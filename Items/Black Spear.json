@@ -6,7 +6,7 @@
     "STARTER"
   ],
   "stats": null,
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -16,69 +16,17 @@
   ],
   "effects_structured": [
     {
-      "raw": "Consumes this item to initiate a {{fd 3.5}}-second [[cast time]] and a 3-second {{tip channel}} afterwards from the user and the target allied champion, both becoming bound allies",
+      "raw": "Bind allied champion as Oathsworn after cast/channel; target incapacitated after channel.",
       "effect_type": "utility",
-      "stat": null,
-      "value": 3.5,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "stat": "oathsworn_bond",
+      "duration_seconds": 6,
+      "trigger": "active",
       "applies_to": "ally",
       "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3.5,
-        3
-      ],
-      "parse_confidence": 0.6
-    },
-    {
-      "raw": "The target is unable to act for 6 seconds after the channel's duration",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 6,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 6.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        6
+        "cast_time_3.5s",
+        "channel_3s"
       ],
       "parse_confidence": 0.7
-    },
-    {
-      "raw": "Afterwards, the target becomes an ''Oathsworn''.",
-      "effect_type": "utility",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.4
     }
   ],
   "shop": {
@@ -92,6 +40,7 @@
   "generated_at": "2026-02-09T23:34:24.918852+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.068691+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.714581+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

@@ -31,90 +31,44 @@
       "effects": "Transforms into {{ii|Seraph's Embrace}} at {{as|360 '''bonus''' mana}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Grants {{as ability power}} equal to {{as 1% '''bonus''' mana}}.",
+      "raw": "Gain AP equal to 1% bonus mana.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
-      "value": 1,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1
-      ],
-      "parse_confidence": 0.75
+      "value": 0.01,
+      "unit": "percent_bonus_mana",
+      "trigger": "passive",
+      "applies_to": "self",
+      "parse_confidence": 0.9
     },
     {
-      "raw": "Grants a charge every 8 seconds, up to 5 charges",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 8,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": 8.0,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        8,
-        5
-      ],
-      "parse_confidence": 0.65
-    },
-    {
-      "raw": "Affecting an enemy or ally with an [[champion ability ability]] consumes a charge to grant {{as 5 '''bonus''' mana}}, increased to {{as 10 mana}} if they are a champion, up to a '''maximum''' of {{as 360 '''bonus''' mana}}.",
-      "effect_type": "stat_modifier",
+      "raw": "Manaflow: gain charges every 8s up to 5; ability use consumes charge to grant bonus mana (5/10) up to 360.",
+      "effect_type": "resource",
       "stat": "mana",
-      "value": 5,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_ability",
-      "applies_to": "enemy",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
+      "interval_seconds": 8,
+      "value_range": [
         5,
-        10,
-        360
+        10
       ],
-      "parse_confidence": 0.85
+      "conditions": [
+        "charge",
+        "max_bonus_mana_360"
+      ],
+      "trigger": "on_ability",
+      "applies_to": "self",
+      "parse_confidence": 0.8
     },
     {
-      "raw": "Transforms into {{ii Seraph's Embrace}} at {{as 360 '''bonus''' mana}}.",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
+      "raw": "Transforms at 360 bonus mana.",
+      "effect_type": "utility",
+      "stat": "transform",
       "value": 360,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        360
-      ],
-      "parse_confidence": 0.75
+      "unit": "bonus_mana",
+      "trigger": "passive",
+      "applies_to": "self",
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -137,6 +91,7 @@
   "generated_at": "2026-02-09T23:34:24.841955+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.001102+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.711056+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

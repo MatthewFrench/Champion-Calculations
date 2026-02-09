@@ -31,54 +31,29 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "{{tip Slow Slowing}} or {{tip immobilize immobilizing}} an enemy champion empowers you with ''Fanfare'' for {{rd 8 4}} seconds, granting you {{as 20 '''bonus''' movement speed}}",
-      "effect_type": "status",
+      "raw": "Slow/immobilize enemy grants bonus MS and nearby allies bonus attack speed for 8s.",
+      "effect_type": "buff",
       "stat": "movement_speed",
-      "value": 8,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        8,
-        4,
-        20
-      ],
-      "parse_confidence": 0.85
+      "value": 20,
+      "unit": "flat",
+      "duration_seconds": 8,
+      "trigger": "on_cc",
+      "applies_to": "self",
+      "parse_confidence": 0.8
     },
     {
-      "raw": "While empowered, you and nearby allied champions also gain {{as {{rd 30 20}}% '''bonus''' attack speed}}.",
-      "effect_type": "stat_modifier",
+      "raw": "Nearby allies gain bonus attack speed while empowered.",
+      "effect_type": "buff",
       "stat": "attack_speed",
-      "value": 30,
-      "value_range": null,
+      "value": 0.3,
       "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [
-        "while_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30,
-        20
-      ],
-      "parse_confidence": 0.8
+      "duration_seconds": 8,
+      "trigger": "on_cc",
+      "applies_to": "ally",
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
@@ -93,10 +68,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2524_tankasaura.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.845267+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.004052+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.713170+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

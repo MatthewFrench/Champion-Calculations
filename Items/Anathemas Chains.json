@@ -29,87 +29,46 @@
   ],
   "effects_structured": [
     {
-      "raw": "Take 30% reduced damage from your ''Nemesis'' and reduce their {{tip tenacity}} by 20% while they are within {{tip cr icononly=true}} 700 units of you.",
-      "effect_type": "damage",
-      "stat": "tenacity",
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Take 30% reduced damage from your Nemesis while within 700 units.",
+      "effect_type": "damage_reduction",
+      "stat": "damage_taken_multiplier",
+      "value": 0.7,
+      "unit": "multiplier",
+      "range_units": 700,
+      "trigger": "passive",
       "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "nemesis",
+        "within_units"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30,
-        20,
-        700
-      ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.9
     },
     {
-      "raw": "Curse the target enemy champion, designating them as your ''Nemesis''",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Choosing a new ''Nemesis'' removes the curse from the old one",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Cannot be cast for 15 seconds while in combat with enemy champions.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 15,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 15.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Reduce Nemesis tenacity by 20% while within 700 units.",
+      "effect_type": "debuff",
+      "stat": "tenacity",
+      "value": -0.2,
+      "unit": "percent",
+      "range_units": 700,
+      "trigger": "passive",
       "applies_to": "enemy_champion",
       "conditions": [
-        "while_condition",
-        "in_combat"
+        "nemesis",
+        "within_units"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15
+      "parse_confidence": 0.85
+    },
+    {
+      "raw": "Designate target enemy champion as Nemesis (cannot recast for 15s while in combat).",
+      "effect_type": "utility",
+      "stat": "nemesis_mark",
+      "cooldown_seconds": 15,
+      "trigger": "active",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "in_combat_lockout"
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -135,6 +94,7 @@
   "generated_at": "2026-02-09T23:34:24.881623+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.035710+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.710225+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

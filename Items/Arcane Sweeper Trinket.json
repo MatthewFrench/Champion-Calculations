@@ -6,7 +6,7 @@
     "TRINKET"
   ],
   "stats": null,
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "effects": "Summons a mist over the target location for 5 seconds, granting {{tip|sight}} of the area in a 375 radius and {{tip|true sight|revealing}} enemy {{tip|stealthed trap|traps}} within for 3 seconds.",
@@ -15,37 +15,28 @@
   ],
   "effects_structured": [
     {
-      "raw": "Summons a mist over the target location for 5 seconds, granting {{tip sight}} of the area in a 375 radius and {{tip true sight revealing}} enemy {{tip stealthed trap traps}} within for 3 seconds.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 5,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 5.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
-      "conditions": [],
-      "status_effects": [
-        "stealth"
+      "raw": "Reveal area (375 radius) for 5s and traps for 3s. Range 800.",
+      "effect_type": "utility",
+      "stat": "vision",
+      "duration_seconds": 5,
+      "range_units": 800,
+      "radius_units": 375,
+      "trigger": "active",
+      "applies_to": "area",
+      "conditions": [
+        "true_sight_traps_3s"
       ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        5,
-        375,
-        3
-      ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.85
     }
   ],
   "shop": null,
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3348_arcanesweeper.png",
   "simpleDescription": "Activate to reveal a nearby area of the map",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.859258+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.017337+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.710827+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

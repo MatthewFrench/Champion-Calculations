@@ -20,29 +20,21 @@
       "effects": "Gain {{sti|critical strike chance|{{pp|0 to 30|key=%|0 to 3000 by 100|type='''bonus''' health|color=hp|label=Crit chance}}}} {{as|critical strike chance}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain {{sti critical strike chance {{pp 0 to 30 key=% 0 to 3000 by 100 type='''bonus''' health color=hp label=Crit chance}}}} {{as critical strike chance}}.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 0,
-      "value_range": null,
+      "raw": "Gain critical strike chance scaling with bonus health (up to 30%).",
+      "effect_type": "stat_modifier",
+      "stat": "critical_strike",
+      "value_range": [
+        0,
+        30
+      ],
       "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        0,
-        30,
-        0,
-        3000,
-        100
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "scales_with_bonus_health"
       ],
       "parse_confidence": 0.75
     }
@@ -65,6 +57,7 @@
   "generated_at": "2026-02-09T23:34:24.848689+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.007917+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.711864+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

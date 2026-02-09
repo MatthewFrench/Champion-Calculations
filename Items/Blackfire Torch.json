@@ -28,95 +28,33 @@
       "effects": "For each champion, epic monster, and large monster afflicted with ''Baleful Blaze's'' burn, increase your {{as|ability power}} by 4%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Dealing [[ability damage]] burns enemies, causing them to take {{as {{ap 60/6}} {{as (+ {{ap 6/6}}% AP)}} magic damage magic damage}} every {{fd 0.5}} seconds over 3 seconds, for a total of {{as 60 magic damage}} {{as (+ 6% AP)}}",
+      "raw": "Ability damage burns enemies for 3s, dealing magic damage every 0.5s (scales with AP).",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 60,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [
-        {
-          "percent": 6.0,
-          "stat": "ap",
-          "qualifier": null
-        }
+      "stat": "magic_damage",
+      "duration_seconds": 3,
+      "interval_seconds": 0.5,
+      "trigger": "on_ability",
+      "applies_to": "enemy",
+      "conditions": [
+        "burn"
       ],
-      "numbers_extracted": [
-        60,
-        6,
-        6,
-        6,
-        0.5,
-        3,
-        60,
-        6
-      ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     },
     {
-      "raw": "Against monsters, the burn deals {{as 10 '''bonus''' magic damage}} per tick, dealing a total of {{as {{ap (60/6)+10}} {{as (+ {{ap 6/6}}% AP)}} magic damage magic damage}} per tick for up to {{as {{ap 60+(10*6)}} magic damage}} {{as (+ 6% AP)}}.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "monster",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [
-        {
-          "percent": 6.0,
-          "stat": "ap",
-          "qualifier": null
-        }
-      ],
-      "numbers_extracted": [
-        10,
-        60,
-        6,
-        10,
-        6,
-        6,
-        60,
-        10,
-        6,
-        6
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "For each champion, epic monster, and large monster afflicted with ''Baleful Blaze's'' burn, increase your {{as ability power}} by 4%.",
-      "effect_type": "stat_modifier",
+      "raw": "Gain 4% ability power per afflicted target.",
+      "effect_type": "buff",
       "stat": "ability_power",
-      "value": 4,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "monster",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        4
+      "value": 0.04,
+      "unit": "percent_per_target",
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "afflicted_targets"
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -137,6 +75,7 @@
   "generated_at": "2026-02-09T23:34:24.884658+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.037542+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.714764+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

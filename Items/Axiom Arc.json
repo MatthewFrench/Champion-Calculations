@@ -23,30 +23,26 @@
       "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them refunds 15% {{as|(+ {{fd|0.15}}% per 1 Lethality)}} of your ultimate ability's '''total''' cooldown."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them refunds 15% {{as (+ {{fd 0.15}}% per 1 Lethality)}} of your ultimate ability's '''total''' cooldown.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 3,
-      "value_range": null,
+      "raw": "Takedown within 3s of damaging refunds 15% + 0.15% per lethality of ultimate cooldown.",
+      "effect_type": "cooldown",
+      "stat": "ultimate_cooldown_refund_percent",
+      "value": 15,
       "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3,
-        15,
-        0.15,
-        1
+      "scaling_terms": [
+        {
+          "percent": 0.15,
+          "stat": "lethality",
+          "qualifier": "per_1"
+        }
       ],
-      "parse_confidence": 0.55
+      "trigger": "on_kill",
+      "conditions": [
+        "within_3s_of_damage"
+      ],
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -61,10 +57,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.858821+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.016970+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.712302+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

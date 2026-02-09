@@ -23,76 +23,54 @@
       "effects": "Base turrets have health regeneration, but cannot regenerate past their current segment."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "While no enemy {{tip minions}} or {{ui Rift Herald Rift Herald Mercenary}} are within range, turrets gain 80% damage reduction (including against {{tip true damage}}).",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 80,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
+      "raw": "Turrets gain 80% damage reduction when no enemy minions/herald in range.",
+      "effect_type": "damage_reduction",
+      "stat": "damage_taken_multiplier",
+      "value": 0.2,
+      "unit": "multiplier",
+      "trigger": "passive",
+      "applies_to": "structure",
       "conditions": [
-        "while_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        80
+        "no_enemy_minions"
       ],
       "parse_confidence": 0.8
     },
     {
-      "raw": "Turrets take 20% increased damage from {{tip melee}} champions.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 20,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Turrets take 20% increased damage from melee champions.",
+      "effect_type": "damage_amp_taken",
+      "stat": "damage_taken_multiplier",
+      "value": 1.2,
+      "unit": "multiplier",
+      "trigger": "passive",
       "applies_to": "structure",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20
+      "conditions": [
+        "melee_attackers"
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     },
     {
-      "raw": "Base turrets have health regeneration, but cannot regenerate past their current segment.",
+      "raw": "Base turrets regenerate health up to current segment.",
       "effect_type": "healing",
-      "stat": "health",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "stat": "health_regen",
+      "trigger": "passive",
       "applies_to": "structure",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "conditions": [
+        "segment_cap"
+      ],
+      "parse_confidence": 0.7
     }
   ],
   "shop": null,
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3042_netherrift_armor.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.922330+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.070992+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.713579+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

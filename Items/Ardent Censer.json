@@ -26,29 +26,35 @@
       "effects": "{{tip|Heal|Healing}} or {{tip|shield|shielding}} allied champions (''excluding yourself'') enhances you and them for 6 seconds, granting {{as|25% '''bonus''' attack speed|attack speed}} and {{as|20 '''bonus''' magic damage}} [[on-hit]] on basic attacks."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "{{tip Heal Healing}} or {{tip shield shielding}} allied champions (''excluding yourself'') enhances you and them for 6 seconds, granting {{as 25% '''bonus''' attack speed attack speed}} and {{as 20 '''bonus''' magic damage}} [[on-hit]] on basic attacks.",
-      "effect_type": "damage",
+      "raw": "Healing/shielding allies grants bonus attack speed and on-hit magic damage for 6s (self and ally).",
+      "effect_type": "buff",
       "stat": "attack_speed",
-      "value": 6,
-      "value_range": null,
+      "value": 0.25,
       "unit": "percent",
-      "duration_seconds": 6.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        6,
-        25,
-        20
+      "duration_seconds": 6,
+      "trigger": "on_heal_shield",
+      "applies_to": "ally",
+      "conditions": [
+        "not_self"
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.85
+    },
+    {
+      "raw": "On-hit bonus magic damage during Sanctify.",
+      "effect_type": "damage",
+      "stat": "magic_damage",
+      "value": 20,
+      "unit": "flat",
+      "duration_seconds": 6,
+      "trigger": "on_hit",
+      "applies_to": "enemy",
+      "conditions": [
+        "sanctify"
+      ],
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -70,6 +76,7 @@
   "generated_at": "2026-02-09T23:34:24.849353+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.008525+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.711295+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

@@ -29,157 +29,27 @@
   ],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] and {{tip immobilize immobilizing}} effects against enemy champions generate 1 and 5 stacks of ''Accretion'', respectively, up to 50",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 1,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "raw": "Accretion stacks from on-hit/immobilize; gain base health regen and size scaling per stacks.",
+      "effect_type": "buff",
+      "stat": "health_regen",
       "trigger": "on_hit",
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1,
-        5,
-        50
-      ],
-      "parse_confidence": 0.65
-    },
-    {
-      "raw": "For each ''Accretion'' stack, gain {{as 10% '''base''' health regeneration}}, up to {{as 500% '''base''' health regeneration}} at '''maximum''' stacks",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        10,
-        500
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Additionally, for every 10 ''Accretion'' stacks, gain 20% increased size, up to 100% at '''maximum''' stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        10,
-        20,
-        100
-      ],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "Stacks are reset every round and between each phase in a round.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Summon a black hole at the target location after a {{fd 0.5}}-second delay that lasts for 2 {{as (+ {{fd 0.1}} per 100 '''bonus''' health)}} seconds",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 0.5,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "accretion_stacks"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        0.5,
-        2,
-        0.1,
-        100
-      ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Enemies within are dealt {{as {{pp 30 to 100}} magic damage}} {{as (+ {{fd 5}}% of user's '''maximum''' health)}} {{as magic damage}} every second, {{tip slow slowed}} by 30%, and {{tip kinematics dragged}} inward until they reach the horizon at the center",
+      "raw": "Active black hole: delay 0.5s, lasts scaling with bonus health; deals magic damage per second, slows, pulls inward.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "slow"
+      "stat": "magic_damage",
+      "interval_seconds": 1,
+      "trigger": "active",
+      "applies_to": "enemy",
+      "conditions": [
+        "area_effect"
       ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30,
-        100,
-        5,
-        30
-      ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "Additionally, for each enemy champion inside the black hole, generate 1 stack of ''Accretion'' per second.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 1,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1
-      ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -190,10 +60,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447122_blackholegauntlet.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.919901+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.069436+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.714339+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

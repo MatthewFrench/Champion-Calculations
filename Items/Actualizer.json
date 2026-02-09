@@ -16,7 +16,7 @@
       "flat": 10.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -26,88 +26,53 @@
   ],
   "effects_structured": [
     {
-      "raw": "For 8 seconds, your mana is ''Empowered''",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
-      "value": 8,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 8.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Activate to empower mana for 8 seconds; abilities cost 100% more mana; gain increased ability damage/healing/shielding; basic ability cooldowns progress faster.",
+      "effect_type": "buff",
+      "stat": "ability_damage_heal_shield_amp",
+      "value": 0.15,
+      "unit": "percent",
+      "scaling_terms": [
+        {
+          "percent": 0.5,
+          "stat": "bonus_mana",
+          "qualifier": "per_100"
+        }
+      ],
+      "duration_seconds": 8,
+      "trigger": "active",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        8
+      "conditions": [
+        "empowered"
       ],
       "parse_confidence": 0.85
     },
     {
-      "raw": "While ''Empowered'': your [[champion ability abilities]] cost 100% more mana",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
-      "value": 100,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_ability",
+      "raw": "Abilities cost 100% more mana while empowered.",
+      "effect_type": "resource",
+      "stat": "mana_cost_multiplier",
+      "value": 2.0,
+      "unit": "multiplier",
+      "duration_seconds": 8,
+      "trigger": "active",
       "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "empowered"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100
-      ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.85
     },
     {
-      "raw": "you gain 15% {{as (+ {{fd 0.5}}% per 100 '''bonus''' mana)}} increased ability damage, {{tip healing}}, and {{tip shielding}}",
-      "effect_type": "damage",
-      "stat": "mana",
-      "value": 15,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Basic ability cooldowns progress 30% faster while empowered.",
+      "effect_type": "cooldown",
+      "stat": "basic_ability_cooldown_rate",
+      "value": 1.3,
+      "unit": "multiplier",
+      "duration_seconds": 8,
+      "trigger": "active",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15,
-        0.5,
-        100
+      "conditions": [
+        "empowered"
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "and your basic ability cooldowns progress 30% faster.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30
-      ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -122,10 +87,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.855068+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.013460+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.708921+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

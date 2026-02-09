@@ -18,58 +18,39 @@
       "effects": "Against lane minions, this minion deals {{as|'''bonus''' physical damage}} on-hit equal to {{as|6% of the target's '''current''' health}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "{{tip Turret}} basic attacks are modified to deal {{as {{pp key=% 14;11;8 Outer;Inner;Inhibitor/Nexus type=turret type}} of this minion's '''maximum''' health}} as {{tt pre-mitigation damage Damage calculated before modifiers}}.",
+      "raw": "Turret attacks deal percent max health to this minion based on turret type.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 14,
-      "value_range": null,
+      "stat": "turret_damage_percent_max_health",
       "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        14,
-        11,
-        8
+      "trigger": "passive",
+      "applies_to": "structure",
+      "conditions": [
+        "turret_type_scaling"
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Against lane minions, this minion deals {{as '''bonus''' physical damage}} on-hit equal to {{as 6% of the target's '''current''' health}}.",
+      "raw": "Against lane minions, deal bonus physical on-hit equal to 6% target current health.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 6,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "stat": "physical_damage",
+      "value": 0.06,
+      "unit": "percent_current_health",
       "trigger": "on_hit",
       "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        6
-      ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.8
     }
   ],
   "shop": null,
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1508_antitowersocks.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.926963+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.074265+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.710565+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

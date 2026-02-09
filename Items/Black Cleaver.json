@@ -33,82 +33,32 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Dealing {{as physical damage}} to an enemy champion applies a stack of ''Carve'' for 6 seconds, stacking up to 5 times",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 6,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 6.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Physical damage applies armor reduction stacks (6% per stack) up to 30% for 6s.",
+      "effect_type": "debuff",
+      "stat": "armor",
+      "value": -0.06,
+      "unit": "percent_per_stack",
+      "duration_seconds": 6,
+      "trigger": "on_damage",
       "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        6,
-        5
+      "conditions": [
+        "max_stacks_5"
       ],
       "parse_confidence": 0.85
     },
     {
-      "raw": "Each stack inflicts {{as 6% armor reduction}}, up to {{as 30% armor}} at 5 stacks.",
-      "effect_type": "stat_modifier",
-      "stat": "armor",
-      "value": 6,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [
-        {
-          "percent": 6.0,
-          "stat": "armor",
-          "qualifier": null
-        },
-        {
-          "percent": 30.0,
-          "stat": "armor",
-          "qualifier": null
-        }
-      ],
-      "numbers_extracted": [
-        6,
-        30,
-        5
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Dealing {{as physical damage}} grants you {{as 20 '''bonus''' movement speed}} for 2 seconds.",
-      "effect_type": "damage",
+      "raw": "Physical damage grants 20 bonus movement speed for 2s.",
+      "effect_type": "buff",
       "stat": "movement_speed",
       "value": 20,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 2.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "unit": "flat",
+      "duration_seconds": 2,
+      "trigger": "on_damage",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20,
-        2
-      ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -132,6 +82,7 @@
   "generated_at": "2026-02-09T23:34:24.859787+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.017787+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.714138+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

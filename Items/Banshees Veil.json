@@ -20,27 +20,19 @@
       "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Grants a {{tip spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions).",
-      "effect_type": "damage",
-      "stat": "shield",
-      "value": 40,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        40
+      "raw": "Spell shield blocks next hostile ability. Cooldown 40s (resets on damage from champs).",
+      "effect_type": "status",
+      "stat": "spell_shield",
+      "cooldown_seconds": 40,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "reset_on_champion_damage"
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.85
     }
   ],
   "shop": {
@@ -63,6 +55,7 @@
   "generated_at": "2026-02-09T23:34:24.884911+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.037795+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.713382+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

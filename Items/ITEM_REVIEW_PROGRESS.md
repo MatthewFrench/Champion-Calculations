@@ -3,31 +3,31 @@
 Legend: [ ] not started, [~] in progress, [x] reviewed
 
 - [x] Abyssal Mask.json
-- [ ] Actualizer.json
-- [ ] Aether Wisp.json
-- [ ] Amplifying Tome.json
-- [ ] Anathemas Chains.json
-- [ ] Anti-Tower Socks.json
-- [ ] Arcane Sweeper Trinket.json
-- [ ] Archangels Staff.json
-- [ ] Ardent Censer.json
-- [ ] Armored Advance.json
-- [ ] Atmas Reckoning.json
-- [ ] Axiom Arc.json
-- [ ] B. F. Sword.json
-- [ ] Bamis Cinder.json
-- [ ] Bandleglass Mirror.json
-- [ ] Bandlepipes.json
-- [ ] Banshees Veil.json
-- [ ] Base Turret Reinforced Armor Turret Item.json
-- [ ] Bastionbreaker.json
-- [ ] Berserkers Greaves.json
-- [ ] Black Cleaver.json
-- [ ] Black Hole Gauntlet.json
-- [ ] Black Spear.json
-- [ ] Blackfire Torch.json
-- [ ] Blade of the Ruined King.json
-- [ ] Blasting Wand.json
+- [x] Actualizer.json
+- [x] Aether Wisp.json
+- [x] Amplifying Tome.json
+- [x] Anathemas Chains.json
+- [x] Anti-Tower Socks.json
+- [x] Arcane Sweeper Trinket.json
+- [x] Archangels Staff.json
+- [x] Ardent Censer.json
+- [x] Armored Advance.json
+- [x] Atmas Reckoning.json
+- [x] Axiom Arc.json
+- [x] B. F. Sword.json
+- [x] Bamis Cinder.json
+- [x] Bandleglass Mirror.json
+- [x] Bandlepipes.json
+- [x] Banshees Veil.json
+- [x] Base Turret Reinforced Armor Turret Item.json
+- [x] Bastionbreaker.json
+- [x] Berserkers Greaves.json
+- [x] Black Cleaver.json
+- [x] Black Hole Gauntlet.json
+- [x] Black Spear.json
+- [x] Blackfire Torch.json
+- [x] Blade of the Ruined King.json
+- [x] Blasting Wand.json
 - [ ] Blighting Jewel.json
 - [ ] Bloodletters Curse.json
 - [ ] Bloodsong.json

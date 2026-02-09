@@ -16,8 +16,8 @@
       "flat": 10.0
     }
   },
-  "passives": null,
-  "active": null,
+  "passives": [],
+  "active": [],
   "effects_structured": [],
   "shop": {
     "prices": {
@@ -37,6 +37,7 @@
   "generated_at": "2026-02-09T23:34:24.858304+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.016480+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.712984+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

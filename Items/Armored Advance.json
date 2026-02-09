@@ -26,50 +26,44 @@
       "cooldown": "15"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Reduces all incoming {{tip basic damage}} by 10% (''excluding from [[turret]] attacks'').",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "structure",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        10
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Taking {{as physical damage}} from champions grants you a {{tip shield}} that absorbs {{pp 100 to 200 color=pd}} {{as (+ 8% '''bonus''' health)}} {{as physical damage}} for 5 seconds.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 100,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 5.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Reduce incoming basic damage by 10% (excluding turrets).",
+      "effect_type": "damage_reduction",
+      "stat": "basic_damage_taken_multiplier",
+      "value": 0.9,
+      "unit": "multiplier",
+      "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100,
-        200,
-        8,
-        5
+      "conditions": [
+        "exclude_turrets"
       ],
       "parse_confidence": 0.85
+    },
+    {
+      "raw": "Taking physical damage from champions grants a shield (100-200 + 8% bonus health) for 5s. Cooldown 15s.",
+      "effect_type": "shield",
+      "stat": "shield",
+      "value_range": [
+        100,
+        200
+      ],
+      "scaling_terms": [
+        {
+          "percent": 8,
+          "stat": "health",
+          "qualifier": "bonus"
+        }
+      ],
+      "duration_seconds": 5,
+      "cooldown_seconds": 15,
+      "trigger": "on_damage",
+      "applies_to": "self",
+      "conditions": [
+        "physical_damage_from_champions"
+      ],
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -87,6 +81,7 @@
   "generated_at": "2026-02-09T23:34:24.863285+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.020392+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.711514+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

@@ -20,69 +20,23 @@
       "effects": "Taking or dealing damage activates this passive for 3 seconds. Deal {{as|15 magic damage}} every second to enemies within {{tip|cr|icononly = true}} 325 (+ 100% '''bonus''' [[size]]) units, with the damage being increased to 150% against {{tip|minions}} and 200% against {{tip|monsters}}. This executes minions that would be killed by one more tick of damage."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Taking or dealing damage activates this passive for 3 seconds",
+      "raw": "Immolate: deal 15 magic damage per second for 3s to nearby enemies (325 units), increased vs minions/monsters.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 3.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "passive",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3
-      ],
-      "parse_confidence": 0.95
-    },
-    {
-      "raw": "Deal {{as 15 magic damage}} every second to enemies within {{tip cr icononly = true}} 325 (+ 100% '''bonus''' [[size]]) units, with the damage being increased to 150% against {{tip minions}} and 200% against {{tip monsters}}",
-      "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 15,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15,
-        325,
-        100,
-        150,
-        200
+      "unit": "flat_per_second",
+      "duration_seconds": 3,
+      "interval_seconds": 1,
+      "range_units": 325,
+      "trigger": "aura",
+      "applies_to": "enemy",
+      "conditions": [
+        "immediately_after_damage"
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "This executes minions that would be killed by one more tick of damage.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -103,6 +57,7 @@
   "generated_at": "2026-02-09T23:34:24.896355+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.049572+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.712771+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

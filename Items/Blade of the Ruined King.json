@@ -29,73 +29,35 @@
       "cooldown": "15"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks deal {{as '''bonus''' physical damage}} [[on-hit]] equal to {{as {{rd 9% 6%}} of the target's '''current''' health}}, with a '''maximum''' of 100 against {{tip minions}} and {{tip monsters}}.",
+      "raw": "On-hit bonus physical damage equal to current health percent (melee/ranged), max vs minions/monsters.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 9,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "stat": "physical_damage",
+      "unit": "percent_current_health",
       "trigger": "on_hit",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        9,
-        6,
-        100
+      "applies_to": "enemy",
+      "conditions": [
+        "melee_ranged_split",
+        "max_vs_minions"
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.8
     },
     {
-      "raw": "Basic attacks on-hit against enemy champions apply a stack for 6 seconds, stacking up to 3 times",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 6,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 6.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "raw": "Third stack slows target by 30% for 1s (stacks up to 3 for 6s).",
+      "effect_type": "debuff",
+      "stat": "slow",
+      "value": 0.3,
+      "unit": "percent",
+      "duration_seconds": 1,
       "trigger": "on_hit",
       "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        6,
-        3
+      "conditions": [
+        "third_stack",
+        "cooldown_15s"
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "The third stack consumes them all to {{tip slow}} the target by 30% for 1 second.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 1.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30,
-        1
-      ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -121,6 +83,7 @@
   "generated_at": "2026-02-09T23:34:24.850362+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.009171+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.714993+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }

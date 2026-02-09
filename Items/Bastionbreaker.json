@@ -29,58 +29,31 @@
       "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you ''Sabotage'' for 90 seconds, empowering your next basic attack against a {{tip|turret}} or epic {{tip|monster}} to consume the effect to deal {{as|{{rd|300|240}} {{as|(+ {{rd|25|20}} per 1 lethality)}} '''bonus''' true damage}} over 3 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Your next instance of [[ability damage]] to a champion or epic monster with a [[champion ability]] deals {{as {{rd 30 15}} {{as (+ {{rd {{fd 1.5}} {{fd 0.75}}}} per 1 lethality)}} '''bonus''' true damage}}.",
+      "raw": "Next ability damage to champion/epic monster deals bonus true damage. Cooldown 45s.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 30,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "stat": "true_damage",
+      "cooldown_seconds": 45,
       "trigger": "on_ability",
-      "applies_to": "monster",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30,
-        15,
-        1.5,
-        0.75,
-        1
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "epic_monster_or_champion"
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.75
     },
     {
-      "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them grants you ''Sabotage'' for 90 seconds, empowering your next basic attack against a {{tip turret}} or epic {{tip monster}} to consume the effect to deal {{as {{rd 300 240}} {{as (+ {{rd 25 20}} per 1 lethality)}} '''bonus''' true damage}} over 3 seconds.",
+      "raw": "Takedown within 3s grants Sabotage for 90s; next basic attack vs turret/epic monster deals bonus true damage over 3s.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 90.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3,
-        90,
-        300,
-        240,
-        25,
-        20,
-        1,
-        3
+      "stat": "true_damage",
+      "duration_seconds": 3,
+      "trigger": "on_kill",
+      "applies_to": "structure",
+      "conditions": [
+        "sabotage_buff_90s"
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -101,6 +74,7 @@
   "generated_at": "2026-02-09T23:34:24.888083+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.041442+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:56:19.713784+00:00",
+    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
   }
 }
