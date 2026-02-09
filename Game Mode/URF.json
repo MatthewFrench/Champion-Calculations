@@ -1,0 +1,948 @@
+{
+  "mode_name": "Ultra Rapid Fire",
+  "mode_key": "URF",
+  "map": "Summoner's Rift",
+  "draft_types": [
+    "ARURF",
+    "Blind Pick"
+  ],
+  "global_buffs": {
+    "ability_haste": 300,
+    "cooldown_reduction_equivalent_percent": 75,
+    "summoner_spell_haste": 300,
+    "item_haste": 300,
+    "resource_costs": {
+      "mana_cost_multiplier": 0.0,
+      "energy_cost_multiplier": 0.0,
+      "health_cost_multiplier": 0.5
+    },
+    "tenacity_bonus_percent": 25,
+    "tenaciousness_bonus_percent": 25,
+    "movement_speed_bonus_flat": 60,
+    "bonus_attack_speed_multiplier": {
+      "melee": 1.5,
+      "ranged": 2.0
+    },
+    "bonus_experience": {
+      "value": 90,
+      "interval_seconds": 30
+    },
+    "critical_strike_damage_bonus_percent": 25,
+    "bonus_mana_to_bonus_health_percent": 35,
+    "bonus_mana_regen_to_bonus_health_regen_percent": 100
+  },
+  "mode_specific_rules": {
+    "abilities_have_no_mana_or_energy_cost": true,
+    "notes": [
+      "Global buff values are taken from community documentation and may be updated between URF runs.",
+      "Champion-specific damage dealt/received modifiers can apply in URF.",
+      "Values listed may change between URF runs and can be updated between events."
+    ],
+    "champion_cannon": {
+      "available_at_fountain": true,
+      "entering_cannon_status": "vanished",
+      "max_time_in_cannon_seconds": 10,
+      "field_of_view_increase": true,
+      "launch": {
+        "displacement_immunity": true,
+        "target_indicator_visible_to_all": true,
+        "impact": {
+          "magic_damage_by_level": [
+            120,
+            460
+          ],
+          "knockup": "airborne"
+        }
+      }
+    },
+    "healing_and_shielding_modifiers": {
+      "direct_healing_effectiveness_start_percent": 50,
+      "direct_healing_effectiveness_increase_percent_per_30s": 1,
+      "direct_healing_effectiveness_max_percent": 100,
+      "direct_healing_effectiveness_reaches_max_at_minutes": 25,
+      "non_ultimate_shield_strength_reduction_percent": 30
+    },
+    "minion_gold": {
+      "gold_shared_on_nearby_minion_death": true,
+      "last_hit_bonus_gold": true,
+      "caster_minion_gold": 19.6,
+      "melee_minion_gold": 29.4,
+      "siege_minion_gold": 84
+    },
+    "level_cap": 30,
+    "early_surrender": {
+      "unanimous_minutes": 8,
+      "normal_minutes": 10
+    },
+    "homeguard_enabled_from_start": true,
+    "turret_plating": {
+      "disintegrates_at_minutes": 8,
+      "plate_health_by_plate": [
+        500,
+        1500
+      ],
+      "plate_gold": 300
+    },
+    "balance_modifiers": {
+      "champion_damage_dealt_received_modifiers": true,
+      "rune_and_item_mode_specific_adjustments": true,
+      "notes": "Values and modifiers can change between URF runs; see patch/buff history for specifics."
+    },
+    "summoner_spell_changes": {
+      "smite": {
+        "charge_rate_seconds": 120,
+        "cooldown_between_charges_seconds": 10
+      },
+      "teleport": {
+        "disabled": true
+      }
+    },
+    "jungle_changes": {
+      "dragon": {
+        "initial_spawn_minutes": 4,
+        "respawn_minutes": 2.5,
+        "health_increased": true
+      },
+      "baron_nashor": {
+        "initial_spawn_minutes": 10,
+        "respawn_minutes": 5,
+        "health_increased": true,
+        "grants_hand_of_baron": true,
+        "spawns_eye_of_the_herald": true
+      },
+      "voidgrubs": {
+        "initial_spawn_minutes": 4
+      }
+    }
+  },
+  "patch_specific_changes": [
+    {
+      "patch": "2025.S1.3",
+      "change": "Attack speed cap increased from 2.5 to 10.0 for ARURF/URF.",
+      "source_context": "ARURF section and Attack Speed Cap system notes."
+    }
+  ],
+  "sources": [
+    {
+      "name": "League of Legends Wiki (Fandom) - Ultra Rapid Fire",
+      "url": "https://leagueoflegends.fandom.com/wiki/Ultra_Rapid_Fire",
+      "used_for": [
+        "mode overview",
+        "map and draft types",
+        "ability haste and no mana/energy costs (main effects)"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki (Fandom) - URF Patch and Buff History",
+      "url": "https://leagueoflegends.fandom.com/wiki/Ultra_Rapid_Fire/Patch_and_Buff_History",
+      "used_for": [
+        "URF buff list (resource costs, haste, tenacity/tenaciousness, movement speed, attack speed multipliers, crit damage, health costs, bonus XP, mana-to-health conversions)"
+      ]
+    },
+    {
+      "name": "League of Legends Patch 2025.S1.3 Notes",
+      "url": "https://www.leagueoflegends.com/en-sg/news/game-updates/patch-2025-s1-3-notes/",
+      "used_for": [
+        "attack speed cap increase for ARURF/URF"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - URF Map Changes Module",
+      "url": "https://wiki.leagueoflegends.com/en-us/Module:MapChanges/data/urf",
+      "used_for": [
+        "mode-specific balance changes for champions, items, runes, and summoner spells"
+      ]
+    }
+  ],
+  "mode_specific_changes": {
+    "source": "Module:MapChanges/data/urf",
+    "champions": [
+      {
+        "key": "Aatrox Q",
+        "effects_raw": [
+          "Minion damage modifier now continues scaling past level 18."
+        ],
+        "effects": [
+          "Minion damage modifier now continues scaling past level 18."
+        ]
+      },
+      {
+        "key": "Alistar W",
+        "effects_raw": [
+          "Stun now ends at the same time the displacement does."
+        ],
+        "effects": [
+          "Stun now ends at the same time the displacement does."
+        ]
+      },
+      {
+        "key": "Alistar R",
+        "effects_raw": [
+          "Duration changed to {{fd|3.5}} seconds. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Duration changed to 3.5 seconds. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "Anivia I",
+        "effects_raw": [
+          "Cooldown set to 60 seconds."
+        ],
+        "effects": [
+          "Cooldown set to 60 seconds."
+        ]
+      },
+      {
+        "key": "Azir W",
+        "effects_raw": [
+          "Limited to 3 ''Sand Soldiers'' active.",
+          "Recharge timer set to {{ap|19.2*(1/(1+3)) to 12.8*(1/(1+3))}} seconds."
+        ],
+        "effects": [
+          "Limited to 3 Sand Soldiers active.",
+          "Recharge timer set to 19.2*(1/(1+3)) to 12.8*(1/(1+3)) seconds."
+        ]
+      },
+      {
+        "key": "Bard I",
+        "effects_raw": [
+          "''Meeps'' thresholds changed to one each 2 ''Chimes''.",
+          "''Meep'' respawn time set to 6 seconds."
+        ],
+        "effects": [
+          "Meeps thresholds changed to one each 2 Chimes.",
+          "Meep respawn time set to 6 seconds."
+        ]
+      },
+      {
+        "key": "Brand Q",
+        "effects_raw": [
+          "Stun duration changed to 1 second."
+        ],
+        "effects": [
+          "Stun duration changed to 1 second."
+        ]
+      },
+      {
+        "key": "Bel'Veth Q",
+        "effects_raw": [
+          "Per-direction dash cooldown changed to 5 seconds at all ranks. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Per-direction dash cooldown changed to 5 seconds at all ranks. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "Dr. Mundo I",
+        "effects_raw": [
+          "Health regeneration changed to {{as|{{pp|2.3 to 4.7 for 13|18 to 30|formula=2.3% + 0.2% per level at level 18|key=%}} '''maximum''' health}}."
+        ],
+        "effects": [
+          "Health regeneration changed to ."
+        ]
+      },
+      {
+        "key": "Dr. Mundo W",
+        "effects_raw": [
+          "Initial grey health percentage storage changed to {{pp|95 + (95-80)/17*(x-1)|18 to 30 by 1|key=%}} of the {{tt|post-mitigation damage|Damage calculated after modifiers}} taken."
+        ],
+        "effects": [
+          "Initial grey health percentage storage changed to of the Damage calculated after modifiers taken."
+        ]
+      },
+      {
+        "key": "Evelynn Q",
+        "effects_raw": [
+          "Recast can now be used up to 10 times instead of 3. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Recast can now be used up to 10 times instead of 3. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "Ezreal Q",
+        "effects_raw": [
+          "Cooldown reduction on {{ai|W|Ezreal}}, {{ai|E|Ezreal}}, and {{ai|R|Ezreal}} changed to {{fd|0.33}} seconds."
+        ],
+        "effects": [
+          "Cooldown reduction on , , and changed to 0.33 seconds."
+        ]
+      },
+      {
+        "key": "Gangplank Q",
+        "effects_raw": [
+          "{{ai|Silver Serpents|Gangplank|Silver Serpent}} generation multiplied by 3."
+        ],
+        "effects": [
+          "generation multiplied by 3."
+        ]
+      },
+      {
+        "key": "Garen E",
+        "effects_raw": [
+          "Cannot spin more than once from multiple casts."
+        ],
+        "effects": [
+          "Cannot spin more than once from multiple casts."
+        ]
+      },
+      {
+        "key": "Gragas E",
+        "effects_raw": [
+          "Cooldown refund changed to {{fd|0.25}} seconds."
+        ],
+        "effects": [
+          "Cooldown refund changed to 0.25 seconds."
+        ]
+      },
+      {
+        "key": "Hecarim Q",
+        "effects_raw": [
+          "Stacking cooldown reduction effect removed. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Stacking cooldown reduction effect removed. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "Hecarim E",
+        "effects_raw": [
+          "Cooldown begins after the empowered attack is used or times out. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Cooldown begins after the empowered attack is used or times out. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "Jayce Hyper Charge",
+        "effects_raw": [
+          "Bonus attack speed changed to 1000%."
+        ],
+        "effects": [
+          "Bonus attack speed changed to 1000%."
+        ]
+      },
+      {
+        "key": "K'Sante I",
+        "effects_raw": [
+          "Health ratio changed to {{as|{{pp|1;1.33;1.66;2;2.33;2.66|1;6;11;16;21;26|formula=1% + 0.33% every 5 levels|key=%}} '''maximum''' health}}.",
+          "{{ai|All Out|K'Sante}} health ratio changed to {{as|{{pp|1.33*1.35;1.66*1.35;2*1.35;2.33*1.35;2.66*1.35|6;11;16;21;26|key=%}}|health}} {{as|'''maximum''' health}}."
+        ],
+        "effects": [
+          "Health ratio changed to .",
+          "health ratio changed to 'maximum' health."
+        ]
+      },
+      {
+        "key": "Kalista I",
+        "effects_raw": [
+          "{{sbc|New Effect:}} Now enforces an attack speed cap of {{fd|6.0}}.",
+          "{{sbc|New Effect:}} Now converts every {{as|{{fd|0.7}}% '''bonus''' attack speed}} in excess of the cap into {{as|1 '''bonus''' attack damage}}."
+        ],
+        "effects": [
+          "Now enforces an attack speed cap of 6.0.",
+          "Now converts every in excess of the cap into 1 'bonus' attack damage."
+        ]
+      },
+      {
+        "key": "Karma I",
+        "effects_raw": [
+          "On-damage cooldown reduction changed to {{ap|0.5|0.75|1}}.{{tt|*|Recurring change that has not yet been observed by editors.}}"
+        ],
+        "effects": [
+          "On-damage cooldown reduction changed to 0.5|0.75|1.Recurring change that has not yet been observed by editors."
+        ]
+      },
+      {
+        "key": "Kassadin R",
+        "effects_raw": [
+          "Cooldown is unaffected by ability haste.",
+          "Cooldown is set to {{ap|4|3|2}} seconds.",
+          "Maximum Riftwalk stacks changed to 2."
+        ],
+        "effects": [
+          "Cooldown is unaffected by ability haste.",
+          "Cooldown is set to 4|3|2 seconds.",
+          "Maximum Riftwalk stacks changed to 2."
+        ]
+      },
+      {
+        "key": "Kindred Q",
+        "effects_raw": [
+          "Cooldown while in {{ai|Wolf's Frenzy|Kindred}} set to {{fd|0.5}} seconds. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Cooldown while in set to 0.5 seconds. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "LeBlanc Q",
+        "effects_raw": [
+          "Bonus minion damage now continues scaling past level 18."
+        ],
+        "effects": [
+          "Bonus minion damage now continues scaling past level 18."
+        ]
+      },
+      {
+        "key": "Maokai I",
+        "effects_raw": [
+          "Heal changed to {{as|{{pp|4;5.33;6.66;8;9.33;10.66;12;12.6 to 19.2 for 12|1;6;9;11;13;15;17;19 to 30|key=%}} '''maximum''' health}}."
+        ],
+        "effects": [
+          "Heal changed to ."
+        ]
+      },
+      {
+        "key": "Maokai E",
+        "effects_raw": [
+          "Limited to 5 ''Saplings'' active."
+        ],
+        "effects": [
+          "Limited to 5 Saplings active."
+        ]
+      },
+      {
+        "key": "Master Yi Q",
+        "effects_raw": [
+          "Cooldown begins after the blink."
+        ],
+        "effects": [
+          "Cooldown begins after the blink."
+        ]
+      },
+      {
+        "key": "Nami E",
+        "effects_raw": [
+          "Buff damage modifier through area damage now continues scaling past level 18."
+        ],
+        "effects": [
+          "Buff damage modifier through area damage now continues scaling past level 18."
+        ]
+      },
+      {
+        "key": "Nunu & Willump E",
+        "effects_raw": [
+          "Recast can now be used up to 10 times instead of 2. {{tt|*|Recurring change that has been observed, but not confirmed by Riot.}}"
+        ],
+        "effects": [
+          "Recast can now be used up to 10 times instead of 2. Recurring change that has been observed, but not confirmed by Riot."
+        ]
+      },
+      {
+        "key": "Rakan I",
+        "effects_raw": [
+          "Cooldown scaling per level past level 18 changed to -{{fd|0.875}} seconds per level."
+        ],
+        "effects": [
+          "Cooldown scaling per level past level 18 changed to -0.875 seconds per level."
+        ]
+      },
+      {
+        "key": "Renekton E",
+        "effects_raw": [
+          "Now is affected by -200 ability haste."
+        ],
+        "effects": [
+          "Now is affected by -200 ability haste."
+        ]
+      },
+      {
+        "key": "Rumble I",
+        "effects_raw": [
+          "No longer disables his abilities.",
+          "No Danger Zone bonuses."
+        ],
+        "effects": [
+          "No longer disables his abilities.",
+          "No Danger Zone bonuses."
+        ]
+      },
+      {
+        "key": "Rumble E",
+        "effects_raw": [
+          "Slow no longer stacks. {{tt|*|Recurring change that has not yet been observed by editors.}}"
+        ],
+        "effects": [
+          "Slow no longer stacks. Recurring change that has not yet been observed by editors."
+        ]
+      },
+      {
+        "key": "Shaco W",
+        "effects_raw": [
+          "Limited to 6 ''Boxes'' active."
+        ],
+        "effects": [
+          "Limited to 6 Boxes active."
+        ]
+      },
+      {
+        "key": "Shen I",
+        "effects_raw": [
+          "Cooldown now scales past level 18 by {{fd|0.125}} seconds per level."
+        ],
+        "effects": [
+          "Cooldown now scales past level 18 by 0.125 seconds per level."
+        ]
+      },
+      {
+        "key": "Shyvana E",
+        "effects_raw": [
+          "Explosion base damage changed to {{pp|75;80 to 195 for 24|1;7 to 30|formula=75 at level 1, then + 5 per level starting at level 7}}."
+        ],
+        "effects": [
+          "Explosion base damage changed to ."
+        ]
+      },
+      {
+        "key": "Sivir I",
+        "effects_raw": [
+          "Bonus movement speed changed to {{pp|changedisplay=true|55 to 80 for 6|1;6;11;16;18;24}}."
+        ],
+        "effects": [
+          "Bonus movement speed changed to ."
+        ]
+      },
+      {
+        "key": "Sona I",
+        "effects_raw": [
+          "Global cooldown set to {{fd|0.5}} seconds."
+        ],
+        "effects": [
+          "Global cooldown set to 0.5 seconds."
+        ]
+      },
+      {
+        "key": "Tahm Kench Q",
+        "effects_raw": [
+          "m",
+          "Cooldown changed to {{ap|14 to 10}} seconds."
+        ],
+        "effects": [
+          "m",
+          "Cooldown changed to 14 to 10 seconds."
+        ]
+      },
+      {
+        "key": "Taliyah I",
+        "effects_raw": [
+          "Bonus movement speed changed to {{pp|10;15;25;40;65;95|1;9;12;15;27;30|key=%}}."
+        ],
+        "effects": [
+          "Bonus movement speed changed to ."
+        ]
+      },
+      {
+        "key": "Teemo R",
+        "effects_raw": [
+          "Limited to 12 ''Mushrooms'' active."
+        ],
+        "effects": [
+          "Limited to 12 Mushrooms active."
+        ]
+      },
+      {
+        "key": "Thresh I",
+        "effects_raw": [
+          "Stacks per soul changed to 3."
+        ],
+        "effects": [
+          "Stacks per soul changed to 3."
+        ]
+      },
+      {
+        "key": "Udyr I",
+        "effects_raw": [
+          "Cooldown reduced by 50%.",
+          "Cooldown refund changed to 10%."
+        ],
+        "effects": [
+          "Cooldown reduced by 50%.",
+          "Cooldown refund changed to 10%."
+        ]
+      },
+      {
+        "key": "Zaahen I",
+        "effects_raw": [
+          "Bonus attack damage per stack changed to {{pp|1.5 + 1.3/17 * (x-1)|1 to 30 by 1|formula=1.5% + 1.3% ÷ 17 × (level − 1)|key=%|color=ad}}.",
+          "Total bonus attack damage changed to {{pp|1.5*12*2 + 1.3*12*2/17 * (x-1)|1 to 30 by 1|formula=36% + 31.2% ÷ 17 × (level − 1)|key=%|color=ad}}."
+        ],
+        "effects": [
+          "Bonus attack damage per stack changed to .",
+          "Total bonus attack damage changed to ."
+        ]
+      },
+      {
+        "key": "Zac I",
+        "effects_raw": [
+          "Cooldown set to 60 seconds."
+        ],
+        "effects": [
+          "Cooldown set to 60 seconds."
+        ]
+      },
+      {
+        "key": "Zilean Q",
+        "effects_raw": [
+          "Stun duration reduced by {{fd|0.6}} seconds.",
+          "Cooldown changed to {{ap|18 to 14.4}} seconds."
+        ],
+        "effects": [
+          "Stun duration reduced by 0.6 seconds.",
+          "Cooldown changed to 18 to 14.4 seconds."
+        ]
+      },
+      {
+        "key": "Zilean W",
+        "effects_raw": [
+          "Cooldown changed to {{ap|25.2 to 10.8}} seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 25.2 to 10.8 seconds."
+        ]
+      }
+    ],
+    "items": [
+      {
+        "key": "Dark Seal",
+        "effects_raw": [
+          "Stacks gained on kill changed to 1.",
+          "Stacks lost on death changed to 3."
+        ],
+        "effects": [
+          "Stacks gained on kill changed to 1.",
+          "Stacks lost on death changed to 3."
+        ]
+      },
+      {
+        "key": "Mejai's Soulstealer",
+        "effects_raw": [
+          "Stacks gained on kill changed to 2.",
+          "Stacks gained on assist changed to 1.",
+          "Stacks lost on death changed to 5."
+        ],
+        "effects": [
+          "Stacks gained on kill changed to 2.",
+          "Stacks gained on assist changed to 1.",
+          "Stacks lost on death changed to 5."
+        ]
+      },
+      {
+        "key": "Cull",
+        "effects_raw": [
+          "Reap minion kill requirement changed to 50."
+        ],
+        "effects": [
+          "Reap minion kill requirement changed to 50."
+        ]
+      },
+      {
+        "key": "Fimbulwinter",
+        "effects_raw": [
+          "Everlasting cooldown changed to 16 seconds.",
+          "Everlasting shield mana ratio changed to {{as|2% '''current''' mana}}."
+        ],
+        "effects": [
+          "Everlasting cooldown changed to 16 seconds.",
+          "Everlasting shield mana ratio changed to 2% 'current' mana."
+        ]
+      },
+      {
+        "key": "Heartsteel",
+        "effects_raw": [
+          "Colossal Consumption per-target cooldown changed to 30 seconds.",
+          "Colossal Consumption damage to health ratio changed to 5%."
+        ],
+        "effects": [
+          "Colossal Consumption per-target cooldown changed to 30 seconds.",
+          "Colossal Consumption damage to health ratio changed to 5%."
+        ]
+      },
+      {
+        "key": "Hubris",
+        "effects_raw": [
+          "Eminence duration changed to 45 seconds.",
+          "Eminence base bonus attack damage changed to 10.",
+          "Eminence bonus attack damage per stack changed to 1."
+        ],
+        "effects": [
+          "Eminence duration changed to 45 seconds.",
+          "Eminence base bonus attack damage changed to 10.",
+          "Eminence bonus attack damage per stack changed to 1."
+        ]
+      },
+      {
+        "key": "Rod of Ages",
+        "effects_raw": [
+          "Timeless stack interval changed to 40 seconds."
+        ],
+        "effects": [
+          "Timeless stack interval changed to 40 seconds."
+        ]
+      },
+      {
+        "key": "Sundered Sky",
+        "effects_raw": [
+          "Base heal changed to {{as|110% '''base''' AD}}.",
+          "Heal health ratio changed to {{as|4% '''missing''' health}}."
+        ],
+        "effects": [
+          "Base heal changed to 110% 'base' AD.",
+          "Heal health ratio changed to 4% 'missing' health."
+        ]
+      },
+      {
+        "key": "Unending Despair",
+        "effects_raw": [
+          "Anguish cooldown changed to 10 seconds.",
+          "Anguish healing changed to 175%."
+        ],
+        "effects": [
+          "Anguish cooldown changed to 10 seconds.",
+          "Anguish healing changed to 175%."
+        ]
+      },
+      {
+        "key": "Vigilant Wardstone",
+        "effects_raw": [
+          "This item is disabled."
+        ],
+        "effects": [
+          "This item is disabled."
+        ]
+      },
+      {
+        "key": "Watchful Wardstone",
+        "effects_raw": [
+          "This item is disabled."
+        ],
+        "effects": [
+          "This item is disabled."
+        ]
+      },
+      {
+        "key": "World Atlas",
+        "effects_raw": [
+          "This item is disabled."
+        ],
+        "effects": [
+          "This item is disabled."
+        ]
+      },
+      {
+        "key": "Gustwalker Hatchling",
+        "effects_raw": [
+          "First evolution changed to 10 treats.",
+          "Second evolution changed to 20 treats."
+        ],
+        "effects": [
+          "First evolution changed to 10 treats.",
+          "Second evolution changed to 20 treats."
+        ]
+      },
+      {
+        "key": "Mosstomper Seedling",
+        "effects_raw": [
+          "First evolution changed to 10 treats.",
+          "Second evolution changed to 20 treats."
+        ],
+        "effects": [
+          "First evolution changed to 10 treats.",
+          "Second evolution changed to 20 treats."
+        ]
+      },
+      {
+        "key": "Scorchclaw Pup",
+        "effects_raw": [
+          "First evolution changed to 10 treats.",
+          "Second evolution changed to 20 treats."
+        ],
+        "effects": [
+          "First evolution changed to 10 treats.",
+          "Second evolution changed to 20 treats."
+        ]
+      }
+    ],
+    "runes": [
+      {
+        "key": "Aftershock",
+        "effects_raw": [
+          "Cooldown changed to 15 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 15 seconds."
+        ]
+      },
+      {
+        "key": "Arcane Comet",
+        "effects_raw": [
+          "Cooldown continues scaling past level 18.",
+          "Cooldown scaling is now capped at {{fd|0.3}} seconds. ''Effectively, this is only relevant for levels 29 and 30.''"
+        ],
+        "effects": [
+          "Cooldown continues scaling past level 18.",
+          "Cooldown scaling is now capped at 0.3 seconds. Effectively, this is only relevant for levels 29 and 30."
+        ]
+      },
+      {
+        "key": "Biscuit Delivery",
+        "effects_raw": [
+          "Biscuit interval changed to {{fd|1.5}} minutes."
+        ],
+        "effects": [
+          "Biscuit interval changed to 1.5 minutes."
+        ]
+      },
+      {
+        "key": "Conditioning",
+        "effects_raw": [
+          "Initial cooldown changed to 6 minutes."
+        ],
+        "effects": [
+          "Initial cooldown changed to 6 minutes."
+        ]
+      },
+      {
+        "key": "Dark Harvest",
+        "effects_raw": [
+          "Cooldown changed to 12 seconds.",
+          "Base damage changed to {{pp|10 to 50}}.",
+          "AP ratio changed to {{as|10% AP}}.",
+          "AD ratio changed to {{as|20% '''bonus''' AD}}.",
+          "Damage per soul changed to 2."
+        ],
+        "effects": [
+          "Cooldown changed to 12 seconds.",
+          "Base damage changed to .",
+          "AP ratio changed to 10% AP.",
+          "AD ratio changed to 20% 'bonus' AD.",
+          "Damage per soul changed to 2."
+        ]
+      },
+      {
+        "key": "Demolish",
+        "effects_raw": [
+          "Cooldown changed to 30 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 30 seconds."
+        ]
+      },
+      {
+        "key": "Electrocute",
+        "effects_raw": [
+          "Cooldown changed to 10 seconds at all levels."
+        ],
+        "effects": [
+          "Cooldown changed to 10 seconds at all levels."
+        ]
+      },
+      {
+        "key": "First Strike",
+        "effects_raw": [
+          "Cooldown changed to {{pp|15 to 9}} seconds."
+        ],
+        "effects": [
+          "Cooldown changed to seconds."
+        ]
+      },
+      {
+        "key": "Gathering Storm",
+        "effects_raw": [
+          "Effect triggers every 6 minutes."
+        ],
+        "effects": [
+          "Effect triggers every 6 minutes."
+        ]
+      },
+      {
+        "key": "Grasp of the Undying",
+        "effects_raw": [
+          "Triggered attack bonus health changed to 15.",
+          "Ranged champions triggered attack bonus health changed to 9."
+        ],
+        "effects": [
+          "Triggered attack bonus health changed to 15.",
+          "Ranged champions triggered attack bonus health changed to 9."
+        ]
+      },
+      {
+        "key": "Glacial Augment",
+        "effects_raw": [
+          "Cooldown changed to 15 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 15 seconds."
+        ]
+      },
+      {
+        "key": "Magical Footwear",
+        "effects_raw": [
+          "Boots granted at 6 minutes."
+        ],
+        "effects": [
+          "Boots granted at 6 minutes."
+        ]
+      },
+      {
+        "key": "Nullifying Orb",
+        "effects_raw": [
+          "Cooldown changed to 30 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 30 seconds."
+        ]
+      },
+      {
+        "key": "Perfect Timing",
+        "effects_raw": [
+          "Initial cooldown changed to 4 minutes."
+        ],
+        "effects": [
+          "Initial cooldown changed to 4 minutes."
+        ]
+      },
+      {
+        "key": "Phase Rush",
+        "effects_raw": [
+          "Cooldown changed to 10 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 10 seconds."
+        ]
+      },
+      {
+        "key": "Taste of Blood",
+        "effects_raw": [
+          "Cooldown changed to 10 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 10 seconds."
+        ]
+      },
+      {
+        "key": "Unsealed Spellbook",
+        "effects_raw": [
+          "This rune is disabled."
+        ],
+        "effects": [
+          "This rune is disabled."
+        ]
+      }
+    ],
+    "summoner_spells": [
+      {
+        "key": "Smite",
+        "effects_raw": [
+          "Cooldown changed to 10 seconds.",
+          "Recharge timer changed to 120 seconds."
+        ],
+        "effects": [
+          "Cooldown changed to 10 seconds.",
+          "Recharge timer changed to 120 seconds."
+        ]
+      }
+    ]
+  }
+}
