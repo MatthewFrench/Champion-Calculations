@@ -1,0 +1,2193 @@
+{
+  "system_name": "Summoner Masteries",
+  "season": 2016,
+  "trees": [
+    {
+      "id": "cunning",
+      "name": "Cunning",
+      "replaces": "Utility",
+      "tiers": [
+        {
+          "tier": 1,
+          "points_in_tree_required": 0,
+          "points_available": 5,
+          "masteries": [
+            "Savagery",
+            "Wanderer"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 2,
+          "points_in_tree_required": 5,
+          "points_available": 1,
+          "masteries": [
+            "Assassin",
+            "Runic Affinity",
+            "Secret Stash"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 3,
+          "points_in_tree_required": 6,
+          "points_available": 5,
+          "masteries": [
+            "Meditation",
+            "Merciless"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 4,
+          "points_in_tree_required": 11,
+          "points_available": 1,
+          "masteries": [
+            "Bandit",
+            "Dangerous Game"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 5,
+          "points_in_tree_required": 12,
+          "points_available": 5,
+          "masteries": [
+            "Intelligence",
+            "Precision"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 6,
+          "points_in_tree_required": 17,
+          "points_available": 1,
+          "masteries": [
+            "Stormraider's Surge",
+            "Thunderlord's Decree",
+            "Windspeaker's Blessing"
+          ],
+          "is_keystone_tier": true
+        }
+      ]
+    },
+    {
+      "id": "ferocity",
+      "name": "Ferocity",
+      "replaces": "Offense",
+      "tiers": [
+        {
+          "tier": 1,
+          "points_in_tree_required": 0,
+          "points_available": 5,
+          "masteries": [
+            "Fury",
+            "Sorcery"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 2,
+          "points_in_tree_required": 5,
+          "points_available": 1,
+          "masteries": [
+            "Expose Weakness",
+            "Feast"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 3,
+          "points_in_tree_required": 6,
+          "points_available": 5,
+          "masteries": [
+            "Natural Talent",
+            "Vampirism"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 4,
+          "points_in_tree_required": 11,
+          "points_available": 1,
+          "masteries": [
+            "Bounty Hunter",
+            "Double-Edged Sword",
+            "Oppressor"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 5,
+          "points_in_tree_required": 12,
+          "points_available": 5,
+          "masteries": [
+            "Battering Blows",
+            "Piercing Thoughts"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 6,
+          "points_in_tree_required": 17,
+          "points_available": 1,
+          "masteries": [
+            "Deathfire Touch",
+            "Fervor of Battle",
+            "Warlord's Bloodlust"
+          ],
+          "is_keystone_tier": true
+        }
+      ]
+    },
+    {
+      "id": "resolve",
+      "name": "Resolve",
+      "replaces": "Defense",
+      "tiers": [
+        {
+          "tier": 1,
+          "points_in_tree_required": 0,
+          "points_available": 5,
+          "masteries": [
+            "Recovery",
+            "Unyielding"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 2,
+          "points_in_tree_required": 5,
+          "points_available": 1,
+          "masteries": [
+            "Explorer",
+            "Tough Skin"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 3,
+          "points_in_tree_required": 6,
+          "points_available": 5,
+          "masteries": [
+            "Runic Armor",
+            "Veteran's Scars"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 4,
+          "points_in_tree_required": 11,
+          "points_available": 1,
+          "masteries": [
+            "Insight",
+            "Perseverance"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 5,
+          "points_in_tree_required": 12,
+          "points_available": 5,
+          "masteries": [
+            "Legendary Guardian",
+            "Swiftness"
+          ],
+          "is_keystone_tier": false
+        },
+        {
+          "tier": 6,
+          "points_in_tree_required": 17,
+          "points_available": 1,
+          "masteries": [
+            "Bond of Stone",
+            "Grasp of the Undying",
+            "Strength of the Ages"
+          ],
+          "is_keystone_tier": true
+        }
+      ]
+    }
+  ],
+  "selection_rules": {
+    "total_points": 30,
+    "max_points_per_tree": 18,
+    "primary_tree_points": 18,
+    "secondary_tree_points": 12,
+    "tertiary_tree_points": 0,
+    "keystone_requirement_points_in_tree": 17,
+    "keystone_pick_limit": 1
+  },
+  "notes": [
+    "Season 2016 masteries use three trees (Ferocity, Cunning, Resolve) with tiered point-gated choices.",
+    "Each tier allows a maximum number of points, so you cannot freely distribute all points within a tree.",
+    "Keystones are the final tier and require deep investment in a tree.",
+    "Tree tiers and mastery lists are now generated from mastery data templates to ensure completeness."
+  ],
+  "effects_status": {
+    "per_mastery_effects_included": true,
+    "reason": "Per-mastery effects loaded from mastery data templates with raw and structured effect fields."
+  },
+  "sources": [
+    {
+      "name": "Summoner Mastery overview",
+      "url": "https://wiki.leagueoflegends.com/en-us/Summoner_Mastery",
+      "used_for": [
+        "system overview",
+        "tree names and historical context"
+      ]
+    },
+    {
+      "name": "Ferocity Mastery Tree (2016)",
+      "url": "https://leagueoflegends.fandom.com/wiki/Ferocity_Mastery_Tree_%282016%29",
+      "used_for": [
+        "Ferocity tier lists",
+        "keystone list",
+        "points per tier"
+      ]
+    },
+    {
+      "name": "Cunning Mastery Tree (2016)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Cunning_Mastery_Tree_%282016%29",
+      "used_for": [
+        "Cunning tier lists",
+        "keystone list",
+        "points per tier"
+      ]
+    },
+    {
+      "name": "Resolve Mastery Tree (2016)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Resolve_Mastery_Tree_%282016%29",
+      "used_for": [
+        "Resolve tier lists",
+        "keystone list",
+        "points per tier"
+      ]
+    },
+    {
+      "name": "Template:Mastery data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data/doc",
+      "used_for": [
+        "future per-mastery effect fields"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Mastery data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Mastery_data_templates",
+      "used_for": [
+        "enumerating Season 2016 mastery templates"
+      ]
+    }
+  ],
+  "masteries": [
+    {
+      "mastery_id": "Savagery",
+      "display_name": "Savagery",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 1,
+      "ranks": 5,
+      "points_required_in_tree": 0,
+      "effects": {
+        "primary": "Basic attacks and single target spells deal 1 / 2 / 3 / 4 / 5 bonus damage to minions and monsters .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Basic attacks and single target spells deal 1 / 2 / 3 / 4 / 5 bonus damage to minions and monsters .",
+          "numbers_extracted": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Savagery (Season 2016 Mastery)",
+        "disp_name": "Savagery",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "1",
+        "rank": "5",
+        "req": "0",
+        "effects": "Basic attacks and single target spells deal 1 / 2 / 3 / 4 / 5 bonus damage to minions and monsters .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Savagery",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Savagery"
+    },
+    {
+      "mastery_id": "Wanderer",
+      "display_name": "Wanderer",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 1,
+      "ranks": 5,
+      "points_required_in_tree": 0,
+      "effects": {
+        "primary": "Increases champion movement speed by 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% when out of combat.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Increases champion movement speed by 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% when out of combat.",
+          "numbers_extracted": [
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Wanderer (Season 2016 Mastery)",
+        "disp_name": "Wanderer",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "1",
+        "rank": "5",
+        "req": "0",
+        "effects": "Increases champion movement speed by 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% when out of combat.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Wanderer",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Wanderer"
+    },
+    {
+      "mastery_id": "Assassin",
+      "display_name": "Assassin",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Grants 2% increased damage against enemy champions while no allied champions are nearby.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 2% increased damage against enemy champions while no allied champions are nearby.",
+          "numbers_extracted": [
+            2
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "800",
+      "raw_parameters": {
+        "1": "Assassin (Season 2016 Mastery)",
+        "disp_name": "Assassin",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Grants 2% increased damage against enemy champions while no allied champions are nearby.",
+        "effects2": "",
+        "cd": "",
+        "range": "800"
+      },
+      "source_template": "Template:Mastery data Assassin",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Assassin"
+    },
+    {
+      "mastery_id": "Runic Affinity",
+      "display_name": "Runic Affinity",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Buffs granted by jungle monsters last 15% longer, including epic monsters.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Buffs granted by jungle monsters last 15% longer, including epic monsters.",
+          "numbers_extracted": [
+            15
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Runic Affinity (Season 2016 Mastery)",
+        "disp_name": "Runic Affinity",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Buffs granted by jungle monsters last 15% longer, including epic monsters.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Runic Affinity",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Runic_Affinity"
+    },
+    {
+      "mastery_id": "Secret Stash",
+      "display_name": "Secret Stash",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Your potions ( Health Potion , refillable potions ( Refillable , Corrupting , Hunter's Potion ) and elixirs ( Elixir of Iron , Sorcery , Wrath ) last 10% longer. Additionally, your Health Potions are replaced with Total Biscuits of Rejuvenation that restore an additional 15 health and mana instantly upon consumption.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Your potions ( Health Potion , refillable potions ( Refillable , Corrupting , Hunter's Potion ) and elixirs ( Elixir of Iron , Sorcery , Wrath ) last 10% longer. Additionally, your Health Potions are replaced with Total Biscuits of Rejuvenation that restore an additional 15 health and mana instantly upon consumption.",
+          "numbers_extracted": [
+            10,
+            15
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Secret Stash (Season 2016 Mastery)",
+        "disp_name": "Secret Stash",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Your potions ( Health Potion , refillable potions ( Refillable , Corrupting , Hunter's Potion ) and elixirs ( Elixir of Iron , Sorcery , Wrath ) last 10% longer. Additionally, your Health Potions are replaced with Total Biscuits of Rejuvenation that restore an additional 15 health and mana instantly upon consumption.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Secret Stash",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Secret_Stash"
+    },
+    {
+      "mastery_id": "Meditation",
+      "display_name": "Meditation",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 3,
+      "ranks": 5,
+      "points_required_in_tree": 6,
+      "effects": {
+        "primary": "Once every 5 seconds, you will restore 0. 25 / 0. 5 / 0. 75 / 1 / 1. 25 % of missing mana .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Once every 5 seconds, you will restore 0. 25 / 0. 5 / 0. 75 / 1 / 1. 25 % of missing mana .",
+          "numbers_extracted": [
+            5,
+            0.0,
+            25,
+            0.0,
+            5,
+            0.0,
+            75,
+            1,
+            1.0,
+            25
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Meditation (Season 2016 Mastery)",
+        "disp_name": "Meditation",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "3",
+        "rank": "5",
+        "req": "6",
+        "effects": "Once every 5 seconds, you will restore 0. 25 / 0. 5 / 0. 75 / 1 / 1. 25 % of missing mana .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Meditation",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Meditation"
+    },
+    {
+      "mastery_id": "Merciless",
+      "display_name": "Merciless",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 3,
+      "ranks": 5,
+      "points_required_in_tree": 6,
+      "effects": {
+        "primary": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% increased damage against champions below 40% health .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% increased damage against champions below 40% health .",
+          "numbers_extracted": [
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3,
+            40
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Merciless (Season 2016 Mastery)",
+        "disp_name": "Merciless",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "3",
+        "rank": "5",
+        "req": "6",
+        "effects": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% increased damage against champions below 40% health .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Merciless",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Merciless"
+    },
+    {
+      "mastery_id": "Bandit",
+      "display_name": "Bandit",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "Gain 1 for each nearby minion killed by an ally. Gain 3 / 10 when hitting an enemy champion with a basic attack or an ability that applies on-hit effects .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Gain 1 for each nearby minion killed by an ally. Gain 3 / 10 when hitting an enemy champion with a basic attack or an ability that applies on-hit effects .",
+          "numbers_extracted": [
+            1,
+            3,
+            10
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "5",
+      "range": "",
+      "raw_parameters": {
+        "1": "Bandit (Season 2016 Mastery)",
+        "disp_name": "Bandit",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "Gain 1 for each nearby minion killed by an ally. Gain 3 / 10 when hitting an enemy champion with a basic attack or an ability that applies on-hit effects .",
+        "effects2": "",
+        "cd": "5",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Bandit",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Bandit"
+    },
+    {
+      "mastery_id": "Dangerous Game",
+      "display_name": "Dangerous Game",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "Champion kills and assists restore 5% of missing health and 5% of missing mana .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Champion kills and assists restore 5% of missing health and 5% of missing mana .",
+          "numbers_extracted": [
+            5,
+            5
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Dangerous Game (Season 2016 Mastery)",
+        "disp_name": "Dangerous Game",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "Champion kills and assists restore 5% of missing health and 5% of missing mana .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Dangerous Game",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Dangerous_Game"
+    },
+    {
+      "mastery_id": "Intelligence",
+      "display_name": "Intelligence",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 5,
+      "ranks": 5,
+      "points_required_in_tree": 12,
+      "effects": {
+        "primary": "Increases the cooldown reduction cap by 1 / 2 / 3 / 4 / 5% and grants 1 / 2 / 3 / 4 / 5% cooldown reduction .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Increases the cooldown reduction cap by 1 / 2 / 3 / 4 / 5% and grants 1 / 2 / 3 / 4 / 5% cooldown reduction .",
+          "numbers_extracted": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Intelligence (Season 2016 Mastery)",
+        "disp_name": "Intelligence",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "5",
+        "rank": "5",
+        "req": "12",
+        "effects": "Increases the cooldown reduction cap by 1 / 2 / 3 / 4 / 5% and grants 1 / 2 / 3 / 4 / 5% cooldown reduction .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Intelligence",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Intelligence"
+    },
+    {
+      "mastery_id": "Precision",
+      "display_name": "Precision",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 5,
+      "ranks": 5,
+      "points_required_in_tree": 12,
+      "effects": {
+        "primary": "Grants 1. 2 / 2. 4 / 3. 6 / 4. 8 / 6 Lethality and 0. 3 + (0. 05 × level) / 0. 6 + (0. 1 × level) / 0. 9 + (0. 15 × level) / 1. 2 + (0. 2 × level) / 1. 5 + (0. 25 × level) magic penetration Rank 1: 0. 35 – 1. 2 (based on level) Rank 2: 0. 7 – 2. 4 (based on level) Rank 3: 1. 05 – 3. 6 (based on level) Rank 4: 1. 4 – 4. 8 (based on level) Rank 5: 1. 75 – 6 (based on level)",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 1. 2 / 2. 4 / 3. 6 / 4. 8 / 6 Lethality and 0. 3 + (0. 05 × level) / 0. 6 + (0. 1 × level) / 0. 9 + (0. 15 × level) / 1. 2 + (0. 2 × level) / 1. 5 + (0. 25 × level) magic penetration Rank 1: 0. 35 – 1. 2 (based on level) Rank 2: 0. 7 – 2. 4 (based on level) Rank 3: 1. 05 – 3. 6 (based on level) Rank 4: 1. 4 – 4. 8 (based on level) Rank 5: 1. 75 – 6 (based on level)",
+          "numbers_extracted": [
+            1.0,
+            2,
+            2.0,
+            4,
+            3.0,
+            6,
+            4.0,
+            8,
+            6,
+            0.0,
+            3,
+            0.0,
+            5,
+            0.0,
+            6,
+            0.0,
+            1,
+            0.0,
+            9,
+            0.0,
+            15,
+            1.0,
+            2,
+            0.0,
+            2,
+            1.0,
+            5,
+            0.0,
+            25,
+            1,
+            0.0,
+            35,
+            1.0,
+            2,
+            2,
+            0.0,
+            7,
+            2.0,
+            4,
+            3,
+            1.0,
+            5,
+            3.0,
+            6,
+            4,
+            1.0,
+            4,
+            4.0,
+            8,
+            5,
+            1.0,
+            75,
+            6
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Precision (Season 2016 Mastery)",
+        "disp_name": "Precision",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "5",
+        "rank": "5",
+        "req": "12",
+        "effects": "Grants 1. 2 / 2. 4 / 3. 6 / 4. 8 / 6 Lethality and 0. 3 + (0. 05 × level) / 0. 6 + (0. 1 × level) / 0. 9 + (0. 15 × level) / 1. 2 + (0. 2 × level) / 1. 5 + (0. 25 × level) magic penetration Rank 1: 0. 35 – 1. 2 (based on level) Rank 2: 0. 7 – 2. 4 (based on level) Rank 3: 1. 05 – 3. 6 (based on level) Rank 4: 1. 4 – 4. 8 (based on level) Rank 5: 1. 75 – 6 (based on level)",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Precision",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Precision"
+    },
+    {
+      "mastery_id": "Stormraider's Surge",
+      "display_name": "Stormraider's Surge",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "Dealing 30% of a champion's maximum health within 2. 5 seconds grants you 40% bonus movement speed and 75% Slow Resist for 3 seconds.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Dealing 30% of a champion's maximum health within 2. 5 seconds grants you 40% bonus movement speed and 75% Slow Resist for 3 seconds.",
+          "numbers_extracted": [
+            30,
+            2.0,
+            5,
+            40,
+            75,
+            3
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "10",
+      "range": "",
+      "raw_parameters": {
+        "1": "Stormraider's Surge (Season 2016 Mastery)",
+        "disp_name": "Stormraider's Surge",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "Dealing 30% of a champion's maximum health within 2. 5 seconds grants you 40% bonus movement speed and 75% Slow Resist for 3 seconds.",
+        "effects2": "",
+        "cd": "10",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Stormraider's Surge",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Stormraider's_Surge"
+    },
+    {
+      "mastery_id": "Thunderlord's Decree",
+      "display_name": "Thunderlord's Decree",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "Hitting an enemy champion with an ability ( ability damage ) or basic attack ( on-hit ) marks them with Thunderlord's Decree for 3 seconds. At 3 stacks, the target is dealt 10 – 180 (based on level) + (30% bonus AD) + (10% AP) magic damage in an area around them. Thunderlord's Decree can only be triggered once every 25 – 15 (based on level) seconds. Persistent area of effects, such as Fiddlesticks' Crowstorm and Morgana's Tormented Soil , hit with each application of damage. Applied damage over time effects, like Fiddlesticks' Drain or Swain's Torment , only hit once.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Hitting an enemy champion with an ability ( ability damage ) or basic attack ( on-hit ) marks them with Thunderlord's Decree for 3 seconds. At 3 stacks, the target is dealt 10 – 180 (based on level) + (30% bonus AD) + (10% AP) magic damage in an area around them. Thunderlord's Decree can only be triggered once every 25 – 15 (based on level) seconds. Persistent area of effects, such as Fiddlesticks' Crowstorm and Morgana's Tormented Soil , hit with each application of damage. Applied damage over time effects, like Fiddlesticks' Drain or Swain's Torment , only hit once.",
+          "numbers_extracted": [
+            3,
+            3,
+            10,
+            180,
+            30,
+            10,
+            25,
+            15
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Thunderlord's Decree (Season 2016 Mastery)",
+        "disp_name": "Thunderlord's Decree",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "Hitting an enemy champion with an ability ( ability damage ) or basic attack ( on-hit ) marks them with Thunderlord's Decree for 3 seconds. At 3 stacks, the target is dealt 10 – 180 (based on level) + (30% bonus AD) + (10% AP) magic damage in an area around them. Thunderlord's Decree can only be triggered once every 25 – 15 (based on level) seconds. Persistent area of effects, such as Fiddlesticks' Crowstorm and Morgana's Tormented Soil , hit with each application of damage. Applied damage over time effects, like Fiddlesticks' Drain or Swain's Torment , only hit once.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Thunderlord's Decree",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Thunderlord's_Decree"
+    },
+    {
+      "mastery_id": "Windspeaker's Blessing",
+      "display_name": "Windspeaker's Blessing",
+      "season": 2016,
+      "tree": "Cunning",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "Your heals and shields are 10% stronger. Additionally, heals and shields on allies increase your target's armor by 5 – 22 (based on level) and magic resistance by 2. 5 – 11 (based on level) for 3 seconds.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Your heals and shields are 10% stronger. Additionally, heals and shields on allies increase your target's armor by 5 – 22 (based on level) and magic resistance by 2. 5 – 11 (based on level) for 3 seconds.",
+          "numbers_extracted": [
+            10,
+            5,
+            22,
+            2.0,
+            5,
+            11,
+            3
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Windspeaker's Blessing (Season 2016 Mastery)",
+        "disp_name": "Windspeaker's Blessing",
+        "season": "2016",
+        "tree": "Cunning",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "Your heals and shields are 10% stronger. Additionally, heals and shields on allies increase your target's armor by 5 – 22 (based on level) and magic resistance by 2. 5 – 11 (based on level) for 3 seconds.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Windspeaker's Blessing",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Windspeaker's_Blessing"
+    },
+    {
+      "mastery_id": "Fury",
+      "display_name": "Fury",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 1,
+      "ranks": 5,
+      "points_required_in_tree": 0,
+      "effects": {
+        "primary": "Increases champion attack speed by 0. 8 / 1. 6 / 2. 4 / 3. 2 / 4%.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Increases champion attack speed by 0. 8 / 1. 6 / 2. 4 / 3. 2 / 4%.",
+          "numbers_extracted": [
+            0.0,
+            8,
+            1.0,
+            6,
+            2.0,
+            4,
+            3.0,
+            2,
+            4
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Fury (Season 2016 Mastery)",
+        "disp_name": "Fury",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "1",
+        "rank": "5",
+        "req": "0",
+        "effects": "Increases champion attack speed by 0. 8 / 1. 6 / 2. 4 / 3. 2 / 4%.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Fury",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Fury"
+    },
+    {
+      "mastery_id": "Sorcery",
+      "display_name": "Sorcery",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 1,
+      "ranks": 5,
+      "points_required_in_tree": 0,
+      "effects": {
+        "primary": "Increases ability and spell damage by 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2%.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Increases ability and spell damage by 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2%.",
+          "numbers_extracted": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Sorcery (Season 2016 Mastery)",
+        "disp_name": "Sorcery",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "1",
+        "rank": "5",
+        "req": "0",
+        "effects": "Increases ability and spell damage by 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2%.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Sorcery",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Sorcery"
+    },
+    {
+      "mastery_id": "Expose Weakness",
+      "display_name": "Expose Weakness",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Your damaging abilities debuff enemies for 3 seconds, increasing the damage they take from allied champions by 3%.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Your damaging abilities debuff enemies for 3 seconds, increasing the damage they take from allied champions by 3%.",
+          "numbers_extracted": [
+            3,
+            3
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Expose Weakness (Season 2016 Mastery)",
+        "disp_name": "Expose Weakness",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Your damaging abilities debuff enemies for 3 seconds, increasing the damage they take from allied champions by 3%.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Expose Weakness",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Expose_Weakness"
+    },
+    {
+      "mastery_id": "Feast",
+      "display_name": "Feast",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Killing a unit restores 20 health .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Killing a unit restores 20 health .",
+          "numbers_extracted": [
+            20
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "30",
+      "range": "",
+      "raw_parameters": {
+        "1": "Feast (Season 2016 Mastery)",
+        "disp_name": "Feast",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Killing a unit restores 20 health .",
+        "effects2": "",
+        "cd": "30",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Feast",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Feast"
+    },
+    {
+      "mastery_id": "Natural Talent",
+      "display_name": "Natural Talent",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 3,
+      "ranks": 5,
+      "points_required_in_tree": 6,
+      "effects": {
+        "primary": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 + (0. 089 / 0. 178 / 0. 267 / 0. 356 / 0. 444 × level) attack damage (2 / 4 / 6 / 8 / 10 at level 18) and 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 + (0. 133 / 0. 267 / 0. 4 / 0. 533 / 0. 667 × level) ability power (3 / 6 / 9 / 12 / 15 at level 18).",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 + (0. 089 / 0. 178 / 0. 267 / 0. 356 / 0. 444 × level) attack damage (2 / 4 / 6 / 8 / 10 at level 18) and 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 + (0. 133 / 0. 267 / 0. 4 / 0. 533 / 0. 667 × level) ability power (3 / 6 / 9 / 12 / 15 at level 18).",
+          "numbers_extracted": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2,
+            0.0,
+            89,
+            0.0,
+            178,
+            0.0,
+            267,
+            0.0,
+            356,
+            0.0,
+            444,
+            2,
+            4,
+            6,
+            8,
+            10,
+            18,
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3,
+            0.0,
+            133,
+            0.0,
+            267,
+            0.0,
+            4,
+            0.0,
+            533,
+            0.0,
+            667,
+            3,
+            6,
+            9,
+            12,
+            15,
+            18
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Natural Talent (Season 2016 Mastery)",
+        "disp_name": "Natural Talent",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "3",
+        "rank": "5",
+        "req": "6",
+        "effects": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 + (0. 089 / 0. 178 / 0. 267 / 0. 356 / 0. 444 × level) attack damage (2 / 4 / 6 / 8 / 10 at level 18) and 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 + (0. 133 / 0. 267 / 0. 4 / 0. 533 / 0. 667 × level) ability power (3 / 6 / 9 / 12 / 15 at level 18).",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Natural Talent",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Natural_Talent"
+    },
+    {
+      "mastery_id": "Vampirism",
+      "display_name": "Vampirism",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 3,
+      "ranks": 5,
+      "points_required_in_tree": 6,
+      "effects": {
+        "primary": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2% life steal and spell vamp .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2% life steal and spell vamp .",
+          "numbers_extracted": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Vampirism (Season 2016 Mastery)",
+        "disp_name": "Vampirism",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "3",
+        "rank": "5",
+        "req": "6",
+        "effects": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2% life steal and spell vamp .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Vampirism",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Vampirism"
+    },
+    {
+      "mastery_id": "Bounty Hunter",
+      "display_name": "Bounty Hunter",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "Grants 1% increased damage for each unique enemy champion you kill. (Your damage output increases by 1% each time you kill an enemy champion for the first time)",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 1% increased damage for each unique enemy champion you kill. (Your damage output increases by 1% each time you kill an enemy champion for the first time)",
+          "numbers_extracted": [
+            1,
+            1
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Bounty Hunter (Season 2016 Mastery)",
+        "disp_name": "Bounty Hunter",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "Grants 1% increased damage for each unique enemy champion you kill. (Your damage output increases by 1% each time you kill an enemy champion for the first time)",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Bounty Hunter",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Bounty_Hunter"
+    },
+    {
+      "mastery_id": "Double-Edged Sword",
+      "display_name": "Double-Edged Sword",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "You deal 3% increased damage from all sources, but take 1. 5 % increased damage from all sources.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "You deal 3% increased damage from all sources, but take 1. 5 % increased damage from all sources.",
+          "numbers_extracted": [
+            3,
+            1.0,
+            5
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Double-Edged Sword (Season 2016 Mastery)",
+        "disp_name": "Double-Edged Sword",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "You deal 3% increased damage from all sources, but take 1. 5 % increased damage from all sources.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Double-Edged Sword",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Double-Edged_Sword"
+    },
+    {
+      "mastery_id": "Oppressor",
+      "display_name": "Oppressor",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "Grants 2. 5 % increased damage against units with impaired movement ( airborne , slow , stun , root , taunt , suppression ).",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 2. 5 % increased damage against units with impaired movement ( airborne , slow , stun , root , taunt , suppression ).",
+          "numbers_extracted": [
+            2.0,
+            5
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Oppressor (Season 2016 Mastery)",
+        "disp_name": "Oppressor",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "Grants 2. 5 % increased damage against units with impaired movement ( airborne , slow , stun , root , taunt , suppression ).",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Oppressor",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Oppressor"
+    },
+    {
+      "mastery_id": "Battering Blows",
+      "display_name": "Battering Blows",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 5,
+      "ranks": 5,
+      "points_required_in_tree": 12,
+      "effects": {
+        "primary": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% armor penetration .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% armor penetration .",
+          "numbers_extracted": [
+            1.0,
+            4,
+            2.0,
+            8,
+            4.0,
+            2,
+            5.0,
+            6,
+            7
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Battering Blows (Season 2016 Mastery)",
+        "disp_name": "Battering Blows",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "5",
+        "rank": "5",
+        "req": "12",
+        "effects": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% armor penetration .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Battering Blows",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Battering_Blows"
+    },
+    {
+      "mastery_id": "Piercing Thoughts",
+      "display_name": "Piercing Thoughts",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 5,
+      "ranks": 5,
+      "points_required_in_tree": 12,
+      "effects": {
+        "primary": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% magic penetration .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% magic penetration .",
+          "numbers_extracted": [
+            1.0,
+            4,
+            2.0,
+            8,
+            4.0,
+            2,
+            5.0,
+            6,
+            7
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Piercing Thoughts (Season 2016 Mastery)",
+        "disp_name": "Piercing Thoughts",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "5",
+        "rank": "5",
+        "req": "12",
+        "effects": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% magic penetration .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Piercing Thoughts",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Piercing_Thoughts"
+    },
+    {
+      "mastery_id": "Deathfire Touch",
+      "display_name": "Deathfire Touch",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "Dealing ability damage to enemy champions applies a bleed, dealing 1 (+ 3. 125 % AP) (+ 5. 625 % bonus AD) magic damage every half-second for a duration based on their type. Single Target : 4 seconds for a total of 8 (+ 25% AP) (+ 45% bonus AD) magic damage. Area of effect : 2 seconds for a total of 4 (+ 12. 5 % AP) (+ 22. 5 % bonus AD) magic damage. Damage over time : 1 second for a total of 2 (+ 6. 25 % AP) (+ 11. 25 % bonus AD) magic damage.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Dealing ability damage to enemy champions applies a bleed, dealing 1 (+ 3. 125 % AP) (+ 5. 625 % bonus AD) magic damage every half-second for a duration based on their type. Single Target : 4 seconds for a total of 8 (+ 25% AP) (+ 45% bonus AD) magic damage. Area of effect : 2 seconds for a total of 4 (+ 12. 5 % AP) (+ 22. 5 % bonus AD) magic damage. Damage over time : 1 second for a total of 2 (+ 6. 25 % AP) (+ 11. 25 % bonus AD) magic damage.",
+          "numbers_extracted": [
+            1,
+            3.0,
+            125,
+            5.0,
+            625,
+            4,
+            8,
+            25,
+            45,
+            2,
+            4,
+            12.0,
+            5,
+            22.0,
+            5,
+            1,
+            2,
+            6.0,
+            25,
+            11.0,
+            25
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Deathfire Touch (Season 2016 Mastery)",
+        "disp_name": "Deathfire Touch",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "Dealing ability damage to enemy champions applies a bleed, dealing 1 (+ 3. 125 % AP) (+ 5. 625 % bonus AD) magic damage every half-second for a duration based on their type. Single Target : 4 seconds for a total of 8 (+ 25% AP) (+ 45% bonus AD) magic damage. Area of effect : 2 seconds for a total of 4 (+ 12. 5 % AP) (+ 22. 5 % bonus AD) magic damage. Damage over time : 1 second for a total of 2 (+ 6. 25 % AP) (+ 11. 25 % bonus AD) magic damage.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Deathfire Touch",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Deathfire_Touch"
+    },
+    {
+      "mastery_id": "Fervor of Battle",
+      "display_name": "Fervor of Battle",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "You gain ( 2 / 1 ) stacks of Fervor for 8 seconds with each basic attack on-hit against an enemy champion , stacking up to 8 times.",
+        "secondary": "Each stack of Fervor adds 1 – 8 (based on level) AD for a maximum of 8 – 64 (based on level) AD ."
+      },
+      "effects_structured": [
+        {
+          "raw": "You gain ( 2 / 1 ) stacks of Fervor for 8 seconds with each basic attack on-hit against an enemy champion , stacking up to 8 times.",
+          "numbers_extracted": [
+            2,
+            1,
+            8,
+            8
+          ],
+          "unit_hint": "seconds"
+        },
+        {
+          "raw": "Each stack of Fervor adds 1 – 8 (based on level) AD for a maximum of 8 – 64 (based on level) AD .",
+          "numbers_extracted": [
+            1,
+            8,
+            8,
+            64
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Fervor of Battle (Season 2016 Mastery)",
+        "disp_name": "Fervor of Battle",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "You gain ( 2 / 1 ) stacks of Fervor for 8 seconds with each basic attack on-hit against an enemy champion , stacking up to 8 times.",
+        "effects2": "Each stack of Fervor adds 1 – 8 (based on level) AD for a maximum of 8 – 64 (based on level) AD .",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Fervor of Battle",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Fervor_of_Battle"
+    },
+    {
+      "mastery_id": "Warlord's Bloodlust",
+      "display_name": "Warlord's Bloodlust",
+      "season": 2016,
+      "tree": "Ferocity",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "Moving or attacking makes an attack Energized . Energized attacks heal for 5% – 40% (based on level) AD and grant 30% movement speed for 0. 75 seconds.",
+        "secondary": "If the Energized attack critically strikes , it instead heals for 5% – 40% (based on level) AD × (2 + bonus critical strike damage )."
+      },
+      "effects_structured": [
+        {
+          "raw": "Moving or attacking makes an attack Energized . Energized attacks heal for 5% – 40% (based on level) AD and grant 30% movement speed for 0. 75 seconds.",
+          "numbers_extracted": [
+            5,
+            40,
+            30,
+            0.0,
+            75
+          ],
+          "unit_hint": "percent"
+        },
+        {
+          "raw": "If the Energized attack critically strikes , it instead heals for 5% – 40% (based on level) AD × (2 + bonus critical strike damage ).",
+          "numbers_extracted": [
+            5,
+            40,
+            2
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Warlord's Bloodlust",
+        "disp_name": "Warlord's Bloodlust",
+        "season": "2016",
+        "tree": "Ferocity",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "Moving or attacking makes an attack Energized . Energized attacks heal for 5% – 40% (based on level) AD and grant 30% movement speed for 0. 75 seconds.",
+        "effects2": "If the Energized attack critically strikes , it instead heals for 5% – 40% (based on level) AD × (2 + bonus critical strike damage ).",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Warlord's Bloodlust",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Warlord's_Bloodlust"
+    },
+    {
+      "mastery_id": "Recovery",
+      "display_name": "Recovery",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 1,
+      "ranks": 5,
+      "points_required_in_tree": 0,
+      "effects": {
+        "primary": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 health regeneration per 5 seconds.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 health regeneration per 5 seconds.",
+          "numbers_extracted": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2,
+            5
+          ],
+          "unit_hint": "seconds"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Recovery (Season 2016 Mastery)",
+        "disp_name": "Recovery",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "1",
+        "rank": "5",
+        "req": "0",
+        "effects": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 health regeneration per 5 seconds.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Recovery",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Recovery"
+    },
+    {
+      "mastery_id": "Unyielding",
+      "display_name": "Unyielding",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 1,
+      "ranks": 5,
+      "points_required_in_tree": 0,
+      "effects": {
+        "primary": "Increases bonus armor and magic resistance by 1 / 2 / 3 / 4 / 5%.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Increases bonus armor and magic resistance by 1 / 2 / 3 / 4 / 5%.",
+          "numbers_extracted": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Unyielding (Season 2016 Mastery)",
+        "disp_name": "Unyielding",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "1",
+        "rank": "5",
+        "req": "0",
+        "effects": "Increases bonus armor and magic resistance by 1 / 2 / 3 / 4 / 5%.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Unyielding",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Unyielding"
+    },
+    {
+      "mastery_id": "Explorer",
+      "display_name": "Explorer",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Grants 15 bonus flat movement speed in brush and river.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 15 bonus flat movement speed in brush and river.",
+          "numbers_extracted": [
+            15
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Explorer (Season 2016 Mastery)",
+        "disp_name": "Explorer",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Grants 15 bonus flat movement speed in brush and river.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Explorer",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Explorer"
+    },
+    {
+      "mastery_id": "Tough Skin",
+      "display_name": "Tough Skin",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 2,
+      "ranks": 1,
+      "points_required_in_tree": 5,
+      "effects": {
+        "primary": "Reduces damage from champion's and monster's basic attacks by 2 after armor reductions.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Reduces damage from champion's and monster's basic attacks by 2 after armor reductions.",
+          "numbers_extracted": [
+            2
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Tough Skin (Season 2016 Mastery)",
+        "disp_name": "Tough Skin",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "2",
+        "rank": "1",
+        "req": "5",
+        "effects": "Reduces damage from champion's and monster's basic attacks by 2 after armor reductions.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Tough Skin",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Tough_Skin"
+    },
+    {
+      "mastery_id": "Runic Armor",
+      "display_name": "Runic Armor",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 3,
+      "ranks": 5,
+      "points_required_in_tree": 6,
+      "effects": {
+        "primary": "Grants 1. 6 / 3. 2 / 4. 8 / 6. 4 / 8% stronger shields and health restoration on you (includes life steal , spell vamp and health regeneration ).",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 1. 6 / 3. 2 / 4. 8 / 6. 4 / 8% stronger shields and health restoration on you (includes life steal , spell vamp and health regeneration ).",
+          "numbers_extracted": [
+            1.0,
+            6,
+            3.0,
+            2,
+            4.0,
+            8,
+            6.0,
+            4,
+            8
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Runic Armor (Season 2016 Mastery)",
+        "disp_name": "Runic Armor",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "3",
+        "rank": "5",
+        "req": "6",
+        "effects": "Grants 1. 6 / 3. 2 / 4. 8 / 6. 4 / 8% stronger shields and health restoration on you (includes life steal , spell vamp and health regeneration ).",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Runic Armor",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Runic_Armor"
+    },
+    {
+      "mastery_id": "Veteran's Scars",
+      "display_name": "Veteran's Scars",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 3,
+      "ranks": 5,
+      "points_required_in_tree": 6,
+      "effects": {
+        "primary": "Grants 10 / 20 / 30 / 40 / 50 health .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 10 / 20 / 30 / 40 / 50 health .",
+          "numbers_extracted": [
+            10,
+            20,
+            30,
+            40,
+            50
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Veteran's Scars (Season 2016 Mastery)",
+        "disp_name": "Veteran's Scars",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "3",
+        "rank": "5",
+        "req": "6",
+        "effects": "Grants 10 / 20 / 30 / 40 / 50 health .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Veteran's Scars",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Veteran's_Scars"
+    },
+    {
+      "mastery_id": "Insight",
+      "display_name": "Insight",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "Grants 15% reduced summoner spell cooldowns.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 15% reduced summoner spell cooldowns.",
+          "numbers_extracted": [
+            15
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Insight (Season 2016 Mastery)",
+        "disp_name": "Insight",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "Grants 15% reduced summoner spell cooldowns.",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Insight",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Insight"
+    },
+    {
+      "mastery_id": "Perseverance",
+      "display_name": "Perseverance",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 4,
+      "ranks": 1,
+      "points_required_in_tree": 11,
+      "effects": {
+        "primary": "Grants +50% base health regeneration , increased to +200% while below 25% health .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants +50% base health regeneration , increased to +200% while below 25% health .",
+          "numbers_extracted": [
+            50,
+            200,
+            25
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Perseverance (Season 2016 Mastery)",
+        "disp_name": "Perseverance",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "4",
+        "rank": "1",
+        "req": "11",
+        "effects": "Grants +50% base health regeneration , increased to +200% while below 25% health .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Perseverance",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Perseverance"
+    },
+    {
+      "mastery_id": "Legendary Guardian",
+      "display_name": "Legendary Guardian",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 5,
+      "ranks": 5,
+      "points_required_in_tree": 12,
+      "effects": {
+        "primary": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 bonus armor and magic resistance for each nearby enemy champion.",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 bonus armor and magic resistance for each nearby enemy champion.",
+          "numbers_extracted": [
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3
+          ],
+          "unit_hint": null
+        }
+      ],
+      "cooldown": "",
+      "range": "700",
+      "raw_parameters": {
+        "1": "Legendary Guardian (Season 2016 Mastery)",
+        "disp_name": "Legendary Guardian",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "5",
+        "rank": "5",
+        "req": "12",
+        "effects": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 bonus armor and magic resistance for each nearby enemy champion.",
+        "effects2": "",
+        "cd": "",
+        "range": "700"
+      },
+      "source_template": "Template:Mastery data Legendary Guardian",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Legendary_Guardian"
+    },
+    {
+      "mastery_id": "Swiftness",
+      "display_name": "Swiftness",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 5,
+      "ranks": 5,
+      "points_required_in_tree": 12,
+      "effects": {
+        "primary": "Grants 3 / 6 / 9 / 12 / 15% Tenacity and Slow Resist .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 3 / 6 / 9 / 12 / 15% Tenacity and Slow Resist .",
+          "numbers_extracted": [
+            3,
+            6,
+            9,
+            12,
+            15
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Swiftness (Season 2016 Mastery)",
+        "disp_name": "Swiftness",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "5",
+        "rank": "5",
+        "req": "12",
+        "effects": "Grants 3 / 6 / 9 / 12 / 15% Tenacity and Slow Resist .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Swiftness",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Swiftness"
+    },
+    {
+      "mastery_id": "Bond of Stone",
+      "display_name": "Bond of Stone",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "Grants 4% reduced damage. In addition to that, 6% of the damage that allied champions would take from enemy champions is dealt to you instead (cannot reduce you below 5% maximum health ).",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "Grants 4% reduced damage. In addition to that, 6% of the damage that allied champions would take from enemy champions is dealt to you instead (cannot reduce you below 5% maximum health ).",
+          "numbers_extracted": [
+            4,
+            6,
+            5
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Bond of Stone (Season 2016 Mastery)",
+        "disp_name": "Bond of Stone",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "Grants 4% reduced damage. In addition to that, 6% of the damage that allied champions would take from enemy champions is dealt to you instead (cannot reduce you below 5% maximum health ).",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Bond of Stone",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Bond_of_Stone"
+    },
+    {
+      "mastery_id": "Grasp of the Undying",
+      "display_name": "Grasp of the Undying",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "After being in combat for 4 seconds, your next attack against an enemy champion deals magic damage and heals you for an amount. Melee champions : deals 3% of your maximum health and heals for 1. 5 % of your maximum health . Ranged champions : deals 1. 5 % of your maximum health and heals for 0. 75 % of your maximum health .",
+        "secondary": ""
+      },
+      "effects_structured": [
+        {
+          "raw": "After being in combat for 4 seconds, your next attack against an enemy champion deals magic damage and heals you for an amount. Melee champions : deals 3% of your maximum health and heals for 1. 5 % of your maximum health . Ranged champions : deals 1. 5 % of your maximum health and heals for 0. 75 % of your maximum health .",
+          "numbers_extracted": [
+            4,
+            3,
+            1.0,
+            5,
+            1.0,
+            5,
+            0.0,
+            75
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Grasp of the Undying (Season 2016 Mastery)",
+        "disp_name": "Grasp of the Undying",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "After being in combat for 4 seconds, your next attack against an enemy champion deals magic damage and heals you for an amount. Melee champions : deals 3% of your maximum health and heals for 1. 5 % of your maximum health . Ranged champions : deals 1. 5 % of your maximum health and heals for 0. 75 % of your maximum health .",
+        "effects2": "",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Grasp of the Undying",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Grasp_of_the_Undying"
+    },
+    {
+      "mastery_id": "Strength of the Ages",
+      "display_name": "Strength of the Ages",
+      "season": 2016,
+      "tree": "Resolve",
+      "tier": 6,
+      "ranks": 1,
+      "points_required_in_tree": 17,
+      "effects": {
+        "primary": "You can stack up to 300 permanent health by killing or being nearby when an allied champion kills a large monster or siege minion: + 20 permanent health for each siege minion. + 10 permanent health for each large or epic monster.",
+        "secondary": "After reaching the maximum bonus, killing or being nearby to further siege minion or large monster takedowns restore 6% of your maximum health ."
+      },
+      "effects_structured": [
+        {
+          "raw": "You can stack up to 300 permanent health by killing or being nearby when an allied champion kills a large monster or siege minion: + 20 permanent health for each siege minion. + 10 permanent health for each large or epic monster.",
+          "numbers_extracted": [
+            300,
+            20,
+            10
+          ],
+          "unit_hint": null
+        },
+        {
+          "raw": "After reaching the maximum bonus, killing or being nearby to further siege minion or large monster takedowns restore 6% of your maximum health .",
+          "numbers_extracted": [
+            6
+          ],
+          "unit_hint": "percent"
+        }
+      ],
+      "cooldown": "",
+      "range": "",
+      "raw_parameters": {
+        "1": "Strength of the Ages (Season 2016 Mastery)",
+        "disp_name": "Strength of the Ages",
+        "season": "2016",
+        "tree": "Resolve",
+        "tier": "6",
+        "rank": "1",
+        "req": "17",
+        "effects": "You can stack up to 300 permanent health by killing or being nearby when an allied champion kills a large monster or siege minion: + 20 permanent health for each siege minion. + 10 permanent health for each large or epic monster.",
+        "effects2": "After reaching the maximum bonus, killing or being nearby to further siege minion or large monster takedowns restore 6% of your maximum health .",
+        "cd": "",
+        "range": ""
+      },
+      "source_template": "Template:Mastery data Strength of the Ages",
+      "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Strength_of_the_Ages"
+    }
+  ]
+}
