@@ -1,0 +1,44 @@
+{
+  "name": "The Brutalizer",
+  "id": 2020,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    2022,
+    1037
+  ],
+  "buildsInto": [
+    6696,
+    2520,
+    6698,
+    6699
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2020_thebrutalizer.png",
+  "nicknames": [
+    "Bloodstone"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    },
+    "lethality": {
+      "flat": 5
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1337,
+      "sell": 534
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

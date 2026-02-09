@@ -1,0 +1,37 @@
+{
+  "name": "Atma's Reckoning",
+  "id": 223039,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3005_fighter_t3_atmasreckoning.png",
+  "nicknames": [
+    "wreckoning"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Big Hands",
+      "effects": "Gain {{sti|critical strike chance|{{pp|0 to 30|key=%|0 to 3000 by 100|type='''bonus''' health|color=hp|label=Crit chance}}}} {{as|critical strike chance}}."
+    }
+  ],
+  "stats": {
+    "criticalStrikeChance": {
+      "percent": 20.0
+    },
+    "health": {
+      "flat": 700.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

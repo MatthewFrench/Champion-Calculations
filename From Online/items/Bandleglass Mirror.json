@@ -1,0 +1,49 @@
+{
+  "name": "Bandleglass Mirror",
+  "id": 4642,
+  "tier": 3,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1004,
+    1052,
+    2022
+  ],
+  "buildsInto": [
+    322065,
+    2065,
+    6620,
+    324005,
+    326617,
+    326620,
+    4005,
+    6617
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4642_enchanter_t2_bandleglassmirror.png",
+  "nicknames": [
+    "yordle"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 20.0
+    },
+    "manaRegen": {
+      "percent": 100.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

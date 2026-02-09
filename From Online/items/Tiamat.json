@@ -1,0 +1,51 @@
+{
+  "name": "Tiamat",
+  "id": 3077,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036,
+    1036
+  ],
+  "buildsInto": [
+    3074,
+    3748,
+    6698,
+    6631
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3077_fighter_t2_tiamat.png",
+  "simpleDescription": "Melee attacks hit nearby enemies",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly = true}} 350 radius centered around the target."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Crescent",
+      "effects": "Deal {{as|75% AD}} {{as|physical damage}} to enemies within a {{tip|cr|icononly = true}} 450 radius in front of you."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

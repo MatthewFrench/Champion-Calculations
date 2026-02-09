@@ -1,0 +1,41 @@
+{
+  "name": "B. F. Sword",
+  "id": 1038,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    3032,
+    3097,
+    3072,
+    6671,
+    3095,
+    4403,
+    3026,
+    3031
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1038_marksman_t1_bfsword.png",
+  "simpleDescription": "Greatly increases Attack Damage",
+  "nicknames": [
+    "bf"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1300,
+      "sell": 520
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

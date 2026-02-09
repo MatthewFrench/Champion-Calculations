@@ -1,0 +1,24 @@
+{
+  "name": "Black Spear",
+  "id": 3599,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "requiredChampion": "Kalista",
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3599_kalistapassiveitem.png",
+  "simpleDescription": "Kalista's spear that binds an Oathsworn Ally.",
+  "nicknames": [
+    "spear"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Oathsworn Bond",
+      "effects": "Consumes this item to initiate a {{fd|3.5}}-second [[cast time]] and a 3-second {{tip|channel}} afterwards from the user and the target allied champion, both becoming bound allies. The target is unable to act for 6 seconds after the channel's duration. Afterwards, the target becomes an ''Oathsworn''."
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  }
+}

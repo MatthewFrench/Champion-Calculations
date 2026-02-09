@@ -1,0 +1,46 @@
+{
+  "name": "Zhonya's Hourglass",
+  "id": 3157,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1058,
+    2420
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3157_mage_t3_zhonyashourglass.png",
+  "simpleDescription": "Activate to become invincible but unable to take actions",
+  "nicknames": [
+    "zhg",
+    "zonyas",
+    "zhonyas",
+    "Witchcap",
+    "Wooglets"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Time Stop",
+      "effects": "Put yourself in {{tip|stasis (buff)|stasis}} for {{fd|2.5}} seconds, rendering you {{tip|untargetable}} and {{tip|invulnerable}} for the duration but also unable to move, declare [[basic attack]]s, cast [[champion ability|abilities]], use [[summoner spell]]s, or [[active ability items|activate items]]."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 105.0
+    },
+    "armor": {
+      "flat": 50.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3250,
+      "sell": 1300
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Death's Daughter",
+  "id": 3902,
+  "tier": 1,
+  "requiredChampion": "Gangplank",
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3902_champ_t0_deathsdaughtercircle.png",
+  "simpleDescription": "<mainText>Cannon Barrage additionally fires a mega-cannonball at the center of the Barrage, dealing <trueDamage>bonus true damage</trueDamage> and <status>Slowing</status>.</mainText>",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Death's Daughter",
+      "effects": "A massive cannonball lands after {{ais|Cannon Barrage|Gangplank}} first cluster of waves, dealing {{sti|true damage|{{as|{{ap|120 to 300 3}}|true damage}}}} {{as|(+ 30% AP)}} {{as|true damage}} to enemies struck and {{tip|slow|slowing}} them by 75% for 1 second."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Ghostcrawlers",
+  "id": 223005,
+  "tier": 2,
+  "rank": [
+    "BOOTS"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4001_ghostwalkers.png",
+  "active": [
+    {
+      "unique": true,
+      "name": "Wall Walk",
+      "effects": "Become ghostly for 6 seconds, ignoring terrain collision until you basic attack or cast an ability. While inside terrain, gain {{as|300 '''bonus''' movement speed}}."
+    }
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 70.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true
+  }
+}

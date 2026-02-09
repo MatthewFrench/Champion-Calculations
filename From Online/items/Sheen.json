@@ -1,0 +1,49 @@
+{
+  "name": "Sheen",
+  "id": 3057,
+  "tier": 1,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    2022
+  ],
+  "buildsInto": [
+    3100,
+    6662,
+    2510,
+    3508,
+    3078,
+    6632
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3057_fighter_t2_sheen.png",
+  "simpleDescription": "Grants a bonus to next attack after spell cast",
+  "nicknames": [
+    "Jimmy Neutron"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|100% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]] ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    }
+  ],
+  "stats": {
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "MAGE",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

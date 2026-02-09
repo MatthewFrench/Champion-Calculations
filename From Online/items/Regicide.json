@@ -1,0 +1,34 @@
+{
+  "name": "Regicide",
+  "id": 447115,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447115_regicide.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "End the Line",
+      "effects": "At the start of the combat phase in each round, declare the enemy champion with the lowest {{as|'''total maximum''' health}} as the ''Regent''. Scoring a {{tip|takedown}} against the ''Regent'' for the first time in the combat phase grants you {{as|10 '''bonus''' attack damage}} permanently and sets the '''current''' cooldown of your ultimate ability to {{fd|0.5}} seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "lethality": {
+      "flat": 15
+    },
+    "movespeed": {
+      "percent": 8.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

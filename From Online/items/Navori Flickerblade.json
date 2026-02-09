@@ -1,0 +1,45 @@
+{
+  "name": "Navori Flickerblade",
+  "id": 6675,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1042,
+    3086,
+    1042
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6675_navoriflickerblade.png",
+  "nicknames": [
+    "crit shojin"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Transcendence",
+      "effects": "Basic attacks [[on-attack]] reduce the '''remaining''' cooldowns of your basic abilities by 15%."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 40.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2650,
+      "sell": 1060
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  }
+}

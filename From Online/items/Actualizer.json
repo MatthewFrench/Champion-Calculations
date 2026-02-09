@@ -1,0 +1,41 @@
+{
+  "name": "Actualizer",
+  "id": 2522,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3802,
+    1026
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
+  "active": [
+    {
+      "unique": true,
+      "name": "Mana Made Real",
+      "effects": "For 8 seconds, your mana is ''Empowered''. While ''Empowered'': your [[champion ability|abilities]] cost 100% more mana; you gain 15% {{as|(+ {{fd|0.5}}% per 100 '''bonus''' mana)}} increased ability damage, {{tip|healing}}, and {{tip|shielding}}; and your basic ability cooldowns progress 30% faster."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 90.0
+    },
+    "mana": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

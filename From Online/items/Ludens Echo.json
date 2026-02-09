@@ -1,0 +1,43 @@
+{
+  "name": "Luden's Echo",
+  "id": 6655,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3802,
+    3145
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
+  "simpleDescription": "High burst damage, good against fragile foes",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Echo",
+      "effects": "Gain 6 ''Echo'' stacks. Dealing [[ability damage]] to an enemy consumes all ''Echo'' stacks to deal {{as|75|magic damage}} {{as|(+ 5% AP)}} {{as|'''bonus''' magic damage}} to them and, for each stack consumed beyond the first, an additional enemy within {{tip|cr|icononly=true}} 600 units of them, firing an orb at each secondary target that impacts after {{rutngt|0.5}} to deal the damage. If the number of additional targets fired at is less than the number of stacks consumed,{{ft|deal an additional {{as|{{pp|75*0.2 to 75*5*0.2 for 5|1 to 5|changedisplay=true|type=remaining ''Echo'' stacks}}|magic damage}} {{as|(+ {{pp|key=%|5*0.2 to 5*5*0.2 for 5|1 to 5|type=remaining ''Echo'' stacks|changedisplay=true|showtype=false}} AP)}} {{as|magic damage}} to the primary target, for a total of {{as|{{pp|(75*0.2)+75 to (75*5*0.2)+75 for 5|1 to 5|type=remaining ''Echo'' stacks|changedisplay=true|showtype=false}}|magic damage}} {{as|(+ {{pp|key=%|(5*0.2)+5 to (5*5*0.2)+5 for 5|1 to 5|type=remaining ''Echo'' stacks|changedisplay=true|showtype=false}} AP)}}|deal an additional 20% damage to the primary target for each remaining ''Echo'' stack}}",
+      "cooldown": "12"
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 100.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2750,
+      "sell": 1100
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

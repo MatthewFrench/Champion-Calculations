@@ -1,0 +1,50 @@
+{
+  "name": "Death's Dance",
+  "id": 6333,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    2019,
+    1037,
+    3133
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
+  "nicknames": [
+    "dd"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Ignore Pain",
+      "effects": "Reduces {{rd|30%|10%}} of all {{tt|post-mitigation|Damage calculated after modifiers}} {{as|physical|physical damage}} and {{as|magic|magic damage}} damage received and instead stores the damage to successively take it as {{as|true damage}} over 3 seconds, dealing a third of the stored damage each second."
+    },
+    {
+      "unique": true,
+      "name": "Defy",
+      "effects": "If an enemy champion dies within 3 seconds of you damaging them, removes ''Ignore Pain's'' remaining stored damage and {{tip|heals}} you for {{as|75% '''bonus''' AD}} over 2 seconds."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 50.0
+    },
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

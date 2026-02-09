@@ -1,0 +1,47 @@
+{
+  "name": "Giant's Belt",
+  "id": 1011,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1028
+  ],
+  "buildsInto": [
+    3119,
+    8001,
+    3748,
+    3083,
+    3039,
+    2525,
+    3084,
+    3116,
+    3143,
+    323119,
+    6665,
+    4637,
+    6609,
+    6667
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1011_class_t2_giantsbelt.png",
+  "simpleDescription": "Greatly increases Health",
+  "stats": {
+    "health": {
+      "flat": 350.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MAGE",
+      "TANK"
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Endless Hunger",
+  "id": 2517,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3133,
+    1037,
+    1036
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2517_adfighteromnivamp.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Famine",
+      "effects": "Gain {{as|5|ah}} {{as|(+ 10% '''bonus''' AD)}} {{as|ability haste}}."
+    },
+    {
+      "unique": true,
+      "name": "Feast",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{as|15% omnivamp}} for 8 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 65.0
+    },
+    "omnivamp": {
+      "percent": 5.0
+    },
+    "tenacity": {
+      "percent": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Blackfire Torch",
+  "id": 2503,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3802,
+    2508
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2503_blackfiretorch64.png",
+  "nicknames": [
+    "bft"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Baleful Blaze",
+      "effects": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|60/6}} {{as|(+ {{ap|6/6}}% AP)}} magic damage|magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|60|magic damage}} {{as|(+ 6% AP)}}. Against monsters, the burn deals {{as|10 '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(60/6)+10}} {{as|(+ {{ap|6/6}}% AP)}} magic damage|magic damage}} per tick for up to {{as|{{ap|60+(10*6)}}|magic damage}} {{as|(+ 6% AP)}}."
+    },
+    {
+      "unique": true,
+      "name": "Blackfire",
+      "effects": "For each champion, epic monster, and large monster afflicted with ''Baleful Blaze's'' burn, increase your {{as|ability power}} by 4%."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

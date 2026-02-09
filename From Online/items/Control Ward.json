@@ -1,0 +1,22 @@
+{
+  "name": "Control Ward",
+  "id": 2055,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2055_class_t1_controlward.png",
+  "simpleDescription": "Used to disable wards and invisible traps in an area.",
+  "nicknames": [
+    "consumable",
+    "orange",
+    "pink"
+  ],
+  "shop": {
+    "prices": {
+      "total": 75,
+      "sell": 30
+    },
+    "purchasable": true
+  }
+}

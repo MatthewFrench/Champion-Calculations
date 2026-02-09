@@ -1,0 +1,46 @@
+{
+  "name": "Zeal",
+  "id": 3086,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1018,
+    1042
+  ],
+  "buildsInto": [
+    3046,
+    6675,
+    6671,
+    4403,
+    2512,
+    3085,
+    3094
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3086_fighter_t2_zeal.png",
+  "simpleDescription": "Slight bonuses to Critical Strike Chance, Move Speed and Attack Speed",
+  "stats": {
+    "attackSpeed": {
+      "flat": 15.0
+    },
+    "criticalStrikeChance": {
+      "percent": 15.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Verdant Barrier",
+  "id": 4632,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052,
+    1033,
+    1052
+  ],
+  "buildsInto": [
+    3102
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4632_tank_t2_verdantbarrier.png",
+  "nicknames": [
+    "necklace"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Annul",
+      "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (60 second cooldown, timer restarts upon taking damage from champions)."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 40.0
+    },
+    "magicResistance": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1600,
+      "sell": 640
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

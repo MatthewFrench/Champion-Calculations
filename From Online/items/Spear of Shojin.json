@@ -1,0 +1,46 @@
+{
+  "name": "Spear of Shojin",
+  "id": 3161,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1037,
+    2021,
+    1028
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
+  "simpleDescription": "Reduce damage taken from champions by a flat amount. Attack while near multiple enemy champions to increase this amount for a short time.",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Dragonforce",
+      "effects": "Gain 25 [[Haste#Basic ability haste|basic ability haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Focused Will",
+      "effects": "Dealing {{tip|ability damage}} or {{tip|pet damage}}, sourced from a non-innate {{tip|ability}}, generates a stack for 6 seconds, stacking up to 4 times. For each stack, your {{tip|ability damage}}, {{tip|pet damage}} and {{tip|proc damage}}, sourced from a non-[[item]], gain 3% increased damage, for a total increase of 12% at '''maximum''' stacks."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 450.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ABILITY_HASTE"
+    ]
+  }
+}

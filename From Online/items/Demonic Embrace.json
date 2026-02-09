@@ -1,0 +1,42 @@
+{
+  "name": "Demonic Embrace",
+  "id": 444637,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4637_mage_t3_demonicembrace.png",
+  "nicknames": [
+    "helmet"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Sinister Pact",
+      "effects": "Increase your {{as|ability power}} by {{as|{{fd|1.5}}%|ap}} and gain {{as|{{fd|1.5}}% '''bonus''' movement speed}} for every {{as|100 '''current''' health}} you are missing, up to an increase of {{as|45% ability power}} and {{as|45% '''bonus''' movement speed}} at {{as|3000 '''current''' health}} missing.",
+      "stats": {
+        "abilityPower": {
+          "flat": 45.0
+        },
+        "movespeed": {
+          "percent": 45.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "health": {
+      "flat": 700.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

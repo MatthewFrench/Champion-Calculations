@@ -1,0 +1,46 @@
+{
+  "name": "Aether Wisp",
+  "id": 3113,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052
+  ],
+  "buildsInto": [
+    123430,
+    322065,
+    4646,
+    3504,
+    2065,
+    3100,
+    323504,
+    4629
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3113_mage_t2_aetherwisp.png",
+  "simpleDescription": "Increases Ability Power and Move Speed",
+  "nicknames": [
+    "spooky ghost"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 30.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "MOVEMENT"
+    ]
+  }
+}

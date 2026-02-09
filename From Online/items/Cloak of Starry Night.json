@@ -1,0 +1,31 @@
+{
+  "name": "Cloak of Starry Night",
+  "id": 443059,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3059_cloakofstarrynight.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Limitless as the Stars",
+      "effects": "Increase your {{as|'''total''' magic resistance}} by {{as|20%|mr}}. Additionally, reduce all incoming damage received from non-basic attack sources by 5% per {{as|200 '''total''' magic resistance}}, up to a maximum of 50% damage reduction."
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 300.0
+    },
+    "magicResistance": {
+      "flat": 100.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

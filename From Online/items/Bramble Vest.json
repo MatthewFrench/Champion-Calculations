@@ -1,0 +1,42 @@
+{
+  "name": "Bramble Vest",
+  "id": 3076,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1029,
+    1029
+  ],
+  "buildsInto": [
+    323075,
+    3075
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3076_tank_t2_bramblevest.png",
+  "nicknames": [
+    "grievous wounds"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Thorns",
+      "effects": "When struck by a basic attack [[on-hit]], deal {{as|10 magic damage}} to the attacker and, if they are a champion, inflict them with {{tip|Grievous Wounds}} for 3 seconds."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 30.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 800,
+      "sell": 320
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

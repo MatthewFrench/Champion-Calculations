@@ -1,0 +1,35 @@
+{
+  "name": "Gunmetal Greaves",
+  "id": 3172,
+  "tier": 3,
+  "rank": [
+    "BOOTS"
+  ],
+  "buildsFrom": [
+    3006
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_berserkersgreaves_64.png",
+  "simpleDescription": "Mobility and Tenacity",
+  "nicknames": [
+    "boots"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 40.0
+    },
+    "lifesteal": {
+      "percent": 5.0
+    },
+    "movespeed": {
+      "flat": 45.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1100,
+      "sell": 440
+    },
+    "purchasable": true
+  }
+}

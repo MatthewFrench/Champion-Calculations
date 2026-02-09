@@ -1,0 +1,51 @@
+{
+  "name": "Force of Nature",
+  "id": 4401,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1057,
+    1028,
+    3066
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4401_tank_t3_forceofnature.png",
+  "simpleDescription": "Move Speed, Magic Resist, and max Health Regeneration",
+  "nicknames": [
+    "fon"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Steadfast",
+      "effects": "Taking {{as|magic damage}} from champions generates a stack of ''Steadfast'' for 7 seconds, stacking up to 8 times with the duration refreshing on subsequent {{as|magic damage}} from them and whenever dealing damage to them. Becoming {{tip|immobilize|immobilized}} by an enemy champion generates 2 stacks and also refreshes the duration. Once per {{tip|cast instance}}, each incoming basic attack, ability, or item effect can only generate 1 stack of ''Steadfast'' from their damage every 1 second. At '''maximum''' stacks, gain {{as|70 '''bonus''' magic resistance}} and {{as|6% '''bonus''' movement speed}}.",
+      "stats": {
+        "movespeed": {
+          "percent": 6.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 400.0
+    },
+    "magicResistance": {
+      "flat": 55.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

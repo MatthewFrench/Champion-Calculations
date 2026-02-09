@@ -1,0 +1,20 @@
+{
+  "name": "Twin Mask",
+  "id": 443080,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443080_twinmasks.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Unanimity",
+      "effects": "Gain 20% of your teammate's {{as|attack damage}}, {{as|ability power}}, {{as|'''total''' attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}}, increased to 35% if they also have '''Twin Mask''' and are alive."
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  }
+}

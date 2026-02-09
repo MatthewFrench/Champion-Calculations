@@ -1,0 +1,45 @@
+{
+  "name": "Chain Vest",
+  "id": 1031,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1029
+  ],
+  "buildsInto": [
+    323075,
+    6662,
+    3068,
+    2502,
+    3002,
+    323109,
+    3075,
+    3109,
+    323002,
+    3742,
+    6665
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1031_base_t2_chainvest.png",
+  "simpleDescription": "Greatly increases Armor",
+  "stats": {
+    "armor": {
+      "flat": 40.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 800,
+      "sell": 320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "TANK"
+    ]
+  }
+}

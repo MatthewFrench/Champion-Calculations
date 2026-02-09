@@ -1,0 +1,37 @@
+{
+  "name": "Detonation Orb",
+  "id": 447113,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7113_detonationorb.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "The Bomb",
+      "effects": "Dealing ability damage against enemy champions marks them for 3 seconds, storing 20% of the {{tt|post-mitigation damage|Damage calculated after modifiers}} you deal to them, increased to 25% if they are {{tip|immobilize|immobilized}}. Each instance of your ability damage dealt to a marked target refreshes their mark. Once the mark expires, it detonates to deal {{as|true damage}} equal to the amount stored against the target. If a mark would deal lethal damage to the target, it is detonated immediately."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 90.0
+    },
+    "magicPenetration": {
+      "flat": 12.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

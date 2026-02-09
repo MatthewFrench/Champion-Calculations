@@ -1,0 +1,73 @@
+{
+  "name": "The Golden Spatula",
+  "id": 224403,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4403_goldenspatula.png",
+  "nicknames": [
+    "spatch",
+    "urf",
+    "manatee",
+    "Quest",
+    "Urf's Champion",
+    "burn"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Doing Something",
+      "effects": "You are permanently [[File:On Fire! buff.png|20px|link=]] '''On Fire!''', causing you to {{as|Burn}} enemies within 400 units every second for {{as|{{pp|26 to 43}} magic damage}} and reduce your abilities' cooldowns by {{fd|0.2}} seconds every {{fd|0.25}} seconds as well as gain {{as|5% '''bonus''' movement speed}}, increased to {{as|20%|ms}} while facing nearby enemy champions, {{as|20% '''bonus''' attack speed}}, {{as|{{pp|50 to 900}} '''bonus''' health}}, {{as|{{fd|1.5}} '''bonus''' mana regeneration}}, and {{as|4 '''bonus''' energy regeneration}}. While '''On Fire!''', however, you also take {{rd|25%|35%}} increased damage and reduce the effectiveness of incoming heals and shields by 25%.",
+      "stats": {
+        "movespeed": {
+          "percent": 5.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 125.0
+    },
+    "armor": {
+      "flat": 40.0
+    },
+    "attackDamage": {
+      "flat": 90.0
+    },
+    "attackSpeed": {
+      "flat": 60.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "healthRegen": {
+      "percent": 200.0
+    },
+    "magicResistance": {
+      "flat": 40.0
+    },
+    "mana": {
+      "flat": 350.0
+    },
+    "manaRegen": {
+      "percent": 200.0
+    },
+    "movespeed": {
+      "percent": 10.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    },
+    "omnivamp": {
+      "percent": 15.0
+    }
+  },
+  "shop": {
+    "purchasable": true
+  }
+}

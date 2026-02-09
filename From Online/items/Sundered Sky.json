@@ -1,0 +1,42 @@
+{
+  "name": "Sundered Sky",
+  "id": 6610,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    2021,
+    3133,
+    1028
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lightshield Strike",
+      "effects": "Your next basic attack against a champion is empowered to {{tip|critical strike|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage|{{sti|{{as|80% '''total''' critical damage}}}}}}and {{tip|heal}} you for {{as|{{rd|100%|50%}} '''base''' AD}} {{as|(+ 6% of your '''missing''' health)}} (10 second cooldown per target). Excess healing beyond {{as|'''maximum''' health}} is converted to {{as|'''bonus''' health}} for 8 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

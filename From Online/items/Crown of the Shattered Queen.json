@@ -1,0 +1,37 @@
+{
+  "name": "Crown of the Shattered Queen",
+  "id": 444644,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4644_crown.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Safeguard",
+      "effects": "Become ''Safeguarded'' to reduce incoming champion damage by 50%, lingering for 3 seconds after taking damage from a champion (30 second cooldown, timer restarts upon taking damage from champions)."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 85.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

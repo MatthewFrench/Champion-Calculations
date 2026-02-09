@@ -1,0 +1,43 @@
+{
+  "name": "Mosstomper Seedling",
+  "id": 1103,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1103_jungle_t1_mosstomperseedling.png",
+  "nicknames": [
+    "jungle",
+    "green",
+    "salamander",
+    "lizard",
+    "frog"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Jungle Companions",
+      "effects": "Summon a ''Mosstomper Seedling'' companion to assist you in combat against monsters."
+    },
+    {
+      "unique": true,
+      "name": "Mosstomper's Courage",
+      "effects": "Feed your companion enough treats to evolve it and upgrade your {{si|Smite}}. Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi|Mosstomper's Courage}} buff."
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 450,
+      "sell": 180
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "LIFESTEAL_VAMP"
+    ]
+  }
+}

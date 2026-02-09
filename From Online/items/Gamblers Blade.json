@@ -1,0 +1,31 @@
+{
+  "name": "Gambler's Blade",
+  "id": 447101,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7101_gamblers_blade.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Money In The Bank",
+      "effects": "Basic attacks [[on-hit]] and ability hits have a 12% chance to store between {{g|30}} and {{as|240|gold}} ({{fd|2.5}}-second cooldown per attack/ability). If you win the round, gain {{g|gold}} equal to the stored amount, otherwise lose 25% of it."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 70.0
+    },
+    "movespeed": {
+      "percent": 8.0
+    },
+    "abilityHaste": {
+      "flat": 40.0
+    }
+  },
+  "shop": {
+    "purchasable": true
+  }
+}

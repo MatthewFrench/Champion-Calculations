@@ -1,0 +1,40 @@
+{
+  "name": "Galeforce",
+  "id": 446671,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6671_marksman_t4_galeforce.png",
+  "nicknames": [
+    "squallrider"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Cloudburst II",
+      "effects": "{{tip|Dash}} to the target location and fire three homing missiles at the {{tt|most wounded|Lowest health percent}} enemy within {{tip|cr|icononly=true}} 750 units of you at the end of the dash, prioritizing enemy champions. Each missile deals {{as|{{pp|150/3 to 350/3|1;8 to 18 by 1}} {{as|(+ {{fd|26.6{{recurring|6}}}}% '''bonus''' AD)}} physical damage|physical damage}}, for a total of {{as|{{pp|150 to 350|1;8 to 18 by 1}} {{as|(+ 80% '''bonus''' AD)}}|physical damage}}, increased by {{pp|type= target's '''missing''' health|color=health|key=%|0 to 50|key1=%|0 to 75 for 11|formula=5% per 7.5% of enemies' '''missing''' health}}."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 65.0
+    },
+    "attackSpeed": {
+      "flat": 30.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "movespeed": {
+      "percent": 6.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  }
+}

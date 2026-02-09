@@ -1,0 +1,42 @@
+{
+  "name": "Thornmail",
+  "id": 3075,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3076,
+    1031,
+    1028
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3075_tank_t3_thornmail.png",
+  "nicknames": [
+    "grievous wounds"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Thorns",
+      "effects": "When struck by a basic attack [[on-hit]], deal {{as|20 {{as|(+ 10% '''bonus''' armor)}} magic damage|magic damage}} to the attacker and, if they are a champion, inflict them with {{tip|Grievous Wounds}} for 3 seconds."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 75.0
+    },
+    "health": {
+      "flat": 150.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2450,
+      "sell": 980
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

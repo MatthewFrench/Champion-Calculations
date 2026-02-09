@@ -1,0 +1,40 @@
+{
+  "name": "Seraph's Embrace",
+  "id": 3040,
+  "tier": 4,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "specialRecipe": 3003,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3048_mage_t3_seraphsembrace.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Awe",
+      "effects": "Grants {{as|ability power}} equal to {{as|2% '''bonus''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take damage that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} for 3 seconds that absorbs damage equal to {{as|18% '''maximum''' mana}} for 3 seconds.",
+      "cooldown": "90"
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "mana": {
+      "flat": 1000.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    }
+  }
+}

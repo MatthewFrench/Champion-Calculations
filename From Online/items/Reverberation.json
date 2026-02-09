@@ -1,0 +1,44 @@
+{
+  "name": "Reverberation",
+  "id": 447114,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447114_reverberation.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Reverberate",
+      "effects": "After 2 seconds from the start of the combat phase in each round, gain {{as|5 '''bonus''' health}} per {{as|1% '''bonus''' attack speed}}."
+    },
+    {
+      "unique": true,
+      "name": "Resonate",
+      "effects": "Basic attacks {{tip|on-hit}} deal {{as|10|magic damage}} {{as|(+ 2% of your '''bonus''' health)}} {{as|'''bonus''' magic damage}}."
+    },
+    {
+      "unique": true,
+      "name": "Rumble",
+      "effects": "{{tip|Immobilize|Immobilizing}} an enemy champion generates 25 stacks of ''Reverberation'' for 10 seconds, stacking up to 100 times and refreshing {{tip|on-hit}} as well as on subsequent immobilizations. At '''maximum''' stacks and upon {{tip|immobilize|immobilizing}} an enemy, your on-hit effects are applied to them 3 times."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 35.0
+    },
+    "attackSpeed": {
+      "flat": 40.0
+    },
+    "magicResistance": {
+      "flat": 35.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

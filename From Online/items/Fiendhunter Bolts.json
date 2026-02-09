@@ -1,0 +1,48 @@
+{
+  "name": "Fiendhunter Bolts",
+  "id": 2512,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3086,
+    3144
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Night Vigil",
+      "effects": "Gain 30 [[Haste#Ultimate haste|ultimate haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Opening Barrage",
+      "effects": "After casting your ultimate ability, your next 3 basic attacks within 8 seconds gain {{as|50% '''bonus''' attack speed}} and will {{tip|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage.|{{sti|{{as|80% '''total''' critical damage}}}}.}}If an attack would have already critically struck, it instead critically strikes for{{ft|{{as|{{critical damage|100|100}}|critical damage}} '''bonus''' damage|{{sti|{{as|100% '''total''' critical damage}}}}}}and deals {{as|'''bonus''' true damage}} equal to 15% of the triggering {{as|attack's damage}}.",
+      "cooldown": 45
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 45.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2650,
+      "sell": 1060
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  }
+}

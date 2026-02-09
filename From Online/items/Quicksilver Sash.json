@@ -1,0 +1,46 @@
+{
+  "name": "Quicksilver Sash",
+  "id": 3140,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1033
+  ],
+  "buildsInto": [
+    6035,
+    3139
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3140_marksman_t2_quicksilversash.png",
+  "simpleDescription": "Activate to remove all crowd control debuffs",
+  "nicknames": [
+    "qss",
+    "mercurial scimitar",
+    "silvermere dawn"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Quicksilver",
+      "effects": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion."
+    }
+  ],
+  "stats": {
+    "magicResistance": {
+      "flat": 30.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1300,
+      "sell": 520
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

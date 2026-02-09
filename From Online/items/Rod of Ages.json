@@ -1,0 +1,54 @@
+{
+  "name": "Rod of Ages",
+  "id": 6657,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1026,
+    3803
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6657_mage_t4_rodofages.png",
+  "nicknames": [
+    "RoA"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Timeless",
+      "effects": "This item gains {{as|10 '''bonus''' health}}, {{as|30 '''bonus''' mana}}, and {{as|3 ability power}} every minute, up to 10 times, for a maximum of {{as|100 '''bonus''' health}}, {{as|300 '''bonus''' mana}}, and {{as|30 ability power}}. Upon reaching maximum stacks, gain a level that preserves your current experience (level cap remains the same).",
+      "stats": {
+        "abilityPower": {
+          "flat": 3.0
+        }
+      }
+    },
+    {
+      "unique": true,
+      "name": "Eternity",
+      "effects": "Restore {{as|mana}} equal to 10% of {{tt|pre-mitigation damage|Damage calculated before modifiers}} taken from champions, and {{tip|heal}} for an amount equal to {{as|25% of mana spent}}, up to 20 per cast. Toggled abilities can only heal for up to 20 per second."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "mana": {
+      "flat": 500.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2600,
+      "sell": 1040
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

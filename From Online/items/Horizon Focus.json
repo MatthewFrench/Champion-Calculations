@@ -1,0 +1,50 @@
+{
+  "name": "Horizon Focus",
+  "id": 4628,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3108,
+    3108,
+    1052
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4628_mage_t3_horizonfocus.png",
+  "simpleDescription": "Immobilizing a champion causes lightning to strike them",
+  "nicknames": [
+    "lock on",
+    "snipe"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Hypershot",
+      "effects": "Dealing [[ability damage]] to a champion with a [[champion ability]] at {{tip|cr|icononly = true}} 600 or more units away from the cast position marks them for 6 seconds, {{tip|standard sight|revealing}} them and increasing your damage dealt to them by 10%."
+    },
+    {
+      "unique": true,
+      "name": "Focus",
+      "effects": "Upon triggering ''Hypershot'', grant {{tip|sight}} of the {{tt|area|Grants sight through terrain and brush}} {{tip|cr|icononly=true}} 1400 units around the target for 2 seconds and apply ''Hypershot's'' mark to enemy champions within the area for 3 seconds.",
+      "cooldown": "30"
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 75.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2700,
+      "sell": 1080
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

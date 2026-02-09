@@ -1,0 +1,45 @@
+{
+  "name": "Tunneler",
+  "id": 2021,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036,
+    1028
+  ],
+  "buildsInto": [
+    3181,
+    3748,
+    3161,
+    3814,
+    2501,
+    3053,
+    3073,
+    6610
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2012_tunneler.png",
+  "nicknames": [
+    "drill"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 15.0
+    },
+    "health": {
+      "flat": 250.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1150,
+      "sell": 460
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

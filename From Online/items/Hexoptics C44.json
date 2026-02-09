@@ -1,0 +1,44 @@
+{
+  "name": "Hexoptics C44",
+  "id": 2523,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1037,
+    6670,
+    1036
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2523_adcscope.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Magnification",
+      "effects": "Deal {{pp|0 to 10 for 11|0 to 600|key=%|type=distance to target|formula=1% per 60 units away, up to a maximum of 10%.}} increased {{tip|basic damage}}. The distance is calculated from your {{tip|cr|icononly=true}} current position to the target's position at the time they are damaged."
+    },
+    {
+      "unique": true,
+      "name": "Arcane Aim",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{sti|100 '''bonus''' attack range}} for 6 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  }
+}

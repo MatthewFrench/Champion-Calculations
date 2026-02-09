@@ -1,0 +1,72 @@
+{
+  "name": "Kindlegem",
+  "id": 3067,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1028,
+    2022
+  ],
+  "buildsInto": [
+    323107,
+    323222,
+    6630,
+    124011,
+    323190,
+    323050,
+    3119,
+    8001,
+    3190,
+    2524,
+    3071,
+    6620,
+    4403,
+    2502,
+    2510,
+    2525,
+    3050,
+    323109,
+    3065,
+    3109,
+    326617,
+    3165,
+    3222,
+    323119,
+    326620,
+    328020,
+    4629,
+    4644,
+    6617,
+    6632,
+    6656,
+    8020
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3067_tank_t1_kindlegem.png",
+  "simpleDescription": "Increases Health and Cooldown Reduction",
+  "stats": {
+    "health": {
+      "flat": 200.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 800,
+      "sell": 320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "SUPPORT"
+    ]
+  }
+}

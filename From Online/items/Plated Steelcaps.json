@@ -1,0 +1,43 @@
+{
+  "name": "Plated Steelcaps",
+  "id": 3047,
+  "tier": 2,
+  "rank": [
+    "BOOTS"
+  ],
+  "buildsFrom": [
+    1001,
+    1029
+  ],
+  "buildsInto": [
+    3174
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3047_class_t2_ninjatabi.png",
+  "simpleDescription": "Enhances Move Speed and reduces incoming basic attack damage",
+  "nicknames": [
+    "boots",
+    "ninja tabi"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Plating",
+      "effects": "Reduces all incoming {{tip|basic damage}} by 10% (''excluding from [[turret]] attacks'')."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 25.0
+    },
+    "movespeed": {
+      "flat": 45.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true
+  }
+}

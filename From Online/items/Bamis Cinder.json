@@ -1,0 +1,45 @@
+{
+  "name": "Bami's Cinder",
+  "id": 6660,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1028,
+    2022
+  ],
+  "buildsInto": [
+    3068,
+    6664
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6660_tank_t2_bamiscinder.png",
+  "nicknames": [
+    "fire"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Immolate",
+      "effects": "Taking or dealing damage activates this passive for 3 seconds. Deal {{as|15 magic damage}} every second to enemies within {{tip|cr|icononly = true}} 325 (+ 100% '''bonus''' [[size]]) units, with the damage being increased to 150% against {{tip|minions}} and 200% against {{tip|monsters}}. This executes minions that would be killed by one more tick of damage."
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 150.0
+    },
+    "abilityHaste": {
+      "flat": 5.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

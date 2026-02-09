@@ -1,0 +1,53 @@
+{
+  "name": "The Collector",
+  "id": 6676,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1037,
+    3134,
+    1018
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6676_marksman_t3_thecollector.png",
+  "nicknames": [
+    "deathblade",
+    "gun",
+    "lethality"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Death",
+      "effects": "If you deal {{tt|post-mitigation|Damage calculated after modifiers}} damage that would leave a champion below {{as|5% of their '''maximum''' health}}, {{tip|execute}} them."
+    },
+    {
+      "unique": true,
+      "name": "Taxes",
+      "effects": "Killing a champion grants you an additional {{g|25}}."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "lethality": {
+      "flat": 10
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

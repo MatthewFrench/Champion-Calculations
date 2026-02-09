@@ -1,0 +1,20 @@
+{
+  "name": "Juice of Power",
+  "id": 2142,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/icon_item_souljuice_abilitypowerattackdamage.png",
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "ATTACK_DAMAGE",
+      "ABILITY_POWER"
+    ]
+  }
+}

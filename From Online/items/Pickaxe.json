@@ -1,0 +1,52 @@
+{
+  "name": "Pickaxe",
+  "id": 1037,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    3181,
+    6035,
+    3139,
+    2020,
+    2517,
+    6692,
+    3071,
+    3072,
+    6673,
+    3161,
+    6676,
+    2523,
+    3031,
+    3053,
+    3087,
+    3124,
+    3153,
+    6695,
+    6029,
+    6333,
+    667666,
+    6701
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1037_class_t1_pickaxe.png",
+  "simpleDescription": "Moderately increases Attack Damage",
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 875,
+      "sell": 350
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

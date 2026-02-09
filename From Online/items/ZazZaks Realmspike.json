@@ -1,0 +1,56 @@
+{
+  "name": "Zaz'Zak's Realmspike",
+  "id": 3871,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3867
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3871_zazzaksrealmspike.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Void Explosion",
+      "effects": "Dealing [[ability damage]] to an enemy champion creates an explosion at their location after a {{fd|0.5}}-second delay, dealing {{as|10|magic damage}} {{as|(+ 15% AP)}} {{as|(+ 3% of each target's '''maximum''' health)}} {{as|magic damage}} to enemies within the area, capped at 300 against {{tip|monsters}}.",
+      "cooldown": "10"
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ward",
+      "effects": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "range": 600
+    }
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 9.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 75.0
+    },
+    "manaRegen": {
+      "percent": 75.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Shattered Armguard",
+  "id": 2421,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052,
+    1029,
+    1052
+  ],
+  "buildsInto": [
+    3157
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2420_shatteredarmguard.png",
+  "simpleDescription": "Upgrades to stopwatch",
+  "stats": {
+    "abilityPower": {
+      "flat": 40.0
+    },
+    "armor": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1600,
+      "sell": 640
+    },
+    "purchasable": true
+  }
+}

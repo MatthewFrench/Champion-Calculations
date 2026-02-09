@@ -1,0 +1,58 @@
+{
+  "name": "Bloodsong",
+  "id": 3877,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3867
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3877_bloodsong.png",
+  "nicknames": [
+    "Spellblade"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an ability, your next basic attack within 10 seconds deals {{as|100% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]]. If the target is a champion, inflict them with ''Expose Weakness'' for 4 seconds, causing them to take {{rd|8%|5%}} increased damage from all sources ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ward",
+      "effects": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "range": 600
+    }
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 9.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 75.0
+    },
+    "manaRegen": {
+      "percent": 75.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

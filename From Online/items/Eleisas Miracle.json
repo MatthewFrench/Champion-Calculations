@@ -1,0 +1,34 @@
+{
+  "name": "Eleisa's Miracle",
+  "id": 443063,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3063_elishasmiracle.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Enduring Vitality",
+      "effects": "Gain {{sti|hsp|{{fd|2.5}}% heal and shield power}} per {{as|100 '''current''' health}} you are missing, up to 60% at {{as|2400 '''current''' health}} missing."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 50.0
+    },
+    "magicResistance": {
+      "flat": 50.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

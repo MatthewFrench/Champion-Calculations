@@ -1,0 +1,44 @@
+{
+  "name": "Overlord's Bloodmail",
+  "id": 2501,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    2021,
+    2021
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7111_overlordsbloodmail.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Tyranny",
+      "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{as|{{fd|2.5}}% '''bonus''' health}}."
+    },
+    {
+      "unique": true,
+      "name": "Retribution",
+      "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{pp|0 to 12 by 1|0 to 70|key=%|key1=%|type='''missing''' health|color=health}} of your {{as|'''total''' attack damage}} from other sources."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 30.0
+    },
+    "health": {
+      "flat": 550.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK"
+    ]
+  }
+}

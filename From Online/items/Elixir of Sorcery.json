@@ -1,0 +1,26 @@
+{
+  "name": "Elixir of Sorcery",
+  "id": 2139,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2139_class_t1_elixirofsorcery.png",
+  "simpleDescription": "Temporarily grants Ability Power and Bonus Damage to champions and turrets.",
+  "nicknames": [
+    "consumable",
+    "blue"
+  ],
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "ABILITY_POWER",
+      "MANA_AND_REG",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

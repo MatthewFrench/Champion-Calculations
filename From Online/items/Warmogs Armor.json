@@ -1,0 +1,49 @@
+{
+  "name": "Warmog's Armor",
+  "id": 3083,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1011,
+    1011,
+    3801
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
+  "simpleDescription": "Grants massive Health and Health Regen",
+  "passives": [
+    {
+      "unique": true,
+      "effects": "Grants ''Warmog's Heart'' if you have at least {{as|2000 '''bonus''' health}}."
+    },
+    {
+      "unique": true,
+      "name": "Warmog's Heart",
+      "effects": "{{stil|Health regeneration|Regenerate}}{{ft|{{as|{{fd|1.5}}% '''maximum''' health}} every {{fd|0.5}} seconds|{{as|15% '''maximum''' health}} every 5 seconds}}if [[damage]] has not been taken in the last 8 seconds (3 seconds for damage from non-champions)."
+    },
+    {
+      "unique": true,
+      "name": "Warmog's Vitality",
+      "effects": "Gain {{as|'''bonus''' health}} equal to {{as|12% '''bonus''' health '''from items'''}}."
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 1000.0
+    },
+    "healthRegen": {
+      "percent": 100.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

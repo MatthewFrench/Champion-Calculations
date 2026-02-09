@@ -1,0 +1,57 @@
+{
+  "name": "Caulfield's Warhammer",
+  "id": 3133,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036,
+    2022,
+    1036
+  ],
+  "buildsInto": [
+    6693,
+    126697,
+    3004,
+    6694,
+    3156,
+    6696,
+    2517,
+    6692,
+    6691,
+    323004,
+    3074,
+    6697,
+    4402,
+    3508,
+    3179,
+    6333,
+    6609,
+    6610,
+    6632
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3133_fighter_t2_caulfieldswarhammer.png",
+  "simpleDescription": "Attack Damage and Cooldown Reduction",
+  "stats": {
+    "attackDamage": {
+      "flat": 20.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1050,
+      "sell": 420
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

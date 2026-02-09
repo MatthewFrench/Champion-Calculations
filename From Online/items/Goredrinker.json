@@ -1,0 +1,40 @@
+{
+  "name": "Goredrinker",
+  "id": 226630,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6630_fighter_t4_goredrinker.png",
+  "nicknames": [
+    "slurp"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Thirsting Slash",
+      "effects": "Deal {{as|175% '''base''' AD}} {{as|physical damage}} to enemies in a {{tip|cr|icononly = true}} 450 radius centered around you. {{tip|Heal}} for {{as|20% AD}} {{as|(+ 8% of your '''missing''' health)}} for each enemy champion hit."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    },
+    "omnivamp": {
+      "percent": 10.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

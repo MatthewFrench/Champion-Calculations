@@ -1,0 +1,44 @@
+{
+  "name": "Hubris",
+  "id": 6697,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3134,
+    3133
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
+  "nicknames": [
+    "lethality"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Eminence",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them generates a permanent stack and grants you {{as|15|ad}} (+ 2 per stack) {{as|'''bonus''' attack damage}} for 90 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "Long Sword",
+  "id": 1036,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    3032,
+    6670,
+    1053,
+    3133,
+    3004,
+    2015,
+    2019,
+    2021,
+    2517,
+    6692,
+    3123,
+    3051,
+    6671,
+    323004,
+    3155,
+    3035,
+    3077,
+    2523,
+    3044,
+    4003,
+    3134,
+    3142,
+    6690,
+    6699,
+    6701
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1036_class_t1_longsword.png",
+  "simpleDescription": "Slightly increases Attack Damage",
+  "stats": {
+    "attackDamage": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 350,
+      "sell": 140
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

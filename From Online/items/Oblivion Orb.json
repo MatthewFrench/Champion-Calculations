@@ -1,0 +1,45 @@
+{
+  "name": "Oblivion Orb",
+  "id": 3916,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052
+  ],
+  "buildsInto": [
+    223011,
+    3011,
+    3165
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3916_mage_t2_oblivionorb.png",
+  "simpleDescription": "Increases magic damage",
+  "nicknames": [
+    "grievous",
+    "grievous wounds"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Grievous Wounds",
+      "effects": "Dealing {{as|magic damage}} to enemy champions inflicts them with {{tip|Grievous Wounds}} for 3 seconds."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 800,
+      "sell": 320
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "SUPPORT"
+    ]
+  }
+}

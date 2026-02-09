@@ -1,0 +1,50 @@
+{
+  "name": "Bandlepipes",
+  "id": 2524,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3067,
+    1029,
+    1033
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2524_tankasaura.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Fanfare",
+      "effects": "{{tip|Slow|Slowing}} or {{tip|immobilize|immobilizing}} an enemy champion empowers you with ''Fanfare'' for {{rd|8|4}} seconds, granting you {{as|20 '''bonus''' movement speed}}. While empowered, you and nearby allied champions also gain {{as|{{rd|30|20}}% '''bonus''' attack speed}}.",
+      "stats": {
+        "movespeed": {
+          "flat": 20.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 20.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "magicResistance": {
+      "flat": 20.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2300,
+      "sell": 920
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

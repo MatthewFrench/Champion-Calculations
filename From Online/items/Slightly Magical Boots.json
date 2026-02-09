@@ -1,0 +1,35 @@
+{
+  "name": "Slightly Magical Boots",
+  "id": 2422,
+  "tier": 1,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "buildsInto": [
+    3006,
+    3047,
+    3020,
+    3158,
+    3111,
+    3117,
+    3009
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2422_class_t1_slightlymagicalboots.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Slightly Quicker",
+      "effects": "Gain {{as|10 '''bonus''' movement speed}}.",
+      "stats": {
+        "movespeed": {
+          "flat": 10.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 25.0
+    }
+  }
+}

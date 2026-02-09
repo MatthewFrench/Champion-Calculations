@@ -1,0 +1,53 @@
+{
+  "name": "World Atlas",
+  "id": 3865,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3865_worldatlas.png",
+  "nicknames": [
+    "Map"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Support Quest",
+      "effects": "Earn {{g|400}} through ''Shared Riches'' and this item's {{stil|gold generation}} stat to automatically upgrade to {{ii|Runic Compass}}, gaining the ''Ward'' active with 3 wards in stock."
+    },
+    {
+      "unique": true,
+      "name": "Shared Riches",
+      "effects": "Grants a '''Shared Riches''' charge every 20 seconds, up to 3 charges. When an allied champion is within {{tip|er|icononly=true}} 1050 units of you, consume a charge in the following ways:<br>• Kill a minion by any means, granting you {{g|15}} and the nearest allied champion kill {{g|gold}}. Damaging a minion {{as|'''below''' {{rd|50%|30%}} of its '''maximum''' health}} with a [[basic attack]] will {{tip|execute}} it, if any charges are available.<br>• Damage an enemy champion or structure with a basic attack or ability, granting you {{g|{{rd|22|20}}}}. A charge may be consumed this way only once per attack or ability."
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 3.0
+    },
+    "health": {
+      "flat": 30.0
+    },
+    "healthRegen": {
+      "percent": 25.0
+    },
+    "manaRegen": {
+      "percent": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT",
+      "MAGE"
+    ]
+  }
+}

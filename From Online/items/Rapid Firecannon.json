@@ -1,0 +1,54 @@
+{
+  "name": "Rapid Firecannon",
+  "id": 3094,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3086,
+    3144
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3094_marksman_t3_rapidfirehandcannon.png",
+  "simpleDescription": "Movement builds charges that release a sieging fire attack on release",
+  "nicknames": [
+    "canon",
+    "gun",
+    "rapidfire",
+    "rfc"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Sharpshooter",
+      "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|40 '''bonus''' magic damage}} [[on-hit]]. ''Energized'' attacks gain 35% '''bonus''' range, capped at 150."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 35.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2650,
+      "sell": 1060
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  }
+}

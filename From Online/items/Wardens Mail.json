@@ -1,0 +1,40 @@
+{
+  "name": "Warden's Mail",
+  "id": 3082,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1029,
+    1029
+  ],
+  "buildsInto": [
+    3110,
+    323110,
+    3143
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3082_tank_t2_wardensmail.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Rock Solid",
+      "effects": "Every first incoming instance of {{tt|post-mitigation|Damage calculated after modifiers}} {{tip|basic damage}} per {{tip|cast instance}} is [[Damage modifier|reduced]] by 15, with a '''maximum''' of 20% reduction each."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 40.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

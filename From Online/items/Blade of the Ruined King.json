@@ -1,0 +1,57 @@
+{
+  "name": "Blade of the Ruined King",
+  "id": 3153,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1053,
+    1043,
+    1037
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3153_fighter_t3_bladeoftheruinedking.png",
+  "simpleDescription": "Deals damage based on target's Health, can steal Move Speed",
+  "nicknames": [
+    "brk",
+    "bork",
+    "botrk",
+    "mist"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Mist's Edge",
+      "effects": "Basic attacks deal {{as|'''bonus''' physical damage}} [[on-hit]] equal to {{as|{{rd|9%|6%}} of the target's '''current''' health}}, with a '''maximum''' of 100 against {{tip|minions}} and {{tip|monsters}}."
+    },
+    {
+      "unique": true,
+      "name": "Clawing Shadows",
+      "effects": "Basic attacks on-hit against enemy champions apply a stack for 6 seconds, stacking up to 3 times. The third stack consumes them all to {{tip|slow}} the target by 30% for 1 second.",
+      "cooldown": "15"
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "attackSpeed": {
+      "flat": 25.0
+    },
+    "lifesteal": {
+      "percent": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

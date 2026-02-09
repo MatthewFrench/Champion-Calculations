@@ -1,0 +1,45 @@
+{
+  "name": "Wit's End",
+  "id": 3091,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1043,
+    1057,
+    1043
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3091_fighter_t3_witsend.png",
+  "simpleDescription": "Resist magic damage and claw your way back to life.",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Fray",
+      "effects": "Basic attacks deal {{as|45 '''bonus''' magic damage}} [[on-hit]]."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 50.0
+    },
+    "magicResistance": {
+      "flat": 45.0
+    },
+    "tenacity": {
+      "percent": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

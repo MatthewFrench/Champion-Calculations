@@ -1,0 +1,48 @@
+{
+  "name": "Hextech Rocketbelt",
+  "id": 3152,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3145,
+    3108,
+    1028
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
+  "simpleDescription": "Activate to dash forward and unleash a fiery explosion",
+  "nicknames": [
+    "protobelt",
+    "rocket belt"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Supersonic",
+      "effects": "{{tip|Dash}} 275 units in the target direction, though not through terrain, then unleash an arc of 7 rockets forward which upon collision explode in a {{tip|cr|icononly = true}} {{tt|185-radius|estimated}} area. Enemies within {{tt|85 units|center-to-edge, estimated}} of your dash and ones hit by any rocket's explosion are dealt {{as|100 {{as|(+ 10% AP)}} magic damage|magic damage}}, once per cast."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "health": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2650,
+      "sell": 1060
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "MOVEMENT"
+    ]
+  }
+}

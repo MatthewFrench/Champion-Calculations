@@ -1,0 +1,48 @@
+{
+  "name": "Spirit Visage",
+  "id": 3065,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3211,
+    3067
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3065_tank_t3_spiritvisage.png",
+  "simpleDescription": "Increases Health and healing effects",
+  "nicknames": [
+    "sv"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Boundless Vitality",
+      "effects": "Increases all {{tip|heal|healing}} and {{tip|shield|shielding}} received as well as {{stil|health regeneration}} by 25%."
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 400.0
+    },
+    "healthRegen": {
+      "percent": 100.0
+    },
+    "magicResistance": {
+      "flat": 50.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2700,
+      "sell": 1080
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

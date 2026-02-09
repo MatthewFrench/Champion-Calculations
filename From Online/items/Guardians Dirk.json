@@ -1,0 +1,43 @@
+{
+  "name": "Guardian's Dirk",
+  "id": 223185,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3181_sanguineblade.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Agricultural Reaper",
+      "effects": "Increases the effects of [[File:Power FlowerSquare.png|20px|link=Arena#Power Flowers]] ''[[Arena#Power Flowers|Power Flowers]]'' by 20%. Additionally, dealing damage to a ''Power Flower'' grants you {{as|100 '''bonus''' movement speed}} for 3 seconds.",
+      "stats": {
+        "movespeed": {
+          "flat": 100.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    },
+    "lethality": {
+      "flat": 11
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ASSASSIN"
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Redemption",
+  "id": 3107,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3108,
+    3114
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3107_enchanter_t3_redemption.png",
+  "simpleDescription": "Activate to heal allies and damage enemies in an area",
+  "nicknames": [
+    "burn"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Intervention",
+      "effects": "Call upon a 550-radius beam of light to strike upon the target location after {{fd|2.5}} seconds, granting {{tip|sight}} of the area for the duration. Allies within the area are {{tip|heal|healed}} for {{pp|150 to 350|type=target's level}}, while enemy champions within take {{as|10% of target's '''maximum''' health}} as {{as|true damage}}. '''Can be used while [[death|dead]].'''",
+      "range": 5500
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 30.0
+    },
+    "healAndShieldPower": {
+      "flat": 10.0
+    },
+    "manaRegen": {
+      "percent": 100.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2250,
+      "sell": 900
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Spellslinger's Shoes",
+  "id": 3175,
+  "tier": 3,
+  "rank": [
+    "BOOTS"
+  ],
+  "buildsFrom": [
+    3020
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_sorceror_64.png",
+  "nicknames": [
+    "boots"
+  ],
+  "stats": {
+    "magicPenetration": {
+      "flat": 18.0,
+      "percent": 8.0
+    },
+    "movespeed": {
+      "flat": 45.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1100,
+      "sell": 440
+    },
+    "purchasable": true
+  }
+}

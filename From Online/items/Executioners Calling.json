@@ -1,0 +1,45 @@
+{
+  "name": "Executioner's Calling",
+  "id": 3123,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036
+  ],
+  "buildsInto": [
+    3033,
+    6609
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3123_fighter_t2_executionerscalling.png",
+  "simpleDescription": "Overcomes enemies with high health gain",
+  "nicknames": [
+    "grievous",
+    "grievous wounds"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Grievous Wounds",
+      "effects": "Dealing {{as|physical damage}} to enemy champions inflicts them with {{tip|Grievous Wounds}} for 3 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 800,
+      "sell": 320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

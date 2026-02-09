@@ -1,0 +1,43 @@
+{
+  "name": "Protoplasm Harness",
+  "id": 2525,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3067,
+    1011
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take damage that would reduce you below {{as|30% of your '''maximum''' health}}, gain {{as|{{pp|200 + (300-200)/17*(x-1) for 20}} '''bonus''' health}} for 5 seconds and {{tip|heal}} yourself for {{pp|200 + (400-200)/17*(x-1) for 20}} {{as|(+ 175% '''bonus''' armor)}} {{as|(+ 175% '''bonus''' magic resistance)}} over the same duration, during which you also gain 15% increased [[size]], {{as|10% '''bonus''' movement speed}}, and 25% {{tip|tenacity}}.",
+      "stats": {
+        "movespeed": {
+          "percent": 10.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

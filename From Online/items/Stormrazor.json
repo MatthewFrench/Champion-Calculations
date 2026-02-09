@@ -1,0 +1,58 @@
+{
+  "name": "Stormrazor",
+  "id": 3097,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1038,
+    1018,
+    3144
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3095_windblade.png",
+  "simpleDescription": "Periodically kill enemy minions to heal and grant gold to a nearby ally",
+  "nicknames": [
+    "energize",
+    "Windblade"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Bolt",
+      "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|100 '''bonus''' magic damage}} [[on-hit]] and grants you {{as|45% '''bonus''' movement speed}} for {{fd|1.5}} seconds.",
+      "stats": {
+        "movespeed": {
+          "percent": 45.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "attackSpeed": {
+      "flat": 20.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

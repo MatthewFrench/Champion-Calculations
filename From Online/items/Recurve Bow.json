@@ -1,0 +1,44 @@
+{
+  "name": "Recurve Bow",
+  "id": 1043,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1042
+  ],
+  "buildsInto": [
+    3115,
+    3302,
+    3091,
+    3124,
+    3153,
+    6672
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1043_base_t2_recurvebow.png",
+  "simpleDescription": "Greatly increases Attack Speed",
+  "passives": [
+    {
+      "name": "Sting",
+      "effects": "Basic attacks deal {{as|15 '''bonus''' physical damage}} [[on-hit]]."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 700,
+      "sell": 280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Seeker's Armguard",
+  "id": 2420,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052,
+    1029,
+    1052
+  ],
+  "buildsInto": [
+    3157
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3191_battlemage_t2_seekersarmguard.png",
+  "simpleDescription": "Activate to become invincible but unable to take actions",
+  "nicknames": [
+    "zhg",
+    "zonyas",
+    "zhonyas"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Time Stop",
+      "effects": "Put yourself in {{tip|stasis (buff)|stasis}} for {{fd|2.5}} seconds, rendering you {{tip|untargetable}} and {{tip|invulnerable}} for the duration but also unable to move, declare [[basic attack]]s, cast [[champion ability|abilities]], use [[summoner spell]]s, or [[active ability items|activate items]]."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 40.0
+    },
+    "armor": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1600,
+      "sell": 640
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

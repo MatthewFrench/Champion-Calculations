@@ -1,0 +1,46 @@
+{
+  "name": "Scout's Slingshot",
+  "id": 3144,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1042,
+    1042
+  ],
+  "buildsInto": [
+    3032,
+    3097,
+    3095,
+    2512,
+    3087,
+    3085,
+    3094
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3144_scoutslingshot.png",
+  "simpleDescription": "Activate to deal magic damage and slow target champion",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Bullseye",
+      "effects": "Damaging an enemy champion deals {{as|40 '''bonus''' magic damage}} (40 second cooldown, reduced by 1 second {{tip|on-attack}})."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 600,
+      "sell": 240
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Kinkou Jitte",
+  "id": 447116,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447116_kinkoujitte.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Between the Ribs",
+      "effects": "You can now identify the ''Weakpoints'' of nearby enemy champions, marked as an arc around them and pointing towards a specific direction. ''Weakpoints'' on targets take 4 seconds to become exposed and linger for {{fd|11.25}} seconds afterwards. Dealing damage while you are facing an exposed ''Weakpoint'' will consume it to deal {{as|'''bonus''' true damage}} equal to {{as|3%|hp}} {{as|(+ 3% per 100 AD)}} {{as|(+ 2% per 100 AP)}} {{as|of the target's '''maximum''' health}} and grant you {{as|{{pp|50 to 75|key=%}} '''bonus''' movement speed}} for {{fd|1.5}} seconds. Once a target's ''Weakpoint'' is consumed or expires, you identify a new ''Weakpoint'' on them."
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 30.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN",
+      "FIGHTER",
+      "MAGE"
+    ]
+  }
+}

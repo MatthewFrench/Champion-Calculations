@@ -1,0 +1,57 @@
+{
+  "name": "Runic Compass",
+  "id": 3866,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "specialRecipe": 3865,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3866_runiccompass.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Support Quest",
+      "effects": "Earn {{g|800}} through ''Shared Riches'' and this item's {{stil|gold generation}} stat to automatically upgrade to {{ii|Bounty of Worlds}}, increasing the ''Ward'' active to instead have 4 wards in stock."
+    },
+    {
+      "unique": true,
+      "name": "Shared Riches",
+      "effects": "Grants a '''Shared Riches''' charge every 20 seconds, up to 3 charges. When an allied champion is within {{tip|er|icononly=true}} 1050 units of you, consume a charge in the following ways:<br>• Kill a minion by any means, granting you {{g|20}} and the nearest allied champion kill {{g|gold}}. Damaging a minion {{as|'''below''' {{rd|50%|30%}} of its '''maximum''' health}} with a [[basic attack]] will {{tip|execute}} it, if any charges are available.<br>• Damage an enemy champion or structure with a basic attack or ability, granting you {{g|{{rd|24|22}}}}. A charge may be consumed this way only once per attack or ability."
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ward",
+      "effects": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. '''Warding''' charges refill upon visiting the shop.",
+      "range": 600
+    }
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 5.0
+    },
+    "health": {
+      "flat": 100.0
+    },
+    "healthRegen": {
+      "percent": 50.0
+    },
+    "manaRegen": {
+      "percent": 50.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

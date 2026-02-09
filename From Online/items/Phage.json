@@ -1,0 +1,50 @@
+{
+  "name": "Phage",
+  "id": 3044,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1028,
+    1036
+  ],
+  "buildsInto": [
+    6631,
+    6630,
+    3071,
+    3073,
+    3078
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3044_fighter_t2_phage.png",
+  "simpleDescription": "Attacks and kills give a small burst of speed",
+  "nicknames": [
+    "mallet"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Rage",
+      "effects": "Basic attacks [[on-hit]] grant {{as|{{rd|20|10}} '''bonus''' movement speed}} for 2 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 15.0
+    },
+    "health": {
+      "flat": 200.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1100,
+      "sell": 440
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Overcharged",
+  "id": 1507,
+  "tier": 1,
+  "rank": [
+    "TURRET"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1507_tournament_suddendeath.png",
+  "passives": [
+    {
+      "unique": true,
+      "effects": "At 55 minutes, this turret begins to malfunction, losing {{as|armor}} and {{as|magic resist}}. After 5 minutes, it will start breaking down, losing an increasing percentage of its {{as|{{sti|health|'''maximum''' health}}}} every 30 seconds."
+    }
+  ]
+}

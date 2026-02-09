@@ -1,0 +1,50 @@
+{
+  "name": "Mikael's Blessing",
+  "id": 3222,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3067,
+    3114
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3222_enchanter_t3_mikaelsblessing.png",
+  "simpleDescription": "Activate to remove all disabling effects from an allied champion",
+  "nicknames": [
+    "crucible",
+    "michael",
+    "mikael"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Purify",
+      "effects": "Remove all {{tip|crowd control}} debuffs (except {{tip|Airborne}}, {{tip|Blind}}, {{tip|Disarm}}, {{tip|Nearsight}}, and {{tip|Suppression}}) from yourself or the target allied champion and {{tip|heal}} the target for {{pp|100 to 250|type=target's level}}."
+    }
+  ],
+  "stats": {
+    "healAndShieldPower": {
+      "flat": 12.0
+    },
+    "health": {
+      "flat": 250.0
+    },
+    "manaRegen": {
+      "percent": 100.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2300,
+      "sell": 920
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

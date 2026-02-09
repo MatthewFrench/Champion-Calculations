@@ -1,0 +1,16 @@
+{
+  "name": "Warden's Eye",
+  "id": 1503,
+  "tier": 1,
+  "rank": [
+    "TURRET"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/096_eye_of_the_observer.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "True Sight",
+      "effects": "Turrets can see and will {{tip|true sight|reveal}} {{tip|camouflage|camouflaged}} and {{tip|invisible}} units within 1100 units."
+    }
+  ]
+}

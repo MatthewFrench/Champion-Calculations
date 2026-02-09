@@ -1,0 +1,50 @@
+{
+  "name": "Maw of Malmortius",
+  "id": 3156,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3155,
+    3133
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
+  "simpleDescription": "Grants bonus Attack Damage when Health is low",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take {{as|magic damage}} that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} that absorbs {{as|{{rd|200|150}}|magic damage}} {{as|(+ {{rd|150%|{{fd|112.5}}%}} '''bonus''' AD)}} {{as|magic damage}} for 3 seconds. Additionally, triggering this effect grants you {{as|10% omnivamp}} until the end of [[combat status|combat]].",
+      "cooldown": "90",
+      "stats": {
+        "omnivamp": {
+          "percent": 30.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "magicResistance": {
+      "flat": 40.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

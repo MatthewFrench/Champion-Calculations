@@ -1,0 +1,57 @@
+{
+  "name": "Knight's Vow",
+  "id": 3109,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3067,
+    1031,
+    1006
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3109_tank_t3_knightsvow.png",
+  "simpleDescription": "Partner with an ally to protect each other",
+  "nicknames": [
+    "kv"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Sacrifice",
+      "effects": "While your ''Worthy'' ally is {{tt|tethered to you|1250 units, center to edge}} and you are above {{as|30% of your '''maximum''' health}}, redirect 12% of the {{tt|pre-mitigation|Damage calculated before the Worthy ally's modifiers}} {{as|physical|physical damage}} and {{as|magic|magic damage}} damage they take to you as the respective damage type. Additionally, you {{tip|heal}} for 10% of the {{tt|post-mitigation damage|Damage calculated after modifiers}} dealt by your ''Worthy'' ally to champions."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Pledge",
+      "effects": "Designate the target allied champion as being ''Worthy'', forming a {{tip|tether}} between you and them. Champions can only be designated as ''Worthy'' by one '''Knight's Vow''' at a time. You cannot be designated as ''Worthy'' by an ally's '''Knight's Vow'''."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 40.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 100.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2300,
+      "sell": 920
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK",
+      "SUPPORT"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Hemomancer's Helm",
+  "id": 447103,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7103_hemomancershelm.png",
+  "nicknames": [
+    "Omnivamp"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Scarlet Allegiance",
+      "effects": "If your {{stil|life steal}} and {{stil|omnivamp}} sum to at least 30%, gain {{as|500 '''bonus''' health}} and {{tip|heal}} yourself equal to 10% of the damage that enemy champions within {{tip|cr|icononly=true}} 525 units of you take from all sources."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 70.0
+    },
+    "abilityHaste": {
+      "flat": 30.0
+    },
+    "omnivamp": {
+      "percent": 15.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

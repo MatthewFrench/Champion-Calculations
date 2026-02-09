@@ -1,0 +1,31 @@
+{
+  "name": "Shield of Molten Stone",
+  "id": 443058,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3058_shieldofmoltenstone.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Immovable as the Earth",
+      "effects": "Increase your {{as|'''total''' armor}} by {{as|20%|armor}}. Additionally, basic attacks that hit you have a chance of being {{tip|block|blocked}} equal to 5% per {{as|200 '''total''' armor}}, up to a maximum of 50% chance."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 100.0
+    },
+    "health": {
+      "flat": 300.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

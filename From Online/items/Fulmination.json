@@ -1,0 +1,47 @@
+{
+  "name": "Fulmination",
+  "id": 443055,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3055_fulmination.png",
+  "nicknames": [
+    "energize"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Polarity",
+      "effects": "Your {{tip|Energized}} attacks against targets not hit by your previous ''Energized'' attack do not consume any ''Energize'' stacks on-hit."
+    },
+    {
+      "unique": true,
+      "name": "Dynamo",
+      "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|'''bonus''' magic damage}} [[on-hit]] equal to {{as|13% of the target's '''current''' health}}."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "attackSpeed": {
+      "flat": 45.0
+    },
+    "movespeed": {
+      "percent": 15.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  }
+}

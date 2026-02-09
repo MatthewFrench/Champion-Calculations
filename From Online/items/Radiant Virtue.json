@@ -1,0 +1,41 @@
+{
+  "name": "Radiant Virtue",
+  "id": 446667,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6667_tank_t4_radiantvirtue.png",
+  "nicknames": [
+    "rv"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Guiding Light",
+      "effects": "Upon casting your [[champion ability|ultimate]], you ''Transcend'' for 9 seconds. While ''Transcended'', increase your {{as|'''maximum''' health by {{fd|12.5}}%}} and cause you and all allies within {{tip|cr|icononly=true}} 1200 units to {{tip|heal}} for {{as|{{fd|3}}% of your '''maximum''' health}} upon you ''Transcending'' and every 3 seconds thereafter, for a total healing of {{as|{{ap|3*4}}% of your '''maximum''' health}}.",
+      "cooldown": "30"
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 35.0
+    },
+    "healAndShieldPower": {
+      "flat": 12.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "magicResistance": {
+      "flat": 35.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

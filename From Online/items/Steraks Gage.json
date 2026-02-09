@@ -1,0 +1,53 @@
+{
+  "name": "Sterak's Gage",
+  "id": 3053,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1037,
+    2021,
+    1028
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
+  "simpleDescription": "Shields against large bursts of damage",
+  "nicknames": [
+    "juggernaut",
+    "primal",
+    "shield",
+    "sterak's cage"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "The Claws that Catch",
+      "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{as|45% '''base''' AD}}."
+    },
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take damage that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} that absorbs damage equal to {{as|60% of '''bonus''' health}} which decays over {{fd|4.5}} seconds.",
+      "cooldown": "90"
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 400.0
+    },
+    "tenacity": {
+      "percent": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ATTACK_DAMAGE"
+    ]
+  }
+}

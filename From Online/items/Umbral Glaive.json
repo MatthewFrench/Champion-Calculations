@@ -1,0 +1,56 @@
+{
+  "name": "Umbral Glaive",
+  "id": 3179,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3134,
+    3133
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
+  "simpleDescription": "Provides trap and ward detection periodically",
+  "nicknames": [
+    "lethality"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Blackout",
+      "effects": "When spotted by enemy [[Stealth#Stealthed_traps_and_wards|stealthed]] {{tip|wards}} or {{tip|stealthed trap|traps}}, gain ''Blackout'' for 8 seconds.",
+      "range": 400,
+      "cooldown": "90"
+    },
+    {
+      "name": "Blackout",
+      "effects": "You {{tip|disabled ward|disable}} surrounding stealthed wards, as well as {{tip|expose}} and {{tip|true sight|reveal}} nearby stealthed wards and traps while ''Blackout'' is active. Your [[basic attack]]s deal {{as|{{rd|2|1}} '''bonus''' true damage}} to wards."
+    },
+    {
+      "unique": true,
+      "name": "Nightstalker",
+      "effects": "After being not {{tip|sight|visible}} to enemies for at least 1 second, your next basic attack against a champion is empowered to deal {{as|50 {{as|(+ {{fd|1.5}} per 1 Lethality)}} '''bonus''' true damage}} [[on-hit]]. The empowered attack lasts for 4 seconds after being seen by an enemy."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

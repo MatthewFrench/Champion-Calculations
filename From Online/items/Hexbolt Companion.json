@@ -1,0 +1,31 @@
+{
+  "name": "Hexbolt Companion",
+  "id": 443081,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443081_hexboltcompanion.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Covering Fire",
+      "effects": "While your ally is within {{tt|1200 units|center-to-edge}}, your basic attacks [[on-hit]] generate a stack of ''Covering Fire''. At 1 stack, your next basic attack consumes them all to cause your ally to fire a bolt at the target, dealing {{as|{{pp|50 to 100}} physical damage}} and applying your ally's on-hit effects at 100% effectiveness."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 75.0
+    },
+    "health": {
+      "flat": 500.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

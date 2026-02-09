@@ -1,0 +1,42 @@
+{
+  "name": "Glacial Buckler",
+  "id": 3024,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1029,
+    1027,
+    2022
+  ],
+  "buildsInto": [
+    3110,
+    323110
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3024_tank_t2_glacialshroud.png",
+  "simpleDescription": "Increases Armor and Cooldown Reduction",
+  "stats": {
+    "armor": {
+      "flat": 25.0
+    },
+    "mana": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK",
+      "SUPPORT"
+    ]
+  }
+}

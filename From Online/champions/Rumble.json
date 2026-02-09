@@ -1,0 +1,2121 @@
+{
+  "id": 68,
+  "key": "Rumble",
+  "name": "Rumble",
+  "title": "The Mechanized Menace",
+  "icon": "http://ddragon.leagueoflegends.com/cdn/16.3.1/img/champion/Rumble.png",
+  "resource": "HEAT",
+  "attackType": "MELEE",
+  "adaptiveType": "MAGIC_DAMAGE",
+  "stats": {
+    "health": {
+      "flat": 655,
+      "perLevel": 105
+    },
+    "healthRegen": {
+      "flat": 7,
+      "perLevel": 0.6
+    },
+    "mana": {
+      "flat": 150
+    },
+    "armor": {
+      "flat": 36,
+      "perLevel": 4.7
+    },
+    "magicResistance": {
+      "flat": 28,
+      "perLevel": 1.55
+    },
+    "attackDamage": {
+      "flat": 64,
+      "perLevel": 3.2
+    },
+    "movespeed": {
+      "flat": 345
+    },
+    "acquisitionRadius": {
+      "flat": 600
+    },
+    "selectionRadius": {
+      "flat": 140
+    },
+    "pathingRadius": {
+      "flat": 35
+    },
+    "gameplayRadius": {
+      "flat": 80
+    },
+    "criticalStrikeDamage": {
+      "flat": 175
+    },
+    "criticalStrikeDamageModifier": {
+      "flat": 1.0
+    },
+    "attackSpeed": {
+      "flat": 0.644,
+      "perLevel": 1.85
+    },
+    "attackSpeedRatio": {
+      "flat": 0.643999993801116
+    },
+    "attackCastTime": {
+      "flat": 0.3
+    },
+    "attackTotalTime": {
+      "flat": 1.6
+    },
+    "attackDelayOffset": {
+      "flat": -0.1
+    },
+    "attackRange": {
+      "flat": 125
+    },
+    "aramDamageTaken": {
+      "flat": 1
+    },
+    "aramDamageDealt": {
+      "flat": 1
+    },
+    "aramHealing": {
+      "flat": 1.0
+    },
+    "aramShielding": {
+      "flat": 1.0
+    },
+    "aramTenacity": {
+      "flat": 1.0
+    },
+    "aramAbilityHaste": {
+      "flat": 1.0
+    },
+    "aramAttackSpeed": {
+      "flat": 1.0
+    },
+    "aramEnergyRegen": {
+      "flat": 1.0
+    },
+    "urfDamageTaken": {
+      "flat": 1.0
+    },
+    "urfDamageDealt": {
+      "flat": 1.0
+    },
+    "urfHealing": {
+      "flat": 1.0
+    },
+    "urfShielding": {
+      "flat": 1.0
+    }
+  },
+  "positions": [
+    "MIDDLE",
+    "TOP"
+  ],
+  "roles": [
+    "BATTLEMAGE",
+    "FIGHTER",
+    "MAGE"
+  ],
+  "attributeRatings": {
+    "damage": 3,
+    "toughness": 2,
+    "control": 2,
+    "mobility": 1,
+    "utility": 1,
+    "abilityReliance": 90,
+    "difficulty": 3
+  },
+  "abilities": {
+    "P": [
+      {
+        "name": "Junkyard Titan",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Rumble/ability-icon/p",
+        "effects": [
+          {
+            "description": "Innate: Rumble's basic ability casts generate Heat, which decays by 10 Heat per second after not using any basic ability within 4 seconds or The Equalizer within 2 seconds. Rumble's mech enters the Danger Zone when at or above 50 Heat, and becomes Overheated while at 150 Heat."
+          },
+          {
+            "description": "Danger Zone: Rumble's mech enters the Danger Zone, empowering his basic abilities."
+          },
+          {
+            "description": "Overheated: Rumble's mech becomes Overheated, disabling his abilities as his Heat decays back down to 0 over 4 seconds. During this time, he gains 50% : 142.54% (based on level) bonus attack speed and empowers his basic attacks to deal 5 : 44.12 (based on level) (+ 25% AP) (+ 4% of the target's maximum health) bonus magic damage on-hit. The damage based on the target's health ratio is capped at 65 : 163.32 (based on level) against monsters."
+          }
+        ],
+        "targeting": "Passive",
+        "affects": "Self",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "Proc",
+        "notes": "While Rumble is overheating, a  Silenced icon will appear above him to signify he cannot cast  abilities. This is visible to all units.\nThe attacks do not deal the bonus damage against  structures.",
+        "blurb": "Innate:  Rumble's  basic ability casts generate  Heat, which gradually expires after a few seconds without generating Heat. Rumble enters the Danger Zone while he has at least  50 Heat, and becomes Overheated at  Max Heat."
+      }
+    ],
+    "Q": [
+      {
+        "name": "Flamespitter",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Rumble/ability-icon/q",
+        "effects": [
+          {
+            "description": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0.25 seconds. Enemies hit by the flame are scorched for 0.6 seconds, taking magic damage every 0.25 seconds as well as upon being hit if not currently scorched, refreshing on subsequent inflictions.Flamespitter's damage is reduced to 70% against minions.",
+            "leveling": [
+              {
+                "attribute": "Minimum Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      15,
+                      21.25,
+                      27.5,
+                      33.75,
+                      40
+                    ]
+                  },
+                  {
+                    "values": [
+                      25,
+                      25,
+                      25,
+                      25,
+                      25
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      1.5,
+                      1.625,
+                      1.75,
+                      1.875,
+                      2
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Magic Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      20,
+                      28.33,
+                      36.67,
+                      45,
+                      53.33
+                    ]
+                  },
+                  {
+                    "values": [
+                      33.33,
+                      33.33,
+                      33.33,
+                      33.33,
+                      33.33
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      2,
+                      2.167,
+                      2.333,
+                      2.5,
+                      2.667
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Magic Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      5,
+                      7.083,
+                      9.167,
+                      11.25,
+                      13.333
+                    ]
+                  },
+                  {
+                    "values": [
+                      8.333,
+                      8.333,
+                      8.333,
+                      8.333,
+                      8.333
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      0.5,
+                      0.542,
+                      0.583,
+                      0.625,
+                      0.667
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Maximum Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      75,
+                      106.25,
+                      137.5,
+                      168.75,
+                      200
+                    ]
+                  },
+                  {
+                    "values": [
+                      125,
+                      125,
+                      125,
+                      125,
+                      125
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      7.5,
+                      8.13,
+                      8.75,
+                      9.38,
+                      10
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Minimum Minion Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      10.5,
+                      14.88,
+                      19.25,
+                      23.63,
+                      28
+                    ]
+                  },
+                  {
+                    "values": [
+                      17.5,
+                      17.5,
+                      17.5,
+                      17.5,
+                      17.5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      1.05,
+                      1.14,
+                      1.23,
+                      1.31,
+                      1.4
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Minion Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      14,
+                      19.83,
+                      25.67,
+                      31.5,
+                      37.33
+                    ]
+                  },
+                  {
+                    "values": [
+                      23.33,
+                      23.33,
+                      23.33,
+                      23.33,
+                      23.33
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      1.4,
+                      1.52,
+                      1.63,
+                      1.75,
+                      1.87
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Minion Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      3.5,
+                      4.958,
+                      6.417,
+                      7.875,
+                      9.333
+                    ]
+                  },
+                  {
+                    "values": [
+                      5.833,
+                      5.833,
+                      5.833,
+                      5.833,
+                      5.833
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      0.35,
+                      0.379,
+                      0.408,
+                      0.438,
+                      0.467
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Maximum Minion Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      52.5,
+                      74.38,
+                      96.25,
+                      118.13,
+                      140
+                    ]
+                  },
+                  {
+                    "values": [
+                      87.5,
+                      87.5,
+                      87.5,
+                      87.5,
+                      87.5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      5.25,
+                      5.69,
+                      6.13,
+                      6.56,
+                      7
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Danger Zone Bonus: Flamespitter's damage is increased by 50%.Flamespitter's total damage based on the target's health is capped at 65 : 336.84 (based on level) against monsters.",
+            "leveling": [
+              {
+                "attribute": "Minimum Enhanced Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      22.5,
+                      31.875,
+                      41.25,
+                      50.625,
+                      60
+                    ]
+                  },
+                  {
+                    "values": [
+                      37.5,
+                      37.5,
+                      37.5,
+                      37.5,
+                      37.5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      2.25,
+                      2.438,
+                      2.625,
+                      2.813,
+                      3
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      30,
+                      42.5,
+                      55,
+                      67.5,
+                      80
+                    ]
+                  },
+                  {
+                    "values": [
+                      50,
+                      50,
+                      50,
+                      50,
+                      50
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      3,
+                      3.25,
+                      3.5,
+                      3.75,
+                      4
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      7.5,
+                      10.625,
+                      13.75,
+                      16.875,
+                      20
+                    ]
+                  },
+                  {
+                    "values": [
+                      12.5,
+                      12.5,
+                      12.5,
+                      12.5,
+                      12.5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      0.75,
+                      0.813,
+                      0.875,
+                      0.938,
+                      1
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Maximum Enhanced Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      112.5,
+                      159.38,
+                      206.25,
+                      253.13,
+                      300
+                    ]
+                  },
+                  {
+                    "values": [
+                      187.5,
+                      187.5,
+                      187.5,
+                      187.5,
+                      187.5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      11.25,
+                      12.19,
+                      13.13,
+                      14.06,
+                      15
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Minimum Enhanced Minion Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      15.75,
+                      22.313,
+                      28.875,
+                      35.438,
+                      42
+                    ]
+                  },
+                  {
+                    "values": [
+                      26.25,
+                      26.25,
+                      26.25,
+                      26.25,
+                      26.25
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      1.575,
+                      1.706,
+                      1.838,
+                      1.969,
+                      2.1
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Minion Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      21,
+                      29.75,
+                      38.5,
+                      47.25,
+                      56
+                    ]
+                  },
+                  {
+                    "values": [
+                      35,
+                      35,
+                      35,
+                      35,
+                      35
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      2.1,
+                      2.275,
+                      2.45,
+                      2.625,
+                      2.8
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Minion Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      5.25,
+                      7.438,
+                      9.625,
+                      11.813,
+                      14
+                    ]
+                  },
+                  {
+                    "values": [
+                      8.75,
+                      8.75,
+                      8.75,
+                      8.75,
+                      8.75
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      0.525,
+                      0.569,
+                      0.613,
+                      0.656,
+                      0.7
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Maximum Enhanced Minion Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      78.75,
+                      124.69,
+                      170.63,
+                      216.56,
+                      262.5
+                    ]
+                  },
+                  {
+                    "values": [
+                      131.25,
+                      131.25,
+                      131.25,
+                      131.25,
+                      131.25
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      7.88,
+                      8.53,
+                      9.19,
+                      9.84,
+                      10.5
+                    ],
+                    "units": [
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health",
+                      "% of target's maximum health"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                10,
+                9,
+                8,
+                7,
+                6
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Auto",
+        "affects": "Enemies",
+        "spellshieldable": "false",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "AoeDoT",
+        "projectile": "FALSE",
+        "notes": "Flamespitter will deal an additional tick of damage to a minion if it would die to its per-tick damage. This is intended.\nRumble will instantly turn to face the cursor if he is not moving when Flamespitter is cast. He will also instantly turn when issuing an Attack order on an enemy while Flamespitter is active.\nIssuing an Attack Move order at a location will not cause Rumble to instantly turn.(note)\nIf Rumble does not path to a location after an Attack or Attack Move order, and the player issues a Stop or Hold order immediately afterwards, Rumble will not visually turn completely to face the new direction,(bug) but the area will turn to have the correct direction as intended.\nWhen Flamespitter's debuff is applied instead of refreshed, the target is dealt one additional instance of the debuff at the same time as the application. This is done by delaying the actual debuff by 0.1 seconds.\nIf the target is already affected by the debuff, its duration is refreshed to the maximum (0.6 seconds).",
+        "blurb": "Active:  Rumble activates a flamethrower for a short time that continually deals magic damage in a frontal cone.",
+        "angle": "64°",
+        "castTime": "none"
+      }
+    ],
+    "W": [
+      {
+        "name": "Scrap Shield",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Rumble/ability-icon/w",
+        "effects": [
+          {
+            "description": "Active: Rumble generates 20 Heat to grant himself a shield for 1.5 seconds.",
+            "leveling": [
+              {
+                "attribute": "Shield Strength",
+                "modifiers": [
+                  {
+                    "values": [
+                      25,
+                      55,
+                      85,
+                      115,
+                      145
+                    ]
+                  },
+                  {
+                    "values": [
+                      30,
+                      30,
+                      30,
+                      30,
+                      30
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      4,
+                      4,
+                      4,
+                      4,
+                      4
+                    ],
+                    "units": [
+                      "% of maximum health",
+                      "% of maximum health",
+                      "% of maximum health",
+                      "% of maximum health",
+                      "% of maximum health"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Rumble also gains bonus movement speed for 1 to 1.32 seconds.",
+            "leveling": [
+              {
+                "attribute": "Bonus Movement Speed",
+                "modifiers": [
+                  {
+                    "values": [
+                      10,
+                      15,
+                      20,
+                      25,
+                      30
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Danger Zone Bonus: Scrap Shield's shield strength and bonus movement speed are increased in effectiveness by 50%.",
+            "leveling": [
+              {
+                "attribute": "Enhanced Shield Strength",
+                "modifiers": [
+                  {
+                    "values": [
+                      37.5,
+                      82.5,
+                      127.5,
+                      172.5,
+                      217.5
+                    ]
+                  },
+                  {
+                    "values": [
+                      45,
+                      45,
+                      45,
+                      45,
+                      45
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      6,
+                      6,
+                      6,
+                      6,
+                      6
+                    ],
+                    "units": [
+                      "% of maximum health",
+                      "% of maximum health",
+                      "% of maximum health",
+                      "% of maximum health",
+                      "% of maximum health"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Bonus Movement Speed",
+                "modifiers": [
+                  {
+                    "values": [
+                      15,
+                      22.5,
+                      30,
+                      37.5,
+                      45
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                6,
+                6,
+                6,
+                6,
+                6
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Auto",
+        "affects": "Self",
+        "notes": "The movement speed buff is supposed to last for 1 second, but due to a bug may last 0.264 seconds longer.\nLike most buffs, the stat bonus is already only gained at the next stat update (every 0.264 seconds). Despite this, the duration still inconsistent.",
+        "blurb": "Active:  Rumble briefly  shields himself and gains  bonus movement speed.",
+        "castTime": "none"
+      }
+    ],
+    "E": [
+      {
+        "name": "Electro Harpoon",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Rumble/ability-icon/e",
+        "effects": [
+          {
+            "description": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds. These effects stack additively with multiple harpoons, refreshing their duration and stacking up to 2 times.",
+            "leveling": [
+              {
+                "attribute": "Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      55,
+                      80,
+                      105,
+                      130,
+                      155
+                    ]
+                  },
+                  {
+                    "values": [
+                      50,
+                      50,
+                      50,
+                      50,
+                      50
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      110,
+                      160,
+                      210,
+                      260,
+                      310
+                    ]
+                  },
+                  {
+                    "values": [
+                      100,
+                      100,
+                      100,
+                      100,
+                      100
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Magic Resistance Reduction",
+                "modifiers": [
+                  {
+                    "values": [
+                      10,
+                      12,
+                      14,
+                      16,
+                      18
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total MR Reduction",
+                "modifiers": [
+                  {
+                    "values": [
+                      20,
+                      24,
+                      28,
+                      32,
+                      36
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Slow",
+                "modifiers": [
+                  {
+                    "values": [
+                      15,
+                      20,
+                      25,
+                      30,
+                      35
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total Slow",
+                "modifiers": [
+                  {
+                    "values": [
+                      30,
+                      40,
+                      50,
+                      60,
+                      70
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Rumble periodically stocks an Electro Harpoon charge, up to a maximum of 2."
+          },
+          {
+            "description": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%.",
+            "leveling": [
+              {
+                "attribute": "Enhanced Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      82.5,
+                      120,
+                      157.5,
+                      195,
+                      232.5
+                    ]
+                  },
+                  {
+                    "values": [
+                      75,
+                      75,
+                      75,
+                      75,
+                      75
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total Enhanced Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      165,
+                      240,
+                      315,
+                      390,
+                      465
+                    ]
+                  },
+                  {
+                    "values": [
+                      150,
+                      150,
+                      150,
+                      150,
+                      150
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Magic Resistance Reduction",
+                "modifiers": [
+                  {
+                    "values": [
+                      15,
+                      18,
+                      21,
+                      24,
+                      27
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total Enhanced MR Reduction",
+                "modifiers": [
+                  {
+                    "values": [
+                      30,
+                      36,
+                      42,
+                      48,
+                      54
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Enhanced Slow",
+                "modifiers": [
+                  {
+                    "values": [
+                      22.5,
+                      30,
+                      37.5,
+                      45,
+                      52.5
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total Enhanced Slow",
+                "modifiers": [
+                  {
+                    "values": [
+                      45,
+                      60,
+                      75,
+                      90,
+                      105
+                    ],
+                    "units": [
+                      "%",
+                      "%",
+                      "%",
+                      "%",
+                      "%"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "If Rumble casts Electro Harpoon before his mech becomes Overheated, he may still use another charge within 3 seconds of the initial cast."
+          }
+        ],
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                0.5
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Direction",
+        "affects": "Enemies",
+        "spellshieldable": "True",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "spell",
+        "projectile": "TRUE",
+        "notes": "If Electro Harpoon is empowered with  Danger Zone's bonus and hits a target that is afflicted with the non-enhanced slow and shred applied by previous, non-empowered Electro Harpoon casts, the effectiveness of both debuffs on the target are increased to their enhanced values for all stacks of each debuff.\nThis also applies vice versa; a non-empowered Electro Harpoon cast will reduce the enhanced slow and shred applied by previous, empowered Electro Harpoon casts back to the non-enhanced values, for all stacks.\nA buff with the magic resistance reduction tooltip is applied to  minions and  pets, but their magic resistance is unaffected by Electro Harpoon.(bug)\nEach Electro Harpoon cast triggers  Spellblade and reduces  Force Pulse's cooldown.\nElectro Harpoon's missile will fail to fire if Rumble is  suppressed during the cast time.(note)\nThis ability will cast from wherever the caster is at the end of the cast time.\nRumble stocks an Electro Harpoon charge before the ability is even learned.",
+        "blurb": "Active:  Rumble shoots a harpoon in the target direction that deals magic damage and briefly  slows the first enemy hit, reducing their  magic resist for a few seconds. These effects can stack with multiple harpoons.",
+        "rechargeRate": [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "speed": "2000",
+        "width": "120",
+        "castTime": "0.25"
+      }
+    ],
+    "R": [
+      {
+        "name": "The Equalizer",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Rumble/ability-icon/r",
+        "effects": [
+          {
+            "description": "Active: Rumble deploys a barrage of rockets from the sky along the target path in a line over 0.75 seconds. Each rocket impacts the ground to create a field of fire that lasts 4.5 seconds."
+          },
+          {
+            "description": "Enemies struck by the impact or within the field are marked Burning for 1 second, taking magic damage every 0.25 seconds and being slowed by 35%, refreshing while in the area. Enemies may be Burning for up to 5 seconds, for a total of 20 instances of its effect.",
+            "leveling": [
+              {
+                "attribute": "Magic Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      35,
+                      52.5,
+                      70
+                    ]
+                  },
+                  {
+                    "values": [
+                      8.75,
+                      8.75,
+                      8.75
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Magic Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      140,
+                      210,
+                      280
+                    ]
+                  },
+                  {
+                    "values": [
+                      35,
+                      35,
+                      35
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Maximum Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      700,
+                      1050,
+                      1400
+                    ]
+                  },
+                  {
+                    "values": [
+                      175,
+                      175,
+                      175
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                130,
+                105,
+                80
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Vector",
+        "affects": "Enemies",
+        "spellshieldable": "False",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "aoedot",
+        "projectile": "FALSE",
+        "notes": "The Equalizer's cumulative hitbox consists of a row of six rockets, each having a circular area of effect with a radius of 205 units. Each rocket drops at an offset of 180 units from the previous in the vector of cast.\nThe missile that manages the rockets being deployed starts 150 units behind the target vector origin, and thus drops the first rocket at 30 units in front of the cast vector origin, which is equivalent to a period of 0.132 seconds from the cast point.\nA given field checks for targets to apply or refresh the debuff on once every 0.25 seconds.\nDue to each field expiring at different points in time, champions moving in the duration of the rockets' launch as they are expiring may sometimes receive 1 more instance of the debuff at most beyond the maximum.(bug)",
+        "blurb": "Active:  Rumble deploys a barrage of rockets along the target path that create a field which lingers for a few seconds.",
+        "speed": "1600",
+        "width": "410 - 368.4",
+        "castTime": "None / 0.5833",
+        "targetRange": "1700"
+      }
+    ]
+  },
+  "releaseDate": "2011-04-26",
+  "releasePatch": "1.0.0.116",
+  "patchLastChanged": "25.17",
+  "price": {
+    "blueEssence": 2400,
+    "rp": 880
+  },
+  "lore": "Rumble is a young inventor with a temper. Using nothing more than his own two hands and a heap of scrap, the feisty yordle constructed a colossal mech suit outfitted with an arsenal of electrified harpoons and incendiary rockets. Though others may scoff and sneer at his junkyard creations, Rumble doesn't mind—after all, he's the one with the flamespitter.",
+  "faction": "bandle-city",
+  "skins": [
+    {
+      "name": "Original",
+      "id": 68000,
+      "isBase": true,
+      "availability": "Available",
+      "formatName": "Original",
+      "lootEligible": true,
+      "cost": 880,
+      "rarity": "NoRarity",
+      "lore": "Rumble is a young inventor with a temper. Using nothing more than his own two hands and a heap of scrap, the feisty yordle constructed a colossal mech suit outfitted with an arsenal of electrified harpoons and incendiary rockets. Though others may scoff and sneer at his junkyard creations, Rumble doesn't mind—after all, he's the one with the flamespitter.",
+      "release": "2011-04-26",
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/base/images/rumble_splash_centered_0.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/base/images/rumble_splash_uncentered_0.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/base/images/rumble_splash_tile_0.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/base/rumbleloadscreen.jpg",
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Esben Lash Rasmussen",
+        "Sixmorevodka Studio"
+      ]
+    },
+    {
+      "name": "Bilgerat",
+      "id": 68002,
+      "availability": "Legacy",
+      "formatName": "Bilgerat",
+      "lootEligible": true,
+      "cost": 520,
+      "rarity": "NoRarity",
+      "lore": "When the burdens of invention weigh too heavy on a young yordle's shoulders, there's no better choice than to take to the seas! Nothing like plunderin' and maraudin' to lend Rumble a new lease on life as he terrorizes the coasts.",
+      "release": "2011-04-26",
+      "set": [
+        "Bilgewater: Burning Tides"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin02/images/rumble_splash_centered_2.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin02/images/rumble_splash_uncentered_2.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin02/images/rumble_splash_tile_2.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin02/rumbleloadscreen_2.jpg",
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Feihong Chen"
+      ]
+    },
+    {
+      "name": "Rumble in the Jungle",
+      "id": 68001,
+      "availability": "Available",
+      "formatName": "Rumble in the Jungle",
+      "lootEligible": true,
+      "cost": 975,
+      "rarity": "NoRarity",
+      "release": "2011-04-26",
+      "set": [
+        "Legacy"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin01/images/rumble_splash_centered_1.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin01/images/rumble_splash_uncentered_1.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin01/images/rumble_splash_tile_1.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin01/rumbleloadscreen_1.jpg",
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Feihong Chen"
+      ]
+    },
+    {
+      "name": "Super Galaxy",
+      "id": 68003,
+      "availability": "Available",
+      "formatName": "Super Galaxy",
+      "lootEligible": true,
+      "cost": 1820,
+      "rarity": "Legendary",
+      "lore": "Founder of the Super Galaxy Defense Force, Rumble always dreamed of saving the world… with his “explosive face-melters” and “courageous giga-guards”. To this day, his allies still have no idea what those terms mean, but they don't question it—because a yordle operating a volcanic flame-spitting mech can be a very volatile thing.",
+      "release": "2014-04-02",
+      "set": [
+        "Super Galaxy"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin03/images/rumble_splash_centered_3.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin03/images/rumble_splash_uncentered_3.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin03/images/rumble_splash_tile_3.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin03/rumbleloadscreen_3.jpg",
+      "loadScreenVintagePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin03/rumbleloadscreen_3_le.jpg",
+      "newEffects": true,
+      "newAnimations": true,
+      "newRecall": true,
+      "newVoice": true,
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Andrew 'Silver' Silver"
+      ]
+    },
+    {
+      "name": "Badlands Baron",
+      "id": 68004,
+      "availability": "Available",
+      "formatName": "Badlands Baron",
+      "lootEligible": true,
+      "cost": 1350,
+      "rarity": "Epic",
+      "chromas": [
+        {
+          "name": "Catseye",
+          "id": 68011,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68011.png",
+          "colors": [
+            "#FFEE59",
+            "#FFEE59"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Emerald",
+          "id": 68012,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68012.png",
+          "colors": [
+            "#2DA130",
+            "#2DA130"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Meteorite",
+          "id": 68006,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68006.png",
+          "colors": [
+            "#5F432B",
+            "#5F432B"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Obsidian",
+          "id": 68010,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68010.png",
+          "colors": [
+            "#27211C",
+            "#27211C"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Pearl",
+          "id": 68008,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68008.png",
+          "colors": [
+            "#ECF9F8",
+            "#ECF9F8"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Rose Quartz",
+          "id": 68009,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68009.png",
+          "colors": [
+            "#E58BA5",
+            "#E58BA5"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Ruby",
+          "id": 68005,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68005.png",
+          "colors": [
+            "#D33528",
+            "#D33528"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Turquoise",
+          "id": 68007,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68007.png",
+          "colors": [
+            "#73BFBE",
+            "#73BFBE"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "VN"
+            },
+            {
+              "region": "riot"
+            }
+          ]
+        }
+      ],
+      "lore": "Nothing turns a traveler's blood cold like seeing Rumble in the distance, his iron death buggy chugging thick clouds of irradiated smoke. That means someone's got his attention, and those with Rumble's attention have a nasty habit of becoming very, very dead.",
+      "release": "2018-04-11",
+      "set": [
+        "Road Warrior"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin04/images/rumble_splash_centered_4.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin04/images/rumble_splash_uncentered_4.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin04/images/rumble_splash_tile_4.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin04/rumbleloadscreen_4.jpg",
+      "newEffects": true,
+      "newAnimations": true,
+      "newRecall": true,
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Alex 'alexplank' Flores"
+      ]
+    },
+    {
+      "name": "Space Groove",
+      "id": 68013,
+      "availability": "Available",
+      "formatName": "Space Groove",
+      "lootEligible": true,
+      "cost": 1350,
+      "rarity": "Epic",
+      "chromas": [
+        {
+          "name": "Amethyst",
+          "id": 68020,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68020.png",
+          "colors": [
+            "#9C68D7",
+            "#9C68D7"
+          ]
+        },
+        {
+          "name": "Aquamarine",
+          "id": 68019,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68019.png",
+          "colors": [
+            "#6ABBEE",
+            "#6ABBEE"
+          ]
+        },
+        {
+          "name": "Catseye",
+          "id": 68016,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68016.png",
+          "colors": [
+            "#FFEE59",
+            "#FFEE59"
+          ]
+        },
+        {
+          "name": "Disco",
+          "id": 68022,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68022.png",
+          "colors": [
+            "#9DFFEF",
+            "#AA55FF"
+          ],
+          "descriptions": [
+            {
+              "description": "This chroma was released as a Loot exclusive in the 2021 Space Groove event.",
+              "region": "riot"
+            }
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Emerald",
+          "id": 68018,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68018.png",
+          "colors": [
+            "#2DA130",
+            "#2DA130"
+          ]
+        },
+        {
+          "name": "Obsidian",
+          "id": 68021,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68021.png",
+          "colors": [
+            "#27211C",
+            "#27211C"
+          ]
+        },
+        {
+          "name": "Rose Quartz",
+          "id": 68015,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68015.png",
+          "colors": [
+            "#E58BA5",
+            "#E58BA5"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "TENCENT"
+            }
+          ]
+        },
+        {
+          "name": "Ruby",
+          "id": 68014,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68014.png",
+          "colors": [
+            "#D33528",
+            "#D33528"
+          ],
+          "descriptions": [
+            {
+              "description": "This chroma was released as a bundle exclusive in 2021.",
+              "region": "riot"
+            }
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Turquoise",
+          "id": 68017,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68017.png",
+          "colors": [
+            "#73BFBE",
+            "#73BFBE"
+          ]
+        }
+      ],
+      "lore": "The Retro-Futuristic Planet is tired of listening to the boring music brought by Lissandra's evil influence. Fashioning a Groove suit of his own design, Rumble now stomps across his adoptive homeworld, unleashing powerful rockets and a groovy bass track on anyone who'd keep the people from dancing.",
+      "release": "2021-04-01",
+      "set": [
+        "Space Groove"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin13/images/rumble_splash_centered_13.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin13/images/rumble_splash_uncentered_13.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin13/images/rumble_splash_tile_13.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin13/rumbleloadscreen_13.jpg",
+      "loadScreenVintagePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin13/rumbleloadscreen_13_le.jpg",
+      "newEffects": true,
+      "newAnimations": true,
+      "newRecall": true,
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Marie Magny",
+        "West Studio"
+      ]
+    },
+    {
+      "name": "Cafe Cuties",
+      "id": 68023,
+      "availability": "Available",
+      "formatName": "Cafe Cuties",
+      "lootEligible": true,
+      "cost": 1350,
+      "rarity": "Epic",
+      "chromas": [
+        {
+          "name": "Catseye",
+          "id": 68025,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68025.png",
+          "colors": [
+            "#FFEE59",
+            "#FFEE59"
+          ]
+        },
+        {
+          "name": "Emerald",
+          "id": 68026,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68026.png",
+          "colors": [
+            "#2DA130",
+            "#2DA130"
+          ],
+          "descriptions": [
+            {
+              "description": "Obtained through Influencer audience giveaways.",
+              "region": "riot"
+            }
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Obsidian",
+          "id": 68030,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68030.png",
+          "colors": [
+            "#27211C",
+            "#27211C"
+          ]
+        },
+        {
+          "name": "Pearl",
+          "id": 68031,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68031.png",
+          "colors": [
+            "#ECF9F8",
+            "#ECF9F8"
+          ]
+        },
+        {
+          "name": "Rose Quartz",
+          "id": 68028,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68028.png",
+          "colors": [
+            "#E58BA5",
+            "#E58BA5"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "TENCENT"
+            }
+          ]
+        },
+        {
+          "name": "Ruby",
+          "id": 68024,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68024.png",
+          "colors": [
+            "#D33528",
+            "#D33528"
+          ],
+          "descriptions": [
+            {
+              "description": "This chroma was released as a bundle exclusive in 2023.",
+              "region": "riot"
+            }
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Sapphire",
+          "id": 68027,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68027.png",
+          "colors": [
+            "#2756CE",
+            "#2756CE"
+          ]
+        },
+        {
+          "name": "Tanzanite",
+          "id": 68029,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/68/68029.png",
+          "colors": [
+            "#54209B",
+            "#54209B"
+          ]
+        }
+      ],
+      "lore": "As the cafe's handy barista, Rumble always provides piping hot deliciousness! His trusty coffee making suit is unconventional, but effective for any cafe's needs. Just make sure to check the temperature before taking a sip of his drinks—his inventions are known for occasionally going haywire!",
+      "release": "2023-10-25",
+      "set": [
+        "Cafe Cuties"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin23/images/rumble_splash_centered_23.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin23/images/rumble_splash_uncentered_23.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin23/images/rumble_splash_tile_23.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/rumble/skins/skin23/rumbleloadscreen_23.jpg",
+      "newEffects": true,
+      "newAnimations": true,
+      "newRecall": true,
+      "voiceActor": [
+        "Ari Rubin"
+      ],
+      "splashArtist": [
+        "Yuyu Wong",
+        "Kudos Productions"
+      ]
+    }
+  ]
+}

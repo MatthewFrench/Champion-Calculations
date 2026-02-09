@@ -1,0 +1,59 @@
+{
+  "name": "Whispering Circlet",
+  "id": 2526,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3114,
+    1028,
+    3070
+  ],
+  "buildsInto": [
+    2530
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2526_enchantertearbase.png",
+  "nicknames": [
+    "tear"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Harmony",
+      "effects": "Grants {{as|heal and shield power}} equal to {{as|{{fd|0.5}}% '''bonus''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Manaflow",
+      "effects": "Grants a charge every 8 seconds, up to 5 charges. Affecting an enemy or ally with an ability consumes a charge to grant {{as|4 '''bonus''' mana}}, increased to {{as|8|mana}} if they are a champion, up to a '''maximum''' of {{as|360 '''bonus''' mana}}."
+    },
+    {
+      "effects": "Transforms into {{ii|Diadem of Songs}} at {{as|360 '''bonus''' mana}}."
+    }
+  ],
+  "stats": {
+    "healAndShieldPower": {
+      "flat": 8.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "mana": {
+      "flat": 300.0
+    },
+    "manaRegen": {
+      "percent": 75.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2250,
+      "sell": 900
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

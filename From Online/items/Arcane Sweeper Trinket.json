@@ -1,0 +1,16 @@
+{
+  "name": "Arcane Sweeper (Trinket)",
+  "id": 3348,
+  "tier": 1,
+  "rank": [
+    "TRINKET"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3348_arcanesweeper.png",
+  "simpleDescription": "Activate to reveal a nearby area of the map",
+  "active": [
+    {
+      "effects": "Summons a mist over the target location for 5 seconds, granting {{tip|sight}} of the area in a 375 radius and {{tip|true sight|revealing}} enemy {{tip|stealthed trap|traps}} within for 3 seconds.",
+      "range": 800
+    }
+  ]
+}

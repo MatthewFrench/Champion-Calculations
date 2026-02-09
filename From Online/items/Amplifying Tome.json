@@ -1,0 +1,57 @@
+{
+  "name": "Amplifying Tome",
+  "id": 1052,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    3146,
+    4635,
+    4632,
+    124011,
+    3145,
+    2421,
+    3108,
+    2508,
+    2420,
+    4628,
+    3113,
+    3116,
+    3124,
+    324005,
+    3147,
+    323504,
+    326616,
+    3802,
+    3916,
+    4630,
+    4637,
+    4642,
+    4644,
+    6656
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1052_mage_t2_amptome.png",
+  "simpleDescription": "Slightly increases Ability Power",
+  "nicknames": [
+    "amptome",
+    "book"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "SUPPORT"
+    ]
+  }
+}

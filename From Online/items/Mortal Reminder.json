@@ -1,0 +1,47 @@
+{
+  "name": "Mortal Reminder",
+  "id": 3033,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3123,
+    3035,
+    1018
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3033_marksman_t3_mortalreminder.png",
+  "simpleDescription": "Overcomes enemies with high Health recovery and Armor",
+  "nicknames": [
+    "grievous",
+    "grievous wounds"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Grievous Wounds",
+      "effects": "Dealing {{as|physical damage}} to enemy champions inflicts them with {{tip|Grievous Wounds}} for 3 seconds."
+    }
+  ],
+  "stats": {
+    "armorPenetration": {
+      "percent": 30.0
+    },
+    "attackDamage": {
+      "flat": 35.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  }
+}

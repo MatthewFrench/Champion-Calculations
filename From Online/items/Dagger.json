@@ -1,0 +1,42 @@
+{
+  "name": "Dagger",
+  "id": 1042,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    6631,
+    1043,
+    3046,
+    3051,
+    6675,
+    6677,
+    3144,
+    3086,
+    3006,
+    2510,
+    3073,
+    3131
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1042_base_t1_dagger.png",
+  "simpleDescription": "Slightly increases Attack Speed",
+  "stats": {
+    "attackSpeed": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 250,
+      "sell": 100
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

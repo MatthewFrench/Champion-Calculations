@@ -1,0 +1,42 @@
+{
+  "name": "Crimson Lucidity",
+  "id": 3171,
+  "tier": 3,
+  "rank": [
+    "BOOTS"
+  ],
+  "buildsFrom": [
+    3158
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_ionianboots_64.png",
+  "nicknames": [
+    "boots"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Ionian Lucidity",
+      "effects": "Gain 20 [[Haste#Summoner spell haste|summoner spell haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Noxian Haste",
+      "effects": "{{tip|heal|Healing}}, {{tip|shield|shielding}} or buffing an ally, damaging abilities against champions, and using [[summoner spell]]s grants you {{as|{{rd|10%|8%}} '''bonus''' movement speed}} for 4 seconds. This can be triggered from the same {{tip|cast instance}} only once every 4 seconds."
+    }
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 45.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true
+  }
+}

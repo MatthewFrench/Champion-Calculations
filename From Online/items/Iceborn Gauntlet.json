@@ -1,0 +1,52 @@
+{
+  "name": "Iceborn Gauntlet",
+  "id": 6662,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3057,
+    1028,
+    1031
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t3_iceborngauntlet.png",
+  "simpleDescription": "High Magic Resist.Passively slow nearby enemies. When spells are cast near you, release a wave of energy that damages and slows.",
+  "nicknames": [
+    "Spellblade",
+    "ibg",
+    "frostfire",
+    "frozen",
+    "frozen gauntlet"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an [[champion ability|ability]], your next basic attack within 10 seconds deals {{as|150% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]] and creates a 300 radius frost field for 2 seconds. Enemies within the field are slowed by {{rd|25%|{{ap|25*0.5}}%}} ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 50.0
+    },
+    "health": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

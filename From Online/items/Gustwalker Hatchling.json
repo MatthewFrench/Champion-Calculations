@@ -1,0 +1,43 @@
+{
+  "name": "Gustwalker Hatchling",
+  "id": 1102,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1102_jungle_t1_gustwalkerhatchling.png",
+  "nicknames": [
+    "jungle",
+    "blue",
+    "dog",
+    "doggo",
+    "woof"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Jungle Companions",
+      "effects": "Summon a ''Gustwalker Hatchling'' companion to assist you in combat against monsters."
+    },
+    {
+      "unique": true,
+      "name": "Gustwalker's Gait",
+      "effects": "Feed your companion enough treats to evolve it and upgrade your {{si|Smite}}. Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi|Gustwalker's Gait}} buff."
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 450,
+      "sell": 180
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "LIFESTEAL_VAMP"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Diadem of Songs",
+  "id": 2530,
+  "tier": 4,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "specialRecipe": 2526,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2530_enchantertearupgraded.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Harmony",
+      "effects": "Grants {{as|heal and shield power}} equal to {{as|{{fd|0.5}}% '''bonus''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Consonance",
+      "effects": "While you or any allied champion you granted a {{tip|heal}} or {{tip|shield}} to in the last 3 seconds is [[combat status|in combat]] with champions, each second, you heal the {{tt|most wounded|Lowest health percent}} allied champion within 900 units for {{as|{{fd|0.8}}% of your '''maximum''' mana}}."
+    }
+  ],
+  "stats": {
+    "healAndShieldPower": {
+      "flat": 8.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "mana": {
+      "flat": 1000.0
+    },
+    "manaRegen": {
+      "percent": 100.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2250,
+      "sell": 900
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Unending Despair",
+  "id": 2502,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1031,
+    3067,
+    1028
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2502_unendingdespair.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Anguish",
+      "effects": "Every 4 seconds after entering combat with champions, sap all enemy champions around you within 650 units to deal {{as|magic damage}} equal to {{as|3% of your '''bonus''' health}} to them and {{tip|heal}} yourself equal to 250% of the {{tt|post-mitigation|Damage calculated after modifiers}} damage dealt."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 50.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Immortal Shieldbow",
+  "id": 6673,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1037,
+    6670
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take damage that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} that absorbs {{rd|400 to 700 for 11|400*0.8 to 700*0.8 for 11|levels=1;9 to 18|pp=true}} damage for 3 seconds.",
+      "cooldown": "90"
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "HEALTH_AND_REG"
+    ]
+  }
+}

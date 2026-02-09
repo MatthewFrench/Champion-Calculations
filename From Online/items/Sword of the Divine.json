@@ -1,0 +1,39 @@
+{
+  "name": "Sword of the Divine",
+  "id": 443060,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3131_fighter_t3_swordofthedivine.png",
+  "nicknames": [
+    "sotd"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Excoriate",
+      "effects": "Gain a random amount of {{as|'''bonus''' critical strike damage|critical damage}} that scales up to {{as|50% of your critical strike chance}}, with the value of this amount changing every {{fd|0.25}} seconds.",
+      "stats": {
+        "criticalStrikeChance": {
+          "percent": 50.0
+        },
+        "criticalStrikeDamage": {
+          "percent": 50.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "criticalStrikeChance": {
+      "percent": 50.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

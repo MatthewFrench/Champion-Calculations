@@ -1,0 +1,41 @@
+{
+  "name": "Serpent's Fang",
+  "id": 6695,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3134,
+    1037
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6695_assassin_t3_serpentsfang.png",
+  "nicknames": [
+    "lethality"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Shield Reaver",
+      "effects": "Dealing damage to an enemy champion inflicts them with venom for 3 seconds, reducing any {{tip|shield|shields}} they gain within the duration by {{rd|50%|35%}}, and if the target was not already afflicted by the venom, reducing all of their active shields by the same amount."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 15
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Doran's Shield",
+  "id": 1054,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1054_tank_t1_doransshield.png",
+  "simpleDescription": "Good defensive starting item",
+  "nicknames": [
+    "dshield"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Enduring Focus",
+      "effects": "After taking damage from a [[champion]], gain '''bonus''' [[health regeneration]] per second equal to {{as|{{rd|0 to 5 for 11|0 to 3.75 for 11|levels=0 to 75|key1=%|formula1=0.066 health regen for every 1% missing health|formula2=0.05 health regen for every 1% missing health|type='''current missing''' health|pp=true}}|health}} for 8 seconds, refreshing on subsequent champion damage taken. [[Area of effect]], [[damage over time]], or [[damage|proc]] damage taken trigger this effect with the {{tip|ranged}} values."
+    },
+    {
+      "unique": true,
+      "name": "Helping Hand",
+      "effects": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]]."
+    }
+  ],
+  "stats": {
+    "health": {
+      "flat": 110.0
+    },
+    "healthRegen": {
+      "flat": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 450,
+      "sell": 180
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Mejai's Soulstealer",
+  "id": 3041,
+  "tier": 2,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    1082
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3041_mage_t2_mejaissoulstealer.png",
+  "simpleDescription": "Grants Ability Power for kills and assists",
+  "nicknames": [
+    "book"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Glory",
+      "effects": "Gain 4 stacks for each champion [[kill]] and 2 stacks for each [[assist]], up to a '''maximum''' of 25 stacks. For every stack, gain {{as|5 ability power}}, up to {{as|125|AP}} at '''maximum''' stacks. If you have at least 10 stacks, also gain {{as|10% '''bonus''' movement speed}}. Lose 10 stacks on [[death]]. Stacks are preserved from {{ii|Dark Seal}}.",
+      "stats": {
+        "abilityPower": {
+          "flat": 5.0
+        },
+        "movespeed": {
+          "percent": 10.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 20.0
+    },
+    "health": {
+      "flat": 100.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1500,
+      "sell": 600
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "MOVEMENT"
+    ]
+  }
+}

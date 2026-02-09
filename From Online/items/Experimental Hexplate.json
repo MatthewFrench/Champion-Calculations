@@ -1,0 +1,55 @@
+{
+  "name": "Experimental Hexplate",
+  "id": 3073,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    2021,
+    3044,
+    1042
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
+  "simpleDescription": "Increases maximum Mana as Mana is spent",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Hexcharged",
+      "effects": "Gain 30 [[Haste#Ultimate haste|ultimate haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Overdrive",
+      "effects": "Upon casting your ultimate ability, enter ''Overdrive'' to gain {{as|50% '''bonus''' attack speed}} and {{as|20% '''bonus''' movement speed}} for 8 seconds (30 second cooldown, starts on ultimate cast).",
+      "stats": {
+        "movespeed": {
+          "percent": 20.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "attackSpeed": {
+      "flat": 20.0
+    },
+    "health": {
+      "flat": 450.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ABILITY_HASTE",
+      "MOVEMENT"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Cruelty",
+  "id": 447109,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6035_fighter_t3_silvermeredawn.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Watch Them Fall",
+      "effects": "{{tip|Immobilize|Immobilizing}} or {{tip|ground|grounding}} an enemy champion summons a comet above them that lands at their current location after 1 second, dealing {{as|{{pp|50 to 150}}|magic damage}} {{as|(+ 40% AP)}} {{as|(+ 4% of your '''maximum''' health)}} {{as|magic damage}} to enemies within the area (6 second cooldown per target per {{tip|cast instance}})."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "armor": {
+      "flat": 30.0
+    },
+    "magicResistance": {
+      "flat": 30.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

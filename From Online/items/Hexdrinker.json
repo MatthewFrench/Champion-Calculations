@@ -1,0 +1,46 @@
+{
+  "name": "Hexdrinker",
+  "id": 3155,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036,
+    1033,
+    1036
+  ],
+  "buildsInto": [
+    3156
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3155_fighter_t2_hexdrinker.png",
+  "simpleDescription": "Increases Attack Damage and Magic Resist",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take {{as|magic damage}} that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} that absorbs {{as|{{rd|110 to 280|82.5 to 210|pp=true}} magic damage}} for {{fd|2.5}} seconds.",
+      "cooldown": "90"
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    },
+    "magicResistance": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1300,
+      "sell": 520
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  }
+}

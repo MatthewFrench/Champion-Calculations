@@ -1,0 +1,38 @@
+{
+  "name": "Guardian's Blade",
+  "id": 3177,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3177_aram_t1_guardiansblade.png",
+  "simpleDescription": "Good starting item for attackers",
+  "nicknames": [
+    "dblade"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 30.0
+    },
+    "health": {
+      "flat": 150.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 950,
+      "sell": 380
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "TANK"
+    ]
+  }
+}

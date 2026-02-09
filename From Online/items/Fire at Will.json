@@ -1,0 +1,15 @@
+{
+  "name": "Fire at Will",
+  "id": 3901,
+  "tier": 1,
+  "requiredChampion": "Gangplank",
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3901_champ_t0_fireatwillcircle.png",
+  "simpleDescription": "Cannon Barrage fires at an increasing rate over time (additional 6 waves over the duration).",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Fire at Will",
+      "effects": "{{ai|Cannon Barrage|Gangplank}} fires 2 additional clusters of 3 waves over the duration at an increased rate of fire (1 cluster per {{fd|1.33}} seconds), for a total of 18 waves over the 8 seconds."
+    }
+  ]
+}

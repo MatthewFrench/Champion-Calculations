@@ -1,0 +1,54 @@
+{
+  "name": "Stridebreaker",
+  "id": 6631,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3077,
+    3044,
+    1042
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6631_fighter_t4_stridebreaker.png",
+  "nicknames": [
+    "kneecapper",
+    "whipchain"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly = true}} 350 radius centered around the target."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Breaking Shockwave",
+      "effects": "Deal {{as|80% AD}} {{as|physical damage}} to enemies in a {{tip|cr|icononly = true}} 450 radius centered around you and {{tip|slow}} them by 35% for 3 seconds. For each champion hit, gain {{as|35% '''bonus''' movement speed}} decaying over 3 seconds. Can move while casting."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "attackSpeed": {
+      "flat": 25.0
+    },
+    "health": {
+      "flat": 450.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MOVEMENT"
+    ]
+  }
+}

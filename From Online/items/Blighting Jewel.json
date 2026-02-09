@@ -1,0 +1,39 @@
+{
+  "name": "Blighting Jewel",
+  "id": 4630,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052
+  ],
+  "buildsInto": [
+    3137,
+    3135
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4630_mage_t2_voidcrystal.png",
+  "nicknames": [
+    "pen",
+    "purple"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 25.0
+    },
+    "magicPenetration": {
+      "percent": 13.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1100,
+      "sell": 440
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

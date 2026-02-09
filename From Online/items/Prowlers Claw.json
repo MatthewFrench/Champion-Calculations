@@ -1,0 +1,37 @@
+{
+  "name": "Prowler's Claw",
+  "id": 446693,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6693_assassin_t4_prowlersclaw.png",
+  "nicknames": [
+    "lethality"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Sandswipe",
+      "effects": "{{tip|Dash}} to 150 units beyond the {{tt|target enemy champion's location|At the end of the cast time.}}, and upon completing the dash, deal {{as|12% {{as|(+ 5% per 100 '''bonus''' AD)}} of target's '''maximum''' health}} {{as|'''bonus''' physical damage}} to the target. You then deal 20% increased damage to the target for the next 3 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 22
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

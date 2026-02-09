@@ -1,0 +1,32 @@
+{
+  "name": "Rejuvenation Bead",
+  "id": 1006,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    3801,
+    3211,
+    323109,
+    3109
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1006_tank_t1_rejuvenationbead.png",
+  "simpleDescription": "Slightly increases Health Regen",
+  "stats": {
+    "healthRegen": {
+      "percent": 100.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 300,
+      "sell": 120
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

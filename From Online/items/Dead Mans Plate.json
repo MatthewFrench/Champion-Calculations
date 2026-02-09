@@ -1,0 +1,60 @@
+{
+  "name": "Dead Man's Plate",
+  "id": 3742,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3066,
+    1028,
+    1031
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3742_tank_t3_deadmansplate.png",
+  "simpleDescription": "Build momentum as you move around then smash into enemies.",
+  "nicknames": [
+    "dmp",
+    "dreadnought",
+    "gangplank",
+    "juggernaut"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Shipwrecker",
+      "effects": "While moving, generates 7 stacks of ''Momentum'' every {{fd|0.25}} seconds, granting up to {{as|20 '''bonus''' movement speed}} at 100 stacks after {{fd|3.75}} seconds of moving. Basic attacks consume all stacks to deal {{as|{{pp|0 to 40 for 11|0 to 100|type=Momentum|label1=stacks of Momentum|formula=0.4 for every 1 stack of Momentum, capped at 40}}|physical damage}} {{as|(+ {{pp|0 to 100 for 11|0 to 100|key=%|type=Momentum|label1=stacks of Momentum|formula=1% for every 1 stack of Momentum, capped at 100}} '''base''' AD)}} {{as|'''bonus''' physical damage}} [[on-hit]].",
+      "stats": {
+        "movespeed": {
+          "flat": 20.0
+        }
+      }
+    },
+    {
+      "unique": true,
+      "name": "Unsinkable",
+      "effects": "Gain 15% {{tip|slow resist}}."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 55.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK"
+    ]
+  }
+}

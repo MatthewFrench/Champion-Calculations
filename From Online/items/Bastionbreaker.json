@@ -1,0 +1,50 @@
+{
+  "name": "Bastionbreaker",
+  "id": 2520,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    2020,
+    3134
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2520_adassassingameender.png",
+  "nicknames": [
+    "lethality"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Shaped Charge",
+      "effects": "Your next instance of [[ability damage]] to a champion or epic monster with a [[champion ability]] deals {{as|{{rd|30|15}} {{as|(+ {{rd|{{fd|1.5}}|{{fd|0.75}}}} per 1 lethality)}} '''bonus''' true damage}}.",
+      "cooldown": 45
+    },
+    {
+      "unique": true,
+      "name": "Sabotage",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you ''Sabotage'' for 90 seconds, empowering your next basic attack against a {{tip|turret}} or epic {{tip|monster}} to consume the effect to deal {{as|{{rd|300|240}} {{as|(+ {{rd|25|20}} per 1 lethality)}} '''bonus''' true damage}} over 3 seconds."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 22
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

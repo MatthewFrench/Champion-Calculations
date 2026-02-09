@@ -1,0 +1,1042 @@
+{
+  "id": 800,
+  "key": "Mel",
+  "name": "Mel",
+  "title": "The Soul's Reflection",
+  "fullName": "Mel Medarda",
+  "icon": "http://ddragon.leagueoflegends.com/cdn/16.3.1/img/champion/Mel.png",
+  "resource": "MANA",
+  "attackType": "RANGED",
+  "adaptiveType": "MAGIC_DAMAGE",
+  "stats": {
+    "health": {
+      "flat": 630,
+      "perLevel": 99
+    },
+    "healthRegen": {
+      "flat": 6,
+      "perLevel": 0.55
+    },
+    "mana": {
+      "flat": 480,
+      "perLevel": 28
+    },
+    "manaRegen": {
+      "flat": 9,
+      "perLevel": 0.9
+    },
+    "armor": {
+      "flat": 21,
+      "perLevel": 5.2
+    },
+    "magicResistance": {
+      "flat": 30,
+      "perLevel": 1.3
+    },
+    "attackDamage": {
+      "flat": 54,
+      "perLevel": 3.3
+    },
+    "movespeed": {
+      "flat": 330
+    },
+    "acquisitionRadius": {
+      "flat": 625
+    },
+    "selectionRadius": {
+      "flat": 120
+    },
+    "pathingRadius": {
+      "flat": 35
+    },
+    "gameplayRadius": {
+      "flat": 65
+    },
+    "criticalStrikeDamage": {
+      "flat": 175
+    },
+    "criticalStrikeDamageModifier": {
+      "flat": 1.0
+    },
+    "attackSpeed": {
+      "flat": 0.625,
+      "perLevel": 2.5
+    },
+    "attackSpeedRatio": {
+      "flat": 0.625
+    },
+    "attackCastTime": {
+      "flat": 0.3
+    },
+    "attackTotalTime": {
+      "flat": 1.6
+    },
+    "attackDelayOffset": {
+      "flat": -0.143999993801117
+    },
+    "attackRange": {
+      "flat": 550
+    },
+    "aramDamageTaken": {
+      "flat": 1.0
+    },
+    "aramDamageDealt": {
+      "flat": 1.0
+    },
+    "aramHealing": {
+      "flat": 1.0
+    },
+    "aramShielding": {
+      "flat": 1.0
+    },
+    "aramTenacity": {
+      "flat": 1.0
+    },
+    "aramAbilityHaste": {
+      "flat": -10
+    },
+    "aramAttackSpeed": {
+      "flat": 1.0
+    },
+    "aramEnergyRegen": {
+      "flat": 1.0
+    },
+    "urfDamageTaken": {
+      "flat": 1.0
+    },
+    "urfDamageDealt": {
+      "flat": 0.9
+    },
+    "urfHealing": {
+      "flat": 1.0
+    },
+    "urfShielding": {
+      "flat": 1.0
+    }
+  },
+  "positions": [
+    "MIDDLE",
+    "SUPPORT"
+  ],
+  "roles": [
+    "ARTILLERY",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "attributeRatings": {
+    "damage": 3,
+    "toughness": 1,
+    "control": 2,
+    "mobility": 1,
+    "utility": 1,
+    "abilityReliance": 100,
+    "difficulty": 2
+  },
+  "abilities": {
+    "P": [
+      {
+        "name": "Searing Brilliance",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Mel/ability-icon/p",
+        "effects": [
+          {
+            "description": "Innate: Mel's basic attacks and abilities apply a stack of Overwhelm for each instance of damage they deal to enemies for 5 seconds, refreshing on subsequent damage instances and stacking infinitely."
+          },
+          {
+            "description": "Overwhelm: Store 50 / 60 / 70 / 80 (based on Golden Eclipse's rank) (+ 10% AP) magic damage on the affected enemy with the first stack, reduced[ to 60% ][ to 30 / 36 / 42 / 48 (based on Golden Eclipse's rank) (+ 6% AP) ]against minions. For each stack, store an additional 2 / 3 / 4 / 5 (based on Golden Eclipse's rank) (+ 0.75% AP) magic damage on the target. If the total post-mitigation damage stored exceeds the target's current health and shields, the next stack applied against them will consume them all to deal the stored damage."
+          },
+          {
+            "description": "Innate - Searing Brilliance: Mel's ability casts each generate 3 stacks of Searing Brilliance for 5 seconds, refreshing on subsequent casts and stacking up to 9 times. Her next basic attack consumes all stacks of Searing Brilliance to additionally fire an equal number of blazing projectiles at the target. Each projectile deals 8 : 32.59 (based on level) (+ 4% AP) magic damage, for a total possible damage of 72 : 293.29 (based on level) (+ 36% AP) at maximum stacks."
+          }
+        ],
+        "targeting": "Passive",
+        "affects": "Self, Enemies",
+        "spellshieldable": "false",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "proc",
+        "projectile": "TRUE",
+        "notes": "The first stack also benefits from the per-stack bonus stored damage.\nA threshold indicator for the currently stored damage is placed on a target's health bar, as well as a mark above their head, while any Overwhelm stacks are active. These are visible to Mel and her target(s).\nWhenever  Golden Eclipse's damage would put them below Overwhelm's threshold, the mark will darken and glow more prominently.\nThis does not take into account effects that would amplify the damage such as  Coup de Grace.\nJust before Overwhelm stacks are consumed, targets have 5 additional stacks applied to them.(bug)\nThese stacks are consumed immediately.\nOverwhelm stacks will not be consumed against  Tryndamere's  Undying Rage.",
+        "blurb": "Innate - Overwhelm:  Mel's damaging  basic attacks and  abilities apply a  stack of Overwhelm to enemies hit for a few seconds, stacking infinitely. Each stack stores magic damage; if the total stored damage would kill the target, the next stack will consume them all to detonate the damage."
+      }
+    ],
+    "Q": [
+      {
+        "name": "Radiant Volley",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Mel/ability-icon/q",
+        "effects": [
+          {
+            "description": "Active: Mel launches a barrage of luminous bolts at the target location over 0.5 seconds which distribute evenly in the area. Each bolt explodes upon landing to deal magic damage to nearby enemies, with all explosions after the first dealing reduced damage.",
+            "leveling": [
+              {
+                "attribute": "Initial Explosion Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      60,
+                      90,
+                      120,
+                      150,
+                      180
+                    ]
+                  },
+                  {
+                    "values": [
+                      60,
+                      60,
+                      60,
+                      60,
+                      60
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Magic Damage per Subsequent Explosion",
+                "modifiers": [
+                  {
+                    "values": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ]
+                  },
+                  {
+                    "values": [
+                      5,
+                      5,
+                      5,
+                      5,
+                      5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Number of Bolts",
+                "modifiers": [
+                  {
+                    "values": [
+                      6,
+                      7,
+                      8,
+                      9,
+                      10
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Total Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      90,
+                      132,
+                      176,
+                      222,
+                      270
+                    ]
+                  },
+                  {
+                    "values": [
+                      90,
+                      95,
+                      100,
+                      105,
+                      110
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "The bolts momentarily grant sight during their travel, while the explosions grant sight over their target area. Both can see through brush and terrain."
+          }
+        ],
+        "cost": {
+          "modifiers": [
+            {
+              "values": [
+                70,
+                75,
+                80,
+                85,
+                90
+              ]
+            }
+          ]
+        },
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                10,
+                9,
+                8,
+                7,
+                6
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Location",
+        "affects": "Enemies",
+        "spellshieldable": "special",
+        "resource": "MANA",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "aoedot",
+        "projectile": "TRUE",
+        "notes": "Radiant Volley has a channel time of 0.5 seconds.\n Spell shield will only block a single explosion.\nFor the given number of Radiant Volley bolts, the spread will result in the same individual areas being affected over the duration invariably.\nEach individual missile is explicitly assigned an explosion location at a small offset from the cast location. This varies by missile, which results in their combined area of effect distributing over a total radius of [explosion radius + maximum spread] = 220 + 60 = 280 units.\nThis means that the distribution area is not random.\nThe order of bolts however, which will determine the order of individual areas to be affected per explosion, is random.\nMel launching the missiles in the same arcing motion for every Radiant Volley cast does not correlate with which missile is being fired at the time. The height and gravity of each missile are irrelevant.\nNote that the combined area of effect may not always be the maximum possible (circle with radius of 280 units); this drawback diminishes with a higher number of bolts as the new missiles fill the gaps within.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+        "blurb": "Active:  Mel concentrates a bombardment of luminous bolts that explode in an area, dealing magic damage.",
+        "speed": "3800",
+        "castTime": "0.35",
+        "effectRadius": "200 /  100",
+        "targetRange": "950"
+      }
+    ],
+    "W": [
+      {
+        "name": "Rebuttal",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Mel/ability-icon/w",
+        "effects": [
+          {
+            "description": "Active: Mel forms a protective barrier around herself for 0.75 seconds, granting herself a shield for the duration, and gaining 40% bonus movement speed that decays over 1.5 seconds. Additionally, all hostile projectiles sourced from enemy champions that collide with the barrier will be destroyed instantly before Mel fires the same projectiles as her own, either toward or in the direction of the original sources, or toward herself.",
+            "leveling": [
+              {
+                "attribute": "Shield",
+                "modifiers": [
+                  {
+                    "values": [
+                      80,
+                      110,
+                      140,
+                      170,
+                      200
+                    ]
+                  },
+                  {
+                    "values": [
+                      70,
+                      70,
+                      70,
+                      70,
+                      70
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Replicated projectiles have the same features that the original ones do, but they retain a ratio of the damage that the original ones would deal. Additionally, all of their damage is converted to magic damage, with physical damage instances being reduced to 70% before conversion.",
+            "leveling": [
+              {
+                "attribute": "Replicated Projectile Magic Damage Modifier",
+                "modifiers": [
+                  {
+                    "values": [
+                      40,
+                      45,
+                      50,
+                      55,
+                      60
+                    ],
+                    "units": [
+                      "%  of the original damage",
+                      "%  of the original damage",
+                      "%  of the original damage",
+                      "%  of the original damage",
+                      "%  of the original damage"
+                    ]
+                  },
+                  {
+                    "values": [
+                      5,
+                      5,
+                      5,
+                      5,
+                      5
+                    ],
+                    "units": [
+                      "% per 100 AP",
+                      "% per 100 AP",
+                      "% per 100 AP",
+                      "% per 100 AP",
+                      "% per 100 AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Replicated Projectile Physical Damage Modifier",
+                "modifiers": [
+                  {
+                    "values": [
+                      28,
+                      31.5,
+                      35,
+                      38.5,
+                      42
+                    ],
+                    "units": [
+                      "%  of the original damage",
+                      "%  of the original damage",
+                      "%  of the original damage",
+                      "%  of the original damage",
+                      "%  of the original damage"
+                    ]
+                  },
+                  {
+                    "values": [
+                      3.5,
+                      3.5,
+                      3.5,
+                      3.5,
+                      3.5
+                    ],
+                    "units": [
+                      "% per 100 AP",
+                      "% per 100 AP",
+                      "% per 100 AP",
+                      "% per 100 AP",
+                      "% per 100 AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "cost": {
+          "modifiers": [
+            {
+              "values": [
+                80,
+                60,
+                40,
+                20
+              ]
+            }
+          ]
+        },
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                35,
+                32,
+                29,
+                26,
+                23
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Auto",
+        "affects": "Self, Enemies",
+        "spellshieldable": "special",
+        "resource": "MANA",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "special",
+        "projectile": "SPECIAL",
+        "notes": "Rebuttal's barrier will also instantly destroy missiles that are already within its radius when the ability is cast.\nThe replicated missile will mimic all of the original missile's properties, which includes its range, width, speed, acceleration, angle (if a cone), height, and sight radius.\nSpell effects, as well as interactions with  spell shield and  projectile-interception effects, all vary based on the original missile that was replicated.\nThe only exception to this is the copied missile's path, or trajectory, which is based on the targeting paradigm that the original missile used when fired by its source. The replicated missile acquires the original missile source as the target.\nIf the original missile was fired by a  unit or  auto-targeted effect, the replicated missile will be fired as a homing missile with the target being the original missile source.\nHealing projectiles, such as  Soraka's  Rejuvenation and  Sona's  Aria of Perseverance, will instead target Mel.\nIf the original missile was fired via any other targeting paradigm, the replicated missile will by default fire in the direction of the original missile source at the time of replication. This includes  vector-targeted projectiles (currently only  Viktor's  Hextech Ray), for which the origin will always be Mel's center (since she cannot control the cast point).\nThe replicated missile will mimic all of the functions of and copy the behavior of the original missile, unless otherwise stated. This includes every aspect and effect of the missile conforming to the attack or spell from which the missile originated.\nThe scaling of the effects of the copied missile is calculated using the original missile source's attributes (namely their stats). The damage of the missile only benefits from Mel's damage modifiers and magic penetration, and not the original source's.\nThe following missiles are destroyed, but not replicated:\n Draven's  Whirling Death on its way back to him.\n Gnar's  Boomerang Throw on its way back to him.\n Illaoi's  Test of Spirit\n Sivir's  Boomerang Blade on its way back to her.\n Sylas'  Hijack\n Urgot's  Mercy\n Xayah's  Bladecaller and  Featherstorm\n Zac's  Stretching Strikes\nMissiles fired from auto-targeted abilities that target each unit in an area that isn't Mel\nExamples include  Brand's  Conflagration,  Katarina's  Death Lotus,  Samira's  Inferno Trigger, and  Ryze's  Spell Flux.\nThe following abilities will be stopped short of their trajectory without replication:\n Azir's  Emperor's Divide\n Syndra's  Spheres thrown with her  Scatter the Weak\nMel may occasionally fail to attribute  Echoes of Helia's Soul Siphon's damage projectile to herself.(bug)\nThis can cause the enemy to be able to kill their own allies, and gain all the kill's rewards.\nRebuttal will play distinct sound cues from destroying and replicating projectiles fired from specific types of abilities:\nNon-ultimate ability missile: \nUltimate ability missile: \nAbility with global or near-global range missile:",
+        "blurb": "Active:  Mel forms a protective barrier around herself for 0.75 seconds, becoming  invulnerable to non- turret damage and gaining decaying  bonus move speed.",
+        "castTime": "none",
+        "effectRadius": "175"
+      }
+    ],
+    "E": [
+      {
+        "name": "Solar Snare",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Mel/ability-icon/e",
+        "effects": [
+          {
+            "description": "Active: Mel fires an orb in the target direction that grants sight of its surroundings every 0.25 seconds as it travels. Enemies hit by the orb are dealt magic damage and rooted for 1.5 seconds.",
+            "leveling": [
+              {
+                "attribute": "Orb Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      60,
+                      105,
+                      150,
+                      195,
+                      240
+                    ]
+                  },
+                  {
+                    "values": [
+                      70,
+                      70,
+                      70,
+                      70,
+                      70
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "The orb emanates a field of solar radiation that additionally expands after a 0.5-second delay. Enemies within the field are dealt magic damage and slowed by 30% every 0.125 seconds, lingering for 0.25 seconds after exiting.",
+            "leveling": [
+              {
+                "attribute": "Field Magic Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      2,
+                      3.5,
+                      5,
+                      6.5,
+                      8
+                    ]
+                  },
+                  {
+                    "values": [
+                      1,
+                      1,
+                      1,
+                      1,
+                      1
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Field Magic Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      16,
+                      28,
+                      40,
+                      52,
+                      64
+                    ]
+                  },
+                  {
+                    "values": [
+                      8,
+                      8,
+                      8,
+                      8,
+                      8
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Both the orb and the field of Solar Snare deal 50% damage against minions.",
+            "leveling": [
+              {
+                "attribute": "Orb Minion Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      30,
+                      52.5,
+                      75,
+                      97.5,
+                      120
+                    ]
+                  },
+                  {
+                    "values": [
+                      35,
+                      35,
+                      35,
+                      35,
+                      35
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Field Minion Magic Damage per Tick",
+                "modifiers": [
+                  {
+                    "values": [
+                      1,
+                      1.75,
+                      2.5,
+                      3.25,
+                      4
+                    ]
+                  },
+                  {
+                    "values": [
+                      0.5,
+                      0.5,
+                      0.5,
+                      0.5,
+                      0.5
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Field Magic Damage per Second",
+                "modifiers": [
+                  {
+                    "values": [
+                      8,
+                      14,
+                      20,
+                      26,
+                      32
+                    ]
+                  },
+                  {
+                    "values": [
+                      4,
+                      4,
+                      4,
+                      4,
+                      4
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "cost": {
+          "modifiers": [
+            {
+              "values": [
+                50,
+                60,
+                70,
+                80,
+                90
+              ]
+            }
+          ]
+        },
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                11,
+                10.5,
+                10,
+                9.5,
+                9
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Direction",
+        "affects": "Enemies",
+        "spellshieldable": "special",
+        "resource": "MANA",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "special",
+        "projectile": "TRUE",
+        "notes": "Spell shield will only block the orb ( root portion).\nSolar Snare's lollipop roots targets in its area without triggering spell shield.(bug)\nThe initial impact of Solar Snare deals  area damage, while the lingering damage over time deals  persistent area damage.\nThe slow debuff lasts for the same duration as its tick rate (0.125 seconds).\nThis ability will cast from wherever the caster is at the end of the cast time.",
+        "blurb": "Active:  Mel fires an orb that deals magic damage to enemies hit and  roots them for a moment.",
+        "speed": "1100",
+        "castTime": "0.25",
+        "effectRadius": "70 / 70 / 230 / 60"
+      }
+    ],
+    "R": [
+      {
+        "name": "Golden Eclipse",
+        "icon": "https://cdn.communitydragon.org/latest/champion/Mel/ability-icon/r",
+        "effects": [
+          {
+            "description": "Passive: Overwhelm stacks store more damage.",
+            "leveling": [
+              {
+                "attribute": "Increased Stored Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      10,
+                      20,
+                      30
+                    ]
+                  }
+                ]
+              },
+              {
+                "attribute": "Stored Damage Increase per Stack",
+                "modifiers": [
+                  {
+                    "values": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Active: Mel unleashes a radiant blast on all enemies affected by Overwhelm, dealing magic damage to each of them. Enemies are also revealed for 1 second from the start of the cast time.",
+            "leveling": [
+              {
+                "attribute": "Magic Damage",
+                "modifiers": [
+                  {
+                    "values": [
+                      100,
+                      150,
+                      200
+                    ]
+                  },
+                  {
+                    "values": [
+                      30,
+                      30,
+                      30
+                    ],
+                    "units": [
+                      "% AP",
+                      "% AP",
+                      "% AP"
+                    ]
+                  },
+                  {
+                    "values": [
+                      4,
+                      7,
+                      10
+                    ],
+                    "units": [
+                      " (+ 4% AP) per Overwhelm stack on the target",
+                      " (+ 4% AP) per Overwhelm stack on the target",
+                      " (+ 4% AP) per Overwhelm stack on the target"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "An enemy champion affected by Overwhelm is required to cast this ability. The target does not have to be visible to be hit by this ability."
+          }
+        ],
+        "cost": {
+          "modifiers": [
+            {
+              "values": [
+                100,
+                100,
+                100
+              ]
+            }
+          ]
+        },
+        "cooldown": {
+          "modifiers": [
+            {
+              "values": [
+                120,
+                100,
+                80
+              ]
+            }
+          ],
+          "affectedByCdr": true
+        },
+        "targeting": "Auto",
+        "affects": "Enemies",
+        "spellshieldable": "true",
+        "resource": "MANA",
+        "damageType": "MAGIC_DAMAGE",
+        "spellEffects": "spell",
+        "notes": "Golden Eclipse can be cast even if all affected targets are  untargetable.(note)\nGolden Eclipse does not deal damage to enemies that are  untargetable by the time the cast time completes.\nGolden Eclipse cannot be cast if none of the affected targets are in Mel's realm ( Death Realm).\nGolden Eclipse will only deal damage to targets in Mel's realm at the end of the cast.\nWhenever Golden Eclipse's damage would put a target below  Overwhelm's threshold, it will use a  different icon.\nGolden Eclipse will display the number of total stacks affecting all enemy champions in the HUD.\nGolden Eclipse sets the duration of  Overwhelm stacks to 0.75 seconds if they would run out during the cast time.",
+        "blurb": "Passive:  Overwhelm stores more damage.",
+        "castTime": "0.75",
+        "targetRange": "Global"
+      }
+    ]
+  },
+  "releaseDate": "2025-01-23",
+  "releasePatch": "25.02",
+  "patchLastChanged": "26.03",
+  "price": {
+    "blueEssence": 3150,
+    "rp": 975
+  },
+  "lore": "Mel Medarda is the presumed heir of the Medarda family, once one of the most powerful in Noxus. In appearance she is a graceful aristocrat, but beneath the surface lies a skilled politician who makes it her business to know everything about everyone she meets. After an encounter with the mysterious Black Rose, Mel discovered the depths of her mother's deception and, for once, faced a situation potentially beyond her control. With newly awakened magical abilities, she sailed home in search of answers—and though many still seek to temper the light within her, Mel's soul remains forever defiant.",
+  "faction": "noxus",
+  "skins": [
+    {
+      "name": "Original",
+      "id": 800000,
+      "isBase": true,
+      "availability": "Available",
+      "formatName": "Original",
+      "lootEligible": true,
+      "cost": 975,
+      "rarity": "NoRarity",
+      "lore": "Mel Medarda is the presumed heir of the Medarda family, once one of the most powerful in Noxus. In appearance she is a graceful aristocrat, but beneath the surface lies a skilled politician who makes it her business to know everything about everyone she meets. After an encounter with the mysterious Black Rose, Mel discovered the depths of her mother's deception and, for once, faced a situation potentially beyond her control. With newly awakened magical abilities, she sailed home in search of answers—and though many still seek to temper the light within her, Mel's soul remains forever defiant.",
+      "release": "2025-01-23",
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/base/images/mel_splash_centered_0.mel.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/base/images/mel_splash_uncentered_0.mel.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/base/images/mel_splash_tile_0.mel.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/base/melloadscreen_0.mel.jpg",
+      "voiceActor": [
+        "Toks Olagundoye"
+      ],
+      "splashArtist": [
+        "Bo 'chenbowow' Chen"
+      ]
+    },
+    {
+      "name": "Arcane Councilor",
+      "id": 800001,
+      "availability": "Available",
+      "formatName": "Arcane Councilor",
+      "lootEligible": true,
+      "cost": 1350,
+      "rarity": "Epic",
+      "chromas": [
+        {
+          "name": "Catseye",
+          "id": 800005,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800005.png",
+          "colors": [
+            "#FFEE59",
+            "#FFEE59"
+          ]
+        },
+        {
+          "name": "Obsidian",
+          "id": 800008,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800008.png",
+          "colors": [
+            "#27211C",
+            "#27211C"
+          ]
+        },
+        {
+          "name": "Pearl",
+          "id": 800009,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800009.png",
+          "colors": [
+            "#ECF9F8",
+            "#ECF9F8"
+          ]
+        },
+        {
+          "name": "Rose Quartz",
+          "id": 800006,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800006.png",
+          "colors": [
+            "#E58BA5",
+            "#E58BA5"
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "TENCENT"
+            }
+          ]
+        },
+        {
+          "name": "Ruby",
+          "id": 800002,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800002.png",
+          "colors": [
+            "#D33528",
+            "#D33528"
+          ],
+          "descriptions": [
+            {
+              "description": "This chroma was released as a bundle exclusive in 2024.",
+              "region": "riot"
+            }
+          ],
+          "rarities": [
+            {
+              "rarity": 1,
+              "region": "riot"
+            }
+          ]
+        },
+        {
+          "name": "Sapphire",
+          "id": 800007,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800007.png",
+          "colors": [
+            "#2756CE",
+            "#2756CE"
+          ]
+        },
+        {
+          "name": "Tanzanite",
+          "id": 800004,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800004.png",
+          "colors": [
+            "#54209B",
+            "#54209B"
+          ]
+        },
+        {
+          "name": "Turquoise",
+          "id": 800003,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800003.png",
+          "colors": [
+            "#73BFBE",
+            "#73BFBE"
+          ]
+        }
+      ],
+      "lore": "Mel Medarda has always had a keen eye for potential—and in hextech, she saw power that would forever alter the face of Piltover. For most, this technology would be unobtainable, but with her influence on the Council, nothing escapes her grasp. With hextech at her fingertips, there is no telling what she'll be able to accomplish.",
+      "release": "2025-01-23",
+      "set": [
+        "Arcane"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin01/images/mel_splash_centered_1.mel.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin01/images/mel_splash_uncentered_1.mel.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin01/images/mel_splash_tile_1.mel.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin01/melloadscreen_1.mel.jpg",
+      "newEffects": true,
+      "newAnimations": true,
+      "newRecall": true,
+      "voiceActor": [
+        "Toks Olagundoye"
+      ],
+      "splashArtist": [
+        "Julia Yurtsev"
+      ]
+    },
+    {
+      "name": "Prestige Winterblessed",
+      "id": 800010,
+      "availability": "Rare",
+      "formatName": "Prestige Winterblessed",
+      "lootEligible": true,
+      "cost": "Special",
+      "distribution": "150 Mythic Essence",
+      "rarity": "Mythic",
+      "chromas": [
+        {
+          "name": "Vivid",
+          "id": 800011,
+          "chromaPath": "http://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/v1/champion-chroma-images/800/800011.png",
+          "colors": [
+            "#F44EDB",
+            "#F3AE71"
+          ],
+          "descriptions": [
+            {
+              "description": "This chroma was released as a Loot exclusive in the Mythic Shop.",
+              "region": "riot"
+            }
+          ],
+          "rarities": [
+            {
+              "rarity": 5,
+              "region": "riot"
+            }
+          ]
+        }
+      ],
+      "lore": "Daughter of a punishing Polaris, Mel was born with an innate ability to harness the Aurora's magic. But this blessing came at a cost: the life of her mother. Now, Mel carries the family's legacy in her own way, leading with compassion and rewarding those who prove their loyalty.",
+      "release": "2025-12-03",
+      "set": [
+        "Winterblessed"
+      ],
+      "splashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin10/images/mel_splash_centered_10.skins_mel_skin10.jpg",
+      "uncenteredSplashPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin10/images/mel_splash_uncentered_10.skins_mel_skin10.jpg",
+      "tilePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin10/images/mel_splash_tile_10.skins_mel_skin10.jpg",
+      "loadScreenPath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin10/melloadscreen_10.skins_mel_skin10.jpg",
+      "loadScreenVintagePath": "https://raw.communitydragon.org/pbe/plugins/rcp-be-lol-game-data/global/default/assets/characters/mel/skins/skin10/melloadscreen_10_le.skins_mel_skin10.jpg",
+      "newEffects": true,
+      "newAnimations": true,
+      "newRecall": true,
+      "voiceActor": [
+        "Toks Olagundoye"
+      ],
+      "splashArtist": [
+        "Francis Tneh",
+        "West Studio"
+      ]
+    }
+  ]
+}

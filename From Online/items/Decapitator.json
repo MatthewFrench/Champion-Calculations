@@ -1,0 +1,28 @@
+{
+  "name": "Decapitator",
+  "id": 447107,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7107_decapitator.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Anticipation",
+      "effects": "[[Basic attack]]s and [[Champion ability|basic ability]] casts generate 1 and 2 stacks of ''Anticipation'' for the rest of the round, respectively, stacking up to 40 times. For each stack, increase your ultimate ability's damage by 3% and gain 2 [[Haste#Ultimate haste|ultimate haste]], up to 120% increased ultimate damage and 80 ultimate haste. Stacks are reset every round and between each phase in a round."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 50.0
+    },
+    "movespeed": {
+      "percent": 8.0
+    }
+  },
+  "shop": {
+    "purchasable": true
+  }
+}

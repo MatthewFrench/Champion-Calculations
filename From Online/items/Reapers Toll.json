@@ -1,0 +1,36 @@
+{
+  "name": "Reaper's Toll",
+  "id": 443090,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443090_reaperstoll.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Reap",
+      "effects": "Basic attacks [[on-hit]] apply a ''Reap'' stack to the target, stacking infinitely and lasting for the remainder of the combat phase, and deal {{as|'''bonus''' true damage}} equal to {{as|{{rd|{{fd|0.7}}%|{{fd|0.5}}%}} (+ {{fd|0.1}}% per target's ''Reap'' stack) of the target's '''maximum''' health}}. Additionally, the target is inflicted a [[Health#Health threshold|health threshold]] equal to {{as|100% of their '''maximum''' health}} minus the '''total''' amount of '''bonus''' damage dealt against them, lasting until the end of the round and capped at a threshold of {{as|50% of their '''maximum''' health}}."
+    },
+    {
+      "unique": true,
+      "name": "Sow",
+      "effects": "Increases the {{as|attack speed}} gained from all sources by 15%."
+    }
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 50.0
+    },
+    "movespeed": {
+      "percent": 5.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  }
+}

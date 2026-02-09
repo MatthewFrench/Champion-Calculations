@@ -1,0 +1,42 @@
+{
+  "name": "Everfrost",
+  "id": 446656,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6656_mage_t4_everfrost.png",
+  "nicknames": [
+    "GLP",
+    "hose",
+    "supersoaker"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Glaciate",
+      "effects": "Unleash a fan of icy shards in a cone in the target direction, dealing {{as|300|magic damage}} {{as|(+ 85% AP)}} {{as|magic damage}} to enemies struck within and {{tip|slow|slowing}} them by 70% for {{fd|1.5}} seconds. Enemies hit in the center of the cone are {{tip|root|rooted}} for the same duration instead."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 100.0
+    },
+    "health": {
+      "flat": 250.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

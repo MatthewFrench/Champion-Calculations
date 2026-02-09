@@ -1,0 +1,38 @@
+{
+  "name": "Divine Sunderer",
+  "id": 446632,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6632_fighter_t4_divinedevourer.png",
+  "nicknames": [
+    "Spellblade",
+    "devourer"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an [[champion ability|ability]], your next basic attack within 10 seconds deals {{as|180% '''base''' AD}} {{as|(+ {{rd|4%|2%}} of target's '''maximum''' health)}} as {{as|'''bonus''' physical damage}} [[on-hit]], for a '''minimum''' of {{as|180% '''base''' AD}}. If the target is a champion, {{tip|heal}} for{{ft|{{as|{{ap|180*0.55}}% '''base''' AD}} {{as|(+ {{rd|{{ap|4*0.55}}%|{{ap|2*0.55}}%}} of target's '''maximum''' health)|health}}|55% of the damage value}}({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

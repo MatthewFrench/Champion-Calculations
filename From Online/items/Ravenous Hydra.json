@@ -1,0 +1,53 @@
+{
+  "name": "Ravenous Hydra",
+  "id": 3074,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3077,
+    1053,
+    3133
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
+  "simpleDescription": "Melee attacks hit nearby enemies, dealing damage and restoring Health",
+  "nicknames": [
+    "rav hydra"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly = true}} 350 radius centered around the target. This damage benefits from {{as|{{sti|life steal}}}} at 100% effectiveness."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ravenous Crescent",
+      "effects": "Deal {{as|80% AD}} {{as|physical damage}} to enemies within a {{tip|cr|icononly = true}} 450 radius in front of you. This damage benefits from {{as|{{sti|life steal}}}} at 100% effectiveness."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 65.0
+    },
+    "lifesteal": {
+      "percent": 12.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  }
+}

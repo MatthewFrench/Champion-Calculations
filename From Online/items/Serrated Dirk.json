@@ -1,0 +1,53 @@
+{
+  "name": "Serrated Dirk",
+  "id": 3134,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036,
+    1036
+  ],
+  "buildsInto": [
+    3142,
+    6693,
+    126697,
+    2520,
+    6691,
+    3814,
+    4004,
+    6676,
+    6697,
+    3131,
+    3179,
+    6695,
+    667666,
+    6701
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3134_assassin_t2_serrateddirk.png",
+  "simpleDescription": "Increases Attack Damage and Lethality",
+  "nicknames": [
+    "lethality"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 20.0
+    },
+    "lethality": {
+      "flat": 10
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN",
+      "ARMOR_PEN"
+    ]
+  }
+}

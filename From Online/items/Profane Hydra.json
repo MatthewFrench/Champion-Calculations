@@ -1,0 +1,51 @@
+{
+  "name": "Profane Hydra",
+  "id": 6698,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3077,
+    2020
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
+  "nicknames": [
+    "lethality"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Damaging basic attacks deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly=true}} 350 radius centered around the target."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Heretical Cleave",
+      "effects": "Deal {{as|80% AD}} {{as|physical damage}} to enemies in a {{tip|cr|icononly = true}} 450 radius."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2850,
+      "sell": 1140
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

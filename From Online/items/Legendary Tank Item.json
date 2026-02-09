@@ -1,0 +1,16 @@
+{
+  "name": "Legendary Tank Item",
+  "id": 220005,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/220005_tankanvil.png",
+  "shop": {
+    "prices": {
+      "total": 2000,
+      "sell": 800
+    },
+    "purchasable": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Prismatic Item",
+  "id": 220007,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/220007_prismaticanvil.png",
+  "shop": {
+    "prices": {
+      "total": 4000,
+      "sell": 1600
+    },
+    "purchasable": true
+  }
+}

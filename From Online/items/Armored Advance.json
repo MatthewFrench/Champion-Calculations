@@ -1,0 +1,44 @@
+{
+  "name": "Armored Advance",
+  "id": 3174,
+  "tier": 3,
+  "rank": [
+    "BOOTS"
+  ],
+  "buildsFrom": [
+    3047
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_platedsteelcaps_64.png",
+  "simpleDescription": "Deal damage to empower your heals and shields",
+  "nicknames": [
+    "boots"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Plating",
+      "effects": "Reduces all incoming {{tip|basic damage}} by 10% (''excluding from [[turret]] attacks'')."
+    },
+    {
+      "unique": true,
+      "name": "Noxian Endurance",
+      "effects": "Taking {{as|physical damage}} from champions grants you a {{tip|shield}} that absorbs {{pp|100 to 200|color=pd}} {{as|(+ 8% '''bonus''' health)}} {{as|physical damage}} for 5 seconds.",
+      "cooldown": "15"
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 35.0
+    },
+    "movespeed": {
+      "flat": 45.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true
+  }
+}

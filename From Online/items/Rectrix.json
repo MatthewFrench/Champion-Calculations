@@ -1,0 +1,39 @@
+{
+  "name": "Rectrix",
+  "id": 6690,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1036
+  ],
+  "buildsInto": [
+    3087,
+    4003,
+    3142,
+    6672,
+    6700
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6690_rectrix.png",
+  "stats": {
+    "attackDamage": {
+      "flat": 15.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 775,
+      "sell": 310
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN",
+      "FIGHTER"
+    ]
+  }
+}

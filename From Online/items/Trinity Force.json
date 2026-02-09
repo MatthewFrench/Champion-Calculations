@@ -1,0 +1,64 @@
+{
+  "name": "Trinity Force",
+  "id": 3078,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3057,
+    3044,
+    3051
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
+  "simpleDescription": "Tons of Damage",
+  "nicknames": [
+    "Spellblade",
+    "triforce",
+    "tons of damage",
+    "33333"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|200% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]] ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    },
+    {
+      "unique": true,
+      "name": "Quicken",
+      "effects": "Basic attacks [[on-hit]] grant {{as|20 '''bonus''' movement speed}} for 2 seconds",
+      "stats": {
+        "movespeed": {
+          "flat": 20.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 36.0
+    },
+    "attackSpeed": {
+      "flat": 30.0
+    },
+    "health": {
+      "flat": 333.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3333,
+      "sell": 1333
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  }
+}

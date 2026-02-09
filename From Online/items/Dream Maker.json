@@ -1,0 +1,59 @@
+{
+  "name": "Dream Maker",
+  "id": 3870,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3867
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3870_dreammaker.png",
+  "nicknames": [
+    "Plushie",
+    "plushie"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Dream Maker",
+      "effects": "Every 8 seconds, you gain a ''Blue Dream Bubble'' and a ''Purple Dream Bubble''. Granting a {{tip|heal}} or {{tip|shield}} to an allied champion ''(excluding yourself)'' causes you to grant both of your ''Dream Bubbles'' to them, empowering them for 3 seconds. The ''Blue Bubble'' reduces the next instance of non-{{tip|minion}} damage they take by {{pp|75 to 255 for 13|1;7 to 18|type=your level}} and the ''Purple Bubble'' grants them {{as|{{pp|50 to 170 for 13|1;7 to 18|type=your level}} '''bonus''' magic damage}} [[on-hit]] on their next basic attack."
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ward",
+      "effects": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "range": 600
+    }
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 9.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 75.0
+    },
+    "manaRegen": {
+      "percent": 75.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  }
+}

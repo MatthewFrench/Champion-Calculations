@@ -1,0 +1,48 @@
+{
+  "name": "Edge of Night",
+  "id": 3814,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3134,
+    2021
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
+  "simpleDescription": "Periodically blocks enemy abilities",
+  "nicknames": [
+    "eon",
+    "lethality",
+    "spellshield",
+    "spell shield"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Annul",
+      "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions)."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "health": {
+      "flat": 250.0
+    },
+    "lethality": {
+      "flat": 15
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

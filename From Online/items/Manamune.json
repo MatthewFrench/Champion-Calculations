@@ -1,0 +1,58 @@
+{
+  "name": "Manamune",
+  "id": 3004,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3070,
+    3133,
+    1036
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
+  "simpleDescription": "Increases Attack Damage based on maximum Mana",
+  "nicknames": [
+    "Muramana",
+    "tear"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Awe",
+      "effects": "Grants {{as|'''bonus''' attack damage}} equal to {{as|2% '''maximum''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Manaflow",
+      "effects": "Grants a charge every 8 seconds, up to 4 charges. Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability|ability]] to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} for champion targets, up to a '''maximum''' of {{as|360 '''bonus''' mana}}. Can only be triggered once per {{tip|cast instance}}."
+    },
+    {
+      "effects": "Transforms into {{ii|Muramana}} at {{as|360 '''bonus''' mana}}."
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 35.0
+    },
+    "mana": {
+      "flat": 500.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "ONHIT_EFFECTS"
+    ]
+  }
+}

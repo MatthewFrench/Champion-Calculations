@@ -1,0 +1,46 @@
+{
+  "name": "Randuin's Omen",
+  "id": 3143,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3082,
+    1011
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
+  "simpleDescription": "Greatly increases defenses, activate to slow nearby enemies",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Resilience",
+      "effects": "Reduces incoming damage from {{tip|critical strike|critical strikes}} by 30%."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Humility",
+      "effects": "Unleash a shockwave around you that {{tip|slow|slows}} nearby enemies by 70% for 2 seconds."
+    }
+  ],
+  "stats": {
+    "armor": {
+      "flat": 75.0
+    },
+    "health": {
+      "flat": 350.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 2700,
+      "sell": 1080
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}

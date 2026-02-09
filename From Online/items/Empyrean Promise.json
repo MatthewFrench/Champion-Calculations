@@ -1,0 +1,37 @@
+{
+  "name": "Empyrean Promise",
+  "id": 447105,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "specialRecipe": 220007,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7105_angelicpromise.png",
+  "active": [
+    {
+      "unique": true,
+      "name": "Vigilance",
+      "effects": "{{tip|Dash}} to the current location of your ally and upon completion grant both yourself and the ally a {{tip|shield}} that absorbs {{pp|100 to 250}} {{as|(+ 100% of your AP)}} {{as|(+ 10% of your '''bonus''' health)}} damage for 5 seconds. '''Can be used even while the ally is dead.'''"
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "healAndShieldPower": {
+      "flat": 18.0
+    },
+    "manaRegen": {
+      "percent": 125.0
+    },
+    "abilityHaste": {
+      "flat": 30.0
+    }
+  },
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

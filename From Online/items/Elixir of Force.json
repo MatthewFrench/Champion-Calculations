@@ -1,0 +1,9 @@
+{
+  "name": "Elixir of Force",
+  "id": 2152,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/elixir_of_force.png"
+}

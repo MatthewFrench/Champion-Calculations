@@ -1,0 +1,59 @@
+{
+  "name": "Black Cleaver",
+  "id": 3071,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "buildsFrom": [
+    3044,
+    3067,
+    1037
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
+  "simpleDescription": "Dealing physical damage to enemy champions reduces their Armor",
+  "nicknames": [
+    "bc"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Carve",
+      "effects": "Dealing {{as|physical damage}} to an enemy champion applies a stack of ''Carve'' for 6 seconds, stacking up to 5 times. Each stack inflicts {{as|6% armor reduction}}, up to {{as|30%|armor}} at 5 stacks."
+    },
+    {
+      "unique": true,
+      "name": "Fervor",
+      "effects": "Dealing {{as|physical damage}} grants you {{as|20 '''bonus''' movement speed}} for 2 seconds.",
+      "stats": {
+        "movespeed": {
+          "flat": 20.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ONHIT_EFFECTS",
+      "ARMOR_PEN",
+      "MOVEMENT"
+    ]
+  }
+}

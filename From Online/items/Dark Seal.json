@@ -1,0 +1,46 @@
+{
+  "name": "Dark Seal",
+  "id": 1082,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "buildsInto": [
+    3041
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1082_mage_t1_darkseal.png",
+  "simpleDescription": "Provides Ability Power and Mana.  Increases in power as you kill enemies.",
+  "nicknames": [
+    "Noxian"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Glory",
+      "effects": "Gain 2 stacks for each champion [[kill]] and 1 stack for each [[assist]], up to a '''maximum''' of 10 stacks. For every stack, gain {{as|4 ability power}}, up to {{as|40|AP}} at '''maximum''' stacks. Lose 5 stacks on [[death]]. Stacks are preserved when upgrading to {{ii|Mejai's Soulstealer}}.",
+      "stats": {
+        "abilityPower": {
+          "flat": 4.0
+        }
+      }
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 15.0
+    },
+    "health": {
+      "flat": 50.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 350,
+      "sell": 140
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

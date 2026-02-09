@@ -1,0 +1,40 @@
+{
+  "name": "Swiftmarch",
+  "id": 3170,
+  "tier": 3,
+  "rank": [
+    "BOOTS"
+  ],
+  "buildsFrom": [
+    3009
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_swiftness_64.png",
+  "simpleDescription": "Improves defense and reduces duration of disabling effects",
+  "nicknames": [
+    "boots"
+  ],
+  "passives": [
+    {
+      "unique": true,
+      "name": "Fleetfooted",
+      "effects": "Gain 40% [[slow resist]]."
+    },
+    {
+      "unique": true,
+      "name": "Noxian Fervor",
+      "effects": "Gain {{tip|adaptive force}} equal to {{as|5% of your '''total''' movement speed}}."
+    }
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 65.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    },
+    "purchasable": true
+  }
+}

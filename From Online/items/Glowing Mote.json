@@ -1,0 +1,45 @@
+{
+  "name": "Glowing Mote",
+  "id": 2022,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "buildsInto": [
+    3158,
+    3133,
+    2020,
+    3108,
+    6660,
+    3024,
+    3057,
+    3067,
+    3802,
+    4642
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2022_glowingmote.png",
+  "nicknames": [
+    "haste"
+  ],
+  "stats": {
+    "abilityHaste": {
+      "flat": 5.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 250,
+      "sell": 100
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "SUPPORT"
+    ]
+  }
+}

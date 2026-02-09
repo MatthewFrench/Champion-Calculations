@@ -1,0 +1,38 @@
+{
+  "name": "Fated Ashes",
+  "id": 2508,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1052
+  ],
+  "buildsInto": [
+    6653,
+    2503
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2508_fatedashes64.png",
+  "passives": [
+    {
+      "unique": true,
+      "name": "Inflame",
+      "effects": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|15/6}} magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|15|magic damage}}. Against monsters, the burn deals {{as|{{fd|7.5}} '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(15/6)+7.5}} magic damage}} per tick for up to {{as|{{ap|15+(7.5*6)}}|magic damage}}."
+    }
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 30.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  }
+}

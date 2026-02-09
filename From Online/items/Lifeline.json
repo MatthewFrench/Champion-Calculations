@@ -1,0 +1,49 @@
+{
+  "name": "Lifeline",
+  "id": 4003,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    6690,
+    1036
+  ],
+  "buildsInto": [
+    4004
+  ],
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4003_assassin_t2_lifeline.png",
+  "simpleDescription": "Marks the ground, and returns you there after a few moments",
+  "nicknames": [
+    "lethality"
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Soul Anchor",
+      "effects": "Mark your current location. After 4 seconds, you automatically {{tip|blink}} to the marked location after a {{fd|0.5}}-second delay. ''Soul Anchor'' may be recast within its duration to manually blink to the marked location after the same delay (45 second cooldown, starts after the blink).",
+      "cooldown": 45.0
+    }
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    },
+    "lethality": {
+      "flat": 5
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1600,
+      "sell": 640
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  }
+}

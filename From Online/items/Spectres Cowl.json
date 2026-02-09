@@ -1,0 +1,46 @@
+{
+  "name": "Spectre's Cowl",
+  "id": 3211,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "buildsFrom": [
+    1028,
+    1033,
+    1006
+  ],
+  "buildsInto": [
+    2504,
+    3065,
+    6664
+  ],
+  "noEffects": true,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3211_tank_t2_spectrescowl.png",
+  "simpleDescription": "Improves defense and grants regeneration upon being damaged",
+  "nicknames": [
+    "hat",
+    "ghost"
+  ],
+  "stats": {
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 100.0
+    },
+    "magicResistance": {
+      "flat": 35.0
+    }
+  },
+  "shop": {
+    "prices": {
+      "total": 1250,
+      "sell": 500
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  }
+}
