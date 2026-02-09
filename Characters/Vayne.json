@@ -1,0 +1,197 @@
+{
+  "data_version": "16.3.1", 
+  "abilities": {
+    "passive": {
+      "type": "Passive", 
+      "name": "Night Hunter", 
+      "description": "Vayne ruthlessly hunts evil-doers, gaining Move Speed when moving toward nearby enemy champions."
+    }, 
+    "basic_ability_3": {
+      "slot": "E", 
+      "range": 550, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          90, 
+          90, 
+          90, 
+          90, 
+          90
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Condemn", 
+      "cooldown_seconds_by_rank": [
+        20, 
+        18, 
+        16, 
+        14, 
+        12
+      ], 
+      "type": "Active", 
+      "default_keybinding": "E", 
+      "effects": [], 
+      "description": "Vayne draws a heavy crossbow from her back, and fires a huge bolt at her target, knocking them back and dealing damage. If they collide with terrain, they are impaled, dealing bonus damage and stunning them."
+    }, 
+    "basic_ability_2": {
+      "slot": "W", 
+      "range": 750, 
+      "cost": {
+        "value_type": "flat", 
+        "resource": "special", 
+        "context_notes": "Resource string: Passive"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Silver Bolts", 
+      "cooldown_seconds_by_rank": [
+        0, 
+        0, 
+        0, 
+        0, 
+        0
+      ], 
+      "type": "Active", 
+      "default_keybinding": "W", 
+      "effects": [], 
+      "description": "Vayne tips her bolts with a rare metal, toxic to evil things. The third consecutive attack or ability against the same target deals a percentage of the target's max health as bonus true damage."
+    }, 
+    "basic_ability_1": {
+      "slot": "Q", 
+      "range": 300, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          30, 
+          30, 
+          30, 
+          30, 
+          30
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Tumble", 
+      "cooldown_seconds_by_rank": [
+        6, 
+        5, 
+        4, 
+        3, 
+        2
+      ], 
+      "type": "Active", 
+      "default_keybinding": "Q", 
+      "effects": [], 
+      "description": "Vayne tumbles, maneuvering to carefully place her next shot. Her next attack deals bonus damage."
+    }, 
+    "ultimate": {
+      "slot": "R", 
+      "range": 1, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          80, 
+          80, 
+          80
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Final Hour", 
+      "cooldown_seconds_by_rank": [
+        100, 
+        85, 
+        70
+      ], 
+      "type": "Active", 
+      "default_keybinding": "R", 
+      "effects": [], 
+      "description": "Readying herself for an epic confrontation, Vayne gains increased Attack Damage, Invisibility during Tumble, reduced Tumble cooldown, and more bonus Move Speed from Night Hunter"
+    }
+  }, 
+  "sources": [
+    {
+      "path": "/Users/matthewfrench/Downloads/Vayne.json", 
+      "used_for": "base stats, base ability values, cooldowns, costs", 
+      "type": "Riot Data Dragon (local)", 
+      "accessed": "2026-02-09"
+    }
+  ], 
+  "name": "Vayne", 
+  "role_tags": [
+    "Marksman", 
+    "Assassin"
+  ], 
+  "notes": [
+    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank."
+  ], 
+  "schema_notes": {
+    "formula": {
+      "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "terms": [
+        {
+          "coefficient": "Numeric multiplier applied to input_stat.", 
+          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.", 
+          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).", 
+          "coefficient_type": [
+            "per_point: linear scaling per 1 point of input_stat.", 
+            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.", 
+            "percent_per_100_stat: coefficient applied per 100 of input_stat.", 
+            "multiplier: used when the input_stat is a value to be multiplied directly (e.g., damage_dealt)."
+          ]
+        }
+      ], 
+      "op": "Operation applied to all terms. Common: add, multiply."
+    }, 
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "base_by_rank": "Array of base values by ability rank (1-5).", 
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat."
+  }, 
+  "base_stats": {
+    "resource_regeneration": {
+      "per_level": 0.4, 
+      "base": 7
+    }, 
+    "move_speed": 330, 
+    "health_regeneration": {
+      "per_level": 0.55, 
+      "base": 3.5
+    }, 
+    "attack_damage": {
+      "per_level": 2.35, 
+      "base": 60
+    }, 
+    "crit_chance": {
+      "per_level": 0, 
+      "base": 0
+    }, 
+    "attack_range": 550, 
+    "attack_speed": {
+      "per_level_percent": 3.3, 
+      "base": 0.658
+    }, 
+    "resource": {
+      "per_level": 35, 
+      "base": 232, 
+      "type": "mana"
+    }, 
+    "armor": {
+      "per_level": 4.6, 
+      "base": 23
+    }, 
+    "magic_resist": {
+      "per_level": 1.3, 
+      "base": 30
+    }, 
+    "health": {
+      "per_level": 103, 
+      "base": 550
+    }
+  }
+}

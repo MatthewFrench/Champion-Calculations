@@ -1,0 +1,204 @@
+{
+  "data_version": "16.3.1", 
+  "abilities": {
+    "passive": {
+      "type": "Passive", 
+      "name": "Power Chord", 
+      "description": "<passive>Accelerando</passive>: Sona gains non-Ultimate ability haste permanently for her basic abilities as she uses her abilities well, up to a cap. Beyond that cap, further successful uses reduce her ultimate's remaining cooldown instead.<br><br><passive>Power Chord</passive>: Every few spell casts, Sona's next attack will deal bonus magic damage in addition to an additional effect based on what basic Ability Sona last activated."
+    }, 
+    "basic_ability_3": {
+      "slot": "E", 
+      "range": 430, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          65, 
+          65, 
+          65, 
+          65, 
+          65
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Song of Celerity", 
+      "cooldown_seconds_by_rank": [
+        14, 
+        14, 
+        14, 
+        14, 
+        14
+      ], 
+      "type": "Active", 
+      "default_keybinding": "E", 
+      "effects": [], 
+      "description": "Sona plays the Song of Celerity, granting nearby allies bonus Move Speed. Sona gains a temporary aura that grants allied champions tagged by the zone bonus Move Speed."
+    }, 
+    "basic_ability_2": {
+      "slot": "W", 
+      "range": 1000, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          80, 
+          85, 
+          90, 
+          95, 
+          100
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Aria of Perseverance", 
+      "cooldown_seconds_by_rank": [
+        10, 
+        10, 
+        10, 
+        10, 
+        10
+      ], 
+      "type": "Active", 
+      "default_keybinding": "W", 
+      "effects": [], 
+      "description": "Sona plays the Aria of Perseverance, sending out protective melodies, healing Sona and a nearby wounded ally. Sona gains a temporary aura that grants allies tagged by the zone a temporary shield."
+    }, 
+    "basic_ability_1": {
+      "slot": "Q", 
+      "range": 825, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          50, 
+          55, 
+          60, 
+          65, 
+          70
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Hymn of Valor", 
+      "cooldown_seconds_by_rank": [
+        8, 
+        8, 
+        8, 
+        8, 
+        8
+      ], 
+      "type": "Active", 
+      "default_keybinding": "Q", 
+      "effects": [], 
+      "description": "Sona plays the Hymn of Valor, sends out bolts of sound, dealing magic damage to two nearby enemies, prioritizing champions and monsters. Sona gains a temporary aura that grants allies tagged by the zone bonus damage on their next attack against enemies."
+    }, 
+    "ultimate": {
+      "slot": "R", 
+      "range": 900, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          100, 
+          100, 
+          100
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Crescendo", 
+      "cooldown_seconds_by_rank": [
+        140, 
+        120, 
+        100
+      ], 
+      "type": "Active", 
+      "default_keybinding": "R", 
+      "effects": [], 
+      "description": "Sona plays her ultimate chord, stunning enemy champions and forcing them to dance and dealing magic damage to them."
+    }
+  }, 
+  "sources": [
+    {
+      "path": "/Users/matthewfrench/Downloads/Sona.json", 
+      "used_for": "base stats, base ability values, cooldowns, costs", 
+      "type": "Riot Data Dragon (local)", 
+      "accessed": "2026-02-09"
+    }
+  ], 
+  "name": "Sona", 
+  "role_tags": [
+    "Support", 
+    "Mage"
+  ], 
+  "notes": [
+    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank."
+  ], 
+  "schema_notes": {
+    "formula": {
+      "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "terms": [
+        {
+          "coefficient": "Numeric multiplier applied to input_stat.", 
+          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.", 
+          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).", 
+          "coefficient_type": [
+            "per_point: linear scaling per 1 point of input_stat.", 
+            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.", 
+            "percent_per_100_stat: coefficient applied per 100 of input_stat.", 
+            "multiplier: used when the input_stat is a value to be multiplied directly (e.g., damage_dealt)."
+          ]
+        }
+      ], 
+      "op": "Operation applied to all terms. Common: add, multiply."
+    }, 
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "base_by_rank": "Array of base values by ability rank (1-5).", 
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat."
+  }, 
+  "base_stats": {
+    "resource_regeneration": {
+      "per_level": 0.4, 
+      "base": 11.5
+    }, 
+    "move_speed": 325, 
+    "health_regeneration": {
+      "per_level": 0.55, 
+      "base": 5.5
+    }, 
+    "attack_damage": {
+      "per_level": 3, 
+      "base": 49
+    }, 
+    "crit_chance": {
+      "per_level": 0, 
+      "base": 0
+    }, 
+    "attack_range": 550, 
+    "attack_speed": {
+      "per_level_percent": 2.3, 
+      "base": 0.644
+    }, 
+    "resource": {
+      "per_level": 45, 
+      "base": 340, 
+      "type": "mana"
+    }, 
+    "armor": {
+      "per_level": 4.2, 
+      "base": 26
+    }, 
+    "magic_resist": {
+      "per_level": 1.3, 
+      "base": 30
+    }, 
+    "health": {
+      "per_level": 91, 
+      "base": 550
+    }
+  }
+}

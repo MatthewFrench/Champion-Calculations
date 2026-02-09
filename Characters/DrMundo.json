@@ -1,0 +1,178 @@
+{
+  "abilities": {
+    "passive": {
+      "type": "Passive", 
+      "name": "Goes Where He Pleases", 
+      "description": "Dr. Mundo resists the first Immobilizing effect that hits him, instead losing Health and dropping a chemical cannister nearby. Dr. Mundo can pick it up by walking over it, restoring Health and reducing this Ability's Cooldown.<br><br>Dr. Mundo also has significantly increased Health regeneration.<br>"
+    }, 
+    "basic_ability_3": {
+      "slot": "E", 
+      "name": "Blunt Force Trauma", 
+      "cooldown_seconds_by_rank": [
+        9, 
+        8.25, 
+        7.5, 
+        6.75, 
+        6
+      ], 
+      "default_keybinding": "E", 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "range": 0, 
+      "cost": {
+        "resource": "health", 
+        "value_type": "flat", 
+        "context_notes": "Resource string: {{ flathealthcost }} Health"
+      }, 
+      "effects": [], 
+      "type": "Active", 
+      "description": "Passive - Dr. Mundo gains bonus Attack Damage, increasing based on his max Health.<br><br>Active - Dr. Mundo slams his \u201cmedical\u201d bag into an enemy, dealing additional damage based on his missing Health. If the enemy dies they are swatted away, dealing damage to enemies they pass through."
+    }, 
+    "basic_ability_2": {
+      "slot": "W", 
+      "name": "Heart Zapper", 
+      "cooldown_seconds_by_rank": [
+        17, 
+        16.5, 
+        16, 
+        15.5, 
+        15
+      ], 
+      "default_keybinding": "W", 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "range": 325, 
+      "cost": {
+        "resource": "health", 
+        "value_type": "flat", 
+        "context_notes": "Resource string: {{ currenthealthcost*100 }}% Current Health"
+      }, 
+      "effects": [], 
+      "type": "Active", 
+      "description": "Dr. Mundo electrocutes himself, dealing persistent damage to nearby enemies and storing a portion of damage he takes. At the end of the duration or on Recast, Dr. Mundo deals a burst of damage to nearby enemies. If the burst hit an enemy, he heals a percentage of the stored damage."
+    }, 
+    "basic_ability_1": {
+      "slot": "Q", 
+      "name": "Infected Bonesaw", 
+      "cooldown_seconds_by_rank": [
+        4, 
+        4, 
+        4, 
+        4, 
+        4
+      ], 
+      "default_keybinding": "Q", 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "range": 975, 
+      "cost": {
+        "resource": "health", 
+        "value_type": "flat", 
+        "context_notes": "Resource string: {{ healthcost }} Health"
+      }, 
+      "effects": [], 
+      "type": "Active", 
+      "description": "Dr. Mundo throws an infected bonesaw, dealing damage to the first enemy hit based on their current health and slowing them."
+    }, 
+    "ultimate": {
+      "slot": "R", 
+      "name": "Maximum Dosage", 
+      "cooldown_seconds_by_rank": [
+        120, 
+        120, 
+        120
+      ], 
+      "default_keybinding": "R", 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "range": 20, 
+      "cost": {
+        "resource": "none", 
+        "value_type": "flat"
+      }, 
+      "effects": [], 
+      "type": "Active", 
+      "description": "Dr. Mundo pumps himself with chemicals, instantly healing a percent of his missing Health. He then gains Move Speed and regenerates a portion of his maximum Health over a long duration."
+    }
+  }, 
+  "name": "Dr. Mundo", 
+  "role_tags": [
+    "Tank", 
+    "Fighter"
+  ], 
+  "notes": [
+    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank."
+  ], 
+  "data_version": "16.3.1", 
+  "sources": [
+    {
+      "path": "/Users/matthewfrench/Downloads/DrMundo.json", 
+      "type": "Riot Data Dragon (local)", 
+      "accessed": "2026-02-09", 
+      "used_for": "base stats, base ability values, cooldowns, costs"
+    }
+  ], 
+  "schema_notes": {
+    "formula": {
+      "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
+      "op": "Operation applied to all terms. Common: add, multiply.", 
+      "terms": [
+        {
+          "coefficient": "Numeric multiplier applied to input_stat.", 
+          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.", 
+          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).", 
+          "coefficient_type": [
+            "per_point: linear scaling per 1 point of input_stat.", 
+            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.", 
+            "percent_per_100_stat: coefficient applied per 100 of input_stat.", 
+            "multiplier: used when the input_stat is a value to be multiplied directly (e.g., damage_dealt)."
+          ]
+        }
+      ], 
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health)."
+    }, 
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "base_by_rank": "Array of base values by ability rank (1-5).", 
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat."
+  }, 
+  "base_stats": {
+    "attack_speed": {
+      "per_level_percent": 3.3, 
+      "base": 0.67
+    }, 
+    "resource_regeneration": {
+      "per_level": 0, 
+      "base": 0
+    }, 
+    "crit_chance": {
+      "per_level": 0, 
+      "base": 0
+    }, 
+    "armor": {
+      "per_level": 4.5, 
+      "base": 32
+    }, 
+    "move_speed": 345, 
+    "magic_resist": {
+      "per_level": 2.3, 
+      "base": 29
+    }, 
+    "health_regeneration": {
+      "per_level": 0.5, 
+      "base": 7
+    }, 
+    "attack_damage": {
+      "per_level": 2.5, 
+      "base": 61
+    }, 
+    "health": {
+      "per_level": 103, 
+      "base": 640
+    }, 
+    "resource": {
+      "per_level": 0, 
+      "type": "health", 
+      "context_notes": "Dr. Mundo does not use mana or energy; ability costs are typically health.", 
+      "base": 0
+    }, 
+    "attack_range": 125
+  }
+}

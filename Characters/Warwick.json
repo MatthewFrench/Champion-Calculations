@@ -1,0 +1,246 @@
+{
+  "data_version": "16.3.1", 
+  "abilities": {
+    "passive": {
+      "type": "Passive", 
+      "name": "Eternal Hunger", 
+      "description": "Warwick's basic attacks deal bonus magic damage. If Warwick is below 50% health, he heals the same amount. If Warwick is below 25% health, this healing triples."
+    }, 
+    "basic_ability_3": {
+      "slot": "E", 
+      "range": 375, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          40, 
+          40, 
+          40, 
+          40, 
+          40
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "name": "Primal Howl", 
+      "cooldown_seconds_by_rank": [
+        15, 
+        14, 
+        13, 
+        12, 
+        11
+      ], 
+      "type": "Active", 
+      "default_keybinding": "E", 
+      "effects": [
+        {
+          "formula": {
+            "output_stat": "damage", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "context_notes": "Base values from Data Dragon leveltip effect reference {{ e1 }}% -> {{ e1NL }}%.", 
+          "id": "damage_reduction", 
+          "base_by_rank": [
+            35, 
+            40, 
+            45, 
+            50, 
+            55
+          ], 
+          "description": "Damage Reduction"
+        }
+      ], 
+      "description": "Warwick gains damage reduction for 2.5 seconds. At the end, or if re-activated, he howls, causing nearby enemies to flee for 1 second."
+    }, 
+    "basic_ability_2": {
+      "slot": "W", 
+      "range": 4000, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          55, 
+          55, 
+          55, 
+          55, 
+          55
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Blood Hunt", 
+      "cooldown_seconds_by_rank": [
+        80, 
+        70, 
+        60, 
+        50, 
+        40
+      ], 
+      "type": "Active", 
+      "default_keybinding": "W", 
+      "effects": [], 
+      "description": "Warwick senses enemies below 50% health, gaining Move Speed toward and attack speed against them. When they fall below 25% health, he frenzies and these bonuses triple."
+    }, 
+    "basic_ability_1": {
+      "slot": "Q", 
+      "range": 365, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          80, 
+          85, 
+          90, 
+          95, 
+          100
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "name": "Jaws of the Beast", 
+      "cooldown_seconds_by_rank": [
+        8, 
+        7.5, 
+        7, 
+        6.5, 
+        6
+      ], 
+      "type": "Active", 
+      "default_keybinding": "Q", 
+      "effects": [
+        {
+          "formula": {
+            "output_stat": "heal", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "context_notes": "Base values from Data Dragon leveltip effect reference {{ e3 }}% -> {{ e3NL }}%.", 
+          "id": "healing", 
+          "base_by_rank": [
+            25, 
+            37.5, 
+            50, 
+            62.5, 
+            75
+          ], 
+          "description": "Healing"
+        }
+      ], 
+      "description": "Warwick lunges forward and bites his target, dealing damage based on their maximum health and healing for damage dealt."
+    }, 
+    "ultimate": {
+      "slot": "R", 
+      "range": 25000, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          100, 
+          100, 
+          100
+        ], 
+        "resource": "special", 
+        "context_notes": "Cost type:  {{ abilityresourcename }}"
+      }, 
+      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
+      "name": "Infinite Duress", 
+      "cooldown_seconds_by_rank": [
+        110, 
+        90, 
+        70
+      ], 
+      "type": "Active", 
+      "default_keybinding": "R", 
+      "effects": [], 
+      "description": "Warwick leaps in a direction (scaling with his bonus Move Speed), suppressing the first champion he collides with for 1.5 seconds."
+    }
+  }, 
+  "sources": [
+    {
+      "path": "/Users/matthewfrench/Downloads/Warwick.json", 
+      "used_for": "base stats, base ability values, cooldowns, costs", 
+      "type": "Riot Data Dragon (local)", 
+      "accessed": "2026-02-09"
+    }
+  ], 
+  "name": "Warwick", 
+  "role_tags": [
+    "Fighter", 
+    "Tank"
+  ], 
+  "notes": [
+    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank."
+  ], 
+  "schema_notes": {
+    "formula": {
+      "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "terms": [
+        {
+          "coefficient": "Numeric multiplier applied to input_stat.", 
+          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.", 
+          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).", 
+          "coefficient_type": [
+            "per_point: linear scaling per 1 point of input_stat.", 
+            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.", 
+            "percent_per_100_stat: coefficient applied per 100 of input_stat.", 
+            "multiplier: used when the input_stat is a value to be multiplied directly (e.g., damage_dealt)."
+          ]
+        }
+      ], 
+      "op": "Operation applied to all terms. Common: add, multiply."
+    }, 
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "base_by_rank": "Array of base values by ability rank (1-5).", 
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat."
+  }, 
+  "base_stats": {
+    "resource_regeneration": {
+      "per_level": 0.6, 
+      "base": 7.45
+    }, 
+    "move_speed": 335, 
+    "health_regeneration": {
+      "per_level": 0.75, 
+      "base": 4
+    }, 
+    "attack_damage": {
+      "per_level": 2.5, 
+      "base": 65
+    }, 
+    "crit_chance": {
+      "per_level": 0, 
+      "base": 0
+    }, 
+    "attack_range": 125, 
+    "attack_speed": {
+      "per_level_percent": 2, 
+      "base": 0.638
+    }, 
+    "resource": {
+      "per_level": 35, 
+      "base": 280, 
+      "type": "mana"
+    }, 
+    "armor": {
+      "per_level": 4.4, 
+      "base": 33
+    }, 
+    "magic_resist": {
+      "per_level": 2.05, 
+      "base": 32
+    }, 
+    "health": {
+      "per_level": 99, 
+      "base": 620
+    }
+  }
+}
