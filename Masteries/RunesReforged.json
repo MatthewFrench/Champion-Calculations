@@ -461,44 +461,58 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Upon moving near an un-tracked enemy ward , it is automatically tracked with a ward timer .",
-                  "effect_type": "stat_modifier",
-                  "stat": null,
+                  "raw": "Upon moving near an un-tracked enemy ward, it is automatically tracked with a ward timer.",
+                  "effect_type": "utility",
+                  "stat": "ward_tracking",
                   "unit": null,
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [],
-                  "scaling": null,
-                  "trigger": null,
-                  "applies_to": "enemy",
-                  "formula": null,
-                  "conditions": [],
-                  "parse_confidence": 0.4
+                  "formula": {
+                    "type": "flag",
+                    "value": true
+                  },
+                  "trigger": "proximity",
+                  "applies_to": "enemy_ward",
+                  "conditions": [
+                    "untracked_ward"
+                  ],
+                  "parse_confidence": 0.9
                 },
                 {
                   "raw": "At level 11, additionally reveals nearby enemy stealthed wards for 10 seconds upon being triggered.",
-                  "effect_type": "stat_modifier",
-                  "stat": null,
+                  "effect_type": "reveal",
+                  "stat": "ward_reveal_duration",
                   "unit": "seconds",
-                  "values": null,
+                  "values": [
+                    10
+                  ],
                   "value_range": null,
                   "numbers_extracted": [
                     11,
                     10
                   ],
-                  "scaling": null,
-                  "trigger": null,
-                  "applies_to": "enemy",
                   "formula": {
                     "type": "flat",
-                    "value": 11,
+                    "value": 10,
                     "unit": "seconds"
                   },
-                  "conditions": [],
-                  "parse_confidence": 0.7
+                  "trigger": "proximity",
+                  "applies_to": "enemy_ward",
+                  "conditions": [
+                    "level_at_least_11",
+                    "stealth_ward"
+                  ],
+                  "parse_confidence": 0.9
                 }
               ],
-              "template_source": "Template:Rune data Sixth Sense"
+              "template_source": "Template:Rune data Sixth Sense",
+              "manual_override": true,
+              "override_sources": [
+                "https://wiki.leagueoflegends.com/en-us/Template:Rune_data_Sixth_Sense"
+              ],
+              "cooldown_seconds": 250,
+              "range_units": 900
             },
             {
               "id": 8140,
@@ -1325,45 +1339,95 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain an Elixir upon reaching each of the following levels: Level 3: Elixir of Avarice Level 6: Elixir of Force Level 9: Elixir of Skill",
-                  "effect_type": "stat_modifier",
-                  "stat": null,
+                  "raw": "Level 3: Gain Elixir of Avarice.",
+                  "effect_type": "grant_item",
+                  "stat": "grant_elixir",
                   "unit": null,
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    3,
-                    6,
-                    9
+                    3
                   ],
-                  "scaling": null,
-                  "trigger": null,
-                  "applies_to": null,
                   "formula": {
-                    "type": "flat",
-                    "value": 3,
-                    "unit": null
+                    "type": "grant",
+                    "item": "Elixir of Avarice",
+                    "level": 3
                   },
-                  "conditions": [],
-                  "parse_confidence": 0.7
+                  "trigger": "on_level",
+                  "applies_to": "self",
+                  "conditions": [
+                    "level_3"
+                  ],
+                  "parse_confidence": 0.9
                 },
                 {
-                  "raw": "If the inventory is full upon the user becoming eligible to receive Elixir of Avarice or Elixir of Force , each item will be granted as soon as an empty slot is available. If the inventory is full upon becoming eligible to receive Elixir of Skill , the item is consumed automatically.",
-                  "effect_type": "stat_modifier",
-                  "stat": null,
+                  "raw": "Level 6: Gain Elixir of Force.",
+                  "effect_type": "grant_item",
+                  "stat": "grant_elixir",
+                  "unit": null,
+                  "values": null,
+                  "value_range": null,
+                  "numbers_extracted": [
+                    6
+                  ],
+                  "formula": {
+                    "type": "grant",
+                    "item": "Elixir of Force",
+                    "level": 6
+                  },
+                  "trigger": "on_level",
+                  "applies_to": "self",
+                  "conditions": [
+                    "level_6"
+                  ],
+                  "parse_confidence": 0.9
+                },
+                {
+                  "raw": "Level 9: Gain Elixir of Skill.",
+                  "effect_type": "grant_item",
+                  "stat": "grant_elixir",
+                  "unit": null,
+                  "values": null,
+                  "value_range": null,
+                  "numbers_extracted": [
+                    9
+                  ],
+                  "formula": {
+                    "type": "grant",
+                    "item": "Elixir of Skill",
+                    "level": 9
+                  },
+                  "trigger": "on_level",
+                  "applies_to": "self",
+                  "conditions": [
+                    "level_9"
+                  ],
+                  "parse_confidence": 0.9
+                },
+                {
+                  "raw": "If inventory is full while receiving an elixir, it appears when a slot is available.",
+                  "effect_type": "inventory_rule",
+                  "stat": "grant_delay",
                   "unit": null,
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [],
-                  "scaling": null,
-                  "trigger": null,
-                  "applies_to": "ally",
-                  "formula": null,
-                  "conditions": [],
-                  "parse_confidence": 0.4
+                  "formula": {
+                    "type": "defer_grant_until_slot_available"
+                  },
+                  "trigger": "on_grant",
+                  "applies_to": "self",
+                  "conditions": [
+                    "inventory_full"
+                  ],
+                  "parse_confidence": 0.9
                 }
               ],
-              "template_source": "Template:Rune data Triple Tonic"
+              "template_source": "Template:Rune data Triple Tonic",
+              "manual_override": true,
+              "override_sources": [
+                "https://wiki.leagueoflegends.com/en-us/Template:Rune_data_Triple_Tonic"
+              ]
             },
             {
               "id": 8352,
@@ -4558,18 +4622,7 @@
   ],
   "validation": {
     "generated_at": "2026-02-09T12:18:08.033811+00:00",
-    "low_confidence_count": 2,
-    "low_confidence_runes": [
-      {
-        "rune": "Sixth Sense",
-        "id": 8137,
-        "reason": "low_parse_confidence"
-      },
-      {
-        "rune": "Triple Tonic",
-        "id": 8313,
-        "reason": "low_parse_confidence"
-      }
-    ]
+    "low_confidence_count": 0,
+    "low_confidence_runes": []
   }
 }
