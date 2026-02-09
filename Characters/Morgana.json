@@ -1,10 +1,9 @@
 {
   "abilities": {
     "passive": {
-      "type": "Passive", 
       "description_source": "Morgana drains spirit from her enemies, healing as she deals damage to champions, large minions, and medium and larger jungler monsters.", 
+      "type": "Passive", 
       "description": "Heal for 18% of post-mitigation damage dealt by abilities to champions, large minions, and medium or large monsters.", 
-      "name": "Soul Siphon", 
       "effects": [
         {
           "formula": {
@@ -16,7 +15,7 @@
                 "champions": 0.18
               }
             }, 
-            "output_stat": "heal", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -24,13 +23,14 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "heal"
           }, 
           "id": "healing_from_ability_damage", 
           "context_notes": "Healing is based on post-mitigation damage dealt by abilities.", 
           "description": "Heal from ability damage"
         }
-      ]
+      ], 
+      "name": "Soul Siphon"
     }, 
     "basic_ability_3": {
       "slot": "E", 
@@ -42,18 +42,18 @@
         18.5, 
         16
       ], 
-      "type": "Active", 
+      "default_keybinding": "E", 
       "description_source": "Morgana anoints an ally with a protective barrier of starfire, which absorbs magical damage and disabling effects until it is broken.", 
       "range": 800, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 80
       }, 
       "effects": [
         {
           "formula": {
-            "output_stat": "magic_shield", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -64,10 +64,8 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_shield"
           }, 
-          "duration_seconds": 5, 
-          "id": "shield", 
           "base_by_rank": [
             100, 
             155, 
@@ -75,6 +73,8 @@
             265, 
             320
           ], 
+          "id": "shield", 
+          "duration_seconds": 5, 
           "description": "Magic damage shield"
         }, 
         {
@@ -83,7 +83,7 @@
           "description": "Crowd control immunity while shield holds"
         }
       ], 
-      "default_keybinding": "E", 
+      "type": "Active", 
       "description": "Grant a magic-damage shield that also blocks crowd control while it holds."
     }, 
     "basic_ability_2": {
@@ -96,11 +96,11 @@
         12, 
         12
       ], 
-      "type": "Active", 
+      "default_keybinding": "W", 
       "description_source": "Morgana casts a cursed shadow on an area, damaging enemies who dare stand in her dark circle. They receive magic damage over time, which increases the lower health they are.", 
       "range": 900, 
       "cost": {
-        "value_type": "flat", 
+        "resource": "mana", 
         "value_by_rank": [
           70, 
           85, 
@@ -108,7 +108,7 @@
           115, 
           130
         ], 
-        "resource": "mana"
+        "value_type": "flat"
       }, 
       "effects": [
         {
@@ -123,7 +123,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_per_tick", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -134,7 +134,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_per_tick"
           }, 
           "id": "minimum_damage_per_tick", 
           "base_by_rank": [
@@ -148,7 +148,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_per_tick", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -159,10 +159,8 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_per_tick"
           }, 
-          "context_notes": "Maximum damage occurs at 100% missing health (170% increase).", 
-          "id": "maximum_damage_per_tick", 
           "base_by_rank": [
             16.2, 
             31.05, 
@@ -170,11 +168,13 @@
             60.75, 
             75.6
           ], 
+          "id": "maximum_damage_per_tick", 
+          "context_notes": "Maximum damage occurs at 100% missing health (170% increase).", 
           "description": "Maximum damage per tick"
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_total", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -185,7 +185,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_total"
           }, 
           "id": "minimum_total_damage", 
           "base_by_rank": [
@@ -199,7 +199,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_total", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -210,7 +210,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_total"
           }, 
           "id": "maximum_total_damage", 
           "base_by_rank": [
@@ -231,9 +231,9 @@
           "description": "Damage increase based on target missing health"
         }, 
         {
-          "value_multiplier": 1.7, 
+          "id": "monster_damage_multiplier", 
           "description": "Damage multiplier vs monsters", 
-          "id": "monster_damage_multiplier"
+          "value_multiplier": 1.7
         }, 
         {
           "value_percent": 5, 
@@ -242,7 +242,7 @@
           "description": "Cooldown reduction when Soul Siphon triggers"
         }
       ], 
-      "default_keybinding": "W", 
+      "type": "Active", 
       "description": "Create an area for 5s that deals magic damage per tick, increasing with target missing health; deals increased damage to monsters."
     }, 
     "basic_ability_1": {
@@ -255,12 +255,12 @@
         10, 
         10
       ], 
-      "type": "Active", 
+      "default_keybinding": "Q", 
       "description_source": "Morgana binds an enemy in place with dark magic, forcing them to feel the pain they've caused and dealing magic damage. ", 
       "context_notes": "Missile width 140 and speed 1200 per wiki.", 
       "range": 1300, 
       "cost": {
-        "value_type": "flat", 
+        "resource": "mana", 
         "value_by_rank": [
           50, 
           55, 
@@ -268,12 +268,12 @@
           65, 
           70
         ], 
-        "resource": "mana"
+        "value_type": "flat"
       }, 
       "effects": [
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -284,7 +284,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "magic_damage", 
           "base_by_rank": [
@@ -297,6 +297,7 @@
           "description": "Magic damage"
         }, 
         {
+          "id": "root_duration", 
           "description": "Root duration", 
           "value_seconds_by_rank": [
             2, 
@@ -304,11 +305,10 @@
             2.5, 
             2.75, 
             3
-          ], 
-          "id": "root_duration"
+          ]
         }
       ], 
-      "default_keybinding": "Q", 
+      "type": "Active", 
       "description": "Deal magic damage and root for a duration."
     }, 
     "ultimate": {
@@ -319,19 +319,19 @@
         110, 
         100
       ], 
-      "type": "Active", 
+      "default_keybinding": "R", 
       "description_source": "Morgana unleashes the full force of her Celestial power as she unbinds her wings and hovers above the ground. She lashes chains of dark pain onto nearby enemy champions, gaining Move Speed. The chains slow and deal initial damage and, after a delay, stun those who are unable to break them.", 
       "context_notes": "Requires an enemy champion within 575 units to cast. Effect radius 625 and tether radius 625. Cast time 0.35.", 
       "range": 625, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 100
       }, 
       "effects": [
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -342,7 +342,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "initial_magic_damage", 
           "base_by_rank": [
@@ -354,7 +354,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_total", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -365,7 +365,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_total"
           }, 
           "id": "total_magic_damage", 
           "base_by_rank": [
@@ -395,16 +395,16 @@
           "description": "Tether duration"
         }, 
         {
+          "id": "stun_duration", 
           "description": "Stun duration", 
           "value_seconds_by_rank": [
             1.5, 
             1.75, 
             2
-          ], 
-          "id": "stun_duration"
+          ]
         }
       ], 
-      "default_keybinding": "R", 
+      "type": "Active", 
       "description": "Tether nearby enemy champions, slowing them and granting bonus move speed; after 3s, deal additional magic damage and stun them if they remain tethered."
     }
   }, 
@@ -434,9 +434,9 @@
   "sources": [
     {
       "path": "/Users/matthewfrench/Downloads/Morgana.json", 
-      "used_for": "base stats, base ability values, cooldowns, costs", 
       "type": "Riot Data Dragon (local)", 
-      "accessed": "2026-02-09"
+      "accessed": "2026-02-09", 
+      "used_for": "base stats, base ability values, cooldowns, costs"
     }, 
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Morgana/Soul_Siphon", 
@@ -482,6 +482,7 @@
     }
   ], 
   "schema_notes": {
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
     "basic_attack": {
       "attack_type": "Ranged or melee.", 
@@ -496,7 +497,7 @@
     "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
     "formula": {
       "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
-      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "op": "Operation applied to all terms. Common: add, multiply.", 
       "terms": [
         {
           "coefficient": "Numeric multiplier applied to input_stat.", 
@@ -510,9 +511,8 @@
           ]
         }
       ], 
-      "op": "Operation applied to all terms. Common: add, multiply."
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health)."
     }, 
-    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "base_by_rank": "Array of base values by ability rank (1-5)."
   }, 
   "base_stats": {

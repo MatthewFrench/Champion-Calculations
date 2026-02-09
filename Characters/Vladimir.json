@@ -1,18 +1,14 @@
 {
-  "role_tags": [
-    "Mage", 
-    "Fighter"
-  ], 
+  "data_version": "16.3.1", 
   "abilities": {
     "passive": {
-      "type": "Passive", 
       "description_source": "Every 30 points of bonus Health gives Vladimir 1 Ability Power and every 1 point of Ability Power gives Vladimir 1.6 bonus Health (does not stack with itself).", 
+      "type": "Passive", 
       "description": "Gain ability power equal to 3.3% of bonus health. Gain bonus health equal to 1.6 per 1 ability power.", 
-      "name": "Crimson Pact", 
       "effects": [
         {
           "formula": {
-            "output_stat": "ability_power", 
+            "op": "add", 
             "terms": [
               {
                 "coefficient": 0.033, 
@@ -20,14 +16,14 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "ability_power"
           }, 
           "id": "ability_power_from_bonus_health", 
           "description": "Gains Ability Power based on bonus health"
         }, 
         {
           "formula": {
-            "output_stat": "bonus_health", 
+            "op": "add", 
             "terms": [
               {
                 "coefficient": 1.6, 
@@ -35,12 +31,13 @@
                 "coefficient_type": "per_point"
               }
             ], 
-            "op": "add"
+            "output_stat": "bonus_health"
           }, 
           "id": "bonus_health_from_ability_power", 
           "description": "Gains bonus health based on Ability Power"
         }
-      ]
+      ], 
+      "name": "Crimson Pact"
     }, 
     "basic_ability_3": {
       "slot": "E", 
@@ -52,7 +49,7 @@
         7, 
         5
       ], 
-      "default_keybinding": "E", 
+      "type": "Active", 
       "description_source": "Vladimir pays his own health to charge up a reservoir of blood which, when released, deals damage in the area around him but can be blocked by enemy units.", 
       "range": 600, 
       "cost": {
@@ -68,7 +65,7 @@
       "effects": [
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -84,7 +81,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "minimum_damage", 
           "base_by_rank": [
@@ -98,7 +95,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -114,7 +111,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "maximum_damage", 
           "base_by_rank": [
@@ -128,16 +125,14 @@
         }, 
         {
           "formula": {
-            "op": "add", 
+            "output_stat": "slow_percent", 
             "terms": [
               {
                 "source": "base_by_rank"
               }
             ], 
-            "output_stat": "slow_percent"
+            "op": "add"
           }, 
-          "duration_seconds": 0.5, 
-          "id": "slow", 
           "base_by_rank": [
             40, 
             45, 
@@ -145,10 +140,12 @@
             55, 
             60
           ], 
+          "id": "slow", 
+          "duration_seconds": 0.5, 
           "description": "Slow if charged at least 1 second"
         }
       ], 
-      "type": "Active", 
+      "default_keybinding": "E", 
       "description": "Charge and release an area attack that deals magic damage scaling with max health and ability power; slows if charged at least 1s. Costs 2-8% max health based on charge."
     }, 
     "basic_ability_2": {
@@ -161,12 +158,12 @@
         19, 
         16
       ], 
-      "default_keybinding": "W", 
+      "type": "Active", 
       "description_source": "Vladimir sinks into a pool of blood, becoming untargetable for 2 seconds. Additionally, enemies on the pool are slowed and Vladimir siphons life from them.", 
       "range": 350, 
       "cost": {
-        "ratio": 0.15, 
         "resource": "current_health", 
+        "ratio": 0.15, 
         "ratio_type": "percent_of_stat"
       }, 
       "effects": [
@@ -187,7 +184,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_per_tick", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -198,8 +195,10 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_per_tick"
           }, 
+          "description": "Damage per tick", 
+          "id": "damage_per_tick", 
           "base_by_rank": [
             20, 
             33.75, 
@@ -207,13 +206,11 @@
             61.25, 
             75
           ], 
-          "id": "damage_per_tick", 
-          "tick_interval_seconds": 0.5, 
-          "description": "Damage per tick"
+          "tick_interval_seconds": 0.5
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage_total", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -224,8 +221,10 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage_total"
           }, 
+          "duration_seconds": 2, 
+          "id": "total_damage", 
           "base_by_rank": [
             80, 
             135, 
@@ -233,8 +232,6 @@
             245, 
             300
           ], 
-          "id": "total_damage", 
-          "duration_seconds": 2, 
           "description": "Total damage over duration"
         }, 
         {
@@ -245,7 +242,7 @@
                 "minions": 0.18
               }
             }, 
-            "output_stat": "heal", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -253,14 +250,14 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "heal"
           }, 
           "id": "heal_from_damage", 
           "context_notes": "Heal based on pre-mitigation damage dealt.", 
           "description": "Heal from damage dealt"
         }
       ], 
-      "type": "Active", 
+      "default_keybinding": "W", 
       "description": "Become untargetable for 2s, gain decaying move speed, slow enemies, and deal magic damage over time based on bonus health; heal for a percent of damage dealt. Costs 15% current health."
     }, 
     "basic_ability_1": {
@@ -273,17 +270,17 @@
         5.7, 
         4.6
       ], 
-      "default_keybinding": "Q", 
+      "type": "Active", 
       "description_source": "Vladimir steals life from the target enemy. When Vladimir's resource is full, Transfusion will benefit from massively increased damage and healing for a brief time.", 
       "range": 600, 
       "cost": {
-        "resource": "none", 
-        "value_type": "flat"
+        "value_type": "flat", 
+        "resource": "none"
       }, 
       "effects": [
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -294,7 +291,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "magic_damage", 
           "base_by_rank": [
@@ -308,7 +305,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "heal", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -319,7 +316,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "heal"
           }, 
           "id": "heal", 
           "base_by_rank": [
@@ -333,7 +330,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -344,10 +341,8 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
-          "context_notes": "Represents 85% increased damage over base values.", 
-          "id": "crimson_rush_increased_damage", 
           "base_by_rank": [
             148, 
             185, 
@@ -355,11 +350,13 @@
             259, 
             296
           ], 
+          "id": "crimson_rush_increased_damage", 
+          "context_notes": "Represents 85% increased damage over base values.", 
           "description": "Crimson Rush increased damage"
         }, 
         {
           "formula": {
-            "output_stat": "heal", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_champion_level"
@@ -375,7 +372,7 @@
                 "coefficient_type": "percent_per_100_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "heal"
           }, 
           "base_by_champion_level": [
             30, 
@@ -389,7 +386,7 @@
           "description": "Crimson Rush additional heal"
         }
       ], 
-      "type": "Active", 
+      "default_keybinding": "Q", 
       "description": "Deal magic damage and heal. During Crimson Rush, damage is increased and you gain additional healing based on missing health (reduced vs minions)."
     }, 
     "ultimate": {
@@ -400,12 +397,12 @@
         120, 
         120
       ], 
-      "default_keybinding": "R", 
+      "type": "Active", 
       "description_source": "Vladimir infects an area with a virulent plague. Affected enemies take increased damage for the duration. After a few seconds, Hemoplague deals magic damage to infected enemies and heals Vladimir for each enemy Champion hit.", 
       "range": 625, 
       "cost": {
-        "resource": "none", 
-        "value_type": "flat"
+        "value_type": "flat", 
+        "resource": "none"
       }, 
       "effects": [
         {
@@ -420,7 +417,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -431,7 +428,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "detonation_damage", 
           "base_by_rank": [
@@ -443,7 +440,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "heal", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -454,7 +451,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "heal"
           }, 
           "id": "heal_per_champion", 
           "base_by_rank": [
@@ -466,7 +463,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "heal_reduction_per_additional_champion", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -477,7 +474,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "heal_reduction_per_additional_champion"
           }, 
           "id": "reduced_heal_additional", 
           "base_by_rank": [
@@ -489,7 +486,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "max_total_heal", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -500,7 +497,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "max_total_heal"
           }, 
           "id": "max_total_heal", 
           "base_by_rank": [
@@ -511,7 +508,7 @@
           "description": "Maximum total heal from multiple champions"
         }
       ], 
-      "type": "Active", 
+      "default_keybinding": "R", 
       "description": "Infect enemies for 4s, causing them to take 10% increased damage. On detonation, deal magic damage and heal per champion hit (reduced for additional champions)."
     }
   }, 
@@ -519,9 +516,9 @@
   "sources": [
     {
       "path": "/Users/matthewfrench/Downloads/Vladimir.json", 
+      "used_for": "base stats, base ability values, cooldowns, costs", 
       "type": "Riot Data Dragon (local)", 
-      "accessed": "2026-02-09", 
-      "used_for": "base stats, base ability values, cooldowns, costs"
+      "accessed": "2026-02-09"
     }, 
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Crimson_Pact", 
@@ -577,8 +574,12 @@
     "missile_travel_time_seconds_per_unit": 0.000625, 
     "base_windup_seconds": 0.2999544072948328
   }, 
-  "data_version": "16.3.1", 
+  "role_tags": [
+    "Mage", 
+    "Fighter"
+  ], 
   "schema_notes": {
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
     "basic_attack": {
       "attack_type": "Ranged or melee.", 
@@ -593,7 +594,7 @@
     "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
     "formula": {
       "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
-      "op": "Operation applied to all terms. Common: add, multiply.", 
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
       "terms": [
         {
           "coefficient": "Numeric multiplier applied to input_stat.", 
@@ -607,9 +608,8 @@
           ]
         }
       ], 
-      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health)."
+      "op": "Operation applied to all terms. Common: add, multiply."
     }, 
-    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "base_by_rank": "Array of base values by ability rank (1-5)."
   }, 
   "base_stats": {
@@ -649,8 +649,8 @@
     "resource": {
       "per_level": 0, 
       "type": "health", 
-      "context_notes": "Source lists resource name 'Crimson Rush', but Vladimir ability costs use health.", 
-      "base": 2
+      "base": 2, 
+      "context_notes": "Source lists resource name 'Crimson Rush', but Vladimir ability costs use health."
     }, 
     "attack_range": 450
   }

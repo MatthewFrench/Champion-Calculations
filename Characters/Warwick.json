@@ -1,13 +1,14 @@
 {
   "abilities": {
     "passive": {
-      "type": "Passive", 
       "description_source": "Warwick's basic attacks deal bonus magic damage. If Warwick is below 50% health, he heals the same amount. If Warwick is below 25% health, this healing triples.", 
+      "type": "Passive", 
       "description": "Basic attacks deal bonus magic damage scaling with level, bonus AD, and AP. Heal for damage dealt below 50% health (increased below 25%).", 
+      "name": "Eternal Hunger", 
       "effects": [
         {
           "formula": {
-            "output_stat": "bonus_magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_champion_level"
@@ -23,7 +24,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "bonus_magic_damage"
           }, 
           "base_by_champion_level": [
             12, 
@@ -37,11 +38,11 @@
           "formula": {
             "contextual_multipliers": {
               "by_self_health_percent": {
-                "below_25_percent": 2.5, 
-                "below_50_percent": 1.0
+                "below_50_percent": 1.0, 
+                "below_25_percent": 2.5
               }
             }, 
-            "output_stat": "heal", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -49,14 +50,13 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "heal"
           }, 
           "id": "heal_from_passive_damage", 
           "context_notes": "Heal equals damage dealt below 50% health; increased to 250% below 25%.", 
           "description": "Heal from passive damage when low health"
         }
-      ], 
-      "name": "Eternal Hunger"
+      ]
     }, 
     "basic_ability_3": {
       "slot": "E", 
@@ -68,12 +68,12 @@
         12, 
         11
       ], 
-      "type": "Active", 
+      "default_keybinding": "E", 
       "description_source": "Warwick gains damage reduction for 2.5 seconds. At the end, or if re-activated, he howls, causing nearby enemies to flee for 1 second.", 
       "range": 375, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 40
       }, 
       "effects": [
@@ -106,7 +106,7 @@
           "description": "Recast delay"
         }
       ], 
-      "default_keybinding": "E", 
+      "type": "Active", 
       "description": "Gain damage reduction for 2.5s, then fear nearby enemies and slow them; can recast after 1s."
     }, 
     "basic_ability_2": {
@@ -119,13 +119,13 @@
         55, 
         40
       ], 
-      "type": "Active", 
+      "default_keybinding": "W", 
       "description_source": "Warwick senses enemies below 50% health, gaining Move Speed toward and attack speed against them. When they fall below 25% health, he frenzies and these bonuses triple.", 
       "context_notes": "Passive attack speed applies to targets below 50% health; movement speed applies when following trails toward low-health champions. Active marks nearest enemy champion for 8 seconds.", 
       "range": 4000, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 70
       }, 
       "effects": [
@@ -184,12 +184,12 @@
           "description": "Static cooldown during champion combat"
         }, 
         {
-          "value_multiplier": 2.0, 
+          "description": "Cooldown runs twice as fast when no enemy champions are marked", 
           "id": "cooldown_reduction_when_no_targets", 
-          "description": "Cooldown runs twice as fast when no enemy champions are marked"
+          "value_multiplier": 2.0
         }
       ], 
-      "default_keybinding": "W", 
+      "type": "Active", 
       "description": "Sense low-health enemy champions, granting bonus move speed toward them and bonus attack speed against them; bonuses are increased against targets below 25% health. Active marks the nearest enemy champion for 8s."
     }, 
     "basic_ability_1": {
@@ -202,12 +202,12 @@
         6, 
         6
       ], 
-      "type": "Active", 
+      "default_keybinding": "Q", 
       "description_source": "Warwick lunges forward and bites his target, dealing damage based on their maximum health and healing for damage dealt.", 
       "context_notes": "Range shown as target range 350; ability lunges to target.", 
       "range": 350, 
       "cost": {
-        "value_type": "flat", 
+        "resource": "mana", 
         "value_by_rank": [
           50, 
           60, 
@@ -215,7 +215,7 @@
           80, 
           90
         ], 
-        "resource": "mana"
+        "value_type": "flat"
       }, 
       "effects": [
         {
@@ -229,7 +229,7 @@
                 0.1
               ]
             }, 
-            "output_stat": "magic_damage", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -237,14 +237,14 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "magic_damage"
           }, 
           "id": "magic_damage_percent_target_max_health", 
           "description": "Magic damage based on target max health"
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "coefficient": 1.2, 
@@ -257,14 +257,14 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "magic_damage_bonus_ad_ap", 
           "description": "Bonus damage scaling"
         }, 
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -280,7 +280,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "monster_damage_cap", 
           "base_by_rank": [
@@ -303,7 +303,7 @@
                 0.75
               ]
             }, 
-            "output_stat": "heal", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -311,14 +311,14 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "heal"
           }, 
           "id": "heal_from_q_damage", 
           "context_notes": "Healing is based on post-mitigation damage dealt by Q only.", 
           "description": "Heal from Q damage dealt"
         }
       ], 
-      "default_keybinding": "Q", 
+      "type": "Active", 
       "description": "Bite a target to deal magic damage based on target max health plus AD/AP scaling and heal for a percent of damage dealt; has a monster damage cap."
     }, 
     "ultimate": {
@@ -329,19 +329,19 @@
         90, 
         70
       ], 
-      "type": "Active", 
+      "default_keybinding": "R", 
       "description_source": "Warwick leaps in a direction (scaling with his bonus Move Speed), suppressing the first champion he collides with for 1.5 seconds.", 
       "context_notes": "Range scales with current movement speed (250% movement speed).", 
       "range": 0, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 100
       }, 
       "effects": [
         {
           "formula": {
-            "output_stat": "magic_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -352,7 +352,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "magic_damage"
           }, 
           "id": "total_magic_damage", 
           "base_by_rank": [
@@ -369,7 +369,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "heal", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -377,7 +377,7 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "heal"
           }, 
           "id": "heal_from_damage", 
           "context_notes": "Heals for 100% of post-mitigation damage dealt to the target during the channel.", 
@@ -389,7 +389,7 @@
           "description": "On-hit and on-attack applications"
         }
       ], 
-      "default_keybinding": "R", 
+      "type": "Active", 
       "description": "Leap to suppress a target for 1.5s, applying on-hit effects three times, dealing total magic damage scaling with bonus AD, and healing for damage dealt."
     }
   }, 
@@ -419,9 +419,9 @@
   "sources": [
     {
       "path": "/Users/matthewfrench/Downloads/Warwick.json", 
-      "used_for": "base stats, base ability values, cooldowns, costs", 
       "type": "Riot Data Dragon (local)", 
-      "accessed": "2026-02-09"
+      "accessed": "2026-02-09", 
+      "used_for": "base stats, base ability values, cooldowns, costs"
     }, 
     {
       "url": "https://leagueoflegends.fandom.com/wiki/Warwick/LoL", 
@@ -443,6 +443,7 @@
     }
   ], 
   "schema_notes": {
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
     "basic_attack": {
       "attack_type": "Ranged or melee.", 
@@ -457,7 +458,7 @@
     "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
     "formula": {
       "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
-      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "op": "Operation applied to all terms. Common: add, multiply.", 
       "terms": [
         {
           "coefficient": "Numeric multiplier applied to input_stat.", 
@@ -471,9 +472,8 @@
           ]
         }
       ], 
-      "op": "Operation applied to all terms. Common: add, multiply."
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health)."
     }, 
-    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "base_by_rank": "Array of base values by ability rank (1-5)."
   }, 
   "base_stats": {

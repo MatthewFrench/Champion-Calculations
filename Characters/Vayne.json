@@ -1,21 +1,20 @@
 {
   "abilities": {
     "passive": {
-      "type": "Passive", 
       "description_source": "Vayne ruthlessly hunts evil-doers, gaining Move Speed when moving toward nearby enemy champions.", 
+      "type": "Passive", 
       "description": "Gain bonus move speed while facing a nearby enemy champion, increased during Final Hour; persists briefly after losing sight.", 
-      "name": "Night Hunter", 
       "effects": [
         {
+          "description": "Bonus movement speed while facing nearby enemy champion", 
           "id": "bonus_move_speed", 
-          "value_flat": 30, 
           "context_notes": "Bonus movement speed is flat, not percent. Persists 2 seconds after losing sight.", 
-          "description": "Bonus movement speed while facing nearby enemy champion"
+          "value_flat": 30
         }, 
         {
+          "id": "bonus_move_speed_final_hour", 
           "description": "Bonus movement speed during Final Hour", 
-          "value_flat": 90, 
-          "id": "bonus_move_speed_final_hour"
+          "value_flat": 90
         }, 
         {
           "value_units": 2000, 
@@ -27,7 +26,8 @@
           "id": "persistence_after_los", 
           "description": "Bonus duration after losing sight of enemy champion"
         }
-      ]
+      ], 
+      "name": "Night Hunter"
     }, 
     "basic_ability_3": {
       "slot": "E", 
@@ -39,12 +39,12 @@
         14, 
         12
       ], 
-      "type": "Active", 
+      "default_keybinding": "E", 
       "description_source": "Vayne draws a heavy crossbow from her back, and fires a huge bolt at her target, knocking them back and dealing damage. If they collide with terrain, they are impaled, dealing bonus damage and stunning them.", 
       "context_notes": "Missile speed is 2200/2000; knockback distance 475 units. Cast time 0.25s.", 
       "range": 550, 
       "cost": {
-        "value_type": "flat", 
+        "resource": "mana", 
         "value_by_rank": [
           90, 
           90, 
@@ -52,12 +52,12 @@
           90, 
           90
         ], 
-        "resource": "mana"
+        "value_type": "flat"
       }, 
       "effects": [
         {
           "formula": {
-            "output_stat": "physical_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -68,7 +68,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "physical_damage"
           }, 
           "id": "physical_damage", 
           "base_by_rank": [
@@ -82,7 +82,7 @@
         }, 
         {
           "formula": {
-            "output_stat": "physical_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
@@ -93,7 +93,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "physical_damage"
           }, 
           "id": "bonus_physical_damage_on_wall", 
           "base_by_rank": [
@@ -111,7 +111,7 @@
           "description": "Stun duration on terrain collision"
         }
       ], 
-      "default_keybinding": "E", 
+      "type": "Active", 
       "description": "Knock back an enemy; if they collide with terrain, deal bonus damage and stun for 1.5s."
     }, 
     "basic_ability_2": {
@@ -124,12 +124,12 @@
         0, 
         0
       ], 
-      "type": "Active", 
+      "default_keybinding": "W", 
       "description_source": "Vayne tips her bolts with a rare metal, toxic to evil things. The third consecutive attack or ability against the same target deals a percentage of the target's max health as bonus true damage.", 
       "range": 0, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 0
       }, 
       "effects": [
@@ -154,7 +154,7 @@
                 0.1
               ]
             }, 
-            "output_stat": "true_damage", 
+            "op": "multiply", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -162,20 +162,20 @@
                 "coefficient_type": "multiplier"
               }
             ], 
-            "op": "multiply"
+            "output_stat": "true_damage"
           }, 
           "id": "bonus_true_damage_percent_target_max_health", 
           "description": "Bonus true damage based on target max health"
         }, 
         {
           "formula": {
-            "output_stat": "true_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
               }
             ], 
-            "op": "add"
+            "output_stat": "true_damage"
           }, 
           "id": "minimum_bonus_true_damage", 
           "base_by_rank": [
@@ -193,7 +193,7 @@
           "description": "Bonus true damage cap vs monsters"
         }
       ], 
-      "default_keybinding": "W", 
+      "type": "Active", 
       "description": "Every third attack on the same target deals bonus true damage based on target max health (with a minimum value) and has a monster cap."
     }, 
     "basic_ability_1": {
@@ -206,12 +206,12 @@
         3, 
         2
       ], 
-      "type": "Active", 
+      "default_keybinding": "Q", 
       "description_source": "Vayne tumbles, maneuvering to carefully place her next shot. Her next attack deals bonus damage.", 
       "context_notes": "Dash speed is 500 + total movement speed. Tumble resets basic attack timer.", 
       "range": 300, 
       "cost": {
-        "value_type": "flat", 
+        "resource": "mana", 
         "value_by_rank": [
           30, 
           30, 
@@ -219,7 +219,7 @@
           30, 
           30
         ], 
-        "resource": "mana"
+        "value_type": "flat"
       }, 
       "effects": [
         {
@@ -233,7 +233,7 @@
                 1.15
               ]
             }, 
-            "output_stat": "bonus_physical_damage", 
+            "op": "add", 
             "terms": [
               {
                 "coefficient": 1.0, 
@@ -246,7 +246,7 @@
                 "coefficient_type": "percent_of_stat"
               }
             ], 
-            "op": "add"
+            "output_stat": "bonus_physical_damage"
           }, 
           "id": "bonus_physical_damage", 
           "context_notes": "Bonus damage scales off total AD by rank (75% to 115%) plus 50% AP.", 
@@ -258,7 +258,7 @@
           "description": "Duration to use empowered attack"
         }
       ], 
-      "default_keybinding": "Q", 
+      "type": "Active", 
       "description": "Dash and empower your next basic attack within 3s to deal bonus physical damage based on total AD and ability power."
     }, 
     "ultimate": {
@@ -269,34 +269,34 @@
         85, 
         70
       ], 
-      "type": "Active", 
+      "default_keybinding": "R", 
       "description_source": "Readying herself for an epic confrontation, Vayne gains increased Attack Damage, Invisibility during Tumble, reduced Tumble cooldown, and more bonus Move Speed from Night Hunter", 
       "context_notes": "While active, Night Hunter bonus movement speed is tripled.", 
       "range": 0, 
       "cost": {
-        "value_type": "flat", 
         "resource": "mana", 
+        "value_type": "flat", 
         "value": 80
       }, 
       "effects": [
         {
+          "id": "duration", 
           "description": "Duration", 
           "value_seconds_by_rank": [
             8, 
             10, 
             12
-          ], 
-          "id": "duration"
+          ]
         }, 
         {
           "formula": {
-            "output_stat": "bonus_attack_damage", 
+            "op": "add", 
             "terms": [
               {
                 "source": "base_by_rank"
               }
             ], 
-            "op": "add"
+            "output_stat": "bonus_attack_damage"
           }, 
           "id": "bonus_attack_damage", 
           "base_by_rank": [
@@ -327,7 +327,7 @@
           "description": "Duration extension on takedown"
         }
       ], 
-      "default_keybinding": "R", 
+      "type": "Active", 
       "description": "Empower yourself for a duration with bonus attack damage; Tumble has reduced cooldown and grants brief invisibility. Takedowns extend the duration. Night Hunter bonus movement speed is tripled during the effect."
     }
   }, 
@@ -357,9 +357,9 @@
   "sources": [
     {
       "path": "/Users/matthewfrench/Downloads/Vayne.json", 
-      "used_for": "base stats, base ability values, cooldowns, costs", 
       "type": "Riot Data Dragon (local)", 
-      "accessed": "2026-02-09"
+      "accessed": "2026-02-09", 
+      "used_for": "base stats, base ability values, cooldowns, costs"
     }, 
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vayne/Night_Hunter", 
@@ -405,6 +405,7 @@
     }
   ], 
   "schema_notes": {
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
     "basic_attack": {
       "attack_type": "Ranged or melee.", 
@@ -419,7 +420,7 @@
     "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
     "formula": {
       "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
-      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "op": "Operation applied to all terms. Common: add, multiply.", 
       "terms": [
         {
           "coefficient": "Numeric multiplier applied to input_stat.", 
@@ -433,9 +434,8 @@
           ]
         }
       ], 
-      "op": "Operation applied to all terms. Common: add, multiply."
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health)."
     }, 
-    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
     "base_by_rank": "Array of base values by ability rank (1-5)."
   }, 
   "base_stats": {
