@@ -295,6 +295,17 @@
       "effects_structured": [
         {
           "raw": "Basic attacks and single target spells deal 1 / 2 / 3 / 4 / 5 bonus damage to minions and monsters .",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": null,
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1,
             2,
@@ -302,7 +313,9 @@
             4,
             5
           ],
-          "unit_hint": null
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": "minion"
         }
       ],
       "cooldown": "",
@@ -338,6 +351,21 @@
       "effects_structured": [
         {
           "raw": "Increases champion movement speed by 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% when out of combat.",
+          "effect_type": "stat_modifier",
+          "stat": "movement_speed",
+          "unit": "percent",
+          "values": [
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             6,
@@ -349,7 +377,9 @@
             4,
             3
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": "conditional",
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -385,10 +415,17 @@
       "effects_structured": [
         {
           "raw": "Grants 2% increased damage against enemy champions while no allied champions are nearby.",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             2
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "enemy_champion"
         }
       ],
       "cooldown": "",
@@ -424,10 +461,17 @@
       "effects_structured": [
         {
           "raw": "Buffs granted by jungle monsters last 15% longer, including epic monsters.",
+          "effect_type": "stat_modifier",
+          "stat": null,
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             15
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "monster"
         }
       ],
       "cooldown": "",
@@ -463,11 +507,18 @@
       "effects_structured": [
         {
           "raw": "Your potions ( Health Potion , refillable potions ( Refillable , Corrupting , Hunter's Potion ) and elixirs ( Elixir of Iron , Sorcery , Wrath ) last 10% longer. Additionally, your Health Potions are replaced with Total Biscuits of Rejuvenation that restore an additional 15 health and mana instantly upon consumption.",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             10,
             15
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "ally"
         }
       ],
       "cooldown": "",
@@ -503,6 +554,22 @@
       "effects_structured": [
         {
           "raw": "Once every 5 seconds, you will restore 0. 25 / 0. 5 / 0. 75 / 1 / 1. 25 % of missing mana .",
+          "effect_type": "stat_modifier",
+          "stat": "mana",
+          "unit": "percent",
+          "values": [
+            5,
+            0.0,
+            25,
+            0.0,
+            5,
+            0.0,
+            75,
+            1,
+            1.0,
+            25
+          ],
+          "value_range": null,
           "numbers_extracted": [
             5,
             0.0,
@@ -515,7 +582,9 @@
             1.0,
             25
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -551,6 +620,22 @@
       "effects_structured": [
         {
           "raw": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3% increased damage against champions below 40% health .",
+          "effect_type": "damage",
+          "stat": "health",
+          "unit": "percent",
+          "values": [
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3,
+            40
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             6,
@@ -563,7 +648,9 @@
             3,
             40
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -599,12 +686,23 @@
       "effects_structured": [
         {
           "raw": "Gain 1 for each nearby minion killed by an ally. Gain 3 / 10 when hitting an enemy champion with a basic attack or an ability that applies on-hit effects .",
+          "effect_type": "stat_modifier",
+          "stat": null,
+          "unit": null,
+          "values": [
+            1,
+            3,
+            10
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1,
             3,
             10
           ],
-          "unit_hint": null
+          "scaling": "per_rank",
+          "trigger": "on_hit",
+          "applies_to": "enemy"
         }
       ],
       "cooldown": "5",
@@ -640,11 +738,18 @@
       "effects_structured": [
         {
           "raw": "Champion kills and assists restore 5% of missing health and 5% of missing mana .",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             5,
             5
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": "on_kill",
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -680,6 +785,22 @@
       "effects_structured": [
         {
           "raw": "Increases the cooldown reduction cap by 1 / 2 / 3 / 4 / 5% and grants 1 / 2 / 3 / 4 / 5% cooldown reduction .",
+          "effect_type": "cooldown",
+          "stat": "cooldown",
+          "unit": "percent",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1,
             2,
@@ -692,7 +813,9 @@
             4,
             5
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -728,6 +851,68 @@
       "effects_structured": [
         {
           "raw": "Grants 1. 2 / 2. 4 / 3. 6 / 4. 8 / 6 Lethality and 0. 3 + (0. 05 × level) / 0. 6 + (0. 1 × level) / 0. 9 + (0. 15 × level) / 1. 2 + (0. 2 × level) / 1. 5 + (0. 25 × level) magic penetration Rank 1: 0. 35 – 1. 2 (based on level) Rank 2: 0. 7 – 2. 4 (based on level) Rank 3: 1. 05 – 3. 6 (based on level) Rank 4: 1. 4 – 4. 8 (based on level) Rank 5: 1. 75 – 6 (based on level)",
+          "effect_type": "stat_modifier",
+          "stat": "magic_penetration",
+          "unit": null,
+          "values": [
+            1.0,
+            2,
+            2.0,
+            4,
+            3.0,
+            6,
+            4.0,
+            8,
+            6,
+            0.0,
+            3,
+            0.0,
+            5,
+            0.0,
+            6,
+            0.0,
+            1,
+            0.0,
+            9,
+            0.0,
+            15,
+            1.0,
+            2,
+            0.0,
+            2,
+            1.0,
+            5,
+            0.0,
+            25,
+            1,
+            0.0,
+            35,
+            1.0,
+            2,
+            2,
+            0.0,
+            7,
+            2.0,
+            4,
+            3,
+            1.0,
+            5,
+            3.0,
+            6,
+            4,
+            1.0,
+            4,
+            4.0,
+            8,
+            5,
+            1.0,
+            75,
+            6
+          ],
+          "value_range": [
+            35,
+            1.0
+          ],
           "numbers_extracted": [
             1.0,
             2,
@@ -783,7 +968,9 @@
             75,
             6
           ],
-          "unit_hint": null
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -819,6 +1006,11 @@
       "effects_structured": [
         {
           "raw": "Dealing 30% of a champion's maximum health within 2. 5 seconds grants you 40% bonus movement speed and 75% Slow Resist for 3 seconds.",
+          "effect_type": "healing",
+          "stat": "movement_speed",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             30,
             2.0,
@@ -827,7 +1019,9 @@
             75,
             3
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "10",
@@ -863,6 +1057,14 @@
       "effects_structured": [
         {
           "raw": "Hitting an enemy champion with an ability ( ability damage ) or basic attack ( on-hit ) marks them with Thunderlord's Decree for 3 seconds. At 3 stacks, the target is dealt 10 – 180 (based on level) + (30% bonus AD) + (10% AP) magic damage in an area around them. Thunderlord's Decree can only be triggered once every 25 – 15 (based on level) seconds. Persistent area of effects, such as Fiddlesticks' Crowstorm and Morgana's Tormented Soil , hit with each application of damage. Applied damage over time effects, like Fiddlesticks' Drain or Swain's Torment , only hit once.",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": [
+            10,
+            180
+          ],
           "numbers_extracted": [
             3,
             3,
@@ -873,7 +1075,9 @@
             25,
             15
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": "on_hit",
+          "applies_to": "enemy"
         }
       ],
       "cooldown": "",
@@ -909,6 +1113,14 @@
       "effects_structured": [
         {
           "raw": "Your heals and shields are 10% stronger. Additionally, heals and shields on allies increase your target's armor by 5 – 22 (based on level) and magic resistance by 2. 5 – 11 (based on level) for 3 seconds.",
+          "effect_type": "healing",
+          "stat": "armor",
+          "unit": "percent",
+          "values": null,
+          "value_range": [
+            5,
+            22
+          ],
           "numbers_extracted": [
             10,
             5,
@@ -918,7 +1130,9 @@
             11,
             3
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "ally"
         }
       ],
       "cooldown": "",
@@ -954,6 +1168,21 @@
       "effects_structured": [
         {
           "raw": "Increases champion attack speed by 0. 8 / 1. 6 / 2. 4 / 3. 2 / 4%.",
+          "effect_type": "stat_modifier",
+          "stat": "attack_speed",
+          "unit": "percent",
+          "values": [
+            0.0,
+            8,
+            1.0,
+            6,
+            2.0,
+            4,
+            3.0,
+            2,
+            4
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             8,
@@ -965,7 +1194,9 @@
             2,
             4
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1001,6 +1232,21 @@
       "effects_structured": [
         {
           "raw": "Increases ability and spell damage by 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2%.",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             4,
@@ -1012,7 +1258,9 @@
             6,
             2
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1048,11 +1296,18 @@
       "effects_structured": [
         {
           "raw": "Your damaging abilities debuff enemies for 3 seconds, increasing the damage they take from allied champions by 3%.",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             3,
             3
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1088,10 +1343,17 @@
       "effects_structured": [
         {
           "raw": "Killing a unit restores 20 health .",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": null,
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             20
           ],
-          "unit_hint": null
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "30",
@@ -1127,6 +1389,62 @@
       "effects_structured": [
         {
           "raw": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 + (0. 089 / 0. 178 / 0. 267 / 0. 356 / 0. 444 × level) attack damage (2 / 4 / 6 / 8 / 10 at level 18) and 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 + (0. 133 / 0. 267 / 0. 4 / 0. 533 / 0. 667 × level) ability power (3 / 6 / 9 / 12 / 15 at level 18).",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": null,
+          "values": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2,
+            0.0,
+            89,
+            0.0,
+            178,
+            0.0,
+            267,
+            0.0,
+            356,
+            0.0,
+            444,
+            2,
+            4,
+            6,
+            8,
+            10,
+            18,
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3,
+            0.0,
+            133,
+            0.0,
+            267,
+            0.0,
+            4,
+            0.0,
+            533,
+            0.0,
+            667,
+            3,
+            6,
+            9,
+            12,
+            15,
+            18
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             4,
@@ -1179,7 +1497,9 @@
             15,
             18
           ],
-          "unit_hint": null
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1215,6 +1535,21 @@
       "effects_structured": [
         {
           "raw": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2% life steal and spell vamp .",
+          "effect_type": "stat_modifier",
+          "stat": "spell_vamp",
+          "unit": "percent",
+          "values": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             4,
@@ -1226,7 +1561,9 @@
             6,
             2
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1262,11 +1599,18 @@
       "effects_structured": [
         {
           "raw": "Grants 1% increased damage for each unique enemy champion you kill. (Your damage output increases by 1% each time you kill an enemy champion for the first time)",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             1,
             1
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "enemy"
         }
       ],
       "cooldown": "",
@@ -1302,12 +1646,19 @@
       "effects_structured": [
         {
           "raw": "You deal 3% increased damage from all sources, but take 1. 5 % increased damage from all sources.",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             3,
             1.0,
             5
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1343,11 +1694,18 @@
       "effects_structured": [
         {
           "raw": "Grants 2. 5 % increased damage against units with impaired movement ( airborne , slow , stun , root , taunt , suppression ).",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             2.0,
             5
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1383,6 +1741,21 @@
       "effects_structured": [
         {
           "raw": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% armor penetration .",
+          "effect_type": "stat_modifier",
+          "stat": "armor",
+          "unit": "percent",
+          "values": [
+            1.0,
+            4,
+            2.0,
+            8,
+            4.0,
+            2,
+            5.0,
+            6,
+            7
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1.0,
             4,
@@ -1394,7 +1767,9 @@
             6,
             7
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1430,6 +1805,21 @@
       "effects_structured": [
         {
           "raw": "Grants 1. 4 / 2. 8 / 4. 2 / 5. 6 / 7% magic penetration .",
+          "effect_type": "stat_modifier",
+          "stat": "magic_penetration",
+          "unit": "percent",
+          "values": [
+            1.0,
+            4,
+            2.0,
+            8,
+            4.0,
+            2,
+            5.0,
+            6,
+            7
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1.0,
             4,
@@ -1441,7 +1831,9 @@
             6,
             7
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1477,6 +1869,11 @@
       "effects_structured": [
         {
           "raw": "Dealing ability damage to enemy champions applies a bleed, dealing 1 (+ 3. 125 % AP) (+ 5. 625 % bonus AD) magic damage every half-second for a duration based on their type. Single Target : 4 seconds for a total of 8 (+ 25% AP) (+ 45% bonus AD) magic damage. Area of effect : 2 seconds for a total of 4 (+ 12. 5 % AP) (+ 22. 5 % bonus AD) magic damage. Damage over time : 1 second for a total of 2 (+ 6. 25 % AP) (+ 11. 25 % bonus AD) magic damage.",
+          "effect_type": "damage",
+          "stat": "duration",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             1,
             3.0,
@@ -1500,7 +1897,9 @@
             11.0,
             25
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "enemy_champion"
         }
       ],
       "cooldown": "",
@@ -1536,23 +1935,45 @@
       "effects_structured": [
         {
           "raw": "You gain ( 2 / 1 ) stacks of Fervor for 8 seconds with each basic attack on-hit against an enemy champion , stacking up to 8 times.",
+          "effect_type": "stat_modifier",
+          "stat": null,
+          "unit": "seconds",
+          "values": [
+            2,
+            1,
+            8,
+            8
+          ],
+          "value_range": null,
           "numbers_extracted": [
             2,
             1,
             8,
             8
           ],
-          "unit_hint": "seconds"
+          "scaling": "per_rank",
+          "trigger": "on_hit",
+          "applies_to": "enemy"
         },
         {
           "raw": "Each stack of Fervor adds 1 – 8 (based on level) AD for a maximum of 8 – 64 (based on level) AD .",
+          "effect_type": "stat_modifier",
+          "stat": null,
+          "unit": null,
+          "values": null,
+          "value_range": [
+            1,
+            8
+          ],
           "numbers_extracted": [
             1,
             8,
             8,
             64
           ],
-          "unit_hint": null
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1588,6 +2009,11 @@
       "effects_structured": [
         {
           "raw": "Moving or attacking makes an attack Energized . Energized attacks heal for 5% – 40% (based on level) AD and grant 30% movement speed for 0. 75 seconds.",
+          "effect_type": "healing",
+          "stat": "movement_speed",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             5,
             40,
@@ -1595,16 +2021,25 @@
             0.0,
             75
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         },
         {
           "raw": "If the Energized attack critically strikes , it instead heals for 5% – 40% (based on level) AD × (2 + bonus critical strike damage ).",
+          "effect_type": "damage",
+          "stat": "damage",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             5,
             40,
             2
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "ally"
         }
       ],
       "cooldown": "",
@@ -1640,6 +2075,22 @@
       "effects_structured": [
         {
           "raw": "Grants 0. 4 / 0. 8 / 1. 2 / 1. 6 / 2 health regeneration per 5 seconds.",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": "seconds",
+          "values": [
+            0.0,
+            4,
+            0.0,
+            8,
+            1.0,
+            2,
+            1.0,
+            6,
+            2,
+            5
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             4,
@@ -1652,7 +2103,9 @@
             2,
             5
           ],
-          "unit_hint": "seconds"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1688,6 +2141,17 @@
       "effects_structured": [
         {
           "raw": "Increases bonus armor and magic resistance by 1 / 2 / 3 / 4 / 5%.",
+          "effect_type": "stat_modifier",
+          "stat": "armor",
+          "unit": "percent",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1,
             2,
@@ -1695,7 +2159,9 @@
             4,
             5
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1731,10 +2197,17 @@
       "effects_structured": [
         {
           "raw": "Grants 15 bonus flat movement speed in brush and river.",
+          "effect_type": "stat_modifier",
+          "stat": "movement_speed",
+          "unit": null,
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             15
           ],
-          "unit_hint": null
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1770,10 +2243,17 @@
       "effects_structured": [
         {
           "raw": "Reduces damage from champion's and monster's basic attacks by 2 after armor reductions.",
+          "effect_type": "damage",
+          "stat": "armor",
+          "unit": null,
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             2
           ],
-          "unit_hint": null
+          "scaling": null,
+          "trigger": "conditional",
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1809,6 +2289,21 @@
       "effects_structured": [
         {
           "raw": "Grants 1. 6 / 3. 2 / 4. 8 / 6. 4 / 8% stronger shields and health restoration on you (includes life steal , spell vamp and health regeneration ).",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": "percent",
+          "values": [
+            1.0,
+            6,
+            3.0,
+            2,
+            4.0,
+            8,
+            6.0,
+            4,
+            8
+          ],
+          "value_range": null,
           "numbers_extracted": [
             1.0,
             6,
@@ -1820,7 +2315,9 @@
             4,
             8
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1856,6 +2353,17 @@
       "effects_structured": [
         {
           "raw": "Grants 10 / 20 / 30 / 40 / 50 health .",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": null,
+          "values": [
+            10,
+            20,
+            30,
+            40,
+            50
+          ],
+          "value_range": null,
           "numbers_extracted": [
             10,
             20,
@@ -1863,7 +2371,9 @@
             40,
             50
           ],
-          "unit_hint": null
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1899,10 +2409,17 @@
       "effects_structured": [
         {
           "raw": "Grants 15% reduced summoner spell cooldowns.",
+          "effect_type": "cooldown",
+          "stat": "cooldown",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             15
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1938,12 +2455,19 @@
       "effects_structured": [
         {
           "raw": "Grants +50% base health regeneration , increased to +200% while below 25% health .",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             50,
             200,
             25
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -1979,6 +2503,21 @@
       "effects_structured": [
         {
           "raw": "Grants 0. 6 / 1. 2 / 1. 8 / 2. 4 / 3 bonus armor and magic resistance for each nearby enemy champion.",
+          "effect_type": "stat_modifier",
+          "stat": "armor",
+          "unit": null,
+          "values": [
+            0.0,
+            6,
+            1.0,
+            2,
+            1.0,
+            8,
+            2.0,
+            4,
+            3
+          ],
+          "value_range": null,
           "numbers_extracted": [
             0.0,
             6,
@@ -1990,7 +2529,9 @@
             4,
             3
           ],
-          "unit_hint": null
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": "enemy"
         }
       ],
       "cooldown": "",
@@ -2026,6 +2567,17 @@
       "effects_structured": [
         {
           "raw": "Grants 3 / 6 / 9 / 12 / 15% Tenacity and Slow Resist .",
+          "effect_type": "stat_modifier",
+          "stat": "tenacity",
+          "unit": "percent",
+          "values": [
+            3,
+            6,
+            9,
+            12,
+            15
+          ],
+          "value_range": null,
           "numbers_extracted": [
             3,
             6,
@@ -2033,7 +2585,9 @@
             12,
             15
           ],
-          "unit_hint": "percent"
+          "scaling": "per_rank",
+          "trigger": null,
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -2069,12 +2623,19 @@
       "effects_structured": [
         {
           "raw": "Grants 4% reduced damage. In addition to that, 6% of the damage that allied champions would take from enemy champions is dealt to you instead (cannot reduce you below 5% maximum health ).",
+          "effect_type": "damage",
+          "stat": "health",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             4,
             6,
             5
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": null,
+          "applies_to": "enemy_champion"
         }
       ],
       "cooldown": "",
@@ -2110,6 +2671,11 @@
       "effects_structured": [
         {
           "raw": "After being in combat for 4 seconds, your next attack against an enemy champion deals magic damage and heals you for an amount. Melee champions : deals 3% of your maximum health and heals for 1. 5 % of your maximum health . Ranged champions : deals 1. 5 % of your maximum health and heals for 0. 75 % of your maximum health .",
+          "effect_type": "damage",
+          "stat": "health",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             4,
             3,
@@ -2120,7 +2686,9 @@
             0.0,
             75
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": "conditional",
+          "applies_to": "enemy"
         }
       ],
       "cooldown": "",
@@ -2156,19 +2724,33 @@
       "effects_structured": [
         {
           "raw": "You can stack up to 300 permanent health by killing or being nearby when an allied champion kills a large monster or siege minion: + 20 permanent health for each siege minion. + 10 permanent health for each large or epic monster.",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": null,
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             300,
             20,
             10
           ],
-          "unit_hint": null
+          "scaling": null,
+          "trigger": "on_kill",
+          "applies_to": null
         },
         {
           "raw": "After reaching the maximum bonus, killing or being nearby to further siege minion or large monster takedowns restore 6% of your maximum health .",
+          "effect_type": "healing",
+          "stat": "health",
+          "unit": "percent",
+          "values": null,
+          "value_range": null,
           "numbers_extracted": [
             6
           ],
-          "unit_hint": "percent"
+          "scaling": null,
+          "trigger": "conditional",
+          "applies_to": null
         }
       ],
       "cooldown": "",
@@ -2189,5 +2771,8 @@
       "source_template": "Template:Mastery data Strength of the Ages",
       "source_url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data_Strength_of_the_Ages"
     }
-  ]
+  ],
+  "schema_notes": {
+    "effects_structured": "Enhanced parsing: units, per-rank arrays, triggers, applies_to, effect_type, stat mapping."
+  }
 }
