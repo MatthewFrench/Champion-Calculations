@@ -2774,5 +2774,34 @@
   ],
   "schema_notes": {
     "effects_structured": "Enhanced parsing: units, per-rank arrays, triggers, applies_to, effect_type, stat mapping."
-  }
+  },
+  "canonical_stat_keys": [
+    "ability_haste",
+    "ability_power",
+    "adaptive",
+    "armor",
+    "attack_damage",
+    "attack_speed",
+    "cooldown",
+    "critical_strike",
+    "damage",
+    "energy",
+    "experience",
+    "gold",
+    "healing",
+    "health",
+    "lifesteal",
+    "magic_damage",
+    "magic_resistance",
+    "mana",
+    "mana_regen",
+    "missing_health",
+    "movement_speed",
+    "omnivamp",
+    "physical_damage",
+    "shield",
+    "slow_resist",
+    "tenacity",
+    "true_damage"
+  ]
 }
