@@ -1,657 +1,677 @@
 {
-  "data_version": "16.3.1", 
+  "data_version": "16.3.1",
   "abilities": {
     "passive": {
-      "description_source": "Every 30 points of bonus Health gives Vladimir 1 Ability Power and every 1 point of Ability Power gives Vladimir 1.6 bonus Health (does not stack with itself).", 
-      "type": "Passive", 
-      "description": "Gain ability power equal to 3.3% of bonus health. Gain bonus health equal to 1.6 per 1 ability power.", 
+      "description_source": "Every 30 points of bonus Health gives Vladimir 1 Ability Power and every 1 point of Ability Power gives Vladimir 1.6 bonus Health (does not stack with itself).",
+      "type": "Passive",
+      "description": "Gain ability power equal to 3.3% of bonus health. Gain bonus health equal to 1.6 per 1 ability power.",
       "effects": [
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
-                "coefficient": 0.033, 
-                "input_stat": "bonus_health", 
+                "coefficient": 0.033,
+                "input_stat": "bonus_health",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "ability_power"
-          }, 
-          "id": "ability_power_from_bonus_health", 
+          },
+          "id": "ability_power_from_bonus_health",
           "description": "Gains Ability Power based on bonus health"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
-                "coefficient": 1.6, 
-                "input_stat": "ability_power", 
+                "coefficient": 1.6,
+                "input_stat": "ability_power",
                 "coefficient_type": "per_point"
               }
-            ], 
+            ],
             "output_stat": "bonus_health"
-          }, 
-          "id": "bonus_health_from_ability_power", 
+          },
+          "id": "bonus_health_from_ability_power",
           "description": "Gains bonus health based on Ability Power"
         }
-      ], 
+      ],
       "name": "Crimson Pact"
-    }, 
+    },
     "basic_ability_3": {
-      "slot": "E", 
-      "name": "Tides of Blood", 
+      "slot": "E",
+      "name": "Tides of Blood",
       "cooldown_seconds_by_rank": [
-        13, 
-        11, 
-        9, 
-        7, 
+        13,
+        11,
+        9,
+        7,
         5
-      ], 
-      "type": "Active", 
-      "description_source": "Vladimir pays his own health to charge up a reservoir of blood which, when released, deals damage in the area around him but can be blocked by enemy units.", 
-      "range": 600, 
+      ],
+      "type": "Active",
+      "description_source": "Vladimir pays his own health to charge up a reservoir of blood which, when released, deals damage in the area around him but can be blocked by enemy units.",
+      "range": 600,
       "cost": {
         "ratio_by_charge": [
-          0.02, 
-          0.04, 
-          0.06, 
+          0.02,
+          0.04,
+          0.06,
           0.08
-        ], 
-        "resource": "max_health", 
+        ],
+        "resource": "max_health",
         "ratio_type": "percent_of_stat"
-      }, 
+      },
       "effects": [
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.015, 
-                "input_stat": "max_health", 
+                "coefficient": 0.015,
+                "input_stat": "max_health",
                 "coefficient_type": "percent_of_stat"
-              }, 
+              },
               {
-                "coefficient": 0.35, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.35,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "minimum_damage", 
+          },
+          "id": "minimum_damage",
           "base_by_rank": [
-            30, 
-            45, 
-            60, 
-            75, 
+            30,
+            45,
+            60,
+            75,
             90
-          ], 
+          ],
           "description": "Minimum damage (tap)"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.06, 
-                "input_stat": "max_health", 
+                "coefficient": 0.06,
+                "input_stat": "max_health",
                 "coefficient_type": "percent_of_stat"
-              }, 
+              },
               {
-                "coefficient": 0.8, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.8,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "maximum_damage", 
+          },
+          "id": "maximum_damage",
           "base_by_rank": [
-            60, 
-            90, 
-            120, 
-            150, 
+            60,
+            90,
+            120,
+            150,
             180
-          ], 
+          ],
           "description": "Maximum damage (full charge)"
-        }, 
+        },
         {
           "formula": {
-            "output_stat": "slow_percent", 
+            "output_stat": "slow_percent",
             "terms": [
               {
                 "source": "base_by_rank"
               }
-            ], 
+            ],
             "op": "add"
-          }, 
+          },
           "base_by_rank": [
-            40, 
-            45, 
-            50, 
-            55, 
+            40,
+            45,
+            50,
+            55,
             60
-          ], 
-          "id": "slow", 
-          "duration_seconds": 0.5, 
+          ],
+          "id": "slow",
+          "duration_seconds": 0.5,
           "description": "Slow if charged at least 1 second"
         }
-      ], 
-      "default_keybinding": "E", 
+      ],
+      "default_keybinding": "E",
       "description": "Charge and release an area attack that deals magic damage scaling with max health and ability power; slows if charged at least 1s. Costs 2-8% max health based on charge."
-    }, 
+    },
     "basic_ability_2": {
-      "slot": "W", 
-      "name": "Sanguine Pool", 
+      "slot": "W",
+      "name": "Sanguine Pool",
       "cooldown_seconds_by_rank": [
-        28, 
-        25, 
-        22, 
-        19, 
+        28,
+        25,
+        22,
+        19,
         16
-      ], 
-      "type": "Active", 
-      "description_source": "Vladimir sinks into a pool of blood, becoming untargetable for 2 seconds. Additionally, enemies on the pool are slowed and Vladimir siphons life from them.", 
-      "range": 350, 
+      ],
+      "type": "Active",
+      "description_source": "Vladimir sinks into a pool of blood, becoming untargetable for 2 seconds. Additionally, enemies on the pool are slowed and Vladimir siphons life from them.",
+      "range": 350,
       "cost": {
-        "resource": "current_health", 
-        "ratio": 0.15, 
+        "resource": "current_health",
+        "ratio": 0.15,
         "ratio_type": "percent_of_stat"
-      }, 
+      },
       "effects": [
         {
-          "value_seconds": 2, 
-          "id": "untargetable", 
+          "value_seconds": 2,
+          "id": "untargetable",
           "description": "Untargetable duration"
-        }, 
+        },
         {
-          "value_percent": 37.5, 
-          "id": "move_speed", 
+          "value_percent": 37.5,
+          "id": "move_speed",
           "description": "Bonus move speed (decays)"
-        }, 
+        },
         {
-          "value_percent": 40, 
-          "id": "slow", 
+          "value_percent": 40,
+          "id": "slow",
           "description": "Enemy slow"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.0375, 
-                "input_stat": "bonus_health", 
+                "coefficient": 0.0375,
+                "input_stat": "bonus_health",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage_per_tick"
-          }, 
-          "description": "Damage per tick", 
-          "id": "damage_per_tick", 
+          },
+          "description": "Damage per tick",
+          "id": "damage_per_tick",
           "base_by_rank": [
-            20, 
-            33.75, 
-            47.5, 
-            61.25, 
+            20,
+            33.75,
+            47.5,
+            61.25,
             75
-          ], 
+          ],
           "tick_interval_seconds": 0.5
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.15, 
-                "input_stat": "bonus_health", 
+                "coefficient": 0.15,
+                "input_stat": "bonus_health",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage_total"
-          }, 
-          "duration_seconds": 2, 
-          "id": "total_damage", 
+          },
+          "duration_seconds": 2,
+          "id": "total_damage",
           "base_by_rank": [
-            80, 
-            135, 
-            190, 
-            245, 
+            80,
+            135,
+            190,
+            245,
             300
-          ], 
+          ],
           "description": "Total damage over duration"
-        }, 
+        },
         {
           "formula": {
             "contextual_multipliers": {
               "by_target_type": {
-                "champions": 0.3, 
+                "champions": 0.3,
                 "minions": 0.18
               }
-            }, 
-            "op": "multiply", 
+            },
+            "op": "multiply",
             "terms": [
               {
-                "coefficient": 1.0, 
-                "input_stat": "damage_dealt", 
+                "coefficient": 1.0,
+                "input_stat": "damage_dealt",
                 "coefficient_type": "multiplier"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
-          "id": "heal_from_damage", 
-          "context_notes": "Heal based on pre-mitigation damage dealt.", 
+          },
+          "id": "heal_from_damage",
+          "context_notes": "Heal based on pre-mitigation damage dealt.",
           "description": "Heal from damage dealt"
         }
-      ], 
-      "default_keybinding": "W", 
+      ],
+      "default_keybinding": "W",
       "description": "Become untargetable for 2s, gain decaying move speed, slow enemies, and deal magic damage over time based on bonus health; heal for a percent of damage dealt. Costs 15% current health."
-    }, 
+    },
     "basic_ability_1": {
-      "slot": "Q", 
-      "name": "Transfusion", 
+      "slot": "Q",
+      "name": "Transfusion",
       "cooldown_seconds_by_rank": [
-        9, 
-        7.9, 
-        6.8, 
-        5.7, 
+        9,
+        7.9,
+        6.8,
+        5.7,
         4.6
-      ], 
-      "type": "Active", 
-      "description_source": "Vladimir steals life from the target enemy. When Vladimir's resource is full, Transfusion will benefit from massively increased damage and healing for a brief time.", 
-      "range": 600, 
+      ],
+      "type": "Active",
+      "description_source": "Vladimir steals life from the target enemy. When Vladimir's resource is full, Transfusion will benefit from massively increased damage and healing for a brief time.",
+      "range": 600,
       "cost": {
-        "value_type": "flat", 
+        "value_type": "flat",
         "resource": "none"
-      }, 
+      },
       "effects": [
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.6, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.6,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "magic_damage", 
+          },
+          "id": "magic_damage",
           "base_by_rank": [
-            80, 
-            100, 
-            120, 
-            140, 
+            80,
+            100,
+            120,
+            140,
             160
-          ], 
+          ],
           "description": "Magic damage"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.35, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.35,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
-          "id": "heal", 
+          },
+          "id": "heal",
           "base_by_rank": [
-            20, 
-            25, 
-            30, 
-            35, 
+            20,
+            25,
+            30,
+            35,
             40
-          ], 
+          ],
           "description": "Heal"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 1.11, 
-                "input_stat": "ability_power", 
+                "coefficient": 1.11,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
+          },
           "base_by_rank": [
-            148, 
-            185, 
-            222, 
-            259, 
+            148,
+            185,
+            222,
+            259,
             296
-          ], 
-          "id": "crimson_rush_increased_damage", 
-          "context_notes": "Represents 85% increased damage over base values.", 
+          ],
+          "id": "crimson_rush_increased_damage",
+          "context_notes": "Represents 85% increased damage over base values.",
           "description": "Crimson Rush increased damage"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_champion_level"
-              }, 
+              },
               {
-                "coefficient": 0.05, 
-                "input_stat": "missing_health", 
+                "coefficient": 0.05,
+                "input_stat": "missing_health",
                 "coefficient_type": "percent_of_stat"
-              }, 
+              },
               {
-                "coefficient": 0.04, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.04,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_per_100_stat"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
+          },
           "base_by_champion_level": [
-            30, 
-            60, 
-            90, 
-            140, 
+            30,
+            60,
+            90,
+            140,
             200
-          ], 
-          "id": "crimson_rush_additional_heal", 
-          "context_notes": "Additional heal reduced to 35% vs minions.", 
+          ],
+          "id": "crimson_rush_additional_heal",
+          "context_notes": "Additional heal reduced to 35% vs minions.",
           "description": "Crimson Rush additional heal"
         }
-      ], 
-      "default_keybinding": "Q", 
+      ],
+      "default_keybinding": "Q",
       "description": "Deal magic damage and heal. During Crimson Rush, damage is increased and you gain additional healing based on missing health (reduced vs minions)."
-    }, 
+    },
     "ultimate": {
-      "slot": "R", 
-      "name": "Hemoplague", 
+      "slot": "R",
+      "name": "Hemoplague",
       "cooldown_seconds_by_rank": [
-        120, 
-        120, 
+        120,
+        120,
         120
-      ], 
-      "type": "Active", 
-      "description_source": "Vladimir infects an area with a virulent plague. Affected enemies take increased damage for the duration. After a few seconds, Hemoplague deals magic damage to infected enemies and heals Vladimir for each enemy Champion hit.", 
-      "range": 625, 
+      ],
+      "type": "Active",
+      "description_source": "Vladimir infects an area with a virulent plague. Affected enemies take increased damage for the duration. After a few seconds, Hemoplague deals magic damage to infected enemies and heals Vladimir for each enemy Champion hit.",
+      "range": 625,
       "cost": {
-        "value_type": "flat", 
+        "value_type": "flat",
         "resource": "none"
-      }, 
+      },
       "effects": [
         {
-          "value_seconds": 4, 
-          "id": "infection_duration", 
+          "value_seconds": 4,
+          "id": "infection_duration",
           "description": "Infection duration"
-        }, 
+        },
         {
-          "value_percent": 10, 
-          "id": "damage_amplification", 
+          "value_percent": 10,
+          "id": "damage_amplification",
           "description": "Increased damage taken"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.7, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.7,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "detonation_damage", 
+          },
+          "id": "detonation_damage",
           "base_by_rank": [
-            150, 
-            250, 
+            150,
+            250,
             350
-          ], 
+          ],
           "description": "Magic damage at end of infection"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.7, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.7,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
-          "id": "heal_per_champion", 
+          },
+          "id": "heal_per_champion",
           "base_by_rank": [
-            150, 
-            250, 
+            150,
+            250,
             350
-          ], 
+          ],
           "description": "Heal on detonation (per champion)"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 0.28, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.28,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "heal_reduction_per_additional_champion"
-          }, 
-          "id": "reduced_heal_additional", 
+          },
+          "id": "reduced_heal_additional",
           "base_by_rank": [
-            60, 
-            100, 
+            60,
+            100,
             140
-          ], 
+          ],
           "description": "Reduced heal for each additional champion beyond the first"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 1.82, 
-                "input_stat": "ability_power", 
+                "coefficient": 1.82,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "max_total_heal"
-          }, 
-          "id": "max_total_heal", 
+          },
+          "id": "max_total_heal",
           "base_by_rank": [
-            390, 
-            650, 
+            390,
+            650,
             910
-          ], 
+          ],
           "description": "Maximum total heal from multiple champions"
         }
-      ], 
-      "default_keybinding": "R", 
+      ],
+      "default_keybinding": "R",
       "description": "Infect enemies for 4s, causing them to take 10% increased damage. On detonation, deal magic damage and heal per champion hit (reduced for additional champions)."
     }
-  }, 
-  "name": "Vladimir", 
+  },
+  "name": "Vladimir",
   "sources": [
     {
-      "path": "/Users/matthewfrench/Downloads/Vladimir.json", 
-      "used_for": "base stats, base ability values, cooldowns, costs", 
-      "type": "Riot Data Dragon (local)", 
+      "path": "/Users/matthewfrench/Downloads/Vladimir.json",
+      "used_for": "base stats, base ability values, cooldowns, costs",
+      "type": "Riot Data Dragon (local)",
       "accessed": "2026-02-09"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Crimson_Pact", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (ability data template)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Crimson_Pact",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (ability data template)",
       "used_for": "passive values"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Transfusion", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (ability data template)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Transfusion",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (ability data template)",
       "used_for": "Q values"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Sanguine_Pool", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (ability data template)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Sanguine_Pool",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (ability data template)",
       "used_for": "W values"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Tides_of_Blood", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (ability data template)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Tides_of_Blood",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (ability data template)",
       "used_for": "E values"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Hemoplague", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (ability data template)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Hemoplague",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (ability data template)",
       "used_for": "R values"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Vladimir", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (base stats)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Vladimir",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (base stats)",
       "used_for": "basic attack windup and missile speed"
+    },
+    {
+      "type": "Generated champion data",
+      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Vladimir.json",
+      "used_for": "raw basic attack timing stats and radii"
+    },
+    {
+      "type": "Generated champion data",
+      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Vladimir.json",
+      "used_for": "raw basic attack timing stats and radii"
     }
-  ], 
+  ],
   "notes": [
-    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
-    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank.", 
-    "Scaling coefficients were supplemented from wiki ability data templates where available.", 
+    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.",
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank.",
+    "Scaling coefficients were supplemented from wiki ability data templates where available.",
     "Ability values and scalings for Vladimir were verified against the League of Legends Wiki ability data templates."
-  ], 
+  ],
   "basic_attack": {
-    "attack_type": "ranged", 
-    "windup_percent": 19.737, 
-    "windup_fraction": 0.19737, 
-    "calculation_notes": "base_attack_period_seconds = 1 / base_attack_speed. base_windup_seconds = base_attack_period_seconds * windup_fraction.", 
-    "missile_speed": 1600, 
-    "base_attack_period_seconds": 1.519756838905775, 
-    "is_projectile": true, 
-    "missile_travel_time_seconds_per_unit": 0.000625, 
-    "base_windup_seconds": 0.2999544072948328
-  }, 
+    "attack_type": "ranged",
+    "windup_percent": 19.737,
+    "windup_fraction": 0.19737,
+    "calculation_notes": "base_attack_period_seconds = 1 / base_attack_speed. base_windup_seconds = base_attack_period_seconds * windup_fraction.",
+    "missile_speed": 1600,
+    "base_attack_period_seconds": 1.519756838905775,
+    "is_projectile": true,
+    "missile_travel_time_seconds_per_unit": 0.000625,
+    "base_windup_seconds": 0.2999544072948328,
+    "raw_timing_stats": {
+      "attack_cast_time_seconds": 0.300000011920928,
+      "attack_delay_offset_seconds": -0.0721089988946914,
+      "attack_total_time_seconds": 1.51999998092651,
+      "attack_speed_ratio": 0.657999992370605,
+      "attack_range": 450,
+      "acquisition_radius": 600,
+      "gameplay_radius": 65
+    }
+  },
   "role_tags": [
-    "Mage", 
+    "Mage",
     "Fighter"
-  ], 
+  ],
   "schema_notes": {
-    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
-    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).",
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).",
     "basic_attack": {
-      "attack_type": "Ranged or melee.", 
-      "windup_percent": "Percent of attack period spent in windup.", 
-      "windup_fraction": "windup_percent divided by 100.", 
-      "calculation_notes": "Explains how derived values were computed.", 
-      "missile_speed": "Projectile speed for ranged basic attacks (units per second); null for melee.", 
-      "base_attack_period_seconds": "Derived: 1 / base attack speed.", 
-      "missile_travel_time_seconds_per_unit": "Travel time per unit distance (1/missile_speed).", 
+      "attack_type": "Ranged or melee.",
+      "windup_percent": "Percent of attack period spent in windup.",
+      "windup_fraction": "windup_percent divided by 100.",
+      "calculation_notes": "Explains how derived values were computed.",
+      "missile_speed": "Projectile speed for ranged basic attacks (units per second); null for melee.",
+      "base_attack_period_seconds": "Derived: 1 / base attack speed.",
+      "missile_travel_time_seconds_per_unit": "Travel time per unit distance (1/missile_speed).",
       "base_windup_seconds": "Derived: base_attack_period_seconds * windup_fraction."
-    }, 
-    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
+    },
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.",
     "formula": {
-      "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
-      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
+      "contextual_multipliers": "Optional. Used when the result depends on context like target type.",
+      "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).",
       "terms": [
         {
-          "coefficient": "Numeric multiplier applied to input_stat.", 
-          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.", 
-          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).", 
+          "coefficient": "Numeric multiplier applied to input_stat.",
+          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.",
+          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).",
           "coefficient_type": [
-            "per_point: linear scaling per 1 point of input_stat.", 
-            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.", 
-            "percent_per_100_stat: coefficient applied per 100 of input_stat.", 
+            "per_point: linear scaling per 1 point of input_stat.",
+            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.",
+            "percent_per_100_stat: coefficient applied per 100 of input_stat.",
             "multiplier: used when the input_stat is a value to be multiplied directly (e.g., damage_dealt)."
           ]
         }
-      ], 
+      ],
       "op": "Operation applied to all terms. Common: add, multiply."
-    }, 
-    "base_by_rank": "Array of base values by ability rank (1-5)."
-  }, 
+    },
+    "base_by_rank": "Array of base values by ability rank (1-5).",
+    "basic_attack_raw_timing_stats": "Raw timing values from generated data (attackCastTime, attackDelayOffset, attackTotalTime, attackSpeedRatio, acquisitionRadius, gameplayRadius)."
+  },
   "base_stats": {
     "attack_speed": {
-      "per_level_percent": 2, 
+      "per_level_percent": 2,
       "base": 0.658
-    }, 
+    },
     "resource_regeneration": {
-      "per_level": 0, 
+      "per_level": 0,
       "base": 0
-    }, 
+    },
     "crit_chance": {
-      "per_level": 0, 
+      "per_level": 0,
       "base": 0
-    }, 
+    },
     "armor": {
-      "per_level": 4.5, 
+      "per_level": 4.5,
       "base": 24
-    }, 
-    "move_speed": 330, 
+    },
+    "move_speed": 330,
     "magic_resist": {
-      "per_level": 1.3, 
+      "per_level": 1.3,
       "base": 30
-    }, 
+    },
     "health_regeneration": {
-      "per_level": 0.6, 
+      "per_level": 0.6,
       "base": 7
-    }, 
+    },
     "attack_damage": {
-      "per_level": 3, 
+      "per_level": 3,
       "base": 55
-    }, 
+    },
     "health": {
-      "per_level": 110, 
+      "per_level": 110,
       "base": 600
-    }, 
+    },
     "resource": {
-      "per_level": 0, 
-      "type": "health", 
-      "base": 2, 
+      "per_level": 0,
+      "type": "health",
+      "base": 2,
       "context_notes": "Source lists resource name 'Crimson Rush', but Vladimir ability costs use health."
-    }, 
+    },
     "attack_range": 450
   }
 }

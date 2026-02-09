@@ -1,520 +1,535 @@
 {
   "abilities": {
     "passive": {
-      "description_source": "Warwick's basic attacks deal bonus magic damage. If Warwick is below 50% health, he heals the same amount. If Warwick is below 25% health, this healing triples.", 
-      "type": "Passive", 
-      "description": "Basic attacks deal bonus magic damage scaling with level, bonus AD, and AP. Heal for damage dealt below 50% health (increased below 25%).", 
-      "name": "Eternal Hunger", 
+      "description_source": "Warwick's basic attacks deal bonus magic damage. If Warwick is below 50% health, he heals the same amount. If Warwick is below 25% health, this healing triples.",
+      "type": "Passive",
+      "description": "Basic attacks deal bonus magic damage scaling with level, bonus AD, and AP. Heal for damage dealt below 50% health (increased below 25%).",
+      "name": "Eternal Hunger",
       "effects": [
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_champion_level"
-              }, 
+              },
               {
-                "coefficient": 0.15, 
-                "input_stat": "bonus_attack_damage", 
+                "coefficient": 0.15,
+                "input_stat": "bonus_attack_damage",
                 "coefficient_type": "percent_of_stat"
-              }, 
+              },
               {
-                "coefficient": 0.1, 
-                "input_stat": "ability_power", 
+                "coefficient": 0.1,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "bonus_magic_damage"
-          }, 
+          },
           "base_by_champion_level": [
-            12, 
+            12,
             46
-          ], 
-          "id": "bonus_magic_damage_on_hit", 
-          "context_notes": "Damage scales by champion level from 12 to 46.", 
+          ],
+          "id": "bonus_magic_damage_on_hit",
+          "context_notes": "Damage scales by champion level from 12 to 46.",
           "description": "Bonus magic damage on-hit"
-        }, 
+        },
         {
           "formula": {
             "contextual_multipliers": {
               "by_self_health_percent": {
-                "below_50_percent": 1.0, 
+                "below_50_percent": 1.0,
                 "below_25_percent": 2.5
               }
-            }, 
-            "op": "multiply", 
+            },
+            "op": "multiply",
             "terms": [
               {
-                "coefficient": 1.0, 
-                "input_stat": "damage_dealt", 
+                "coefficient": 1.0,
+                "input_stat": "damage_dealt",
                 "coefficient_type": "multiplier"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
-          "id": "heal_from_passive_damage", 
-          "context_notes": "Heal equals damage dealt below 50% health; increased to 250% below 25%.", 
+          },
+          "id": "heal_from_passive_damage",
+          "context_notes": "Heal equals damage dealt below 50% health; increased to 250% below 25%.",
           "description": "Heal from passive damage when low health"
         }
       ]
-    }, 
+    },
     "basic_ability_3": {
-      "slot": "E", 
-      "name": "Primal Howl", 
+      "slot": "E",
+      "name": "Primal Howl",
       "cooldown_seconds_by_rank": [
-        15, 
-        14, 
-        13, 
-        12, 
+        15,
+        14,
+        13,
+        12,
         11
-      ], 
-      "default_keybinding": "E", 
-      "description_source": "Warwick gains damage reduction for 2.5 seconds. At the end, or if re-activated, he howls, causing nearby enemies to flee for 1 second.", 
-      "range": 375, 
+      ],
+      "default_keybinding": "E",
+      "description_source": "Warwick gains damage reduction for 2.5 seconds. At the end, or if re-activated, he howls, causing nearby enemies to flee for 1 second.",
+      "range": 375,
       "cost": {
-        "resource": "mana", 
-        "value_type": "flat", 
+        "resource": "mana",
+        "value_type": "flat",
         "value": 40
-      }, 
+      },
       "effects": [
         {
           "value_percent_by_rank": [
-            35, 
-            40, 
-            45, 
-            50, 
+            35,
+            40,
+            45,
+            50,
             55
-          ], 
-          "id": "damage_reduction", 
-          "duration_seconds": 2.5, 
+          ],
+          "id": "damage_reduction",
+          "duration_seconds": 2.5,
           "description": "Damage reduction"
-        }, 
+        },
         {
-          "value_seconds": 1, 
-          "id": "fear", 
+          "value_seconds": 1,
+          "id": "fear",
           "description": "Fear duration"
-        }, 
+        },
         {
-          "value_percent": 90, 
-          "id": "slow_after_fear", 
-          "duration_seconds": 1, 
+          "value_percent": 90,
+          "id": "slow_after_fear",
+          "duration_seconds": 1,
           "description": "Slow on fear"
-        }, 
+        },
         {
-          "value_seconds": 1, 
-          "id": "recast_available_after", 
+          "value_seconds": 1,
+          "id": "recast_available_after",
           "description": "Recast delay"
         }
-      ], 
-      "type": "Active", 
+      ],
+      "type": "Active",
       "description": "Gain damage reduction for 2.5s, then fear nearby enemies and slow them; can recast after 1s."
-    }, 
+    },
     "basic_ability_2": {
-      "slot": "W", 
-      "name": "Blood Hunt", 
+      "slot": "W",
+      "name": "Blood Hunt",
       "cooldown_seconds_by_rank": [
-        100, 
-        85, 
-        70, 
-        55, 
+        100,
+        85,
+        70,
+        55,
         40
-      ], 
-      "default_keybinding": "W", 
-      "description_source": "Warwick senses enemies below 50% health, gaining Move Speed toward and attack speed against them. When they fall below 25% health, he frenzies and these bonuses triple.", 
-      "context_notes": "Passive attack speed applies to targets below 50% health; movement speed applies when following trails toward low-health champions. Active marks nearest enemy champion for 8 seconds.", 
-      "range": 4000, 
+      ],
+      "default_keybinding": "W",
+      "description_source": "Warwick senses enemies below 50% health, gaining Move Speed toward and attack speed against them. When they fall below 25% health, he frenzies and these bonuses triple.",
+      "context_notes": "Passive attack speed applies to targets below 50% health; movement speed applies when following trails toward low-health champions. Active marks nearest enemy champion for 8 seconds.",
+      "range": 4000,
       "cost": {
-        "resource": "mana", 
-        "value_type": "flat", 
+        "resource": "mana",
+        "value_type": "flat",
         "value": 70
-      }, 
+      },
       "effects": [
         {
           "value_percent_by_rank": [
-            70, 
-            80, 
-            90, 
-            100, 
+            70,
+            80,
+            90,
+            100,
             110
-          ], 
-          "id": "bonus_attack_speed", 
+          ],
+          "id": "bonus_attack_speed",
           "description": "Bonus attack speed vs targets below 50% health"
-        }, 
+        },
         {
           "value_percent_by_rank": [
-            35, 
-            42.5, 
-            50, 
-            57.5, 
+            35,
+            42.5,
+            50,
+            57.5,
             65
-          ], 
-          "id": "bonus_movement_speed", 
+          ],
+          "id": "bonus_movement_speed",
           "description": "Bonus movement speed toward low-health champions"
-        }, 
+        },
         {
           "value_percent_by_rank": [
-            175, 
-            200, 
-            225, 
-            250, 
+            175,
+            200,
+            225,
+            250,
             275
-          ], 
-          "id": "increased_attack_speed_low_health", 
+          ],
+          "id": "increased_attack_speed_low_health",
           "description": "Increased attack speed vs targets below 25% health"
-        }, 
+        },
         {
           "value_percent_by_rank": [
-            87.5, 
-            106.25, 
-            125, 
-            143.75, 
+            87.5,
+            106.25,
+            125,
+            143.75,
             162.5
-          ], 
-          "id": "increased_movement_speed_low_health", 
+          ],
+          "id": "increased_movement_speed_low_health",
           "description": "Increased movement speed vs targets below 25% health"
-        }, 
+        },
         {
-          "value_seconds": 8, 
-          "id": "active_mark_duration", 
+          "value_seconds": 8,
+          "id": "active_mark_duration",
           "description": "Active mark duration"
-        }, 
+        },
         {
-          "value_seconds": 3, 
-          "id": "combat_cooldown_lockout", 
+          "value_seconds": 3,
+          "id": "combat_cooldown_lockout",
           "description": "Static cooldown during champion combat"
-        }, 
+        },
         {
-          "description": "Cooldown runs twice as fast when no enemy champions are marked", 
-          "id": "cooldown_reduction_when_no_targets", 
+          "description": "Cooldown runs twice as fast when no enemy champions are marked",
+          "id": "cooldown_reduction_when_no_targets",
           "value_multiplier": 2.0
         }
-      ], 
-      "type": "Active", 
+      ],
+      "type": "Active",
       "description": "Sense low-health enemy champions, granting bonus move speed toward them and bonus attack speed against them; bonuses are increased against targets below 25% health. Active marks the nearest enemy champion for 8s."
-    }, 
+    },
     "basic_ability_1": {
-      "slot": "Q", 
-      "name": "Jaws of the Beast", 
+      "slot": "Q",
+      "name": "Jaws of the Beast",
       "cooldown_seconds_by_rank": [
-        6, 
-        6, 
-        6, 
-        6, 
+        6,
+        6,
+        6,
+        6,
         6
-      ], 
-      "default_keybinding": "Q", 
-      "description_source": "Warwick lunges forward and bites his target, dealing damage based on their maximum health and healing for damage dealt.", 
-      "context_notes": "Range shown as target range 350; ability lunges to target.", 
-      "range": 350, 
+      ],
+      "default_keybinding": "Q",
+      "description_source": "Warwick lunges forward and bites his target, dealing damage based on their maximum health and healing for damage dealt.",
+      "context_notes": "Range shown as target range 350; ability lunges to target.",
+      "range": 350,
       "cost": {
-        "resource": "mana", 
+        "resource": "mana",
         "value_by_rank": [
-          50, 
-          60, 
-          70, 
-          80, 
+          50,
+          60,
+          70,
+          80,
           90
-        ], 
+        ],
         "value_type": "flat"
-      }, 
+      },
       "effects": [
         {
           "formula": {
             "contextual_multipliers": {
               "by_rank": [
-                0.06, 
-                0.07, 
-                0.08, 
-                0.09, 
+                0.06,
+                0.07,
+                0.08,
+                0.09,
                 0.1
               ]
-            }, 
-            "op": "multiply", 
+            },
+            "op": "multiply",
             "terms": [
               {
-                "coefficient": 1.0, 
-                "input_stat": "target_max_health", 
+                "coefficient": 1.0,
+                "input_stat": "target_max_health",
                 "coefficient_type": "multiplier"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "magic_damage_percent_target_max_health", 
+          },
+          "id": "magic_damage_percent_target_max_health",
           "description": "Magic damage based on target max health"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
-                "coefficient": 1.2, 
-                "input_stat": "attack_damage", 
+                "coefficient": 1.2,
+                "input_stat": "attack_damage",
                 "coefficient_type": "percent_of_stat"
-              }, 
+              },
               {
-                "coefficient": 1.0, 
-                "input_stat": "ability_power", 
+                "coefficient": 1.0,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "magic_damage_bonus_ad_ap", 
+          },
+          "id": "magic_damage_bonus_ad_ap",
           "description": "Bonus damage scaling"
-        }, 
+        },
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 1.2, 
-                "input_stat": "attack_damage", 
+                "coefficient": 1.2,
+                "input_stat": "attack_damage",
                 "coefficient_type": "percent_of_stat"
-              }, 
+              },
               {
-                "coefficient": 1.0, 
-                "input_stat": "ability_power", 
+                "coefficient": 1.0,
+                "input_stat": "ability_power",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "monster_damage_cap", 
+          },
+          "id": "monster_damage_cap",
           "base_by_rank": [
-            150, 
-            165, 
-            180, 
-            195, 
+            150,
+            165,
+            180,
+            195,
             210
-          ], 
+          ],
           "description": "Maximum monster damage"
-        }, 
+        },
         {
           "formula": {
             "contextual_multipliers": {
               "by_rank": [
-                0.25, 
-                0.375, 
-                0.5, 
-                0.625, 
+                0.25,
+                0.375,
+                0.5,
+                0.625,
                 0.75
               ]
-            }, 
-            "op": "multiply", 
+            },
+            "op": "multiply",
             "terms": [
               {
-                "coefficient": 1.0, 
-                "input_stat": "damage_dealt", 
+                "coefficient": 1.0,
+                "input_stat": "damage_dealt",
                 "coefficient_type": "multiplier"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
-          "id": "heal_from_q_damage", 
-          "context_notes": "Healing is based on post-mitigation damage dealt by Q only.", 
+          },
+          "id": "heal_from_q_damage",
+          "context_notes": "Healing is based on post-mitigation damage dealt by Q only.",
           "description": "Heal from Q damage dealt"
         }
-      ], 
-      "type": "Active", 
+      ],
+      "type": "Active",
       "description": "Bite a target to deal magic damage based on target max health plus AD/AP scaling and heal for a percent of damage dealt; has a monster damage cap."
-    }, 
+    },
     "ultimate": {
-      "slot": "R", 
-      "name": "Infinite Duress", 
+      "slot": "R",
+      "name": "Infinite Duress",
       "cooldown_seconds_by_rank": [
-        110, 
-        90, 
+        110,
+        90,
         70
-      ], 
-      "default_keybinding": "R", 
-      "description_source": "Warwick leaps in a direction (scaling with his bonus Move Speed), suppressing the first champion he collides with for 1.5 seconds.", 
-      "context_notes": "Range scales with current movement speed (250% movement speed).", 
-      "range": 0, 
+      ],
+      "default_keybinding": "R",
+      "description_source": "Warwick leaps in a direction (scaling with his bonus Move Speed), suppressing the first champion he collides with for 1.5 seconds.",
+      "context_notes": "Range scales with current movement speed (250% movement speed).",
+      "range": 0,
       "cost": {
-        "resource": "mana", 
-        "value_type": "flat", 
+        "resource": "mana",
+        "value_type": "flat",
         "value": 100
-      }, 
+      },
       "effects": [
         {
           "formula": {
-            "op": "add", 
+            "op": "add",
             "terms": [
               {
                 "source": "base_by_rank"
-              }, 
+              },
               {
-                "coefficient": 1.67, 
-                "input_stat": "bonus_attack_damage", 
+                "coefficient": 1.67,
+                "input_stat": "bonus_attack_damage",
                 "coefficient_type": "percent_of_stat"
               }
-            ], 
+            ],
             "output_stat": "magic_damage"
-          }, 
-          "id": "total_magic_damage", 
+          },
+          "id": "total_magic_damage",
           "base_by_rank": [
-            175, 
-            350, 
+            175,
+            350,
             525
-          ], 
+          ],
           "description": "Total magic damage"
-        }, 
+        },
         {
-          "value_seconds": 1.5, 
-          "id": "suppression_duration", 
+          "value_seconds": 1.5,
+          "id": "suppression_duration",
           "description": "Suppression duration"
-        }, 
+        },
         {
           "formula": {
-            "op": "multiply", 
+            "op": "multiply",
             "terms": [
               {
-                "coefficient": 1.0, 
-                "input_stat": "damage_dealt", 
+                "coefficient": 1.0,
+                "input_stat": "damage_dealt",
                 "coefficient_type": "multiplier"
               }
-            ], 
+            ],
             "output_stat": "heal"
-          }, 
-          "id": "heal_from_damage", 
-          "context_notes": "Heals for 100% of post-mitigation damage dealt to the target during the channel.", 
+          },
+          "id": "heal_from_damage",
+          "context_notes": "Heals for 100% of post-mitigation damage dealt to the target during the channel.",
           "description": "Heal for damage dealt during R"
-        }, 
+        },
         {
-          "id": "on_hit_applications", 
-          "value": 3, 
+          "id": "on_hit_applications",
+          "value": 3,
           "description": "On-hit and on-attack applications"
         }
-      ], 
-      "type": "Active", 
+      ],
+      "type": "Active",
       "description": "Leap to suppress a target for 1.5s, applying on-hit effects three times, dealing total magic damage scaling with bonus AD, and healing for damage dealt."
     }
-  }, 
-  "name": "Warwick", 
-  "data_version": "16.3.1", 
+  },
+  "name": "Warwick",
+  "data_version": "16.3.1",
   "notes": [
-    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
-    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank.", 
-    "Scaling coefficients were supplemented from wiki ability data templates where available.", 
+    "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.",
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank.",
+    "Scaling coefficients were supplemented from wiki ability data templates where available.",
     "Ability values and scalings for Warwick were verified against the Fandom LoL wiki page."
-  ], 
+  ],
   "basic_attack": {
-    "attack_type": "melee", 
-    "windup_percent": 17.5, 
-    "windup_fraction": 0.175, 
-    "calculation_notes": "base_attack_period_seconds = 1 / base_attack_speed. base_windup_seconds = base_attack_period_seconds * windup_fraction.", 
-    "missile_speed": null, 
-    "base_attack_period_seconds": 1.567398119122257, 
-    "is_projectile": false, 
-    "missile_travel_time_seconds_per_unit": null, 
-    "base_windup_seconds": 0.274294670846395
-  }, 
+    "attack_type": "melee",
+    "windup_percent": 17.5,
+    "windup_fraction": 0.175,
+    "calculation_notes": "base_attack_period_seconds = 1 / base_attack_speed. base_windup_seconds = base_attack_period_seconds * windup_fraction.",
+    "missile_speed": null,
+    "base_attack_period_seconds": 1.567398119122257,
+    "is_projectile": false,
+    "missile_travel_time_seconds_per_unit": null,
+    "base_windup_seconds": 0.274294670846395,
+    "raw_timing_stats": {
+      "attack_cast_time_seconds": 0.3,
+      "attack_delay_offset_seconds": -0.125,
+      "attack_total_time_seconds": 1.6,
+      "attack_speed_ratio": 0.638000011444091,
+      "attack_range": 125,
+      "acquisition_radius": 400,
+      "gameplay_radius": 74.75
+    }
+  },
   "role_tags": [
-    "Fighter", 
+    "Fighter",
     "Tank"
-  ], 
+  ],
   "sources": [
     {
-      "path": "/Users/matthewfrench/Downloads/Warwick.json", 
-      "type": "Riot Data Dragon (local)", 
-      "accessed": "2026-02-09", 
+      "path": "/Users/matthewfrench/Downloads/Warwick.json",
+      "type": "Riot Data Dragon (local)",
+      "accessed": "2026-02-09",
       "used_for": "base stats, base ability values, cooldowns, costs"
-    }, 
+    },
     {
-      "url": "https://leagueoflegends.fandom.com/wiki/Warwick/LoL", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (Fandom)", 
+      "url": "https://leagueoflegends.fandom.com/wiki/Warwick/LoL",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (Fandom)",
       "used_for": "ability values, costs, cooldowns, ranges, and scalings"
-    }, 
+    },
     {
-      "url": "https://nexus.leagueoflegends.com/en-us/champion/warwick/", 
-      "accessed": "2026-02-09", 
-      "type": "Riot Champion Page", 
+      "url": "https://nexus.leagueoflegends.com/en-us/champion/warwick/",
+      "accessed": "2026-02-09",
+      "type": "Riot Champion Page",
       "used_for": "ability descriptions (non-numeric)"
-    }, 
+    },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Warwick", 
-      "accessed": "2026-02-09", 
-      "type": "League of Legends Wiki (base stats)", 
+      "url": "https://wiki.leagueoflegends.com/en-us/Warwick",
+      "accessed": "2026-02-09",
+      "type": "League of Legends Wiki (base stats)",
       "used_for": "basic attack windup and missile speed"
+    },
+    {
+      "type": "Generated champion data",
+      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Warwick.json",
+      "used_for": "raw basic attack timing stats and radii"
     }
-  ], 
+  ],
   "schema_notes": {
-    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
-    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).",
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).",
     "basic_attack": {
-      "attack_type": "Ranged or melee.", 
-      "windup_percent": "Percent of attack period spent in windup.", 
-      "windup_fraction": "windup_percent divided by 100.", 
-      "calculation_notes": "Explains how derived values were computed.", 
-      "missile_speed": "Projectile speed for ranged basic attacks (units per second); null for melee.", 
-      "base_attack_period_seconds": "Derived: 1 / base attack speed.", 
-      "missile_travel_time_seconds_per_unit": "Travel time per unit distance (1/missile_speed).", 
+      "attack_type": "Ranged or melee.",
+      "windup_percent": "Percent of attack period spent in windup.",
+      "windup_fraction": "windup_percent divided by 100.",
+      "calculation_notes": "Explains how derived values were computed.",
+      "missile_speed": "Projectile speed for ranged basic attacks (units per second); null for melee.",
+      "base_attack_period_seconds": "Derived: 1 / base attack speed.",
+      "missile_travel_time_seconds_per_unit": "Travel time per unit distance (1/missile_speed).",
       "base_windup_seconds": "Derived: base_attack_period_seconds * windup_fraction."
-    }, 
-    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
+    },
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.",
     "formula": {
-      "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
-      "op": "Operation applied to all terms. Common: add, multiply.", 
+      "contextual_multipliers": "Optional. Used when the result depends on context like target type.",
+      "op": "Operation applied to all terms. Common: add, multiply.",
       "terms": [
         {
-          "coefficient": "Numeric multiplier applied to input_stat.", 
-          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.", 
-          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).", 
+          "coefficient": "Numeric multiplier applied to input_stat.",
+          "source": "Optional. References a base array like base_by_rank or base_by_champion_level.",
+          "input_stat": "Optional. The stat used for scaling (e.g., ability_power, bonus_health).",
           "coefficient_type": [
-            "per_point: linear scaling per 1 point of input_stat.", 
-            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.", 
-            "percent_per_100_stat: coefficient applied per 100 of input_stat.", 
+            "per_point: linear scaling per 1 point of input_stat.",
+            "percent_of_stat: input_stat * coefficient, where coefficient is a percent as a decimal.",
+            "percent_per_100_stat: coefficient applied per 100 of input_stat.",
             "multiplier: used when the input_stat is a value to be multiplied directly (e.g., damage_dealt)."
           ]
         }
-      ], 
+      ],
       "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health)."
-    }, 
-    "base_by_rank": "Array of base values by ability rank (1-5)."
-  }, 
+    },
+    "base_by_rank": "Array of base values by ability rank (1-5).",
+    "basic_attack_raw_timing_stats": "Raw timing values from generated data (attackCastTime, attackDelayOffset, attackTotalTime, attackSpeedRatio, acquisitionRadius, gameplayRadius)."
+  },
   "base_stats": {
     "attack_speed": {
-      "per_level_percent": 2, 
+      "per_level_percent": 2,
       "base": 0.638
-    }, 
+    },
     "resource_regeneration": {
-      "per_level": 0.6, 
+      "per_level": 0.6,
       "base": 7.45
-    }, 
+    },
     "crit_chance": {
-      "per_level": 0, 
+      "per_level": 0,
       "base": 0
-    }, 
+    },
     "armor": {
-      "per_level": 4.4, 
+      "per_level": 4.4,
       "base": 33
-    }, 
-    "move_speed": 335, 
+    },
+    "move_speed": 335,
     "magic_resist": {
-      "per_level": 2.05, 
+      "per_level": 2.05,
       "base": 32
-    }, 
+    },
     "health_regeneration": {
-      "per_level": 0.75, 
+      "per_level": 0.75,
       "base": 4
-    }, 
+    },
     "attack_damage": {
-      "per_level": 2.5, 
+      "per_level": 2.5,
       "base": 65
-    }, 
+    },
     "health": {
-      "per_level": 99, 
+      "per_level": 99,
       "base": 620
-    }, 
+    },
     "resource": {
-      "per_level": 35, 
-      "type": "mana", 
+      "per_level": 35,
+      "type": "mana",
       "base": 280
-    }, 
+    },
     "attack_range": 125
   }
 }
