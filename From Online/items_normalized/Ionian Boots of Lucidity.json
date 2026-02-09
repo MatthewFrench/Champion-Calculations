@@ -1,0 +1,52 @@
+{
+  "name": "Ionian Boots of Lucidity",
+  "id": 3158,
+  "tier": 2,
+  "rank": [
+    "BOOTS"
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 45.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Ionian Insight",
+      "effects": "Gain 10 [[Haste#Summoner spell haste|summoner spell haste]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 10 [[Haste#Summoner spell haste|summoner spell haste]].",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 10,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        10
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3158_class_t2_ionianbootsoflucidity.png",
+  "simpleDescription": "Increases Move Speed and Cooldown Reduction",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.144370+00:00"
+}

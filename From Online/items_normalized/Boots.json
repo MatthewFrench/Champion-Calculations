@@ -1,0 +1,27 @@
+{
+  "name": "Boots",
+  "id": 1001,
+  "tier": 1,
+  "rank": [
+    "BOOTS"
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 25.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 300,
+      "sell": 120
+    },
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1001_class_t1_bootsofspeed.png",
+  "simpleDescription": "Slightly increases Move Speed",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.194292+00:00"
+}

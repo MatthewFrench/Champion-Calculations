@@ -1,0 +1,79 @@
+{
+  "name": "Spear of Shojin",
+  "id": 3161,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 450.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Dragonforce",
+      "effects": "Gain 25 [[Haste#Basic ability haste|basic ability haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Focused Will",
+      "effects": "Dealing {{tip|ability damage}} or {{tip|pet damage}}, sourced from a non-innate {{tip|ability}}, generates a stack for 6 seconds, stacking up to 4 times. For each stack, your {{tip|ability damage}}, {{tip|pet damage}} and {{tip|proc damage}}, sourced from a non-[[item]], gain 3% increased damage, for a total increase of 12% at '''maximum''' stacks."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 25 [[Haste#Basic ability haste|basic ability haste]].",
+      "effect_type": "stat_modifier",
+      "stat": "ability_haste",
+      "value": 25,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        25
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Dealing {{tip|ability damage}} or {{tip|pet damage}}, sourced from a non-innate {{tip|ability}}, generates a stack for 6 seconds, stacking up to 4 times. For each stack, your {{tip|ability damage}}, {{tip|pet damage}} and {{tip|proc damage}}, sourced from a non-[[item]], gain 3% increased damage, for a total increase of 12% at '''maximum''' stacks.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 6,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        6,
+        4,
+        3,
+        12
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ABILITY_HASTE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
+  "simpleDescription": "Reduce damage taken from champions by a flat amount. Attack while near multiple enemy champions to increase this amount for a short time.",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.225318+00:00"
+}

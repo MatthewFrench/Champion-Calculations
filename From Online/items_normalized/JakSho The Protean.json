@@ -1,0 +1,61 @@
+{
+  "name": "Jak'Sho, The Protean",
+  "id": 6665,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "magicResistance": {
+      "flat": 45.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Voidborn Resilience",
+      "effects": "Gain a stack for each second [[Combat status|in combat]] with enemy champions, stacking up to 5 times. At '''maximum''' stacks, increase your {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}} by 30% until the end of combat."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain a stack for each second [[Combat status|in combat]] with enemy champions, stacking up to 5 times. At '''maximum''' stacks, increase your {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}} by 30% until the end of combat.",
+      "effect_type": "stat_modifier",
+      "stat": "armor",
+      "value": 5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        5,
+        30
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6665_tank_t4_jakshotheprotean.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "Jak'Sho, The Protean"
+  ],
+  "generated_at": "2026-02-09T22:46:10.160419+00:00"
+}

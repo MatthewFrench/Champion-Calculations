@@ -1,0 +1,63 @@
+{
+  "name": "Ohmwrecker (Turret Item)",
+  "id": 1500,
+  "tier": 1,
+  "rank": [
+    "TURRET"
+  ],
+  "stats": {
+    "armorPenetration": {
+      "percent": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Dodge Piercing",
+      "effects": "Turret attacks cannot be dodged."
+    },
+    {
+      "unique": true,
+      "name": "Warming Up",
+      "effects": "Turrets gain a stack for 5 seconds each time they strike a champion. Each stack increases their damage dealt by 50%, up to 150%."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Turret attacks cannot be dodged.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "structure",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.4
+    },
+    {
+      "raw": "Turrets gain a stack for 5 seconds each time they strike a champion. Each stack increases their damage dealt by 50%, up to 150%.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "structure",
+      "status_effects": [],
+      "numbers_extracted": [
+        5,
+        50,
+        150
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3056_ohmwrecker.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.134523+00:00"
+}

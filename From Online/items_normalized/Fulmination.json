@@ -1,0 +1,94 @@
+{
+  "name": "Fulmination",
+  "id": 443055,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "attackSpeed": {
+      "flat": 45.0
+    },
+    "movespeed": {
+      "percent": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Polarity",
+      "effects": "Your {{tip|Energized}} attacks against targets not hit by your previous ''Energized'' attack do not consume any ''Energize'' stacks on-hit."
+    },
+    {
+      "unique": true,
+      "name": "Dynamo",
+      "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|'''bonus''' magic damage}} [[on-hit]] equal to {{as|13% of the target's '''current''' health}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 100.0,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        100.0
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Your {{tip|Energized}} attacks against targets not hit by your previous ''Energized'' attack do not consume any ''Energize'' stacks on-hit.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.5
+    },
+    {
+      "raw": "When fully {{tip|Energized}}, your next basic attack deals {{as|'''bonus''' magic damage}} [[on-hit]] equal to {{as|13% of the target's '''current''' health}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 13,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        13
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3055_fulmination.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "energize"
+  ],
+  "generated_at": "2026-02-09T22:46:10.166534+00:00"
+}

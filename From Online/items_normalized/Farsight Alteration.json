@@ -1,0 +1,49 @@
+{
+  "name": "Farsight Alteration",
+  "id": 3363,
+  "tier": 1,
+  "rank": [
+    "TRINKET"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Trinket",
+      "effects": "Places a visible {{tip|Farsight Ward}} at the target location that grants {{tip|sight}} of the surrounding area, including over [[terrain]] and through [[brush]] and lasting indefinitely. Also grants sight of the area in a 800 radius for 2 seconds. Upon detecting an enemy champion, the ward will increase its sight radius to 800 units and destroy itself after 3 seconds.",
+      "range": 4000
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Places a visible {{tip|Farsight Ward}} at the target location that grants {{tip|sight}} of the surrounding area, including over [[terrain]] and through [[brush]] and lasting indefinitely. Also grants sight of the area in a 800 radius for 2 seconds. Upon detecting an enemy champion, the ward will increase its sight radius to 800 units and destroy itself after 3 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 800,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        800,
+        2,
+        800,
+        3
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3363_class_t1_farsightalteration.png",
+  "simpleDescription": "Grants increased range and reveals the targetted area",
+  "nicknames": [
+    "blue",
+    "totem",
+    "trinket"
+  ],
+  "generated_at": "2026-02-09T22:46:10.149867+00:00"
+}

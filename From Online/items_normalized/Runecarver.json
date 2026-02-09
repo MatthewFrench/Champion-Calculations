@@ -1,0 +1,102 @@
+{
+  "name": "Runecarver",
+  "id": 447108,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Helix",
+      "effects": "Dealing damage with an ability generates 30 ''Energize'' stacks and triggers the effects of {{tip|Energized}} attacks if they are ready ({{fd|2.5}}-second cooldown per {{tip|cast instance}})."
+    },
+    {
+      "unique": true,
+      "name": "Spiral Out",
+      "effects": "When fully {{tip|Energized}}, your next basic attack generates a ''Rune'' stack and fires a missile at the target for each ''Rune'' stack you have, dealing {{as|{{pp|20 to 45}}|magic damage}} {{as|(+ 11% '''bonus''' AD)}} {{as|(+ 8% AP)}} {{as|(+ {{fd|0.3}} per 100 '''bonus''' health)}} {{as|magic damage}} with each missile. Stacks are reset every round and between each phase in a round."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 100.0,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        100.0
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Dealing damage with an ability generates 30 ''Energize'' stacks and triggers the effects of {{tip|Energized}} attacks if they are ready ({{fd|2.5}}-second cooldown per {{tip|cast instance}}).",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 30,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        30,
+        2.5
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "When fully {{tip|Energized}}, your next basic attack generates a ''Rune'' stack and fires a missile at the target for each ''Rune'' stack you have, dealing {{as|{{pp|20 to 45}}|magic damage}} {{as|(+ 11% '''bonus''' AD)}} {{as|(+ 8% AP)}} {{as|(+ {{fd|0.3}} per 100 '''bonus''' health)}} {{as|magic damage}} with each missile. Stacks are reset every round and between each phase in a round.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 20,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        45,
+        11,
+        8,
+        0.3,
+        100
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7108_runecarver.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "energize"
+  ],
+  "generated_at": "2026-02-09T22:46:10.235767+00:00"
+}

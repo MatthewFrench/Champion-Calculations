@@ -1,0 +1,35 @@
+{
+  "name": "Vampiric Scepter",
+  "id": 1053,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 15.0
+    },
+    "lifesteal": {
+      "percent": 7.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1053_fighter_t2_vampiricscepter.png",
+  "simpleDescription": "Basic attacks restore Health",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.171506+00:00"
+}

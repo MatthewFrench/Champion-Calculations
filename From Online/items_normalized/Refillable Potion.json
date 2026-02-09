@@ -1,0 +1,48 @@
+{
+  "name": "Refillable Potion",
+  "id": 2031,
+  "tier": 1,
+  "rank": [
+    "POTION"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "effects": "Holds charges that refill upon visiting the [[shop]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Holds charges that refill upon visiting the [[shop]].",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.4
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 150,
+      "sell": 60
+    },
+    "purchasable": true,
+    "tags": [
+      "HEALTH_AND_REG"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2031_class_t1_refillablepotion.png",
+  "simpleDescription": "Restores Health over time. Refills at shop.",
+  "nicknames": [
+    "consumable",
+    "Green Potion"
+  ],
+  "generated_at": "2026-02-09T22:46:10.156886+00:00"
+}

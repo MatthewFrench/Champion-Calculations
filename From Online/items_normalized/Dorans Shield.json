@@ -1,0 +1,97 @@
+{
+  "name": "Doran's Shield",
+  "id": 1054,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "health": {
+      "flat": 110.0
+    },
+    "healthRegen": {
+      "flat": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Enduring Focus",
+      "effects": "After taking damage from a [[champion]], gain '''bonus''' [[health regeneration]] per second equal to {{as|{{rd|0 to 5 for 11|0 to 3.75 for 11|levels=0 to 75|key1=%|formula1=0.066 health regen for every 1% missing health|formula2=0.05 health regen for every 1% missing health|type='''current missing''' health|pp=true}}|health}} for 8 seconds, refreshing on subsequent champion damage taken. [[Area of effect]], [[damage over time]], or [[damage|proc]] damage taken trigger this effect with the {{tip|ranged}} values."
+    },
+    {
+      "unique": true,
+      "name": "Helping Hand",
+      "effects": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "After taking damage from a [[champion]], gain '''bonus''' [[health regeneration]] per second equal to {{as|{{rd|0 to 5 for 11|0 to 3.75 for 11|levels=0 to 75|key1=%|formula1=0.066 health regen for every 1% missing health|formula2=0.05 health regen for every 1% missing health|type='''current missing''' health|pp=true}}|health}} for 8 seconds, refreshing on subsequent champion damage taken. [[Area of effect]], [[damage over time]], or [[damage|proc]] damage taken trigger this effect with the {{tip|ranged}} values.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        5,
+        11,
+        0,
+        3.75,
+        11,
+        0,
+        75,
+        1,
+        1,
+        0.066,
+        1,
+        2,
+        0.05,
+        1,
+        8
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]].",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 5,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_hit",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 450,
+      "sell": 180
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1054_tank_t1_doransshield.png",
+  "simpleDescription": "Good defensive starting item",
+  "nicknames": [
+    "dshield"
+  ],
+  "generated_at": "2026-02-09T22:46:10.168393+00:00"
+}

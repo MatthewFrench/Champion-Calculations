@@ -1,0 +1,56 @@
+{
+  "name": "Scarecrow Effigy",
+  "id": 3330,
+  "tier": 1,
+  "rank": [
+    "TRINKET"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Trinket",
+      "effects": "Consume a charge to place a visible {{tip|Effigy}} at the target location, which grants {{tip|sight}} over the surrounding area for {{pp|130 + (300-130)/17*(x-1) for 20}} seconds. For enemies, it visually appears identical to {{ci|Fiddlesticks}} (including on the minimap) and has no visible [[health bar]] until it ''activates''. Enemy {{tip|champion|champions}} that approach it will activate it, causing it to automatically sound a Danger [[ping]] to its allies as well as fake a random action for up to 2 seconds. If not destroyed by that time, it will deal 1 damage to itself.",
+      "range": 625
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Consume a charge to place a visible {{tip|Effigy}} at the target location, which grants {{tip|sight}} over the surrounding area for {{pp|130 + (300-130)/17*(x-1) for 20}} seconds. For enemies, it visually appears identical to {{ci|Fiddlesticks}} (including on the minimap) and has no visible [[health bar]] until it ''activates''. Enemy {{tip|champion|champions}} that approach it will activate it, causing it to automatically sound a Danger [[ping]] to its allies as well as fake a random action for up to 2 seconds. If not destroyed by that time, it will deal 1 damage to itself.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 130,
+      "value_range": [
+        300,
+        130
+      ],
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy",
+      "status_effects": [],
+      "numbers_extracted": [
+        130,
+        300,
+        -130,
+        17,
+        -1,
+        20,
+        2,
+        1
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/fiddlestickstrinket1.png",
+  "simpleDescription": "Periodically place a Stealth Ward",
+  "nicknames": [
+    "yellow",
+    "totem",
+    "trinket"
+  ],
+  "generated_at": "2026-02-09T22:46:10.219943+00:00"
+}

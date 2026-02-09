@@ -1,0 +1,35 @@
+{
+  "name": "Steel Sigil",
+  "id": 2019,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 30.0
+    },
+    "attackDamage": {
+      "flat": 15.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 1100,
+      "sell": 440
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2019_steel_sigil.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "Bloodstone"
+  ],
+  "generated_at": "2026-02-09T22:46:10.184627+00:00"
+}

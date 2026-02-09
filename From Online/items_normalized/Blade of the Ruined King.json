@@ -1,0 +1,93 @@
+{
+  "name": "Blade of the Ruined King",
+  "id": 3153,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "attackSpeed": {
+      "flat": 25.0
+    },
+    "lifesteal": {
+      "percent": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Mist's Edge",
+      "effects": "Basic attacks deal {{as|'''bonus''' physical damage}} [[on-hit]] equal to {{as|{{rd|9%|6%}} of the target's '''current''' health}}, with a '''maximum''' of 100 against {{tip|minions}} and {{tip|monsters}}."
+    },
+    {
+      "unique": true,
+      "name": "Clawing Shadows",
+      "effects": "Basic attacks on-hit against enemy champions apply a stack for 6 seconds, stacking up to 3 times. The third stack consumes them all to {{tip|slow}} the target by 30% for 1 second.",
+      "cooldown": "15"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks deal {{as|'''bonus''' physical damage}} [[on-hit]] equal to {{as|{{rd|9%|6%}} of the target's '''current''' health}}, with a '''maximum''' of 100 against {{tip|minions}} and {{tip|monsters}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 9,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        9,
+        6,
+        100
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Basic attacks on-hit against enemy champions apply a stack for 6 seconds, stacking up to 3 times. The third stack consumes them all to {{tip|slow}} the target by 30% for 1 second.",
+      "effect_type": "status",
+      "stat": null,
+      "value": 6,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "enemy_champion",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        6,
+        3,
+        30,
+        1
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3153_fighter_t3_bladeoftheruinedking.png",
+  "simpleDescription": "Deals damage based on target's Health, can steal Move Speed",
+  "nicknames": [
+    "brk",
+    "bork",
+    "botrk",
+    "mist"
+  ],
+  "generated_at": "2026-02-09T22:46:10.143634+00:00"
+}

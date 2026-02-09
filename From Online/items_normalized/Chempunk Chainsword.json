@@ -1,0 +1,62 @@
+{
+  "name": "Chempunk Chainsword",
+  "id": 6609,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 450.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Hackshorn",
+      "effects": "Dealing {{as|physical damage}} to enemy champions inflicts them with {{tip|Grievous Wounds}} for 3 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing {{as|physical damage}} to enemy champions inflicts them with {{tip|Grievous Wounds}} for 3 seconds.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6609_fighter_t3_chempunkchainsword.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "grievous",
+    "grievous wounds"
+  ],
+  "generated_at": "2026-02-09T22:46:10.191105+00:00"
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Turbo Chemtank",
+  "id": 443079,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "health": {
+      "flat": 600.0
+    }
+  },
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Supercharged",
+      "effects": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion and grants you {{tip|Cc-immune|total crowd control immunity}} for the next 3 seconds."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion and grants you {{tip|Cc-immune|total crowd control immunity}} for the next 3 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6664_tank_t4_acceleratedchemtank.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "catastrophe"
+  ],
+  "generated_at": "2026-02-09T22:46:10.137648+00:00"
+}

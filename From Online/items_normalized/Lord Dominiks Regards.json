@@ -1,0 +1,70 @@
+{
+  "name": "Lord Dominik's Regards",
+  "id": 3036,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "armorPenetration": {
+      "percent": 35.0
+    },
+    "attackDamage": {
+      "flat": 35.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Giant Slayer",
+      "effects": "Deal {{pp|0 to 15 for 16|0 to 1500|key=%|type=target's '''bonus''' health|formula=1% per 100 bonus health, up to a maximum of 15% at 1500 bonus health.|color=health}} increased damage against enemy champions."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Deal {{pp|0 to 15 for 16|0 to 1500|key=%|type=target's '''bonus''' health|formula=1% per 100 bonus health, up to a maximum of 15% at 1500 bonus health.|color=health}} increased damage against enemy champions.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        15,
+        16,
+        0,
+        1500,
+        1,
+        100,
+        15,
+        1500
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3036_marksman_t3_dominikregards.png",
+  "simpleDescription": "Overcomes enemies with high health and armor",
+  "nicknames": [
+    "lw",
+    "ldr",
+    "doms"
+  ],
+  "generated_at": "2026-02-09T22:46:10.223915+00:00"
+}

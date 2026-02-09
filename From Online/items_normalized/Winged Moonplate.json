@@ -1,0 +1,39 @@
+{
+  "name": "Winged Moonplate",
+  "id": 3066,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "health": {
+      "flat": 200.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 800,
+      "sell": 320
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3066_tank_t3_wingedmoonplate.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "chaps",
+    "pants",
+    "leggings",
+    "zoomin"
+  ],
+  "generated_at": "2026-02-09T22:46:10.177749+00:00"
+}

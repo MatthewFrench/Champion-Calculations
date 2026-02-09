@@ -1,0 +1,87 @@
+{
+  "name": "Puppeteer",
+  "id": 447123,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 30.0
+    },
+    "healAndShieldPower": {
+      "flat": 15.0
+    },
+    "manaRegen": {
+      "percent": 150.0
+    },
+    "abilityHaste": {
+      "flat": 40.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Pull Their Strings",
+      "effects": "Basic attacks [[on-hit]] against enemy champions apply a ''Puppeteer'' stack for 15 seconds, stacking up to 4 times. The fourth stack against a target consumes them all to render the target {{tip|berserk}} for 2 seconds, causing them to gain {{as|50%|as}} {{as|(+ 150% of your heal and shield power)}} {{as|'''bonus''' attack speed}} and {{as|40% '''bonus''' movement speed}} (25 second cooldown). If only one champion is alive on the enemy team, instead {{tip|fear}} the target for the same duration.",
+      "stats": {
+        "movespeed": {
+          "percent": 40.0
+        }
+      }
+    },
+    {
+      "unique": true,
+      "effects": "Granting yourself or an ally a {{tip|heal}}, {{tip|shield}}, or [[champion ability|ability-sourced]] buff reduces the cooldown of ''Pull Their Strings'' by 5 seconds, once per cast."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks [[on-hit]] against enemy champions apply a ''Puppeteer'' stack for 15 seconds, stacking up to 4 times. The fourth stack against a target consumes them all to render the target {{tip|berserk}} for 2 seconds, causing them to gain {{as|50%|as}} {{as|(+ 150% of your heal and shield power)}} {{as|'''bonus''' attack speed}} and {{as|40% '''bonus''' movement speed}} (25 second cooldown). If only one champion is alive on the enemy team, instead {{tip|fear}} the target for the same duration.",
+      "effect_type": "healing",
+      "stat": "attack_speed",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        15,
+        4,
+        2,
+        50,
+        150,
+        40,
+        25
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Granting yourself or an ally a {{tip|heal}}, {{tip|shield}}, or [[champion ability|ability-sourced]] buff reduces the cooldown of ''Pull Their Strings'' by 5 seconds, once per cast.",
+      "effect_type": "healing",
+      "stat": "shield",
+      "value": 5,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_ability",
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447123_puppeteer.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.173091+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Needlessly Large Rod",
+  "id": 1058,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 65.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1058_mage_t1_largerod.png",
+  "simpleDescription": "Greatly increases Ability Power",
+  "nicknames": [
+    "nlr"
+  ],
+  "generated_at": "2026-02-09T22:46:10.180908+00:00"
+}

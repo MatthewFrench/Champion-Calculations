@@ -1,0 +1,75 @@
+{
+  "name": "Scorchclaw Pup",
+  "id": 1101,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Jungle Companions",
+      "effects": "Summon a ''Scorchclaw Pup'' companion to assist you in combat against monsters."
+    },
+    {
+      "unique": true,
+      "name": "Scorchclaw's Slash",
+      "effects": "Feed your companion enough treats to evolve it and upgrade your {{si|Smite}}. Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi|Scorchclaw's Slash}} buff."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Summon a ''Scorchclaw Pup'' companion to assist you in combat against monsters.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "monster",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.4
+    },
+    {
+      "raw": "Feed your companion enough treats to evolve it and upgrade your {{si|Smite}}. Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi|Scorchclaw's Slash}} buff.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.4
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 450,
+      "sell": 180
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "LIFESTEAL_VAMP"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1101_jungle_t1_scorchclawpup.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "jungle",
+    "red",
+    "cat",
+    "kitty",
+    "meow"
+  ],
+  "generated_at": "2026-02-09T22:46:10.196520+00:00"
+}

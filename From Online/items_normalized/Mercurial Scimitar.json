@@ -1,0 +1,66 @@
+{
+  "name": "Mercurial Scimitar",
+  "id": 3139,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "lifesteal": {
+      "percent": 10.0
+    },
+    "magicResistance": {
+      "flat": 35.0
+    }
+  },
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Quicksilver",
+      "effects": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion and grants {{as|50% '''bonus total''' movement speed}} and {{tip|ghosted|ghosting}} for 2 seconds."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion and grants {{as|50% '''bonus total''' movement speed}} and {{tip|ghosted|ghosting}} for 2 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "movement_speed",
+      "value": 50,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        50,
+        2
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3139_marksman_t3_mercurialscimitar.png",
+  "simpleDescription": "Activate to remove all crowd control debuffs and grant massive Move Speed",
+  "nicknames": [
+    "merc scim",
+    "qss",
+    "quicksilver sash",
+    "silvermere dawn"
+  ],
+  "generated_at": "2026-02-09T22:46:10.204969+00:00"
+}

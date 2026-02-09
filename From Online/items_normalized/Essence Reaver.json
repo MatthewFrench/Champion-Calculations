@@ -1,0 +1,84 @@
+{
+  "name": "Essence Reaver",
+  "id": 3508,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|125% '''base''' AD}} {{as|(+ {{pp|0 to 50|0 to 100 for 11|label1=% critical strike chance|showtype=false|formula=0.5 damage for every 1% critical strike chance}} based on critical strike chance)}} {{as|'''bonus''' physical damage}} [[on-hit]] and restores {{as|mana}} equal to{{ft|50% of that amount|{{as|{{ap|125*0.5}}% '''base''' AD}} {{as|(+ {{pp|0 to 25|0 to 100 for 11|label1=% critical strike chance|showtype=false|formula=0.25 mana restored for every 1% critical strike chance}} based on critical strike chance)}}}}({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|125% '''base''' AD}} {{as|(+ {{pp|0 to 50|0 to 100 for 11|label1=% critical strike chance|showtype=false|formula=0.5 damage for every 1% critical strike chance}} based on critical strike chance)}} {{as|'''bonus''' physical damage}} [[on-hit]] and restores {{as|mana}} equal to{{ft|50% of that amount|{{as|{{ap|125*0.5}}% '''base''' AD}} {{as|(+ {{pp|0 to 25|0 to 100 for 11|label1=% critical strike chance|showtype=false|formula=0.25 mana restored for every 1% critical strike chance}} based on critical strike chance)}}}}({{fd|1.5}} second cooldown, starts after using the empowered attack).",
+      "effect_type": "damage",
+      "stat": "mana",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        125,
+        0,
+        50,
+        0,
+        100,
+        11,
+        1,
+        0.5,
+        1,
+        50,
+        125,
+        0.5,
+        0,
+        25,
+        0,
+        100,
+        11,
+        1,
+        0.25,
+        1,
+        1.5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3050,
+      "sell": 1220
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MANA_AND_REG",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3508_marksman_t3_essencereaver.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "er",
+    "Spellblade"
+  ],
+  "generated_at": "2026-02-09T22:46:10.224713+00:00"
+}

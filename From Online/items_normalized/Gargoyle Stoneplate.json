@@ -1,0 +1,60 @@
+{
+  "name": "Gargoyle Stoneplate",
+  "id": 443193,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 65.0
+    },
+    "magicResistance": {
+      "flat": 65.0
+    },
+    "movespeed": {
+      "percent": 10.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Unbreakable",
+      "effects": "Gain a {{tip|shield}} for 300 {{as|(+ 100% '''bonus''' health)}} that decays over 5 seconds, and 25% increased [[size]] for the same duration."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Gain a {{tip|shield}} for 300 {{as|(+ 100% '''bonus''' health)}} that decays over 5 seconds, and 25% increased [[size]] for the same duration.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 300,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        300,
+        100,
+        5,
+        25
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3193_tank_t3_gargoylestoneplate.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.180620+00:00"
+}

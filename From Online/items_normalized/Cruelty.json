@@ -1,0 +1,59 @@
+{
+  "name": "Cruelty",
+  "id": 447109,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "armor": {
+      "flat": 30.0
+    },
+    "magicResistance": {
+      "flat": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Watch Them Fall",
+      "effects": "{{tip|Immobilize|Immobilizing}} or {{tip|ground|grounding}} an enemy champion summons a comet above them that lands at their current location after 1 second, dealing {{as|{{pp|50 to 150}}|magic damage}} {{as|(+ 40% AP)}} {{as|(+ 4% of your '''maximum''' health)}} {{as|magic damage}} to enemies within the area (6 second cooldown per target per {{tip|cast instance}})."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{tip|Immobilize|Immobilizing}} or {{tip|ground|grounding}} an enemy champion summons a comet above them that lands at their current location after 1 second, dealing {{as|{{pp|50 to 150}}|magic damage}} {{as|(+ 40% AP)}} {{as|(+ 4% of your '''maximum''' health)}} {{as|magic damage}} to enemies within the area (6 second cooldown per target per {{tip|cast instance}}).",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 1,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        1,
+        50,
+        150,
+        40,
+        4,
+        6
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6035_fighter_t3_silvermeredawn.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.168731+00:00"
+}

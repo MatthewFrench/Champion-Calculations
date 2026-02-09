@@ -1,0 +1,59 @@
+{
+  "name": "Guardian's Orb",
+  "id": 3112,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 50.0
+    },
+    "health": {
+      "flat": 150.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Recovery",
+      "effects": "Gain {{as|10 '''bonus''' mana regeneration}}. Manaless champions gain {{as|15 '''bonus''' health regeneration}} instead."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain {{as|10 '''bonus''' mana regeneration}}. Manaless champions gain {{as|15 '''bonus''' health regeneration}} instead.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 10,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        15
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 950,
+      "sell": 380
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "TANK",
+      "SUPPORT",
+      "MANA_AND_REG"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3112_aram_t1_guardiansorb.png",
+  "simpleDescription": "Good starting item for mages",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.210372+00:00"
+}

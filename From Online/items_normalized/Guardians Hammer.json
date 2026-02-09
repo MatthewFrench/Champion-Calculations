@@ -1,0 +1,40 @@
+{
+  "name": "Guardian's Hammer",
+  "id": 3184,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    },
+    "health": {
+      "flat": 150.0
+    },
+    "lifesteal": {
+      "percent": 5.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 950,
+      "sell": 380
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3177_aram_t1_guardianshammer.png",
+  "simpleDescription": "Good starting item for attackers",
+  "nicknames": [
+    "dblade"
+  ],
+  "generated_at": "2026-02-09T22:46:10.174761+00:00"
+}

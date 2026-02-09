@@ -1,0 +1,61 @@
+{
+  "name": "Lost Chapter",
+  "id": 3802,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 40.0
+    },
+    "mana": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Enlighten",
+      "effects": "Upon leveling up, restores {{as|20% of '''maximum''' mana}} over 3 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Upon leveling up, restores {{as|20% of '''maximum''' mana}} over 3 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "mana",
+      "value": 20,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        3
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3802_mage_tier2_lostchapter.png",
+  "simpleDescription": "Restores Mana upon levelling up.",
+  "nicknames": [
+    "mana book"
+  ],
+  "generated_at": "2026-02-09T22:46:10.134904+00:00"
+}

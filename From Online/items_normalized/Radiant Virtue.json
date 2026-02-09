@@ -1,0 +1,66 @@
+{
+  "name": "Radiant Virtue",
+  "id": 446667,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 35.0
+    },
+    "healAndShieldPower": {
+      "flat": 12.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "magicResistance": {
+      "flat": 35.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Guiding Light",
+      "effects": "Upon casting your [[champion ability|ultimate]], you ''Transcend'' for 9 seconds. While ''Transcended'', increase your {{as|'''maximum''' health by {{fd|12.5}}%}} and cause you and all allies within {{tip|cr|icononly=true}} 1200 units to {{tip|heal}} for {{as|{{fd|3}}% of your '''maximum''' health}} upon you ''Transcending'' and every 3 seconds thereafter, for a total healing of {{as|{{ap|3*4}}% of your '''maximum''' health}}.",
+      "cooldown": "30"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Upon casting your [[champion ability|ultimate]], you ''Transcend'' for 9 seconds. While ''Transcended'', increase your {{as|'''maximum''' health by {{fd|12.5}}%}} and cause you and all allies within {{tip|cr|icononly=true}} 1200 units to {{tip|heal}} for {{as|{{fd|3}}% of your '''maximum''' health}} upon you ''Transcending'' and every 3 seconds thereafter, for a total healing of {{as|{{ap|3*4}}% of your '''maximum''' health}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 9,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        9,
+        12.5,
+        1200,
+        3,
+        3,
+        3,
+        4
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6667_tank_t4_radiantvirtue.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "rv"
+  ],
+  "generated_at": "2026-02-09T22:46:10.143234+00:00"
+}

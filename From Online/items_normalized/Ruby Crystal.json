@@ -1,0 +1,37 @@
+{
+  "name": "Ruby Crystal",
+  "id": 1028,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "health": {
+      "flat": 150.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1028_base_t1_rubycrystal.png",
+  "simpleDescription": "Increases Health",
+  "nicknames": [
+    "red"
+  ],
+  "generated_at": "2026-02-09T22:46:10.221985+00:00"
+}

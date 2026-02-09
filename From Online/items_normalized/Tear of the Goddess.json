@@ -1,0 +1,84 @@
+{
+  "name": "Tear of the Goddess",
+  "id": 3070,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "mana": {
+      "flat": 240.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Manaflow",
+      "effects": "Grants a charge every 8 seconds, up to 4 charges. Affecting an enemy or ally with an [[champion ability|ability]] consumes a charge to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} if they are a champion, up to '''maximum''' of {{as|360 '''bonus''' mana}}. Can only be triggered if an ability was cast and only once per {{tip|cast instance}}."
+    },
+    {
+      "unique": true,
+      "name": "Helping Hand",
+      "effects": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants a charge every 8 seconds, up to 4 charges. Affecting an enemy or ally with an [[champion ability|ability]] consumes a charge to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} if they are a champion, up to '''maximum''' of {{as|360 '''bonus''' mana}}. Can only be triggered if an ability was cast and only once per {{tip|cast instance}}.",
+      "effect_type": "stat_modifier",
+      "stat": "mana",
+      "value": 8,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_ability",
+      "applies_to": "enemy",
+      "status_effects": [],
+      "numbers_extracted": [
+        8,
+        4,
+        3,
+        6,
+        360
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]].",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 5,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_hit",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3070_all_t1_tearofthegoddess.png",
+  "simpleDescription": "Increases maximum Mana as Mana is spent",
+  "nicknames": [
+    "archangel's staff",
+    "Seraph's embrace",
+    "Winter's approach",
+    "Fimbulwinter",
+    "Muramana",
+    "Manamune"
+  ],
+  "generated_at": "2026-02-09T22:46:10.149231+00:00"
+}

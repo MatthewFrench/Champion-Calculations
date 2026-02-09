@@ -1,0 +1,55 @@
+{
+  "name": "Sanguine Gift",
+  "id": 443062,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "healAndShieldPower": {
+      "flat": 15.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Patronage",
+      "effects": "Store 15% of {{tt|post-mitigation damage|Damage calculated after modifiers}} dealt. Whenever the stored amount exceeds a value of 333, consume it to {{tip|heal}} yourself and the nearest allied champion for that same amount. Stored damage is reset every round and between each phase in a round."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Store 15% of {{tt|post-mitigation damage|Damage calculated after modifiers}} dealt. Whenever the stored amount exceeds a value of 333, consume it to {{tip|heal}} yourself and the nearest allied champion for that same amount. Stored damage is reset every round and between each phase in a round.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        15,
+        333
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3062_sanguinegift.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.184101+00:00"
+}

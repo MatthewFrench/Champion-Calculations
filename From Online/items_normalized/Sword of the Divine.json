@@ -1,0 +1,59 @@
+{
+  "name": "Sword of the Divine",
+  "id": 443060,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "criticalStrikeChance": {
+      "percent": 50.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Excoriate",
+      "effects": "Gain a random amount of {{as|'''bonus''' critical strike damage|critical damage}} that scales up to {{as|50% of your critical strike chance}}, with the value of this amount changing every {{fd|0.25}} seconds.",
+      "stats": {
+        "criticalStrikeChance": {
+          "percent": 50.0
+        },
+        "criticalStrikeDamage": {
+          "percent": 50.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain a random amount of {{as|'''bonus''' critical strike damage|critical damage}} that scales up to {{as|50% of your critical strike chance}}, with the value of this amount changing every {{fd|0.25}} seconds.",
+      "effect_type": "damage",
+      "stat": "critical_strike",
+      "value": 50,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        50,
+        0.25
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3131_fighter_t3_swordofthedivine.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "sotd"
+  ],
+  "generated_at": "2026-02-09T22:46:10.131466+00:00"
+}

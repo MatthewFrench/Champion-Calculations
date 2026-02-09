@@ -1,0 +1,17 @@
+{
+  "name": "Elixir of Force",
+  "id": 2152,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/elixir_of_force.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.219648+00:00"
+}

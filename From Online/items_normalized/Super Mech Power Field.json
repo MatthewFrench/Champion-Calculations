@@ -1,0 +1,40 @@
+{
+  "name": "Super Mech Power Field",
+  "id": 1512,
+  "tier": 1,
+  "rank": [
+    "MINION"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Super Mech Power Field",
+      "effects": "Grants nearby minions (excluding super minions) {{as|35 armor}} and {{as|35 magic resistance}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants nearby minions (excluding super minions) {{as|35 armor}} and {{as|35 magic resistance}}.",
+      "effect_type": "stat_modifier",
+      "stat": "armor",
+      "value": 35,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        35,
+        35
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1512_supermechpowerfield.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.186472+00:00"
+}

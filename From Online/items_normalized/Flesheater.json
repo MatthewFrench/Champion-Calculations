@@ -1,0 +1,71 @@
+{
+  "name": "Flesheater",
+  "id": 447112,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "health": {
+      "flat": 500.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Hack the Meat",
+      "effects": "Dealing damage reduces the target's {{as|armor}} and {{as|magic resistance}} by 3 for 5 seconds, stacking up to 10 times for a total resistances reduction of 30. Stacks can be applied to each enemy only once every second."
+    },
+    {
+      "unique": true,
+      "name": "Cannibalize",
+      "effects": "If you or the allied champion on your team score a {{tip|takedown}} against an enemy champion, you are both {{tip|heal|healed}} for {{as|18% of the taken down target's '''maximum''' health}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing damage reduces the target's {{as|armor}} and {{as|magic resistance}} by 3 for 5 seconds, stacking up to 10 times for a total resistances reduction of 30. Stacks can be applied to each enemy only once every second.",
+      "effect_type": "damage",
+      "stat": "armor",
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        5,
+        10,
+        30.0
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "If you or the allied champion on your team score a {{tip|takedown}} against an enemy champion, you are both {{tip|heal|healed}} for {{as|18% of the taken down target's '''maximum''' health}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 18,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        18
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7112_flesheater.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.204382+00:00"
+}

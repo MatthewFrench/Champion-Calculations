@@ -1,0 +1,63 @@
+{
+  "name": "Nashor's Tooth",
+  "id": 3115,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "attackSpeed": {
+      "flat": 50.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Icathian Bite",
+      "effects": "Basic attacks deal {{as|15 {{as|(+ 15% AP)}} '''bonus''' magic damage|magic damage}} [[on-hit]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks deal {{as|15 {{as|(+ 15% AP)}} '''bonus''' magic damage|magic damage}} [[on-hit]].",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        15,
+        15
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MAGE",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3115_mage_t3_nashorstooth.png",
+  "simpleDescription": "Increases Attack Speed, Ability Power, and Cooldown Reduction",
+  "nicknames": [
+    "nashors"
+  ],
+  "generated_at": "2026-02-09T22:46:10.150961+00:00"
+}

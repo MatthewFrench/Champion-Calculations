@@ -1,0 +1,85 @@
+{
+  "name": "Sword of Blossoming Dawn",
+  "id": 4011,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 45.0
+    },
+    "healAndShieldPower": {
+      "flat": 12.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Effervescence",
+      "effects": "Gain {{as|{{fd|1.2}}% '''bonus''' attack speed}} per 1% {{stil|heal and shield power}}."
+    },
+    {
+      "unique": true,
+      "name": "Peppermint",
+      "effects": "Basic attacks [[on-hit]] cause the {{tt|most wounded|Lowest health percent}} and nearest allied champion to be {{tip|heal|healed}} for {{pp|15 to 45}} {{as|(+ 10% '''bonus''' AD)}} {{as|(+ 7% AP)}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain {{as|{{fd|1.2}}% '''bonus''' attack speed}} per 1% {{stil|heal and shield power}}.",
+      "effect_type": "healing",
+      "stat": "attack_speed",
+      "value": 1.2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        1.2,
+        1
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Basic attacks [[on-hit]] cause the {{tt|most wounded|Lowest health percent}} and nearest allied champion to be {{tip|heal|healed}} for {{pp|15 to 45}} {{as|(+ 10% '''bonus''' AD)}} {{as|(+ 7% AP)}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        15,
+        45,
+        10,
+        7
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4011_swordofblossomingdawn.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.169978+00:00"
+}

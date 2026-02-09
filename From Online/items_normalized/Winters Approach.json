@@ -1,0 +1,103 @@
+{
+  "name": "Winter's Approach",
+  "id": 3119,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "health": {
+      "flat": 550.0
+    },
+    "mana": {
+      "flat": 500.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Awe",
+      "effects": "Grants {{as|'''bonus''' health}} equal to {{as|15% '''bonus''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Manaflow",
+      "effects": "Grants a charge every 8 seconds, up to 4 charges. Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability|ability]] to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} for champion targets, up to a '''maximum''' of {{as|360 '''bonus''' mana}}."
+    },
+    {
+      "effects": "Transforms into {{ii|Fimbulwinter}} at {{as|360 '''bonus''' mana}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants {{as|'''bonus''' health}} equal to {{as|15% '''bonus''' mana}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        15
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Grants a charge every 8 seconds, up to 4 charges. Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability|ability]] to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} for champion targets, up to a '''maximum''' of {{as|360 '''bonus''' mana}}.",
+      "effect_type": "stat_modifier",
+      "stat": "mana",
+      "value": 8,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_hit",
+      "applies_to": "enemy",
+      "status_effects": [],
+      "numbers_extracted": [
+        8,
+        4,
+        3,
+        6,
+        360
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Transforms into {{ii|Fimbulwinter}} at {{as|360 '''bonus''' mana}}.",
+      "effect_type": "stat_modifier",
+      "stat": "mana",
+      "value": 360,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        360
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2400,
+      "sell": 960
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "Fimbulwinter",
+    "tear"
+  ],
+  "generated_at": "2026-02-09T22:46:10.163661+00:00"
+}

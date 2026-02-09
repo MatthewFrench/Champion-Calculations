@@ -1,0 +1,32 @@
+{
+  "name": "Dagger",
+  "id": 1042,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 10.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 250,
+      "sell": 100
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1042_base_t1_dagger.png",
+  "simpleDescription": "Slightly increases Attack Speed",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.194851+00:00"
+}

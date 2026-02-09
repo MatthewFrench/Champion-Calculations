@@ -1,0 +1,84 @@
+{
+  "name": "Profane Hydra",
+  "id": 6698,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Damaging basic attacks deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly=true}} 350 radius centered around the target."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Heretical Cleave",
+      "effects": "Deal {{as|80% AD}} {{as|physical damage}} to enemies in a {{tip|cr|icononly = true}} 450 radius."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Damaging basic attacks deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly=true}} 350 radius centered around the target.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 40,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        40,
+        20,
+        350
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Deal {{as|80% AD}} {{as|physical damage}} to enemies in a {{tip|cr|icononly = true}} 450 radius.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 80,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        80,
+        450
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2850,
+      "sell": 1140
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "lethality"
+  ],
+  "generated_at": "2026-02-09T22:46:10.217154+00:00"
+}

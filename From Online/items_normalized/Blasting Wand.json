@@ -1,0 +1,31 @@
+{
+  "name": "Blasting Wand",
+  "id": 1026,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 45.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 850,
+      "sell": 340
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1026_mage_t1_blastingwand.png",
+  "simpleDescription": "Moderately increases Ability Power",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.177137+00:00"
+}

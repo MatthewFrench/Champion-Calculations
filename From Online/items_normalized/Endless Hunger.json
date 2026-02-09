@@ -1,0 +1,81 @@
+{
+  "name": "Endless Hunger",
+  "id": 2517,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 65.0
+    },
+    "omnivamp": {
+      "percent": 5.0
+    },
+    "tenacity": {
+      "percent": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Famine",
+      "effects": "Gain {{as|5|ah}} {{as|(+ 10% '''bonus''' AD)}} {{as|ability haste}}."
+    },
+    {
+      "unique": true,
+      "name": "Feast",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{as|15% omnivamp}} for 8 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain {{as|5|ah}} {{as|(+ 10% '''bonus''' AD)}} {{as|ability haste}}.",
+      "effect_type": "stat_modifier",
+      "stat": "ability_haste",
+      "value": 5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        5,
+        10
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{as|15% omnivamp}} for 8 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "omnivamp",
+      "value": 3,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        15,
+        8
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2517_adfighteromnivamp.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.202959+00:00"
+}

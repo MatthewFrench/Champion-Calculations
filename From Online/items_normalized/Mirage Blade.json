@@ -1,0 +1,49 @@
+{
+  "name": "Mirage Blade",
+  "id": 447100,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 60.0
+    },
+    "movespeed": {
+      "percent": 6.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Blur",
+      "effects": "Basic attacks [[on-hit]] reduce the remaining cooldowns of your abilities and spells with {{tip|dash|dashes}} and/or {{tip|blink|blinks}} by 12%, modified to 4% for your ultimate ability."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks [[on-hit]] reduce the remaining cooldowns of your abilities and spells with {{tip|dash|dashes}} and/or {{tip|blink|blinks}} by 12%, modified to 4% for your ultimate ability.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 12,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        12,
+        4
+      ],
+      "parse_confidence": 0.7
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7100_mirageblade.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.236762+00:00"
+}

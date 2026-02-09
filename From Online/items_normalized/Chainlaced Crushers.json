@@ -1,0 +1,61 @@
+{
+  "name": "Chainlaced Crushers",
+  "id": 3173,
+  "tier": 3,
+  "rank": [
+    "BOOTS"
+  ],
+  "stats": {
+    "magicResistance": {
+      "flat": 30.0
+    },
+    "movespeed": {
+      "flat": 45.0
+    },
+    "tenacity": {
+      "percent": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Noxian Persistence",
+      "effects": "Taking {{as|magic damage}} from champions grants you a {{tip|shield}} that absorbs {{pp|100 to 200|color=md}} {{as|(+ 8% '''bonus''' health)}} {{as|magic damage}} for 5 seconds.",
+      "cooldown": "15"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Taking {{as|magic damage}} from champions grants you a {{tip|shield}} that absorbs {{pp|100 to 200|color=md}} {{as|(+ 8% '''bonus''' health)}} {{as|magic damage}} for 5 seconds.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 100,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        100,
+        200,
+        8,
+        5
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1250,
+      "sell": 500
+    },
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_mercury_64.png",
+  "simpleDescription": "Increases Move Speed and Cooldown Reduction",
+  "nicknames": [
+    "boots"
+  ],
+  "generated_at": "2026-02-09T22:46:10.221430+00:00"
+}

@@ -1,0 +1,99 @@
+{
+  "name": "Terminus",
+  "id": 3302,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 30.0
+    },
+    "attackSpeed": {
+      "flat": 35.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Shadow",
+      "effects": "Basic attacks deal {{as|30 '''bonus''' magic damage}} [[on-hit]]."
+    },
+    {
+      "unique": true,
+      "name": "Juxtaposition",
+      "effects": "Basic attacks {{tip|on-hit}} against champions alternate between ''Light'' and ''Dark'' hits, each one granting a bonus for 5 seconds that stacks up to 3 times. ''Light'' hits grant {{pp|6 to 8 for 3|1;11;14|type=level}} {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}} while ''Dark'' hits grant 10% {{as|armor penetration}} and {{as|magic penetration}}, for a total of {{pp|6*3 to 8*3 for 3|1;11;14}} '''bonus''' resistances and 30% resistances penetration at maximum stacks of each."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks deal {{as|30 '''bonus''' magic damage}} [[on-hit]].",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 30,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        30
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Basic attacks {{tip|on-hit}} against champions alternate between ''Light'' and ''Dark'' hits, each one granting a bonus for 5 seconds that stacks up to 3 times. ''Light'' hits grant {{pp|6 to 8 for 3|1;11;14|type=level}} {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}} while ''Dark'' hits grant 10% {{as|armor penetration}} and {{as|magic penetration}}, for a total of {{pp|6*3 to 8*3 for 3|1;11;14}} '''bonus''' resistances and 30% resistances penetration at maximum stacks of each.",
+      "effect_type": "stat_modifier",
+      "stat": "armor",
+      "value": 5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        5,
+        3,
+        6,
+        8,
+        3,
+        1,
+        11,
+        14,
+        10,
+        6,
+        3,
+        8,
+        3,
+        3,
+        1,
+        11,
+        14,
+        30
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ONHIT_EFFECTS",
+      "ARMOR_PEN",
+      "MAGIC_PEN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3302_terminus.png",
+  "simpleDescription": "Kill minions periodically to heal and grant gold to a nearby ally",
+  "nicknames": [
+    "bow",
+    "sentinel"
+  ],
+  "generated_at": "2026-02-09T22:46:10.155909+00:00"
+}

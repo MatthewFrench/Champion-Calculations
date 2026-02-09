@@ -1,0 +1,23 @@
+{
+  "name": "Legendary Mage Item",
+  "id": 220004,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 2000,
+      "sell": 800
+    },
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/220004_mageanvil.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.173515+00:00"
+}

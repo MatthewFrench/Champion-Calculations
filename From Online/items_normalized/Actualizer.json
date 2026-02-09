@@ -1,0 +1,63 @@
+{
+  "name": "Actualizer",
+  "id": 2522,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 90.0
+    },
+    "mana": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Mana Made Real",
+      "effects": "For 8 seconds, your mana is ''Empowered''. While ''Empowered'': your [[champion ability|abilities]] cost 100% more mana; you gain 15% {{as|(+ {{fd|0.5}}% per 100 '''bonus''' mana)}} increased ability damage, {{tip|healing}}, and {{tip|shielding}}; and your basic ability cooldowns progress 30% faster."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "For 8 seconds, your mana is ''Empowered''. While ''Empowered'': your [[champion ability|abilities]] cost 100% more mana; you gain 15% {{as|(+ {{fd|0.5}}% per 100 '''bonus''' mana)}} increased ability damage, {{tip|healing}}, and {{tip|shielding}}; and your basic ability cooldowns progress 30% faster.",
+      "effect_type": "damage",
+      "stat": "mana",
+      "value": 8,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        8,
+        100,
+        15,
+        0.5,
+        100,
+        30
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.148886+00:00"
+}

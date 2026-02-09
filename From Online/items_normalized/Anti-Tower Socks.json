@@ -1,0 +1,61 @@
+{
+  "name": "Anti-Tower Socks",
+  "id": 1508,
+  "tier": 1,
+  "rank": [
+    "MINION"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Reinforced Armor",
+      "effects": "{{tip|Turret}} basic attacks are modified to deal {{as|{{pp|key=%|14;11;8|Outer;Inner;Inhibitor/Nexus|type=turret type}} of this minion's '''maximum''' health}} as {{tt|pre-mitigation damage|Damage calculated before modifiers}}."
+    },
+    {
+      "unique": true,
+      "name": "Minion Slayer",
+      "effects": "Against lane minions, this minion deals {{as|'''bonus''' physical damage}} on-hit equal to {{as|6% of the target's '''current''' health}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{tip|Turret}} basic attacks are modified to deal {{as|{{pp|key=%|14;11;8|Outer;Inner;Inhibitor/Nexus|type=turret type}} of this minion's '''maximum''' health}} as {{tt|pre-mitigation damage|Damage calculated before modifiers}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 14,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        14,
+        11,
+        8
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Against lane minions, this minion deals {{as|'''bonus''' physical damage}} on-hit equal to {{as|6% of the target's '''current''' health}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 6,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        6
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1508_antitowersocks.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.230490+00:00"
+}

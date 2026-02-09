@@ -1,0 +1,88 @@
+{
+  "name": "Youmuu's Ghostblade",
+  "id": 3142,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Haunt",
+      "effects": "Gain {{as|{{rd|20|10}} '''bonus''' movement speed}} while out-of-combat with enemy champions for 3 seconds."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Wraith Step",
+      "effects": "Gain {{as|{{rd|20%|15%}} '''bonus''' movement speed}} and {{tip|ghosted|ghosting}} for {{rd|6|4}} seconds."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Gain {{as|{{rd|20|10}} '''bonus''' movement speed}} while out-of-combat with enemy champions for 3 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "movement_speed",
+      "value": 20,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        10,
+        3
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Gain {{as|{{rd|20%|15%}} '''bonus''' movement speed}} and {{tip|ghosted|ghosting}} for {{rd|6|4}} seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "movement_speed",
+      "value": 20,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        15,
+        6,
+        4
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
+  "simpleDescription": "Activate to greatly increase Move Speed",
+  "nicknames": [
+    "lethality",
+    "haste"
+  ],
+  "generated_at": "2026-02-09T22:46:10.142175+00:00"
+}

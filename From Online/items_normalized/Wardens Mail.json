@@ -1,0 +1,53 @@
+{
+  "name": "Warden's Mail",
+  "id": 3082,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 40.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Rock Solid",
+      "effects": "Every first incoming instance of {{tt|post-mitigation|Damage calculated after modifiers}} {{tip|basic damage}} per {{tip|cast instance}} is [[Damage modifier|reduced]] by 15, with a '''maximum''' of 20% reduction each."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Every first incoming instance of {{tt|post-mitigation|Damage calculated after modifiers}} {{tip|basic damage}} per {{tip|cast instance}} is [[Damage modifier|reduced]] by 15, with a '''maximum''' of 20% reduction each.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        15,
+        20
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3082_tank_t2_wardensmail.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.141665+00:00"
+}

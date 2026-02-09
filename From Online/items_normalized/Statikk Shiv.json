@@ -1,0 +1,90 @@
+{
+  "name": "Statikk Shiv",
+  "id": 3087,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "attackSpeed": {
+      "flat": 30.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Electrospark",
+      "effects": "Your next 3 basic attacks {{tip|on-hit}} within 8 seconds are empowered to deal {{as|60 '''bonus''' magic damage}}, increased to {{as|85|magic damage}} against non-champions. This bounces to the closest target within 500 units, repeating from the new target to strike up to 5 targets ({{pp|25 to 10 for 6|1;8 to 12}} second cooldown, starts after using the first empowered attack)."
+    },
+    {
+      "unique": true,
+      "name": "Electroshock",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them resets ''Electrospark's'' cooldown."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Your next 3 basic attacks {{tip|on-hit}} within 8 seconds are empowered to deal {{as|60 '''bonus''' magic damage}}, increased to {{as|85|magic damage}} against non-champions. This bounces to the closest target within 500 units, repeating from the new target to strike up to 5 targets ({{pp|25 to 10 for 6|1;8 to 12}} second cooldown, starts after using the first empowered attack).",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        8,
+        60,
+        85,
+        500,
+        5,
+        25,
+        10,
+        6,
+        1,
+        8,
+        12
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them resets ''Electrospark's'' cooldown.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2700,
+      "sell": 1080
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
+  "simpleDescription": "Movement builds charges that release chain lightning on basic attack",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.172124+00:00"
+}

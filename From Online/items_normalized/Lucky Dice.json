@@ -1,0 +1,17 @@
+{
+  "name": "Lucky Dice",
+  "id": 2145,
+  "tier": 1,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/item_consumable_shopreroll.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.220249+00:00"
+}

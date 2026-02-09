@@ -1,0 +1,35 @@
+{
+  "name": "Cloth Armor",
+  "id": 1029,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 15.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 300,
+      "sell": 120
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1029_base_t1_clotharmor.png",
+  "simpleDescription": "Slightly increases Armor",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.206650+00:00"
+}

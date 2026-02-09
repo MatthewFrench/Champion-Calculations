@@ -1,0 +1,79 @@
+{
+  "name": "Wordless Promise",
+  "id": 4016,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 50.0
+    },
+    "healAndShieldPower": {
+      "flat": 25.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Promise",
+      "effects": "While your ''Promised'' ally is {{tt|tethered|1250 units, center to edge}} to you, gain {{as|ability power}} equal to {{as|20% of ''Promised'' ally's AP}}, and grant your ''Promised'' ally {{as|ability haste}} equal to {{as|20% of your ability haste}}. ''Increases and decreases to each teammate's stats recalculate this effect.''"
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Promise",
+      "effects": "Make a ''Promise'' to the target allied champion, forming a {{tip|tether}} between you and them."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "While your ''Promised'' ally is {{tt|tethered|1250 units, center to edge}} to you, gain {{as|ability power}} equal to {{as|20% of ''Promised'' ally's AP}}, and grant your ''Promised'' ally {{as|ability haste}} equal to {{as|20% of your ability haste}}. ''Increases and decreases to each teammate's stats recalculate this effect.''",
+      "effect_type": "stat_modifier",
+      "stat": "ability_power",
+      "value": 1250,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        1250,
+        20,
+        20
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Make a ''Promise'' to the target allied champion, forming a {{tip|tether}} between you and them.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.4
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4016_wordlesspromise.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.222432+00:00"
+}

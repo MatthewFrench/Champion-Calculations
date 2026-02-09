@@ -1,0 +1,108 @@
+{
+  "name": "Malignance",
+  "id": 3118,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 90.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Scorn",
+      "effects": "Gain 20 [[Haste#Ultimate haste|ultimate haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Hatefog",
+      "effects": "Dealing non-{{tip|proc damage}} or {{tip|pet damage}} to enemy champions with your [[champion ability|ultimate ability]] creates a {{pp|type=ultimate's damage instance|251;251.8;253.1;255.5;259.8;267.3;280.7;304.2;345.9;419.7;550|0 to 823|formula=250 + 2^(damage dealt/100)}} radius scorched zone beneath them for 3 seconds, applying a ''Curse'' to enemies within that deals {{ft|{{as|{{ap|60/4}}|magic damage}} {{as|(+ {{ap|5/4}}% AP)}} {{as|magic damage}} every {{fd|0.25}} seconds|{{as|{{ap|60*3}}|magic damage}} {{as|(+ {{ap|5*3}}% AP)}} {{as|'''total''' magic damage}} over the duration}} and reduces their {{as|magic resistance by 10}} (3 second cooldown per target, starts on zone creation)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 20 [[Haste#Ultimate haste|ultimate haste]].",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 20,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        20
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Dealing non-{{tip|proc damage}} or {{tip|pet damage}} to enemy champions with your [[champion ability|ultimate ability]] creates a {{pp|type=ultimate's damage instance|251;251.8;253.1;255.5;259.8;267.3;280.7;304.2;345.9;419.7;550|0 to 823|formula=250 + 2^(damage dealt/100)}} radius scorched zone beneath them for 3 seconds, applying a ''Curse'' to enemies within that deals {{ft|{{as|{{ap|60/4}}|magic damage}} {{as|(+ {{ap|5/4}}% AP)}} {{as|magic damage}} every {{fd|0.25}} seconds|{{as|{{ap|60*3}}|magic damage}} {{as|(+ {{ap|5*3}}% AP)}} {{as|'''total''' magic damage}} over the duration}} and reduces their {{as|magic resistance by 10}} (3 second cooldown per target, starts on zone creation).",
+      "effect_type": "damage",
+      "stat": "magic_resistance",
+      "value": 251,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        251,
+        251.8,
+        253.1,
+        255.5,
+        259.8,
+        267.3,
+        280.7,
+        304.2,
+        345.9,
+        419.7,
+        550,
+        0,
+        823,
+        250,
+        2,
+        100,
+        3,
+        60,
+        4,
+        5,
+        4,
+        0.25,
+        60,
+        3,
+        5,
+        3,
+        10,
+        3
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2700,
+      "sell": 1080
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "ABILITY_HASTE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
+  "simpleDescription": "Partner with an ally to protect each other",
+  "nicknames": [
+    "burn"
+  ],
+  "generated_at": "2026-02-09T22:46:10.187692+00:00"
+}

@@ -1,0 +1,66 @@
+{
+  "name": "Eclipse",
+  "id": 6692,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Ever Rising Moon",
+      "effects": "Damaging [[basic attack]]s, [[champion ability|abilities]], [[Named item effect|item effects]], and [[summoner spell]]s, as well as the application of {{tip|crowd control}} and [[damage over time]] effects, generate [[stack]]s against enemy champions, up to one per attack or cast per champion. Applying 2 stacks to a champion within a 2 second period deals {{as|'''bonus''' physical damage}} to them equal to {{as|{{rd|6%|4%}} of target's '''maximum''' health}} and grants you a {{tip|shield}} for {{rd|160|80}} {{as|(+ {{rd|40%|20%}} '''bonus''' AD)}} for 2 seconds.",
+      "cooldown": "6"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Damaging [[basic attack]]s, [[champion ability|abilities]], [[Named item effect|item effects]], and [[summoner spell]]s, as well as the application of {{tip|crowd control}} and [[damage over time]] effects, generate [[stack]]s against enemy champions, up to one per attack or cast per champion. Applying 2 stacks to a champion within a 2 second period deals {{as|'''bonus''' physical damage}} to them equal to {{as|{{rd|6%|4%}} of target's '''maximum''' health}} and grants you a {{tip|shield}} for {{rd|160|80}} {{as|(+ {{rd|40%|20%}} '''bonus''' AD)}} for 2 seconds.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        2,
+        2,
+        6,
+        4,
+        160,
+        80,
+        40,
+        20,
+        2
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "lethality"
+  ],
+  "generated_at": "2026-02-09T22:46:10.156490+00:00"
+}

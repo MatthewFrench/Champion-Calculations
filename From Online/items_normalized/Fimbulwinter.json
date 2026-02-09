@@ -1,0 +1,87 @@
+{
+  "name": "Fimbulwinter",
+  "id": 3121,
+  "tier": 4,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "health": {
+      "flat": 550.0
+    },
+    "mana": {
+      "flat": 1000.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Awe",
+      "effects": "Grants {{as|'''bonus''' health}} equal to {{as|15% '''bonus''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Everlasting",
+      "effects": "{{tip|immobilize|Immobilizing}}, or {{tip|slow|slowing}} if you are {{tip|melee}}, an enemy champion grants a 100 {{as|(+ {{fd|4.5}}% '''current''' mana)}} {{tip|shield}} for 3 seconds (8 second cooldown). The shield's strength is increased{{ft|by 80%|to 180 {{as|(+ {{ap|4.5*1.8}}% '''current''' mana)}}}}if there is more than one enemy champion within {{tip|cr|icononly=true}} 1200 units."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants {{as|'''bonus''' health}} equal to {{as|15% '''bonus''' mana}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 15,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        15
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "{{tip|immobilize|Immobilizing}}, or {{tip|slow|slowing}} if you are {{tip|melee}}, an enemy champion grants a 100 {{as|(+ {{fd|4.5}}% '''current''' mana)}} {{tip|shield}} for 3 seconds (8 second cooldown). The shield's strength is increased{{ft|by 80%|to 180 {{as|(+ {{ap|4.5*1.8}}% '''current''' mana)}}}}if there is more than one enemy champion within {{tip|cr|icononly=true}} 1200 units.",
+      "effect_type": "shield",
+      "stat": "mana",
+      "value": 100,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        100,
+        4.5,
+        3,
+        8,
+        80,
+        180,
+        4.5,
+        1.8,
+        1200
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2400,
+      "sell": 960
+    },
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3121_fimbulwinter.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.188292+00:00"
+}

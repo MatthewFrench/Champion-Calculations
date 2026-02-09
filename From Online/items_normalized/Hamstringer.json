@@ -1,0 +1,70 @@
+{
+  "name": "Hamstringer",
+  "id": 443069,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "attackSpeed": {
+      "flat": 40.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Scour",
+      "effects": "{{tip|Critical strike|Critical strikes}} inflict a bleed on the target for 2 seconds, dealing {{as|'''bonus''' physical damage}} equal to{{ft|{{pp|20/4 to 80/4|color=physical damage}} plus {{ap|25/4}}% of the {{tt|pre-mitigation|Damage calculated before resistances and reductions.}} {{tip|critical strike}} instance every {{fd|0.5}} seconds,|{{pp|20 to 80|color=physical damage}} plus 25% of the {{tip|critical strike}} instance over the duration,}}as well as applies a 7% {{tip|slow}} for the same duration. The bleed's damage is affected by {{tip|critical strike}} modifiers and stacks infinitely; the slow stacks up to 35%."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{tip|Critical strike|Critical strikes}} inflict a bleed on the target for 2 seconds, dealing {{as|'''bonus''' physical damage}} equal to{{ft|{{pp|20/4 to 80/4|color=physical damage}} plus {{ap|25/4}}% of the {{tt|pre-mitigation|Damage calculated before resistances and reductions.}} {{tip|critical strike}} instance every {{fd|0.5}} seconds,|{{pp|20 to 80|color=physical damage}} plus 25% of the {{tip|critical strike}} instance over the duration,}}as well as applies a 7% {{tip|slow}} for the same duration. The bleed's damage is affected by {{tip|critical strike}} modifiers and stacks infinitely; the slow stacks up to 35%.",
+      "effect_type": "damage",
+      "stat": "critical_strike",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        2,
+        20,
+        4,
+        80,
+        4,
+        25,
+        4,
+        0.5,
+        20,
+        80,
+        25,
+        7,
+        35
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3069_hamstringer.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "bleed"
+  ],
+  "generated_at": "2026-02-09T22:46:10.134157+00:00"
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Hextech Alternator",
+  "id": 3145,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 45.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Revved",
+      "effects": "Damaging an enemy champion deals {{as|65 '''bonus''' magic damage}}.",
+      "cooldown": "40"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Damaging an enemy champion deals {{as|65 '''bonus''' magic damage}}.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 65,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        65
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1100,
+      "sell": 440
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3145_mage_t2_hextechalternator.png",
+  "simpleDescription": "Increases Ability Power. Deal bonus magic damage on attack periodically.",
+  "nicknames": [
+    "revolver",
+    "pewpew"
+  ],
+  "generated_at": "2026-02-09T22:46:10.214587+00:00"
+}

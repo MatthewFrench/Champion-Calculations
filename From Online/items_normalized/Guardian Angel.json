@@ -1,0 +1,65 @@
+{
+  "name": "Guardian Angel",
+  "id": 3026,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 45.0
+    },
+    "attackDamage": {
+      "flat": 55.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Rebirth",
+      "effects": "Upon taking [[death|lethal damage]], enter {{tip|resurrection}} for 4 seconds, during which you are {{tip|invulnerable}}, {{tip|untargetable}}, and unable to act, and afterwards {{tip|heal}} for {{as|50% of '''base''' health}} and restore {{as|100% of '''maximum''' mana}} (300 second cooldown, starts after resurrection ends)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Upon taking [[death|lethal damage]], enter {{tip|resurrection}} for 4 seconds, during which you are {{tip|invulnerable}}, {{tip|untargetable}}, and unable to act, and afterwards {{tip|heal}} for {{as|50% of '''base''' health}} and restore {{as|100% of '''maximum''' mana}} (300 second cooldown, starts after resurrection ends).",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 4,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [
+        "untargetable",
+        "invulnerable"
+      ],
+      "numbers_extracted": [
+        4,
+        50,
+        100,
+        300
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3026_fighter_t3_guardianangel.png",
+  "simpleDescription": "Periodically revives champion upon death",
+  "nicknames": [
+    "ga"
+  ],
+  "generated_at": "2026-02-09T22:46:10.210818+00:00"
+}

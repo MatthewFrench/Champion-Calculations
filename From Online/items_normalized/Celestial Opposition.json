@@ -1,0 +1,108 @@
+{
+  "name": "Celestial Opposition",
+  "id": 3869,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 9.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 75.0
+    },
+    "manaRegen": {
+      "percent": 75.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Blessing of the Mountain",
+      "effects": "Become ''Blessed'' to reduce incoming champion damage by {{rd|35%|25%}}, lingering for 2 seconds after taking damage from a champion. After the linger ends, you lose ''Blessed'' to unleash a shockwave around you that {{tip|slow|slows}} enemies within 500 units by 50% for {{fd|1.5}} seconds (18 second cooldown, timer restarts upon taking damage from champions)."
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ward",
+      "effects": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "range": 600
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Become ''Blessed'' to reduce incoming champion damage by {{rd|35%|25%}}, lingering for 2 seconds after taking damage from a champion. After the linger ends, you lose ''Blessed'' to unleash a shockwave around you that {{tip|slow|slows}} enemies within 500 units by 50% for {{fd|1.5}} seconds (18 second cooldown, timer restarts upon taking damage from champions).",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 35,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": "self",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        35,
+        25,
+        2,
+        500,
+        50,
+        1.5,
+        18
+      ],
+      "parse_confidence": 1.0
+    },
+    {
+      "raw": "Receives diminishing gold from excessive minion kills.",
+      "effect_type": "resource",
+      "stat": "gold",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_kill",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "effect_type": "status",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "stealth"
+      ],
+      "numbers_extracted": [],
+      "parse_confidence": 0.5
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3869_celestialopposition.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.174395+00:00"
+}

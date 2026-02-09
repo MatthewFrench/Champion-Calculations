@@ -1,0 +1,84 @@
+{
+  "name": "Death's Dance",
+  "id": 6333,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 50.0
+    },
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Ignore Pain",
+      "effects": "Reduces {{rd|30%|10%}} of all {{tt|post-mitigation|Damage calculated after modifiers}} {{as|physical|physical damage}} and {{as|magic|magic damage}} damage received and instead stores the damage to successively take it as {{as|true damage}} over 3 seconds, dealing a third of the stored damage each second."
+    },
+    {
+      "unique": true,
+      "name": "Defy",
+      "effects": "If an enemy champion dies within 3 seconds of you damaging them, removes ''Ignore Pain's'' remaining stored damage and {{tip|heals}} you for {{as|75% '''bonus''' AD}} over 2 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Reduces {{rd|30%|10%}} of all {{tt|post-mitigation|Damage calculated after modifiers}} {{as|physical|physical damage}} and {{as|magic|magic damage}} damage received and instead stores the damage to successively take it as {{as|true damage}} over 3 seconds, dealing a third of the stored damage each second.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 30,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        30,
+        10,
+        3
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "If an enemy champion dies within 3 seconds of you damaging them, removes ''Ignore Pain's'' remaining stored damage and {{tip|heals}} you for {{as|75% '''bonus''' AD}} over 2 seconds.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 3,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        75,
+        2
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "dd"
+  ],
+  "generated_at": "2026-02-09T22:46:10.170670+00:00"
+}

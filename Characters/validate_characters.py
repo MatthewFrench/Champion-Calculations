@@ -69,7 +69,7 @@ def check_number_list(errors, value, path):
 
 
 def check_string(errors, value, path):
-    if not isinstance(value, basestring):
+    if not isinstance(value, str):
         error(errors, path, "expected string, got %s" % type(value).__name__)
 
 
@@ -78,7 +78,7 @@ def check_string_list(errors, value, path):
         error(errors, path, "expected list of strings, got %s" % type(value).__name__)
         return
     for i, v in enumerate(value):
-        if not isinstance(v, basestring):
+        if not isinstance(v, str):
             error(errors, "%s[%d]" % (path, i), "expected string, got %s" % type(v).__name__)
 
 

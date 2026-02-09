@@ -1,0 +1,63 @@
+{
+  "name": "Bloodletter's Curse",
+  "id": 8010,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 65.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Vile Decay",
+      "effects": "Dealing {{as|magic damage}} to an enemy champion with a [[champion ability]] applies a stack of ''Vile Decay'' to them for 6 seconds, stacking up to 4 times and up to once per basic attack or ability per {{tip|cast instance}} every {{fd|0.3}} seconds. Each stack inflicts {{as|{{fd|7.5}}% magic resistance reduction}}, up to {{as|30%|mr}} at 4 stacks."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing {{as|magic damage}} to an enemy champion with a [[champion ability]] applies a stack of ''Vile Decay'' to them for 6 seconds, stacking up to 4 times and up to once per basic attack or ability per {{tip|cast instance}} every {{fd|0.3}} seconds. Each stack inflicts {{as|{{fd|7.5}}% magic resistance reduction}}, up to {{as|30%|mr}} at 4 stacks.",
+      "effect_type": "damage",
+      "stat": "magic_resistance",
+      "value": 6,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        6,
+        4,
+        0.3,
+        7.5,
+        30,
+        4
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8010_bloodletterscurse.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.164369+00:00"
+}

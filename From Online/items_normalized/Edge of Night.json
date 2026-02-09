@@ -1,0 +1,63 @@
+{
+  "name": "Edge of Night",
+  "id": 3814,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "health": {
+      "flat": 250.0
+    },
+    "lethality": {
+      "flat": 15
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Annul",
+      "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions).",
+      "effect_type": "damage",
+      "stat": "shield",
+      "value": 40,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        40
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
+  "simpleDescription": "Periodically blocks enemy abilities",
+  "nicknames": [
+    "eon",
+    "lethality",
+    "spellshield",
+    "spell shield"
+  ],
+  "generated_at": "2026-02-09T22:46:10.223351+00:00"
+}

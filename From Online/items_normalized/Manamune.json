@@ -1,0 +1,106 @@
+{
+  "name": "Manamune",
+  "id": 3004,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 35.0
+    },
+    "mana": {
+      "flat": 500.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Awe",
+      "effects": "Grants {{as|'''bonus''' attack damage}} equal to {{as|2% '''maximum''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Manaflow",
+      "effects": "Grants a charge every 8 seconds, up to 4 charges. Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability|ability]] to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} for champion targets, up to a '''maximum''' of {{as|360 '''bonus''' mana}}. Can only be triggered once per {{tip|cast instance}}."
+    },
+    {
+      "effects": "Transforms into {{ii|Muramana}} at {{as|360 '''bonus''' mana}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants {{as|'''bonus''' attack damage}} equal to {{as|2% '''maximum''' mana}}.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        2
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Grants a charge every 8 seconds, up to 4 charges. Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability|ability]] to grant {{as|3 '''bonus''' mana}}, increased to {{as|6|mana}} for champion targets, up to a '''maximum''' of {{as|360 '''bonus''' mana}}. Can only be triggered once per {{tip|cast instance}}.",
+      "effect_type": "stat_modifier",
+      "stat": "mana",
+      "value": 8,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_hit",
+      "applies_to": "enemy",
+      "status_effects": [],
+      "numbers_extracted": [
+        8,
+        4,
+        3,
+        6,
+        360
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Transforms into {{ii|Muramana}} at {{as|360 '''bonus''' mana}}.",
+      "effect_type": "stat_modifier",
+      "stat": "mana",
+      "value": 360,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        360
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2900,
+      "sell": 1160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
+  "simpleDescription": "Increases Attack Damage based on maximum Mana",
+  "nicknames": [
+    "Muramana",
+    "tear"
+  ],
+  "generated_at": "2026-02-09T22:46:10.204024+00:00"
+}

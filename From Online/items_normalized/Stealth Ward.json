@@ -1,0 +1,50 @@
+{
+  "name": "Stealth Ward",
+  "id": 3340,
+  "tier": 1,
+  "rank": [
+    "TRINKET"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Trinket",
+      "effects": "Consume a charge to place an invisible {{tip|Totem Ward}} at the target location, which grants {{tip|sight}} of the surrounding area for {{pp|90 to 120|type=average champion level}} seconds.",
+      "range": 600
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Consume a charge to place an invisible {{tip|Totem Ward}} at the target location, which grants {{tip|sight}} of the surrounding area for {{pp|90 to 120|type=average champion level}} seconds.",
+      "effect_type": "status",
+      "stat": null,
+      "value": 90,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "invisible"
+      ],
+      "numbers_extracted": [
+        90,
+        120
+      ],
+      "parse_confidence": 0.7
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3340_class_t1_wardingtotem.png",
+  "simpleDescription": "Periodically place a Stealth Ward",
+  "nicknames": [
+    "yellow",
+    "sweeper",
+    "totem",
+    "trinket"
+  ],
+  "generated_at": "2026-02-09T22:46:10.150590+00:00"
+}

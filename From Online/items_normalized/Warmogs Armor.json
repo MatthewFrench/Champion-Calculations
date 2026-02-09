@@ -1,0 +1,99 @@
+{
+  "name": "Warmog's Armor",
+  "id": 3083,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "health": {
+      "flat": 1000.0
+    },
+    "healthRegen": {
+      "percent": 100.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "effects": "Grants ''Warmog's Heart'' if you have at least {{as|2000 '''bonus''' health}}."
+    },
+    {
+      "unique": true,
+      "name": "Warmog's Heart",
+      "effects": "{{stil|Health regeneration|Regenerate}}{{ft|{{as|{{fd|1.5}}% '''maximum''' health}} every {{fd|0.5}} seconds|{{as|15% '''maximum''' health}} every 5 seconds}}if [[damage]] has not been taken in the last 8 seconds (3 seconds for damage from non-champions)."
+    },
+    {
+      "unique": true,
+      "name": "Warmog's Vitality",
+      "effects": "Gain {{as|'''bonus''' health}} equal to {{as|12% '''bonus''' health '''from items'''}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants ''Warmog's Heart'' if you have at least {{as|2000 '''bonus''' health}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 2000,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        2000
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "{{stil|Health regeneration|Regenerate}}{{ft|{{as|{{fd|1.5}}% '''maximum''' health}} every {{fd|0.5}} seconds|{{as|15% '''maximum''' health}} every 5 seconds}}if [[damage]] has not been taken in the last 8 seconds (3 seconds for damage from non-champions).",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 1.5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        1.5,
+        0.5,
+        15,
+        5,
+        8,
+        3
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Gain {{as|'''bonus''' health}} equal to {{as|12% '''bonus''' health '''from items'''}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 12,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        12
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
+  "simpleDescription": "Grants massive Health and Health Regen",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.228855+00:00"
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Rite of Ruin",
+  "id": 3430,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 50.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Wrath and Ruin",
+      "effects": "Casting an [[Champion ability|ability]] grants {{sti|{{fd|2.5}}% critical strike chance}} for 6 seconds, stacking up to 8 times for a maximum of {{sti|critical strike chance|20%}}."
+    },
+    {
+      "unique": true,
+      "name": "Salvage the Wreckage",
+      "effects": "Casting an ability has a {{pp|key=%|key1=%|type=critical strike chance|0 to 100 for 11|0 to 100|formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to grant you or your ally a {{tip|shield}} for 3 seconds that absorbs {{pp|70 to 210}} {{as|(+ 25% '''bonus''' AD)}} {{as|(+ 15% AP)}} damage."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Casting an [[Champion ability|ability]] grants {{sti|{{fd|2.5}}% critical strike chance}} for 6 seconds, stacking up to 8 times for a maximum of {{sti|critical strike chance|20%}}.",
+      "effect_type": "stat_modifier",
+      "stat": "critical_strike",
+      "value": 2.5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        2.5,
+        6,
+        8,
+        20
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Casting an ability has a {{pp|key=%|key1=%|type=critical strike chance|0 to 100 for 11|0 to 100|formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to grant you or your ally a {{tip|shield}} for 3 seconds that absorbs {{pp|70 to 210}} {{as|(+ 25% '''bonus''' AD)}} {{as|(+ 15% AP)}} damage.",
+      "effect_type": "damage",
+      "stat": "critical_strike",
+      "value": 1,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        1,
+        0,
+        100,
+        11,
+        0,
+        100,
+        1,
+        1,
+        100,
+        3,
+        70,
+        210,
+        25,
+        15
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3430_riteofruin.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.213874+00:00"
+}

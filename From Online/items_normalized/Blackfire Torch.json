@@ -1,0 +1,97 @@
+{
+  "name": "Blackfire Torch",
+  "id": 2503,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "mana": {
+      "flat": 600.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Baleful Blaze",
+      "effects": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|60/6}} {{as|(+ {{ap|6/6}}% AP)}} magic damage|magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|60|magic damage}} {{as|(+ 6% AP)}}. Against monsters, the burn deals {{as|10 '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(60/6)+10}} {{as|(+ {{ap|6/6}}% AP)}} magic damage|magic damage}} per tick for up to {{as|{{ap|60+(10*6)}}|magic damage}} {{as|(+ 6% AP)}}."
+    },
+    {
+      "unique": true,
+      "name": "Blackfire",
+      "effects": "For each champion, epic monster, and large monster afflicted with ''Baleful Blaze's'' burn, increase your {{as|ability power}} by 4%."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|60/6}} {{as|(+ {{ap|6/6}}% AP)}} magic damage|magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|60|magic damage}} {{as|(+ 6% AP)}}. Against monsters, the burn deals {{as|10 '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(60/6)+10}} {{as|(+ {{ap|6/6}}% AP)}} magic damage|magic damage}} per tick for up to {{as|{{ap|60+(10*6)}}|magic damage}} {{as|(+ 6% AP)}}.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 60,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "monster",
+      "status_effects": [],
+      "numbers_extracted": [
+        60,
+        6,
+        6,
+        6,
+        0.5,
+        3,
+        60,
+        6,
+        10,
+        60,
+        6,
+        10,
+        6,
+        6,
+        60,
+        10,
+        6,
+        6
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "For each champion, epic monster, and large monster afflicted with ''Baleful Blaze's'' burn, increase your {{as|ability power}} by 4%.",
+      "effect_type": "stat_modifier",
+      "stat": "ability_power",
+      "value": 4,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "monster",
+      "status_effects": [],
+      "numbers_extracted": [
+        4
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2503_blackfiretorch64.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "bft"
+  ],
+  "generated_at": "2026-02-09T22:46:10.181837+00:00"
+}

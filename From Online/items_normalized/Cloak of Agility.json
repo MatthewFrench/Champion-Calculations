@@ -1,0 +1,30 @@
+{
+  "name": "Cloak of Agility",
+  "id": 1018,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "criticalStrikeChance": {
+      "percent": 15.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 600,
+      "sell": 240
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1018_base_t1_cloakagility.png",
+  "simpleDescription": "Increases critical strike chance",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.160788+00:00"
+}

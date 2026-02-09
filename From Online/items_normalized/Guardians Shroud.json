@@ -1,0 +1,37 @@
+{
+  "name": "Guardian's Shroud",
+  "id": 2050,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 35.0
+    },
+    "health": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3194_battlemage_blocker.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.137069+00:00"
+}

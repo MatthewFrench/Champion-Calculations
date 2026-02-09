@@ -1,0 +1,66 @@
+{
+  "name": "Demonic Embrace",
+  "id": 444637,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "health": {
+      "flat": 700.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Sinister Pact",
+      "effects": "Increase your {{as|ability power}} by {{as|{{fd|1.5}}%|ap}} and gain {{as|{{fd|1.5}}% '''bonus''' movement speed}} for every {{as|100 '''current''' health}} you are missing, up to an increase of {{as|45% ability power}} and {{as|45% '''bonus''' movement speed}} at {{as|3000 '''current''' health}} missing.",
+      "stats": {
+        "abilityPower": {
+          "flat": 45.0
+        },
+        "movespeed": {
+          "percent": 45.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Increase your {{as|ability power}} by {{as|{{fd|1.5}}%|ap}} and gain {{as|{{fd|1.5}}% '''bonus''' movement speed}} for every {{as|100 '''current''' health}} you are missing, up to an increase of {{as|45% ability power}} and {{as|45% '''bonus''' movement speed}} at {{as|3000 '''current''' health}} missing.",
+      "effect_type": "healing",
+      "stat": "ability_power",
+      "value": 1.5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        1.5,
+        1.5,
+        100,
+        45,
+        45,
+        3000
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4637_mage_t3_demonicembrace.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "helmet"
+  ],
+  "generated_at": "2026-02-09T22:46:10.197888+00:00"
+}

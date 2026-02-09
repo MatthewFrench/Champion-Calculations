@@ -1,0 +1,55 @@
+{
+  "name": "Hexbolt Companion",
+  "id": 443081,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 75.0
+    },
+    "health": {
+      "flat": 500.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Covering Fire",
+      "effects": "While your ally is within {{tt|1200 units|center-to-edge}}, your basic attacks [[on-hit]] generate a stack of ''Covering Fire''. At 1 stack, your next basic attack consumes them all to cause your ally to fire a bolt at the target, dealing {{as|{{pp|50 to 100}} physical damage}} and applying your ally's on-hit effects at 100% effectiveness."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "While your ally is within {{tt|1200 units|center-to-edge}}, your basic attacks [[on-hit]] generate a stack of ''Covering Fire''. At 1 stack, your next basic attack consumes them all to cause your ally to fire a bolt at the target, dealing {{as|{{pp|50 to 100}} physical damage}} and applying your ally's on-hit effects at 100% effectiveness.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 1200,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        1200,
+        1,
+        50,
+        100,
+        100
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443081_hexboltcompanion.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.171846+00:00"
+}

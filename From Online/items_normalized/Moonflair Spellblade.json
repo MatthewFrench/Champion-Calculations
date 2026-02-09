@@ -1,0 +1,55 @@
+{
+  "name": "Moonflair Spellblade",
+  "id": 447110,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 85.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "tenacity": {
+      "percent": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Relentless",
+      "effects": "Casting an ability {{tip|basic attack reset|resets}} your basic attack timer and empowers your next two basic attacks with {{as|90% '''bonus''' attack speed}}. Additionally, each basic attack [[on-attack]] reduces the cooldowns of all your abilities by {{fd|0.5}} seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Casting an ability {{tip|basic attack reset|resets}} your basic attack timer and empowers your next two basic attacks with {{as|90% '''bonus''' attack speed}}. Additionally, each basic attack [[on-attack]] reduces the cooldowns of all your abilities by {{fd|0.5}} seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "attack_speed",
+      "value": 90,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        90,
+        0.5
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7110_moonflairspellblade.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.200121+00:00"
+}

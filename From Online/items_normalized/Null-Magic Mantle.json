@@ -1,0 +1,35 @@
+{
+  "name": "Null-Magic Mantle",
+  "id": 1033,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "magicResistance": {
+      "flat": 20.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN",
+      "MAGE",
+      "TANK",
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1033_base_t1_magicmantle.png",
+  "simpleDescription": "Slightly increases Magic Resist",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.191477+00:00"
+}

@@ -1,0 +1,79 @@
+{
+  "name": "Diadem of Songs",
+  "id": 2530,
+  "tier": 4,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "healAndShieldPower": {
+      "flat": 8.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "mana": {
+      "flat": 1000.0
+    },
+    "manaRegen": {
+      "percent": 100.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Harmony",
+      "effects": "Grants {{as|heal and shield power}} equal to {{as|{{fd|0.5}}% '''bonus''' mana}}."
+    },
+    {
+      "unique": true,
+      "name": "Consonance",
+      "effects": "While you or any allied champion you granted a {{tip|heal}} or {{tip|shield}} to in the last 3 seconds is [[combat status|in combat]] with champions, each second, you heal the {{tt|most wounded|Lowest health percent}} allied champion within 900 units for {{as|{{fd|0.8}}% of your '''maximum''' mana}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants {{as|heal and shield power}} equal to {{as|{{fd|0.5}}% '''bonus''' mana}}.",
+      "effect_type": "healing",
+      "stat": "mana",
+      "value": 0.5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        0.5
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "While you or any allied champion you granted a {{tip|heal}} or {{tip|shield}} to in the last 3 seconds is [[combat status|in combat]] with champions, each second, you heal the {{tt|most wounded|Lowest health percent}} allied champion within 900 units for {{as|{{fd|0.8}}% of your '''maximum''' mana}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 3,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        900,
+        0.8
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2250,
+      "sell": 900
+    }
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2530_enchantertearupgraded.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.140868+00:00"
+}

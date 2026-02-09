@@ -1,0 +1,61 @@
+{
+  "name": "Empyrean Promise",
+  "id": 447105,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "healAndShieldPower": {
+      "flat": 18.0
+    },
+    "manaRegen": {
+      "percent": 125.0
+    },
+    "abilityHaste": {
+      "flat": 30.0
+    }
+  },
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Vigilance",
+      "effects": "{{tip|Dash}} to the current location of your ally and upon completion grant both yourself and the ally a {{tip|shield}} that absorbs {{pp|100 to 250}} {{as|(+ 100% of your AP)}} {{as|(+ 10% of your '''bonus''' health)}} damage for 5 seconds. '''Can be used even while the ally is dead.'''"
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "{{tip|Dash}} to the current location of your ally and upon completion grant both yourself and the ally a {{tip|shield}} that absorbs {{pp|100 to 250}} {{as|(+ 100% of your AP)}} {{as|(+ 10% of your '''bonus''' health)}} damage for 5 seconds. '''Can be used even while the ally is dead.'''",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 100,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        100,
+        250,
+        100,
+        10,
+        5
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7105_angelicpromise.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.205507+00:00"
+}

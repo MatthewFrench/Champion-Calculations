@@ -1,0 +1,59 @@
+{
+  "name": "Gusto",
+  "id": 1509,
+  "tier": 1,
+  "rank": [
+    "MINION"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Gusto",
+      "effects": "{{tip|Turret}} basic attacks are modified to deal {{as|45% of this minion's '''maximum''' health}} as {{tt|pre-mitigation damage|Damage calculated before modifiers}}."
+    },
+    {
+      "unique": true,
+      "name": "Minion Wounder",
+      "effects": "Against lane minions, this minion deals {{as|'''bonus''' physical damage}} on-hit equal to {{as|2% of the target's '''current''' health}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{tip|Turret}} basic attacks are modified to deal {{as|45% of this minion's '''maximum''' health}} as {{tt|pre-mitigation damage|Damage calculated before modifiers}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 45,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        45
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Against lane minions, this minion deals {{as|'''bonus''' physical damage}} on-hit equal to {{as|2% of the target's '''current''' health}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        2
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1509_gusto.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.144999+00:00"
+}

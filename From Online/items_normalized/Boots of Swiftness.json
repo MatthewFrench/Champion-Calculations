@@ -1,0 +1,53 @@
+{
+  "name": "Boots of Swiftness",
+  "id": 3009,
+  "tier": 2,
+  "rank": [
+    "BOOTS"
+  ],
+  "stats": {
+    "movespeed": {
+      "flat": 55.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Fleetfooted",
+      "effects": "Gain 25% [[slow resist]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 25% [[slow resist]].",
+      "effect_type": "status",
+      "stat": null,
+      "value": 25,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        25
+      ],
+      "parse_confidence": 0.7
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    },
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3009_class_t2_bootsofswiftness.png",
+  "simpleDescription": "Enhances Move Speed and reduces the effect of slows",
+  "nicknames": [
+    "swifties"
+  ],
+  "generated_at": "2026-02-09T22:46:10.193571+00:00"
+}

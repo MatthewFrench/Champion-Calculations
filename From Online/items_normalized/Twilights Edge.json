@@ -1,0 +1,64 @@
+{
+  "name": "Twilight's Edge",
+  "id": 447121,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 100.0
+    },
+    "attackDamage": {
+      "flat": 70.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "The Path Between",
+      "effects": "If you have at least {{as|130 '''bonus''' attack damage}} and {{as|180 ability power}}, enter either the ''Material World'' or the ''Spirit World'', determined randomly, at the start of the combat phase in each round:<br><br>• '''Material World''': Increase your {{as|attack damage}} by 25% and gain {{as|{{pp|50 to 150|key=%}} '''bonus''' attack speed}}.<br>• '''Spirit World''': Increase your {{as|ability power}} by 25% and gain {{as|{{pp|30 to 120}} ability haste}}.",
+      "stats": {
+        "abilityPower": {
+          "flat": 180.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "If you have at least {{as|130 '''bonus''' attack damage}} and {{as|180 ability power}}, enter either the ''Material World'' or the ''Spirit World'', determined randomly, at the start of the combat phase in each round:<br><br>• '''Material World''': Increase your {{as|attack damage}} by 25% and gain {{as|{{pp|50 to 150|key=%}} '''bonus''' attack speed}}.<br>• '''Spirit World''': Increase your {{as|ability power}} by 25% and gain {{as|{{pp|30 to 120}} ability haste}}.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 130,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        130,
+        180,
+        25,
+        50,
+        150,
+        25,
+        30,
+        120
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447121_twilightsedge.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.186877+00:00"
+}

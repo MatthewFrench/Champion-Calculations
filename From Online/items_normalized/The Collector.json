@@ -1,0 +1,83 @@
+{
+  "name": "The Collector",
+  "id": 6676,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 50.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "lethality": {
+      "flat": 10
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Death",
+      "effects": "If you deal {{tt|post-mitigation|Damage calculated after modifiers}} damage that would leave a champion below {{as|5% of their '''maximum''' health}}, {{tip|execute}} them."
+    },
+    {
+      "unique": true,
+      "name": "Taxes",
+      "effects": "Killing a champion grants you an additional {{g|25}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "If you deal {{tt|post-mitigation|Damage calculated after modifiers}} damage that would leave a champion below {{as|5% of their '''maximum''' health}}, {{tip|execute}} them.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        5
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Killing a champion grants you an additional {{g|25}}.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 25,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        25
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6676_marksman_t3_thecollector.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "deathblade",
+    "gun",
+    "lethality"
+  ],
+  "generated_at": "2026-02-09T22:46:10.233024+00:00"
+}

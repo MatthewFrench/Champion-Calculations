@@ -1,0 +1,99 @@
+{
+  "name": "Pyromancer's Cloak",
+  "id": 447118,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spark",
+      "effects": "Basic attacks and ability hits against enemies inflicts them with a {{as|Burn}} that deals{{ft|{{as|{{pp|100 to 350}} magic damage}} over 3 seconds.|{{as|{{pp|200/12 to 450/12}} magic damage}} every {{fd|0.25}} seconds over 3 seconds.}}",
+      "cooldown": "5"
+    },
+    {
+      "unique": true,
+      "name": "Cleansing Flame",
+      "effects": "Inflicting an enemy champion with a {{as|Burn|buzzword3}} effect releases a fireball from the target, landing to a location near you after {{fd|0.5}} seconds. Upon landing, a blaze is created at the impact area with a radius of 175 units, lasting for 5 seconds (3 second cooldown per target). While you are within the blaze, gain {{as|20% '''bonus total''' movement speed}}, lingering for {{fd|0.75}} seconds after exiting, and {{tip|heal}} for {{pp|60 to 150}} upon entering and each second of the blaze's lifetime thereafter. While enemies are within the blaze, they are dealt {{as|100 magic damage}} every second.<br><br>For each unique {{as|Burn|buzzword3}} effect source that you have, up to 10, increase the blaze's size by 40 units, and its strength by {{as|4% '''bonus total''' movement speed}} and {{as|30|hsp}} healing per second for the buff and {{as|60 magic damage}} per tick for the enemy effect."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks and ability hits against enemies inflicts them with a {{as|Burn}} that deals{{ft|{{as|{{pp|100 to 350}} magic damage}} over 3 seconds.|{{as|{{pp|200/12 to 450/12}} magic damage}} every {{fd|0.25}} seconds over 3 seconds.}}",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 100,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        100,
+        350,
+        3,
+        200,
+        12,
+        450,
+        12,
+        0.25,
+        3
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Inflicting an enemy champion with a {{as|Burn|buzzword3}} effect releases a fireball from the target, landing to a location near you after {{fd|0.5}} seconds. Upon landing, a blaze is created at the impact area with a radius of 175 units, lasting for 5 seconds (3 second cooldown per target). While you are within the blaze, gain {{as|20% '''bonus total''' movement speed}}, lingering for {{fd|0.75}} seconds after exiting, and {{tip|heal}} for {{pp|60 to 150}} upon entering and each second of the blaze's lifetime thereafter. While enemies are within the blaze, they are dealt {{as|100 magic damage}} every second.<br><br>For each unique {{as|Burn|buzzword3}} effect source that you have, up to 10, increase the blaze's size by 40 units, and its strength by {{as|4% '''bonus total''' movement speed}} and {{as|30|hsp}} healing per second for the buff and {{as|60 magic damage}} per tick for the enemy effect.",
+      "effect_type": "damage",
+      "stat": "movement_speed",
+      "value": 3,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        0.5,
+        175,
+        5,
+        3,
+        20,
+        0.75,
+        60,
+        150,
+        100,
+        3,
+        10,
+        40,
+        4,
+        30,
+        60
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447118_pyromancerscloak.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "burn"
+  ],
+  "generated_at": "2026-02-09T22:46:10.145752+00:00"
+}

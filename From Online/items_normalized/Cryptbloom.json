@@ -1,0 +1,62 @@
+{
+  "name": "Cryptbloom",
+  "id": 3137,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 75.0
+    },
+    "magicPenetration": {
+      "percent": 30.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Life From Death",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion while alive and within 3 seconds of damaging them summons a nova that radiates from the location of their death over {{fd|1.75}} seconds, {{tip|heal|healing}} you and allied champions hit for 100 {{as|(+ 20% AP)}}.",
+      "cooldown": "60"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Scoring a {{tip|takedown}} against an enemy champion while alive and within 3 seconds of damaging them summons a nova that radiates from the location of their death over {{fd|1.75}} seconds, {{tip|heal|healing}} you and allied champions hit for 100 {{as|(+ 20% AP)}}.",
+      "effect_type": "healing",
+      "stat": "healing",
+      "value": 3,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        1.75,
+        100,
+        20
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
+  "simpleDescription": "Activate to remove all debuffs and grant massive Move Speed",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.212510+00:00"
+}

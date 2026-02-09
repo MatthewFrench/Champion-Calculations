@@ -1,0 +1,66 @@
+{
+  "name": "Night Harvester",
+  "id": 444636,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 90.0
+    },
+    "health": {
+      "flat": 300.0
+    },
+    "abilityHaste": {
+      "flat": 25.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Soulrend",
+      "effects": "Damaging an enemy champion with a basic attack or [[ability damage]] deals {{as|125 {{as|(+ 15% AP)}} '''bonus''' magic damage|magic damage}} and grants you {{as|40% '''bonus''' movement speed}} for {{fd|1.5}} seconds, with the duration extending on subsequent triggers (10 second cooldown per champion).",
+      "stats": {
+        "movespeed": {
+          "percent": 40.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Damaging an enemy champion with a basic attack or [[ability damage]] deals {{as|125 {{as|(+ 15% AP)}} '''bonus''' magic damage|magic damage}} and grants you {{as|40% '''bonus''' movement speed}} for {{fd|1.5}} seconds, with the duration extending on subsequent triggers (10 second cooldown per champion).",
+      "effect_type": "damage",
+      "stat": "movement_speed",
+      "value": 125,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        125,
+        15,
+        40,
+        1.5,
+        10
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4636_mage_t4_nightharvester.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "dark",
+    "scythe"
+  ],
+  "generated_at": "2026-02-09T22:46:10.133773+00:00"
+}

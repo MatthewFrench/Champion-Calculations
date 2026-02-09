@@ -1,0 +1,42 @@
+{
+  "name": "Twin Mask",
+  "id": 443080,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Unanimity",
+      "effects": "Gain 20% of your teammate's {{as|attack damage}}, {{as|ability power}}, {{as|'''total''' attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}}, increased to 35% if they also have '''Twin Mask''' and are alive."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 20% of your teammate's {{as|attack damage}}, {{as|ability power}}, {{as|'''total''' attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}}, increased to 35% if they also have '''Twin Mask''' and are alive.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 20,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        35
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443080_twinmasks.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.227967+00:00"
+}

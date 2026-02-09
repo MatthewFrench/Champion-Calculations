@@ -1,0 +1,32 @@
+{
+  "name": "Negatron Cloak",
+  "id": 1057,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "magicResistance": {
+      "flat": 45.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 850,
+      "sell": 340
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK",
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1057_tank_t2_negatroncloak.png",
+  "simpleDescription": "Moderately increases Magic Resist",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.194019+00:00"
+}

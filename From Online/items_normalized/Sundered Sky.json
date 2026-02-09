@@ -1,0 +1,65 @@
+{
+  "name": "Sundered Sky",
+  "id": 6610,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 45.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lightshield Strike",
+      "effects": "Your next basic attack against a champion is empowered to {{tip|critical strike|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage|{{sti|{{as|80% '''total''' critical damage}}}}}}and {{tip|heal}} you for {{as|{{rd|100%|50%}} '''base''' AD}} {{as|(+ 6% of your '''missing''' health)}} (10 second cooldown per target). Excess healing beyond {{as|'''maximum''' health}} is converted to {{as|'''bonus''' health}} for 8 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Your next basic attack against a champion is empowered to {{tip|critical strike|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage|{{sti|{{as|80% '''total''' critical damage}}}}}}and {{tip|heal}} you for {{as|{{rd|100%|50%}} '''base''' AD}} {{as|(+ 6% of your '''missing''' health)}} (10 second cooldown per target). Excess healing beyond {{as|'''maximum''' health}} is converted to {{as|'''bonus''' health}} for 8 seconds.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 60,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        60,
+        80,
+        80,
+        100,
+        50,
+        6,
+        10,
+        8
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.133432+00:00"
+}

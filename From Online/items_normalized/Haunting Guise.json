@@ -1,0 +1,58 @@
+{
+  "name": "Haunting Guise",
+  "id": 3147,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 30.0
+    },
+    "health": {
+      "flat": 200.0
+    }
+  },
+  "passives": [
+    {
+      "name": "Madness",
+      "effects": "For each second in combat with enemy champions, deal 2% increased damage, stacking up to 3 times for a total of 6%."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "For each second in combat with enemy champions, deal 2% increased damage, stacking up to 3 times for a total of 6%.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        2,
+        3,
+        6
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1300,
+      "sell": 520
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3147_hauntingguise.png",
+  "simpleDescription": "Deals additional physical damage when ambushing enemies",
+  "nicknames": [
+    "mask"
+  ],
+  "generated_at": "2026-02-09T22:46:10.151980+00:00"
+}

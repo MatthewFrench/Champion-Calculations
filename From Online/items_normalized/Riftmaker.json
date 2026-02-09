@@ -1,0 +1,90 @@
+{
+  "name": "Riftmaker",
+  "id": 4633,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "abilityHaste": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Void Corruption",
+      "effects": "For each second [[combat status|in combat]] with champions, deal 2% increased damage, stacking up to 4 times for a total of 8% increased damage. At maximum stacks, gain {{as|{{rd|10%|6%}} omnivamp}}.",
+      "stats": {
+        "omnivamp": {
+          "percent": 2.0
+        }
+      }
+    },
+    {
+      "unique": true,
+      "name": "Void Infusion",
+      "effects": "Gain {{as|ability power}} equal to {{as|2% '''bonus''' health}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "For each second [[combat status|in combat]] with champions, deal 2% increased damage, stacking up to 4 times for a total of 8% increased damage. At maximum stacks, gain {{as|{{rd|10%|6%}} omnivamp}}.",
+      "effect_type": "damage",
+      "stat": "omnivamp",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        2,
+        4,
+        8,
+        10,
+        6
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Gain {{as|ability power}} equal to {{as|2% '''bonus''' health}}.",
+      "effect_type": "healing",
+      "stat": "ability_power",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        2
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "LIFESTEAL_VAMP"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "velkoz"
+  ],
+  "generated_at": "2026-02-09T22:46:10.226628+00:00"
+}

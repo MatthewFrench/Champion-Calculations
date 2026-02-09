@@ -1,0 +1,63 @@
+{
+  "name": "Hubris",
+  "id": 6697,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 60.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Eminence",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them generates a permanent stack and grants you {{as|15|ad}} (+ 2 per stack) {{as|'''bonus''' attack damage}} for 90 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them generates a permanent stack and grants you {{as|15|ad}} (+ 2 per stack) {{as|'''bonus''' attack damage}} for 90 seconds.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        15,
+        2,
+        90
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "lethality"
+  ],
+  "generated_at": "2026-02-09T22:46:10.164677+00:00"
+}

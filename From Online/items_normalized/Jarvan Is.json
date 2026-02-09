@@ -1,0 +1,121 @@
+{
+  "name": "Jarvan I's",
+  "id": 1111,
+  "tier": 2,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 25.0
+    },
+    "attackSpeed": {
+      "flat": 25.0
+    },
+    "magicPenetration": {
+      "flat": 12.0
+    },
+    "magicResistance": {
+      "flat": 20.0
+    },
+    "movespeed": {
+      "flat": 100.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    },
+    "tenacity": {
+      "percent": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Jarvan One",
+      "effects": "This item gains the stats and passive effects of all Boots items."
+    },
+    {
+      "unique": true,
+      "name": "Fleetfooted",
+      "effects": "Gain 25% [[slow resist]]."
+    },
+    {
+      "unique": true,
+      "name": "Ionian Insight",
+      "effects": "Gain 10 [[Haste#Summoner spell haste|summoner spell haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Plating",
+      "effects": "Reduces all incoming {{tip|basic damage}} by 10% (''excluding from [[turret]] attacks'')."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "This item gains the stats and passive effects of all Boots items.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": "passive",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.5
+    },
+    {
+      "raw": "Gain 25% [[slow resist]].",
+      "effect_type": "status",
+      "stat": null,
+      "value": 25,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        25
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Gain 10 [[Haste#Summoner spell haste|summoner spell haste]].",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 10,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        10
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Reduces all incoming {{tip|basic damage}} by 10% (''excluding from [[turret]] attacks'').",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "structure",
+      "status_effects": [],
+      "numbers_extracted": [
+        10
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1111_jarvanis.kiwi_15_24_balance.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.158614+00:00"
+}

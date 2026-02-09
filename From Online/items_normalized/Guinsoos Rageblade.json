@@ -1,0 +1,87 @@
+{
+  "name": "Guinsoo's Rageblade",
+  "id": 3124,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 30.0
+    },
+    "attackDamage": {
+      "flat": 30.0
+    },
+    "attackSpeed": {
+      "flat": 25.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Wrath",
+      "effects": "Basic attacks deal {{as|30 '''bonus''' magic damage}} on-hit."
+    },
+    {
+      "unique": true,
+      "name": "Seething Strike",
+      "effects": "Basic attacks grant {{as|8% '''bonus''' attack speed}} for 3 seconds, stacking up to 4 times for a total of {{as|32% '''bonus''' attack speed}}. At maximum stacks, basic attacks {{tip|on-attack}} also grant a ''Phantom'' stack for 6 seconds, up to 2 stacks. At 2 ''Phantom'' stacks, the next basic attack consumes all of those stacks {{tip|on-attack}} to trigger a ''Phantom Hit'' that applies {{tip|on-hit}} effects to the target after a {{fd|0.15}}-second delay."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks deal {{as|30 '''bonus''' magic damage}} on-hit.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 30,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        30
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Basic attacks grant {{as|8% '''bonus''' attack speed}} for 3 seconds, stacking up to 4 times for a total of {{as|32% '''bonus''' attack speed}}. At maximum stacks, basic attacks {{tip|on-attack}} also grant a ''Phantom'' stack for 6 seconds, up to 2 stacks. At 2 ''Phantom'' stacks, the next basic attack consumes all of those stacks {{tip|on-attack}} to trigger a ''Phantom Hit'' that applies {{tip|on-hit}} effects to the target after a {{fd|0.15}}-second delay.",
+      "effect_type": "stat_modifier",
+      "stat": "attack_speed",
+      "value": 8,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        8,
+        3,
+        4,
+        32,
+        6,
+        2,
+        2,
+        0.15
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3124_marksman_t3_guinsoosrageblade.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.226319+00:00"
+}

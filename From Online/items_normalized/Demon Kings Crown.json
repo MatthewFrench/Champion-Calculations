@@ -1,0 +1,43 @@
+{
+  "name": "Demon King's Crown",
+  "id": 443056,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Supremacy",
+      "effects": "Increase your '''total''' {{as|attack damage}}, {{as|ability power}}, {{as|attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}} by 26%, further increased by {{fd|1.2}}% for each round you win and reduced by 3% for each round you lose."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Increase your '''total''' {{as|attack damage}}, {{as|ability power}}, {{as|attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}} by 26%, further increased by {{fd|1.2}}% for each round you win and reduced by 3% for each round you lose.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 26,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        26,
+        1.2,
+        3
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3056_demonkingscrown.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.228245+00:00"
+}

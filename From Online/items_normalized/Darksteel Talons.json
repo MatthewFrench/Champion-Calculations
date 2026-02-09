@@ -1,0 +1,62 @@
+{
+  "name": "Darksteel Talons",
+  "id": 443054,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 55.0
+    },
+    "attackSpeed": {
+      "flat": 50.0
+    },
+    "movespeed": {
+      "percent": 5.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Gash",
+      "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|20 to 40|10 to 20|pp=true}}|true damage}} {{as|(+ {{rd|25%|20%}} '''bonus''' armor)|armor}} {{as|'''bonus''' true damage}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks [[on-hit]] deal {{as|{{rd|20 to 40|10 to 20|pp=true}}|true damage}} {{as|(+ {{rd|25%|20%}} '''bonus''' armor)|armor}} {{as|'''bonus''' true damage}}.",
+      "effect_type": "damage",
+      "stat": "armor",
+      "value": 20,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        40,
+        10,
+        20,
+        25,
+        20
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3054_silversteeltalons.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "bloodrazor",
+    "kitae"
+  ],
+  "generated_at": "2026-02-09T22:46:10.176336+00:00"
+}

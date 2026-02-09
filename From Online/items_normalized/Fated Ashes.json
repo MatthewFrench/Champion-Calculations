@@ -1,0 +1,63 @@
+{
+  "name": "Fated Ashes",
+  "id": 2508,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Inflame",
+      "effects": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|15/6}} magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|15|magic damage}}. Against monsters, the burn deals {{as|{{fd|7.5}} '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(15/6)+7.5}} magic damage}} per tick for up to {{as|{{ap|15+(7.5*6)}}|magic damage}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|15/6}} magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|15|magic damage}}. Against monsters, the burn deals {{as|{{fd|7.5}} '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(15/6)+7.5}} magic damage}} per tick for up to {{as|{{ap|15+(7.5*6)}}|magic damage}}.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 15,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "monster",
+      "status_effects": [],
+      "numbers_extracted": [
+        15,
+        6,
+        0.5,
+        3,
+        15,
+        7.5,
+        15,
+        6,
+        7.5,
+        15,
+        7.5,
+        6
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 900,
+      "sell": 360
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2508_fatedashes64.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.153934+00:00"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "Banshee's Veil",
+  "id": 3102,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 105.0
+    },
+    "magicResistance": {
+      "flat": 40.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Annul",
+      "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions).",
+      "effect_type": "damage",
+      "stat": "shield",
+      "value": 40,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        40
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3102_mage_t3_bansheesveil.png",
+  "simpleDescription": "Periodically blocks enemy abilities",
+  "nicknames": [
+    "bv",
+    "spellshield",
+    "spell shield"
+  ],
+  "generated_at": "2026-02-09T22:46:10.182202+00:00"
+}

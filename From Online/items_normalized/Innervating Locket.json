@@ -1,0 +1,61 @@
+{
+  "name": "Innervating Locket",
+  "id": 447104,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Fill the Soul",
+      "effects": "Gain a charge each time you or champions within 800 units cast an [[champion ability|ability]], up to 30. At maximum charges, gain {{as|{{pp|100 to 250}} ability power}} and {{as|{{pp|15 to 25|key=%}} '''bonus''' movement speed}} for the rest of the round, as well as a {{pp|400 to 750}} {{tip|shield}} that lasts until destroyed. Charges are reset every round and between each phase in a round."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain a charge each time you or champions within 800 units cast an [[champion ability|ability]], up to 30. At maximum charges, gain {{as|{{pp|100 to 250}} ability power}} and {{as|{{pp|15 to 25|key=%}} '''bonus''' movement speed}} for the rest of the round, as well as a {{pp|400 to 750}} {{tip|shield}} that lasts until destroyed. Charges are reset every round and between each phase in a round.",
+      "effect_type": "shield",
+      "stat": "ability_power",
+      "value": 800,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_ability",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        800,
+        30.0,
+        100,
+        250,
+        15,
+        25,
+        400,
+        750
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_innervating_locket.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.129441+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Elixir of Iron",
+  "id": 2138,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "HEALTH_AND_REG",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2138_class_elixirofiron.png",
+  "simpleDescription": "Temporarily increases defenses. Leaves a trail for allies to follow.",
+  "nicknames": [
+    "consumable",
+    "orange",
+    "white"
+  ],
+  "generated_at": "2026-02-09T22:46:10.204690+00:00"
+}

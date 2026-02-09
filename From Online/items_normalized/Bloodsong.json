@@ -1,0 +1,107 @@
+{
+  "name": "Bloodsong",
+  "id": 3877,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "goldPer10": {
+      "flat": 9.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "healthRegen": {
+      "percent": 75.0
+    },
+    "manaRegen": {
+      "percent": 75.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an ability, your next basic attack within 10 seconds deals {{as|100% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]]. If the target is a champion, inflict them with ''Expose Weakness'' for 4 seconds, causing them to take {{rd|8%|5%}} increased damage from all sources ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    },
+    {
+      "unique": true,
+      "effects": "Receives diminishing gold from excessive minion kills."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Ward",
+      "effects": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "range": 600
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "After using an ability, your next basic attack within 10 seconds deals {{as|100% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]]. If the target is a champion, inflict them with ''Expose Weakness'' for 4 seconds, causing them to take {{rd|8%|5%}} increased damage from all sources ({{fd|1.5}} second cooldown, starts after using the empowered attack).",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        100,
+        4,
+        8,
+        5,
+        1.5
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Receives diminishing gold from excessive minion kills.",
+      "effect_type": "resource",
+      "stat": "gold",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_kill",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Consumes a charge to place a {{tip|Stealth Ward}} at the target location, which grants {{tip|sight}} of the surrounding area. Charges refill upon visiting the shop.",
+      "effect_type": "status",
+      "stat": null,
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "stealth"
+      ],
+      "numbers_extracted": [],
+      "parse_confidence": 0.5
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3877_bloodsong.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "Spellblade"
+  ],
+  "generated_at": "2026-02-09T22:46:10.214281+00:00"
+}

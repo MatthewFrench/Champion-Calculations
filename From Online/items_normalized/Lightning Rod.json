@@ -1,0 +1,91 @@
+{
+  "name": "Lightning Rod",
+  "id": 447119,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 30.0
+    },
+    "health": {
+      "flat": 500.0
+    },
+    "magicResistance": {
+      "flat": 30.0
+    },
+    "movespeed": {
+      "percent": 8.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Call Lightning",
+      "effects": "{{as|Automatically|river}} summon a storm cloud above you, which strikes a lightning bolt at your current location after {{fd|1.5}} seconds to deal {{as|{{pp|135 to 230}}|magic damage}} {{as|(+ 30% '''bonus''' AD)}} {{as|(+ 50% AP)}} {{as|(+ 10% of target's '''maximum''' health)}} {{as|magic damage}} to enemies within the area and {{tip|slow}} them by 30% for 2 seconds. If you are within the lightning strike, gain a {{tip|shield}} equal to {{as|14% of your '''maximum''' health}} {{as|(+ 75% AP)}} for 2 seconds.",
+      "cooldown": "16"
+    },
+    {
+      "unique": true,
+      "name": "Fully Automated",
+      "effects": "{{as|Automatic|river}} effects have their cooldown reduced by 1 second and now benefit from your {{as|ability haste}}. ''Call Lightning's'' cooldown cannot be reduced below 5 seconds by this effect."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{as|Automatically|river}} summon a storm cloud above you, which strikes a lightning bolt at your current location after {{fd|1.5}} seconds to deal {{as|{{pp|135 to 230}}|magic damage}} {{as|(+ 30% '''bonus''' AD)}} {{as|(+ 50% AP)}} {{as|(+ 10% of target's '''maximum''' health)}} {{as|magic damage}} to enemies within the area and {{tip|slow}} them by 30% for 2 seconds. If you are within the lightning strike, gain a {{tip|shield}} equal to {{as|14% of your '''maximum''' health}} {{as|(+ 75% AP)}} for 2 seconds.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 1.5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        1.5,
+        135,
+        230,
+        30,
+        50,
+        10,
+        30,
+        2,
+        14,
+        75,
+        2
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "{{as|Automatic|river}} effects have their cooldown reduced by 1 second and now benefit from your {{as|ability haste}}. ''Call Lightning's'' cooldown cannot be reduced below 5 seconds by this effect.",
+      "effect_type": "stat_modifier",
+      "stat": "ability_haste",
+      "value": 1,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        1,
+        5
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447119_lightningrod.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.212863+00:00"
+}

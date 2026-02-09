@@ -1,0 +1,78 @@
+{
+  "name": "Tiamat",
+  "id": 3077,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly = true}} 350 radius centered around the target."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Crescent",
+      "effects": "Deal {{as|75% AD}} {{as|physical damage}} to enemies within a {{tip|cr|icononly = true}} 450 radius in front of you."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Basic attacks [[on-hit]] deal {{as|{{rd|40% AD|20% AD}}|ad}} {{as|physical damage}} to other enemies in a {{tip|cr|icononly = true}} 350 radius centered around the target.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 40,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        40,
+        20,
+        350
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Deal {{as|75% AD}} {{as|physical damage}} to enemies within a {{tip|cr|icononly = true}} 450 radius in front of you.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 75,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        75,
+        450
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3077_fighter_t2_tiamat.png",
+  "simpleDescription": "Melee attacks hit nearby enemies",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.165007+00:00"
+}

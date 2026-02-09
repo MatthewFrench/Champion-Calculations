@@ -1,0 +1,67 @@
+{
+  "name": "Guardian's Dirk",
+  "id": 223185,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 25.0
+    },
+    "lethality": {
+      "flat": 11
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Agricultural Reaper",
+      "effects": "Increases the effects of [[File:Power FlowerSquare.png|20px|link=Arena#Power Flowers]] ''[[Arena#Power Flowers|Power Flowers]]'' by 20%. Additionally, dealing damage to a ''Power Flower'' grants you {{as|100 '''bonus''' movement speed}} for 3 seconds.",
+      "stats": {
+        "movespeed": {
+          "flat": 100.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Increases the effects of [[File:Power FlowerSquare.png|20px|link=Arena#Power Flowers]] ''[[Arena#Power Flowers|Power Flowers]]'' by 20%. Additionally, dealing damage to a ''Power Flower'' grants you {{as|100 '''bonus''' movement speed}} for 3 seconds.",
+      "effect_type": "damage",
+      "stat": "movement_speed",
+      "value": 20,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        20,
+        100,
+        3
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3181_sanguineblade.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.193278+00:00"
+}

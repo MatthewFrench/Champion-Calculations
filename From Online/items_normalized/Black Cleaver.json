@@ -1,0 +1,93 @@
+{
+  "name": "Black Cleaver",
+  "id": 3071,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "health": {
+      "flat": 400.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Carve",
+      "effects": "Dealing {{as|physical damage}} to an enemy champion applies a stack of ''Carve'' for 6 seconds, stacking up to 5 times. Each stack inflicts {{as|6% armor reduction}}, up to {{as|30%|armor}} at 5 stacks."
+    },
+    {
+      "unique": true,
+      "name": "Fervor",
+      "effects": "Dealing {{as|physical damage}} grants you {{as|20 '''bonus''' movement speed}} for 2 seconds.",
+      "stats": {
+        "movespeed": {
+          "flat": 20.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing {{as|physical damage}} to an enemy champion applies a stack of ''Carve'' for 6 seconds, stacking up to 5 times. Each stack inflicts {{as|6% armor reduction}}, up to {{as|30%|armor}} at 5 stacks.",
+      "effect_type": "damage",
+      "stat": "armor",
+      "value": 6,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        6,
+        5,
+        6,
+        30,
+        5
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Dealing {{as|physical damage}} grants you {{as|20 '''bonus''' movement speed}} for 2 seconds.",
+      "effect_type": "damage",
+      "stat": "movement_speed",
+      "value": 20,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        20,
+        2
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ONHIT_EFFECTS",
+      "ARMOR_PEN",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
+  "simpleDescription": "Dealing physical damage to enemy champions reduces their Armor",
+  "nicknames": [
+    "bc"
+  ],
+  "generated_at": "2026-02-09T22:46:10.155501+00:00"
+}

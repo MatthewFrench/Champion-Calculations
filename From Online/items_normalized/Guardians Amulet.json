@@ -1,0 +1,60 @@
+{
+  "name": "Guardian's Amulet",
+  "id": 2049,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 20.0
+    },
+    "healAndShieldPower": {
+      "flat": 15.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Recovery",
+      "effects": "Restore {{as|10 mana}} every 5 seconds. Manaless champions restore {{as|3 health}} instead."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Restore {{as|10 mana}} every 5 seconds. Manaless champions restore {{as|3 health}} instead.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 10,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        5,
+        3
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2049_guardiansamulet.png",
+  "simpleDescription": "Increases Health and provides Stealth Wards over time",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.200910+00:00"
+}

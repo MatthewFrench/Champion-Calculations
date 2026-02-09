@@ -1,0 +1,35 @@
+{
+  "name": "Caulfield's Warhammer",
+  "id": 3133,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 20.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 1050,
+      "sell": 420
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MARKSMAN",
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3133_fighter_t2_caulfieldswarhammer.png",
+  "simpleDescription": "Attack Damage and Cooldown Reduction",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.216132+00:00"
+}

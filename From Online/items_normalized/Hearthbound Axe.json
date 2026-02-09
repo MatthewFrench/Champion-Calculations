@@ -1,0 +1,37 @@
+{
+  "name": "Hearthbound Axe",
+  "id": 3051,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 20.0
+    },
+    "attackSpeed": {
+      "flat": 20.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 1200,
+      "sell": 480
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "MOVEMENT",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3051_fighter_t2_axeofavarosa.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "blue arrow"
+  ],
+  "generated_at": "2026-02-09T22:46:10.138938+00:00"
+}

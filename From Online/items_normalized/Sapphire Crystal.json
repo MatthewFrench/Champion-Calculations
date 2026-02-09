@@ -1,0 +1,33 @@
+{
+  "name": "Sapphire Crystal",
+  "id": 1027,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "mana": {
+      "flat": 300.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 300,
+      "sell": 120
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1027_base_t1_saphirecrystal.png",
+  "simpleDescription": "Increases Mana",
+  "nicknames": [
+    "blue"
+  ],
+  "generated_at": "2026-02-09T22:46:10.137341+00:00"
+}

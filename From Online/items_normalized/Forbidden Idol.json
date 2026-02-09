@@ -1,0 +1,33 @@
+{
+  "name": "Forbidden Idol",
+  "id": 3114,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "healAndShieldPower": {
+      "flat": 8.0
+    },
+    "manaRegen": {
+      "percent": 50.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 600,
+      "sell": 240
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3114_mage_t2_forbiddenidol.png",
+  "simpleDescription": "Increases Heal and Shield Power, Mana Regeneration, and Cooldown Reduction",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.140074+00:00"
+}

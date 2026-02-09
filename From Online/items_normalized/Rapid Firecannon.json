@@ -1,0 +1,86 @@
+{
+  "name": "Rapid Firecannon",
+  "id": 3094,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 35.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Sharpshooter",
+      "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|40 '''bonus''' magic damage}} [[on-hit]]. ''Energized'' attacks gain 35% '''bonus''' range, capped at 150."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 100.0,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        100.0
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "When fully {{tip|Energized}}, your next basic attack deals {{as|40 '''bonus''' magic damage}} [[on-hit]]. ''Energized'' attacks gain 35% '''bonus''' range, capped at 150.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 40,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        40,
+        35,
+        150.0
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2650,
+      "sell": 1060
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3094_marksman_t3_rapidfirehandcannon.png",
+  "simpleDescription": "Movement builds charges that release a sieging fire attack on release",
+  "nicknames": [
+    "canon",
+    "gun",
+    "rapidfire",
+    "rfc"
+  ],
+  "generated_at": "2026-02-09T22:46:10.235058+00:00"
+}

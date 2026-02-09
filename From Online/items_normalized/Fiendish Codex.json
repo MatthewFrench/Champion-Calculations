@@ -1,0 +1,35 @@
+{
+  "name": "Fiendish Codex",
+  "id": 3108,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 25.0
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 850,
+      "sell": 340
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3108_mage_t2_fiendishcodex.png",
+  "simpleDescription": "Increases Ability Power and Cooldown Reduction",
+  "nicknames": [
+    "book"
+  ],
+  "generated_at": "2026-02-09T22:46:10.137977+00:00"
+}

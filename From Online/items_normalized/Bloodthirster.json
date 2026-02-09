@@ -1,0 +1,72 @@
+{
+  "name": "Bloodthirster",
+  "id": 3072,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 80.0
+    },
+    "lifesteal": {
+      "percent": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Ichorshield",
+      "effects": "Convert the {{tip|healing}} received from {{sti|life steal}} in excess of {{as|'''maximum''' health}} into a {{tip|shield}} for up to {{pp|165 + (315-165)/10*(x-1)|1;9 to 20 by 1|formula=165 base, then +15 per level starting from level 9.}}, which lasts until destroyed."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Convert the {{tip|healing}} received from {{sti|life steal}} in excess of {{as|'''maximum''' health}} into a {{tip|shield}} for up to {{pp|165 + (315-165)/10*(x-1)|1;9 to 20 by 1|formula=165 base, then +15 per level starting from level 9.}}, which lasts until destroyed.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 165,
+      "value_range": [
+        315,
+        165
+      ],
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        165,
+        315,
+        -165,
+        10,
+        -1,
+        1,
+        9,
+        20,
+        1,
+        165,
+        15,
+        9.0
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3400,
+      "sell": 1360
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3072_fighter_t3_bloodthirster.png",
+  "simpleDescription": "Grants Attack Damage, Life Steal and Life Steal now overheals",
+  "nicknames": [
+    "bt",
+    "healsword"
+  ],
+  "generated_at": "2026-02-09T22:46:10.139231+00:00"
+}

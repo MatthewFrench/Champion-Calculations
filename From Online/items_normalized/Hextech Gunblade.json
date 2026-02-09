@@ -1,0 +1,71 @@
+{
+  "name": "Hextech Gunblade",
+  "id": 3146,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 80.0
+    },
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "omnivamp": {
+      "percent": 10.0
+    }
+  },
+  "passives": null,
+  "active": [
+    {
+      "unique": true,
+      "name": "Lightning Bolt",
+      "effects": "Shocks the target enemy champion with a bolt of lightning, dealing {{as|{{pp|175 + (253-175)/17*(x-1) for 20}}|magic damage}} {{as|(+ 30% AP)}} {{as|magic damage}} and {{tip|slow|slowing}} them by 25% for {{fd|1.5}} seconds."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Shocks the target enemy champion with a bolt of lightning, dealing {{as|{{pp|175 + (253-175)/17*(x-1) for 20}}|magic damage}} {{as|(+ 30% AP)}} {{as|magic damage}} and {{tip|slow|slowing}} them by 25% for {{fd|1.5}} seconds.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 175,
+      "value_range": [
+        253,
+        175
+      ],
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        175,
+        253,
+        -175,
+        17,
+        -1,
+        20,
+        30,
+        25,
+        1.5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3146_hextechgunblade.png",
+  "simpleDescription": "Increases Attack Damage and Ability Power, activate to slow a target",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.166221+00:00"
+}

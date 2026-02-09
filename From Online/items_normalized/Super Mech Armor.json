@@ -1,0 +1,39 @@
+{
+  "name": "Super Mech Armor",
+  "id": 1511,
+  "tier": 1,
+  "rank": [
+    "MINION"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Super Mech Armor",
+      "effects": "{{tip|Turret}} basic attacks are modified to deal {{as|7% of this minion's '''maximum''' health}} as {{tt|pre-mitigation damage|Damage calculated before modifiers}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{tip|Turret}} basic attacks are modified to deal {{as|7% of this minion's '''maximum''' health}} as {{tt|pre-mitigation damage|Damage calculated before modifiers}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 7,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        7
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1511_supermecharmor.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.218222+00:00"
+}

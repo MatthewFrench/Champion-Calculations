@@ -1,0 +1,34 @@
+{
+  "name": "Noonquiver",
+  "id": 6670,
+  "tier": 2,
+  "rank": [
+    "EPIC"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 15.0
+    },
+    "criticalStrikeChance": {
+      "percent": 20.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 1300,
+      "sell": 520
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6670_marksman_t2_noonquiver.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.229212+00:00"
+}

@@ -1,0 +1,64 @@
+{
+  "name": "Force of Entropy",
+  "id": 443061,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "health": {
+      "flat": 900.0
+    },
+    "abilityHaste": {
+      "flat": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Atrophy",
+      "effects": "{{tip|Immobilize|Immobilizing}} effects against {{tip|champions}} have a {{pp|key=%|key1=%|type=critical strike chance|0 to 100 for 11|0 to 100|formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to increase in duration by {{fd|0.25}} seconds (+ 33% of immobilizing effect's duration)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "{{tip|Immobilize|Immobilizing}} effects against {{tip|champions}} have a {{pp|key=%|key1=%|type=critical strike chance|0 to 100 for 11|0 to 100|formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to increase in duration by {{fd|0.25}} seconds (+ 33% of immobilizing effect's duration).",
+      "effect_type": "stat_modifier",
+      "stat": "critical_strike",
+      "value": 1,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        1,
+        0,
+        100,
+        11,
+        0,
+        100,
+        1,
+        1,
+        100,
+        0.25,
+        33
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3061_forceofentropy.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.178868+00:00"
+}

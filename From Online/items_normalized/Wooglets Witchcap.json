@@ -1,0 +1,82 @@
+{
+  "name": "Wooglet's Witchcap",
+  "id": 228002,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 300.0
+    },
+    "armor": {
+      "flat": 50.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Magical Opus",
+      "effects": "Increase your {{as|ability power}} by 50%."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Stasis",
+      "effects": "Put yourself in {{tip|stasis (buff)|stasis}} for {{fd|2.5}} seconds, rendering you {{tip|untargetable}} and {{tip|invulnerable}} for the duration but also unable to move, declare [[basic attack]]s, cast [[champion ability|abilities]], use [[summoner spell]]s, or [[active ability items|activate items]]."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Increase your {{as|ability power}} by 50%.",
+      "effect_type": "stat_modifier",
+      "stat": "ability_power",
+      "value": 50,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        50
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Put yourself in {{tip|stasis (buff)|stasis}} for {{fd|2.5}} seconds, rendering you {{tip|untargetable}} and {{tip|invulnerable}} for the duration but also unable to move, declare [[basic attack]]s, cast [[champion ability|abilities]], use [[summoner spell]]s, or [[active ability items|activate items]].",
+      "effect_type": "status",
+      "stat": null,
+      "value": 2.5,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_ability",
+      "applies_to": "self",
+      "status_effects": [
+        "stasis",
+        "untargetable",
+        "invulnerable"
+      ],
+      "numbers_extracted": [
+        2.5
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3385_forge_wooglets_witchcap.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "Quest",
+    "Deathcap"
+  ],
+  "generated_at": "2026-02-09T22:46:10.166892+00:00"
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Heartsteel",
+  "id": 3084,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "health": {
+      "flat": 900.0
+    },
+    "healthRegen": {
+      "percent": 100.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Colossal Consumption",
+      "effects": "While within 700 units of an enemy champion, generate a stack on them each second, stacking up to 3 times. Your next basic attack against a target with 3 stacks is empowered to consume them all to deal {{as|70|physical damage}} {{as|(+ 6% '''maximum''' health)}} {{as|'''bonus''' physical damage}} [[on-hit]] and grant you permanent {{as|'''bonus''' health}} equal to{{ft|8% of that amount|{{as|{{ap|70*0.08}} (+ {{ap|6*0.08}}% '''maximum''' health)}}}} (30 second cooldown per target)."
+    },
+    {
+      "unique": true,
+      "name": "Goliath",
+      "effects": "Gain {{as|{{pp|key=%|0 to 30 for 11|0 to 10000|type='''maximum''' health}}|hp}} increased size."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "While within 700 units of an enemy champion, generate a stack on them each second, stacking up to 3 times. Your next basic attack against a target with 3 stacks is empowered to consume them all to deal {{as|70|physical damage}} {{as|(+ 6% '''maximum''' health)}} {{as|'''bonus''' physical damage}} [[on-hit]] and grant you permanent {{as|'''bonus''' health}} equal to{{ft|8% of that amount|{{as|{{ap|70*0.08}} (+ {{ap|6*0.08}}% '''maximum''' health)}}}} (30 second cooldown per target).",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 700,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        700,
+        3,
+        3,
+        70,
+        6,
+        8,
+        70,
+        0.08,
+        6,
+        0.08,
+        30
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Gain {{as|{{pp|key=%|0 to 30 for 11|0 to 10000|type='''maximum''' health}}|hp}} increased size.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        30,
+        11,
+        0,
+        10000
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3084_tank_t4_heartsteel.png",
+  "simpleDescription": "Restores Health on kill or assist",
+  "nicknames": [
+    "Quest",
+    "Steal",
+    "Boy Band",
+    "BoyBand"
+  ],
+  "generated_at": "2026-02-09T22:46:10.234001+00:00"
+}

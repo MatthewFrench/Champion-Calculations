@@ -1,0 +1,44 @@
+{
+  "name": "Death's Daughter",
+  "id": 3902,
+  "tier": 1,
+  "rank": null,
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Death's Daughter",
+      "effects": "A massive cannonball lands after {{ais|Cannon Barrage|Gangplank}} first cluster of waves, dealing {{sti|true damage|{{as|{{ap|120 to 300 3}}|true damage}}}} {{as|(+ 30% AP)}} {{as|true damage}} to enemies struck and {{tip|slow|slowing}} them by 75% for 1 second."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "A massive cannonball lands after {{ais|Cannon Barrage|Gangplank}} first cluster of waves, dealing {{sti|true damage|{{as|{{ap|120 to 300 3}}|true damage}}}} {{as|(+ 30% AP)}} {{as|true damage}} to enemies struck and {{tip|slow|slowing}} them by 75% for 1 second.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 120,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        120,
+        300,
+        3,
+        30,
+        75,
+        1
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3902_champ_t0_deathsdaughtercircle.png",
+  "simpleDescription": "<mainText>Cannon Barrage additionally fires a mega-cannonball at the center of the Barrage, dealing <trueDamage>bonus true damage</trueDamage> and <status>Slowing</status>.</mainText>",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.169682+00:00"
+}

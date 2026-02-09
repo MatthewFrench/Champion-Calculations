@@ -1,0 +1,56 @@
+{
+  "name": "Shadowflame",
+  "id": 4645,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 110.0
+    },
+    "magicPenetration": {
+      "flat": 15.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cinderbloom",
+      "effects": "Your {{as|magic|magic damage}} and {{as|true|true damage}} damage will {{tip|critical strike|critically strike}} for 120% damage against enemies {{as|below 40% '''maximum''' health}}."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Your {{as|magic|magic damage}} and {{as|true|true damage}} damage will {{tip|critical strike|critically strike}} for 120% damage against enemies {{as|below 40% '''maximum''' health}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 120,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        120,
+        40
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4645_shadowflame.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.182426+00:00"
+}

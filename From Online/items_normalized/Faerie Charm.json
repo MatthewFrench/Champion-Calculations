@@ -1,0 +1,31 @@
+{
+  "name": "Faerie Charm",
+  "id": 1004,
+  "tier": 1,
+  "rank": [
+    "BASIC"
+  ],
+  "stats": {
+    "manaRegen": {
+      "percent": 50.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 200,
+      "sell": 80
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1004_class_t1_faeriecharm.png",
+  "simpleDescription": "Slightly increases Mana Regen",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.232310+00:00"
+}

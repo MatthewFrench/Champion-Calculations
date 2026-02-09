@@ -1,0 +1,89 @@
+{
+  "name": "Fiendhunter Bolts",
+  "id": 2512,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 45.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Night Vigil",
+      "effects": "Gain 30 [[Haste#Ultimate haste|ultimate haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Opening Barrage",
+      "effects": "After casting your ultimate ability, your next 3 basic attacks within 8 seconds gain {{as|50% '''bonus''' attack speed}} and will {{tip|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage.|{{sti|{{as|80% '''total''' critical damage}}}}.}}If an attack would have already critically struck, it instead critically strikes for{{ft|{{as|{{critical damage|100|100}}|critical damage}} '''bonus''' damage|{{sti|{{as|100% '''total''' critical damage}}}}}}and deals {{as|'''bonus''' true damage}} equal to 15% of the triggering {{as|attack's damage}}.",
+      "cooldown": 45
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 30 [[Haste#Ultimate haste|ultimate haste]].",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 30,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        30
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "After casting your ultimate ability, your next 3 basic attacks within 8 seconds gain {{as|50% '''bonus''' attack speed}} and will {{tip|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage.|{{sti|{{as|80% '''total''' critical damage}}}}.}}If an attack would have already critically struck, it instead critically strikes for{{ft|{{as|{{critical damage|100|100}}|critical damage}} '''bonus''' damage|{{sti|{{as|100% '''total''' critical damage}}}}}}and deals {{as|'''bonus''' true damage}} equal to 15% of the triggering {{as|attack's damage}}.",
+      "effect_type": "damage",
+      "stat": "attack_speed",
+      "value": 3,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "ally",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        8,
+        50,
+        60,
+        80,
+        80,
+        100,
+        100,
+        100,
+        15
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2650,
+      "sell": 1060
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.180042+00:00"
+}

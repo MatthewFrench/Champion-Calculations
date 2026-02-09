@@ -1,0 +1,40 @@
+{
+  "name": "Crystalline Overgrowth",
+  "id": 1524,
+  "tier": 1,
+  "rank": [
+    "TURRET"
+  ],
+  "stats": null,
+  "passives": [
+    {
+      "unique": true,
+      "name": "Buildup",
+      "effects": "After 90 seconds, turrets gain ''Overgrowth''. Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as|'''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "After 90 seconds, turrets gain ''Overgrowth''. Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as|'''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 90,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "structure",
+      "status_effects": [],
+      "numbers_extracted": [
+        90,
+        300
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": null,
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1524_turret_crystalline_overgrowth.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.167188+00:00"
+}

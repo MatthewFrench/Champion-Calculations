@@ -1,0 +1,59 @@
+{
+  "name": "Rabadon's Deathcap",
+  "id": 3089,
+  "tier": 2,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 130.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Magical Opus",
+      "effects": "Increase your {{as|ability power}} by 30%."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Increase your {{as|ability power}} by 30%.",
+      "effect_type": "stat_modifier",
+      "stat": "ability_power",
+      "value": 30,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        30
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3500,
+      "sell": 1400
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3089_mage_t3_deathcap.png",
+  "simpleDescription": "Massively increases Ability Power",
+  "nicknames": [
+    "banksys",
+    "dc",
+    "dcap",
+    "hat",
+    "witchcap",
+    "wooglets"
+  ],
+  "generated_at": "2026-02-09T22:46:10.207274+00:00"
+}

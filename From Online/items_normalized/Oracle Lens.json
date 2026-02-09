@@ -1,0 +1,46 @@
+{
+  "name": "Oracle Lens",
+  "id": 3364,
+  "tier": 1,
+  "rank": [
+    "TRINKET"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": [
+    {
+      "effects": "Consume one charge to summon a {{tip|Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip|sight|visible}}."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Consume one charge to summon a {{tip|Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip|sight|visible}}.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 8,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        8
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3364_class_t1_oracleslens.png",
+  "simpleDescription": "Disables nearby invisible wards and traps for a duration",
+  "nicknames": [
+    "red",
+    "lens",
+    "spinny",
+    "sweeper",
+    "totem",
+    "trinket"
+  ],
+  "generated_at": "2026-02-09T22:46:10.224274+00:00"
+}

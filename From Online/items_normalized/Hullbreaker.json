@@ -1,0 +1,109 @@
+{
+  "name": "Hullbreaker",
+  "id": 3181,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "health": {
+      "flat": 500.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Skipper",
+      "effects": "Basic attacks [[on-hit]] against any enemy grant a stack for 10 seconds, stacking up to 5 times. At '''maximum''' stacks, or 4 stacks, your next basic attack against a champion, epic monster, or structure consumes all stacks to deal {{as|{{rd|120%|{{ap|120*0.7}}%}} '''base''' AD|ad}} {{as|(+ {{rd|5%|{{ap|5*0.7}}%}} '''maximum''' health)}} {{as|'''bonus''' physical damage}}, increased to {{as|{{rd|300%|{{ap|300*0.7}}%}} '''base''' AD|ad}} {{as|(+ {{rd|10%|{{ap|10*0.7}}%}} '''maximum''' health)}} against structures."
+    },
+    {
+      "unique": true,
+      "name": "Boarding Party",
+      "effects": "Allied {{ui|Blue Siege Minion|link=Siege minion|siege minions}} and {{ui|Blue Super Minion|link=Super minion|super minions}} within {{tip|er|icononly=true}} {{tt|1050|Estimated}} units gain {{rd|70 to 130 for 11|70*0.5 to 130*0.5 for 11|levels=1;9 to 18|pp=true}} {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}}, as well as 10% increased size."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Basic attacks [[on-hit]] against any enemy grant a stack for 10 seconds, stacking up to 5 times. At '''maximum''' stacks, or 4 stacks, your next basic attack against a champion, epic monster, or structure consumes all stacks to deal {{as|{{rd|120%|{{ap|120*0.7}}%}} '''base''' AD|ad}} {{as|(+ {{rd|5%|{{ap|5*0.7}}%}} '''maximum''' health)}} {{as|'''bonus''' physical damage}}, increased to {{as|{{rd|300%|{{ap|300*0.7}}%}} '''base''' AD|ad}} {{as|(+ {{rd|10%|{{ap|10*0.7}}%}} '''maximum''' health)}} against structures.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "enemy",
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        5,
+        4,
+        120,
+        120,
+        0.7,
+        5,
+        5,
+        0.7,
+        300,
+        300,
+        0.7,
+        10,
+        10,
+        0.7
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Allied {{ui|Blue Siege Minion|link=Siege minion|siege minions}} and {{ui|Blue Super Minion|link=Super minion|super minions}} within {{tip|er|icononly=true}} {{tt|1050|Estimated}} units gain {{rd|70 to 130 for 11|70*0.5 to 130*0.5 for 11|levels=1;9 to 18|pp=true}} {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}}, as well as 10% increased size.",
+      "effect_type": "stat_modifier",
+      "stat": "armor",
+      "value": 1050,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        1050,
+        70,
+        130,
+        11,
+        70,
+        0.5,
+        130,
+        0.5,
+        11,
+        1,
+        9,
+        18,
+        10
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3181_hullbreaker.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "ahoy",
+    "hull",
+    "pirate",
+    "yarrr"
+  ],
+  "generated_at": "2026-02-09T22:46:10.158054+00:00"
+}

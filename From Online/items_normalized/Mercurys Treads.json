@@ -1,0 +1,36 @@
+{
+  "name": "Mercury's Treads",
+  "id": 3111,
+  "tier": 2,
+  "rank": [
+    "BOOTS"
+  ],
+  "stats": {
+    "magicResistance": {
+      "flat": 20.0
+    },
+    "movespeed": {
+      "flat": 45.0
+    },
+    "tenacity": {
+      "percent": 30.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 1250,
+      "sell": 500
+    },
+    "purchasable": true
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3111_class_t2_mercurystreads.png",
+  "simpleDescription": "Increases Move Speed and reduces duration of disabling effects",
+  "nicknames": [
+    "boots",
+    "mercs"
+  ],
+  "generated_at": "2026-02-09T22:46:10.179732+00:00"
+}

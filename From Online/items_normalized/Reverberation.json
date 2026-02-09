@@ -1,0 +1,100 @@
+{
+  "name": "Reverberation",
+  "id": 447114,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 35.0
+    },
+    "attackSpeed": {
+      "flat": 40.0
+    },
+    "magicResistance": {
+      "flat": 35.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Reverberate",
+      "effects": "After 2 seconds from the start of the combat phase in each round, gain {{as|5 '''bonus''' health}} per {{as|1% '''bonus''' attack speed}}."
+    },
+    {
+      "unique": true,
+      "name": "Resonate",
+      "effects": "Basic attacks {{tip|on-hit}} deal {{as|10|magic damage}} {{as|(+ 2% of your '''bonus''' health)}} {{as|'''bonus''' magic damage}}."
+    },
+    {
+      "unique": true,
+      "name": "Rumble",
+      "effects": "{{tip|Immobilize|Immobilizing}} an enemy champion generates 25 stacks of ''Reverberation'' for 10 seconds, stacking up to 100 times and refreshing {{tip|on-hit}} as well as on subsequent immobilizations. At '''maximum''' stacks and upon {{tip|immobilize|immobilizing}} an enemy, your on-hit effects are applied to them 3 times."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "After 2 seconds from the start of the combat phase in each round, gain {{as|5 '''bonus''' health}} per {{as|1% '''bonus''' attack speed}}.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 2,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        2,
+        5,
+        1
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Basic attacks {{tip|on-hit}} deal {{as|10|magic damage}} {{as|(+ 2% of your '''bonus''' health)}} {{as|'''bonus''' magic damage}}.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        2
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "{{tip|Immobilize|Immobilizing}} an enemy champion generates 25 stacks of ''Reverberation'' for 10 seconds, stacking up to 100 times and refreshing {{tip|on-hit}} as well as on subsequent immobilizations. At '''maximum''' stacks and upon {{tip|immobilize|immobilizing}} an enemy, your on-hit effects are applied to them 3 times.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 25,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": "on_hit",
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        25,
+        10,
+        100,
+        3
+      ],
+      "parse_confidence": 0.7
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447114_reverberation.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.202589+00:00"
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Doran's Ring",
+  "id": 1056,
+  "tier": 1,
+  "rank": [
+    "STARTER"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 18.0
+    },
+    "health": {
+      "flat": 90.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Drain",
+      "effects": "Restore {{as|1 mana}} every second. Dealing damage to an enemy champion increases the restoration to {{as|2 mana}} for the next 5 seconds. If you cannot gain mana, {{tip|healing|heal}} for{{ft|45% of the value|{{as|{{ap|1*0.45}}|hp}} every second, increased to {{as|{{ap|2*0.45}}|hp}} when dealing damage to an enemy champion}}instead."
+    },
+    {
+      "unique": true,
+      "name": "Helping Hand",
+      "effects": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]]."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Restore {{as|1 mana}} every second. Dealing damage to an enemy champion increases the restoration to {{as|2 mana}} for the next 5 seconds. If you cannot gain mana, {{tip|healing|heal}} for{{ft|45% of the value|{{as|{{ap|1*0.45}}|hp}} every second, increased to {{as|{{ap|2*0.45}}|hp}} when dealing damage to an enemy champion}}instead.",
+      "effect_type": "damage",
+      "stat": "mana",
+      "value": 1,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        1,
+        2,
+        5,
+        45,
+        1,
+        0.45,
+        2,
+        0.45
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]].",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 5,
+      "value_range": null,
+      "unit": null,
+      "trigger": "on_hit",
+      "applies_to": "minion",
+      "status_effects": [],
+      "numbers_extracted": [
+        5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 400,
+      "sell": 160
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE",
+      "MANA_AND_REG",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1056_mage_t1_doransring.png",
+  "simpleDescription": "Good starting item for casters",
+  "nicknames": [
+    "dring"
+  ],
+  "generated_at": "2026-02-09T22:46:10.167728+00:00"
+}

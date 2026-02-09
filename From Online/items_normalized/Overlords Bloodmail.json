@@ -1,0 +1,81 @@
+{
+  "name": "Overlord's Bloodmail",
+  "id": 2501,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 30.0
+    },
+    "health": {
+      "flat": 550.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Tyranny",
+      "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{as|{{fd|2.5}}% '''bonus''' health}}."
+    },
+    {
+      "unique": true,
+      "name": "Retribution",
+      "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{pp|0 to 12 by 1|0 to 70|key=%|key1=%|type='''missing''' health|color=health}} of your {{as|'''total''' attack damage}} from other sources."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain {{as|'''bonus''' attack damage}} equal to {{as|{{fd|2.5}}% '''bonus''' health}}.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 2.5,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        2.5
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Gain {{as|'''bonus''' attack damage}} equal to {{pp|0 to 12 by 1|0 to 70|key=%|key1=%|type='''missing''' health|color=health}} of your {{as|'''total''' attack damage}} from other sources.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        12,
+        1,
+        0,
+        70,
+        1
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7111_overlordsbloodmail.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.189308+00:00"
+}

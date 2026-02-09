@@ -1,0 +1,72 @@
+{
+  "name": "Echoes of Helia",
+  "id": 6620,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 35.0
+    },
+    "health": {
+      "flat": 200.0
+    },
+    "manaRegen": {
+      "percent": 125.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Soul Siphon",
+      "effects": "Gain 35% of {{tt|pre-mitigation damage|Damage calculated before modifiers}} dealt to champions as ''Soul Charges'', up to {{pp|80 + (250-80)/17*(x-1) for 20}}. {{tip|Healing}} or {{tip|shielding}} an allied champion ''(excluding yourself)'' consumes all charges to heal them equal to the consumed amount."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 35% of {{tt|pre-mitigation damage|Damage calculated before modifiers}} dealt to champions as ''Soul Charges'', up to {{pp|80 + (250-80)/17*(x-1) for 20}}. {{tip|Healing}} or {{tip|shielding}} an allied champion ''(excluding yourself)'' consumes all charges to heal them equal to the consumed amount.",
+      "effect_type": "damage",
+      "stat": "shield",
+      "value": 35,
+      "value_range": [
+        250,
+        80
+      ],
+      "unit": "percent",
+      "trigger": "on_damage",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        35,
+        80,
+        250,
+        -80,
+        17,
+        -1,
+        20
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2200,
+      "sell": 880
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6620_echoes_of_helia.png",
+  "simpleDescription": "Damage low-health enemies to trigger a cursed explosion, dealing damage and slowing nearby foes",
+  "nicknames": [
+    "spooky cup"
+  ],
+  "generated_at": "2026-02-09T22:46:10.230829+00:00"
+}

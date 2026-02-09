@@ -1,0 +1,67 @@
+{
+  "name": "Dusk and Dawn",
+  "id": 2510,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 70.0
+    },
+    "attackSpeed": {
+      "flat": 25.0
+    },
+    "health": {
+      "flat": 350.0
+    },
+    "abilityHaste": {
+      "flat": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Spellblade",
+      "effects": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|75% '''base''' AD}} {{as|(+ 10% AP)}} {{as|'''bonus''' magic damage}} on-hit and applies {{tip|on-hit}} effects to the target again after a {{fd|0.2}}-second delay ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|75% '''base''' AD}} {{as|(+ 10% AP)}} {{as|'''bonus''' magic damage}} on-hit and applies {{tip|on-hit}} effects to the target again after a {{fd|0.2}}-second delay ({{fd|1.5}} second cooldown, starts after using the empowered attack).",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        75,
+        10,
+        0.2,
+        1.5
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3100,
+      "sell": 1240
+    },
+    "purchasable": true,
+    "tags": [
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2510_apfightersheen.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "Spellblade"
+  ],
+  "generated_at": "2026-02-09T22:46:10.215384+00:00"
+}

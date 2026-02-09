@@ -1,0 +1,84 @@
+{
+  "name": "Sterak's Gage",
+  "id": 3053,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "health": {
+      "flat": 400.0
+    },
+    "tenacity": {
+      "percent": 20.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "The Claws that Catch",
+      "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{as|45% '''base''' AD}}."
+    },
+    {
+      "unique": true,
+      "name": "Lifeline",
+      "effects": "If you would take damage that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} that absorbs damage equal to {{as|60% of '''bonus''' health}} which decays over {{fd|4.5}} seconds.",
+      "cooldown": "90"
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain {{as|'''bonus''' attack damage}} equal to {{as|45% '''base''' AD}}.",
+      "effect_type": "damage",
+      "stat": "attack_damage",
+      "value": 45,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        45
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "If you would take damage that would reduce you below {{as|30% of your '''maximum''' health}}, you first gain a {{tip|shield}} that absorbs damage equal to {{as|60% of '''bonus''' health}} which decays over {{fd|4.5}} seconds.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 30,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        30,
+        60,
+        4.5
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3200,
+      "sell": 1280
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ATTACK_DAMAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
+  "simpleDescription": "Shields against large bursts of damage",
+  "nicknames": [
+    "juggernaut",
+    "primal",
+    "shield",
+    "sterak's cage"
+  ],
+  "generated_at": "2026-02-09T22:46:10.203654+00:00"
+}

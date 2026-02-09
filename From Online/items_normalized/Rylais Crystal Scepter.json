@@ -1,0 +1,60 @@
+{
+  "name": "Rylai's Crystal Scepter",
+  "id": 3116,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 65.0
+    },
+    "health": {
+      "flat": 400.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Rimefrost",
+      "effects": "Dealing {{tip|ability damage}} {{tip|slow|slows}} affected [[unit]]s by 30% for 1 second."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Dealing {{tip|ability damage}} {{tip|slow|slows}} affected [[unit]]s by 30% for 1 second.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 30,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        30,
+        1
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2600,
+      "sell": 1040
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3116_mage_t3_rylajscrystalscepter.png",
+  "simpleDescription": "Abilities slow enemies",
+  "nicknames": [
+    "rylais"
+  ],
+  "generated_at": "2026-02-09T22:46:10.147937+00:00"
+}

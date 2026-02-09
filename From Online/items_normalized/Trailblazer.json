@@ -1,0 +1,73 @@
+{
+  "name": "Trailblazer",
+  "id": 3002,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "armor": {
+      "flat": 40.0
+    },
+    "health": {
+      "flat": 250.0
+    },
+    "movespeed": {
+      "percent": 4.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Lead the Way",
+      "effects": "While moving, generate 7 stacks of ''Momentum'' every {{fd|0.25}} seconds, granting up to {{as|20 '''bonus''' movement speed}} at 100 stacks after {{fd|3.75}} seconds of moving. At '''maximum''' stacks, you leave behind a path briefly that grants {{as|15% of your '''total''' movement speed}} as {{as|'''bonus''' movement speed}} to allied champions within. Basic attacks consume all stacks. If you are {{tip|melee}} and at '''maximum''' stacks, your next basic attack {{tip|slow|slows}} the target by 50% for 1 second.",
+      "stats": {
+        "movespeed": {
+          "flat": 20.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "While moving, generate 7 stacks of ''Momentum'' every {{fd|0.25}} seconds, granting up to {{as|20 '''bonus''' movement speed}} at 100 stacks after {{fd|3.75}} seconds of moving. At '''maximum''' stacks, you leave behind a path briefly that grants {{as|15% of your '''total''' movement speed}} as {{as|'''bonus''' movement speed}} to allied champions within. Basic attacks consume all stacks. If you are {{tip|melee}} and at '''maximum''' stacks, your next basic attack {{tip|slow|slows}} the target by 50% for 1 second.",
+      "effect_type": "status",
+      "stat": "movement_speed",
+      "value": 7,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        7,
+        0.25,
+        20,
+        100,
+        3.75,
+        15,
+        50,
+        1
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2400,
+      "sell": 960
+    },
+    "purchasable": true,
+    "tags": [
+      "SUPPORT",
+      "TANK"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3002_trailblazer.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.233603+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Infinity Edge",
+  "id": 3031,
+  "tier": 2,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 75.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    },
+    "criticalStrikeDamage": {
+      "percent": 30.0
+    }
+  },
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 3500,
+      "sell": 1400
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3031_marksman_t3_infinityedge.png",
+  "simpleDescription": "Massively enhances critical strikes",
+  "nicknames": [
+    "ie"
+  ],
+  "generated_at": "2026-02-09T22:46:10.207764+00:00"
+}

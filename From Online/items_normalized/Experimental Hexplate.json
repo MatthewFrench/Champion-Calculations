@@ -1,0 +1,88 @@
+{
+  "name": "Experimental Hexplate",
+  "id": 3073,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "attackSpeed": {
+      "flat": 20.0
+    },
+    "health": {
+      "flat": 450.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Hexcharged",
+      "effects": "Gain 30 [[Haste#Ultimate haste|ultimate haste]]."
+    },
+    {
+      "unique": true,
+      "name": "Overdrive",
+      "effects": "Upon casting your ultimate ability, enter ''Overdrive'' to gain {{as|50% '''bonus''' attack speed}} and {{as|20% '''bonus''' movement speed}} for 8 seconds (30 second cooldown, starts on ultimate cast).",
+      "stats": {
+        "movespeed": {
+          "percent": 20.0
+        }
+      }
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain 30 [[Haste#Ultimate haste|ultimate haste]].",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 30,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        30
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Upon casting your ultimate ability, enter ''Overdrive'' to gain {{as|50% '''bonus''' attack speed}} and {{as|20% '''bonus''' movement speed}} for 8 seconds (30 second cooldown, starts on ultimate cast).",
+      "effect_type": "stat_modifier",
+      "stat": "attack_speed",
+      "value": 50,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_cast",
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        50,
+        20,
+        8,
+        30
+      ],
+      "parse_confidence": 0.9
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "ABILITY_HASTE",
+      "MOVEMENT"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
+  "simpleDescription": "Increases maximum Mana as Mana is spent",
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.209001+00:00"
+}

@@ -1,0 +1,107 @@
+{
+  "name": "Voltaic Cyclosword",
+  "id": 6699,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "lethality": {
+      "flat": 18
+    },
+    "abilityHaste": {
+      "flat": 10.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Energized",
+      "effects": "Moving and basic attacking generates ''Energize'' stacks, up to 100."
+    },
+    {
+      "unique": true,
+      "name": "Galvanize",
+      "effects": "{{tip|Energized}} stack generation is increased by 75% for distance travelled from {{tip|dash|dashes}}, {{tip|lunge|lunges}} and {{tip|blink|blinks}}, as well as while moving in {{tip|stealth}}."
+    },
+    {
+      "unique": true,
+      "name": "Firmament",
+      "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|100 '''bonus''' physical damage}} [[on-hit]] and {{tip|slow|slows}} the target by {{rd|99%|20%}} for {{fd|0.75}} seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 100.0,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        100.0
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "{{tip|Energized}} stack generation is increased by 75% for distance travelled from {{tip|dash|dashes}}, {{tip|lunge|lunges}} and {{tip|blink|blinks}}, as well as while moving in {{tip|stealth}}.",
+      "effect_type": "status",
+      "stat": null,
+      "value": 75,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [
+        "stealth"
+      ],
+      "numbers_extracted": [
+        75
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "When fully {{tip|Energized}}, your next basic attack deals {{as|100 '''bonus''' physical damage}} [[on-hit]] and {{tip|slow|slows}} the target by {{rd|99%|20%}} for {{fd|0.75}} seconds.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 100,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "status_effects": [
+        "slow"
+      ],
+      "numbers_extracted": [
+        100,
+        99,
+        20,
+        0.75
+      ],
+      "parse_confidence": 1.0
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3000,
+      "sell": 1200
+    },
+    "purchasable": true,
+    "tags": [
+      "ASSASSIN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
+  "simpleDescription": null,
+  "nicknames": [
+    "lethality"
+  ],
+  "generated_at": "2026-02-09T22:46:10.152294+00:00"
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Perplexity",
+  "id": 4015,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "abilityPower": {
+      "flat": 60.0
+    },
+    "armorPenetration": {
+      "percent": 22.0
+    },
+    "magicPenetration": {
+      "percent": 30.0
+    },
+    "movespeed": {
+      "percent": 5.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Giant Slayer",
+      "effects": "Deal {{pp|type='''maximum''' health difference|color=health|key=%|0 to 15 for 11|0 to 2500|formula=0.6% per 100 greater '''maximum''' health}} increased damage against enemy champions with greater {{as|'''maximum''' health}} than you."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Deal {{pp|type='''maximum''' health difference|color=health|key=%|0 to 15 for 11|0 to 2500|formula=0.6% per 100 greater '''maximum''' health}} increased damage against enemy champions with greater {{as|'''maximum''' health}} than you.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        15,
+        11,
+        0,
+        2500,
+        0.6,
+        100
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1000
+    },
+    "purchasable": true,
+    "tags": [
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4015_perplexity.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.183583+00:00"
+}

@@ -1,0 +1,90 @@
+{
+  "name": "Titanic Hydra",
+  "id": 3748,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 40.0
+    },
+    "health": {
+      "flat": 600.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Cleave",
+      "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|1%|{{fd|0.5}}%}} '''maximum''' health|hp}} {{as|'''bonus''' physical damage}} to the target and {{as|{{rd|3%|{{fd|1.5}}%}} '''maximum''' health|hp}} {{as|physical damage}} to other enemies in a cone in the direction of the primary target."
+    }
+  ],
+  "active": [
+    {
+      "unique": true,
+      "name": "Titanic Crescent",
+      "effects": "Your next basic attack within 10 seconds empowers ''Cleave'' to deal {{as|{{rd|4%|2%}} '''maximum''' health|hp}} {{as|'''bonus''' physical damage}} to the primary target and {{as|{{rd|9%|{{fd|4.5}}%}} '''maximum''' health|hp}} {{as|physical damage}} to secondary targets (10 second cooldown, starts after using the empowered attack).",
+      "cooldown": 10.0
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Basic attacks [[on-hit]] deal {{as|{{rd|1%|{{fd|0.5}}%}} '''maximum''' health|hp}} {{as|'''bonus''' physical damage}} to the target and {{as|{{rd|3%|{{fd|1.5}}%}} '''maximum''' health|hp}} {{as|physical damage}} to other enemies in a cone in the direction of the primary target.",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 1,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": "on_hit",
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        1,
+        0.5,
+        3,
+        1.5
+      ],
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "Your next basic attack within 10 seconds empowers ''Cleave'' to deal {{as|{{rd|4%|2%}} '''maximum''' health|hp}} {{as|'''bonus''' physical damage}} to the primary target and {{as|{{rd|9%|{{fd|4.5}}%}} '''maximum''' health|hp}} {{as|physical damage}} to secondary targets (10 second cooldown, starts after using the empowered attack).",
+      "effect_type": "damage",
+      "stat": "health",
+      "value": 10,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        10,
+        4,
+        2,
+        9,
+        4.5,
+        10
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 3300,
+      "sell": 1320
+    },
+    "purchasable": true,
+    "tags": [
+      "FIGHTER",
+      "TANK",
+      "ONHIT_EFFECTS"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3748_fighter_t3_titanichydra.png",
+  "simpleDescription": "Deals area of effect damage based on owner's health",
+  "nicknames": [
+    "beefer",
+    "juggernaut"
+  ],
+  "generated_at": "2026-02-09T22:46:10.234736+00:00"
+}

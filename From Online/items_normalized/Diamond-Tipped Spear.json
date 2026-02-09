@@ -1,0 +1,80 @@
+{
+  "name": "Diamond-Tipped Spear",
+  "id": 447120,
+  "tier": 3,
+  "rank": [
+    "DISTRIBUTED"
+  ],
+  "stats": {
+    "attackSpeed": {
+      "flat": 30.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Reach Weapon",
+      "effects": "Gain {{sti|range|75 '''bonus''' attack range}}."
+    },
+    {
+      "unique": true,
+      "name": "Sweet Spot",
+      "effects": "Basic attacks deal {{pp|0 to 30 for 11|0 to 1000|key=%|type=distance|label1=units}} increased damage and abilities deal {{pp|0 to 40 for 11|0 to 1000|key=%|type=distance|label1=units}} increased damage. The distance is calculated from your {{tip|cr|icononly=true}} current position to the target's position at the time the triggering attack or ability hits them."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Gain {{sti|range|75 '''bonus''' attack range}}.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 75,
+      "value_range": null,
+      "unit": null,
+      "trigger": null,
+      "applies_to": null,
+      "status_effects": [],
+      "numbers_extracted": [
+        75
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Basic attacks deal {{pp|0 to 30 for 11|0 to 1000|key=%|type=distance|label1=units}} increased damage and abilities deal {{pp|0 to 40 for 11|0 to 1000|key=%|type=distance|label1=units}} increased damage. The distance is calculated from your {{tip|cr|icononly=true}} current position to the target's position at the time the triggering attack or ability hits them.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        30,
+        11,
+        0,
+        1000,
+        1,
+        0,
+        40,
+        11,
+        0,
+        1000,
+        1
+      ],
+      "parse_confidence": 0.8
+    }
+  ],
+  "shop": {
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN",
+      "MAGE"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447120_diamondtippedspear.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.145389+00:00"
+}

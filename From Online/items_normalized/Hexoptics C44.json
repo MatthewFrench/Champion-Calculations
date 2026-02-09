@@ -1,0 +1,84 @@
+{
+  "name": "Hexoptics C44",
+  "id": 2523,
+  "tier": 3,
+  "rank": [
+    "LEGENDARY"
+  ],
+  "stats": {
+    "attackDamage": {
+      "flat": 55.0
+    },
+    "criticalStrikeChance": {
+      "percent": 25.0
+    }
+  },
+  "passives": [
+    {
+      "unique": true,
+      "name": "Magnification",
+      "effects": "Deal {{pp|0 to 10 for 11|0 to 600|key=%|type=distance to target|formula=1% per 60 units away, up to a maximum of 10%.}} increased {{tip|basic damage}}. The distance is calculated from your {{tip|cr|icononly=true}} current position to the target's position at the time they are damaged."
+    },
+    {
+      "unique": true,
+      "name": "Arcane Aim",
+      "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{sti|100 '''bonus''' attack range}} for 6 seconds."
+    }
+  ],
+  "active": null,
+  "effects_structured": [
+    {
+      "raw": "Deal {{pp|0 to 10 for 11|0 to 600|key=%|type=distance to target|formula=1% per 60 units away, up to a maximum of 10%.}} increased {{tip|basic damage}}. The distance is calculated from your {{tip|cr|icononly=true}} current position to the target's position at the time they are damaged.",
+      "effect_type": "damage",
+      "stat": "damage",
+      "value": 0,
+      "value_range": null,
+      "unit": "percent",
+      "trigger": null,
+      "applies_to": "self",
+      "status_effects": [],
+      "numbers_extracted": [
+        0,
+        10,
+        11,
+        0,
+        600,
+        1,
+        60,
+        10
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "raw": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{sti|100 '''bonus''' attack range}} for 6 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": null,
+      "value": 3,
+      "value_range": null,
+      "unit": "seconds",
+      "trigger": null,
+      "applies_to": "enemy_champion",
+      "status_effects": [],
+      "numbers_extracted": [
+        3,
+        100,
+        6
+      ],
+      "parse_confidence": 0.6
+    }
+  ],
+  "shop": {
+    "prices": {
+      "total": 2800,
+      "sell": 1120
+    },
+    "purchasable": true,
+    "tags": [
+      "MARKSMAN"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2523_adcscope.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.206207+00:00"
+}

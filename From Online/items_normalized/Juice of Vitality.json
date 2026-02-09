@@ -1,0 +1,26 @@
+{
+  "name": "Juice of Vitality",
+  "id": 2143,
+  "tier": 1,
+  "rank": [
+    "CONSUMABLE"
+  ],
+  "stats": null,
+  "passives": null,
+  "active": null,
+  "effects_structured": [],
+  "shop": {
+    "prices": {
+      "total": 500,
+      "sell": 200
+    },
+    "purchasable": true,
+    "tags": [
+      "HEALTH_AND_REG"
+    ]
+  },
+  "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/icons_souljuice_green.png",
+  "simpleDescription": null,
+  "nicknames": null,
+  "generated_at": "2026-02-09T22:46:10.226009+00:00"
+}
