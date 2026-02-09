@@ -1,13 +1,134 @@
 {
-  "data_version": "16.3.1", 
   "abilities": {
     "passive": {
       "type": "Passive", 
+      "description_source": "<passive>Accelerando</passive>: Sona gains non-Ultimate ability haste permanently for her basic abilities as she uses her abilities well, up to a cap. Beyond that cap, further successful uses reduce her ultimate's remaining cooldown instead.<br><br><passive>Power Chord</passive>: Every few spell casts, Sona's next attack will deal bonus magic damage in addition to an additional effect based on what basic Ability Sona last activated.", 
+      "description": "Casting basic abilities grants Melody for 3s. After 3 casts, your next basic attack is Power Chord, dealing bonus magic damage. The last basic ability cast alters Power Chord: Q (Staccato) increases damage, W (Diminuendo) reduces target damage, E (Tempo) slows. Hitting champions with Q or mitigating enough damage with W grants Accelerando stacks; each stack grants basic ability haste, and at max stacks Crescendo cooldown is reduced per stack.", 
       "name": "Power Chord", 
-      "description": "<passive>Accelerando</passive>: Sona gains non-Ultimate ability haste permanently for her basic abilities as she uses her abilities well, up to a cap. Beyond that cap, further successful uses reduce her ultimate's remaining cooldown instead.<br><br><passive>Power Chord</passive>: Every few spell casts, Sona's next attack will deal bonus magic damage in addition to an additional effect based on what basic Ability Sona last activated."
+      "effects": [
+        {
+          "value_max": 120, 
+          "id": "accelerando_stacks", 
+          "context_notes": "Gains a stack when Q hits a champion or W heals/shields sufficient damage.", 
+          "description": "Accelerando stacks from Q/W interactions"
+        }, 
+        {
+          "context_notes": "Up to 60 basic ability haste at 120 stacks.", 
+          "value_type": "flat", 
+          "id": "basic_ability_haste_per_stack", 
+          "value": 0.5, 
+          "description": "Basic ability haste per Accelerando stack"
+        }, 
+        {
+          "value_seconds": 1.5, 
+          "id": "crescendo_cooldown_reduction_per_stack", 
+          "description": "Crescendo cooldown reduction per stack at max stacks"
+        }, 
+        {
+          "value_seconds": 3, 
+          "id": "melody_aura_duration", 
+          "description": "Aura duration after casting a basic ability"
+        }, 
+        {
+          "value_seconds": 0.5, 
+          "id": "basic_ability_global_cooldown", 
+          "description": "Global cooldown applied to other basic abilities"
+        }, 
+        {
+          "formula": {
+            "output_stat": "bonus_magic_damage", 
+            "terms": [
+              {
+                "source": "base_by_champion_level"
+              }, 
+              {
+                "coefficient": 0.2, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "base_by_champion_level": [
+            20, 
+            240
+          ], 
+          "id": "power_chord_bonus_damage", 
+          "context_notes": "Damage scales by champion level from 20 to 240.", 
+          "description": "Empowered attack bonus magic damage"
+        }, 
+        {
+          "formula": {
+            "output_stat": "bonus_magic_damage", 
+            "terms": [
+              {
+                "source": "base_by_champion_level"
+              }, 
+              {
+                "coefficient": 0.3, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "base_by_champion_level": [
+            30, 
+            360
+          ], 
+          "id": "staccato_bonus_damage", 
+          "context_notes": "Damage scales by champion level from 30 to 360.", 
+          "description": "Staccato bonus magic damage"
+        }, 
+        {
+          "value_percent": 25, 
+          "description": "Diminuendo damage reduction", 
+          "duration_seconds": 3, 
+          "context_notes": "Also reduces target size by 8%.", 
+          "formula": {
+            "output_stat": "damage_reduction_percent", 
+            "terms": [
+              {
+                "coefficient": 0.04, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_per_100_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "diminuendo_damage_reduction"
+        }, 
+        {
+          "formula": {
+            "output_stat": "slow_percent", 
+            "terms": [
+              {
+                "coefficient": 0.04, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_per_100_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "value_percent": 50, 
+          "id": "tempo_slow", 
+          "duration_seconds": 2, 
+          "description": "Tempo slow"
+        }
+      ]
     }, 
     "basic_ability_3": {
       "slot": "E", 
+      "name": "Song of Celerity", 
+      "cooldown_seconds_by_rank": [
+        14, 
+        14, 
+        14, 
+        14, 
+        14
+      ], 
+      "type": "Active", 
+      "description_source": "Sona plays the Song of Celerity, granting nearby allies bonus Move Speed. Sona gains a temporary aura that grants allied champions tagged by the zone bonus Move Speed.", 
       "range": 430, 
       "cost": {
         "value_type": "flat", 
@@ -18,25 +139,69 @@
           65, 
           65
         ], 
-        "resource": "special", 
-        "context_notes": "Cost type:  {{ abilityresourcename }}"
+        "resource": "mana"
       }, 
-      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
-      "name": "Song of Celerity", 
-      "cooldown_seconds_by_rank": [
-        14, 
-        14, 
-        14, 
-        14, 
-        14
+      "effects": [
+        {
+          "value_percent": 20, 
+          "description": "Self bonus movement speed", 
+          "duration_seconds": 7, 
+          "context_notes": "Duration ends early if damaged after at least 3 seconds.", 
+          "formula": {
+            "output_stat": "move_speed_percent", 
+            "terms": [
+              {
+                "coefficient": 0.02, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_per_100_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "self_bonus_move_speed"
+        }, 
+        {
+          "formula": {
+            "output_stat": "move_speed_percent", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }, 
+              {
+                "coefficient": 0.02, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_per_100_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "duration_seconds": 3, 
+          "id": "ally_bonus_move_speed", 
+          "base_by_rank": [
+            10, 
+            12, 
+            14, 
+            16, 
+            18
+          ], 
+          "description": "Ally bonus movement speed"
+        }
       ], 
-      "type": "Active", 
       "default_keybinding": "E", 
-      "effects": [], 
-      "description": "Sona plays the Song of Celerity, granting nearby allies bonus Move Speed. Sona gains a temporary aura that grants allied champions tagged by the zone bonus Move Speed."
+      "description": "Grant bonus move speed to yourself and allies; the self-buff lasts longer and can end early if you take damage after 3s."
     }, 
     "basic_ability_2": {
       "slot": "W", 
+      "name": "Aria of Perseverance", 
+      "cooldown_seconds_by_rank": [
+        10, 
+        10, 
+        10, 
+        10, 
+        10
+      ], 
+      "type": "Active", 
+      "description_source": "Sona plays the Aria of Perseverance, sending out protective melodies, healing Sona and a nearby wounded ally. Sona gains a temporary aura that grants allies tagged by the zone a temporary shield.", 
       "range": 1000, 
       "cost": {
         "value_type": "flat", 
@@ -47,25 +212,96 @@
           95, 
           100
         ], 
-        "resource": "special", 
-        "context_notes": "Cost type:  {{ abilityresourcename }}"
+        "resource": "mana"
       }, 
-      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
-      "name": "Aria of Perseverance", 
-      "cooldown_seconds_by_rank": [
-        10, 
-        10, 
-        10, 
-        10, 
-        10
+      "effects": [
+        {
+          "formula": {
+            "output_stat": "heal", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }, 
+              {
+                "coefficient": 0.3, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "heal", 
+          "base_by_rank": [
+            30, 
+            45, 
+            60, 
+            75, 
+            90
+          ], 
+          "description": "Heal"
+        }, 
+        {
+          "formula": {
+            "output_stat": "shield", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }, 
+              {
+                "coefficient": 0.25, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "duration_seconds": 1.5, 
+          "id": "shield", 
+          "base_by_rank": [
+            25, 
+            45, 
+            65, 
+            85, 
+            105
+          ], 
+          "description": "Shield strength"
+        }, 
+        {
+          "formula": {
+            "output_stat": "damage_mitigated", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "minimum_damage_mitigated", 
+          "base_by_rank": [
+            25, 
+            45, 
+            65, 
+            85, 
+            105
+          ], 
+          "description": "Minimum damage mitigated to gain Accelerando"
+        }
       ], 
-      "type": "Active", 
       "default_keybinding": "W", 
-      "effects": [], 
-      "description": "Sona plays the Aria of Perseverance, sending out protective melodies, healing Sona and a nearby wounded ally. Sona gains a temporary aura that grants allies tagged by the zone a temporary shield."
+      "description": "Heal and briefly shield; mitigated damage contributes to Accelerando stacks."
     }, 
     "basic_ability_1": {
       "slot": "Q", 
+      "name": "Hymn of Valor", 
+      "cooldown_seconds_by_rank": [
+        8, 
+        8, 
+        8, 
+        8, 
+        8
+      ], 
+      "type": "Active", 
+      "description_source": "Sona plays the Hymn of Valor, sends out bolts of sound, dealing magic damage to two nearby enemies, prioritizing champions and monsters. Sona gains a temporary aura that grants allies tagged by the zone bonus damage on their next attack against enemies.", 
       "range": 825, 
       "cost": {
         "value_type": "flat", 
@@ -76,37 +312,65 @@
           65, 
           70
         ], 
-        "resource": "special", 
-        "context_notes": "Cost type:  {{ abilityresourcename }}"
+        "resource": "mana"
       }, 
-      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
-      "name": "Hymn of Valor", 
-      "cooldown_seconds_by_rank": [
-        8, 
-        8, 
-        8, 
-        8, 
-        8
+      "effects": [
+        {
+          "formula": {
+            "output_stat": "magic_damage", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }, 
+              {
+                "coefficient": 0.4, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "magic_damage", 
+          "base_by_rank": [
+            50, 
+            80, 
+            110, 
+            140, 
+            170
+          ], 
+          "description": "Magic damage per bolt"
+        }, 
+        {
+          "formula": {
+            "output_stat": "bonus_magic_damage", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }, 
+              {
+                "coefficient": 0.1, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "melody_bonus_magic_damage", 
+          "base_by_rank": [
+            10, 
+            15, 
+            20, 
+            25, 
+            30
+          ], 
+          "description": "Melody bonus magic damage on next basic attack"
+        }
       ], 
-      "type": "Active", 
       "default_keybinding": "Q", 
-      "effects": [], 
-      "description": "Sona plays the Hymn of Valor, sends out bolts of sound, dealing magic damage to two nearby enemies, prioritizing champions and monsters. Sona gains a temporary aura that grants allies tagged by the zone bonus damage on their next attack against enemies."
+      "description": "Deal magic damage and grant a bonus magic-damage Melody attack."
     }, 
     "ultimate": {
       "slot": "R", 
-      "range": 900, 
-      "cost": {
-        "value_type": "flat", 
-        "value_by_rank": [
-          100, 
-          100, 
-          100
-        ], 
-        "resource": "special", 
-        "context_notes": "Cost type:  {{ abilityresourcename }}"
-      }, 
-      "context_notes": "No leveltip effect mapping available in source; scaling data not present in Data Dragon vars.", 
       "name": "Crescendo", 
       "cooldown_seconds_by_rank": [
         140, 
@@ -114,19 +378,52 @@
         100
       ], 
       "type": "Active", 
+      "description_source": "Sona plays her ultimate chord, stunning enemy champions and forcing them to dance and dealing magic damage to them.", 
+      "context_notes": "Width 280, speed 2400 per wiki.", 
+      "range": 1000, 
+      "cost": {
+        "value_type": "flat", 
+        "value_by_rank": [
+          100, 
+          100, 
+          100
+        ], 
+        "resource": "mana"
+      }, 
+      "effects": [
+        {
+          "formula": {
+            "output_stat": "magic_damage", 
+            "terms": [
+              {
+                "source": "base_by_rank"
+              }, 
+              {
+                "coefficient": 0.5, 
+                "input_stat": "ability_power", 
+                "coefficient_type": "percent_of_stat"
+              }
+            ], 
+            "op": "add"
+          }, 
+          "id": "magic_damage", 
+          "base_by_rank": [
+            150, 
+            250, 
+            350
+          ], 
+          "description": "Magic damage"
+        }, 
+        {
+          "value_seconds": 1.5, 
+          "id": "stun", 
+          "description": "Stun duration"
+        }
+      ], 
       "default_keybinding": "R", 
-      "effects": [], 
-      "description": "Sona plays her ultimate chord, stunning enemy champions and forcing them to dance and dealing magic damage to them."
+      "description": "Deal magic damage and stun."
     }
   }, 
-  "sources": [
-    {
-      "path": "/Users/matthewfrench/Downloads/Sona.json", 
-      "used_for": "base stats, base ability values, cooldowns, costs", 
-      "type": "Riot Data Dragon (local)", 
-      "accessed": "2026-02-09"
-    }
-  ], 
   "name": "Sona", 
   "role_tags": [
     "Support", 
@@ -134,9 +431,61 @@
   ], 
   "notes": [
     "Scaling coefficients are not included in Data Dragon spell vars for these files; only base values are represented.", 
-    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank."
+    "Where leveltip labels exist, base values are mapped into effects with formula terms using base_by_rank.", 
+    "Scaling coefficients were supplemented from wiki ability data templates where available.", 
+    "Ability values and passive details for Sona were verified against the Fandom LoL wiki page."
+  ], 
+  "basic_attack": {
+    "attack_type": "ranged", 
+    "windup_percent": 17.182, 
+    "windup_fraction": 0.17181999999999997, 
+    "calculation_notes": "base_attack_period_seconds = 1 / base_attack_speed. base_windup_seconds = base_attack_period_seconds * windup_fraction.", 
+    "missile_speed": 1500, 
+    "base_attack_period_seconds": 1.5527950310559007, 
+    "is_projectile": true, 
+    "missile_travel_time_seconds_per_unit": 0.0006666666666666666, 
+    "base_windup_seconds": 0.2668012422360248
+  }, 
+  "data_version": "16.3.1", 
+  "sources": [
+    {
+      "path": "/Users/matthewfrench/Downloads/Sona.json", 
+      "used_for": "base stats, base ability values, cooldowns, costs", 
+      "type": "Riot Data Dragon (local)", 
+      "accessed": "2026-02-09"
+    }, 
+    {
+      "url": "https://leagueoflegends.fandom.com/wiki/Sona/LoL", 
+      "accessed": "2026-02-09", 
+      "type": "League of Legends Wiki (Fandom)", 
+      "used_for": "ability values, costs, cooldowns, and passive details"
+    }, 
+    {
+      "url": "https://lol.fandom.com/wiki/Sona", 
+      "accessed": "2026-02-09", 
+      "type": "Leaguepedia", 
+      "used_for": "Power Chord secondary effects summary"
+    }, 
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Sona", 
+      "accessed": "2026-02-09", 
+      "type": "League of Legends Wiki (base stats)", 
+      "used_for": "basic attack windup and missile speed"
+    }
   ], 
   "schema_notes": {
+    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
+    "basic_attack": {
+      "attack_type": "Ranged or melee.", 
+      "windup_percent": "Percent of attack period spent in windup.", 
+      "windup_fraction": "windup_percent divided by 100.", 
+      "calculation_notes": "Explains how derived values were computed.", 
+      "missile_speed": "Projectile speed for ranged basic attacks (units per second); null for melee.", 
+      "base_attack_period_seconds": "Derived: 1 / base attack speed.", 
+      "missile_travel_time_seconds_per_unit": "Travel time per unit distance (1/missile_speed).", 
+      "base_windup_seconds": "Derived: base_attack_period_seconds * windup_fraction."
+    }, 
+    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat.", 
     "formula": {
       "contextual_multipliers": "Optional. Used when the result depends on context like target type.", 
       "output_stat": "The stat produced by this formula (e.g., magic_damage, heal, bonus_health).", 
@@ -156,16 +505,30 @@
       "op": "Operation applied to all terms. Common: add, multiply."
     }, 
     "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).", 
-    "value_percent": "A fixed percentage value (stored as percent, not decimal).", 
-    "base_by_rank": "Array of base values by ability rank (1-5).", 
-    "ratio_type": "Defines how a ratio is interpreted relative to the specified resource or stat."
+    "base_by_rank": "Array of base values by ability rank (1-5)."
   }, 
   "base_stats": {
+    "attack_speed": {
+      "per_level_percent": 2.3, 
+      "base": 0.644
+    }, 
     "resource_regeneration": {
       "per_level": 0.4, 
       "base": 11.5
     }, 
+    "crit_chance": {
+      "per_level": 0, 
+      "base": 0
+    }, 
+    "armor": {
+      "per_level": 4.2, 
+      "base": 26
+    }, 
     "move_speed": 325, 
+    "magic_resist": {
+      "per_level": 1.3, 
+      "base": 30
+    }, 
     "health_regeneration": {
       "per_level": 0.55, 
       "base": 5.5
@@ -174,31 +537,15 @@
       "per_level": 3, 
       "base": 49
     }, 
-    "crit_chance": {
-      "per_level": 0, 
-      "base": 0
-    }, 
-    "attack_range": 550, 
-    "attack_speed": {
-      "per_level_percent": 2.3, 
-      "base": 0.644
-    }, 
-    "resource": {
-      "per_level": 45, 
-      "base": 340, 
-      "type": "mana"
-    }, 
-    "armor": {
-      "per_level": 4.2, 
-      "base": 26
-    }, 
-    "magic_resist": {
-      "per_level": 1.3, 
-      "base": 30
-    }, 
     "health": {
       "per_level": 91, 
       "base": 550
-    }
+    }, 
+    "resource": {
+      "per_level": 45, 
+      "type": "mana", 
+      "base": 340
+    }, 
+    "attack_range": 550
   }
 }
