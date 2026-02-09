@@ -65,7 +65,7 @@
       "numbers_extracted": [
         333
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "Stored damage is reset every round and between each phase in a round.",
@@ -83,7 +83,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -95,5 +95,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3062_sanguinegift.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.886651+00:00"
+  "generated_at": "2026-02-09T23:34:24.886651+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.039400+00:00"
+  }
 }

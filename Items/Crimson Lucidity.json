@@ -45,7 +45,7 @@
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "{{tip heal Healing}}, {{tip shield shielding}} or buffing an ally, damaging abilities against champions, and using [[summoner spell]]s grants you {{as {{rd 10% 8%}} '''bonus''' movement speed}} for 4 seconds",
@@ -102,5 +102,9 @@
   "nicknames": [
     "boots"
   ],
-  "generated_at": "2026-02-09T23:34:24.897843+00:00"
+  "generated_at": "2026-02-09T23:34:24.897843+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.050834+00:00"
+  }
 }

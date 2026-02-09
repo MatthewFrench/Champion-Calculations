@@ -17,17 +17,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Consume a charge to place a visible {{tip Effigy}} at the target location, which grants {{tip sight}} over the surrounding area for {{pp 130 + (300-130)/17*(x-1) for 20}} seconds",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -53,7 +42,7 @@
         -1,
         20
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "For enemies, it visually appears identical to {{ci Fiddlesticks}} (including on the minimap) and has no visible [[health bar]] until it ''activates''",
@@ -71,7 +60,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "Enemy {{tip champion champions}} that approach it will activate it, causing it to automatically sound a Danger [[ping]] to its allies as well as fake a random action for up to 2 seconds",
@@ -91,7 +80,7 @@
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "If not destroyed by that time, it will deal 1 damage to itself.",
@@ -124,5 +113,9 @@
     "totem",
     "trinket"
   ],
-  "generated_at": "2026-02-09T23:34:24.917272+00:00"
+  "generated_at": "2026-02-09T23:34:24.917272+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.067284+00:00"
+  }
 }

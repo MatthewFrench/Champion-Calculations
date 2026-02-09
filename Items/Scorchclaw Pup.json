@@ -21,17 +21,6 @@
   "active": null,
   "effects_structured": [
     {
-      "raw": "Jungle companion item with evolve/consume behavior.",
-      "effect_type": "utility",
-      "stat": "jungle_companion",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "jungle_companion"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Summon a ''Scorchclaw Pup'' companion to assist you in combat against monsters.",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -49,7 +38,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.4
     },
     {
       "raw": "Feed your companion enough treats to evolve it and upgrade your {{si Smite}}",
@@ -67,7 +56,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi Scorchclaw's Slash}} buff.",
@@ -85,7 +74,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -112,5 +101,9 @@
     "kitty",
     "meow"
   ],
-  "generated_at": "2026-02-09T23:34:24.897230+00:00"
+  "generated_at": "2026-02-09T23:34:24.897230+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.050346+00:00"
+  }
 }

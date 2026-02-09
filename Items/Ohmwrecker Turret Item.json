@@ -26,14 +26,6 @@
   "effects_structured": [
     {
       "raw": "Turret attacks cannot be dodged.",
-      "effect_type": "utility",
-      "stat": "turret_attack_undodgeable",
-      "trigger": "passive",
-      "applies_to": "structure",
-      "parse_confidence": 0.9
-    },
-    {
-      "raw": "Turret attacks cannot be dodged.",
       "effect_type": "stat_modifier",
       "stat": null,
       "value": null,
@@ -48,7 +40,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Turrets gain a stack for 5 seconds each time they strike a champion",
@@ -96,5 +88,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3056_ohmwrecker.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.844377+00:00"
+  "generated_at": "2026-02-09T23:34:24.844377+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.003328+00:00"
+  }
 }

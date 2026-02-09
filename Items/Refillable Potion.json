@@ -15,17 +15,6 @@
   "active": null,
   "effects_structured": [
     {
-      "raw": "Holds charges that refill upon visiting the shop.",
-      "effect_type": "resource",
-      "stat": "charges",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "refill_at_shop"
-      ],
-      "parse_confidence": 0.9
-    },
-    {
       "raw": "Holds charges that refill upon visiting the [[shop]].",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -41,7 +30,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -60,5 +49,9 @@
     "consumable",
     "Green Potion"
   ],
-  "generated_at": "2026-02-09T23:34:24.861200+00:00"
+  "generated_at": "2026-02-09T23:34:24.861200+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.018559+00:00"
+  }
 }

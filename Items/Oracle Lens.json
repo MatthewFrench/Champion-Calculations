@@ -14,17 +14,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Consume one charge to summon a {{tip Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip sight visible}}.",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -42,7 +31,7 @@
       "numbers_extracted": [
         8
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -58,5 +47,9 @@
     "totem",
     "trinket"
   ],
-  "generated_at": "2026-02-09T23:34:24.921179+00:00"
+  "generated_at": "2026-02-09T23:34:24.921179+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.070113+00:00"
+  }
 }

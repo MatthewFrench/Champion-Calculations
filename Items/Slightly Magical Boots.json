@@ -49,5 +49,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2422_class_t1_slightlymagicalboots.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.876738+00:00"
+  "generated_at": "2026-02-09T23:34:24.876738+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.031876+00:00"
+  }
 }

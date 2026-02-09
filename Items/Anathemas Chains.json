@@ -68,7 +68,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Choosing a new ''Nemesis'' removes the curse from the old one",
@@ -86,7 +86,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Cannot be cast for 15 seconds while in combat with enemy champions.",
@@ -132,5 +132,9 @@
     "healia",
     "heal"
   ],
-  "generated_at": "2026-02-09T23:34:24.881623+00:00"
+  "generated_at": "2026-02-09T23:34:24.881623+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.035710+00:00"
+  }
 }

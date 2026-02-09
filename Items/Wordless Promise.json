@@ -32,17 +32,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Tethered ally effect.",
-      "effect_type": "utility",
-      "stat": "tether",
-      "trigger": "active",
-      "applies_to": "ally",
-      "conditions": [
-        "tether"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "While your ''Promised'' ally is {{tt tethered 1250 units, center to edge}} to you, gain {{as ability power}} equal to {{as 20% of ''Promised'' ally's AP}}, and grant your ''Promised'' ally {{as ability haste}} equal to {{as 20% of your ability haste}}",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
@@ -82,7 +71,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Make a ''Promise'' to the target allied champion, forming a {{tip tether}} between you and them.",
@@ -100,7 +89,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -116,5 +105,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4016_wordlesspromise.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.919465+00:00"
+  "generated_at": "2026-02-09T23:34:24.919465+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.069083+00:00"
+  }
 }

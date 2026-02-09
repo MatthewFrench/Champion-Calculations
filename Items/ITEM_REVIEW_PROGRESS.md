@@ -1,0 +1,325 @@
+# Item Review Progress
+
+Legend: [ ] not started, [~] in progress, [x] reviewed
+
+- [x] Abyssal Mask.json
+- [ ] Actualizer.json
+- [ ] Aether Wisp.json
+- [ ] Amplifying Tome.json
+- [ ] Anathemas Chains.json
+- [ ] Anti-Tower Socks.json
+- [ ] Arcane Sweeper Trinket.json
+- [ ] Archangels Staff.json
+- [ ] Ardent Censer.json
+- [ ] Armored Advance.json
+- [ ] Atmas Reckoning.json
+- [ ] Axiom Arc.json
+- [ ] B. F. Sword.json
+- [ ] Bamis Cinder.json
+- [ ] Bandleglass Mirror.json
+- [ ] Bandlepipes.json
+- [ ] Banshees Veil.json
+- [ ] Base Turret Reinforced Armor Turret Item.json
+- [ ] Bastionbreaker.json
+- [ ] Berserkers Greaves.json
+- [ ] Black Cleaver.json
+- [ ] Black Hole Gauntlet.json
+- [ ] Black Spear.json
+- [ ] Blackfire Torch.json
+- [ ] Blade of the Ruined King.json
+- [ ] Blasting Wand.json
+- [ ] Blighting Jewel.json
+- [ ] Bloodletters Curse.json
+- [ ] Bloodsong.json
+- [ ] Bloodthirster.json
+- [ ] Boots of Swiftness.json
+- [ ] Boots.json
+- [ ] Bounty of Worlds.json
+- [ ] Bramble Vest.json
+- [ ] Cappa Juice.json
+- [ ] Catalyst of Aeons.json
+- [ ] Caulfields Warhammer.json
+- [ ] Celestial Opposition.json
+- [ ] Chain Vest.json
+- [ ] Chainlaced Crushers.json
+- [ ] Chempunk Chainsword.json
+- [ ] Cloak of Agility.json
+- [ ] Cloak of Starry Night.json
+- [ ] Cloth Armor.json
+- [ ] Control Ward.json
+- [ ] Cosmic Drive.json
+- [ ] Crimson Lucidity.json
+- [ ] Crown of the Shattered Queen.json
+- [ ] Cruelty.json
+- [ ] Cryptbloom.json
+- [ ] Crystalline Bracer.json
+- [ ] Crystalline Overgrowth.json
+- [ ] Cull.json
+- [ ] Dagger.json
+- [ ] Dark Seal.json
+- [ ] Darksteel Talons.json
+- [ ] Dawncore.json
+- [ ] Dead Mans Plate.json
+- [ ] Deaths Dance.json
+- [ ] Deaths Daughter.json
+- [ ] Decapitator.json
+- [ ] Demon Kings Crown.json
+- [ ] Demonic Embrace.json
+- [ ] Detonation Orb.json
+- [ ] Diadem of Songs.json
+- [ ] Diamond-Tipped Spear.json
+- [ ] Divine Sunderer.json
+- [ ] Dorans Blade.json
+- [ ] Dorans Ring.json
+- [ ] Dorans Shield.json
+- [ ] Dragonheart.json
+- [ ] Dream Maker.json
+- [ ] Dusk and Dawn.json
+- [ ] Duskblade of Draktharr.json
+- [ ] Echoes of Helia.json
+- [ ] Eclipse.json
+- [ ] Edge of Night.json
+- [ ] Eleisas Miracle.json
+- [ ] Elixir of Avarice.json
+- [ ] Elixir of Force.json
+- [ ] Elixir of Iron.json
+- [ ] Elixir of Skill.json
+- [ ] Elixir of Sorcery.json
+- [ ] Elixir of Wrath.json
+- [ ] Empyrean Promise.json
+- [ ] Endless Hunger.json
+- [ ] Enhanced Lucky Dice.json
+- [ ] Essence Reaver.json
+- [ ] Everfrost.json
+- [ ] Executioners Calling.json
+- [ ] Experimental Hexplate.json
+- [ ] Eye of the Herald.json
+- [ ] Faerie Charm.json
+- [ ] Farsight Alteration.json
+- [ ] Fated Ashes.json
+- [ ] Fiendhunter Bolts.json
+- [ ] Fiendish Codex.json
+- [ ] Fimbulwinter.json
+- [ ] Fire at Will.json
+- [ ] Flesheater.json
+- [ ] Forbidden Idol.json
+- [ ] Force of Entropy.json
+- [ ] Force of Nature.json
+- [ ] Frozen Heart.json
+- [ ] Fulmination.json
+- [ ] Galeforce.json
+- [ ] Gamblers Blade.json
+- [ ] Gargoyle Stoneplate.json
+- [ ] Ghostcrawlers.json
+- [ ] Giants Belt.json
+- [ ] Glacial Buckler.json
+- [ ] Glowing Mote.json
+- [ ] Goredrinker.json
+- [ ] Guardian Angel.json
+- [ ] Guardians Amulet.json
+- [ ] Guardians Blade.json
+- [ ] Guardians Dirk.json
+- [ ] Guardians Hammer.json
+- [ ] Guardians Horn.json
+- [ ] Guardians Orb.json
+- [ ] Guardians Shroud.json
+- [ ] Guinsoos Rageblade.json
+- [ ] Gunmetal Greaves.json
+- [ ] Gusto.json
+- [ ] Gustwalker Hatchling.json
+- [ ] Hamstringer.json
+- [ ] Haunting Guise.json
+- [ ] Health Potion.json
+- [ ] Hearthbound Axe.json
+- [ ] Heartsteel.json
+- [ ] Hellfire Hatchet.json
+- [ ] Hemomancers Helm.json
+- [ ] Hexbolt Companion.json
+- [ ] Hexdrinker.json
+- [ ] Hexoptics C44.json
+- [ ] Hextech Alternator.json
+- [ ] Hextech Gunblade.json
+- [ ] Hextech Rocketbelt.json
+- [ ] Hollow Radiance.json
+- [ ] Horizon Focus.json
+- [ ] Hubris.json
+- [ ] Hullbreaker.json
+- [ ] Iceborn Gauntlet.json
+- [ ] Immortal Shieldbow.json
+- [ ] Imperial Mandate.json
+- [ ] Infinity Edge.json
+- [ ] Innervating Locket.json
+- [ ] Ionian Boots of Lucidity.json
+- [ ] JakSho The Protean.json
+- [ ] Jarvan Is.json
+- [ ] Juice of Haste.json
+- [ ] Juice of Power.json
+- [ ] Juice of Vitality.json
+- [ ] Kaenic Rookern.json
+- [ ] Kindlegem.json
+- [ ] Kinkou Jitte.json
+- [ ] Knights Vow.json
+- [ ] Kraken Slayer.json
+- [ ] Last Whisper.json
+- [ ] Legendary Assassin Item.json
+- [ ] Legendary Fighter Item.json
+- [ ] Legendary Mage Item.json
+- [ ] Legendary Marksman Item.json
+- [ ] Legendary Support Item.json
+- [ ] Legendary Tank Item.json
+- [ ] Liandrys Torment.json
+- [ ] Lich Bane.json
+- [ ] Lifeline.json
+- [ ] Lightning Rod.json
+- [ ] Locket of the Iron Solari.json
+- [ ] Long Sword.json
+- [ ] Lord Dominiks Regards.json
+- [ ] Lost Chapter.json
+- [ ] Lucky Dice.json
+- [ ] Ludens Echo.json
+- [ ] Malignance.json
+- [ ] Manamune.json
+- [ ] Maw of Malmortius.json
+- [ ] Mejais Soulstealer.json
+- [ ] Mercurial Scimitar.json
+- [ ] Mercurys Treads.json
+- [ ] Mikaels Blessing.json
+- [ ] Mirage Blade.json
+- [ ] Moonflair Spellblade.json
+- [ ] Moonstone Renewer.json
+- [ ] Morellonomicon.json
+- [ ] Mortal Reminder.json
+- [ ] Mosstomper Seedling.json
+- [ ] Muramana.json
+- [ ] Nashors Tooth.json
+- [ ] Navori Flickerblade.json
+- [ ] Needlessly Large Rod.json
+- [ ] Negatron Cloak.json
+- [ ] Night Harvester.json
+- [ ] Noonquiver.json
+- [ ] Null-Magic Mantle.json
+- [ ] Oblivion Orb.json
+- [ ] Ohmwrecker Turret Item.json
+- [ ] Opportunity.json
+- [ ] Oracle Lens.json
+- [ ] Overcharged.json
+- [ ] Overlords Bloodmail.json
+- [ ] Perplexity.json
+- [ ] Phage.json
+- [ ] Phantom Dancer.json
+- [ ] Phreakish Gusto.json
+- [ ] Pickaxe.json
+- [ ] Plated Steelcaps.json
+- [ ] Poro-Snax.json
+- [ ] Prismatic Item.json
+- [ ] Profane Hydra.json
+- [ ] Protoplasm Harness.json
+- [ ] Prowlers Claw.json
+- [ ] Puppeteer.json
+- [ ] Pyromancers Cloak.json
+- [ ] Quicksilver Sash.json
+- [ ] Rabadons Deathcap.json
+- [ ] Radiant Virtue.json
+- [ ] Raise Morale.json
+- [ ] Randuins Omen.json
+- [ ] Rapid Firecannon.json
+- [ ] Ravenous Hydra.json
+- [ ] Reality Fracture.json
+- [ ] Reapers Toll.json
+- [ ] Rectrix.json
+- [ ] Recurve Bow.json
+- [ ] Redemption.json
+- [ ] Refillable Potion.json
+- [ ] Regicide.json
+- [ ] Reinforced Armor Turret Item.json
+- [ ] Rejuvenation Bead.json
+- [ ] Reverberation.json
+- [ ] Riftmaker.json
+- [ ] Rite of Ruin.json
+- [ ] Rod of Ages.json
+- [ ] Ruby Crystal.json
+- [ ] Runaans Hurricane.json
+- [ ] Runecarver.json
+- [ ] Runic Compass.json
+- [ ] Rylais Crystal Scepter.json
+- [ ] Sanguine Gift.json
+- [ ] Sapphire Crystal.json
+- [ ] Scarecrow Effigy.json
+- [ ] Scorchclaw Pup.json
+- [ ] Scouts Slingshot.json
+- [ ] Seekers Armguard.json
+- [ ] Seraphs Embrace.json
+- [ ] Serpents Fang.json
+- [ ] Serrated Dirk.json
+- [ ] Seryldas Grudge.json
+- [ ] Shadowflame.json
+- [ ] Shattered Armguard.json
+- [ ] Sheen.json
+- [ ] Shield of Molten Stone.json
+- [ ] Shurelyas Battlesong.json
+- [ ] Slightly Magical Boots.json
+- [ ] Solstice Sleigh.json
+- [ ] Sorcerers Shoes.json
+- [ ] Spear of Shojin.json
+- [ ] Spectral Cutlass.json
+- [ ] Spectres Cowl.json
+- [ ] Spellslingers Shoes.json
+- [ ] Spirit Visage.json
+- [ ] Staff of Flowing Water.json
+- [ ] Stat Bonus.json
+- [ ] Statikk Shiv.json
+- [ ] Stealth Ward.json
+- [ ] Steel Sigil.json
+- [ ] Steraks Gage.json
+- [ ] Stormrazor.json
+- [ ] Stormsurge.json
+- [ ] Stridebreaker.json
+- [ ] Sundered Sky.json
+- [ ] Sunfire Aegis.json
+- [ ] Super Mech Armor.json
+- [ ] Super Mech Power Field.json
+- [ ] Swiftmarch.json
+- [ ] Sword of Blossoming Dawn.json
+- [ ] Sword of the Divine.json
+- [ ] Talisman of Ascension.json
+- [ ] Tear of the Goddess.json
+- [ ] Terminus.json
+- [ ] The Brutalizer.json
+- [ ] The Collector.json
+- [ ] The Golden Spatula.json
+- [ ] Thornmail.json
+- [ ] Tiamat.json
+- [ ] Titanic Hydra.json
+- [ ] Total Biscuit of Everlasting Will.json
+- [ ] Trailblazer.json
+- [ ] Trinity Force.json
+- [ ] Tunneler.json
+- [ ] Turbo Chemtank.json
+- [ ] Turret Plating.json
+- [ ] Twilights Edge.json
+- [ ] Twin Mask.json
+- [ ] Umbral Glaive.json
+- [ ] Unending Despair.json
+- [ ] Vampiric Scepter.json
+- [ ] Verdant Barrier.json
+- [ ] Void Staff.json
+- [ ] Voltaic Cyclosword.json
+- [ ] Wardens Eye.json
+- [ ] Wardens Mail.json
+- [ ] Warmogs Armor.json
+- [ ] Whispering Circlet.json
+- [ ] Winged Moonplate.json
+- [ ] Winters Approach.json
+- [ ] Wits End.json
+- [ ] Wooglets Witchcap.json
+- [ ] Wordless Promise.json
+- [ ] World Atlas.json
+- [ ] Youmuus Ghostblade.json
+- [ ] Your Cut.json
+- [ ] Yun Tal Wildarrows.json
+- [ ] ZazZaks Realmspike.json
+- [ ] Zeal.json
+- [ ] Zekes Convergence.json
+- [ ] Zephyr.json
+- [ ] Zhonyas Hourglass.json
+- [ ] items_quality_report.json

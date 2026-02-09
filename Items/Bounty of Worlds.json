@@ -40,28 +40,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Support quest and ward charge behavior.",
-      "effect_type": "utility",
-      "stat": "support_quest",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "support_quest"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "You have completed the support quest and can now upgrade this item, '''Bounty of Worlds''', for free into ''{{ii Bloodsong}}'', ''{{ii Celestial Opposition}}'', ''{{ii Dream Maker}}'', ''{{ii Solstice Sleigh}}'', or ''{{ii Zaz'Zak's Realmspike}}'' by selecting one of them from a custom menu in the HUD or the shop",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -77,7 +55,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "''The upgrade can be done outside the shop using the menu.''",
@@ -95,7 +73,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Receives diminishing gold from excessive minion kills.",
@@ -133,7 +111,7 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.45
     },
     {
       "raw": "Charges refill upon visiting the shop.",
@@ -151,7 +129,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -166,5 +144,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3867_bountyofworlds.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.898901+00:00"
+  "generated_at": "2026-02-09T23:34:24.898901+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.051858+00:00"
+  }
 }

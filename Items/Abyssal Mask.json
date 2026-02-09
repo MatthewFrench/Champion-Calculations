@@ -23,28 +23,28 @@
       "effects": "Enemy champions within {{tt|700 units|center to edge}} of you become cursed, causing them to receive {{as|12% increased magic damage|magic damage}} from all sources."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Enemy champions within {{tt 700 units center to edge}} of you become cursed, causing them to receive {{as 12% increased magic damage magic damage}} from all sources.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 700,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "raw": "Enemy champions within 700 units become cursed, causing them to receive 12% increased magic damage from all sources.",
+      "effect_type": "damage_amp_taken",
+      "stat": "magic_damage_taken_multiplier",
+      "value": 1.12,
+      "unit": "multiplier",
+      "range_units": 700,
+      "trigger": "aura",
       "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "conditions": [
+        "within_units"
+      ],
+      "status_effects": [
+        "cursed"
+      ],
       "numbers_extracted": [
         700,
         12
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.9
     }
   ],
   "shop": {
@@ -60,6 +60,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
   "simpleDescription": null,
-  "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.918295+00:00"
+  "nicknames": [],
+  "generated_at": "2026-02-09T23:34:24.918295+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.068263+00:00",
+    "effects_structured_reviewed": "Manual: structured aura damage amplification with range and multiplier."
+  }
 }

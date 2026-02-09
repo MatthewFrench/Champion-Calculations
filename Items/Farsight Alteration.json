@@ -17,28 +17,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Support quest and ward charge behavior.",
-      "effect_type": "utility",
-      "stat": "support_quest",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "support_quest"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Places a visible {{tip Farsight Ward}} at the target location that grants {{tip sight}} of the surrounding area, including over [[terrain]] and through [[brush]] and lasting indefinitely",
       "effect_type": "utility",
       "stat": null,
@@ -54,7 +32,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Also grants sight of the area in a 800 radius for 2 seconds",
@@ -111,5 +89,9 @@
     "totem",
     "trinket"
   ],
-  "generated_at": "2026-02-09T23:34:24.855796+00:00"
+  "generated_at": "2026-02-09T23:34:24.855796+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.014134+00:00"
+  }
 }

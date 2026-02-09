@@ -85,5 +85,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
   "simpleDescription": "Greatly increases defenses, activate to slow nearby enemies",
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.851591+00:00"
+  "generated_at": "2026-02-09T23:34:24.851591+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.010031+00:00"
+  }
 }

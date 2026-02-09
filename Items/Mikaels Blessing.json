@@ -29,17 +29,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Remove all {{tip crowd control}} debuffs (except {{tip Airborne}}, {{tip Blind}}, {{tip Disarm}}, {{tip Nearsight}}, and {{tip Suppression}}) from yourself or the target allied champion and {{tip heal}} the target for {{pp 100 to 250 type=target's level}}.",
       "effect_type": "healing",
       "stat": null,
@@ -80,5 +69,9 @@
     "michael",
     "mikael"
   ],
-  "generated_at": "2026-02-09T23:34:24.912332+00:00"
+  "generated_at": "2026-02-09T23:34:24.912332+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.063254+00:00"
+  }
 }

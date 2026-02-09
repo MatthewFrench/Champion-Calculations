@@ -68,7 +68,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "Once the mark expires, it detonates to deal {{as true damage}} equal to the amount stored against the target",
@@ -86,7 +86,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "If a mark would deal lethal damage to the target, it is detonated immediately.",
@@ -104,7 +104,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -116,5 +116,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7113_detonationorb.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.884315+00:00"
+  "generated_at": "2026-02-09T23:34:24.884315+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.037227+00:00"
+  }
 }

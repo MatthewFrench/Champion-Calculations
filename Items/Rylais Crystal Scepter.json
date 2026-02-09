@@ -61,5 +61,9 @@
   "nicknames": [
     "rylais"
   ],
-  "generated_at": "2026-02-09T23:34:24.854315+00:00"
+  "generated_at": "2026-02-09T23:34:24.854315+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.012700+00:00"
+  }
 }

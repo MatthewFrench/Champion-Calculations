@@ -28,5 +28,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1036_class_t1_longsword.png",
   "simpleDescription": "Slightly increases Attack Damage",
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.892714+00:00"
+  "generated_at": "2026-02-09T23:34:24.892714+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.046497+00:00"
+  }
 }

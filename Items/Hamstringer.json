@@ -74,7 +74,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "the slow stacks up to 35%.",
@@ -110,5 +110,9 @@
   "nicknames": [
     "bleed"
   ],
-  "generated_at": "2026-02-09T23:34:24.843920+00:00"
+  "generated_at": "2026-02-09T23:34:24.843920+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.003048+00:00"
+  }
 }

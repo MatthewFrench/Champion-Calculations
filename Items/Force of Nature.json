@@ -69,7 +69,7 @@
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "Once per {{tip cast instance}}, each incoming basic attack, ability, or item effect can only generate 1 stack of ''Steadfast'' from their damage every 1 second",
@@ -129,5 +129,9 @@
   "nicknames": [
     "fon"
   ],
-  "generated_at": "2026-02-09T23:34:24.913882+00:00"
+  "generated_at": "2026-02-09T23:34:24.913882+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.065151+00:00"
+  }
 }

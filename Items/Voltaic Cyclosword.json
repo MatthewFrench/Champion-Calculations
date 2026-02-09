@@ -53,7 +53,7 @@
       "numbers_extracted": [
         100.0
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "{{tip Energized}} stack generation is increased by 75% for distance travelled from {{tip dash dashes}}, {{tip lunge lunges}} and {{tip blink blinks}}, as well as while moving in {{tip stealth}}.",
@@ -120,5 +120,9 @@
   "nicknames": [
     "lethality"
   ],
-  "generated_at": "2026-02-09T23:34:24.857400+00:00"
+  "generated_at": "2026-02-09T23:34:24.857400+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.015615+00:00"
+  }
 }

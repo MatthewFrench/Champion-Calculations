@@ -29,28 +29,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Support quest and ward charge behavior.",
-      "effect_type": "utility",
-      "stat": "support_quest",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "support_quest"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Basic attacks [[on-hit]] and {{tip immobilize immobilizing}} effects against enemy champions generate 1 and 5 stacks of ''Accretion'', respectively, up to 50",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -113,7 +91,7 @@
         20,
         100
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "Stacks are reset every round and between each phase in a round.",
@@ -131,7 +109,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Summon a black hole at the target location after a {{fd 0.5}}-second delay that lasts for 2 {{as (+ {{fd 0.1}} per 100 '''bonus''' health)}} seconds",
@@ -201,7 +179,7 @@
       "numbers_extracted": [
         1
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -213,5 +191,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447122_blackholegauntlet.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.919901+00:00"
+  "generated_at": "2026-02-09T23:34:24.919901+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.069436+00:00"
+  }
 }

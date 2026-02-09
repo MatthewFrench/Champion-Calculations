@@ -35,17 +35,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Tethered ally effect.",
-      "effect_type": "utility",
-      "stat": "tether",
-      "trigger": "active",
-      "applies_to": "ally",
-      "conditions": [
-        "tether"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "While your ''Worthy'' ally is {{tt tethered to you 1250 units, center to edge}} and you are above {{as 30% of your '''maximum''' health}}, redirect 12% of the {{tt pre-mitigation Damage calculated before the Worthy ally's modifiers}} {{as physical physical damage}} and {{as magic magic damage}} damage they take to you as the respective damage type",
       "effect_type": "damage",
       "stat": "health",
@@ -107,7 +96,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Champions can only be designated as ''Worthy'' by one '''Knight's Vow''' at a time",
@@ -125,7 +114,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "You cannot be designated as ''Worthy'' by an ally's '''Knight's Vow'''.",
@@ -143,7 +132,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -162,5 +151,9 @@
   "nicknames": [
     "kv"
   ],
-  "generated_at": "2026-02-09T23:34:24.903626+00:00"
+  "generated_at": "2026-02-09T23:34:24.903626+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.055140+00:00"
+  }
 }

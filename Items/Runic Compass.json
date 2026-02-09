@@ -45,28 +45,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Support quest and ward charge behavior.",
-      "effect_type": "utility",
-      "stat": "support_quest",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "support_quest"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Earn {{g 800}} through ''Shared Riches'' and this item's {{stil gold generation}} stat to automatically upgrade to {{ii Bounty of Worlds}}, increasing the ''Ward'' active to instead have 4 wards in stock.",
       "effect_type": "resource",
       "stat": "gold",
@@ -126,7 +104,7 @@
       "numbers_extracted": [
         1050
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "• Kill a minion by any means, granting you {{g 20}} and the nearest allied champion kill {{g gold}}",
@@ -208,7 +186,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Receives diminishing gold from excessive minion kills.",
@@ -246,7 +224,7 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.45
     },
     {
       "raw": "'''Warding''' charges refill upon visiting the shop.",
@@ -264,7 +242,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -279,5 +257,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3866_runiccompass.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.914723+00:00"
+  "generated_at": "2026-02-09T23:34:24.914723+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.065696+00:00"
+  }
 }

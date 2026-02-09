@@ -38,17 +38,6 @@
   "active": null,
   "effects_structured": [
     {
-      "raw": "Jungle companion item with evolve/consume behavior.",
-      "effect_type": "utility",
-      "stat": "jungle_companion",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "jungle_companion"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Basic attacks [[on-hit]] against enemy champions apply a ''Puppeteer'' stack for 15 seconds, stacking up to 4 times",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -109,7 +98,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "Granting yourself or an ally a {{tip heal}}, {{tip shield}}, or [[champion ability ability-sourced]] buff reduces the cooldown of ''Pull Their Strings'' by 5 seconds, once per cast.",
@@ -141,5 +130,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447123_puppeteer.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.876175+00:00"
+  "generated_at": "2026-02-09T23:34:24.876175+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.031491+00:00"
+  }
 }

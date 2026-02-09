@@ -30,17 +30,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Call upon a 550-radius beam of light to strike upon the target location after {{fd 2.5}} seconds, granting {{tip sight}} of the area for the duration",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -105,7 +94,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.4
     }
   ],
   "shop": {
@@ -123,5 +112,9 @@
   "nicknames": [
     "burn"
   ],
-  "generated_at": "2026-02-09T23:34:24.859508+00:00"
+  "generated_at": "2026-02-09T23:34:24.859508+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.017544+00:00"
+  }
 }

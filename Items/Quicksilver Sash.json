@@ -20,19 +20,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Remove all crowd control debuffs (except airborne).",
-      "effect_type": "utility",
-      "status_effects": [
-        "cleanse"
-      ],
-      "trigger": "active",
-      "applies_to": "self",
-      "conditions": [
-        "cc_cleanse"
-      ],
-      "parse_confidence": 0.9
-    },
-    {
       "raw": "Removes all {{tip crowd control}} debuffs (except {{tip Airborne}}) from your champion.",
       "effect_type": "stat_modifier",
       "stat": null,
@@ -48,7 +35,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -70,5 +57,9 @@
     "mercurial scimitar",
     "silvermere dawn"
   ],
-  "generated_at": "2026-02-09T23:34:24.929433+00:00"
+  "generated_at": "2026-02-09T23:34:24.929433+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.075962+00:00"
+  }
 }

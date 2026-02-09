@@ -51,7 +51,7 @@
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
       "raw": "Upon casting your ultimate ability, you summon a storm of flame and ice around you for 5 seconds, dealing{{ft {{as {{ap 30/4}} magic damage}} every {{fd 0.25}} seconds {{as {{ap 30*5}} '''total''' magic damage}} over the duration}}to enemies within {{tip cr icononly=true}} 350 units and {{tip slow slowing}} them by 30% (45 second cooldown, starts on ultimate cast).",
@@ -100,5 +100,9 @@
   "nicknames": [
     "haroldandkumar"
   ],
-  "generated_at": "2026-02-09T23:34:24.892962+00:00"
+  "generated_at": "2026-02-09T23:34:24.892962+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.046820+00:00"
+  }
 }

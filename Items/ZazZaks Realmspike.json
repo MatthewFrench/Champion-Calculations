@@ -41,28 +41,6 @@
   ],
   "effects_structured": [
     {
-      "raw": "Support quest and ward charge behavior.",
-      "effect_type": "utility",
-      "stat": "support_quest",
-      "trigger": "passive",
-      "applies_to": "self",
-      "conditions": [
-        "support_quest"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "Place a ward and grant vision.",
-      "effect_type": "utility",
-      "stat": "ward",
-      "trigger": "active",
-      "applies_to": "area",
-      "conditions": [
-        "ward_active"
-      ],
-      "parse_confidence": 0.8
-    },
-    {
       "raw": "Dealing [[ability damage]] to an enemy champion creates an explosion at their location after a {{fd 0.5}}-second delay, dealing {{as 10 magic damage}} {{as (+ 15% AP)}} {{as (+ 3% of each target's '''maximum''' health)}} {{as magic damage}} to enemies within the area, capped at 300 against {{tip monsters}}.",
       "effect_type": "damage",
       "stat": "health",
@@ -130,7 +108,7 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.45
     },
     {
       "raw": "Charges refill upon visiting the shop.",
@@ -148,7 +126,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     }
   ],
   "shop": {
@@ -164,5 +142,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3871_zazzaksrealmspike.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.857847+00:00"
+  "generated_at": "2026-02-09T23:34:24.857847+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.016033+00:00"
+  }
 }

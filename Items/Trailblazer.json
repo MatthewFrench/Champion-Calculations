@@ -93,7 +93,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.35
     },
     {
       "raw": "If you are {{tip melee}} and at '''maximum''' stacks, your next basic attack {{tip slow slows}} the target by 50% for 1 second.",
@@ -133,5 +133,9 @@
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3002_trailblazer.png",
   "simpleDescription": null,
   "nicknames": null,
-  "generated_at": "2026-02-09T23:34:24.929762+00:00"
+  "generated_at": "2026-02-09T23:34:24.929762+00:00",
+  "schema_notes": {
+    "effects_structured": "Parsed from passive/active text for simulation use.",
+    "effects_structured_generated_at": "2026-02-09T23:46:08.076199+00:00"
+  }
 }
