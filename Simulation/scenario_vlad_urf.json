@@ -1,0 +1,130 @@
+{
+  "simulation": {
+    "dt": 0.05,
+    "max_time_seconds": 180.0,
+    "vlad_pool_rank": 5,
+    "vlad_pool_untargetable_seconds": 2.0,
+    "vlad_pool_cost_percent_current_health": 0.15,
+    "vlad_pool_heal_ratio_of_damage": 0.3,
+    "vlad_pool_base_damage_by_rank": [80, 135, 190, 245, 300],
+    "vlad_pool_bonus_health_ratio": 0.15,
+    "zhonya_duration_seconds": 2.5,
+    "zhonya_cooldown_seconds": 120.0,
+    "zhonya_trigger_health_percent": 0.18,
+    "ga_cooldown_seconds": 300.0,
+    "ga_revive_duration_seconds": 4.0,
+    "ga_revive_base_health_ratio": 0.5,
+    "protoplasm_trigger_health_percent": 0.3,
+    "protoplasm_bonus_health": 250.0,
+    "protoplasm_heal_total": 300.0,
+    "protoplasm_duration_seconds": 5.0
+  },
+  "vladimir_base": {
+    "name": "Vladimir",
+    "base_health": 650.0,
+    "base_armor": 30.0,
+    "base_magic_resist": 30.0,
+    "base_attack_damage": 60.0,
+    "base_attack_speed": 0.66,
+    "base_move_speed": 335.0,
+    "is_melee": false
+  },
+  "vladimir_baseline_fixed": [
+    "Liandry's Torment",
+    "Boots of Swiftness",
+    "Zhonya's Hourglass",
+    "Guardian Angel",
+    "Protoplasm Harness",
+    "Morellonomicon"
+  ],
+  "enemies": [
+    {
+      "name": "Warwick",
+      "base": {
+        "name": "Warwick",
+        "base_health": 720.0,
+        "base_armor": 33.0,
+        "base_magic_resist": 32.0,
+        "base_attack_damage": 65.0,
+        "base_attack_speed": 0.68,
+        "base_move_speed": 335.0,
+        "is_melee": true
+      },
+      "ability_dps_flat": 30.0,
+      "ability_dps_ad_ratio": 0.1,
+      "stun_interval_seconds": 9.0,
+      "stun_duration_seconds": 0.75
+    },
+    {
+      "name": "Vayne",
+      "base": {
+        "name": "Vayne",
+        "base_health": 630.0,
+        "base_armor": 24.0,
+        "base_magic_resist": 30.0,
+        "base_attack_damage": 60.0,
+        "base_attack_speed": 0.68,
+        "base_move_speed": 330.0,
+        "is_melee": false
+      },
+      "ability_dps_flat": 20.0,
+      "ability_dps_ad_ratio": 0.12
+    },
+    {
+      "name": "Morgana",
+      "base": {
+        "name": "Morgana",
+        "base_health": 650.0,
+        "base_armor": 25.0,
+        "base_magic_resist": 30.0,
+        "base_attack_damage": 56.0,
+        "base_attack_speed": 0.62,
+        "base_move_speed": 335.0,
+        "is_melee": false
+      },
+      "ability_dps_flat": 45.0,
+      "ability_dps_ap_ratio": 0.15,
+      "stun_interval_seconds": 11.0,
+      "stun_duration_seconds": 1.5
+    },
+    {
+      "name": "Sona",
+      "base": {
+        "name": "Sona",
+        "base_health": 600.0,
+        "base_armor": 28.0,
+        "base_magic_resist": 30.0,
+        "base_attack_damage": 49.0,
+        "base_attack_speed": 0.64,
+        "base_move_speed": 325.0,
+        "is_melee": false
+      },
+      "ability_dps_flat": 25.0,
+      "ability_dps_ap_ratio": 0.12
+    },
+    {
+      "name": "DrMundo",
+      "base": {
+        "name": "DrMundo",
+        "base_health": 710.0,
+        "base_armor": 32.0,
+        "base_magic_resist": 32.0,
+        "base_attack_damage": 64.0,
+        "base_attack_speed": 0.67,
+        "base_move_speed": 345.0,
+        "is_melee": true
+      },
+      "ability_dps_flat": 25.0,
+      "ability_dps_ad_ratio": 0.08,
+      "stun_interval_seconds": 12.0,
+      "stun_duration_seconds": 0.5
+    }
+  ],
+  "search": {
+    "strategy": "beam",
+    "beam_width": 30,
+    "max_items": 6,
+    "random_samples": 400,
+    "seed": 1337
+  }
+}
