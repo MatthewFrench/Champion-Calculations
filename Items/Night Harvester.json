@@ -28,37 +28,62 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Damaging an enemy champion with a basic attack or [[ability damage]] deals {{as 125 {{as (+ 15% AP)}} '''bonus''' magic damage magic damage}} and grants you {{as 40% '''bonus''' movement speed}} for {{fd 1.5}} seconds, with the duration extending on subsequent triggers (10 second cooldown per champion).",
+      "raw": "Damaging an enemy champion with a basic attack or ability deals 125 (+15% AP) bonus magic damage.",
       "effect_type": "damage",
-      "stat": "movement_speed",
+      "stat": "magic_damage",
       "value": 125,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 10.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_basic_attack_or_ability_damage",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "per_target_cooldown"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 15.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.15,
+          "type": "percent"
         }
       ],
       "numbers_extracted": [
         125,
         15,
+        10
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Triggering Soulrend grants 40% bonus movement speed for 1.5 seconds (duration extends on subsequent triggers).",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_movement_speed",
+      "value": 0.4,
+      "value_range": null,
+      "unit": "ratio",
+      "duration_seconds": 1.5,
+      "cooldown_seconds": 10.0,
+      "interval_seconds": null,
+      "trigger": "on_soulrend_trigger",
+      "applies_to": "self",
+      "conditions": [
+        "duration_refresh_on_retrigger",
+        "per_target_cooldown"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
         40,
         1.5,
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -76,6 +101,7 @@
   "generated_at": "2026-02-09T23:34:24.843605+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.002759+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.002759+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

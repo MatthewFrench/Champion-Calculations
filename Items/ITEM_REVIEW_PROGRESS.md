@@ -191,13 +191,13 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Mortal Reminder.json
 - [x] Mosstomper Seedling.json
 - [x] Muramana.json
-- [ ] Nashors Tooth.json
-- [ ] Navori Flickerblade.json
-- [ ] Needlessly Large Rod.json
-- [ ] Negatron Cloak.json
-- [ ] Night Harvester.json
-- [ ] Noonquiver.json
-- [ ] Null-Magic Mantle.json
+- [x] Nashors Tooth.json
+- [x] Navori Flickerblade.json
+- [x] Needlessly Large Rod.json
+- [x] Negatron Cloak.json
+- [x] Night Harvester.json
+- [x] Noonquiver.json
+- [x] Null-Magic Mantle.json
 - [ ] Oblivion Orb.json
 - [ ] Ohmwrecker Turret Item.json
 - [ ] Opportunity.json

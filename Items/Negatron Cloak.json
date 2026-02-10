@@ -10,8 +10,8 @@
       "flat": 45.0
     }
   },
-  "passives": null,
-  "active": null,
+  "passives": [],
+  "active": [],
   "effects_structured": [],
   "shop": {
     "prices": {
@@ -27,10 +27,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1057_tank_t2_negatroncloak.png",
   "simpleDescription": "Moderately increases Magic Resist",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.894993+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.048534+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.048534+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

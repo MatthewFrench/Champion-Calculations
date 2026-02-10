@@ -23,27 +23,28 @@
       "effects": "Basic attacks [[on-attack]] reduce the '''remaining''' cooldowns of your basic abilities by 15%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-attack]] reduce the '''remaining''' cooldowns of your basic abilities by 15%.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 15,
+      "raw": "Basic attacks reduce the remaining cooldowns of your basic abilities by 15%.",
+      "effect_type": "cooldown_reduction_remaining",
+      "stat": "cooldown",
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_basic_attack",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "affected_abilities": "basic",
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -64,6 +65,7 @@
   "generated_at": "2026-02-09T23:34:24.923396+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.071875+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.071875+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
