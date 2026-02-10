@@ -198,26 +198,26 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Night Harvester.json
 - [x] Noonquiver.json
 - [x] Null-Magic Mantle.json
-- [ ] Oblivion Orb.json
-- [ ] Ohmwrecker Turret Item.json
-- [ ] Opportunity.json
-- [ ] Oracle Lens.json
-- [ ] Overcharged.json
-- [ ] Overlords Bloodmail.json
-- [ ] Perplexity.json
-- [ ] Phage.json
-- [ ] Phantom Dancer.json
-- [ ] Phreakish Gusto.json
-- [ ] Pickaxe.json
-- [ ] Plated Steelcaps.json
-- [ ] Poro-Snax.json
-- [ ] Prismatic Item.json
-- [ ] Profane Hydra.json
-- [ ] Protoplasm Harness.json
-- [ ] Prowlers Claw.json
-- [ ] Puppeteer.json
-- [ ] Pyromancers Cloak.json
-- [ ] Quicksilver Sash.json
+- [x] Oblivion Orb.json
+- [x] Ohmwrecker Turret Item.json
+- [x] Opportunity.json
+- [x] Oracle Lens.json
+- [x] Overcharged.json
+- [x] Overlords Bloodmail.json
+- [x] Perplexity.json
+- [x] Phage.json
+- [x] Phantom Dancer.json
+- [x] Phreakish Gusto.json
+- [x] Pickaxe.json
+- [x] Plated Steelcaps.json
+- [x] Poro-Snax.json
+- [x] Prismatic Item.json
+- [x] Profane Hydra.json
+- [x] Protoplasm Harness.json
+- [x] Prowlers Claw.json
+- [x] Puppeteer.json
+- [x] Pyromancers Cloak.json
+- [x] Quicksilver Sash.json
 - [ ] Rabadons Deathcap.json
 - [ ] Radiant Virtue.json
 - [ ] Raise Morale.json

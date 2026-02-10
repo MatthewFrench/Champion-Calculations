@@ -22,75 +22,92 @@
       "effects": "Turrets gain a stack for 5 seconds each time they strike a champion. Each stack increases their damage dealt by 50%, up to 150%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Turret attacks cannot be dodged.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
+      "effect_type": "attack_property",
+      "stat": "turret_attack_undodgeable",
+      "value": true,
       "value_range": null,
-      "unit": null,
+      "unit": "boolean",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "always",
       "applies_to": "structure",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "undodgeable_attacks"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Turrets gain a stack for 5 seconds each time they strike a champion",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 5,
+      "raw": "Turrets gain a stack for 5 seconds each time they strike a champion.",
+      "effect_type": "apply_stack",
+      "stack_id": "warming_up",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 5.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_turret_hit_champion",
       "applies_to": "structure",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "warming_up"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "duration_seconds": 5.0,
+        "max_stacks": 3,
+        "stacks_per_hit": 1
+      },
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Each stack increases their damage dealt by 50%, up to 150%.",
-      "effect_type": "damage",
+      "raw": "Each stack increases turret damage by 50%, up to 150%.",
+      "effect_type": "damage_multiplier",
       "stat": "damage",
-      "value": 50,
+      "value": 0.5,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_per_stack",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_stack",
+      "applies_to": "structure",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "warming_up_stacks",
+          "ratio": 0.5,
+          "type": "percent_per_stack",
+          "cap": 1.5
+        }
+      ],
       "numbers_extracted": [
         50,
         150
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3056_ohmwrecker.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.844377+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.003328+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.003328+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

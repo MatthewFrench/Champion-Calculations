@@ -26,42 +26,59 @@
       "effects": "Inflicting an enemy champion with a {{as|Burn|buzzword3}} effect releases a fireball from the target, landing to a location near you after {{fd|0.5}} seconds. Upon landing, a blaze is created at the impact area with a radius of 175 units, lasting for 5 seconds (3 second cooldown per target). While you are within the blaze, gain {{as|20% '''bonus total''' movement speed}}, lingering for {{fd|0.75}} seconds after exiting, and {{tip|heal}} for {{pp|60 to 150}} upon entering and each second of the blaze's lifetime thereafter. While enemies are within the blaze, they are dealt {{as|100 magic damage}} every second.<br><br>For each unique {{as|Burn|buzzword3}} effect source that you have, up to 10, increase the blaze's size by 40 units, and its strength by {{as|4% '''bonus total''' movement speed}} and {{as|30|hsp}} healing per second for the buff and {{as|60 magic damage}} per tick for the enemy effect."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks and ability hits against enemies inflicts them with a {{as Burn}} that deals{{ft {{as {{pp 100 to 350}} magic damage}} over 3 seconds",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "Basic attacks and ability hits inflict Burn that deals magic damage over 3 seconds (5s cooldown).",
+      "effect_type": "damage_over_time",
+      "stat": "magic_damage",
       "value": 100,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "value_range": {
+        "min": 100,
+        "max": 350
+      },
+      "unit": "flat_total",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": 5.0,
+      "interval_seconds": 0.25,
+      "trigger": "on_basic_attack_or_ability_hit",
+      "applies_to": "enemy",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "burn"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 100,
+          "max": 350
+        }
+      ],
       "numbers_extracted": [
         100,
         350,
-        3
+        3,
+        0.25,
+        5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     },
     {
-      "raw": "{{as {{pp 200/12 to 450/12}} magic damage}} every {{fd 0.25}} seconds over 3 seconds.}}",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 200,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "raw": "Burn ticks every 0.25 seconds over 3 seconds.",
+      "effect_type": "damage_over_time",
+      "stat": "magic_damage",
+      "value": 16.667,
+      "value_range": {
+        "min": 16.667,
+        "max": 37.5
+      },
+      "unit": "flat_per_tick",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": 5.0,
+      "interval_seconds": 0.25,
+      "trigger": "on_burn_tick",
+      "applies_to": "enemy",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -73,125 +90,145 @@
         0.25,
         3
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.5
     },
     {
-      "raw": "Inflicting an enemy champion with a {{as Burn buzzword3}} effect releases a fireball from the target, landing to a location near you after {{fd 0.5}} seconds",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 3,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3,
-        0.5
-      ],
-      "parse_confidence": 0.6
-    },
-    {
-      "raw": "Upon landing, a blaze is created at the impact area with a radius of 175 units, lasting for 5 seconds (3 second cooldown per target)",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Applying Burn to a champion launches a fireball that lands near you after 0.5 seconds, creating a blaze.",
+      "effect_type": "zone_create",
+      "stat": "blaze_zone",
       "value": 175,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "units",
       "duration_seconds": 5.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 3.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_burn_apply_to_champion",
+      "applies_to": "ground_near_self",
+      "conditions": [
+        "per_target_cooldown"
+      ],
+      "status_effects": [
+        "blaze_zone"
+      ],
       "scaling_terms": [],
+      "travel_time_seconds": 0.5,
       "numbers_extracted": [
+        0.5,
         175,
         5,
         3
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     },
     {
-      "raw": "While you are within the blaze, gain {{as 20% '''bonus total''' movement speed}}, lingering for {{fd 0.75}} seconds after exiting, and {{tip heal}} for {{pp 60 to 150}} upon entering and each second of the blaze's lifetime thereafter",
-      "effect_type": "healing",
-      "stat": "movement_speed",
-      "value": 20,
+      "raw": "While in the blaze, gain 20% bonus total movement speed (lingers 0.75s after exit) and heal on entry and each second.",
+      "effect_type": "stat_modifier_and_heal",
+      "stat": "bonus_total_movement_speed",
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 5.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "interval_seconds": 1.0,
+      "trigger": "on_enter_or_tick_blaze",
       "applies_to": "self",
       "conditions": [
-        "while_condition",
-        "after_condition"
+        "while_in_blaze"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "heal": {
+        "value_range": {
+          "min": 60,
+          "max": 150
+        },
+        "unit": "flat_per_tick"
+      },
+      "lingers_after_exit_seconds": 0.75,
       "numbers_extracted": [
         20,
         0.75,
         60,
         150
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.55
     },
     {
-      "raw": "While enemies are within the blaze, they are dealt {{as 100 magic damage}} every second.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "Enemies in the blaze take 100 magic damage each second.",
+      "effect_type": "damage_over_time",
+      "stat": "magic_damage",
       "value": 100,
       "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
+      "unit": "flat_per_tick",
+      "duration_seconds": 5.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "interval_seconds": 1.0,
+      "trigger": "on_blaze_tick",
+      "applies_to": "enemies_in_blaze",
       "conditions": [
-        "while_condition"
+        "while_in_blaze"
       ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         100
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     },
     {
-      "raw": "For each unique {{as Burn buzzword3}} effect source that you have, up to 10, increase the blaze's size by 40 units, and its strength by {{as 4% '''bonus total''' movement speed}} and {{as 30 hsp}} healing per second for the buff and {{as 60 magic damage}} per tick for the enemy effect.",
-      "effect_type": "damage",
-      "stat": "movement_speed",
-      "value": 3,
+      "raw": "Each unique Burn source (up to 10) increases blaze radius by 40, and increases buff and damage per tick.",
+      "effect_type": "stack_scaling",
+      "stat": "blaze_zone",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
+      "unit": "per_stack",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
-      "conditions": [],
+      "trigger": "on_burn_source_count",
+      "applies_to": "self",
+      "conditions": [
+        "unique_burn_sources"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "burn_source_count",
+          "ratio": 40,
+          "type": "flat_per_stack",
+          "cap": 10,
+          "affects": "blaze_radius_units"
+        },
+        {
+          "stat": "burn_source_count",
+          "ratio": 0.04,
+          "type": "percent_per_stack",
+          "cap": 10,
+          "affects": "bonus_total_movement_speed"
+        },
+        {
+          "stat": "burn_source_count",
+          "ratio": 30,
+          "type": "flat_per_stack",
+          "cap": 10,
+          "affects": "heal_per_second"
+        },
+        {
+          "stat": "burn_source_count",
+          "ratio": 60,
+          "type": "flat_per_stack",
+          "cap": 10,
+          "affects": "enemy_damage_per_tick"
+        }
+      ],
       "numbers_extracted": [
-        3,
         10,
         40,
         4,
         30,
         60
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.5
     }
   ],
   "shop": {
@@ -210,6 +247,10 @@
   "generated_at": "2026-02-09T23:34:24.853155+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.011562+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.011562+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Burn and blaze values appear to be Arena-style; some details (exact formulas) are implicit."
+    ]
   }
 }

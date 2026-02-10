@@ -5,7 +5,7 @@
   "rank": [
     "MINION"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -18,56 +18,71 @@
       "effects": "Against lane minions, this minion deals {{as|'''bonus''' physical damage}} on-hit equal to {{as|4% of the target's '''current''' health}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "{{tip Turret}} basic attacks are modified to deal {{as 70% of this minion's '''maximum''' health}} as {{tt pre-mitigation damage Damage calculated before modifiers}}.",
+      "raw": "Turret basic attacks deal damage equal to 70% of this minion's maximum health as pre-mitigation damage.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 70,
+      "stat": "physical_damage",
+      "value": 0.7,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_self_max_health",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": "minion",
-      "conditions": [],
+      "trigger": "on_turret_basic_attack",
+      "applies_to": "turret_target",
+      "conditions": [
+        "pre_mitigation"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "self_max_health",
+          "ratio": 0.7,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         70
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
-      "raw": "Against lane minions, this minion deals {{as '''bonus''' physical damage}} on-hit equal to {{as 4% of the target's '''current''' health}}.",
+      "raw": "Against lane minions, this minion deals bonus physical damage on-hit equal to 4% of the target's current health.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 4,
+      "stat": "physical_damage",
+      "value": 0.04,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_target_current_health",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": "minion",
+      "applies_to": "lane_minion",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_current_health",
+          "ratio": 0.04,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         4
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1510_phreakishgusto.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.918031+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.068042+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.068042+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

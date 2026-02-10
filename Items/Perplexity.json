@@ -26,33 +26,45 @@
       "effects": "Deal {{pp|type='''maximum''' health difference|color=health|key=%|0 to 15 for 11|0 to 2500|formula=0.6% per 100 greater '''maximum''' health}} increased damage against enemy champions with greater {{as|'''maximum''' health}} than you."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Deal {{pp type='''maximum''' health difference color=health key=% 0 to 15 for 11 0 to 2500 formula=0.6% per 100 greater '''maximum''' health}} increased damage against enemy champions with greater {{as '''maximum''' health}} than you.",
-      "effect_type": "damage",
-      "stat": "health",
+      "raw": "Deal increased damage against enemy champions with greater maximum health than you, scaling with max health difference.",
+      "effect_type": "damage_multiplier",
+      "stat": "damage",
       "value": 0,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 0.0,
+        "max": 0.15,
+        "max_health_difference_max": 2500
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_damage_to_champion",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "target_max_health_greater_than_self"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "max_health_difference",
+          "ratio": 0.006,
+          "type": "percent_per_100",
+          "per": 100,
+          "cap": 0.15
+        }
+      ],
       "numbers_extracted": [
         0,
         15,
-        11,
-        0,
         2500,
         0.6,
         100
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -67,10 +79,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4015_perplexity.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.886168+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.038938+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.038938+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

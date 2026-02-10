@@ -16,7 +16,7 @@
       "flat": 20.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -26,48 +26,66 @@
   ],
   "effects_structured": [
     {
-      "raw": "{{tip Dash}} to 150 units beyond the {{tt target enemy champion's location At the end of the cast time.}}, and upon completing the dash, deal {{as 12% {{as (+ 5% per 100 '''bonus''' AD)}} of target's '''maximum''' health}} {{as '''bonus''' physical damage}} to the target",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 150,
+      "raw": "Dash to 150 units beyond the target enemy champion. On arrival, deal bonus physical damage equal to 12% of target max health, plus 5% per 100 bonus AD.",
+      "effect_type": "dash_and_damage",
+      "stat": "physical_damage",
+      "value": 0.12,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_target_max_health",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_activate",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_max_health",
+          "ratio": 0.12,
+          "type": "percent"
+        },
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 0.05,
+          "type": "percent_per_100",
+          "per": 100
+        }
+      ],
+      "movement": {
+        "type": "dash",
+        "distance_units": 150,
+        "relative_to_target": "beyond_target"
+      },
       "numbers_extracted": [
         150,
         12,
         5,
         100
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     },
     {
-      "raw": "You then deal 20% increased damage to the target for the next 3 seconds.",
-      "effect_type": "damage",
+      "raw": "You deal 20% increased damage to that target for 3 seconds.",
+      "effect_type": "damage_multiplier",
       "stat": "damage",
-      "value": 20,
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_activate",
+      "applies_to": "target",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "target_restriction": "same_target_as_dash",
       "numbers_extracted": [
         20,
         3
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -84,6 +102,7 @@
   "generated_at": "2026-02-09T23:34:24.847230+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.006360+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.006360+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

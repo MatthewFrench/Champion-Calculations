@@ -25,50 +25,119 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "If you would take damage that would reduce you below {{as 30% of your '''maximum''' health}}, gain {{as {{pp 200 + (300-200)/17*(x-1) for 20}} '''bonus''' health}} for 5 seconds and {{tip heal}} yourself for {{pp 200 + (400-200)/17*(x-1) for 20}} {{as (+ 175% '''bonus''' armor)}} {{as (+ 175% '''bonus''' magic resistance)}} over the same duration, during which you also gain 15% increased [[size]], {{as 10% '''bonus''' movement speed}}, and 25% {{tip tenacity}}.",
-      "effect_type": "damage",
-      "stat": "armor",
-      "value": 30,
-      "value_range": [
-        300,
-        200
-      ],
-      "unit": "percent",
+      "raw": "If damage would reduce you below 30% max health, gain bonus health for 5 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_health",
+      "value": 200,
+      "value_range": {
+        "min": 200,
+        "max": 300
+      },
+      "unit": "flat",
       "duration_seconds": 5.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_health_threshold",
       "applies_to": "self",
       "conditions": [
-        "threshold"
+        "health_below_30_percent"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "lifeline"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 200,
+          "max": 300
+        }
+      ],
       "numbers_extracted": [
         30,
         200,
         300,
-        -200,
-        17,
-        -1,
-        20,
-        5,
+        5
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Heal over 5 seconds for a base amount that scales by level and by bonus armor and bonus magic resistance.",
+      "effect_type": "healing_over_time",
+      "stat": "health",
+      "value": 200,
+      "value_range": {
+        "min": 200,
+        "max": 400
+      },
+      "unit": "flat_total",
+      "duration_seconds": 5.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_lifeline_trigger",
+      "applies_to": "self",
+      "conditions": [
+        "health_below_30_percent"
+      ],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 200,
+          "max": 400
+        },
+        {
+          "stat": "bonus_armor",
+          "ratio": 1.75,
+          "type": "percent"
+        },
+        {
+          "stat": "bonus_magic_resistance",
+          "ratio": 1.75,
+          "type": "percent"
+        }
+      ],
+      "numbers_extracted": [
         200,
         400,
-        -200,
-        17,
-        -1,
-        20,
+        5,
         175,
-        175,
+        175
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "While Lifeline is active, gain 15% increased size, 10% bonus movement speed, and 25% tenacity.",
+      "effect_type": "stat_modifier",
+      "stat": "size_movement_speed_tenacity",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": 5.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_lifeline_trigger",
+      "applies_to": "self",
+      "conditions": [
+        "health_below_30_percent"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "size_percent": 15,
+        "bonus_movement_speed_ratio": 0.1,
+        "tenacity_percent": 25
+      },
+      "numbers_extracted": [
         15,
         10,
         25
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -83,10 +152,15 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.926418+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.073813+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.073813+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Bonus health and heal base values scale linearly with level (20-level range).",
+      "Exact per-tick healing cadence is not specified; treated as total over duration."
+    ]
   }
 }

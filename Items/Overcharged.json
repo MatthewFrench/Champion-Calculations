@@ -5,66 +5,76 @@
   "rank": [
     "TURRET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
       "effects": "At 55 minutes, this turret begins to malfunction, losing {{as|armor}} and {{as|magic resist}}. After 5 minutes, it will start breaking down, losing an increasing percentage of its {{as|{{sti|health|'''maximum''' health}}}} every 30 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "At 55 minutes, this turret begins to malfunction, losing {{as armor}} and {{as magic resist}}",
+      "raw": "At 55 minutes, the turret begins to malfunction, losing armor and magic resist.",
       "effect_type": "stat_modifier",
-      "stat": "armor",
-      "value": 55,
+      "stat": "armor_and_magic_resist",
+      "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_game_time",
       "applies_to": "structure",
-      "conditions": [],
-      "status_effects": [],
+      "conditions": [
+        "game_time_at_least_55_minutes"
+      ],
+      "status_effects": [
+        "malfunctioning"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         55
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.55
     },
     {
-      "raw": "After 5 minutes, it will start breaking down, losing an increasing percentage of its {{as {{sti health '''maximum''' health}}}} every 30 seconds.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 5,
+      "raw": "5 minutes later, the turret starts breaking down, losing an increasing percentage of max health every 30 seconds.",
+      "effect_type": "health_decay_over_time",
+      "stat": "max_health",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "percent_per_tick",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": 30.0,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_game_time",
+      "applies_to": "structure",
       "conditions": [
-        "after_condition"
+        "game_time_at_least_60_minutes"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "breaking_down"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         5,
         30
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.5
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1507_tournament_suddendeath.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.899369+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.052362+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.052362+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Exact armor/magic resist loss and health decay rate are not specified in this payload."
+    ]
   }
 }

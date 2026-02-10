@@ -25,52 +25,73 @@
       "effects": "Gain {{as|'''bonus''' attack damage}} equal to {{pp|0 to 12 by 1|0 to 70|key=%|key1=%|type='''missing''' health|color=health}} of your {{as|'''total''' attack damage}} from other sources."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain {{as '''bonus''' attack damage}} equal to {{as {{fd 2.5}}% '''bonus''' health}}.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 2.5,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        2.5
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Gain {{as '''bonus''' attack damage}} equal to {{pp 0 to 12 by 1 0 to 70 key=% key1=% type='''missing''' health color=health}} of your {{as '''total''' attack damage}} from other sources.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
+      "raw": "Gain bonus attack damage equal to 2.5% of bonus health.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_damage",
       "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_equip",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_health",
+          "ratio": 0.025,
+          "type": "percent"
+        }
+      ],
+      "numbers_extracted": [
+        2.5
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Gain bonus attack damage based on missing health, scaling up to 12% of total attack damage from other sources.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_damage",
+      "value": 0,
+      "value_range": {
+        "min": 0.0,
+        "max": 0.12,
+        "missing_health_percent_max": 70
+      },
+      "unit": "ratio",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "dynamic",
+      "applies_to": "self",
+      "conditions": [
+        "scales_with_missing_health"
+      ],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "missing_health_percent",
+          "ratio": 0.12,
+          "type": "linear_to_cap",
+          "cap_at_missing_health_percent": 70
+        },
+        {
+          "stat": "total_attack_damage_from_other_sources",
+          "ratio": 0.12,
+          "type": "percent_at_cap"
+        }
+      ],
       "numbers_extracted": [
         0,
         12,
-        1,
-        0,
-        70,
-        1
+        70
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -86,10 +107,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7111_overlordsbloodmail.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.891098+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.044837+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.044837+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Retribution scaling based on missing health references total attack damage from other sources; exact formula beyond cap is not specified here."
+    ]
   }
 }

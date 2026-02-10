@@ -35,90 +35,147 @@
       "effects": "Granting yourself or an ally a {{tip|heal}}, {{tip|shield}}, or [[champion ability|ability-sourced]] buff reduces the cooldown of ''Pull Their Strings'' by 5 seconds, once per cast."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] against enemy champions apply a ''Puppeteer'' stack for 15 seconds, stacking up to 4 times",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 15,
+      "raw": "Basic attacks on enemy champions apply a Puppeteer stack for 15 seconds, up to 4 stacks.",
+      "effect_type": "apply_stack",
+      "stack_id": "puppeteer",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 15.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
+      "trigger": "on_basic_attack_hit",
       "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "puppeteer"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 4,
+        "stacks_per_hit": 1,
+        "duration_seconds": 15.0
+      },
       "numbers_extracted": [
         15,
         4
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "The fourth stack against a target consumes them all to render the target {{tip berserk}} for 2 seconds, causing them to gain {{as 50% as}} {{as (+ 150% of your heal and shield power)}} {{as '''bonus''' attack speed}} and {{as 40% '''bonus''' movement speed}} (25 second cooldown)",
-      "effect_type": "healing",
-      "stat": "attack_speed",
-      "value": 2,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 2.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        2,
-        50,
-        150,
-        40,
-        25
-      ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "If only one champion is alive on the enemy team, instead {{tip fear}} the target for the same duration.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "At 4 stacks, consume all stacks to berserk the target for 2 seconds, granting them bonus attack speed and bonus movement speed (25s cooldown).",
+      "effect_type": "apply_status",
+      "stat": "berserk",
       "value": null,
       "value_range": null,
       "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "duration_seconds": 2.0,
+      "cooldown_seconds": 25.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
+      "trigger": "on_stack_max",
+      "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "berserk"
+      ],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "stack_interaction": {
+        "stack_id": "puppeteer",
+        "consume": "all"
+      },
+      "numbers_extracted": [
+        2,
+        25
+      ],
+      "parse_confidence": 0.65
     },
     {
-      "raw": "Granting yourself or an ally a {{tip heal}}, {{tip shield}}, or [[champion ability ability-sourced]] buff reduces the cooldown of ''Pull Their Strings'' by 5 seconds, once per cast.",
-      "effect_type": "healing",
-      "stat": "shield",
-      "value": 5,
+      "raw": "Berserked target gains 50% bonus attack speed plus 150% of your heal and shield power, and 40% bonus movement speed for 2 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_speed_and_movement_speed",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": 2.0,
+      "cooldown_seconds": 25.0,
+      "interval_seconds": null,
+      "trigger": "on_berserk_apply",
+      "applies_to": "enemy_champion",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "heal_and_shield_power",
+          "ratio": 1.5,
+          "type": "percent"
+        }
+      ],
+      "modifiers": {
+        "bonus_attack_speed_ratio": 0.5,
+        "bonus_movement_speed_ratio": 0.4
+      },
+      "numbers_extracted": [
+        50,
+        150,
+        40,
+        2,
+        25
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "If only one champion is alive on the enemy team, fear the target for the same duration instead of berserk.",
+      "effect_type": "apply_status",
+      "stat": "fear",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": 2.0,
+      "cooldown_seconds": 25.0,
+      "interval_seconds": null,
+      "trigger": "on_stack_max",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "only_one_enemy_champion_alive"
+      ],
+      "status_effects": [
+        "fear"
+      ],
+      "scaling_terms": [],
+      "stack_interaction": {
+        "stack_id": "puppeteer",
+        "consume": "all"
+      },
+      "numbers_extracted": [
+        2,
+        25
+      ],
+      "parse_confidence": 0.55
+    },
+    {
+      "raw": "Granting a heal, shield, or ability-sourced buff reduces Pull Their Strings cooldown by 5 seconds (once per cast).",
+      "effect_type": "cooldown_reduction_remaining",
+      "stat": "pull_their_strings_cooldown",
+      "value": 5.0,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
-      "applies_to": "ally",
-      "conditions": [],
+      "trigger": "on_heal_shield_or_buff",
+      "applies_to": "self",
+      "conditions": [
+        "once_per_cast"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -129,10 +186,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447123_puppeteer.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.876175+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.031491+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.031491+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

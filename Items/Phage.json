@@ -20,20 +20,22 @@
       "effects": "Basic attacks [[on-hit]] grant {{as|{{rd|20|10}} '''bonus''' movement speed}} for 2 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] grant {{as {{rd 20 10}} '''bonus''' movement speed}} for 2 seconds.",
+      "raw": "Basic attacks grant bonus movement speed for 2 seconds.",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
+      "stat": "bonus_movement_speed",
       "value": 20,
-      "value_range": null,
-      "unit": "seconds",
+      "value_range": {
+        "ranged": 10
+      },
+      "unit": "flat",
       "duration_seconds": 2.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -42,7 +44,7 @@
         10,
         2
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -64,6 +66,10 @@
   "generated_at": "2026-02-09T23:34:24.864470+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.021555+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.021555+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Rage bonus movement speed differs for melee vs ranged (20 melee, 10 ranged)."
+    ]
   }
 }

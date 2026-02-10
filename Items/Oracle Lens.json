@@ -5,8 +5,8 @@
   "rank": [
     "TRINKET"
   ],
-  "stats": null,
-  "passives": null,
+  "stats": {},
+  "passives": [],
   "active": [
     {
       "effects": "Consume one charge to summon a {{tip|Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip|sight|visible}}."
@@ -14,24 +14,29 @@
   ],
   "effects_structured": [
     {
-      "raw": "Consume one charge to summon a {{tip Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip sight visible}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 8,
+      "raw": "Consume one charge to summon a Sweeper Drone for 8 seconds that detects nearby invisible enemies/wards.",
+      "effect_type": "summon_warding_entity",
+      "stat": "sweeper_drone",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
+      "unit": "count",
+      "duration_seconds": 8.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_activate",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "conditions": [
+        "consume_charge"
+      ],
+      "status_effects": [
+        "detects_invisible_units",
+        "reveals_wards_traps"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         8
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -50,6 +55,10 @@
   "generated_at": "2026-02-09T23:34:24.921179+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.070113+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.070113+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Detection radius and specific ward reveal rules are not encoded in this payload."
+    ]
   }
 }

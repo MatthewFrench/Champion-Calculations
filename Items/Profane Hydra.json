@@ -32,64 +32,76 @@
   ],
   "effects_structured": [
     {
-      "raw": "Damaging basic attacks deal {{as {{rd 40% AD 20% AD}} ad}} {{as physical damage}} to other enemies in a {{tip cr icononly=true}} 350 radius centered around the target.",
+      "raw": "Damaging basic attacks deal 40% (20% for ranged) AD physical damage to other enemies in a 350 radius around the target.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 40,
-      "value_range": null,
-      "unit": "percent",
+      "stat": "physical_damage",
+      "value": 0.4,
+      "value_range": {
+        "ranged": 0.2
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "nearby_enemies",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 40.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.4,
+          "type": "percent",
+          "qualifier": "melee"
         },
         {
-          "percent": 20.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.2,
+          "type": "percent",
+          "qualifier": "ranged"
         }
       ],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 350
+      },
       "numbers_extracted": [
         40,
         20,
         350
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Deal {{as 80% AD}} {{as physical damage}} to enemies in a {{tip cr icononly = true}} 450 radius.",
+      "raw": "Active: Deal 80% AD physical damage to enemies in a 450 radius.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 80,
+      "stat": "physical_damage",
+      "value": 0.8,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_activate",
+      "applies_to": "enemies_in_radius",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 80.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.8,
+          "type": "percent"
         }
       ],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 450
+      },
       "numbers_extracted": [
         80,
         450
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -110,6 +122,10 @@
   "generated_at": "2026-02-09T23:34:24.913515+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.064464+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.064464+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
+    ]
   }
 }

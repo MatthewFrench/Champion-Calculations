@@ -20,27 +20,29 @@
       "effects": "Reduces all incoming {{tip|basic damage}} by 10% (''excluding from [[turret]] attacks'')."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Reduces all incoming {{tip basic damage}} by 10% (''excluding from [[turret]] attacks'').",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
+      "raw": "Reduces incoming basic attack damage by 10%, excluding turret attacks.",
+      "effect_type": "damage_multiplier",
+      "stat": "basic_attack_damage",
+      "value": -0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "structure",
-      "conditions": [],
+      "trigger": "on_incoming_basic_attack",
+      "applies_to": "self",
+      "conditions": [
+        "exclude_turret_attacks"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -59,6 +61,7 @@
   "generated_at": "2026-02-09T23:34:24.875803+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.031205+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.031205+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

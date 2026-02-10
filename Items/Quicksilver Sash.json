@@ -10,7 +10,7 @@
       "flat": 30.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -20,22 +20,26 @@
   ],
   "effects_structured": [
     {
-      "raw": "Removes all {{tip crowd control}} debuffs (except {{tip Airborne}}) from your champion.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Remove all crowd control debuffs except Airborne.",
+      "effect_type": "cleanse",
+      "stat": "crowd_control",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_activate",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "conditions": [
+        "exclude_airborne"
+      ],
+      "status_effects": [
+        "crowd_control_removed"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -60,6 +64,7 @@
   "generated_at": "2026-02-09T23:34:24.929433+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.075962+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.075962+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
