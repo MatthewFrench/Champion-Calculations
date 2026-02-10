@@ -19,31 +19,35 @@
       "effects": "For each second in combat with enemy champions, deal 2% increased damage, stacking up to 3 times for a total of 6%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "For each second in combat with enemy champions, deal 2% increased damage, stacking up to 3 times for a total of 6%.",
-      "effect_type": "damage",
+      "effect_type": "damage_multiplier",
       "stat": "damage",
-      "value": 2,
+      "value": 0.02,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "interval_seconds": 1.0,
+      "trigger": "while_in_combat_with_champions",
+      "applies_to": "self",
       "conditions": [
         "in_combat"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 3,
+        "stack_value": 0.02
+      },
       "numbers_extracted": [
         2,
         3,
         6
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -64,6 +68,7 @@
   "generated_at": "2026-02-09T23:34:24.857137+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.015386+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.015386+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

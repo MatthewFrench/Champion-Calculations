@@ -25,23 +25,35 @@
       "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{sti|100 '''bonus''' attack range}} for 6 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Deal {{pp 0 to 10 for 11 0 to 600 key=% type=distance to target formula=1% per 60 units away, up to a maximum of 10%.}} increased {{tip basic damage}}",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "damage_multiplier",
+      "stat": "basic_attack_damage",
       "value": 0,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 0.0,
+        "max": 0.1,
+        "distance_units_max": 600
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_basic_attack_damage",
+      "applies_to": "enemy_unit_hit",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "distance_scaling": {
+        "metric": "units",
+        "origin": "caster_current_position",
+        "target": "target_position_on_damage",
+        "max_distance_units": 600,
+        "ratio_per_60_units": 0.01,
+        "cap": 0.1
+      },
       "numbers_extracted": [
         0,
         10,
@@ -52,39 +64,24 @@
         60,
         10
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "The distance is calculated from your {{tip cr icononly=true}} current position to the target's position at the time they are damaged.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them grants you {{sti 100 '''bonus''' attack range}} for 6 seconds.",
       "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 3,
+      "stat": "attack_range",
+      "value": 100,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": 6.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "on_takedown_within_3s_damage",
+      "applies_to": "self",
+      "conditions": [
+        "takedown",
+        "damaged_target_within_3_seconds"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
@@ -92,7 +89,7 @@
         100,
         6
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -107,10 +104,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2523_adcscope.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.905862+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.057007+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.057007+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

@@ -20,52 +20,69 @@
       "effects": "While your ally is within {{tt|1200 units|center-to-edge}}, your basic attacks [[on-hit]] generate a stack of ''Covering Fire''. At 1 stack, your next basic attack consumes them all to cause your ally to fire a bolt at the target, dealing {{as|{{pp|50 to 100}} physical damage}} and applying your ally's on-hit effects at 100% effectiveness."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "While your ally is within {{tt 1200 units center-to-edge}}, your basic attacks [[on-hit]] generate a stack of ''Covering Fire''",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 1200,
+      "effect_type": "apply_stack",
+      "stack_id": "covering_fire",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "ally",
+      "trigger": "on_basic_attack",
+      "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "ally_within_range"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "covering_fire"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 1
+      },
+      "range_units": 1200,
       "numbers_extracted": [
         1200
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.6
     },
     {
       "raw": "At 1 stack, your next basic attack consumes them all to cause your ally to fire a bolt at the target, dealing {{as {{pp 50 to 100}} physical damage}} and applying your ally's on-hit effects at 100% effectiveness.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 1,
-      "value_range": null,
-      "unit": "percent",
+      "stat": "physical_damage",
+      "value": 50,
+      "value_range": {
+        "min": 50,
+        "max": 100
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "ally",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_basic_attack",
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "covering_fire_stack_1"
+      ],
+      "status_effects": [
+        "consume_covering_fire"
+      ],
       "scaling_terms": [],
+      "ally_on_hit_effects": {
+        "effectiveness": 1.0
+      },
       "numbers_extracted": [
         1,
         50,
         100,
         100
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -76,10 +93,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443081_hexboltcompanion.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.874642+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.030473+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.030473+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

@@ -16,7 +16,7 @@
       "percent": 10.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -28,17 +28,18 @@
     {
       "raw": "Shocks the target enemy champion with a bolt of lightning, dealing {{as {{pp 175 + (253-175)/17*(x-1) for 20}} magic damage}} {{as (+ 30% AP)}} {{as magic damage}} and {{tip slow slowing}} them by 25% for {{fd 1.5}} seconds.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 175,
-      "value_range": [
-        253,
-        175
-      ],
-      "unit": "percent",
+      "value_range": {
+        "min": 175,
+        "max": 253,
+        "scales_with": "champion_level"
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "active",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [
@@ -46,9 +47,17 @@
       ],
       "scaling_terms": [
         {
-          "percent": 30.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.3,
+          "type": "percent"
+        }
+      ],
+      "status_effects_data": [
+        {
+          "status": "slow",
+          "value": 0.25,
+          "unit": "percent",
+          "duration_seconds": 1.5
         }
       ],
       "numbers_extracted": [
@@ -62,7 +71,7 @@
         25,
         1.5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -77,10 +86,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3146_hextechgunblade.png",
   "simpleDescription": "Increases Attack Damage and Ability Power, activate to slow a target",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.869320+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.025420+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.025420+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

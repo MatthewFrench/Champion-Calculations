@@ -23,30 +23,40 @@
       "effects": "If your {{stil|life steal}} and {{stil|omnivamp}} sum to at least 30%, gain {{as|500 '''bonus''' health}} and {{tip|heal}} yourself equal to 10% of the damage that enemy champions within {{tip|cr|icononly=true}} 525 units of you take from all sources."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "If your {{stil life steal}} and {{stil omnivamp}} sum to at least 30%, gain {{as 500 '''bonus''' health}} and {{tip heal}} yourself equal to 10% of the damage that enemy champions within {{tip cr icononly=true}} 525 units of you take from all sources.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
+      "effect_type": "conditional_bonus_and_heal",
+      "stat": "bonus_health",
+      "value": 500,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "lifesteal_plus_omnivamp_at_least_30_percent"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "damage_taken_by_enemies_in_range",
+          "ratio": 0.1,
+          "type": "percent",
+          "applies_to": "healing"
+        }
+      ],
+      "range_units": 525,
       "numbers_extracted": [
         30,
         500,
         10,
         525
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -63,6 +73,7 @@
   "generated_at": "2026-02-09T23:34:24.865110+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.022193+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.022193+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

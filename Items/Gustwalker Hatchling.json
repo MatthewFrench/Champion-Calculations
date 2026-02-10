@@ -5,7 +5,7 @@
   "rank": [
     "STARTER"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -18,63 +18,69 @@
       "effects": "Feed your companion enough treats to evolve it and upgrade your {{si|Smite}}. Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi|Gustwalker's Gait}} buff."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Summon a ''Gustwalker Hatchling'' companion to assist you in combat against monsters.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
+      "effect_type": "summon_companion",
+      "stat": "gustwalker_hatchling",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "count",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "monster",
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [
-        "in_combat"
+        "jungle_companion"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "companion"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.4
+      "parse_confidence": 0.6
     },
     {
       "raw": "Feed your companion enough treats to evolve it and upgrade your {{si Smite}}",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "progression",
+      "stat": "treats",
       "value": null,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_treats_collected",
       "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "smite_upgrade"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.5
     },
     {
       "raw": "Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi Gustwalker's Gait}} buff.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
+      "effect_type": "grant_status",
+      "stat": "gustwalkers_gait",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "buff",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_companion_final_evolution",
       "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "gustwalkers_gait"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -104,6 +110,10 @@
   "generated_at": "2026-02-09T23:34:24.885398+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.038212+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.038212+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Jungle companion evolution depends on treats; item consumed on final evolution."
+    ]
   }
 }

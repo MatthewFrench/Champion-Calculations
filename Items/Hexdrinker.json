@@ -21,24 +21,35 @@
       "cooldown": "90"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "If you would take {{as magic damage}} that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs {{as {{rd 110 to 280 82.5 to 210 pp=true}} magic damage}} for {{fd 2.5}} seconds.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "effect_type": "shield",
+      "stat": "magic_damage_absorb",
+      "value": 110,
+      "value_range": {
+        "melee": {
+          "min": 110,
+          "max": 280
+        },
+        "ranged": {
+          "min": 82.5,
+          "max": 210
+        }
+      },
+      "unit": "flat",
+      "duration_seconds": 2.5,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_magic_damage_below_health_threshold",
       "applies_to": "self",
       "conditions": [
-        "threshold"
+        "health_below_30_percent"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "shield"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         30,
@@ -48,7 +59,7 @@
         210,
         2.5
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -65,10 +76,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3155_fighter_t2_hexdrinker.png",
   "simpleDescription": "Increases Attack Damage and Magic Resist",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.898460+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.051390+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.051390+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

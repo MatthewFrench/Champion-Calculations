@@ -18,19 +18,19 @@
       "cooldown": "40"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Damaging an enemy champion deals {{as 65 '''bonus''' magic damage}}.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 65,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 40.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_damage_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
@@ -38,7 +38,7 @@
       "numbers_extracted": [
         65
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -60,6 +60,7 @@
   "generated_at": "2026-02-09T23:34:24.911173+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.062430+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.062430+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

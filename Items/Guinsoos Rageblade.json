@@ -28,20 +28,20 @@
       "effects": "Basic attacks grant {{as|8% '''bonus''' attack speed}} for 3 seconds, stacking up to 4 times for a total of {{as|32% '''bonus''' attack speed}}. At maximum stacks, basic attacks {{tip|on-attack}} also grant a ''Phantom'' stack for 6 seconds, up to 2 stacks. At 2 ''Phantom'' stacks, the next basic attack consumes all of those stacks {{tip|on-attack}} to trigger a ''Phantom Hit'' that applies {{tip|on-hit}} effects to the target after a {{fd|0.15}}-second delay."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Basic attacks deal {{as 30 '''bonus''' magic damage}} on-hit.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 30,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
+      "applies_to": "enemy_unit_hit",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -54,17 +54,21 @@
       "raw": "Basic attacks grant {{as 8% '''bonus''' attack speed}} for 3 seconds, stacking up to 4 times for a total of {{as 32% '''bonus''' attack speed}}",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",
-      "value": 8,
+      "value": 0.08,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_basic_attack",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 4,
+        "stack_value": 0.08
+      },
       "numbers_extracted": [
         8,
         3,
@@ -75,49 +79,60 @@
     },
     {
       "raw": "At maximum stacks, basic attacks {{tip on-attack}} also grant a ''Phantom'' stack for 6 seconds, up to 2 stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 6,
+      "effect_type": "apply_stack",
+      "stack_id": "phantom",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 6.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_basic_attack",
+      "applies_to": "self",
       "conditions": [
         "at_max_stacks"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "phantom"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 2
+      },
       "numbers_extracted": [
         6,
         2
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.6
     },
     {
       "raw": "At 2 ''Phantom'' stacks, the next basic attack consumes all of those stacks {{tip on-attack}} to trigger a ''Phantom Hit'' that applies {{tip on-hit}} effects to the target after a {{fd 0.15}}-second delay.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "trigger_on_hit_effects",
+      "stat": "phantom_hit",
       "value": 2,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack",
+      "applies_to": "enemy_unit_hit",
       "conditions": [
-        "after_condition"
+        "phantom_stacks_2"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "consume_phantom_stacks"
+      ],
       "scaling_terms": [],
+      "timing": {
+        "on_hit_repeat_delay_seconds": 0.15
+      },
       "numbers_extracted": [
         2,
         0.15
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -134,10 +149,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3124_marksman_t3_guinsoosrageblade.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.922832+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.071371+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.071371+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

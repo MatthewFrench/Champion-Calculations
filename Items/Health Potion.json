@@ -5,10 +5,35 @@
   "rank": [
     "POTION"
   ],
-  "stats": null,
-  "passives": null,
-  "active": null,
-  "effects_structured": [],
+  "stats": {},
+  "passives": [],
+  "active": [
+    {
+      "unique": true,
+      "name": "Consume",
+      "effects": "Restore health over time."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Consume to restore Health over time.",
+      "effect_type": "healing_over_time",
+      "stat": "health",
+      "value": null,
+      "value_range": null,
+      "unit": "flat_total",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "active",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.4
+    }
+  ],
   "shop": {
     "prices": {
       "total": 50,
@@ -28,6 +53,10 @@
   "generated_at": "2026-02-09T23:34:24.845844+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.004623+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.004623+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Exact healing amount and duration not present in source data."
+    ]
   }
 }

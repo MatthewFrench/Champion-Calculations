@@ -23,25 +23,46 @@
       "effects": "{{tip|Critical strike|Critical strikes}} inflict a bleed on the target for 2 seconds, dealing {{as|'''bonus''' physical damage}} equal to{{ft|{{pp|20/4 to 80/4|color=physical damage}} plus {{ap|25/4}}% of the {{tt|pre-mitigation|Damage calculated before resistances and reductions.}} {{tip|critical strike}} instance every {{fd|0.5}} seconds,|{{pp|20 to 80|color=physical damage}} plus 25% of the {{tip|critical strike}} instance over the duration,}}as well as applies a 7% {{tip|slow}} for the same duration. The bleed's damage is affected by {{tip|critical strike}} modifiers and stacks infinitely; the slow stacks up to 35%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "{{tip Critical strike Critical strikes}} inflict a bleed on the target for 2 seconds, dealing {{as '''bonus''' physical damage}} equal to{{ft {{pp 20/4 to 80/4 color=physical damage}} plus {{ap 25/4}}% of the {{tt pre-mitigation Damage calculated before resistances and reductions.}} {{tip critical strike}} instance every {{fd 0.5}} seconds, {{pp 20 to 80 color=physical damage}} plus 25% of the {{tip critical strike}} instance over the duration,}}as well as applies a 7% {{tip slow}} for the same duration",
-      "effect_type": "damage",
-      "stat": "critical_strike",
-      "value": 2,
-      "value_range": null,
-      "unit": "percent",
+      "effect_type": "damage_over_time",
+      "stat": "physical_damage",
+      "value": 20,
+      "value_range": {
+        "min": 20,
+        "max": 80,
+        "scales_with": "champion_level"
+      },
+      "unit": "flat_total",
       "duration_seconds": 2.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
-      "conditions": [],
+      "interval_seconds": 0.5,
+      "trigger": "on_critical_strike",
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "critical_strike"
+      ],
       "status_effects": [
         "slow"
       ],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "critical_strike_instance_damage",
+          "ratio": 0.25,
+          "type": "percent"
+        }
+      ],
+      "status_effects_data": [
+        {
+          "status": "slow",
+          "value": 0.07,
+          "unit": "percent",
+          "duration_seconds": 2.0,
+          "stack_cap": 0.35
+        }
+      ],
       "numbers_extracted": [
         2,
         20,
@@ -56,47 +77,7 @@
         25,
         7
       ],
-      "parse_confidence": 1.0
-    },
-    {
-      "raw": "The bleed's damage is affected by {{tip critical strike}} modifiers and stacks infinitely",
-      "effect_type": "damage",
-      "stat": "critical_strike",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "the slow stacks up to 35%.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 35,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        35
-      ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -113,6 +94,10 @@
   "generated_at": "2026-02-09T23:34:24.843920+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.003048+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.003048+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Bleed damage scales with critical strike instance and is affected by crit modifiers; bleed stacks infinitely."
+    ]
   }
 }

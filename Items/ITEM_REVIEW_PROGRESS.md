@@ -123,22 +123,22 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Guardians Horn.json
 - [x] Guardians Orb.json
 - [x] Guardians Shroud.json
-- [ ] Guinsoos Rageblade.json
-- [ ] Gunmetal Greaves.json
-- [ ] Gusto.json
-- [ ] Gustwalker Hatchling.json
-- [ ] Hamstringer.json
-- [ ] Haunting Guise.json
-- [ ] Health Potion.json
-- [ ] Hearthbound Axe.json
-- [ ] Heartsteel.json
-- [ ] Hellfire Hatchet.json
-- [ ] Hemomancers Helm.json
-- [ ] Hexbolt Companion.json
-- [ ] Hexdrinker.json
-- [ ] Hexoptics C44.json
-- [ ] Hextech Alternator.json
-- [ ] Hextech Gunblade.json
+- [x] Guinsoos Rageblade.json
+- [x] Gunmetal Greaves.json
+- [x] Gusto.json
+- [x] Gustwalker Hatchling.json
+- [x] Hamstringer.json
+- [x] Haunting Guise.json
+- [x] Health Potion.json
+- [x] Hearthbound Axe.json
+- [x] Heartsteel.json
+- [x] Hellfire Hatchet.json
+- [x] Hemomancers Helm.json
+- [x] Hexbolt Companion.json
+- [x] Hexdrinker.json
+- [x] Hexoptics C44.json
+- [x] Hextech Alternator.json
+- [x] Hextech Gunblade.json
 - [ ] Hextech Rocketbelt.json
 - [ ] Hollow Radiance.json
 - [ ] Horizon Focus.json

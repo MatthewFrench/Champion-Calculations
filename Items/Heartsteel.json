@@ -25,26 +25,32 @@
       "effects": "Gain {{as|{{pp|key=%|0 to 30 for 11|0 to 10000|type='''maximum''' health}}|hp}} increased size."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "While within 700 units of an enemy champion, generate a stack on them each second, stacking up to 3 times",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 700,
+      "effect_type": "apply_stack",
+      "stack_id": "heartsteel",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "interval_seconds": 1.0,
+      "trigger": "while_within_range",
       "applies_to": "enemy_champion",
       "conditions": [
-        "while_condition",
         "within_units"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "heartsteel_stack"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 3
+      },
+      "range_units": 700,
       "numbers_extracted": [
         700,
         3
@@ -54,18 +60,32 @@
     {
       "raw": "Your next basic attack against a target with 3 stacks is empowered to consume them all to deal {{as 70 physical damage}} {{as (+ 6% '''maximum''' health)}} {{as '''bonus''' physical damage}} [[on-hit]] and grant you permanent {{as '''bonus''' health}} equal to{{ft 8% of that amount {{as {{ap 70*0.08}} (+ {{ap 6*0.08}}% '''maximum''' health)}}}} (30 second cooldown per target).",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 3,
+      "stat": "physical_damage",
+      "value": 70,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "trigger": "on_basic_attack",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "heartsteel_stacks_3"
+      ],
+      "status_effects": [
+        "consume_heartsteel_stacks"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "max_health",
+          "ratio": 0.06,
+          "type": "percent"
+        }
+      ],
+      "permanent_bonus": {
+        "stat": "bonus_health",
+        "ratio_of_damage": 0.08
+      },
       "numbers_extracted": [
         3,
         70,
@@ -77,20 +97,24 @@
         0.08,
         30
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
       "raw": "Gain {{as {{pp key=% 0 to 30 for 11 0 to 10000 type='''maximum''' health}} hp}} increased size.",
-      "effect_type": "healing",
-      "stat": "health",
+      "effect_type": "stat_modifier",
+      "stat": "size",
       "value": 0,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 0,
+        "max": 0.3,
+        "scales_with": "max_health"
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -101,7 +125,7 @@
         0,
         10000
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -125,6 +149,7 @@
   "generated_at": "2026-02-09T23:34:24.930100+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.076480+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.076480+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
