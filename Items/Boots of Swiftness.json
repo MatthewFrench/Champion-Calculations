@@ -17,29 +17,17 @@
       "effects": "Gain 25% [[slow resist]]."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain 25% [[slow resist]].",
-      "effect_type": "status",
-      "stat": null,
-      "value": 25,
-      "value_range": null,
+      "raw": "Gain 25% slow resist.",
+      "effect_type": "stat_modifier",
+      "stat": "slow_resist",
+      "value": 0.25,
       "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        25
-      ],
-      "parse_confidence": 0.65
+      "trigger": "passive",
+      "applies_to": "self",
+      "parse_confidence": 0.9
     }
   ],
   "shop": {
@@ -57,6 +45,7 @@
   "generated_at": "2026-02-09T23:34:24.894311+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.048198+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.048198+00:00",
+    "effects_structured_reviewed": "Manual review: slow resist passive."
   }
 }

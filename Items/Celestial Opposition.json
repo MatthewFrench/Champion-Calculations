@@ -40,112 +40,62 @@
   ],
   "effects_structured": [
     {
-      "raw": "Become ''Blessed'' to reduce incoming champion damage by {{rd 35% 25%}}, lingering for 2 seconds after taking damage from a champion",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 35,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 2.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "raw": "Blessed: reduce incoming champion damage (35% melee / 25% ranged), lingering 2s after damage.",
+      "effect_type": "damage_reduction",
+      "stat": "damage_taken_multiplier",
+      "value_range": [
+        0.65,
+        0.75
+      ],
+      "unit": "multiplier",
+      "duration_seconds": 2,
       "trigger": "on_damage",
-      "applies_to": null,
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        35,
-        25,
-        2
-      ],
-      "parse_confidence": 1.0
-    },
-    {
-      "raw": "After the linger ends, you lose ''Blessed'' to unleash a shockwave around you that {{tip slow slows}} enemies within 500 units by 50% for {{fd 1.5}} seconds (18 second cooldown, timer restarts upon taking damage from champions).",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 500,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
       "applies_to": "self",
       "conditions": [
-        "after_condition",
-        "within_units"
+        "melee_ranged_split",
+        "linger"
       ],
-      "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        500,
-        50,
-        1.5,
-        18
-      ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.85
     },
     {
-      "raw": "Receives diminishing gold from excessive minion kills.",
+      "raw": "After Blessed ends, slow enemies within 500 units by 50% for 1.5s. Cooldown 18s, resets on champion damage.",
+      "effect_type": "debuff",
+      "stat": "slow",
+      "value": 0.50,
+      "unit": "percent",
+      "duration_seconds": 1.5,
+      "cooldown_seconds": 18,
+      "range_units": 500,
+      "trigger": "on_expire",
+      "applies_to": "enemy",
+      "conditions": [
+        "reset_on_champion_damage"
+      ],
+      "parse_confidence": 0.85
+    },
+    {
+      "raw": "Diminishing gold from excessive minion kills.",
       "effect_type": "resource",
-      "stat": "gold",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_kill",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.65
-    },
-    {
-      "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area",
-      "effect_type": "status",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "stealth"
+      "stat": "minion_gold_modifier",
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "minion_kill_penalty"
       ],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.45
+      "parse_confidence": 0.85
     },
     {
-      "raw": "Charges refill upon visiting the shop.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "raw": "Place a Stealth Ward; charges refill at shop.",
+      "effect_type": "utility",
+      "stat": "ward",
+      "trigger": "active",
+      "applies_to": "area",
+      "conditions": [
+        "ward_charges",
+        "refill_at_shop"
+      ],
+      "range_units": 600,
+      "parse_confidence": 0.9
     }
   ],
   "shop": {
@@ -160,10 +110,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3869_celestialopposition.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.877070+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.032142+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.032142+00:00",
+    "effects_structured_reviewed": "Manual review: Blessed damage reduction + shockwave slow + ward + minion gold penalty."
   }
 }

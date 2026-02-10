@@ -23,57 +23,70 @@
       "effects": "Dealing {{as|magic damage}} to an enemy champion with a [[champion ability]] applies a stack of ''Vile Decay'' to them for 6 seconds, stacking up to 4 times and up to once per basic attack or ability per {{tip|cast instance}} every {{fd|0.3}} seconds. Each stack inflicts {{as|{{fd|7.5}}% magic resistance reduction}}, up to {{as|30%|mr}} at 4 stacks."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Dealing {{as magic damage}} to an enemy champion with a [[champion ability]] applies a stack of ''Vile Decay'' to them for 6 seconds, stacking up to 4 times and up to once per basic attack or ability per {{tip cast instance}} every {{fd 0.3}} seconds",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "apply_stack",
+      "stack_id": "vile_decay",
       "value": 6,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": 6.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 0.3,
       "interval_seconds": null,
-      "trigger": "on_ability",
+      "trigger": "on_magic_damage_ability_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "vile_decay"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 4,
+        "refresh_duration_on_apply": true
+      },
       "numbers_extracted": [
         6,
         4,
         0.3
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.65
     },
     {
       "raw": "Each stack inflicts {{as {{fd 7.5}}% magic resistance reduction}}, up to {{as 30% mr}} at 4 stacks.",
       "effect_type": "stat_modifier",
       "stat": "magic_resistance",
-      "value": 7.5,
+      "value": -7.5,
       "value_range": null,
       "unit": "percent",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_stack",
+      "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "vile_decay"
+      ],
       "scaling_terms": [
         {
-          "percent": 30.0,
-          "stat": "mr",
-          "qualifier": null
+          "stat": "magic_resistance",
+          "qualifier": "total",
+          "ratio": -0.3,
+          "type": "percent_max"
         }
       ],
+      "caps": {
+        "min": -0.3,
+        "unit": "percent"
+      },
       "numbers_extracted": [
         7.5,
         30,
         4
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -88,10 +101,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8010_bloodletterscurse.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.867364+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.024102+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.024102+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

@@ -5,10 +5,37 @@
   "rank": [
     "CONSUMABLE"
   ],
-  "stats": null,
-  "passives": null,
-  "active": null,
-  "effects_structured": [],
+  "stats": {},
+  "passives": [],
+  "active": [
+    {
+      "name": "Ward",
+      "effects": "Place a Control Ward that reveals and disables nearby enemy wards and traps."
+    }
+  ],
+  "effects_structured": [
+    {
+      "raw": "Place a Control Ward that reveals and disables nearby enemy wards and traps.",
+      "effect_type": "place_ward",
+      "ward_type": "control_ward",
+      "value": 1,
+      "value_range": null,
+      "unit": "count",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "active",
+      "applies_to": "ground_target",
+      "conditions": [],
+      "status_effects": [
+        "reveals_stealth",
+        "disables_enemy_wards"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.6
+    }
+  ],
   "shop": {
     "prices": {
       "total": 75,
@@ -26,6 +53,10 @@
   "generated_at": "2026-02-09T23:34:24.928251+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.075341+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.075341+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Control Wards persist until destroyed; vision radius and placement range are not encoded here."
+    ]
   }
 }

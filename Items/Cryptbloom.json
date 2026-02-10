@@ -24,38 +24,41 @@
       "cooldown": "60"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Scoring a {{tip takedown}} against an enemy champion while alive and within 3 seconds of damaging them summons a nova that radiates from the location of their death over {{fd 1.75}} seconds, {{tip heal healing}} you and allied champions hit for 100 {{as (+ 20% AP)}}.",
       "effect_type": "healing",
       "stat": "healing",
-      "value": 3,
+      "value": 100,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 60.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "trigger": "on_takedown_within_3s_damage",
+      "applies_to": "self_and_allied_champions_in_nova",
       "conditions": [
-        "while_condition"
+        "takedown",
+        "damaged_target_within_3_seconds"
       ],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 20.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.2,
+          "type": "percent"
         }
       ],
+      "timing": {
+        "nova_travel_seconds": 1.75
+      },
       "numbers_extracted": [
-        3,
         1.75,
         100,
         20
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -70,10 +73,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
   "simpleDescription": "Activate to remove all debuffs and grant massive Move Speed",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.909139+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.059901+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.059901+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

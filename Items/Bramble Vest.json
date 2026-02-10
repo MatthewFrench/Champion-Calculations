@@ -17,28 +17,26 @@
       "effects": "When struck by a basic attack [[on-hit]], deal {{as|10 magic damage}} to the attacker and, if they are a champion, inflict them with {{tip|Grievous Wounds}} for 3 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "When struck by a basic attack [[on-hit]], deal {{as 10 magic damage}} to the attacker and, if they are a champion, inflict them with {{tip Grievous Wounds}} for 3 seconds.",
+      "raw": "On being hit by a basic attack, deal 10 magic damage to the attacker.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 10,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 3.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
+      "unit": "flat",
       "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        10,
-        3
-      ],
-      "parse_confidence": 0.95
+      "applies_to": "enemy",
+      "parse_confidence": 0.9
+    },
+    {
+      "raw": "If the attacker is a champion, apply Grievous Wounds for 3 seconds.",
+      "effect_type": "debuff",
+      "stat": "grievous_wounds",
+      "duration_seconds": 3,
+      "trigger": "on_hit",
+      "applies_to": "enemy_champion",
+      "parse_confidence": 0.9
     }
   ],
   "shop": {
@@ -59,6 +57,7 @@
   "generated_at": "2026-02-09T23:34:24.874240+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.030054+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.030054+00:00",
+    "effects_structured_reviewed": "Manual review: thorns damage + grievous wounds."
   }
 }

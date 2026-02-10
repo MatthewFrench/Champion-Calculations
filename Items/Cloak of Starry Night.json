@@ -20,7 +20,7 @@
       "effects": "Increase your {{as|'''total''' magic resistance}} by {{as|20%|mr}}. Additionally, reduce all incoming damage received from non-basic attack sources by 5% per {{as|200 '''total''' magic resistance}}, up to a maximum of 50% damage reduction."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Increase your {{as '''total''' magic resistance}} by {{as 20% mr}}",
@@ -32,15 +32,16 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "passive",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 20.0,
-          "stat": "mr",
-          "qualifier": null
+          "stat": "magic_resistance",
+          "qualifier": "total",
+          "ratio": 0.2,
+          "type": "percent"
         }
       ],
       "numbers_extracted": [
@@ -50,25 +51,38 @@
     },
     {
       "raw": "Additionally, reduce all incoming damage received from non-basic attack sources by 5% per {{as 200 '''total''' magic resistance}}, up to a maximum of 50% damage reduction.",
-      "effect_type": "damage",
-      "stat": "magic_resistance",
+      "effect_type": "damage_reduction",
       "value": 5,
       "value_range": null,
       "unit": "percent",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "non_basic_attack_damage"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "magic_resistance",
+          "qualifier": "total",
+          "value_per": 0.05,
+          "per": 200,
+          "type": "percent"
+        }
+      ],
+      "caps": {
+        "max": 0.5,
+        "unit": "percent"
+      },
       "numbers_extracted": [
         5,
         200,
         50
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -79,10 +93,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3059_cloakofstarrynight.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.908698+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.059520+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.059520+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

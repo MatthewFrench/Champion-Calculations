@@ -25,69 +25,58 @@
       "effects": "{{tip|heal|Healing}}, {{tip|shield|shielding}} or buffing an ally, damaging abilities against champions, and using [[summoner spell]]s grants you {{as|{{rd|10%|8%}} '''bonus''' movement speed}} for 4 seconds. This can be triggered from the same {{tip|cast instance}} only once every 4 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain 20 [[Haste#Summoner spell haste summoner spell haste]].",
       "effect_type": "stat_modifier",
-      "stat": null,
+      "stat": "summoner_spell_haste",
       "value": 20,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "raw": "{{tip heal Healing}}, {{tip shield shielding}} or buffing an ally, damaging abilities against champions, and using [[summoner spell]]s grants you {{as {{rd 10% 8%}} '''bonus''' movement speed}} for 4 seconds",
-      "effect_type": "healing",
-      "stat": "movement_speed",
+      "effect_type": "stat_modifier",
+      "stat": "movespeed",
       "value": 10,
-      "value_range": null,
+      "value_range": {
+        "melee": 0.1,
+        "ranged": 0.08
+      },
       "unit": "percent",
       "duration_seconds": 4.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 4.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_support_or_damage_or_summoner_cast",
+      "applies_to": "self",
+      "conditions": [
+        "healing_or_shielding_or_buffing_ally",
+        "damaging_ability_to_champions",
+        "summoner_spell_cast"
+      ],
+      "status_effects": [
+        "movespeed"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         10,
         8,
         4
       ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "This can be triggered from the same {{tip cast instance}} only once every 4 seconds.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 4,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": 4.0,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        4
-      ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -105,6 +94,10 @@
   "generated_at": "2026-02-09T23:34:24.897843+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.050834+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.050834+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Move speed bonus uses melee/ranged split from tooltip (10% melee, 8% ranged)."
+    ]
   }
 }

@@ -26,31 +26,32 @@
       "effects": "Become ''Safeguarded'' to reduce incoming champion damage by 50%, lingering for 3 seconds after taking damage from a champion (30 second cooldown, timer restarts upon taking damage from champions)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Become ''Safeguarded'' to reduce incoming champion damage by 50%, lingering for 3 seconds after taking damage from a champion (30 second cooldown, timer restarts upon taking damage from champions).",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "damage_reduction",
       "value": 50,
       "value_range": null,
       "unit": "percent",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "champion_damage"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "safeguard"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         50,
         3,
         30
       ],
-      "parse_confidence": 1.0
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -61,10 +62,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4644_crown.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.863035+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.020137+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.020137+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Safeguard cooldown timer restarts upon taking champion damage."
+    ]
   }
 }

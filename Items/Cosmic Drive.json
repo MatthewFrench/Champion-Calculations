@@ -31,28 +31,33 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Dealing {{as magic magic damage}} or {{as true true damage}} damage to an enemy champion grants you {{as 20 '''bonus''' movement speed ms}} for 4 seconds.",
-      "effect_type": "damage",
-      "stat": "movement_speed",
+      "effect_type": "stat_modifier",
+      "stat": "movespeed",
       "value": 20,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": 4.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_magic_or_true_damage_to_champions",
+      "applies_to": "self",
+      "conditions": [
+        "magic_damage",
+        "true_damage"
+      ],
+      "status_effects": [
+        "movespeed"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         20,
         4
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -74,6 +79,7 @@
   "generated_at": "2026-02-09T23:34:24.906577+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.057623+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.057623+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

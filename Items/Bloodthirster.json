@@ -20,41 +20,27 @@
       "effects": "Convert the {{tip|healing}} received from {{sti|life steal}} in excess of {{as|'''maximum''' health}} into a {{tip|shield}} for up to {{pp|165 + (315-165)/10*(x-1)|1;9 to 20 by 1|formula=165 base, then +15 per level starting from level 9.}}, which lasts until destroyed."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Convert the {{tip healing}} received from {{sti life steal}} in excess of {{as '''maximum''' health}} into a {{tip shield}} for up to {{pp 165 + (315-165)/10*(x-1) 1;9 to 20 by 1 formula=165 base, then +15 per level starting from level 9.}}, which lasts until destroyed.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 165,
-      "value_range": [
-        315,
-        165
+      "raw": "Convert lifesteal overheal into a shield, capped by level-scaling values.",
+      "effect_type": "shield",
+      "stat": "overheal_shield",
+      "trigger": "on_lifesteal_overheal",
+      "applies_to": "self",
+      "conditions": [
+        "overheal",
+        "lifesteal_only"
       ],
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        165,
-        315,
-        -165,
-        10,
-        -1,
-        1,
-        9,
-        20,
-        1,
-        165,
-        15,
-        9.0
-      ],
-      "parse_confidence": 0.75
+      "cap": {
+        "base": 165,
+        "per_level": 15,
+        "starts_at_level": 9,
+        "max": 315,
+        "unit": "health"
+      },
+      "duration": "until_destroyed",
+      "parse_confidence": 0.9
     }
   ],
   "shop": {

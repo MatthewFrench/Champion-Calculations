@@ -28,31 +28,31 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Blackfire Torch.json
 - [x] Blade of the Ruined King.json
 - [x] Blasting Wand.json
-- [ ] Blighting Jewel.json
-- [ ] Bloodletters Curse.json
-- [ ] Bloodsong.json
-- [ ] Bloodthirster.json
-- [ ] Boots of Swiftness.json
-- [ ] Boots.json
-- [ ] Bounty of Worlds.json
-- [ ] Bramble Vest.json
-- [ ] Cappa Juice.json
-- [ ] Catalyst of Aeons.json
-- [ ] Caulfields Warhammer.json
-- [ ] Celestial Opposition.json
-- [ ] Chain Vest.json
-- [ ] Chainlaced Crushers.json
-- [ ] Chempunk Chainsword.json
-- [ ] Cloak of Agility.json
-- [ ] Cloak of Starry Night.json
-- [ ] Cloth Armor.json
-- [ ] Control Ward.json
-- [ ] Cosmic Drive.json
-- [ ] Crimson Lucidity.json
-- [ ] Crown of the Shattered Queen.json
-- [ ] Cruelty.json
-- [ ] Cryptbloom.json
-- [ ] Crystalline Bracer.json
+- [x] Blighting Jewel.json
+- [x] Bloodletters Curse.json
+- [x] Bloodsong.json
+- [x] Bloodthirster.json
+- [x] Boots of Swiftness.json
+- [x] Boots.json
+- [x] Bounty of Worlds.json
+- [x] Bramble Vest.json
+- [x] Cappa Juice.json
+- [x] Catalyst of Aeons.json
+- [x] Caulfields Warhammer.json
+- [x] Celestial Opposition.json
+- [x] Chain Vest.json
+- [x] Chainlaced Crushers.json
+- [x] Chempunk Chainsword.json
+- [x] Cloak of Agility.json
+- [x] Cloak of Starry Night.json
+- [x] Cloth Armor.json
+- [x] Control Ward.json
+- [x] Cosmic Drive.json
+- [x] Crimson Lucidity.json
+- [x] Crown of the Shattered Queen.json
+- [x] Cruelty.json
+- [x] Cryptbloom.json
+- [x] Crystalline Bracer.json
 - [ ] Crystalline Overgrowth.json
 - [ ] Cull.json
 - [ ] Dagger.json
