@@ -23,20 +23,23 @@
       "effects": "Basic attacks [[on-hit]] and ability hits have a 12% chance to store between {{g|30}} and {{as|240|gold}} ({{fd|2.5}}-second cooldown per attack/ability). If you win the round, gain {{g|gold}} equal to the stored amount, otherwise lose 25% of it."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Basic attacks [[on-hit]] and ability hits have a 12% chance to store between {{g 30}} and {{as 240 gold}} ({{fd 2.5}}-second cooldown per attack/ability)",
-      "effect_type": "resource",
+      "effect_type": "resource_store",
       "stat": "gold",
-      "value": 12,
-      "value_range": null,
-      "unit": "percent",
+      "value": 0.12,
+      "value_range": {
+        "min": 30,
+        "max": 240
+      },
+      "unit": "chance",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 2.5,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack_or_ability_hit",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -46,19 +49,19 @@
         240,
         2.5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
       "raw": "If you win the round, gain {{g gold}} equal to the stored amount, otherwise lose 25% of it.",
-      "effect_type": "resource",
+      "effect_type": "resource_modifier",
       "stat": "gold",
-      "value": 25,
+      "value": 0.25,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "round_end",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
@@ -66,7 +69,7 @@
       "numbers_extracted": [
         25
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -74,10 +77,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7101_gamblers_blade.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.889571+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.043375+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.043375+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Round-based payout mechanic (Arena-style)."
+    ]
   }
 }

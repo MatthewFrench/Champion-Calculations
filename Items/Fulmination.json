@@ -33,32 +33,38 @@
       "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|'''bonus''' magic damage}} [[on-hit]] equal to {{as|13% of the target's '''current''' health}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 100.0,
+      "effect_type": "apply_stack",
+      "stack_id": "energize",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_move_or_basic_attack",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "energize"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 100
+      },
       "numbers_extracted": [
         100.0
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Your {{tip Energized}} attacks against targets not hit by your previous ''Energized'' attack do not consume any ''Energize'' stacks on-hit.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "stack_rule",
+      "stat": "energize",
       "value": null,
       "value_range": null,
       "unit": null,
@@ -67,31 +73,43 @@
       "interval_seconds": null,
       "trigger": "on_hit",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "conditions": [
+        "target_not_previous_energized_target"
+      ],
+      "status_effects": [
+        "energize"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.45
+      "parse_confidence": 0.6
     },
     {
       "raw": "When fully {{tip Energized}}, your next basic attack deals {{as '''bonus''' magic damage}} [[on-hit]] equal to {{as 13% of the target's '''current''' health}}.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 13,
+      "stat": "magic_damage",
+      "value": 0.13,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": "self",
-      "conditions": [],
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "energize_full"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_current_health",
+          "ratio": 0.13,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         13
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -108,6 +126,7 @@
   "generated_at": "2026-02-09T23:34:24.869605+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.025753+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.025753+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

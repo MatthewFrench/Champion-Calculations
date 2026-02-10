@@ -10,7 +10,7 @@
       "flat": 70.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -21,18 +21,23 @@
   "effects_structured": [
     {
       "raw": "Become ghostly for 6 seconds, ignoring terrain collision until you basic attack or cast an ability",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "status_effect",
+      "stat": "ghosted",
       "value": 6,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": 6.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "active",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "conditions": [
+        "ends_on_basic_attack_or_ability_cast"
+      ],
+      "status_effects": [
+        "ghosted",
+        "ignore_terrain_collision"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         6
@@ -42,14 +47,14 @@
     {
       "raw": "While inside terrain, gain {{as 300 '''bonus''' movement speed}}.",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
+      "stat": "movespeed",
       "value": 300,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "while_in_terrain",
       "applies_to": null,
       "conditions": [
         "while_condition"
@@ -59,7 +64,7 @@
       "numbers_extracted": [
         300
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -71,10 +76,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4001_ghostwalkers.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.863523+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.020624+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.020624+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

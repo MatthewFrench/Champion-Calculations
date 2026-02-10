@@ -20,47 +20,49 @@
       "effects": "Gain {{as|10 '''bonus''' mana regeneration}}. Manaless champions gain {{as|15 '''bonus''' health regeneration}} instead."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain {{as 10 '''bonus''' mana regeneration}}",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
+      "effect_type": "resource_regen",
+      "stat": "mana_regen",
       "value": 10,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
       "raw": "Manaless champions gain {{as 15 '''bonus''' health regeneration}} instead.",
-      "effect_type": "healing",
-      "stat": "health",
+      "effect_type": "resource_regen",
+      "stat": "health_regen",
       "value": 15,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "no_mana_resource"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -78,10 +80,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3112_aram_t1_guardiansorb.png",
   "simpleDescription": "Good starting item for mages",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.907771+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.058703+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.058703+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

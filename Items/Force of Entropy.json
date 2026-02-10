@@ -23,23 +23,37 @@
       "effects": "{{tip|Immobilize|Immobilizing}} effects against {{tip|champions}} have a {{pp|key=%|key1=%|type=critical strike chance|0 to 100 for 11|0 to 100|formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to increase in duration by {{fd|0.25}} seconds (+ 33% of immobilizing effect's duration)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "{{tip Immobilize Immobilizing}} effects against {{tip champions}} have a {{pp key=% key1=% type=critical strike chance 0 to 100 for 11 0 to 100 formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to increase in duration by {{fd 0.25}} seconds (+ 33% of immobilizing effect's duration).",
-      "effect_type": "stat_modifier",
-      "stat": "critical_strike",
-      "value": 1,
-      "value_range": null,
-      "unit": "percent",
+      "effect_type": "duration_increase_chance",
+      "stat": "immobilize_duration",
+      "value": 0.01,
+      "value_range": {
+        "min": 0.0,
+        "max": 1.0
+      },
+      "unit": "ratio_per_crit_chance_percent",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_immobilize_to_champions",
+      "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "critical_strike_chance_percent",
+          "ratio": 0.01,
+          "type": "chance_per_percent",
+          "cap": 1.0
+        }
+      ],
+      "duration_modifiers": {
+        "flat_increase_seconds": 0.25,
+        "percent_of_duration": 0.33
+      },
       "numbers_extracted": [
         1,
         0,
@@ -53,7 +67,7 @@
         0.25,
         33
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -64,10 +78,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3061_forceofentropy.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.881159+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.035304+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.035304+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

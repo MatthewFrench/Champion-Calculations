@@ -23,28 +23,31 @@
       "effects": "{{tip|Cripple|Cripples}} the [[attack speed]] of enemy champions within {{tt|700 units|center to edge}} by 20%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "{{tip Cripple Cripples}} the [[attack speed]] of enemy champions within {{tt 700 units center to edge}} by 20%.",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",
-      "value": 700,
+      "value": -0.2,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "aura",
       "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "cripple"
+      ],
       "scaling_terms": [],
+      "range_units": 700,
       "numbers_extracted": [
         700,
         20
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -66,6 +69,7 @@
   "generated_at": "2026-02-09T23:34:24.910125+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.061432+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.061432+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

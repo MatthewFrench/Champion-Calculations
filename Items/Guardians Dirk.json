@@ -28,20 +28,20 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Increases the effects of [[File:Power FlowerSquare.png 20px link=Arena#Power Flowers]] ''[[Arena#Power Flowers Power Flowers]]'' by 20%",
       "effect_type": "stat_modifier",
-      "stat": null,
+      "stat": "power_flower_effect_multiplier",
       "value": 20,
       "value_range": null,
       "unit": "percent",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -49,20 +49,20 @@
         20,
         20
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Additionally, dealing damage to a ''Power Flower'' grants you {{as 100 '''bonus''' movement speed}} for 3 seconds.",
-      "effect_type": "damage",
-      "stat": "movement_speed",
+      "effect_type": "stat_modifier",
+      "stat": "movespeed",
       "value": 100,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_damage_to_power_flower",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -70,7 +70,7 @@
         100,
         3
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -86,10 +86,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3181_sanguineblade.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.893862+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.047986+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.047986+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Arena Power Flower interaction."
+    ]
   }
 }

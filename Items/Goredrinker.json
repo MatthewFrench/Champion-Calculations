@@ -19,7 +19,7 @@
       "percent": 10.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -31,50 +31,66 @@
     {
       "raw": "Deal {{as 175% '''base''' AD}} {{as physical damage}} to enemies in a {{tip cr icononly = true}} 450 radius centered around you",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 175,
+      "stat": "physical_damage",
+      "value": 1.75,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        175,
-        450
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "{{tip Heal}} for {{as 20% AD}} {{as (+ 8% of your '''missing''' health)}} for each enemy champion hit.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 20,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "enemy_champion",
+      "trigger": "active",
+      "applies_to": "enemy_units_in_radius",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 20.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "base_attack_damage",
+          "ratio": 1.75,
+          "type": "flat"
         }
       ],
+      "range_units": 450,
+      "numbers_extracted": [
+        175,
+        450
+      ],
+      "parse_confidence": 0.65
+    },
+    {
+      "raw": "{{tip Heal}} for {{as 20% AD}} {{as (+ 8% of your '''missing''' health)}} for each enemy champion hit.",
+      "effect_type": "healing",
+      "stat": "healing",
+      "value": 0.2,
+      "value_range": null,
+      "unit": "ratio",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "active",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "attack_damage",
+          "ratio": 0.2,
+          "type": "percent"
+        },
+        {
+          "stat": "missing_health",
+          "ratio": 0.08,
+          "type": "percent"
+        }
+      ],
+      "per_target": {
+        "type": "enemy_champion",
+        "counted_for": "heal_amount"
+      },
       "numbers_extracted": [
         20,
         8
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -91,6 +107,7 @@
   "generated_at": "2026-02-09T23:34:24.895439+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.048865+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.048865+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

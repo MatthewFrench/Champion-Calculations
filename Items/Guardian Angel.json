@@ -20,36 +20,63 @@
       "effects": "Upon taking [[death|lethal damage]], enter {{tip|resurrection}} for 4 seconds, during which you are {{tip|invulnerable}}, {{tip|untargetable}}, and unable to act, and afterwards {{tip|heal}} for {{as|50% of '''base''' health}} and restore {{as|100% of '''maximum''' mana}} (300 second cooldown, starts after resurrection ends)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Upon taking [[death lethal damage]], enter {{tip resurrection}} for 4 seconds, during which you are {{tip invulnerable}}, {{tip untargetable}}, and unable to act, and afterwards {{tip heal}} for {{as 50% of '''base''' health}} and restore {{as 100% of '''maximum''' mana}} (300 second cooldown, starts after resurrection ends).",
-      "effect_type": "damage",
-      "stat": "health",
+      "effect_type": "resurrection",
+      "stat": "revive",
       "value": 4,
       "value_range": null,
-      "unit": "percent",
+      "unit": "seconds",
       "duration_seconds": 4.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 300.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_lethal_damage",
       "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "lethal_damage"
       ],
       "status_effects": [
         "untargetable",
         "invulnerable",
         "resurrection"
       ],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_health",
+          "ratio": 0.5,
+          "type": "percent",
+          "applies_to": "heal_on_revive"
+        },
+        {
+          "stat": "max_mana",
+          "ratio": 1.0,
+          "type": "percent",
+          "applies_to": "mana_restore_on_revive"
+        }
+      ],
+      "post_effects": [
+        {
+          "effect_type": "healing",
+          "stat": "health",
+          "value": 0.5,
+          "unit": "ratio"
+        },
+        {
+          "effect_type": "resource_restore",
+          "stat": "mana",
+          "value": 1.0,
+          "unit": "ratio"
+        }
+      ],
       "numbers_extracted": [
         4,
         50,
         100,
         300
       ],
-      "parse_confidence": 1.0
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -72,6 +99,10 @@
   "generated_at": "2026-02-09T23:34:24.907998+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.058935+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.058935+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cooldown starts after resurrection ends."
+    ]
   }
 }

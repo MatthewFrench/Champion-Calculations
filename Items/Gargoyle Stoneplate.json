@@ -19,7 +19,7 @@
       "flat": 15.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -30,26 +30,43 @@
   "effects_structured": [
     {
       "raw": "Gain a {{tip shield}} for 300 {{as (+ 100% '''bonus''' health)}} that decays over 5 seconds, and 25% increased [[size]] for the same duration.",
-      "effect_type": "healing",
-      "stat": "health",
+      "effect_type": "shield",
+      "stat": "damage_absorb",
       "value": 300,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": "flat",
+      "duration_seconds": 5.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "active",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "shield",
+        "size_increase"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "bonus_health",
+          "ratio": 1.0,
+          "type": "percent"
+        }
+      ],
+      "decay": {
+        "duration_seconds": 5.0
+      },
+      "size_modifier": {
+        "value": 0.25,
+        "unit": "ratio",
+        "duration_seconds": 5.0
+      },
       "numbers_extracted": [
         300,
         100,
         5,
         25
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -60,10 +77,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3193_tank_t3_gargoylestoneplate.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.883039+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.036540+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.036540+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

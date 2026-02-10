@@ -28,69 +28,82 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Taking {{as magic damage}} from champions generates a stack of ''Steadfast'' for 7 seconds, stacking up to 8 times with the duration refreshing on subsequent {{as magic damage}} from them and whenever dealing damage to them",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 7,
+      "effect_type": "apply_stack",
+      "stack_id": "steadfast",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 7.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_magic_damage_from_champions",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "steadfast"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 8,
+        "refresh_duration_on_apply": true,
+        "apply_on_deal_damage_to_source": true
+      },
       "numbers_extracted": [
         7,
         8
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     },
     {
       "raw": "Becoming {{tip immobilize immobilized}} by an enemy champion generates 2 stacks and also refreshes the duration",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "apply_stack",
+      "stack_id": "steadfast",
+      "stat": "stack",
       "value": 2,
       "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
+      "unit": "stacks",
+      "duration_seconds": 7.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "trigger": "on_immobilized_by_champion",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "steadfast"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Once per {{tip cast instance}}, each incoming basic attack, ability, or item effect can only generate 1 stack of ''Steadfast'' from their damage every 1 second",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "stack_rule",
+      "stat": "steadfast",
       "value": 1,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": 1.0,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_damage_instance",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "steadfast"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         1,
         1
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     },
     {
       "raw": "At '''maximum''' stacks, gain {{as 70 '''bonus''' magic resistance}} and {{as 6% '''bonus''' movement speed}}.",
@@ -98,20 +111,26 @@
       "stat": "magic_resistance",
       "value": 70,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_max_stacks",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "movespeed",
+          "ratio": 0.06,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         70,
         6
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -132,6 +151,7 @@
   "generated_at": "2026-02-09T23:34:24.913882+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.065151+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.065151+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

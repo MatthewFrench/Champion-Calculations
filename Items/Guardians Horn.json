@@ -20,20 +20,23 @@
       "effects": "Reduces all sources of incoming champion damage by 15, modified to {{fd|3.75}} against [[damage over time]] abilities."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Reduces all sources of incoming champion damage by 15, modified to {{fd 3.75}} against [[damage over time]] abilities.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "damage_reduction_flat",
+      "stat": "incoming_damage",
       "value": 15,
-      "value_range": null,
-      "unit": null,
+      "value_range": {
+        "default": 15,
+        "dot": 3.75
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
+      "trigger": "on_damage_from_champions",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -41,7 +44,7 @@
         15,
         3.75
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -68,6 +71,7 @@
   "generated_at": "2026-02-09T23:34:24.887551+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.040771+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.040771+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

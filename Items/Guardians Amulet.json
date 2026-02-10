@@ -23,20 +23,20 @@
       "effects": "Restore {{as|10 mana}} every 5 seconds. Manaless champions restore {{as|3 health}} instead."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Restore {{as 10 mana}} every 5 seconds",
-      "effect_type": "stat_modifier",
+      "effect_type": "resource_regen",
       "stat": "mana",
       "value": 10,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat_per_interval",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": 5.0,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -44,7 +44,7 @@
         10,
         5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.75
     },
     {
       "raw": "Manaless champions restore {{as 3 health}} instead.",
@@ -52,19 +52,21 @@
       "stat": "health",
       "value": 3,
       "value_range": null,
-      "unit": null,
+      "unit": "flat_per_interval",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "interval_seconds": 5.0,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "no_mana_resource"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -79,10 +81,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2049_guardiansamulet.png",
   "simpleDescription": "Increases Health and provides Stealth Wards over time",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.901094+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.053373+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.053373+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

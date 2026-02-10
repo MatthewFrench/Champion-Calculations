@@ -19,7 +19,7 @@
       "percent": 6.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -30,39 +30,69 @@
   "effects_structured": [
     {
       "raw": "{{tip Dash}} to the target location and fire three homing missiles at the {{tt most wounded Lowest health percent}} enemy within {{tip cr icononly=true}} 750 units of you at the end of the dash, prioritizing enemy champions",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 750,
+      "effect_type": "movement_and_targeting",
+      "stat": "dash_and_target",
+      "value": 3,
       "value_range": null,
-      "unit": null,
+      "unit": "missiles",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "active",
+      "applies_to": "self_and_target_enemy",
+      "conditions": [
+        "prioritize_enemy_champions"
+      ],
       "status_effects": [],
+      "range_units": 750,
+      "movement": {
+        "type": "dash",
+        "target": "cursor_location"
+      },
       "scaling_terms": [],
       "numbers_extracted": [
         750
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     },
     {
       "raw": "Each missile deals {{as {{pp 150/3 to 350/3 1;8 to 18 by 1}} {{as (+ {{fd 26.6{{recurring 6}}}}% '''bonus''' AD)}} physical damage physical damage}}, for a total of {{as {{pp 150 to 350 1;8 to 18 by 1}} {{as (+ 80% '''bonus''' AD)}} physical damage}}, increased by {{pp type= target's '''missing''' health color=health key=% 0 to 50 key1=% 0 to 75 for 11 formula=5% per 7.5% of enemies' '''missing''' health}}.",
       "effect_type": "damage",
-      "stat": "health",
+      "stat": "physical_damage",
       "value": 150,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 150,
+        "max": 350,
+        "scales_with": "champion_level"
+      },
+      "unit": "flat_total",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "active",
+      "applies_to": "target_enemy",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 0.8,
+          "type": "percent_total"
+        }
+      ],
+      "missiles": {
+        "count": 3,
+        "damage_per_missile": {
+          "min": 50,
+          "max": 116.6666667
+        }
+      },
+      "missing_health_scaling": {
+        "max_bonus_ratio": 0.5,
+        "scales_to": 0.75,
+        "formula": "5% per 7.5% missing health",
+        "metric": "target_missing_health_percent"
+      },
       "numbers_extracted": [
         150,
         3,
@@ -90,7 +120,7 @@
         5,
         7.5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -107,6 +137,7 @@
   "generated_at": "2026-02-09T23:34:24.842476+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.001597+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.001597+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

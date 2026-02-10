@@ -103,26 +103,26 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Fire at Will.json
 - [x] Flesheater.json
 - [x] Forbidden Idol.json
-- [ ] Force of Entropy.json
-- [ ] Force of Nature.json
-- [ ] Frozen Heart.json
-- [ ] Fulmination.json
-- [ ] Galeforce.json
-- [ ] Gamblers Blade.json
-- [ ] Gargoyle Stoneplate.json
-- [ ] Ghostcrawlers.json
-- [ ] Giants Belt.json
-- [ ] Glacial Buckler.json
-- [ ] Glowing Mote.json
-- [ ] Goredrinker.json
-- [ ] Guardian Angel.json
-- [ ] Guardians Amulet.json
-- [ ] Guardians Blade.json
-- [ ] Guardians Dirk.json
-- [ ] Guardians Hammer.json
-- [ ] Guardians Horn.json
-- [ ] Guardians Orb.json
-- [ ] Guardians Shroud.json
+- [x] Force of Entropy.json
+- [x] Force of Nature.json
+- [x] Frozen Heart.json
+- [x] Fulmination.json
+- [x] Galeforce.json
+- [x] Gamblers Blade.json
+- [x] Gargoyle Stoneplate.json
+- [x] Ghostcrawlers.json
+- [x] Giants Belt.json
+- [x] Glacial Buckler.json
+- [x] Glowing Mote.json
+- [x] Goredrinker.json
+- [x] Guardian Angel.json
+- [x] Guardians Amulet.json
+- [x] Guardians Blade.json
+- [x] Guardians Dirk.json
+- [x] Guardians Hammer.json
+- [x] Guardians Horn.json
+- [x] Guardians Orb.json
+- [x] Guardians Shroud.json
 - [ ] Guinsoos Rageblade.json
 - [ ] Gunmetal Greaves.json
 - [ ] Gusto.json
