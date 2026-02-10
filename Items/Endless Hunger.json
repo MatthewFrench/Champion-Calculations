@@ -28,7 +28,7 @@
       "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them grants you {{as|15% omnivamp}} for 8 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain {{as 5 ah}} {{as (+ 10% '''bonus''' AD)}} {{as ability haste}}.",
@@ -36,34 +36,43 @@
       "stat": "ability_haste",
       "value": 5,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 0.1,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         5,
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them grants you {{as 15% omnivamp}} for 8 seconds.",
       "effect_type": "stat_modifier",
       "stat": "omnivamp",
-      "value": 3,
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 8.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "on_takedown_within_3s_damage",
+      "applies_to": "self",
+      "conditions": [
+        "takedown",
+        "damaged_target_within_3_seconds"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
@@ -71,7 +80,7 @@
         15,
         8
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -86,10 +95,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2517_adfighteromnivamp.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.903159+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.054855+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.054855+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

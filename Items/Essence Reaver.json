@@ -23,25 +23,50 @@
       "effects": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds deals {{as|125% '''base''' AD}} {{as|(+ {{pp|0 to 50|0 to 100 for 11|label1=% critical strike chance|showtype=false|formula=0.5 damage for every 1% critical strike chance}} based on critical strike chance)}} {{as|'''bonus''' physical damage}} [[on-hit]] and restores {{as|mana}} equal to{{ft|50% of that amount|{{as|{{ap|125*0.5}}% '''base''' AD}} {{as|(+ {{pp|0 to 25|0 to 100 for 11|label1=% critical strike chance|showtype=false|formula=0.25 mana restored for every 1% critical strike chance}} based on critical strike chance)}}}}({{fd|1.5}} second cooldown, starts after using the empowered attack)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After using an [[Champion ability ability]], your next basic attack within 10 seconds deals {{as 125% '''base''' AD}} {{as (+ {{pp 0 to 50 0 to 100 for 11 label1=% critical strike chance showtype=false formula=0.5 damage for every 1% critical strike chance}} based on critical strike chance)}} {{as '''bonus''' physical damage}} [[on-hit]] and restores {{as mana}} equal to{{ft 50% of that amount {{as {{ap 125*0.5}}% '''base''' AD}} {{as (+ {{pp 0 to 25 0 to 100 for 11 label1=% critical strike chance showtype=false formula=0.25 mana restored for every 1% critical strike chance}} based on critical strike chance)}}}}({{fd 1.5}} second cooldown, starts after using the empowered attack).",
       "effect_type": "damage",
-      "stat": "mana",
-      "value": 10,
+      "stat": "physical_damage",
+      "value": 1.25,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.5,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
+      "trigger": "on_next_basic_attack_after_ability",
+      "applies_to": "enemy_unit_hit",
       "conditions": [
-        "after_condition"
+        "within_10_seconds"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_attack_damage",
+          "ratio": 1.25,
+          "type": "flat"
+        },
+        {
+          "stat": "critical_strike_chance_percent",
+          "ratio": 0.5,
+          "type": "flat_per_percent"
+        }
+      ],
+      "resource_restore": {
+        "stat": "mana",
+        "ratio_of_damage": 0.5,
+        "scaling_terms": [
+          {
+            "stat": "critical_strike_chance_percent",
+            "ratio": 0.25,
+            "type": "flat_per_percent"
+          }
+        ]
+      },
+      "timing": {
+        "window_seconds": 10.0
+      },
       "numbers_extracted": [
         10,
         125,
@@ -66,7 +91,7 @@
         1,
         1.5
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -90,6 +115,7 @@
   "generated_at": "2026-02-09T23:34:24.921496+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.070348+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.070348+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

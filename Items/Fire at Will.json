@@ -2,8 +2,8 @@
   "name": "Fire at Will",
   "id": 3901,
   "tier": 1,
-  "rank": null,
-  "stats": null,
+  "rank": [],
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -11,23 +11,30 @@
       "effects": "{{ai|Cannon Barrage|Gangplank}} fires 2 additional clusters of 3 waves over the duration at an increased rate of fire (1 cluster per {{fd|1.33}} seconds), for a total of 18 waves over the 8 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "{{ai Cannon Barrage Gangplank}} fires 2 additional clusters of 3 waves over the duration at an increased rate of fire (1 cluster per {{fd 1.33}} seconds), for a total of 18 waves over the 8 seconds.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "ability_modifier",
+      "stat": "cannon_barrage_waves",
       "value": 2,
       "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
+      "unit": "additional_clusters",
+      "duration_seconds": 8.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "interval_seconds": 1.33,
+      "trigger": "on_cannon_barrage_cast",
+      "applies_to": "enemy_units_in_area",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "ability_modifiers": {
+        "additional_clusters": 2,
+        "waves_per_cluster": 3,
+        "cluster_interval_seconds": 1.33,
+        "total_waves": 18,
+        "total_duration_seconds": 8
+      },
       "numbers_extracted": [
         2,
         3,
@@ -36,16 +43,20 @@
         18,
         8
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3901_champ_t0_fireatwillcircle.png",
   "simpleDescription": "Cannon Barrage fires at an increasing rate over time (additional 6 waves over the duration).",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.916660+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.066879+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.066879+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "This is a Gangplank ultimate upgrade effect (not a standard shop item)."
+    ]
   }
 }

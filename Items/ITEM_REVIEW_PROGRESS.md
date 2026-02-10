@@ -76,33 +76,33 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Dream Maker.json
 - [x] Dusk and Dawn.json
 - [x] Duskblade of Draktharr.json
-- [ ] Echoes of Helia.json
-- [ ] Eclipse.json
-- [ ] Edge of Night.json
-- [ ] Eleisas Miracle.json
-- [ ] Elixir of Avarice.json
-- [ ] Elixir of Force.json
-- [ ] Elixir of Iron.json
-- [ ] Elixir of Skill.json
-- [ ] Elixir of Sorcery.json
-- [ ] Elixir of Wrath.json
-- [ ] Empyrean Promise.json
-- [ ] Endless Hunger.json
-- [ ] Enhanced Lucky Dice.json
-- [ ] Essence Reaver.json
-- [ ] Everfrost.json
-- [ ] Executioners Calling.json
-- [ ] Experimental Hexplate.json
+- [x] Echoes of Helia.json
+- [x] Eclipse.json
+- [x] Edge of Night.json
+- [x] Eleisas Miracle.json
+- [x] Elixir of Avarice.json
+- [x] Elixir of Force.json
+- [x] Elixir of Iron.json
+- [x] Elixir of Skill.json
+- [x] Elixir of Sorcery.json
+- [x] Elixir of Wrath.json
+- [x] Empyrean Promise.json
+- [x] Endless Hunger.json
+- [x] Enhanced Lucky Dice.json
+- [x] Essence Reaver.json
+- [x] Everfrost.json
+- [x] Executioners Calling.json
+- [x] Experimental Hexplate.json
 - [ ] Eye of the Herald.json
-- [ ] Faerie Charm.json
+- [x] Faerie Charm.json
 - [ ] Farsight Alteration.json
-- [ ] Fated Ashes.json
-- [ ] Fiendhunter Bolts.json
-- [ ] Fiendish Codex.json
-- [ ] Fimbulwinter.json
-- [ ] Fire at Will.json
-- [ ] Flesheater.json
-- [ ] Forbidden Idol.json
+- [x] Fated Ashes.json
+- [x] Fiendhunter Bolts.json
+- [x] Fiendish Codex.json
+- [x] Fimbulwinter.json
+- [x] Fire at Will.json
+- [x] Flesheater.json
+- [x] Forbidden Idol.json
 - [ ] Force of Entropy.json
 - [ ] Force of Nature.json
 - [ ] Frozen Heart.json

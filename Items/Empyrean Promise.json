@@ -19,7 +19,7 @@
       "flat": 30.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -30,19 +30,39 @@
   "effects_structured": [
     {
       "raw": "{{tip Dash}} to the current location of your ally and upon completion grant both yourself and the ally a {{tip shield}} that absorbs {{pp 100 to 250}} {{as (+ 100% of your AP)}} {{as (+ 10% of your '''bonus''' health)}} damage for 5 seconds",
-      "effect_type": "damage",
-      "stat": "health",
+      "effect_type": "shield",
+      "stat": "damage_absorb",
       "value": 100,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 100,
+        "max": 250
+      },
+      "unit": "flat",
       "duration_seconds": 5.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "active",
+      "applies_to": "self_and_target_ally",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "shield"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "ability_power",
+          "ratio": 1.0,
+          "type": "percent"
+        },
+        {
+          "stat": "bonus_health",
+          "ratio": 0.1,
+          "type": "percent"
+        }
+      ],
+      "movement": {
+        "type": "dash",
+        "target": "ally_current_position"
+      },
       "numbers_extracted": [
         100,
         250,
@@ -50,27 +70,7 @@
         10,
         5
       ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "'''Can be used even while the ally is dead.'''",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [
-        "while_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.4
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -81,10 +81,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7105_angelicpromise.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.905371+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.056580+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.056580+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Active can be used even while the ally is dead."
+    ]
   }
 }

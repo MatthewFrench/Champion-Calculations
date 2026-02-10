@@ -26,26 +26,38 @@
       "effects": "Gain 35% of {{tt|pre-mitigation damage|Damage calculated before modifiers}} dealt to champions as ''Soul Charges'', up to {{pp|80 + (250-80)/17*(x-1) for 20}}. {{tip|Healing}} or {{tip|shielding}} an allied champion ''(excluding yourself)'' consumes all charges to heal them equal to the consumed amount."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain 35% of {{tt pre-mitigation damage Damage calculated before modifiers}} dealt to champions as ''Soul Charges'', up to {{pp 80 + (250-80)/17*(x-1) for 20}}",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 35,
-      "value_range": [
-        250,
-        80
-      ],
-      "unit": "percent",
+      "effect_type": "apply_stack",
+      "stack_id": "soul_charge",
+      "stat": "pre_mitigation_damage",
+      "value": 0.35,
+      "value_range": {
+        "min": 80,
+        "max": 250,
+        "scales_with": "champion_level"
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
+      "trigger": "on_pre_mitigation_damage_to_champions",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "soul_charge"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 1,
+        "cap_value": {
+          "min": 80,
+          "max": 250,
+          "scales_with": "champion_level"
+        }
+      },
       "numbers_extracted": [
         35,
         80,
@@ -55,25 +67,29 @@
         -1,
         20
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     },
     {
       "raw": "{{tip Healing}} or {{tip shielding}} an allied champion ''(excluding yourself)'' consumes all charges to heal them equal to the consumed amount.",
       "effect_type": "healing",
-      "stat": "shield",
+      "stat": "healing",
       "value": null,
       "value_range": null,
-      "unit": null,
+      "unit": "stored_value",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_heal_or_shield_ally",
+      "applies_to": "allied_champion",
+      "conditions": [
+        "exclude_self"
+      ],
+      "status_effects": [
+        "consume_soul_charge"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -94,6 +110,7 @@
   "generated_at": "2026-02-09T23:34:24.927196+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.074531+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.074531+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

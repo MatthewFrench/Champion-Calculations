@@ -17,20 +17,20 @@
       "effects": "Dealing [[ability damage]] burns enemies, causing them to take {{as|{{ap|15/6}} magic damage}} every {{fd|0.5}} seconds over 3 seconds, for a total of {{as|15|magic damage}}. Against monsters, the burn deals {{as|{{fd|7.5}} '''bonus''' magic damage}} per tick, dealing a total of {{as|{{ap|(15/6)+7.5}} magic damage}} per tick for up to {{as|{{ap|15+(7.5*6)}}|magic damage}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Dealing [[ability damage]] burns enemies, causing them to take {{as {{ap 15/6}} magic damage}} every {{fd 0.5}} seconds over 3 seconds, for a total of {{as 15 magic damage}}",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 15,
+      "stat": "magic_damage",
+      "value": 2.5,
       "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
+      "unit": "flat_per_tick",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "interval_seconds": 0.5,
+      "trigger": "on_ability_damage",
+      "applies_to": "enemy_units_hit",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -41,21 +41,23 @@
         3,
         15
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     },
     {
       "raw": "Against monsters, the burn deals {{as {{fd 7.5}} '''bonus''' magic damage}} per tick, dealing a total of {{as {{ap (15/6)+7.5}} magic damage}} per tick for up to {{as {{ap 15+(7.5*6)}} magic damage}}.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 7.5,
       "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
+      "unit": "flat_per_tick",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
+      "interval_seconds": 0.5,
       "trigger": null,
       "applies_to": "monster",
-      "conditions": [],
+      "conditions": [
+        "monster"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
@@ -67,7 +69,7 @@
         7.5,
         6
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -82,10 +84,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2508_fatedashes64.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.858586+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.016764+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.016764+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Burn total is 15 magic damage over 3 seconds (0.5s ticks). Monster bonus is +7.5 magic damage per tick."
+    ]
   }
 }

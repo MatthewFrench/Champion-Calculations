@@ -23,30 +23,41 @@
       "effects": "Gain {{sti|hsp|{{fd|2.5}}% heal and shield power}} per {{as|100 '''current''' health}} you are missing, up to 60% at {{as|2400 '''current''' health}} missing."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain {{sti hsp {{fd 2.5}}% heal and shield power}} per {{as 100 '''current''' health}} you are missing, up to 60% at {{as 2400 '''current''' health}} missing.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 2.5,
+      "effect_type": "stat_modifier",
+      "stat": "heal_and_shield_power",
+      "value": 0.025,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "passive",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "missing_health",
+          "ratio": 0.025,
+          "type": "percent_per_100",
+          "per": 100
+        }
+      ],
+      "caps": {
+        "max": 0.6,
+        "unit": "ratio"
+      },
       "numbers_extracted": [
         2.5,
         100,
         60,
         2400
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -57,10 +68,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3063_elishasmiracle.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.893344+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.047452+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.047452+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

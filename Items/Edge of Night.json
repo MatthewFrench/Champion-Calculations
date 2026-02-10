@@ -23,27 +23,29 @@
       "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Grants a {{tip spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions).",
-      "effect_type": "damage",
-      "stat": "shield",
-      "value": 40,
+      "effect_type": "status_effect",
+      "stat": "spell_shield",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "count",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 40.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "spell_shield"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         40
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -67,6 +69,10 @@
   "generated_at": "2026-02-09T23:34:24.920565+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.069720+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.069720+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cooldown timer restarts upon taking damage from champions."
+    ]
   }
 }

@@ -29,45 +29,55 @@
       "cooldown": 45
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain 30 [[Haste#Ultimate haste ultimate haste]].",
       "effect_type": "stat_modifier",
-      "stat": null,
+      "stat": "ultimate_haste",
       "value": 30,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "raw": "After casting your ultimate ability, your next 3 basic attacks within 8 seconds gain {{as 50% '''bonus''' attack speed}} and will {{tip critically strike}} for{{ft {{as {{critical damage 60 80}} critical damage}} '''bonus''' damage",
-      "effect_type": "damage",
+      "effect_type": "stat_modifier",
       "stat": "attack_speed",
-      "value": 3,
+      "value": 0.5,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 8.0,
+      "cooldown_seconds": 45.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_ultimate_cast",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "next_basic_attacks_3"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "opening_barrage"
+      ],
       "scaling_terms": [],
+      "crit_bonus": {
+        "if_noncrit": {
+          "bonus_critical_damage": {
+            "melee": 0.6,
+            "ranged": 0.8
+          }
+        }
+      },
       "numbers_extracted": [
         3,
         8,
@@ -75,20 +85,20 @@
         60,
         80
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     },
     {
       "raw": "{{sti {{as 80% '''total''' critical damage}}}}.}}If an attack would have already critically struck, it instead critically strikes for{{ft {{as {{critical damage 100 100}} critical damage}} '''bonus''' damage {{sti {{as 100% '''total''' critical damage}}}}}}and deals {{as '''bonus''' true damage}} equal to 15% of the triggering {{as attack's damage}}.",
       "effect_type": "damage",
-      "stat": "critical_strike",
-      "value": 80,
+      "stat": "true_damage",
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 45.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_critical_strike_with_opening_barrage",
+      "applies_to": "enemy_unit_hit",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -99,7 +109,7 @@
         100,
         15
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -115,10 +125,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.882393+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.036134+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.036134+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Opening Barrage affects next 3 basic attacks within 8 seconds after ultimate cast."
+    ]
   }
 }

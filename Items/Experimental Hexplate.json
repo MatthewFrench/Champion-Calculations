@@ -33,50 +33,58 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain 30 [[Haste#Ultimate haste ultimate haste]].",
       "effect_type": "stat_modifier",
-      "stat": null,
+      "stat": "ultimate_haste",
       "value": 30,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "raw": "Upon casting your ultimate ability, enter ''Overdrive'' to gain {{as 50% '''bonus''' attack speed}} and {{as 20% '''bonus''' movement speed}} for 8 seconds (30 second cooldown, starts on ultimate cast).",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",
-      "value": 50,
+      "value": 0.5,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 8.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
-      "trigger": "on_cast",
+      "trigger": "on_ultimate_cast",
       "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "overdrive"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "movespeed",
+          "ratio": 0.2,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         50,
         20,
         8,
         30
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -93,10 +101,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
   "simpleDescription": "Increases maximum Mana as Mana is spent",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.907065+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.058033+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.058033+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

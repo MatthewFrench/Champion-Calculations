@@ -25,68 +25,67 @@
       "effects": "If you or the allied champion on your team score a {{tip|takedown}} against an enemy champion, you are both {{tip|heal|healed}} for {{as|18% of the taken down target's '''maximum''' health}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Dealing damage reduces the target's {{as armor}} and {{as magic resistance}} by 3 for 5 seconds, stacking up to 10 times for a total resistances reduction of 30",
-      "effect_type": "damage",
-      "stat": "armor",
+      "effect_type": "stat_modifier",
+      "stat": "armor_and_magic_resistance",
       "value": 3,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": 5.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_damage_to_enemies",
+      "applies_to": "enemy_unit_hit",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 10,
+        "per_target": true,
+        "stack_value": -3,
+        "stack_stat": [
+          "armor",
+          "magic_resistance"
+        ]
+      },
       "numbers_extracted": [
         3,
         5,
         10,
         30
       ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "Stacks can be applied to each enemy only once every second.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     },
     {
       "raw": "If you or the allied champion on your team score a {{tip takedown}} against an enemy champion, you are both {{tip heal healed}} for {{as 18% of the taken down target's '''maximum''' health}}.",
       "effect_type": "healing",
-      "stat": "health",
-      "value": 18,
+      "stat": "healing",
+      "value": 0.18,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "on_team_takedown",
+      "applies_to": "self_and_ally",
+      "conditions": [
+        "takedown"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_max_health",
+          "ratio": 0.18,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         18
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -94,10 +93,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7112_flesheater.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.904729+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.056049+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.056049+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

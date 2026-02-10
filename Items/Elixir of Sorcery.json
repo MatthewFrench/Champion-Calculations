@@ -5,9 +5,9 @@
   "rank": [
     "CONSUMABLE"
   ],
-  "stats": null,
-  "passives": null,
-  "active": null,
+  "stats": {},
+  "passives": [],
+  "active": [],
   "effects_structured": [],
   "shop": {
     "prices": {
@@ -30,6 +30,10 @@
   "generated_at": "2026-02-09T23:34:24.900632+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.053212+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.053212+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Elixir effect details not present in source data; not encoded."
+    ]
   }
 }

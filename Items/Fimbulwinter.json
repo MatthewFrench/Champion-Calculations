@@ -28,68 +28,86 @@
       "effects": "{{tip|immobilize|Immobilizing}}, or {{tip|slow|slowing}} if you are {{tip|melee}}, an enemy champion grants a 100 {{as|(+ {{fd|4.5}}% '''current''' mana)}} {{tip|shield}} for 3 seconds (8 second cooldown). The shield's strength is increased{{ft|by 80%|to 180 {{as|(+ {{ap|4.5*1.8}}% '''current''' mana)}}}}if there is more than one enemy champion within {{tip|cr|icononly=true}} 1200 units."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Grants {{as '''bonus''' health}} equal to {{as 15% '''bonus''' mana}}.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 15,
+      "effect_type": "stat_modifier",
+      "stat": "bonus_health",
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_mana",
+          "ratio": 0.15,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
       "raw": "{{tip immobilize Immobilizing}}, or {{tip slow slowing}} if you are {{tip melee}}, an enemy champion grants a 100 {{as (+ {{fd 4.5}}% '''current''' mana)}} {{tip shield}} for 3 seconds (8 second cooldown)",
       "effect_type": "shield",
-      "stat": "mana",
+      "stat": "damage_absorb",
       "value": 100,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 8.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [
-        "slow"
+      "trigger": "on_immobilize_or_slow_champion",
+      "applies_to": "self",
+      "conditions": [
+        "immobilize",
+        "slow_if_melee"
       ],
-      "scaling_terms": [],
+      "status_effects": [
+        "shield"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "current_mana",
+          "ratio": 0.045,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         100,
         4.5,
         3,
         8
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.65
     },
     {
       "raw": "The shield's strength is increased{{ft by 80% to 180 {{as (+ {{ap 4.5*1.8}}% '''current''' mana)}}}}if there is more than one enemy champion within {{tip cr icononly=true}} 1200 units.",
-      "effect_type": "shield",
-      "stat": "mana",
-      "value": 80,
+      "effect_type": "shield_modifier",
+      "stat": "shield_value_multiplier",
+      "value": 1.8,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "on_multiple_enemies_nearby",
+      "applies_to": "self",
+      "conditions": [
+        "enemy_champions_within_1200_units"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "range_units": 1200,
       "numbers_extracted": [
         80,
         180,
@@ -97,7 +115,7 @@
         1.8,
         1200
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -111,10 +129,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3121_fimbulwinter.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.890383+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.044232+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.044232+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

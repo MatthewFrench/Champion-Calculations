@@ -19,7 +19,7 @@
       "flat": 25.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -31,24 +31,32 @@
     {
       "raw": "Unleash a fan of icy shards in a cone in the target direction, dealing {{as 300 magic damage}} {{as (+ 85% AP)}} {{as magic damage}} to enemies struck within and {{tip slow slowing}} them by 70% for {{fd 1.5}} seconds",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 300,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "active",
+      "applies_to": "enemy_units_in_cone",
       "conditions": [],
       "status_effects": [
         "slow"
       ],
       "scaling_terms": [
         {
-          "percent": 85.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.85,
+          "type": "percent"
+        }
+      ],
+      "status_effects_data": [
+        {
+          "status": "slow",
+          "value": 0.7,
+          "unit": "percent",
+          "duration_seconds": 1.5
         }
       ],
       "numbers_extracted": [
@@ -57,27 +65,27 @@
         70,
         1.5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
       "raw": "Enemies hit in the center of the cone are {{tip root rooted}} for the same duration instead.",
-      "effect_type": "status",
-      "stat": null,
-      "value": null,
+      "effect_type": "status_effect",
+      "stat": "root",
+      "value": 1.5,
       "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
+      "unit": "seconds",
+      "duration_seconds": 1.5,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "active",
+      "applies_to": "enemy_units_in_center_cone",
       "conditions": [],
       "status_effects": [
         "root"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.45
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -96,6 +104,7 @@
   "generated_at": "2026-02-09T23:34:24.887340+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.040474+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.040474+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
