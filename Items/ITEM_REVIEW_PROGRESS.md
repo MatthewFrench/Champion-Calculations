@@ -139,22 +139,22 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Hexoptics C44.json
 - [x] Hextech Alternator.json
 - [x] Hextech Gunblade.json
-- [ ] Hextech Rocketbelt.json
-- [ ] Hollow Radiance.json
-- [ ] Horizon Focus.json
-- [ ] Hubris.json
-- [ ] Hullbreaker.json
-- [ ] Iceborn Gauntlet.json
-- [ ] Immortal Shieldbow.json
-- [ ] Imperial Mandate.json
-- [ ] Infinity Edge.json
-- [ ] Innervating Locket.json
-- [ ] Ionian Boots of Lucidity.json
-- [ ] JakSho The Protean.json
-- [ ] Jarvan Is.json
-- [ ] Juice of Haste.json
-- [ ] Juice of Power.json
-- [ ] Juice of Vitality.json
+- [x] Hextech Rocketbelt.json
+- [x] Hollow Radiance.json
+- [x] Horizon Focus.json
+- [x] Hubris.json
+- [x] Hullbreaker.json
+- [x] Iceborn Gauntlet.json
+- [x] Immortal Shieldbow.json
+- [x] Imperial Mandate.json
+- [x] Infinity Edge.json
+- [x] Innervating Locket.json
+- [x] Ionian Boots of Lucidity.json
+- [x] JakSho The Protean.json
+- [x] Jarvan Is.json
+- [x] Juice of Haste.json
+- [x] Juice of Power.json
+- [x] Juice of Vitality.json
 - [ ] Kaenic Rookern.json
 - [ ] Kindlegem.json
 - [ ] Kinkou Jitte.json

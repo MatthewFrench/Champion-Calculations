@@ -21,24 +21,35 @@
       "cooldown": "90"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "If you would take damage that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs {{rd 400 to 700 for 11 400*0.8 to 700*0.8 for 11 levels=1;9 to 18 pp=true}} damage for 3 seconds.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
+      "effect_type": "shield",
+      "stat": "damage_absorb",
+      "value": 400,
+      "value_range": {
+        "melee": {
+          "min": 400,
+          "max": 700
+        },
+        "ranged": {
+          "min": 320,
+          "max": 560
+        }
+      },
+      "unit": "flat",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_damage_below_health_threshold",
       "applies_to": "self",
       "conditions": [
-        "threshold"
+        "health_below_30_percent"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "shield"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         30,
@@ -55,7 +66,7 @@
         18,
         3
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -71,10 +82,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.853942+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.012347+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.012347+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

@@ -16,7 +16,7 @@
       "flat": 20.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -27,53 +27,66 @@
   "effects_structured": [
     {
       "raw": "{{tip Dash}} 275 units in the target direction, though not through terrain, then unleash an arc of 7 rockets forward which upon collision explode in a {{tip cr icononly = true}} {{tt 185-radius estimated}} area",
-      "effect_type": "utility",
-      "stat": null,
+      "effect_type": "movement_and_projectile",
+      "stat": "dash_and_rockets",
       "value": 275,
       "value_range": null,
-      "unit": null,
+      "unit": "units",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "active",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "movement": {
+        "type": "dash",
+        "distance_units": 275,
+        "can_pass_through_terrain": false
+      },
+      "projectiles": {
+        "count": 7,
+        "explosion_radius_units": 185
+      },
       "numbers_extracted": [
         275,
         7,
         185
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Enemies within {{tt 85 units center-to-edge, estimated}} of your dash and ones hit by any rocket's explosion are dealt {{as 100 {{as (+ 10% AP)}} magic damage magic damage}}, once per cast.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 85,
+      "stat": "magic_damage",
+      "value": 100,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "active",
+      "applies_to": "enemy_units_hit",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 10.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.1,
+          "type": "percent"
         }
       ],
+      "range_units": 85,
+      "per_cast": {
+        "max_hits": 1
+      },
       "numbers_extracted": [
         85,
         100,
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -96,6 +109,10 @@
   "generated_at": "2026-02-09T23:34:24.868779+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.025008+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.025008+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Rocket explosion radius and dash hit radius are marked as estimated in source text."
+    ]
   }
 }

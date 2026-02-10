@@ -23,25 +23,36 @@
       "effects": "After using an [[champion ability|ability]], your next basic attack within 10 seconds deals {{as|150% '''base''' AD}} {{as|'''bonus''' physical damage}} [[on-hit]] and creates a 300 radius frost field for 2 seconds. Enemies within the field are slowed by {{rd|25%|{{ap|25*0.5}}%}} ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After using an [[champion ability ability]], your next basic attack within 10 seconds deals {{as 150% '''base''' AD}} {{as '''bonus''' physical damage}} [[on-hit]] and creates a 300 radius frost field for 2 seconds",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
+      "stat": "physical_damage",
+      "value": 1.5,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 2.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.5,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
+      "trigger": "on_next_basic_attack_after_ability",
+      "applies_to": "enemy_unit_hit",
       "conditions": [
-        "after_condition"
+        "within_10_seconds"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_attack_damage",
+          "ratio": 1.5,
+          "type": "flat"
+        }
+      ],
+      "area": {
+        "type": "frost_field",
+        "radius_units": 300,
+        "duration_seconds": 2.0
+      },
       "numbers_extracted": [
         10,
         150,
@@ -52,18 +63,21 @@
     },
     {
       "raw": "Enemies within the field are slowed by {{rd 25% {{ap 25*0.5}}%}} ({{fd 1.5}} second cooldown, starts after using the empowered attack).",
-      "effect_type": "status",
-      "stat": null,
-      "value": 25,
-      "value_range": null,
-      "unit": "percent",
+      "effect_type": "status_effect",
+      "stat": "slow",
+      "value": 0.25,
+      "value_range": {
+        "melee": 0.25,
+        "ranged": 0.125
+      },
+      "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.5,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_frost_field",
+      "applies_to": "enemy_units_in_field",
       "conditions": [
-        "after_condition"
+        "frost_field_active"
       ],
       "status_effects": [
         "slow"
@@ -75,7 +89,7 @@
         0.5,
         1.5
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -102,6 +116,7 @@
   "generated_at": "2026-02-09T23:34:24.856074+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.014378+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.014378+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

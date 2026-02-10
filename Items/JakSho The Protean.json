@@ -23,25 +23,31 @@
       "effects": "Gain a stack for each second [[Combat status|in combat]] with enemy champions, stacking up to 5 times. At '''maximum''' stacks, increase your {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}} by 30% until the end of combat."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain a stack for each second [[Combat status in combat]] with enemy champions, stacking up to 5 times",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 5,
+      "effect_type": "apply_stack",
+      "stack_id": "voidborn_resilience",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "interval_seconds": 1.0,
+      "trigger": "while_in_combat_with_champions",
+      "applies_to": "self",
       "conditions": [
         "in_combat"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "voidborn_resilience"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 5
+      },
       "numbers_extracted": [
         5
       ],
@@ -50,14 +56,14 @@
     {
       "raw": "At '''maximum''' stacks, increase your {{as '''bonus''' armor}} and {{as '''bonus''' magic resistance}} by 30% until the end of combat.",
       "effect_type": "stat_modifier",
-      "stat": "armor",
-      "value": 30,
+      "stat": "bonus_armor_and_bonus_magic_resistance",
+      "value": 0.3,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_max_stacks",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
@@ -65,7 +71,7 @@
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -86,6 +92,7 @@
   "generated_at": "2026-02-09T23:34:24.864082+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.021216+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.021216+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

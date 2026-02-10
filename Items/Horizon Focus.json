@@ -26,51 +26,60 @@
       "cooldown": "30"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Dealing [[ability damage]] to a champion with a [[champion ability]] at {{tip cr icononly = true}} 600 or more units away from the cast position marks them for 6 seconds, {{tip standard sight revealing}} them and increasing your damage dealt to them by 10%.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 600,
+      "effect_type": "mark_and_damage_amp",
+      "stat": "damage_multiplier",
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 6.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_ability_damage_at_range",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "cast_distance_at_least_600_units"
+      ],
+      "status_effects": [
+        "revealed",
+        "hypershot_mark"
+      ],
       "scaling_terms": [],
+      "range_units": 600,
       "numbers_extracted": [
         600,
         6,
         10
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     },
     {
       "raw": "Upon triggering ''Hypershot'', grant {{tip sight}} of the {{tt area Grants sight through terrain and brush}} {{tip cr icononly=true}} 1400 units around the target for 2 seconds and apply ''Hypershot's'' mark to enemy champions within the area for 3 seconds.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "vision_and_mark",
+      "stat": "vision",
       "value": 1400,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "units",
       "duration_seconds": 2.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "trigger": "on_hypershot_trigger",
+      "applies_to": "area_around_target",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "vision"
+      ],
+      "mark_duration_seconds": 3.0,
       "scaling_terms": [],
       "numbers_extracted": [
         1400,
         2,
         3
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -92,6 +101,7 @@
   "generated_at": "2026-02-09T23:34:24.902053+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.054075+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.054075+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

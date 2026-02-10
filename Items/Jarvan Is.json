@@ -50,12 +50,12 @@
       "effects": "Reduces all incoming {{tip|basic damage}} by 10% (''excluding from [[turret]] attacks'')."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "This item gains the stats and passive effects of all Boots items.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "grant_item_effects",
+      "stat": "boots_effects",
       "value": null,
       "value_range": null,
       "unit": null,
@@ -63,83 +63,86 @@
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "passive",
-      "applies_to": null,
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.45
+      "parse_confidence": 0.5
     },
     {
       "raw": "Gain 25% [[slow resist]].",
-      "effect_type": "status",
-      "stat": null,
-      "value": 25,
+      "effect_type": "stat_modifier",
+      "stat": "slow_resist",
+      "value": 0.25,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [
-        "slow"
+        "slow_resist"
       ],
       "scaling_terms": [],
       "numbers_extracted": [
         25
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "raw": "Gain 10 [[Haste#Summoner spell haste summoner spell haste]].",
       "effect_type": "stat_modifier",
-      "stat": null,
+      "stat": "summoner_spell_haste",
       "value": 10,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "raw": "Reduces all incoming {{tip basic damage}} by 10% (''excluding from [[turret]] attacks'').",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
+      "effect_type": "damage_reduction",
+      "stat": "basic_attack_damage",
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "structure",
-      "conditions": [],
+      "trigger": "on_basic_attack_damage_taken",
+      "applies_to": "self",
+      "conditions": [
+        "exclude_turret_attacks"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1111_jarvanis.kiwi_15_24_balance.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.862709+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.019777+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.019777+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

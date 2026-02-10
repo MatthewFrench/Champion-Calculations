@@ -23,68 +23,59 @@
       "effects": "Abilities that {{tip|slow}} or {{tip|immobilize}} enemy champions mark them for 5 seconds. Allied champions that damage marked enemies consume the mark to deal {{as|10% of the target's '''current''' health}} {{as|'''bonus''' magic damage}} (9 second cooldown per target, shared between all users of '''Imperial Mandate'''; starts upon mark application)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Abilities that {{tip slow}} or {{tip immobilize}} enemy champions mark them for 5 seconds",
-      "effect_type": "status",
-      "stat": null,
+      "effect_type": "apply_mark",
+      "mark_id": "imperial_mandate",
+      "stat": "mark",
       "value": 5,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": 5.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 9.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_slow_or_immobilize_champions",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [
-        "slow"
+        "marked"
       ],
       "scaling_terms": [],
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
       "raw": "Allied champions that damage marked enemies consume the mark to deal {{as 10% of the target's '''current''' health}} {{as '''bonus''' magic damage}} (9 second cooldown per target, shared between all users of '''Imperial Mandate'''",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 10,
+      "stat": "magic_damage",
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_ally_damage_to_marked_target",
+      "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "consume_imperial_mandate"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "target_current_health",
+          "ratio": 0.1,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         10,
         9
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "starts upon mark application).",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -106,6 +97,10 @@
   "generated_at": "2026-02-09T23:34:24.883948+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.036945+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.036945+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cooldown is per target and shared between all Imperial Mandate users; starts on mark application."
+    ]
   }
 }

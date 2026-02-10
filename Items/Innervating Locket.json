@@ -23,46 +23,70 @@
       "effects": "Gain a charge each time you or champions within 800 units cast an [[champion ability|ability]], up to 30. At maximum charges, gain {{as|{{pp|100 to 250}} ability power}} and {{as|{{pp|15 to 25|key=%}} '''bonus''' movement speed}} for the rest of the round, as well as a {{pp|400 to 750}} {{tip|shield}} that lasts until destroyed. Charges are reset every round and between each phase in a round."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain a charge each time you or champions within 800 units cast an [[champion ability ability]], up to 30",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 800,
+      "effect_type": "apply_stack",
+      "stack_id": "innervating",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
+      "trigger": "on_ability_cast_within_range",
       "applies_to": "self",
       "conditions": [
         "within_units"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "innervating"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 30
+      },
+      "range_units": 800,
       "numbers_extracted": [
         800,
         30
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.65
     },
     {
       "raw": "At maximum charges, gain {{as {{pp 100 to 250}} ability power}} and {{as {{pp 15 to 25 key=%}} '''bonus''' movement speed}} for the rest of the round, as well as a {{pp 400 to 750}} {{tip shield}} that lasts until destroyed",
-      "effect_type": "shield",
+      "effect_type": "stat_modifier_and_shield",
       "stat": "ability_power",
       "value": 100,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 100,
+        "max": 250
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_max_stacks",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "innervating_max"
+      ],
       "scaling_terms": [],
+      "bonus_movespeed": {
+        "min": 0.15,
+        "max": 0.25,
+        "unit": "ratio",
+        "duration": "round"
+      },
+      "shield": {
+        "min": 400,
+        "max": 750,
+        "unit": "flat",
+        "duration": "until_destroyed"
+      },
       "numbers_extracted": [
         100,
         250,
@@ -71,25 +95,7 @@
         400,
         750
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Charges are reset every round and between each phase in a round.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -100,10 +106,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_innervating_locket.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.839859+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:07.999584+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:07.999584+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Charges reset every round/phase (Arena-style mechanic)."
+    ]
   }
 }

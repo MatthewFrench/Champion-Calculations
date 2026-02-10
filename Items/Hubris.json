@@ -23,30 +23,44 @@
       "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them generates a permanent stack and grants you {{as|15|ad}} (+ 2 per stack) {{as|'''bonus''' attack damage}} for 90 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them generates a permanent stack and grants you {{as 15 ad}} (+ 2 per stack) {{as '''bonus''' attack damage}} for 90 seconds.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 3,
+      "effect_type": "apply_stack_and_buff",
+      "stat": "bonus_attack_damage",
+      "value": 15,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": 90.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "trigger": "on_takedown_within_3s_damage",
+      "applies_to": "self",
+      "conditions": [
+        "takedown",
+        "damaged_target_within_3_seconds"
+      ],
+      "status_effects": [
+        "hubris_stack"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "hubris_stacks",
+          "ratio": 2,
+          "type": "flat_per_stack"
+        }
+      ],
+      "stack_rules": {
+        "permanent": true
+      },
       "numbers_extracted": [
         3,
         15,
         2,
         90
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -67,6 +81,7 @@
   "generated_at": "2026-02-09T23:34:24.867786+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.024311+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.024311+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
