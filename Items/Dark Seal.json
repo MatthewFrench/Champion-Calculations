@@ -25,29 +25,36 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Gain 2 stacks for each champion [[kill]] and 1 stack for each [[assist]], up to a '''maximum''' of 10 stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "apply_stack",
+      "stack_id": "glory",
       "value": 2,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_takedown",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "glory"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 10,
+        "stacks_on_kill": 2,
+        "stacks_on_assist": 1
+      },
       "numbers_extracted": [
         2,
         1,
         10
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "raw": "For every stack, gain {{as 4 ability power}}, up to {{as 40 AP}} at '''maximum''' stacks",
@@ -55,15 +62,21 @@
       "stat": "ability_power",
       "value": 4,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_stack",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "glory"
+      ],
       "scaling_terms": [],
+      "caps": {
+        "max": 40,
+        "unit": "ability_power"
+      },
       "numbers_extracted": [
         4,
         40
@@ -72,41 +85,25 @@
     },
     {
       "raw": "Lose 5 stacks on [[death]]",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "remove_stack",
+      "stack_id": "glory",
       "value": 5,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_death",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "glory"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "Stacks are preserved when upgrading to {{ii Mejai's Soulstealer}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -127,6 +124,10 @@
   "generated_at": "2026-02-09T23:34:24.864859+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.021919+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.021919+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Glory stacks are preserved when upgrading to Mejai's Soulstealer."
+    ]
   }
 }

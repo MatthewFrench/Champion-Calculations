@@ -33,26 +33,32 @@
       "effects": "Gain 15% {{tip|slow resist}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "While moving, generates 7 stacks of ''Momentum'' every {{fd 0.25}} seconds, granting up to {{as 20 '''bonus''' movement speed}} at 100 stacks after {{fd 3.75}} seconds of moving",
-      "effect_type": "stat_modifier",
-      "stat": "movement_speed",
+      "effect_type": "apply_stack",
+      "stack_id": "momentum",
       "value": 7,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "interval_seconds": 0.25,
+      "trigger": "while_moving",
+      "applies_to": "self",
       "conditions": [
-        "while_condition",
-        "after_condition"
+        "moving"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "momentum"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 100,
+        "bonus_movespeed_at_max": 20,
+        "bonus_movespeed_unit": "flat"
+      },
       "numbers_extracted": [
         7,
         0.25,
@@ -60,23 +66,37 @@
         100,
         3.75
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.65
     },
     {
       "raw": "Basic attacks consume all stacks to deal {{as {{pp 0 to 40 for 11 0 to 100 type=Momentum label1=stacks of Momentum formula=0.4 for every 1 stack of Momentum, capped at 40}} physical damage}} {{as (+ {{pp 0 to 100 for 11 0 to 100 key=% type=Momentum label1=stacks of Momentum formula=1% for every 1 stack of Momentum, capped at 100}} '''base''' AD)}} {{as '''bonus''' physical damage}} [[on-hit]].",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 0,
+      "stat": "physical_damage",
+      "value": 0.4,
       "value_range": null,
-      "unit": "percent",
+      "unit": "per_stack",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": 1.0,
       "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "basic_attack",
+        "consume_momentum"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_attack_damage",
+          "ratio": 0.01,
+          "type": "percent_per_stack",
+          "cap": 1.0
+        }
+      ],
+      "caps": {
+        "max": 40,
+        "unit": "flat_damage"
+      },
       "numbers_extracted": [
         0,
         40,
@@ -101,25 +121,25 @@
     },
     {
       "raw": "Gain 15% {{tip slow resist}}.",
-      "effect_type": "status",
-      "stat": null,
+      "effect_type": "stat_modifier",
+      "stat": "slow_resist",
       "value": 15,
       "value_range": null,
       "unit": "percent",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [
-        "slow"
+        "slow_resist"
       ],
       "scaling_terms": [],
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -144,6 +164,10 @@
   "generated_at": "2026-02-09T23:34:24.863824+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.020918+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.020918+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Momentum stacks grant up to 20 bonus move speed at 100 stacks over 3.75 seconds of moving."
+    ]
   }
 }

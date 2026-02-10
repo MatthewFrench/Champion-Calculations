@@ -28,53 +28,74 @@
       "effects": "If an enemy champion dies within 3 seconds of you damaging them, removes ''Ignore Pain's'' remaining stored damage and {{tip|heals}} you for {{as|75% '''bonus''' AD}} over 2 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Reduces {{rd 30% 10%}} of all {{tt post-mitigation Damage calculated after modifiers}} {{as physical physical damage}} and {{as magic magic damage}} damage received and instead stores the damage to successively take it as {{as true damage}} over 3 seconds, dealing a third of the stored damage each second.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "effect_type": "damage_store",
+      "stat": "post_mitigation_damage",
+      "value": 0.3,
+      "value_range": {
+        "melee": 0.3,
+        "ranged": 0.1
+      },
+      "unit": "ratio",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
+      "trigger": "on_physical_or_magic_damage_taken",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "post_mitigation"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "ignore_pain"
+      ],
       "scaling_terms": [],
+      "tick": {
+        "interval_seconds": 1.0,
+        "ticks": 3,
+        "damage_type": "true_damage",
+        "portion_of_stored_per_tick": 0.3333333333
+      },
       "numbers_extracted": [
         30,
         10,
         3
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.65
     },
     {
       "raw": "If an enemy champion dies within 3 seconds of you damaging them, removes ''Ignore Pain's'' remaining stored damage and {{tip heals}} you for {{as 75% '''bonus''' AD}} over 2 seconds.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
+      "effect_type": "healing",
+      "stat": "healing",
+      "value": 0.75,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 2.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "trigger": "on_takedown_within_3s_damage",
+      "applies_to": "self",
+      "conditions": [
+        "enemy_champion_death_within_3_seconds"
+      ],
+      "status_effects": [
+        "remove_ignore_pain"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 0.75,
+          "type": "flat"
+        }
+      ],
       "numbers_extracted": [
         3,
         75,
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -95,6 +116,7 @@
   "generated_at": "2026-02-09T23:34:24.873626+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.029325+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.029325+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

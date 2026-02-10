@@ -53,16 +53,16 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Cruelty.json
 - [x] Cryptbloom.json
 - [x] Crystalline Bracer.json
-- [ ] Crystalline Overgrowth.json
-- [ ] Cull.json
-- [ ] Dagger.json
-- [ ] Dark Seal.json
-- [ ] Darksteel Talons.json
-- [ ] Dawncore.json
-- [ ] Dead Mans Plate.json
-- [ ] Deaths Dance.json
-- [ ] Deaths Daughter.json
-- [ ] Decapitator.json
+- [x] Crystalline Overgrowth.json
+- [x] Cull.json
+- [x] Dagger.json
+- [x] Dark Seal.json
+- [x] Darksteel Talons.json
+- [x] Dawncore.json
+- [x] Dead Mans Plate.json
+- [x] Deaths Dance.json
+- [x] Deaths Daughter.json
+- [x] Decapitator.json
 - [ ] Demon Kings Crown.json
 - [ ] Demonic Embrace.json
 - [ ] Detonation Orb.json

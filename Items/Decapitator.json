@@ -20,23 +20,31 @@
       "effects": "[[Basic attack]]s and [[Champion ability|basic ability]] casts generate 1 and 2 stacks of ''Anticipation'' for the rest of the round, respectively, stacking up to 40 times. For each stack, increase your ultimate ability's damage by 3% and gain 2 [[Haste#Ultimate haste|ultimate haste]], up to 120% increased ultimate damage and 80 ultimate haste. Stacks are reset every round and between each phase in a round."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "[[Basic attack]]s and [[Champion ability basic ability]] casts generate 1 and 2 stacks of ''Anticipation'' for the rest of the round, respectively, stacking up to 40 times",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "apply_stack",
+      "stack_id": "anticipation",
       "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
-      "applies_to": null,
+      "trigger": "on_basic_attack_or_basic_ability",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "anticipation"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 40,
+        "stacks_on_basic_attack": 1,
+        "stacks_on_basic_ability": 2,
+        "duration": "round"
+      },
       "numbers_extracted": [
         1,
         2,
@@ -46,44 +54,36 @@
     },
     {
       "raw": "For each stack, increase your ultimate ability's damage by 3% and gain 2 [[Haste#Ultimate haste ultimate haste]], up to 120% increased ultimate damage and 80 ultimate haste",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
+      "effect_type": "stat_modifier",
+      "stat": "ultimate_damage_multiplier",
+      "value": 0.03,
       "value_range": null,
       "unit": "percent",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_stack",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "ultimate_haste",
+          "ratio": 2,
+          "type": "flat_per_stack"
+        }
+      ],
+      "caps": {
+        "ultimate_damage_multiplier": 1.2,
+        "ultimate_haste": 80
+      },
       "numbers_extracted": [
         3,
         2,
         120,
         80
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Stacks are reset every round and between each phase in a round.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -91,10 +91,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7107_decapitator.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.845001+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.003809+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.003809+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Anticipation stacks reset each round/phase (Arena-style mechanic)."
+    ]
   }
 }

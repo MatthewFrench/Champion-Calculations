@@ -2,8 +2,8 @@
   "name": "Death's Daughter",
   "id": 3902,
   "tier": 1,
-  "rank": null,
-  "stats": null,
+  "rank": [],
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -11,31 +11,43 @@
       "effects": "A massive cannonball lands after {{ais|Cannon Barrage|Gangplank}} first cluster of waves, dealing {{sti|true damage|{{as|{{ap|120 to 300 3}}|true damage}}}} {{as|(+ 30% AP)}} {{as|true damage}} to enemies struck and {{tip|slow|slowing}} them by 75% for 1 second."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "A massive cannonball lands after {{ais Cannon Barrage Gangplank}} first cluster of waves, dealing {{sti true damage {{as {{ap 120 to 300 3}} true damage}}}} {{as (+ 30% AP)}} {{as true damage}} to enemies struck and {{tip slow slowing}} them by 75% for 1 second.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "true_damage",
       "value": 120,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 120,
+        "max": 300,
+        "scales_with": "ability_rank"
+      },
+      "unit": "flat",
       "duration_seconds": 1.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_cannon_barrage_cluster",
+      "applies_to": "enemy_units_in_area",
       "conditions": [
-        "after_condition"
+        "gangplank_ultimate"
       ],
       "status_effects": [
         "slow"
       ],
       "scaling_terms": [
         {
-          "percent": 30.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.3,
+          "type": "percent"
+        }
+      ],
+      "status_effects_data": [
+        {
+          "status": "slow",
+          "value": 0.75,
+          "unit": "percent",
+          "duration_seconds": 1.0
         }
       ],
       "numbers_extracted": [
@@ -46,16 +58,20 @@
         75,
         1
       ],
-      "parse_confidence": 1.0
+      "parse_confidence": 0.65
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3902_champ_t0_deathsdaughtercircle.png",
   "simpleDescription": "<mainText>Cannon Barrage additionally fires a mega-cannonball at the center of the Barrage, dealing <trueDamage>bonus true damage</trueDamage> and <status>Slowing</status>.</mainText>",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.872531+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.028441+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.028441+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "This is a Gangplank ultimate upgrade effect (not a standard shop item)."
+    ]
   }
 }

@@ -5,7 +5,7 @@
   "rank": [
     "TURRET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,24 +13,26 @@
       "effects": "After 90 seconds, turrets gain ''Overgrowth''. Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as|'''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After 90 seconds, turrets gain ''Overgrowth''",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "apply_status",
+      "stat": "overgrowth",
       "value": 90,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "time_elapsed",
       "applies_to": "structure",
       "conditions": [
-        "after_condition"
+        "turret"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "overgrowth"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         90
@@ -40,31 +42,37 @@
     {
       "raw": "Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as '''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 300,
+      "stat": "true_damage",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "scales_with_overgrowth_time",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_attack_overgrowth_turret",
       "applies_to": "structure",
-      "conditions": [],
+      "conditions": [
+        "overgrowth_consumed"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         300
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.5
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1524_turret_crystalline_overgrowth.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.870194+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.026237+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.026237+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Overgrowth damage scales with buildup time up to a 300 second cap; specific damage formula is not encoded here."
+    ]
   }
 }

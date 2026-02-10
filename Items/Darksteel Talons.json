@@ -23,23 +23,47 @@
       "effects": "Basic attacks [[on-hit]] deal {{as|{{rd|20 to 40|10 to 20|pp=true}}|true damage}} {{as|(+ {{rd|25%|20%}} '''bonus''' armor)|armor}} {{as|'''bonus''' true damage}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Basic attacks [[on-hit]] deal {{as {{rd 20 to 40 10 to 20 pp=true}} true damage}} {{as (+ {{rd 25% 20%}} '''bonus''' armor) armor}} {{as '''bonus''' true damage}}.",
       "effect_type": "damage",
-      "stat": "armor",
+      "stat": "true_damage",
       "value": 20,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "melee": {
+          "min": 20,
+          "max": 40
+        },
+        "ranged": {
+          "min": 10,
+          "max": 20
+        }
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "basic_attack"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_armor",
+          "ratio": 0.25,
+          "type": "percent",
+          "applies_to": "melee"
+        },
+        {
+          "stat": "bonus_armor",
+          "ratio": 0.2,
+          "type": "percent",
+          "applies_to": "ranged"
+        }
+      ],
       "numbers_extracted": [
         20,
         40,
@@ -48,7 +72,7 @@
         25,
         20
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -66,6 +90,7 @@
   "generated_at": "2026-02-09T23:34:24.879343+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.033593+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.033593+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

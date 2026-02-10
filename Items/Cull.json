@@ -17,28 +17,32 @@
       "effects": "Killing a [[minion]] grants an additional {{g|1}}, up to a '''maximum''' of {{g|100}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Killing a [[minion]] grants an additional {{g 1}}, up to a '''maximum''' of {{g 100}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "resource_modifier",
+      "stat": "gold",
       "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "minion",
+      "trigger": "on_minion_kill",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "caps": {
+        "max": 100,
+        "unit": "gold"
+      },
       "numbers_extracted": [
         1,
         100
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -63,6 +67,7 @@
   "generated_at": "2026-02-09T23:34:24.882744+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.036339+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.036339+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
