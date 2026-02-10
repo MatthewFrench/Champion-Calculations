@@ -23,25 +23,49 @@
       "effects": "After using an [[champion ability|ability]], your next basic attack within 10 seconds deals {{as|180% '''base''' AD}} {{as|(+ {{rd|4%|2%}} of target's '''maximum''' health)}} as {{as|'''bonus''' physical damage}} [[on-hit]], for a '''minimum''' of {{as|180% '''base''' AD}}. If the target is a champion, {{tip|heal}} for{{ft|{{as|{{ap|180*0.55}}% '''base''' AD}} {{as|(+ {{rd|{{ap|4*0.55}}%|{{ap|2*0.55}}%}} of target's '''maximum''' health)|health}}|55% of the damage value}}({{fd|1.5}} second cooldown, starts after using the empowered attack)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After using an [[champion ability ability]], your next basic attack within 10 seconds deals {{as 180% '''base''' AD}} {{as (+ {{rd 4% 2%}} of target's '''maximum''' health)}} as {{as '''bonus''' physical damage}} [[on-hit]], for a '''minimum''' of {{as 180% '''base''' AD}}",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 10,
+      "stat": "physical_damage",
+      "value": 1.8,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
+      "trigger": "on_next_basic_attack_after_ability",
+      "applies_to": "enemy_unit_hit",
       "conditions": [
-        "after_condition"
+        "within_10_seconds"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_attack_damage",
+          "ratio": 1.8,
+          "type": "flat"
+        },
+        {
+          "stat": "target_max_health",
+          "ratio": 0.04,
+          "type": "percent",
+          "applies_to": "melee"
+        },
+        {
+          "stat": "target_max_health",
+          "ratio": 0.02,
+          "type": "percent",
+          "applies_to": "ranged"
+        }
+      ],
+      "caps": {
+        "min_base_attack_damage_ratio": 1.8
+      },
+      "timing": {
+        "window_seconds": 10.0
+      },
       "numbers_extracted": [
         10,
         180,
@@ -49,25 +73,31 @@
         2,
         180
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.65
     },
     {
       "raw": "If the target is a champion, {{tip heal}} for{{ft {{as {{ap 180*0.55}}% '''base''' AD}} {{as (+ {{rd {{ap 4*0.55}}% {{ap 2*0.55}}%}} of target's '''maximum''' health) health}} 55% of the damage value}}({{fd 1.5}} second cooldown, starts after using the empowered attack).",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 180,
+      "effect_type": "healing",
+      "stat": "healing",
+      "value": 0.55,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.5,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_spellblade_hit",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "target_is_champion"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "spellblade_damage_dealt",
+          "ratio": 0.55,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         180,
         0.55,
@@ -78,7 +108,7 @@
         55,
         1.5
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -96,6 +126,7 @@
   "generated_at": "2026-02-09T23:34:24.878923+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.033278+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.033278+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

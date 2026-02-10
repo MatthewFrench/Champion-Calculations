@@ -25,20 +25,20 @@
       "effects": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]]."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Restore {{as 1 mana}} every second",
-      "effect_type": "stat_modifier",
+      "effect_type": "resource_regen",
       "stat": "mana",
       "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat_per_second",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "interval_seconds": 1.0,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -49,16 +49,16 @@
     },
     {
       "raw": "Dealing damage to an enemy champion increases the restoration to {{as 2 mana}} for the next 5 seconds",
-      "effect_type": "damage",
+      "effect_type": "resource_regen",
       "stat": "mana",
       "value": 2,
       "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
+      "unit": "flat_per_second",
+      "duration_seconds": 5.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "interval_seconds": 1.0,
+      "trigger": "on_damage_to_champions",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
@@ -70,19 +70,25 @@
     },
     {
       "raw": "If you cannot gain mana, {{tip healing heal}} for{{ft 45% of the value {{as {{ap 1*0.45}} hp}} every second, increased to {{as {{ap 2*0.45}} hp}} when dealing damage to an enemy champion}}instead.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 45,
+      "effect_type": "healing",
+      "stat": "healing",
+      "value": 0.45,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "interval_seconds": 1.0,
+      "trigger": "if_no_mana_resource",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "mana_regen_amount",
+          "ratio": 0.45,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         45,
         1,
@@ -90,15 +96,15 @@
         2,
         0.45
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     },
     {
       "raw": "Basic attacks deal {{as 5 '''bonus''' physical damage}} [[on-hit]] against [[minions]].",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "physical_damage",
       "value": 5,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
@@ -110,7 +116,7 @@
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -133,6 +139,7 @@
   "generated_at": "2026-02-09T23:34:24.870709+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.026642+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.026642+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

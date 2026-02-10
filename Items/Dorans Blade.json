@@ -16,8 +16,8 @@
       "percent": 2.5
     }
   },
-  "passives": null,
-  "active": null,
+  "passives": [],
+  "active": [],
   "effects_structured": [],
   "shop": {
     "prices": {
@@ -40,6 +40,7 @@
   "generated_at": "2026-02-09T23:34:24.898633+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.051542+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.051542+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

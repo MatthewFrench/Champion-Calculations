@@ -31,53 +31,68 @@
       "effects": "While you or any allied champion you granted a {{tip|heal}} or {{tip|shield}} to in the last 3 seconds is [[combat status|in combat]] with champions, each second, you heal the {{tt|most wounded|Lowest health percent}} allied champion within 900 units for {{as|{{fd|0.8}}% of your '''maximum''' mana}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Grants {{as heal and shield power}} equal to {{as {{fd 0.5}}% '''bonus''' mana}}.",
-      "effect_type": "healing",
-      "stat": "mana",
-      "value": 0.5,
+      "effect_type": "stat_modifier",
+      "stat": "heal_and_shield_power",
+      "value": 0.005,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "passive",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_mana",
+          "ratio": 0.005,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         0.5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     },
     {
       "raw": "While you or any allied champion you granted a {{tip heal}} or {{tip shield}} to in the last 3 seconds is [[combat status in combat]] with champions, each second, you heal the {{tt most wounded Lowest health percent}} allied champion within 900 units for {{as {{fd 0.8}}% of your '''maximum''' mana}}.",
       "effect_type": "healing",
-      "stat": "health",
-      "value": 3,
+      "stat": "healing",
+      "value": 0.008,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "interval_seconds": 1.0,
+      "trigger": "while_in_combat_after_heal_or_shield",
+      "applies_to": "lowest_health_ally_in_range",
       "conditions": [
-        "while_condition",
         "in_combat",
         "within_units"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "max_mana",
+          "ratio": 0.008,
+          "type": "percent"
+        }
+      ],
+      "range_units": 900,
+      "timing": {
+        "recent_heal_or_shield_window_seconds": 3.0
+      },
       "numbers_extracted": [
         3,
         900,
         0.8
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -88,10 +103,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2530_enchantertearupgraded.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.848475+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.007700+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.007700+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

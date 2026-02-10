@@ -23,23 +23,38 @@
       "effects": "Your abilities deal {{as|{{rd|{{pp|0 to 22.5 for 11|0 to 70|key=%|key1=%|type=target's '''missing''' health|showtype=false}}|{{pp|0 to 12.5 for 11|0 to 70|key=%|key1=%|type=target's '''missing''' health|showtype=false}}}}|hp}} {{as|(based on target's '''missing''' health)}} increased damage against enemy champions. Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them renders you {{tip|untargetable}} for {{fd|1.5}} seconds, which ends prematurely if you perform an action that {{tip|break stealth|breaks stealth}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Your abilities deal {{as {{rd {{pp 0 to 22.5 for 11 0 to 70 key=% key1=% type=target's '''missing''' health showtype=false}} {{pp 0 to 12.5 for 11 0 to 70 key=% key1=% type=target's '''missing''' health showtype=false}}}} hp}} {{as (based on target's '''missing''' health)}} increased damage against enemy champions",
-      "effect_type": "damage",
-      "stat": "health",
+      "effect_type": "damage_multiplier",
+      "stat": "damage",
       "value": 0,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "melee": {
+          "min": 0.0,
+          "max": 0.225,
+          "missing_health_percent_max": 70
+        },
+        "ranged": {
+          "min": 0.0,
+          "max": 0.125,
+          "missing_health_percent_max": 70
+        }
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_ability_damage_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "missing_health_scaling": {
+        "max_percent": 70,
+        "metric": "target_missing_health_percent"
+      },
       "numbers_extracted": [
         0,
         22.5,
@@ -58,20 +73,23 @@
     },
     {
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them renders you {{tip untargetable}} for {{fd 1.5}} seconds, which ends prematurely if you perform an action that {{tip break stealth breaks stealth}}.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 3,
+      "effect_type": "status_effect",
+      "stat": "untargetable",
+      "value": 1.5,
       "value_range": null,
       "unit": "seconds",
-      "duration_seconds": null,
+      "duration_seconds": 1.5,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "on_takedown_within_3s_damage",
+      "applies_to": "self",
+      "conditions": [
+        "takedown",
+        "damaged_target_within_3_seconds"
+      ],
       "status_effects": [
         "untargetable",
-        "stealth"
+        "stealth_break_on_action"
       ],
       "scaling_terms": [],
       "numbers_extracted": [
@@ -95,6 +113,7 @@
   "generated_at": "2026-02-09T23:34:24.885696+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.038488+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.038488+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

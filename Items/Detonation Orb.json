@@ -26,85 +26,97 @@
       "effects": "Dealing ability damage against enemy champions marks them for 3 seconds, storing 20% of the {{tt|post-mitigation damage|Damage calculated after modifiers}} you deal to them, increased to 25% if they are {{tip|immobilize|immobilized}}. Each instance of your ability damage dealt to a marked target refreshes their mark. Once the mark expires, it detonates to deal {{as|true damage}} equal to the amount stored against the target. If a mark would deal lethal damage to the target, it is detonated immediately."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Dealing ability damage against enemy champions marks them for 3 seconds, storing 20% of the {{tt post-mitigation damage Damage calculated after modifiers}} you deal to them, increased to 25% if they are {{tip immobilize immobilized}}",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
-      "value_range": null,
-      "unit": "percent",
+      "effect_type": "apply_mark",
+      "mark_id": "detonation_orb",
+      "stat": "post_mitigation_damage",
+      "value": 0.2,
+      "value_range": {
+        "base": 0.2,
+        "immobilized": 0.25
+      },
+      "unit": "ratio",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
+      "trigger": "on_ability_damage_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [
-        "after_condition"
+        "post_mitigation"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "marked"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         3,
         20,
         25
       ],
-      "parse_confidence": 1.0
+      "parse_confidence": 0.65
     },
     {
-      "raw": "Each instance of your ability damage dealt to a marked target refreshes their mark",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "Each instance of your ability damage dealt to a marked target refreshes their mark.",
+      "effect_type": "refresh_mark",
+      "mark_id": "detonation_orb",
+      "value": 3.0,
+      "value_range": null,
+      "unit": "seconds",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_ability_damage_to_marked_champion",
+      "applies_to": "enemy_champion",
+      "conditions": [],
+      "status_effects": [
+        "marked"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Once the mark expires, it detonates to deal {{as true damage}} equal to the amount stored against the target.",
+      "effect_type": "detonate_mark",
+      "mark_id": "detonation_orb",
+      "stat": "true_damage",
       "value": null,
       "value_range": null,
-      "unit": null,
+      "unit": "stored_damage",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_mark_expire",
+      "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "Once the mark expires, it detonates to deal {{as true damage}} equal to the amount stored against the target",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "If a mark would deal lethal damage to the target, it is detonated immediately.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "detonate_mark",
+      "mark_id": "detonation_orb",
+      "stat": "true_damage",
       "value": null,
       "value_range": null,
-      "unit": null,
+      "unit": "stored_damage",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "trigger": "on_mark_lethal",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "lethal_stored_damage"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -115,10 +127,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7113_detonationorb.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.884315+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.037227+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.037227+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

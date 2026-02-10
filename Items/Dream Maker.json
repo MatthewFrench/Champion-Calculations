@@ -41,58 +41,74 @@
   "effects_structured": [
     {
       "raw": "Every 8 seconds, you gain a ''Blue Dream Bubble'' and a ''Purple Dream Bubble''",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 8,
+      "effect_type": "grant_status",
+      "stat": "dream_bubbles",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "set",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": 8.0,
-      "trigger": null,
+      "trigger": "interval",
       "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "blue_dream_bubble",
+        "purple_dream_bubble"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         8
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     },
     {
       "raw": "Granting a {{tip heal}} or {{tip shield}} to an allied champion ''(excluding yourself)'' causes you to grant both of your ''Dream Bubbles'' to them, empowering them for 3 seconds",
-      "effect_type": "healing",
-      "stat": "shield",
+      "effect_type": "grant_status",
+      "stat": "dream_bubbles",
       "value": 3,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_heal_or_shield_ally",
+      "applies_to": "allied_champion",
+      "conditions": [
+        "exclude_self"
+      ],
+      "status_effects": [
+        "blue_dream_bubble",
+        "purple_dream_bubble"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
       "raw": "The ''Blue Bubble'' reduces the next instance of non-{{tip minion}} damage they take by {{pp 75 to 255 for 13 1;7 to 18 type=your level}} and the ''Purple Bubble'' grants them {{as {{pp 50 to 170 for 13 1;7 to 18 type=your level}} '''bonus''' magic damage}} [[on-hit]] on their next basic attack.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "effect_type": "shield_on_next_damage",
+      "stat": "damage_reduction",
       "value": 75,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
+      "value_range": {
+        "min": 75,
+        "max": 255,
+        "scales_with": "champion_level"
+      },
+      "unit": "flat",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_damage_taken_next_instance",
+      "applies_to": "allied_champion",
+      "conditions": [
+        "non_minion_damage"
+      ],
+      "status_effects": [
+        "blue_dream_bubble"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         75,
@@ -108,11 +124,11 @@
         7,
         18
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
       "raw": "Receives diminishing gold from excessive minion kills.",
-      "effect_type": "resource",
+      "effect_type": "resource_modifier",
       "stat": "gold",
       "value": null,
       "value_range": null,
@@ -120,51 +136,59 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_kill",
-      "applies_to": "minion",
+      "trigger": "on_minion_kill",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area",
-      "effect_type": "status",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
+      "raw": "Purple Bubble grants bonus magic damage on next basic attack.",
+      "effect_type": "damage",
+      "stat": "magic_damage",
+      "value": 50,
+      "value_range": {
+        "min": 50,
+        "max": 170,
+        "scales_with": "champion_level"
+      },
+      "unit": "flat",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "trigger": "on_next_basic_attack",
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "purple_dream_bubble"
+      ],
       "status_effects": [
-        "stealth"
+        "purple_dream_bubble"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.45
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Charges refill upon visiting the shop.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
+      "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area.",
+      "effect_type": "place_ward",
+      "ward_type": "stealth_ward",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "count",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "active",
+      "applies_to": "ground_target",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "vision"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -186,6 +210,10 @@
   "generated_at": "2026-02-09T23:34:24.871126+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.027052+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.027052+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Ward charges refill upon visiting the shop; charge count and ward duration are not encoded here."
+    ]
   }
 }

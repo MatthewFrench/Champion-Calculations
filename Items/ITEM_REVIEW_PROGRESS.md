@@ -63,19 +63,19 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Deaths Dance.json
 - [x] Deaths Daughter.json
 - [x] Decapitator.json
-- [ ] Demon Kings Crown.json
-- [ ] Demonic Embrace.json
-- [ ] Detonation Orb.json
-- [ ] Diadem of Songs.json
-- [ ] Diamond-Tipped Spear.json
-- [ ] Divine Sunderer.json
-- [ ] Dorans Blade.json
-- [ ] Dorans Ring.json
-- [ ] Dorans Shield.json
-- [ ] Dragonheart.json
-- [ ] Dream Maker.json
-- [ ] Dusk and Dawn.json
-- [ ] Duskblade of Draktharr.json
+- [x] Demon Kings Crown.json
+- [x] Demonic Embrace.json
+- [x] Detonation Orb.json
+- [x] Diadem of Songs.json
+- [x] Diamond-Tipped Spear.json
+- [x] Divine Sunderer.json
+- [x] Dorans Blade.json
+- [x] Dorans Ring.json
+- [x] Dorans Shield.json
+- [x] Dragonheart.json
+- [x] Dream Maker.json
+- [x] Dusk and Dawn.json
+- [x] Duskblade of Draktharr.json
 - [ ] Echoes of Helia.json
 - [ ] Eclipse.json
 - [ ] Edge of Night.json

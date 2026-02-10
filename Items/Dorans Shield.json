@@ -25,25 +25,42 @@
       "effects": "Basic attacks deal {{as|5 '''bonus''' physical damage}} [[on-hit]] against [[minions]]."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After taking damage from a [[champion]], gain '''bonus''' [[health regeneration]] per second equal to {{as {{rd 0 to 5 for 11 0 to 3.75 for 11 levels=0 to 75 key1=% formula1=0.066 health regen for every 1% missing health formula2=0.05 health regen for every 1% missing health type='''current missing''' health pp=true}} health}} for 8 seconds, refreshing on subsequent champion damage taken",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 0,
-      "value_range": null,
-      "unit": "percent",
+      "effect_type": "resource_regen",
+      "stat": "health_regen",
+      "value": 0.066,
+      "value_range": {
+        "melee": 0.066,
+        "ranged": 0.05
+      },
+      "unit": "per_percent_missing_health",
       "duration_seconds": 8.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
+      "trigger": "on_damage_from_champion",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "post_damage"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "missing_current_health_percent",
+          "ratio": 0.066,
+          "type": "flat",
+          "applies_to": "melee"
+        },
+        {
+          "stat": "missing_current_health_percent",
+          "ratio": 0.05,
+          "type": "flat",
+          "applies_to": "ranged"
+        }
+      ],
+      "range_units": null,
       "numbers_extracted": [
         0,
         5,
@@ -62,33 +79,15 @@
         1,
         8
       ],
-      "parse_confidence": 1.0
-    },
-    {
-      "raw": "[[Area of effect]], [[damage over time]], or [[damage proc]] damage taken trigger this effect with the {{tip ranged}} values.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Basic attacks deal {{as 5 '''bonus''' physical damage}} [[on-hit]] against [[minions]].",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "physical_damage",
       "value": 5,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
@@ -100,7 +99,7 @@
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
@@ -126,6 +125,10 @@
   "generated_at": "2026-02-09T23:34:24.871555+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.027451+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.027451+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "AoE/DoT/proc damage uses ranged values for the regen effect."
+    ]
   }
 }

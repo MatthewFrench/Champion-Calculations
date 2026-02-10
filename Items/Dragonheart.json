@@ -5,7 +5,7 @@
   "rank": [
     "DISTRIBUTED"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,90 +13,138 @@
       "effects": "Every 2 rounds, gain a random {{bi|Dragon Soul}}. Additionally, increase your '''total''' {{as|attack damage}}, {{as|ability power}}, {{as|attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}} by 4% for each {{bi|Dragon Soul}} you possess, up to {{ap|4*6}}% at maximum souls.<br><br>Once you have obtained all 6 {{bi|Dragon Soul|Dragon Souls}}, you also gain the {{bi|Aspect of the Dragon}} buff permanently at the next phase. ''Aspect of the Dragon'' counts as an extra Soul for this effect, for a total stat increase of {{ap|4*7}}%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Every 2 rounds, gain a random {{bi Dragon Soul}}",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "grant_status",
+      "stat": "dragon_soul",
       "value": 2,
       "value_range": null,
-      "unit": null,
+      "unit": "rounds",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "round_interval",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "dragon_soul"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "Additionally, increase your '''total''' {{as attack damage}}, {{as ability power}}, {{as attack speed}}, {{as '''maximum''' health}}, {{as armor}}, {{as magic resistance}}, and {{as ability haste}} by 4% for each {{bi Dragon Soul}} you possess, up to {{ap 4*6}}% at maximum souls.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 4,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        4,
-        4,
-        6
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Once you have obtained all 6 {{bi Dragon Soul Dragon Souls}}, you also gain the {{bi Aspect of the Dragon}} buff permanently at the next phase",
       "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 6,
+      "stat": "multiple",
+      "value": 0.04,
       "value_range": null,
-      "unit": null,
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "passive",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "attack_damage",
+          "qualifier": "total",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        },
+        {
+          "stat": "attack_speed",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        },
+        {
+          "stat": "max_health",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        },
+        {
+          "stat": "armor",
+          "qualifier": "total",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        },
+        {
+          "stat": "magic_resistance",
+          "qualifier": "total",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        },
+        {
+          "stat": "ability_haste",
+          "ratio": 0.04,
+          "type": "percent_per_soul"
+        }
+      ],
+      "caps": {
+        "max_souls": 6
+      },
+      "numbers_extracted": [
+        4,
+        4,
+        6
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Once you have obtained all 6 {{bi Dragon Soul Dragon Souls}}, you also gain the {{bi Aspect of the Dragon}} buff permanently at the next phase",
+      "effect_type": "grant_status",
+      "stat": "aspect_of_the_dragon",
+      "value": 6,
+      "value_range": null,
+      "unit": "souls",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_max_souls",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [
+        "aspect_of_the_dragon"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         6
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
       "raw": "''Aspect of the Dragon'' counts as an extra Soul for this effect, for a total stat increase of {{ap 4*7}}%.",
       "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 4,
+      "stat": "dragon_souls_effective",
+      "value": 1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_aspect_of_the_dragon",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "dragon_soul_bonus"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         4,
         7
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -104,10 +152,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7106_dragonheart.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.846963+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.006069+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.006069+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Arena-style: gain a random Dragon Soul every 2 rounds, plus Aspect of the Dragon after all 6 souls."
+    ]
   }
 }

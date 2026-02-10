@@ -5,7 +5,7 @@
   "rank": [
     "DISTRIBUTED"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,29 +13,72 @@
       "effects": "Increase your '''total''' {{as|attack damage}}, {{as|ability power}}, {{as|attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}} by 26%, further increased by {{fd|1.2}}% for each round you win and reduced by 3% for each round you lose."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Increase your '''total''' {{as attack damage}}, {{as ability power}}, {{as attack speed}}, {{as '''maximum''' health}}, {{as armor}}, {{as magic resistance}}, and {{as ability haste}} by 26%, further increased by {{fd 1.2}}% for each round you win and reduced by 3% for each round you lose.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 26,
+      "effect_type": "stat_modifier",
+      "stat": "multiple",
+      "value": 0.26,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "passive",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "attack_damage",
+          "qualifier": "total",
+          "ratio": 0.26,
+          "type": "percent"
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.26,
+          "type": "percent"
+        },
+        {
+          "stat": "attack_speed",
+          "ratio": 0.26,
+          "type": "percent"
+        },
+        {
+          "stat": "max_health",
+          "ratio": 0.26,
+          "type": "percent"
+        },
+        {
+          "stat": "armor",
+          "qualifier": "total",
+          "ratio": 0.26,
+          "type": "percent"
+        },
+        {
+          "stat": "magic_resistance",
+          "qualifier": "total",
+          "ratio": 0.26,
+          "type": "percent"
+        },
+        {
+          "stat": "ability_haste",
+          "ratio": 0.26,
+          "type": "percent"
+        }
+      ],
+      "round_modifiers": {
+        "per_round_win_bonus": 0.012,
+        "per_round_loss_penalty": 0.03
+      },
       "numbers_extracted": [
         26,
         1.2,
         3
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -43,10 +86,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3056_demonkingscrown.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.924615+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.072863+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.072863+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Arena-style round scaling: +1.2% per round win, -3% per round loss."
+    ]
   }
 }

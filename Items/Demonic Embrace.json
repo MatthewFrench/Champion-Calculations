@@ -28,29 +28,41 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Increase your {{as ability power}} by {{as {{fd 1.5}}% ap}} and gain {{as {{fd 1.5}}% '''bonus''' movement speed}} for every {{as 100 '''current''' health}} you are missing, up to an increase of {{as 45% ability power}} and {{as 45% '''bonus''' movement speed}} at {{as 3000 '''current''' health}} missing.",
-      "effect_type": "healing",
+      "effect_type": "stat_modifier",
       "stat": "ability_power",
-      "value": 1.5,
+      "value": 0.015,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "passive",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 45.0,
-          "stat": "ability_power",
-          "qualifier": null
+          "stat": "missing_health",
+          "ratio": 0.015,
+          "type": "percent_per_100",
+          "per": 100
+        },
+        {
+          "stat": "movespeed",
+          "ratio": 0.015,
+          "type": "percent_per_100",
+          "per": 100
         }
       ],
+      "caps": {
+        "ability_power": 0.45,
+        "movespeed": 0.45,
+        "unit": "ratio"
+      },
       "numbers_extracted": [
         1.5,
         1.5,
@@ -59,7 +71,7 @@
         45,
         3000
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -76,6 +88,10 @@
   "generated_at": "2026-02-09T23:34:24.898240+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.051189+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.051189+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Bonuses scale off missing current health, capped at 3000 missing health (45% AP and 45% bonus move speed)."
+    ]
   }
 }
