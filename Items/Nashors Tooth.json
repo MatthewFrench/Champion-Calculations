@@ -23,34 +23,34 @@
       "effects": "Basic attacks deal {{as|15 {{as|(+ 15% AP)}} '''bonus''' magic damage|magic damage}} [[on-hit]]."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks deal {{as 15 {{as (+ 15% AP)}} '''bonus''' magic damage magic damage}} [[on-hit]].",
+      "raw": "Basic attacks deal 15 (+15% AP) bonus magic damage on-hit.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
+      "applies_to": "enemy",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 15.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.15,
+          "type": "percent"
         }
       ],
       "numbers_extracted": [
         15,
         15
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -73,6 +73,7 @@
   "generated_at": "2026-02-09T23:34:24.856520+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.014795+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.014795+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
