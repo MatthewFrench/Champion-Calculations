@@ -20,28 +20,32 @@
       "effects": "Basic attacks [[on-hit]] reduce the remaining cooldowns of your abilities and spells with {{tip|dash|dashes}} and/or {{tip|blink|blinks}} by 12%, modified to 4% for your ultimate ability."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] reduce the remaining cooldowns of your abilities and spells with {{tip dash dashes}} and/or {{tip blink blinks}} by 12%, modified to 4% for your ultimate ability.",
-      "effect_type": "utility",
-      "stat": null,
-      "value": 12,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "On-hit basic attacks reduce remaining cooldowns of dash/blink abilities by 12% (4% for ultimates).",
+      "effect_type": "cooldown_reduction_remaining",
+      "stat": "cooldown",
+      "value": 0.12,
+      "value_range": {
+        "ultimate": 0.04
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "ability_has_dash_or_blink_tag"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         12,
         4
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -49,10 +53,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7100_mirageblade.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.932303+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.078937+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.078937+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

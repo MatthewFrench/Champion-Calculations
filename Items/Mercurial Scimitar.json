@@ -16,7 +16,7 @@
       "flat": 35.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -26,16 +26,40 @@
   ],
   "effects_structured": [
     {
-      "raw": "Removes all {{tip crowd control}} debuffs (except {{tip Airborne}}) from your champion and grants {{as 50% '''bonus total''' movement speed}} and {{tip ghosted ghosting}} for 2 seconds.",
-      "effect_type": "status",
-      "stat": "movement_speed",
-      "value": 50,
+      "raw": "Removes all crowd control debuffs except Airborne.",
+      "effect_type": "cleanse",
+      "stat": "crowd_control",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
+      "unit": null,
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_activate",
+      "applies_to": "self",
+      "conditions": [
+        "exclude_airborne"
+      ],
+      "status_effects": [
+        "crowd_control_removed"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        2
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Gain 50% bonus total movement speed and ghosted for 2 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_total_movement_speed",
+      "value": 0.5,
+      "value_range": null,
+      "unit": "ratio",
       "duration_seconds": 2.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [
@@ -46,7 +70,7 @@
         50,
         2
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -72,6 +96,7 @@
   "generated_at": "2026-02-09T23:34:24.905133+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.056381+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.056381+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

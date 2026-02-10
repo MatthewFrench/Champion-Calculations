@@ -23,47 +23,69 @@
       "effects": "Casting an ability {{tip|basic attack reset|resets}} your basic attack timer and empowers your next two basic attacks with {{as|90% '''bonus''' attack speed}}. Additionally, each basic attack [[on-attack]] reduces the cooldowns of all your abilities by {{fd|0.5}} seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Casting an ability {{tip basic attack reset resets}} your basic attack timer and empowers your next two basic attacks with {{as 90% '''bonus''' attack speed}}",
-      "effect_type": "stat_modifier",
-      "stat": "attack_speed",
-      "value": 90,
+      "raw": "Casting an ability resets your basic attack timer.",
+      "effect_type": "basic_attack_reset",
+      "stat": "basic_attack_timer",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
+      "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_ability_cast",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "numbers_extracted": [],
+      "parse_confidence": 0.65
+    },
+    {
+      "raw": "After casting an ability, your next two basic attacks gain 90% bonus attack speed.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_speed",
+      "value": 0.9,
+      "value_range": null,
+      "unit": "ratio",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_ability_cast",
+      "applies_to": "self",
+      "conditions": [
+        "next_two_basic_attacks"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "charges": 2,
       "numbers_extracted": [
         90
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Additionally, each basic attack [[on-attack]] reduces the cooldowns of all your abilities by {{fd 0.5}} seconds.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Each basic attack reduces the remaining cooldowns of all abilities by 0.5 seconds.",
+      "effect_type": "cooldown_reduction_remaining",
+      "stat": "cooldown",
       "value": 0.5,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_basic_attack",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "affected_abilities": "all",
       "numbers_extracted": [
         0.5
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -74,10 +96,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7110_moonflairspellblade.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.899974+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.052931+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.052931+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

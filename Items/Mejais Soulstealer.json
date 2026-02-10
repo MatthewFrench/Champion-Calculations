@@ -28,109 +28,128 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain 4 stacks for each champion [[kill]] and 2 stacks for each [[assist]], up to a '''maximum''' of 25 stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Gain Glory stacks from champion takedowns (4 per kill, 2 per assist), up to 25.",
+      "effect_type": "apply_stack",
+      "stack_id": "glory",
       "value": 4,
-      "value_range": null,
-      "unit": null,
+      "value_range": {
+        "assist": 2
+      },
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_champion_kill_or_assist",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "glory"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 25,
+        "stacks_on_kill": 4,
+        "stacks_on_assist": 2
+      },
       "numbers_extracted": [
         4,
         2,
         25
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
-      "raw": "For every stack, gain {{as 5 ability power}}, up to {{as 125 AP}} at '''maximum''' stacks",
+      "raw": "Gain 5 ability power per Glory stack (up to 125 at max stacks).",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
       "value": 5,
       "value_range": null,
-      "unit": null,
+      "unit": "flat_per_stack",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_stack",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "glory_stacks",
+          "ratio": 5,
+          "type": "flat_per_stack",
+          "cap": 125
+        }
+      ],
       "numbers_extracted": [
         5,
         125
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "If you have at least 10 stacks, also gain {{as 10% '''bonus''' movement speed}}",
+      "raw": "At 10+ Glory stacks, gain 10% bonus movement speed.",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 10,
+      "stat": "bonus_movement_speed",
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_stack_threshold",
+      "applies_to": "self",
+      "conditions": [
+        "glory_stacks_at_least_10"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        10
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "Lose 10 Glory stacks on death.",
+      "effect_type": "remove_stack",
+      "stack_id": "glory",
+      "value": 10,
+      "value_range": null,
+      "unit": "stacks",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_death",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
-        10,
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Lose 10 stacks on [[death]]",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 10,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        10
-      ],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "Stacks are preserved from {{ii Dark Seal}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Glory stacks are preserved when upgrading from Dark Seal.",
+      "effect_type": "stack_persistence",
+      "stat": "glory_stacks",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "trigger": "on_item_upgrade",
+      "applies_to": "self",
+      "conditions": [
+        "from_dark_seal"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -152,6 +171,7 @@
   "generated_at": "2026-02-09T23:34:24.888352+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.041840+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.041840+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

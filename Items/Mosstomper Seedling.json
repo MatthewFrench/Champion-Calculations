@@ -5,7 +5,7 @@
   "rank": [
     "STARTER"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -18,63 +18,69 @@
       "effects": "Feed your companion enough treats to evolve it and upgrade your {{si|Smite}}. Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi|Mosstomper's Courage}} buff."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Summon a ''Mosstomper Seedling'' companion to assist you in combat against monsters.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Summon a Mosstomper Seedling companion to assist you versus monsters.",
+      "effect_type": "summon_companion",
+      "stat": "companion",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "monster",
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [
-        "in_combat"
+        "vs_monsters"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "mosstomper_seedling"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.4
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Feed your companion enough treats to evolve it and upgrade your {{si Smite}}",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Companion evolves by consuming treats and upgrades Smite.",
+      "effect_type": "upgrade_summoner_spell",
+      "stat": "summoner_spell",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_companion_evolution",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "target_spell": "Smite",
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.55
     },
     {
-      "raw": "Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi Mosstomper's Courage}} buff.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "At final evolution, the item is consumed and grants Mosstomper's Courage.",
+      "effect_type": "grant_buff",
+      "stat": "buff",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_companion_final_evolution",
       "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "mosstompers_courage"
+      ],
       "scaling_terms": [],
+      "consumes_item": true,
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -104,6 +110,10 @@
   "generated_at": "2026-02-09T23:34:24.865754+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.022912+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.022912+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Companion evolution, treats, and Smite upgrade values are not specified in this item payload."
+    ]
   }
 }

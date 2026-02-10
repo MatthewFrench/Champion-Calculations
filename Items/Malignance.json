@@ -28,74 +28,125 @@
       "effects": "Dealing non-{{tip|proc damage}} or {{tip|pet damage}} to enemy champions with your [[champion ability|ultimate ability]] creates a {{pp|type=ultimate's damage instance|251;251.8;253.1;255.5;259.8;267.3;280.7;304.2;345.9;419.7;550|0 to 823|formula=250 + 2^(damage dealt/100)}} radius scorched zone beneath them for 3 seconds, applying a ''Curse'' to enemies within that deals {{ft|{{as|{{ap|60/4}}|magic damage}} {{as|(+ {{ap|5/4}}% AP)}} {{as|magic damage}} every {{fd|0.25}} seconds|{{as|{{ap|60*3}}|magic damage}} {{as|(+ {{ap|5*3}}% AP)}} {{as|'''total''' magic damage}} over the duration}} and reduces their {{as|magic resistance by 10}} (3 second cooldown per target, starts on zone creation)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain 20 [[Haste#Ultimate haste ultimate haste]].",
+      "raw": "Gain 20 ultimate haste.",
       "effect_type": "stat_modifier",
-      "stat": null,
+      "stat": "ultimate_haste",
       "value": 20,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     },
     {
-      "raw": "Dealing non-{{tip proc damage}} or {{tip pet damage}} to enemy champions with your [[champion ability ultimate ability]] creates a {{pp type=ultimate's damage instance 251;251.8;253.1;255.5;259.8;267.3;280.7;304.2;345.9;419.7;550 0 to 823 formula=250 + 2^(damage dealt/100)}} radius scorched zone beneath them for 3 seconds, applying a ''Curse'' to enemies within that deals {{ft {{as {{ap 60/4}} magic damage}} {{as (+ {{ap 5/4}}% AP)}} {{as magic damage}} every {{fd 0.25}} seconds {{as {{ap 60*3}} magic damage}} {{as (+ {{ap 5*3}}% AP)}} {{as '''total''' magic damage}} over the duration}} and reduces their {{as magic resistance by 10}} (3 second cooldown per target, starts on zone creation).",
-      "effect_type": "damage",
-      "stat": "magic_resistance",
-      "value": 251,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Ultimate damage to enemy champions (non-proc, non-pet) creates a scorched zone for 3 seconds with a radius that scales by ultimate damage instance.",
+      "effect_type": "zone_create",
+      "stat": "zone_radius",
+      "value": 250,
+      "value_range": {
+        "min": 250,
+        "max": 823
+      },
+      "unit": "units",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "trigger": "on_ultimate_damage_to_champion",
+      "applies_to": "ground",
+      "conditions": [
+        "non_proc_damage",
+        "non_pet_damage"
+      ],
+      "status_effects": [
+        "scorched_zone"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "ultimate_damage_instance",
+          "formula": "250 + 2^(damage_dealt/100)"
+        }
+      ],
       "numbers_extracted": [
-        251,
-        251.8,
-        253.1,
-        255.5,
-        259.8,
-        267.3,
-        280.7,
-        304.2,
-        345.9,
-        419.7,
-        550,
-        0,
-        823,
         250,
-        2,
-        100,
+        823,
         3,
+        2,
+        100
+      ],
+      "parse_confidence": 0.55
+    },
+    {
+      "raw": "Enemies within the scorched zone are cursed, taking magic damage every 0.25s for 3s.",
+      "effect_type": "damage_over_time",
+      "stat": "magic_damage",
+      "value": 15,
+      "value_range": null,
+      "unit": "flat_per_tick",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": null,
+      "interval_seconds": 0.25,
+      "trigger": "on_zone_tick",
+      "applies_to": "enemy_in_zone",
+      "conditions": [],
+      "status_effects": [
+        "curse"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "ability_power",
+          "ratio": 0.0125,
+          "type": "percent_per_tick"
+        }
+      ],
+      "ticks": 12,
+      "total_damage": {
+        "base": 180,
+        "ap_ratio": 0.15
+      },
+      "numbers_extracted": [
         60,
         4,
         5,
         4,
         0.25,
-        60,
-        3,
-        5,
-        3,
+        3
+      ],
+      "parse_confidence": 0.55
+    },
+    {
+      "raw": "Cursed enemies in the zone have their magic resistance reduced by 10 for 3 seconds (3s cooldown per target, starts on zone creation).",
+      "effect_type": "stat_modifier",
+      "stat": "magic_resistance",
+      "value": -10,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": 3.0,
+      "interval_seconds": null,
+      "trigger": "on_zone_apply",
+      "applies_to": "enemy_in_zone",
+      "conditions": [
+        "per_target_cooldown"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
         10,
         3
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -117,6 +168,10 @@
   "generated_at": "2026-02-09T23:34:24.889896+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.043758+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.043758+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Scorched zone radius scales with ultimate damage instance (formula: 250 + 2^(damage_dealt/100))."
+    ]
   }
 }

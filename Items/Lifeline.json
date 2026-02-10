@@ -28,38 +28,46 @@
   "effects_structured": [
     {
       "raw": "Mark your current location",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
+      "effect_type": "set_anchor",
+      "stat": "soul_anchor",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "anchor",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "active",
       "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "soul_anchor"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     },
     {
       "raw": "After 4 seconds, you automatically {{tip blink}} to the marked location after a {{fd 0.5}}-second delay",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "blink",
+      "stat": "soul_anchor",
       "value": 4,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "active",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "auto_blink_after_delay"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "blink"
+      ],
+      "timing": {
+        "auto_blink_delay_seconds": 4.0,
+        "blink_windup_seconds": 0.5
+      },
       "scaling_terms": [],
       "numbers_extracted": [
         4,
@@ -69,20 +77,22 @@
     },
     {
       "raw": "''Soul Anchor'' may be recast within its duration to manually blink to the marked location after the same delay (45 second cooldown, starts after the blink).",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "blink",
+      "stat": "soul_anchor",
       "value": 45,
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 45.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "active_recast",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "recast_within_duration"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "blink"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         45
@@ -108,6 +118,10 @@
   "generated_at": "2026-02-09T23:34:24.873213+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.028988+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.028988+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cooldown starts after the blink."
+    ]
   }
 }

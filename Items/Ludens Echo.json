@@ -24,114 +24,110 @@
       "cooldown": "12"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain 6 ''Echo'' stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Gain 6 ''Echo'' stacks.",
+      "effect_type": "apply_stack",
+      "stack_id": "echo",
       "value": 6,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "echo"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 6,
+        "stacks_on_equip": 6
+      },
       "numbers_extracted": [
         6
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Dealing [[ability damage]] to an enemy consumes all ''Echo'' stacks to deal {{as 75 magic damage}} {{as (+ 5% AP)}} {{as '''bonus''' magic damage}} to them and, for each stack consumed beyond the first, an additional enemy within {{tip cr icononly=true}} 600 units of them, firing an orb at each secondary target that impacts after {{rutngt 0.5}} to deal the damage",
+      "raw": "Dealing ability damage to an enemy consumes all ''Echo'' stacks to deal 75 (+5% AP) bonus magic damage. For each stack beyond the first, fire an orb at an additional enemy within 600 units (0.5s impact delay) that deals the same damage.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 75,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 12.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_ability_damage",
       "applies_to": "enemy",
       "conditions": [
-        "after_condition"
+        "consume_all_echo_stacks"
       ],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 5.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.05,
+          "type": "percent"
         }
       ],
+      "stack_interaction": {
+        "stack_id": "echo",
+        "consume": "all",
+        "stacks_consumed_minimum": 1
+      },
+      "extra_targets": {
+        "per_stack_beyond_first": 1,
+        "max_additional_targets": 5,
+        "range_units": 600,
+        "projectile_travel_time_seconds": 0.5,
+        "damage_same_as_primary": true
+      },
       "numbers_extracted": [
         75,
         5,
         600,
-        0.5
+        0.5,
+        12
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     },
     {
-      "raw": "If the number of additional targets fired at is less than the number of stacks consumed,{{ft deal an additional {{as {{pp 75*0.2 to 75*5*0.2 for 5 1 to 5 changedisplay=true type=remaining ''Echo'' stacks}} magic damage}} {{as (+ {{pp key=% 5*0.2 to 5*5*0.2 for 5 1 to 5 type=remaining ''Echo'' stacks changedisplay=true showtype=false}} AP)}} {{as magic damage}} to the primary target, for a total of {{as {{pp (75*0.2)+75 to (75*5*0.2)+75 for 5 1 to 5 type=remaining ''Echo'' stacks changedisplay=true showtype=false}} magic damage}} {{as (+ {{pp key=% (5*0.2)+5 to (5*5*0.2)+5 for 5 1 to 5 type=remaining ''Echo'' stacks changedisplay=true showtype=false}} AP)}} deal an additional 20% damage to the primary target for each remaining ''Echo'' stack}}",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 75,
+      "raw": "If fewer additional targets are available than stacks consumed, deal 20% more damage to the primary target per remaining stack.",
+      "effect_type": "damage_multiplier",
+      "stat": "magic_damage",
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_per_stack",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 12.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        75,
-        0.2,
-        75,
-        5,
-        0.2,
-        5,
-        1,
-        5,
-        5,
-        0.2,
-        5,
-        5,
-        0.2,
-        5,
-        1,
-        5,
-        75,
-        0.2,
-        75,
-        75,
-        5,
-        0.2,
-        75,
-        5,
-        1,
-        5,
-        5,
-        0.2,
-        5,
-        5,
-        5,
-        0.2,
-        5,
-        5,
-        1,
-        5,
-        20
+      "trigger": "on_ability_damage",
+      "applies_to": "primary_target",
+      "conditions": [
+        "remaining_echo_stacks_after_additional_targets"
       ],
-      "parse_confidence": 0.75
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "remaining_echo_stacks",
+          "ratio": 0.2,
+          "type": "percent_per_stack"
+        }
+      ],
+      "stack_interaction": {
+        "stack_id": "echo",
+        "consume": "all"
+      },
+      "numbers_extracted": [
+        20,
+        12
+      ],
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -146,10 +142,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
   "simpleDescription": "High burst damage, good against fragile foes",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.878142+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.032723+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.032723+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

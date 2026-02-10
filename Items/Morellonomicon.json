@@ -23,27 +23,29 @@
       "effects": "Dealing {{as|magic damage}} to enemy champions inflicts them with {{tip|Grievous Wounds}} for 3 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Dealing {{as magic damage}} to enemy champions inflicts them with {{tip Grievous Wounds}} for 3 seconds.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
+      "raw": "Magic damage to enemy champions applies Grievous Wounds for 3 seconds.",
+      "effect_type": "apply_status",
+      "stat": "grievous_wounds",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": null,
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_magic_damage_to_champion",
       "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "grievous_wounds"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -69,6 +71,7 @@
   "generated_at": "2026-02-09T23:34:24.906843+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.057838+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.057838+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

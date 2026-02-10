@@ -23,31 +23,44 @@
       "effects": "After using an [[Champion ability|ability]], your next basic attack within 10 seconds gains {{as|50% '''bonus''' attack speed}} and deals {{as|75% '''base''' AD}} {{as|(+ 40% AP)}} {{as|'''bonus''' magic damage}} [[on-hit]] ({{fd|1.5}} second cooldown, starts after using the empowered attack)."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After using an [[Champion ability ability]], your next basic attack within 10 seconds gains {{as 50% '''bonus''' attack speed}} and deals {{as 75% '''base''' AD}} {{as (+ 40% AP)}} {{as '''bonus''' magic damage}} [[on-hit]] ({{fd 1.5}} second cooldown, starts after using the empowered attack).",
-      "effect_type": "damage",
+      "effect_type": "stat_modifier_and_damage",
       "stat": "attack_speed",
-      "value": 10,
+      "value": 0.5,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.5,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
+      "trigger": "on_next_basic_attack_after_ability",
+      "applies_to": "enemy_unit_hit",
       "conditions": [
-        "after_condition"
+        "within_10_seconds"
       ],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 40.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "base_attack_damage",
+          "ratio": 0.75,
+          "type": "flat"
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.4,
+          "type": "percent"
         }
       ],
+      "bonus_damage": {
+        "stat": "magic_damage",
+        "value": 0.75,
+        "unit": "ratio_of_base_ad"
+      },
+      "timing": {
+        "window_seconds": 10.0
+      },
       "numbers_extracted": [
         10,
         50,
@@ -55,7 +68,7 @@
         40,
         1.5
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -77,6 +90,7 @@
   "generated_at": "2026-02-09T23:34:24.866175+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.023317+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.023317+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

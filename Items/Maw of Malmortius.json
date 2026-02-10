@@ -29,54 +29,76 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "If you would take {{as magic damage}} that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs {{as {{rd 200 150}} magic damage}} {{as (+ {{rd 150% {{fd 112.5}}%}} '''bonus''' AD)}} {{as magic damage}} for 3 seconds",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "If magic damage would reduce you below 30% max health, gain a magic damage shield for 3s (90s cooldown).",
+      "effect_type": "shield",
+      "stat": "magic_damage",
+      "value": 200,
+      "value_range": {
+        "melee": 200,
+        "ranged": 150
+      },
+      "unit": "flat",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_magic_damage_threshold",
       "applies_to": "self",
       "conditions": [
-        "threshold"
+        "health_below_30_percent"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "lifeline_shield"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 1.5,
+          "type": "percent",
+          "qualifier": "melee"
+        },
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 1.125,
+          "type": "percent",
+          "qualifier": "ranged"
+        }
+      ],
       "numbers_extracted": [
         30,
         200,
         150,
         150,
         112.5,
-        3
+        3,
+        90
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Additionally, triggering this effect grants you {{as 10% omnivamp}} until the end of [[combat status combat]].",
+      "raw": "Triggering Lifeline grants 10% omnivamp until combat ends.",
       "effect_type": "stat_modifier",
       "stat": "omnivamp",
-      "value": 10,
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
+      "trigger": "on_lifeline_trigger",
+      "applies_to": "self",
+      "conditions": [
+        "until_combat_end"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
-        10
+        10,
+        90
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -93,10 +115,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
   "simpleDescription": "Grants bonus Attack Damage when Health is low",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.866785+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.023862+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.023862+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Shield base and bonus AD scaling are melee/ranged differentiated."
+    ]
   }
 }

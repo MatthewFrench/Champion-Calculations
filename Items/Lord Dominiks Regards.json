@@ -23,23 +23,35 @@
       "effects": "Deal {{pp|0 to 15 for 16|0 to 1500|key=%|type=target's '''bonus''' health|formula=1% per 100 bonus health, up to a maximum of 15% at 1500 bonus health.|color=health}} increased damage against enemy champions."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Deal {{pp 0 to 15 for 16 0 to 1500 key=% type=target's '''bonus''' health formula=1% per 100 bonus health, up to a maximum of 15% at 1500 bonus health",
-      "effect_type": "healing",
-      "stat": "health",
+      "effect_type": "damage_multiplier",
+      "stat": "damage",
       "value": 0,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 0.0,
+        "max": 0.15,
+        "bonus_health_max": 1500
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_damage_to_champions",
+      "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_bonus_health",
+          "ratio": 0.01,
+          "type": "percent_per_100",
+          "per": 100,
+          "cap": 0.15
+        }
+      ],
       "numbers_extracted": [
         0,
         15,
@@ -51,25 +63,7 @@
         15,
         1500
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "color=health}} increased damage against enemy champions.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -92,6 +86,7 @@
   "generated_at": "2026-02-09T23:34:24.920910+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.069923+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.069923+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

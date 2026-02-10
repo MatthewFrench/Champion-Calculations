@@ -31,43 +31,55 @@
       "effects": "Transforms into {{ii|Muramana}} at {{as|360 '''bonus''' mana}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Grants {{as '''bonus''' attack damage}} equal to {{as 2% '''maximum''' mana}}.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 2,
+      "raw": "Gain bonus attack damage equal to 2% of maximum mana.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_damage",
+      "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "max_mana",
+          "ratio": 0.02,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Grants a charge every 8 seconds, up to 4 charges",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 8,
+      "raw": "Gain a Manaflow charge every 8 seconds, up to 4 charges.",
+      "effect_type": "apply_stack",
+      "stack_id": "manaflow_charge",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": 8.0,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_time",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "manaflow"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 4,
+        "stacks_per_interval": 1
+      },
       "numbers_extracted": [
         8,
         4
@@ -75,64 +87,74 @@
       "parse_confidence": 0.65
     },
     {
-      "raw": "Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability ability]] to grant {{as 3 '''bonus''' mana}}, increased to {{as 6 mana}} for champion targets, up to a '''maximum''' of {{as 360 '''bonus''' mana}}",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
+      "raw": "Consume a Manaflow charge on-hit or when an ability affects a unit to gain bonus mana (3, or 6 for champion targets), once per cast instance.",
+      "effect_type": "resource_gain",
+      "stat": "bonus_mana",
       "value": 3,
-      "value_range": null,
-      "unit": null,
+      "value_range": {
+        "champion_target": 6
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "enemy",
+      "trigger": "on_hit_or_ability_affect",
+      "applies_to": "self",
+      "conditions": [
+        "once_per_cast_instance"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "stack_interaction": {
+        "stack_id": "manaflow_charge",
+        "consume": 1
+      },
+      "numbers_extracted": [
+        3,
+        6
+      ],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "Bonus mana gained from Manaflow stacks caps at 360.",
+      "effect_type": "resource_cap",
+      "stat": "bonus_mana",
+      "value": 360,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": null,
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
-        3,
-        6,
         360
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Can only be triggered once per {{tip cast instance}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Transforms into Muramana at 360 bonus mana.",
+      "effect_type": "transform",
+      "stat": "item",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_bonus_mana_cap_reached",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Transforms into {{ii Muramana}} at {{as 360 '''bonus''' mana}}.",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
-      "value": 360,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "transform_to": "Muramana",
       "numbers_extracted": [
         360
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -157,6 +179,7 @@
   "generated_at": "2026-02-09T23:34:24.904370+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.055698+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.055698+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

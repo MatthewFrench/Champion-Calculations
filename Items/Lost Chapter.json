@@ -23,28 +23,34 @@
       "effects": "Upon leveling up, restores {{as|20% of '''maximum''' mana}} over 3 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Upon leveling up, restores {{as 20% of '''maximum''' mana}} over 3 seconds.",
-      "effect_type": "stat_modifier",
+      "effect_type": "resource_restore_over_time",
       "stat": "mana",
-      "value": 20,
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_level_up",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "max_mana",
+          "ratio": 0.2,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         20,
         3
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -65,6 +71,7 @@
   "generated_at": "2026-02-09T23:34:24.844703+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.003555+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.003555+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

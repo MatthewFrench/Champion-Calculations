@@ -28,67 +28,63 @@
       "effects": "Basic attacks [[on-hit]] against champions deal {{as|{{as|{{fd|1.2}}% '''maximum''' mana}} '''bonus''' physical damage}}. Can only be triggered on the same target once every {{fd|6.5}} seconds from the same {{tip|cast instance}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Grants {{as '''bonus''' attack damage}} equal to {{as 2% '''maximum''' mana}}.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 2,
+      "raw": "Gain bonus attack damage equal to 2% of maximum mana.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_damage",
+      "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "max_mana",
+          "ratio": 0.02,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Basic attacks [[on-hit]] against champions deal {{as {{as {{fd 1.2}}% '''maximum''' mana}} '''bonus''' physical damage}}",
+      "raw": "On-hit basic attacks against champions deal bonus physical damage equal to 1.2% of maximum mana (per-target cooldown).",
       "effect_type": "damage",
-      "stat": "mana",
-      "value": 1.2,
+      "stat": "physical_damage",
+      "value": 0.012,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_max_mana",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 6.5,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1.2
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "per_target_cooldown",
+        "once_per_cast_instance"
       ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "Can only be triggered on the same target once every {{fd 6.5}} seconds from the same {{tip cast instance}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 6.5,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "max_mana",
+          "ratio": 0.012,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
+        1.2,
         6.5
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -105,10 +101,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3042_marksman_t3_muramana.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.931131+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.077374+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.077374+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

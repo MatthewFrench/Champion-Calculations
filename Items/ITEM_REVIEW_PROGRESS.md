@@ -167,30 +167,30 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Legendary Marksman Item.json
 - [x] Legendary Support Item.json
 - [x] Legendary Tank Item.json
-- [ ] Liandrys Torment.json
-- [ ] Lich Bane.json
-- [ ] Lifeline.json
-- [ ] Lightning Rod.json
-- [ ] Locket of the Iron Solari.json
-- [ ] Long Sword.json
-- [ ] Lord Dominiks Regards.json
-- [ ] Lost Chapter.json
-- [ ] Lucky Dice.json
-- [ ] Ludens Echo.json
-- [ ] Malignance.json
-- [ ] Manamune.json
-- [ ] Maw of Malmortius.json
-- [ ] Mejais Soulstealer.json
-- [ ] Mercurial Scimitar.json
-- [ ] Mercurys Treads.json
-- [ ] Mikaels Blessing.json
-- [ ] Mirage Blade.json
-- [ ] Moonflair Spellblade.json
-- [ ] Moonstone Renewer.json
-- [ ] Morellonomicon.json
-- [ ] Mortal Reminder.json
-- [ ] Mosstomper Seedling.json
-- [ ] Muramana.json
+- [x] Liandrys Torment.json
+- [x] Lich Bane.json
+- [x] Lifeline.json
+- [x] Lightning Rod.json
+- [x] Locket of the Iron Solari.json
+- [x] Long Sword.json
+- [x] Lord Dominiks Regards.json
+- [x] Lost Chapter.json
+- [x] Lucky Dice.json
+- [x] Ludens Echo.json
+- [x] Malignance.json
+- [x] Manamune.json
+- [x] Maw of Malmortius.json
+- [x] Mejais Soulstealer.json
+- [x] Mercurial Scimitar.json
+- [x] Mercurys Treads.json
+- [x] Mikaels Blessing.json
+- [x] Mirage Blade.json
+- [x] Moonflair Spellblade.json
+- [x] Moonstone Renewer.json
+- [x] Morellonomicon.json
+- [x] Mortal Reminder.json
+- [x] Mosstomper Seedling.json
+- [x] Muramana.json
 - [ ] Nashors Tooth.json
 - [ ] Navori Flickerblade.json
 - [ ] Needlessly Large Rod.json
