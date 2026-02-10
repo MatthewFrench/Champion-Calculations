@@ -155,18 +155,18 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Juice of Haste.json
 - [x] Juice of Power.json
 - [x] Juice of Vitality.json
-- [ ] Kaenic Rookern.json
-- [ ] Kindlegem.json
-- [ ] Kinkou Jitte.json
-- [ ] Knights Vow.json
-- [ ] Kraken Slayer.json
-- [ ] Last Whisper.json
-- [ ] Legendary Assassin Item.json
-- [ ] Legendary Fighter Item.json
-- [ ] Legendary Mage Item.json
-- [ ] Legendary Marksman Item.json
-- [ ] Legendary Support Item.json
-- [ ] Legendary Tank Item.json
+- [x] Kaenic Rookern.json
+- [x] Kindlegem.json
+- [x] Kinkou Jitte.json
+- [x] Knights Vow.json
+- [x] Kraken Slayer.json
+- [x] Last Whisper.json
+- [x] Legendary Assassin Item.json
+- [x] Legendary Fighter Item.json
+- [x] Legendary Mage Item.json
+- [x] Legendary Marksman Item.json
+- [x] Legendary Support Item.json
+- [x] Legendary Tank Item.json
 - [ ] Liandrys Torment.json
 - [ ] Lich Bane.json
 - [ ] Lifeline.json

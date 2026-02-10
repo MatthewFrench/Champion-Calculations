@@ -13,8 +13,8 @@
       "flat": 10.0
     }
   },
-  "passives": null,
-  "active": null,
+  "passives": [],
+  "active": [],
   "effects_structured": [],
   "shop": {
     "prices": {
@@ -33,10 +33,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3067_tank_t1_kindlegem.png",
   "simpleDescription": "Increases Health and Cooldown Reduction",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.896098+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.049368+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.049368+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

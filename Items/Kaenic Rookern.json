@@ -23,30 +23,38 @@
       "effects": "After not taking {{as|magic damage}} for 15 seconds, gain a {{tip|shield}} that absorbs {{as|magic damage}} equal to {{as|15% of '''maximum''' health}} until destroyed."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "After not taking {{as magic damage}} for 15 seconds, gain a {{tip shield}} that absorbs {{as magic damage}} equal to {{as 15% of '''maximum''' health}} until destroyed.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 15,
+      "effect_type": "shield",
+      "stat": "magic_damage_absorb",
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 15.0,
-      "cooldown_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": null,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "after_no_magic_damage",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "no_magic_damage_for_15_seconds"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "shield"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "max_health",
+          "ratio": 0.15,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         15,
         15
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -61,10 +69,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2504_kaenicrookern.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.880134+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.034285+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.034285+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

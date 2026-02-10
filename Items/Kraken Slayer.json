@@ -23,47 +23,73 @@
       "effects": "Basic attacks [[on-hit]] grant a stack for 3 seconds, up to 2 stacks. At 2 stacks, the next basic attack consumes all stacks to deal {{as|{{rd|150 + (200-150)/10*(x-1) for 13|150*0.8 + (200*0.8-150*0.8)/10*(x-1) for 13|levels=1;9 to 20|pp=true}} '''bonus''' physical damage|physical damage}} on-hit, increased by {{pp|0 to 75 by 5|0 to 100|key=%|color=health|type=target's '''missing''' health|key1=%}}, for up to {{as|{{rd|150*1.75 + (200*1.75-150*1.75)/10*(x-1) for 13|150*0.8*1.75 + (200*0.8*1.75-150*0.8*1.75)/10*(x-1) for 13|levels=1;9 to 20|pp=true}} '''bonus''' physical damage|physical damage}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Basic attacks [[on-hit]] grant a stack for 3 seconds, up to 2 stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 3,
+      "effect_type": "apply_stack",
+      "stack_id": "kraken_slayer",
+      "stat": "stack",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "kraken_slayer_stack"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 2
+      },
       "numbers_extracted": [
         3,
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     },
     {
       "raw": "At 2 stacks, the next basic attack consumes all stacks to deal {{as {{rd 150 + (200-150)/10*(x-1) for 13 150*0.8 + (200*0.8-150*0.8)/10*(x-1) for 13 levels=1;9 to 20 pp=true}} '''bonus''' physical damage physical damage}} on-hit, increased by {{pp 0 to 75 by 5 0 to 100 key=% color=health type=target's '''missing''' health key1=%}}, for up to {{as {{rd 150*1.75 + (200*1.75-150*1.75)/10*(x-1) for 13 150*0.8*1.75 + (200*0.8*1.75-150*0.8*1.75)/10*(x-1) for 13 levels=1;9 to 20 pp=true}} '''bonus''' physical damage physical damage}}.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 2,
-      "value_range": [
-        200,
-        150
-      ],
-      "unit": "percent",
+      "stat": "physical_damage",
+      "value": 150,
+      "value_range": {
+        "melee": {
+          "min": 150,
+          "max": 200,
+          "scales_with": "champion_level"
+        },
+        "ranged": {
+          "min": 120,
+          "max": 160,
+          "scales_with": "champion_level"
+        }
+      },
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
+      "applies_to": "enemy_unit_hit",
+      "conditions": [
+        "kraken_slayer_stacks_2"
+      ],
+      "status_effects": [
+        "consume_kraken_slayer_stacks"
+      ],
       "scaling_terms": [],
+      "missing_health_scaling": {
+        "max_bonus_ratio": 0.75,
+        "scales_to": 1.0,
+        "metric": "target_missing_health_percent"
+      },
+      "caps": {
+        "max_damage_multiplier": 1.75
+      },
       "numbers_extracted": [
         2,
         150,
@@ -115,7 +141,7 @@
         9,
         20
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -136,6 +162,7 @@
   "generated_at": "2026-02-09T23:34:24.899701+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.052690+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.052690+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

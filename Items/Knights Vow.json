@@ -37,102 +37,80 @@
     {
       "raw": "While your ''Worthy'' ally is {{tt tethered to you 1250 units, center to edge}} and you are above {{as 30% of your '''maximum''' health}}, redirect 12% of the {{tt pre-mitigation Damage calculated before the Worthy ally's modifiers}} {{as physical physical damage}} and {{as magic magic damage}} damage they take to you as the respective damage type",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 1250,
+      "stat": "damage_redirect",
+      "value": 0.12,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": "ally",
+      "trigger": "on_worthy_ally_damage_taken",
+      "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "tethered",
+        "self_health_above_30_percent"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "range_units": 1250,
+      "damage_types": [
+        "physical",
+        "magic"
+      ],
       "numbers_extracted": [
         1250,
         30,
         12
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     },
     {
       "raw": "Additionally, you {{tip heal}} for 10% of the {{tt post-mitigation damage Damage calculated after modifiers}} dealt by your ''Worthy'' ally to champions.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
+      "effect_type": "healing",
+      "stat": "healing",
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": "ally",
+      "trigger": "on_worthy_ally_damage_to_champions",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "tethered"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "post_mitigation_damage_dealt_by_worthy_ally",
+          "ratio": 0.1,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     },
     {
       "raw": "Designate the target allied champion as being ''Worthy'', forming a {{tip tether}} between you and them",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "effect_type": "select_worthy_ally",
+      "stat": "tether",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "active",
+      "applies_to": "self_and_target_ally",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "tether"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Champions can only be designated as ''Worthy'' by one '''Knight's Vow''' at a time",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "You cannot be designated as ''Worthy'' by an ally's '''Knight's Vow'''.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -154,6 +132,10 @@
   "generated_at": "2026-02-09T23:34:24.903626+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.055140+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.055140+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Only one Knight's Vow may be linked to a given ally; you cannot be marked as Worthy by another Knight's Vow."
+    ]
   }
 }

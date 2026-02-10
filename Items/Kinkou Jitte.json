@@ -20,40 +20,42 @@
       "effects": "You can now identify the ''Weakpoints'' of nearby enemy champions, marked as an arc around them and pointing towards a specific direction. ''Weakpoints'' on targets take 4 seconds to become exposed and linger for {{fd|11.25}} seconds afterwards. Dealing damage while you are facing an exposed ''Weakpoint'' will consume it to deal {{as|'''bonus''' true damage}} equal to {{as|3%|hp}} {{as|(+ 3% per 100 AD)}} {{as|(+ 2% per 100 AP)}} {{as|of the target's '''maximum''' health}} and grant you {{as|{{pp|50 to 75|key=%}} '''bonus''' movement speed}} for {{fd|1.5}} seconds. Once a target's ''Weakpoint'' is consumed or expires, you identify a new ''Weakpoint'' on them."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "You can now identify the ''Weakpoints'' of nearby enemy champions, marked as an arc around them and pointing towards a specific direction",
-      "effect_type": "utility",
-      "stat": null,
-      "value": null,
+      "effect_type": "mark_weakpoint",
+      "stat": "weakpoint",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "mark",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "passive",
       "applies_to": "enemy_champion",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "weakpoint"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.55
     },
     {
       "raw": "''Weakpoints'' on targets take 4 seconds to become exposed and linger for {{fd 11.25}} seconds afterwards",
-      "effect_type": "utility",
-      "stat": null,
+      "effect_type": "timing",
+      "stat": "weakpoint_exposure",
       "value": 4,
       "value_range": null,
       "unit": "seconds",
-      "duration_seconds": null,
+      "duration_seconds": 11.25,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_weakpoint_assigned",
+      "applies_to": "enemy_champion",
       "conditions": [
-        "after_condition"
+        "expose_delay"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -66,26 +68,46 @@
     {
       "raw": "Dealing damage while you are facing an exposed ''Weakpoint'' will consume it to deal {{as '''bonus''' true damage}} equal to {{as 3% hp}} {{as (+ 3% per 100 AD)}} {{as (+ 2% per 100 AP)}} {{as of the target's '''maximum''' health}} and grant you {{as {{pp 50 to 75 key=%}} '''bonus''' movement speed}} for {{fd 1.5}} seconds",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 3,
+      "stat": "true_damage",
+      "value": 0.03,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_damage_to_exposed_weakpoint",
+      "applies_to": "enemy_champion",
       "conditions": [
-        "while_condition"
+        "facing_exposed_weakpoint"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "consume_weakpoint"
+      ],
       "scaling_terms": [
         {
-          "percent": 3.0,
-          "stat": "health",
-          "qualifier": null
+          "stat": "target_max_health",
+          "ratio": 0.03,
+          "type": "percent"
+        },
+        {
+          "stat": "attack_damage",
+          "ratio": 0.03,
+          "type": "percent_per_100",
+          "per": 100
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.02,
+          "type": "percent_per_100",
+          "per": 100
         }
       ],
+      "bonus_movespeed": {
+        "min": 0.5,
+        "max": 0.75,
+        "unit": "ratio",
+        "duration_seconds": 1.5
+      },
       "numbers_extracted": [
         3,
         3,
@@ -96,25 +118,7 @@
         75,
         1.5
       ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "Once a target's ''Weakpoint'' is consumed or expires, you identify a new ''Weakpoint'' on them.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -127,10 +131,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447116_kinkoujitte.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.891880+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.045583+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.045583+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "New weakpoint is generated after consumption/expiration."
+    ]
   }
 }
