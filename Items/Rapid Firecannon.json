@@ -28,68 +28,87 @@
       "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|40 '''bonus''' magic damage}} [[on-hit]]. ''Energized'' attacks gain 35% '''bonus''' range, capped at 150."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 100.0,
+      "raw": "Moving and basic attacking generates Energize stacks, up to 100.",
+      "effect_type": "apply_stack",
+      "stack_id": "energize",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100.0
-      ],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "When fully {{tip Energized}}, your next basic attack deals {{as 40 '''bonus''' magic damage}} [[on-hit]]",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 40,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
+      "trigger": "on_move_or_basic_attack",
       "applies_to": "self",
       "conditions": [],
+      "status_effects": [
+        "energize"
+      ],
+      "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 100
+      },
+      "numbers_extracted": [
+        100
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "At full Energize, your next basic attack deals 40 bonus magic damage on-hit.",
+      "effect_type": "damage",
+      "stat": "magic_damage",
+      "value": 40,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_next_basic_attack",
+      "applies_to": "enemy",
+      "conditions": [
+        "energize_full"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_interaction": {
+        "stack_id": "energize",
+        "consume": "all"
+      },
       "numbers_extracted": [
         40
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
-      "raw": "''Energized'' attacks gain 35% '''bonus''' range, capped at 150.",
+      "raw": "Energized attacks gain 35% bonus range, capped at 150.",
       "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 35,
-      "value_range": null,
-      "unit": "percent",
+      "stat": "bonus_attack_range",
+      "value": 0.35,
+      "value_range": {
+        "cap_units": 150
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "trigger": "on_next_basic_attack",
+      "applies_to": "self",
+      "conditions": [
+        "energize_full"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_interaction": {
+        "stack_id": "energize",
+        "consume": "all"
+      },
       "numbers_extracted": [
         35,
-        150.0
+        150
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -114,6 +133,7 @@
   "generated_at": "2026-02-09T23:34:24.930872+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.077133+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.077133+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

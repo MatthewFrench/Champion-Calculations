@@ -5,7 +5,7 @@
   "rank": [
     "TURRET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -18,58 +18,61 @@
       "effects": "Turrets take 20% increased damage from {{tip|melee}} champions."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "While no enemy {{tip minions}} or {{ui Rift Herald Rift Herald Mercenary}} are within range, turrets gain 80% damage reduction (including against {{tip true damage}}).",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 80,
+      "raw": "While no enemy minions or Rift Herald are in range, turrets take 80% reduced damage (including true damage).",
+      "effect_type": "damage_multiplier",
+      "stat": "incoming_damage",
+      "value": -0.8,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
+      "trigger": "on_enemy_units_out_of_range",
+      "applies_to": "structure",
       "conditions": [
-        "while_condition"
+        "no_enemy_minions_or_rift_herald_in_range"
       ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         80
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Turrets take 20% increased damage from {{tip melee}} champions.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 20,
+      "raw": "Turrets take 20% increased damage from melee champions.",
+      "effect_type": "damage_multiplier",
+      "stat": "incoming_damage_from_melee_champions",
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_incoming_damage",
       "applies_to": "structure",
-      "conditions": [],
+      "conditions": [
+        "source_is_melee_champion"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3042_netherrift_armor.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.885944+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.038723+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.038723+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

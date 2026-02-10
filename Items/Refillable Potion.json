@@ -5,32 +5,32 @@
   "rank": [
     "POTION"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
       "effects": "Holds charges that refill upon visiting the [[shop]]."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Holds charges that refill upon visiting the [[shop]].",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Holds charges that refill upon visiting the shop.",
+      "effect_type": "charge_refill_rule",
+      "stat": "charges",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_visit_shop",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -52,6 +52,10 @@
   "generated_at": "2026-02-09T23:34:24.861200+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.018559+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.018559+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Healing amount and number of charges are not encoded in this payload."
+    ]
   }
 }

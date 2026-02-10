@@ -19,7 +19,7 @@
       "flat": 15.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -30,71 +30,103 @@
   ],
   "effects_structured": [
     {
-      "raw": "Call upon a 550-radius beam of light to strike upon the target location after {{fd 2.5}} seconds, granting {{tip sight}} of the area for the duration",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "After 2.5s, a 550-radius beam strikes the target location, granting vision.",
+      "effect_type": "area_strike",
+      "stat": "beam",
       "value": 550,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "radius_units",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "after_condition"
+      "trigger": "on_activate",
+      "applies_to": "target_location",
+      "conditions": [],
+      "status_effects": [
+        "grants_vision"
       ],
-      "status_effects": [],
       "scaling_terms": [],
+      "delay_seconds": 2.5,
       "numbers_extracted": [
         550,
         2.5
       ],
+      "parse_confidence": 0.65
+    },
+    {
+      "raw": "Allies in the area are healed for 150 to 350 based on target level.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 150,
+      "value_range": {
+        "min": 150,
+        "max": 350
+      },
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_beam_impact",
+      "applies_to": "allies_in_radius",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "target_level",
+          "type": "linear",
+          "min": 150,
+          "max": 350
+        }
+      ],
+      "numbers_extracted": [
+        150,
+        350
+      ],
       "parse_confidence": 0.6
     },
     {
-      "raw": "Allies within the area are {{tip heal healed}} for {{pp 150 to 350 type=target's level}}, while enemy champions within take {{as 10% of target's '''maximum''' health}} as {{as true damage}}",
+      "raw": "Enemy champions in the area take true damage equal to 10% of target max health.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 150,
+      "stat": "true_damage",
+      "value": 0.1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_target_max_health",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [
-        "while_condition"
-      ],
+      "trigger": "on_beam_impact",
+      "applies_to": "enemy_champions_in_radius",
+      "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_max_health",
+          "ratio": 0.1,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
-        150,
-        350,
         10
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     },
     {
-      "raw": "'''Can be used while [[death dead]].'''",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
+      "raw": "Can be used while dead.",
+      "effect_type": "activation_rule",
+      "stat": "cast_while_dead",
+      "value": true,
       "value_range": null,
-      "unit": null,
+      "unit": "boolean",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "while_condition"
-      ],
+      "trigger": "on_activate",
+      "applies_to": "self",
+      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.4
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -115,6 +147,7 @@
   "generated_at": "2026-02-09T23:34:24.859508+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.017544+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.017544+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

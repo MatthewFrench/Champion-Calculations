@@ -27,55 +27,81 @@
       "cooldown": "30"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Upon casting your [[champion ability ultimate]], you ''Transcend'' for 9 seconds",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 9,
+      "raw": "On ultimate cast, you Transcend for 9 seconds (30s cooldown).",
+      "effect_type": "apply_status",
+      "stat": "transcend",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": null,
       "duration_seconds": 9.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
-      "trigger": "on_ability",
+      "trigger": "on_ultimate_cast",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [
+        "transcend"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        9,
+        30
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "While Transcended, increase max health by 12.5%.",
+      "effect_type": "stat_modifier",
+      "stat": "max_health",
+      "value": 0.125,
+      "value_range": null,
+      "unit": "ratio",
+      "duration_seconds": 9.0,
+      "cooldown_seconds": 30.0,
+      "interval_seconds": null,
+      "trigger": "on_transcend_start",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
-        9
+        12.5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "While ''Transcended'', increase your {{as '''maximum''' health by {{fd 12.5}}%}} and cause you and all allies within {{tip cr icononly=true}} 1200 units to {{tip heal}} for {{as {{fd 3}}% of your '''maximum''' health}} upon you ''Transcending'' and every 3 seconds thereafter, for a total healing of {{as {{ap 3*4}}% of your '''maximum''' health}}.",
-      "effect_type": "healing",
+      "raw": "On Transcend start and every 3 seconds for 9 seconds, you and allies within 1200 units heal for 3% of your max health.",
+      "effect_type": "healing_over_time",
       "stat": "health",
-      "value": 12.5,
+      "value": 0.03,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "unit": "ratio_of_self_max_health",
+      "duration_seconds": 9.0,
+      "cooldown_seconds": 30.0,
       "interval_seconds": 3.0,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [
-        "while_condition",
-        "after_condition"
-      ],
+      "trigger": "on_transcend_tick",
+      "applies_to": "self_and_allies_in_radius",
+      "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "self_max_health",
+          "ratio": 0.03,
+          "type": "percent"
+        }
+      ],
+      "range_units": 1200,
+      "ticks": 4,
       "numbers_extracted": [
-        12.5,
         1200,
-        3,
         3,
         3,
         4
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -92,6 +118,7 @@
   "generated_at": "2026-02-09T23:34:24.849763+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.008896+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.008896+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

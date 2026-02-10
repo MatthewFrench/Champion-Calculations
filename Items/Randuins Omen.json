@@ -30,46 +30,50 @@
   "effects_structured": [
     {
       "raw": "Reduces incoming damage from {{tip critical strike critical strikes}} by 30%.",
-      "effect_type": "damage",
-      "stat": "critical_strike",
-      "value": 30,
+      "effect_type": "damage_multiplier",
+      "stat": "critical_strike_damage",
+      "value": -0.3,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_incoming_critical_strike",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
       "raw": "Unleash a shockwave around you that {{tip slow slows}} nearby enemies by 70% for 2 seconds.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 70,
+      "effect_type": "apply_status",
+      "stat": "slow",
+      "value": 0.7,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 2.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_activate",
+      "applies_to": "enemies_in_radius",
       "conditions": [],
       "status_effects": [
         "slow"
       ],
       "scaling_terms": [],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": null
+      },
       "numbers_extracted": [
         70,
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -84,10 +88,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
   "simpleDescription": "Greatly increases defenses, activate to slow nearby enemies",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.851591+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.010031+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.010031+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Active shockwave radius is not specified in this payload."
+    ]
   }
 }

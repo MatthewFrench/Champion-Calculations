@@ -23,46 +23,52 @@
       "effects": "At the start of the combat phase in each round, declare the enemy champion with the lowest {{as|'''total maximum''' health}} as the ''Regent''. Scoring a {{tip|takedown}} against the ''Regent'' for the first time in the combat phase grants you {{as|10 '''bonus''' attack damage}} permanently and sets the '''current''' cooldown of your ultimate ability to {{fd|0.5}} seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "At the start of the combat phase in each round, declare the enemy champion with the lowest {{as '''total maximum''' health}} as the ''Regent''",
-      "effect_type": "healing",
-      "stat": "health",
+      "raw": "At the start of each combat phase, mark the enemy champion with the lowest max health as the Regent.",
+      "effect_type": "mark_target",
+      "stat": "regent",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "trigger": "on_combat_phase_start",
+      "applies_to": "enemy_champion_lowest_max_health",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "regent_mark"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Scoring a {{tip takedown}} against the ''Regent'' for the first time in the combat phase grants you {{as 10 '''bonus''' attack damage}} permanently and sets the '''current''' cooldown of your ultimate ability to {{fd 0.5}} seconds.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
+      "raw": "First takedown of the Regent in the combat phase grants 10 permanent bonus attack damage and sets current ultimate cooldown to 0.5 seconds.",
+      "effect_type": "stat_modifier_and_cooldown_set",
+      "stat": "bonus_attack_damage",
       "value": 10,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_regent_takedown",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "first_takedown_per_combat_phase"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "cooldown_set_seconds": 0.5,
+      "applies_to_cooldown": "ultimate",
       "numbers_extracted": [
         10,
         0.5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -73,10 +79,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447115_regicide.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.842966+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.002219+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.002219+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Combat phase/round concepts indicate Arena-style rules."
+    ]
   }
 }

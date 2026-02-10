@@ -218,20 +218,20 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Puppeteer.json
 - [x] Pyromancers Cloak.json
 - [x] Quicksilver Sash.json
-- [ ] Rabadons Deathcap.json
-- [ ] Radiant Virtue.json
-- [ ] Raise Morale.json
-- [ ] Randuins Omen.json
-- [ ] Rapid Firecannon.json
-- [ ] Ravenous Hydra.json
-- [ ] Reality Fracture.json
-- [ ] Reapers Toll.json
-- [ ] Rectrix.json
-- [ ] Recurve Bow.json
-- [ ] Redemption.json
-- [ ] Refillable Potion.json
-- [ ] Regicide.json
-- [ ] Reinforced Armor Turret Item.json
+- [x] Rabadons Deathcap.json
+- [x] Radiant Virtue.json
+- [x] Raise Morale.json
+- [x] Randuins Omen.json
+- [x] Rapid Firecannon.json
+- [x] Ravenous Hydra.json
+- [x] Reality Fracture.json
+- [x] Reapers Toll.json
+- [x] Rectrix.json
+- [x] Recurve Bow.json
+- [x] Redemption.json
+- [x] Refillable Potion.json
+- [x] Regicide.json
+- [x] Reinforced Armor Turret Item.json
 - [ ] Rejuvenation Bead.json
 - [ ] Reverberation.json
 - [ ] Riftmaker.json

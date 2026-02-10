@@ -25,70 +25,120 @@
       "effects": "Increases the {{as|attack speed}} gained from all sources by 15%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] apply a ''Reap'' stack to the target, stacking infinitely and lasting for the remainder of the combat phase, and deal {{as '''bonus''' true damage}} equal to {{as {{rd {{fd 0.7}}% {{fd 0.5}}%}} (+ {{fd 0.1}}% per target's ''Reap'' stack) of the target's '''maximum''' health}}",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 0.7,
+      "raw": "Basic attacks apply a Reap stack (infinite, lasts for combat phase).",
+      "effect_type": "apply_stack",
+      "stack_id": "reap",
+      "value": 1,
       "value_range": null,
-      "unit": "percent",
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "enemy_target",
+      "conditions": [
+        "combat_phase_duration"
+      ],
+      "status_effects": [
+        "reap"
+      ],
+      "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": null,
+        "duration": "combat_phase"
+      },
+      "numbers_extracted": [],
+      "parse_confidence": 0.6
+    },
+    {
+      "raw": "On-hit, deal bonus true damage equal to 0.7% (0.5% ranged) of target max health plus 0.1% per Reap stack.",
+      "effect_type": "damage",
+      "stat": "true_damage",
+      "value": 0.007,
+      "value_range": {
+        "ranged": 0.005
+      },
+      "unit": "ratio_of_target_max_health",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "enemy_target",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "target_max_health",
+          "ratio": 0.007,
+          "type": "percent",
+          "qualifier": "melee"
+        },
+        {
+          "stat": "target_max_health",
+          "ratio": 0.005,
+          "type": "percent",
+          "qualifier": "ranged"
+        },
+        {
+          "stat": "reap_stacks",
+          "ratio": 0.001,
+          "type": "percent_per_stack"
+        }
+      ],
       "numbers_extracted": [
         0.7,
         0.5,
         0.1
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Additionally, the target is inflicted a [[Health#Health threshold health threshold]] equal to {{as 100% of their '''maximum''' health}} minus the '''total''' amount of '''bonus''' damage dealt against them, lasting until the end of the round and capped at a threshold of {{as 50% of their '''maximum''' health}}.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 100,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Target health threshold equals 100% max health minus total bonus damage dealt, capped at 50% max health, lasting until end of round.",
+      "effect_type": "health_threshold",
+      "stat": "health_threshold",
+      "value": 1.0,
+      "value_range": {
+        "cap_ratio": 0.5
+      },
+      "unit": "ratio_of_target_max_health",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
+      "trigger": "on_reap_damage",
+      "applies_to": "enemy_target",
+      "conditions": [
+        "end_of_round_duration"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         100,
         50
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.5
     },
     {
-      "raw": "Increases the {{as attack speed}} gained from all sources by 15%.",
+      "raw": "Increases attack speed gained from all sources by 15%.",
       "effect_type": "stat_modifier",
-      "stat": "attack_speed",
-      "value": 15,
+      "stat": "attack_speed_gain_multiplier",
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -99,10 +149,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443090_reaperstoll.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.926033+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.073577+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.073577+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Reap stacks are Arena-style (combat phase/round concepts)."
+    ]
   }
 }

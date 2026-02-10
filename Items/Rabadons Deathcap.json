@@ -17,19 +17,19 @@
       "effects": "Increase your {{as|ability power}} by 30%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
       "raw": "Increase your {{as ability power}} by 30%.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
-      "value": 30,
+      "value": 0.3,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_equip",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
@@ -37,7 +37,7 @@
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -63,6 +63,7 @@
   "generated_at": "2026-02-09T23:34:24.906230+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.057326+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.057326+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

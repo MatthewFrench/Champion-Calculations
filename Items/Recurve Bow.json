@@ -16,27 +16,27 @@
       "effects": "Basic attacks deal {{as|15 '''bonus''' physical damage}} [[on-hit]]."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks deal {{as 15 '''bonus''' physical damage}} [[on-hit]].",
+      "raw": "Basic attacks deal 15 bonus physical damage on-hit.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "physical_damage",
       "value": 15,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
+      "applies_to": "enemy",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -53,10 +53,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1043_base_t2_recurvebow.png",
   "simpleDescription": "Greatly increases Attack Speed",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.916067+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.066676+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.066676+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

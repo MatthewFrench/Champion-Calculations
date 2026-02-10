@@ -2,8 +2,8 @@
   "name": "Raise Morale",
   "id": 3903,
   "tier": 1,
-  "rank": null,
-  "stats": null,
+  "rank": [],
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -16,39 +16,42 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "{{ci Gangplank}} and his allies within {{ai Cannon Barrage Gangplank}} gain {{as 40% '''bonus''' movement speed}}, which persists for 2 seconds after leaving the area.",
+      "raw": "Gangplank and allies within Cannon Barrage gain 40% bonus movement speed, persisting 2 seconds after leaving the area.",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 40,
+      "stat": "bonus_movement_speed",
+      "value": 0.4,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 2.0,
+      "unit": "ratio",
+      "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [
-        "after_condition"
-      ],
+      "trigger": "on_enter_cannon_barrage_area",
+      "applies_to": "gangplank_and_allies_in_area",
+      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "lingers_after_exit_seconds": 2.0,
       "numbers_extracted": [
         40,
         2
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3903_champ_t0_raisemoralecircle.png",
   "simpleDescription": "Allies in the Cannon Barrage gain <speed>bonus Move Speed</speed>.",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.890882+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.044640+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.044640+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Effect is tied to Gangplank's Cannon Barrage area."
+    ]
   }
 }
