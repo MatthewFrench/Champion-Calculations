@@ -320,6 +320,6 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] ZazZaks Realmspike.json
 - [x] Zeal.json
 - [x] Zekes Convergence.json
-- [ ] Zephyr.json
-- [ ] Zhonyas Hourglass.json
+- [x] Zephyr.json
+- [x] Zhonyas Hourglass.json
 - [ ] items_quality_report.json

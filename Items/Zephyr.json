@@ -31,49 +31,29 @@
       }
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] grant a stack of ''Like The Wind'' for 6 seconds, refreshing on subsequent attacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 6,
-      "value_range": null,
-      "unit": "seconds",
+      "id": "zephyr_like_the_wind_stack_gain",
+      "raw": "Basic attacks grant a Like The Wind stack for 6s, refreshing on subsequent attacks.",
+      "effect_type": "stack_gain",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "stack_name": "like_the_wind",
       "duration_seconds": 6.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        6
-      ],
-      "parse_confidence": 0.75
+      "max_stacks": 5
     },
     {
-      "raw": "For each stack, gain {{as 5% '''bonus''' movement speed ms}}, stacking up to 5 times for a total of {{as 25% ms}}.",
+      "id": "zephyr_like_the_wind_movespeed",
+      "raw": "Each Like The Wind stack grants 5% bonus move speed (up to 25% at 5 stacks).",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 5,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        5,
-        5,
-        25
-      ],
-      "parse_confidence": 0.75
+      "applies_to": "self",
+      "stat": "movement_speed_bonus_percent",
+      "value_per_stack": 5,
+      "stack_name": "like_the_wind",
+      "max_value": 25
     }
   ],
   "shop": {
@@ -89,10 +69,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/boots_tier3_berserkersgreaves_64.png",
   "simpleDescription": "Mobility and Tenacity",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.908237+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.059125+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.059125+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }
