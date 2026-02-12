@@ -16,7 +16,7 @@
       "percent": 4.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -27,64 +27,71 @@
   ],
   "effects_structured": [
     {
-      "raw": "Mark your current location",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Mark your current location (Soul Anchor).",
+      "effect_type": "mark_location",
+      "stat": "soul_anchor",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": 4.0,
+      "cooldown_seconds": 45.0,
+      "interval_seconds": null,
+      "trigger": "on_activate",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [
+        "soul_anchor"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        4,
+        0.5,
+        45
+      ],
+      "parse_confidence": 0.65
+    },
+    {
+      "raw": "After 4 seconds, blink to the marked location after a 0.5-second delay.",
+      "effect_type": "blink",
+      "stat": "position",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 45.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_anchor_expire",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "After 4 seconds, you automatically {{tip blink}} to the marked location after a {{fd 0.5}}-second delay",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 4,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "delay_seconds": 0.5,
       "numbers_extracted": [
         4,
-        0.5
+        0.5,
+        45
       ],
       "parse_confidence": 0.6
     },
     {
-      "raw": "''Soul Anchor'' may be recast within its duration to manually blink to the marked location after the same delay (45 second cooldown, starts after the blink).",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 45,
+      "raw": "Recast within the duration to blink early with the same delay (45s cooldown starts after blink).",
+      "effect_type": "recast_rule",
+      "stat": "soul_anchor",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "unit": null,
+      "duration_seconds": 4.0,
+      "cooldown_seconds": 45.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [
-        "after_condition"
-      ],
+      "trigger": "on_recast",
+      "applies_to": "self",
+      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "delay_seconds": 0.5,
       "numbers_extracted": [
+        4,
+        0.5,
         45
       ],
       "parse_confidence": 0.6
@@ -102,10 +109,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4004_assassin_t3_spectralcutlass.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.928858+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.075577+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.075577+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

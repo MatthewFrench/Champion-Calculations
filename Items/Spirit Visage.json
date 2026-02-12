@@ -26,27 +26,27 @@
       "effects": "Increases all {{tip|heal|healing}} and {{tip|shield|shielding}} received as well as {{stil|health regeneration}} by 25%."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Increases all {{tip heal healing}} and {{tip shield shielding}} received as well as {{stil health regeneration}} by 25%.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 25,
+      "raw": "Increase all healing and shielding received, and health regeneration, by 25%.",
+      "effect_type": "stat_modifier",
+      "stat": "healing_shielding_and_regen_received",
+      "value": 0.25,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         25
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -67,6 +67,7 @@
   "generated_at": "2026-02-09T23:34:24.856943+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.015208+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.015208+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

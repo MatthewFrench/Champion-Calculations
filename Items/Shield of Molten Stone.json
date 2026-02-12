@@ -20,55 +20,61 @@
       "effects": "Increase your {{as|'''total''' armor}} by {{as|20%|armor}}. Additionally, basic attacks that hit you have a chance of being {{tip|block|blocked}} equal to 5% per {{as|200 '''total''' armor}}, up to a maximum of 50% chance."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Increase your {{as '''total''' armor}} by {{as 20% armor}}",
+      "raw": "Increase total armor by 20%.",
       "effect_type": "stat_modifier",
-      "stat": "armor",
-      "value": 20,
+      "stat": "total_armor",
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_equip",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [
-        {
-          "percent": 20.0,
-          "stat": "armor",
-          "qualifier": null
-        }
-      ],
+      "scaling_terms": [],
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Additionally, basic attacks that hit you have a chance of being {{tip block blocked}} equal to 5% per {{as 200 '''total''' armor}}, up to a maximum of 50% chance.",
-      "effect_type": "stat_modifier",
-      "stat": "armor",
-      "value": 5,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Basic attacks that hit you have a block chance equal to 5% per 200 total armor, capped at 50%.",
+      "effect_type": "block_chance",
+      "stat": "block",
+      "value": 0.05,
+      "value_range": {
+        "cap": 0.5
+      },
+      "unit": "ratio_per_200_armor",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_incoming_basic_attack",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "block_chance"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "total_armor",
+          "ratio": 0.05,
+          "type": "percent_per_200",
+          "per": 200,
+          "cap": 0.5
+        }
+      ],
       "numbers_extracted": [
         5,
         200,
         50
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -79,10 +85,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3058_shieldofmoltenstone.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.905600+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.056774+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.056774+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

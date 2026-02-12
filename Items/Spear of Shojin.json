@@ -25,69 +25,86 @@
       "effects": "Dealing {{tip|ability damage}} or {{tip|pet damage}}, sourced from a non-innate {{tip|ability}}, generates a stack for 6 seconds, stacking up to 4 times. For each stack, your {{tip|ability damage}}, {{tip|pet damage}} and {{tip|proc damage}}, sourced from a non-[[item]], gain 3% increased damage, for a total increase of 12% at '''maximum''' stacks."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain 25 [[Haste#Basic ability haste basic ability haste]].",
+      "raw": "Gain 25 basic ability haste.",
       "effect_type": "stat_modifier",
-      "stat": "ability_haste",
+      "stat": "basic_ability_haste",
       "value": 25,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         25
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Dealing {{tip ability damage}} or {{tip pet damage}}, sourced from a non-innate {{tip ability}}, generates a stack for 6 seconds, stacking up to 4 times",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 6,
+      "raw": "Ability or pet damage from non-innate abilities grants a stack for 6 seconds, up to 4 stacks.",
+      "effect_type": "apply_stack",
+      "stack_id": "focused_will",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 6.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_ability_or_pet_damage",
+      "applies_to": "self",
+      "conditions": [
+        "non_innate_ability",
+        "non_item_source"
+      ],
+      "status_effects": [
+        "focused_will"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 4,
+        "duration_seconds": 6.0
+      },
       "numbers_extracted": [
         6,
         4
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
-      "raw": "For each stack, your {{tip ability damage}}, {{tip pet damage}} and {{tip proc damage}}, sourced from a non-[[item]], gain 3% increased damage, for a total increase of 12% at '''maximum''' stacks.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Each stack increases your ability, pet, and proc damage (non-item) by 3%, up to 12% at max stacks.",
+      "effect_type": "damage_multiplier",
+      "stat": "ability_pet_proc_damage",
+      "value": 0.03,
+      "value_range": {
+        "max": 0.12
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_stack",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "non_item_source"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_rules": {
+        "value_per_stack": 0.03,
+        "max_stacks": 4
+      },
       "numbers_extracted": [
         3,
         12
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -103,10 +120,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
   "simpleDescription": "Reduce damage taken from champions by a flat amount. Attack while near multiple enemy champions to increase this amount for a short time.",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.922031+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.070766+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.070766+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

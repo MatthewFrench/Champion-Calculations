@@ -46,93 +46,106 @@
   ],
   "effects_structured": [
     {
-      "raw": "{{tip Slow Slowing}} or {{tip immobilize immobilizing}} an enemy champion causes you and the {{tt most wounded Lowest health percent}} allied champion within 1500 units to gain {{as 20% '''bonus''' movement speed}} decaying over {{fd 2.5}} seconds and {{as {{pp 50 to 230 for 13 1;7 to 18 type=your level}} hp}} {{as '''bonus''' health}} for {{fd 2.5}} seconds.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 1500,
+      "raw": "Slowing or immobilizing an enemy champion grants you and the most wounded allied champion within 1500 units 20% bonus movement speed (decays over 2.5s) and bonus health for 2.5s (30s cooldown).",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_movement_speed_and_health",
+      "value": 0.2,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "unit": "ratio",
+      "duration_seconds": 2.5,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [
-        "within_units"
+      "trigger": "on_slow_or_immobilize",
+      "applies_to": "self_and_most_wounded_ally_in_radius",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 50,
+          "max": 230
+        }
       ],
-      "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
+      "range_units": 1500,
+      "decay": {
+        "type": "linear_to_zero",
+        "duration_seconds": 2.5
+      },
+      "bonus_health": {
+        "min": 50,
+        "max": 230,
+        "duration_seconds": 2.5
+      },
       "numbers_extracted": [
         1500,
         20,
         2.5,
         50,
         230,
-        13,
-        1,
-        7,
-        18,
-        2.5
+        2.5,
+        30
       ],
-      "parse_confidence": 0.9
-    },
-    {
-      "raw": "Receives diminishing gold from excessive minion kills.",
-      "effect_type": "resource",
-      "stat": "gold",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_kill",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
       "parse_confidence": 0.65
     },
     {
-      "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area",
-      "effect_type": "status",
-      "stat": null,
+      "raw": "Receives diminishing gold from excessive minion kills.",
+      "effect_type": "resource_modifier",
+      "stat": "gold_gain_from_minions",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "stealth"
+      "trigger": "on_minion_kill",
+      "applies_to": "self",
+      "conditions": [
+        "excessive_minion_kills"
       ],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.45
-    },
-    {
-      "raw": "Charges refill upon visiting the shop.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.5
+    },
+    {
+      "raw": "Consume a ward charge to place a Stealth Ward at target location (600 range). Charges refill at shop.",
+      "effect_type": "place_ward",
+      "stat": "stealth_ward",
+      "value": 1,
+      "value_range": null,
+      "unit": "count",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_activate",
+      "applies_to": "target_location",
+      "conditions": [
+        "consume_ward_charge"
+      ],
+      "status_effects": [
+        "grants_vision"
+      ],
+      "scaling_terms": [],
+      "range_units": 600,
+      "numbers_extracted": []
+    },
+    {
+      "raw": "Warding charges refill upon visiting the shop.",
+      "effect_type": "charge_refill_rule",
+      "stat": "ward_charges",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_visit_shop",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": []
     }
   ],
   "shop": {
@@ -147,10 +160,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3876_solticesleigh.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.932007+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.078628+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.078628+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

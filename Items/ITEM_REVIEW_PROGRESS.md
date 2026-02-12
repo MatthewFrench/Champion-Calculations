@@ -254,18 +254,18 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Seryldas Grudge.json
 - [x] Shadowflame.json
 - [x] Shattered Armguard.json
-- [ ] Sheen.json
-- [ ] Shield of Molten Stone.json
-- [ ] Shurelyas Battlesong.json
-- [ ] Slightly Magical Boots.json
-- [ ] Solstice Sleigh.json
-- [ ] Sorcerers Shoes.json
-- [ ] Spear of Shojin.json
-- [ ] Spectral Cutlass.json
-- [ ] Spectres Cowl.json
-- [ ] Spellslingers Shoes.json
-- [ ] Spirit Visage.json
-- [ ] Staff of Flowing Water.json
+- [x] Sheen.json
+- [x] Shield of Molten Stone.json
+- [x] Shurelyas Battlesong.json
+- [x] Slightly Magical Boots.json
+- [x] Solstice Sleigh.json
+- [x] Sorcerers Shoes.json
+- [x] Spear of Shojin.json
+- [x] Spectral Cutlass.json
+- [x] Spectres Cowl.json
+- [x] Spellslingers Shoes.json
+- [x] Spirit Visage.json
+- [x] Staff of Flowing Water.json
 - [ ] Stat Bonus.json
 - [ ] Statikk Shiv.json
 - [ ] Stealth Ward.json

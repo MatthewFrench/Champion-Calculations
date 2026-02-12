@@ -19,7 +19,7 @@
       "flat": 15.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -31,26 +31,27 @@
     {
       "raw": "Grants you and all allies within 1000 units {{as 30% '''bonus''' movement speed}} for 4 seconds.",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 1000,
+      "stat": "bonus_movement_speed",
+      "value": 0.3,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 4.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_activate",
+      "applies_to": "self_and_allies_in_radius",
       "conditions": [
-        "within_units"
+        "within_range"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "range_units": 1000,
       "numbers_extracted": [
         1000,
         30,
         4
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -73,6 +74,7 @@
   "generated_at": "2026-02-09T23:34:24.908473+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.059316+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.059316+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
