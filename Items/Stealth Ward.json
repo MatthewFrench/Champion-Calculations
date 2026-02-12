@@ -5,8 +5,8 @@
   "rank": [
     "TRINKET"
   ],
-  "stats": null,
-  "passives": null,
+  "stats": {},
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -17,22 +17,33 @@
   ],
   "effects_structured": [
     {
-      "raw": "Consume a charge to place an invisible {{tip Totem Ward}} at the target location, which grants {{tip sight}} of the surrounding area for {{pp 90 to 120 type=average champion level}} seconds.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 90,
+      "raw": "Consume a charge to place an invisible Totem Ward that grants vision for 90 to 120 seconds (scales with average champion level).",
+      "effect_type": "place_ward",
+      "stat": "totem_ward",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "count",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "invisible"
+      "trigger": "on_activate",
+      "applies_to": "target_location",
+      "conditions": [
+        "consume_charge"
       ],
-      "scaling_terms": [],
+      "status_effects": [
+        "invisible",
+        "grants_vision"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "average_champion_level",
+          "type": "linear",
+          "min": 90,
+          "max": 120
+        }
+      ],
+      "range_units": 600,
       "numbers_extracted": [
         90,
         120
@@ -54,6 +65,7 @@
   "generated_at": "2026-02-09T23:34:24.856313+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.014588+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.014588+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

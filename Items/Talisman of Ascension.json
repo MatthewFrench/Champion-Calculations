@@ -5,8 +5,8 @@
   "rank": [
     "DISTRIBUTED"
   ],
-  "stats": null,
-  "passives": null,
+  "stats": {},
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -16,42 +16,45 @@
   ],
   "effects_structured": [
     {
-      "raw": "Reroll the stats on this item, up to twice per round and up to thrice with the [[File:Apex Inventor augment.png 20px link=]] [[Arena/Augments Apex Inventor]] augment",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 20,
-      "value_range": null,
-      "unit": null,
+      "raw": "Reroll the stats on this item, up to twice per round (thrice with Apex Inventor augment). Each reroll increases stat values.",
+      "effect_type": "reroll_item_stats",
+      "stat": "item_stats",
+      "value": 2,
+      "value_range": {
+        "with_apex_inventor": 3
+      },
+      "unit": "rerolls_per_round",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_activate",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
-        20
+        2,
+        3
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Each time you do so, the stats become higher in value.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Each reroll increases the item's stat values.",
+      "effect_type": "stat_increase_rule",
+      "stat": "item_stats",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_reroll",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.5
     }
   ],
   "shop": {
@@ -67,6 +70,10 @@
   "generated_at": "2026-02-09T23:34:24.859045+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.017158+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.017158+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Arena-style rerolling; exact stat scaling per reroll is not specified."
+    ]
   }
 }

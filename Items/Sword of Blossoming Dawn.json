@@ -31,48 +31,62 @@
       "effects": "Basic attacks [[on-hit]] cause the {{tt|most wounded|Lowest health percent}} and nearest allied champion to be {{tip|heal|healed}} for {{pp|15 to 45}} {{as|(+ 10% '''bonus''' AD)}} {{as|(+ 7% AP)}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain {{as {{fd 1.2}}% '''bonus''' attack speed}} per 1% {{stil heal and shield power}}.",
-      "effect_type": "healing",
-      "stat": "attack_speed",
-      "value": 1.2,
+      "raw": "Gain 1.2% bonus attack speed per 1% heal and shield power.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_speed",
+      "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_per_percent_hsp",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1.2,
-        1
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Basic attacks [[on-hit]] cause the {{tt most wounded Lowest health percent}} and nearest allied champion to be {{tip heal healed}} for {{pp 15 to 45}} {{as (+ 10% '''bonus''' AD)}} {{as (+ 7% AP)}}.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 15,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 7.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "heal_and_shield_power_percent",
+          "ratio": 0.012,
+          "type": "ratio_per_percent"
+        }
+      ],
+      "numbers_extracted": [
+        1.2,
+        1
+      ],
+      "parse_confidence": 0.65
+    },
+    {
+      "raw": "Basic attacks heal the most wounded and nearest allied champion for 15–45 (+10% bonus AD) (+7% AP).",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 15,
+      "value_range": {
+        "min": 15,
+        "max": 45
+      },
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "most_wounded_nearest_ally",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 0.1,
+          "type": "percent"
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.07,
+          "type": "percent"
         }
       ],
       "numbers_extracted": [
@@ -81,7 +95,7 @@
         10,
         7
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -96,10 +110,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4011_swordofblossomingdawn.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.872764+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.028659+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.028659+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

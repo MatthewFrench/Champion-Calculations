@@ -26,64 +26,76 @@
   ],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] deal {{as {{rd 40% AD 20% AD}} ad}} {{as physical damage}} to other enemies in a {{tip cr icononly = true}} 350 radius centered around the target.",
+      "raw": "Basic attacks deal 40% (20% for ranged) AD physical damage to other enemies in a 350 radius around the target.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 40,
-      "value_range": null,
-      "unit": "percent",
+      "stat": "physical_damage",
+      "value": 0.4,
+      "value_range": {
+        "ranged": 0.2
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "nearby_enemies",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 40.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.4,
+          "type": "percent",
+          "qualifier": "melee"
         },
         {
-          "percent": 20.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.2,
+          "type": "percent",
+          "qualifier": "ranged"
         }
       ],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 350
+      },
       "numbers_extracted": [
         40,
         20,
         350
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Deal {{as 75% AD}} {{as physical damage}} to enemies within a {{tip cr icononly = true}} 450 radius in front of you.",
+      "raw": "Active: Deal 75% AD physical damage to enemies in a 450 radius in front of you.",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 75,
+      "stat": "physical_damage",
+      "value": 0.75,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_activate",
+      "applies_to": "enemies_in_cone",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 75.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.75,
+          "type": "percent"
         }
       ],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 450
+      },
       "numbers_extracted": [
         75,
         450
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -100,10 +112,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3077_fighter_t2_tiamat.png",
   "simpleDescription": "Melee attacks hit nearby enemies",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.868193+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.024560+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.024560+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
+    ]
   }
 }

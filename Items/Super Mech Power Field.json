@@ -5,7 +5,7 @@
   "rank": [
     "MINION"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,37 +13,44 @@
       "effects": "Grants nearby minions (excluding super minions) {{as|35 armor}} and {{as|35 magic resistance}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Grants nearby minions (excluding super minions) {{as 35 armor}} and {{as 35 magic resistance}}.",
-      "effect_type": "stat_modifier",
-      "stat": "armor",
+      "raw": "Grants nearby non-super minions 35 armor and 35 magic resistance.",
+      "effect_type": "aura_stat_modifier",
+      "stat": "armor_and_magic_resistance",
       "value": 35,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "minion",
-      "conditions": [],
+      "trigger": "on_aura_tick",
+      "applies_to": "nearby_minions",
+      "conditions": [
+        "exclude_super_minions"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "armor": 35,
+        "magic_resistance": 35
+      },
       "numbers_extracted": [
         35,
         35
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1512_supermechpowerfield.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.888710+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.042321+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.042321+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

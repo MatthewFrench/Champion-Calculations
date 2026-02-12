@@ -28,80 +28,88 @@
       "effects": "Scoring a {{tip|takedown}} against an enemy champion within 3 seconds of damaging them resets ''Electrospark's'' cooldown."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Your next 3 basic attacks {{tip on-hit}} within 8 seconds are empowered to deal {{as 60 '''bonus''' magic damage}}, increased to {{as 85 magic damage}} against non-champions",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
+      "raw": "Your next 3 basic attacks within 8 seconds are empowered to deal 60 bonus magic damage (85 vs non-champions).",
+      "effect_type": "empowered_basic_attacks",
+      "stat": "magic_damage",
+      "value": 60,
+      "value_range": {
+        "non_champions": 85
+      },
+      "unit": "flat",
+      "duration_seconds": 8.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "self",
+      "trigger": "on_empower",
+      "applies_to": "enemy",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "charges": 3,
       "numbers_extracted": [
         3,
         8,
         60,
         85
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
-      "raw": "This bounces to the closest target within 500 units, repeating from the new target to strike up to 5 targets ({{pp 25 to 10 for 6 1;8 to 12}} second cooldown, starts after using the first empowered attack).",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 500,
+      "raw": "Damage bounces to the closest target within 500 units, chaining up to 5 targets (cooldown starts after first empowered attack).",
+      "effect_type": "chain_damage",
+      "stat": "magic_damage",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "chain",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "after_condition",
-        "within_units"
-      ],
+      "trigger": "on_empowered_hit",
+      "applies_to": "chain_targets",
+      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "chain": {
+        "range_units": 500,
+        "max_targets": 5
+      },
+      "cooldown_by_level_seconds": {
+        "min": 10,
+        "max": 25,
+        "levels": 6
+      },
       "numbers_extracted": [
         500,
         5,
         25,
         10,
-        6,
-        1,
-        8,
-        12
+        6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.55
     },
     {
-      "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them resets ''Electrospark's'' cooldown.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 3,
+      "raw": "Takedown within 3 seconds of damaging an enemy champion resets Electrospark cooldown.",
+      "effect_type": "cooldown_reset",
+      "stat": "electrospark_cooldown",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
+      "trigger": "on_takedown",
+      "applies_to": "self",
+      "conditions": [
+        "damaged_target_within_3_seconds"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -117,10 +125,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
   "simpleDescription": "Movement builds charges that release chain lightning on basic attack",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.874931+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.030761+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.030761+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

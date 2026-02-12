@@ -25,28 +25,38 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain a random amount of {{as '''bonus''' critical strike damage critical damage}} that scales up to {{as 50% of your critical strike chance}}, with the value of this amount changing every {{fd 0.25}} seconds.",
-      "effect_type": "damage",
-      "stat": "critical_strike",
-      "value": 50,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Gain a random amount of bonus critical strike damage that scales up to 50% of your critical strike chance, changing every 0.25 seconds.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_critical_strike_damage",
+      "value": null,
+      "value_range": {
+        "max_ratio_of_crit_chance": 0.5
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "interval_seconds": 0.25,
+      "trigger": "on_equip",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "randomized_value"
+      ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "critical_strike_chance",
+          "ratio": 0.5,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         50,
         0.25
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -63,6 +73,10 @@
   "generated_at": "2026-02-09T23:34:24.841599+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.000835+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.000835+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Bonus critical strike damage value is randomized and changes every 0.25 seconds."
+    ]
   }
 }

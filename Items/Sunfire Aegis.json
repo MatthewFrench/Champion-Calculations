@@ -23,43 +23,60 @@
       "effects": "Taking or dealing damage activates this passive for 3 seconds. Deal {{as|20 {{as|(+ 1% '''bonus''' health)}} magic damage|magic damage}} every second to enemies within {{tip|cr|icononly = true}} 325 (+ 100% '''bonus''' [[size]]) units, with the damage being increased to 160% against {{tip|minions}} and to 200% against {{tip|monsters}}. This executes minions that would be killed by one more tick of damage."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Taking or dealing damage activates this passive for 3 seconds",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 3,
+      "raw": "Taking or dealing damage activates Immolate for 3 seconds.",
+      "effect_type": "apply_status",
+      "stat": "immolate",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": null,
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "passive",
-      "applies_to": null,
+      "trigger": "on_damage_dealt_or_taken",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "immolate"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Deal {{as 20 {{as (+ 1% '''bonus''' health)}} magic damage magic damage}} every second to enemies within {{tip cr icononly = true}} 325 (+ 100% '''bonus''' [[size]]) units, with the damage being increased to 160% against {{tip minions}} and to 200% against {{tip monsters}}",
-      "effect_type": "damage",
-      "stat": "health",
+      "raw": "Immolate deals 20 (+1% bonus health) magic damage per second to nearby enemies (325 radius, increased by bonus size). Damage is increased vs minions/monsters.",
+      "effect_type": "damage_over_time",
+      "stat": "magic_damage",
       "value": 20,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat_per_second",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "minion",
+      "interval_seconds": 1.0,
+      "trigger": "on_immolate_tick",
+      "applies_to": "enemies_in_radius",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_health",
+          "ratio": 0.01,
+          "type": "percent"
+        }
+      ],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 325,
+        "scales_with_bonus_size": true
+      },
+      "damage_multipliers": {
+        "minions": 1.6,
+        "monsters": 2.0
+      },
       "numbers_extracted": [
         20,
         1,
@@ -68,25 +85,25 @@
         160,
         200
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     },
     {
-      "raw": "This executes minions that would be killed by one more tick of damage.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "Immolate executes minions that would be killed by one more tick.",
+      "effect_type": "execute",
+      "stat": "minion_health_threshold",
       "value": null,
       "value_range": null,
-      "unit": null,
+      "unit": "next_tick",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_immolate_tick",
       "applies_to": "minion",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -109,6 +126,7 @@
   "generated_at": "2026-02-09T23:34:24.891565+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.045283+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.045283+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

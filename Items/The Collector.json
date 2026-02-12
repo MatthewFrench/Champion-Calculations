@@ -28,42 +28,41 @@
       "effects": "Killing a champion grants you an additional {{g|25}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "If you deal {{tt post-mitigation Damage calculated after modifiers}} damage that would leave a champion below {{as 5% of their '''maximum''' health}}, {{tip execute}} them.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 5,
+      "raw": "If post-mitigation damage would leave a champion below 5% max health, execute them.",
+      "effect_type": "execute",
+      "stat": "health_threshold",
+      "value": 0.05,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_damage",
-      "applies_to": "self",
+      "applies_to": "enemy_champion",
       "conditions": [
-        "threshold",
-        "after_condition"
+        "post_mitigation"
       ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Killing a champion grants you an additional {{g 25}}.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Killing a champion grants an additional 25 gold.",
+      "effect_type": "resource_gain",
+      "stat": "gold",
       "value": 25,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_champion_kill",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
@@ -71,7 +70,7 @@
       "numbers_extracted": [
         25
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -95,6 +94,7 @@
   "generated_at": "2026-02-09T23:34:24.929175+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.075785+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.075785+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

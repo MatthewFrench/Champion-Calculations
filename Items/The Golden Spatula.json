@@ -58,28 +58,65 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "You are permanently [[File:On Fire! buff.png 20px link=]] '''On Fire!''', causing you to {{as Burn}} enemies within 400 units every second for {{as {{pp 26 to 43}} magic damage}} and reduce your abilities' cooldowns by {{fd 0.2}} seconds every {{fd 0.25}} seconds as well as gain {{as 5% '''bonus''' movement speed}}, increased to {{as 20% ms}} while facing nearby enemy champions, {{as 20% '''bonus''' attack speed}}, {{as {{pp 50 to 900}} '''bonus''' health}}, {{as {{fd 1.5}} '''bonus''' mana regeneration}}, and {{as 4 '''bonus''' energy regeneration}}",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 20,
+      "raw": "Permanently On Fire: burn nearby enemies every second and gain multiple buffs; also reduces cooldowns periodically.",
+      "effect_type": "aura_and_buff",
+      "stat": "on_fire",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
+      "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [
-        "while_condition",
-        "within_units"
+      "interval_seconds": 1.0,
+      "trigger": "always",
+      "applies_to": "self_and_nearby_enemies",
+      "conditions": [],
+      "status_effects": [
+        "on_fire"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 26,
+          "max": 43,
+          "affects": "burn_damage_per_second"
+        },
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 50,
+          "max": 900,
+          "affects": "bonus_health"
+        }
+      ],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 400
+      },
+      "burn_damage_per_second": {
+        "min": 26,
+        "max": 43,
+        "type": "magic"
+      },
+      "cooldown_reduction": {
+        "seconds_reduced": 0.2,
+        "interval_seconds": 0.25
+      },
+      "buffs": {
+        "bonus_movement_speed": 0.05,
+        "bonus_movement_speed_facing_enemy": 0.2,
+        "bonus_attack_speed": 0.2,
+        "bonus_health": {
+          "min": 50,
+          "max": 900
+        },
+        "bonus_mana_regen": 1.5,
+        "bonus_energy_regen": 4
+      },
       "numbers_extracted": [
-        20,
         400,
         26,
         43,
@@ -93,31 +130,37 @@
         1.5,
         4
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.55
     },
     {
-      "raw": "While '''On Fire!''', however, you also take {{rd 25% 35%}} increased damage and reduce the effectiveness of incoming heals and shields by 25%.",
-      "effect_type": "damage",
-      "stat": "shield",
-      "value": 25,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "While On Fire, take increased damage and reduced healing/shielding effectiveness.",
+      "effect_type": "stat_modifier",
+      "stat": "damage_taken_and_heal_shield_received",
+      "value": 0.25,
+      "value_range": {
+        "damage_taken_increase": {
+          "melee": 0.25,
+          "ranged": 0.35
+        }
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "always",
       "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "on_fire_active"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "heal_shield_received_modifier": -0.25,
       "numbers_extracted": [
         25,
         35,
         25
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -136,6 +179,10 @@
   "generated_at": "2026-02-09T23:34:24.896948+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.050067+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.050067+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "On Fire! has multiple concurrent effects; some values scale by level and/or are mode-specific."
+    ]
   }
 }

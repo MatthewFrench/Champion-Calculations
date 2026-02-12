@@ -23,53 +23,74 @@
       "effects": "Your next basic attack against a champion is empowered to {{tip|critical strike|critically strike}} for{{ft|{{as|{{critical damage|60|80}}|critical damage}} '''bonus''' damage|{{sti|{{as|80% '''total''' critical damage}}}}}}and {{tip|heal}} you for {{as|{{rd|100%|50%}} '''base''' AD}} {{as|(+ 6% of your '''missing''' health)}} (10 second cooldown per target). Excess healing beyond {{as|'''maximum''' health}} is converted to {{as|'''bonus''' health}} for 8 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Your next basic attack against a champion is empowered to {{tip critical strike critically strike}} for{{ft {{as {{critical damage 60 80}} critical damage}} '''bonus''' damage {{sti {{as 80% '''total''' critical damage}}}}}}and {{tip heal}} you for {{as {{rd 100% 50%}} '''base''' AD}} {{as (+ 6% of your '''missing''' health)}} (10 second cooldown per target)",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 60,
+      "raw": "Your next basic attack against a champion critically strikes for bonus damage and heals you (10s cooldown per target).",
+      "effect_type": "empowered_basic_attack",
+      "stat": "critical_damage_and_heal",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
+      "unit": null,
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 10.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_next_basic_attack",
+      "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_attack_damage",
+          "ratio": 1.0,
+          "type": "percent",
+          "qualifier": "melee"
+        },
+        {
+          "stat": "base_attack_damage",
+          "ratio": 0.5,
+          "type": "percent",
+          "qualifier": "ranged"
+        },
+        {
+          "stat": "missing_health",
+          "ratio": 0.06,
+          "type": "percent"
+        }
+      ],
+      "critical_damage_bonus": {
+        "melee": 0.6,
+        "ranged": 0.8
+      },
       "numbers_extracted": [
         60,
-        80,
         80,
         100,
         50,
         6,
         10
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.55
     },
     {
-      "raw": "Excess healing beyond {{as '''maximum''' health}} is converted to {{as '''bonus''' health}} for 8 seconds.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 8,
+      "raw": "Excess healing beyond max health becomes bonus health for 8 seconds.",
+      "effect_type": "overheal_to_bonus_health",
+      "stat": "bonus_health",
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": null,
       "duration_seconds": 8.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_overheal",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         8
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -84,10 +105,15 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.843322+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.002508+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.002508+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Critical damage bonus differs for melee vs ranged (60% vs 80%).",
+      "Heal scales with base AD (melee 100% / ranged 50%) plus 6% missing health."
+    ]
   }
 }

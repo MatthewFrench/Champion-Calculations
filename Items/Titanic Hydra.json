@@ -30,45 +30,106 @@
   ],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-hit]] deal {{as {{rd 1% {{fd 0.5}}%}} '''maximum''' health hp}} {{as '''bonus''' physical damage}} to the target and {{as {{rd 3% {{fd 1.5}}%}} '''maximum''' health hp}} {{as physical damage}} to other enemies in a cone in the direction of the primary target.",
+      "raw": "Basic attacks deal bonus physical damage equal to 1% (0.5% ranged) max health to the target, and 3% (1.5% ranged) to other enemies in a cone.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 1,
-      "value_range": null,
-      "unit": "percent",
+      "stat": "physical_damage",
+      "value": 0.01,
+      "value_range": {
+        "ranged_primary": 0.005,
+        "ranged_secondary": 0.015
+      },
+      "unit": "ratio_of_max_health",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "target_and_cone_enemies",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "self_max_health",
+          "ratio": 0.01,
+          "type": "percent",
+          "qualifier": "melee_primary"
+        },
+        {
+          "stat": "self_max_health",
+          "ratio": 0.005,
+          "type": "percent",
+          "qualifier": "ranged_primary"
+        },
+        {
+          "stat": "self_max_health",
+          "ratio": 0.03,
+          "type": "percent",
+          "qualifier": "melee_secondary"
+        },
+        {
+          "stat": "self_max_health",
+          "ratio": 0.015,
+          "type": "percent",
+          "qualifier": "ranged_secondary"
+        }
+      ],
+      "area_of_effect": {
+        "shape": "cone"
+      },
       "numbers_extracted": [
         1,
         0.5,
         3,
         1.5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     },
     {
-      "raw": "Your next basic attack within 10 seconds empowers ''Cleave'' to deal {{as {{rd 4% 2%}} '''maximum''' health hp}} {{as '''bonus''' physical damage}} to the primary target and {{as {{rd 9% {{fd 4.5}}%}} '''maximum''' health hp}} {{as physical damage}} to secondary targets (10 second cooldown, starts after using the empowered attack).",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Next basic attack within 10 seconds empowers Cleave: 4% (2% ranged) max health to primary and 9% (4.5% ranged) to secondary targets (10s cooldown).",
+      "effect_type": "empowered_basic_attack",
+      "stat": "physical_damage",
+      "value": 0.04,
+      "value_range": {
+        "ranged_primary": 0.02,
+        "ranged_secondary": 0.045
+      },
+      "unit": "ratio_of_max_health",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 10.0,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [
-        "after_condition"
-      ],
+      "trigger": "on_next_basic_attack",
+      "applies_to": "target_and_cone_enemies",
+      "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "self_max_health",
+          "ratio": 0.04,
+          "type": "percent",
+          "qualifier": "melee_primary"
+        },
+        {
+          "stat": "self_max_health",
+          "ratio": 0.02,
+          "type": "percent",
+          "qualifier": "ranged_primary"
+        },
+        {
+          "stat": "self_max_health",
+          "ratio": 0.09,
+          "type": "percent",
+          "qualifier": "melee_secondary"
+        },
+        {
+          "stat": "self_max_health",
+          "ratio": 0.045,
+          "type": "percent",
+          "qualifier": "ranged_secondary"
+        }
+      ],
+      "buff_window_seconds": 10.0,
+      "area_of_effect": {
+        "shape": "cone"
+      },
       "numbers_extracted": [
         10,
         4,
@@ -77,7 +138,7 @@
         4.5,
         10
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -101,6 +162,10 @@
   "generated_at": "2026-02-09T23:34:24.930620+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.076908+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.076908+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Cleave damage differs for melee vs ranged (primary: 1% vs 0.5%; secondary: 3% vs 1.5%)."
+    ]
   }
 }

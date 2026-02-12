@@ -266,30 +266,30 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Spellslingers Shoes.json
 - [x] Spirit Visage.json
 - [x] Staff of Flowing Water.json
-- [ ] Stat Bonus.json
-- [ ] Statikk Shiv.json
-- [ ] Stealth Ward.json
-- [ ] Steel Sigil.json
-- [ ] Steraks Gage.json
-- [ ] Stormrazor.json
-- [ ] Stormsurge.json
-- [ ] Stridebreaker.json
-- [ ] Sundered Sky.json
-- [ ] Sunfire Aegis.json
-- [ ] Super Mech Armor.json
-- [ ] Super Mech Power Field.json
-- [ ] Swiftmarch.json
-- [ ] Sword of Blossoming Dawn.json
-- [ ] Sword of the Divine.json
-- [ ] Talisman of Ascension.json
-- [ ] Tear of the Goddess.json
-- [ ] Terminus.json
-- [ ] The Brutalizer.json
-- [ ] The Collector.json
-- [ ] The Golden Spatula.json
-- [ ] Thornmail.json
-- [ ] Tiamat.json
-- [ ] Titanic Hydra.json
+- [x] Stat Bonus.json
+- [x] Statikk Shiv.json
+- [x] Stealth Ward.json
+- [x] Steel Sigil.json
+- [x] Steraks Gage.json
+- [x] Stormrazor.json
+- [x] Stormsurge.json
+- [x] Stridebreaker.json
+- [x] Sundered Sky.json
+- [x] Sunfire Aegis.json
+- [x] Super Mech Armor.json
+- [x] Super Mech Power Field.json
+- [x] Swiftmarch.json
+- [x] Sword of Blossoming Dawn.json
+- [x] Sword of the Divine.json
+- [x] Talisman of Ascension.json
+- [x] Tear of the Goddess.json
+- [x] Terminus.json
+- [x] The Brutalizer.json
+- [x] The Collector.json
+- [x] The Golden Spatula.json
+- [x] Thornmail.json
+- [x] Tiamat.json
+- [x] Titanic Hydra.json
 - [ ] Total Biscuit of Everlasting Will.json
 - [ ] Trailblazer.json
 - [ ] Trinity Force.json

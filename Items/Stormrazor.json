@@ -33,49 +33,64 @@
       }
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 100.0,
+      "raw": "Moving and basic attacking generates Energize stacks, up to 100.",
+      "effect_type": "apply_stack",
+      "stack_id": "energize",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100.0
-      ],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "When fully {{tip Energized}}, your next basic attack deals {{as 100 '''bonus''' magic damage}} [[on-hit]] and grants you {{as 45% '''bonus''' movement speed}} for {{fd 1.5}} seconds.",
-      "effect_type": "damage",
-      "stat": "movement_speed",
-      "value": 100,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
+      "trigger": "on_move_or_basic_attack",
       "applies_to": "self",
       "conditions": [],
+      "status_effects": [
+        "energize"
+      ],
+      "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 100
+      },
+      "numbers_extracted": [
+        100
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "At full Energize, your next basic attack deals 100 bonus magic damage and grants 45% bonus movement speed for 1.5 seconds.",
+      "effect_type": "damage_and_speed",
+      "stat": "magic_damage",
+      "value": 100,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_next_basic_attack",
+      "applies_to": "enemy",
+      "conditions": [
+        "energize_full"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_interaction": {
+        "stack_id": "energize",
+        "consume": "all"
+      },
+      "movement_speed_bonus": {
+        "value": 0.45,
+        "duration_seconds": 1.5
+      },
       "numbers_extracted": [
         100,
         45,
         1.5
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -98,6 +113,7 @@
   "generated_at": "2026-02-09T23:34:24.923652+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.072092+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.072092+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

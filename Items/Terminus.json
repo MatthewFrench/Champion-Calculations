@@ -25,86 +25,100 @@
       "effects": "Basic attacks {{tip|on-hit}} against champions alternate between ''Light'' and ''Dark'' hits, each one granting a bonus for 5 seconds that stacks up to 3 times. ''Light'' hits grant {{pp|6 to 8 for 3|1;11;14|type=level}} {{as|'''bonus''' armor}} and {{as|'''bonus''' magic resistance}} while ''Dark'' hits grant 10% {{as|armor penetration}} and {{as|magic penetration}}, for a total of {{pp|6*3 to 8*3 for 3|1;11;14}} '''bonus''' resistances and 30% resistances penetration at maximum stacks of each."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks deal {{as 30 '''bonus''' magic damage}} [[on-hit]].",
+      "raw": "Basic attacks deal 30 bonus magic damage on-hit.",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 30,
       "value_range": null,
-      "unit": null,
+      "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_hit",
-      "applies_to": null,
+      "applies_to": "enemy",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Basic attacks {{tip on-hit}} against champions alternate between ''Light'' and ''Dark'' hits, each one granting a bonus for 5 seconds that stacks up to 3 times",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 5,
+      "raw": "Basic attacks on champions alternate between Light and Dark hits, each granting a 5s buff that stacks up to 3.",
+      "effect_type": "apply_stack",
+      "stack_id": "light_or_dark",
+      "value": 1,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": 5.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack_hit_champion",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "light_hit",
+        "dark_hit"
+      ],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 3,
+        "duration_seconds": 5.0,
+        "alternate_modes": [
+          "light",
+          "dark"
+        ]
+      },
       "numbers_extracted": [
         5,
         3
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     },
     {
-      "raw": "''Light'' hits grant {{pp 6 to 8 for 3 1;11;14 type=level}} {{as '''bonus''' armor}} and {{as '''bonus''' magic resistance}} while ''Dark'' hits grant 10% {{as armor penetration}} and {{as magic penetration}}, for a total of {{pp 6*3 to 8*3 for 3 1;11;14}} '''bonus''' resistances and 30% resistances penetration at maximum stacks of each.",
+      "raw": "Light hits grant bonus armor and magic resistance; Dark hits grant armor and magic penetration. Max stacks provide 30% penetration and higher resists.",
       "effect_type": "stat_modifier",
-      "stat": "armor",
-      "value": 6,
+      "stat": "resistances_and_penetration",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
+      "unit": null,
+      "duration_seconds": 5.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "while_condition",
-        "at_max_stacks"
-      ],
+      "trigger": "on_stack",
+      "applies_to": "self",
+      "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 6,
+          "max": 8,
+          "affects": "bonus_armor_and_magic_resist_per_light_stack"
+        },
+        {
+          "stat": "dark_stacks",
+          "ratio": 0.1,
+          "type": "percent_per_stack",
+          "affects": "armor_and_magic_penetration"
+        }
+      ],
+      "caps": {
+        "penetration_ratio_max": 0.3,
+        "max_stacks_per_mode": 3
+      },
       "numbers_extracted": [
         6,
         8,
-        3,
-        1,
-        11,
-        14,
         10,
-        6,
-        3,
-        8,
-        3,
-        3,
-        1,
-        11,
-        14,
         30
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.55
     }
   ],
   "shop": {
@@ -130,6 +144,10 @@
   "generated_at": "2026-02-09T23:34:24.860129+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.018086+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.018086+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Light stack resist values scale with level; Dark stacks grant 10% penetration per stack up to 30%."
+    ]
   }
 }

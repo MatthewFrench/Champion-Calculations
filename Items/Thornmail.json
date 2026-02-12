@@ -20,29 +20,56 @@
       "effects": "When struck by a basic attack [[on-hit]], deal {{as|20 {{as|(+ 10% '''bonus''' armor)}} magic damage|magic damage}} to the attacker and, if they are a champion, inflict them with {{tip|Grievous Wounds}} for 3 seconds."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "When struck by a basic attack [[on-hit]], deal {{as 20 {{as (+ 10% '''bonus''' armor)}} magic damage magic damage}} to the attacker and, if they are a champion, inflict them with {{tip Grievous Wounds}} for 3 seconds.",
+      "raw": "When struck by a basic attack, deal 20 (+10% bonus armor) magic damage to the attacker.",
       "effect_type": "damage",
-      "stat": "armor",
+      "stat": "magic_damage",
       "value": 20,
       "value_range": null,
-      "unit": "percent",
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_basic_attack_hit_by_enemy",
+      "applies_to": "attacker",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_armor",
+          "ratio": 0.1,
+          "type": "percent"
+        }
+      ],
+      "numbers_extracted": [
+        20,
+        10
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "If the attacker is a champion, apply Grievous Wounds for 3 seconds.",
+      "effect_type": "apply_status",
+      "stat": "grievous_wounds",
+      "value": null,
+      "value_range": null,
+      "unit": null,
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_basic_attack_hit_by_champion",
+      "applies_to": "attacker",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "grievous_wounds"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
-        20,
-        10,
         3
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -63,6 +90,7 @@
   "generated_at": "2026-02-09T23:34:24.873993+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.029746+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.029746+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

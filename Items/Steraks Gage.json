@@ -26,51 +26,70 @@
       "cooldown": "90"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Gain {{as '''bonus''' attack damage}} equal to {{as 45% '''base''' AD}}.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 45,
+      "raw": "Gain bonus attack damage equal to 45% of base AD.",
+      "effect_type": "stat_modifier",
+      "stat": "bonus_attack_damage",
+      "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "base_attack_damage",
+          "ratio": 0.45,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         45
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "If you would take damage that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs damage equal to {{as 60% of '''bonus''' health}} which decays over {{fd 4.5}} seconds.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
+      "raw": "If damage would reduce you below 30% max health, gain a decaying shield equal to 60% of bonus health (90s cooldown).",
+      "effect_type": "shield",
+      "stat": "damage",
+      "value": 0.6,
       "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
+      "unit": "ratio_of_bonus_health",
+      "duration_seconds": 4.5,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_health_threshold",
       "applies_to": "self",
       "conditions": [
-        "threshold"
+        "health_below_30_percent"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "lifeline_shield"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "bonus_health",
+          "ratio": 0.6,
+          "type": "percent"
+        }
+      ],
+      "decay": {
+        "type": "linear_to_zero",
+        "duration_seconds": 4.5
+      },
       "numbers_extracted": [
         30,
         60,
-        4.5
+        4.5,
+        90
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -95,6 +114,7 @@
   "generated_at": "2026-02-09T23:34:24.904043+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.055445+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.055445+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }
