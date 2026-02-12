@@ -33,74 +33,84 @@
       "effects": "Gain {{as|ability power}} equal to {{as|2% '''bonus''' health}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "For each second [[combat status in combat]] with champions, deal 2% increased damage, stacking up to 4 times for a total of 8% increased damage",
-      "effect_type": "damage",
+      "raw": "Each second in combat with champions grants a 2% damage increase, stacking up to 4 times (8% total).",
+      "effect_type": "damage_multiplier",
       "stat": "damage",
-      "value": 2,
-      "value_range": null,
-      "unit": "percent",
+      "value": 0.02,
+      "value_range": {
+        "max": 0.08
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "in_combat"
-      ],
+      "interval_seconds": 1.0,
+      "trigger": "on_in_combat_with_champions",
+      "applies_to": "self",
+      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 4,
+        "value_per_stack": 0.02
+      },
       "numbers_extracted": [
         2,
         4,
         8
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     },
     {
-      "raw": "At maximum stacks, gain {{as {{rd 10% 6%}} omnivamp}}.",
+      "raw": "At maximum stacks, gain omnivamp (10% melee, 6% ranged).",
       "effect_type": "stat_modifier",
       "stat": "omnivamp",
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
+      "value": 0.1,
+      "value_range": {
+        "ranged": 0.06
+      },
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "at_max_stacks"
-      ],
+      "trigger": "on_stack_max",
+      "applies_to": "self",
+      "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10,
         6
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Gain {{as ability power}} equal to {{as 2% '''bonus''' health}}.",
-      "effect_type": "healing",
+      "raw": "Gain ability power equal to 2% of bonus health.",
+      "effect_type": "stat_modifier",
       "stat": "ability_power",
-      "value": 2,
+      "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_health",
+          "ratio": 0.02,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -122,6 +132,10 @@
   "generated_at": "2026-02-09T23:34:24.923132+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.071644+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.071644+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Omnivamp values differ for melee vs ranged (10% vs 6%)."
+    ]
   }
 }

@@ -20,30 +20,32 @@
       "effects": "Your {{as|magic|magic damage}} and {{as|true|true damage}} damage will {{tip|critical strike|critically strike}} for 120% damage against enemies {{as|below 40% '''maximum''' health}}."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Your {{as magic magic damage}} and {{as true true damage}} damage will {{tip critical strike critically strike}} for 120% damage against enemies {{as below 40% '''maximum''' health}}.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 120,
+      "raw": "Your magic and true damage critically strike for 120% damage against enemies below 40% max health.",
+      "effect_type": "damage_multiplier",
+      "stat": "magic_and_true_damage",
+      "value": 1.2,
       "value_range": null,
-      "unit": "percent",
+      "unit": "multiplier",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_damage",
+      "applies_to": "enemy",
       "conditions": [
-        "threshold"
+        "target_health_percent_below_40"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "critical_strike_damage"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         120,
         40
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -58,10 +60,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4645_shadowflame.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.885120+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.037981+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.037981+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

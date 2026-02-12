@@ -232,28 +232,28 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Refillable Potion.json
 - [x] Regicide.json
 - [x] Reinforced Armor Turret Item.json
-- [ ] Rejuvenation Bead.json
-- [ ] Reverberation.json
-- [ ] Riftmaker.json
-- [ ] Rite of Ruin.json
-- [ ] Rod of Ages.json
-- [ ] Ruby Crystal.json
-- [ ] Runaans Hurricane.json
-- [ ] Runecarver.json
-- [ ] Runic Compass.json
-- [ ] Rylais Crystal Scepter.json
-- [ ] Sanguine Gift.json
-- [ ] Sapphire Crystal.json
-- [ ] Scarecrow Effigy.json
-- [ ] Scorchclaw Pup.json
-- [ ] Scouts Slingshot.json
-- [ ] Seekers Armguard.json
-- [ ] Seraphs Embrace.json
-- [ ] Serpents Fang.json
-- [ ] Serrated Dirk.json
-- [ ] Seryldas Grudge.json
-- [ ] Shadowflame.json
-- [ ] Shattered Armguard.json
+- [x] Rejuvenation Bead.json
+- [x] Reverberation.json
+- [x] Riftmaker.json
+- [x] Rite of Ruin.json
+- [x] Rod of Ages.json
+- [x] Ruby Crystal.json
+- [x] Runaans Hurricane.json
+- [x] Runecarver.json
+- [x] Runic Compass.json
+- [x] Rylais Crystal Scepter.json
+- [x] Sanguine Gift.json
+- [x] Sapphire Crystal.json
+- [x] Scarecrow Effigy.json
+- [x] Scorchclaw Pup.json
+- [x] Scouts Slingshot.json
+- [x] Seekers Armguard.json
+- [x] Seraphs Embrace.json
+- [x] Serpents Fang.json
+- [x] Serrated Dirk.json
+- [x] Seryldas Grudge.json
+- [x] Shadowflame.json
+- [x] Shattered Armguard.json
 - [ ] Sheen.json
 - [ ] Shield of Molten Stone.json
 - [ ] Shurelyas Battlesong.json

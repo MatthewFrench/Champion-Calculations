@@ -23,16 +23,16 @@
   ],
   "effects_structured": [
     {
-      "raw": "Put yourself in {{tip stasis (buff) stasis}} for {{fd 2.5}} seconds, rendering you {{tip untargetable}} and {{tip invulnerable}} for the duration but also unable to move, declare [[basic attack]]s, cast [[champion ability abilities]], use [[summoner spell]]s, or [[active ability items activate items]].",
-      "effect_type": "status",
-      "stat": null,
-      "value": 2.5,
+      "raw": "Put yourself in stasis for 2.5 seconds, becoming untargetable and invulnerable but unable to act.",
+      "effect_type": "apply_status",
+      "stat": "stasis",
+      "value": true,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "boolean",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
+      "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [
@@ -41,10 +41,20 @@
         "invulnerable"
       ],
       "scaling_terms": [],
+      "duration": {
+        "seconds": 2.5
+      },
+      "restrictions": [
+        "cannot_move",
+        "cannot_basic_attack",
+        "cannot_cast_abilities",
+        "cannot_use_summoner_spells",
+        "cannot_activate_items"
+      ],
       "numbers_extracted": [
         2.5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -67,6 +77,10 @@
   "generated_at": "2026-02-09T23:34:24.907572+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.058480+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.058480+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "This item is a special/variant entry containing a stasis active."
+    ]
   }
 }

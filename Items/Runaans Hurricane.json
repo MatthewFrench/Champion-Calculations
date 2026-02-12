@@ -23,53 +23,57 @@
       "effects": "Basic attacks [[on-attack]] fire additional bolts at up to 2 enemies {{tt|in front of you|180{{degree}}}}, each dealing {{as|55% AD}} {{as|physical damage}}. Bolts apply {{tip|on-hit}} effects and are affected by {{tip|critical strike}} modifiers."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Basic attacks [[on-attack]] fire additional bolts at up to 2 enemies {{tt in front of you 180{{degree}}}}, each dealing {{as 55% AD}} {{as physical damage}}",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 2,
+      "raw": "Basic attacks fire additional bolts at up to 2 enemies in a 180-degree cone; each bolt deals 55% AD physical damage.",
+      "effect_type": "additional_projectiles",
+      "stat": "physical_damage",
+      "value": 0.55,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_basic_attack",
+      "applies_to": "additional_targets",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 55.0,
-          "stat": "ad",
-          "qualifier": null
+          "stat": "attack_damage",
+          "ratio": 0.55,
+          "type": "percent"
         }
       ],
+      "projectiles": {
+        "count": 2,
+        "cone_degrees": 180
+      },
       "numbers_extracted": [
         2,
         180,
         55
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     },
     {
-      "raw": "Bolts apply {{tip on-hit}} effects and are affected by {{tip critical strike}} modifiers.",
-      "effect_type": "stat_modifier",
-      "stat": "critical_strike",
-      "value": null,
+      "raw": "Bolts apply on-hit effects and are affected by critical strike modifiers.",
+      "effect_type": "on_hit_modifier",
+      "stat": "on_hit_and_crit_apply",
+      "value": true,
       "value_range": null,
-      "unit": null,
+      "unit": "boolean",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
+      "trigger": "on_additional_bolt_hit",
+      "applies_to": "additional_targets",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -86,10 +90,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3085_marksman_t3_runaans.png",
   "simpleDescription": "Ranged attacks fire two bolts at nearby enemies",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.886388+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.039157+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.039157+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

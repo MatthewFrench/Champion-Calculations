@@ -23,67 +23,75 @@
       "effects": "Store 15% of {{tt|post-mitigation damage|Damage calculated after modifiers}} dealt. Whenever the stored amount exceeds a value of 333, consume it to {{tip|heal}} yourself and the nearest allied champion for that same amount. Stored damage is reset every round and between each phase in a round."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Store 15% of {{tt post-mitigation damage Damage calculated after modifiers}} dealt",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 15,
+      "raw": "Store 15% of post-mitigation damage dealt.",
+      "effect_type": "store_resource",
+      "stat": "stored_damage",
+      "value": 0.15,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_damage_dealt",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
+      "trigger": "on_damage_dealt",
+      "applies_to": "self",
       "conditions": [
-        "after_condition"
+        "post_mitigation"
       ],
-      "status_effects": [],
+      "status_effects": [
+        "patronage"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Whenever the stored amount exceeds a value of 333, consume it to {{tip heal}} yourself and the nearest allied champion for that same amount",
+      "raw": "When stored damage exceeds 333, consume it to heal yourself and the nearest allied champion for that amount.",
       "effect_type": "healing",
-      "stat": null,
+      "stat": "health",
       "value": 333,
       "value_range": null,
-      "unit": null,
+      "unit": "flat_threshold",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_stored_damage_threshold",
+      "applies_to": "self_and_nearest_ally",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "stored_damage",
+          "ratio": 1.0,
+          "type": "consume_full_amount"
+        }
+      ],
       "numbers_extracted": [
         333
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Stored damage is reset every round and between each phase in a round.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "Stored damage resets every round and between each phase.",
+      "effect_type": "stack_reset_rule",
+      "stat": "stored_damage",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_round_or_phase_end",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -94,10 +102,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3062_sanguinegift.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.886651+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.039400+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.039400+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Stored damage resets per round/phase (Arena-style)."
+    ]
   }
 }

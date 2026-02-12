@@ -20,20 +20,20 @@
       "effects": "Dealing {{tip|ability damage}} {{tip|slow|slows}} affected [[unit]]s by 30% for 1 second."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Dealing {{tip ability damage}} {{tip slow slows}} affected [[unit]]s by 30% for 1 second.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 30,
+      "raw": "Ability damage slows affected units by 30% for 1 second.",
+      "effect_type": "apply_status",
+      "stat": "slow",
+      "value": 0.3,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": 1.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_ability_damage",
+      "applies_to": "affected_units",
       "conditions": [],
       "status_effects": [
         "slow"
@@ -43,7 +43,7 @@
         30,
         1
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -64,6 +64,7 @@
   "generated_at": "2026-02-09T23:34:24.854315+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.012700+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.012700+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

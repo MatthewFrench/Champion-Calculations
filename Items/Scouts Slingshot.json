@@ -17,29 +17,30 @@
       "effects": "Damaging an enemy champion deals {{as|40 '''bonus''' magic damage}} (40 second cooldown, reduced by 1 second {{tip|on-attack}})."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Damaging an enemy champion deals {{as 40 '''bonus''' magic damage}} (40 second cooldown, reduced by 1 second {{tip on-attack}}).",
+      "raw": "Damaging an enemy champion deals 40 bonus magic damage (40s cooldown, reduced by 1s on attack).",
       "effect_type": "damage",
-      "stat": "damage",
+      "stat": "magic_damage",
       "value": 40,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 40.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_damage_to_champion",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "cooldown_reduction_on_attack_seconds": 1.0,
       "numbers_extracted": [
         40,
         40,
         1
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -55,10 +56,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3144_scoutslingshot.png",
   "simpleDescription": "Activate to deal magic damage and slow target champion",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.872293+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.028219+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.028219+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

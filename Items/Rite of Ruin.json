@@ -28,69 +28,91 @@
       "effects": "Casting an ability has a {{pp|key=%|key1=%|type=critical strike chance|0 to 100 for 11|0 to 100|formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to grant you or your ally a {{tip|shield}} for 3 seconds that absorbs {{pp|70 to 210}} {{as|(+ 25% '''bonus''' AD)}} {{as|(+ 15% AP)}} damage."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Casting an [[Champion ability ability]] grants {{sti {{fd 2.5}}% critical strike chance}} for 6 seconds, stacking up to 8 times for a maximum of {{sti critical strike chance 20%}}.",
+      "raw": "Casting an ability grants 2.5% critical strike chance for 6 seconds, stacking up to 8 times (max 20%).",
       "effect_type": "stat_modifier",
-      "stat": "critical_strike",
-      "value": 2.5,
-      "value_range": null,
-      "unit": "percent",
+      "stat": "critical_strike_chance",
+      "value": 0.025,
+      "value_range": {
+        "max": 0.2
+      },
+      "unit": "ratio",
       "duration_seconds": 6.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_ability",
-      "applies_to": null,
+      "trigger": "on_ability_cast",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 8,
+        "value_per_stack": 0.025
+      },
       "numbers_extracted": [
         2.5,
         6,
         8,
         20
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Casting an ability has a {{pp key=% key1=% type=critical strike chance 0 to 100 for 11 0 to 100 formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to grant you or your ally a {{tip shield}} for 3 seconds that absorbs {{pp 70 to 210}} {{as (+ 25% '''bonus''' AD)}} {{as (+ 15% AP)}} damage.",
-      "effect_type": "damage",
-      "stat": "critical_strike",
-      "value": 1,
-      "value_range": null,
-      "unit": "percent",
+      "raw": "Casting an ability has a chance (equal to your crit chance, capped at 100%) to grant you or an ally a 3s shield.",
+      "effect_type": "shield",
+      "stat": "shield",
+      "value": 70,
+      "value_range": {
+        "min": 70,
+        "max": 210
+      },
+      "unit": "flat",
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [],
+      "trigger": "on_ability_cast",
+      "applies_to": "self_or_ally",
+      "conditions": [
+        "chance_scales_with_crit_chance"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
-          "percent": 15.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "critical_strike_chance",
+          "ratio": 1.0,
+          "type": "chance_per_percent",
+          "cap": 1.0
+        },
+        {
+          "stat": "bonus_attack_damage",
+          "ratio": 0.25,
+          "type": "percent"
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.15,
+          "type": "percent"
+        },
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 70,
+          "max": 210
         }
       ],
       "numbers_extracted": [
-        1,
-        0,
-        100,
-        11,
         0,
         100,
         1,
-        1,
-        100,
         3,
         70,
         210,
         25,
         15
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -105,10 +127,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3430_riteofruin.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.910429+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.061730+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.061730+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Shield chance equals critical strike chance, capped at 100%."
+    ]
   }
 }

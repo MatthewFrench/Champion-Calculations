@@ -29,52 +29,67 @@
       "cooldown": "90"
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Grants {{as ability power}} equal to {{as 2% '''bonus''' mana}}.",
+      "raw": "Gain ability power equal to 2% of bonus mana.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
-      "value": 2,
+      "value": 0,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_equip",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "bonus_mana",
+          "ratio": 0.02,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.7
     },
     {
-      "raw": "If you would take damage that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} for 3 seconds that absorbs damage equal to {{as 18% '''maximum''' mana}} for 3 seconds.",
-      "effect_type": "damage",
-      "stat": "health",
-      "value": 30,
+      "raw": "If damage would reduce you below 30% max health, gain a shield for 3 seconds equal to 18% max mana (90s cooldown).",
+      "effect_type": "shield",
+      "stat": "damage",
+      "value": 0.18,
       "value_range": null,
-      "unit": "percent",
+      "unit": "ratio_of_max_mana",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": null,
+      "trigger": "on_health_threshold",
       "applies_to": "self",
       "conditions": [
-        "threshold"
+        "health_below_30_percent"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
+      "status_effects": [
+        "lifeline_shield"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "max_mana",
+          "ratio": 0.18,
+          "type": "percent"
+        }
+      ],
       "numbers_extracted": [
         30,
         3,
         18,
-        3
+        3,
+        90
       ],
-      "parse_confidence": 0.9
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -85,10 +100,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3048_mage_t3_seraphsembrace.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.853696+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.012104+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.012104+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

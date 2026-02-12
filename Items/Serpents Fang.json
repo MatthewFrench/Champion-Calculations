@@ -20,29 +20,79 @@
       "effects": "Dealing damage to an enemy champion inflicts them with venom for 3 seconds, reducing any {{tip|shield|shields}} they gain within the duration by {{rd|50%|35%}}, and if the target was not already afflicted by the venom, reducing all of their active shields by the same amount."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Dealing damage to an enemy champion inflicts them with venom for 3 seconds, reducing any {{tip shield shields}} they gain within the duration by {{rd 50% 35%}}, and if the target was not already afflicted by the venom, reducing all of their active shields by the same amount.",
-      "effect_type": "damage",
-      "stat": "shield",
-      "value": 3,
+      "raw": "Dealing damage to an enemy champion applies Venom for 3 seconds.",
+      "effect_type": "apply_status",
+      "stat": "venom",
+      "value": null,
       "value_range": null,
-      "unit": "percent",
+      "unit": null,
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "active",
+      "trigger": "on_damage_to_champion",
       "applies_to": "enemy_champion",
       "conditions": [],
+      "status_effects": [
+        "venom"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "While Venom is active, shields gained are reduced by 50% (35% for ranged).",
+      "effect_type": "shield_modifier",
+      "stat": "incoming_shield_strength",
+      "value": -0.5,
+      "value_range": {
+        "ranged": -0.35
+      },
+      "unit": "ratio",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_shield_gain",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "venom_active"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
-        3,
         50,
         35
       ],
-      "parse_confidence": 0.95
+      "parse_confidence": 0.7
+    },
+    {
+      "raw": "If the target was not already Venomed, reduce all active shields by the same amount.",
+      "effect_type": "shield_reduction",
+      "stat": "active_shields",
+      "value": -0.5,
+      "value_range": {
+        "ranged": -0.35
+      },
+      "unit": "ratio",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_venom_apply",
+      "applies_to": "enemy_champion",
+      "conditions": [
+        "target_not_already_venomed"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        50,
+        35
+      ],
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -63,6 +113,10 @@
   "generated_at": "2026-02-09T23:34:24.856745+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.015008+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.015008+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Shield reduction differs for melee vs ranged (50% vs 35%)."
+    ]
   }
 }

@@ -5,8 +5,8 @@
   "rank": [
     "TRINKET"
   ],
-  "stats": null,
-  "passives": null,
+  "stats": {},
+  "passives": [],
   "active": [
     {
       "unique": true,
@@ -17,90 +17,98 @@
   ],
   "effects_structured": [
     {
-      "raw": "Consume a charge to place a visible {{tip Effigy}} at the target location, which grants {{tip sight}} over the surrounding area for {{pp 130 + (300-130)/17*(x-1) for 20}} seconds",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 130,
-      "value_range": [
-        300,
-        130
-      ],
-      "unit": "seconds",
+      "raw": "Consume a charge to place an Effigy that grants vision for 130 to 300 seconds (scales with level).",
+      "effect_type": "place_effigy",
+      "stat": "effigy",
+      "value": 1,
+      "value_range": null,
+      "unit": "count",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
+      "trigger": "on_activate",
+      "applies_to": "target_location",
+      "conditions": [
+        "consume_charge"
+      ],
+      "status_effects": [
+        "grants_vision"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 130,
+          "max": 300
+        }
+      ],
       "numbers_extracted": [
         130,
-        300,
-        -130,
-        17,
-        -1,
-        20
+        300
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "For enemies, it visually appears identical to {{ci Fiddlesticks}} (including on the minimap) and has no visible [[health bar]] until it ''activates''",
-      "effect_type": "healing",
-      "stat": "health",
+      "raw": "Effigy appears as Fiddlesticks to enemies and has no visible health bar until activation.",
+      "effect_type": "deception",
+      "stat": "disguise",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
+      "trigger": "on_effigy_place",
+      "applies_to": "effigy",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "disguised_as_fiddlesticks"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Enemy {{tip champion champions}} that approach it will activate it, causing it to automatically sound a Danger [[ping]] to its allies as well as fake a random action for up to 2 seconds",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Enemy champions that approach activate the effigy, causing a danger ping and fake action for up to 2 seconds.",
+      "effect_type": "activation_on_proximity",
+      "stat": "effigy_activation",
       "value": 2,
       "value_range": null,
       "unit": "seconds",
-      "duration_seconds": null,
+      "duration_seconds": 2.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
+      "trigger": "on_enemy_champion_proximity",
+      "applies_to": "effigy",
       "conditions": [],
-      "status_effects": [],
+      "status_effects": [
+        "danger_ping"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.6
     },
     {
-      "raw": "If not destroyed by that time, it will deal 1 damage to itself.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "If not destroyed after activation, the effigy self-destructs (deals 1 damage to itself).",
+      "effect_type": "self_destruct",
+      "stat": "effigy",
       "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "damage",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
+      "trigger": "on_activation_end",
+      "applies_to": "effigy",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         1
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -116,6 +124,7 @@
   "generated_at": "2026-02-09T23:34:24.917272+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.067284+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.067284+00:00",
+    "effects_structured_reviewed": "2026-02-10"
   }
 }

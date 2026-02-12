@@ -33,70 +33,104 @@
       "effects": "When fully {{tip|Energized}}, your next basic attack generates a ''Rune'' stack and fires a missile at the target for each ''Rune'' stack you have, dealing {{as|{{pp|20 to 45}}|magic damage}} {{as|(+ 11% '''bonus''' AD)}} {{as|(+ 8% AP)}} {{as|(+ {{fd|0.3}} per 100 '''bonus''' health)}} {{as|magic damage}} with each missile. Stacks are reset every round and between each phase in a round."
     }
   ],
-  "active": null,
+  "active": [],
   "effects_structured": [
     {
-      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 100.0,
+      "raw": "Moving and basic attacking generates Energize stacks, up to 100.",
+      "effect_type": "apply_stack",
+      "stack_id": "energize",
+      "value": 1,
       "value_range": null,
-      "unit": null,
+      "unit": "stacks",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_move_or_basic_attack",
+      "applies_to": "self",
       "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100.0
+      "status_effects": [
+        "energize"
       ],
-      "parse_confidence": 0.55
+      "scaling_terms": [],
+      "stack_rules": {
+        "max_stacks": 100
+      },
+      "numbers_extracted": [
+        100
+      ],
+      "parse_confidence": 0.7
     },
     {
-      "raw": "Dealing damage with an ability generates 30 ''Energize'' stacks and triggers the effects of {{tip Energized}} attacks if they are ready ({{fd 2.5}}-second cooldown per {{tip cast instance}}).",
-      "effect_type": "damage",
-      "stat": "damage",
+      "raw": "Ability damage generates 30 Energize stacks and triggers Energized attacks if ready (2.5s cooldown per cast instance).",
+      "effect_type": "apply_stack",
+      "stack_id": "energize",
       "value": 30,
       "value_range": null,
-      "unit": "seconds",
+      "unit": "stacks",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 2.5,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_ability_damage",
+      "applies_to": "self",
+      "conditions": [
+        "once_per_cast_instance"
+      ],
+      "status_effects": [
+        "energize"
+      ],
       "scaling_terms": [],
       "numbers_extracted": [
         30,
         2.5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.65
     },
     {
-      "raw": "When fully {{tip Energized}}, your next basic attack generates a ''Rune'' stack and fires a missile at the target for each ''Rune'' stack you have, dealing {{as {{pp 20 to 45}} magic damage}} {{as (+ 11% '''bonus''' AD)}} {{as (+ 8% AP)}} {{as (+ {{fd 0.3}} per 100 '''bonus''' health)}} {{as magic damage}} with each missile",
-      "effect_type": "damage",
-      "stat": "health",
+      "raw": "At full Energize, your next basic attack generates a Rune stack and fires a missile per Rune stack dealing magic damage.",
+      "effect_type": "apply_stack_and_projectiles",
+      "stat": "magic_damage",
       "value": 20,
-      "value_range": null,
-      "unit": "percent",
+      "value_range": {
+        "min": 20,
+        "max": 45
+      },
+      "unit": "flat_per_missile",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
+      "trigger": "on_next_basic_attack",
+      "applies_to": "enemy_target",
+      "conditions": [
+        "energize_full"
+      ],
+      "status_effects": [
+        "rune"
+      ],
       "scaling_terms": [
         {
-          "percent": 8.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "bonus_attack_damage",
+          "ratio": 0.11,
+          "type": "percent"
+        },
+        {
+          "stat": "ability_power",
+          "ratio": 0.08,
+          "type": "percent"
+        },
+        {
+          "stat": "bonus_health",
+          "ratio": 0.003,
+          "type": "percent_per_100",
+          "per": 100
         }
       ],
+      "projectiles": {
+        "count_per_rune_stack": 1
+      },
+      "stack_interaction": {
+        "stack_id": "rune",
+        "gain": 1
+      },
       "numbers_extracted": [
         20,
         45,
@@ -105,25 +139,25 @@
         0.3,
         100
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.6
     },
     {
-      "raw": "Stacks are reset every round and between each phase in a round.",
-      "effect_type": "stat_modifier",
-      "stat": null,
+      "raw": "Rune stacks reset each round/phase.",
+      "effect_type": "stack_reset_rule",
+      "stat": "rune_stacks",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
+      "trigger": "on_round_or_phase_end",
+      "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "parse_confidence": 0.6
     }
   ],
   "shop": {
@@ -140,6 +174,10 @@
   "generated_at": "2026-02-09T23:34:24.931446+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.077962+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.077962+00:00",
+    "effects_structured_reviewed": "2026-02-10",
+    "context_notes": [
+      "Rune stacks are Arena-style (round/phase resets)."
+    ]
   }
 }
