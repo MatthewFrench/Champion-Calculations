@@ -5,7 +5,7 @@
   "rank": [
     "TURRET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,40 +13,28 @@
       "effects": "Turrets can see and will {{tip|true sight|reveal}} {{tip|camouflage|camouflaged}} and {{tip|invisible}} units within 1100 units."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Turrets can see and will {{tip true sight reveal}} {{tip camouflage camouflaged}} and {{tip invisible}} units within 1100 units.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 1100,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "wardens_eye_true_sight",
+      "raw": "Turrets reveal camouflaged and invisible units within 1100 units.",
+      "effect_type": "reveal",
       "applies_to": "structure",
-      "conditions": [
-        "within_units"
-      ],
-      "status_effects": [
+      "radius_units": 1100,
+      "reveal_types": [
+        "camouflage",
         "invisible"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1100
-      ],
-      "parse_confidence": 0.7
+      ]
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/096_eye_of_the_observer.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.927585+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.074839+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.074839+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

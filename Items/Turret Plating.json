@@ -5,7 +5,7 @@
   "rank": [
     "TURRET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,52 +13,19 @@
       "effects": "Turrets have plating which provide them extra defensive measures against enemies. Attackers are rewarded for destroying portions of the plating."
     }
   ],
-  "active": null,
-  "effects_structured": [
-    {
-      "raw": "Turrets have plating which provide them extra defensive measures against enemies",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "structure",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Attackers are rewarded for destroying portions of the plating.",
-      "effect_type": "utility",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    }
-  ],
-  "shop": null,
+  "active": {},
+  "effects_structured": [],
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1504_turretshielder.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.895894+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.049211+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.049211+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "No explicit plating values, damage reduction, or reward values are present in the source text."
+    ]
   }
 }

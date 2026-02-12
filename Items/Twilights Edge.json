@@ -25,72 +25,88 @@
       }
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "If you have at least {{as 130 '''bonus''' attack damage}} and {{as 180 ability power}}, enter either the ''Material World'' or the ''Spirit World'', determined randomly, at the start of the combat phase in each round:",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 130,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "twilights_edge_mode_select",
+      "raw": "If you have at least 130 bonus AD and 180 AP, randomly enter Material World or Spirit World at the start of each combat round.",
+      "effect_type": "mode_select",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        130,
-        180
+      "trigger": {
+        "type": "start_of_combat_round"
+      },
+      "conditions": [
+        "bonus_attack_damage_at_least_130",
+        "ability_power_at_least_180"
       ],
-      "parse_confidence": 0.75
+      "modes": [
+        {
+          "id": "material_world",
+          "selection": "random"
+        },
+        {
+          "id": "spirit_world",
+          "selection": "random"
+        }
+      ]
     },
     {
-      "raw": "• '''Material World''': Increase your {{as attack damage}} by 25% and gain {{as {{pp 50 to 150 key=%}} '''bonus''' attack speed}}.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 25,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "twilights_edge_material_world_ad",
+      "raw": "Material World: Increase total attack damage by 25%.",
+      "effect_type": "stat_modifier",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        25,
+      "trigger": {
+        "type": "mode_active",
+        "mode": "material_world"
+      },
+      "stat": "attack_damage_total_percent",
+      "value": 25,
+      "duration_seconds": null
+    },
+    {
+      "id": "twilights_edge_material_world_as",
+      "raw": "Material World: Gain 50–150% bonus attack speed.",
+      "effect_type": "stat_modifier",
+      "applies_to": "self",
+      "trigger": {
+        "type": "mode_active",
+        "mode": "material_world"
+      },
+      "stat": "attack_speed_bonus_percent",
+      "value_range": [
         50,
         150
       ],
-      "parse_confidence": 0.75
+      "duration_seconds": null
     },
     {
-      "raw": "• '''Spirit World''': Increase your {{as ability power}} by 25% and gain {{as {{pp 30 to 120}} ability haste}}.",
+      "id": "twilights_edge_spirit_world_ap",
+      "raw": "Spirit World: Increase total ability power by 25%.",
       "effect_type": "stat_modifier",
-      "stat": "ability_power",
-      "value": 25,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        25,
+      "trigger": {
+        "type": "mode_active",
+        "mode": "spirit_world"
+      },
+      "stat": "ability_power_total_percent",
+      "value": 25,
+      "duration_seconds": null
+    },
+    {
+      "id": "twilights_edge_spirit_world_ability_haste",
+      "raw": "Spirit World: Gain 30–120 ability haste.",
+      "effect_type": "stat_modifier",
+      "applies_to": "self",
+      "trigger": {
+        "type": "mode_active",
+        "mode": "spirit_world"
+      },
+      "stat": "ability_haste_flat",
+      "value_range": [
         30,
         120
       ],
-      "parse_confidence": 0.75
+      "duration_seconds": null
     }
   ],
   "shop": {
@@ -102,10 +118,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447121_twilightsedge.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.889088+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.042685+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.042685+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "Value ranges (attack speed and ability haste) lack a defined scaling axis in the source text."
+    ]
   }
 }

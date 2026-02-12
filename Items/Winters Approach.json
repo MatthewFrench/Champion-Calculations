@@ -31,90 +31,58 @@
       "effects": "Transforms into {{ii|Fimbulwinter}} at {{as|360 '''bonus''' mana}}."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Grants {{as '''bonus''' health}} equal to {{as 15% '''bonus''' mana}}.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 15,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15
-      ],
-      "parse_confidence": 0.75
+      "id": "winters_approach_awe",
+      "raw": "Gain bonus health equal to 15% of bonus mana.",
+      "effect_type": "stat_modifier",
+      "applies_to": "self",
+      "stat": "health_bonus",
+      "scaling_terms": [
+        {
+          "stat": "mana_bonus",
+          "ratio": 0.15
+        }
+      ]
     },
     {
-      "raw": "Grants a charge every 8 seconds, up to 4 charges",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 8,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": 8.0,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        8,
-        4
-      ],
-      "parse_confidence": 0.65
+      "id": "winters_approach_manaflow_charge_gain",
+      "raw": "Gain a Manaflow charge every 8s, up to 4 charges.",
+      "effect_type": "stack_gain",
+      "applies_to": "self",
+      "trigger": {
+        "type": "periodic",
+        "interval_seconds": 8.0
+      },
+      "stack_name": "manaflow_charge",
+      "max_stacks": 4
     },
     {
-      "raw": "Consumes a charge [[on-hit]] and whenever affecting an enemy or ally with an [[champion ability ability]] to grant {{as 3 '''bonus''' mana}}, increased to {{as 6 mana}} for champion targets, up to a '''maximum''' of {{as 360 '''bonus''' mana}}.",
+      "id": "winters_approach_manaflow_mana_gain",
+      "raw": "On-hit or on ability affect, consume a charge to gain 3 bonus mana (6 vs champions), up to 360 bonus mana.",
       "effect_type": "stat_modifier",
-      "stat": "mana",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_attack_or_ability_affects_unit"
+      },
+      "conditions": [
+        "consumes_manaflow_charge"
+      ],
+      "stat": "mana_bonus",
       "value": 3,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "enemy",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3,
-        6,
-        360
-      ],
-      "parse_confidence": 0.85
+      "value_if_target_is_champion": 6,
+      "max_bonus_mana": 360
     },
     {
-      "raw": "Transforms into {{ii Fimbulwinter}} at {{as 360 '''bonus''' mana}}.",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
-      "value": 360,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        360
+      "id": "winters_approach_transform",
+      "raw": "Transforms into Fimbulwinter when bonus mana reaches 360.",
+      "effect_type": "transform",
+      "applies_to": "self",
+      "conditions": [
+        "bonus_mana_at_least_360"
       ],
-      "parse_confidence": 0.75
+      "target_item": "Fimbulwinter"
     }
   ],
   "shop": {
@@ -136,6 +104,7 @@
   "generated_at": "2026-02-09T23:34:24.866445+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.023572+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.023572+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

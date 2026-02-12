@@ -32,48 +32,36 @@
   ],
   "effects_structured": [
     {
-      "raw": "Increase your {{as ability power}} by 50%.",
+      "id": "wooglets_magical_opus",
+      "raw": "Increase ability power by 50%.",
       "effect_type": "stat_modifier",
-      "stat": "ability_power",
-      "value": 50,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        50
-      ],
-      "parse_confidence": 0.75
+      "stat": "ability_power_total_percent",
+      "value": 50
     },
     {
-      "raw": "Put yourself in {{tip stasis (buff) stasis}} for {{fd 2.5}} seconds, rendering you {{tip untargetable}} and {{tip invulnerable}} for the duration but also unable to move, declare [[basic attack]]s, cast [[champion ability abilities]], use [[summoner spell]]s, or [[active ability items activate items]].",
+      "id": "wooglets_stasis",
+      "raw": "Active: Enter stasis for 2.5s, becoming untargetable and invulnerable but unable to act.",
       "effect_type": "status",
-      "stat": null,
-      "value": 2.5,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_ability",
       "applies_to": "self",
-      "conditions": [],
+      "trigger": {
+        "type": "on_activate"
+      },
       "status_effects": [
-        "stasis",
-        "untargetable",
-        "invulnerable"
+        {
+          "type": "stasis",
+          "duration_seconds": 2.5
+        },
+        {
+          "type": "untargetable",
+          "duration_seconds": 2.5
+        },
+        {
+          "type": "invulnerable",
+          "duration_seconds": 2.5
+        }
       ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        2.5
-      ],
-      "parse_confidence": 0.75
+      "cannot_act": true
     }
   ],
   "shop": {
@@ -91,6 +79,7 @@
   "generated_at": "2026-02-09T23:34:24.869890+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.026007+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.026007+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

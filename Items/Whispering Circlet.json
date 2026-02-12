@@ -34,90 +34,58 @@
       "effects": "Transforms into {{ii|Diadem of Songs}} at {{as|360 '''bonus''' mana}}."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Grants {{as heal and shield power}} equal to {{as {{fd 0.5}}% '''bonus''' mana}}.",
-      "effect_type": "healing",
-      "stat": "mana",
-      "value": 0.5,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        0.5
-      ],
-      "parse_confidence": 0.75
+      "id": "whispering_circlet_harmony",
+      "raw": "Gain heal and shield power equal to 0.5% of bonus mana.",
+      "effect_type": "stat_modifier",
+      "applies_to": "self",
+      "stat": "heal_and_shield_power",
+      "scaling_terms": [
+        {
+          "stat": "mana_bonus",
+          "ratio": 0.005
+        }
+      ]
     },
     {
-      "raw": "Grants a charge every 8 seconds, up to 5 charges",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 8,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": 8.0,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        8,
-        5
-      ],
-      "parse_confidence": 0.65
+      "id": "whispering_circlet_manaflow_charge_gain",
+      "raw": "Gain a Manaflow charge every 8s, up to 5 charges.",
+      "effect_type": "stack_gain",
+      "applies_to": "self",
+      "trigger": {
+        "type": "periodic",
+        "interval_seconds": 8.0
+      },
+      "stack_name": "manaflow_charge",
+      "max_stacks": 5
     },
     {
-      "raw": "Affecting an enemy or ally with an ability consumes a charge to grant {{as 4 '''bonus''' mana}}, increased to {{as 8 mana}} if they are a champion, up to a '''maximum''' of {{as 360 '''bonus''' mana}}.",
+      "id": "whispering_circlet_manaflow_mana_gain",
+      "raw": "Affecting an enemy or ally with an ability consumes a charge to grant 4 bonus mana (8 if they are a champion), up to 360 bonus mana.",
       "effect_type": "stat_modifier",
-      "stat": "mana",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_ability_affects_unit"
+      },
+      "conditions": [
+        "consumes_manaflow_charge"
+      ],
+      "stat": "mana_bonus",
       "value": 4,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        4,
-        8,
-        360
-      ],
-      "parse_confidence": 0.75
+      "value_if_target_is_champion": 8,
+      "max_bonus_mana": 360
     },
     {
-      "raw": "Transforms into {{ii Diadem of Songs}} at {{as 360 '''bonus''' mana}}.",
-      "effect_type": "stat_modifier",
-      "stat": "mana",
-      "value": 360,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        360
+      "id": "whispering_circlet_transform",
+      "raw": "Transforms into Diadem of Songs when bonus mana reaches 360.",
+      "effect_type": "transform",
+      "applies_to": "self",
+      "conditions": [
+        "bonus_mana_at_least_360"
       ],
-      "parse_confidence": 0.75
+      "target_item": "Diadem of Songs"
     }
   ],
   "shop": {
@@ -138,6 +106,7 @@
   "generated_at": "2026-02-09T23:34:24.850945+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.009552+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.009552+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

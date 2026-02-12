@@ -25,55 +25,49 @@
       "effects": "Launching a basic attack against an enemy champion grants you {{as|30% '''bonus''' attack speed}} for 6 seconds (30 second cooldown, reduced by 1 second {{tip|on-hit}} and 2 seconds if the attack {{tip|critical strike|critically strikes}})."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Basic attacks {{tip on-attack}} grant {{as {{rd {{fd 0.4}}% {{fd 0.2}}%}} critical strike chance}} permanently, stacking up to {{rd 63 125}} times (capped at {{as 25% critical strike chance}}).",
-      "effect_type": "stat_modifier",
-      "stat": "critical_strike",
-      "value": 0.4,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        0.4,
-        0.2,
-        63,
-        125,
-        25
-      ],
-      "parse_confidence": 0.75
+      "id": "yuntal_practice_crit_stack",
+      "raw": "Basic attacks permanently grant critical strike chance (0.4% melee, 0.2% ranged) up to 63/125 stacks, capped at 25% crit.",
+      "effect_type": "stack_gain",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "stack_name": "practice_crit",
+      "value_per_stack_percent_by_attack_type": {
+        "melee": 0.4,
+        "ranged": 0.2
+      },
+      "max_stacks_by_attack_type": {
+        "melee": 63,
+        "ranged": 125
+      },
+      "max_total_crit_percent": 25
     },
     {
-      "raw": "Launching a basic attack against an enemy champion grants you {{as 30% '''bonus''' attack speed}} for 6 seconds (30 second cooldown, reduced by 1 second {{tip on-hit}} and 2 seconds if the attack {{tip critical strike critically strikes}}).",
+      "id": "yuntal_flurry_attack_speed",
+      "raw": "On basic attack against a champion, gain 30% bonus attack speed for 6s (30s cooldown; reduced by 1s on-hit and 2s on crit).",
       "effect_type": "stat_modifier",
-      "stat": "attack_speed",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_attack_against_champion"
+      },
+      "stat": "attack_speed_bonus_percent",
       "value": 30,
-      "value_range": null,
-      "unit": "percent",
       "duration_seconds": 6.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        30,
-        6,
-        30,
-        1,
-        2
-      ],
-      "parse_confidence": 0.95
+      "cooldown_seconds": 30.0,
+      "cooldown_reduction_rules": [
+        {
+          "type": "on_hit",
+          "amount_seconds": 1.0
+        },
+        {
+          "type": "on_critical_strike",
+          "amount_seconds": 2.0
+        }
+      ]
     }
   ],
   "shop": {
@@ -95,6 +89,7 @@
   "generated_at": "2026-02-09T23:34:24.879763+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.033943+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.033943+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

@@ -35,169 +35,99 @@
       "effects": "Receives diminishing gold from excessive minion kills."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Earn {{g 400}} through ''Shared Riches'' and this item's {{stil gold generation}} stat to automatically upgrade to {{ii Runic Compass}}, gaining the ''Ward'' active with 3 wards in stock.",
-      "effect_type": "resource",
-      "stat": "gold",
-      "value": 400,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "active",
-      "applies_to": "ally",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        400,
-        3
-      ],
-      "parse_confidence": 0.85
-    },
-    {
-      "raw": "Grants a '''Shared Riches''' charge every 20 seconds, up to 3 charges",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 20,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": 20.0,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20,
-        3
-      ],
-      "parse_confidence": 0.65
-    },
-    {
-      "raw": "When an allied champion is within {{tip er icononly=true}} 1050 units of you, consume a charge in the following ways:",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 1050,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "world_atlas_upgrade",
+      "raw": "Earn 400 gold from Shared Riches and item gold generation to upgrade into Runic Compass (gain Ward active with 3 wards).",
+      "effect_type": "upgrade",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1050
-      ],
-      "parse_confidence": 0.55
+      "required_gold_from_item": 400,
+      "target_item": "Runic Compass",
+      "grants_ward_stock": 3
     },
     {
-      "raw": "• Kill a minion by any means, granting you {{g 15}} and the nearest allied champion kill {{g gold}}",
-      "effect_type": "resource",
-      "stat": "gold",
-      "value": 15,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_kill",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15
-      ],
-      "parse_confidence": 0.85
+      "id": "world_atlas_shared_riches_charge_gain",
+      "raw": "Gain a Shared Riches charge every 20s, up to 3 charges.",
+      "effect_type": "stack_gain",
+      "applies_to": "self",
+      "trigger": {
+        "type": "periodic",
+        "interval_seconds": 20.0
+      },
+      "stack_name": "shared_riches_charge",
+      "max_stacks": 3
     },
     {
-      "raw": "Damaging a minion {{as '''below''' {{rd 50% 30%}} of its '''maximum''' health}} with a [[basic attack]] will {{tip execute}} it, if any charges are available.",
-      "effect_type": "healing",
-      "stat": "health",
-      "value": 50,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "minion",
+      "id": "world_atlas_shared_riches_ally_range",
+      "raw": "Shared Riches effects only consume charges when an allied champion is within 1050 units.",
+      "effect_type": "condition_gate",
+      "applies_to": "self",
       "conditions": [
-        "threshold"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        50,
-        30
-      ],
-      "parse_confidence": 0.8
+        "ally_within_1050"
+      ]
     },
     {
-      "raw": "• Damage an enemy champion or structure with a basic attack or ability, granting you {{g {{rd 22 20}}}}",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 22,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        22,
-        20
-      ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "A charge may be consumed this way only once per attack or ability.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Receives diminishing gold from excessive minion kills.",
+      "id": "world_atlas_minion_kill_gold",
+      "raw": "With an ally nearby, killing a minion grants you 15 gold and grants the nearest allied champion the kill gold.",
       "effect_type": "resource",
-      "stat": "gold",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_kill",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_minion_kill"
+      },
+      "conditions": [
+        "ally_within_1050",
+        "consumes_shared_riches_charge"
+      ],
+      "resource": "gold",
+      "value": 15,
+      "grants_kill_credit_to_nearest_ally": true
+    },
+    {
+      "id": "world_atlas_minion_execute",
+      "raw": "If you basic attack a minion below 50% (melee) or 30% (ranged) max health, execute it when a charge is available.",
+      "effect_type": "execute",
       "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.65
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "conditions": [
+        "ally_within_1050",
+        "consumes_shared_riches_charge"
+      ],
+      "threshold_percent_by_attack_type": {
+        "melee": 50,
+        "ranged": 30
+      }
+    },
+    {
+      "id": "world_atlas_damage_gold",
+      "raw": "Damaging an enemy champion or structure with a basic attack or ability grants 22 gold (20 ranged).",
+      "effect_type": "resource",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_damage_to_enemy_champion_or_structure"
+      },
+      "conditions": [
+        "ally_within_1050",
+        "consumes_shared_riches_charge_once_per_attack_or_ability"
+      ],
+      "resource": "gold",
+      "value_by_attack_type": {
+        "melee": 22,
+        "ranged": 20
+      }
+    },
+    {
+      "id": "world_atlas_minion_kill_penalty",
+      "raw": "Excessive minion kills reduce gold earned (diminishing returns).",
+      "effect_type": "resource_modifier",
+      "applies_to": "self",
+      "resource": "gold",
+      "conditions": [
+        "excessive_minion_kills"
+      ],
+      "modifier_type": "diminishing_returns"
     }
   ],
   "shop": {
@@ -219,6 +149,10 @@
   "generated_at": "2026-02-09T23:34:24.854673+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.013086+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.013086+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "Exact gold for allied champion kill credit is not specified; the effect notes kill credit without a numeric value."
+    ]
   }
 }

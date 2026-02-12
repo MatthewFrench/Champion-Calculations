@@ -5,7 +5,7 @@
   "rank": [
     "DISTRIBUTED"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -13,28 +13,48 @@
       "effects": "Gain 20% of your teammate's {{as|attack damage}}, {{as|ability power}}, {{as|'''total''' attack speed}}, {{as|'''maximum''' health}}, {{as|armor}}, {{as|magic resistance}}, and {{as|ability haste}}, increased to 35% if they also have '''Twin Mask''' and are alive."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Gain 20% of your teammate's {{as attack damage}}, {{as ability power}}, {{as '''total''' attack speed}}, {{as '''maximum''' health}}, {{as armor}}, {{as magic resistance}}, and {{as ability haste}}, increased to 35% if they also have '''Twin Mask''' and are alive.",
-      "effect_type": "damage",
-      "stat": "attack_damage",
-      "value": 20,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "twin_mask_stat_link",
+      "raw": "Gain 20% of a teammate's AD, AP, total attack speed, max health, armor, magic resist, and ability haste.",
+      "effect_type": "stat_link",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20,
-        35
+      "source": "teammate",
+      "stats": [
+        "attack_damage_total",
+        "ability_power",
+        "attack_speed_total",
+        "health_max",
+        "armor",
+        "magic_resistance",
+        "ability_haste"
       ],
-      "parse_confidence": 0.75
+      "value": 0.2,
+      "unit": "ratio",
+      "conditions": []
+    },
+    {
+      "id": "twin_mask_stat_link_bonus",
+      "raw": "If the teammate also has Twin Mask and is alive, gain 35% of those stats instead.",
+      "effect_type": "stat_link",
+      "applies_to": "self",
+      "source": "teammate",
+      "stats": [
+        "attack_damage_total",
+        "ability_power",
+        "attack_speed_total",
+        "health_max",
+        "armor",
+        "magic_resistance",
+        "ability_haste"
+      ],
+      "value": 0.35,
+      "unit": "ratio",
+      "conditions": [
+        "teammate_has_twin_mask",
+        "teammate_alive"
+      ]
     }
   ],
   "shop": {
@@ -42,10 +62,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443080_twinmasks.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.924401+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.072690+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.072690+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

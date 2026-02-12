@@ -28,95 +28,94 @@
       }
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "While moving, generate 7 stacks of ''Momentum'' every {{fd 0.25}} seconds, granting up to {{as 20 '''bonus''' movement speed}} at 100 stacks after {{fd 3.75}} seconds of moving",
-      "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 7,
-      "value_range": null,
-      "unit": "seconds",
+      "id": "trailblazer_momentum_stack_gain",
+      "raw": "While moving, gain 7 Momentum stacks every 0.25s up to 100 stacks.",
+      "effect_type": "stack_gain",
+      "applies_to": "self",
+      "trigger": {
+        "type": "while_moving"
+      },
+      "stack_name": "momentum",
+      "stacks_per_interval": 7,
+      "interval_seconds": 0.25,
+      "max_stacks": 100,
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "while_condition",
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        7,
-        0.25,
-        20,
-        100,
-        3.75
-      ],
-      "parse_confidence": 0.8
+      "conditions": []
     },
     {
-      "raw": "At '''maximum''' stacks, you leave behind a path briefly that grants {{as 15% of your '''total''' movement speed}} as {{as '''bonus''' movement speed}} to allied champions within",
+      "id": "trailblazer_momentum_speed",
+      "raw": "While moving, Momentum grants up to +20 bonus move speed at max stacks.",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
+      "applies_to": "self",
+      "trigger": {
+        "type": "while_moving"
+      },
+      "stat": "movement_speed_flat",
+      "value": 20,
+      "stack_name": "momentum",
+      "max_value_at_max_stacks": true,
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "conditions": []
+    },
+    {
+      "id": "trailblazer_ally_trail_speed",
+      "raw": "At max Momentum, leave a trail that gives allies 15% of your total move speed as bonus move speed.",
+      "effect_type": "stat_modifier",
+      "applies_to": "allied_champions_in_trail",
+      "trigger": {
+        "type": "at_max_stacks"
+      },
+      "stat": "movement_speed_bonus_percent",
       "value": 15,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15
+      "scaling_terms": [
+        {
+          "stat": "movement_speed_total",
+          "ratio": 0.15
+        }
       ],
-      "parse_confidence": 0.75
-    },
-    {
-      "raw": "Basic attacks consume all stacks",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "conditions": [
+        "trail_left_behind"
+      ]
     },
     {
-      "raw": "If you are {{tip melee}} and at '''maximum''' stacks, your next basic attack {{tip slow slows}} the target by 50% for 1 second.",
+      "id": "trailblazer_basic_attack_consume_stacks",
+      "raw": "Basic attacks consume all Momentum stacks.",
+      "effect_type": "stack_consume",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "stack_name": "momentum",
+      "consume_amount": "all",
+      "conditions": []
+    },
+    {
+      "id": "trailblazer_melee_max_stack_slow",
+      "raw": "If melee and at max Momentum, your next basic attack slows the target by 50% for 1s.",
       "effect_type": "status",
-      "stat": null,
-      "value": 50,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": 1.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
+      "applies_to": "target",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
       "status_effects": [
-        "slow"
+        {
+          "type": "slow",
+          "value": 50,
+          "unit": "percent",
+          "duration_seconds": 1.0
+        }
       ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        50,
-        1
-      ],
-      "parse_confidence": 0.75
+      "conditions": [
+        "melee_only",
+        "at_max_stacks"
+      ]
     }
   ],
   "shop": {
@@ -132,10 +131,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3002_trailblazer.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.929762+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.076199+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.076199+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "Trail duration for the ally movement speed bonus is not specified in the source text."
+    ]
   }
 }

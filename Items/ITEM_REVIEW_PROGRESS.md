@@ -93,9 +93,9 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Everfrost.json
 - [x] Executioners Calling.json
 - [x] Experimental Hexplate.json
-- [ ] Eye of the Herald.json
+- [x] Eye of the Herald.json
 - [x] Faerie Charm.json
-- [ ] Farsight Alteration.json
+- [x] Farsight Alteration.json
 - [x] Fated Ashes.json
 - [x] Fiendhunter Bolts.json
 - [x] Fiendish Codex.json
@@ -290,36 +290,36 @@ Legend: [ ] not started, [~] in progress, [x] reviewed
 - [x] Thornmail.json
 - [x] Tiamat.json
 - [x] Titanic Hydra.json
-- [ ] Total Biscuit of Everlasting Will.json
-- [ ] Trailblazer.json
-- [ ] Trinity Force.json
-- [ ] Tunneler.json
-- [ ] Turbo Chemtank.json
-- [ ] Turret Plating.json
-- [ ] Twilights Edge.json
-- [ ] Twin Mask.json
-- [ ] Umbral Glaive.json
-- [ ] Unending Despair.json
-- [ ] Vampiric Scepter.json
-- [ ] Verdant Barrier.json
-- [ ] Void Staff.json
-- [ ] Voltaic Cyclosword.json
-- [ ] Wardens Eye.json
-- [ ] Wardens Mail.json
-- [ ] Warmogs Armor.json
-- [ ] Whispering Circlet.json
-- [ ] Winged Moonplate.json
-- [ ] Winters Approach.json
-- [ ] Wits End.json
-- [ ] Wooglets Witchcap.json
-- [ ] Wordless Promise.json
-- [ ] World Atlas.json
-- [ ] Youmuus Ghostblade.json
-- [ ] Your Cut.json
-- [ ] Yun Tal Wildarrows.json
-- [ ] ZazZaks Realmspike.json
-- [ ] Zeal.json
-- [ ] Zekes Convergence.json
+- [x] Total Biscuit of Everlasting Will.json
+- [x] Trailblazer.json
+- [x] Trinity Force.json
+- [x] Tunneler.json
+- [x] Turbo Chemtank.json
+- [x] Turret Plating.json
+- [x] Twilights Edge.json
+- [x] Twin Mask.json
+- [x] Umbral Glaive.json
+- [x] Unending Despair.json
+- [x] Vampiric Scepter.json
+- [x] Verdant Barrier.json
+- [x] Void Staff.json
+- [x] Voltaic Cyclosword.json
+- [x] Wardens Eye.json
+- [x] Wardens Mail.json
+- [x] Warmogs Armor.json
+- [x] Whispering Circlet.json
+- [x] Winged Moonplate.json
+- [x] Winters Approach.json
+- [x] Wits End.json
+- [x] Wooglets Witchcap.json
+- [x] Wordless Promise.json
+- [x] World Atlas.json
+- [x] Youmuus Ghostblade.json
+- [x] Your Cut.json
+- [x] Yun Tal Wildarrows.json
+- [x] ZazZaks Realmspike.json
+- [x] Zeal.json
+- [x] Zekes Convergence.json
 - [ ] Zephyr.json
 - [ ] Zhonyas Hourglass.json
 - [ ] items_quality_report.json

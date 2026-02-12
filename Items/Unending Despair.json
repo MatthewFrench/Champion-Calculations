@@ -23,33 +23,44 @@
       "effects": "Every 4 seconds after entering combat with champions, sap all enemy champions around you within 650 units to deal {{as|magic damage}} equal to {{as|3% of your '''bonus''' health}} to them and {{tip|heal}} yourself equal to 250% of the {{tt|post-mitigation|Damage calculated after modifiers}} damage dealt."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Every 4 seconds after entering combat with champions, sap all enemy champions around you within 650 units to deal {{as magic damage}} equal to {{as 3% of your '''bonus''' health}} to them and {{tip heal}} yourself equal to 250% of the {{tt post-mitigation Damage calculated after modifiers}} damage dealt.",
+      "id": "unending_despair_aura_damage",
+      "raw": "Every 4s after entering combat, deal magic damage to nearby enemy champions equal to 3% of bonus health (650 range).",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 4,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": 4.0,
-      "trigger": "on_damage",
-      "applies_to": "enemy_champion",
-      "conditions": [
-        "after_condition",
-        "within_units"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        4,
-        650,
-        3,
-        250
-      ],
-      "parse_confidence": 1.0
+      "applies_to": "enemy_champions_in_radius",
+      "trigger": {
+        "type": "periodic",
+        "interval_seconds": 4.0,
+        "start_condition": "after_entering_combat_with_champions"
+      },
+      "radius_units": 650,
+      "damage_type": "magic",
+      "scaling_terms": [
+        {
+          "stat": "health_bonus",
+          "ratio": 0.03
+        }
+      ]
+    },
+    {
+      "id": "unending_despair_heal_from_damage",
+      "raw": "Heal for 250% of the post-mitigation damage dealt by this effect.",
+      "effect_type": "heal",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_damage_dealt",
+        "source": "unending_despair_aura_damage"
+      },
+      "value": 2.5,
+      "unit": "ratio",
+      "scaling_terms": [
+        {
+          "stat": "damage_dealt_post_mitigation",
+          "ratio": 2.5
+        }
+      ]
     }
   ],
   "shop": {
@@ -64,10 +75,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2502_unendingdespair.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.886893+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.039686+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.039686+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

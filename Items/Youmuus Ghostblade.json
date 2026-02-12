@@ -32,53 +32,45 @@
   ],
   "effects_structured": [
     {
-      "raw": "Gain {{as {{rd 20 10}} '''bonus''' movement speed}} while out-of-combat with enemy champions for 3 seconds.",
+      "id": "youmuus_haunt_move_speed",
+      "raw": "While out of combat with enemy champions for 3s, gain 20 bonus move speed (10 if ranged).",
       "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 20,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 3.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
+      "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "out_of_combat_with_enemy_champions_for_3s"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20,
-        10,
-        3
-      ],
-      "parse_confidence": 0.9
+      "stat": "movement_speed_flat",
+      "value_by_attack_type": {
+        "melee": 20,
+        "ranged": 10
+      }
     },
     {
-      "raw": "Gain {{as {{rd 20% 15%}} '''bonus''' movement speed}} and {{tip ghosted ghosting}} for {{rd 6 4}} seconds.",
+      "id": "youmuus_wraith_step",
+      "raw": "Active: Gain 20% bonus move speed (15% ranged) and Ghosted for 6s (4s ranged).",
       "effect_type": "status",
-      "stat": "movement_speed",
-      "value": 20,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_activate"
+      },
+      "stat_modifiers": [
+        {
+          "stat": "movement_speed_bonus_percent",
+          "value_by_attack_type": {
+            "melee": 20,
+            "ranged": 15
+          }
+        }
+      ],
       "status_effects": [
-        "ghosted"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20,
-        15,
-        6,
-        4
-      ],
-      "parse_confidence": 0.85
+        {
+          "type": "ghosted",
+          "duration_seconds_by_attack_type": {
+            "melee": 6,
+            "ranged": 4
+          }
+        }
+      ]
     }
   ],
   "shop": {
@@ -101,6 +93,7 @@
   "generated_at": "2026-02-09T23:34:24.849123+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.008307+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.008307+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

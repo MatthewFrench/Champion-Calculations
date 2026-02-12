@@ -20,27 +20,18 @@
       "effects": "Grants a {{tip|spell shield}} that blocks the next hostile ability (60 second cooldown, timer restarts upon taking damage from champions)."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Grants a {{tip spell shield}} that blocks the next hostile ability (60 second cooldown, timer restarts upon taking damage from champions).",
-      "effect_type": "damage",
-      "stat": "shield",
-      "value": 60,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        60
-      ],
-      "parse_confidence": 0.75
+      "id": "verdant_barrier_spell_shield",
+      "raw": "Gain a spell shield that blocks the next hostile ability (60s cooldown; timer restarts on champion damage).",
+      "effect_type": "spell_shield",
+      "applies_to": "self",
+      "blocks": "next_hostile_ability",
+      "cooldown_seconds": 60.0,
+      "cooldown_restart_conditions": [
+        "takes_damage_from_champions"
+      ]
     }
   ],
   "shop": {
@@ -61,6 +52,7 @@
   "generated_at": "2026-02-09T23:34:24.891314+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.045036+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.045036+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

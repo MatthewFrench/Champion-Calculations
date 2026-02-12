@@ -31,57 +31,48 @@
       "effects": "Upon casting your ultimate ability, you summon a storm of flame and ice around you for 5 seconds, dealing{{ft|{{as|{{ap|30/4}} magic damage}} every {{fd|0.25}} seconds|{{as|{{ap|30*5}} '''total''' magic damage}} over the duration}}to enemies within {{tip|cr|icononly=true}} 350 units and {{tip|slow|slowing}} them by 30% (45 second cooldown, starts on ultimate cast)."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Gain 15 [[Haste#Ultimate haste ultimate haste]].",
+      "id": "zekes_ultimate_haste",
+      "raw": "Gain 15 ultimate haste.",
       "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 15,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15
-      ],
-      "parse_confidence": 0.55
+      "applies_to": "self",
+      "stat": "ultimate_haste_flat",
+      "value": 15
     },
     {
-      "raw": "Upon casting your ultimate ability, you summon a storm of flame and ice around you for 5 seconds, dealing{{ft {{as {{ap 30/4}} magic damage}} every {{fd 0.25}} seconds {{as {{ap 30*5}} '''total''' magic damage}} over the duration}}to enemies within {{tip cr icononly=true}} 350 units and {{tip slow slowing}} them by 30% (45 second cooldown, starts on ultimate cast).",
+      "id": "zekes_frostfire_tempest_damage",
+      "raw": "On ultimate cast, summon a storm for 5s that deals magic damage every 0.25s to enemies within 350 units (45s cooldown).",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 5,
-      "value_range": null,
-      "unit": "percent",
+      "applies_to": "enemy_units_in_radius",
+      "trigger": {
+        "type": "on_ultimate_cast"
+      },
       "duration_seconds": 5.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_cast",
-      "applies_to": "self",
-      "conditions": [],
+      "interval_seconds": 0.25,
+      "radius_units": 350,
+      "damage_type": "magic",
+      "damage_per_tick": 30,
+      "cooldown_seconds": 45.0
+    },
+    {
+      "id": "zekes_frostfire_tempest_slow",
+      "raw": "Enemies in the storm are slowed by 30% while it persists.",
+      "effect_type": "status",
+      "applies_to": "enemy_units_in_radius",
+      "trigger": {
+        "type": "on_ultimate_cast"
+      },
+      "duration_seconds": 5.0,
+      "radius_units": 350,
       "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        5,
-        30,
-        4,
-        0.25,
-        30,
-        5,
-        350,
-        30,
-        45
-      ],
-      "parse_confidence": 1.0
+        {
+          "type": "slow",
+          "value": 30,
+          "unit": "percent"
+        }
+      ]
     }
   ],
   "shop": {
@@ -103,6 +94,10 @@
   "generated_at": "2026-02-09T23:34:24.892962+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.046820+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.046820+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "Damage per tick shown as 30; source also references a total value (30*5). Confirm if tick damage scales with any stats."
+    ]
   }
 }

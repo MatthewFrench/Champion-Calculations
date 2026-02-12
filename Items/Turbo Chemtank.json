@@ -20,24 +20,32 @@
   ],
   "effects_structured": [
     {
-      "raw": "Removes all {{tip crowd control}} debuffs (except {{tip Airborne}}) from your champion and grants you {{tip Cc-immune total crowd control immunity}} for the next 3 seconds.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 3,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "turbo_chemtank_cleanse",
+      "raw": "Active: Remove all crowd control debuffs except airborne.",
+      "effect_type": "cleanse",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        3
+      "trigger": {
+        "type": "on_activate"
+      },
+      "remove_effects": [
+        "crowd_control"
       ],
-      "parse_confidence": 0.55
+      "exceptions": [
+        "airborne"
+      ]
+    },
+    {
+      "id": "turbo_chemtank_cc_immunity",
+      "raw": "Active: Gain total crowd control immunity for 3s.",
+      "effect_type": "status_immunity",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_activate"
+      },
+      "immunity_types": [
+        "crowd_control"
+      ],
+      "duration_seconds": 3.0
     }
   ],
   "shop": {
@@ -54,6 +62,10 @@
   "generated_at": "2026-02-09T23:34:24.846527+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.005569+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.005569+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "Active cooldown and any movement speed bonuses are not described in this source text."
+    ]
   }
 }

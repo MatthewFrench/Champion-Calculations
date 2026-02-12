@@ -33,76 +33,71 @@
       "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|100 '''bonus''' physical damage}} [[on-hit]] and {{tip|slow|slows}} the target by {{rd|99%|20%}} for {{fd|0.75}} seconds."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 100.0,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100.0
-      ],
-      "parse_confidence": 0.55
-    },
-    {
-      "raw": "{{tip Energized}} stack generation is increased by 75% for distance travelled from {{tip dash dashes}}, {{tip lunge lunges}} and {{tip blink blinks}}, as well as while moving in {{tip stealth}}.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 75,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [
-        "while_condition"
-      ],
-      "status_effects": [
-        "stealth"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        75
-      ],
-      "parse_confidence": 0.7
-    },
-    {
-      "raw": "When fully {{tip Energized}}, your next basic attack deals {{as 100 '''bonus''' physical damage}} [[on-hit]] and {{tip slow slows}} the target by {{rd 99% 20%}} for {{fd 0.75}} seconds.",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 100,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
+      "id": "voltaic_energize_stack_gain",
+      "raw": "Moving and basic attacking generates Energize stacks up to 100.",
+      "effect_type": "stack_gain",
       "applies_to": "self",
-      "conditions": [],
+      "trigger": {
+        "type": "on_move_or_basic_attack"
+      },
+      "stack_name": "energize",
+      "max_stacks": 100
+    },
+    {
+      "id": "voltaic_energize_generation_bonus",
+      "raw": "Energize stack generation increases by 75% during dashes, lunges, blinks, and while moving in stealth.",
+      "effect_type": "stack_gain_modifier",
+      "applies_to": "self",
+      "stack_name": "energize",
+      "value": 0.75,
+      "unit": "ratio",
+      "conditions": [
+        "during_dash_or_lunge_or_blink",
+        "while_moving_in_stealth"
+      ]
+    },
+    {
+      "id": "voltaic_firmament_bonus_damage",
+      "raw": "When fully Energized, your next basic attack deals 100 bonus physical damage on-hit.",
+      "effect_type": "damage",
+      "applies_to": "target",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "conditions": [
+        "energize_at_max_stacks"
+      ],
+      "damage_type": "physical",
+      "value": 100,
+      "unit": "flat",
+      "is_on_hit": true,
+      "consumes_stack": "energize"
+    },
+    {
+      "id": "voltaic_firmament_slow",
+      "raw": "When fully Energized, your next basic attack slows the target by 99% (melee) or 20% (ranged) for 0.75s.",
+      "effect_type": "status",
+      "applies_to": "target",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "conditions": [
+        "energize_at_max_stacks"
+      ],
       "status_effects": [
-        "slow"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        100,
-        99,
-        20,
-        0.75
-      ],
-      "parse_confidence": 0.95
+        {
+          "type": "slow",
+          "value_by_attack_type": {
+            "melee": 99,
+            "ranged": 20
+          },
+          "unit": "percent",
+          "duration_seconds": 0.75
+        }
+      ]
     }
   ],
   "shop": {
@@ -123,6 +118,7 @@
   "generated_at": "2026-02-09T23:34:24.857400+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.015615+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.015615+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

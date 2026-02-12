@@ -17,30 +17,19 @@
       "effects": "Every first incoming instance of {{tt|post-mitigation|Damage calculated after modifiers}} {{tip|basic damage}} per {{tip|cast instance}} is [[Damage modifier|reduced]] by 15, with a '''maximum''' of 20% reduction each."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Every first incoming instance of {{tt post-mitigation Damage calculated after modifiers}} {{tip basic damage}} per {{tip cast instance}} is [[Damage modifier reduced]] by 15, with a '''maximum''' of 20% reduction each.",
-      "effect_type": "damage",
-      "stat": "damage",
+      "id": "wardens_mail_rock_solid_flat",
+      "raw": "The first post-mitigation basic damage instance per cast is reduced by 15 (max 20% reduction).",
+      "effect_type": "damage_reduction_flat",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_damage_instance",
+        "instance": "first_per_cast"
+      },
       "value": 15,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_damage",
-      "applies_to": null,
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        15,
-        20
-      ],
-      "parse_confidence": 0.9
+      "max_percent_reduction": 20
     }
   ],
   "shop": {
@@ -55,10 +44,14 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3082_tank_t2_wardensmail.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.848899+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.008107+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.008107+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "The term 'basic damage' and 'cast instance' are preserved; confirm if this includes on-hit effects or only basic attack damage."
+    ]
   }
 }

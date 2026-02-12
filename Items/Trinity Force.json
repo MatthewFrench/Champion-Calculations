@@ -36,52 +36,57 @@
       }
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "After using an [[Champion ability ability]], your next basic attack within 10 seconds deals {{as 200% '''base''' AD}} {{as '''bonus''' physical damage}} [[on-hit]] ({{fd 1.5}} second cooldown, starts after using the empowered attack).",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 10,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
+      "id": "trinity_spellblade_ready",
+      "raw": "After casting an ability, gain Spellblade for 10s (1.5s cooldown starts after empowered attack).",
+      "effect_type": "buff",
       "applies_to": "self",
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        10,
-        200,
-        1.5
-      ],
-      "parse_confidence": 0.9
+      "trigger": {
+        "type": "on_ability_cast"
+      },
+      "buff_name": "spellblade_ready",
+      "duration_seconds": 10.0,
+      "cooldown_seconds": 1.5,
+      "cooldown_starts_on": "empowered_attack",
+      "conditions": []
     },
     {
-      "raw": "Basic attacks [[on-hit]] grant {{as 20 '''bonus''' movement speed}} for 2 seconds",
-      "effect_type": "stat_modifier",
-      "stat": "movement_speed",
-      "value": 20,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": 2.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        20,
-        2
+      "id": "trinity_spellblade_damage",
+      "raw": "While Spellblade is ready, your next basic attack deals 200% base AD bonus physical damage on-hit.",
+      "effect_type": "damage",
+      "applies_to": "target",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "conditions": [
+        "spellblade_ready"
       ],
-      "parse_confidence": 0.95
+      "damage_type": "physical",
+      "value": 2.0,
+      "unit": "ratio",
+      "scaling_terms": [
+        {
+          "stat": "attack_damage_base",
+          "ratio": 2.0
+        }
+      ],
+      "consumes_buff": "spellblade_ready",
+      "is_on_hit": true
+    },
+    {
+      "id": "trinity_quicken_move_speed",
+      "raw": "Basic attacks grant +20 bonus move speed for 2s.",
+      "effect_type": "stat_modifier",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "stat": "movement_speed_flat",
+      "value": 20,
+      "duration_seconds": 2.0,
+      "conditions": []
     }
   ],
   "shop": {
@@ -107,6 +112,7 @@
   "generated_at": "2026-02-09T23:34:24.880738+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.034921+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.034921+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

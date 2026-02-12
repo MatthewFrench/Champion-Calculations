@@ -23,27 +23,20 @@
       "effects": "Basic attacks deal {{as|45 '''bonus''' magic damage}} [[on-hit]]."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "Basic attacks deal {{as 45 '''bonus''' magic damage}} [[on-hit]].",
+      "id": "wits_end_fray_bonus_damage",
+      "raw": "Basic attacks deal 45 bonus magic damage on-hit.",
       "effect_type": "damage",
-      "stat": "damage",
+      "applies_to": "target",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "damage_type": "magic",
       "value": 45,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        45
-      ],
-      "parse_confidence": 0.85
+      "unit": "flat",
+      "is_on_hit": true
     }
   ],
   "shop": {
@@ -60,10 +53,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3091_fighter_t3_witsend.png",
   "simpleDescription": "Resist magic damage and claw your way back to life.",
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.841069+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.000456+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.000456+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

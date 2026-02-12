@@ -41,92 +41,60 @@
   ],
   "effects_structured": [
     {
-      "raw": "Dealing [[ability damage]] to an enemy champion creates an explosion at their location after a {{fd 0.5}}-second delay, dealing {{as 10 magic damage}} {{as (+ 15% AP)}} {{as (+ 3% of each target's '''maximum''' health)}} {{as magic damage}} to enemies within the area, capped at 300 against {{tip monsters}}.",
+      "id": "zazzaks_void_explosion",
+      "raw": "Dealing ability damage to a champion triggers a delayed explosion that deals magic damage (10 + 15% AP + 3% target max health), capped at 300 vs monsters.",
       "effect_type": "damage",
-      "stat": "health",
-      "value": 0.5,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy_champion",
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
+      "applies_to": "enemies_in_area",
+      "trigger": {
+        "type": "on_ability_damage_to_champion"
+      },
+      "delay_seconds": 0.5,
+      "damage_type": "magic",
+      "value": 10,
+      "unit": "flat",
       "scaling_terms": [
         {
-          "percent": 15.0,
-          "stat": "ap",
-          "qualifier": null
+          "stat": "ability_power",
+          "ratio": 0.15
+        },
+        {
+          "stat": "target_health_max",
+          "ratio": 0.03
         }
       ],
-      "numbers_extracted": [
-        0.5,
-        10,
-        15,
-        3,
-        300
+      "cap_vs_monsters": 300
+    },
+    {
+      "id": "zazzaks_minion_kill_penalty",
+      "raw": "Excessive minion kills reduce gold earned (diminishing returns).",
+      "effect_type": "resource_modifier",
+      "applies_to": "self",
+      "resource": "gold",
+      "conditions": [
+        "excessive_minion_kills"
       ],
-      "parse_confidence": 0.8
+      "modifier_type": "diminishing_returns"
     },
     {
-      "raw": "Receives diminishing gold from excessive minion kills.",
-      "effect_type": "resource",
-      "stat": "gold",
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_kill",
-      "applies_to": "minion",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.65
+      "id": "zazzaks_ward_place",
+      "raw": "Active: Consume a charge to place a Stealth Ward (range 600).",
+      "effect_type": "summon_ward",
+      "applies_to": "self",
+      "trigger": {
+        "type": "on_activate"
+      },
+      "ward_type": "stealth",
+      "range_units": 600
     },
     {
-      "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area",
-      "effect_type": "status",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [
-        "stealth"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.45
-    },
-    {
-      "raw": "Charges refill upon visiting the shop.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "id": "zazzaks_ward_refill",
+      "raw": "Ward charges refill upon visiting the shop.",
+      "effect_type": "charge_refill",
+      "applies_to": "self",
+      "resource": "ward_charge",
+      "trigger": {
+        "type": "on_shop_visit"
+      }
     }
   ],
   "shop": {
@@ -141,10 +109,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3871_zazzaksrealmspike.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.857847+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.016033+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.016033+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }

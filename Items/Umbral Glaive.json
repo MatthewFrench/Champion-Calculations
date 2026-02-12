@@ -34,119 +34,86 @@
       "effects": "After being not {{tip|sight|visible}} to enemies for at least 1 second, your next basic attack against a champion is empowered to deal {{as|50 {{as|(+ {{fd|1.5}} per 1 Lethality)}} '''bonus''' true damage}} [[on-hit]]. The empowered attack lasts for 4 seconds after being seen by an enemy."
     }
   ],
-  "active": null,
+  "active": {},
   "effects_structured": [
     {
-      "raw": "When spotted by enemy [[Stealth#Stealthed_traps_and_wards stealthed]] {{tip wards}} or {{tip stealthed trap traps}}, gain ''Blackout'' for 8 seconds.",
-      "effect_type": "status",
-      "stat": null,
-      "value": 8,
-      "value_range": null,
-      "unit": "seconds",
+      "id": "umbral_blackout_trigger",
+      "raw": "When spotted by a stealthed ward or trap, gain Blackout for 8s (90s cooldown, 400 range).",
+      "effect_type": "buff",
+      "applies_to": "self",
+      "trigger": {
+        "type": "spotted_by_stealthed_ward_or_trap"
+      },
+      "buff_name": "blackout",
       "duration_seconds": 8.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
-      "conditions": [],
-      "status_effects": [
-        "stealth"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        8
-      ],
-      "parse_confidence": 0.75
+      "cooldown_seconds": 90.0,
+      "range_units": 400
     },
     {
-      "raw": "You {{tip disabled ward disable}} surrounding stealthed wards, as well as {{tip expose}} and {{tip true sight reveal}} nearby stealthed wards and traps while ''Blackout'' is active",
-      "effect_type": "status",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "active",
-      "applies_to": "self",
-      "conditions": [
-        "while_condition"
+      "id": "umbral_blackout_reveal",
+      "raw": "While Blackout is active, disable nearby stealthed wards and reveal stealthed wards and traps.",
+      "effect_type": "reveal",
+      "applies_to": "nearby_wards_and_traps",
+      "trigger": {
+        "type": "while_buff_active",
+        "buff": "blackout"
+      },
+      "reveal_types": [
+        "stealthed_wards",
+        "stealthed_traps"
       ],
-      "status_effects": [
-        "stealth"
-      ],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "disable_wards": true
     },
     {
-      "raw": "Your [[basic attack]]s deal {{as {{rd 2 1}} '''bonus''' true damage}} to wards.",
+      "id": "umbral_blackout_ward_damage",
+      "raw": "Basic attacks deal bonus true damage to wards (melee 2, ranged 1).",
       "effect_type": "damage",
-      "stat": "damage",
-      "value": 2,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        2,
-        1
-      ],
-      "parse_confidence": 0.75
+      "applies_to": "ward",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
+      "damage_type": "true",
+      "value_by_attack_type": {
+        "melee": 2,
+        "ranged": 1
+      },
+      "is_on_hit": true
     },
     {
-      "raw": "After being not {{tip sight visible}} to enemies for at least 1 second, your next basic attack against a champion is empowered to deal {{as 50 {{as (+ {{fd 1.5}} per 1 Lethality)}} '''bonus''' true damage}} [[on-hit]]",
-      "effect_type": "damage",
-      "stat": "damage",
-      "value": 1,
-      "value_range": null,
-      "unit": "seconds",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "on_hit",
+      "id": "umbral_nightstalker_ready",
+      "raw": "After being unseen for 1s, gain Nightstalker for 4s (expires after being seen).",
+      "effect_type": "buff",
       "applies_to": "self",
-      "conditions": [
-        "after_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1,
-        50,
-        1.5,
-        1
-      ],
-      "parse_confidence": 0.9
-    },
-    {
-      "raw": "The empowered attack lasts for 4 seconds after being seen by an enemy.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": 4,
-      "value_range": null,
-      "unit": "seconds",
+      "trigger": {
+        "type": "after_not_visible_to_enemies",
+        "duration_seconds": 1.0
+      },
+      "buff_name": "nightstalker_ready",
       "duration_seconds": 4.0,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "enemy",
+      "buff_expires_after_seen": true
+    },
+    {
+      "id": "umbral_nightstalker_damage",
+      "raw": "While Nightstalker is ready, your next basic attack vs a champion deals bonus true damage (50 + 1.5 per lethality) on-hit.",
+      "effect_type": "damage",
+      "applies_to": "enemy_champion",
+      "trigger": {
+        "type": "on_basic_attack"
+      },
       "conditions": [
-        "after_condition"
+        "nightstalker_ready"
       ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        4
+      "damage_type": "true",
+      "value": 50,
+      "unit": "flat",
+      "scaling_terms": [
+        {
+          "stat": "lethality",
+          "ratio": 1.5
+        }
       ],
-      "parse_confidence": 0.7
+      "is_on_hit": true,
+      "consumes_buff": "nightstalker_ready"
     }
   ],
   "shop": {
@@ -167,6 +134,10 @@
   "generated_at": "2026-02-09T23:34:24.909821+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.061002+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.061002+00:00",
+    "effects_structured_reviewed": "2026-02-12",
+    "context_notes": [
+      "Ward bonus true damage uses a melee/ranged split ({rd 2 1}) in the source; mapping assumed as melee=2, ranged=1."
+    ]
   }
 }

@@ -32,64 +32,53 @@
   ],
   "effects_structured": [
     {
-      "raw": "While your ''Promised'' ally is {{tt tethered 1250 units, center to edge}} to you, gain {{as ability power}} equal to {{as 20% of ''Promised'' ally's AP}}, and grant your ''Promised'' ally {{as ability haste}} equal to {{as 20% of your ability haste}}",
-      "effect_type": "stat_modifier",
-      "stat": "ability_power",
-      "value": 1250,
-      "value_range": null,
-      "unit": "percent",
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": "ally",
-      "conditions": [
-        "while_condition"
-      ],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [
-        1250,
-        20,
-        20
-      ],
-      "parse_confidence": 0.8
-    },
-    {
-      "raw": "''Increases and decreases to each teammate's stats recalculate this effect.''",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
-      "applies_to": null,
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
-    },
-    {
-      "raw": "Make a ''Promise'' to the target allied champion, forming a {{tip tether}} between you and them.",
-      "effect_type": "stat_modifier",
-      "stat": null,
-      "value": null,
-      "value_range": null,
-      "unit": null,
-      "duration_seconds": null,
-      "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": null,
+      "id": "wordless_promise_tether_link",
+      "raw": "While tethered to your Promised ally (1250 range), gain AP equal to 20% of their AP.",
+      "effect_type": "stat_link",
       "applies_to": "self",
-      "conditions": [],
-      "status_effects": [],
-      "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.35
+      "source": "promised_ally",
+      "conditions": [
+        "tethered_within_1250"
+      ],
+      "stats": [
+        "ability_power"
+      ],
+      "value": 0.2,
+      "unit": "ratio"
+    },
+    {
+      "id": "wordless_promise_tether_share_haste",
+      "raw": "While tethered, grant your Promised ally ability haste equal to 20% of your ability haste.",
+      "effect_type": "stat_link",
+      "applies_to": "promised_ally",
+      "source": "self",
+      "conditions": [
+        "tethered_within_1250"
+      ],
+      "stats": [
+        "ability_haste"
+      ],
+      "value": 0.2,
+      "unit": "ratio"
+    },
+    {
+      "id": "wordless_promise_recalculate",
+      "raw": "Stat changes recalculate the tether bonuses dynamically.",
+      "effect_type": "dynamic_recalculate",
+      "applies_to": "self",
+      "conditions": [
+        "tether_active"
+      ]
+    },
+    {
+      "id": "wordless_promise_activate",
+      "raw": "Active: Make a Promise to an allied champion, forming a tether.",
+      "effect_type": "tether",
+      "applies_to": "ally",
+      "trigger": {
+        "type": "on_activate"
+      },
+      "tether_range_units": 1250
     }
   ],
   "shop": {
@@ -104,10 +93,11 @@
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4016_wordlesspromise.png",
   "simpleDescription": null,
-  "nicknames": null,
+  "nicknames": [],
   "generated_at": "2026-02-09T23:34:24.919465+00:00",
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
-    "effects_structured_generated_at": "2026-02-09T23:46:08.069083+00:00"
+    "effects_structured_generated_at": "2026-02-09T23:46:08.069083+00:00",
+    "effects_structured_reviewed": "2026-02-12"
   }
 }
