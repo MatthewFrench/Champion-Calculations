@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "lightshield_strike_empowered_critical_and_heal_on_next_attack",
       "raw": "Your next basic attack against a champion critically strikes for bonus damage and heals you (10s cooldown per target).",
       "effect_type": "empowered_basic_attack",
       "stat": "critical_damage_and_heal",
@@ -73,6 +74,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "lightshield_strike_convert_overheal_to_temporary_bonus_health",
       "raw": "Excess healing beyond max health becomes bonus health for 8 seconds.",
       "effect_type": "overheal_to_bonus_health",
       "stat": "bonus_health",

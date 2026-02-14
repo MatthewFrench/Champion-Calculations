@@ -53,6 +53,9 @@
       "interval_seconds": 0.25,
       "radius_units": 350,
       "damage_type": "magic",
+      "value": 30,
+      "unit": "flat_per_tick",
+      "scaling_terms": [],
       "damage_per_tick": 30,
       "cooldown_seconds": 45.0
     },

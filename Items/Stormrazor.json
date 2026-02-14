@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "energized_generate_stacks_on_move_or_basic_attack",
       "raw": "Moving and basic attacking generates Energize stacks, up to 100.",
       "effect_type": "apply_stack",
       "stack_id": "energize",
@@ -61,6 +62,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "bolt_empowered_attack_bonus_magic_damage_and_movement_speed",
       "raw": "At full Energize, your next basic attack deals 100 bonus magic damage and grants 45% bonus movement speed for 1.5 seconds.",
       "effect_type": "damage_and_speed",
       "stat": "magic_damage",

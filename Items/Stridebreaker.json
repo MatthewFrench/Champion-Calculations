@@ -32,6 +32,7 @@
   ],
   "effects_structured": [
     {
+      "id": "cleave_basic_attack_splash_physical_damage",
       "raw": "Basic attacks deal 40% (20% for ranged) AD physical damage to other enemies in a 350 radius around the target.",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -73,6 +74,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "breaking_shockwave_active_area_physical_damage_and_slow",
       "raw": "Active: Deal 80% AD physical damage in a 450 radius and slow enemies by 35% for 3 seconds.",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -112,6 +114,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "breaking_shockwave_bonus_movement_speed_per_champion_hit",
       "raw": "For each champion hit, gain 35% bonus movement speed decaying over 3 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",
@@ -138,6 +141,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "breaking_shockwave_can_move_while_casting",
       "raw": "Can move while casting.",
       "effect_type": "cast_rule",
       "stat": "move_while_casting",

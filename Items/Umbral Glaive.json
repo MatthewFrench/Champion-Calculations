@@ -73,6 +73,11 @@
         "type": "on_basic_attack"
       },
       "damage_type": "true",
+      "value": 2,
+      "value_range": {
+        "ranged": 1
+      },
+      "scaling_terms": [],
       "value_by_attack_type": {
         "melee": 2,
         "ranged": 1

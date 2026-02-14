@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "the_claws_that_catch_bonus_attack_damage_from_base_attack_damage",
       "raw": "Gain bonus attack damage equal to 45% of base AD.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_damage",
@@ -55,6 +56,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "lifeline_shield_from_bonus_health_below_health_threshold",
       "raw": "If damage would reduce you below 30% max health, gain a decaying shield equal to 60% of bonus health (90s cooldown).",
       "effect_type": "shield",
       "stat": "damage",

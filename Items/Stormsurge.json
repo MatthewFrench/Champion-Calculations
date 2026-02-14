@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "stormraider_apply_squall_on_damage_threshold_window",
       "raw": "Dealing 25% of a champion's max health within 2.5 seconds applies Squall (30s cooldown).",
       "effect_type": "apply_status",
       "stat": "squall",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "squall_delayed_lightning_magic_damage",
       "raw": "2 seconds after applying Squall, lightning strikes for 125 (+10% AP) magic damage.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -86,6 +88,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "squall_on_target_death_area_magic_damage",
       "raw": "If the target dies before the strike, they emit an electric field that shocks enemies in 600 radius for the same damage.",
       "effect_type": "area_damage",
       "stat": "magic_damage",

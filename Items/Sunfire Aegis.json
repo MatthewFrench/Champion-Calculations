@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "immolate_activate_on_damage_dealt_or_taken",
       "raw": "Taking or dealing damage activates Immolate for 3 seconds.",
       "effect_type": "apply_status",
       "stat": "immolate",
@@ -48,6 +49,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "immolate_aura_magic_damage_per_second",
       "raw": "Immolate deals 20 (+1% bonus health) magic damage per second to nearby enemies (325 radius, increased by bonus size). Damage is increased vs minions/monsters.",
       "effect_type": "damage_over_time",
       "stat": "magic_damage",
@@ -88,6 +90,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "immolate_execute_minions_below_next_tick_threshold",
       "raw": "Immolate executes minions that would be killed by one more tick.",
       "effect_type": "execute",
       "stat": "minion_health_threshold",

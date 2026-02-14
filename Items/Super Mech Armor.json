@@ -16,6 +16,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "super_mech_armor_turret_attack_damage_from_minion_max_health",
       "raw": "Turret basic attacks deal damage equal to 7% of this minion's max health as pre-mitigation damage.",
       "effect_type": "damage",
       "stat": "physical_damage",

@@ -25,6 +25,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "fleetfooted_grant_slow_resist",
       "raw": "Gain 40% slow resist.",
       "effect_type": "stat_modifier",
       "stat": "slow_resist",
@@ -45,6 +46,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "noxian_fervor_grant_adaptive_force_from_total_movement_speed",
       "raw": "Gain adaptive force equal to 5% of total movement speed.",
       "effect_type": "stat_modifier",
       "stat": "adaptive_force",

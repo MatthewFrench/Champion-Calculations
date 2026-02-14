@@ -16,6 +16,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "super_mech_power_field_aura_bonus_resists_to_nearby_non_super_minions",
       "raw": "Grants nearby non-super minions 35 armor and 35 magic resistance.",
       "effect_type": "aura_stat_modifier",
       "stat": "armor_and_magic_resistance",
