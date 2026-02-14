@@ -18,7 +18,7 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 **Data Notes**
 - Items are local JSON files with stats, passives, actives, and parsed effects.
 - URF mode data includes global buffs (haste, health cost multiplier, attack speed modifiers) and notes about patch variability.
-- Champion data includes structured ability effects to support simulation logic.
+- Champion data exists and is structured for simulation, but it is not fully wired into the current simulator path yet.
 
 **Simulator**
 - Entry point: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py`
@@ -26,6 +26,19 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 - Focus: Vlad survival time while chaining W in a fight against 5 enemies.
 - Deterministic: Same inputs produce the same results.
 - Models: pool uptime, health costs, basic healing from pool, GA revive, Zhonya stasis, Protoplasm lifeline, and simplified enemy DPS + stuns.
+
+**Current Drawbacks (Important)**
+- The current simulator is a simplified model. It does not yet run full champion kits from `Characters` data.
+- Enemy output is approximated with auto-attack DPS + simplified spell DPS terms from scenario config.
+- `Masteries`/runes are not yet modeled in the combat loop.
+- This means outputs are useful for fast iteration and ranking directionally, but not final high-fidelity truth.
+
+**Incremental Plan (In Progress)**
+- Wire champion base stats, growth, and ability data from `Characters` into the simulation engine.
+- Replace simplified enemy DPS terms with ability/event timelines derived from champion data.
+- Add rune/mastery effects from `Masteries` where they materially affect survivability and DPS.
+- Expand item passive/active coverage and timing interactions.
+- Keep deterministic mode as default while improving realism step by step.
 
 **Research Goal**
 Find a “best URF tier” survivability build for Vladimir and compare against fixed baselines (including a specific baseline item list). Expand later to attack speed (Taric) and move speed (Hecarim) optimization.
