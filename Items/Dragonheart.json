@@ -16,6 +16,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "inner_flame_gain_random_dragon_soul_every_two_rounds",
       "raw": "Every 2 rounds, gain a random {{bi Dragon Soul}}",
       "effect_type": "grant_status",
       "stat": "dragon_soul",
@@ -38,6 +39,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "inner_flame_stat_amp_per_dragon_soul",
       "raw": "Additionally, increase your '''total''' {{as attack damage}}, {{as ability power}}, {{as attack speed}}, {{as '''maximum''' health}}, {{as armor}}, {{as magic resistance}}, and {{as ability haste}} by 4% for each {{bi Dragon Soul}} you possess, up to {{ap 4*6}}% at maximum souls.",
       "effect_type": "stat_modifier",
       "stat": "multiple",
@@ -102,6 +104,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "inner_flame_grant_aspect_of_the_dragon_at_six_souls",
       "raw": "Once you have obtained all 6 {{bi Dragon Soul Dragon Souls}}, you also gain the {{bi Aspect of the Dragon}} buff permanently at the next phase",
       "effect_type": "grant_status",
       "stat": "aspect_of_the_dragon",
@@ -124,6 +127,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "inner_flame_aspect_counts_as_extra_soul",
       "raw": "''Aspect of the Dragon'' counts as an extra Soul for this effect, for a total stat increase of {{ap 4*7}}%.",
       "effect_type": "stat_modifier",
       "stat": "dragon_souls_effective",

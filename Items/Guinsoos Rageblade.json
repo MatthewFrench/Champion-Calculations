@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "wrath_on_hit_bonus_magic_damage",
       "raw": "Basic attacks deal {{as 30 '''bonus''' magic damage}} on-hit.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -51,6 +52,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "seething_strike_stack_bonus_attack_speed",
       "raw": "Basic attacks grant {{as 8% '''bonus''' attack speed}} for 3 seconds, stacking up to 4 times for a total of {{as 32% '''bonus''' attack speed}}",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",
@@ -78,6 +80,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "seething_strike_generate_phantom_stacks_at_max_attack_speed_stacks",
       "raw": "At maximum stacks, basic attacks {{tip on-attack}} also grant a ''Phantom'' stack for 6 seconds, up to 2 stacks",
       "effect_type": "apply_stack",
       "stack_id": "phantom",
@@ -107,6 +110,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "phantom_hit_trigger_on_hit_effects_after_two_phantom_stacks",
       "raw": "At 2 ''Phantom'' stacks, the next basic attack consumes all of those stacks {{tip on-attack}} to trigger a ''Phantom Hit'' that applies {{tip on-hit}} effects to the target after a {{fd 0.15}}-second delay.",
       "effect_type": "trigger_on_hit_effects",
       "stat": "phantom_hit",

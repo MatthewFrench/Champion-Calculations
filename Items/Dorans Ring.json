@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "drain_mana_regen_base",
       "raw": "Restore {{as 1 mana}} every second",
       "effect_type": "resource_regen",
       "stat": "mana",
@@ -48,6 +49,7 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "drain_mana_regen_after_champion_damage",
       "raw": "Dealing damage to an enemy champion increases the restoration to {{as 2 mana}} for the next 5 seconds",
       "effect_type": "resource_regen",
       "stat": "mana",
@@ -69,6 +71,7 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "drain_heal_when_no_mana_resource",
       "raw": "If you cannot gain mana, {{tip healing heal}} for{{ft 45% of the value {{as {{ap 1*0.45}} hp}} every second, increased to {{as {{ap 2*0.45}} hp}} when dealing damage to an enemy champion}}instead.",
       "effect_type": "healing",
       "stat": "healing",
@@ -99,6 +102,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "helping_hand_on_hit_bonus_physical_vs_minions",
       "raw": "Basic attacks deal {{as 5 '''bonus''' physical damage}} [[on-hit]] against [[minions]].",
       "effect_type": "damage",
       "stat": "physical_damage",

@@ -22,6 +22,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "madness_damage_amp_per_second_in_champion_combat",
       "raw": "For each second in combat with enemy champions, deal 2% increased damage, stacking up to 3 times for a total of 6%.",
       "effect_type": "damage_multiplier",
       "stat": "damage",

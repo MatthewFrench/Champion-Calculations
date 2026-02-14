@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "jungle_companions_summon_gustwalker_hatchling",
       "raw": "Summon a ''Gustwalker Hatchling'' companion to assist you in combat against monsters.",
       "effect_type": "summon_companion",
       "stat": "gustwalker_hatchling",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "gustwalkers_gait_progression_evolve_companion_and_upgrade_smite",
       "raw": "Feed your companion enough treats to evolve it and upgrade your {{si Smite}}",
       "effect_type": "progression",
       "stat": "treats",
@@ -63,6 +65,7 @@
       "parse_confidence": 0.5
     },
     {
+      "id": "gustwalkers_gait_grant_buff_on_final_companion_evolution",
       "raw": "Upon the companion reaching its final evolution, this item is consumed, granting you the {{bi Gustwalker's Gait}} buff.",
       "effect_type": "grant_status",
       "stat": "gustwalkers_gait",

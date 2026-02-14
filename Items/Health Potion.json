@@ -16,6 +16,7 @@
   ],
   "effects_structured": [
     {
+      "id": "consume_restore_health_over_time",
       "raw": "Consume to restore Health over time.",
       "effect_type": "healing_over_time",
       "stat": "health",

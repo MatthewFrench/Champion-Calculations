@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "vigilance_dash_and_dual_shield",
       "raw": "{{tip Dash}} to the current location of your ally and upon completion grant both yourself and the ally a {{tip shield}} that absorbs {{pp 100 to 250}} {{as (+ 100% of your AP)}} {{as (+ 10% of your '''bonus''' health)}} damage for 5 seconds",
       "effect_type": "shield",
       "stat": "damage_absorb",

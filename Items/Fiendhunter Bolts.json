@@ -32,6 +32,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "night_vigil_grant_ultimate_haste",
       "raw": "Gain 30 [[Haste#Ultimate haste ultimate haste]].",
       "effect_type": "stat_modifier",
       "stat": "ultimate_haste",
@@ -52,6 +53,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "opening_barrage_three_empowered_attacks_after_ultimate",
       "raw": "After casting your ultimate ability, your next 3 basic attacks within 8 seconds gain {{as 50% '''bonus''' attack speed}} and will {{tip critically strike}} for{{ft {{as {{critical damage 60 80}} critical damage}} '''bonus''' damage",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",
@@ -88,6 +90,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "opening_barrage_true_damage_on_forced_critical_strike",
       "raw": "{{sti {{as 80% '''total''' critical damage}}}}.}}If an attack would have already critically struck, it instead critically strikes for{{ft {{as {{critical damage 100 100}} critical damage}} '''bonus''' damage {{sti {{as 100% '''total''' critical damage}}}}}}and deals {{as '''bonus''' true damage}} equal to 15% of the triggering {{as attack's damage}}.",
       "effect_type": "damage",
       "stat": "true_damage",

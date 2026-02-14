@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "gusto_turret_attack_pre_mitigation_damage_from_minion_max_health",
       "raw": "{{tip Turret}} basic attacks are modified to deal {{as 45% of this minion's '''maximum''' health}} as {{tt pre-mitigation damage Damage calculated before modifiers}}.",
       "effect_type": "damage",
       "stat": "pre_mitigation_damage",
@@ -47,6 +48,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "minion_wounder_on_hit_bonus_physical_vs_lane_minions",
       "raw": "Against lane minions, this minion deals {{as '''bonus''' physical damage}} on-hit equal to {{as 2% of the target's '''current''' health}}.",
       "effect_type": "damage",
       "stat": "physical_damage",

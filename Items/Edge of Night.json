@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "annul_spell_shield_block_next_hostile_ability",
       "raw": "Grants a {{tip spell shield}} that blocks the next hostile ability (40 second cooldown, timer restarts upon taking damage from champions).",
       "effect_type": "status_effect",
       "stat": "spell_shield",

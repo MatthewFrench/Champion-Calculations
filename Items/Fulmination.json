@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "energized_generate_stacks_on_move_or_basic_attack",
       "raw": "Moving and basic attacking generates ''Energize'' stacks, up to 100.",
       "effect_type": "apply_stack",
       "stack_id": "energize",
@@ -62,6 +63,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "polarity_preserve_energize_stacks_on_new_target",
       "raw": "Your {{tip Energized}} attacks against targets not hit by your previous ''Energized'' attack do not consume any ''Energize'' stacks on-hit.",
       "effect_type": "stack_rule",
       "stat": "energize",
@@ -84,6 +86,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "dynamo_full_energize_on_hit_bonus_magic_damage",
       "raw": "When fully {{tip Energized}}, your next basic attack deals {{as '''bonus''' magic damage}} [[on-hit]] equal to {{as 13% of the target's '''current''' health}}.",
       "effect_type": "damage",
       "stat": "magic_damage",

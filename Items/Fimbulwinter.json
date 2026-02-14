@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "awe_bonus_health_from_bonus_mana",
       "raw": "Grants {{as '''bonus''' health}} equal to {{as 15% '''bonus''' mana}}.",
       "effect_type": "stat_modifier",
       "stat": "bonus_health",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "everlasting_shield_on_immobilize_or_melee_slow",
       "raw": "{{tip immobilize Immobilizing}}, or {{tip slow slowing}} if you are {{tip melee}}, an enemy champion grants a 100 {{as (+ {{fd 4.5}}% '''current''' mana)}} {{tip shield}} for 3 seconds (8 second cooldown)",
       "effect_type": "shield",
       "stat": "damage_absorb",
@@ -91,6 +93,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "everlasting_shield_strength_multiplier_with_multiple_nearby_enemies",
       "raw": "The shield's strength is increased{{ft by 80% to 180 {{as (+ {{ap 4.5*1.8}}% '''current''' mana)}}}}if there is more than one enemy champion within {{tip cr icononly=true}} 1200 units.",
       "effect_type": "shield_modifier",
       "stat": "shield_value_multiplier",

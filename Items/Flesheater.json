@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "hack_the_meat_reduce_target_resists_on_damage",
       "raw": "Dealing damage reduces the target's {{as armor}} and {{as magic resistance}} by 3 for 5 seconds, stacking up to 10 times for a total resistances reduction of 30",
       "effect_type": "stat_modifier",
       "stat": "armor_and_magic_resistance",
@@ -60,6 +61,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "cannibalize_heal_allies_on_team_takedown",
       "raw": "If you or the allied champion on your team score a {{tip takedown}} against an enemy champion, you are both {{tip heal healed}} for {{as 18% of the taken down target's '''maximum''' health}}.",
       "effect_type": "healing",
       "stat": "healing",

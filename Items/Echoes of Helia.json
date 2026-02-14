@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "soul_siphon_store_charge_from_pre_mitigation_damage",
       "raw": "Gain 35% of {{tt pre-mitigation damage Damage calculated before modifiers}} dealt to champions as ''Soul Charges'', up to {{pp 80 + (250-80)/17*(x-1) for 20}}",
       "effect_type": "apply_stack",
       "stack_id": "soul_charge",
@@ -70,6 +71,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "soul_siphon_consume_charges_to_heal_ally",
       "raw": "{{tip Healing}} or {{tip shielding}} an allied champion ''(excluding yourself)'' consumes all charges to heal them equal to the consumed amount.",
       "effect_type": "healing",
       "stat": "healing",

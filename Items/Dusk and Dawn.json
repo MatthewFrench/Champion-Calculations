@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spellblade_empowered_next_attack_magic_damage_and_repeat_on_hit",
       "raw": "After using an [[Champion ability ability]], your next basic attack within 10 seconds deals {{as 75% '''base''' AD}} {{as (+ 10% AP)}} {{as '''bonus''' magic damage}} on-hit and applies {{tip on-hit}} effects to the target again after a {{fd 0.2}}-second delay ({{fd 1.5}} second cooldown, starts after using the empowered attack).",
       "effect_type": "damage",
       "stat": "magic_damage",

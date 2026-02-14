@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "recovery_restore_mana_every_interval",
       "raw": "Restore {{as 10 mana}} every 5 seconds",
       "effect_type": "resource_regen",
       "stat": "mana",
@@ -47,6 +48,7 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "recovery_restore_health_for_manaless_champions",
       "raw": "Manaless champions restore {{as 3 health}} instead.",
       "effect_type": "healing",
       "stat": "health",

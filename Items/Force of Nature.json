@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "steadfast_gain_stack_on_magic_damage_taken_from_champions",
       "raw": "Taking {{as magic damage}} from champions generates a stack of ''Steadfast'' for 7 seconds, stacking up to 8 times with the duration refreshing on subsequent {{as magic damage}} from them and whenever dealing damage to them",
       "effect_type": "apply_stack",
       "stack_id": "steadfast",
@@ -60,6 +61,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "steadfast_gain_two_stacks_on_immobilized_by_champion",
       "raw": "Becoming {{tip immobilize immobilized}} by an enemy champion generates 2 stacks and also refreshes the duration",
       "effect_type": "apply_stack",
       "stack_id": "steadfast",
@@ -83,6 +85,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "steadfast_stack_generation_rate_limit",
       "raw": "Once per {{tip cast instance}}, each incoming basic attack, ability, or item effect can only generate 1 stack of ''Steadfast'' from their damage every 1 second",
       "effect_type": "stack_rule",
       "stat": "steadfast",
@@ -106,6 +109,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "steadfast_max_stack_bonus_resist_and_movement_speed",
       "raw": "At '''maximum''' stacks, gain {{as 70 '''bonus''' magic resistance}} and {{as 6% '''bonus''' movement speed}}.",
       "effect_type": "stat_modifier",
       "stat": "magic_resistance",

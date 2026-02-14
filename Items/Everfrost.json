@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "glaciate_cone_magic_damage_and_slow",
       "raw": "Unleash a fan of icy shards in a cone in the target direction, dealing {{as 300 magic damage}} {{as (+ 85% AP)}} {{as magic damage}} to enemies struck within and {{tip slow slowing}} them by 70% for {{fd 1.5}} seconds",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -68,6 +69,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "glaciate_center_cone_root",
       "raw": "Enemies hit in the center of the cone are {{tip root rooted}} for the same duration instead.",
       "effect_type": "status_effect",
       "stat": "root",

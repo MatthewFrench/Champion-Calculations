@@ -14,6 +14,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "fire_at_will_cannon_barrage_wave_pattern_modifier",
       "raw": "{{ai Cannon Barrage Gangplank}} fires 2 additional clusters of 3 waves over the duration at an increased rate of fire (1 cluster per {{fd 1.33}} seconds), for a total of 18 waves over the 8 seconds.",
       "effect_type": "ability_modifier",
       "stat": "cannon_barrage_waves",

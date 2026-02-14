@@ -24,6 +24,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "lifeline_magic_damage_shield_below_health_threshold",
       "raw": "If you would take {{as magic damage}} that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs {{as {{rd 110 to 280 82.5 to 210 pp=true}} magic damage}} for {{fd 2.5}} seconds.",
       "effect_type": "shield",
       "stat": "magic_damage_absorb",

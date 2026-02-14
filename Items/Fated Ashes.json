@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "inflame_burn_magic_damage_per_tick",
       "raw": "Dealing [[ability damage]] burns enemies, causing them to take {{as {{ap 15/6}} magic damage}} every {{fd 0.5}} seconds over 3 seconds, for a total of {{as 15 magic damage}}",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -44,6 +45,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "inflame_monster_bonus_burn_damage_per_tick",
       "raw": "Against monsters, the burn deals {{as {{fd 7.5}} '''bonus''' magic damage}} per tick, dealing a total of {{as {{ap (15/6)+7.5}} magic damage}} per tick for up to {{as {{ap 15+(7.5*6)}} magic damage}}.",
       "effect_type": "damage",
       "stat": "magic_damage",

@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "winters_caress_aura_reduce_enemy_attack_speed",
       "raw": "{{tip Cripple Cripples}} the [[attack speed]] of enemy champions within {{tt 700 units center to edge}} by 20%.",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",

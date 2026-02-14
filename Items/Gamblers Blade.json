@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "money_in_the_bank_store_gold_on_hits",
       "raw": "Basic attacks [[on-hit]] and ability hits have a 12% chance to store between {{g 30}} and {{as 240 gold}} ({{fd 2.5}}-second cooldown per attack/ability)",
       "effect_type": "resource_store",
       "stat": "gold",
@@ -52,6 +53,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "money_in_the_bank_round_end_payout_or_loss",
       "raw": "If you win the round, gain {{g gold}} equal to the stored amount, otherwise lose 25% of it.",
       "effect_type": "resource_modifier",
       "stat": "gold",

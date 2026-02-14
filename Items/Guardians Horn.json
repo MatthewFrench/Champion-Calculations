@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "undaunted_flat_damage_reduction_from_champions",
       "raw": "Reduces all sources of incoming champion damage by 15, modified to {{fd 3.75}} against [[damage over time]] abilities.",
       "effect_type": "damage_reduction_flat",
       "stat": "incoming_damage",

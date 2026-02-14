@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "rebirth_resurrection_with_post_revive_health_and_mana_restore",
       "raw": "Upon taking [[death lethal damage]], enter {{tip resurrection}} for 4 seconds, during which you are {{tip invulnerable}}, {{tip untargetable}}, and unable to act, and afterwards {{tip heal}} for {{as 50% of '''base''' health}} and restore {{as 100% of '''maximum''' mana}} (300 second cooldown, starts after resurrection ends).",
       "effect_type": "resurrection",
       "stat": "revive",

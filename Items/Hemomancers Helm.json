@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "scarlet_allegiance_conditional_bonus_health_and_heal_from_nearby_enemy_damage_taken",
       "raw": "If your {{stil life steal}} and {{stil omnivamp}} sum to at least 30%, gain {{as 500 '''bonus''' health}} and {{tip heal}} yourself equal to 10% of the damage that enemy champions within {{tip cr icononly=true}} 525 units of you take from all sources.",
       "effect_type": "conditional_bonus_and_heal",
       "stat": "bonus_health",

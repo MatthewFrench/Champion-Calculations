@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spellblade_empowered_attack_bonus_physical_and_mana_restore",
       "raw": "After using an [[Champion ability ability]], your next basic attack within 10 seconds deals {{as 125% '''base''' AD}} {{as (+ {{pp 0 to 50 0 to 100 for 11 label1=% critical strike chance showtype=false formula=0.5 damage for every 1% critical strike chance}} based on critical strike chance)}} {{as '''bonus''' physical damage}} [[on-hit]] and restores {{as mana}} equal to{{ft 50% of that amount {{as {{ap 125*0.5}}% '''base''' AD}} {{as (+ {{pp 0 to 25 0 to 100 for 11 label1=% critical strike chance showtype=false formula=0.25 mana restored for every 1% critical strike chance}} based on critical strike chance)}}}}({{fd 1.5}} second cooldown, starts after using the empowered attack).",
       "effect_type": "damage",
       "stat": "physical_damage",

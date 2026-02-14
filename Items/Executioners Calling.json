@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "grievous_wounds_on_physical_damage_to_champions",
       "raw": "Dealing {{as physical damage}} to enemy champions inflicts them with {{tip Grievous Wounds}} for 3 seconds.",
       "effect_type": "status_effect",
       "stat": "grievous_wounds",

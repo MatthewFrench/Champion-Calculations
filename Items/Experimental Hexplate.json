@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "hexcharged_grant_ultimate_haste",
       "raw": "Gain 30 [[Haste#Ultimate haste ultimate haste]].",
       "effect_type": "stat_modifier",
       "stat": "ultimate_haste",
@@ -56,6 +57,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "overdrive_bonus_attack_speed_and_movement_speed_on_ultimate_cast",
       "raw": "Upon casting your ultimate ability, enter ''Overdrive'' to gain {{as 50% '''bonus''' attack speed}} and {{as 20% '''bonus''' movement speed}} for 8 seconds (30 second cooldown, starts on ultimate cast).",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",

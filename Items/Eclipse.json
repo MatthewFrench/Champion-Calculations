@@ -24,6 +24,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "ever_rising_moon_generate_stacks_on_damage_or_cc",
       "raw": "Damaging [[basic attack]]s, [[champion ability abilities]], [[Named item effect item effects]], and [[summoner spell]]s, as well as the application of {{tip crowd control}} and [[damage over time]] effects, generate [[stack]]s against enemy champions, up to one per attack or cast per champion",
       "effect_type": "apply_stack",
       "stack_id": "eclipse",
@@ -51,6 +52,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "ever_rising_moon_proc_damage_and_shield_on_two_stacks",
       "raw": "Applying 2 stacks to a champion within a 2 second period deals {{as '''bonus''' physical damage}} to them equal to {{as {{rd 6% 4%}} of target's '''maximum''' health}} and grants you a {{tip shield}} for {{rd 160 80}} {{as (+ {{rd 40% 20%}} '''bonus''' AD)}} for 2 seconds.",
       "effect_type": "damage_and_shield",
       "stat": "physical_damage",

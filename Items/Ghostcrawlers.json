@@ -20,6 +20,7 @@
   ],
   "effects_structured": [
     {
+      "id": "wall_walk_ghosted_and_ignore_terrain_collision",
       "raw": "Become ghostly for 6 seconds, ignoring terrain collision until you basic attack or cast an ability",
       "effect_type": "status_effect",
       "stat": "ghosted",
@@ -45,6 +46,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "wall_walk_bonus_movement_speed_while_inside_terrain",
       "raw": "While inside terrain, gain {{as 300 '''bonus''' movement speed}}.",
       "effect_type": "stat_modifier",
       "stat": "movespeed",

@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "atrophy_immobilize_duration_increase_chance_from_critical_strike_chance",
       "raw": "{{tip Immobilize Immobilizing}} effects against {{tip champions}} have a {{pp key=% key1=% type=critical strike chance 0 to 100 for 11 0 to 100 formula=1% per 1% critical strike chance, capped at 100% critical strike chance}} chance to increase in duration by {{fd 0.25}} seconds (+ 33% of immobilizing effect's duration).",
       "effect_type": "duration_increase_chance",
       "stat": "immobilize_duration",

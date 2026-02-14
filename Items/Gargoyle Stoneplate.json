@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "unbreakable_active_shield_decay_and_size_increase",
       "raw": "Gain a {{tip shield}} for 300 {{as (+ 100% '''bonus''' health)}} that decays over 5 seconds, and 25% increased [[size]] for the same duration.",
       "effect_type": "shield",
       "stat": "damage_absorb",

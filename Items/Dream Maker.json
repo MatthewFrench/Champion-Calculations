@@ -40,6 +40,7 @@
   ],
   "effects_structured": [
     {
+      "id": "dream_maker_generate_bubbles_interval",
       "raw": "Every 8 seconds, you gain a ''Blue Dream Bubble'' and a ''Purple Dream Bubble''",
       "effect_type": "grant_status",
       "stat": "dream_bubbles",
@@ -63,6 +64,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "dream_maker_transfer_bubbles_on_ally_heal_or_shield",
       "raw": "Granting a {{tip heal}} or {{tip shield}} to an allied champion ''(excluding yourself)'' causes you to grant both of your ''Dream Bubbles'' to them, empowering them for 3 seconds",
       "effect_type": "grant_status",
       "stat": "dream_bubbles",
@@ -88,6 +90,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "blue_bubble_reduce_next_non_minion_damage",
       "raw": "The ''Blue Bubble'' reduces the next instance of non-{{tip minion}} damage they take by {{pp 75 to 255 for 13 1;7 to 18 type=your level}} and the ''Purple Bubble'' grants them {{as {{pp 50 to 170 for 13 1;7 to 18 type=your level}} '''bonus''' magic damage}} [[on-hit]] on their next basic attack.",
       "effect_type": "shield_on_next_damage",
       "stat": "damage_reduction",
@@ -127,6 +130,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "support_item_diminishing_gold_from_excessive_minion_kills",
       "raw": "Receives diminishing gold from excessive minion kills.",
       "effect_type": "resource_modifier",
       "stat": "gold",
@@ -145,6 +149,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "purple_bubble_on_hit_bonus_magic_damage",
       "raw": "Purple Bubble grants bonus magic damage on next basic attack.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -171,6 +176,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "ward_active_place_stealth_ward",
       "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area.",
       "effect_type": "place_ward",
       "ward_type": "stealth_ward",

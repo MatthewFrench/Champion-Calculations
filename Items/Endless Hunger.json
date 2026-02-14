@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "famine_bonus_ability_haste_from_bonus_attack_damage",
       "raw": "Gain {{as 5 ah}} {{as (+ 10% '''bonus''' AD)}} {{as ability haste}}.",
       "effect_type": "stat_modifier",
       "stat": "ability_haste",
@@ -58,6 +59,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "feast_bonus_omnivamp_on_recent_damage_takedown",
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them grants you {{as 15% omnivamp}} for 8 seconds.",
       "effect_type": "stat_modifier",
       "stat": "omnivamp",

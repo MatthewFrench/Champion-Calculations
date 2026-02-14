@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "nightstalker_missing_health_damage_amp_vs_champions",
       "raw": "Your abilities deal {{as {{rd {{pp 0 to 22.5 for 11 0 to 70 key=% key1=% type=target's '''missing''' health showtype=false}} {{pp 0 to 12.5 for 11 0 to 70 key=% key1=% type=target's '''missing''' health showtype=false}}}} hp}} {{as (based on target's '''missing''' health)}} increased damage against enemy champions",
       "effect_type": "damage_multiplier",
       "stat": "damage",
@@ -72,6 +73,7 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "nightstalker_untargetable_on_recent_damage_takedown",
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them renders you {{tip untargetable}} for {{fd 1.5}} seconds, which ends prematurely if you perform an action that {{tip break stealth breaks stealth}}.",
       "effect_type": "status_effect",
       "stat": "untargetable",
