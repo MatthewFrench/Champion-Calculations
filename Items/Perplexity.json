@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "giant_slayer_damage_amp_from_max_health_difference",
       "raw": "Deal increased damage against enemy champions with greater maximum health than you, scaling with max health difference.",
       "effect_type": "damage_multiplier",
       "stat": "damage",

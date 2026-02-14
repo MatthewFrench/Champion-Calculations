@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spectral_waltz_permanent_ghosted_status",
       "raw": "Permanently become ghosted.",
       "effect_type": "apply_status",
       "stat": "ghosted",

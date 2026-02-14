@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "lifeline_gain_bonus_health_below_health_threshold",
       "raw": "If damage would reduce you below 30% max health, gain bonus health for 5 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_health",
@@ -65,6 +66,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "lifeline_heal_over_time_scaling_with_resists",
       "raw": "Heal over 5 seconds for a base amount that scales by level and by bonus armor and bonus magic resistance.",
       "effect_type": "healing_over_time",
       "stat": "health",
@@ -111,6 +113,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "lifeline_gain_size_movement_speed_and_tenacity",
       "raw": "While Lifeline is active, gain 15% increased size, 10% bonus movement speed, and 25% tenacity.",
       "effect_type": "stat_modifier",
       "stat": "size_movement_speed_tenacity",

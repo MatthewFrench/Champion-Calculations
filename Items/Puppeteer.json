@@ -38,6 +38,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "pull_their_strings_apply_stacks_on_basic_attack_hits",
       "raw": "Basic attacks on enemy champions apply a Puppeteer stack for 15 seconds, up to 4 stacks.",
       "effect_type": "apply_stack",
       "stack_id": "puppeteer",
@@ -66,6 +67,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "pull_their_strings_consume_stacks_to_berserk_target",
       "raw": "At 4 stacks, consume all stacks to berserk the target for 2 seconds, granting them bonus attack speed and bonus movement speed (25s cooldown).",
       "effect_type": "apply_status",
       "stat": "berserk",
@@ -93,6 +95,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "pull_their_strings_berserk_target_stat_modifiers",
       "raw": "Berserked target gains 50% bonus attack speed plus 150% of your heal and shield power, and 40% bonus movement speed for 2 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_speed_and_movement_speed",
@@ -127,6 +130,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "pull_their_strings_fear_instead_when_only_one_enemy_alive",
       "raw": "If only one champion is alive on the enemy team, fear the target for the same duration instead of berserk.",
       "effect_type": "apply_status",
       "stat": "fear",
@@ -156,6 +160,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "pull_their_strings_cooldown_reduction_on_heal_shield_or_buff",
       "raw": "Granting a heal, shield, or ability-sourced buff reduces Pull Their Strings cooldown by 5 seconds (once per cast).",
       "effect_type": "cooldown_reduction_remaining",
       "stat": "pull_their_strings_cooldown",

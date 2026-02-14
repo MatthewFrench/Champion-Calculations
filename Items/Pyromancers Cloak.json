@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spark_apply_burn_on_basic_attack_or_ability_hit",
       "raw": "Basic attacks and ability hits inflict Burn that deals magic damage over 3 seconds (5s cooldown).",
       "effect_type": "damage_over_time",
       "stat": "magic_damage",
@@ -65,6 +66,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "spark_burn_tick_damage_profile",
       "raw": "Burn ticks every 0.25 seconds over 3 seconds.",
       "effect_type": "damage_over_time",
       "stat": "magic_damage",
@@ -93,6 +95,7 @@
       "parse_confidence": 0.5
     },
     {
+      "id": "cleansing_flame_create_blaze_zone_on_burn_apply",
       "raw": "Applying Burn to a champion launches a fireball that lands near you after 0.5 seconds, creating a blaze.",
       "effect_type": "zone_create",
       "stat": "blaze_zone",
@@ -121,6 +124,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "cleansing_flame_self_bonuses_and_healing_while_in_blaze",
       "raw": "While in the blaze, gain 20% bonus total movement speed (lingers 0.75s after exit) and heal on entry and each second.",
       "effect_type": "stat_modifier_and_heal",
       "stat": "bonus_total_movement_speed",
@@ -154,6 +158,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "cleansing_flame_enemy_damage_while_in_blaze",
       "raw": "Enemies in the blaze take 100 magic damage each second.",
       "effect_type": "damage_over_time",
       "stat": "magic_damage",
@@ -176,6 +181,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "cleansing_flame_blaze_scaling_per_unique_burn_source",
       "raw": "Each unique Burn source (up to 10) increases blaze radius by 40, and increases buff and damage per tick.",
       "effect_type": "stack_scaling",
       "stat": "blaze_zone",

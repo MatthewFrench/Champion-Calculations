@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "rage_bonus_movement_speed_on_basic_attack",
       "raw": "Basic attacks grant bonus movement speed for 2 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",

@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "plating_reduce_incoming_basic_attack_damage_excluding_turrets",
       "raw": "Reduces incoming basic attack damage by 10%, excluding turret attacks.",
       "effect_type": "damage_multiplier",
       "stat": "basic_attack_damage",

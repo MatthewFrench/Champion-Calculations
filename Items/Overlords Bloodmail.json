@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "tyranny_bonus_attack_damage_from_bonus_health",
       "raw": "Gain bonus attack damage equal to 2.5% of bonus health.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_damage",
@@ -54,6 +55,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "retribution_bonus_attack_damage_scaling_with_missing_health",
       "raw": "Gain bonus attack damage based on missing health, scaling up to 12% of total attack damage from other sources.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_damage",

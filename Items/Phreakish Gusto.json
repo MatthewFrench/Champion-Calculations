@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "phreakish_gusto_turret_attack_damage_from_minion_max_health",
       "raw": "Turret basic attacks deal damage equal to 70% of this minion's maximum health as pre-mitigation damage.",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -49,6 +50,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "minion_damager_on_hit_bonus_physical_vs_lane_minions",
       "raw": "Against lane minions, this minion deals bonus physical damage on-hit equal to 4% of the target's current health.",
       "effect_type": "damage",
       "stat": "physical_damage",

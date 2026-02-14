@@ -26,6 +26,7 @@
   ],
   "effects_structured": [
     {
+      "id": "sandswipe_dash_and_bonus_physical_damage",
       "raw": "Dash to 150 units beyond the target enemy champion. On arrival, deal bonus physical damage equal to 12% of target max health, plus 5% per 100 bonus AD.",
       "effect_type": "dash_and_damage",
       "stat": "physical_damage",
@@ -66,6 +67,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "sandswipe_damage_amp_on_same_target",
       "raw": "You deal 20% increased damage to that target for 3 seconds.",
       "effect_type": "damage_multiplier",
       "stat": "damage",
