@@ -32,6 +32,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "lifeline_magic_damage_shield_on_threshold",
       "raw": "If magic damage would reduce you below 30% max health, gain a magic damage shield for 3s (90s cooldown).",
       "effect_type": "shield",
       "stat": "magic_damage",
@@ -78,6 +79,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "lifeline_grant_omnivamp_until_combat_ends",
       "raw": "Triggering Lifeline grants 10% omnivamp until combat ends.",
       "effect_type": "stat_modifier",
       "stat": "omnivamp",

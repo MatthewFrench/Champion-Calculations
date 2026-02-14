@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "magebane_magic_damage_shield_after_no_magic_damage",
       "raw": "After not taking {{as magic damage}} for 15 seconds, gain a {{tip shield}} that absorbs {{as magic damage}} equal to {{as 15% of '''maximum''' health}} until destroyed.",
       "effect_type": "shield",
       "stat": "magic_damage_absorb",

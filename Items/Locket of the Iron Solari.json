@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "devotion_active_shield_self_and_nearby_allies",
       "raw": "Grants you and allied champions within {{tip cr icononly=true}} 850 units a {{tip shield}} for {{pp 200 to 360 type=target's level}} that decays over {{fd 2.5}} seconds.",
       "effect_type": "shield",
       "stat": "damage_absorb",

@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "glory_gain_stacks_on_champion_kill_or_assist",
       "raw": "Gain Glory stacks from champion takedowns (4 per kill, 2 per assist), up to 25.",
       "effect_type": "apply_stack",
       "stack_id": "glory",
@@ -62,6 +63,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "glory_grant_ability_power_per_stack",
       "raw": "Gain 5 ability power per Glory stack (up to 125 at max stacks).",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
@@ -90,6 +92,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "glory_bonus_movement_speed_at_stack_threshold",
       "raw": "At 10+ Glory stacks, gain 10% bonus movement speed.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",
@@ -112,6 +115,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "glory_lose_stacks_on_death",
       "raw": "Lose 10 Glory stacks on death.",
       "effect_type": "remove_stack",
       "stack_id": "glory",
@@ -132,6 +136,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "glory_stack_persistence_from_dark_seal_upgrade",
       "raw": "Glory stacks are preserved when upgrading from Dark Seal.",
       "effect_type": "stack_persistence",
       "stat": "glory_stacks",

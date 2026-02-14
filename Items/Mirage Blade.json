@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "blur_reduce_remaining_cooldowns_of_dash_and_blink_spells_on_hit",
       "raw": "On-hit basic attacks reduce remaining cooldowns of dash/blink abilities by 12% (4% for ultimates).",
       "effect_type": "cooldown_reduction_remaining",
       "stat": "cooldown",

@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "relentless_reset_basic_attack_timer_on_ability_cast",
       "raw": "Casting an ability resets your basic attack timer.",
       "effect_type": "basic_attack_reset",
       "stat": "basic_attack_timer",
@@ -44,6 +45,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "relentless_empower_next_two_basic_attacks_with_bonus_attack_speed",
       "raw": "After casting an ability, your next two basic attacks gain 90% bonus attack speed.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_speed",
@@ -67,6 +69,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "relentless_reduce_remaining_cooldowns_on_basic_attack",
       "raw": "Each basic attack reduces the remaining cooldowns of all abilities by 0.5 seconds.",
       "effect_type": "cooldown_reduction_remaining",
       "stat": "cooldown",

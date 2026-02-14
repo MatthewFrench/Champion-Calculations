@@ -26,6 +26,7 @@
   ],
   "effects_structured": [
     {
+      "id": "quicksilver_cleanse_crowd_control_except_airborne",
       "raw": "Removes all crowd control debuffs except Airborne.",
       "effect_type": "cleanse",
       "stat": "crowd_control",
@@ -50,6 +51,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "quicksilver_bonus_movement_speed_and_ghosted",
       "raw": "Gain 50% bonus total movement speed and ghosted for 2 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_total_movement_speed",

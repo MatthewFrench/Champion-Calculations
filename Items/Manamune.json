@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "awe_bonus_attack_damage_from_max_mana",
       "raw": "Gain bonus attack damage equal to 2% of maximum mana.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_damage",
@@ -60,6 +61,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "manaflow_generate_charges_over_time",
       "raw": "Gain a Manaflow charge every 8 seconds, up to 4 charges.",
       "effect_type": "apply_stack",
       "stack_id": "manaflow_charge",
@@ -87,6 +89,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "manaflow_consume_charge_to_gain_bonus_mana",
       "raw": "Consume a Manaflow charge on-hit or when an ability affects a unit to gain bonus mana (3, or 6 for champion targets), once per cast instance.",
       "effect_type": "resource_gain",
       "stat": "bonus_mana",
@@ -116,6 +119,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "manaflow_bonus_mana_cap",
       "raw": "Bonus mana gained from Manaflow stacks caps at 360.",
       "effect_type": "resource_cap",
       "stat": "bonus_mana",
@@ -136,6 +140,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "manamune_transform_to_muramana_at_bonus_mana_cap",
       "raw": "Transforms into Muramana at 360 bonus mana.",
       "effect_type": "transform",
       "stat": "item",

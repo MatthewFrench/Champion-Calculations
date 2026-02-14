@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "giant_slayer_damage_amp_from_target_bonus_health",
       "raw": "Deal {{pp 0 to 15 for 16 0 to 1500 key=% type=target's '''bonus''' health formula=1% per 100 bonus health, up to a maximum of 15% at 1500 bonus health",
       "effect_type": "damage_multiplier",
       "stat": "damage",

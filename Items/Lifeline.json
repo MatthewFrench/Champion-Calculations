@@ -27,6 +27,7 @@
   ],
   "effects_structured": [
     {
+      "id": "soul_anchor_mark_current_location",
       "raw": "Mark your current location",
       "effect_type": "set_anchor",
       "stat": "soul_anchor",
@@ -47,6 +48,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "soul_anchor_automatic_blink_after_delay",
       "raw": "After 4 seconds, you automatically {{tip blink}} to the marked location after a {{fd 0.5}}-second delay",
       "effect_type": "blink",
       "stat": "soul_anchor",
@@ -76,6 +78,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "soul_anchor_recast_manual_blink",
       "raw": "''Soul Anchor'' may be recast within its duration to manually blink to the marked location after the same delay (45 second cooldown, starts after the blink).",
       "effect_type": "blink",
       "stat": "soul_anchor",

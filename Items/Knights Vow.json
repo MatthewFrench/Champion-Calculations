@@ -35,6 +35,7 @@
   ],
   "effects_structured": [
     {
+      "id": "sacrifice_redirect_portion_of_worthy_ally_damage",
       "raw": "While your ''Worthy'' ally is {{tt tethered to you 1250 units, center to edge}} and you are above {{as 30% of your '''maximum''' health}}, redirect 12% of the {{tt pre-mitigation Damage calculated before the Worthy ally's modifiers}} {{as physical physical damage}} and {{as magic magic damage}} damage they take to you as the respective damage type",
       "effect_type": "damage",
       "stat": "damage_redirect",
@@ -65,6 +66,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "sacrifice_heal_from_worthy_ally_champion_damage",
       "raw": "Additionally, you {{tip heal}} for 10% of the {{tt post-mitigation damage Damage calculated after modifiers}} dealt by your ''Worthy'' ally to champions.",
       "effect_type": "healing",
       "stat": "healing",
@@ -93,6 +95,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "pledge_select_worthy_ally_and_form_tether",
       "raw": "Designate the target allied champion as being ''Worthy'', forming a {{tip tether}} between you and them",
       "effect_type": "select_worthy_ally",
       "stat": "tether",

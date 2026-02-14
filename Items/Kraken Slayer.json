@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bring_it_down_generate_on_hit_stacks",
       "raw": "Basic attacks [[on-hit]] grant a stack for 3 seconds, up to 2 stacks",
       "effect_type": "apply_stack",
       "stack_id": "kraken_slayer",
@@ -53,6 +54,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "bring_it_down_consume_stacks_for_bonus_physical_damage",
       "raw": "At 2 stacks, the next basic attack consumes all stacks to deal {{as {{rd 150 + (200-150)/10*(x-1) for 13 150*0.8 + (200*0.8-150*0.8)/10*(x-1) for 13 levels=1;9 to 20 pp=true}} '''bonus''' physical damage physical damage}} on-hit, increased by {{pp 0 to 75 by 5 0 to 100 key=% color=health type=target's '''missing''' health key1=%}}, for up to {{as {{rd 150*1.75 + (200*1.75-150*1.75)/10*(x-1) for 13 150*0.8*1.75 + (200*0.8*1.75-150*0.8*1.75)/10*(x-1) for 13 levels=1;9 to 20 pp=true}} '''bonus''' physical damage physical damage}}.",
       "effect_type": "damage",
       "stat": "physical_damage",

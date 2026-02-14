@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "scorn_grant_ultimate_haste",
       "raw": "Gain 20 ultimate haste.",
       "effect_type": "stat_modifier",
       "stat": "ultimate_haste",
@@ -51,6 +52,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "hatefog_create_scorched_zone_on_ultimate_damage",
       "raw": "Ultimate damage to enemy champions (non-proc, non-pet) creates a scorched zone for 3 seconds with a radius that scales by ultimate damage instance.",
       "effect_type": "zone_create",
       "stat": "zone_radius",
@@ -88,6 +90,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "hatefog_curse_magic_damage_over_time_in_zone",
       "raw": "Enemies within the scorched zone are cursed, taking magic damage every 0.25s for 3s.",
       "effect_type": "damage_over_time",
       "stat": "magic_damage",
@@ -126,6 +129,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "hatefog_reduce_magic_resistance_of_cursed_enemies",
       "raw": "Cursed enemies in the zone have their magic resistance reduced by 10 for 3 seconds (3s cooldown per target, starts on zone creation).",
       "effect_type": "stat_modifier",
       "stat": "magic_resistance",

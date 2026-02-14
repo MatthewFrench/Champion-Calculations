@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "between_the_ribs_identify_enemy_weakpoints",
       "raw": "You can now identify the ''Weakpoints'' of nearby enemy champions, marked as an arc around them and pointing towards a specific direction",
       "effect_type": "mark_weakpoint",
       "stat": "weakpoint",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "between_the_ribs_weakpoint_exposure_timing",
       "raw": "''Weakpoints'' on targets take 4 seconds to become exposed and linger for {{fd 11.25}} seconds afterwards",
       "effect_type": "timing",
       "stat": "weakpoint_exposure",
@@ -66,6 +68,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "between_the_ribs_consume_exposed_weakpoint_for_true_damage_and_movespeed",
       "raw": "Dealing damage while you are facing an exposed ''Weakpoint'' will consume it to deal {{as '''bonus''' true damage}} equal to {{as 3% hp}} {{as (+ 3% per 100 AD)}} {{as (+ 2% per 100 AP)}} {{as of the target's '''maximum''' health}} and grant you {{as {{pp 50 to 75 key=%}} '''bonus''' movement speed}} for {{fd 1.5}} seconds",
       "effect_type": "damage",
       "stat": "true_damage",

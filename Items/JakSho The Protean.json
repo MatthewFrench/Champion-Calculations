@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "voidborn_resilience_generate_combat_stacks",
       "raw": "Gain a stack for each second [[Combat status in combat]] with enemy champions, stacking up to 5 times",
       "effect_type": "apply_stack",
       "stack_id": "voidborn_resilience",
@@ -54,6 +55,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "voidborn_resilience_bonus_resists_at_max_stacks",
       "raw": "At '''maximum''' stacks, increase your {{as '''bonus''' armor}} and {{as '''bonus''' magic resistance}} by 30% until the end of combat.",
       "effect_type": "stat_modifier",
       "stat": "bonus_armor_and_bonus_magic_resistance",

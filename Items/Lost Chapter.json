@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "enlighten_restore_mana_on_level_up",
       "raw": "Upon leveling up, restores {{as 20% of '''maximum''' mana}} over 3 seconds.",
       "effect_type": "resource_restore_over_time",
       "stat": "mana",

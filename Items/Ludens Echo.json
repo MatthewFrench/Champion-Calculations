@@ -27,6 +27,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "echo_gain_initial_stacks",
       "raw": "Gain 6 ''Echo'' stacks.",
       "effect_type": "apply_stack",
       "stack_id": "echo",
@@ -53,6 +54,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "echo_consume_stacks_for_primary_and_secondary_magic_damage",
       "raw": "Dealing ability damage to an enemy consumes all ''Echo'' stacks to deal 75 (+5% AP) bonus magic damage. For each stack beyond the first, fire an orb at an additional enemy within 600 units (0.5s impact delay) that deals the same damage.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -97,6 +99,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "echo_remaining_stack_primary_damage_multiplier",
       "raw": "If fewer additional targets are available than stacks consumed, deal 20% more damage to the primary target per remaining stack.",
       "effect_type": "damage_multiplier",
       "stat": "magic_damage",

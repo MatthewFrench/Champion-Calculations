@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "purify_cleanse_target_or_self_with_exclusions",
       "raw": "Remove all crowd control debuffs from yourself or an allied champion, except Airborne, Blind, Disarm, Nearsight, and Suppression.",
       "effect_type": "cleanse",
       "stat": "crowd_control",
@@ -58,6 +59,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "purify_heal_target_based_on_level",
       "raw": "Heal the target for 100 to 250 based on target level.",
       "effect_type": "healing",
       "stat": "health",
