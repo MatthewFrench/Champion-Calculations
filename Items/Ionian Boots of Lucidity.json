@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "ionian_insight_grant_summoner_spell_haste",
       "raw": "Gain 10 [[Haste#Summoner spell haste summoner spell haste]].",
       "effect_type": "stat_modifier",
       "stat": "summoner_spell_haste",

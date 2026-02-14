@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "fill_the_soul_generate_charges_on_nearby_ability_casts",
       "raw": "Gain a charge each time you or champions within 800 units cast an [[champion ability ability]], up to 30",
       "effect_type": "apply_stack",
       "stack_id": "innervating",
@@ -56,6 +57,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "fill_the_soul_max_charge_bonus_stats_and_shield",
       "raw": "At maximum charges, gain {{as {{pp 100 to 250}} ability power}} and {{as {{pp 15 to 25 key=%}} '''bonus''' movement speed}} for the rest of the round, as well as a {{pp 400 to 750}} {{tip shield}} that lasts until destroyed",
       "effect_type": "stat_modifier_and_shield",
       "stat": "ability_power",

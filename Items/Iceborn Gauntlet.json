@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spellblade_empowered_attack_bonus_physical_and_create_frost_field",
       "raw": "After using an [[champion ability ability]], your next basic attack within 10 seconds deals {{as 150% '''base''' AD}} {{as '''bonus''' physical damage}} [[on-hit]] and creates a 300 radius frost field for 2 seconds",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -62,6 +63,7 @@
       "parse_confidence": 1.0
     },
     {
+      "id": "spellblade_frost_field_slow",
       "raw": "Enemies within the field are slowed by {{rd 25% {{ap 25*0.5}}%}} ({{fd 1.5}} second cooldown, starts after using the empowered attack).",
       "effect_type": "status_effect",
       "stat": "slow",

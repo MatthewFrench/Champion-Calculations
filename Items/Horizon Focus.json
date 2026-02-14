@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "hypershot_mark_and_damage_amp_on_long_range_ability_damage",
       "raw": "Dealing [[ability damage]] to a champion with a [[champion ability]] at {{tip cr icononly = true}} 600 or more units away from the cast position marks them for 6 seconds, {{tip standard sight revealing}} them and increasing your damage dealt to them by 10%.",
       "effect_type": "mark_and_damage_amp",
       "stat": "damage_multiplier",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "focus_grant_area_vision_and_apply_marks_after_hypershot",
       "raw": "Upon triggering ''Hypershot'', grant {{tip sight}} of the {{tt area Grants sight through terrain and brush}} {{tip cr icononly=true}} 1400 units around the target for 2 seconds and apply ''Hypershot's'' mark to enemy champions within the area for 3 seconds.",
       "effect_type": "vision_and_mark",
       "stat": "vision",

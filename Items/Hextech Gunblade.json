@@ -26,6 +26,7 @@
   ],
   "effects_structured": [
     {
+      "id": "lightning_bolt_active_magic_damage_and_slow",
       "raw": "Shocks the target enemy champion with a bolt of lightning, dealing {{as {{pp 175 + (253-175)/17*(x-1) for 20}} magic damage}} {{as (+ 30% AP)}} {{as magic damage}} and {{tip slow slowing}} them by 25% for {{fd 1.5}} seconds.",
       "effect_type": "damage",
       "stat": "magic_damage",

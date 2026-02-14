@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "immolate_activate_on_damage_taken_or_dealt",
       "raw": "Taking or dealing damage activates this passive for 3 seconds",
       "effect_type": "activate_aura",
       "stat": "immolate",
@@ -54,6 +55,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "immolate_aura_magic_damage_per_second",
       "raw": "Deal {{as {{#vardefineecho:hollow_ibase 15}} {{as (+ {{#vardefineecho:hollow_ihp 1}}% '''bonus''' health)}} magic damage magic damage}} every second to enemies within {{tip cr icononly=true}} 325 (+ 100% '''bonus''' size) units, with the damage being increased to 125% against {{tip minions}} and {{tip monsters}}",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -89,6 +91,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "desolate_eruption_damage_on_non_champion_kill",
       "raw": "Killing a {{tt non-champion unit Excluding wards and structures.}} causes an eruption around their death location that deals{{ft {{as {{ap {{#var:hollow_ibase}}*2}} {{as (+ {{ap {{#var:hollow_ihp}}*2}}% '''bonus''' health)}} magic damage magic damage}} 200% of ''Immolate's'' damage}}to enemies within 350 units",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -115,6 +118,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "desolate_larger_eruption_damage_on_recent_damage_takedown",
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them causes a larger eruption that deals{{ft {{as {{ap {{#var:hollow_ibase}}*4}} {{as (+ {{ap {{#var:hollow_ihp}}*4}}% '''bonus''' health)}} magic damage magic damage}} 400% of ''Immolate's'' damage}}to enemies within 500 units.",
       "effect_type": "damage",
       "stat": "magic_damage",

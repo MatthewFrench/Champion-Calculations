@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "revved_bonus_magic_damage_on_champion_damage",
       "raw": "Damaging an enemy champion deals {{as 65 '''bonus''' magic damage}}.",
       "effect_type": "damage",
       "stat": "magic_damage",

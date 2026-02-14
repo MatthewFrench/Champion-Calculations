@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "skipper_generate_stacks_on_hit",
       "raw": "Basic attacks [[on-hit]] against any enemy grant a stack for 10 seconds, stacking up to 5 times",
       "effect_type": "apply_stack",
       "stack_id": "hullbreaker",
@@ -58,6 +59,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "skipper_empowered_hit_consume_stacks_for_bonus_damage",
       "raw": "At '''maximum''' stacks, or 4 stacks, your next basic attack against a champion, epic monster, or structure consumes all stacks to deal {{as {{rd 120% {{ap 120*0.7}}%}} '''base''' AD ad}} {{as (+ {{rd 5% {{ap 5*0.7}}%}} '''maximum''' health)}} {{as '''bonus''' physical damage}}, increased to {{as {{rd 300% {{ap 300*0.7}}%}} '''base''' AD ad}} {{as (+ {{rd 10% {{ap 10*0.7}}%}} '''maximum''' health)}} against structures.",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -109,6 +111,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "boarding_party_aura_bonus_resists_and_size_for_allied_siege_and_super_minions",
       "raw": "Allied {{ui Blue Siege Minion link=Siege minion siege minions}} and {{ui Blue Super Minion link=Super minion super minions}} within {{tip er icononly=true}} {{tt 1050 Estimated}} units gain {{rd 70 to 130 for 11 70*0.5 to 130*0.5 for 11 levels=1;9 to 18 pp=true}} {{as '''bonus''' armor}} and {{as '''bonus''' magic resistance}}, as well as 10% increased size.",
       "effect_type": "stat_modifier",
       "stat": "armor_and_magic_resistance",

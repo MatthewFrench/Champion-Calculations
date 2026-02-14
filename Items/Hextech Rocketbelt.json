@@ -26,6 +26,7 @@
   ],
   "effects_structured": [
     {
+      "id": "supersonic_dash_and_rocket_projectiles",
       "raw": "{{tip Dash}} 275 units in the target direction, though not through terrain, then unleash an arc of 7 rockets forward which upon collision explode in a {{tip cr icononly = true}} {{tt 185-radius estimated}} area",
       "effect_type": "movement_and_projectile",
       "stat": "dash_and_rockets",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "supersonic_magic_damage_on_dash_and_rocket_hit_once_per_cast",
       "raw": "Enemies within {{tt 85 units center-to-edge, estimated}} of your dash and ones hit by any rocket's explosion are dealt {{as 100 {{as (+ 10% AP)}} magic damage magic damage}}, once per cast.",
       "effect_type": "damage",
       "stat": "magic_damage",

@@ -24,6 +24,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "lifeline_shield_on_damage_below_health_threshold",
       "raw": "If you would take damage that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs {{rd 400 to 700 for 11 400*0.8 to 700*0.8 for 11 levels=1;9 to 18 pp=true}} damage for 3 seconds.",
       "effect_type": "shield",
       "stat": "damage_absorb",

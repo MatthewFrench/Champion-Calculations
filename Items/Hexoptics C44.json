@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "magnification_basic_attack_damage_amp_by_distance",
       "raw": "Deal {{pp 0 to 10 for 11 0 to 600 key=% type=distance to target formula=1% per 60 units away, up to a maximum of 10%.}} increased {{tip basic damage}}",
       "effect_type": "damage_multiplier",
       "stat": "basic_attack_damage",
@@ -67,6 +68,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "arcane_aim_bonus_attack_range_on_recent_damage_takedown",
       "raw": "Scoring a {{tip takedown}} against an enemy champion within 3 seconds of damaging them grants you {{sti 100 '''bonus''' attack range}} for 6 seconds.",
       "effect_type": "stat_modifier",
       "stat": "attack_range",

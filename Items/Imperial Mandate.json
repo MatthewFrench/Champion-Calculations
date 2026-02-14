@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "coordinated_fire_apply_mark_on_slow_or_immobilize",
       "raw": "Abilities that {{tip slow}} or {{tip immobilize}} enemy champions mark them for 5 seconds",
       "effect_type": "apply_mark",
       "mark_id": "imperial_mandate",
@@ -49,6 +50,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "coordinated_fire_consume_mark_for_bonus_magic_damage",
       "raw": "Allied champions that damage marked enemies consume the mark to deal {{as 10% of the target's '''current''' health}} {{as '''bonus''' magic damage}} (9 second cooldown per target, shared between all users of '''Imperial Mandate'''",
       "effect_type": "damage",
       "stat": "magic_damage",
