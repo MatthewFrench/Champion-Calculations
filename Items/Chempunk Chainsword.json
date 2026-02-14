@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "chempunk_chainsword_hackshorn",
       "raw": "Dealing {{as physical damage}} to enemy champions inflicts them with {{tip Grievous Wounds}} for 3 seconds.",
       "effect_type": "status_effect",
       "value": 3,

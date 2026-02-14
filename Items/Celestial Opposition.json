@@ -40,6 +40,7 @@
   ],
   "effects_structured": [
     {
+      "id": "celestial_opposition_blessed_reduction",
       "raw": "Blessed: reduce incoming champion damage (35% melee / 25% ranged), lingering 2s after damage.",
       "effect_type": "damage_reduction",
       "stat": "damage_taken_multiplier",
@@ -58,6 +59,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "celestial_opposition_shockwave_slow",
       "raw": "After Blessed ends, slow enemies within 500 units by 50% for 1.5s. Cooldown 18s, resets on champion damage.",
       "effect_type": "debuff",
       "stat": "slow",
@@ -74,6 +76,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "celestial_opposition_minion_gold_penalty",
       "raw": "Diminishing gold from excessive minion kills.",
       "effect_type": "resource",
       "stat": "minion_gold_modifier",
@@ -85,6 +88,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "celestial_opposition_ward_place",
       "raw": "Place a Stealth Ward; charges refill at shop.",
       "effect_type": "utility",
       "stat": "ward",

@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "catalyst_eternity_mana_restore",
       "raw": "Restore mana equal to 10% of pre-mitigation damage taken from champions.",
       "effect_type": "resource",
       "stat": "mana",
@@ -36,6 +37,7 @@
       "parse_confidence": 0.9
     },
     {
+      "id": "catalyst_eternity_heal",
       "raw": "Heal for 25% of mana spent, up to 20 per cast (toggles: 20 per second).",
       "effect_type": "healing",
       "stat": "heal",

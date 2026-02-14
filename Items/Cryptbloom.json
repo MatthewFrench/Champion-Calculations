@@ -27,6 +27,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "cryptbloom_life_from_death",
       "raw": "Scoring a {{tip takedown}} against an enemy champion while alive and within 3 seconds of damaging them summons a nova that radiates from the location of their death over {{fd 1.75}} seconds, {{tip heal healing}} you and allied champions hit for 100 {{as (+ 20% AP)}}.",
       "effect_type": "healing",
       "stat": "healing",

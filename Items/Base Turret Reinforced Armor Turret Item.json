@@ -58,6 +58,8 @@
       "raw": "Base turrets regenerate health up to current segment.",
       "effect_type": "healing",
       "stat": "health_regen",
+      "value": 1,
+      "unit": "segment_limited_regeneration",
       "trigger": "passive",
       "applies_to": "structure",
       "conditions": [

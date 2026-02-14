@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "dawncore_first_light",
       "raw": "Gain {{as 2% heal and shield power hsp}} and {{as 10 ability power}} for every additional {{as 100% '''base''' mana regeneration}}.",
       "effect_type": "stat_modifier",
       "stat": "heal_and_shield_power",

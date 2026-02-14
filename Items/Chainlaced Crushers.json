@@ -27,6 +27,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "chainlaced_crushers_noxian_persistence",
       "raw": "Taking {{as magic damage}} from champions grants you a {{tip shield}} that absorbs {{pp 100 to 200 color=md}} {{as (+ 8% '''bonus''' health)}} {{as magic damage}} for 5 seconds.",
       "effect_type": "shield",
       "shield_type": "magic",

@@ -40,6 +40,7 @@
   ],
   "effects_structured": [
     {
+      "id": "bounty_of_worlds_upgrade",
       "raw": "Support quest completed; can upgrade into a support item via menu.",
       "effect_type": "utility",
       "stat": "support_quest_upgrade",
@@ -51,6 +52,7 @@
       "parse_confidence": 0.9
     },
     {
+      "id": "bounty_of_worlds_minion_gold_penalty",
       "raw": "Diminishing gold from excessive minion kills.",
       "effect_type": "resource",
       "stat": "minion_gold_modifier",
@@ -62,6 +64,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "bounty_of_worlds_ward_place",
       "raw": "Place a Stealth Ward; charges refill at shop.",
       "effect_type": "utility",
       "stat": "ward",

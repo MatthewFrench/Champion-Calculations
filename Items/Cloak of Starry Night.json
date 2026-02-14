@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "cloak_of_starry_night_mr_increase",
       "raw": "Increase your {{as '''total''' magic resistance}} by {{as 20% mr}}",
       "effect_type": "stat_modifier",
       "stat": "magic_resistance",
@@ -50,6 +51,7 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "cloak_of_starry_night_non_basic_reduction",
       "raw": "Additionally, reduce all incoming damage received from non-basic attack sources by 5% per {{as 200 '''total''' magic resistance}}, up to a maximum of 50% damage reduction.",
       "effect_type": "damage_reduction",
       "value": 5,

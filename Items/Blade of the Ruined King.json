@@ -41,6 +41,15 @@
         "ranged": 6
       },
       "max_vs_minions_monsters": 100,
+      "scaling_terms": [
+        {
+          "stat": "target_current_health",
+          "ratio_by_attack_type": {
+            "melee": 0.09,
+            "ranged": 0.06
+          }
+        }
+      ],
       "unit": "percent_current_health",
       "trigger": "on_hit",
       "applies_to": "enemy",

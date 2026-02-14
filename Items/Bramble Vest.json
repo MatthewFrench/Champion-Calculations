@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bramble_vest_thorns_damage",
       "raw": "On being hit by a basic attack, deal 10 magic damage to the attacker.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -30,6 +31,7 @@
       "parse_confidence": 0.9
     },
     {
+      "id": "bramble_vest_thorns_grievous_wounds",
       "raw": "If the attacker is a champion, apply Grievous Wounds for 3 seconds.",
       "effect_type": "debuff",
       "stat": "grievous_wounds",

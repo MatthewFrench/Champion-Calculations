@@ -15,6 +15,7 @@
   ],
   "effects_structured": [
     {
+      "id": "control_ward_place",
       "raw": "Place a Control Ward that reveals and disables nearby enemy wards and traps.",
       "effect_type": "place_ward",
       "ward_type": "control_ward",

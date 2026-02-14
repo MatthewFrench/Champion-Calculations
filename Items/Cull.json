@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "cull_reap_bonus_gold",
       "raw": "Killing a [[minion]] grants an additional {{g 1}}, up to a '''maximum''' of {{g 100}}.",
       "effect_type": "resource_modifier",
       "stat": "gold",

@@ -14,6 +14,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "deaths_daughter_cannonball",
       "raw": "A massive cannonball lands after {{ais Cannon Barrage Gangplank}} first cluster of waves, dealing {{sti true damage {{as {{ap 120 to 300 3}} true damage}}}} {{as (+ 30% AP)}} {{as true damage}} to enemies struck and {{tip slow slowing}} them by 75% for 1 second.",
       "effect_type": "damage",
       "stat": "true_damage",

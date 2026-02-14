@@ -16,6 +16,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "demon_kings_crown_supremacy",
       "raw": "Increase your '''total''' {{as attack damage}}, {{as ability power}}, {{as attack speed}}, {{as '''maximum''' health}}, {{as armor}}, {{as magic resistance}}, and {{as ability haste}} by 26%, further increased by {{fd 1.2}}% for each round you win and reduced by 3% for each round you lose.",
       "effect_type": "stat_modifier",
       "stat": "multiple",

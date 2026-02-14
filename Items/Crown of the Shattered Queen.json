@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "crown_safeguard",
       "raw": "Become ''Safeguarded'' to reduce incoming champion damage by 50%, lingering for 3 seconds after taking damage from a champion (30 second cooldown, timer restarts upon taking damage from champions).",
       "effect_type": "damage_reduction",
       "value": 50,

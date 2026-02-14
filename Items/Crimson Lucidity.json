@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "crimson_lucidity_summoner_haste",
       "raw": "Gain 20 [[Haste#Summoner spell haste summoner spell haste]].",
       "effect_type": "stat_modifier",
       "stat": "summoner_spell_haste",
@@ -48,6 +49,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "crimson_lucidity_noxian_haste",
       "raw": "{{tip heal Healing}}, {{tip shield shielding}} or buffing an ally, damaging abilities against champions, and using [[summoner spell]]s grants you {{as {{rd 10% 8%}} '''bonus''' movement speed}} for 4 seconds",
       "effect_type": "stat_modifier",
       "stat": "movespeed",

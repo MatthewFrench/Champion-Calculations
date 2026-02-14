@@ -16,6 +16,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "crystalline_overgrowth_buildup",
       "raw": "After 90 seconds, turrets gain ''Overgrowth''",
       "effect_type": "apply_status",
       "stat": "overgrowth",
@@ -40,6 +41,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "crystalline_overgrowth_consume_damage",
       "raw": "Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as '''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time.",
       "effect_type": "damage",
       "stat": "true_damage",

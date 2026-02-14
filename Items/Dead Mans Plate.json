@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "dead_mans_plate_momentum_gain",
       "raw": "While moving, generates 7 stacks of ''Momentum'' every {{fd 0.25}} seconds, granting up to {{as 20 '''bonus''' movement speed}} at 100 stacks after {{fd 3.75}} seconds of moving",
       "effect_type": "apply_stack",
       "stack_id": "momentum",
@@ -69,6 +70,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "dead_mans_plate_momentum_hit",
       "raw": "Basic attacks consume all stacks to deal {{as {{pp 0 to 40 for 11 0 to 100 type=Momentum label1=stacks of Momentum formula=0.4 for every 1 stack of Momentum, capped at 40}} physical damage}} {{as (+ {{pp 0 to 100 for 11 0 to 100 key=% type=Momentum label1=stacks of Momentum formula=1% for every 1 stack of Momentum, capped at 100}} '''base''' AD)}} {{as '''bonus''' physical damage}} [[on-hit]].",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -120,6 +122,7 @@
       "parse_confidence": 0.95
     },
     {
+      "id": "dead_mans_plate_unsinkable",
       "raw": "Gain 15% {{tip slow resist}}.",
       "effect_type": "stat_modifier",
       "stat": "slow_resist",

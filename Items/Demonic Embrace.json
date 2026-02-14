@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "demonic_embrace_sinister_pact",
       "raw": "Increase your {{as ability power}} by {{as {{fd 1.5}}% ap}} and gain {{as {{fd 1.5}}% '''bonus''' movement speed}} for every {{as 100 '''current''' health}} you are missing, up to an increase of {{as 45% ability power}} and {{as 45% '''bonus''' movement speed}} at {{as 3000 '''current''' health}} missing.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",

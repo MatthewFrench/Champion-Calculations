@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "deaths_dance_ignore_pain",
       "raw": "Reduces {{rd 30% 10%}} of all {{tt post-mitigation Damage calculated after modifiers}} {{as physical physical damage}} and {{as magic magic damage}} damage received and instead stores the damage to successively take it as {{as true damage}} over 3 seconds, dealing a third of the stored damage each second.",
       "effect_type": "damage_store",
       "stat": "post_mitigation_damage",
@@ -66,6 +67,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "deaths_dance_defy_heal",
       "raw": "If an enemy champion dies within 3 seconds of you damaging them, removes ''Ignore Pain's'' remaining stored damage and {{tip heals}} you for {{as 75% '''bonus''' AD}} over 2 seconds.",
       "effect_type": "healing",
       "stat": "healing",

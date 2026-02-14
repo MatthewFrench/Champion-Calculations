@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "dark_seal_glory_stack_gain",
       "raw": "Gain 2 stacks for each champion [[kill]] and 1 stack for each [[assist]], up to a '''maximum''' of 10 stacks",
       "effect_type": "apply_stack",
       "stack_id": "glory",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "dark_seal_glory_ap",
       "raw": "For every stack, gain {{as 4 ability power}}, up to {{as 40 AP}} at '''maximum''' stacks",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
@@ -84,6 +86,7 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "dark_seal_glory_stack_loss_on_death",
       "raw": "Lose 5 stacks on [[death]]",
       "effect_type": "remove_stack",
       "stack_id": "glory",

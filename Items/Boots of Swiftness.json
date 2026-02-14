@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "boots_of_swiftness_fleetfooted",
       "raw": "Gain 25% slow resist.",
       "effect_type": "stat_modifier",
       "stat": "slow_resist",

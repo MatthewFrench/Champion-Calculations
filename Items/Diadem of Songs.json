@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "diadem_of_songs_harmony",
       "raw": "Grants {{as heal and shield power}} equal to {{as {{fd 0.5}}% '''bonus''' mana}}.",
       "effect_type": "stat_modifier",
       "stat": "heal_and_shield_power",
@@ -60,6 +61,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "diadem_of_songs_consonance_heal",
       "raw": "While you or any allied champion you granted a {{tip heal}} or {{tip shield}} to in the last 3 seconds is [[combat status in combat]] with champions, each second, you heal the {{tt most wounded Lowest health percent}} allied champion within 900 units for {{as {{fd 0.8}}% of your '''maximum''' mana}}.",
       "effect_type": "healing",
       "stat": "healing",

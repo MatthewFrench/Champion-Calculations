@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "darksteel_talons_gash",
       "raw": "Basic attacks [[on-hit]] deal {{as {{rd 20 to 40 10 to 20 pp=true}} true damage}} {{as (+ {{rd 25% 20%}} '''bonus''' armor) armor}} {{as '''bonus''' true damage}}.",
       "effect_type": "damage",
       "stat": "true_damage",

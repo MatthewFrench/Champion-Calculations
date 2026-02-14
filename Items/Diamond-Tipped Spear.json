@@ -25,6 +25,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "diamond_tipped_spear_reach_weapon",
       "raw": "Gain {{sti range 75 '''bonus''' attack range}}.",
       "effect_type": "stat_modifier",
       "stat": "attack_range",
@@ -45,6 +46,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "diamond_tipped_spear_sweet_spot",
       "raw": "Basic attacks deal {{pp 0 to 30 for 11 0 to 1000 key=% type=distance label1=units}} increased damage and abilities deal {{pp 0 to 40 for 11 0 to 1000 key=% type=distance label1=units}} increased damage",
       "effect_type": "damage_multiplier",
       "stat": "damage",

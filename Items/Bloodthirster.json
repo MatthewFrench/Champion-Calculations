@@ -23,9 +23,18 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bloodthirster_ichorshield",
       "raw": "Convert lifesteal overheal into a shield, capped by level-scaling values.",
       "effect_type": "shield",
       "stat": "overheal_shield",
+      "value": 165,
+      "scaling_terms": [
+        {
+          "stat": "champion_level",
+          "ratio": 15,
+          "type": "flat_per_level_from_9"
+        }
+      ],
       "trigger": "on_lifesteal_overheal",
       "applies_to": "self",
       "conditions": [

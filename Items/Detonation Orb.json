@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "detonation_orb_mark_apply",
       "raw": "Dealing ability damage against enemy champions marks them for 3 seconds, storing 20% of the {{tt post-mitigation damage Damage calculated after modifiers}} you deal to them, increased to 25% if they are {{tip immobilize immobilized}}",
       "effect_type": "apply_mark",
       "mark_id": "detonation_orb",
@@ -59,6 +60,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "detonation_orb_mark_refresh",
       "raw": "Each instance of your ability damage dealt to a marked target refreshes their mark.",
       "effect_type": "refresh_mark",
       "mark_id": "detonation_orb",
@@ -79,6 +81,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "detonation_orb_mark_detonate_expire",
       "raw": "Once the mark expires, it detonates to deal {{as true damage}} equal to the amount stored against the target.",
       "effect_type": "detonate_mark",
       "mark_id": "detonation_orb",
@@ -98,6 +101,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "detonation_orb_mark_detonate_lethal",
       "raw": "If a mark would deal lethal damage to the target, it is detonated immediately.",
       "effect_type": "detonate_mark",
       "mark_id": "detonation_orb",

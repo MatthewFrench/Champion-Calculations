@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "cosmic_drive_spelldance",
       "raw": "Dealing {{as magic magic damage}} or {{as true true damage}} damage to an enemy champion grants you {{as 20 '''bonus''' movement speed ms}} for 4 seconds.",
       "effect_type": "stat_modifier",
       "stat": "movespeed",

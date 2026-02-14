@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "decapitator_anticipation_stack_gain",
       "raw": "[[Basic attack]]s and [[Champion ability basic ability]] casts generate 1 and 2 stacks of ''Anticipation'' for the rest of the round, respectively, stacking up to 40 times",
       "effect_type": "apply_stack",
       "stack_id": "anticipation",
@@ -53,6 +54,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "decapitator_anticipation_ult_scaling",
       "raw": "For each stack, increase your ultimate ability's damage by 3% and gain 2 [[Haste#Ultimate haste ultimate haste]], up to 120% increased ultimate damage and 80 ultimate haste",
       "effect_type": "stat_modifier",
       "stat": "ultimate_damage_multiplier",
