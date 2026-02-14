@@ -45,6 +45,7 @@
   ],
   "effects_structured": [
     {
+      "id": "runic_compass_support_quest_upgrade_on_800_gold",
       "raw": "Earn 800 gold via Shared Riches and gold generation to upgrade to Bounty of Worlds; Ward stock becomes 4.",
       "effect_type": "upgrade_item",
       "stat": "upgrade",
@@ -68,6 +69,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "runic_compass_shared_riches_generate_charge_every_20_seconds",
       "raw": "Gain a Shared Riches charge every 20 seconds, up to 3.",
       "effect_type": "apply_stack",
       "stack_id": "shared_riches",
@@ -95,6 +97,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "runic_compass_shared_riches_charge_use_requires_nearby_ally",
       "raw": "If an allied champion is within 1050 units, Shared Riches charges can be consumed by minion kills or champion/structure damage.",
       "effect_type": "charge_consumption_rule",
       "stat": "shared_riches",
@@ -117,6 +120,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "runic_compass_shared_riches_minion_kill_gold_grant",
       "raw": "Minion kill consumes a charge, granting you 20 gold and the nearest ally the minion gold.",
       "effect_type": "resource_gain",
       "stat": "gold",
@@ -139,6 +143,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "runic_compass_shared_riches_execute_minions_below_health_threshold",
       "raw": "Basic attack executes minions below 50% (melee) or 30% (ranged) max health if a charge is available.",
       "effect_type": "execute",
       "stat": "minion_health_threshold",
@@ -164,6 +169,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "runic_compass_shared_riches_damage_gold_grant_vs_champion_or_structure",
       "raw": "Damaging an enemy champion or structure grants 24 gold (22 for ranged).",
       "effect_type": "resource_gain",
       "stat": "gold",
@@ -189,6 +195,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "runic_compass_shared_riches_consume_once_per_attack_or_ability",
       "raw": "Shared Riches charge consumption occurs once per attack or ability.",
       "effect_type": "charge_consumption_rule",
       "stat": "shared_riches",
@@ -207,6 +214,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "runic_compass_diminishing_gold_from_excessive_minion_kills",
       "raw": "Receives diminishing gold from excessive minion kills.",
       "effect_type": "resource_modifier",
       "stat": "gold_gain_from_minions",
@@ -227,6 +235,7 @@
       "parse_confidence": 0.5
     },
     {
+      "id": "runic_compass_ward_place_stealth_ward",
       "raw": "Consume a ward charge to place a Stealth Ward at target location (600 range), granting vision. Charges refill at shop.",
       "effect_type": "place_ward",
       "stat": "stealth_ward",
@@ -249,6 +258,7 @@
       "numbers_extracted": []
     },
     {
+      "id": "runic_compass_ward_charges_refill_at_shop",
       "raw": "Warding charges refill upon visiting the shop.",
       "effect_type": "charge_refill_rule",
       "stat": "ward_charges",

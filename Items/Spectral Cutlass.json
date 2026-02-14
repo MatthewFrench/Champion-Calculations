@@ -27,6 +27,7 @@
   ],
   "effects_structured": [
     {
+      "id": "spectral_cutlass_soul_anchor_mark_location",
       "raw": "Mark your current location (Soul Anchor).",
       "effect_type": "mark_location",
       "stat": "soul_anchor",
@@ -51,6 +52,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "spectral_cutlass_soul_anchor_auto_blink",
       "raw": "After 4 seconds, blink to the marked location after a 0.5-second delay.",
       "effect_type": "blink",
       "stat": "position",
@@ -74,6 +76,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "spectral_cutlass_soul_anchor_recast_rule",
       "raw": "Recast within the duration to blink early with the same delay (45s cooldown starts after blink).",
       "effect_type": "recast_rule",
       "stat": "soul_anchor",

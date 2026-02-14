@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "shurelyas_battlesong_inspiring_speech_movespeed",
       "raw": "Grants you and all allies within 1000 units {{as 30% '''bonus''' movement speed}} for 4 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",

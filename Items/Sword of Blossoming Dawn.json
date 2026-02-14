@@ -35,6 +35,7 @@
   "effects_structured": [
     {
       "raw": "Gain 1.2% bonus attack speed per 1% heal and shield power.",
+      "id": "sword_blossoming_dawn_attack_speed_from_hsp",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_speed",
       "value": 0,
@@ -62,6 +63,7 @@
     },
     {
       "raw": "Basic attacks heal the most wounded and nearest allied champion for 15–45 (+10% bonus AD) (+7% AP).",
+      "id": "sword_blossoming_dawn_ally_heal_on_hit",
       "effect_type": "healing",
       "stat": "health",
       "value": 15,

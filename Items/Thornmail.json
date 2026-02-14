@@ -24,6 +24,7 @@
   "effects_structured": [
     {
       "raw": "When struck by a basic attack, deal 20 (+10% bonus armor) magic damage to the attacker.",
+      "id": "thornmail_thorns_reflect_damage",
       "effect_type": "damage",
       "stat": "magic_damage",
       "value": 20,
@@ -51,6 +52,7 @@
     },
     {
       "raw": "If the attacker is a champion, apply Grievous Wounds for 3 seconds.",
+      "id": "thornmail_thorns_grievous_wounds",
       "effect_type": "apply_status",
       "stat": "grievous_wounds",
       "value": null,

@@ -23,6 +23,7 @@
   ],
   "effects_structured": [
     {
+      "id": "seekers_armguard_time_stop_stasis_untargetable_invulnerable",
       "raw": "Put yourself in stasis for 2.5 seconds, becoming untargetable and invulnerable but unable to act.",
       "effect_type": "apply_status",
       "stat": "stasis",

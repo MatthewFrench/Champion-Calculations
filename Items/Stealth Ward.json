@@ -17,6 +17,7 @@
   ],
   "effects_structured": [
     {
+      "id": "stealth_ward_totem_placement",
       "raw": "Consume a charge to place an invisible Totem Ward that grants vision for 90 to 120 seconds (scales with average champion level).",
       "effect_type": "place_ward",
       "stat": "totem_ward",

@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "runecarver_energized_generate_stacks_on_move_or_basic_attack",
       "raw": "Moving and basic attacking generates Energize stacks, up to 100.",
       "effect_type": "apply_stack",
       "stack_id": "energize",
@@ -61,6 +62,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "runecarver_helix_generate_stacks_on_ability_damage",
       "raw": "Ability damage generates 30 Energize stacks and triggers Energized attacks if ready (2.5s cooldown per cast instance).",
       "effect_type": "apply_stack",
       "stack_id": "energize",
@@ -86,6 +88,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "runecarver_spiral_out_full_energize_attack_rune_missiles_magic_damage",
       "raw": "At full Energize, your next basic attack generates a Rune stack and fires a missile per Rune stack dealing magic damage.",
       "effect_type": "apply_stack_and_projectiles",
       "stat": "magic_damage",
@@ -142,6 +145,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "runecarver_spiral_out_rune_stacks_reset_each_round_or_phase",
       "raw": "Rune stacks reset each round/phase.",
       "effect_type": "stack_reset_rule",
       "stat": "rune_stacks",

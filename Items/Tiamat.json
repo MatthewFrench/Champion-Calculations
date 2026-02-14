@@ -27,6 +27,7 @@
   "effects_structured": [
     {
       "raw": "Basic attacks deal 40% (20% for ranged) AD physical damage to other enemies in a 350 radius around the target.",
+      "id": "tiamat_cleave_splash_damage",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 0.4,
@@ -68,6 +69,7 @@
     },
     {
       "raw": "Active: Deal 75% AD physical damage to enemies in a 450 radius in front of you.",
+      "id": "tiamat_crescent_active_damage",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 0.75,

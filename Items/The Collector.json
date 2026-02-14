@@ -32,6 +32,7 @@
   "effects_structured": [
     {
       "raw": "If post-mitigation damage would leave a champion below 5% max health, execute them.",
+      "id": "collector_execute_threshold",
       "effect_type": "execute",
       "stat": "health_threshold",
       "value": 0.05,
@@ -54,6 +55,7 @@
     },
     {
       "raw": "Killing a champion grants an additional 25 gold.",
+      "id": "collector_taxes_bonus_gold",
       "effect_type": "resource_gain",
       "stat": "gold",
       "value": 25,

@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "scorchclaw_pup_summon_companion_vs_monsters",
       "raw": "Summon a Scorchclaw Pup companion to assist you versus monsters.",
       "effect_type": "summon_companion",
       "stat": "companion",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "scorchclaw_pup_upgrade_smite_on_companion_evolution",
       "raw": "Companion evolves by consuming treats and upgrades Smite.",
       "effect_type": "upgrade_summoner_spell",
       "stat": "summoner_spell",
@@ -62,6 +64,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "scorchclaw_pup_consume_item_and_grant_slash_on_final_evolution",
       "raw": "At final evolution, the item is consumed and grants Scorchclaw's Slash.",
       "effect_type": "grant_buff",
       "stat": "buff",

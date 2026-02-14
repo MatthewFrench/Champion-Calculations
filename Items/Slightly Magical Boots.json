@@ -25,6 +25,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "slightly_magical_boots_slightly_quicker_movespeed",
       "raw": "Gain {{as 10 '''bonus''' movement speed}}.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",

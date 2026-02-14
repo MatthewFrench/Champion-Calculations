@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "scouts_slingshot_bullseye_bonus_magic_damage_on_champion_damage",
       "raw": "Damaging an enemy champion deals 40 bonus magic damage (40s cooldown, reduced by 1s on attack).",
       "effect_type": "damage",
       "stat": "magic_damage",

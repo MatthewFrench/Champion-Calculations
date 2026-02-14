@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "runaans_hurricane_winds_fury_additional_bolts_physical_damage",
       "raw": "Basic attacks fire additional bolts at up to 2 enemies in a 180-degree cone; each bolt deals 55% AD physical damage.",
       "effect_type": "additional_projectiles",
       "stat": "physical_damage",
@@ -58,6 +59,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "runaans_hurricane_winds_fury_bolts_apply_on_hit_and_crit_modifiers",
       "raw": "Bolts apply on-hit effects and are affected by critical strike modifiers.",
       "effect_type": "on_hit_modifier",
       "stat": "on_hit_and_crit_apply",

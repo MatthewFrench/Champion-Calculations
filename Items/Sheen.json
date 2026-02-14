@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "sheen_spellblade_on_hit_damage",
       "raw": "After using an ability, your next basic attack within 10 seconds deals bonus physical damage equal to 100% base AD (1.5s cooldown after use).",
       "effect_type": "damage",
       "stat": "physical_damage",

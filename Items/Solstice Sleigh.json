@@ -46,6 +46,7 @@
   ],
   "effects_structured": [
     {
+      "id": "solstice_sleigh_going_sledding_movespeed_health_buff",
       "raw": "Slowing or immobilizing an enemy champion grants you and the most wounded allied champion within 1500 units 20% bonus movement speed (decays over 2.5s) and bonus health for 2.5s (30s cooldown).",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed_and_health",
@@ -89,6 +90,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "solstice_sleigh_diminishing_minion_gold",
       "raw": "Receives diminishing gold from excessive minion kills.",
       "effect_type": "resource_modifier",
       "stat": "gold_gain_from_minions",
@@ -109,6 +111,7 @@
       "parse_confidence": 0.5
     },
     {
+      "id": "solstice_sleigh_ward_place_stealth_ward",
       "raw": "Consume a ward charge to place a Stealth Ward at target location (600 range). Charges refill at shop.",
       "effect_type": "place_ward",
       "stat": "stealth_ward",
@@ -131,6 +134,7 @@
       "numbers_extracted": []
     },
     {
+      "id": "solstice_sleigh_ward_refill_on_shop_visit",
       "raw": "Warding charges refill upon visiting the shop.",
       "effect_type": "charge_refill_rule",
       "stat": "ward_charges",

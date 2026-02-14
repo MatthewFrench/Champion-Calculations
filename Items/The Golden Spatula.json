@@ -62,6 +62,7 @@
   "effects_structured": [
     {
       "raw": "Permanently On Fire: burn nearby enemies every second and gain multiple buffs; also reduces cooldowns periodically.",
+      "id": "golden_spatula_on_fire_aura_buffs",
       "effect_type": "aura_and_buff",
       "stat": "on_fire",
       "value": null,
@@ -134,6 +135,7 @@
     },
     {
       "raw": "While On Fire, take increased damage and reduced healing/shielding effectiveness.",
+      "id": "golden_spatula_on_fire_penalties",
       "effect_type": "stat_modifier",
       "stat": "damage_taken_and_heal_shield_received",
       "value": 0.25,

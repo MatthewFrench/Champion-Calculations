@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "sanguine_gift_patronage_store_post_mitigation_damage",
       "raw": "Store 15% of post-mitigation damage dealt.",
       "effect_type": "store_resource",
       "stat": "stored_damage",
@@ -50,6 +51,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "sanguine_gift_patronage_heal_on_stored_damage_threshold",
       "raw": "When stored damage exceeds 333, consume it to heal yourself and the nearest allied champion for that amount.",
       "effect_type": "healing",
       "stat": "health",
@@ -76,6 +78,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "sanguine_gift_patronage_stored_damage_reset_each_round_or_phase",
       "raw": "Stored damage resets every round and between each phase.",
       "effect_type": "stack_reset_rule",
       "stat": "stored_damage",

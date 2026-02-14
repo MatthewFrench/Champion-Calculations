@@ -29,6 +29,7 @@
   "effects_structured": [
     {
       "raw": "Basic attacks deal 30 bonus magic damage on-hit.",
+      "id": "terminus_shadow_on_hit_damage",
       "effect_type": "damage",
       "stat": "magic_damage",
       "value": 30,
@@ -49,6 +50,7 @@
     },
     {
       "raw": "Basic attacks on champions alternate between Light and Dark hits, each granting a 5s buff that stacks up to 3.",
+      "id": "terminus_juxtaposition_alternating_stacks",
       "effect_type": "apply_stack",
       "stack_id": "light_or_dark",
       "value": 1,
@@ -81,6 +83,7 @@
     },
     {
       "raw": "Light hits grant bonus armor and magic resistance; Dark hits grant armor and magic penetration. Max stacks provide 30% penetration and higher resists.",
+      "id": "terminus_juxtaposition_light_dark_bonuses",
       "effect_type": "stat_modifier",
       "stat": "resistances_and_penetration",
       "value": null,

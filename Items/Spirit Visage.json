@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spirit_visage_boundless_vitality_heal_shield_regen_amp",
       "raw": "Increase all healing and shielding received, and health regeneration, by 25%.",
       "effect_type": "stat_modifier",
       "stat": "healing_shielding_and_regen_received",

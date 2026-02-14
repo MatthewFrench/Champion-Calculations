@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "serpents_fang_shield_reaver_apply_venom_on_champion_damage",
       "raw": "Dealing damage to an enemy champion applies Venom for 3 seconds.",
       "effect_type": "apply_status",
       "stat": "venom",
@@ -45,6 +46,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "serpents_fang_shield_reaver_reduce_new_shields_while_venom_active",
       "raw": "While Venom is active, shields gained are reduced by 50% (35% for ranged).",
       "effect_type": "shield_modifier",
       "stat": "incoming_shield_strength",
@@ -70,6 +72,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "serpents_fang_shield_reaver_reduce_active_shields_on_first_venom_apply",
       "raw": "If the target was not already Venomed, reduce all active shields by the same amount.",
       "effect_type": "shield_reduction",
       "stat": "active_shields",

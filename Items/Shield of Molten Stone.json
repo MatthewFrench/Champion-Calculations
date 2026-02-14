@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "shield_of_molten_stone_immovable_armor_increase",
       "raw": "Increase total armor by 20%.",
       "effect_type": "stat_modifier",
       "stat": "total_armor",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "shield_of_molten_stone_immovable_block_chance",
       "raw": "Basic attacks that hit you have a block chance equal to 5% per 200 total armor, capped at 50%.",
       "effect_type": "block_chance",
       "stat": "block",

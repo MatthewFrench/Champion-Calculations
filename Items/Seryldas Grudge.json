@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "seryldas_grudge_bitter_cold_slow",
       "raw": "Ability damage to enemies at or below 50% max health slows them by 30% for 1 second.",
       "effect_type": "apply_status",
       "stat": "slow",

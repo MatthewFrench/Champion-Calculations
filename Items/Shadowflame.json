@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "shadowflame_cinderbloom_crit_damage_amp",
       "raw": "Your magic and true damage critically strike for 120% damage against enemies below 40% max health.",
       "effect_type": "damage_multiplier",
       "stat": "magic_and_true_damage",

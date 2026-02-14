@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "staff_of_flowing_water_rapids_ability_power_buff",
       "raw": "Healing or shielding an allied champion (excluding yourself) grants you and them 45 ability power for 6 seconds.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",

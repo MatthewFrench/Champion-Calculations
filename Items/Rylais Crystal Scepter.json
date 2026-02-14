@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "rylais_crystal_scepter_rimefrost_slow_on_ability_damage",
       "raw": "Ability damage slows affected units by 30% for 1 second.",
       "effect_type": "apply_status",
       "stat": "slow",

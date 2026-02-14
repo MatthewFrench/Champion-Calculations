@@ -31,6 +31,7 @@
   "effects_structured": [
     {
       "raw": "Basic attacks deal bonus physical damage equal to 1% (0.5% ranged) max health to the target, and 3% (1.5% ranged) to other enemies in a cone.",
+      "id": "titanic_hydra_cleave_health_damage",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 0.01,
@@ -85,6 +86,7 @@
     },
     {
       "raw": "Next basic attack within 10 seconds empowers Cleave: 4% (2% ranged) max health to primary and 9% (4.5% ranged) to secondary targets (10s cooldown).",
+      "id": "titanic_hydra_empowered_crescent",
       "effect_type": "empowered_basic_attack",
       "stat": "physical_damage",
       "value": 0.04,

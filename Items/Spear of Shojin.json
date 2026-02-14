@@ -28,6 +28,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "spear_of_shojin_dragonforce_basic_ability_haste",
       "raw": "Gain 25 basic ability haste.",
       "effect_type": "stat_modifier",
       "stat": "basic_ability_haste",
@@ -48,6 +49,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "spear_of_shojin_focused_will_stack_apply",
       "raw": "Ability or pet damage from non-innate abilities grants a stack for 6 seconds, up to 4 stacks.",
       "effect_type": "apply_stack",
       "stack_id": "focused_will",
@@ -78,6 +80,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "spear_of_shojin_focused_will_damage_amp",
       "raw": "Each stack increases your ability, pet, and proc damage (non-item) by 3%, up to 12% at max stacks.",
       "effect_type": "damage_multiplier",
       "stat": "ability_pet_proc_damage",

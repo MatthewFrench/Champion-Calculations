@@ -32,6 +32,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "seraphs_embrace_awe_bonus_ability_power_from_bonus_mana",
       "raw": "Gain ability power equal to 2% of bonus mana.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
@@ -58,6 +59,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "seraphs_embrace_lifeline_shield_on_low_health_from_max_mana",
       "raw": "If damage would reduce you below 30% max health, gain a shield for 3 seconds equal to 18% max mana (90s cooldown).",
       "effect_type": "shield",
       "stat": "damage",

@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "statikk_shiv_electrospark_empower",
       "raw": "Your next 3 basic attacks within 8 seconds are empowered to deal 60 bonus magic damage (85 vs non-champions).",
       "effect_type": "empowered_basic_attacks",
       "stat": "magic_damage",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "statikk_shiv_electrospark_chain",
       "raw": "Damage bounces to the closest target within 500 units, chaining up to 5 targets (cooldown starts after first empowered attack).",
       "effect_type": "chain_damage",
       "stat": "magic_damage",
@@ -90,6 +92,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "statikk_shiv_electrospark_takedown_reset",
       "raw": "Takedown within 3 seconds of damaging an enemy champion resets Electrospark cooldown.",
       "effect_type": "cooldown_reset",
       "stat": "electrospark_cooldown",

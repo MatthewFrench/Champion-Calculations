@@ -17,6 +17,7 @@
   ],
   "effects_structured": [
     {
+      "id": "scarecrow_effigy_place_effigy_grant_vision_scaled_duration",
       "raw": "Consume a charge to place an Effigy that grants vision for 130 to 300 seconds (scales with level).",
       "effect_type": "place_effigy",
       "stat": "effigy",
@@ -49,6 +50,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "scarecrow_effigy_disguise_as_fiddlesticks_until_activation",
       "raw": "Effigy appears as Fiddlesticks to enemies and has no visible health bar until activation.",
       "effect_type": "deception",
       "stat": "disguise",
@@ -69,6 +71,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "scarecrow_effigy_activate_on_enemy_proximity_ping_and_fake_action",
       "raw": "Enemy champions that approach activate the effigy, causing a danger ping and fake action for up to 2 seconds.",
       "effect_type": "activation_on_proximity",
       "stat": "effigy_activation",
@@ -91,6 +94,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "scarecrow_effigy_self_destruct_if_not_destroyed_after_activation",
       "raw": "If not destroyed after activation, the effigy self-destructs (deals 1 damage to itself).",
       "effect_type": "self_destruct",
       "stat": "effigy",

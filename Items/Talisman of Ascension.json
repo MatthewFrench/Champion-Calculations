@@ -17,6 +17,7 @@
   "effects_structured": [
     {
       "raw": "Reroll the stats on this item, up to twice per round (thrice with Apex Inventor augment). Each reroll increases stat values.",
+      "id": "talisman_ascension_reroll_limit",
       "effect_type": "reroll_item_stats",
       "stat": "item_stats",
       "value": 2,
@@ -40,6 +41,7 @@
     },
     {
       "raw": "Each reroll increases the item's stat values.",
+      "id": "talisman_ascension_reroll_stat_increase",
       "effect_type": "stat_increase_rule",
       "stat": "item_stats",
       "value": null,

@@ -26,6 +26,7 @@
   "effects_structured": [
     {
       "raw": "Gain a Manaflow charge every 8 seconds, up to 4 charges.",
+      "id": "tear_manaflow_charge_gain",
       "effect_type": "apply_stack",
       "stack_id": "manaflow_charge",
       "value": 1,
@@ -53,6 +54,7 @@
     },
     {
       "raw": "Ability affects a unit consumes a charge to grant bonus mana (3; 6 if champion), up to 360 bonus mana.",
+      "id": "tear_manaflow_mana_gain",
       "effect_type": "resource_gain",
       "stat": "bonus_mana",
       "value": 3,
@@ -84,6 +86,7 @@
     },
     {
       "raw": "Basic attacks deal 5 bonus physical damage on-hit against minions.",
+      "id": "tear_helping_hand_minion_damage",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 5,
