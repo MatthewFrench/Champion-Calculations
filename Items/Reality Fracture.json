@@ -27,6 +27,7 @@
   "effects_structured": [
     {
       "raw": "Basic attacks and damaging abilities summon 8 allied Voidmites that attack the target (12s cooldown).",
+      "id": "zzrot_summon_voidmites_on_basic_attack_or_ability_damage",
       "effect_type": "summon_entities",
       "stat": "voidmite",
       "value": 8,
@@ -51,6 +52,7 @@
     },
     {
       "raw": "Voidmites deal 6 (+4% AD) (+8% AP) magic damage per attack.",
+      "id": "zzrot_voidmite_attack_magic_damage",
       "effect_type": "damage",
       "stat": "magic_damage",
       "value": 6,
@@ -84,6 +86,7 @@
     },
     {
       "raw": "Upon death, summon 6 Voidmites.",
+      "id": "zzrot_summon_voidmites_on_death",
       "effect_type": "summon_entities",
       "stat": "voidmite",
       "value": 6,

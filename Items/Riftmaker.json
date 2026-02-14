@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "void_corruption_damage_amp_per_second_in_champion_combat",
       "raw": "Each second in combat with champions grants a 2% damage increase, stacking up to 4 times (8% total).",
       "effect_type": "damage_multiplier",
       "stat": "damage",
@@ -64,6 +65,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "void_corruption_gain_omnivamp_at_max_stacks",
       "raw": "At maximum stacks, gain omnivamp (10% melee, 6% ranged).",
       "effect_type": "stat_modifier",
       "stat": "omnivamp",
@@ -87,6 +89,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "void_infusion_gain_ability_power_from_bonus_health",
       "raw": "Gain ability power equal to 2% of bonus health.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",

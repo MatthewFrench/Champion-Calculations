@@ -33,6 +33,7 @@
   "effects_structured": [
     {
       "raw": "Basic attacks deal 40% (20% for ranged) AD physical damage to other enemies in a 350 radius around the target.",
+      "id": "cleave_basic_attack_splash_physical_damage",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 0.4,
@@ -74,6 +75,7 @@
     },
     {
       "raw": "Cleave damage benefits from lifesteal at 100% effectiveness.",
+      "id": "cleave_lifesteal_full_effectiveness",
       "effect_type": "lifesteal_modifier",
       "stat": "lifesteal_effectiveness",
       "value": 1.0,
@@ -94,6 +96,7 @@
     },
     {
       "raw": "Active: Deal 80% AD physical damage to enemies in a 450 radius in front of you.",
+      "id": "ravenous_crescent_active_physical_damage",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 0.8,
@@ -125,6 +128,7 @@
     },
     {
       "raw": "Active damage benefits from lifesteal at 100% effectiveness.",
+      "id": "ravenous_crescent_active_lifesteal_full_effectiveness",
       "effect_type": "lifesteal_modifier",
       "stat": "lifesteal_effectiveness",
       "value": 1.0,

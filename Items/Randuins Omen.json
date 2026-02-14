@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "resilience_reduce_incoming_critical_strike_damage",
       "raw": "Reduces incoming damage from {{tip critical strike critical strikes}} by 30%.",
       "effect_type": "damage_multiplier",
       "stat": "critical_strike_damage",
@@ -49,6 +50,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "humility_apply_slow_to_nearby_enemies",
       "raw": "Unleash a shockwave around you that {{tip slow slows}} nearby enemies by 70% for 2 seconds.",
       "effect_type": "apply_status",
       "stat": "slow",

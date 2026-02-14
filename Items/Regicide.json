@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "regicide_mark_lowest_max_health_enemy_as_regent",
       "raw": "At the start of each combat phase, mark the enemy champion with the lowest max health as the Regent.",
       "effect_type": "mark_target",
       "stat": "regent",
@@ -46,6 +47,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "regicide_first_regent_takedown_grants_permanent_ad_and_resets_ultimate_cooldown",
       "raw": "First takedown of the Regent in the combat phase grants 10 permanent bonus attack damage and sets current ultimate cooldown to 0.5 seconds.",
       "effect_type": "stat_modifier_and_cooldown_set",
       "stat": "bonus_attack_damage",

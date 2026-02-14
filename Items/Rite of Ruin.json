@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "wrath_and_ruin_gain_crit_chance_on_ability_cast",
       "raw": "Casting an ability grants 2.5% critical strike chance for 6 seconds, stacking up to 8 times (max 20%).",
       "effect_type": "stat_modifier",
       "stat": "critical_strike_chance",
@@ -60,6 +61,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "salvage_the_wreckage_grant_shield_on_ability_cast_chance_scaled_by_crit",
       "raw": "Casting an ability has a chance (equal to your crit chance, capped at 100%) to grant you or an ally a 3s shield.",
       "effect_type": "shield",
       "stat": "shield",

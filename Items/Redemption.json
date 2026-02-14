@@ -31,6 +31,7 @@
   "effects_structured": [
     {
       "raw": "After 2.5s, a 550-radius beam strikes the target location, granting vision.",
+      "id": "intervention_delayed_beam_area_strike_and_vision",
       "effect_type": "area_strike",
       "stat": "beam",
       "value": 550,
@@ -55,6 +56,7 @@
     },
     {
       "raw": "Allies in the area are healed for 150 to 350 based on target level.",
+      "id": "intervention_beam_heal_allies_by_target_level",
       "effect_type": "healing",
       "stat": "health",
       "value": 150,
@@ -86,6 +88,7 @@
     },
     {
       "raw": "Enemy champions in the area take true damage equal to 10% of target max health.",
+      "id": "intervention_beam_true_damage_to_enemy_champions_from_target_max_health",
       "effect_type": "damage",
       "stat": "true_damage",
       "value": 0.1,
@@ -112,6 +115,7 @@
     },
     {
       "raw": "Can be used while dead.",
+      "id": "intervention_can_cast_while_dead",
       "effect_type": "activation_rule",
       "stat": "cast_while_dead",
       "value": true,

@@ -20,6 +20,7 @@
   ],
   "effects_structured": [
     {
+      "id": "quicksilver_cleanse_crowd_control_except_airborne",
       "raw": "Remove all crowd control debuffs except Airborne.",
       "effect_type": "cleanse",
       "stat": "crowd_control",

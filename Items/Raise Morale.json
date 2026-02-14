@@ -19,6 +19,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "raise_morale_bonus_movement_speed_aura",
       "raw": "Gangplank and allies within Cannon Barrage gain 40% bonus movement speed, persisting 2 seconds after leaving the area.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",

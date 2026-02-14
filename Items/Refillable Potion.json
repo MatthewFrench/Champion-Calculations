@@ -16,6 +16,7 @@
   "effects_structured": [
     {
       "raw": "Holds charges that refill upon visiting the shop.",
+      "id": "refillable_potion_refill_charges_on_visit_shop",
       "effect_type": "charge_refill_rule",
       "stat": "charges",
       "value": null,

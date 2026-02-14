@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "reinforced_turret_damage_reduction_without_enemy_minions_or_herald",
       "raw": "While no enemy minions or Rift Herald are in range, turrets take 80% reduced damage (including true damage).",
       "effect_type": "damage_multiplier",
       "stat": "incoming_damage",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "melee_weakness_turret_increased_damage_from_melee_champions",
       "raw": "Turrets take 20% increased damage from melee champions.",
       "effect_type": "damage_multiplier",
       "stat": "incoming_damage_from_melee_champions",

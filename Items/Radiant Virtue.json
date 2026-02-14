@@ -30,6 +30,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "guiding_light_apply_transcend_on_ultimate_cast",
       "raw": "On ultimate cast, you Transcend for 9 seconds (30s cooldown).",
       "effect_type": "apply_status",
       "stat": "transcend",
@@ -53,6 +54,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "guiding_light_transcend_increase_max_health",
       "raw": "While Transcended, increase max health by 12.5%.",
       "effect_type": "stat_modifier",
       "stat": "max_health",
@@ -73,6 +75,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "guiding_light_transcend_periodic_heal_aura",
       "raw": "On Transcend start and every 3 seconds for 9 seconds, you and allies within 1200 units heal for 3% of your max health.",
       "effect_type": "healing_over_time",
       "stat": "health",

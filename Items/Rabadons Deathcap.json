@@ -20,6 +20,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "magical_opus_increase_ability_power",
       "raw": "Increase your {{as ability power}} by 30%.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",

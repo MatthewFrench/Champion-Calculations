@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "energized_generate_energize_stacks",
       "raw": "Moving and basic attacking generates Energize stacks, up to 100.",
       "effect_type": "apply_stack",
       "stack_id": "energize",
@@ -56,6 +57,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "sharpshooter_energized_attack_bonus_magic_damage",
       "raw": "At full Energize, your next basic attack deals 40 bonus magic damage on-hit.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -82,6 +84,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "sharpshooter_energized_attack_bonus_range",
       "raw": "Energized attacks gain 35% bonus range, capped at 150.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_range",

@@ -29,6 +29,7 @@
   "effects_structured": [
     {
       "raw": "Basic attacks apply a Reap stack (infinite, lasts for combat phase).",
+      "id": "reap_apply_stack_on_basic_attack_hit",
       "effect_type": "apply_stack",
       "stack_id": "reap",
       "value": 1,
@@ -55,6 +56,7 @@
     },
     {
       "raw": "On-hit, deal bonus true damage equal to 0.7% (0.5% ranged) of target max health plus 0.1% per Reap stack.",
+      "id": "reap_on_hit_bonus_true_damage_from_target_max_health_and_reap_stacks",
       "effect_type": "damage",
       "stat": "true_damage",
       "value": 0.007,
@@ -97,6 +99,7 @@
     },
     {
       "raw": "Target health threshold equals 100% max health minus total bonus damage dealt, capped at 50% max health, lasting until end of round.",
+      "id": "reap_health_threshold_from_bonus_damage_dealt",
       "effect_type": "health_threshold",
       "stat": "health_threshold",
       "value": 1.0,
@@ -122,6 +125,7 @@
     },
     {
       "raw": "Increases attack speed gained from all sources by 15%.",
+      "id": "sow_attack_speed_gain_multiplier",
       "effect_type": "stat_modifier",
       "stat": "attack_speed_gain_multiplier",
       "value": 0.15,

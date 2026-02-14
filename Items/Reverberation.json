@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "reverberate_gain_bonus_health_from_bonus_attack_speed_after_combat_start",
       "raw": "After 2 seconds from combat phase start, gain 5 bonus health per 1% bonus attack speed.",
       "effect_type": "stat_modifier",
       "stat": "bonus_health",
@@ -66,6 +67,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "resonate_on_hit_bonus_magic_damage_scaling_with_bonus_health",
       "raw": "Basic attacks deal 10 (+2% bonus health) bonus magic damage on-hit.",
       "effect_type": "damage",
       "stat": "magic_damage",
@@ -93,6 +95,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "rumble_gain_reverberation_stacks_on_immobilize",
       "raw": "Immobilizing an enemy champion grants 25 Reverberation stacks for 10 seconds, stacking up to 100 and refreshing on immobilizations.",
       "effect_type": "apply_stack",
       "stack_id": "reverberation",
@@ -122,6 +125,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "rumble_max_stacks_tripled_on_hit_application_on_immobilize",
       "raw": "At max stacks, immobilizing an enemy causes on-hit effects to apply 3 times.",
       "effect_type": "on_hit_multiplier",
       "stat": "on_hit_applications",
