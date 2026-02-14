@@ -5,7 +5,7 @@
   "rank": [
     "STARTER"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [],
   "active": [
     {
@@ -16,6 +16,7 @@
   ],
   "effects_structured": [
     {
+      "id": "black_spear_oathsworn_bond",
       "raw": "Bind allied champion as Oathsworn after cast/channel; target incapacitated after channel.",
       "effect_type": "utility",
       "stat": "oathsworn_bond",

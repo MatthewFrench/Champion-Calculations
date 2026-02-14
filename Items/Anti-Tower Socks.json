@@ -5,7 +5,7 @@
   "rank": [
     "MINION"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -21,10 +21,17 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "anti_tower_socks_reinforced_armor",
       "raw": "Turret attacks deal percent max health to this minion based on turret type.",
       "effect_type": "damage",
       "stat": "turret_damage_percent_max_health",
-      "unit": "percent",
+      "value": 14,
+      "value_by_turret_type": {
+        "outer": 14,
+        "inner": 11,
+        "inhibitor_nexus": 8
+      },
+      "unit": "percent_max_health",
       "trigger": "passive",
       "applies_to": "structure",
       "conditions": [
@@ -33,6 +40,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "anti_tower_socks_minion_slayer",
       "raw": "Against lane minions, deal bonus physical on-hit equal to 6% target current health.",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -43,7 +51,7 @@
       "parse_confidence": 0.8
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1508_antitowersocks.png",
   "simpleDescription": null,
   "nicknames": [],

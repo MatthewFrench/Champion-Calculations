@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "banshees_veil_annul_spell_shield",
       "raw": "Spell shield blocks next hostile ability. Cooldown 40s (resets on damage from champs).",
       "effect_type": "status",
       "stat": "spell_shield",
@@ -31,6 +32,9 @@
       "applies_to": "self",
       "conditions": [
         "reset_on_champion_damage"
+      ],
+      "status_effects": [
+        "spell_shield"
       ],
       "parse_confidence": 0.85
     }

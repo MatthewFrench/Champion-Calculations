@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "abyssal_mask_unmake_magic_amp",
       "raw": "Enemy champions within 700 units become cursed, causing them to receive 12% increased magic damage from all sources.",
       "effect_type": "damage_amp_taken",
       "stat": "magic_damage_taken_multiplier",

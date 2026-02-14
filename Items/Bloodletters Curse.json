@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bloodletters_vile_decay_stack_apply",
       "raw": "Dealing {{as magic damage}} to an enemy champion with a [[champion ability]] applies a stack of ''Vile Decay'' to them for 6 seconds, stacking up to 4 times and up to once per basic attack or ability per {{tip cast instance}} every {{fd 0.3}} seconds",
       "effect_type": "apply_stack",
       "stack_id": "vile_decay",
@@ -54,6 +55,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "bloodletters_vile_decay_mr_reduction",
       "raw": "Each stack inflicts {{as {{fd 7.5}}% magic resistance reduction}}, up to {{as 30% mr}} at 4 stacks.",
       "effect_type": "stat_modifier",
       "stat": "magic_resistance",

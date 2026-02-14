@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "archangels_awe_ap_from_mana",
       "raw": "Gain AP equal to 1% bonus mana.",
       "effect_type": "stat_modifier",
       "stat": "ability_power",
@@ -44,6 +45,7 @@
       "parse_confidence": 0.9
     },
     {
+      "id": "archangels_manaflow_bonus_mana",
       "raw": "Manaflow: gain charges every 8s up to 5; ability use consumes charge to grant bonus mana (5/10) up to 360.",
       "effect_type": "resource",
       "stat": "mana",
@@ -61,6 +63,7 @@
       "parse_confidence": 0.8
     },
     {
+      "id": "archangels_transform",
       "raw": "Transforms at 360 bonus mana.",
       "effect_type": "utility",
       "stat": "transform",

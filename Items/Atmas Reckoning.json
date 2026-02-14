@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "atmas_big_hands_crit_scaling",
       "raw": "Gain critical strike chance scaling with bonus health (up to 30%).",
       "effect_type": "stat_modifier",
       "stat": "critical_strike",

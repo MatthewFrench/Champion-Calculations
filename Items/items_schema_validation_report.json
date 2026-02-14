@@ -1,0 +1,4589 @@
+{
+  "errors": [],
+  "files": {
+    "Base Turret Reinforced Armor Turret Item.json": [
+      {
+        "level": "warning",
+        "message": "healing effect missing value or scaling_terms",
+        "path": "Base Turret Reinforced Armor Turret Item.json.effects_structured[2]"
+      }
+    ],
+    "Blade of the Ruined King.json": [
+      {
+        "level": "warning",
+        "message": "damage effect missing value or scaling_terms",
+        "path": "Blade of the Ruined King.json.effects_structured[0]"
+      }
+    ],
+    "Bloodthirster.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Bloodthirster.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "shield effect missing value or scaling_terms",
+        "path": "Bloodthirster.json.effects_structured[0]"
+      }
+    ],
+    "Boots of Swiftness.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Boots of Swiftness.json.effects_structured[0].id"
+      }
+    ],
+    "Bounty of Worlds.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Bounty of Worlds.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Bounty of Worlds.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Bounty of Worlds.json.effects_structured[2].id"
+      }
+    ],
+    "Bramble Vest.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Bramble Vest.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Bramble Vest.json.effects_structured[1].id"
+      }
+    ],
+    "Catalyst of Aeons.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Catalyst of Aeons.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Catalyst of Aeons.json.effects_structured[1].id"
+      }
+    ],
+    "Celestial Opposition.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Celestial Opposition.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Celestial Opposition.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Celestial Opposition.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Celestial Opposition.json.effects_structured[3].id"
+      }
+    ],
+    "Chainlaced Crushers.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Chainlaced Crushers.json.effects_structured[0].id"
+      }
+    ],
+    "Chempunk Chainsword.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Chempunk Chainsword.json.effects_structured[0].id"
+      }
+    ],
+    "Cloak of Starry Night.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Cloak of Starry Night.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Cloak of Starry Night.json.effects_structured[1].id"
+      }
+    ],
+    "Control Ward.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Control Ward.json.effects_structured[0].id"
+      }
+    ],
+    "Cosmic Drive.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Cosmic Drive.json.effects_structured[0].id"
+      }
+    ],
+    "Crimson Lucidity.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Crimson Lucidity.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Crimson Lucidity.json.effects_structured[1].id"
+      }
+    ],
+    "Crown of the Shattered Queen.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Crown of the Shattered Queen.json.effects_structured[0].id"
+      }
+    ],
+    "Cruelty.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Cruelty.json.effects_structured[0].id"
+      }
+    ],
+    "Cryptbloom.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Cryptbloom.json.effects_structured[0].id"
+      }
+    ],
+    "Crystalline Overgrowth.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Crystalline Overgrowth.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Crystalline Overgrowth.json.effects_structured[1].id"
+      }
+    ],
+    "Cull.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Cull.json.effects_structured[0].id"
+      }
+    ],
+    "Dark Seal.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dark Seal.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dark Seal.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dark Seal.json.effects_structured[2].id"
+      }
+    ],
+    "Darksteel Talons.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Darksteel Talons.json.effects_structured[0].id"
+      }
+    ],
+    "Dawncore.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dawncore.json.effects_structured[0].id"
+      }
+    ],
+    "Dead Mans Plate.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dead Mans Plate.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dead Mans Plate.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dead Mans Plate.json.effects_structured[2].id"
+      }
+    ],
+    "Deaths Dance.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Deaths Dance.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Deaths Dance.json.effects_structured[1].id"
+      }
+    ],
+    "Deaths Daughter.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Deaths Daughter.json.effects_structured[0].id"
+      }
+    ],
+    "Decapitator.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Decapitator.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Decapitator.json.effects_structured[1].id"
+      }
+    ],
+    "Demon Kings Crown.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Demon Kings Crown.json.effects_structured[0].id"
+      }
+    ],
+    "Demonic Embrace.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Demonic Embrace.json.effects_structured[0].id"
+      }
+    ],
+    "Detonation Orb.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Detonation Orb.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Detonation Orb.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Detonation Orb.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Detonation Orb.json.effects_structured[3].id"
+      }
+    ],
+    "Diadem of Songs.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Diadem of Songs.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Diadem of Songs.json.effects_structured[1].id"
+      }
+    ],
+    "Diamond-Tipped Spear.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Diamond-Tipped Spear.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Diamond-Tipped Spear.json.effects_structured[1].id"
+      }
+    ],
+    "Divine Sunderer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Divine Sunderer.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Divine Sunderer.json.effects_structured[1].id"
+      }
+    ],
+    "Dorans Ring.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dorans Ring.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dorans Ring.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dorans Ring.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dorans Ring.json.effects_structured[3].id"
+      }
+    ],
+    "Dorans Shield.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dorans Shield.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dorans Shield.json.effects_structured[1].id"
+      }
+    ],
+    "Dragonheart.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dragonheart.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dragonheart.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dragonheart.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dragonheart.json.effects_structured[3].id"
+      }
+    ],
+    "Dream Maker.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dream Maker.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dream Maker.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dream Maker.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dream Maker.json.effects_structured[3].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dream Maker.json.effects_structured[4].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dream Maker.json.effects_structured[5].id"
+      }
+    ],
+    "Dusk and Dawn.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Dusk and Dawn.json.effects_structured[0].id"
+      }
+    ],
+    "Duskblade of Draktharr.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Duskblade of Draktharr.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Duskblade of Draktharr.json.effects_structured[1].id"
+      }
+    ],
+    "Echoes of Helia.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Echoes of Helia.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Echoes of Helia.json.effects_structured[1].id"
+      }
+    ],
+    "Eclipse.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Eclipse.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Eclipse.json.effects_structured[1].id"
+      }
+    ],
+    "Edge of Night.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Edge of Night.json.effects_structured[0].id"
+      }
+    ],
+    "Eleisas Miracle.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Eleisas Miracle.json.effects_structured[0].id"
+      }
+    ],
+    "Empyrean Promise.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Empyrean Promise.json.effects_structured[0].id"
+      }
+    ],
+    "Endless Hunger.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Endless Hunger.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Endless Hunger.json.effects_structured[1].id"
+      }
+    ],
+    "Essence Reaver.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Essence Reaver.json.effects_structured[0].id"
+      }
+    ],
+    "Everfrost.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Everfrost.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Everfrost.json.effects_structured[1].id"
+      }
+    ],
+    "Executioners Calling.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Executioners Calling.json.effects_structured[0].id"
+      }
+    ],
+    "Experimental Hexplate.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Experimental Hexplate.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Experimental Hexplate.json.effects_structured[1].id"
+      }
+    ],
+    "Fated Ashes.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fated Ashes.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fated Ashes.json.effects_structured[1].id"
+      }
+    ],
+    "Fiendhunter Bolts.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fiendhunter Bolts.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fiendhunter Bolts.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fiendhunter Bolts.json.effects_structured[2].id"
+      }
+    ],
+    "Fimbulwinter.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fimbulwinter.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fimbulwinter.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fimbulwinter.json.effects_structured[2].id"
+      }
+    ],
+    "Fire at Will.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fire at Will.json.effects_structured[0].id"
+      }
+    ],
+    "Flesheater.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Flesheater.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Flesheater.json.effects_structured[1].id"
+      }
+    ],
+    "Force of Entropy.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Force of Entropy.json.effects_structured[0].id"
+      }
+    ],
+    "Force of Nature.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Force of Nature.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Force of Nature.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Force of Nature.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Force of Nature.json.effects_structured[3].id"
+      }
+    ],
+    "Frozen Heart.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Frozen Heart.json.effects_structured[0].id"
+      }
+    ],
+    "Fulmination.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fulmination.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fulmination.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Fulmination.json.effects_structured[2].id"
+      }
+    ],
+    "Galeforce.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Galeforce.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Galeforce.json.effects_structured[1].id"
+      }
+    ],
+    "Gamblers Blade.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gamblers Blade.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gamblers Blade.json.effects_structured[1].id"
+      }
+    ],
+    "Gargoyle Stoneplate.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gargoyle Stoneplate.json.effects_structured[0].id"
+      }
+    ],
+    "Ghostcrawlers.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ghostcrawlers.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ghostcrawlers.json.effects_structured[1].id"
+      }
+    ],
+    "Goredrinker.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Goredrinker.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Goredrinker.json.effects_structured[1].id"
+      }
+    ],
+    "Guardian Angel.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardian Angel.json.effects_structured[0].id"
+      }
+    ],
+    "Guardians Amulet.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Amulet.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Amulet.json.effects_structured[1].id"
+      }
+    ],
+    "Guardians Dirk.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Dirk.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Dirk.json.effects_structured[1].id"
+      }
+    ],
+    "Guardians Horn.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Horn.json.effects_structured[0].id"
+      }
+    ],
+    "Guardians Orb.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Orb.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guardians Orb.json.effects_structured[1].id"
+      }
+    ],
+    "Guinsoos Rageblade.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guinsoos Rageblade.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guinsoos Rageblade.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guinsoos Rageblade.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Guinsoos Rageblade.json.effects_structured[3].id"
+      }
+    ],
+    "Gusto.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gusto.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gusto.json.effects_structured[1].id"
+      }
+    ],
+    "Gustwalker Hatchling.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gustwalker Hatchling.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gustwalker Hatchling.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Gustwalker Hatchling.json.effects_structured[2].id"
+      }
+    ],
+    "Hamstringer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hamstringer.json.effects_structured[0].id"
+      }
+    ],
+    "Haunting Guise.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Haunting Guise.json.effects_structured[0].id"
+      }
+    ],
+    "Health Potion.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Health Potion.json.effects_structured[0].id"
+      }
+    ],
+    "Heartsteel.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Heartsteel.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Heartsteel.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Heartsteel.json.effects_structured[2].id"
+      }
+    ],
+    "Hellfire Hatchet.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hellfire Hatchet.json.effects_structured[0].id"
+      }
+    ],
+    "Hemomancers Helm.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hemomancers Helm.json.effects_structured[0].id"
+      }
+    ],
+    "Hexbolt Companion.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hexbolt Companion.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hexbolt Companion.json.effects_structured[1].id"
+      }
+    ],
+    "Hexdrinker.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hexdrinker.json.effects_structured[0].id"
+      }
+    ],
+    "Hexoptics C44.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hexoptics C44.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hexoptics C44.json.effects_structured[1].id"
+      }
+    ],
+    "Hextech Alternator.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hextech Alternator.json.effects_structured[0].id"
+      }
+    ],
+    "Hextech Gunblade.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hextech Gunblade.json.effects_structured[0].id"
+      }
+    ],
+    "Hextech Rocketbelt.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hextech Rocketbelt.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hextech Rocketbelt.json.effects_structured[1].id"
+      }
+    ],
+    "Hollow Radiance.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hollow Radiance.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hollow Radiance.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hollow Radiance.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hollow Radiance.json.effects_structured[3].id"
+      }
+    ],
+    "Horizon Focus.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Horizon Focus.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Horizon Focus.json.effects_structured[1].id"
+      }
+    ],
+    "Hubris.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hubris.json.effects_structured[0].id"
+      }
+    ],
+    "Hullbreaker.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hullbreaker.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hullbreaker.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Hullbreaker.json.effects_structured[2].id"
+      }
+    ],
+    "Iceborn Gauntlet.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Iceborn Gauntlet.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Iceborn Gauntlet.json.effects_structured[1].id"
+      }
+    ],
+    "Immortal Shieldbow.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Immortal Shieldbow.json.effects_structured[0].id"
+      }
+    ],
+    "Imperial Mandate.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Imperial Mandate.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Imperial Mandate.json.effects_structured[1].id"
+      }
+    ],
+    "Innervating Locket.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Innervating Locket.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Innervating Locket.json.effects_structured[1].id"
+      }
+    ],
+    "Ionian Boots of Lucidity.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ionian Boots of Lucidity.json.effects_structured[0].id"
+      }
+    ],
+    "JakSho The Protean.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "JakSho The Protean.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "JakSho The Protean.json.effects_structured[1].id"
+      }
+    ],
+    "Jarvan Is.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Jarvan Is.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Jarvan Is.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Jarvan Is.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Jarvan Is.json.effects_structured[3].id"
+      }
+    ],
+    "Kaenic Rookern.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Kaenic Rookern.json.effects_structured[0].id"
+      }
+    ],
+    "Kinkou Jitte.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Kinkou Jitte.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Kinkou Jitte.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Kinkou Jitte.json.effects_structured[2].id"
+      }
+    ],
+    "Knights Vow.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Knights Vow.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Knights Vow.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Knights Vow.json.effects_structured[2].id"
+      }
+    ],
+    "Kraken Slayer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Kraken Slayer.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Kraken Slayer.json.effects_structured[1].id"
+      }
+    ],
+    "Liandrys Torment.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Liandrys Torment.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Liandrys Torment.json.effects_structured[1].id"
+      }
+    ],
+    "Lich Bane.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lich Bane.json.effects_structured[0].id"
+      }
+    ],
+    "Lifeline.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lifeline.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lifeline.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lifeline.json.effects_structured[2].id"
+      }
+    ],
+    "Lightning Rod.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lightning Rod.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lightning Rod.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lightning Rod.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lightning Rod.json.effects_structured[3].id"
+      }
+    ],
+    "Locket of the Iron Solari.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Locket of the Iron Solari.json.effects_structured[0].id"
+      }
+    ],
+    "Lord Dominiks Regards.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lord Dominiks Regards.json.effects_structured[0].id"
+      }
+    ],
+    "Lost Chapter.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Lost Chapter.json.effects_structured[0].id"
+      }
+    ],
+    "Ludens Echo.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ludens Echo.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ludens Echo.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ludens Echo.json.effects_structured[2].id"
+      }
+    ],
+    "Malignance.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Malignance.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Malignance.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Malignance.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Malignance.json.effects_structured[3].id"
+      }
+    ],
+    "Manamune.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Manamune.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Manamune.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Manamune.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Manamune.json.effects_structured[3].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Manamune.json.effects_structured[4].id"
+      }
+    ],
+    "Maw of Malmortius.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Maw of Malmortius.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Maw of Malmortius.json.effects_structured[1].id"
+      }
+    ],
+    "Mejais Soulstealer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mejais Soulstealer.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mejais Soulstealer.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mejais Soulstealer.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mejais Soulstealer.json.effects_structured[3].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mejais Soulstealer.json.effects_structured[4].id"
+      }
+    ],
+    "Mercurial Scimitar.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mercurial Scimitar.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mercurial Scimitar.json.effects_structured[1].id"
+      }
+    ],
+    "Mikaels Blessing.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mikaels Blessing.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mikaels Blessing.json.effects_structured[1].id"
+      }
+    ],
+    "Mirage Blade.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mirage Blade.json.effects_structured[0].id"
+      }
+    ],
+    "Moonflair Spellblade.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Moonflair Spellblade.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Moonflair Spellblade.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Moonflair Spellblade.json.effects_structured[2].id"
+      }
+    ],
+    "Moonstone Renewer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Moonstone Renewer.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Moonstone Renewer.json.effects_structured[1].id"
+      }
+    ],
+    "Morellonomicon.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Morellonomicon.json.effects_structured[0].id"
+      }
+    ],
+    "Mortal Reminder.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mortal Reminder.json.effects_structured[0].id"
+      }
+    ],
+    "Mosstomper Seedling.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mosstomper Seedling.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mosstomper Seedling.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Mosstomper Seedling.json.effects_structured[2].id"
+      }
+    ],
+    "Muramana.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Muramana.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Muramana.json.effects_structured[1].id"
+      }
+    ],
+    "Nashors Tooth.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Nashors Tooth.json.effects_structured[0].id"
+      }
+    ],
+    "Navori Flickerblade.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Navori Flickerblade.json.effects_structured[0].id"
+      }
+    ],
+    "Night Harvester.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Night Harvester.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Night Harvester.json.effects_structured[1].id"
+      }
+    ],
+    "Oblivion Orb.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Oblivion Orb.json.effects_structured[0].id"
+      }
+    ],
+    "Ohmwrecker Turret Item.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ohmwrecker Turret Item.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ohmwrecker Turret Item.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ohmwrecker Turret Item.json.effects_structured[2].id"
+      }
+    ],
+    "Opportunity.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Opportunity.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Opportunity.json.effects_structured[1].id"
+      }
+    ],
+    "Oracle Lens.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Oracle Lens.json.effects_structured[0].id"
+      }
+    ],
+    "Overcharged.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Overcharged.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Overcharged.json.effects_structured[1].id"
+      }
+    ],
+    "Overlords Bloodmail.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Overlords Bloodmail.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Overlords Bloodmail.json.effects_structured[1].id"
+      }
+    ],
+    "Perplexity.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Perplexity.json.effects_structured[0].id"
+      }
+    ],
+    "Phage.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Phage.json.effects_structured[0].id"
+      }
+    ],
+    "Phantom Dancer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Phantom Dancer.json.effects_structured[0].id"
+      }
+    ],
+    "Phreakish Gusto.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Phreakish Gusto.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Phreakish Gusto.json.effects_structured[1].id"
+      }
+    ],
+    "Plated Steelcaps.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Plated Steelcaps.json.effects_structured[0].id"
+      }
+    ],
+    "Profane Hydra.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Profane Hydra.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Profane Hydra.json.effects_structured[1].id"
+      }
+    ],
+    "Protoplasm Harness.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Protoplasm Harness.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Protoplasm Harness.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Protoplasm Harness.json.effects_structured[2].id"
+      }
+    ],
+    "Prowlers Claw.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Prowlers Claw.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Prowlers Claw.json.effects_structured[1].id"
+      }
+    ],
+    "Puppeteer.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Puppeteer.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Puppeteer.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Puppeteer.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Puppeteer.json.effects_structured[3].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Puppeteer.json.effects_structured[4].id"
+      }
+    ],
+    "Pyromancers Cloak.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Pyromancers Cloak.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Pyromancers Cloak.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Pyromancers Cloak.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Pyromancers Cloak.json.effects_structured[3].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Pyromancers Cloak.json.effects_structured[4].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Pyromancers Cloak.json.effects_structured[5].id"
+      }
+    ],
+    "Quicksilver Sash.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Quicksilver Sash.json.effects_structured[0].id"
+      }
+    ],
+    "Rabadons Deathcap.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rabadons Deathcap.json.effects_structured[0].id"
+      }
+    ],
+    "Radiant Virtue.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Radiant Virtue.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Radiant Virtue.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Radiant Virtue.json.effects_structured[2].id"
+      }
+    ],
+    "Raise Morale.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Raise Morale.json.effects_structured[0].id"
+      }
+    ],
+    "Randuins Omen.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Randuins Omen.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Randuins Omen.json.effects_structured[1].id"
+      }
+    ],
+    "Rapid Firecannon.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rapid Firecannon.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rapid Firecannon.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rapid Firecannon.json.effects_structured[2].id"
+      }
+    ],
+    "Ravenous Hydra.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ravenous Hydra.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ravenous Hydra.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ravenous Hydra.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Ravenous Hydra.json.effects_structured[3].id"
+      }
+    ],
+    "Reality Fracture.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reality Fracture.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reality Fracture.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reality Fracture.json.effects_structured[2].id"
+      }
+    ],
+    "Reapers Toll.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reapers Toll.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reapers Toll.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reapers Toll.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reapers Toll.json.effects_structured[3].id"
+      }
+    ],
+    "Recurve Bow.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Recurve Bow.json.effects_structured[0].id"
+      }
+    ],
+    "Redemption.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Redemption.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Redemption.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Redemption.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Redemption.json.effects_structured[3].id"
+      }
+    ],
+    "Refillable Potion.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Refillable Potion.json.effects_structured[0].id"
+      }
+    ],
+    "Regicide.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Regicide.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Regicide.json.effects_structured[1].id"
+      }
+    ],
+    "Reinforced Armor Turret Item.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reinforced Armor Turret Item.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reinforced Armor Turret Item.json.effects_structured[1].id"
+      }
+    ],
+    "Reverberation.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reverberation.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reverberation.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reverberation.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Reverberation.json.effects_structured[3].id"
+      }
+    ],
+    "Riftmaker.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Riftmaker.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Riftmaker.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Riftmaker.json.effects_structured[2].id"
+      }
+    ],
+    "Rite of Ruin.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rite of Ruin.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rite of Ruin.json.effects_structured[1].id"
+      }
+    ],
+    "Rod of Ages.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rod of Ages.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rod of Ages.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rod of Ages.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rod of Ages.json.effects_structured[3].id"
+      }
+    ],
+    "Runaans Hurricane.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runaans Hurricane.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runaans Hurricane.json.effects_structured[1].id"
+      }
+    ],
+    "Runecarver.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runecarver.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runecarver.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runecarver.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runecarver.json.effects_structured[3].id"
+      }
+    ],
+    "Runic Compass.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[3].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[4].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[5].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[6].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[7].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[8].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Runic Compass.json.effects_structured[9].id"
+      }
+    ],
+    "Rylais Crystal Scepter.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Rylais Crystal Scepter.json.effects_structured[0].id"
+      }
+    ],
+    "Sanguine Gift.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sanguine Gift.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sanguine Gift.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sanguine Gift.json.effects_structured[2].id"
+      }
+    ],
+    "Scarecrow Effigy.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scarecrow Effigy.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scarecrow Effigy.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scarecrow Effigy.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scarecrow Effigy.json.effects_structured[3].id"
+      }
+    ],
+    "Scorchclaw Pup.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scorchclaw Pup.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scorchclaw Pup.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scorchclaw Pup.json.effects_structured[2].id"
+      }
+    ],
+    "Scouts Slingshot.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Scouts Slingshot.json.effects_structured[0].id"
+      }
+    ],
+    "Seekers Armguard.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Seekers Armguard.json.effects_structured[0].id"
+      }
+    ],
+    "Seraphs Embrace.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Seraphs Embrace.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Seraphs Embrace.json.effects_structured[1].id"
+      }
+    ],
+    "Serpents Fang.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Serpents Fang.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Serpents Fang.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Serpents Fang.json.effects_structured[2].id"
+      }
+    ],
+    "Seryldas Grudge.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Seryldas Grudge.json.effects_structured[0].id"
+      }
+    ],
+    "Shadowflame.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Shadowflame.json.effects_structured[0].id"
+      }
+    ],
+    "Sheen.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sheen.json.effects_structured[0].id"
+      }
+    ],
+    "Shield of Molten Stone.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Shield of Molten Stone.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Shield of Molten Stone.json.effects_structured[1].id"
+      }
+    ],
+    "Shurelyas Battlesong.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Shurelyas Battlesong.json.effects_structured[0].id"
+      }
+    ],
+    "Slightly Magical Boots.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Slightly Magical Boots.json.effects_structured[0].id"
+      }
+    ],
+    "Solstice Sleigh.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Solstice Sleigh.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Solstice Sleigh.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Solstice Sleigh.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Solstice Sleigh.json.effects_structured[3].id"
+      }
+    ],
+    "Spear of Shojin.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spear of Shojin.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spear of Shojin.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spear of Shojin.json.effects_structured[2].id"
+      }
+    ],
+    "Spectral Cutlass.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spectral Cutlass.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spectral Cutlass.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spectral Cutlass.json.effects_structured[2].id"
+      }
+    ],
+    "Spirit Visage.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Spirit Visage.json.effects_structured[0].id"
+      }
+    ],
+    "Staff of Flowing Water.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Staff of Flowing Water.json.effects_structured[0].id"
+      }
+    ],
+    "Statikk Shiv.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Statikk Shiv.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Statikk Shiv.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Statikk Shiv.json.effects_structured[2].id"
+      }
+    ],
+    "Stealth Ward.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stealth Ward.json.effects_structured[0].id"
+      }
+    ],
+    "Steraks Gage.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Steraks Gage.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Steraks Gage.json.effects_structured[1].id"
+      }
+    ],
+    "Stormrazor.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stormrazor.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stormrazor.json.effects_structured[1].id"
+      }
+    ],
+    "Stormsurge.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stormsurge.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stormsurge.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stormsurge.json.effects_structured[2].id"
+      }
+    ],
+    "Stridebreaker.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stridebreaker.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stridebreaker.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stridebreaker.json.effects_structured[2].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Stridebreaker.json.effects_structured[3].id"
+      }
+    ],
+    "Sundered Sky.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sundered Sky.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sundered Sky.json.effects_structured[1].id"
+      }
+    ],
+    "Sunfire Aegis.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sunfire Aegis.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sunfire Aegis.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sunfire Aegis.json.effects_structured[2].id"
+      }
+    ],
+    "Super Mech Armor.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Super Mech Armor.json.effects_structured[0].id"
+      }
+    ],
+    "Super Mech Power Field.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Super Mech Power Field.json.effects_structured[0].id"
+      }
+    ],
+    "Swiftmarch.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Swiftmarch.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Swiftmarch.json.effects_structured[1].id"
+      }
+    ],
+    "Sword of Blossoming Dawn.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sword of Blossoming Dawn.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sword of Blossoming Dawn.json.effects_structured[1].id"
+      }
+    ],
+    "Sword of the Divine.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Sword of the Divine.json.effects_structured[0].id"
+      }
+    ],
+    "Talisman of Ascension.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Talisman of Ascension.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Talisman of Ascension.json.effects_structured[1].id"
+      }
+    ],
+    "Tear of the Goddess.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Tear of the Goddess.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Tear of the Goddess.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Tear of the Goddess.json.effects_structured[2].id"
+      }
+    ],
+    "Terminus.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Terminus.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Terminus.json.effects_structured[1].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Terminus.json.effects_structured[2].id"
+      }
+    ],
+    "The Collector.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "The Collector.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "The Collector.json.effects_structured[1].id"
+      }
+    ],
+    "The Golden Spatula.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "The Golden Spatula.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "The Golden Spatula.json.effects_structured[1].id"
+      }
+    ],
+    "Thornmail.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Thornmail.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Thornmail.json.effects_structured[1].id"
+      }
+    ],
+    "Tiamat.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Tiamat.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Tiamat.json.effects_structured[1].id"
+      }
+    ],
+    "Titanic Hydra.json": [
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Titanic Hydra.json.effects_structured[0].id"
+      },
+      {
+        "level": "warning",
+        "message": "missing or empty effect id (recommended for simulation)",
+        "path": "Titanic Hydra.json.effects_structured[1].id"
+      }
+    ],
+    "Umbral Glaive.json": [
+      {
+        "level": "warning",
+        "message": "damage effect missing value or scaling_terms",
+        "path": "Umbral Glaive.json.effects_structured[2]"
+      }
+    ],
+    "Zekes Convergence.json": [
+      {
+        "level": "warning",
+        "message": "damage effect missing value or scaling_terms",
+        "path": "Zekes Convergence.json.effects_structured[1]"
+      }
+    ]
+  },
+  "generated_at": "2026-02-14T01:59:30.514021+00:00",
+  "items_checked": 320,
+  "warnings": [
+    {
+      "file": "Base Turret Reinforced Armor Turret Item.json",
+      "message": "healing effect missing value or scaling_terms",
+      "path": "Base Turret Reinforced Armor Turret Item.json.effects_structured[2]"
+    },
+    {
+      "file": "Blade of the Ruined King.json",
+      "message": "damage effect missing value or scaling_terms",
+      "path": "Blade of the Ruined King.json.effects_structured[0]"
+    },
+    {
+      "file": "Bloodthirster.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Bloodthirster.json.effects_structured[0].id"
+    },
+    {
+      "file": "Bloodthirster.json",
+      "message": "shield effect missing value or scaling_terms",
+      "path": "Bloodthirster.json.effects_structured[0]"
+    },
+    {
+      "file": "Boots of Swiftness.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Boots of Swiftness.json.effects_structured[0].id"
+    },
+    {
+      "file": "Bounty of Worlds.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Bounty of Worlds.json.effects_structured[0].id"
+    },
+    {
+      "file": "Bounty of Worlds.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Bounty of Worlds.json.effects_structured[1].id"
+    },
+    {
+      "file": "Bounty of Worlds.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Bounty of Worlds.json.effects_structured[2].id"
+    },
+    {
+      "file": "Bramble Vest.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Bramble Vest.json.effects_structured[0].id"
+    },
+    {
+      "file": "Bramble Vest.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Bramble Vest.json.effects_structured[1].id"
+    },
+    {
+      "file": "Catalyst of Aeons.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Catalyst of Aeons.json.effects_structured[0].id"
+    },
+    {
+      "file": "Catalyst of Aeons.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Catalyst of Aeons.json.effects_structured[1].id"
+    },
+    {
+      "file": "Celestial Opposition.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Celestial Opposition.json.effects_structured[0].id"
+    },
+    {
+      "file": "Celestial Opposition.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Celestial Opposition.json.effects_structured[1].id"
+    },
+    {
+      "file": "Celestial Opposition.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Celestial Opposition.json.effects_structured[2].id"
+    },
+    {
+      "file": "Celestial Opposition.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Celestial Opposition.json.effects_structured[3].id"
+    },
+    {
+      "file": "Chainlaced Crushers.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Chainlaced Crushers.json.effects_structured[0].id"
+    },
+    {
+      "file": "Chempunk Chainsword.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Chempunk Chainsword.json.effects_structured[0].id"
+    },
+    {
+      "file": "Cloak of Starry Night.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Cloak of Starry Night.json.effects_structured[0].id"
+    },
+    {
+      "file": "Cloak of Starry Night.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Cloak of Starry Night.json.effects_structured[1].id"
+    },
+    {
+      "file": "Control Ward.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Control Ward.json.effects_structured[0].id"
+    },
+    {
+      "file": "Cosmic Drive.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Cosmic Drive.json.effects_structured[0].id"
+    },
+    {
+      "file": "Crimson Lucidity.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Crimson Lucidity.json.effects_structured[0].id"
+    },
+    {
+      "file": "Crimson Lucidity.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Crimson Lucidity.json.effects_structured[1].id"
+    },
+    {
+      "file": "Crown of the Shattered Queen.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Crown of the Shattered Queen.json.effects_structured[0].id"
+    },
+    {
+      "file": "Cruelty.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Cruelty.json.effects_structured[0].id"
+    },
+    {
+      "file": "Cryptbloom.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Cryptbloom.json.effects_structured[0].id"
+    },
+    {
+      "file": "Crystalline Overgrowth.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Crystalline Overgrowth.json.effects_structured[0].id"
+    },
+    {
+      "file": "Crystalline Overgrowth.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Crystalline Overgrowth.json.effects_structured[1].id"
+    },
+    {
+      "file": "Cull.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Cull.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dark Seal.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dark Seal.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dark Seal.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dark Seal.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dark Seal.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dark Seal.json.effects_structured[2].id"
+    },
+    {
+      "file": "Darksteel Talons.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Darksteel Talons.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dawncore.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dawncore.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dead Mans Plate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dead Mans Plate.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dead Mans Plate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dead Mans Plate.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dead Mans Plate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dead Mans Plate.json.effects_structured[2].id"
+    },
+    {
+      "file": "Deaths Dance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Deaths Dance.json.effects_structured[0].id"
+    },
+    {
+      "file": "Deaths Dance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Deaths Dance.json.effects_structured[1].id"
+    },
+    {
+      "file": "Deaths Daughter.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Deaths Daughter.json.effects_structured[0].id"
+    },
+    {
+      "file": "Decapitator.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Decapitator.json.effects_structured[0].id"
+    },
+    {
+      "file": "Decapitator.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Decapitator.json.effects_structured[1].id"
+    },
+    {
+      "file": "Demon Kings Crown.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Demon Kings Crown.json.effects_structured[0].id"
+    },
+    {
+      "file": "Demonic Embrace.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Demonic Embrace.json.effects_structured[0].id"
+    },
+    {
+      "file": "Detonation Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Detonation Orb.json.effects_structured[0].id"
+    },
+    {
+      "file": "Detonation Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Detonation Orb.json.effects_structured[1].id"
+    },
+    {
+      "file": "Detonation Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Detonation Orb.json.effects_structured[2].id"
+    },
+    {
+      "file": "Detonation Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Detonation Orb.json.effects_structured[3].id"
+    },
+    {
+      "file": "Diadem of Songs.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Diadem of Songs.json.effects_structured[0].id"
+    },
+    {
+      "file": "Diadem of Songs.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Diadem of Songs.json.effects_structured[1].id"
+    },
+    {
+      "file": "Diamond-Tipped Spear.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Diamond-Tipped Spear.json.effects_structured[0].id"
+    },
+    {
+      "file": "Diamond-Tipped Spear.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Diamond-Tipped Spear.json.effects_structured[1].id"
+    },
+    {
+      "file": "Divine Sunderer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Divine Sunderer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Divine Sunderer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Divine Sunderer.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dorans Ring.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dorans Ring.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dorans Ring.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dorans Ring.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dorans Ring.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dorans Ring.json.effects_structured[2].id"
+    },
+    {
+      "file": "Dorans Ring.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dorans Ring.json.effects_structured[3].id"
+    },
+    {
+      "file": "Dorans Shield.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dorans Shield.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dorans Shield.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dorans Shield.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dragonheart.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dragonheart.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dragonheart.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dragonheart.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dragonheart.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dragonheart.json.effects_structured[2].id"
+    },
+    {
+      "file": "Dragonheart.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dragonheart.json.effects_structured[3].id"
+    },
+    {
+      "file": "Dream Maker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dream Maker.json.effects_structured[0].id"
+    },
+    {
+      "file": "Dream Maker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dream Maker.json.effects_structured[1].id"
+    },
+    {
+      "file": "Dream Maker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dream Maker.json.effects_structured[2].id"
+    },
+    {
+      "file": "Dream Maker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dream Maker.json.effects_structured[3].id"
+    },
+    {
+      "file": "Dream Maker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dream Maker.json.effects_structured[4].id"
+    },
+    {
+      "file": "Dream Maker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dream Maker.json.effects_structured[5].id"
+    },
+    {
+      "file": "Dusk and Dawn.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Dusk and Dawn.json.effects_structured[0].id"
+    },
+    {
+      "file": "Duskblade of Draktharr.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Duskblade of Draktharr.json.effects_structured[0].id"
+    },
+    {
+      "file": "Duskblade of Draktharr.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Duskblade of Draktharr.json.effects_structured[1].id"
+    },
+    {
+      "file": "Echoes of Helia.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Echoes of Helia.json.effects_structured[0].id"
+    },
+    {
+      "file": "Echoes of Helia.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Echoes of Helia.json.effects_structured[1].id"
+    },
+    {
+      "file": "Eclipse.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Eclipse.json.effects_structured[0].id"
+    },
+    {
+      "file": "Eclipse.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Eclipse.json.effects_structured[1].id"
+    },
+    {
+      "file": "Edge of Night.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Edge of Night.json.effects_structured[0].id"
+    },
+    {
+      "file": "Eleisas Miracle.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Eleisas Miracle.json.effects_structured[0].id"
+    },
+    {
+      "file": "Empyrean Promise.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Empyrean Promise.json.effects_structured[0].id"
+    },
+    {
+      "file": "Endless Hunger.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Endless Hunger.json.effects_structured[0].id"
+    },
+    {
+      "file": "Endless Hunger.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Endless Hunger.json.effects_structured[1].id"
+    },
+    {
+      "file": "Essence Reaver.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Essence Reaver.json.effects_structured[0].id"
+    },
+    {
+      "file": "Everfrost.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Everfrost.json.effects_structured[0].id"
+    },
+    {
+      "file": "Everfrost.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Everfrost.json.effects_structured[1].id"
+    },
+    {
+      "file": "Executioners Calling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Executioners Calling.json.effects_structured[0].id"
+    },
+    {
+      "file": "Experimental Hexplate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Experimental Hexplate.json.effects_structured[0].id"
+    },
+    {
+      "file": "Experimental Hexplate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Experimental Hexplate.json.effects_structured[1].id"
+    },
+    {
+      "file": "Fated Ashes.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fated Ashes.json.effects_structured[0].id"
+    },
+    {
+      "file": "Fated Ashes.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fated Ashes.json.effects_structured[1].id"
+    },
+    {
+      "file": "Fiendhunter Bolts.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fiendhunter Bolts.json.effects_structured[0].id"
+    },
+    {
+      "file": "Fiendhunter Bolts.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fiendhunter Bolts.json.effects_structured[1].id"
+    },
+    {
+      "file": "Fiendhunter Bolts.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fiendhunter Bolts.json.effects_structured[2].id"
+    },
+    {
+      "file": "Fimbulwinter.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fimbulwinter.json.effects_structured[0].id"
+    },
+    {
+      "file": "Fimbulwinter.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fimbulwinter.json.effects_structured[1].id"
+    },
+    {
+      "file": "Fimbulwinter.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fimbulwinter.json.effects_structured[2].id"
+    },
+    {
+      "file": "Fire at Will.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fire at Will.json.effects_structured[0].id"
+    },
+    {
+      "file": "Flesheater.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Flesheater.json.effects_structured[0].id"
+    },
+    {
+      "file": "Flesheater.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Flesheater.json.effects_structured[1].id"
+    },
+    {
+      "file": "Force of Entropy.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Force of Entropy.json.effects_structured[0].id"
+    },
+    {
+      "file": "Force of Nature.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Force of Nature.json.effects_structured[0].id"
+    },
+    {
+      "file": "Force of Nature.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Force of Nature.json.effects_structured[1].id"
+    },
+    {
+      "file": "Force of Nature.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Force of Nature.json.effects_structured[2].id"
+    },
+    {
+      "file": "Force of Nature.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Force of Nature.json.effects_structured[3].id"
+    },
+    {
+      "file": "Frozen Heart.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Frozen Heart.json.effects_structured[0].id"
+    },
+    {
+      "file": "Fulmination.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fulmination.json.effects_structured[0].id"
+    },
+    {
+      "file": "Fulmination.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fulmination.json.effects_structured[1].id"
+    },
+    {
+      "file": "Fulmination.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Fulmination.json.effects_structured[2].id"
+    },
+    {
+      "file": "Galeforce.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Galeforce.json.effects_structured[0].id"
+    },
+    {
+      "file": "Galeforce.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Galeforce.json.effects_structured[1].id"
+    },
+    {
+      "file": "Gamblers Blade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gamblers Blade.json.effects_structured[0].id"
+    },
+    {
+      "file": "Gamblers Blade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gamblers Blade.json.effects_structured[1].id"
+    },
+    {
+      "file": "Gargoyle Stoneplate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gargoyle Stoneplate.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ghostcrawlers.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ghostcrawlers.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ghostcrawlers.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ghostcrawlers.json.effects_structured[1].id"
+    },
+    {
+      "file": "Goredrinker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Goredrinker.json.effects_structured[0].id"
+    },
+    {
+      "file": "Goredrinker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Goredrinker.json.effects_structured[1].id"
+    },
+    {
+      "file": "Guardian Angel.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardian Angel.json.effects_structured[0].id"
+    },
+    {
+      "file": "Guardians Amulet.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Amulet.json.effects_structured[0].id"
+    },
+    {
+      "file": "Guardians Amulet.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Amulet.json.effects_structured[1].id"
+    },
+    {
+      "file": "Guardians Dirk.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Dirk.json.effects_structured[0].id"
+    },
+    {
+      "file": "Guardians Dirk.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Dirk.json.effects_structured[1].id"
+    },
+    {
+      "file": "Guardians Horn.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Horn.json.effects_structured[0].id"
+    },
+    {
+      "file": "Guardians Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Orb.json.effects_structured[0].id"
+    },
+    {
+      "file": "Guardians Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guardians Orb.json.effects_structured[1].id"
+    },
+    {
+      "file": "Guinsoos Rageblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guinsoos Rageblade.json.effects_structured[0].id"
+    },
+    {
+      "file": "Guinsoos Rageblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guinsoos Rageblade.json.effects_structured[1].id"
+    },
+    {
+      "file": "Guinsoos Rageblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guinsoos Rageblade.json.effects_structured[2].id"
+    },
+    {
+      "file": "Guinsoos Rageblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Guinsoos Rageblade.json.effects_structured[3].id"
+    },
+    {
+      "file": "Gusto.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gusto.json.effects_structured[0].id"
+    },
+    {
+      "file": "Gusto.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gusto.json.effects_structured[1].id"
+    },
+    {
+      "file": "Gustwalker Hatchling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gustwalker Hatchling.json.effects_structured[0].id"
+    },
+    {
+      "file": "Gustwalker Hatchling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gustwalker Hatchling.json.effects_structured[1].id"
+    },
+    {
+      "file": "Gustwalker Hatchling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Gustwalker Hatchling.json.effects_structured[2].id"
+    },
+    {
+      "file": "Hamstringer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hamstringer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Haunting Guise.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Haunting Guise.json.effects_structured[0].id"
+    },
+    {
+      "file": "Health Potion.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Health Potion.json.effects_structured[0].id"
+    },
+    {
+      "file": "Heartsteel.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Heartsteel.json.effects_structured[0].id"
+    },
+    {
+      "file": "Heartsteel.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Heartsteel.json.effects_structured[1].id"
+    },
+    {
+      "file": "Heartsteel.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Heartsteel.json.effects_structured[2].id"
+    },
+    {
+      "file": "Hellfire Hatchet.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hellfire Hatchet.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hemomancers Helm.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hemomancers Helm.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hexbolt Companion.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hexbolt Companion.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hexbolt Companion.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hexbolt Companion.json.effects_structured[1].id"
+    },
+    {
+      "file": "Hexdrinker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hexdrinker.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hexoptics C44.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hexoptics C44.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hexoptics C44.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hexoptics C44.json.effects_structured[1].id"
+    },
+    {
+      "file": "Hextech Alternator.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hextech Alternator.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hextech Gunblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hextech Gunblade.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hextech Rocketbelt.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hextech Rocketbelt.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hextech Rocketbelt.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hextech Rocketbelt.json.effects_structured[1].id"
+    },
+    {
+      "file": "Hollow Radiance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hollow Radiance.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hollow Radiance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hollow Radiance.json.effects_structured[1].id"
+    },
+    {
+      "file": "Hollow Radiance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hollow Radiance.json.effects_structured[2].id"
+    },
+    {
+      "file": "Hollow Radiance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hollow Radiance.json.effects_structured[3].id"
+    },
+    {
+      "file": "Horizon Focus.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Horizon Focus.json.effects_structured[0].id"
+    },
+    {
+      "file": "Horizon Focus.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Horizon Focus.json.effects_structured[1].id"
+    },
+    {
+      "file": "Hubris.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hubris.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hullbreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hullbreaker.json.effects_structured[0].id"
+    },
+    {
+      "file": "Hullbreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hullbreaker.json.effects_structured[1].id"
+    },
+    {
+      "file": "Hullbreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Hullbreaker.json.effects_structured[2].id"
+    },
+    {
+      "file": "Iceborn Gauntlet.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Iceborn Gauntlet.json.effects_structured[0].id"
+    },
+    {
+      "file": "Iceborn Gauntlet.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Iceborn Gauntlet.json.effects_structured[1].id"
+    },
+    {
+      "file": "Immortal Shieldbow.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Immortal Shieldbow.json.effects_structured[0].id"
+    },
+    {
+      "file": "Imperial Mandate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Imperial Mandate.json.effects_structured[0].id"
+    },
+    {
+      "file": "Imperial Mandate.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Imperial Mandate.json.effects_structured[1].id"
+    },
+    {
+      "file": "Innervating Locket.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Innervating Locket.json.effects_structured[0].id"
+    },
+    {
+      "file": "Innervating Locket.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Innervating Locket.json.effects_structured[1].id"
+    },
+    {
+      "file": "Ionian Boots of Lucidity.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ionian Boots of Lucidity.json.effects_structured[0].id"
+    },
+    {
+      "file": "JakSho The Protean.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "JakSho The Protean.json.effects_structured[0].id"
+    },
+    {
+      "file": "JakSho The Protean.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "JakSho The Protean.json.effects_structured[1].id"
+    },
+    {
+      "file": "Jarvan Is.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Jarvan Is.json.effects_structured[0].id"
+    },
+    {
+      "file": "Jarvan Is.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Jarvan Is.json.effects_structured[1].id"
+    },
+    {
+      "file": "Jarvan Is.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Jarvan Is.json.effects_structured[2].id"
+    },
+    {
+      "file": "Jarvan Is.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Jarvan Is.json.effects_structured[3].id"
+    },
+    {
+      "file": "Kaenic Rookern.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Kaenic Rookern.json.effects_structured[0].id"
+    },
+    {
+      "file": "Kinkou Jitte.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Kinkou Jitte.json.effects_structured[0].id"
+    },
+    {
+      "file": "Kinkou Jitte.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Kinkou Jitte.json.effects_structured[1].id"
+    },
+    {
+      "file": "Kinkou Jitte.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Kinkou Jitte.json.effects_structured[2].id"
+    },
+    {
+      "file": "Knights Vow.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Knights Vow.json.effects_structured[0].id"
+    },
+    {
+      "file": "Knights Vow.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Knights Vow.json.effects_structured[1].id"
+    },
+    {
+      "file": "Knights Vow.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Knights Vow.json.effects_structured[2].id"
+    },
+    {
+      "file": "Kraken Slayer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Kraken Slayer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Kraken Slayer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Kraken Slayer.json.effects_structured[1].id"
+    },
+    {
+      "file": "Liandrys Torment.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Liandrys Torment.json.effects_structured[0].id"
+    },
+    {
+      "file": "Liandrys Torment.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Liandrys Torment.json.effects_structured[1].id"
+    },
+    {
+      "file": "Lich Bane.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lich Bane.json.effects_structured[0].id"
+    },
+    {
+      "file": "Lifeline.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lifeline.json.effects_structured[0].id"
+    },
+    {
+      "file": "Lifeline.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lifeline.json.effects_structured[1].id"
+    },
+    {
+      "file": "Lifeline.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lifeline.json.effects_structured[2].id"
+    },
+    {
+      "file": "Lightning Rod.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lightning Rod.json.effects_structured[0].id"
+    },
+    {
+      "file": "Lightning Rod.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lightning Rod.json.effects_structured[1].id"
+    },
+    {
+      "file": "Lightning Rod.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lightning Rod.json.effects_structured[2].id"
+    },
+    {
+      "file": "Lightning Rod.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lightning Rod.json.effects_structured[3].id"
+    },
+    {
+      "file": "Locket of the Iron Solari.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Locket of the Iron Solari.json.effects_structured[0].id"
+    },
+    {
+      "file": "Lord Dominiks Regards.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lord Dominiks Regards.json.effects_structured[0].id"
+    },
+    {
+      "file": "Lost Chapter.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Lost Chapter.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ludens Echo.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ludens Echo.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ludens Echo.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ludens Echo.json.effects_structured[1].id"
+    },
+    {
+      "file": "Ludens Echo.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ludens Echo.json.effects_structured[2].id"
+    },
+    {
+      "file": "Malignance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Malignance.json.effects_structured[0].id"
+    },
+    {
+      "file": "Malignance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Malignance.json.effects_structured[1].id"
+    },
+    {
+      "file": "Malignance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Malignance.json.effects_structured[2].id"
+    },
+    {
+      "file": "Malignance.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Malignance.json.effects_structured[3].id"
+    },
+    {
+      "file": "Manamune.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Manamune.json.effects_structured[0].id"
+    },
+    {
+      "file": "Manamune.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Manamune.json.effects_structured[1].id"
+    },
+    {
+      "file": "Manamune.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Manamune.json.effects_structured[2].id"
+    },
+    {
+      "file": "Manamune.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Manamune.json.effects_structured[3].id"
+    },
+    {
+      "file": "Manamune.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Manamune.json.effects_structured[4].id"
+    },
+    {
+      "file": "Maw of Malmortius.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Maw of Malmortius.json.effects_structured[0].id"
+    },
+    {
+      "file": "Maw of Malmortius.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Maw of Malmortius.json.effects_structured[1].id"
+    },
+    {
+      "file": "Mejais Soulstealer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mejais Soulstealer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Mejais Soulstealer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mejais Soulstealer.json.effects_structured[1].id"
+    },
+    {
+      "file": "Mejais Soulstealer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mejais Soulstealer.json.effects_structured[2].id"
+    },
+    {
+      "file": "Mejais Soulstealer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mejais Soulstealer.json.effects_structured[3].id"
+    },
+    {
+      "file": "Mejais Soulstealer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mejais Soulstealer.json.effects_structured[4].id"
+    },
+    {
+      "file": "Mercurial Scimitar.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mercurial Scimitar.json.effects_structured[0].id"
+    },
+    {
+      "file": "Mercurial Scimitar.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mercurial Scimitar.json.effects_structured[1].id"
+    },
+    {
+      "file": "Mikaels Blessing.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mikaels Blessing.json.effects_structured[0].id"
+    },
+    {
+      "file": "Mikaels Blessing.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mikaels Blessing.json.effects_structured[1].id"
+    },
+    {
+      "file": "Mirage Blade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mirage Blade.json.effects_structured[0].id"
+    },
+    {
+      "file": "Moonflair Spellblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Moonflair Spellblade.json.effects_structured[0].id"
+    },
+    {
+      "file": "Moonflair Spellblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Moonflair Spellblade.json.effects_structured[1].id"
+    },
+    {
+      "file": "Moonflair Spellblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Moonflair Spellblade.json.effects_structured[2].id"
+    },
+    {
+      "file": "Moonstone Renewer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Moonstone Renewer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Moonstone Renewer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Moonstone Renewer.json.effects_structured[1].id"
+    },
+    {
+      "file": "Morellonomicon.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Morellonomicon.json.effects_structured[0].id"
+    },
+    {
+      "file": "Mortal Reminder.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mortal Reminder.json.effects_structured[0].id"
+    },
+    {
+      "file": "Mosstomper Seedling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mosstomper Seedling.json.effects_structured[0].id"
+    },
+    {
+      "file": "Mosstomper Seedling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mosstomper Seedling.json.effects_structured[1].id"
+    },
+    {
+      "file": "Mosstomper Seedling.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Mosstomper Seedling.json.effects_structured[2].id"
+    },
+    {
+      "file": "Muramana.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Muramana.json.effects_structured[0].id"
+    },
+    {
+      "file": "Muramana.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Muramana.json.effects_structured[1].id"
+    },
+    {
+      "file": "Nashors Tooth.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Nashors Tooth.json.effects_structured[0].id"
+    },
+    {
+      "file": "Navori Flickerblade.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Navori Flickerblade.json.effects_structured[0].id"
+    },
+    {
+      "file": "Night Harvester.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Night Harvester.json.effects_structured[0].id"
+    },
+    {
+      "file": "Night Harvester.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Night Harvester.json.effects_structured[1].id"
+    },
+    {
+      "file": "Oblivion Orb.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Oblivion Orb.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ohmwrecker Turret Item.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ohmwrecker Turret Item.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ohmwrecker Turret Item.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ohmwrecker Turret Item.json.effects_structured[1].id"
+    },
+    {
+      "file": "Ohmwrecker Turret Item.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ohmwrecker Turret Item.json.effects_structured[2].id"
+    },
+    {
+      "file": "Opportunity.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Opportunity.json.effects_structured[0].id"
+    },
+    {
+      "file": "Opportunity.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Opportunity.json.effects_structured[1].id"
+    },
+    {
+      "file": "Oracle Lens.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Oracle Lens.json.effects_structured[0].id"
+    },
+    {
+      "file": "Overcharged.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Overcharged.json.effects_structured[0].id"
+    },
+    {
+      "file": "Overcharged.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Overcharged.json.effects_structured[1].id"
+    },
+    {
+      "file": "Overlords Bloodmail.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Overlords Bloodmail.json.effects_structured[0].id"
+    },
+    {
+      "file": "Overlords Bloodmail.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Overlords Bloodmail.json.effects_structured[1].id"
+    },
+    {
+      "file": "Perplexity.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Perplexity.json.effects_structured[0].id"
+    },
+    {
+      "file": "Phage.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Phage.json.effects_structured[0].id"
+    },
+    {
+      "file": "Phantom Dancer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Phantom Dancer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Phreakish Gusto.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Phreakish Gusto.json.effects_structured[0].id"
+    },
+    {
+      "file": "Phreakish Gusto.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Phreakish Gusto.json.effects_structured[1].id"
+    },
+    {
+      "file": "Plated Steelcaps.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Plated Steelcaps.json.effects_structured[0].id"
+    },
+    {
+      "file": "Profane Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Profane Hydra.json.effects_structured[0].id"
+    },
+    {
+      "file": "Profane Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Profane Hydra.json.effects_structured[1].id"
+    },
+    {
+      "file": "Protoplasm Harness.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Protoplasm Harness.json.effects_structured[0].id"
+    },
+    {
+      "file": "Protoplasm Harness.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Protoplasm Harness.json.effects_structured[1].id"
+    },
+    {
+      "file": "Protoplasm Harness.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Protoplasm Harness.json.effects_structured[2].id"
+    },
+    {
+      "file": "Prowlers Claw.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Prowlers Claw.json.effects_structured[0].id"
+    },
+    {
+      "file": "Prowlers Claw.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Prowlers Claw.json.effects_structured[1].id"
+    },
+    {
+      "file": "Puppeteer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Puppeteer.json.effects_structured[0].id"
+    },
+    {
+      "file": "Puppeteer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Puppeteer.json.effects_structured[1].id"
+    },
+    {
+      "file": "Puppeteer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Puppeteer.json.effects_structured[2].id"
+    },
+    {
+      "file": "Puppeteer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Puppeteer.json.effects_structured[3].id"
+    },
+    {
+      "file": "Puppeteer.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Puppeteer.json.effects_structured[4].id"
+    },
+    {
+      "file": "Pyromancers Cloak.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Pyromancers Cloak.json.effects_structured[0].id"
+    },
+    {
+      "file": "Pyromancers Cloak.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Pyromancers Cloak.json.effects_structured[1].id"
+    },
+    {
+      "file": "Pyromancers Cloak.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Pyromancers Cloak.json.effects_structured[2].id"
+    },
+    {
+      "file": "Pyromancers Cloak.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Pyromancers Cloak.json.effects_structured[3].id"
+    },
+    {
+      "file": "Pyromancers Cloak.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Pyromancers Cloak.json.effects_structured[4].id"
+    },
+    {
+      "file": "Pyromancers Cloak.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Pyromancers Cloak.json.effects_structured[5].id"
+    },
+    {
+      "file": "Quicksilver Sash.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Quicksilver Sash.json.effects_structured[0].id"
+    },
+    {
+      "file": "Rabadons Deathcap.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rabadons Deathcap.json.effects_structured[0].id"
+    },
+    {
+      "file": "Radiant Virtue.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Radiant Virtue.json.effects_structured[0].id"
+    },
+    {
+      "file": "Radiant Virtue.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Radiant Virtue.json.effects_structured[1].id"
+    },
+    {
+      "file": "Radiant Virtue.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Radiant Virtue.json.effects_structured[2].id"
+    },
+    {
+      "file": "Raise Morale.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Raise Morale.json.effects_structured[0].id"
+    },
+    {
+      "file": "Randuins Omen.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Randuins Omen.json.effects_structured[0].id"
+    },
+    {
+      "file": "Randuins Omen.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Randuins Omen.json.effects_structured[1].id"
+    },
+    {
+      "file": "Rapid Firecannon.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rapid Firecannon.json.effects_structured[0].id"
+    },
+    {
+      "file": "Rapid Firecannon.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rapid Firecannon.json.effects_structured[1].id"
+    },
+    {
+      "file": "Rapid Firecannon.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rapid Firecannon.json.effects_structured[2].id"
+    },
+    {
+      "file": "Ravenous Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ravenous Hydra.json.effects_structured[0].id"
+    },
+    {
+      "file": "Ravenous Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ravenous Hydra.json.effects_structured[1].id"
+    },
+    {
+      "file": "Ravenous Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ravenous Hydra.json.effects_structured[2].id"
+    },
+    {
+      "file": "Ravenous Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Ravenous Hydra.json.effects_structured[3].id"
+    },
+    {
+      "file": "Reality Fracture.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reality Fracture.json.effects_structured[0].id"
+    },
+    {
+      "file": "Reality Fracture.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reality Fracture.json.effects_structured[1].id"
+    },
+    {
+      "file": "Reality Fracture.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reality Fracture.json.effects_structured[2].id"
+    },
+    {
+      "file": "Reapers Toll.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reapers Toll.json.effects_structured[0].id"
+    },
+    {
+      "file": "Reapers Toll.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reapers Toll.json.effects_structured[1].id"
+    },
+    {
+      "file": "Reapers Toll.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reapers Toll.json.effects_structured[2].id"
+    },
+    {
+      "file": "Reapers Toll.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reapers Toll.json.effects_structured[3].id"
+    },
+    {
+      "file": "Recurve Bow.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Recurve Bow.json.effects_structured[0].id"
+    },
+    {
+      "file": "Redemption.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Redemption.json.effects_structured[0].id"
+    },
+    {
+      "file": "Redemption.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Redemption.json.effects_structured[1].id"
+    },
+    {
+      "file": "Redemption.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Redemption.json.effects_structured[2].id"
+    },
+    {
+      "file": "Redemption.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Redemption.json.effects_structured[3].id"
+    },
+    {
+      "file": "Refillable Potion.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Refillable Potion.json.effects_structured[0].id"
+    },
+    {
+      "file": "Regicide.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Regicide.json.effects_structured[0].id"
+    },
+    {
+      "file": "Regicide.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Regicide.json.effects_structured[1].id"
+    },
+    {
+      "file": "Reinforced Armor Turret Item.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reinforced Armor Turret Item.json.effects_structured[0].id"
+    },
+    {
+      "file": "Reinforced Armor Turret Item.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reinforced Armor Turret Item.json.effects_structured[1].id"
+    },
+    {
+      "file": "Reverberation.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reverberation.json.effects_structured[0].id"
+    },
+    {
+      "file": "Reverberation.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reverberation.json.effects_structured[1].id"
+    },
+    {
+      "file": "Reverberation.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reverberation.json.effects_structured[2].id"
+    },
+    {
+      "file": "Reverberation.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Reverberation.json.effects_structured[3].id"
+    },
+    {
+      "file": "Riftmaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Riftmaker.json.effects_structured[0].id"
+    },
+    {
+      "file": "Riftmaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Riftmaker.json.effects_structured[1].id"
+    },
+    {
+      "file": "Riftmaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Riftmaker.json.effects_structured[2].id"
+    },
+    {
+      "file": "Rite of Ruin.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rite of Ruin.json.effects_structured[0].id"
+    },
+    {
+      "file": "Rite of Ruin.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rite of Ruin.json.effects_structured[1].id"
+    },
+    {
+      "file": "Rod of Ages.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rod of Ages.json.effects_structured[0].id"
+    },
+    {
+      "file": "Rod of Ages.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rod of Ages.json.effects_structured[1].id"
+    },
+    {
+      "file": "Rod of Ages.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rod of Ages.json.effects_structured[2].id"
+    },
+    {
+      "file": "Rod of Ages.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rod of Ages.json.effects_structured[3].id"
+    },
+    {
+      "file": "Runaans Hurricane.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runaans Hurricane.json.effects_structured[0].id"
+    },
+    {
+      "file": "Runaans Hurricane.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runaans Hurricane.json.effects_structured[1].id"
+    },
+    {
+      "file": "Runecarver.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runecarver.json.effects_structured[0].id"
+    },
+    {
+      "file": "Runecarver.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runecarver.json.effects_structured[1].id"
+    },
+    {
+      "file": "Runecarver.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runecarver.json.effects_structured[2].id"
+    },
+    {
+      "file": "Runecarver.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runecarver.json.effects_structured[3].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[0].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[1].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[2].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[3].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[4].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[5].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[6].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[7].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[8].id"
+    },
+    {
+      "file": "Runic Compass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Runic Compass.json.effects_structured[9].id"
+    },
+    {
+      "file": "Rylais Crystal Scepter.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Rylais Crystal Scepter.json.effects_structured[0].id"
+    },
+    {
+      "file": "Sanguine Gift.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sanguine Gift.json.effects_structured[0].id"
+    },
+    {
+      "file": "Sanguine Gift.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sanguine Gift.json.effects_structured[1].id"
+    },
+    {
+      "file": "Sanguine Gift.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sanguine Gift.json.effects_structured[2].id"
+    },
+    {
+      "file": "Scarecrow Effigy.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scarecrow Effigy.json.effects_structured[0].id"
+    },
+    {
+      "file": "Scarecrow Effigy.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scarecrow Effigy.json.effects_structured[1].id"
+    },
+    {
+      "file": "Scarecrow Effigy.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scarecrow Effigy.json.effects_structured[2].id"
+    },
+    {
+      "file": "Scarecrow Effigy.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scarecrow Effigy.json.effects_structured[3].id"
+    },
+    {
+      "file": "Scorchclaw Pup.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scorchclaw Pup.json.effects_structured[0].id"
+    },
+    {
+      "file": "Scorchclaw Pup.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scorchclaw Pup.json.effects_structured[1].id"
+    },
+    {
+      "file": "Scorchclaw Pup.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scorchclaw Pup.json.effects_structured[2].id"
+    },
+    {
+      "file": "Scouts Slingshot.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Scouts Slingshot.json.effects_structured[0].id"
+    },
+    {
+      "file": "Seekers Armguard.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Seekers Armguard.json.effects_structured[0].id"
+    },
+    {
+      "file": "Seraphs Embrace.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Seraphs Embrace.json.effects_structured[0].id"
+    },
+    {
+      "file": "Seraphs Embrace.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Seraphs Embrace.json.effects_structured[1].id"
+    },
+    {
+      "file": "Serpents Fang.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Serpents Fang.json.effects_structured[0].id"
+    },
+    {
+      "file": "Serpents Fang.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Serpents Fang.json.effects_structured[1].id"
+    },
+    {
+      "file": "Serpents Fang.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Serpents Fang.json.effects_structured[2].id"
+    },
+    {
+      "file": "Seryldas Grudge.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Seryldas Grudge.json.effects_structured[0].id"
+    },
+    {
+      "file": "Shadowflame.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Shadowflame.json.effects_structured[0].id"
+    },
+    {
+      "file": "Sheen.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sheen.json.effects_structured[0].id"
+    },
+    {
+      "file": "Shield of Molten Stone.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Shield of Molten Stone.json.effects_structured[0].id"
+    },
+    {
+      "file": "Shield of Molten Stone.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Shield of Molten Stone.json.effects_structured[1].id"
+    },
+    {
+      "file": "Shurelyas Battlesong.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Shurelyas Battlesong.json.effects_structured[0].id"
+    },
+    {
+      "file": "Slightly Magical Boots.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Slightly Magical Boots.json.effects_structured[0].id"
+    },
+    {
+      "file": "Solstice Sleigh.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Solstice Sleigh.json.effects_structured[0].id"
+    },
+    {
+      "file": "Solstice Sleigh.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Solstice Sleigh.json.effects_structured[1].id"
+    },
+    {
+      "file": "Solstice Sleigh.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Solstice Sleigh.json.effects_structured[2].id"
+    },
+    {
+      "file": "Solstice Sleigh.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Solstice Sleigh.json.effects_structured[3].id"
+    },
+    {
+      "file": "Spear of Shojin.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spear of Shojin.json.effects_structured[0].id"
+    },
+    {
+      "file": "Spear of Shojin.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spear of Shojin.json.effects_structured[1].id"
+    },
+    {
+      "file": "Spear of Shojin.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spear of Shojin.json.effects_structured[2].id"
+    },
+    {
+      "file": "Spectral Cutlass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spectral Cutlass.json.effects_structured[0].id"
+    },
+    {
+      "file": "Spectral Cutlass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spectral Cutlass.json.effects_structured[1].id"
+    },
+    {
+      "file": "Spectral Cutlass.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spectral Cutlass.json.effects_structured[2].id"
+    },
+    {
+      "file": "Spirit Visage.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Spirit Visage.json.effects_structured[0].id"
+    },
+    {
+      "file": "Staff of Flowing Water.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Staff of Flowing Water.json.effects_structured[0].id"
+    },
+    {
+      "file": "Statikk Shiv.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Statikk Shiv.json.effects_structured[0].id"
+    },
+    {
+      "file": "Statikk Shiv.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Statikk Shiv.json.effects_structured[1].id"
+    },
+    {
+      "file": "Statikk Shiv.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Statikk Shiv.json.effects_structured[2].id"
+    },
+    {
+      "file": "Stealth Ward.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stealth Ward.json.effects_structured[0].id"
+    },
+    {
+      "file": "Steraks Gage.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Steraks Gage.json.effects_structured[0].id"
+    },
+    {
+      "file": "Steraks Gage.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Steraks Gage.json.effects_structured[1].id"
+    },
+    {
+      "file": "Stormrazor.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stormrazor.json.effects_structured[0].id"
+    },
+    {
+      "file": "Stormrazor.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stormrazor.json.effects_structured[1].id"
+    },
+    {
+      "file": "Stormsurge.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stormsurge.json.effects_structured[0].id"
+    },
+    {
+      "file": "Stormsurge.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stormsurge.json.effects_structured[1].id"
+    },
+    {
+      "file": "Stormsurge.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stormsurge.json.effects_structured[2].id"
+    },
+    {
+      "file": "Stridebreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stridebreaker.json.effects_structured[0].id"
+    },
+    {
+      "file": "Stridebreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stridebreaker.json.effects_structured[1].id"
+    },
+    {
+      "file": "Stridebreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stridebreaker.json.effects_structured[2].id"
+    },
+    {
+      "file": "Stridebreaker.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Stridebreaker.json.effects_structured[3].id"
+    },
+    {
+      "file": "Sundered Sky.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sundered Sky.json.effects_structured[0].id"
+    },
+    {
+      "file": "Sundered Sky.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sundered Sky.json.effects_structured[1].id"
+    },
+    {
+      "file": "Sunfire Aegis.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sunfire Aegis.json.effects_structured[0].id"
+    },
+    {
+      "file": "Sunfire Aegis.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sunfire Aegis.json.effects_structured[1].id"
+    },
+    {
+      "file": "Sunfire Aegis.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sunfire Aegis.json.effects_structured[2].id"
+    },
+    {
+      "file": "Super Mech Armor.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Super Mech Armor.json.effects_structured[0].id"
+    },
+    {
+      "file": "Super Mech Power Field.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Super Mech Power Field.json.effects_structured[0].id"
+    },
+    {
+      "file": "Swiftmarch.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Swiftmarch.json.effects_structured[0].id"
+    },
+    {
+      "file": "Swiftmarch.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Swiftmarch.json.effects_structured[1].id"
+    },
+    {
+      "file": "Sword of Blossoming Dawn.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sword of Blossoming Dawn.json.effects_structured[0].id"
+    },
+    {
+      "file": "Sword of Blossoming Dawn.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sword of Blossoming Dawn.json.effects_structured[1].id"
+    },
+    {
+      "file": "Sword of the Divine.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Sword of the Divine.json.effects_structured[0].id"
+    },
+    {
+      "file": "Talisman of Ascension.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Talisman of Ascension.json.effects_structured[0].id"
+    },
+    {
+      "file": "Talisman of Ascension.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Talisman of Ascension.json.effects_structured[1].id"
+    },
+    {
+      "file": "Tear of the Goddess.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Tear of the Goddess.json.effects_structured[0].id"
+    },
+    {
+      "file": "Tear of the Goddess.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Tear of the Goddess.json.effects_structured[1].id"
+    },
+    {
+      "file": "Tear of the Goddess.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Tear of the Goddess.json.effects_structured[2].id"
+    },
+    {
+      "file": "Terminus.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Terminus.json.effects_structured[0].id"
+    },
+    {
+      "file": "Terminus.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Terminus.json.effects_structured[1].id"
+    },
+    {
+      "file": "Terminus.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Terminus.json.effects_structured[2].id"
+    },
+    {
+      "file": "The Collector.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "The Collector.json.effects_structured[0].id"
+    },
+    {
+      "file": "The Collector.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "The Collector.json.effects_structured[1].id"
+    },
+    {
+      "file": "The Golden Spatula.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "The Golden Spatula.json.effects_structured[0].id"
+    },
+    {
+      "file": "The Golden Spatula.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "The Golden Spatula.json.effects_structured[1].id"
+    },
+    {
+      "file": "Thornmail.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Thornmail.json.effects_structured[0].id"
+    },
+    {
+      "file": "Thornmail.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Thornmail.json.effects_structured[1].id"
+    },
+    {
+      "file": "Tiamat.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Tiamat.json.effects_structured[0].id"
+    },
+    {
+      "file": "Tiamat.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Tiamat.json.effects_structured[1].id"
+    },
+    {
+      "file": "Titanic Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Titanic Hydra.json.effects_structured[0].id"
+    },
+    {
+      "file": "Titanic Hydra.json",
+      "message": "missing or empty effect id (recommended for simulation)",
+      "path": "Titanic Hydra.json.effects_structured[1].id"
+    },
+    {
+      "file": "Umbral Glaive.json",
+      "message": "damage effect missing value or scaling_terms",
+      "path": "Umbral Glaive.json.effects_structured[2]"
+    },
+    {
+      "file": "Zekes Convergence.json",
+      "message": "damage effect missing value or scaling_terms",
+      "path": "Zekes Convergence.json.effects_structured[1]"
+    }
+  ]
+}

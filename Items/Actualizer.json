@@ -26,6 +26,7 @@
   ],
   "effects_structured": [
     {
+      "id": "actualizer_empowered_amp",
       "raw": "Activate to empower mana for 8 seconds; abilities cost 100% more mana; gain increased ability damage/healing/shielding; basic ability cooldowns progress faster.",
       "effect_type": "buff",
       "stat": "ability_damage_heal_shield_amp",
@@ -47,6 +48,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "actualizer_empowered_mana_cost",
       "raw": "Abilities cost 100% more mana while empowered.",
       "effect_type": "resource",
       "stat": "mana_cost_multiplier",
@@ -61,6 +63,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "actualizer_empowered_cooldown_rate",
       "raw": "Basic ability cooldowns progress 30% faster while empowered.",
       "effect_type": "cooldown",
       "stat": "basic_ability_cooldown_rate",

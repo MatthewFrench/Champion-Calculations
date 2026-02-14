@@ -10,7 +10,7 @@
       "flat": 600.0
     }
   },
-  "passives": null,
+  "passives": [],
   "active": [
     {
       "unique": true,

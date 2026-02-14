@@ -55,7 +55,7 @@
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "while_in_terrain",
-      "applies_to": null,
+      "applies_to": "self",
       "conditions": [
         "while_condition"
       ],

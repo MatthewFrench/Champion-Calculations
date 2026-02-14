@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "axiom_arc_flux_ultimate_refund",
       "raw": "Takedown within 3s of damaging refunds 15% + 0.15% per lethality of ultimate cooldown.",
       "effect_type": "cooldown",
       "stat": "ultimate_cooldown_refund_percent",

@@ -36,6 +36,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "black_cleaver_carve_armor_reduction",
       "raw": "Physical damage applies armor reduction stacks (6% per stack) up to 30% for 6s.",
       "effect_type": "debuff",
       "stat": "armor",
@@ -50,6 +51,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "black_cleaver_fervor_move_speed",
       "raw": "Physical damage grants 20 bonus movement speed for 2s.",
       "effect_type": "buff",
       "stat": "movement_speed",

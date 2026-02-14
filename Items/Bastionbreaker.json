@@ -32,9 +32,23 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bastionbreaker_shaped_charge",
       "raw": "Next ability damage to champion/epic monster deals bonus true damage. Cooldown 45s.",
       "effect_type": "damage",
       "stat": "true_damage",
+      "value_by_attack_type": {
+        "melee": 30,
+        "ranged": 15
+      },
+      "scaling_terms": [
+        {
+          "stat": "lethality",
+          "ratio_by_attack_type": {
+            "melee": 1.5,
+            "ranged": 0.75
+          }
+        }
+      ],
       "cooldown_seconds": 45,
       "trigger": "on_ability",
       "applies_to": "enemy_champion",
@@ -44,9 +58,23 @@
       "parse_confidence": 0.75
     },
     {
+      "id": "bastionbreaker_sabotage",
       "raw": "Takedown within 3s grants Sabotage for 90s; next basic attack vs turret/epic monster deals bonus true damage over 3s.",
       "effect_type": "damage",
       "stat": "true_damage",
+      "value_by_attack_type": {
+        "melee": 300,
+        "ranged": 240
+      },
+      "scaling_terms": [
+        {
+          "stat": "lethality",
+          "ratio_by_attack_type": {
+            "melee": 25,
+            "ranged": 20
+          }
+        }
+      ],
       "duration_seconds": 3,
       "trigger": "on_kill",
       "applies_to": "structure",

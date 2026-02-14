@@ -5,7 +5,7 @@
   "rank": [
     "TURRET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [
     {
       "unique": true,
@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "base_turret_reinforced_damage_reduction",
       "raw": "Turrets gain 80% damage reduction when no enemy minions/herald in range.",
       "effect_type": "damage_reduction",
       "stat": "damage_taken_multiplier",
@@ -39,6 +40,7 @@
       "parse_confidence": 0.8
     },
     {
+      "id": "base_turret_melee_weakness",
       "raw": "Turrets take 20% increased damage from melee champions.",
       "effect_type": "damage_amp_taken",
       "stat": "damage_taken_multiplier",
@@ -52,6 +54,7 @@
       "parse_confidence": 0.8
     },
     {
+      "id": "base_turret_regeneration",
       "raw": "Base turrets regenerate health up to current segment.",
       "effect_type": "healing",
       "stat": "health_regen",
@@ -63,7 +66,7 @@
       "parse_confidence": 0.7
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3042_netherrift_armor.png",
   "simpleDescription": null,
   "nicknames": [],

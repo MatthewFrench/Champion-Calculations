@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "anathemas_vengeance_damage_reduction",
       "raw": "Take 30% reduced damage from your Nemesis while within 700 units.",
       "effect_type": "damage_reduction",
       "stat": "damage_taken_multiplier",
@@ -44,6 +45,7 @@
       "parse_confidence": 0.9
     },
     {
+      "id": "anathemas_vengeance_tenacity_reduction",
       "raw": "Reduce Nemesis tenacity by 20% while within 700 units.",
       "effect_type": "debuff",
       "stat": "tenacity",
@@ -59,6 +61,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "anathemas_vow_nemesis_mark",
       "raw": "Designate target enemy champion as Nemesis (cannot recast for 15s while in combat).",
       "effect_type": "utility",
       "stat": "nemesis_mark",

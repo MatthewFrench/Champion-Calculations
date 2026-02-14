@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "ardent_censer_sanctify_attack_speed",
       "raw": "Healing/shielding allies grants bonus attack speed and on-hit magic damage for 6s (self and ally).",
       "effect_type": "buff",
       "stat": "attack_speed",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "ardent_censer_sanctify_on_hit",
       "raw": "On-hit bonus magic damage during Sanctify.",
       "effect_type": "damage",
       "stat": "magic_damage",

@@ -23,6 +23,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bamis_cinder_immolate_aura",
       "raw": "Immolate: deal 15 magic damage per second for 3s to nearby enemies (325 units), increased vs minions/monsters.",
       "effect_type": "damage",
       "stat": "magic_damage",

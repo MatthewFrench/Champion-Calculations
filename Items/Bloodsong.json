@@ -40,6 +40,7 @@
   ],
   "effects_structured": [
     {
+      "id": "bloodsong_spellblade_damage",
       "raw": "After using an ability, your next basic attack within 10 seconds deals {{as 100% '''base''' AD}} {{as '''bonus''' physical damage}} [[on-hit]]",
       "effect_type": "damage",
       "stat": "physical_damage",
@@ -72,6 +73,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "bloodsong_expose_weakness",
       "raw": "If the target is a champion, inflict them with ''Expose Weakness'' for 4 seconds, causing them to take {{rd 8% 5%}} increased damage from all sources ({{fd 1.5}} second cooldown, starts after using the empowered attack).",
       "effect_type": "damage_taken_increase",
       "stat": "damage_taken",
@@ -102,6 +104,7 @@
       "parse_confidence": 0.65
     },
     {
+      "id": "bloodsong_minion_gold_penalty",
       "raw": "Receives diminishing gold from excessive minion kills.",
       "effect_type": "resource_modifier",
       "stat": "gold",
@@ -120,6 +123,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "bloodsong_ward_place",
       "raw": "Consumes a charge to place a {{tip Stealth Ward}} at the target location, which grants {{tip sight}} of the surrounding area.",
       "effect_type": "place_ward",
       "ward_type": "stealth_ward",

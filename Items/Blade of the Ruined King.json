@@ -32,9 +32,15 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bork_mists_edge_on_hit",
       "raw": "On-hit bonus physical damage equal to current health percent (melee/ranged), max vs minions/monsters.",
       "effect_type": "damage",
       "stat": "physical_damage",
+      "value_by_attack_type": {
+        "melee": 9,
+        "ranged": 6
+      },
+      "max_vs_minions_monsters": 100,
       "unit": "percent_current_health",
       "trigger": "on_hit",
       "applies_to": "enemy",
@@ -45,6 +51,7 @@
       "parse_confidence": 0.8
     },
     {
+      "id": "bork_clawing_shadows_slow",
       "raw": "Third stack slows target by 30% for 1s (stacks up to 3 for 6s).",
       "effect_type": "debuff",
       "stat": "slow",

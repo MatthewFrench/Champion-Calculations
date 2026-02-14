@@ -34,6 +34,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "bandlepipes_fanfare_self_movespeed",
       "raw": "Slow/immobilize enemy grants bonus MS and nearby allies bonus attack speed for 8s.",
       "effect_type": "buff",
       "stat": "movement_speed",
@@ -45,6 +46,7 @@
       "parse_confidence": 0.8
     },
     {
+      "id": "bandlepipes_fanfare_ally_attack_speed",
       "raw": "Nearby allies gain bonus attack speed while empowered.",
       "effect_type": "buff",
       "stat": "attack_speed",

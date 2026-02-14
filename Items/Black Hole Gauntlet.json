@@ -29,6 +29,7 @@
   ],
   "effects_structured": [
     {
+      "id": "black_hole_gauntlet_accretion_scaling",
       "raw": "Accretion stacks from on-hit/immobilize; gain base health regen and size scaling per stacks.",
       "effect_type": "buff",
       "stat": "health_regen",
@@ -40,9 +41,27 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "black_hole_gauntlet_dark_star",
       "raw": "Active black hole: delay 0.5s, lasts scaling with bonus health; deals magic damage per second, slows, pulls inward.",
       "effect_type": "damage",
       "stat": "magic_damage",
+      "value_range": [
+        30,
+        100
+      ],
+      "scaling_terms": [
+        {
+          "stat": "health_max",
+          "ratio": 0.05
+        }
+      ],
+      "duration_seconds": 2,
+      "duration_scaling_terms": [
+        {
+          "stat": "health_bonus",
+          "ratio": 0.001
+        }
+      ],
       "interval_seconds": 1,
       "trigger": "active",
       "applies_to": "enemy",

@@ -29,6 +29,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "armored_advance_plating_reduction",
       "raw": "Reduce incoming basic damage by 10% (excluding turrets).",
       "effect_type": "damage_reduction",
       "stat": "basic_damage_taken_multiplier",
@@ -42,6 +43,7 @@
       "parse_confidence": 0.85
     },
     {
+      "id": "armored_advance_noxian_endurance_shield",
       "raw": "Taking physical damage from champions grants a shield (100-200 + 8% bonus health) for 5s. Cooldown 15s.",
       "effect_type": "shield",
       "stat": "shield",

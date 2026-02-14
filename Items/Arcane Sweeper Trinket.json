@@ -5,7 +5,7 @@
   "rank": [
     "TRINKET"
   ],
-  "stats": null,
+  "stats": {},
   "passives": [],
   "active": [
     {
@@ -15,6 +15,7 @@
   ],
   "effects_structured": [
     {
+      "id": "arcane_sweeper_reveal",
       "raw": "Reveal area (375 radius) for 5s and traps for 3s. Range 800.",
       "effect_type": "utility",
       "stat": "vision",
@@ -29,7 +30,7 @@
       "parse_confidence": 0.85
     }
   ],
-  "shop": null,
+  "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3348_arcanesweeper.png",
   "simpleDescription": "Activate to reveal a nearby area of the map",
   "nicknames": [],

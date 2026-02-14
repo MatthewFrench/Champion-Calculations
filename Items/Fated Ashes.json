@@ -53,7 +53,7 @@
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": 0.5,
-      "trigger": null,
+      "trigger": "on_ability_damage",
       "applies_to": "monster",
       "conditions": [
         "monster"

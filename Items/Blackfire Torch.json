@@ -31,9 +31,18 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "blackfire_torch_baleful_blaze",
       "raw": "Ability damage burns enemies for 3s, dealing magic damage every 0.5s (scales with AP).",
       "effect_type": "damage",
       "stat": "magic_damage",
+      "value": 10,
+      "unit": "flat_per_tick",
+      "scaling_terms": [
+        {
+          "stat": "ability_power",
+          "ratio": 0.01
+        }
+      ],
       "duration_seconds": 3,
       "interval_seconds": 0.5,
       "trigger": "on_ability",
@@ -44,6 +53,7 @@
       "parse_confidence": 0.8
     },
     {
+      "id": "blackfire_torch_blackfire_ap",
       "raw": "Gain 4% ability power per afflicted target.",
       "effect_type": "buff",
       "stat": "ability_power",
