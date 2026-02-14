@@ -14,6 +14,7 @@
   ],
   "effects_structured": [
     {
+      "id": "consume_charge_summon_sweeper_drone",
       "raw": "Consume one charge to summon a Sweeper Drone for 8 seconds that detects nearby invisible enemies/wards.",
       "effect_type": "summon_warding_entity",
       "stat": "sweeper_drone",

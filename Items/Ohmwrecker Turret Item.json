@@ -25,6 +25,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "dodge_piercing_turret_attacks_undodgeable",
       "raw": "Turret attacks cannot be dodged.",
       "effect_type": "attack_property",
       "stat": "turret_attack_undodgeable",
@@ -45,6 +46,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "warming_up_generate_stacks_on_turret_hit_champion",
       "raw": "Turrets gain a stack for 5 seconds each time they strike a champion.",
       "effect_type": "apply_stack",
       "stack_id": "warming_up",
@@ -72,6 +74,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "warming_up_turret_damage_multiplier_per_stack",
       "raw": "Each stack increases turret damage by 50%, up to 150%.",
       "effect_type": "damage_multiplier",
       "stat": "damage",

@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "grievous_wounds_on_physical_damage_to_champions",
       "raw": "Physical damage to enemy champions applies Grievous Wounds for 3 seconds.",
       "effect_type": "apply_status",
       "stat": "grievous_wounds",

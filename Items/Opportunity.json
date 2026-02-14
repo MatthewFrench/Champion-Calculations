@@ -33,6 +33,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "preparation_out_of_combat_lethality_bonus",
       "raw": "After 8 seconds out of combat with enemy champions, gain lethality. Bonus persists 3 seconds after dealing damage to a champion.",
       "effect_type": "stat_modifier",
       "stat": "lethality",
@@ -65,6 +66,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "extraction_bonus_movement_speed_on_recent_damage_takedown",
       "raw": "Takedown on a champion within 3 seconds of damaging them grants 200 bonus movement speed that decays over 1.5 seconds.",
       "effect_type": "stat_modifier",
       "stat": "bonus_movement_speed",

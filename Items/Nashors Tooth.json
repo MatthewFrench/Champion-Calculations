@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "icathian_bite_on_hit_bonus_magic_damage",
       "raw": "Basic attacks deal 15 (+15% AP) bonus magic damage on-hit.",
       "effect_type": "damage",
       "stat": "magic_damage",

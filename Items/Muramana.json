@@ -31,6 +31,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "awe_bonus_attack_damage_from_max_mana",
       "raw": "Gain bonus attack damage equal to 2% of maximum mana.",
       "effect_type": "stat_modifier",
       "stat": "bonus_attack_damage",
@@ -57,6 +58,7 @@
       "parse_confidence": 0.7
     },
     {
+      "id": "shock_on_hit_bonus_physical_damage_from_max_mana_vs_champions",
       "raw": "On-hit basic attacks against champions deal bonus physical damage equal to 1.2% of maximum mana (per-target cooldown).",
       "effect_type": "damage",
       "stat": "physical_damage",

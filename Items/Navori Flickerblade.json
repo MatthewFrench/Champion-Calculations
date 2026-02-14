@@ -26,6 +26,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "transcendence_reduce_remaining_basic_ability_cooldowns_on_attack",
       "raw": "Basic attacks reduce the remaining cooldowns of your basic abilities by 15%.",
       "effect_type": "cooldown_reduction_remaining",
       "stat": "cooldown",

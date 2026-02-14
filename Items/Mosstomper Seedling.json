@@ -21,6 +21,7 @@
   "active": [],
   "effects_structured": [
     {
+      "id": "jungle_companions_summon_mosstomper_seedling",
       "raw": "Summon a Mosstomper Seedling companion to assist you versus monsters.",
       "effect_type": "summon_companion",
       "stat": "companion",
@@ -43,6 +44,7 @@
       "parse_confidence": 0.6
     },
     {
+      "id": "mosstompers_courage_companion_evolution_upgrades_smite",
       "raw": "Companion evolves by consuming treats and upgrades Smite.",
       "effect_type": "upgrade_summoner_spell",
       "stat": "summoner_spell",
@@ -62,6 +64,7 @@
       "parse_confidence": 0.55
     },
     {
+      "id": "mosstompers_courage_grant_buff_on_final_evolution_and_consume_item",
       "raw": "At final evolution, the item is consumed and grants Mosstomper's Courage.",
       "effect_type": "grant_buff",
       "stat": "buff",
