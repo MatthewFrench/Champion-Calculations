@@ -25,6 +25,7 @@ struct Stats {
     attack_speed_percent: f64,
     ability_haste: f64,
     move_speed_flat: f64,
+    move_speed_percent: f64,
     crit_chance_percent: f64,
 }
 
@@ -38,6 +39,7 @@ impl Stats {
         self.attack_speed_percent += other.attack_speed_percent;
         self.ability_haste += other.ability_haste;
         self.move_speed_flat += other.move_speed_flat;
+        self.move_speed_percent += other.move_speed_percent;
         self.crit_chance_percent += other.crit_chance_percent;
     }
 
@@ -51,6 +53,7 @@ impl Stats {
             "attack_speed_percent" => self.attack_speed_percent,
             "ability_haste" => self.ability_haste,
             "move_speed_flat" => self.move_speed_flat,
+            "move_speed_percent" => self.move_speed_percent,
             "crit_chance_percent" => self.crit_chance_percent,
             _ => 0.0,
         }
@@ -137,6 +140,28 @@ struct BuildSearchConfig {
     max_items: usize,
     random_samples: usize,
     seed: u64,
+}
+
+#[derive(Debug, Clone, Default)]
+struct MasterySelection {
+    name: String,
+    rank: usize,
+}
+
+#[derive(Debug, Clone, Default)]
+struct LoadoutSelection {
+    rune_ids: Vec<i64>,
+    rune_names: Vec<String>,
+    shard_stats: Vec<String>,
+    masteries: Vec<MasterySelection>,
+}
+
+#[derive(Debug, Clone, Default)]
+struct ResolvedLoadout {
+    selection_labels: Vec<String>,
+    bonus_stats: Stats,
+    applied_notes: Vec<String>,
+    skipped_notes: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -242,7 +267,8 @@ impl VladCombatSimulation {
     fn new(
         vlad_base: ChampionBase,
         vlad_build_items: &[Item],
-        enemies: &[(EnemyConfig, Vec<Item>)],
+        vlad_bonus_stats: &Stats,
+        enemies: &[(EnemyConfig, Vec<Item>, Stats)],
         sim: SimulationConfig,
         urf: UrfBuffs,
     ) -> Self {
@@ -250,6 +276,7 @@ impl VladCombatSimulation {
         for item in vlad_build_items {
             vlad_item_stats.add(&item.stats);
         }
+        vlad_item_stats.add(vlad_bonus_stats);
         apply_item_assumptions(&mut vlad_item_stats, &vlad_base, vlad_build_items, &sim);
         let vlad_stats = compute_vlad_stats(&vlad_base, &vlad_item_stats);
 
@@ -320,11 +347,12 @@ impl VladCombatSimulation {
 
         runner.pool_duration = runner.sim.vlad_pool_untargetable_seconds;
 
-        for (idx, (enemy, build)) in enemies.iter().cloned().enumerate() {
+        for (idx, (enemy, build, enemy_bonus)) in enemies.iter().cloned().enumerate() {
             let mut enemy_stats = Stats::default();
             for item in &build {
                 enemy_stats.add(&item.stats);
             }
+            enemy_stats.add(&enemy_bonus);
             apply_item_assumptions(&mut enemy_stats, &enemy.base, &build, &runner.sim);
             let (_physical_dps, magic_dps) = compute_enemy_dps(&enemy, &enemy_stats, &runner.urf);
             let attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage;
@@ -628,6 +656,345 @@ fn load_json(path: &Path) -> Result<Value> {
     serde_json::from_str(&text).with_context(|| format!("Failed parsing {}", path.display()))
 }
 
+fn to_norm_key(input: &str) -> String {
+    input
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric())
+        .flat_map(|c| c.to_lowercase())
+        .collect()
+}
+
+fn value_from_effect(effect: &Value, rank: usize, level: usize) -> Option<f64> {
+    if let Some(v) = effect
+        .get("formula")
+        .and_then(|f| f.get("value"))
+        .and_then(Value::as_f64)
+    {
+        return Some(v);
+    }
+    if let Some(v) = effect.get("value").and_then(Value::as_f64) {
+        return Some(v);
+    }
+    if let Some(values) = effect.get("values").and_then(Value::as_array) {
+        let idx = rank.saturating_sub(1).min(values.len().saturating_sub(1));
+        if let Some(v) = values.get(idx).and_then(Value::as_f64) {
+            return Some(v);
+        }
+    }
+    if let Some(vr) = effect.get("value_range").and_then(Value::as_object) {
+        if let (Some(min), Some(max)) = (
+            vr.get("min").and_then(Value::as_f64),
+            vr.get("max").and_then(Value::as_f64),
+        ) {
+            let t = ((level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+            return Some(min + (max - min) * t);
+        }
+    }
+    None
+}
+
+fn apply_stat_bonus(
+    stats: &mut Stats,
+    stat: &str,
+    value: f64,
+    is_percent_unit: bool,
+    for_vlad: bool,
+) -> bool {
+    match stat {
+        "health" => {
+            stats.health += value;
+            true
+        }
+        "armor" => {
+            stats.armor += value;
+            true
+        }
+        "magic_resist" | "mr" => {
+            stats.magic_resist += value;
+            true
+        }
+        "attack_damage" => {
+            stats.attack_damage += value;
+            true
+        }
+        "ability_power" => {
+            stats.ability_power += value;
+            true
+        }
+        "ability_haste" => {
+            stats.ability_haste += value;
+            true
+        }
+        "attack_speed" => {
+            if is_percent_unit {
+                stats.attack_speed_percent += value;
+            } else {
+                stats.attack_speed_percent += value;
+            }
+            true
+        }
+        "movement_speed" => {
+            if is_percent_unit {
+                stats.move_speed_percent += value;
+            } else {
+                stats.move_speed_flat += value;
+            }
+            true
+        }
+        "adaptive" => {
+            if for_vlad {
+                stats.ability_power += value;
+                true
+            } else {
+                false
+            }
+        }
+        "cooldown" => {
+            // Approximate CDR% to AH for deterministic use.
+            let pct = if is_percent_unit {
+                value / 100.0
+            } else {
+                value
+            };
+            let pct = pct.clamp(0.0, 0.95);
+            let ah = 100.0 * pct / (1.0 - pct);
+            stats.ability_haste += ah;
+            true
+        }
+        _ => false,
+    }
+}
+
+fn apply_structured_effect(
+    effect: &Value,
+    rank: usize,
+    level: usize,
+    for_vlad: bool,
+    stats: &mut Stats,
+) -> Result<bool> {
+    let effect_type = effect
+        .get("effect_type")
+        .and_then(Value::as_str)
+        .unwrap_or("");
+    if effect_type != "stat_modifier" && effect_type != "cooldown" {
+        return Ok(false);
+    }
+    let trigger = effect
+        .get("trigger")
+        .and_then(Value::as_str)
+        .unwrap_or("passive");
+    let unconditional_trigger = matches!(trigger, "" | "passive" | "on_equip" | "always");
+    if !unconditional_trigger {
+        return Ok(false);
+    }
+    let stat = effect.get("stat").and_then(Value::as_str).unwrap_or("");
+    if stat.is_empty() {
+        return Ok(false);
+    }
+    let Some(value) = value_from_effect(effect, rank, level) else {
+        return Ok(false);
+    };
+    let unit = effect.get("unit").and_then(Value::as_str).unwrap_or("");
+    let is_percent_unit = unit.contains("percent") || unit == "ratio";
+    Ok(apply_stat_bonus(
+        stats,
+        stat,
+        value,
+        is_percent_unit,
+        for_vlad,
+    ))
+}
+
+fn resolve_loadout(
+    selection: &LoadoutSelection,
+    level: usize,
+    for_vlad: bool,
+) -> Result<ResolvedLoadout> {
+    let runes_data = load_json(&PathBuf::from("Masteries/RunesReforged.json"))?;
+    let masteries_data = load_json(&PathBuf::from("Masteries/Season2016.json"))?;
+
+    let mut runes_by_id: HashMap<i64, Value> = HashMap::new();
+    let mut runes_by_name: HashMap<String, Value> = HashMap::new();
+    if let Some(paths) = runes_data.get("paths").and_then(Value::as_array) {
+        for path in paths {
+            if let Some(slots) = path.get("slots").and_then(Value::as_array) {
+                for slot in slots {
+                    if let Some(runes) = slot.get("runes").and_then(Value::as_array) {
+                        for rune in runes {
+                            if let Some(id) = rune.get("id").and_then(Value::as_i64) {
+                                runes_by_id.insert(id, rune.clone());
+                            }
+                            if let Some(name) = rune.get("name").and_then(Value::as_str) {
+                                runes_by_name.insert(to_norm_key(name), rune.clone());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    let mastery_by_name = masteries_data
+        .get("masteries")
+        .and_then(Value::as_array)
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|m| {
+                    m.get("display_name")
+                        .and_then(Value::as_str)
+                        .map(|name| (to_norm_key(name), m.clone()))
+                })
+                .collect::<HashMap<_, _>>()
+        })
+        .unwrap_or_default();
+
+    let mut out = ResolvedLoadout::default();
+
+    for id in &selection.rune_ids {
+        if let Some(rune) = runes_by_id.get(id) {
+            let name = rune
+                .get("name")
+                .and_then(Value::as_str)
+                .unwrap_or("unknown rune");
+            out.selection_labels.push(format!("Rune: {}", name));
+            for effect in rune
+                .get("effects_structured")
+                .and_then(Value::as_array)
+                .cloned()
+                .unwrap_or_default()
+            {
+                if apply_structured_effect(&effect, 1, level, for_vlad, &mut out.bonus_stats)? {
+                    out.applied_notes
+                        .push(format!("Applied rune stat effect from {}.", name));
+                }
+            }
+        } else {
+            out.skipped_notes
+                .push(format!("Rune id {} not found in RunesReforged.", id));
+        }
+    }
+
+    for name in &selection.rune_names {
+        let key = to_norm_key(name);
+        if let Some(rune) = runes_by_name.get(&key) {
+            let real_name = rune.get("name").and_then(Value::as_str).unwrap_or(name);
+            out.selection_labels.push(format!("Rune: {}", real_name));
+            for effect in rune
+                .get("effects_structured")
+                .and_then(Value::as_array)
+                .cloned()
+                .unwrap_or_default()
+            {
+                if apply_structured_effect(&effect, 1, level, for_vlad, &mut out.bonus_stats)? {
+                    out.applied_notes
+                        .push(format!("Applied rune stat effect from {}.", real_name));
+                }
+            }
+        } else {
+            out.skipped_notes
+                .push(format!("Rune '{}' not found in RunesReforged.", name));
+        }
+    }
+
+    if let Some(shards) = runes_data.get("stat_shards").and_then(Value::as_array) {
+        for (idx, shard_key) in selection.shard_stats.iter().enumerate() {
+            let Some(slot) = shards.get(idx) else {
+                out.skipped_notes.push(format!(
+                    "Shard '{}' ignored: slot {} does not exist.",
+                    shard_key,
+                    idx + 1
+                ));
+                continue;
+            };
+            let key = to_norm_key(shard_key);
+            let mut applied = false;
+            for option in slot
+                .get("options")
+                .and_then(Value::as_array)
+                .cloned()
+                .unwrap_or_default()
+            {
+                let stat = option.get("stat").and_then(Value::as_str).unwrap_or("");
+                if to_norm_key(stat) != key {
+                    continue;
+                }
+                let mut val = option
+                    .get("numbers_extracted")
+                    .and_then(Value::as_array)
+                    .and_then(|a| a.first())
+                    .and_then(Value::as_f64)
+                    .unwrap_or(0.0);
+                if stat == "health" {
+                    // health shard scales with level using extracted [min, max]
+                    if let Some(nums) = option.get("numbers_extracted").and_then(Value::as_array) {
+                        if nums.len() >= 2 {
+                            if let (Some(min), Some(max)) = (nums[0].as_f64(), nums[1].as_f64()) {
+                                let t = ((level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+                                val = min + (max - min) * t;
+                            }
+                        }
+                    }
+                }
+                let is_percent = option
+                    .get("unit_hint")
+                    .and_then(Value::as_str)
+                    .unwrap_or("")
+                    .contains("percent");
+                if apply_stat_bonus(&mut out.bonus_stats, stat, val, is_percent, for_vlad) {
+                    out.selection_labels
+                        .push(format!("Shard {}: {}", idx + 1, shard_key));
+                    out.applied_notes.push(format!(
+                        "Applied shard '{}' in slot {}.",
+                        shard_key,
+                        idx + 1
+                    ));
+                    applied = true;
+                    break;
+                }
+            }
+            if !applied {
+                out.skipped_notes.push(format!(
+                    "Shard '{}' in slot {} not applicable in current stat model.",
+                    shard_key,
+                    idx + 1
+                ));
+            }
+        }
+    }
+
+    for mastery in &selection.masteries {
+        let key = to_norm_key(&mastery.name);
+        let Some(m) = mastery_by_name.get(&key) else {
+            out.skipped_notes.push(format!(
+                "Mastery '{}' not found in Season2016.",
+                mastery.name
+            ));
+            continue;
+        };
+        let max_ranks = m.get("ranks").and_then(Value::as_u64).unwrap_or(1) as usize;
+        let rank = mastery.rank.clamp(1, max_ranks);
+        let name = m
+            .get("display_name")
+            .and_then(Value::as_str)
+            .unwrap_or(&mastery.name);
+        out.selection_labels
+            .push(format!("Mastery: {} ({}/{})", name, rank, max_ranks));
+        for effect in m
+            .get("effects_structured")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default()
+        {
+            if apply_structured_effect(&effect, rank, level, for_vlad, &mut out.bonus_stats)? {
+                out.applied_notes
+                    .push(format!("Applied mastery stat effect from {}.", name));
+            }
+        }
+    }
+
+    Ok(out)
+}
+
 fn as_f64(obj: &Value, key: &str) -> Result<f64> {
     obj.get(key)
         .and_then(Value::as_f64)
@@ -790,6 +1157,57 @@ fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .unwrap_or(200) as usize,
         seed: data.get("seed").and_then(Value::as_u64).unwrap_or(1337),
     })
+}
+
+fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection {
+    let mut out = LoadoutSelection::default();
+    let Some(obj) = data.and_then(Value::as_object) else {
+        return out;
+    };
+
+    if let Some(runes_obj) = obj.get("runes_reforged").and_then(Value::as_object) {
+        if let Some(ids) = runes_obj.get("rune_ids").and_then(Value::as_array) {
+            out.rune_ids = ids.iter().filter_map(Value::as_i64).collect();
+        }
+        if let Some(names) = runes_obj.get("rune_names").and_then(Value::as_array) {
+            out.rune_names = names
+                .iter()
+                .filter_map(Value::as_str)
+                .map(ToOwned::to_owned)
+                .collect();
+        }
+        if let Some(shards) = runes_obj.get("shard_stats").and_then(Value::as_array) {
+            out.shard_stats = shards
+                .iter()
+                .filter_map(Value::as_str)
+                .map(ToOwned::to_owned)
+                .collect();
+        }
+    }
+
+    if let Some(masteries) = obj.get("season2016_masteries").and_then(Value::as_array) {
+        for entry in masteries {
+            if let Some(name) = entry.as_str() {
+                out.masteries.push(MasterySelection {
+                    name: name.to_string(),
+                    rank: 1,
+                });
+                continue;
+            }
+            let Some(mo) = entry.as_object() else {
+                continue;
+            };
+            let Some(name) = mo.get("name").and_then(Value::as_str) else {
+                continue;
+            };
+            let rank = mo.get("rank").and_then(Value::as_u64).unwrap_or(1) as usize;
+            out.masteries.push(MasterySelection {
+                name: name.to_string(),
+                rank,
+            });
+        }
+    }
+    out
 }
 
 fn normalize_name(input: &str) -> String {
@@ -1134,9 +1552,11 @@ fn apply_item_assumptions(
 fn compute_effective_item_stats_for_build(
     base: &ChampionBase,
     build_items: &[Item],
+    bonus_stats: &Stats,
     sim: &SimulationConfig,
 ) -> Stats {
     let mut stats = build_item_stats(build_items);
+    stats.add(bonus_stats);
     apply_item_assumptions(&mut stats, base, build_items, sim);
     stats
 }
@@ -1194,6 +1614,7 @@ fn compute_vlad_stats(base: &ChampionBase, item_stats: &Stats) -> Stats {
         attack_speed_percent: item_stats.attack_speed_percent,
         ability_haste: item_stats.ability_haste,
         move_speed_flat: item_stats.move_speed_flat,
+        move_speed_percent: item_stats.move_speed_percent,
         crit_chance_percent: item_stats.crit_chance_percent,
     };
     stats.health += base.base_health;
@@ -1222,13 +1643,15 @@ fn compute_enemy_dps(enemy: &EnemyConfig, item_stats: &Stats, urf: &UrfBuffs) ->
 fn simulate_vlad_survival(
     vlad_base: &ChampionBase,
     vlad_build_items: &[Item],
-    enemies: &[(EnemyConfig, Vec<Item>)],
+    vlad_bonus_stats: &Stats,
+    enemies: &[(EnemyConfig, Vec<Item>, Stats)],
     sim: &SimulationConfig,
     urf: &UrfBuffs,
 ) -> f64 {
     let mut runner = VladCombatSimulation::new(
         vlad_base.clone(),
         vlad_build_items,
+        vlad_bonus_stats,
         enemies,
         sim.clone(),
         urf.clone(),
@@ -1396,11 +1819,13 @@ fn write_vlad_report(
     vlad_base_level: &ChampionBase,
     vlad_end_stats: &Stats,
     stack_notes: &[String],
+    vlad_loadout: &ResolvedLoadout,
+    enemy_loadout: &ResolvedLoadout,
     baseline_build: &[Item],
     baseline_time: f64,
     best_build: &[Item],
     best_time: f64,
-    enemy_builds: &[(EnemyConfig, Vec<Item>)],
+    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     diverse_top_builds: &[(Vec<Item>, f64)],
 ) -> Result<()> {
     if let Some(parent) = report_path.parent() {
@@ -1444,6 +1869,44 @@ fn write_vlad_report(
         vlad_base_level.base_move_speed
     ));
 
+    content.push_str("## Selected Runes/Masteries\n");
+    if vlad_loadout.selection_labels.is_empty() {
+        content.push_str("- Vladimir: none selected.\n");
+    } else {
+        content.push_str("- Vladimir:\n");
+        for s in &vlad_loadout.selection_labels {
+            content.push_str(&format!("  - {}\n", s));
+        }
+    }
+    if enemy_loadout.selection_labels.is_empty() {
+        content.push_str("- Enemies: none selected.\n\n");
+    } else {
+        content.push_str("- Enemies (applied to all):\n");
+        for s in &enemy_loadout.selection_labels {
+            content.push_str(&format!("  - {}\n", s));
+        }
+        content.push('\n');
+    }
+    if !vlad_loadout.applied_notes.is_empty() || !enemy_loadout.applied_notes.is_empty() {
+        content.push_str("- Applied deterministic loadout effects:\n");
+        for note in &vlad_loadout.applied_notes {
+            content.push_str(&format!("  - Vladimir: {}\n", note));
+        }
+        for note in &enemy_loadout.applied_notes {
+            content.push_str(&format!("  - Enemies: {}\n", note));
+        }
+    }
+    if !vlad_loadout.skipped_notes.is_empty() || !enemy_loadout.skipped_notes.is_empty() {
+        content.push_str("- Skipped unsupported/non-deterministic effects:\n");
+        for note in &vlad_loadout.skipped_notes {
+            content.push_str(&format!("  - Vladimir: {}\n", note));
+        }
+        for note in &enemy_loadout.skipped_notes {
+            content.push_str(&format!("  - Enemies: {}\n", note));
+        }
+    }
+    content.push('\n');
+
     content.push_str("## Baseline Build\n");
     content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
 
@@ -1452,14 +1915,15 @@ fn write_vlad_report(
 
     content.push_str("## Vladimir End Stats (Best Build)\n");
     content.push_str(&format!(
-        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AP: {:.1}, AD: {:.1}, Ability Haste: {:.1}, Move Speed (flat bonus): {:.1}\n\n",
+        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AP: {:.1}, AD: {:.1}, Ability Haste: {:.1}, Move Speed (flat bonus): {:.1}, Move Speed (% bonus): {:.1}\n\n",
         vlad_end_stats.health,
         vlad_end_stats.armor,
         vlad_end_stats.magic_resist,
         vlad_end_stats.ability_power,
         vlad_end_stats.attack_damage,
         vlad_end_stats.ability_haste,
-        vlad_end_stats.move_speed_flat
+        vlad_end_stats.move_speed_flat,
+        vlad_end_stats.move_speed_percent
     ));
 
     content.push_str("## Stack Assumptions\n");
@@ -1475,7 +1939,7 @@ fn write_vlad_report(
     }
 
     content.push_str("## Enemy Builds (DPS-Optimized)\n");
-    for (enemy, build) in enemy_builds {
+    for (enemy, build, _) in enemy_builds {
         content.push_str(&format!("- {}: {}\n", enemy.name, item_names(build)));
     }
     content.push('\n');
@@ -1532,10 +1996,8 @@ fn write_vlad_report(
             top_freq.join(", ")
         ));
         content.push_str("- Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.\n");
-        content.push_str("- Rune/mastery effects are not yet modeled in end stats.\n");
     } else {
         content.push_str("- Broaden thresholds (`--max-relative-gap-percent`) or lower diversity constraint (`--min-item-diff`) to surface more alternatives.\n");
-        content.push_str("- Rune/mastery effects are not yet modeled in end stats.\n");
     }
 
     fs::write(report_path, content)
@@ -1787,6 +2249,10 @@ fn run_vlad_scenario(
             .get("search")
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
+    let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
+    let enemy_loadout_selection = parse_loadout_selection(scenario.get("enemy_loadout"));
+    let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim.champion_level, true)?;
+    let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim.champion_level, false)?;
     let max_items = search_cfg.max_items;
     let item_pool = default_item_pool(&items);
 
@@ -1803,13 +2269,14 @@ fn run_vlad_scenario(
 
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
-    let enemy_builds: Vec<(EnemyConfig, Vec<Item>)> = enemies
+    let enemy_builds: Vec<(EnemyConfig, Vec<Item>, Stats)> = enemies
         .par_iter()
         .map(|enemy| {
             let enemy_copy = enemy.clone();
             let build_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
                 let build_items = build_from_indices(&item_pool, build_idx);
                 let mut stats = build_item_stats(&build_items);
+                stats.add(&enemy_loadout.bonus_stats);
                 apply_item_assumptions(&mut stats, &enemy_copy.base, &build_items, &sim);
                 let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
                 physical_dps + magic_dps
@@ -1817,6 +2284,7 @@ fn run_vlad_scenario(
             (
                 enemy.clone(),
                 build_from_indices(&item_pool, &build_indices),
+                enemy_loadout.bonus_stats.clone(),
             )
         })
         .collect();
@@ -1824,15 +2292,36 @@ fn run_vlad_scenario(
     let vlad_ranked = if search_cfg.strategy == "beam" {
         beam_search_ranked(&item_pool, max_items, search_cfg.beam_width, |build_idx| {
             let build_items = build_from_indices(&item_pool, build_idx);
-            simulate_vlad_survival(&vlad_base, &build_items, &enemy_builds, &sim, &urf)
+            simulate_vlad_survival(
+                &vlad_base,
+                &build_items,
+                &vlad_loadout.bonus_stats,
+                &enemy_builds,
+                &sim,
+                &urf,
+            )
         })
     } else {
         let best = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
             let build_items = build_from_indices(&item_pool, build_idx);
-            simulate_vlad_survival(&vlad_base, &build_items, &enemy_builds, &sim, &urf)
+            simulate_vlad_survival(
+                &vlad_base,
+                &build_items,
+                &vlad_loadout.bonus_stats,
+                &enemy_builds,
+                &sim,
+                &urf,
+            )
         });
         let best_items = build_from_indices(&item_pool, &best);
-        let best_score = simulate_vlad_survival(&vlad_base, &best_items, &enemy_builds, &sim, &urf);
+        let best_score = simulate_vlad_survival(
+            &vlad_base,
+            &best_items,
+            &vlad_loadout.bonus_stats,
+            &enemy_builds,
+            &sim,
+            &urf,
+        );
         vec![(canonical_key(&best), best_score)]
     };
     let vlad_best_indices = vlad_ranked
@@ -1841,13 +2330,25 @@ fn run_vlad_scenario(
         .unwrap_or_default();
     let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
 
-    let baseline_fixed_time =
-        simulate_vlad_survival(&vlad_base, &baseline_fixed_build, &enemy_builds, &sim, &urf);
-    let vlad_best_time =
-        simulate_vlad_survival(&vlad_base, &vlad_best_build, &enemy_builds, &sim, &urf);
+    let baseline_fixed_time = simulate_vlad_survival(
+        &vlad_base,
+        &baseline_fixed_build,
+        &vlad_loadout.bonus_stats,
+        &enemy_builds,
+        &sim,
+        &urf,
+    );
+    let vlad_best_time = simulate_vlad_survival(
+        &vlad_base,
+        &vlad_best_build,
+        &vlad_loadout.bonus_stats,
+        &enemy_builds,
+        &sim,
+        &urf,
+    );
 
     println!("Enemy builds (optimized for DPS):");
-    for (enemy, build) in &enemy_builds {
+    for (enemy, build, _) in &enemy_builds {
         println!(
             "- {}: {}",
             enemy.name,
@@ -1880,6 +2381,18 @@ fn run_vlad_scenario(
             .join(", ")
     );
     println!("- Time alive: {:.2}s", vlad_best_time);
+    if !vlad_loadout.selection_labels.is_empty() {
+        println!("\nVladimir runes/masteries:");
+        for s in &vlad_loadout.selection_labels {
+            println!("- {}", s);
+        }
+    }
+    if !enemy_loadout.selection_labels.is_empty() {
+        println!("\nEnemy runes/masteries (applied to all enemies):");
+        for s in &enemy_loadout.selection_labels {
+            println!("- {}", s);
+        }
+    }
 
     let diverse_top_raw =
         select_diverse_top_builds(&vlad_ranked, top_x, min_item_diff, max_relative_gap_percent);
@@ -1888,8 +2401,12 @@ fn run_vlad_scenario(
         .map(|(indices, score)| (build_from_indices(&item_pool, indices), *score))
         .collect::<Vec<_>>();
 
-    let best_effective_item_stats =
-        compute_effective_item_stats_for_build(&vlad_base, &vlad_best_build, &sim);
+    let best_effective_item_stats = compute_effective_item_stats_for_build(
+        &vlad_base,
+        &vlad_best_build,
+        &vlad_loadout.bonus_stats,
+        &sim,
+    );
     let vlad_end_stats = compute_vlad_stats(&vlad_base, &best_effective_item_stats);
     let stack_notes = build_stack_notes(&vlad_best_build, &vlad_base, &sim);
 
@@ -1914,6 +2431,8 @@ fn run_vlad_scenario(
         &vlad_base,
         &vlad_end_stats,
         &stack_notes,
+        &vlad_loadout,
+        &enemy_loadout,
         &baseline_fixed_build,
         baseline_fixed_time,
         &vlad_best_build,
@@ -1969,9 +2488,13 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
             .get("search")
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
+    let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
+    let enemy_loadout_selection = parse_loadout_selection(scenario.get("enemy_loadout"));
+    let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim_cfg.champion_level, true)?;
+    let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim_cfg.champion_level, false)?;
     let item_pool = default_item_pool(&items);
 
-    let enemy_builds: Vec<(EnemyConfig, Vec<Item>)> = enemies
+    let enemy_builds: Vec<(EnemyConfig, Vec<Item>, Stats)> = enemies
         .par_iter()
         .map(|enemy| {
             let enemy_copy = enemy.clone();
@@ -1979,6 +2502,7 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
                 build_search(&item_pool, search_cfg.max_items, &search_cfg, |build_idx| {
                     let build_items = build_from_indices(&item_pool, build_idx);
                     let mut stats = build_item_stats(&build_items);
+                    stats.add(&enemy_loadout.bonus_stats);
                     apply_item_assumptions(&mut stats, &enemy_copy.base, &build_items, &sim_cfg);
                     let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
                     physical_dps + magic_dps
@@ -1986,6 +2510,7 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
             (
                 enemy.clone(),
                 build_from_indices(&item_pool, &build_indices),
+                enemy_loadout.bonus_stats.clone(),
             )
         })
         .collect();
@@ -2005,6 +2530,7 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
     let mut sim = VladCombatSimulation::new(
         vlad_base,
         &baseline_fixed_build,
+        &vlad_loadout.bonus_stats,
         &enemy_builds,
         sim_cfg.clone(),
         urf,

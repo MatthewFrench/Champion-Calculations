@@ -97,3 +97,15 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
 - Level assumption:
   - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
+
+## Runes/Masteries
+- Optional scenario loadout blocks:
+  - `vladimir_loadout`
+  - `enemy_loadout` (applied to all enemies)
+- Supported keys:
+  - `runes_reforged.rune_ids` (array of rune IDs)
+  - `runes_reforged.rune_names` (array of rune names)
+  - `runes_reforged.shard_stats` (slot-ordered shard stat keys, e.g. `ability_haste`, `health`, `attack_speed`)
+  - `season2016_masteries` (array of mastery names, or objects `{ \"name\": \"...\", \"rank\": N }`)
+- Current implementation applies deterministic stat bonuses from direct passive/stat effects and reports selections/skips in output.
+- Conditional or highly dynamic rune/mastery effects that cannot be represented deterministically are skipped and documented in the report.

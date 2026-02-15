@@ -30,6 +30,34 @@
     "Protoplasm Harness",
     "Morellonomicon"
   ],
+  "vladimir_loadout": {
+    "runes_reforged": {
+      "rune_names": [
+        "Grasp of the Undying",
+        "Conditioning",
+        "Overgrowth",
+        "Transcendence",
+        "Gathering Storm"
+      ],
+      "shard_stats": [
+        "ability_haste",
+        "health",
+        "health"
+      ]
+    },
+    "season2016_masteries": []
+  },
+  "enemy_loadout": {
+    "runes_reforged": {
+      "rune_names": [],
+      "shard_stats": [
+        "attack_speed",
+        "health",
+        "health"
+      ]
+    },
+    "season2016_masteries": []
+  },
   "enemies": [
     {
       "champion": "Warwick",
