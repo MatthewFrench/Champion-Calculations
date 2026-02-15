@@ -1,0 +1,57 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  simulation-checks:
+    name: Build, Lint, Test, and Smoke Run
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Simulation
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry and build artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: Simulation
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo clippy --all-targets --all-features
+
+      - name: Run unit tests
+        run: cargo test --release
+
+      - name: Build release binary
+        run: cargo build --release
+
+      - name: Run smoke simulation and generate findings report
+        run: |
+          ./target/release/urf_sim \
+            --mode vladimir \
+            --scenario scenario_vlad_urf.json \
+            --max-runtime-seconds 5 \
+            --status-every-seconds 1 \
+            --search-quality-profile fast
+
+      - name: Upload generated findings reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: simulation-findings-${{ github.sha }}
+          path: |
+            Simulation/output/vladimir_run_report.md
+            Simulation/output/vladimir_run_report.json

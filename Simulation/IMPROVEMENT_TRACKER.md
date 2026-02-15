@@ -20,6 +20,9 @@
 - Added first-pass module split for simulation extensions:
   - `src/respawn.rs`
   - `src/scripts/vladimir.rs`
+- Added additional modular extraction for orchestration support:
+  - `src/cache.rs`
+  - `src/status.rs`
 - Added enemy lifecycle simulation:
   - enemies can die from Vladimir damage
   - enemies respawn using URF-scaled death timer logic
@@ -29,6 +32,9 @@
 - Added cap-survivor handling in output and tie-break:
   - cap-survivor labeling in reports/output
   - tie-break uses existing objective damage/healing weights
+- Added repository automation workflows:
+  - pull request and main branch continuous integration in `.github/workflows/continuous-integration.yml`
+  - tag-based release generation with findings in `.github/workflows/release.yml`
 
 ## Not Done
 - [P0] Full-fidelity Vladimir kit simulation (`Q`, `E`, `R`, passives)

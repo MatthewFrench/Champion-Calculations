@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build and Publish Release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Simulation
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo registry and build artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: Simulation
+
+      - name: Build release binary
+        run: cargo build --release
+
+      - name: Generate release simulation findings
+        run: |
+          ./target/release/urf_sim \
+            --mode vladimir \
+            --scenario scenario_vlad_urf.json \
+            --max-runtime-seconds 15 \
+            --status-every-seconds 2 \
+            --search-quality-profile maximum_quality
+
+      - name: Build release notes from generated report
+        run: |
+          {
+            echo "# Vladimir Simulation Findings";
+            echo;
+            echo "Generated from \`Simulation/output/vladimir_run_report.md\` at release time.";
+            echo;
+            echo "## Headline";
+            awk '/^## Headline/{flag=1;next}/^## /{if(flag) exit}flag' output/vladimir_run_report.md;
+            echo;
+            echo "## Search Diagnostics";
+            awk '/^## Search Diagnostics/{flag=1;next}/^## /{if(flag) exit}flag' output/vladimir_run_report.md;
+            echo;
+            echo "## Top Build Snapshot";
+            awk '/^## Best Build/{flag=1;next}/^## /{if(flag) exit}flag' output/vladimir_run_report.md;
+          } > ../RELEASE_NOTES.md
+
+      - name: Create GitHub release with findings
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          body_path: RELEASE_NOTES.md
+          files: |
+            Simulation/target/release/urf_sim
+            Simulation/output/vladimir_run_report.md
+            Simulation/output/vladimir_run_report.json

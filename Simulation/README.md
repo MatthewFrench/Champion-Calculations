@@ -32,6 +32,8 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
+- `src/cache.rs`: In-memory and persisted score cache implementations.
+- `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
 - `src/scripts/vladimir.rs`: Vladimir scripted ability formulas/cooldowns.
 
@@ -57,6 +59,26 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Prints periodic status lines (phase, elapsed, progress, best score) while searching.
 - `--search-quality-profile {fast|balanced|maximum_quality}`:
   - Applies opinionated search settings. Default is `maximum_quality`.
+
+## Continuous Integration and Release
+- Repository workflows are defined under:
+  - `.github/workflows/continuous-integration.yml`
+  - `.github/workflows/release.yml`
+- Continuous integration runs on pull requests and pushes to `main`:
+  - formatting check
+  - clippy lint with denied warnings
+  - tests
+  - release build
+  - smoke simulation run
+  - upload of generated findings report artifacts
+- Release workflow runs on version tags (`v*`):
+  - builds release binary
+  - generates simulation findings report
+  - publishes release with:
+    - binary artifact
+    - markdown findings report
+    - structured JSON findings report
+  - release description includes extracted findings/report sections.
 
 ## Threading
 - The Rust optimizer leaves one core free by default (`available_cores - 1`, minimum 1 thread).

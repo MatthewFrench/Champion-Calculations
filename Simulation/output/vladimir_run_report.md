@@ -1,6 +1,6 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771194310`
+- Generated (unix): `1771196044`
 - Scenario: `scenario_vlad_urf.json`
 
 ## Headline
@@ -21,14 +21,14 @@
 - Loadout candidates/finalists: `192/1`
 - Ensemble seeds: `1`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
-- Full evaluations: `36` (cache hits/misses/waits: `0/36/0`)
-- Full persistent cache hits/entries: `0/36`
+- Full evaluations: `18` (cache hits/misses/waits: `0/18/0`)
+- Full persistent cache hits/entries: `20/54`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
 
-- Time budget: `2.0s`; elapsed: `2.0s`; timed_out: `true`; progress: `0/1`
+- Time budget: `1.0s`; elapsed: `1.0s`; timed_out: `true`; progress: `0/1`
 
 ## Vladimir Base Stats At Level
 - HP: 2690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0

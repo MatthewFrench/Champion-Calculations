@@ -10,16 +10,20 @@ use std::fs;
 use std::hash::{Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
-use std::sync::{Arc, Condvar, Mutex};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
+mod cache;
 mod respawn;
 mod scripts;
+mod status;
 
+use crate::cache::{BlockingScoreCache, PersistentScoreCache};
 use crate::scripts::vladimir::{
     VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
     q_damage_raw, r_damage_raw,
 };
+use crate::status::{StatusReporter, deadline_reached};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 const LEGENDARY_RANK: &str = "LEGENDARY";
@@ -264,233 +268,6 @@ struct SearchDiagnostics {
     processed_candidates: usize,
     total_candidates: usize,
     seed_best_scores: Vec<f64>,
-}
-
-#[derive(Debug)]
-enum CacheState {
-    InFlight,
-    Ready(f64),
-}
-
-#[derive(Debug)]
-struct BlockingScoreCache {
-    shards: Vec<CacheShard>,
-    hits: AtomicUsize,
-    misses: AtomicUsize,
-    waits: AtomicUsize,
-}
-
-#[derive(Debug)]
-struct CacheShard {
-    states: Mutex<HashMap<Vec<usize>, CacheState>>,
-    cv: Condvar,
-}
-
-impl BlockingScoreCache {
-    fn new() -> Self {
-        let shard_count = std::thread::available_parallelism()
-            .map(|n| n.get())
-            .unwrap_or(8)
-            .next_power_of_two()
-            .max(8);
-        let shards = (0..shard_count)
-            .map(|_| CacheShard {
-                states: Mutex::new(HashMap::new()),
-                cv: Condvar::new(),
-            })
-            .collect::<Vec<_>>();
-        Self {
-            shards,
-            hits: AtomicUsize::new(0),
-            misses: AtomicUsize::new(0),
-            waits: AtomicUsize::new(0),
-        }
-    }
-
-    fn shard_idx(&self, key: &[usize]) -> usize {
-        let mut hasher = DefaultHasher::new();
-        key.hash(&mut hasher);
-        (hasher.finish() as usize) & (self.shards.len() - 1)
-    }
-
-    fn get_or_compute<F>(&self, key: Vec<usize>, compute: F) -> f64
-    where
-        F: FnOnce() -> f64,
-    {
-        let shard_idx = self.shard_idx(&key);
-        let shard = &self.shards[shard_idx];
-        loop {
-            let mut guard = shard.states.lock().expect("cache mutex poisoned");
-            match guard.get(&key) {
-                Some(CacheState::Ready(v)) => {
-                    self.hits.fetch_add(1, AtomicOrdering::Relaxed);
-                    return *v;
-                }
-                Some(CacheState::InFlight) => {
-                    self.waits.fetch_add(1, AtomicOrdering::Relaxed);
-                    guard = shard.cv.wait(guard).expect("cache condvar wait poisoned");
-                    drop(guard);
-                    continue;
-                }
-                None => {
-                    self.misses.fetch_add(1, AtomicOrdering::Relaxed);
-                    guard.insert(key.clone(), CacheState::InFlight);
-                    drop(guard);
-                    let value = compute();
-                    let mut done = shard.states.lock().expect("cache mutex poisoned");
-                    done.insert(key.clone(), CacheState::Ready(value));
-                    shard.cv.notify_all();
-                    return value;
-                }
-            }
-        }
-    }
-
-    fn hits(&self) -> usize {
-        self.hits.load(AtomicOrdering::Relaxed)
-    }
-    fn misses(&self) -> usize {
-        self.misses.load(AtomicOrdering::Relaxed)
-    }
-    fn waits(&self) -> usize {
-        self.waits.load(AtomicOrdering::Relaxed)
-    }
-}
-
-#[derive(Debug)]
-struct PersistentScoreCache {
-    path: PathBuf,
-    values: Mutex<HashMap<String, f64>>,
-    hits: AtomicUsize,
-}
-
-impl PersistentScoreCache {
-    fn load(path: PathBuf) -> Self {
-        let values = load_json(&path)
-            .ok()
-            .and_then(|v| v.as_object().cloned())
-            .map(|obj| {
-                obj.into_iter()
-                    .filter_map(|(k, v)| v.as_f64().map(|s| (k, s)))
-                    .collect::<HashMap<_, _>>()
-            })
-            .unwrap_or_default();
-        Self {
-            path,
-            values: Mutex::new(values),
-            hits: AtomicUsize::new(0),
-        }
-    }
-
-    fn key(build: &[usize]) -> String {
-        build
-            .iter()
-            .map(|idx| idx.to_string())
-            .collect::<Vec<_>>()
-            .join(",")
-    }
-
-    fn get(&self, build: &[usize]) -> Option<f64> {
-        let key = Self::key(build);
-        let value = self
-            .values
-            .lock()
-            .ok()
-            .and_then(|map| map.get(&key).copied());
-        if value.is_some() {
-            self.hits.fetch_add(1, AtomicOrdering::Relaxed);
-        }
-        value
-    }
-
-    fn insert(&self, build: &[usize], score: f64) {
-        if let Ok(mut map) = self.values.lock() {
-            map.insert(Self::key(build), score);
-        }
-    }
-
-    fn len(&self) -> usize {
-        self.values.lock().map(|m| m.len()).unwrap_or(0)
-    }
-
-    fn hits(&self) -> usize {
-        self.hits.load(AtomicOrdering::Relaxed)
-    }
-
-    fn flush(&self) -> Result<()> {
-        if let Some(parent) = self.path.parent() {
-            fs::create_dir_all(parent)
-                .with_context(|| format!("Failed creating {}", parent.display()))?;
-        }
-        let text = if let Ok(map) = self.values.lock() {
-            serde_json::to_string_pretty(&*map)?
-        } else {
-            "{}".to_string()
-        };
-        fs::write(&self.path, text)
-            .with_context(|| format!("Failed writing {}", self.path.display()))?;
-        Ok(())
-    }
-}
-
-fn deadline_reached(deadline: Option<Instant>) -> bool {
-    deadline.is_some_and(|d| Instant::now() >= d)
-}
-
-#[derive(Debug)]
-struct StatusReporter {
-    run_start: Instant,
-    interval: Duration,
-    next_emit_at: Instant,
-}
-
-impl StatusReporter {
-    fn new(run_start: Instant, interval: Duration) -> Self {
-        Self {
-            run_start,
-            interval,
-            next_emit_at: run_start,
-        }
-    }
-
-    fn emit(
-        &mut self,
-        phase: &str,
-        progress: Option<(usize, usize)>,
-        best_score: Option<f64>,
-        note: Option<&str>,
-        force: bool,
-    ) {
-        if !force && Instant::now() < self.next_emit_at {
-            return;
-        }
-        let elapsed = self.run_start.elapsed().as_secs_f64();
-        let progress_str = progress
-            .map(|(done, total)| {
-                if total > 0 {
-                    format!(
-                        "{} / {} ({:.1}%)",
-                        done,
-                        total,
-                        done as f64 * 100.0 / total as f64
-                    )
-                } else {
-                    format!("{} / {}", done, total)
-                }
-            })
-            .unwrap_or_else(|| "n/a".to_string());
-        let best_str = best_score
-            .map(|v| format!("{:.4}", v))
-            .unwrap_or_else(|| "n/a".to_string());
-        let note_str = note.unwrap_or("");
-        println!(
-            "[status] elapsed={:.1}s phase={} progress={} best={} {}",
-            elapsed, phase, progress_str, best_str, note_str
-        );
-        while self.next_emit_at <= Instant::now() {
-            self.next_emit_at += self.interval;
-        }
-    }
 }
 
 #[derive(Debug, Clone, Default)]
