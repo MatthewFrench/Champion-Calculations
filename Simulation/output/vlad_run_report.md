@@ -1,6 +1,6 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771131460`
+- Generated (unix): `1771132076`
 - Scenario: `Simulation/scenario_vlad_urf.json`
 
 ## Headline
@@ -43,11 +43,11 @@
 - Dead Man's Plate, Guardian Angel, Heartsteel, Randuin's Omen, Thornmail, Zhonya's Hourglass
 
 ## Vladimir End Stats (Best Build)
-- HP: 5467.5, Armor: 409.5, MR: 54.7, AP: 191.1, AD: 55.0, Ability Haste: 8.0, Move Speed (flat bonus): 4.0, Move Speed (% bonus): 0.0
+- HP: 5224.5, Armor: 409.5, MR: 54.7, AP: 183.1, AD: 55.0, Ability Haste: 8.0, Move Speed (flat bonus): 4.0, Move Speed (% bonus): 0.0
 
 ## Stack Assumptions
 - Dead Man's Plate has stack-based passive text in item data; currently treated as baseline/implicit unless explicitly modeled.
-- Heartsteel assumed procs by 8m: 20 (estimated permanent bonus health: +473.0).
+- Heartsteel estimated stacks by level 20: 12.0 (acquired at level 11, reference full-at-20 stack target 20, estimated permanent bonus health: +278.4).
 
 ## Enemy Builds (DPS-Optimized)
 - Warwick: Bloodthirster, Kraken Slayer, Phantom Dancer, Statikk Shiv, Stormrazor, Yun Tal Wildarrows
@@ -59,6 +59,22 @@
 ## Diverse Top Builds
 1. `19.05s` (+0.00s vs top): Dead Man's Plate, Guardian Angel, Heartsteel, Randuin's Omen, Thornmail, Zhonya's Hourglass
 2. `19.00s` (-0.05s vs top): Frozen Heart, Guardian Angel, Heartsteel, Randuin's Omen, Warmog's Armor, Zhonya's Hourglass
+
+## Build Order Optimization
+1. Cumulative score: `85.87` | Order: Guardian Angel, Zhonya's Hourglass, Heartsteel, Randuin's Omen, Thornmail, Dead Man's Plate
+   - Stage 1 (level 5): `8.57s`
+   - Stage 2 (level 8): `13.56s`
+   - Stage 3 (level 11): `14.23s`
+   - Stage 4 (level 14): `14.99s`
+   - Stage 5 (level 17): `15.65s`
+   - Stage 6 (level 20): `18.87s`
+2. Cumulative score: `85.81` | Order: Guardian Angel, Zhonya's Hourglass, Heartsteel, Randuin's Omen, Frozen Heart, Warmog's Armor
+   - Stage 1 (level 5): `8.57s`
+   - Stage 2 (level 8): `13.56s`
+   - Stage 3 (level 11): `14.23s`
+   - Stage 4 (level 14): `14.99s`
+   - Stage 5 (level 17): `15.63s`
+   - Stage 6 (level 20): `18.83s`
 
 ## Deeper Insights
 - Common core across all selected top builds: Guardian Angel, Heartsteel, Randuin's Omen, Zhonya's Hourglass.

@@ -165,6 +165,15 @@ struct ResolvedLoadout {
 }
 
 #[derive(Debug, Clone)]
+struct BuildOrderResult {
+    ordered_items: Vec<Item>,
+    levels: Vec<usize>,
+    acquired_levels: Vec<usize>,
+    stage_survival: Vec<f64>,
+    cumulative_score: f64,
+}
+
+#[derive(Debug, Clone)]
 struct EnemyState {
     enemy: EnemyConfig,
     physical_hit_damage: f64,
@@ -268,6 +277,7 @@ impl VladCombatSimulation {
         vlad_base: ChampionBase,
         vlad_build_items: &[Item],
         vlad_bonus_stats: &Stats,
+        vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
         enemies: &[(EnemyConfig, Vec<Item>, Stats)],
         sim: SimulationConfig,
         urf: UrfBuffs,
@@ -277,7 +287,14 @@ impl VladCombatSimulation {
             vlad_item_stats.add(&item.stats);
         }
         vlad_item_stats.add(vlad_bonus_stats);
-        apply_item_assumptions(&mut vlad_item_stats, &vlad_base, vlad_build_items, &sim);
+        apply_item_assumptions(
+            &mut vlad_item_stats,
+            &vlad_base,
+            vlad_build_items,
+            &sim,
+            sim.champion_level,
+            vlad_item_acquired_levels,
+        );
         let vlad_stats = compute_vlad_stats(&vlad_base, &vlad_item_stats);
 
         let max_health = vlad_stats.health;
@@ -353,7 +370,14 @@ impl VladCombatSimulation {
                 enemy_stats.add(&item.stats);
             }
             enemy_stats.add(&enemy_bonus);
-            apply_item_assumptions(&mut enemy_stats, &enemy.base, &build, &runner.sim);
+            apply_item_assumptions(
+                &mut enemy_stats,
+                &enemy.base,
+                &build,
+                &runner.sim,
+                runner.sim.champion_level,
+                None,
+            );
             let (_physical_dps, magic_dps) = compute_enemy_dps(&enemy, &enemy_stats, &runner.urf);
             let attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage;
             let attack_speed_bonus = enemy_stats.attack_speed_percent / 100.0;
@@ -1536,16 +1560,54 @@ fn assumed_heartsteel_bonus_health(base_max_health: f64, stacks_at_8m: f64) -> f
     gained
 }
 
+fn assumed_heartsteel_stacks_by_level(
+    full_stacks_at_level_20: f64,
+    acquired_level: usize,
+    current_level: usize,
+) -> f64 {
+    let ref_start: f64 = 5.0;
+    let ref_end: f64 = 20.0;
+    let acquired = acquired_level as f64;
+    let current = current_level as f64;
+    let elapsed = (current - acquired).max(0.0);
+    let reference_window = (ref_end - ref_start).max(1.0_f64);
+    (full_stacks_at_level_20 * (elapsed / reference_window)).clamp(0.0, full_stacks_at_level_20)
+}
+
+fn get_item_acquired_level(
+    build_items: &[Item],
+    item_name: &str,
+    acquired_levels: Option<&HashMap<String, usize>>,
+    default_level: usize,
+) -> usize {
+    if build_items.iter().any(|i| i.name == item_name) {
+        if let Some(map) = acquired_levels {
+            if let Some(level) = map.get(item_name) {
+                return *level;
+            }
+        }
+        return default_level;
+    }
+    default_level
+}
+
 fn apply_item_assumptions(
     stats: &mut Stats,
     base: &ChampionBase,
     build_items: &[Item],
     sim: &SimulationConfig,
+    current_level: usize,
+    acquired_levels: Option<&HashMap<String, usize>>,
 ) {
     if build_items.iter().any(|i| i.name == "Heartsteel") {
+        let acquired_level = get_item_acquired_level(build_items, "Heartsteel", acquired_levels, 5);
+        let stacks = assumed_heartsteel_stacks_by_level(
+            sim.heartsteel_assumed_stacks_at_8m,
+            acquired_level,
+            current_level,
+        );
         let base_max_health = base.base_health + stats.health;
-        stats.health +=
-            assumed_heartsteel_bonus_health(base_max_health, sim.heartsteel_assumed_stacks_at_8m);
+        stats.health += assumed_heartsteel_bonus_health(base_max_health, stacks);
     }
 }
 
@@ -1554,10 +1616,19 @@ fn compute_effective_item_stats_for_build(
     build_items: &[Item],
     bonus_stats: &Stats,
     sim: &SimulationConfig,
+    current_level: usize,
+    acquired_levels: Option<&HashMap<String, usize>>,
 ) -> Stats {
     let mut stats = build_item_stats(build_items);
     stats.add(bonus_stats);
-    apply_item_assumptions(&mut stats, base, build_items, sim);
+    apply_item_assumptions(
+        &mut stats,
+        base,
+        build_items,
+        sim,
+        current_level,
+        acquired_levels,
+    );
     stats
 }
 
@@ -1565,6 +1636,8 @@ fn build_stack_notes(
     build_items: &[Item],
     base: &ChampionBase,
     sim: &SimulationConfig,
+    current_level: usize,
+    acquired_levels: Option<&HashMap<String, usize>>,
 ) -> Vec<String> {
     let mut notes = Vec::new();
     for item in build_items {
@@ -1573,11 +1646,17 @@ fn build_stack_notes(
             // Remove Heartsteel's own flat health so the estimate is anchored to pre-heartsteel max HP.
             base_stats.health -= item.stats.health;
             let base_max_hp = base.base_health + base_stats.health.max(0.0);
-            let bonus =
-                assumed_heartsteel_bonus_health(base_max_hp, sim.heartsteel_assumed_stacks_at_8m);
+            let acquired_level =
+                get_item_acquired_level(build_items, "Heartsteel", acquired_levels, 5);
+            let stacks = assumed_heartsteel_stacks_by_level(
+                sim.heartsteel_assumed_stacks_at_8m,
+                acquired_level,
+                current_level,
+            );
+            let bonus = assumed_heartsteel_bonus_health(base_max_hp, stacks);
             notes.push(format!(
-                "Heartsteel assumed procs by 8m: {:.0} (estimated permanent bonus health: +{:.1}).",
-                sim.heartsteel_assumed_stacks_at_8m, bonus
+                "Heartsteel estimated stacks by level {}: {:.1} (acquired at level {}, reference full-at-20 stack target {:.0}, estimated permanent bonus health: +{:.1}).",
+                current_level, stacks, acquired_level, sim.heartsteel_assumed_stacks_at_8m, bonus
             ));
             continue;
         }
@@ -1644,6 +1723,7 @@ fn simulate_vlad_survival(
     vlad_base: &ChampionBase,
     vlad_build_items: &[Item],
     vlad_bonus_stats: &Stats,
+    vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
     enemies: &[(EnemyConfig, Vec<Item>, Stats)],
     sim: &SimulationConfig,
     urf: &UrfBuffs,
@@ -1652,6 +1732,7 @@ fn simulate_vlad_survival(
         vlad_base.clone(),
         vlad_build_items,
         vlad_bonus_stats,
+        vlad_item_acquired_levels,
         enemies,
         sim.clone(),
         urf.clone(),
@@ -1808,6 +1889,149 @@ fn item_names(items: &[Item]) -> String {
         .join(", ")
 }
 
+fn build_level_milestones(item_count: usize, start_level: usize, end_level: usize) -> Vec<usize> {
+    if item_count == 0 {
+        return vec![];
+    }
+    if item_count == 1 {
+        return vec![end_level.max(start_level)];
+    }
+    let start = start_level as f64;
+    let end = end_level as f64;
+    let denom = (item_count - 1) as f64;
+    (0..item_count)
+        .map(|i| {
+            let t = (i as f64) / denom;
+            (start + (end - start) * t).round().max(1.0) as usize
+        })
+        .collect()
+}
+
+fn acquisition_level_map(items: &[Item], levels: &[usize]) -> HashMap<String, usize> {
+    let mut map = HashMap::new();
+    for (item, lvl) in items.iter().zip(levels.iter()) {
+        map.insert(item.name.clone(), *lvl);
+    }
+    map
+}
+
+fn level_scaled_enemy_builds(
+    level: usize,
+    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
+    raw_enemy_bases: &HashMap<String, ChampionBase>,
+) -> Vec<(EnemyConfig, Vec<Item>, Stats)> {
+    enemy_builds
+        .iter()
+        .map(|(enemy_cfg, build, bonus_stats)| {
+            let raw_base = raw_enemy_bases
+                .get(&enemy_cfg.name)
+                .cloned()
+                .unwrap_or_else(|| enemy_cfg.base.clone());
+            let mut scaled_cfg = enemy_cfg.clone();
+            scaled_cfg.base = champion_at_level(&raw_base, level);
+            (scaled_cfg, build.clone(), bonus_stats.clone())
+        })
+        .collect()
+}
+
+fn score_build_order(
+    ordered_items: &[Item],
+    levels: &[usize],
+    vlad_base_raw: &ChampionBase,
+    vlad_bonus_stats: &Stats,
+    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
+    raw_enemy_bases: &HashMap<String, ChampionBase>,
+    sim: &SimulationConfig,
+    urf: &UrfBuffs,
+) -> BuildOrderResult {
+    let mut stage_survival = Vec::new();
+    let mut cumulative_score = 0.0;
+    for (idx, level) in levels.iter().enumerate() {
+        let prefix = &ordered_items[..=idx];
+        let prefix_levels = &levels[..=idx];
+        let acquired_map = acquisition_level_map(prefix, prefix_levels);
+        let vlad_base_level = champion_at_level(vlad_base_raw, *level);
+        let enemy_level_builds = level_scaled_enemy_builds(*level, enemy_builds, raw_enemy_bases);
+        let mut sim_at_level = sim.clone();
+        sim_at_level.champion_level = *level;
+        let t = simulate_vlad_survival(
+            &vlad_base_level,
+            prefix,
+            vlad_bonus_stats,
+            Some(&acquired_map),
+            &enemy_level_builds,
+            &sim_at_level,
+            urf,
+        );
+        stage_survival.push(t);
+        cumulative_score += t;
+    }
+    BuildOrderResult {
+        ordered_items: ordered_items.to_vec(),
+        levels: levels.to_vec(),
+        acquired_levels: levels.to_vec(),
+        stage_survival,
+        cumulative_score,
+    }
+}
+
+fn generate_permutations<T: Clone>(items: &[T]) -> Vec<Vec<T>> {
+    fn permute<T: Clone>(arr: &mut Vec<T>, l: usize, out: &mut Vec<Vec<T>>) {
+        if l == arr.len() {
+            out.push(arr.clone());
+            return;
+        }
+        for i in l..arr.len() {
+            arr.swap(l, i);
+            permute(arr, l + 1, out);
+            arr.swap(l, i);
+        }
+    }
+    let mut arr = items.to_vec();
+    let mut out = Vec::new();
+    permute(&mut arr, 0, &mut out);
+    out
+}
+
+fn optimize_build_order(
+    build_items: &[Item],
+    vlad_base_raw: &ChampionBase,
+    vlad_bonus_stats: &Stats,
+    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
+    raw_enemy_bases: &HashMap<String, ChampionBase>,
+    sim: &SimulationConfig,
+    urf: &UrfBuffs,
+) -> BuildOrderResult {
+    let levels = build_level_milestones(build_items.len(), 5, 20);
+    let permutations = generate_permutations(build_items);
+    let mut best = score_build_order(
+        build_items,
+        &levels,
+        vlad_base_raw,
+        vlad_bonus_stats,
+        enemy_builds,
+        raw_enemy_bases,
+        sim,
+        urf,
+    );
+    for perm in permutations {
+        let current = score_build_order(
+            &perm,
+            &levels,
+            vlad_base_raw,
+            vlad_bonus_stats,
+            enemy_builds,
+            raw_enemy_bases,
+            sim,
+            urf,
+        );
+        if current.cumulative_score > best.cumulative_score {
+            best = current;
+        }
+    }
+    best
+}
+
 fn default_report_path() -> PathBuf {
     simulation_dir().join("output").join("vlad_run_report.md")
 }
@@ -1827,6 +2051,7 @@ fn write_vlad_report(
     best_time: f64,
     enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     diverse_top_builds: &[(Vec<Item>, f64)],
+    build_orders: &[BuildOrderResult],
 ) -> Result<()> {
     if let Some(parent) = report_path.parent() {
         fs::create_dir_all(parent)
@@ -1958,6 +2183,31 @@ fn write_vlad_report(
                 delta,
                 item_names(build)
             ));
+        }
+        content.push('\n');
+    }
+
+    content.push_str("## Build Order Optimization\n");
+    if build_orders.is_empty() {
+        content.push_str("- No build-order optimization results available.\n\n");
+    } else {
+        for (idx, br) in build_orders.iter().enumerate() {
+            content.push_str(&format!(
+                "{}. Cumulative score: `{:.2}` | Order: {}\n",
+                idx + 1,
+                br.cumulative_score,
+                item_names(&br.ordered_items)
+            ));
+            for (stage_idx, (lvl, surv)) in
+                br.levels.iter().zip(br.stage_survival.iter()).enumerate()
+            {
+                content.push_str(&format!(
+                    "   - Stage {} (level {}): `{:.2}s`\n",
+                    stage_idx + 1,
+                    lvl,
+                    surv
+                ));
+            }
         }
         content.push('\n');
     }
@@ -2236,8 +2486,13 @@ fn run_vlad_scenario(
         .iter()
         .map(|e| parse_enemy_config(e, &champion_bases))
         .collect::<Result<Vec<_>>>()?;
+    let raw_enemy_bases = enemies_raw
+        .iter()
+        .map(|e| (e.name.clone(), e.base.clone()))
+        .collect::<HashMap<_, _>>();
     let enemies = enemies_raw
-        .into_iter()
+        .iter()
+        .cloned()
         .map(|mut e| {
             e.base = champion_at_level(&e.base, sim.champion_level);
             e
@@ -2277,7 +2532,14 @@ fn run_vlad_scenario(
                 let build_items = build_from_indices(&item_pool, build_idx);
                 let mut stats = build_item_stats(&build_items);
                 stats.add(&enemy_loadout.bonus_stats);
-                apply_item_assumptions(&mut stats, &enemy_copy.base, &build_items, &sim);
+                apply_item_assumptions(
+                    &mut stats,
+                    &enemy_copy.base,
+                    &build_items,
+                    &sim,
+                    sim.champion_level,
+                    None,
+                );
                 let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
                 physical_dps + magic_dps
             });
@@ -2296,6 +2558,7 @@ fn run_vlad_scenario(
                 &vlad_base,
                 &build_items,
                 &vlad_loadout.bonus_stats,
+                None,
                 &enemy_builds,
                 &sim,
                 &urf,
@@ -2308,6 +2571,7 @@ fn run_vlad_scenario(
                 &vlad_base,
                 &build_items,
                 &vlad_loadout.bonus_stats,
+                None,
                 &enemy_builds,
                 &sim,
                 &urf,
@@ -2318,6 +2582,7 @@ fn run_vlad_scenario(
             &vlad_base,
             &best_items,
             &vlad_loadout.bonus_stats,
+            None,
             &enemy_builds,
             &sim,
             &urf,
@@ -2334,6 +2599,7 @@ fn run_vlad_scenario(
         &vlad_base,
         &baseline_fixed_build,
         &vlad_loadout.bonus_stats,
+        None,
         &enemy_builds,
         &sim,
         &urf,
@@ -2342,6 +2608,7 @@ fn run_vlad_scenario(
         &vlad_base,
         &vlad_best_build,
         &vlad_loadout.bonus_stats,
+        None,
         &enemy_builds,
         &sim,
         &urf,
@@ -2400,15 +2667,40 @@ fn run_vlad_scenario(
         .iter()
         .map(|(indices, score)| (build_from_indices(&item_pool, indices), *score))
         .collect::<Vec<_>>();
+    let build_order_results = diverse_top_builds
+        .iter()
+        .map(|(build, _)| {
+            optimize_build_order(
+                build,
+                &vlad_base_raw,
+                &vlad_loadout.bonus_stats,
+                &enemy_builds,
+                &raw_enemy_bases,
+                &sim,
+                &urf,
+            )
+        })
+        .collect::<Vec<_>>();
+    let best_order_acquired_map = build_order_results
+        .first()
+        .map(|br| acquisition_level_map(&br.ordered_items, &br.acquired_levels));
 
     let best_effective_item_stats = compute_effective_item_stats_for_build(
         &vlad_base,
         &vlad_best_build,
         &vlad_loadout.bonus_stats,
         &sim,
+        sim.champion_level,
+        best_order_acquired_map.as_ref(),
     );
     let vlad_end_stats = compute_vlad_stats(&vlad_base, &best_effective_item_stats);
-    let stack_notes = build_stack_notes(&vlad_best_build, &vlad_base, &sim);
+    let stack_notes = build_stack_notes(
+        &vlad_best_build,
+        &vlad_base,
+        &sim,
+        sim.champion_level,
+        best_order_acquired_map.as_ref(),
+    );
 
     println!("\nTop diverse builds:");
     if diverse_top_builds.is_empty() {
@@ -2418,6 +2710,27 @@ fn run_vlad_scenario(
     } else {
         for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
             println!("- #{:02} {:.2}s: {}", idx + 1, score, item_names(build));
+        }
+    }
+    if !build_order_results.is_empty() {
+        println!("\nBuild order optimization (levels spread from 5 to 20):");
+        for (idx, br) in build_order_results.iter().enumerate() {
+            println!(
+                "- Build #{:02} best order (cumulative {:.2}): {}",
+                idx + 1,
+                br.cumulative_score,
+                item_names(&br.ordered_items)
+            );
+            for (stage_idx, (lvl, surv)) in
+                br.levels.iter().zip(br.stage_survival.iter()).enumerate()
+            {
+                println!(
+                    "  - Stage {} @ level {} -> {:.2}s",
+                    stage_idx + 1,
+                    lvl,
+                    surv
+                );
+            }
         }
     }
 
@@ -2439,6 +2752,7 @@ fn run_vlad_scenario(
         vlad_best_time,
         &enemy_builds,
         &diverse_top_builds,
+        &build_order_results,
     )?;
     println!("\nReport written: {}", report_path.display());
 
@@ -2503,7 +2817,14 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
                     let build_items = build_from_indices(&item_pool, build_idx);
                     let mut stats = build_item_stats(&build_items);
                     stats.add(&enemy_loadout.bonus_stats);
-                    apply_item_assumptions(&mut stats, &enemy_copy.base, &build_items, &sim_cfg);
+                    apply_item_assumptions(
+                        &mut stats,
+                        &enemy_copy.base,
+                        &build_items,
+                        &sim_cfg,
+                        sim_cfg.champion_level,
+                        None,
+                    );
                     let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
                     physical_dps + magic_dps
                 });
@@ -2531,6 +2852,7 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
         vlad_base,
         &baseline_fixed_build,
         &vlad_loadout.bonus_stats,
+        None,
         &enemy_builds,
         sim_cfg.clone(),
         urf,

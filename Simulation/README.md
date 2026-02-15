@@ -45,6 +45,10 @@ RAYON_NUM_THREADS=8 cargo run --release --manifest-path "/Users/matthewfrench/Do
   - `--min-item-diff` minimum symmetric item difference between selected builds (default `2`)
   - `--max-relative-gap-percent` max score drop from best to still be considered (default `5.0`)
   - `--report-path` optional custom report output path
+- After top builds are selected, simulator also optimizes full-item build order:
+  - Uses full-item permutations only (no partial/intermediate items).
+  - Uses stage levels evenly spaced from 5 to 20 across item slots.
+  - Scores each order by cumulative survival across stages.
 
 ## Taric (Max Attack Speed)
 ```bash
@@ -95,6 +99,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Heartsteel assumptions:
   - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
   - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
+  - In build-order optimization, Heartsteel stacks are distributed by item acquisition level and current stage level (so buying it later yields fewer stacks by level 20).
 - Level assumption:
   - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
 
