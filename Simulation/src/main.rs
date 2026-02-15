@@ -1036,8 +1036,11 @@ fn apply_item_assumptions(
 fn compute_vlad_stats(base: &ChampionBase, item_stats: &Stats) -> Stats {
     let ap_items = item_stats.ability_power;
     let bonus_health_items = item_stats.health;
-    let bonus_health = (bonus_health_items + 1.6 * ap_items) / 0.9472;
-    let ability_power = ap_items + 0.033 * bonus_health;
+    // Crimson Pact should not self-recursively amplify:
+    // - AP gained from bonus health does not grant extra health again
+    // - Health gained from AP does not grant extra AP again
+    let bonus_health = bonus_health_items + 1.6 * ap_items;
+    let ability_power = ap_items + 0.033 * bonus_health_items;
 
     let mut stats = Stats {
         ability_power,
@@ -1508,12 +1511,37 @@ fn is_evolution_target(item_name: &str) -> bool {
         .any(|(_, evolved)| *evolved == item_name)
 }
 
+fn looks_arena_or_non_summoners_rift(item: &Item) -> bool {
+    // Conservative guard: these naming patterns are commonly Arena/distributed-only.
+    // We already constrain to LEGENDARY for search; this helps future-proof odd imports.
+    let lower = item.name.to_ascii_lowercase();
+    let arena_like_tokens = [
+        "dragonheart",
+        "hemomancer",
+        "runecarver",
+        "gambler",
+        "golden spatula",
+        "black hole gauntlet",
+        "reaper",
+        "demon king",
+        "pyromancer",
+        "molten stone",
+        "wooglet",
+        "entropy",
+        "decapitator",
+        "regicide",
+        "lucky dice",
+    ];
+    arena_like_tokens.iter().any(|t| lower.contains(t))
+}
+
 fn default_item_pool(items: &HashMap<String, Item>) -> Vec<Item> {
     let mut pool = items
         .values()
         .filter(|item| item.shop_purchasable || is_evolution_target(&item.name))
         .filter(|item| is_legendary(item))
         .filter(|item| !is_pre_evolution_item(items, &item.name))
+        .filter(|item| !looks_arena_or_non_summoners_rift(item))
         .cloned()
         .collect::<Vec<_>>();
     pool.sort_by(|a, b| a.name.cmp(&b.name));
