@@ -16,7 +16,7 @@
   ],
   "build_orders": [
     {
-      "cumulative_score": 99.41169466266902,
+      "cumulative_score": 261.23895229966723,
       "levels": [
         5,
         9,
@@ -33,10 +33,10 @@
       ],
       "stage_survival_seconds": [
         9.835467964287496,
-        15.680684248039912,
-        20.34072457147906,
-        26.0,
-        27.554817878862558
+        41.17901899826406,
+        55.03071144373671,
+        67.53792514258015,
+        87.6558287507988
       ]
     }
   ],
@@ -44,14 +44,14 @@
   "diagnostics": {
     "adaptive_candidates_injected": 0,
     "bleed_candidates_injected": 0,
-    "elapsed_seconds": 1.003499667,
+    "elapsed_seconds": 2.003267458,
     "ensemble_seeds": 1,
     "full_cache_hits": 0,
-    "full_cache_misses": 18,
+    "full_cache_misses": 36,
     "full_cache_waits": 0,
-    "full_evaluations": 18,
+    "full_evaluations": 36,
     "full_persistent_cache_entries": 36,
-    "full_persistent_cache_hits": 17,
+    "full_persistent_cache_hits": 0,
     "loadout_candidates": 192,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.3,
@@ -61,7 +61,7 @@
     "scenario_count": 1,
     "search_quality_profile": "fast",
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "time_budget_seconds": 1.0,
+    "time_budget_seconds": 2.0,
     "timed_out": true,
     "total_candidates": 1,
     "unique_candidate_builds": 1
@@ -263,15 +263,19 @@
   "headline": {
     "baseline_objective_score": 1.0,
     "baseline_outcome": {
-      "damage_dealt": 16392.455172413793,
-      "healing_done": 4684.041724137942,
-      "time_alive_seconds": 27.554817878862558
+      "cap_survivor": false,
+      "damage_dealt": 28017.493601168277,
+      "enemy_kills": 6,
+      "healing_done": 5596.451668831356,
+      "time_alive_seconds": 87.6558287507988
     },
     "best_objective_score": 1.0,
     "best_outcome": {
-      "damage_dealt": 16392.455172413793,
-      "healing_done": 4684.041724137942,
-      "time_alive_seconds": 27.554817878862558
+      "cap_survivor": false,
+      "damage_dealt": 28017.493601168277,
+      "enemy_kills": 6,
+      "healing_done": 5596.451668831356,
+      "time_alive_seconds": 87.6558287507988
     },
     "improvement_percent": 0.0
   },

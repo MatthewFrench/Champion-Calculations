@@ -13,6 +13,14 @@ use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::sync::{Arc, Condvar, Mutex};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
+mod respawn;
+mod scripts;
+
+use crate::scripts::vladimir::{
+    VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
+    q_damage_raw, r_damage_raw,
+};
+
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 const LEGENDARY_RANK: &str = "LEGENDARY";
 const ITEM_EVOLUTION_REPLACEMENTS: &[(&str, &str)] = &[
@@ -139,6 +147,18 @@ struct SimulationConfig {
     protoplasm_duration_seconds: f64,
     heartsteel_assumed_stacks_at_8m: f64,
     enemy_uptime_model_enabled: bool,
+    urf_respawn_flat_reduction_seconds: f64,
+    urf_respawn_extrapolation_per_level: f64,
+    vlad_q_base_damage: f64,
+    vlad_q_ap_ratio: f64,
+    vlad_q_heal_ratio_of_damage: f64,
+    vlad_q_base_cooldown_seconds: f64,
+    vlad_e_base_damage: f64,
+    vlad_e_ap_ratio: f64,
+    vlad_e_base_cooldown_seconds: f64,
+    vlad_r_base_damage: f64,
+    vlad_r_ap_ratio: f64,
+    vlad_r_base_cooldown_seconds: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -200,6 +220,7 @@ struct CombatOutcome {
     time_alive_seconds: f64,
     damage_dealt: f64,
     healing_done: f64,
+    enemy_kills: usize,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -511,6 +532,10 @@ struct EnemyState {
     burst_physical_damage: f64,
     burst_magic_damage: f64,
     burst_true_damage: f64,
+    max_health: f64,
+    health: f64,
+    magic_multiplier: f64,
+    respawn_at: Option<f64>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -566,6 +591,7 @@ struct VladCombatSimulation {
     death_time: Option<f64>,
     damage_dealt_total: f64,
     healing_done_total: f64,
+    enemy_kills_total: usize,
 
     event_queue: BinaryHeap<QueuedEvent>,
     event_counter: u64,
@@ -579,6 +605,8 @@ struct VladCombatSimulation {
 
     pool_cooldown: f64,
     pool_duration: f64,
+    offensive_tuning: VladimirAbilityTuning,
+    offensive_cooldowns: VladimirAbilityCooldowns,
 
     zhonya_available: bool,
     ga_available: bool,
@@ -591,6 +619,9 @@ struct VladCombatSimulation {
     zhonya_cd: f64,
     ga_cd: f64,
     pool_cd: f64,
+    q_cd: f64,
+    e_cd: f64,
+    r_cd: f64,
     protoplasm_cd: f64,
 
     pool_until: f64,
@@ -639,6 +670,19 @@ impl VladCombatSimulation {
         let ability_haste = vlad_item_stats.ability_haste + urf.ability_haste;
         let pool_base_cd = [28.0, 25.0, 22.0, 19.0, 16.0][sim.vlad_pool_rank - 1];
         let pool_cooldown = cooldown_after_haste(pool_base_cd, ability_haste);
+        let offensive_tuning = VladimirAbilityTuning {
+            q_base_damage: sim.vlad_q_base_damage,
+            q_ap_ratio: sim.vlad_q_ap_ratio,
+            q_heal_ratio_of_damage: sim.vlad_q_heal_ratio_of_damage,
+            q_base_cooldown_seconds: sim.vlad_q_base_cooldown_seconds,
+            e_base_damage: sim.vlad_e_base_damage,
+            e_ap_ratio: sim.vlad_e_ap_ratio,
+            e_base_cooldown_seconds: sim.vlad_e_base_cooldown_seconds,
+            r_base_damage: sim.vlad_r_base_damage,
+            r_ap_ratio: sim.vlad_r_ap_ratio,
+            r_base_cooldown_seconds: sim.vlad_r_base_cooldown_seconds,
+        };
+        let offensive_cooldowns = offensive_cooldowns_after_haste(offensive_tuning, ability_haste);
 
         let zhonya_available = vlad_build_items
             .iter()
@@ -667,6 +711,7 @@ impl VladCombatSimulation {
             death_time: None,
             damage_dealt_total: 0.0,
             healing_done_total: 0.0,
+            enemy_kills_total: 0,
             event_queue: BinaryHeap::new(),
             event_counter: 0,
             vlad_stats,
@@ -676,6 +721,8 @@ impl VladCombatSimulation {
             magic_multiplier,
             pool_cooldown,
             pool_duration: 0.0,
+            offensive_tuning,
+            offensive_cooldowns,
             zhonya_available,
             ga_available,
             protoplasm_available,
@@ -685,6 +732,9 @@ impl VladCombatSimulation {
             zhonya_cd: 0.0,
             ga_cd: 0.0,
             pool_cd: 0.0,
+            q_cd: 0.0,
+            e_cd: 0.0,
+            r_cd: 0.0,
             protoplasm_cd: 0.0,
             pool_until: 0.0,
             stasis_until: 0.0,
@@ -716,6 +766,8 @@ impl VladCombatSimulation {
             );
             let (_physical_dps, magic_dps) = compute_enemy_dps(&enemy, &enemy_stats, &runner.urf);
             let attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage;
+            let magic_resist = enemy.base.base_magic_resist + enemy_stats.magic_resist;
+            let max_health = (enemy.base.base_health + enemy_stats.health).max(1.0);
             let attack_speed_bonus = enemy_stats.attack_speed_percent / 100.0;
             let mut attack_speed = enemy.base.base_attack_speed * (1.0 + attack_speed_bonus);
             attack_speed *= if enemy.base.is_melee {
@@ -739,6 +791,10 @@ impl VladCombatSimulation {
                 burst_physical_damage,
                 burst_magic_damage,
                 burst_true_damage,
+                max_health,
+                health: max_health,
+                magic_multiplier: 100.0 / (100.0 + magic_resist.max(0.0)),
+                respawn_at: None,
             });
 
             runner.schedule_event(
@@ -807,7 +863,35 @@ impl VladCombatSimulation {
         self.is_targetable() && self.time >= self.stunned_until
     }
 
+    fn enemy_respawn_delay_seconds(&self) -> f64 {
+        respawn::urf_respawn_delay_seconds(
+            self.sim.champion_level,
+            self.sim.urf_respawn_flat_reduction_seconds,
+            self.sim.urf_respawn_extrapolation_per_level,
+        )
+    }
+
+    fn refresh_enemy_respawns(&mut self) {
+        for state in &mut self.enemy_state {
+            let Some(respawn_at) = state.respawn_at else {
+                continue;
+            };
+            if self.time >= respawn_at {
+                state.health = state.max_health;
+                state.respawn_at = None;
+            }
+        }
+    }
+
+    fn enemy_is_alive(&self, idx: usize) -> bool {
+        let state = &self.enemy_state[idx];
+        state.respawn_at.is_none() && state.health > 0.0
+    }
+
     fn enemy_is_active(&self, idx: usize) -> bool {
+        if !self.enemy_is_alive(idx) {
+            return false;
+        }
         if !self.sim.enemy_uptime_model_enabled {
             return true;
         }
@@ -820,6 +904,47 @@ impl VladCombatSimulation {
         let phase = state.enemy.uptime_phase_seconds.max(0.0);
         let t = (self.time + phase) % cycle;
         t <= active
+    }
+
+    fn apply_magic_damage_to_enemy(&mut self, idx: usize, raw_magic_damage: f64) -> f64 {
+        if raw_magic_damage <= 0.0 || !self.enemy_is_active(idx) {
+            return 0.0;
+        }
+        let mitigated = {
+            let state = &self.enemy_state[idx];
+            raw_magic_damage * state.magic_multiplier
+        };
+        if mitigated <= 0.0 {
+            return 0.0;
+        }
+        let respawn_delay = self.enemy_respawn_delay_seconds();
+        let mut killed = false;
+        let dealt = {
+            let state = &mut self.enemy_state[idx];
+            let d = mitigated.min(state.health.max(0.0));
+            state.health -= d;
+            if state.health <= 0.0 {
+                state.health = 0.0;
+                state.respawn_at = Some(self.time + respawn_delay);
+                killed = true;
+            }
+            d
+        };
+        if killed {
+            self.enemy_kills_total += 1;
+        }
+        dealt
+    }
+
+    fn apply_magic_damage_to_all_active_enemies(&mut self, raw_magic_damage: f64) -> f64 {
+        if raw_magic_damage <= 0.0 {
+            return 0.0;
+        }
+        let mut total = 0.0;
+        for idx in 0..self.enemy_state.len() {
+            total += self.apply_magic_damage_to_enemy(idx, raw_magic_damage);
+        }
+        total
     }
 
     fn apply_hot_effects(&mut self, to_time: f64) {
@@ -879,6 +1004,7 @@ impl VladCombatSimulation {
         if self.finished {
             return;
         }
+        self.refresh_enemy_respawns();
 
         if self.time >= self.pool_cd && self.can_cast() {
             self.pool_cd = self.time + self.pool_cooldown;
@@ -892,13 +1018,7 @@ impl VladCombatSimulation {
                 self.sim.vlad_pool_base_damage_by_rank[self.sim.vlad_pool_rank - 1];
             pool_damage += self.sim.vlad_pool_bonus_health_ratio
                 * (self.vlad_stats.health - self.vlad_base.base_health);
-            let active_enemy_count = self
-                .enemy_state
-                .iter()
-                .enumerate()
-                .filter(|(idx, _)| self.enemy_is_active(*idx))
-                .count();
-            let total_pool_damage = pool_damage * active_enemy_count as f64;
+            let total_pool_damage = self.apply_magic_damage_to_all_active_enemies(pool_damage);
             self.damage_dealt_total += total_pool_damage.max(0.0);
             let pool_heal = total_pool_damage * self.sim.vlad_pool_heal_ratio_of_damage;
             self.pool_heal_rate = if self.pool_duration > 0.0 {
@@ -911,6 +1031,45 @@ impl VladCombatSimulation {
             if self.health <= 0.0 {
                 self.handle_death();
                 return;
+            }
+        }
+
+        // Scripted offensive cadence for Vladimir abilities.
+        if self.can_cast() {
+            if self.time >= self.q_cd {
+                self.q_cd = self.time + self.offensive_cooldowns.q_seconds;
+                let q_raw_damage =
+                    q_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let mut dealt = 0.0;
+                if let Some(target_idx) =
+                    (0..self.enemy_state.len()).find(|idx| self.enemy_is_active(*idx))
+                {
+                    dealt = self.apply_magic_damage_to_enemy(target_idx, q_raw_damage);
+                }
+                self.damage_dealt_total += dealt.max(0.0);
+                if dealt > 0.0 {
+                    let before = self.health;
+                    self.health = self
+                        .max_health
+                        .min(self.health + dealt * self.offensive_tuning.q_heal_ratio_of_damage);
+                    self.healing_done_total += (self.health - before).max(0.0);
+                }
+            }
+
+            if self.time >= self.e_cd {
+                self.e_cd = self.time + self.offensive_cooldowns.e_seconds;
+                let e_raw_damage =
+                    e_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let dealt = self.apply_magic_damage_to_all_active_enemies(e_raw_damage);
+                self.damage_dealt_total += dealt.max(0.0);
+            }
+
+            if self.time >= self.r_cd {
+                self.r_cd = self.time + self.offensive_cooldowns.r_seconds;
+                let r_raw_damage =
+                    r_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let dealt = self.apply_magic_damage_to_all_active_enemies(r_raw_damage);
+                self.damage_dealt_total += dealt.max(0.0);
             }
         }
 
@@ -993,6 +1152,7 @@ impl VladCombatSimulation {
                 }
                 self.event_queue.pop();
                 self.apply_hot_effects(top.time);
+                self.refresh_enemy_respawns();
                 self.process_event(&top);
                 if let Some(recurring) = top.recurring {
                     if recurring > 0.0 && !self.finished {
@@ -1010,6 +1170,7 @@ impl VladCombatSimulation {
             }
 
             self.apply_hot_effects(target_time);
+            self.refresh_enemy_respawns();
             self.maybe_cast_vlad_defensives();
 
             if self.health <= 0.0 && !self.finished {
@@ -1030,6 +1191,7 @@ impl VladCombatSimulation {
                 .unwrap_or(self.time.min(self.sim.max_time_seconds)),
             damage_dealt: self.damage_dealt_total,
             healing_done: self.healing_done_total,
+            enemy_kills: self.enemy_kills_total,
         }
     }
 }
@@ -1523,6 +1685,54 @@ fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
             .get("enemy_uptime_model_enabled")
             .and_then(Value::as_bool)
             .unwrap_or(false),
+        urf_respawn_flat_reduction_seconds: data
+            .get("urf_respawn_flat_reduction_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(3.0),
+        urf_respawn_extrapolation_per_level: data
+            .get("urf_respawn_extrapolation_per_level")
+            .and_then(Value::as_f64)
+            .unwrap_or(2.5),
+        vlad_q_base_damage: data
+            .get("vlad_q_base_damage")
+            .and_then(Value::as_f64)
+            .unwrap_or(220.0),
+        vlad_q_ap_ratio: data
+            .get("vlad_q_ap_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.60),
+        vlad_q_heal_ratio_of_damage: data
+            .get("vlad_q_heal_ratio_of_damage")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.30),
+        vlad_q_base_cooldown_seconds: data
+            .get("vlad_q_base_cooldown_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(4.0),
+        vlad_e_base_damage: data
+            .get("vlad_e_base_damage")
+            .and_then(Value::as_f64)
+            .unwrap_or(180.0),
+        vlad_e_ap_ratio: data
+            .get("vlad_e_ap_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.50),
+        vlad_e_base_cooldown_seconds: data
+            .get("vlad_e_base_cooldown_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(8.0),
+        vlad_r_base_damage: data
+            .get("vlad_r_base_damage")
+            .and_then(Value::as_f64)
+            .unwrap_or(350.0),
+        vlad_r_ap_ratio: data
+            .get("vlad_r_ap_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.70),
+        vlad_r_base_cooldown_seconds: data
+            .get("vlad_r_base_cooldown_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(90.0),
     })
 }
 
@@ -2856,6 +3066,7 @@ fn aggregate_objective_score_and_outcome(
     let mut weighted_time_sum = 0.0;
     let mut weighted_damage_sum = 0.0;
     let mut weighted_healing_sum = 0.0;
+    let mut weighted_kills_sum = 0.0;
     let mut weight_sum = 0.0;
     let mut worst = f64::INFINITY;
 
@@ -2880,12 +3091,14 @@ fn aggregate_objective_score_and_outcome(
                 time_alive_seconds: sim.max_time_seconds.max(1.0),
                 damage_dealt: 1.0,
                 healing_done: 1.0,
+                enemy_kills: 0,
             });
         let scenario_score = objective_score_from_outcome(outcome, reference, weights);
         weighted_score_sum += w * scenario_score;
         weighted_time_sum += w * outcome.time_alive_seconds;
         weighted_damage_sum += w * outcome.damage_dealt;
         weighted_healing_sum += w * outcome.healing_done;
+        weighted_kills_sum += w * outcome.enemy_kills as f64;
         weight_sum += w;
         worst = worst.min(scenario_score);
     }
@@ -2905,6 +3118,7 @@ fn aggregate_objective_score_and_outcome(
         time_alive_seconds: weighted_time_sum / weight_sum,
         damage_dealt: weighted_damage_sum / weight_sum,
         healing_done: weighted_healing_sum / weight_sum,
+        enemy_kills: (weighted_kills_sum / weight_sum).round() as usize,
     };
     (blended_score, mean_outcome)
 }
@@ -3871,16 +4085,20 @@ fn write_vladimir_report_markdown(
 
     content.push_str("## Headline\n");
     content.push_str(&format!(
-        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done: **{:.2}s / {:.1} / {:.1}**\n- Best time alive / damage dealt / healing done: **{:.2}s / {:.1} / {:.1}**\n\n",
+        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills: **{:.2}s / {:.1} / {:.1} / {}**\n- Best time alive / damage dealt / healing done / enemy kills: **{:.2}s / {:.1} / {:.1} / {}**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
         baseline_score,
         best_score,
         improvement,
         baseline_outcome.time_alive_seconds,
         baseline_outcome.damage_dealt,
         baseline_outcome.healing_done,
+        baseline_outcome.enemy_kills,
         best_outcome.time_alive_seconds,
         best_outcome.damage_dealt,
         best_outcome.healing_done,
+        best_outcome.enemy_kills,
+        baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
+        best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
     ));
 
     content.push_str(&format!(
@@ -4181,11 +4399,15 @@ fn write_vladimir_report_json(
                 "time_alive_seconds": baseline_outcome.time_alive_seconds,
                 "damage_dealt": baseline_outcome.damage_dealt,
                 "healing_done": baseline_outcome.healing_done,
+                "enemy_kills": baseline_outcome.enemy_kills,
+                "cap_survivor": baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
             },
             "best_outcome": {
                 "time_alive_seconds": best_outcome.time_alive_seconds,
                 "damage_dealt": best_outcome.damage_dealt,
                 "healing_done": best_outcome.healing_done,
+                "enemy_kills": best_outcome.enemy_kills,
+                "cap_survivor": best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
             },
         },
         "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
@@ -5210,6 +5432,8 @@ fn run_vladimir_scenario(
         )])));
     let best_loadout_by_item: Arc<Mutex<HashMap<Vec<usize>, (LoadoutSelection, ResolvedLoadout)>>> =
         Arc::new(Mutex::new(HashMap::new()));
+    let best_outcome_by_item: Arc<Mutex<HashMap<Vec<usize>, CombatOutcome>>> =
+        Arc::new(Mutex::new(HashMap::new()));
 
     let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
     let objective_component_weights = normalized_objective_weights(
@@ -5231,7 +5455,7 @@ fn run_vladimir_scenario(
             )
         })
         .collect::<Vec<_>>();
-    let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
+    let evaluate_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
         aggregate_objective_score_and_outcome(
             &vlad_base,
             build_items,
@@ -5243,7 +5467,9 @@ fn run_vladimir_scenario(
             objective_component_weights,
             objective_worst_case_weight,
         )
-        .0
+    };
+    let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
+        evaluate_build_with_bonus(build_items, bonus_stats).0
     };
 
     let loadout_candidates_count = loadout_eval_budget;
@@ -5256,7 +5482,8 @@ fn run_vladimir_scenario(
 
         let mut best_sel = vlad_loadout_selection.clone();
         let mut best_resolved = vlad_base_loadout.clone();
-        let mut best_score = score_build_with_bonus(build_items, &best_resolved.bonus_stats);
+        let (mut best_score, mut best_outcome) =
+            evaluate_build_with_bonus(build_items, &best_resolved.bonus_stats);
         seen.insert(loadout_selection_key(&best_sel));
 
         let mut evaluated = 0usize;
@@ -5290,15 +5517,16 @@ fn run_vladimir_scenario(
             let Some(resolved) = resolved else {
                 continue;
             };
-            let score = score_build_with_bonus(build_items, &resolved.bonus_stats);
+            let (score, outcome) = evaluate_build_with_bonus(build_items, &resolved.bonus_stats);
             if score > best_score {
                 best_score = score;
                 best_sel = candidate;
                 best_resolved = resolved;
+                best_outcome = outcome;
             }
             evaluated += 1;
         }
-        (best_score, best_sel, best_resolved)
+        (best_score, best_outcome, best_sel, best_resolved)
     };
 
     let full_eval_count = AtomicUsize::new(0);
@@ -5333,9 +5561,13 @@ fn run_vladimir_scenario(
             }
             full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             let build_items = build_from_indices(&item_pool, &key);
-            let (score, best_sel, best_resolved) = optimize_loadout_for_build(&key, &build_items);
+            let (score, outcome, best_sel, best_resolved) =
+                optimize_loadout_for_build(&key, &build_items);
             if let Ok(mut map) = best_loadout_by_item.lock() {
                 map.insert(key.clone(), (best_sel, best_resolved));
+            }
+            if let Ok(mut map) = best_outcome_by_item.lock() {
+                map.insert(key.clone(), outcome);
             }
             if score.is_finite() {
                 persistent_full_cache.insert(&key, score);
@@ -5479,31 +5711,39 @@ fn run_vladimir_scenario(
         Some("evaluating all generated candidates"),
         true,
     );
-    for key in &unique_candidate_keys {
-        if processed_keys.contains(key) {
-            continue;
-        }
+    let remaining_keys = unique_candidate_keys
+        .iter()
+        .filter(|key| !processed_keys.contains(*key))
+        .cloned()
+        .collect::<Vec<_>>();
+    let batch_size = 128usize;
+    for batch in remaining_keys.chunks(batch_size) {
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             timed_out = true;
             break;
         }
-        let score = full_score_fn(key);
-        if score.is_finite() {
-            strict_scores.insert(key.clone(), score);
+        let scored_batch = batch
+            .par_iter()
+            .map(|key| (key.clone(), full_score_fn(key)))
+            .collect::<Vec<_>>();
+        for (key, score) in scored_batch {
+            if score.is_finite() {
+                strict_scores.insert(key.clone(), score);
+            }
+            processed_keys.insert(key);
+            processed_candidates += 1;
+            status.emit(
+                "strict_full_ranking",
+                Some((processed_candidates, total_candidates)),
+                strict_scores
+                    .values()
+                    .copied()
+                    .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal)),
+                None,
+                false,
+            );
         }
-        processed_keys.insert(key.clone());
-        processed_candidates += 1;
-        status.emit(
-            "strict_full_ranking",
-            Some((processed_candidates, total_candidates)),
-            strict_scores
-                .values()
-                .copied()
-                .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal)),
-            None,
-            false,
-        );
     }
 
     if strict_scores.is_empty() {
@@ -5520,7 +5760,40 @@ fn run_vladimir_scenario(
 
     let mut vlad_ranked = strict_scores.into_iter().collect::<Vec<_>>();
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
-    vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+    let outcome_map_for_tiebreak = best_outcome_by_item
+        .lock()
+        .map(|m| m.clone())
+        .unwrap_or_default();
+    vlad_ranked.sort_by(|a, b| {
+        let by_score = b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal);
+        if by_score != Ordering::Equal {
+            return by_score;
+        }
+        let out_a = outcome_map_for_tiebreak.get(&a.0);
+        let out_b = outcome_map_for_tiebreak.get(&b.0);
+        let cap_a = out_a
+            .map(|o| o.time_alive_seconds >= sim.max_time_seconds - 1e-6)
+            .unwrap_or(false);
+        let cap_b = out_b
+            .map(|o| o.time_alive_seconds >= sim.max_time_seconds - 1e-6)
+            .unwrap_or(false);
+        if cap_a && cap_b {
+            let combo_a = out_a
+                .map(|o| {
+                    objective_component_weights.damage * o.damage_dealt
+                        + objective_component_weights.healing * o.healing_done
+                })
+                .unwrap_or(0.0);
+            let combo_b = out_b
+                .map(|o| {
+                    objective_component_weights.damage * o.damage_dealt
+                        + objective_component_weights.healing * o.healing_done
+                })
+                .unwrap_or(0.0);
+            return combo_b.partial_cmp(&combo_a).unwrap_or(Ordering::Equal);
+        }
+        Ordering::Equal
+    });
 
     let mut seed_best_scores = Vec::new();
     for ranked in &seed_ranked {
@@ -5596,6 +5869,9 @@ fn run_vladimir_scenario(
         objective_component_weights,
         objective_worst_case_weight,
     );
+    let baseline_cap_survivor =
+        baseline_fixed_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
+    let best_cap_survivor = vlad_best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
 
     println!("Enemy builds (URF preset defaults):");
@@ -5628,11 +5904,13 @@ fn run_vladimir_scenario(
     );
     println!("- Objective score: {:.4}", baseline_fixed_score);
     println!(
-        "- Time alive / damage dealt / healing done: {:.2}s / {:.1} / {:.1}",
+        "- Time alive / damage dealt / healing done / enemy kills: {:.2}s / {:.1} / {:.1} / {}",
         baseline_fixed_outcome.time_alive_seconds,
         baseline_fixed_outcome.damage_dealt,
-        baseline_fixed_outcome.healing_done
+        baseline_fixed_outcome.healing_done,
+        baseline_fixed_outcome.enemy_kills
     );
+    println!("- Cap survivor: {}", baseline_cap_survivor);
 
     println!("\nVladimir best build (optimized for objective):");
     println!(
@@ -5694,11 +5972,13 @@ fn run_vladimir_scenario(
     );
     println!("- Objective score: {:.4}", vlad_best_score);
     println!(
-        "- Time alive / damage dealt / healing done: {:.2}s / {:.1} / {:.1}",
+        "- Time alive / damage dealt / healing done / enemy kills: {:.2}s / {:.1} / {:.1} / {}",
         vlad_best_outcome.time_alive_seconds,
         vlad_best_outcome.damage_dealt,
-        vlad_best_outcome.healing_done
+        vlad_best_outcome.healing_done,
+        vlad_best_outcome.enemy_kills
     );
+    println!("- Cap survivor: {}", best_cap_survivor);
     if !vlad_loadout.selection_labels.is_empty() {
         println!("\nVladimir runes/masteries:");
         for s in &vlad_loadout.selection_labels {
@@ -6233,6 +6513,7 @@ mod tests {
             time_alive_seconds: 20.0,
             damage_dealt: 8000.0,
             healing_done: 2000.0,
+            enemy_kills: 0,
         };
         let baseline_score = objective_score_from_outcome(reference, reference, w);
         assert!((baseline_score - 1.0).abs() < 1e-9);
@@ -6241,7 +6522,20 @@ mod tests {
             time_alive_seconds: 22.0,
             damage_dealt: 8800.0,
             healing_done: 2400.0,
+            enemy_kills: 0,
         };
         assert!(objective_score_from_outcome(better, reference, w) > baseline_score);
+    }
+
+    #[test]
+    fn urf_respawn_timer_scales_with_level() {
+        let mut prev = 0.0;
+        for lvl in 1..=30 {
+            let t = respawn::urf_respawn_delay_seconds(lvl, 3.0, 2.5);
+            assert!(t >= 1.0);
+            assert!(t >= prev);
+            prev = t;
+        }
+        assert!((respawn::urf_respawn_delay_seconds(1, 3.0, 2.5) - 7.0).abs() < 1e-9);
     }
 }

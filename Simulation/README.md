@@ -1,13 +1,14 @@
-# URF Vladimir Survival Simulator
+# URF Vladimir Objective Simulator
 
 This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is deterministic and now runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, ability damage ticks, and crowd control.
 
 ## What It Models
-- Vladimir only casts W (Sanguine Pool) on cooldown.
+- Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
 - Fixed-timestep stepping via `VladCombatSimulation.step()` at `server_tick_rate_hz`.
 - URF global buffs (ability/item haste, health cost multiplier, attack speed multipliers) are applied.
 - Enemy auto-attacks and spell damage are modeled as recurring timed events.
 - Stuns are modeled as recurring timed events that delay Vladimir's casting.
+- Enemy units can die and respawn on URF-scaled timers.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item mechanics can be extended in compiled Rust code paths.
 - Build candidate scoring is parallelized across CPU cores (Rayon).
@@ -18,6 +19,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - Ensemble seed runs are supported for confidence/robustness labeling.
 - Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
 - Adaptive strategy allocation adds extra candidates from strategies that contribute more unique elites.
+- Strict final candidate ranking evaluates remaining candidates in parallel batches.
 - Build scoring uses a composite objective over:
   - time alive
   - damage dealt to enemies
@@ -29,7 +31,9 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
-- `src/main.rs`: Simulator and optimizer.
+- `src/main.rs`: CLI and orchestration.
+- `src/respawn.rs`: URF respawn timer model helpers.
+- `src/scripts/vladimir.rs`: Vladimir scripted ability formulas/cooldowns.
 
 ## Run
 ```bash
@@ -103,6 +107,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 
 ## Extensibility
 - Champion/item mechanics should be added as compiled Rust logic in `src/main.rs` (or split into modules as the codebase grows).
+- Champion/item mechanics should be added in dedicated modules (for example under `src/scripts/`) rather than growing `main.rs`.
 - Scenario JSON should stay minimal and reference canonical data from `Characters`, `Items`, and `Game Mode`.
 
 ## Minimal Scenario Shape
@@ -120,7 +125,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 
 ## Notes
 - Champion base stats are loaded from `Characters/*.json` by champion name.
-- This is still a survival-first model; spell DPS is now eventized but full per-spell champion kits still need script/data integration.
+- This model now includes first-pass scripted Vladimir offensive abilities (`Q`, `E`, `R`) and enemy death/respawn handling.
 - The build search supports: `beam`, `greedy`, `random`, `hill_climb`, `genetic`, `simulated_annealing`, `mcts`, and `portfolio`.
 - Default scenario uses `portfolio`, which runs multiple algorithms in parallel and merges candidates.
 - Useful knobs in `search`:
@@ -150,11 +155,19 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - In build-order optimization, Heartsteel stacks are distributed by item acquisition level and current stage level (so buying it later yields fewer stacks by level 20).
 - Level assumption:
   - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
+- Respawn model knobs:
+  - `simulation.urf_respawn_flat_reduction_seconds` (default `3.0`)
+  - `simulation.urf_respawn_extrapolation_per_level` (default `2.5`)
+- Vladimir scripted ability knobs:
+  - `simulation.vlad_q_base_damage`, `simulation.vlad_q_ap_ratio`, `simulation.vlad_q_heal_ratio_of_damage`, `simulation.vlad_q_base_cooldown_seconds`
+  - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`
+  - `simulation.vlad_r_base_damage`, `simulation.vlad_r_ap_ratio`, `simulation.vlad_r_base_cooldown_seconds`
 - Enemy script hooks (scenario enemy fields):
   - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
   - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per enemy use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
 - Report now includes:
-  - Headline objective score and component outcomes (time alive, damage dealt, healing done)
+  - Headline objective score and component outcomes (time alive, damage dealt, healing done, enemy kills)
+  - Cap-survivor indicators for baseline and best build outcomes
   - Search diagnostics (full eval counts, candidate pool, seed variance, objective weights)
   - Robust vs fragile build confidence based on ensemble seed hit rate
   - Pareto-front tagging over objective/EHP/AP/cost-timing metrics

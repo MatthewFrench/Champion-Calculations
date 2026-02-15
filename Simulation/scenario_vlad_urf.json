@@ -20,7 +20,19 @@
     "protoplasm_heal_total": 300.0,
     "protoplasm_duration_seconds": 5.0,
     "heartsteel_assumed_stacks_at_8m": 20.0,
-    "enemy_uptime_model_enabled": true
+    "enemy_uptime_model_enabled": true,
+    "urf_respawn_flat_reduction_seconds": 3.0,
+    "urf_respawn_extrapolation_per_level": 2.5,
+    "vlad_q_base_damage": 220.0,
+    "vlad_q_ap_ratio": 0.6,
+    "vlad_q_heal_ratio_of_damage": 0.3,
+    "vlad_q_base_cooldown_seconds": 4.0,
+    "vlad_e_base_damage": 180.0,
+    "vlad_e_ap_ratio": 0.5,
+    "vlad_e_base_cooldown_seconds": 8.0,
+    "vlad_r_base_damage": 350.0,
+    "vlad_r_ap_ratio": 0.7,
+    "vlad_r_base_cooldown_seconds": 90.0
   },
   "vladimir_champion": "Vladimir",
   "vladimir_baseline_fixed": [

@@ -17,26 +17,29 @@
 - Added regression tests for legality and key rules.
 - Added persistent full-score cache across runs under:
   - `Simulation/output/cache/`
+- Added first-pass module split for simulation extensions:
+  - `src/respawn.rs`
+  - `src/scripts/vladimir.rs`
+- Added enemy lifecycle simulation:
+  - enemies can die from Vladimir damage
+  - enemies respawn using URF-scaled death timer logic
+- Added first-pass scripted Vladimir offensive cadence:
+  - `Q`, `E`, and `R` damage/heal behavior integrated into the event loop
+- Added strict final ranking parallel batches using Rayon for faster full candidate scoring.
+- Added cap-survivor handling in output and tie-break:
+  - cap-survivor labeling in reports/output
+  - tie-break uses existing objective damage/healing weights
 
 ## Not Done
-- [P0] Full Vladimir kit simulation (`Q`, `E`, `R`)
-  - Goal: move from mostly defensive simulation to realistic throughput and sustain behavior.
+- [P0] Full-fidelity Vladimir kit simulation (`Q`, `E`, `R`, passives)
+  - Goal: upgrade first-pass scripted abilities to closer in-game behavior fidelity.
   - Scope:
-    - Add ability state/cooldown scheduling for `Q`, `E`, and `R`.
-    - Model cast cadence and expected target hit counts in teamfight conditions.
+    - Add full spell-state nuances, empowered states, and target-selection details.
+    - Model cast times/windups and expected hit geometry with position model.
     - Preserve deterministic tick/event behavior.
   - Success criteria:
-    - Reported outcomes change meaningfully with AP/haste/health interactions from offensive builds.
+    - Offensive outcomes track expected ability scaling and timing behavior more closely.
     - Unit tests cover ability cooldown and cast ordering invariants.
-
-- [P0] Parallel strict final candidate evaluation
-  - Goal: reduce wall-clock runtime of strict final ranking.
-  - Scope:
-    - Parallelize full evaluation over strict candidate key batches.
-    - Keep dedupe semantics and leave one core free by default.
-  - Success criteria:
-    - Higher effective multi-core utilization during strict evaluation.
-    - No duplicate full simulation work for identical canonical keys.
 
 - [P1] Build-order scoring alignment to composite objective
   - Goal: make build order optimize the same objective as end-state search.
@@ -78,26 +81,6 @@
     - Report explicitly identifies high-confidence stable loadouts.
     - Repeat runs show reduced variance in recommended top builds.
 
-- [P0] Enemy unit lifecycle (death + respawn)
-  - Goal: allow enemies to die, then return after a respawn delay (target: ~20 seconds).
-  - Scope:
-    - Add enemy health pools and incoming damage resolution from Vladimir abilities.
-    - Remove enemy DPS contribution while dead.
-    - Respawn enemy with URF-appropriate level-based death timer scaling and deterministic reset rules.
-  - Success criteria:
-    - Logs/report show enemy deaths and respawn timestamps.
-    - Time windows with fewer active enemies measurably change survival and damage outputs.
-    - Respawn timings follow documented URF scaling rules.
-
-- [P0] Infinite-survival handling and tie-break policy
-  - Goal: rank indefinitely surviving builds by offensive output instead of treating all as equal.
-  - Scope:
-    - Detect non-death / cap-reached outcomes.
-    - Add tie-break combination for cap survivors (damage + healing composite).
-    - Report explicit "indefinite/cap survivor" label in top results.
-  - Success criteria:
-    - Multiple cap-surviving builds are strictly ranked by combined offensive/sustain output.
-    - No ambiguous ties for top cap survivors.
 
 - [P0] Action timeline realism (windup, projectile travel, blocking, position)
   - Goal: improve combat fidelity beyond instant-hit abstractions.

@@ -1,14 +1,16 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771157273`
+- Generated (unix): `1771194310`
 - Scenario: `scenario_vlad_urf.json`
 
 ## Headline
 - Baseline objective score: **1.0000**
 - Best objective score: **1.0000**
 - Improvement: **+0.00%**
-- Baseline time alive / damage dealt / healing done: **27.55s / 16392.5 / 4684.0**
-- Best time alive / damage dealt / healing done: **27.55s / 16392.5 / 4684.0**
+- Baseline time alive / damage dealt / healing done / enemy kills: **87.66s / 28017.5 / 5596.5 / 6**
+- Best time alive / damage dealt / healing done / enemy kills: **87.66s / 28017.5 / 5596.5 / 6**
+- Baseline cap survivor: **false**
+- Best cap survivor: **false**
 
 - Champion level assumption: **20**
 
@@ -19,14 +21,14 @@
 - Loadout candidates/finalists: `192/1`
 - Ensemble seeds: `1`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
-- Full evaluations: `18` (cache hits/misses/waits: `0/18/0`)
-- Full persistent cache hits/entries: `17/36`
+- Full evaluations: `36` (cache hits/misses/waits: `0/36/0`)
+- Full persistent cache hits/entries: `0/36`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
 
-- Time budget: `1.0s`; elapsed: `1.0s`; timed_out: `true`; progress: `0/1`
+- Time budget: `2.0s`; elapsed: `2.0s`; timed_out: `true`; progress: `0/1`
 
 ## Vladimir Base Stats At Level
 - HP: 2690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
@@ -87,12 +89,12 @@
    - metrics: EHP~10545.4, AP~290.1, timing score -8405.00, total cost 14800
 
 ## Build Order Optimization
-1. Cumulative score: `99.41` | Order: Guardian Angel, Zhonya's Hourglass, Protoplasm Harness, Morellonomicon, Liandry's Torment
+1. Cumulative score: `261.24` | Order: Guardian Angel, Zhonya's Hourglass, Protoplasm Harness, Morellonomicon, Liandry's Torment
    - Stage 1 (level 5): `9.84s`
-   - Stage 2 (level 9): `15.68s`
-   - Stage 3 (level 13): `20.34s`
-   - Stage 4 (level 16): `26.00s`
-   - Stage 5 (level 20): `27.55s`
+   - Stage 2 (level 9): `41.18s`
+   - Stage 3 (level 13): `55.03s`
+   - Stage 4 (level 16): `67.54s`
+   - Stage 5 (level 20): `87.66s`
 
 ## Deeper Insights
 - Common core across all selected top builds: Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass.
