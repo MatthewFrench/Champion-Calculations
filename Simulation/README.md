@@ -31,13 +31,20 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 source "$HOME/.cargo/env"
 cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
-  --mode vlad
+  --mode vladimir
 ```
-- `vlad` mode now also writes a markdown report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vlad_run_report.md`.
+- `vladimir` mode now also writes a markdown report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vladimir_run_report.md`.
 - Report includes:
   - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
   - Vladimir end stats for best build
   - Stack assumptions/notes for stack-based items in the best build
+  - If run with a time budget, report includes timeout/progress metadata
+
+## Runtime Controls
+- `--max-runtime-seconds N`:
+  - Stops search after `N` seconds and reports best-so-far findings.
+- `--status-every-seconds N`:
+  - Prints periodic status lines (elapsed, progress, best score, ETA) while searching.
 
 ## Threading
 - The Rust optimizer leaves one core free by default (`available_cores - 1`, minimum 1 thread).
@@ -46,12 +53,12 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ```bash
 cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
-  --mode vlad \
+  --mode vladimir \
   --threads 8
 ```
 
 ## Diverse Top Builds
-- `vlad` mode can output top diverse builds near the best score:
+- `vladimir` mode can output top diverse builds near the best score:
   - `--top-x` number of diverse builds to keep (default `8`)
   - `--min-item-diff` minimum symmetric item difference between selected builds (default `2`)
   - `--max-relative-gap-percent` max score drop from best to still be considered (default `5.0`)
@@ -77,12 +84,12 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   --mode hecarim_ms
 ```
 
-## Vlad Step Debug (Tick-by-Tick)
+## Vladimir Step Debug (Tick-by-Tick)
 ```bash
 source "$HOME/.cargo/env"
 cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
-  --mode vlad_step \
+  --mode vladimir_step \
   --ticks 60
 ```
 
@@ -119,6 +126,11 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
   - `multi_scenario_worst_weight` (aggregation between weighted-mean and worst-case when using multiple enemy scenarios)
   - `ranked_limit`
+- Loadout search legality:
+  - Rune pages are generated from legal primary/secondary slot rules in `RunesReforged.json`.
+  - Shards are generated from legal `stat_shards` slot options.
+  - Mastery pages are generated from legal Season 2016 tree/tier/point constraints in `Season2016.json`.
+  - Loadout optimization is always on for Vladimir build scoring; there is no scenario shortlist/sample knob for runes/shards/masteries.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - Heartsteel assumptions:
   - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
@@ -135,6 +147,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Pareto-front tagging over survival/EHP/AP/cost-timing metrics
   - Cache hit/miss/wait diagnostics and capped precheck counts
 - Build-order optimization is focused on robust/Pareto builds first, with fallback to top builds if needed.
+- Vladimir loadout (runes/masteries/shards) can be co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
 
 ## Multi-Scenario Objective
 - Optional `enemy_scenarios` array is supported:
@@ -145,7 +158,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ## Runes/Masteries
 - Optional scenario loadout blocks:
   - `vladimir_loadout`
-  - `enemy_loadout` (applied to all enemies)
+  - `enemy_loadout` (`vladimir_step` mode; in `vladimir` mode enemies use hardcoded URF presets by champion)
 - Supported keys:
   - `runes_reforged.rune_ids` (array of rune IDs)
   - `runes_reforged.rune_names` (array of rune names)

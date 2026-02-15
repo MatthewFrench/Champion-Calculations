@@ -11,7 +11,7 @@ use std::hash::{Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::sync::{Arc, Condvar, Mutex};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 const LEGENDARY_RANK: &str = "LEGENDARY";
@@ -229,6 +229,13 @@ struct SearchDiagnostics {
     adaptive_candidates_injected: usize,
     coarse_pool_limit: usize,
     scenario_count: usize,
+    loadout_candidates: usize,
+    loadout_finalists: usize,
+    time_budget_seconds: Option<f64>,
+    elapsed_seconds: f64,
+    timed_out: bool,
+    processed_candidates: usize,
+    total_candidates: usize,
     seed_best_scores: Vec<f64>,
 }
 
@@ -883,7 +890,7 @@ impl VladCombatSimulation {
 struct Cli {
     #[arg(long)]
     scenario: String,
-    #[arg(long, value_enum, default_value_t = Mode::Vlad)]
+    #[arg(long, value_enum, default_value_t = Mode::Vladimir)]
     mode: Mode,
     #[arg(long, default_value_t = 30)]
     ticks: usize,
@@ -897,14 +904,18 @@ struct Cli {
     report_path: Option<String>,
     #[arg(long)]
     threads: Option<usize>,
+    #[arg(long)]
+    max_runtime_seconds: Option<f64>,
+    #[arg(long, default_value_t = 10.0)]
+    status_every_seconds: f64,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum Mode {
-    #[value(name = "vlad")]
-    Vlad,
-    #[value(name = "vlad_step")]
-    VladStep,
+    #[value(name = "vladimir", alias = "vlad")]
+    Vladimir,
+    #[value(name = "vladimir_step", alias = "vlad_step")]
+    VladimirStep,
     #[value(name = "taric_as")]
     TaricAs,
     #[value(name = "hecarim_ms")]
@@ -925,6 +936,10 @@ fn game_mode_dir() -> PathBuf {
 
 fn characters_dir() -> PathBuf {
     simulation_dir().join("..").join("Characters")
+}
+
+fn masteries_dir() -> PathBuf {
+    simulation_dir().join("..").join("Masteries")
 }
 
 fn load_json(path: &Path) -> Result<Value> {
@@ -1087,8 +1102,8 @@ fn resolve_loadout(
     level: usize,
     for_vlad: bool,
 ) -> Result<ResolvedLoadout> {
-    let runes_data = load_json(&PathBuf::from("Masteries/RunesReforged.json"))?;
-    let masteries_data = load_json(&PathBuf::from("Masteries/Season2016.json"))?;
+    let runes_data = load_json(&masteries_dir().join("RunesReforged.json"))?;
+    let masteries_data = load_json(&masteries_dir().join("Season2016.json"))?;
 
     let mut runes_by_id: HashMap<i64, Value> = HashMap::new();
     let mut runes_by_name: HashMap<String, Value> = HashMap::new();
@@ -1636,6 +1651,383 @@ fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection {
         }
     }
     out
+}
+
+fn loadout_selection_key(sel: &LoadoutSelection) -> String {
+    let mut runes = sel.rune_names.clone();
+    runes.sort();
+    let mut shards = sel.shard_stats.clone();
+    shards.sort();
+    let mut masteries = sel
+        .masteries
+        .iter()
+        .map(|m| format!("{}:{}", m.name, m.rank))
+        .collect::<Vec<_>>();
+    masteries.sort();
+    format!(
+        "r={}|s={}|m={}",
+        runes.join(","),
+        shards.join(","),
+        masteries.join(",")
+    )
+}
+
+#[derive(Debug, Clone)]
+struct RunePathDomain {
+    slot_runes: Vec<Vec<String>>,
+}
+
+#[derive(Debug, Clone)]
+struct MasteryOptionDomain {
+    name: String,
+    max_rank: usize,
+    points_required_in_tree: usize,
+}
+
+#[derive(Debug, Clone)]
+struct MasteryTierDomain {
+    points_required: usize,
+    points_available: usize,
+    is_keystone_tier: bool,
+    options: Vec<MasteryOptionDomain>,
+}
+
+#[derive(Debug, Clone)]
+struct MasteryTreeDomain {
+    tiers: Vec<MasteryTierDomain>,
+}
+
+#[derive(Debug, Clone)]
+struct LoadoutDomain {
+    rune_paths: Vec<RunePathDomain>,
+    shard_slots: [Vec<String>; 3],
+    mastery_trees: Vec<MasteryTreeDomain>,
+    mastery_primary_points: usize,
+    mastery_secondary_points: usize,
+    mastery_keystone_requirement: usize,
+}
+
+fn build_loadout_domain() -> LoadoutDomain {
+    let runes_data = load_json(&masteries_dir().join("RunesReforged.json")).unwrap_or(Value::Null);
+    let masteries_data = load_json(&masteries_dir().join("Season2016.json")).unwrap_or(Value::Null);
+
+    let rune_paths = runes_data
+        .get("paths")
+        .and_then(Value::as_array)
+        .map(|paths| {
+            paths
+                .iter()
+                .filter_map(|path| {
+                    let slots = path.get("slots").and_then(Value::as_array)?;
+                    let slot_runes = slots
+                        .iter()
+                        .map(|slot| {
+                            slot.get("runes")
+                                .and_then(Value::as_array)
+                                .map(|runes| {
+                                    runes
+                                        .iter()
+                                        .filter_map(|r| r.get("name").and_then(Value::as_str))
+                                        .map(ToOwned::to_owned)
+                                        .collect::<Vec<_>>()
+                                })
+                                .unwrap_or_default()
+                        })
+                        .collect::<Vec<_>>();
+                    if slot_runes.len() >= 4 {
+                        Some(RunePathDomain { slot_runes })
+                    } else {
+                        None
+                    }
+                })
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
+
+    let shard_slots = {
+        let slots = runes_data
+            .get("stat_shards")
+            .and_then(Value::as_array)
+            .cloned()
+            .unwrap_or_default();
+        let read_slot = |idx: usize| -> Vec<String> {
+            slots
+                .get(idx)
+                .and_then(|s| s.get("options"))
+                .and_then(Value::as_array)
+                .map(|options| {
+                    options
+                        .iter()
+                        .filter_map(|o| o.get("stat").and_then(Value::as_str))
+                        .map(ToOwned::to_owned)
+                        .collect::<Vec<_>>()
+                })
+                .unwrap_or_default()
+        };
+        [read_slot(0), read_slot(1), read_slot(2)]
+    };
+
+    let mastery_lookup = masteries_data
+        .get("masteries")
+        .and_then(Value::as_array)
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|m| {
+                    let name = m.get("display_name").and_then(Value::as_str)?;
+                    let ranks = m.get("ranks").and_then(Value::as_u64).unwrap_or(1) as usize;
+                    let points_required_in_tree = m
+                        .get("points_required_in_tree")
+                        .and_then(Value::as_u64)
+                        .unwrap_or(0) as usize;
+                    Some((
+                        to_norm_key(name),
+                        MasteryOptionDomain {
+                            name: name.to_string(),
+                            max_rank: ranks.max(1),
+                            points_required_in_tree,
+                        },
+                    ))
+                })
+                .collect::<HashMap<_, _>>()
+        })
+        .unwrap_or_default();
+
+    let mastery_trees = masteries_data
+        .get("trees")
+        .and_then(Value::as_array)
+        .map(|trees| {
+            trees
+                .iter()
+                .map(|tree| {
+                    let tiers = tree
+                        .get("tiers")
+                        .and_then(Value::as_array)
+                        .map(|tier_arr| {
+                            tier_arr
+                                .iter()
+                                .map(|tier| {
+                                    let options = tier
+                                        .get("masteries")
+                                        .and_then(Value::as_array)
+                                        .map(|names| {
+                                            names
+                                                .iter()
+                                                .filter_map(Value::as_str)
+                                                .filter_map(|name| mastery_lookup.get(&to_norm_key(name)).cloned())
+                                                .collect::<Vec<_>>()
+                                        })
+                                        .unwrap_or_default();
+                                    MasteryTierDomain {
+                                        points_required: tier
+                                            .get("points_in_tree_required")
+                                            .and_then(Value::as_u64)
+                                            .unwrap_or(0)
+                                            as usize,
+                                        points_available: tier
+                                            .get("points_available")
+                                            .and_then(Value::as_u64)
+                                            .unwrap_or(5)
+                                            as usize,
+                                        is_keystone_tier: tier
+                                            .get("is_keystone_tier")
+                                            .and_then(Value::as_bool)
+                                            .unwrap_or(false),
+                                        options,
+                                    }
+                                })
+                                .collect::<Vec<_>>()
+                        })
+                        .unwrap_or_default();
+                    MasteryTreeDomain { tiers }
+                })
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
+
+    let rules = masteries_data
+        .get("selection_rules")
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
+    LoadoutDomain {
+        rune_paths,
+        shard_slots,
+        mastery_trees,
+        mastery_primary_points: rules
+            .get("primary_tree_points")
+            .and_then(Value::as_u64)
+            .unwrap_or(18) as usize,
+        mastery_secondary_points: rules
+            .get("secondary_tree_points")
+            .and_then(Value::as_u64)
+            .unwrap_or(12) as usize,
+        mastery_keystone_requirement: rules
+            .get("keystone_requirement_points_in_tree")
+            .and_then(Value::as_u64)
+            .unwrap_or(17) as usize,
+    }
+}
+
+fn random_tree_masteries(
+    tree: &MasteryTreeDomain,
+    target_points: usize,
+    keystone_requirement: usize,
+    seed: &mut u64,
+) -> Option<Vec<MasterySelection>> {
+    if tree.tiers.is_empty() || target_points == 0 {
+        return Some(Vec::new());
+    }
+    for _ in 0..128 {
+        let mut points = 0usize;
+        let mut tier_spent = vec![0usize; tree.tiers.len()];
+        let mut ranks = tree
+            .tiers
+            .iter()
+            .map(|t| vec![0usize; t.options.len()])
+            .collect::<Vec<_>>();
+
+        while points < target_points {
+            let mut choices = Vec::new();
+            for (tier_idx, tier) in tree.tiers.iter().enumerate() {
+                if tier.options.is_empty()
+                    || points < tier.points_required
+                    || tier_spent[tier_idx] >= tier.points_available
+                {
+                    continue;
+                }
+                if tier.is_keystone_tier && points < keystone_requirement {
+                    continue;
+                }
+                for (opt_idx, opt) in tier.options.iter().enumerate() {
+                    if ranks[tier_idx][opt_idx] >= opt.max_rank
+                        || points < opt.points_required_in_tree
+                    {
+                        continue;
+                    }
+                    choices.push((tier_idx, opt_idx));
+                }
+            }
+            if choices.is_empty() {
+                break;
+            }
+            let (tier_idx, opt_idx) = choices[rand_index(seed, choices.len())];
+            ranks[tier_idx][opt_idx] += 1;
+            tier_spent[tier_idx] += 1;
+            points += 1;
+        }
+
+        if points != target_points {
+            continue;
+        }
+        let mut out = Vec::new();
+        for (tier_idx, tier) in tree.tiers.iter().enumerate() {
+            for (opt_idx, opt) in tier.options.iter().enumerate() {
+                let rank = ranks[tier_idx][opt_idx];
+                if rank > 0 {
+                    out.push(MasterySelection {
+                        name: opt.name.clone(),
+                        rank,
+                    });
+                }
+            }
+        }
+        return Some(out);
+    }
+    None
+}
+
+fn random_loadout_selection(
+    base: &LoadoutSelection,
+    domain: &LoadoutDomain,
+    seed: &mut u64,
+) -> LoadoutSelection {
+    let mut out = base.clone();
+
+    if domain.rune_paths.len() >= 2
+        && domain.shard_slots.iter().all(|s| !s.is_empty())
+        && domain.rune_paths.iter().all(|p| p.slot_runes.len() >= 4)
+    {
+        let primary_idx = rand_index(seed, domain.rune_paths.len());
+        let secondary_choices = (0..domain.rune_paths.len())
+            .filter(|idx| *idx != primary_idx)
+            .collect::<Vec<_>>();
+        if !secondary_choices.is_empty() {
+            let secondary_idx = secondary_choices[rand_index(seed, secondary_choices.len())];
+            let primary = &domain.rune_paths[primary_idx];
+            let secondary = &domain.rune_paths[secondary_idx];
+            if primary.slot_runes[..4].iter().all(|slot| !slot.is_empty()) {
+                let secondary_slots = (1..=3)
+                    .filter(|slot| {
+                        secondary
+                            .slot_runes
+                            .get(*slot)
+                            .map(|r| !r.is_empty())
+                            .unwrap_or(false)
+                    })
+                    .collect::<Vec<_>>();
+                if secondary_slots.len() >= 2 {
+                    let mut picks = secondary_slots.clone();
+                    shuffle_usize(&mut picks, seed);
+                    let sa = picks[0];
+                    let sb = picks[1];
+                    out.rune_names = vec![
+                        primary.slot_runes[0][rand_index(seed, primary.slot_runes[0].len())].clone(),
+                        primary.slot_runes[1][rand_index(seed, primary.slot_runes[1].len())].clone(),
+                        primary.slot_runes[2][rand_index(seed, primary.slot_runes[2].len())].clone(),
+                        primary.slot_runes[3][rand_index(seed, primary.slot_runes[3].len())].clone(),
+                        secondary.slot_runes[sa][rand_index(seed, secondary.slot_runes[sa].len())]
+                            .clone(),
+                        secondary.slot_runes[sb][rand_index(seed, secondary.slot_runes[sb].len())]
+                            .clone(),
+                    ];
+                    out.rune_ids.clear();
+                    out.shard_stats = domain
+                        .shard_slots
+                        .iter()
+                        .map(|slot| slot[rand_index(seed, slot.len())].clone())
+                        .collect::<Vec<_>>();
+                }
+            }
+        }
+    }
+
+    if domain.mastery_trees.len() >= 2 {
+        let primary_idx = rand_index(seed, domain.mastery_trees.len());
+        let secondary_choices = (0..domain.mastery_trees.len())
+            .filter(|idx| *idx != primary_idx)
+            .collect::<Vec<_>>();
+        if !secondary_choices.is_empty() {
+            let secondary_idx = secondary_choices[rand_index(seed, secondary_choices.len())];
+            let primary = random_tree_masteries(
+                &domain.mastery_trees[primary_idx],
+                domain.mastery_primary_points,
+                domain.mastery_keystone_requirement,
+                seed,
+            );
+            let secondary = random_tree_masteries(
+                &domain.mastery_trees[secondary_idx],
+                domain.mastery_secondary_points,
+                domain.mastery_keystone_requirement,
+                seed,
+            );
+            if let (Some(mut p), Some(s)) = (primary, secondary) {
+                p.extend(s);
+                out.masteries = p;
+            }
+        }
+    }
+
+    out
+}
+
+fn loadout_eval_budget(search: &BuildSearchConfig) -> usize {
+    let base = search
+        .random_samples
+        .max(search.beam_width * 8)
+        .max(search.hill_climb_restarts * 4)
+        .max(search.genetic_population * 2)
+        .max(96);
+    base.min(4096)
 }
 
 fn normalize_name(input: &str) -> String {
@@ -2982,7 +3374,7 @@ fn optimize_build_order(
 }
 
 fn default_report_path() -> PathBuf {
-    simulation_dir().join("output").join("vlad_run_report.md")
+    simulation_dir().join("output").join("vladimir_run_report.md")
 }
 
 fn write_vlad_report(
@@ -3040,9 +3432,11 @@ fn write_vlad_report(
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Enemy scenarios: `{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full capped prechecks: `{}`\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
+        "- Strategy: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full capped prechecks: `{}`\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
         diagnostics.strategy_summary,
         diagnostics.scenario_count,
+        diagnostics.loadout_candidates,
+        diagnostics.loadout_finalists,
         diagnostics.ensemble_seeds,
         diagnostics.coarse_evaluations,
         diagnostics.coarse_cache_hits,
@@ -3060,6 +3454,23 @@ fn write_vlad_report(
         seed_mean,
         seed_std
     ));
+    if let Some(budget) = diagnostics.time_budget_seconds {
+        content.push_str(&format!(
+            "- Time budget: `{:.1}s`; elapsed: `{:.1}s`; timed_out: `{}`; progress: `{}/{}`\n\n",
+            budget,
+            diagnostics.elapsed_seconds,
+            diagnostics.timed_out,
+            diagnostics.processed_candidates,
+            diagnostics.total_candidates
+        ));
+    } else {
+        content.push_str(&format!(
+            "- Elapsed: `{:.1}s`; progress: `{}/{}`\n\n",
+            diagnostics.elapsed_seconds,
+            diagnostics.processed_candidates,
+            diagnostics.total_candidates
+        ));
+    }
 
     content.push_str("## Vladimir Base Stats At Level\n");
     content.push_str(&format!(
@@ -3876,13 +4287,150 @@ fn default_item_pool(items: &HashMap<String, Item>) -> Vec<Item> {
     pool
 }
 
-fn run_vlad_scenario(
+#[derive(Debug, Clone)]
+struct EnemyUrfPreset {
+    item_names: Vec<&'static str>,
+    runes: Vec<&'static str>,
+    shards: Vec<&'static str>,
+    masteries: Vec<(&'static str, usize)>,
+}
+
+fn enemy_urf_preset(champion: &str) -> Option<EnemyUrfPreset> {
+    match to_norm_key(champion).as_str() {
+        "warwick" => Some(EnemyUrfPreset {
+            item_names: vec![
+                "Stridebreaker",
+                "Mercury's Treads",
+                "Blade of the Ruined King",
+                "Kraken Slayer",
+                "Spirit Visage",
+                "Thornmail",
+            ],
+            runes: vec![
+                "Lethal Tempo",
+                "Triumph",
+                "Legend: Alacrity",
+                "Last Stand",
+                "Celerity",
+                "Waterwalking",
+            ],
+            shards: vec!["attack_speed", "adaptive", "health"],
+            masteries: vec![("Fervor of Battle", 1), ("Legendary Guardian", 1)],
+        }),
+        "vayne" => Some(EnemyUrfPreset {
+            item_names: vec![
+                "Berserker's Greaves",
+                "Kraken Slayer",
+                "Guinsoo's Rageblade",
+                "Fiendhunter Bolts",
+                "Blade of the Ruined King",
+                "Infinity Edge",
+            ],
+            runes: vec![
+                "Lethal Tempo",
+                "Triumph",
+                "Legend: Alacrity",
+                "Coup de Grace",
+                "Conditioning",
+                "Overgrowth",
+            ],
+            shards: vec!["attack_speed", "adaptive", "health"],
+            masteries: vec![("Fervor of Battle", 1), ("Battering Blows", 1)],
+        }),
+        "morgana" => Some(EnemyUrfPreset {
+            item_names: vec![
+                "Sorcerer's Shoes",
+                "Liandry's Torment",
+                "Blackfire Torch",
+                "Rylai's Crystal Scepter",
+                "Zhonya's Hourglass",
+                "Luden's Echo",
+            ],
+            runes: vec![
+                "Arcane Comet",
+                "Manaflow Band",
+                "Transcendence",
+                "Gathering Storm",
+                "Cheap Shot",
+                "Ultimate Hunter",
+            ],
+            shards: vec!["adaptive", "adaptive", "health"],
+            masteries: vec![("Thunderlord's Decree", 1), ("Piercing Thoughts", 1)],
+        }),
+        "sona" => Some(EnemyUrfPreset {
+            item_names: vec![
+                "Sorcerer's Shoes",
+                "Luden's Echo",
+                "Lich Bane",
+                "Stormsurge",
+                "Shadowflame",
+                "Rabadon's Deathcap",
+            ],
+            runes: vec![
+                "Summon Aery",
+                "Manaflow Band",
+                "Transcendence",
+                "Gathering Storm",
+                "Conditioning",
+                "Revitalize",
+            ],
+            shards: vec!["adaptive", "adaptive", "health"],
+            masteries: vec![("Windspeaker's Blessing", 1), ("Intelligence", 1)],
+        }),
+        "drmundo" => Some(EnemyUrfPreset {
+            item_names: vec![
+                "Mercury's Treads",
+                "Heartsteel",
+                "Warmog's Armor",
+                "Spirit Visage",
+                "Thornmail",
+                "Titanic Hydra",
+            ],
+            runes: vec![
+                "Grasp of the Undying",
+                "Demolish",
+                "Conditioning",
+                "Overgrowth",
+                "Magical Footwear",
+                "Cosmic Insight",
+            ],
+            shards: vec!["adaptive", "health", "health"],
+            masteries: vec![("Grasp of the Undying", 1), ("Perseverance", 1)],
+        }),
+        _ => None,
+    }
+}
+
+fn enemy_loadout_from_preset(preset: &EnemyUrfPreset) -> LoadoutSelection {
+    LoadoutSelection {
+        rune_ids: Vec::new(),
+        rune_names: preset.runes.iter().map(|s| (*s).to_string()).collect(),
+        shard_stats: preset.shards.iter().map(|s| (*s).to_string()).collect(),
+        masteries: preset
+            .masteries
+            .iter()
+            .map(|(name, rank)| MasterySelection {
+                name: (*name).to_string(),
+                rank: *rank,
+            })
+            .collect(),
+    }
+}
+
+fn run_vladimir_scenario(
     scenario_path: &Path,
     top_x: usize,
     min_item_diff: usize,
     max_relative_gap_percent: f64,
     report_path_override: Option<&str>,
+    max_runtime_seconds: Option<f64>,
+    status_every_seconds: f64,
 ) -> Result<()> {
+    let run_start = Instant::now();
+    let time_budget = max_runtime_seconds
+        .filter(|s| *s > 0.0)
+        .map(Duration::from_secs_f64);
+    let status_every = Duration::from_secs_f64(status_every_seconds.max(1.0));
     let items = load_items()?;
     let urf = load_urf_buffs()?;
     let champion_bases = load_champion_bases()?;
@@ -3965,9 +4513,8 @@ fn run_vlad_scenario(
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
     let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
-    let enemy_loadout_selection = parse_loadout_selection(scenario.get("enemy_loadout"));
-    let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim.champion_level, true)?;
-    let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim.champion_level, false)?;
+    let loadout_domain = Arc::new(build_loadout_domain());
+    let loadout_eval_budget = loadout_eval_budget(&search_cfg);
     let max_items = search_cfg.max_items;
     let item_pool = default_item_pool(&items);
 
@@ -3990,28 +4537,36 @@ fn run_vlad_scenario(
             let builds = enemies
                 .par_iter()
                 .map(|enemy| {
-                    let enemy_copy = enemy.clone();
-                    let build_indices =
-                        build_search(&item_pool, max_items, &search_cfg, |build_idx| {
-                            let build_items = build_from_indices(&item_pool, build_idx);
-                            let mut stats = build_item_stats(&build_items);
-                            stats.add(&enemy_loadout.bonus_stats);
-                            apply_item_assumptions(
-                                &mut stats,
-                                &enemy_copy.base,
-                                &build_items,
-                                &sim,
-                                sim.champion_level,
-                                None,
-                            );
-                            let (physical_dps, magic_dps) =
-                                compute_enemy_dps(&enemy_copy, &stats, &urf);
-                            physical_dps + magic_dps
-                        });
+                    let preset = enemy_urf_preset(&enemy.name);
+                    let build_indices = if let Some(preset) = preset.as_ref() {
+                        let names = preset
+                            .item_names
+                            .iter()
+                            .map(|n| (*n).to_string())
+                            .collect::<Vec<_>>();
+                        item_pool_from_names(&items, &names)
+                            .unwrap_or_else(|_| item_pool.iter().take(max_items).cloned().collect::<Vec<_>>())
+                            .iter()
+                            .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
+                            .collect::<Vec<_>>()
+                    } else {
+                        item_pool.iter().take(max_items).enumerate().map(|(idx, _)| idx).collect::<Vec<_>>()
+                    };
+                    let enemy_bonus_stats = if let Some(preset) = preset.as_ref() {
+                        resolve_loadout(
+                            &enemy_loadout_from_preset(preset),
+                            sim.champion_level,
+                            false,
+                        )
+                        .map(|r| r.bonus_stats)
+                        .unwrap_or_default()
+                    } else {
+                        Stats::default()
+                    };
                     (
                         enemy.clone(),
                         build_from_indices(&item_pool, &build_indices),
-                        enemy_loadout.bonus_stats.clone(),
+                        enemy_bonus_stats,
                     )
                 })
                 .collect::<Vec<_>>();
@@ -4022,15 +4577,20 @@ fn run_vlad_scenario(
         .first()
         .map(|(_, _, b)| b.clone())
         .unwrap_or_default();
+    let enemy_loadout = ResolvedLoadout::default();
 
-    let coarse_eval_count = AtomicUsize::new(0);
-    let full_eval_count = AtomicUsize::new(0);
-    let full_capped_eval_count = AtomicUsize::new(0);
-    let coarse_cache = Arc::new(BlockingScoreCache::new());
-    let full_cache = Arc::new(BlockingScoreCache::new());
-    let coarse_features = precompute_coarse_features(&item_pool);
+    let vlad_base_loadout = resolve_loadout(&vlad_loadout_selection, sim.champion_level, true)?;
+    let resolve_cache: Arc<Mutex<HashMap<String, ResolvedLoadout>>> = Arc::new(Mutex::new(
+        HashMap::from([(
+            loadout_selection_key(&vlad_loadout_selection),
+            vlad_base_loadout.clone(),
+        )]),
+    ));
+    let best_loadout_by_item: Arc<Mutex<HashMap<Vec<usize>, (LoadoutSelection, ResolvedLoadout)>>> =
+        Arc::new(Mutex::new(HashMap::new()));
+
     let objective_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
-    let objective_score_for_build = |build_items: &[Item]| {
+    let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
         let mut weighted_sum = 0.0;
         let mut weight_sum = 0.0;
         let mut worst = f64::INFINITY;
@@ -4038,7 +4598,7 @@ fn run_vlad_scenario(
             let t = simulate_vlad_survival(
                 &vlad_base,
                 build_items,
-                &vlad_loadout.bonus_stats,
+                bonus_stats,
                 None,
                 enemy_builds_s,
                 &sim,
@@ -4060,6 +4620,64 @@ fn run_vlad_scenario(
             mean
         }
     };
+
+    let loadout_candidates_count = loadout_eval_budget;
+    let loadout_finalists_count = 1usize;
+    let optimize_loadout_for_build = |build_key: &[usize], build_items: &[Item]| {
+        let mut hasher = DefaultHasher::new();
+        build_key.hash(&mut hasher);
+        let mut seed = search_cfg.seed ^ hasher.finish();
+        let mut seen = HashSet::new();
+
+        let mut best_sel = vlad_loadout_selection.clone();
+        let mut best_resolved = vlad_base_loadout.clone();
+        let mut best_score = score_build_with_bonus(build_items, &best_resolved.bonus_stats);
+        seen.insert(loadout_selection_key(&best_sel));
+
+        let mut evaluated = 0usize;
+        while evaluated < loadout_eval_budget {
+            let candidate = random_loadout_selection(&vlad_loadout_selection, &loadout_domain, &mut seed);
+            let key = loadout_selection_key(&candidate);
+            if !seen.insert(key.clone()) {
+                continue;
+            }
+
+            let resolved = if let Ok(map) = resolve_cache.lock() {
+                map.get(&key).cloned()
+            } else {
+                None
+            }
+            .or_else(|| {
+                resolve_loadout(&candidate, sim.champion_level, true)
+                    .ok()
+                    .inspect(|resolved| {
+                        if let Ok(mut map) = resolve_cache.lock() {
+                            map.insert(key.clone(), resolved.clone());
+                        }
+                    })
+            });
+
+            let Some(resolved) = resolved else {
+                continue;
+            };
+            let score = score_build_with_bonus(build_items, &resolved.bonus_stats);
+            if score > best_score {
+                best_score = score;
+                best_sel = candidate;
+                best_resolved = resolved;
+            }
+            evaluated += 1;
+        }
+        (best_score, best_sel, best_resolved)
+    };
+
+    let coarse_eval_count = AtomicUsize::new(0);
+    let full_eval_count = AtomicUsize::new(0);
+    let full_capped_eval_count = AtomicUsize::new(0);
+    let coarse_cache = Arc::new(BlockingScoreCache::new());
+    let full_cache = Arc::new(BlockingScoreCache::new());
+    let coarse_features = precompute_coarse_features(&item_pool);
+    let coarse_bonus_stats = vlad_base_loadout.bonus_stats.clone();
     let objective_capped_score_for_build = |build_items: &[Item], cap_seconds: f64| {
         let mut weighted_sum = 0.0;
         let mut weight_sum = 0.0;
@@ -4069,7 +4687,7 @@ fn run_vlad_scenario(
             let t = simulate_vlad_survival_capped(
                 &vlad_base,
                 build_items,
-                &vlad_loadout.bonus_stats,
+                &vlad_base_loadout.bonus_stats,
                 None,
                 enemy_builds_s,
                 &sim,
@@ -4101,7 +4719,7 @@ fn run_vlad_scenario(
                 &vlad_base,
                 &key,
                 &coarse_features,
-                &vlad_loadout.bonus_stats,
+                &coarse_bonus_stats,
                 &sim,
             )
         })
@@ -4112,7 +4730,11 @@ fn run_vlad_scenario(
         cache.get_or_compute(key.clone(), || {
             full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             let build_items = build_from_indices(&item_pool, &key);
-            objective_score_for_build(&build_items)
+            let (score, best_sel, best_resolved) = optimize_loadout_for_build(&key, &build_items);
+            if let Ok(mut map) = best_loadout_by_item.lock() {
+                map.insert(key.clone(), (best_sel, best_resolved));
+            }
+            score
         })
     };
 
@@ -4186,16 +4808,46 @@ fn run_vlad_scenario(
         .max(64);
     let mut vlad_ranked: Vec<(Vec<usize>, f64)> = Vec::new();
     let mut floor = f64::NEG_INFINITY;
-    for (key, _) in coarse_ordered {
-        if floor.is_finite() {
-            let preview_build = build_from_indices(&item_pool, &key);
-            let capped = objective_capped_score_for_build(&preview_build, floor);
-            if capped < floor {
-                continue;
+    let total_candidates = coarse_ordered.len();
+    let mut processed_candidates = 0usize;
+    let mut timed_out = false;
+    let mut next_status_at = run_start + status_every;
+    let batch_size = (rayon::current_num_threads() * 8).max(32);
+    let mut idx = 0usize;
+    while idx < total_candidates {
+        if let Some(budget) = time_budget {
+            if run_start.elapsed() >= budget {
+                timed_out = true;
+                break;
             }
         }
-        let score = full_score_fn(&key);
-        vlad_ranked.push((key, score));
+
+        let end = (idx + batch_size).min(total_candidates);
+        let floor_snapshot = floor;
+        let chunk = &coarse_ordered[idx..end];
+        let scored = chunk
+            .par_iter()
+            .filter_map(|(key, _)| {
+                if let Some(budget) = time_budget {
+                    if run_start.elapsed() >= budget {
+                        return None;
+                    }
+                }
+                if floor_snapshot.is_finite() {
+                    let preview_build = build_from_indices(&item_pool, key);
+                    let capped = objective_capped_score_for_build(&preview_build, floor_snapshot);
+                    if capped < floor_snapshot {
+                        return None;
+                    }
+                }
+                Some((key.clone(), full_score_fn(key)))
+            })
+            .collect::<Vec<_>>();
+
+        processed_candidates = end;
+        for (key, score) in scored {
+            vlad_ranked.push((key, score));
+        }
         vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
         if vlad_ranked.len() > keep_limit {
             vlad_ranked.truncate(keep_limit);
@@ -4203,6 +4855,36 @@ fn run_vlad_scenario(
         if vlad_ranked.len() >= keep_limit {
             floor = vlad_ranked[keep_limit - 1].1;
         }
+
+        if Instant::now() >= next_status_at {
+            let elapsed = run_start.elapsed().as_secs_f64();
+            let pct = if total_candidates > 0 {
+                (processed_candidates as f64 / total_candidates as f64) * 100.0
+            } else {
+                100.0
+            };
+            let rate = if elapsed > 0.0 {
+                processed_candidates as f64 / elapsed
+            } else {
+                0.0
+            };
+            let remaining = total_candidates.saturating_sub(processed_candidates) as f64;
+            let eta = if rate > 0.0 { remaining / rate } else { 0.0 };
+            let best = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
+            println!(
+                "[status] elapsed={:.1}s progress={}/{} ({:.1}%) best={:.2}s eta={:.1}s",
+                elapsed, processed_candidates, total_candidates, pct, best, eta
+            );
+            while next_status_at <= Instant::now() {
+                next_status_at += status_every;
+            }
+        }
+        idx = end;
+    }
+    if vlad_ranked.is_empty() && !unique_coarse_keys.is_empty() {
+        let fallback_key = unique_coarse_keys[0].clone();
+        let fallback_score = full_score_fn(&fallback_key);
+        vlad_ranked.push((fallback_key, fallback_score));
     }
     vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
 
@@ -4230,11 +4912,21 @@ fn run_vlad_scenario(
         .map(|(build, _)| build.clone())
         .unwrap_or_default();
     let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
+    let vlad_loadout = best_loadout_by_item
+        .lock()
+        .ok()
+        .and_then(|m| m.get(&vlad_best_indices).cloned())
+        .map(|(_, resolved)| resolved)
+        .unwrap_or_else(|| vlad_base_loadout.clone());
 
-    let baseline_fixed_time = objective_score_for_build(&baseline_fixed_build);
+    let baseline_fixed_indices = baseline_fixed_build
+        .iter()
+        .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
+        .collect::<Vec<_>>();
+    let baseline_fixed_time = full_score_fn(&baseline_fixed_indices);
     let vlad_best_time = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
 
-    println!("Enemy builds (optimized for DPS):");
+    println!("Enemy builds (URF preset defaults):");
     for (enemy, build, _) in &enemy_builds {
         println!(
             "- {}: {}",
@@ -4264,6 +4956,10 @@ fn run_vlad_scenario(
         search_strategy_summary(&search_cfg)
     );
     println!(
+        "- Loadout candidates/finalists: {}/{}",
+        loadout_candidates_count, loadout_finalists_count
+    );
+    println!(
         "- Candidate evaluations (coarse/full/full-capped): {}/{}/{}",
         coarse_eval_count.load(AtomicOrdering::Relaxed),
         full_eval_count.load(AtomicOrdering::Relaxed),
@@ -4284,6 +4980,16 @@ fn run_vlad_scenario(
         "- Enemy scenarios in objective: {}",
         enemy_build_scenarios.len()
     );
+    if let Some(budget) = time_budget {
+        println!(
+            "- Time budget: {:.1}s | elapsed: {:.1}s | timed_out: {} | progress: {}/{}",
+            budget.as_secs_f64(),
+            run_start.elapsed().as_secs_f64(),
+            timed_out,
+            processed_candidates,
+            total_candidates
+        );
+    }
     println!("- Unique coarse candidates: {}", unique_coarse_keys.len());
     println!("- Bleed candidates injected: {}", bleed_candidate_count);
     println!(
@@ -4372,6 +5078,13 @@ fn run_vlad_scenario(
         adaptive_candidates_injected: adaptive_candidate_count,
         coarse_pool_limit: search_cfg.coarse_pool_limit,
         scenario_count: enemy_build_scenarios.len(),
+        loadout_candidates: loadout_candidates_count,
+        loadout_finalists: loadout_finalists_count,
+        time_budget_seconds: time_budget.map(|d| d.as_secs_f64()),
+        elapsed_seconds: run_start.elapsed().as_secs_f64(),
+        timed_out,
+        processed_candidates,
+        total_candidates,
         seed_best_scores,
     };
     let confidence_by_key = build_confidence
@@ -4499,7 +5212,7 @@ fn run_vlad_scenario(
     Ok(())
 }
 
-fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
+fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
     let items = load_items()?;
     let urf = load_urf_buffs()?;
     let champion_bases = load_champion_bases()?;
@@ -4666,14 +5379,16 @@ fn main() -> Result<()> {
 
     let scenario_path = PathBuf::from(cli.scenario);
     match cli.mode {
-        Mode::Vlad => run_vlad_scenario(
+        Mode::Vladimir => run_vladimir_scenario(
             &scenario_path,
             cli.top_x,
             cli.min_item_diff,
             cli.max_relative_gap_percent,
             cli.report_path.as_deref(),
+            cli.max_runtime_seconds,
+            cli.status_every_seconds,
         ),
-        Mode::VladStep => run_vlad_stepper(&scenario_path, cli.ticks),
+        Mode::VladimirStep => run_vladimir_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
         }
