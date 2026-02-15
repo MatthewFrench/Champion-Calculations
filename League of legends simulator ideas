@@ -1,0 +1,8 @@
+League of legends simulator
+
+- After finding the top builds, do simulations of what to build first and in what order, so we have the perfect build order, spread levels from 1 to 20 evenly between items where first item is at level 5. Don't worry about in-between items or partial items.
+- Add runes/masteries to the builds, simulation, and run output idiomatically if not already
+- Make the enemies able to die, but they respond in about 20 seconds
+- If a build can survive indefinitely, it should then be ranked by damage done to be better than other builds
+- Are champions using abilities? Sounds like we'll need to write code for simulating those, subagents?
+- We need to avoid item/mastery/champion specific code in the main simulation file if we can, that would be where making specific code scripts would come in handy for that execution

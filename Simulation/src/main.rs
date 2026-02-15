@@ -63,6 +63,7 @@ struct Item {
     stats: Stats,
     rank: Vec<String>,
     shop_purchasable: bool,
+    passive_effects_text: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -70,10 +71,15 @@ struct Item {
 struct ChampionBase {
     name: String,
     base_health: f64,
+    health_per_level: f64,
     base_armor: f64,
+    armor_per_level: f64,
     base_magic_resist: f64,
+    magic_resist_per_level: f64,
     base_attack_damage: f64,
+    attack_damage_per_level: f64,
     base_attack_speed: f64,
+    attack_speed_per_level_percent: f64,
     base_move_speed: f64,
     is_melee: bool,
 }
@@ -94,6 +100,7 @@ struct EnemyConfig {
 struct SimulationConfig {
     dt: f64,
     server_tick_rate_hz: f64,
+    champion_level: usize,
     max_time_seconds: f64,
     vlad_pool_rank: usize,
     vlad_pool_untargetable_seconds: f64,
@@ -657,6 +664,10 @@ fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
     Ok(SimulationConfig {
         dt,
         server_tick_rate_hz,
+        champion_level: data
+            .get("champion_level")
+            .and_then(Value::as_u64)
+            .unwrap_or(20) as usize,
         max_time_seconds: as_f64(data, "max_time_seconds")?,
         vlad_pool_rank: data
             .get("vlad_pool_rank")
@@ -691,10 +702,30 @@ fn parse_champion_base(data: &Value) -> Result<ChampionBase> {
     Ok(ChampionBase {
         name: as_str(data, "name")?.to_string(),
         base_health: as_f64(data, "base_health")?,
+        health_per_level: data
+            .get("health_per_level")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
         base_armor: as_f64(data, "base_armor")?,
+        armor_per_level: data
+            .get("armor_per_level")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
         base_magic_resist: as_f64(data, "base_magic_resist")?,
+        magic_resist_per_level: data
+            .get("magic_resist_per_level")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
         base_attack_damage: as_f64(data, "base_attack_damage")?,
+        attack_damage_per_level: data
+            .get("attack_damage_per_level")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
         base_attack_speed: as_f64(data, "base_attack_speed")?,
+        attack_speed_per_level_percent: data
+            .get("attack_speed_per_level_percent")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
         base_move_speed: as_f64(data, "base_move_speed")?,
         is_melee: data
             .get("is_melee")
@@ -806,6 +837,31 @@ fn champion_base_from_character_data(
         .get("move_speed")
         .and_then(Value::as_f64)
         .ok_or_else(|| anyhow!("Missing move_speed for {}", fallback_name))?;
+    let attack_speed_per_level_percent = base_stats
+        .get("attack_speed")
+        .and_then(|v| v.get("per_level_percent"))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0);
+    let armor_per_level = base_stats
+        .get("armor")
+        .and_then(|v| v.get("per_level"))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0);
+    let magic_resist_per_level = base_stats
+        .get("magic_resist")
+        .and_then(|v| v.get("per_level"))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0);
+    let attack_damage_per_level = base_stats
+        .get("attack_damage")
+        .and_then(|v| v.get("per_level"))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0);
+    let health_per_level = base_stats
+        .get("health")
+        .and_then(|v| v.get("per_level"))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0);
 
     let attack_type = character
         .get("basic_attack")
@@ -824,10 +880,15 @@ fn champion_base_from_character_data(
     Ok(ChampionBase {
         name: champion_name,
         base_health: health,
+        health_per_level,
         base_armor: armor,
+        armor_per_level,
         base_magic_resist: magic_resist,
+        magic_resist_per_level,
         base_attack_damage: attack_damage,
+        attack_damage_per_level,
         base_attack_speed: attack_speed,
+        attack_speed_per_level_percent,
         base_move_speed: move_speed,
         is_melee,
     })
@@ -962,7 +1023,22 @@ fn load_items() -> Result<HashMap<String, Item>> {
             }
         }
 
-        let Some(name) = data.get("name").and_then(Value::as_str).map(|s| s.to_string()) else {
+        let passive_effects_text = data
+            .get("passives")
+            .and_then(Value::as_array)
+            .map(|arr| {
+                arr.iter()
+                    .filter_map(|p| p.get("effects").and_then(Value::as_str))
+                    .map(ToOwned::to_owned)
+                    .collect::<Vec<_>>()
+            })
+            .unwrap_or_default();
+
+        let Some(name) = data
+            .get("name")
+            .and_then(Value::as_str)
+            .map(|s| s.to_string())
+        else {
             continue;
         };
         items.insert(
@@ -972,6 +1048,7 @@ fn load_items() -> Result<HashMap<String, Item>> {
                 stats,
                 rank,
                 shop_purchasable: purchasable,
+                passive_effects_text,
             },
         );
     }
@@ -1000,6 +1077,27 @@ fn is_boots(item: &Item) -> bool {
 
 fn cooldown_after_haste(base_seconds: f64, haste: f64) -> f64 {
     base_seconds * (100.0 / (100.0 + haste))
+}
+
+fn champion_at_level(base: &ChampionBase, level: usize) -> ChampionBase {
+    let lvl = level.max(1) as f64;
+    let growth_levels = (lvl - 1.0).max(0.0);
+    ChampionBase {
+        name: base.name.clone(),
+        base_health: base.base_health + base.health_per_level * growth_levels,
+        health_per_level: base.health_per_level,
+        base_armor: base.base_armor + base.armor_per_level * growth_levels,
+        armor_per_level: base.armor_per_level,
+        base_magic_resist: base.base_magic_resist + base.magic_resist_per_level * growth_levels,
+        magic_resist_per_level: base.magic_resist_per_level,
+        base_attack_damage: base.base_attack_damage + base.attack_damage_per_level * growth_levels,
+        attack_damage_per_level: base.attack_damage_per_level,
+        base_attack_speed: base.base_attack_speed
+            * (1.0 + (base.attack_speed_per_level_percent / 100.0) * growth_levels),
+        attack_speed_per_level_percent: base.attack_speed_per_level_percent,
+        base_move_speed: base.base_move_speed,
+        is_melee: base.is_melee,
+    }
 }
 
 fn assumed_heartsteel_bonus_health(base_max_health: f64, stacks_at_8m: f64) -> f64 {
@@ -1031,6 +1129,51 @@ fn apply_item_assumptions(
         stats.health +=
             assumed_heartsteel_bonus_health(base_max_health, sim.heartsteel_assumed_stacks_at_8m);
     }
+}
+
+fn compute_effective_item_stats_for_build(
+    base: &ChampionBase,
+    build_items: &[Item],
+    sim: &SimulationConfig,
+) -> Stats {
+    let mut stats = build_item_stats(build_items);
+    apply_item_assumptions(&mut stats, base, build_items, sim);
+    stats
+}
+
+fn build_stack_notes(
+    build_items: &[Item],
+    base: &ChampionBase,
+    sim: &SimulationConfig,
+) -> Vec<String> {
+    let mut notes = Vec::new();
+    for item in build_items {
+        if item.name == "Heartsteel" {
+            let mut base_stats = build_item_stats(build_items);
+            // Remove Heartsteel's own flat health so the estimate is anchored to pre-heartsteel max HP.
+            base_stats.health -= item.stats.health;
+            let base_max_hp = base.base_health + base_stats.health.max(0.0);
+            let bonus =
+                assumed_heartsteel_bonus_health(base_max_hp, sim.heartsteel_assumed_stacks_at_8m);
+            notes.push(format!(
+                "Heartsteel assumed procs by 8m: {:.0} (estimated permanent bonus health: +{:.1}).",
+                sim.heartsteel_assumed_stacks_at_8m, bonus
+            ));
+            continue;
+        }
+
+        let has_stack_text = item
+            .passive_effects_text
+            .iter()
+            .any(|t| t.to_ascii_lowercase().contains("stack"));
+        if has_stack_text {
+            notes.push(format!(
+                "{} has stack-based passive text in item data; currently treated as baseline/implicit unless explicitly modeled.",
+                item.name
+            ));
+        }
+    }
+    notes
 }
 
 fn compute_vlad_stats(base: &ChampionBase, item_stats: &Stats) -> Stats {
@@ -1249,6 +1392,10 @@ fn default_report_path() -> PathBuf {
 fn write_vlad_report(
     report_path: &Path,
     scenario_path: &Path,
+    sim: &SimulationConfig,
+    vlad_base_level: &ChampionBase,
+    vlad_end_stats: &Stats,
+    stack_notes: &[String],
     baseline_build: &[Item],
     baseline_time: f64,
     best_build: &[Item],
@@ -1281,11 +1428,51 @@ fn write_vlad_report(
         baseline_time, best_time, improvement
     ));
 
+    content.push_str(&format!(
+        "- Champion level assumption: **{}**\n\n",
+        sim.champion_level
+    ));
+
+    content.push_str("## Vladimir Base Stats At Level\n");
+    content.push_str(&format!(
+        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AD: {:.1}, AS: {:.3}, MS: {:.1}\n\n",
+        vlad_base_level.base_health,
+        vlad_base_level.base_armor,
+        vlad_base_level.base_magic_resist,
+        vlad_base_level.base_attack_damage,
+        vlad_base_level.base_attack_speed,
+        vlad_base_level.base_move_speed
+    ));
+
     content.push_str("## Baseline Build\n");
     content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
 
     content.push_str("## Best Build\n");
     content.push_str(&format!("- {}\n\n", item_names(best_build)));
+
+    content.push_str("## Vladimir End Stats (Best Build)\n");
+    content.push_str(&format!(
+        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AP: {:.1}, AD: {:.1}, Ability Haste: {:.1}, Move Speed (flat bonus): {:.1}\n\n",
+        vlad_end_stats.health,
+        vlad_end_stats.armor,
+        vlad_end_stats.magic_resist,
+        vlad_end_stats.ability_power,
+        vlad_end_stats.attack_damage,
+        vlad_end_stats.ability_haste,
+        vlad_end_stats.move_speed_flat
+    ));
+
+    content.push_str("## Stack Assumptions\n");
+    if stack_notes.is_empty() {
+        content.push_str(
+            "- No explicit stack assumptions triggered for selected best build items.\n\n",
+        );
+    } else {
+        for note in stack_notes {
+            content.push_str(&format!("- {}\n", note));
+        }
+        content.push('\n');
+    }
 
     content.push_str("## Enemy Builds (DPS-Optimized)\n");
     for (enemy, build) in enemy_builds {
@@ -1345,8 +1532,10 @@ fn write_vlad_report(
             top_freq.join(", ")
         ));
         content.push_str("- Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.\n");
+        content.push_str("- Rune/mastery effects are not yet modeled in end stats.\n");
     } else {
         content.push_str("- Broaden thresholds (`--max-relative-gap-percent`) or lower diversity constraint (`--min-item-diff`) to surface more alternatives.\n");
+        content.push_str("- Rune/mastery effects are not yet modeled in end stats.\n");
     }
 
     fs::write(report_path, content)
@@ -1566,7 +1755,7 @@ fn run_vlad_scenario(
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
 
-    let vlad_base =
+    let vlad_base_raw =
         if let Some(champion) = scenario.get("vladimir_champion").and_then(Value::as_str) {
             lookup_champion_base(&champion_bases, champion)?
         } else {
@@ -1576,14 +1765,22 @@ fn run_vlad_scenario(
                     .ok_or_else(|| anyhow!("Missing vladimir_champion/vladimir_base"))?,
             )?
         };
+    let vlad_base = champion_at_level(&vlad_base_raw, sim.champion_level);
 
-    let enemies = scenario
+    let enemies_raw = scenario
         .get("enemies")
         .and_then(Value::as_array)
         .ok_or_else(|| anyhow!("Missing enemies"))?
         .iter()
         .map(|e| parse_enemy_config(e, &champion_bases))
         .collect::<Result<Vec<_>>>()?;
+    let enemies = enemies_raw
+        .into_iter()
+        .map(|mut e| {
+            e.base = champion_at_level(&e.base, sim.champion_level);
+            e
+        })
+        .collect::<Vec<_>>();
 
     let search_cfg = parse_build_search(
         scenario
@@ -1691,6 +1888,11 @@ fn run_vlad_scenario(
         .map(|(indices, score)| (build_from_indices(&item_pool, indices), *score))
         .collect::<Vec<_>>();
 
+    let best_effective_item_stats =
+        compute_effective_item_stats_for_build(&vlad_base, &vlad_best_build, &sim);
+    let vlad_end_stats = compute_vlad_stats(&vlad_base, &best_effective_item_stats);
+    let stack_notes = build_stack_notes(&vlad_best_build, &vlad_base, &sim);
+
     println!("\nTop diverse builds:");
     if diverse_top_builds.is_empty() {
         println!(
@@ -1708,6 +1910,10 @@ fn run_vlad_scenario(
     write_vlad_report(
         &report_path,
         scenario_path,
+        &sim,
+        &vlad_base,
+        &vlad_end_stats,
+        &stack_notes,
         &baseline_fixed_build,
         baseline_fixed_time,
         &vlad_best_build,
@@ -1731,7 +1937,7 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    let vlad_base =
+    let vlad_base_raw =
         if let Some(champion) = scenario.get("vladimir_champion").and_then(Value::as_str) {
             lookup_champion_base(&champion_bases, champion)?
         } else {
@@ -1741,14 +1947,22 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
                     .ok_or_else(|| anyhow!("Missing vladimir_champion/vladimir_base"))?,
             )?
         };
+    let vlad_base = champion_at_level(&vlad_base_raw, sim_cfg.champion_level);
 
-    let enemies = scenario
+    let enemies_raw = scenario
         .get("enemies")
         .and_then(Value::as_array)
         .ok_or_else(|| anyhow!("Missing enemies"))?
         .iter()
         .map(|e| parse_enemy_config(e, &champion_bases))
         .collect::<Result<Vec<_>>>()?;
+    let enemies = enemies_raw
+        .into_iter()
+        .map(|mut e| {
+            e.base = champion_at_level(&e.base, sim_cfg.champion_level);
+            e
+        })
+        .collect::<Vec<_>>();
 
     let search_cfg = parse_build_search(
         scenario

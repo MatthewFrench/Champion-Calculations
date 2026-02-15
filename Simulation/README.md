@@ -25,6 +25,10 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   --mode vlad
 ```
 - `vlad` mode now also writes a markdown report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vlad_run_report.md`.
+- Report includes:
+  - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
+  - Vladimir end stats for best build
+  - Stack assumptions/notes for stack-based items in the best build
 
 ## Threading
 - The Rust optimizer uses all available CPU cores by default.
@@ -80,6 +84,9 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Pre-evolution items are normalized to evolved forms in simulation lookups:
   - `Manamune` -> `Muramana`
   - `Archangel's Staff` -> `Seraph's Embrace`
+- Mode availability note:
+  - Item JSON does not currently expose an explicit `available_in_modes` field.
+  - As a practical URF-safe rule, search excludes Arena/distributed-only item patterns and focuses on normal-rift-eligible legendary items.
 
 ## Notes
 - Champion base stats are loaded from `Characters/*.json` by champion name.
@@ -88,3 +95,5 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Heartsteel assumptions:
   - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
   - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
+- Level assumption:
+  - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).

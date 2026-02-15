@@ -1,6 +1,7 @@
 {
   "simulation": {
     "server_tick_rate_hz": 30.0,
+    "champion_level": 20,
     "max_time_seconds": 180.0,
     "vlad_pool_rank": 5,
     "vlad_pool_untargetable_seconds": 2.0,
