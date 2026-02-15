@@ -1,0 +1,183 @@
+{
+  "defaults": {
+    "source_url": "https://www.metasrc.com/lol/urf",
+    "last_checked": "2026-02-15"
+  },
+  "presets": [
+    {
+      "champion": "Warwick",
+      "source_url": "https://www.metasrc.com/lol/urf/build/warwick",
+      "item_names": [
+        "Stridebreaker",
+        "Mercury's Treads",
+        "Blade of the Ruined King",
+        "Kraken Slayer",
+        "Spirit Visage",
+        "Thornmail"
+      ],
+      "runes": [
+        "Lethal Tempo",
+        "Triumph",
+        "Legend: Alacrity",
+        "Last Stand",
+        "Celerity",
+        "Waterwalking"
+      ],
+      "shards": [
+        "attack_speed",
+        "movement_speed",
+        "tenacity"
+      ],
+      "masteries": [
+        {
+          "name": "Fervor of Battle",
+          "rank": 1
+        },
+        {
+          "name": "Legendary Guardian",
+          "rank": 1
+        }
+      ]
+    },
+    {
+      "champion": "Vayne",
+      "source_url": "https://www.metasrc.com/lol/urf/build/vayne",
+      "item_names": [
+        "Berserker's Greaves",
+        "Kraken Slayer",
+        "Guinsoo's Rageblade",
+        "Fiendhunter Bolts",
+        "Blade of the Ruined King",
+        "Infinity Edge"
+      ],
+      "runes": [
+        "Lethal Tempo",
+        "Triumph",
+        "Legend: Alacrity",
+        "Coup de Grace",
+        "Conditioning",
+        "Overgrowth"
+      ],
+      "shards": [
+        "attack_speed",
+        "movement_speed",
+        "health"
+      ],
+      "masteries": [
+        {
+          "name": "Fervor of Battle",
+          "rank": 1
+        },
+        {
+          "name": "Battering Blows",
+          "rank": 1
+        }
+      ]
+    },
+    {
+      "champion": "Morgana",
+      "source_url": "https://www.metasrc.com/lol/urf/build/morgana",
+      "item_names": [
+        "Sorcerer's Shoes",
+        "Liandry's Torment",
+        "Blackfire Torch",
+        "Rylai's Crystal Scepter",
+        "Zhonya's Hourglass",
+        "Luden's Echo"
+      ],
+      "runes": [
+        "Arcane Comet",
+        "Manaflow Band",
+        "Transcendence",
+        "Gathering Storm",
+        "Cheap Shot",
+        "Ultimate Hunter"
+      ],
+      "shards": [
+        "ability_haste",
+        "movement_speed",
+        "health"
+      ],
+      "masteries": [
+        {
+          "name": "Thunderlord's Decree",
+          "rank": 1
+        },
+        {
+          "name": "Piercing Thoughts",
+          "rank": 1
+        }
+      ]
+    },
+    {
+      "champion": "Sona",
+      "source_url": "https://www.metasrc.com/lol/urf/build/sona",
+      "item_names": [
+        "Sorcerer's Shoes",
+        "Luden's Echo",
+        "Lich Bane",
+        "Stormsurge",
+        "Shadowflame",
+        "Rabadon's Deathcap"
+      ],
+      "runes": [
+        "Summon Aery",
+        "Manaflow Band",
+        "Transcendence",
+        "Gathering Storm",
+        "Conditioning",
+        "Revitalize"
+      ],
+      "shards": [
+        "ability_haste",
+        "movement_speed",
+        "health"
+      ],
+      "masteries": [
+        {
+          "name": "Windspeaker's Blessing",
+          "rank": 1
+        },
+        {
+          "name": "Intelligence",
+          "rank": 1
+        }
+      ]
+    },
+    {
+      "champion": "Dr. Mundo",
+      "source_url": "https://www.metasrc.com/lol/urf/build/drmundo",
+      "item_names": [
+        "Mercury's Treads",
+        "Heartsteel",
+        "Warmog's Armor",
+        "Spirit Visage",
+        "Thornmail",
+        "Titanic Hydra"
+      ],
+      "runes": [
+        "Grasp of the Undying",
+        "Demolish",
+        "Conditioning",
+        "Overgrowth",
+        "Magical Footwear",
+        "Cosmic Insight"
+      ],
+      "shards": [
+        "ability_haste",
+        "health",
+        "tenacity"
+      ],
+      "masteries": [
+        {
+          "name": "Grasp of the Undying",
+          "rank": 1
+        },
+        {
+          "name": "Perseverance",
+          "rank": 1
+        }
+      ]
+    }
+  ]
+}

@@ -15,6 +15,7 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
   - coarse proxy filter for broad exploration
   - full event simulation for finalist ranking
 - Full simulation scoring is memoized by canonical build key.
+- Full simulation scores are persisted across runs under `Simulation/output/cache/`.
 - In-flight dedupe cache avoids duplicate parallel re-simulation of the same canonical build.
 - Ensemble seed runs are supported for confidence/robustness labeling.
 - Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
@@ -23,6 +24,8 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
+- `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
+- `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: Simulator and optimizer.
 
@@ -34,6 +37,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   --mode vladimir
 ```
 - `vladimir` mode now also writes a markdown report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vladimir_run_report.md`.
+- `vladimir` mode also writes a structured JSON report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vladimir_run_report.json`.
 - Report includes:
   - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
   - Vladimir end stats for best build
@@ -44,7 +48,9 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - `--max-runtime-seconds N`:
   - Stops search after `N` seconds and reports best-so-far findings.
 - `--status-every-seconds N`:
-  - Prints periodic status lines (elapsed, progress, best score, ETA) while searching.
+  - Prints periodic status lines (phase, elapsed, progress, best score) while searching.
+- `--search-quality-profile {fast|balanced|maximum_quality}`:
+  - Applies opinionated search settings. Default is `maximum_quality`.
 
 ## Threading
 - The Rust optimizer leaves one core free by default (`available_cores - 1`, minimum 1 thread).
@@ -64,7 +70,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - `--max-relative-gap-percent` max score drop from best to still be considered (default `5.0`)
   - `--report-path` optional custom report output path
 - After top builds are selected, simulator also optimizes full-item build order:
-  - Uses full-item permutations only (no partial/intermediate items).
+  - Uses beam plus optimistic bound pruning over order states (no partial/intermediate items).
   - Uses stage levels evenly spaced from 5 to 20 across item slots.
   - Scores each order by cumulative survival across stages.
 
@@ -131,6 +137,9 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Shards are generated from legal `stat_shards` slot options.
   - Mastery pages are generated from legal Season 2016 tree/tier/point constraints in `Season2016.json`.
   - Loadout optimization is always on for Vladimir build scoring; there is no scenario shortlist/sample knob for runes/shards/masteries.
+- Enemy presets:
+  - `vladimir` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune/mastery pages.
+  - Startup validation fails fast if a preset references missing item/rune/shard/mastery data.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - Heartsteel assumptions:
   - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
@@ -158,7 +167,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ## Runes/Masteries
 - Optional scenario loadout blocks:
   - `vladimir_loadout`
-  - `enemy_loadout` (`vladimir_step` mode; in `vladimir` mode enemies use hardcoded URF presets by champion)
+  - `enemy_loadout` (`vladimir_step` mode only)
 - Supported keys:
   - `runes_reforged.rune_ids` (array of rune IDs)
   - `runes_reforged.rune_names` (array of rune names)

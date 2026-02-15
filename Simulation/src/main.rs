@@ -2,7 +2,7 @@ use anyhow::{Context, Result, anyhow, bail};
 use clap::{Parser, ValueEnum};
 use rayon::ThreadPoolBuilder;
 use rayon::prelude::*;
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::cmp::Ordering;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::{BinaryHeap, HashMap, HashSet};
@@ -214,6 +214,7 @@ struct BuildConfidence {
 #[derive(Debug, Clone)]
 struct SearchDiagnostics {
     strategy_summary: String,
+    search_quality_profile: String,
     ensemble_seeds: usize,
     coarse_evaluations: usize,
     full_evaluations: usize,
@@ -224,6 +225,8 @@ struct SearchDiagnostics {
     full_cache_hits: usize,
     full_cache_misses: usize,
     full_cache_waits: usize,
+    full_persistent_cache_hits: usize,
+    full_persistent_cache_entries: usize,
     unique_candidate_builds: usize,
     bleed_candidates_injected: usize,
     adaptive_candidates_injected: usize,
@@ -327,6 +330,142 @@ impl BlockingScoreCache {
     }
     fn waits(&self) -> usize {
         self.waits.load(AtomicOrdering::Relaxed)
+    }
+}
+
+#[derive(Debug)]
+struct PersistentScoreCache {
+    path: PathBuf,
+    values: Mutex<HashMap<String, f64>>,
+    hits: AtomicUsize,
+}
+
+impl PersistentScoreCache {
+    fn load(path: PathBuf) -> Self {
+        let values = load_json(&path)
+            .ok()
+            .and_then(|v| v.as_object().cloned())
+            .map(|obj| {
+                obj.into_iter()
+                    .filter_map(|(k, v)| v.as_f64().map(|s| (k, s)))
+                    .collect::<HashMap<_, _>>()
+            })
+            .unwrap_or_default();
+        Self {
+            path,
+            values: Mutex::new(values),
+            hits: AtomicUsize::new(0),
+        }
+    }
+
+    fn key(build: &[usize]) -> String {
+        build
+            .iter()
+            .map(|idx| idx.to_string())
+            .collect::<Vec<_>>()
+            .join(",")
+    }
+
+    fn get(&self, build: &[usize]) -> Option<f64> {
+        let key = Self::key(build);
+        let value = self
+            .values
+            .lock()
+            .ok()
+            .and_then(|map| map.get(&key).copied());
+        if value.is_some() {
+            self.hits.fetch_add(1, AtomicOrdering::Relaxed);
+        }
+        value
+    }
+
+    fn insert(&self, build: &[usize], score: f64) {
+        if let Ok(mut map) = self.values.lock() {
+            map.insert(Self::key(build), score);
+        }
+    }
+
+    fn len(&self) -> usize {
+        self.values.lock().map(|m| m.len()).unwrap_or(0)
+    }
+
+    fn hits(&self) -> usize {
+        self.hits.load(AtomicOrdering::Relaxed)
+    }
+
+    fn flush(&self) -> Result<()> {
+        if let Some(parent) = self.path.parent() {
+            fs::create_dir_all(parent)
+                .with_context(|| format!("Failed creating {}", parent.display()))?;
+        }
+        let text = if let Ok(map) = self.values.lock() {
+            serde_json::to_string_pretty(&*map)?
+        } else {
+            "{}".to_string()
+        };
+        fs::write(&self.path, text)
+            .with_context(|| format!("Failed writing {}", self.path.display()))?;
+        Ok(())
+    }
+}
+
+fn deadline_reached(deadline: Option<Instant>) -> bool {
+    deadline.is_some_and(|d| Instant::now() >= d)
+}
+
+#[derive(Debug)]
+struct StatusReporter {
+    run_start: Instant,
+    interval: Duration,
+    next_emit_at: Instant,
+}
+
+impl StatusReporter {
+    fn new(run_start: Instant, interval: Duration) -> Self {
+        Self {
+            run_start,
+            interval,
+            next_emit_at: run_start,
+        }
+    }
+
+    fn emit(
+        &mut self,
+        phase: &str,
+        progress: Option<(usize, usize)>,
+        best_score: Option<f64>,
+        note: Option<&str>,
+        force: bool,
+    ) {
+        if !force && Instant::now() < self.next_emit_at {
+            return;
+        }
+        let elapsed = self.run_start.elapsed().as_secs_f64();
+        let progress_str = progress
+            .map(|(done, total)| {
+                if total > 0 {
+                    format!(
+                        "{} / {} ({:.1}%)",
+                        done,
+                        total,
+                        done as f64 * 100.0 / total as f64
+                    )
+                } else {
+                    format!("{} / {}", done, total)
+                }
+            })
+            .unwrap_or_else(|| "n/a".to_string());
+        let best_str = best_score
+            .map(|v| format!("{:.2}s", v))
+            .unwrap_or_else(|| "n/a".to_string());
+        let note_str = note.unwrap_or("");
+        println!(
+            "[status] elapsed={:.1}s phase={} progress={} best={} {}",
+            elapsed, phase, progress_str, best_str, note_str
+        );
+        while self.next_emit_at <= Instant::now() {
+            self.next_emit_at += self.interval;
+        }
     }
 }
 
@@ -908,6 +1047,8 @@ struct Cli {
     max_runtime_seconds: Option<f64>,
     #[arg(long, default_value_t = 10.0)]
     status_every_seconds: f64,
+    #[arg(long, value_enum, default_value_t = SearchQualityProfile::MaximumQuality)]
+    search_quality_profile: SearchQualityProfile,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -920,6 +1061,16 @@ enum Mode {
     TaricAs,
     #[value(name = "hecarim_ms")]
     HecarimMs,
+}
+
+#[derive(Debug, Clone, Copy, ValueEnum)]
+enum SearchQualityProfile {
+    #[value(name = "fast")]
+    Fast,
+    #[value(name = "balanced")]
+    Balanced,
+    #[value(name = "maximum_quality")]
+    MaximumQuality,
 }
 
 fn simulation_dir() -> PathBuf {
@@ -940,6 +1091,10 @@ fn characters_dir() -> PathBuf {
 
 fn masteries_dir() -> PathBuf {
     simulation_dir().join("..").join("Masteries")
+}
+
+fn simulation_data_dir() -> PathBuf {
+    simulation_dir().join("data")
 }
 
 fn load_json(path: &Path) -> Result<Value> {
@@ -1602,6 +1757,65 @@ fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
     })
 }
 
+fn apply_search_quality_profile(search: &mut BuildSearchConfig, profile: SearchQualityProfile) {
+    match profile {
+        SearchQualityProfile::Fast => {
+            search.beam_width = 24;
+            search.random_samples = 192;
+            search.hill_climb_restarts = 24;
+            search.hill_climb_steps = 12;
+            search.hill_climb_neighbors = 12;
+            search.genetic_population = 48;
+            search.genetic_generations = 14;
+            search.simulated_annealing_restarts = 12;
+            search.simulated_annealing_iterations = 96;
+            search.mcts_iterations = 1200;
+            search.mcts_rollouts_per_expansion = 1;
+            search.ensemble_seeds = 1;
+            search.ensemble_seed_top_k = 10;
+            search.coarse_pool_limit = 160;
+            search.ranked_limit = 200;
+            search.bleed_budget = 120;
+        }
+        SearchQualityProfile::Balanced => {
+            search.beam_width = 36;
+            search.random_samples = 360;
+            search.hill_climb_restarts = 48;
+            search.hill_climb_steps = 18;
+            search.hill_climb_neighbors = 20;
+            search.genetic_population = 72;
+            search.genetic_generations = 24;
+            search.simulated_annealing_restarts = 24;
+            search.simulated_annealing_iterations = 180;
+            search.mcts_iterations = 2600;
+            search.mcts_rollouts_per_expansion = 2;
+            search.ensemble_seeds = 2;
+            search.ensemble_seed_top_k = 18;
+            search.coarse_pool_limit = 260;
+            search.ranked_limit = 320;
+            search.bleed_budget = 300;
+        }
+        SearchQualityProfile::MaximumQuality => {
+            search.beam_width = search.beam_width.max(64);
+            search.random_samples = search.random_samples.max(900);
+            search.hill_climb_restarts = search.hill_climb_restarts.max(128);
+            search.hill_climb_steps = search.hill_climb_steps.max(28);
+            search.hill_climb_neighbors = search.hill_climb_neighbors.max(30);
+            search.genetic_population = search.genetic_population.max(140);
+            search.genetic_generations = search.genetic_generations.max(52);
+            search.simulated_annealing_restarts = search.simulated_annealing_restarts.max(56);
+            search.simulated_annealing_iterations = search.simulated_annealing_iterations.max(340);
+            search.mcts_iterations = search.mcts_iterations.max(9000);
+            search.mcts_rollouts_per_expansion = search.mcts_rollouts_per_expansion.max(3);
+            search.ensemble_seeds = search.ensemble_seeds.max(4);
+            search.ensemble_seed_top_k = search.ensemble_seed_top_k.max(36);
+            search.coarse_pool_limit = search.coarse_pool_limit.max(520);
+            search.ranked_limit = search.ranked_limit.max(640);
+            search.bleed_budget = search.bleed_budget.max(1200);
+        }
+    }
+}
+
 fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection {
     let mut out = LoadoutSelection::default();
     let Some(obj) = data.and_then(Value::as_object) else {
@@ -1813,7 +2027,9 @@ fn build_loadout_domain() -> LoadoutDomain {
                                             names
                                                 .iter()
                                                 .filter_map(Value::as_str)
-                                                .filter_map(|name| mastery_lookup.get(&to_norm_key(name)).cloned())
+                                                .filter_map(|name| {
+                                                    mastery_lookup.get(&to_norm_key(name)).cloned()
+                                                })
                                                 .collect::<Vec<_>>()
                                         })
                                         .unwrap_or_default();
@@ -1971,10 +2187,14 @@ fn random_loadout_selection(
                     let sa = picks[0];
                     let sb = picks[1];
                     out.rune_names = vec![
-                        primary.slot_runes[0][rand_index(seed, primary.slot_runes[0].len())].clone(),
-                        primary.slot_runes[1][rand_index(seed, primary.slot_runes[1].len())].clone(),
-                        primary.slot_runes[2][rand_index(seed, primary.slot_runes[2].len())].clone(),
-                        primary.slot_runes[3][rand_index(seed, primary.slot_runes[3].len())].clone(),
+                        primary.slot_runes[0][rand_index(seed, primary.slot_runes[0].len())]
+                            .clone(),
+                        primary.slot_runes[1][rand_index(seed, primary.slot_runes[1].len())]
+                            .clone(),
+                        primary.slot_runes[2][rand_index(seed, primary.slot_runes[2].len())]
+                            .clone(),
+                        primary.slot_runes[3][rand_index(seed, primary.slot_runes[3].len())]
+                            .clone(),
                         secondary.slot_runes[sa][rand_index(seed, secondary.slot_runes[sa].len())]
                             .clone(),
                         secondary.slot_runes[sb][rand_index(seed, secondary.slot_runes[sb].len())]
@@ -2020,14 +2240,18 @@ fn random_loadout_selection(
     out
 }
 
-fn loadout_eval_budget(search: &BuildSearchConfig) -> usize {
+fn loadout_eval_budget(search: &BuildSearchConfig, profile: SearchQualityProfile) -> usize {
     let base = search
         .random_samples
         .max(search.beam_width * 8)
         .max(search.hill_climb_restarts * 4)
         .max(search.genetic_population * 2)
-        .max(96);
-    base.min(4096)
+        .max(128);
+    match profile {
+        SearchQualityProfile::Fast => base.min(256),
+        SearchQualityProfile::Balanced => base.min(1024),
+        SearchQualityProfile::MaximumQuality => base.min(4096),
+    }
 }
 
 fn normalize_name(input: &str) -> String {
@@ -2666,14 +2890,18 @@ fn unique_ranked_from_candidates<F>(
     candidates: Vec<Vec<usize>>,
     score_fn: &F,
     limit: usize,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
 {
-    let scored = score_candidates(candidates, score_fn);
+    let scored = score_candidates(candidates, score_fn, deadline);
     let mut ranked = Vec::new();
     let mut seen = HashSet::new();
     for (_, key, score) in scored {
+        if !score.is_finite() {
+            continue;
+        }
         if seen.insert(key.clone()) {
             ranked.push((key, score));
             if ranked.len() >= limit.max(1) {
@@ -2687,17 +2915,27 @@ where
 fn score_candidates<F>(
     candidates: Vec<Vec<usize>>,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
 {
+    if candidates.is_empty() || deadline_reached(deadline) {
+        return Vec::new();
+    }
     let unique_keys: HashSet<Vec<usize>> = candidates.iter().map(|c| canonical_key(c)).collect();
     let mut key_list = unique_keys.into_iter().collect::<Vec<_>>();
     key_list.sort_unstable();
 
     let score_pairs = key_list
         .par_iter()
-        .map(|key| (key.clone(), score_fn(key)))
+        .map(|key| {
+            if deadline_reached(deadline) {
+                (key.clone(), f64::NEG_INFINITY)
+            } else {
+                (key.clone(), score_fn(key))
+            }
+        })
         .collect::<Vec<_>>();
     let score_map = score_pairs
         .into_iter()
@@ -2726,6 +2964,7 @@ fn beam_search_ranked<F>(
     max_items: usize,
     beam_width: usize,
     score_fn: F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -2734,6 +2973,9 @@ where
     let mut final_scored: Vec<(Vec<usize>, Vec<usize>, f64)> = vec![];
 
     for _ in 0..max_items {
+        if deadline_reached(deadline) {
+            break;
+        }
         let mut next_candidates = Vec::new();
         for build in &candidates {
             let has_boots = build.iter().any(|&i| is_boots(&item_pool[i]));
@@ -2751,7 +2993,7 @@ where
             }
         }
 
-        let scored = score_candidates(next_candidates, &score_fn);
+        let scored = score_candidates(next_candidates, &score_fn, deadline);
         candidates = scored
             .iter()
             .take(beam_width)
@@ -2777,6 +3019,7 @@ fn random_search_ranked<F>(
     seed: u64,
     limit: usize,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -2784,9 +3027,12 @@ where
     let mut s = seed;
     let mut candidates = Vec::with_capacity(random_samples.max(1));
     for _ in 0..random_samples.max(1) {
+        if deadline_reached(deadline) {
+            break;
+        }
         candidates.push(random_valid_build(item_pool, max_items, &mut s));
     }
-    unique_ranked_from_candidates(candidates, score_fn, limit)
+    unique_ranked_from_candidates(candidates, score_fn, limit, deadline)
 }
 
 fn hill_climb_search_ranked<F>(
@@ -2798,6 +3044,7 @@ fn hill_climb_search_ranked<F>(
     seed: u64,
     limit: usize,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -2806,11 +3053,17 @@ where
     let mut candidates = Vec::new();
 
     for _ in 0..restarts.max(1) {
+        if deadline_reached(deadline) {
+            break;
+        }
         let mut current = random_valid_build(item_pool, max_items, &mut s);
         let mut current_score = score_fn(&canonical_key(&current));
         candidates.push(current.clone());
 
         for _ in 0..steps {
+            if deadline_reached(deadline) {
+                break;
+            }
             let mut neighbor_builds = Vec::new();
             for _ in 0..neighbors_per_step.max(1) {
                 if current.is_empty() {
@@ -2836,8 +3089,12 @@ where
             if neighbor_builds.is_empty() {
                 break;
             }
-            let ranked_neighbors =
-                unique_ranked_from_candidates(neighbor_builds, score_fn, neighbors_per_step.max(1));
+            let ranked_neighbors = unique_ranked_from_candidates(
+                neighbor_builds,
+                score_fn,
+                neighbors_per_step.max(1),
+                deadline,
+            );
             let Some((best_neighbor, best_score)) = ranked_neighbors.first().cloned() else {
                 break;
             };
@@ -2851,7 +3108,7 @@ where
         }
     }
 
-    unique_ranked_from_candidates(candidates, score_fn, limit)
+    unique_ranked_from_candidates(candidates, score_fn, limit, deadline)
 }
 
 fn tournament_parent(
@@ -2936,6 +3193,7 @@ fn genetic_search_ranked<F>(
     seed: u64,
     limit: usize,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -2944,12 +3202,19 @@ where
     let mut s = seed;
     let mut population = Vec::with_capacity(pop_n);
     for _ in 0..pop_n {
+        if deadline_reached(deadline) {
+            break;
+        }
         population.push(random_valid_build(item_pool, max_items, &mut s));
     }
 
     let mut all_seen = population.clone();
     for _ in 0..generations.max(1) {
-        let mut scored = unique_ranked_from_candidates(population.clone(), score_fn, pop_n);
+        if deadline_reached(deadline) {
+            break;
+        }
+        let mut scored =
+            unique_ranked_from_candidates(population.clone(), score_fn, pop_n, deadline);
         if scored.is_empty() {
             break;
         }
@@ -2963,6 +3228,9 @@ where
             .collect::<Vec<_>>();
 
         while next_population.len() < pop_n {
+            if deadline_reached(deadline) {
+                break;
+            }
             let parent_a = tournament_parent(&scored, &mut s, 3);
             let parent_b = tournament_parent(&scored, &mut s, 3);
             let mut child = if rand_f64(&mut s) <= crossover_rate.clamp(0.0, 1.0) {
@@ -2979,7 +3247,7 @@ where
         population = next_population;
     }
 
-    unique_ranked_from_candidates(all_seen, score_fn, limit)
+    unique_ranked_from_candidates(all_seen, score_fn, limit, deadline)
 }
 
 fn simulated_annealing_search_ranked<F>(
@@ -2992,6 +3260,7 @@ fn simulated_annealing_search_ranked<F>(
     seed: u64,
     limit: usize,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -3000,6 +3269,9 @@ where
     let mut candidates = Vec::new();
 
     for _ in 0..restarts.max(1) {
+        if deadline_reached(deadline) {
+            break;
+        }
         let mut current = random_valid_build(item_pool, max_items, &mut s);
         let mut current_score = score_fn(&canonical_key(&current));
         let mut best = current.clone();
@@ -3008,6 +3280,9 @@ where
         candidates.push(current.clone());
 
         for _ in 0..iterations.max(1) {
+            if deadline_reached(deadline) {
+                break;
+            }
             let mut next = current.clone();
             if !next.is_empty() {
                 let slot = rand_index(&mut s, next.len());
@@ -3033,7 +3308,7 @@ where
         candidates.push(best);
     }
 
-    unique_ranked_from_candidates(candidates, score_fn, limit)
+    unique_ranked_from_candidates(candidates, score_fn, limit, deadline)
 }
 
 #[derive(Debug, Clone)]
@@ -3059,6 +3334,7 @@ fn rollout_completion<F>(
     start_build: &[usize],
     seed: &mut u64,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> (Vec<usize>, f64)
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -3076,7 +3352,11 @@ where
     }
     repair_build(item_pool, &mut build, max_items, seed);
     let key = canonical_key(&build);
-    let score = score_fn(&key);
+    let score = if deadline_reached(deadline) {
+        f64::NEG_INFINITY
+    } else {
+        score_fn(&key)
+    };
     (key, score)
 }
 
@@ -3089,6 +3369,7 @@ fn mcts_search_ranked<F>(
     seed: u64,
     limit: usize,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -3106,6 +3387,9 @@ where
     let mut all_rollout_keys = Vec::new();
 
     for _ in 0..iterations.max(1) {
+        if deadline_reached(deadline) {
+            break;
+        }
         let mut node_idx = 0usize;
         loop {
             if nodes[node_idx].build.len() >= max_items {
@@ -3161,15 +3445,22 @@ where
         let mut rollout_scores = Vec::new();
         let rollouts = rollouts_per_expansion.max(1);
         for _ in 0..rollouts {
+            if deadline_reached(deadline) {
+                break;
+            }
             let (key, score) = rollout_completion(
                 item_pool,
                 max_items,
                 &nodes[node_idx].build,
                 &mut s,
                 score_fn,
+                deadline,
             );
             all_rollout_keys.push(key);
             rollout_scores.push(score);
+        }
+        if rollout_scores.is_empty() {
+            break;
         }
         let mean_score = rollout_scores.iter().sum::<f64>() / rollout_scores.len() as f64;
 
@@ -3182,7 +3473,7 @@ where
     }
 
     let _used_actions = nodes.iter().filter_map(|n| n.action_from_parent).count();
-    unique_ranked_from_candidates(all_rollout_keys, score_fn, limit)
+    unique_ranked_from_candidates(all_rollout_keys, score_fn, limit, deadline)
 }
 
 fn symmetric_diff_count(a: &[usize], b: &[usize]) -> usize {
@@ -3316,24 +3607,6 @@ fn score_build_order(
     }
 }
 
-fn generate_permutations<T: Clone>(items: &[T]) -> Vec<Vec<T>> {
-    fn permute<T: Clone>(arr: &mut Vec<T>, l: usize, out: &mut Vec<Vec<T>>) {
-        if l == arr.len() {
-            out.push(arr.clone());
-            return;
-        }
-        for i in l..arr.len() {
-            arr.swap(l, i);
-            permute(arr, l + 1, out);
-            arr.swap(l, i);
-        }
-    }
-    let mut arr = items.to_vec();
-    let mut out = Vec::new();
-    permute(&mut arr, 0, &mut out);
-    out
-}
-
 fn optimize_build_order(
     build_items: &[Item],
     vlad_base_raw: &ChampionBase,
@@ -3344,7 +3617,6 @@ fn optimize_build_order(
     urf: &UrfBuffs,
 ) -> BuildOrderResult {
     let levels = build_level_milestones(build_items.len(), 5, 20);
-    let permutations = generate_permutations(build_items);
     let mut best = score_build_order(
         build_items,
         &levels,
@@ -3355,29 +3627,85 @@ fn optimize_build_order(
         sim,
         urf,
     );
-    for perm in permutations {
-        let current = score_build_order(
-            &perm,
-            &levels,
-            vlad_base_raw,
-            vlad_bonus_stats,
-            enemy_builds,
-            raw_enemy_bases,
-            sim,
-            urf,
-        );
-        if current.cumulative_score > best.cumulative_score {
-            best = current;
+    if build_items.len() <= 1 {
+        return best;
+    }
+
+    let beam_width = 40usize;
+    let mut frontier = vec![Vec::<usize>::new()];
+    for depth in 0..build_items.len() {
+        let mut expanded = Vec::<(Vec<usize>, f64)>::new();
+        for partial in &frontier {
+            let mut used = partial.iter().copied().collect::<HashSet<_>>();
+            for idx in 0..build_items.len() {
+                if used.contains(&idx) {
+                    continue;
+                }
+                let mut candidate = partial.clone();
+                candidate.push(idx);
+                used.insert(idx);
+                let ordered = candidate
+                    .iter()
+                    .map(|i| build_items[*i].clone())
+                    .collect::<Vec<_>>();
+                let partial_levels = levels[..candidate.len()].to_vec();
+                let current = score_build_order(
+                    &ordered,
+                    &partial_levels,
+                    vlad_base_raw,
+                    vlad_bonus_stats,
+                    enemy_builds,
+                    raw_enemy_bases,
+                    sim,
+                    urf,
+                );
+                let optimistic_upper_bound = current.cumulative_score
+                    + (build_items.len() - candidate.len()) as f64 * sim.max_time_seconds;
+                expanded.push((candidate, optimistic_upper_bound));
+            }
+        }
+        expanded.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+        frontier = expanded
+            .into_iter()
+            .take(beam_width)
+            .map(|(candidate, _)| candidate)
+            .collect::<Vec<_>>();
+        if frontier.is_empty() {
+            break;
+        }
+        if depth + 1 == build_items.len() {
+            for order_idx in &frontier {
+                let ordered = order_idx
+                    .iter()
+                    .map(|i| build_items[*i].clone())
+                    .collect::<Vec<_>>();
+                let scored = score_build_order(
+                    &ordered,
+                    &levels,
+                    vlad_base_raw,
+                    vlad_bonus_stats,
+                    enemy_builds,
+                    raw_enemy_bases,
+                    sim,
+                    urf,
+                );
+                if scored.cumulative_score > best.cumulative_score {
+                    best = scored;
+                }
+            }
         }
     }
+
     best
 }
 
 fn default_report_path() -> PathBuf {
-    simulation_dir().join("output").join("vladimir_run_report.md")
+    simulation_dir()
+        .join("output")
+        .join("vladimir_run_report.md")
 }
 
-fn write_vlad_report(
+fn write_vladimir_report_markdown(
     report_path: &Path,
     scenario_path: &Path,
     sim: &SimulationConfig,
@@ -3391,6 +3719,7 @@ fn write_vlad_report(
     best_build: &[Item],
     best_time: f64,
     enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
+    enemy_presets_used: &HashMap<String, EnemyUrfPreset>,
     diverse_top_builds: &[(Vec<Item>, f64)],
     diverse_top_keys: &[Vec<usize>],
     build_confidence: &[BuildConfidence],
@@ -3432,8 +3761,9 @@ fn write_vlad_report(
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full capped prechecks: `{}`\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Full capped prechecks: `{}`\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
         diagnostics.strategy_summary,
+        diagnostics.search_quality_profile,
         diagnostics.scenario_count,
         diagnostics.loadout_candidates,
         diagnostics.loadout_finalists,
@@ -3446,6 +3776,8 @@ fn write_vlad_report(
         diagnostics.full_cache_hits,
         diagnostics.full_cache_misses,
         diagnostics.full_cache_waits,
+        diagnostics.full_persistent_cache_hits,
+        diagnostics.full_persistent_cache_entries,
         diagnostics.full_capped_evaluations,
         diagnostics.unique_candidate_builds,
         diagnostics.coarse_pool_limit,
@@ -3552,9 +3884,25 @@ fn write_vlad_report(
         content.push('\n');
     }
 
-    content.push_str("## Enemy Builds (DPS-Optimized)\n");
+    content.push_str("## Enemy Builds (URF Presets)\n");
     for (enemy, build, _) in enemy_builds {
         content.push_str(&format!("- {}: {}\n", enemy.name, item_names(build)));
+        if let Some(preset) = enemy_presets_used.get(&to_norm_key(&enemy.name)) {
+            content.push_str(&format!(
+                "  - Source: {} (last checked {})\n",
+                preset.source_url, preset.last_checked
+            ));
+            content.push_str(&format!("  - Runes: {}\n", preset.runes.join(", ")));
+            content.push_str(&format!(
+                "  - Masteries: {}\n",
+                preset
+                    .masteries
+                    .iter()
+                    .map(|m| format!("{} ({})", m.name, m.rank))
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            ));
+        }
     }
     content.push('\n');
 
@@ -3669,6 +4017,101 @@ fn write_vlad_report(
     Ok(())
 }
 
+fn write_vladimir_report_json(
+    report_path: &Path,
+    scenario_path: &Path,
+    sim: &SimulationConfig,
+    baseline_build: &[Item],
+    baseline_time: f64,
+    best_build: &[Item],
+    best_time: f64,
+    vladimir_loadout: &ResolvedLoadout,
+    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
+    enemy_presets_used: &HashMap<String, EnemyUrfPreset>,
+    diverse_top_builds: &[(Vec<Item>, f64)],
+    diagnostics: &SearchDiagnostics,
+    build_orders: &[BuildOrderResult],
+) -> Result<()> {
+    if let Some(parent) = report_path.parent() {
+        fs::create_dir_all(parent)
+            .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
+    }
+    let improvement_percent = if baseline_time > 0.0 {
+        ((best_time - baseline_time) / baseline_time) * 100.0
+    } else {
+        0.0
+    };
+    let json_value = json!({
+        "scenario_path": scenario_path.display().to_string(),
+        "champion_level": sim.champion_level,
+        "headline": {
+            "baseline_time_alive_seconds": baseline_time,
+            "best_time_alive_seconds": best_time,
+            "improvement_percent": improvement_percent,
+        },
+        "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+        "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+        "vladimir_loadout_labels": vladimir_loadout.selection_labels,
+        "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {
+            let key = to_norm_key(&enemy.name);
+            let preset = enemy_presets_used.get(&key);
+            json!({
+                "champion": enemy.name,
+                "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+                "runes": preset.map(|p| p.runes.clone()).unwrap_or_default(),
+                "shards": preset.map(|p| p.shards.clone()).unwrap_or_default(),
+                "masteries": preset.map(|p| p.masteries.iter().map(|m| json!({"name": m.name, "rank": m.rank})).collect::<Vec<_>>()).unwrap_or_default(),
+                "source_url": preset.map(|p| p.source_url.clone()).unwrap_or_default(),
+                "last_checked": preset.map(|p| p.last_checked.clone()).unwrap_or_default(),
+            })
+        }).collect::<Vec<_>>(),
+        "diverse_top_builds": diverse_top_builds.iter().map(|(build, score)| {
+            json!({
+                "score_seconds": score,
+                "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>()
+            })
+        }).collect::<Vec<_>>(),
+        "build_orders": build_orders.iter().map(|order| {
+            json!({
+                "cumulative_score": order.cumulative_score,
+                "ordered_items": order.ordered_items.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+                "levels": order.levels,
+                "stage_survival_seconds": order.stage_survival,
+            })
+        }).collect::<Vec<_>>(),
+        "diagnostics": {
+            "strategy_summary": diagnostics.strategy_summary,
+            "search_quality_profile": diagnostics.search_quality_profile,
+            "ensemble_seeds": diagnostics.ensemble_seeds,
+            "coarse_evaluations": diagnostics.coarse_evaluations,
+            "full_evaluations": diagnostics.full_evaluations,
+            "full_capped_evaluations": diagnostics.full_capped_evaluations,
+            "coarse_cache_hits": diagnostics.coarse_cache_hits,
+            "coarse_cache_misses": diagnostics.coarse_cache_misses,
+            "coarse_cache_waits": diagnostics.coarse_cache_waits,
+            "full_cache_hits": diagnostics.full_cache_hits,
+            "full_cache_misses": diagnostics.full_cache_misses,
+            "full_cache_waits": diagnostics.full_cache_waits,
+            "full_persistent_cache_hits": diagnostics.full_persistent_cache_hits,
+            "full_persistent_cache_entries": diagnostics.full_persistent_cache_entries,
+            "unique_candidate_builds": diagnostics.unique_candidate_builds,
+            "bleed_candidates_injected": diagnostics.bleed_candidates_injected,
+            "adaptive_candidates_injected": diagnostics.adaptive_candidates_injected,
+            "scenario_count": diagnostics.scenario_count,
+            "loadout_candidates": diagnostics.loadout_candidates,
+            "loadout_finalists": diagnostics.loadout_finalists,
+            "time_budget_seconds": diagnostics.time_budget_seconds,
+            "elapsed_seconds": diagnostics.elapsed_seconds,
+            "timed_out": diagnostics.timed_out,
+            "processed_candidates": diagnostics.processed_candidates,
+            "total_candidates": diagnostics.total_candidates
+        }
+    });
+    fs::write(report_path, serde_json::to_string_pretty(&json_value)?)
+        .with_context(|| format!("Failed writing JSON report {}", report_path.display()))?;
+    Ok(())
+}
+
 fn choose_best_build_by_stat(
     item_pool: &[Item],
     stat_key: &str,
@@ -3709,14 +4152,21 @@ fn build_search_ranked<F>(
     max_items: usize,
     search: &BuildSearchConfig,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
 {
+    if deadline_reached(deadline) {
+        return Vec::new();
+    }
     match search.strategy.as_str() {
         "greedy" => {
             let mut build = Vec::new();
             for _ in 0..max_items {
+                if deadline_reached(deadline) {
+                    break;
+                }
                 let mut best: Option<usize> = None;
                 let mut best_score = f64::NEG_INFINITY;
                 for item_idx in 0..item_pool.len() {
@@ -3740,7 +4190,7 @@ where
             let key = canonical_key(&build);
             vec![(key.clone(), score_fn(&key))]
         }
-        "beam" => beam_search_ranked(item_pool, max_items, search.beam_width, score_fn),
+        "beam" => beam_search_ranked(item_pool, max_items, search.beam_width, score_fn, deadline),
         "random" => random_search_ranked(
             item_pool,
             max_items,
@@ -3748,6 +4198,7 @@ where
             search.seed,
             search.ranked_limit,
             score_fn,
+            deadline,
         ),
         "hill_climb" => hill_climb_search_ranked(
             item_pool,
@@ -3758,6 +4209,7 @@ where
             search.seed,
             search.ranked_limit,
             score_fn,
+            deadline,
         ),
         "genetic" => genetic_search_ranked(
             item_pool,
@@ -3769,6 +4221,7 @@ where
             search.seed,
             search.ranked_limit,
             score_fn,
+            deadline,
         ),
         "simulated_annealing" => simulated_annealing_search_ranked(
             item_pool,
@@ -3780,6 +4233,7 @@ where
             search.seed,
             search.ranked_limit,
             score_fn,
+            deadline,
         ),
         "mcts" => mcts_search_ranked(
             item_pool,
@@ -3790,45 +4244,37 @@ where
             search.seed,
             search.ranked_limit,
             score_fn,
+            deadline,
         ),
         "portfolio" => {
             let strategies = portfolio_strategy_list(search);
-            let ranked_sets = strategies
-                .par_iter()
-                .enumerate()
-                .map(|(idx, strat)| {
-                    let mut cfg = search.clone();
-                    cfg.strategy = strat.clone();
-                    cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
-                    build_search_ranked(item_pool, max_items, &cfg, score_fn)
-                })
-                .collect::<Vec<_>>();
+            let mut ranked_sets = Vec::new();
+            for (idx, strat) in strategies.iter().enumerate() {
+                if deadline_reached(deadline) {
+                    break;
+                }
+                let mut cfg = search.clone();
+                cfg.strategy = strat.clone();
+                cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
+                ranked_sets.push(build_search_ranked(
+                    item_pool, max_items, &cfg, score_fn, deadline,
+                ));
+            }
             let mut merged_candidates = Vec::new();
             for ranked in ranked_sets {
                 for (build, _) in ranked {
                     merged_candidates.push(build);
                 }
             }
-            unique_ranked_from_candidates(merged_candidates, score_fn, search.ranked_limit)
+            unique_ranked_from_candidates(
+                merged_candidates,
+                score_fn,
+                search.ranked_limit,
+                deadline,
+            )
         }
         _ => vec![],
     }
-}
-
-fn build_search<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    search: &BuildSearchConfig,
-    score_fn: F,
-) -> Vec<usize>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    build_search_ranked(item_pool, max_items, search, &score_fn)
-        .into_iter()
-        .next()
-        .map(|(build, _)| build)
-        .unwrap_or_default()
 }
 
 fn portfolio_strategy_list(search: &BuildSearchConfig) -> Vec<String> {
@@ -3870,6 +4316,7 @@ fn strategy_seed_elites<F>(
     search: &BuildSearchConfig,
     strategies: &[String],
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> HashMap<String, Vec<Vec<usize>>>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -3878,18 +4325,21 @@ where
     let top_k = search.ensemble_seed_top_k.max(1);
 
     let grouped = strategies
-        .par_iter()
+        .iter()
         .enumerate()
         .map(|(sidx, strategy)| {
             let mut aggregate = HashMap::<Vec<usize>, f64>::new();
             for seed_idx in 0..ensemble {
+                if deadline_reached(deadline) {
+                    break;
+                }
                 let mut cfg = search.clone();
                 cfg.strategy = strategy.clone();
                 cfg.seed = search.seed.wrapping_add(
                     ((sidx as u64 + 1) * 31 + seed_idx as u64 + 1) * search.ensemble_seed_stride,
                 );
                 cfg.ranked_limit = top_k.max(64);
-                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn);
+                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
                 for (key, score) in ranked.into_iter().take(top_k) {
                     let e = aggregate.entry(key).or_insert(score);
                     if score > *e {
@@ -3995,6 +4445,7 @@ fn adaptive_strategy_candidates<F>(
     search: &BuildSearchConfig,
     strategy_elites: &HashMap<String, Vec<Vec<usize>>>,
     score_fn: &F,
+    deadline: Option<Instant>,
 ) -> Vec<Vec<usize>>
 where
     F: Fn(&[usize]) -> f64 + Sync,
@@ -4025,18 +4476,21 @@ where
         .collect::<Vec<_>>();
 
     let gathered = per_strategy
-        .par_iter()
+        .iter()
         .enumerate()
         .map(|(sidx, (strategy, runs))| {
             let mut local = Vec::new();
             for ridx in 0..*runs {
+                if deadline_reached(deadline) {
+                    break;
+                }
                 let mut cfg = search.clone();
                 cfg.strategy = strategy.clone();
                 cfg.seed = search.seed.wrapping_add(
                     ((sidx as u64 + 1) * 131 + ridx as u64 + 1) * search.ensemble_seed_stride,
                 );
                 cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
-                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn);
+                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
                 for (k, _) in ranked.into_iter().take(search.ensemble_seed_top_k.max(1)) {
                     local.push(k);
                 }
@@ -4289,131 +4743,204 @@ fn default_item_pool(items: &HashMap<String, Item>) -> Vec<Item> {
 
 #[derive(Debug, Clone)]
 struct EnemyUrfPreset {
-    item_names: Vec<&'static str>,
-    runes: Vec<&'static str>,
-    shards: Vec<&'static str>,
-    masteries: Vec<(&'static str, usize)>,
+    champion: String,
+    source_url: String,
+    last_checked: String,
+    item_names: Vec<String>,
+    runes: Vec<String>,
+    shards: Vec<String>,
+    masteries: Vec<MasterySelection>,
 }
 
-fn enemy_urf_preset(champion: &str) -> Option<EnemyUrfPreset> {
-    match to_norm_key(champion).as_str() {
-        "warwick" => Some(EnemyUrfPreset {
-            item_names: vec![
-                "Stridebreaker",
-                "Mercury's Treads",
-                "Blade of the Ruined King",
-                "Kraken Slayer",
-                "Spirit Visage",
-                "Thornmail",
-            ],
-            runes: vec![
-                "Lethal Tempo",
-                "Triumph",
-                "Legend: Alacrity",
-                "Last Stand",
-                "Celerity",
-                "Waterwalking",
-            ],
-            shards: vec!["attack_speed", "adaptive", "health"],
-            masteries: vec![("Fervor of Battle", 1), ("Legendary Guardian", 1)],
-        }),
-        "vayne" => Some(EnemyUrfPreset {
-            item_names: vec![
-                "Berserker's Greaves",
-                "Kraken Slayer",
-                "Guinsoo's Rageblade",
-                "Fiendhunter Bolts",
-                "Blade of the Ruined King",
-                "Infinity Edge",
-            ],
-            runes: vec![
-                "Lethal Tempo",
-                "Triumph",
-                "Legend: Alacrity",
-                "Coup de Grace",
-                "Conditioning",
-                "Overgrowth",
-            ],
-            shards: vec!["attack_speed", "adaptive", "health"],
-            masteries: vec![("Fervor of Battle", 1), ("Battering Blows", 1)],
-        }),
-        "morgana" => Some(EnemyUrfPreset {
-            item_names: vec![
-                "Sorcerer's Shoes",
-                "Liandry's Torment",
-                "Blackfire Torch",
-                "Rylai's Crystal Scepter",
-                "Zhonya's Hourglass",
-                "Luden's Echo",
-            ],
-            runes: vec![
-                "Arcane Comet",
-                "Manaflow Band",
-                "Transcendence",
-                "Gathering Storm",
-                "Cheap Shot",
-                "Ultimate Hunter",
-            ],
-            shards: vec!["adaptive", "adaptive", "health"],
-            masteries: vec![("Thunderlord's Decree", 1), ("Piercing Thoughts", 1)],
-        }),
-        "sona" => Some(EnemyUrfPreset {
-            item_names: vec![
-                "Sorcerer's Shoes",
-                "Luden's Echo",
-                "Lich Bane",
-                "Stormsurge",
-                "Shadowflame",
-                "Rabadon's Deathcap",
-            ],
-            runes: vec![
-                "Summon Aery",
-                "Manaflow Band",
-                "Transcendence",
-                "Gathering Storm",
-                "Conditioning",
-                "Revitalize",
-            ],
-            shards: vec!["adaptive", "adaptive", "health"],
-            masteries: vec![("Windspeaker's Blessing", 1), ("Intelligence", 1)],
-        }),
-        "drmundo" => Some(EnemyUrfPreset {
-            item_names: vec![
-                "Mercury's Treads",
-                "Heartsteel",
-                "Warmog's Armor",
-                "Spirit Visage",
-                "Thornmail",
-                "Titanic Hydra",
-            ],
-            runes: vec![
-                "Grasp of the Undying",
-                "Demolish",
-                "Conditioning",
-                "Overgrowth",
-                "Magical Footwear",
-                "Cosmic Insight",
-            ],
-            shards: vec!["adaptive", "health", "health"],
-            masteries: vec![("Grasp of the Undying", 1), ("Perseverance", 1)],
-        }),
-        _ => None,
+fn enemy_preset_data_path() -> PathBuf {
+    simulation_data_dir().join("enemy_urf_presets.json")
+}
+
+fn load_enemy_urf_presets() -> Result<HashMap<String, EnemyUrfPreset>> {
+    let data = load_json(&enemy_preset_data_path())?;
+    let defaults = data.get("defaults").and_then(Value::as_object);
+    let default_source_url = defaults
+        .and_then(|o| o.get("source_url"))
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+    let default_last_checked = defaults
+        .and_then(|o| o.get("last_checked"))
+        .and_then(Value::as_str)
+        .unwrap_or("")
+        .to_string();
+
+    let presets = data
+        .get("presets")
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing presets array in {}",
+                enemy_preset_data_path().display()
+            )
+        })?;
+
+    let mut by_champion = HashMap::new();
+    for preset in presets {
+        let champion = preset
+            .get("champion")
+            .and_then(Value::as_str)
+            .ok_or_else(|| anyhow!("Missing preset champion field"))?
+            .to_string();
+        let item_names = preset
+            .get("item_names")
+            .and_then(Value::as_array)
+            .ok_or_else(|| anyhow!("Missing item_names for preset {}", champion))?
+            .iter()
+            .filter_map(Value::as_str)
+            .map(ToOwned::to_owned)
+            .collect::<Vec<_>>();
+        let runes = preset
+            .get("runes")
+            .and_then(Value::as_array)
+            .ok_or_else(|| anyhow!("Missing runes for preset {}", champion))?
+            .iter()
+            .filter_map(Value::as_str)
+            .map(ToOwned::to_owned)
+            .collect::<Vec<_>>();
+        let shards = preset
+            .get("shards")
+            .and_then(Value::as_array)
+            .ok_or_else(|| anyhow!("Missing shards for preset {}", champion))?
+            .iter()
+            .filter_map(Value::as_str)
+            .map(ToOwned::to_owned)
+            .collect::<Vec<_>>();
+        let masteries = preset
+            .get("masteries")
+            .and_then(Value::as_array)
+            .ok_or_else(|| anyhow!("Missing masteries for preset {}", champion))?
+            .iter()
+            .filter_map(|m| {
+                let name = m.get("name").and_then(Value::as_str)?;
+                let rank = m.get("rank").and_then(Value::as_u64).unwrap_or(1) as usize;
+                Some(MasterySelection {
+                    name: name.to_string(),
+                    rank,
+                })
+            })
+            .collect::<Vec<_>>();
+
+        let source_url = preset
+            .get("source_url")
+            .and_then(Value::as_str)
+            .unwrap_or(&default_source_url)
+            .to_string();
+        let last_checked = preset
+            .get("last_checked")
+            .and_then(Value::as_str)
+            .unwrap_or(&default_last_checked)
+            .to_string();
+
+        let loaded = EnemyUrfPreset {
+            champion: champion.clone(),
+            source_url,
+            last_checked,
+            item_names,
+            runes,
+            shards,
+            masteries,
+        };
+        by_champion.insert(to_norm_key(&champion), loaded);
     }
+    Ok(by_champion)
+}
+
+fn validate_enemy_urf_presets(
+    presets: &HashMap<String, EnemyUrfPreset>,
+    items: &HashMap<String, Item>,
+    loadout_domain: &LoadoutDomain,
+) -> Result<()> {
+    let all_runes = loadout_domain
+        .rune_paths
+        .iter()
+        .flat_map(|p| p.slot_runes.iter())
+        .flat_map(|slot| slot.iter())
+        .map(|s| to_norm_key(s))
+        .collect::<HashSet<_>>();
+    let all_masteries = loadout_domain
+        .mastery_trees
+        .iter()
+        .flat_map(|t| t.tiers.iter())
+        .flat_map(|tier| tier.options.iter())
+        .map(|m| to_norm_key(&m.name))
+        .collect::<HashSet<_>>();
+    for preset in presets.values() {
+        if preset.item_names.len() != 6 {
+            bail!(
+                "Enemy preset for {} must contain exactly six full items",
+                preset.champion
+            );
+        }
+        if preset.runes.len() != 6 {
+            bail!(
+                "Enemy preset for {} must contain exactly six runes",
+                preset.champion
+            );
+        }
+        if preset.shards.len() != 3 {
+            bail!(
+                "Enemy preset for {} must contain exactly three shards",
+                preset.champion
+            );
+        }
+        for item_name in &preset.item_names {
+            if !items.contains_key(item_name) {
+                bail!(
+                    "Enemy preset item '{}' for {} is not present in Items/",
+                    item_name,
+                    preset.champion
+                );
+            }
+        }
+        for rune_name in &preset.runes {
+            if !all_runes.contains(&to_norm_key(rune_name)) {
+                bail!(
+                    "Enemy preset rune '{}' for {} is not present in RunesReforged",
+                    rune_name,
+                    preset.champion
+                );
+            }
+        }
+        for (idx, shard) in preset.shards.iter().enumerate() {
+            let valid = loadout_domain
+                .shard_slots
+                .get(idx)
+                .map(|slot| slot.iter().any(|s| to_norm_key(s) == to_norm_key(shard)))
+                .unwrap_or(false);
+            if !valid {
+                bail!(
+                    "Enemy preset shard '{}' in slot {} for {} is invalid",
+                    shard,
+                    idx + 1,
+                    preset.champion
+                );
+            }
+        }
+        for mastery in &preset.masteries {
+            if !all_masteries.contains(&to_norm_key(&mastery.name)) {
+                bail!(
+                    "Enemy preset mastery '{}' for {} is not present in Season2016",
+                    mastery.name,
+                    preset.champion
+                );
+            }
+        }
+    }
+    Ok(())
 }
 
 fn enemy_loadout_from_preset(preset: &EnemyUrfPreset) -> LoadoutSelection {
     LoadoutSelection {
         rune_ids: Vec::new(),
-        rune_names: preset.runes.iter().map(|s| (*s).to_string()).collect(),
-        shard_stats: preset.shards.iter().map(|s| (*s).to_string()).collect(),
-        masteries: preset
-            .masteries
-            .iter()
-            .map(|(name, rank)| MasterySelection {
-                name: (*name).to_string(),
-                rank: *rank,
-            })
-            .collect(),
+        rune_names: preset.runes.clone(),
+        shard_stats: preset.shards.clone(),
+        masteries: preset.masteries.clone(),
     }
 }
 
@@ -4425,22 +4952,31 @@ fn run_vladimir_scenario(
     report_path_override: Option<&str>,
     max_runtime_seconds: Option<f64>,
     status_every_seconds: f64,
+    search_quality_profile: SearchQualityProfile,
 ) -> Result<()> {
     let run_start = Instant::now();
     let time_budget = max_runtime_seconds
         .filter(|s| *s > 0.0)
         .map(Duration::from_secs_f64);
+    let deadline = time_budget.map(|d| run_start + d);
     let status_every = Duration::from_secs_f64(status_every_seconds.max(1.0));
+    let mut status = StatusReporter::new(run_start, status_every);
+    let timeout_flag = Arc::new(AtomicUsize::new(0));
+    status.emit("initialization", None, None, Some("starting"), true);
     let items = load_items()?;
     let urf = load_urf_buffs()?;
     let champion_bases = load_champion_bases()?;
     let scenario = load_json(scenario_path)?;
+    status.emit("initialization", None, None, Some("core data loaded"), true);
 
     let sim = parse_simulation_config(
         scenario
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
+    if deadline_reached(deadline) {
+        timeout_flag.store(1, AtomicOrdering::Relaxed);
+    }
 
     let vlad_base_raw =
         if let Some(champion) = scenario.get("vladimir_champion").and_then(Value::as_str) {
@@ -4507,16 +5043,26 @@ fn run_vladimir_scenario(
         })
         .collect::<Vec<_>>();
 
-    let search_cfg = parse_build_search(
+    let mut search_cfg = parse_build_search(
         scenario
             .get("search")
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
+    apply_search_quality_profile(&mut search_cfg, search_quality_profile);
     let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
     let loadout_domain = Arc::new(build_loadout_domain());
-    let loadout_eval_budget = loadout_eval_budget(&search_cfg);
+    let loadout_eval_budget = loadout_eval_budget(&search_cfg, search_quality_profile);
+    let enemy_presets = load_enemy_urf_presets()?;
+    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain)?;
     let max_items = search_cfg.max_items;
     let item_pool = default_item_pool(&items);
+    status.emit(
+        "configuration",
+        None,
+        None,
+        Some("search profile and enemy presets ready"),
+        true,
+    );
 
     let baseline_fixed_names = scenario
         .get("vladimir_baseline_fixed")
@@ -4531,61 +5077,57 @@ fn run_vladimir_scenario(
 
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
-    let enemy_build_scenarios = enemy_scenarios
-        .par_iter()
-        .map(|(name, weight, enemies)| {
-            let builds = enemies
-                .par_iter()
-                .map(|enemy| {
-                    let preset = enemy_urf_preset(&enemy.name);
-                    let build_indices = if let Some(preset) = preset.as_ref() {
-                        let names = preset
-                            .item_names
-                            .iter()
-                            .map(|n| (*n).to_string())
-                            .collect::<Vec<_>>();
-                        item_pool_from_names(&items, &names)
-                            .unwrap_or_else(|_| item_pool.iter().take(max_items).cloned().collect::<Vec<_>>())
-                            .iter()
-                            .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
-                            .collect::<Vec<_>>()
-                    } else {
-                        item_pool.iter().take(max_items).enumerate().map(|(idx, _)| idx).collect::<Vec<_>>()
-                    };
-                    let enemy_bonus_stats = if let Some(preset) = preset.as_ref() {
-                        resolve_loadout(
-                            &enemy_loadout_from_preset(preset),
-                            sim.champion_level,
-                            false,
-                        )
-                        .map(|r| r.bonus_stats)
-                        .unwrap_or_default()
-                    } else {
-                        Stats::default()
-                    };
-                    (
-                        enemy.clone(),
-                        build_from_indices(&item_pool, &build_indices),
-                        enemy_bonus_stats,
-                    )
-                })
-                .collect::<Vec<_>>();
-            (name.clone(), *weight, builds)
-        })
-        .collect::<Vec<_>>();
+    let mut enemy_presets_used: HashMap<String, EnemyUrfPreset> = HashMap::new();
+    let mut enemy_build_scenarios = Vec::new();
+    for (name, weight, enemies) in &enemy_scenarios {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            break;
+        }
+        let mut builds = Vec::new();
+        for enemy in enemies {
+            let preset_key = to_norm_key(&enemy.name);
+            let preset = enemy_presets.get(&preset_key).ok_or_else(|| {
+                anyhow!(
+                    "Missing URF preset for enemy champion '{}'. Add it to {}.",
+                    enemy.name,
+                    enemy_preset_data_path().display()
+                )
+            })?;
+            let build_items = item_pool_from_names(&items, &preset.item_names)?;
+            let resolved_enemy_loadout = resolve_loadout(
+                &enemy_loadout_from_preset(preset),
+                sim.champion_level,
+                false,
+            )?;
+            enemy_presets_used.insert(preset_key, preset.clone());
+            builds.push((
+                enemy.clone(),
+                build_items,
+                resolved_enemy_loadout.bonus_stats,
+            ));
+        }
+        enemy_build_scenarios.push((name.clone(), *weight, builds));
+    }
     let enemy_builds = enemy_build_scenarios
         .first()
         .map(|(_, _, b)| b.clone())
         .unwrap_or_default();
     let enemy_loadout = ResolvedLoadout::default();
+    status.emit(
+        "enemy_setup",
+        None,
+        None,
+        Some("enemy preset builds loaded"),
+        true,
+    );
 
     let vlad_base_loadout = resolve_loadout(&vlad_loadout_selection, sim.champion_level, true)?;
-    let resolve_cache: Arc<Mutex<HashMap<String, ResolvedLoadout>>> = Arc::new(Mutex::new(
-        HashMap::from([(
+    let resolve_cache: Arc<Mutex<HashMap<String, ResolvedLoadout>>> =
+        Arc::new(Mutex::new(HashMap::from([(
             loadout_selection_key(&vlad_loadout_selection),
             vlad_base_loadout.clone(),
-        )]),
-    ));
+        )])));
     let best_loadout_by_item: Arc<Mutex<HashMap<Vec<usize>, (LoadoutSelection, ResolvedLoadout)>>> =
         Arc::new(Mutex::new(HashMap::new()));
 
@@ -4636,7 +5178,12 @@ fn run_vladimir_scenario(
 
         let mut evaluated = 0usize;
         while evaluated < loadout_eval_budget {
-            let candidate = random_loadout_selection(&vlad_loadout_selection, &loadout_domain, &mut seed);
+            if deadline_reached(deadline) {
+                timeout_flag.store(1, AtomicOrdering::Relaxed);
+                break;
+            }
+            let candidate =
+                random_loadout_selection(&vlad_loadout_selection, &loadout_domain, &mut seed);
             let key = loadout_selection_key(&candidate);
             if !seen.insert(key.clone()) {
                 continue;
@@ -4676,13 +5223,31 @@ fn run_vladimir_scenario(
     let full_capped_eval_count = AtomicUsize::new(0);
     let coarse_cache = Arc::new(BlockingScoreCache::new());
     let full_cache = Arc::new(BlockingScoreCache::new());
+    let mut scenario_hasher = DefaultHasher::new();
+    scenario.to_string().hash(&mut scenario_hasher);
+    search_strategy_summary(&search_cfg).hash(&mut scenario_hasher);
+    search_cfg.seed.hash(&mut scenario_hasher);
+    loadout_eval_budget.hash(&mut scenario_hasher);
+    let persistent_full_cache_path = simulation_dir().join("output").join("cache").join(format!(
+        "vladimir_full_scores_{:016x}.json",
+        scenario_hasher.finish()
+    ));
+    let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
     let coarse_features = precompute_coarse_features(&item_pool);
     let coarse_bonus_stats = vlad_base_loadout.bonus_stats.clone();
     let objective_capped_score_for_build = |build_items: &[Item], cap_seconds: f64| {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            return f64::NEG_INFINITY;
+        }
         let mut weighted_sum = 0.0;
         let mut weight_sum = 0.0;
         let mut worst = f64::INFINITY;
         for (_, weight, enemy_builds_s) in &enemy_build_scenarios {
+            if deadline_reached(deadline) {
+                timeout_flag.store(1, AtomicOrdering::Relaxed);
+                break;
+            }
             full_capped_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             let t = simulate_vlad_survival_capped(
                 &vlad_base,
@@ -4711,6 +5276,10 @@ fn run_vladimir_scenario(
         }
     };
     let coarse_score_fn = |build_idx: &[usize]| {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            return f64::NEG_INFINITY;
+        }
         let key = canonical_key(build_idx);
         let cache = Arc::clone(&coarse_cache);
         cache.get_or_compute(key.clone(), || {
@@ -4725,14 +5294,31 @@ fn run_vladimir_scenario(
         })
     };
     let full_score_fn = |build_idx: &[usize]| {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            return f64::NEG_INFINITY;
+        }
         let key = canonical_key(build_idx);
+        if let Some(score) = persistent_full_cache.get(&key) {
+            return score;
+        }
         let cache = Arc::clone(&full_cache);
         cache.get_or_compute(key.clone(), || {
+            if deadline_reached(deadline) {
+                timeout_flag.store(1, AtomicOrdering::Relaxed);
+                return f64::NEG_INFINITY;
+            }
+            if let Some(score) = persistent_full_cache.get(&key) {
+                return score;
+            }
             full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             let build_items = build_from_indices(&item_pool, &key);
             let (score, best_sel, best_resolved) = optimize_loadout_for_build(&key, &build_items);
             if let Ok(mut map) = best_loadout_by_item.lock() {
                 map.insert(key.clone(), (best_sel, best_resolved));
+            }
+            if score.is_finite() {
+                persistent_full_cache.insert(&key, score);
             }
             score
         })
@@ -4740,9 +5326,20 @@ fn run_vladimir_scenario(
 
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
     let active_strategies = portfolio_strategy_list(&search_cfg);
-    let seed_ranked_coarse = (0..ensemble_seeds)
-        .into_par_iter()
-        .map(|seed_idx| {
+    status.emit(
+        "coarse_seed_search",
+        Some((0, ensemble_seeds)),
+        None,
+        Some("running ensemble seeds"),
+        true,
+    );
+    let mut seed_ranked_coarse = Vec::new();
+    for seed_idx in 0..ensemble_seeds {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            break;
+        }
+        seed_ranked_coarse.push({
             let mut cfg = search_cfg.clone();
             cfg.seed = search_cfg.seed.wrapping_add(
                 search_cfg
@@ -4750,15 +5347,23 @@ fn run_vladimir_scenario(
                     .wrapping_mul(seed_idx as u64),
             );
             cfg.ranked_limit = cfg.ranked_limit.max(search_cfg.coarse_pool_limit);
-            build_search_ranked(&item_pool, max_items, &cfg, &coarse_score_fn)
-        })
-        .collect::<Vec<_>>();
+            build_search_ranked(&item_pool, max_items, &cfg, &coarse_score_fn, deadline)
+        });
+        status.emit(
+            "coarse_seed_search",
+            Some((seed_idx + 1, ensemble_seeds)),
+            None,
+            None,
+            false,
+        );
+    }
     let strategy_elites = strategy_seed_elites(
         &item_pool,
         max_items,
         &search_cfg,
         &active_strategies,
         &coarse_score_fn,
+        deadline,
     );
     let adaptive_candidates = adaptive_strategy_candidates(
         &item_pool,
@@ -4766,15 +5371,27 @@ fn run_vladimir_scenario(
         &search_cfg,
         &strategy_elites,
         &coarse_score_fn,
+        deadline,
     );
     let bleed_candidates =
         generate_bleed_candidates(&item_pool, max_items, &strategy_elites, &search_cfg);
+    status.emit(
+        "candidate_merge",
+        None,
+        None,
+        Some("merging coarse candidates"),
+        true,
+    );
     let bleed_candidate_count = bleed_candidates.len();
     let adaptive_candidate_count = adaptive_candidates.len();
 
     let mut coarse_candidates = Vec::new();
     let mut seed_top_sets = Vec::new();
     for ranked in &seed_ranked_coarse {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            break;
+        }
         let seed_top = ranked
             .iter()
             .take(search_cfg.ensemble_seed_top_k.max(1))
@@ -4786,9 +5403,17 @@ fn run_vladimir_scenario(
         }
     }
     for k in bleed_candidates {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            break;
+        }
         coarse_candidates.push(k);
     }
     for k in adaptive_candidates {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            break;
+        }
         coarse_candidates.push(k);
     }
     let unique_coarse_keys = coarse_candidates
@@ -4801,6 +5426,15 @@ fn run_vladimir_scenario(
         .map(|k| (k.clone(), coarse_score_fn(k)))
         .collect::<Vec<_>>();
     coarse_ordered.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+    if coarse_ordered.is_empty() {
+        let baseline_key = canonical_key(
+            &baseline_fixed_build
+                .iter()
+                .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
+                .collect::<Vec<_>>(),
+        );
+        coarse_ordered.push((baseline_key.clone(), coarse_score_fn(&baseline_key)));
+    }
 
     let keep_limit = search_cfg
         .ranked_limit
@@ -4810,16 +5444,21 @@ fn run_vladimir_scenario(
     let mut floor = f64::NEG_INFINITY;
     let total_candidates = coarse_ordered.len();
     let mut processed_candidates = 0usize;
-    let mut timed_out = false;
-    let mut next_status_at = run_start + status_every;
+    let mut timed_out = timeout_flag.load(AtomicOrdering::Relaxed) > 0;
+    status.emit(
+        "full_ranking",
+        Some((0, total_candidates)),
+        None,
+        Some("evaluating finalists"),
+        true,
+    );
     let batch_size = (rayon::current_num_threads() * 8).max(32);
     let mut idx = 0usize;
     while idx < total_candidates {
-        if let Some(budget) = time_budget {
-            if run_start.elapsed() >= budget {
-                timed_out = true;
-                break;
-            }
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            timed_out = true;
+            break;
         }
 
         let end = (idx + batch_size).min(total_candidates);
@@ -4828,10 +5467,9 @@ fn run_vladimir_scenario(
         let scored = chunk
             .par_iter()
             .filter_map(|(key, _)| {
-                if let Some(budget) = time_budget {
-                    if run_start.elapsed() >= budget {
-                        return None;
-                    }
+                if deadline_reached(deadline) {
+                    timeout_flag.store(1, AtomicOrdering::Relaxed);
+                    return None;
                 }
                 if floor_snapshot.is_finite() {
                     let preview_build = build_from_indices(&item_pool, key);
@@ -4856,40 +5494,29 @@ fn run_vladimir_scenario(
             floor = vlad_ranked[keep_limit - 1].1;
         }
 
-        if Instant::now() >= next_status_at {
-            let elapsed = run_start.elapsed().as_secs_f64();
-            let pct = if total_candidates > 0 {
-                (processed_candidates as f64 / total_candidates as f64) * 100.0
-            } else {
-                100.0
-            };
-            let rate = if elapsed > 0.0 {
-                processed_candidates as f64 / elapsed
-            } else {
-                0.0
-            };
-            let remaining = total_candidates.saturating_sub(processed_candidates) as f64;
-            let eta = if rate > 0.0 { remaining / rate } else { 0.0 };
-            let best = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
-            println!(
-                "[status] elapsed={:.1}s progress={}/{} ({:.1}%) best={:.2}s eta={:.1}s",
-                elapsed, processed_candidates, total_candidates, pct, best, eta
-            );
-            while next_status_at <= Instant::now() {
-                next_status_at += status_every;
-            }
-        }
+        status.emit(
+            "full_ranking",
+            Some((processed_candidates, total_candidates)),
+            vlad_ranked.first().map(|(_, s)| *s),
+            None,
+            false,
+        );
         idx = end;
     }
-    if vlad_ranked.is_empty() && !unique_coarse_keys.is_empty() {
+    if vlad_ranked.is_empty() && !unique_coarse_keys.is_empty() && !deadline_reached(deadline) {
         let fallback_key = unique_coarse_keys[0].clone();
         let fallback_score = full_score_fn(&fallback_key);
         vlad_ranked.push((fallback_key, fallback_score));
     }
+    timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
     vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
 
     let mut seed_best_scores = Vec::new();
     for ranked in &seed_ranked_coarse {
+        if deadline_reached(deadline) {
+            timeout_flag.store(1, AtomicOrdering::Relaxed);
+            break;
+        }
         let best = ranked
             .iter()
             .take(search_cfg.ensemble_seed_top_k.max(1))
@@ -4923,8 +5550,13 @@ fn run_vladimir_scenario(
         .iter()
         .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
         .collect::<Vec<_>>();
-    let baseline_fixed_time = full_score_fn(&baseline_fixed_indices);
+    let baseline_fixed_time = if deadline_reached(deadline) {
+        score_build_with_bonus(&baseline_fixed_build, &vlad_base_loadout.bonus_stats)
+    } else {
+        full_score_fn(&baseline_fixed_indices)
+    };
     let vlad_best_time = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
+    timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
 
     println!("Enemy builds (URF preset defaults):");
     for (enemy, build, _) in &enemy_builds {
@@ -4937,6 +5569,12 @@ fn run_vladimir_scenario(
                 .collect::<Vec<_>>()
                 .join(", ")
         );
+        if let Some(preset) = enemy_presets_used.get(&to_norm_key(&enemy.name)) {
+            println!(
+                "  source: {} (last checked {})",
+                preset.source_url, preset.last_checked
+            );
+        }
     }
 
     println!("\nVladimir baseline build (fixed):");
@@ -4969,6 +5607,11 @@ fn run_vladimir_scenario(
         "- Cache hits (coarse/full): {}/{}",
         coarse_cache.hits(),
         full_cache.hits()
+    );
+    println!(
+        "- Persistent full cache hits/entries: {}/{}",
+        persistent_full_cache.hits(),
+        persistent_full_cache.len()
     );
     println!(
         "- Cache waits (coarse/full): {}/{}",
@@ -5063,6 +5706,11 @@ fn run_vladimir_scenario(
         .collect::<Vec<_>>();
     let diagnostics = SearchDiagnostics {
         strategy_summary: search_strategy_summary(&search_cfg),
+        search_quality_profile: match search_quality_profile {
+            SearchQualityProfile::Fast => "fast".to_string(),
+            SearchQualityProfile::Balanced => "balanced".to_string(),
+            SearchQualityProfile::MaximumQuality => "maximum_quality".to_string(),
+        },
         ensemble_seeds,
         coarse_evaluations: coarse_eval_count.load(AtomicOrdering::Relaxed),
         full_evaluations: full_eval_count.load(AtomicOrdering::Relaxed),
@@ -5073,6 +5721,8 @@ fn run_vladimir_scenario(
         full_cache_hits: full_cache.hits(),
         full_cache_misses: full_cache.misses(),
         full_cache_waits: full_cache.waits(),
+        full_persistent_cache_hits: persistent_full_cache.hits(),
+        full_persistent_cache_entries: persistent_full_cache.len(),
         unique_candidate_builds: unique_coarse_keys.len(),
         bleed_candidates_injected: bleed_candidate_count,
         adaptive_candidates_injected: adaptive_candidate_count,
@@ -5185,7 +5835,7 @@ fn run_vladimir_scenario(
     let report_path = report_path_override
         .map(PathBuf::from)
         .unwrap_or_else(default_report_path);
-    write_vlad_report(
+    write_vladimir_report_markdown(
         &report_path,
         scenario_path,
         &sim,
@@ -5199,6 +5849,7 @@ fn run_vladimir_scenario(
         &vlad_best_build,
         vlad_best_time,
         &enemy_builds,
+        &enemy_presets_used,
         &diverse_top_builds,
         &diverse_top_keys,
         &build_confidence,
@@ -5207,7 +5858,32 @@ fn run_vladimir_scenario(
         &diagnostics,
         &build_order_results,
     )?;
+    let json_report_path = report_path.with_extension("json");
+    write_vladimir_report_json(
+        &json_report_path,
+        scenario_path,
+        &sim,
+        &baseline_fixed_build,
+        baseline_fixed_time,
+        &vlad_best_build,
+        vlad_best_time,
+        &vlad_loadout,
+        &enemy_builds,
+        &enemy_presets_used,
+        &diverse_top_builds,
+        &diagnostics,
+        &build_order_results,
+    )?;
+    persistent_full_cache.flush()?;
+    status.emit(
+        "finalization",
+        Some((processed_candidates, total_candidates)),
+        Some(vlad_best_time),
+        Some("reports and persistent cache written"),
+        true,
+    );
     println!("\nReport written: {}", report_path.display());
+    println!("Structured report written: {}", json_report_path.display());
 
     Ok(())
 }
@@ -5250,44 +5926,34 @@ fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
         })
         .collect::<Vec<_>>();
 
-    let search_cfg = parse_build_search(
-        scenario
-            .get("search")
-            .ok_or_else(|| anyhow!("Missing search"))?,
-    )?;
     let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
     let enemy_loadout_selection = parse_loadout_selection(scenario.get("enemy_loadout"));
     let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim_cfg.champion_level, true)?;
     let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim_cfg.champion_level, false)?;
-    let item_pool = default_item_pool(&items);
+    let loadout_domain = build_loadout_domain();
+    let enemy_presets = load_enemy_urf_presets()?;
+    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain)?;
 
-    let enemy_builds: Vec<(EnemyConfig, Vec<Item>, Stats)> = enemies
-        .par_iter()
-        .map(|enemy| {
-            let enemy_copy = enemy.clone();
-            let build_indices =
-                build_search(&item_pool, search_cfg.max_items, &search_cfg, |build_idx| {
-                    let build_items = build_from_indices(&item_pool, build_idx);
-                    let mut stats = build_item_stats(&build_items);
-                    stats.add(&enemy_loadout.bonus_stats);
-                    apply_item_assumptions(
-                        &mut stats,
-                        &enemy_copy.base,
-                        &build_items,
-                        &sim_cfg,
-                        sim_cfg.champion_level,
-                        None,
-                    );
-                    let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
-                    physical_dps + magic_dps
-                });
-            (
-                enemy.clone(),
-                build_from_indices(&item_pool, &build_indices),
-                enemy_loadout.bonus_stats.clone(),
+    let mut enemy_builds: Vec<(EnemyConfig, Vec<Item>, Stats)> = Vec::new();
+    for enemy in &enemies {
+        let key = to_norm_key(&enemy.name);
+        let preset = enemy_presets.get(&key).ok_or_else(|| {
+            anyhow!(
+                "Missing URF preset for enemy champion '{}'. Add it to {}.",
+                enemy.name,
+                enemy_preset_data_path().display()
             )
-        })
-        .collect();
+        })?;
+        let build = item_pool_from_names(&items, &preset.item_names)?;
+        let mut bonus_stats = resolve_loadout(
+            &enemy_loadout_from_preset(preset),
+            sim_cfg.champion_level,
+            false,
+        )?
+        .bonus_stats;
+        bonus_stats.add(&enemy_loadout.bonus_stats);
+        enemy_builds.push((enemy.clone(), build, bonus_stats));
+    }
 
     let baseline_fixed_names = scenario
         .get("vladimir_baseline_fixed")
@@ -5387,11 +6053,117 @@ fn main() -> Result<()> {
             cli.report_path.as_deref(),
             cli.max_runtime_seconds,
             cli.status_every_seconds,
+            cli.search_quality_profile,
         ),
         Mode::VladimirStep => run_vladimir_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
         }
         Mode::HecarimMs => run_stat_optimization("move_speed_flat", &scenario_path, "move speed"),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn loadout_selection_key_is_order_independent() {
+        let a = LoadoutSelection {
+            rune_ids: vec![],
+            rune_names: vec!["Triumph".to_string(), "Lethal Tempo".to_string()],
+            shard_stats: vec!["adaptive".to_string(), "health".to_string()],
+            masteries: vec![
+                MasterySelection {
+                    name: "Fervor of Battle".to_string(),
+                    rank: 1,
+                },
+                MasterySelection {
+                    name: "Perseverance".to_string(),
+                    rank: 2,
+                },
+            ],
+        };
+        let b = LoadoutSelection {
+            rune_ids: vec![],
+            rune_names: vec!["Lethal Tempo".to_string(), "Triumph".to_string()],
+            shard_stats: vec!["health".to_string(), "adaptive".to_string()],
+            masteries: vec![
+                MasterySelection {
+                    name: "Perseverance".to_string(),
+                    rank: 2,
+                },
+                MasterySelection {
+                    name: "Fervor of Battle".to_string(),
+                    rank: 1,
+                },
+            ],
+        };
+        assert_eq!(loadout_selection_key(&a), loadout_selection_key(&b));
+    }
+
+    #[test]
+    fn compute_vladimir_stats_does_not_recursively_reapply_conversions() {
+        let base = ChampionBase {
+            name: "Vladimir".to_string(),
+            base_health: 1000.0,
+            health_per_level: 0.0,
+            base_armor: 30.0,
+            armor_per_level: 0.0,
+            base_magic_resist: 30.0,
+            magic_resist_per_level: 0.0,
+            base_attack_damage: 60.0,
+            attack_damage_per_level: 0.0,
+            base_attack_speed: 0.658,
+            attack_speed_per_level_percent: 0.0,
+            base_move_speed: 340.0,
+            is_melee: false,
+        };
+        let item_stats = Stats {
+            ability_power: 100.0,
+            health: 200.0,
+            ..Stats::default()
+        };
+        let out = compute_vlad_stats(&base, &item_stats);
+        let expected_ap = 100.0 + 0.033 * 200.0;
+        let expected_health = 1000.0 + 200.0 + 1.6 * 100.0;
+        assert!((out.ability_power - expected_ap).abs() < 1e-9);
+        assert!((out.health - expected_health).abs() < 1e-9);
+    }
+
+    #[test]
+    fn enemy_preset_data_validates_against_local_data() {
+        let presets = load_enemy_urf_presets().expect("enemy presets should load");
+        let items = load_items().expect("items should load");
+        let domain = build_loadout_domain();
+        validate_enemy_urf_presets(&presets, &items, &domain)
+            .expect("enemy preset validation should pass");
+    }
+
+    #[test]
+    fn random_loadout_generation_produces_legal_shapes() {
+        let domain = build_loadout_domain();
+        assert!(domain.rune_paths.len() >= 2);
+        assert!(domain.shard_slots.iter().all(|s| !s.is_empty()));
+        assert!(domain.mastery_trees.len() >= 2);
+
+        let base = LoadoutSelection::default();
+        let mut seed = 1337u64;
+        let mut produced_mastery_page = false;
+        for _ in 0..64 {
+            let sample = random_loadout_selection(&base, &domain, &mut seed);
+            assert_eq!(sample.rune_names.len(), 6);
+            assert_eq!(sample.shard_stats.len(), 3);
+            if !sample.masteries.is_empty() {
+                let points = sample.masteries.iter().map(|m| m.rank).sum::<usize>();
+                assert_eq!(points, 30);
+                produced_mastery_page = true;
+                break;
+            }
+        }
+        assert!(
+            produced_mastery_page,
+            "expected to produce at least one legal mastery page"
+        );
     }
 }

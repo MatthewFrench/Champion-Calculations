@@ -1,3 +1,4 @@
 .DS_Store
 /Simulation/__pycache__
 /Simulation/target/
+/Simulation/output/cache
