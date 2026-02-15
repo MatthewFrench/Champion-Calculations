@@ -17,7 +17,8 @@
     "protoplasm_trigger_health_percent": 0.3,
     "protoplasm_bonus_health": 250.0,
     "protoplasm_heal_total": 300.0,
-    "protoplasm_duration_seconds": 5.0
+    "protoplasm_duration_seconds": 5.0,
+    "heartsteel_assumed_stacks_at_8m": 20.0
   },
   "vladimir_champion": "Vladimir",
   "vladimir_baseline_fixed": [

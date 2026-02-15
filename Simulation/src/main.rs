@@ -9,6 +9,11 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
+const LEGENDARY_RANK: &str = "LEGENDARY";
+const ITEM_EVOLUTION_REPLACEMENTS: &[(&str, &str)] = &[
+    ("Manamune", "Muramana"),
+    ("Archangel's Staff", "Seraph's Embrace"),
+];
 
 #[derive(Debug, Clone, Default)]
 struct Stats {
@@ -106,6 +111,7 @@ struct SimulationConfig {
     protoplasm_bonus_health: f64,
     protoplasm_heal_total: f64,
     protoplasm_duration_seconds: f64,
+    heartsteel_assumed_stacks_at_8m: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -237,6 +243,7 @@ impl VladCombatSimulation {
         for item in vlad_build_items {
             vlad_item_stats.add(&item.stats);
         }
+        apply_item_assumptions(&mut vlad_item_stats, &vlad_base, vlad_build_items, &sim);
         let vlad_stats = compute_vlad_stats(&vlad_base, &vlad_item_stats);
 
         let max_health = vlad_stats.health;
@@ -311,6 +318,7 @@ impl VladCombatSimulation {
             for item in &build {
                 enemy_stats.add(&item.stats);
             }
+            apply_item_assumptions(&mut enemy_stats, &enemy.base, &build, &runner.sim);
             let (_physical_dps, magic_dps) = compute_enemy_dps(&enemy, &enemy_stats, &runner.urf);
             let attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage;
             let attack_speed_bonus = enemy_stats.attack_speed_percent / 100.0;
@@ -672,6 +680,10 @@ fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
         protoplasm_bonus_health: as_f64(data, "protoplasm_bonus_health")?,
         protoplasm_heal_total: as_f64(data, "protoplasm_heal_total")?,
         protoplasm_duration_seconds: as_f64(data, "protoplasm_duration_seconds")?,
+        heartsteel_assumed_stacks_at_8m: data
+            .get("heartsteel_assumed_stacks_at_8m")
+            .and_then(Value::as_f64)
+            .unwrap_or(20.0),
     })
 }
 
@@ -926,9 +938,6 @@ fn load_items() -> Result<HashMap<String, Item>> {
             .and_then(|v| v.get("purchasable"))
             .and_then(Value::as_bool)
             .unwrap_or(false);
-        if !purchasable {
-            continue;
-        }
         if rank.iter().any(|r| EXCLUDED_RANKS.contains(&r.as_str())) {
             continue;
         }
@@ -953,7 +962,9 @@ fn load_items() -> Result<HashMap<String, Item>> {
             }
         }
 
-        let name = as_str(&data, "name")?.to_string();
+        let Some(name) = data.get("name").and_then(Value::as_str).map(|s| s.to_string()) else {
+            continue;
+        };
         items.insert(
             name.clone(),
             Item {
@@ -989,6 +1000,37 @@ fn is_boots(item: &Item) -> bool {
 
 fn cooldown_after_haste(base_seconds: f64, haste: f64) -> f64 {
     base_seconds * (100.0 / (100.0 + haste))
+}
+
+fn assumed_heartsteel_bonus_health(base_max_health: f64, stacks_at_8m: f64) -> f64 {
+    if stacks_at_8m <= 0.0 {
+        return 0.0;
+    }
+    // Approximate permanent health gained by repeatedly proccing Heartsteel:
+    // per proc ~= 8% * (70 + 6% max_health) = 5.6 + 0.0048 * max_health.
+    // Use an iterative approximation because max_health grows as stacks are gained.
+    let procs = stacks_at_8m.max(0.0).round() as usize;
+    let mut max_health = base_max_health;
+    let mut gained = 0.0;
+    for _ in 0..procs {
+        let delta = 5.6 + 0.0048 * max_health;
+        gained += delta;
+        max_health += delta;
+    }
+    gained
+}
+
+fn apply_item_assumptions(
+    stats: &mut Stats,
+    base: &ChampionBase,
+    build_items: &[Item],
+    sim: &SimulationConfig,
+) {
+    if build_items.iter().any(|i| i.name == "Heartsteel") {
+        let base_max_health = base.base_health + stats.health;
+        stats.health +=
+            assumed_heartsteel_bonus_health(base_max_health, sim.heartsteel_assumed_stacks_at_8m);
+    }
 }
 
 fn compute_vlad_stats(base: &ChampionBase, item_stats: &Stats) -> Stats {
@@ -1430,20 +1472,48 @@ where
 fn item_pool_from_names(items: &HashMap<String, Item>, names: &[String]) -> Result<Vec<Item>> {
     let mut out = Vec::new();
     for name in names {
+        let resolved = resolve_evolved_item_name(items, name);
         out.push(
             items
-                .get(name)
+                .get(&resolved)
                 .cloned()
-                .ok_or_else(|| anyhow!("Item not found: {}", name))?,
+                .ok_or_else(|| anyhow!("Item not found: {}", resolved))?,
         );
     }
     Ok(out)
 }
 
+fn resolve_evolved_item_name(items: &HashMap<String, Item>, name: &str) -> String {
+    for (source, evolved) in ITEM_EVOLUTION_REPLACEMENTS {
+        if *source == name && items.contains_key(*evolved) {
+            return (*evolved).to_string();
+        }
+    }
+    name.to_string()
+}
+
+fn is_legendary(item: &Item) -> bool {
+    item.rank.iter().any(|r| r == LEGENDARY_RANK)
+}
+
+fn is_pre_evolution_item(items: &HashMap<String, Item>, item_name: &str) -> bool {
+    ITEM_EVOLUTION_REPLACEMENTS
+        .iter()
+        .any(|(source, evolved)| *source == item_name && items.contains_key(*evolved))
+}
+
+fn is_evolution_target(item_name: &str) -> bool {
+    ITEM_EVOLUTION_REPLACEMENTS
+        .iter()
+        .any(|(_, evolved)| *evolved == item_name)
+}
+
 fn default_item_pool(items: &HashMap<String, Item>) -> Vec<Item> {
     let mut pool = items
         .values()
-        .filter(|item| item.shop_purchasable)
+        .filter(|item| item.shop_purchasable || is_evolution_target(&item.name))
+        .filter(|item| is_legendary(item))
+        .filter(|item| !is_pre_evolution_item(items, &item.name))
         .cloned()
         .collect::<Vec<_>>();
     pool.sort_by(|a, b| a.name.cmp(&b.name));
@@ -1514,7 +1584,8 @@ fn run_vlad_scenario(
             let enemy_copy = enemy.clone();
             let build_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
                 let build_items = build_from_indices(&item_pool, build_idx);
-                let stats = build_item_stats(&build_items);
+                let mut stats = build_item_stats(&build_items);
+                apply_item_assumptions(&mut stats, &enemy_copy.base, &build_items, &sim);
                 let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
                 physical_dps + magic_dps
             });
@@ -1665,7 +1736,8 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
             let build_indices =
                 build_search(&item_pool, search_cfg.max_items, &search_cfg, |build_idx| {
                     let build_items = build_from_indices(&item_pool, build_idx);
-                    let stats = build_item_stats(&build_items);
+                    let mut stats = build_item_stats(&build_items);
+                    apply_item_assumptions(&mut stats, &enemy_copy.base, &build_items, &sim_cfg);
                     let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
                     physical_dps + magic_dps
                 });

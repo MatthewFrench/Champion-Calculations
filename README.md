@@ -27,6 +27,7 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 - Deterministic: Same inputs produce the same results.
 - Models: pool uptime, health costs, basic healing from pool, GA revive, Zhonya stasis, Protoplasm lifeline, and enemy attacks/spell damage/stuns as timed events on a fixed tick loop (default 30 Hz).
 - Extensibility: Rust engine can be extended with additional champion/item mechanics as compiled code.
+- Search scope: build search operates on purchasable `LEGENDARY` items only (no intermediate components).
 
 **Current Drawbacks (Important)**
 - The current simulator is a simplified model. It does not yet run full champion kits from `Characters` data.

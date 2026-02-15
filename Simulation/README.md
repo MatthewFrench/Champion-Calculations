@@ -76,8 +76,15 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - `vladimir_champion`: champion name from `Characters/`.
   - `enemies[].champion`: champion name from `Characters/`.
 - Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence).
+- Build search item pool is restricted to purchasable `LEGENDARY` items only.
+- Pre-evolution items are normalized to evolved forms in simulation lookups:
+  - `Manamune` -> `Muramana`
+  - `Archangel's Staff` -> `Seraph's Embrace`
 
 ## Notes
 - Champion base stats are loaded from `Characters/*.json` by champion name.
 - This is still a survival-first model; spell DPS is now eventized but full per-spell champion kits still need script/data integration.
 - The build search uses a beam search by default. You can switch to greedy or random in the scenario.
+- Heartsteel assumptions:
+  - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
+  - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
