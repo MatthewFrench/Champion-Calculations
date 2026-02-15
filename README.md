@@ -21,12 +21,12 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 - Champion base stats and attack type are loaded from `Characters` by champion reference in scenario files; scenarios should only contain scenario-specific behavior knobs.
 
 **Simulator**
-- Entry point: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py`
+- Entry point: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/src/main.rs`
 - Scenario config: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json`
 - Focus: Vlad survival time while chaining W in a fight against 5 enemies.
 - Deterministic: Same inputs produce the same results.
 - Models: pool uptime, health costs, basic healing from pool, GA revive, Zhonya stasis, Protoplasm lifeline, and enemy attacks/spell damage/stuns as timed events on a fixed tick loop (default 30 Hz).
-- Extensibility: optional Python hook scripts can add champion/item behaviors that are not generically modeled.
+- Extensibility: Rust engine can be extended with additional champion/item mechanics as compiled code.
 
 **Current Drawbacks (Important)**
 - The current simulator is a simplified model. It does not yet run full champion kits from `Characters` data.

@@ -13,67 +13,53 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
-- `urf_sim.py`: Simulator and optimizer.
+- `Cargo.toml`: Rust package manifest.
+- `src/main.rs`: Simulator and optimizer.
 
 ## Run
 ```bash
-python "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py" \
+source "$HOME/.cargo/env"
+cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode vlad
 ```
 
 ## Taric (Max Attack Speed)
 ```bash
-python "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py" \
+source "$HOME/.cargo/env"
+cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode taric_as
 ```
 
 ## Hecarim (Max Move Speed)
 ```bash
-python "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py" \
+source "$HOME/.cargo/env"
+cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode hecarim_ms
 ```
 
 ## Vlad Step Debug (Tick-by-Tick)
 ```bash
-python "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py" \
+source "$HOME/.cargo/env"
+cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode vlad_step \
   --ticks 60
 ```
 
-## Script Hooks
-- Scenario-level scripts: `simulation.scripts` (list of Python file paths).
-- Enemy-level scripts: `enemies[i].scripts` (list of Python file paths).
-- Relative script paths are resolved from the scenario file directory.
-- Each script must define:
-```python
-def register(sim):
-    # sim.register_hook("on_pre_tick", callback)
-    # sim.schedule_event(...)
-    pass
-```
-- Available hook names:
-  - `on_init`
-  - `on_pre_tick`
-  - `on_post_tick`
-  - `on_event_pre`
-  - `on_event_post`
-  - `on_damage`
-  - `on_cast_pool`
-  - `on_cast_zhonya`
-  - `on_trigger_protoplasm`
-  - `on_ga_revive`
+## Extensibility
+- Champion/item mechanics should be added as compiled Rust logic in `src/main.rs` (or split into modules as the codebase grows).
+- Scenario JSON should stay minimal and reference canonical data from `Characters`, `Items`, and `Game Mode`.
 
 ## Minimal Scenario Shape
 - Use champion references instead of hardcoding base stats:
   - `vladimir_champion`: champion name from `Characters/`.
   - `enemies[].champion`: champion name from `Characters/`.
-- Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence, script overrides).
+- Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence).
 
 ## Notes
-- The base stats for champions are placeholders; adjust them in `scenario_vlad_urf.json` as needed.
+- Champion base stats are loaded from `Characters/*.json` by champion name.
 - This is still a survival-first model; spell DPS is now eventized but full per-spell champion kits still need script/data integration.
 - The build search uses a beam search by default. You can switch to greedy or random in the scenario.

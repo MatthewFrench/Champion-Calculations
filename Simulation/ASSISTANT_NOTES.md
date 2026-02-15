@@ -11,8 +11,8 @@ This note log explains the decisions and assumptions behind the URF Vladimir sim
 - Enable a fast search for “best URF tier” builds without exhaustive combinations.
 
 ## What I Built
-- `urf_sim.py`: a deterministic simulator and simple build optimizer.
-- `scenario_vlad_urf.json`: baseline scenario with Vlad stats, 5 enemies, stuns, and search parameters.
+- `src/main.rs`: a deterministic Rust simulator and build optimizer.
+- `scenario_vlad_urf.json`: baseline scenario with champion references, 5 enemies, stuns, and search parameters.
 - `README.md`: usage and purpose of the simulator.
 
 ## Why These Decisions
@@ -54,7 +54,7 @@ This note log explains the decisions and assumptions behind the URF Vladimir sim
 
 ## Scenario Configuration
 File: `scenario_vlad_urf.json`
-- Includes base stats for Vlad and 5 enemies.
+- References Vlad and enemies by champion name, loading base stats from `Characters/`.
 - Includes ability DPS and stun intervals for enemies.
 - Includes Vlad baseline fixed item list for comparison.
 - Search configuration uses beam search.
