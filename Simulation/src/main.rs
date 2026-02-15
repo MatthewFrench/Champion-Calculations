@@ -1,12 +1,13 @@
 use anyhow::{Context, Result, anyhow, bail};
 use clap::{Parser, ValueEnum};
-use rayon::prelude::*;
 use rayon::ThreadPoolBuilder;
+use rayon::prelude::*;
 use serde_json::Value;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
@@ -140,6 +141,15 @@ struct BuildSearchConfig {
     beam_width: usize,
     max_items: usize,
     random_samples: usize,
+    hill_climb_restarts: usize,
+    hill_climb_steps: usize,
+    hill_climb_neighbors: usize,
+    genetic_population: usize,
+    genetic_generations: usize,
+    genetic_mutation_rate: f64,
+    genetic_crossover_rate: f64,
+    portfolio_strategies: Vec<String>,
+    ranked_limit: usize,
     seed: u64,
 }
 
@@ -1174,6 +1184,16 @@ fn parse_enemy_config(
 }
 
 fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
+    let portfolio_strategies = data
+        .get("portfolio_strategies")
+        .and_then(Value::as_array)
+        .map(|arr| {
+            arr.iter()
+                .filter_map(Value::as_str)
+                .map(|s| s.to_string())
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
     Ok(BuildSearchConfig {
         strategy: as_str(data, "strategy")?.to_string(),
         beam_width: data.get("beam_width").and_then(Value::as_u64).unwrap_or(20) as usize,
@@ -1182,6 +1202,39 @@ fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("random_samples")
             .and_then(Value::as_u64)
             .unwrap_or(200) as usize,
+        hill_climb_restarts: data
+            .get("hill_climb_restarts")
+            .and_then(Value::as_u64)
+            .unwrap_or(64) as usize,
+        hill_climb_steps: data
+            .get("hill_climb_steps")
+            .and_then(Value::as_u64)
+            .unwrap_or(20) as usize,
+        hill_climb_neighbors: data
+            .get("hill_climb_neighbors")
+            .and_then(Value::as_u64)
+            .unwrap_or(24) as usize,
+        genetic_population: data
+            .get("genetic_population")
+            .and_then(Value::as_u64)
+            .unwrap_or(80) as usize,
+        genetic_generations: data
+            .get("genetic_generations")
+            .and_then(Value::as_u64)
+            .unwrap_or(30) as usize,
+        genetic_mutation_rate: data
+            .get("genetic_mutation_rate")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.18),
+        genetic_crossover_rate: data
+            .get("genetic_crossover_rate")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.90),
+        portfolio_strategies,
+        ranked_limit: data
+            .get("ranked_limit")
+            .and_then(Value::as_u64)
+            .unwrap_or(400) as usize,
         seed: data.get("seed").and_then(Value::as_u64).unwrap_or(1337),
     })
 }
@@ -1761,6 +1814,107 @@ fn canonical_key(build: &[usize]) -> Vec<usize> {
     key
 }
 
+fn next_u64(seed: &mut u64) -> u64 {
+    *seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
+    *seed
+}
+
+fn rand_index(seed: &mut u64, upper: usize) -> usize {
+    if upper <= 1 {
+        return 0;
+    }
+    (next_u64(seed) as usize) % upper
+}
+
+fn rand_f64(seed: &mut u64) -> f64 {
+    let bits = next_u64(seed) >> 11;
+    (bits as f64) / ((1u64 << 53) as f64)
+}
+
+fn shuffle_usize(slice: &mut [usize], seed: &mut u64) {
+    if slice.len() <= 1 {
+        return;
+    }
+    for i in (1..slice.len()).rev() {
+        let j = rand_index(seed, i + 1);
+        slice.swap(i, j);
+    }
+}
+
+fn can_add_item_to_build(item_pool: &[Item], build: &[usize], item_idx: usize) -> bool {
+    if build.contains(&item_idx) {
+        return false;
+    }
+    if is_boots(&item_pool[item_idx]) && build.iter().any(|&i| is_boots(&item_pool[i])) {
+        return false;
+    }
+    true
+}
+
+fn random_valid_build(item_pool: &[Item], max_items: usize, seed: &mut u64) -> Vec<usize> {
+    let mut indices: Vec<usize> = (0..item_pool.len()).collect();
+    shuffle_usize(&mut indices, seed);
+    let mut build = Vec::with_capacity(max_items);
+    for item_idx in indices {
+        if build.len() >= max_items {
+            break;
+        }
+        if can_add_item_to_build(item_pool, &build, item_idx) {
+            build.push(item_idx);
+        }
+    }
+    build
+}
+
+fn repair_build(item_pool: &[Item], build: &mut Vec<usize>, max_items: usize, seed: &mut u64) {
+    let mut deduped = Vec::with_capacity(max_items);
+    for &item_idx in build.iter() {
+        if deduped.len() >= max_items {
+            break;
+        }
+        if can_add_item_to_build(item_pool, &deduped, item_idx) {
+            deduped.push(item_idx);
+        }
+    }
+    *build = deduped;
+
+    if build.len() >= max_items {
+        return;
+    }
+    let mut all_indices: Vec<usize> = (0..item_pool.len()).collect();
+    shuffle_usize(&mut all_indices, seed);
+    for item_idx in all_indices {
+        if build.len() >= max_items {
+            break;
+        }
+        if can_add_item_to_build(item_pool, build, item_idx) {
+            build.push(item_idx);
+        }
+    }
+}
+
+fn unique_ranked_from_candidates<F>(
+    candidates: Vec<Vec<usize>>,
+    score_fn: &F,
+    limit: usize,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let scored = score_candidates(candidates, score_fn);
+    let mut ranked = Vec::new();
+    let mut seen = HashSet::new();
+    for (_, key, score) in scored {
+        if seen.insert(key.clone()) {
+            ranked.push((key, score));
+            if ranked.len() >= limit.max(1) {
+                break;
+            }
+        }
+    }
+    ranked
+}
+
 fn score_candidates<F>(
     candidates: Vec<Vec<usize>>,
     score_fn: &F,
@@ -1845,6 +1999,218 @@ where
         }
     }
     ranked
+}
+
+fn random_search_ranked<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    random_samples: usize,
+    seed: u64,
+    limit: usize,
+    score_fn: &F,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let mut s = seed;
+    let mut candidates = Vec::with_capacity(random_samples.max(1));
+    for _ in 0..random_samples.max(1) {
+        candidates.push(random_valid_build(item_pool, max_items, &mut s));
+    }
+    unique_ranked_from_candidates(candidates, score_fn, limit)
+}
+
+fn hill_climb_search_ranked<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    restarts: usize,
+    steps: usize,
+    neighbors_per_step: usize,
+    seed: u64,
+    limit: usize,
+    score_fn: &F,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let mut s = seed;
+    let mut candidates = Vec::new();
+
+    for _ in 0..restarts.max(1) {
+        let mut current = random_valid_build(item_pool, max_items, &mut s);
+        let mut current_score = score_fn(&canonical_key(&current));
+        candidates.push(current.clone());
+
+        for _ in 0..steps {
+            let mut neighbor_builds = Vec::new();
+            for _ in 0..neighbors_per_step.max(1) {
+                if current.is_empty() {
+                    break;
+                }
+                let mut neighbor = current.clone();
+                let swap_idx = rand_index(&mut s, neighbor.len());
+                let mut proposed = rand_index(&mut s, item_pool.len());
+                let mut tries = 0usize;
+                while tries < item_pool.len()
+                    && (!can_add_item_to_build(item_pool, &neighbor, proposed)
+                        || proposed == neighbor[swap_idx])
+                {
+                    proposed = rand_index(&mut s, item_pool.len());
+                    tries += 1;
+                }
+                if tries < item_pool.len() {
+                    neighbor[swap_idx] = proposed;
+                    repair_build(item_pool, &mut neighbor, max_items, &mut s);
+                    neighbor_builds.push(neighbor);
+                }
+            }
+            if neighbor_builds.is_empty() {
+                break;
+            }
+            let ranked_neighbors =
+                unique_ranked_from_candidates(neighbor_builds, score_fn, neighbors_per_step.max(1));
+            let Some((best_neighbor, best_score)) = ranked_neighbors.first().cloned() else {
+                break;
+            };
+            if best_score > current_score {
+                current = best_neighbor;
+                current_score = best_score;
+                candidates.push(current.clone());
+            } else {
+                break;
+            }
+        }
+    }
+
+    unique_ranked_from_candidates(candidates, score_fn, limit)
+}
+
+fn tournament_parent(
+    scored_population: &[(Vec<usize>, f64)],
+    seed: &mut u64,
+    tournament_size: usize,
+) -> Vec<usize> {
+    let mut best_idx = rand_index(seed, scored_population.len());
+    for _ in 1..tournament_size.max(1) {
+        let idx = rand_index(seed, scored_population.len());
+        if scored_population[idx].1 > scored_population[best_idx].1 {
+            best_idx = idx;
+        }
+    }
+    scored_population[best_idx].0.clone()
+}
+
+fn crossover_builds(
+    parent_a: &[usize],
+    parent_b: &[usize],
+    item_pool: &[Item],
+    max_items: usize,
+    seed: &mut u64,
+) -> Vec<usize> {
+    let mut merged = parent_a.to_vec();
+    for &idx in parent_b {
+        if !merged.contains(&idx) {
+            merged.push(idx);
+        }
+    }
+    shuffle_usize(&mut merged, seed);
+    let mut child = Vec::with_capacity(max_items);
+    for idx in merged {
+        if child.len() >= max_items {
+            break;
+        }
+        if can_add_item_to_build(item_pool, &child, idx) {
+            child.push(idx);
+        }
+    }
+    repair_build(item_pool, &mut child, max_items, seed);
+    child
+}
+
+fn mutate_build(
+    build: &mut Vec<usize>,
+    item_pool: &[Item],
+    max_items: usize,
+    mutation_rate: f64,
+    seed: &mut u64,
+) {
+    if build.is_empty() || rand_f64(seed) > mutation_rate.clamp(0.0, 1.0) {
+        return;
+    }
+    let slot = rand_index(seed, build.len());
+    let mut tries = 0usize;
+    while tries < item_pool.len() {
+        let candidate = rand_index(seed, item_pool.len());
+        if candidate != build[slot] {
+            let old = build[slot];
+            build[slot] = candidate;
+            if can_add_item_to_build(item_pool, &build[..slot], build[slot])
+                && !build[(slot + 1)..].contains(&build[slot])
+            {
+                repair_build(item_pool, build, max_items, seed);
+                return;
+            }
+            build[slot] = old;
+        }
+        tries += 1;
+    }
+    repair_build(item_pool, build, max_items, seed);
+}
+
+fn genetic_search_ranked<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    population_size: usize,
+    generations: usize,
+    mutation_rate: f64,
+    crossover_rate: f64,
+    seed: u64,
+    limit: usize,
+    score_fn: &F,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let pop_n = population_size.max(8);
+    let mut s = seed;
+    let mut population = Vec::with_capacity(pop_n);
+    for _ in 0..pop_n {
+        population.push(random_valid_build(item_pool, max_items, &mut s));
+    }
+
+    let mut all_seen = population.clone();
+    for _ in 0..generations.max(1) {
+        let mut scored = unique_ranked_from_candidates(population.clone(), score_fn, pop_n);
+        if scored.is_empty() {
+            break;
+        }
+        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+
+        let elite_count = (pop_n / 8).max(1).min(scored.len());
+        let mut next_population = scored
+            .iter()
+            .take(elite_count)
+            .map(|(b, _)| b.clone())
+            .collect::<Vec<_>>();
+
+        while next_population.len() < pop_n {
+            let parent_a = tournament_parent(&scored, &mut s, 3);
+            let parent_b = tournament_parent(&scored, &mut s, 3);
+            let mut child = if rand_f64(&mut s) <= crossover_rate.clamp(0.0, 1.0) {
+                crossover_builds(&parent_a, &parent_b, item_pool, max_items, &mut s)
+            } else {
+                parent_a
+            };
+            mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut s);
+            repair_build(item_pool, &mut child, max_items, &mut s);
+            next_population.push(child);
+        }
+
+        all_seen.extend(next_population.clone());
+        population = next_population;
+    }
+
+    unique_ranked_from_candidates(all_seen, score_fn, limit)
 }
 
 fn symmetric_diff_count(a: &[usize], b: &[usize]) -> usize {
@@ -2293,12 +2659,12 @@ fn choose_best_build_by_stat(
     candidates.into_iter().next().unwrap_or_default()
 }
 
-fn build_search<F>(
+fn build_search_ranked<F>(
     item_pool: &[Item],
     max_items: usize,
     search: &BuildSearchConfig,
-    score_fn: F,
-) -> Vec<usize>
+    score_fn: &F,
+) -> Vec<(Vec<usize>, f64)>
 where
     F: Fn(&[usize]) -> f64 + Sync,
 {
@@ -2309,17 +2675,12 @@ where
                 let mut best: Option<usize> = None;
                 let mut best_score = f64::NEG_INFINITY;
                 for item_idx in 0..item_pool.len() {
-                    if build.contains(&item_idx) {
-                        continue;
-                    }
-                    if is_boots(&item_pool[item_idx])
-                        && build.iter().any(|&i| is_boots(&item_pool[i]))
-                    {
+                    if !can_add_item_to_build(item_pool, &build, item_idx) {
                         continue;
                     }
                     let mut candidate = build.clone();
                     candidate.push(item_idx);
-                    let score = score_fn(&candidate);
+                    let score = score_fn(&canonical_key(&candidate));
                     if score > best_score {
                         best_score = score;
                         best = Some(item_idx);
@@ -2331,48 +2692,109 @@ where
                     break;
                 }
             }
-            build
+            let key = canonical_key(&build);
+            vec![(key.clone(), score_fn(&key))]
         }
-        "beam" => beam_search_ranked(item_pool, max_items, search.beam_width, score_fn)
-            .into_iter()
-            .next()
-            .map(|(build, _)| build)
-            .unwrap_or_default(),
-        "random" => {
-            // Lightweight deterministic PRNG to avoid extra crate dependency.
-            let mut seed = search.seed;
-            let mut best_build = Vec::new();
-            let mut best_score = f64::NEG_INFINITY;
-            for _ in 0..search.random_samples {
-                let mut indices: Vec<usize> = (0..item_pool.len()).collect();
-                for i in (1..indices.len()).rev() {
-                    seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
-                    let j = (seed as usize) % (i + 1);
-                    indices.swap(i, j);
-                }
-
-                let mut build = Vec::new();
-                for item_idx in indices {
-                    if build.len() >= max_items {
-                        break;
-                    }
-                    if is_boots(&item_pool[item_idx])
-                        && build.iter().any(|&i| is_boots(&item_pool[i]))
-                    {
-                        continue;
-                    }
-                    build.push(item_idx);
-                }
-
-                let score = score_fn(&build);
-                if score > best_score {
-                    best_score = score;
-                    best_build = build;
+        "beam" => beam_search_ranked(item_pool, max_items, search.beam_width, score_fn),
+        "random" => random_search_ranked(
+            item_pool,
+            max_items,
+            search.random_samples,
+            search.seed,
+            search.ranked_limit,
+            score_fn,
+        ),
+        "hill_climb" => hill_climb_search_ranked(
+            item_pool,
+            max_items,
+            search.hill_climb_restarts,
+            search.hill_climb_steps,
+            search.hill_climb_neighbors,
+            search.seed,
+            search.ranked_limit,
+            score_fn,
+        ),
+        "genetic" => genetic_search_ranked(
+            item_pool,
+            max_items,
+            search.genetic_population,
+            search.genetic_generations,
+            search.genetic_mutation_rate,
+            search.genetic_crossover_rate,
+            search.seed,
+            search.ranked_limit,
+            score_fn,
+        ),
+        "portfolio" => {
+            let mut strategies = if search.portfolio_strategies.is_empty() {
+                vec![
+                    "beam".to_string(),
+                    "hill_climb".to_string(),
+                    "genetic".to_string(),
+                    "random".to_string(),
+                    "greedy".to_string(),
+                ]
+            } else {
+                search.portfolio_strategies.clone()
+            };
+            strategies.retain(|s| s != "portfolio");
+            if strategies.is_empty() {
+                strategies.push("beam".to_string());
+            }
+            let ranked_sets = strategies
+                .par_iter()
+                .enumerate()
+                .map(|(idx, strat)| {
+                    let mut cfg = search.clone();
+                    cfg.strategy = strat.clone();
+                    cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
+                    build_search_ranked(item_pool, max_items, &cfg, score_fn)
+                })
+                .collect::<Vec<_>>();
+            let mut merged_candidates = Vec::new();
+            for ranked in ranked_sets {
+                for (build, _) in ranked {
+                    merged_candidates.push(build);
                 }
             }
-            best_build
+            unique_ranked_from_candidates(merged_candidates, score_fn, search.ranked_limit)
         }
         _ => vec![],
+    }
+}
+
+fn build_search<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    search: &BuildSearchConfig,
+    score_fn: F,
+) -> Vec<usize>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    build_search_ranked(item_pool, max_items, search, &score_fn)
+        .into_iter()
+        .next()
+        .map(|(build, _)| build)
+        .unwrap_or_default()
+}
+
+fn search_strategy_summary(search: &BuildSearchConfig) -> String {
+    if search.strategy == "portfolio" {
+        let strategies = if search.portfolio_strategies.is_empty() {
+            vec![
+                "beam".to_string(),
+                "hill_climb".to_string(),
+                "genetic".to_string(),
+                "random".to_string(),
+                "greedy".to_string(),
+            ]
+        } else {
+            search.portfolio_strategies.clone()
+        };
+        format!("portfolio({})", strategies.join(", "))
+    } else {
+        search.strategy.clone()
     }
 }
 
@@ -2554,44 +2976,20 @@ fn run_vlad_scenario(
         })
         .collect();
 
-    let vlad_ranked = if search_cfg.strategy == "beam" {
-        beam_search_ranked(&item_pool, max_items, search_cfg.beam_width, |build_idx| {
-            let build_items = build_from_indices(&item_pool, build_idx);
-            simulate_vlad_survival(
-                &vlad_base,
-                &build_items,
-                &vlad_loadout.bonus_stats,
-                None,
-                &enemy_builds,
-                &sim,
-                &urf,
-            )
-        })
-    } else {
-        let best = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
-            let build_items = build_from_indices(&item_pool, build_idx);
-            simulate_vlad_survival(
-                &vlad_base,
-                &build_items,
-                &vlad_loadout.bonus_stats,
-                None,
-                &enemy_builds,
-                &sim,
-                &urf,
-            )
-        });
-        let best_items = build_from_indices(&item_pool, &best);
-        let best_score = simulate_vlad_survival(
+    let vlad_eval_count = AtomicUsize::new(0);
+    let vlad_ranked = build_search_ranked(&item_pool, max_items, &search_cfg, &|build_idx| {
+        vlad_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
+        let build_items = build_from_indices(&item_pool, build_idx);
+        simulate_vlad_survival(
             &vlad_base,
-            &best_items,
+            &build_items,
             &vlad_loadout.bonus_stats,
             None,
             &enemy_builds,
             &sim,
             &urf,
-        );
-        vec![(canonical_key(&best), best_score)]
-    };
+        )
+    });
     let vlad_best_indices = vlad_ranked
         .first()
         .map(|(build, _)| build.clone())
@@ -2642,6 +3040,14 @@ fn run_vlad_scenario(
     println!("- Time alive: {:.2}s", baseline_fixed_time);
 
     println!("\nVladimir best build (optimized for survival):");
+    println!(
+        "- Search strategy: {}",
+        search_strategy_summary(&search_cfg)
+    );
+    println!(
+        "- Candidate evaluations: {}",
+        vlad_eval_count.load(AtomicOrdering::Relaxed)
+    );
     println!(
         "- Items: {}",
         vlad_best_build

@@ -97,10 +97,25 @@
     }
   ],
   "search": {
-    "strategy": "beam",
+    "strategy": "portfolio",
+    "portfolio_strategies": [
+      "beam",
+      "hill_climb",
+      "genetic",
+      "random",
+      "greedy"
+    ],
     "beam_width": 30,
     "max_items": 6,
     "random_samples": 400,
+    "hill_climb_restarts": 64,
+    "hill_climb_steps": 24,
+    "hill_climb_neighbors": 24,
+    "genetic_population": 96,
+    "genetic_generations": 36,
+    "genetic_mutation_rate": 0.18,
+    "genetic_crossover_rate": 0.9,
+    "ranked_limit": 500,
     "seed": 1337
   }
 }

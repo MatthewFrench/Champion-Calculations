@@ -1,7 +1,7 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771132076`
-- Scenario: `Simulation/scenario_vlad_urf.json`
+- Generated (unix): `1771135269`
+- Scenario: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json`
 
 ## Headline
 - Baseline time alive: **14.84s**
@@ -58,7 +58,6 @@
 
 ## Diverse Top Builds
 1. `19.05s` (+0.00s vs top): Dead Man's Plate, Guardian Angel, Heartsteel, Randuin's Omen, Thornmail, Zhonya's Hourglass
-2. `19.00s` (-0.05s vs top): Frozen Heart, Guardian Angel, Heartsteel, Randuin's Omen, Warmog's Armor, Zhonya's Hourglass
 
 ## Build Order Optimization
 1. Cumulative score: `85.87` | Order: Guardian Angel, Zhonya's Hourglass, Heartsteel, Randuin's Omen, Thornmail, Dead Man's Plate
@@ -68,15 +67,8 @@
    - Stage 4 (level 14): `14.99s`
    - Stage 5 (level 17): `15.65s`
    - Stage 6 (level 20): `18.87s`
-2. Cumulative score: `85.81` | Order: Guardian Angel, Zhonya's Hourglass, Heartsteel, Randuin's Omen, Frozen Heart, Warmog's Armor
-   - Stage 1 (level 5): `8.57s`
-   - Stage 2 (level 8): `13.56s`
-   - Stage 3 (level 11): `14.23s`
-   - Stage 4 (level 14): `14.99s`
-   - Stage 5 (level 17): `15.63s`
-   - Stage 6 (level 20): `18.83s`
 
 ## Deeper Insights
-- Common core across all selected top builds: Guardian Angel, Heartsteel, Randuin's Omen, Zhonya's Hourglass.
-- Most frequent items in selected top set: Guardian Angel (2/2), Heartsteel (2/2), Randuin's Omen (2/2), Zhonya's Hourglass (2/2), Dead Man's Plate (1/2), Frozen Heart (1/2), Thornmail (1/2), Warmog's Armor (1/2).
+- Common core across all selected top builds: Dead Man's Plate, Guardian Angel, Heartsteel, Randuin's Omen, Thornmail, Zhonya's Hourglass.
+- Most frequent items in selected top set: Dead Man's Plate (1/1), Guardian Angel (1/1), Heartsteel (1/1), Randuin's Omen (1/1), Thornmail (1/1), Zhonya's Hourglass (1/1).
 - Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.
