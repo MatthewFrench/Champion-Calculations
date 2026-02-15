@@ -19,7 +19,8 @@
     "protoplasm_bonus_health": 250.0,
     "protoplasm_heal_total": 300.0,
     "protoplasm_duration_seconds": 5.0,
-    "heartsteel_assumed_stacks_at_8m": 20.0
+    "heartsteel_assumed_stacks_at_8m": 20.0,
+    "enemy_uptime_model_enabled": true
   },
   "vladimir_champion": "Vladimir",
   "vladimir_baseline_fixed": [
@@ -65,13 +66,20 @@
       "ability_dps_ad_ratio": 0.1,
       "ability_tick_interval_seconds": 0.5,
       "stun_interval_seconds": 9.0,
-      "stun_duration_seconds": 0.75
+      "stun_duration_seconds": 0.75,
+      "uptime_cycle_seconds": 6.0,
+      "uptime_active_seconds": 4.8
     },
     {
       "champion": "Vayne",
       "ability_dps_flat": 20.0,
       "ability_dps_ad_ratio": 0.12,
-      "ability_tick_interval_seconds": 0.5
+      "ability_tick_interval_seconds": 0.5,
+      "burst_interval_seconds": 4.0,
+      "burst_physical_flat": 70.0,
+      "uptime_cycle_seconds": 5.0,
+      "uptime_active_seconds": 4.5,
+      "uptime_phase_seconds": 0.5
     },
     {
       "champion": "Morgana",
@@ -79,13 +87,22 @@
       "ability_dps_ap_ratio": 0.15,
       "ability_tick_interval_seconds": 0.5,
       "stun_interval_seconds": 11.0,
-      "stun_duration_seconds": 1.5
+      "stun_duration_seconds": 1.5,
+      "burst_interval_seconds": 7.5,
+      "burst_magic_flat": 140.0,
+      "burst_start_offset_seconds": 2.0,
+      "uptime_cycle_seconds": 6.0,
+      "uptime_active_seconds": 5.0
     },
     {
       "champion": "Sona",
       "ability_dps_flat": 25.0,
       "ability_dps_ap_ratio": 0.12,
-      "ability_tick_interval_seconds": 0.5
+      "ability_tick_interval_seconds": 0.5,
+      "burst_interval_seconds": 8.0,
+      "burst_magic_flat": 100.0,
+      "uptime_cycle_seconds": 6.0,
+      "uptime_active_seconds": 5.5
     },
     {
       "champion": "Dr. Mundo",
@@ -93,7 +110,11 @@
       "ability_dps_ad_ratio": 0.08,
       "ability_tick_interval_seconds": 0.5,
       "stun_interval_seconds": 12.0,
-      "stun_duration_seconds": 0.5
+      "stun_duration_seconds": 0.5,
+      "burst_interval_seconds": 6.0,
+      "burst_physical_flat": 90.0,
+      "uptime_cycle_seconds": 7.0,
+      "uptime_active_seconds": 5.5
     }
   ],
   "search": {
@@ -102,20 +123,37 @@
       "beam",
       "hill_climb",
       "genetic",
+      "simulated_annealing",
+      "mcts",
       "random",
       "greedy"
     ],
-    "beam_width": 30,
+    "beam_width": 48,
     "max_items": 6,
-    "random_samples": 400,
-    "hill_climb_restarts": 64,
-    "hill_climb_steps": 24,
-    "hill_climb_neighbors": 24,
-    "genetic_population": 96,
-    "genetic_generations": 36,
+    "random_samples": 1200,
+    "hill_climb_restarts": 128,
+    "hill_climb_steps": 36,
+    "hill_climb_neighbors": 48,
+    "genetic_population": 192,
+    "genetic_generations": 80,
     "genetic_mutation_rate": 0.18,
     "genetic_crossover_rate": 0.9,
-    "ranked_limit": 500,
+    "simulated_annealing_restarts": 64,
+    "simulated_annealing_iterations": 420,
+    "simulated_annealing_initial_temp": 1.2,
+    "simulated_annealing_cooling_rate": 0.985,
+    "mcts_iterations": 20000,
+    "mcts_rollouts_per_expansion": 4,
+    "mcts_exploration": 1.2,
+    "ensemble_seeds": 8,
+    "ensemble_seed_stride": 1000003,
+    "ensemble_seed_top_k": 60,
+    "coarse_pool_limit": 1200,
+    "robust_min_seed_hit_rate": 0.6,
+    "bleed_enabled": true,
+    "bleed_budget": 2000,
+    "bleed_mutation_rate": 0.35,
+    "ranked_limit": 1600,
     "seed": 1337
   }
 }

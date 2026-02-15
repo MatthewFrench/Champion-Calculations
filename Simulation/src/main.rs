@@ -8,6 +8,7 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
+use std::sync::{Arc, Condvar, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
@@ -68,6 +69,7 @@ struct Item {
     stats: Stats,
     rank: Vec<String>,
     shop_purchasable: bool,
+    total_cost: f64,
     passive_effects_text: Vec<String>,
 }
 
@@ -99,6 +101,16 @@ struct EnemyConfig {
     ability_tick_interval_seconds: f64,
     stun_interval_seconds: f64,
     stun_duration_seconds: f64,
+    burst_interval_seconds: f64,
+    burst_start_offset_seconds: f64,
+    burst_magic_flat: f64,
+    burst_physical_flat: f64,
+    burst_true_flat: f64,
+    burst_ad_ratio: f64,
+    burst_ap_ratio: f64,
+    uptime_cycle_seconds: f64,
+    uptime_active_seconds: f64,
+    uptime_phase_seconds: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -124,6 +136,7 @@ struct SimulationConfig {
     protoplasm_heal_total: f64,
     protoplasm_duration_seconds: f64,
     heartsteel_assumed_stacks_at_8m: f64,
+    enemy_uptime_model_enabled: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -150,7 +163,125 @@ struct BuildSearchConfig {
     genetic_crossover_rate: f64,
     portfolio_strategies: Vec<String>,
     ranked_limit: usize,
+    simulated_annealing_restarts: usize,
+    simulated_annealing_iterations: usize,
+    simulated_annealing_initial_temp: f64,
+    simulated_annealing_cooling_rate: f64,
+    mcts_iterations: usize,
+    mcts_rollouts_per_expansion: usize,
+    mcts_exploration: f64,
+    ensemble_seeds: usize,
+    ensemble_seed_stride: u64,
+    ensemble_seed_top_k: usize,
+    coarse_pool_limit: usize,
+    robust_min_seed_hit_rate: f64,
+    bleed_enabled: bool,
+    bleed_budget: usize,
+    bleed_mutation_rate: f64,
     seed: u64,
+}
+
+#[derive(Debug, Clone)]
+struct BuildMetrics {
+    survival: f64,
+    ehp_mixed: f64,
+    ap: f64,
+    cost_timing: f64,
+    total_cost: f64,
+}
+
+#[derive(Debug, Clone)]
+struct BuildConfidence {
+    key: Vec<usize>,
+    seed_hits: usize,
+    seed_hit_rate: f64,
+    robustness: String,
+}
+
+#[derive(Debug, Clone)]
+struct SearchDiagnostics {
+    strategy_summary: String,
+    ensemble_seeds: usize,
+    coarse_evaluations: usize,
+    full_evaluations: usize,
+    coarse_cache_hits: usize,
+    coarse_cache_misses: usize,
+    coarse_cache_waits: usize,
+    full_cache_hits: usize,
+    full_cache_misses: usize,
+    full_cache_waits: usize,
+    unique_candidate_builds: usize,
+    bleed_candidates_injected: usize,
+    coarse_pool_limit: usize,
+    seed_best_scores: Vec<f64>,
+}
+
+#[derive(Debug)]
+enum CacheState {
+    InFlight,
+    Ready(f64),
+}
+
+#[derive(Debug)]
+struct BlockingScoreCache {
+    states: Mutex<HashMap<Vec<usize>, CacheState>>,
+    cv: Condvar,
+    hits: AtomicUsize,
+    misses: AtomicUsize,
+    waits: AtomicUsize,
+}
+
+impl BlockingScoreCache {
+    fn new() -> Self {
+        Self {
+            states: Mutex::new(HashMap::new()),
+            cv: Condvar::new(),
+            hits: AtomicUsize::new(0),
+            misses: AtomicUsize::new(0),
+            waits: AtomicUsize::new(0),
+        }
+    }
+
+    fn get_or_compute<F>(&self, key: Vec<usize>, compute: F) -> f64
+    where
+        F: FnOnce() -> f64,
+    {
+        loop {
+            let mut guard = self.states.lock().expect("cache mutex poisoned");
+            match guard.get(&key) {
+                Some(CacheState::Ready(v)) => {
+                    self.hits.fetch_add(1, AtomicOrdering::Relaxed);
+                    return *v;
+                }
+                Some(CacheState::InFlight) => {
+                    self.waits.fetch_add(1, AtomicOrdering::Relaxed);
+                    guard = self.cv.wait(guard).expect("cache condvar wait poisoned");
+                    drop(guard);
+                    continue;
+                }
+                None => {
+                    self.misses.fetch_add(1, AtomicOrdering::Relaxed);
+                    guard.insert(key.clone(), CacheState::InFlight);
+                    drop(guard);
+                    let value = compute();
+                    let mut done = self.states.lock().expect("cache mutex poisoned");
+                    done.insert(key.clone(), CacheState::Ready(value));
+                    self.cv.notify_all();
+                    return value;
+                }
+            }
+        }
+    }
+
+    fn hits(&self) -> usize {
+        self.hits.load(AtomicOrdering::Relaxed)
+    }
+    fn misses(&self) -> usize {
+        self.misses.load(AtomicOrdering::Relaxed)
+    }
+    fn waits(&self) -> usize {
+        self.waits.load(AtomicOrdering::Relaxed)
+    }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -189,6 +320,9 @@ struct EnemyState {
     enemy: EnemyConfig,
     physical_hit_damage: f64,
     ability_hit_damage: f64,
+    burst_physical_damage: f64,
+    burst_magic_damage: f64,
+    burst_true_damage: f64,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -196,6 +330,7 @@ enum EventType {
     EnemyAttack(usize),
     EnemyAbility(usize),
     EnemyStun(usize),
+    EnemyBurst(usize),
 }
 
 #[derive(Debug, Clone)]
@@ -401,11 +536,19 @@ impl VladCombatSimulation {
             let attack_interval = 1.0 / attack_speed.max(0.001);
             let ability_interval = enemy.ability_tick_interval_seconds.max(0.05);
             let ability_hit_damage = magic_dps * ability_interval;
+            let burst_physical_damage =
+                enemy.burst_physical_flat + enemy.burst_ad_ratio * attack_damage;
+            let burst_magic_damage =
+                enemy.burst_magic_flat + enemy.burst_ap_ratio * enemy_stats.ability_power;
+            let burst_true_damage = enemy.burst_true_flat;
 
             runner.enemy_state.push(EnemyState {
                 enemy: enemy.clone(),
                 physical_hit_damage: attack_damage,
                 ability_hit_damage,
+                burst_physical_damage,
+                burst_magic_damage,
+                burst_true_damage,
             });
 
             runner.schedule_event(
@@ -428,6 +571,18 @@ impl VladCombatSimulation {
                     20,
                     EventType::EnemyStun(idx),
                     Some(enemy.stun_interval_seconds),
+                );
+            }
+            if enemy.burst_interval_seconds > 0.0
+                && (burst_physical_damage > 0.0
+                    || burst_magic_damage > 0.0
+                    || burst_true_damage > 0.0)
+            {
+                runner.schedule_event(
+                    enemy.burst_start_offset_seconds.max(0.0),
+                    10,
+                    EventType::EnemyBurst(idx),
+                    Some(enemy.burst_interval_seconds),
                 );
             }
         }
@@ -460,6 +615,21 @@ impl VladCombatSimulation {
 
     fn can_cast(&self) -> bool {
         self.is_targetable() && self.time >= self.stunned_until
+    }
+
+    fn enemy_is_active(&self, idx: usize) -> bool {
+        if !self.sim.enemy_uptime_model_enabled {
+            return true;
+        }
+        let state = &self.enemy_state[idx];
+        let cycle = state.enemy.uptime_cycle_seconds;
+        let active = state.enemy.uptime_active_seconds;
+        if cycle <= 0.0 || active <= 0.0 || active >= cycle {
+            return true;
+        }
+        let phase = state.enemy.uptime_phase_seconds.max(0.0);
+        let t = (self.time + phase) % cycle;
+        t <= active
     }
 
     fn apply_hot_effects(&mut self, to_time: f64) {
@@ -568,20 +738,40 @@ impl VladCombatSimulation {
     fn process_event(&mut self, ev: &QueuedEvent) {
         match ev.kind {
             EventType::EnemyAttack(idx) => {
+                if !self.enemy_is_active(idx) {
+                    return;
+                }
                 let state = &self.enemy_state[idx];
                 self.apply_damage(state.physical_hit_damage, 0.0, 0.0);
             }
             EventType::EnemyAbility(idx) => {
+                if !self.enemy_is_active(idx) {
+                    return;
+                }
                 let state = &self.enemy_state[idx];
                 self.apply_damage(0.0, state.ability_hit_damage, 0.0);
             }
             EventType::EnemyStun(idx) => {
+                if !self.enemy_is_active(idx) {
+                    return;
+                }
                 let enemy = &self.enemy_state[idx].enemy;
                 if self.is_targetable() {
                     self.stunned_until = self
                         .stunned_until
                         .max(self.time + enemy.stun_duration_seconds);
                 }
+            }
+            EventType::EnemyBurst(idx) => {
+                if !self.enemy_is_active(idx) {
+                    return;
+                }
+                let state = &self.enemy_state[idx];
+                self.apply_damage(
+                    state.burst_physical_damage,
+                    state.burst_magic_damage,
+                    state.burst_true_damage,
+                );
             }
         }
     }
@@ -1099,6 +1289,10 @@ fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
             .get("heartsteel_assumed_stacks_at_8m")
             .and_then(Value::as_f64)
             .unwrap_or(20.0),
+        enemy_uptime_model_enabled: data
+            .get("enemy_uptime_model_enabled")
+            .and_then(Value::as_bool)
+            .unwrap_or(false),
     })
 }
 
@@ -1180,6 +1374,46 @@ fn parse_enemy_config(
             .get("stun_duration_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
+        burst_interval_seconds: data
+            .get("burst_interval_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        burst_start_offset_seconds: data
+            .get("burst_start_offset_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        burst_magic_flat: data
+            .get("burst_magic_flat")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        burst_physical_flat: data
+            .get("burst_physical_flat")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        burst_true_flat: data
+            .get("burst_true_flat")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        burst_ad_ratio: data
+            .get("burst_ad_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        burst_ap_ratio: data
+            .get("burst_ap_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        uptime_cycle_seconds: data
+            .get("uptime_cycle_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        uptime_active_seconds: data
+            .get("uptime_active_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        uptime_phase_seconds: data
+            .get("uptime_phase_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
     })
 }
 
@@ -1235,6 +1469,66 @@ fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("ranked_limit")
             .and_then(Value::as_u64)
             .unwrap_or(400) as usize,
+        simulated_annealing_restarts: data
+            .get("simulated_annealing_restarts")
+            .and_then(Value::as_u64)
+            .unwrap_or(32) as usize,
+        simulated_annealing_iterations: data
+            .get("simulated_annealing_iterations")
+            .and_then(Value::as_u64)
+            .unwrap_or(220) as usize,
+        simulated_annealing_initial_temp: data
+            .get("simulated_annealing_initial_temp")
+            .and_then(Value::as_f64)
+            .unwrap_or(1.2),
+        simulated_annealing_cooling_rate: data
+            .get("simulated_annealing_cooling_rate")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.985),
+        mcts_iterations: data
+            .get("mcts_iterations")
+            .and_then(Value::as_u64)
+            .unwrap_or(5000) as usize,
+        mcts_rollouts_per_expansion: data
+            .get("mcts_rollouts_per_expansion")
+            .and_then(Value::as_u64)
+            .unwrap_or(2) as usize,
+        mcts_exploration: data
+            .get("mcts_exploration")
+            .and_then(Value::as_f64)
+            .unwrap_or(1.2),
+        ensemble_seeds: data
+            .get("ensemble_seeds")
+            .and_then(Value::as_u64)
+            .unwrap_or(3) as usize,
+        ensemble_seed_stride: data
+            .get("ensemble_seed_stride")
+            .and_then(Value::as_u64)
+            .unwrap_or(1_000_003),
+        ensemble_seed_top_k: data
+            .get("ensemble_seed_top_k")
+            .and_then(Value::as_u64)
+            .unwrap_or(25) as usize,
+        coarse_pool_limit: data
+            .get("coarse_pool_limit")
+            .and_then(Value::as_u64)
+            .unwrap_or(300) as usize,
+        robust_min_seed_hit_rate: data
+            .get("robust_min_seed_hit_rate")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.5),
+        bleed_enabled: data
+            .get("bleed_enabled")
+            .and_then(Value::as_bool)
+            .unwrap_or(true),
+        bleed_budget: data
+            .get("bleed_budget")
+            .and_then(Value::as_u64)
+            .unwrap_or(0) as usize,
+        bleed_mutation_rate: data
+            .get("bleed_mutation_rate")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.35),
         seed: data.get("seed").and_then(Value::as_u64).unwrap_or(1337),
     })
 }
@@ -1497,6 +1791,12 @@ fn load_items() -> Result<HashMap<String, Item>> {
             .and_then(|v| v.get("purchasable"))
             .and_then(Value::as_bool)
             .unwrap_or(false);
+        let total_cost = data
+            .get("shop")
+            .and_then(|v| v.get("prices"))
+            .and_then(|v| v.get("total"))
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0);
         if rank.iter().any(|r| EXCLUDED_RANKS.contains(&r.as_str())) {
             continue;
         }
@@ -1546,6 +1846,7 @@ fn load_items() -> Result<HashMap<String, Item>> {
                 stats,
                 rank,
                 shop_purchasable: purchasable,
+                total_cost,
                 passive_effects_text,
             },
         );
@@ -2213,6 +2514,209 @@ where
     unique_ranked_from_candidates(all_seen, score_fn, limit)
 }
 
+fn simulated_annealing_search_ranked<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    restarts: usize,
+    iterations: usize,
+    initial_temp: f64,
+    cooling_rate: f64,
+    seed: u64,
+    limit: usize,
+    score_fn: &F,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let mut s = seed;
+    let mut candidates = Vec::new();
+
+    for _ in 0..restarts.max(1) {
+        let mut current = random_valid_build(item_pool, max_items, &mut s);
+        let mut current_score = score_fn(&canonical_key(&current));
+        let mut best = current.clone();
+        let mut best_score = current_score;
+        let mut temp = initial_temp.max(0.0001);
+        candidates.push(current.clone());
+
+        for _ in 0..iterations.max(1) {
+            let mut next = current.clone();
+            if !next.is_empty() {
+                let slot = rand_index(&mut s, next.len());
+                let candidate = rand_index(&mut s, item_pool.len());
+                next[slot] = candidate;
+                repair_build(item_pool, &mut next, max_items, &mut s);
+                let next_key = canonical_key(&next);
+                let next_score = score_fn(&next_key);
+                let delta = next_score - current_score;
+                let accept = delta >= 0.0 || rand_f64(&mut s) < (delta / temp).exp();
+                if accept {
+                    current = next;
+                    current_score = next_score;
+                    candidates.push(current.clone());
+                    if current_score > best_score {
+                        best_score = current_score;
+                        best = current.clone();
+                    }
+                }
+            }
+            temp = (temp * cooling_rate.clamp(0.8, 0.9999)).max(0.0001);
+        }
+        candidates.push(best);
+    }
+
+    unique_ranked_from_candidates(candidates, score_fn, limit)
+}
+
+#[derive(Debug, Clone)]
+struct MctsNode {
+    build: Vec<usize>,
+    parent: Option<usize>,
+    action_from_parent: Option<usize>,
+    children: Vec<usize>,
+    untried_actions: Vec<usize>,
+    visits: usize,
+    value_sum: f64,
+}
+
+fn available_actions(item_pool: &[Item], build: &[usize]) -> Vec<usize> {
+    (0..item_pool.len())
+        .filter(|&idx| can_add_item_to_build(item_pool, build, idx))
+        .collect()
+}
+
+fn rollout_completion<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    start_build: &[usize],
+    seed: &mut u64,
+    score_fn: &F,
+) -> (Vec<usize>, f64)
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let mut build = start_build.to_vec();
+    let mut actions = available_actions(item_pool, &build);
+    shuffle_usize(&mut actions, seed);
+    for action in actions {
+        if build.len() >= max_items {
+            break;
+        }
+        if can_add_item_to_build(item_pool, &build, action) {
+            build.push(action);
+        }
+    }
+    repair_build(item_pool, &mut build, max_items, seed);
+    let key = canonical_key(&build);
+    let score = score_fn(&key);
+    (key, score)
+}
+
+fn mcts_search_ranked<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    iterations: usize,
+    rollouts_per_expansion: usize,
+    exploration: f64,
+    seed: u64,
+    limit: usize,
+    score_fn: &F,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let mut s = seed;
+    let mut nodes = vec![MctsNode {
+        build: vec![],
+        parent: None,
+        action_from_parent: None,
+        children: vec![],
+        untried_actions: available_actions(item_pool, &[]),
+        visits: 0,
+        value_sum: 0.0,
+    }];
+    let mut all_rollout_keys = Vec::new();
+
+    for _ in 0..iterations.max(1) {
+        let mut node_idx = 0usize;
+        loop {
+            if nodes[node_idx].build.len() >= max_items {
+                break;
+            }
+            if !nodes[node_idx].untried_actions.is_empty() {
+                break;
+            }
+            if nodes[node_idx].children.is_empty() {
+                break;
+            }
+            let parent_visits = nodes[node_idx].visits.max(1) as f64;
+            let mut best_child = nodes[node_idx].children[0];
+            let mut best_uct = f64::NEG_INFINITY;
+            for &child_idx in &nodes[node_idx].children {
+                let child = &nodes[child_idx];
+                let exploit = if child.visits == 0 {
+                    0.0
+                } else {
+                    child.value_sum / child.visits as f64
+                };
+                let explore =
+                    exploration * ((parent_visits.ln() / (child.visits.max(1) as f64)).sqrt());
+                let uct = exploit + explore;
+                if uct > best_uct {
+                    best_uct = uct;
+                    best_child = child_idx;
+                }
+            }
+            node_idx = best_child;
+        }
+
+        if !nodes[node_idx].untried_actions.is_empty() && nodes[node_idx].build.len() < max_items {
+            let action_pos = rand_index(&mut s, nodes[node_idx].untried_actions.len());
+            let action = nodes[node_idx].untried_actions.swap_remove(action_pos);
+            let mut child_build = nodes[node_idx].build.clone();
+            child_build.push(action);
+            repair_build(item_pool, &mut child_build, max_items, &mut s);
+            let child_idx = nodes.len();
+            nodes.push(MctsNode {
+                build: child_build.clone(),
+                parent: Some(node_idx),
+                action_from_parent: Some(action),
+                children: vec![],
+                untried_actions: available_actions(item_pool, &child_build),
+                visits: 0,
+                value_sum: 0.0,
+            });
+            nodes[node_idx].children.push(child_idx);
+            node_idx = child_idx;
+        }
+
+        let mut rollout_scores = Vec::new();
+        let rollouts = rollouts_per_expansion.max(1);
+        for _ in 0..rollouts {
+            let (key, score) = rollout_completion(
+                item_pool,
+                max_items,
+                &nodes[node_idx].build,
+                &mut s,
+                score_fn,
+            );
+            all_rollout_keys.push(key);
+            rollout_scores.push(score);
+        }
+        let mean_score = rollout_scores.iter().sum::<f64>() / rollout_scores.len() as f64;
+
+        let mut back = Some(node_idx);
+        while let Some(idx) = back {
+            nodes[idx].visits += 1;
+            nodes[idx].value_sum += mean_score;
+            back = nodes[idx].parent;
+        }
+    }
+
+    let _used_actions = nodes.iter().filter_map(|n| n.action_from_parent).count();
+    unique_ranked_from_candidates(all_rollout_keys, score_fn, limit)
+}
+
 fn symmetric_diff_count(a: &[usize], b: &[usize]) -> usize {
     let sa = a.iter().copied().collect::<HashSet<_>>();
     let sb = b.iter().copied().collect::<HashSet<_>>();
@@ -2420,6 +2924,11 @@ fn write_vlad_report(
     best_time: f64,
     enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     diverse_top_builds: &[(Vec<Item>, f64)],
+    diverse_top_keys: &[Vec<usize>],
+    build_confidence: &[BuildConfidence],
+    metrics_by_key: &HashMap<Vec<usize>, BuildMetrics>,
+    pareto_front: &HashSet<Vec<usize>>,
+    diagnostics: &SearchDiagnostics,
     build_orders: &[BuildOrderResult],
 ) -> Result<()> {
     if let Some(parent) = report_path.parent() {
@@ -2450,6 +2959,27 @@ fn write_vlad_report(
     content.push_str(&format!(
         "- Champion level assumption: **{}**\n\n",
         sim.champion_level
+    ));
+
+    let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
+    content.push_str("## Search Diagnostics\n");
+    content.push_str(&format!(
+        "- Strategy: `{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
+        diagnostics.strategy_summary,
+        diagnostics.ensemble_seeds,
+        diagnostics.coarse_evaluations,
+        diagnostics.coarse_cache_hits,
+        diagnostics.coarse_cache_misses,
+        diagnostics.coarse_cache_waits,
+        diagnostics.full_evaluations,
+        diagnostics.full_cache_hits,
+        diagnostics.full_cache_misses,
+        diagnostics.full_cache_waits,
+        diagnostics.unique_candidate_builds,
+        diagnostics.coarse_pool_limit,
+        diagnostics.bleed_candidates_injected,
+        seed_mean,
+        seed_std
     ));
 
     content.push_str("## Vladimir Base Stats At Level\n");
@@ -2545,13 +3075,38 @@ fn write_vlad_report(
         let best = diverse_top_builds[0].1;
         for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
             let delta = score - best;
+            let key = diverse_top_keys.get(idx);
+            let confidence = key
+                .and_then(|k| build_confidence.iter().find(|c| c.key == *k))
+                .map(|c| {
+                    format!(
+                        " | seed hits: {}/{} ({:.0}%) {}",
+                        c.seed_hits,
+                        diagnostics.ensemble_seeds,
+                        c.seed_hit_rate * 100.0,
+                        c.robustness
+                    )
+                })
+                .unwrap_or_default();
+            let pareto = key.map(|k| pareto_front.contains(k)).unwrap_or(false);
+            let pareto_tag = if pareto { " | Pareto-front" } else { "" };
             content.push_str(&format!(
-                "{}. `{:.2}s` ({:+.2}s vs top): {}\n",
+                "{}. `{:.2}s` ({:+.2}s vs top): {}{}{}\n",
                 idx + 1,
                 score,
                 delta,
-                item_names(build)
+                item_names(build),
+                confidence,
+                pareto_tag
             ));
+            if let Some(k) = key {
+                if let Some(m) = metrics_by_key.get(k) {
+                    content.push_str(&format!(
+                        "   - metrics: EHP~{:.1}, AP~{:.1}, timing score {:+.2}, total cost {:.0}\n",
+                        m.ehp_mixed, m.ap, m.cost_timing, m.total_cost
+                    ));
+                }
+            }
         }
         content.push('\n');
     }
@@ -2725,22 +3280,29 @@ where
             search.ranked_limit,
             score_fn,
         ),
+        "simulated_annealing" => simulated_annealing_search_ranked(
+            item_pool,
+            max_items,
+            search.simulated_annealing_restarts,
+            search.simulated_annealing_iterations,
+            search.simulated_annealing_initial_temp,
+            search.simulated_annealing_cooling_rate,
+            search.seed,
+            search.ranked_limit,
+            score_fn,
+        ),
+        "mcts" => mcts_search_ranked(
+            item_pool,
+            max_items,
+            search.mcts_iterations,
+            search.mcts_rollouts_per_expansion,
+            search.mcts_exploration,
+            search.seed,
+            search.ranked_limit,
+            score_fn,
+        ),
         "portfolio" => {
-            let mut strategies = if search.portfolio_strategies.is_empty() {
-                vec![
-                    "beam".to_string(),
-                    "hill_climb".to_string(),
-                    "genetic".to_string(),
-                    "random".to_string(),
-                    "greedy".to_string(),
-                ]
-            } else {
-                search.portfolio_strategies.clone()
-            };
-            strategies.retain(|s| s != "portfolio");
-            if strategies.is_empty() {
-                strategies.push("beam".to_string());
-            }
+            let strategies = portfolio_strategy_list(search);
             let ranked_sets = strategies
                 .par_iter()
                 .enumerate()
@@ -2779,23 +3341,291 @@ where
         .unwrap_or_default()
 }
 
+fn portfolio_strategy_list(search: &BuildSearchConfig) -> Vec<String> {
+    if search.strategy != "portfolio" {
+        return vec![search.strategy.clone()];
+    }
+    let mut strategies = if search.portfolio_strategies.is_empty() {
+        vec![
+            "beam".to_string(),
+            "hill_climb".to_string(),
+            "genetic".to_string(),
+            "simulated_annealing".to_string(),
+            "mcts".to_string(),
+            "random".to_string(),
+            "greedy".to_string(),
+        ]
+    } else {
+        search.portfolio_strategies.clone()
+    };
+    strategies.retain(|s| s != "portfolio");
+    if strategies.is_empty() {
+        strategies.push("beam".to_string());
+    }
+    strategies
+}
+
 fn search_strategy_summary(search: &BuildSearchConfig) -> String {
     if search.strategy == "portfolio" {
-        let strategies = if search.portfolio_strategies.is_empty() {
-            vec![
-                "beam".to_string(),
-                "hill_climb".to_string(),
-                "genetic".to_string(),
-                "random".to_string(),
-                "greedy".to_string(),
-            ]
-        } else {
-            search.portfolio_strategies.clone()
-        };
+        let strategies = portfolio_strategy_list(search);
         format!("portfolio({})", strategies.join(", "))
     } else {
         search.strategy.clone()
     }
+}
+
+fn strategy_seed_elites<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    search: &BuildSearchConfig,
+    strategies: &[String],
+    score_fn: &F,
+) -> HashMap<String, Vec<Vec<usize>>>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let ensemble = search.ensemble_seeds.max(1);
+    let top_k = search.ensemble_seed_top_k.max(1);
+
+    let grouped = strategies
+        .par_iter()
+        .enumerate()
+        .map(|(sidx, strategy)| {
+            let mut aggregate = HashMap::<Vec<usize>, f64>::new();
+            for seed_idx in 0..ensemble {
+                let mut cfg = search.clone();
+                cfg.strategy = strategy.clone();
+                cfg.seed = search.seed.wrapping_add(
+                    ((sidx as u64 + 1) * 31 + seed_idx as u64 + 1) * search.ensemble_seed_stride,
+                );
+                cfg.ranked_limit = top_k.max(64);
+                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn);
+                for (key, score) in ranked.into_iter().take(top_k) {
+                    let e = aggregate.entry(key).or_insert(score);
+                    if score > *e {
+                        *e = score;
+                    }
+                }
+            }
+            let mut items = aggregate.into_iter().collect::<Vec<_>>();
+            items.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+            let keys = items.into_iter().map(|(k, _)| k).collect::<Vec<_>>();
+            (strategy.clone(), keys)
+        })
+        .collect::<Vec<_>>();
+
+    grouped.into_iter().collect::<HashMap<_, _>>()
+}
+
+fn generate_bleed_candidates(
+    item_pool: &[Item],
+    max_items: usize,
+    strategy_elites: &HashMap<String, Vec<Vec<usize>>>,
+    search: &BuildSearchConfig,
+) -> Vec<Vec<usize>> {
+    if !search.bleed_enabled {
+        return Vec::new();
+    }
+    let mut seed = search.seed ^ 0xB1EEDu64;
+    let mut out = Vec::new();
+    let mut seen = HashSet::new();
+    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    let mut elite_pool = Vec::new();
+
+    for builds in strategy_elites.values() {
+        for key in builds.iter().take(search.ensemble_seed_top_k.max(1)) {
+            let canon = canonical_key(key);
+            if seen.insert(canon.clone()) {
+                out.push(canon.clone());
+                elite_pool.push(canon);
+            }
+        }
+    }
+    if elite_pool.is_empty() {
+        return out;
+    }
+
+    let bleed_budget = if search.bleed_budget > 0 {
+        search.bleed_budget
+    } else {
+        // Max-quality default: at least coarse pool size, with a reasonable floor.
+        search.coarse_pool_limit.max(800)
+    };
+    let cross_budget = bleed_budget / 2;
+    let mutate_budget = bleed_budget - cross_budget;
+    let mutation_rate = search.bleed_mutation_rate.clamp(0.0, 1.0);
+
+    for _ in 0..cross_budget {
+        let a = rand_index(&mut seed, elite_pool.len());
+        let b = if strategies.len() >= 2 {
+            let sa = rand_index(&mut seed, strategies.len());
+            let mut sb = rand_index(&mut seed, strategies.len());
+            if sb == sa {
+                sb = (sb + 1) % strategies.len();
+            }
+            let list_a = strategy_elites.get(&strategies[sa]).unwrap_or(&elite_pool);
+            let list_b = strategy_elites.get(&strategies[sb]).unwrap_or(&elite_pool);
+            let pa = list_a
+                .get(rand_index(&mut seed, list_a.len()))
+                .cloned()
+                .unwrap_or_else(|| elite_pool[a].clone());
+            let pb = list_b
+                .get(rand_index(&mut seed, list_b.len()))
+                .cloned()
+                .unwrap_or_else(|| elite_pool[a].clone());
+            let mut child = crossover_builds(&pa, &pb, item_pool, max_items, &mut seed);
+            mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut seed);
+            canonical_key(&child)
+        } else {
+            let mut child = elite_pool[a].clone();
+            mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut seed);
+            canonical_key(&child)
+        };
+        if seen.insert(b.clone()) {
+            out.push(b);
+        }
+    }
+
+    for _ in 0..mutate_budget {
+        let mut child = elite_pool[rand_index(&mut seed, elite_pool.len())].clone();
+        mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut seed);
+        repair_build(item_pool, &mut child, max_items, &mut seed);
+        let key = canonical_key(&child);
+        if seen.insert(key.clone()) {
+            out.push(key);
+        }
+    }
+
+    out
+}
+
+fn effective_hp_mixed(health: f64, armor: f64, magic_resist: f64) -> f64 {
+    let phys_mult = 1.0 + armor.max(0.0) / 100.0;
+    let magic_mult = 1.0 + magic_resist.max(0.0) / 100.0;
+    health.max(1.0) * 0.5 * (phys_mult + magic_mult)
+}
+
+fn build_cost_timing_score(build: &[Item]) -> f64 {
+    if build.is_empty() {
+        return 0.0;
+    }
+    let mut weighted = 0.0;
+    let mut total = 0.0;
+    for (idx, item) in build.iter().enumerate() {
+        let w = 1.0 / (1.0 + idx as f64);
+        weighted += w * item.total_cost.max(0.0);
+        total += item.total_cost.max(0.0);
+    }
+    // Higher is better. Penalize expensive early spikes more.
+    -weighted - 0.1 * total
+}
+
+fn coarse_proxy_survival_score(
+    vlad_base: &ChampionBase,
+    build_items: &[Item],
+    vlad_bonus_stats: &Stats,
+    sim: &SimulationConfig,
+) -> f64 {
+    let item_stats = compute_effective_item_stats_for_build(
+        vlad_base,
+        build_items,
+        vlad_bonus_stats,
+        sim,
+        sim.champion_level,
+        None,
+    );
+    let stats = compute_vlad_stats(vlad_base, &item_stats);
+    let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
+    let active_bonus = (build_items.iter().any(|i| i.name == "Zhonya's Hourglass") as i32 as f64)
+        * 250.0
+        + (build_items.iter().any(|i| i.name == "Guardian Angel") as i32 as f64) * 300.0
+        + (build_items.iter().any(|i| i.name == "Protoplasm Harness") as i32 as f64) * 140.0;
+    let stat_signal = ehp * 0.010
+        + stats.ability_power * 0.040
+        + stats.ability_haste * 0.025
+        + stats.move_speed_flat * 0.005
+        + stats.move_speed_percent * 0.08;
+    stat_signal + active_bonus + build_cost_timing_score(build_items) * 0.01
+}
+
+fn compute_build_metrics(
+    key: &[usize],
+    item_pool: &[Item],
+    vlad_base: &ChampionBase,
+    vlad_bonus_stats: &Stats,
+    sim: &SimulationConfig,
+    survival: f64,
+) -> BuildMetrics {
+    let build = build_from_indices(item_pool, key);
+    let item_stats = compute_effective_item_stats_for_build(
+        vlad_base,
+        &build,
+        vlad_bonus_stats,
+        sim,
+        sim.champion_level,
+        None,
+    );
+    let stats = compute_vlad_stats(vlad_base, &item_stats);
+    let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
+    let total_cost = build.iter().map(|i| i.total_cost).sum::<f64>();
+    BuildMetrics {
+        survival,
+        ehp_mixed: ehp,
+        ap: stats.ability_power,
+        cost_timing: build_cost_timing_score(&build),
+        total_cost,
+    }
+}
+
+fn dominates(a: &BuildMetrics, b: &BuildMetrics) -> bool {
+    let ge = a.survival >= b.survival
+        && a.ehp_mixed >= b.ehp_mixed
+        && a.ap >= b.ap
+        && a.cost_timing >= b.cost_timing;
+    let gt = a.survival > b.survival
+        || a.ehp_mixed > b.ehp_mixed
+        || a.ap > b.ap
+        || a.cost_timing > b.cost_timing;
+    ge && gt
+}
+
+fn pareto_front_keys(metrics_by_key: &HashMap<Vec<usize>, BuildMetrics>) -> HashSet<Vec<usize>> {
+    let keys = metrics_by_key.keys().cloned().collect::<Vec<_>>();
+    let mut front = HashSet::new();
+    for key_a in &keys {
+        let Some(a) = metrics_by_key.get(key_a) else {
+            continue;
+        };
+        let dominated = keys.iter().any(|key_b| {
+            if key_a == key_b {
+                return false;
+            }
+            let Some(b) = metrics_by_key.get(key_b) else {
+                return false;
+            };
+            dominates(b, a)
+        });
+        if !dominated {
+            front.insert(key_a.clone());
+        }
+    }
+    front
+}
+
+fn mean_std(values: &[f64]) -> (f64, f64) {
+    if values.is_empty() {
+        return (0.0, 0.0);
+    }
+    let mean = values.iter().sum::<f64>() / values.len() as f64;
+    let var = values
+        .iter()
+        .map(|v| {
+            let d = *v - mean;
+            d * d
+        })
+        .sum::<f64>()
+        / values.len() as f64;
+    (mean, var.sqrt())
 }
 
 fn item_pool_from_names(items: &HashMap<String, Item>, names: &[String]) -> Result<Vec<Item>> {
@@ -2976,20 +3806,110 @@ fn run_vlad_scenario(
         })
         .collect();
 
-    let vlad_eval_count = AtomicUsize::new(0);
-    let vlad_ranked = build_search_ranked(&item_pool, max_items, &search_cfg, &|build_idx| {
-        vlad_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
-        let build_items = build_from_indices(&item_pool, build_idx);
-        simulate_vlad_survival(
-            &vlad_base,
-            &build_items,
-            &vlad_loadout.bonus_stats,
-            None,
-            &enemy_builds,
-            &sim,
-            &urf,
-        )
-    });
+    let coarse_eval_count = AtomicUsize::new(0);
+    let full_eval_count = AtomicUsize::new(0);
+    let coarse_cache = Arc::new(BlockingScoreCache::new());
+    let full_cache = Arc::new(BlockingScoreCache::new());
+    let coarse_score_fn = |build_idx: &[usize]| {
+        let key = canonical_key(build_idx);
+        let cache = Arc::clone(&coarse_cache);
+        cache.get_or_compute(key.clone(), || {
+            coarse_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
+            let build_items = build_from_indices(&item_pool, &key);
+            coarse_proxy_survival_score(&vlad_base, &build_items, &vlad_loadout.bonus_stats, &sim)
+        })
+    };
+    let full_score_fn = |build_idx: &[usize]| {
+        let key = canonical_key(build_idx);
+        let cache = Arc::clone(&full_cache);
+        cache.get_or_compute(key.clone(), || {
+            full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
+            let build_items = build_from_indices(&item_pool, &key);
+            simulate_vlad_survival(
+                &vlad_base,
+                &build_items,
+                &vlad_loadout.bonus_stats,
+                None,
+                &enemy_builds,
+                &sim,
+                &urf,
+            )
+        })
+    };
+
+    let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
+    let active_strategies = portfolio_strategy_list(&search_cfg);
+    let seed_ranked_coarse = (0..ensemble_seeds)
+        .into_par_iter()
+        .map(|seed_idx| {
+            let mut cfg = search_cfg.clone();
+            cfg.seed = search_cfg.seed.wrapping_add(
+                search_cfg
+                    .ensemble_seed_stride
+                    .wrapping_mul(seed_idx as u64),
+            );
+            cfg.ranked_limit = cfg.ranked_limit.max(search_cfg.coarse_pool_limit);
+            build_search_ranked(&item_pool, max_items, &cfg, &coarse_score_fn)
+        })
+        .collect::<Vec<_>>();
+    let strategy_elites = strategy_seed_elites(
+        &item_pool,
+        max_items,
+        &search_cfg,
+        &active_strategies,
+        &coarse_score_fn,
+    );
+    let bleed_candidates =
+        generate_bleed_candidates(&item_pool, max_items, &strategy_elites, &search_cfg);
+    let bleed_candidate_count = bleed_candidates.len();
+
+    let mut coarse_candidates = Vec::new();
+    let mut seed_top_sets = Vec::new();
+    for ranked in &seed_ranked_coarse {
+        let seed_top = ranked
+            .iter()
+            .take(search_cfg.ensemble_seed_top_k.max(1))
+            .map(|(k, _)| k.clone())
+            .collect::<HashSet<_>>();
+        seed_top_sets.push(seed_top);
+        for (k, _) in ranked.iter().take(search_cfg.coarse_pool_limit.max(1)) {
+            coarse_candidates.push(k.clone());
+        }
+    }
+    for k in bleed_candidates {
+        coarse_candidates.push(k);
+    }
+    let unique_coarse_keys = coarse_candidates
+        .into_iter()
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .collect::<Vec<_>>();
+    let mut vlad_ranked = unique_ranked_from_candidates(
+        unique_coarse_keys.clone(),
+        &full_score_fn,
+        search_cfg.ranked_limit.max(search_cfg.coarse_pool_limit),
+    );
+    vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+
+    let mut seed_best_scores = Vec::new();
+    for ranked in &seed_ranked_coarse {
+        let best = ranked
+            .iter()
+            .take(search_cfg.ensemble_seed_top_k.max(1))
+            .map(|(k, _)| full_score_fn(k))
+            .fold(f64::NEG_INFINITY, |acc, v| acc.max(v));
+        if best.is_finite() {
+            seed_best_scores.push(best);
+        }
+    }
+
+    let mut seed_hits_by_key: HashMap<Vec<usize>, usize> = HashMap::new();
+    for top in &seed_top_sets {
+        for key in top {
+            *seed_hits_by_key.entry(key.clone()).or_insert(0) += 1;
+        }
+    }
+
     let vlad_best_indices = vlad_ranked
         .first()
         .map(|(build, _)| build.clone())
@@ -3005,15 +3925,7 @@ fn run_vlad_scenario(
         &sim,
         &urf,
     );
-    let vlad_best_time = simulate_vlad_survival(
-        &vlad_base,
-        &vlad_best_build,
-        &vlad_loadout.bonus_stats,
-        None,
-        &enemy_builds,
-        &sim,
-        &urf,
-    );
+    let vlad_best_time = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
 
     println!("Enemy builds (optimized for DPS):");
     for (enemy, build, _) in &enemy_builds {
@@ -3045,9 +3957,23 @@ fn run_vlad_scenario(
         search_strategy_summary(&search_cfg)
     );
     println!(
-        "- Candidate evaluations: {}",
-        vlad_eval_count.load(AtomicOrdering::Relaxed)
+        "- Candidate evaluations (coarse/full): {}/{}",
+        coarse_eval_count.load(AtomicOrdering::Relaxed),
+        full_eval_count.load(AtomicOrdering::Relaxed)
     );
+    println!(
+        "- Cache hits (coarse/full): {}/{}",
+        coarse_cache.hits(),
+        full_cache.hits()
+    );
+    println!(
+        "- Cache waits (coarse/full): {}/{}",
+        coarse_cache.waits(),
+        full_cache.waits()
+    );
+    println!("- Ensemble seeds: {}", ensemble_seeds);
+    println!("- Unique coarse candidates: {}", unique_coarse_keys.len());
+    println!("- Bleed candidates injected: {}", bleed_candidate_count);
     println!(
         "- Items: {}",
         vlad_best_build
@@ -3072,10 +3998,63 @@ fn run_vlad_scenario(
 
     let diverse_top_raw =
         select_diverse_top_builds(&vlad_ranked, top_x, min_item_diff, max_relative_gap_percent);
+    let diverse_top_keys = diverse_top_raw
+        .iter()
+        .map(|(indices, _)| indices.clone())
+        .collect::<Vec<_>>();
     let diverse_top_builds = diverse_top_raw
         .iter()
         .map(|(indices, score)| (build_from_indices(&item_pool, indices), *score))
         .collect::<Vec<_>>();
+    let mut metrics_by_key = HashMap::new();
+    for (key, score) in &vlad_ranked {
+        metrics_by_key.insert(
+            key.clone(),
+            compute_build_metrics(
+                key,
+                &item_pool,
+                &vlad_base,
+                &vlad_loadout.bonus_stats,
+                &sim,
+                *score,
+            ),
+        );
+    }
+    let pareto_front = pareto_front_keys(&metrics_by_key);
+    let build_confidence = vlad_ranked
+        .iter()
+        .map(|(key, _)| {
+            let hits = seed_hits_by_key.get(key).copied().unwrap_or(0);
+            let hit_rate = hits as f64 / ensemble_seeds as f64;
+            let robustness = if hit_rate >= search_cfg.robust_min_seed_hit_rate {
+                "robust".to_string()
+            } else {
+                "fragile".to_string()
+            };
+            BuildConfidence {
+                key: key.clone(),
+                seed_hits: hits,
+                seed_hit_rate: hit_rate,
+                robustness,
+            }
+        })
+        .collect::<Vec<_>>();
+    let diagnostics = SearchDiagnostics {
+        strategy_summary: search_strategy_summary(&search_cfg),
+        ensemble_seeds,
+        coarse_evaluations: coarse_eval_count.load(AtomicOrdering::Relaxed),
+        full_evaluations: full_eval_count.load(AtomicOrdering::Relaxed),
+        coarse_cache_hits: coarse_cache.hits(),
+        coarse_cache_misses: coarse_cache.misses(),
+        coarse_cache_waits: coarse_cache.waits(),
+        full_cache_hits: full_cache.hits(),
+        full_cache_misses: full_cache.misses(),
+        full_cache_waits: full_cache.waits(),
+        unique_candidate_builds: unique_coarse_keys.len(),
+        bleed_candidates_injected: bleed_candidate_count,
+        coarse_pool_limit: search_cfg.coarse_pool_limit,
+        seed_best_scores,
+    };
     let build_order_results = diverse_top_builds
         .iter()
         .map(|(build, _)| {
@@ -3161,6 +4140,11 @@ fn run_vlad_scenario(
         vlad_best_time,
         &enemy_builds,
         &diverse_top_builds,
+        &diverse_top_keys,
+        &build_confidence,
+        &metrics_by_key,
+        &pareto_front,
+        &diagnostics,
         &build_order_results,
     )?;
     println!("\nReport written: {}", report_path.display());

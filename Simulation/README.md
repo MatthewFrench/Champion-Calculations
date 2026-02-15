@@ -11,6 +11,13 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item mechanics can be extended in compiled Rust code paths.
 - Build candidate scoring is parallelized across CPU cores (Rayon).
+- Search now supports two-stage scoring:
+  - coarse proxy filter for broad exploration
+  - full event simulation for finalist ranking
+- Full simulation scoring is memoized by canonical build key.
+- In-flight dedupe cache avoids duplicate parallel re-simulation of the same canonical build.
+- Ensemble seed runs are supported for confidence/robustness labeling.
+- Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
@@ -97,19 +104,32 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ## Notes
 - Champion base stats are loaded from `Characters/*.json` by champion name.
 - This is still a survival-first model; spell DPS is now eventized but full per-spell champion kits still need script/data integration.
-- The build search supports: `beam`, `greedy`, `random`, `hill_climb`, `genetic`, and `portfolio`.
+- The build search supports: `beam`, `greedy`, `random`, `hill_climb`, `genetic`, `simulated_annealing`, `mcts`, and `portfolio`.
 - Default scenario uses `portfolio`, which runs multiple algorithms in parallel and merges candidates.
 - Useful knobs in `search`:
   - `portfolio_strategies`
   - `hill_climb_restarts`, `hill_climb_steps`, `hill_climb_neighbors`
   - `genetic_population`, `genetic_generations`, `genetic_mutation_rate`, `genetic_crossover_rate`
+  - `simulated_annealing_restarts`, `simulated_annealing_iterations`, `simulated_annealing_initial_temp`, `simulated_annealing_cooling_rate`
+  - `mcts_iterations`, `mcts_rollouts_per_expansion`, `mcts_exploration`
+  - `ensemble_seeds`, `ensemble_seed_stride`, `ensemble_seed_top_k`
+  - `coarse_pool_limit`, `robust_min_seed_hit_rate`
+  - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
   - `ranked_limit`
+- Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - Heartsteel assumptions:
   - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
   - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
   - In build-order optimization, Heartsteel stacks are distributed by item acquisition level and current stage level (so buying it later yields fewer stacks by level 20).
 - Level assumption:
   - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
+- Enemy script hooks (scenario enemy fields):
+  - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
+  - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per enemy use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
+- Report now includes:
+  - Search diagnostics (coarse/full eval counts, candidate pool, seed variance)
+  - Robust vs fragile build confidence based on ensemble seed hit rate
+  - Pareto-front tagging over survival/EHP/AP/cost-timing metrics
 
 ## Runes/Masteries
 - Optional scenario loadout blocks:
