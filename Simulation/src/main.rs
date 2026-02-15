@@ -175,7 +175,9 @@ struct BuildSearchConfig {
     ensemble_seeds: usize,
     ensemble_seed_stride: u64,
     ensemble_seed_top_k: usize,
-    coarse_pool_limit: usize,
+    objective_survival_weight: f64,
+    objective_damage_weight: f64,
+    objective_healing_weight: f64,
     robust_min_seed_hit_rate: f64,
     bleed_enabled: bool,
     bleed_budget: usize,
@@ -186,21 +188,25 @@ struct BuildSearchConfig {
 
 #[derive(Debug, Clone)]
 struct BuildMetrics {
-    survival: f64,
+    objective: f64,
     ehp_mixed: f64,
     ap: f64,
     cost_timing: f64,
     total_cost: f64,
 }
 
-#[derive(Debug, Clone, Default)]
-struct CoarseItemFeature {
-    stats: Stats,
-    total_cost: f64,
-    has_zhonya: bool,
-    has_ga: bool,
-    has_protoplasm: bool,
-    has_heartsteel: bool,
+#[derive(Debug, Clone, Copy, Default)]
+struct CombatOutcome {
+    time_alive_seconds: f64,
+    damage_dealt: f64,
+    healing_done: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+struct ObjectiveComponentWeights {
+    survival: f64,
+    damage: f64,
+    healing: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -216,12 +222,10 @@ struct SearchDiagnostics {
     strategy_summary: String,
     search_quality_profile: String,
     ensemble_seeds: usize,
-    coarse_evaluations: usize,
+    objective_survival_weight: f64,
+    objective_damage_weight: f64,
+    objective_healing_weight: f64,
     full_evaluations: usize,
-    full_capped_evaluations: usize,
-    coarse_cache_hits: usize,
-    coarse_cache_misses: usize,
-    coarse_cache_waits: usize,
     full_cache_hits: usize,
     full_cache_misses: usize,
     full_cache_waits: usize,
@@ -230,7 +234,6 @@ struct SearchDiagnostics {
     unique_candidate_builds: usize,
     bleed_candidates_injected: usize,
     adaptive_candidates_injected: usize,
-    coarse_pool_limit: usize,
     scenario_count: usize,
     loadout_candidates: usize,
     loadout_finalists: usize,
@@ -456,7 +459,7 @@ impl StatusReporter {
             })
             .unwrap_or_else(|| "n/a".to_string());
         let best_str = best_score
-            .map(|v| format!("{:.2}s", v))
+            .map(|v| format!("{:.4}", v))
             .unwrap_or_else(|| "n/a".to_string());
         let note_str = note.unwrap_or("");
         println!(
@@ -554,7 +557,6 @@ impl Ord for QueuedEvent {
 
 struct VladCombatSimulation {
     vlad_base: ChampionBase,
-    enemy_count: usize,
     sim: SimulationConfig,
     urf: UrfBuffs,
 
@@ -562,6 +564,8 @@ struct VladCombatSimulation {
     time: f64,
     finished: bool,
     death_time: Option<f64>,
+    damage_dealt_total: f64,
+    healing_done_total: f64,
 
     event_queue: BinaryHeap<QueuedEvent>,
     event_counter: u64,
@@ -655,13 +659,14 @@ impl VladCombatSimulation {
 
         let mut runner = Self {
             vlad_base,
-            enemy_count: enemies.len(),
             sim,
             urf,
             tick_seconds,
             time: 0.0,
             finished: false,
             death_time: None,
+            damage_dealt_total: 0.0,
+            healing_done_total: 0.0,
             event_queue: BinaryHeap::new(),
             event_counter: 0,
             vlad_stats,
@@ -824,15 +829,19 @@ impl VladCombatSimulation {
         let delta = to_time - self.time;
         if self.pool_heal_until > self.time {
             let active = delta.min(self.pool_heal_until - self.time);
+            let before = self.health;
             self.health = self
                 .max_health
                 .min(self.health + self.pool_heal_rate * active);
+            self.healing_done_total += (self.health - before).max(0.0);
         }
         if self.protoplasm_hot_until > self.time {
             let active = delta.min(self.protoplasm_hot_until - self.time);
+            let before = self.health;
             self.health = self
                 .max_health
                 .min(self.health + self.protoplasm_hot_rate * active);
+            self.healing_done_total += (self.health - before).max(0.0);
         }
         self.time = to_time;
     }
@@ -883,7 +892,14 @@ impl VladCombatSimulation {
                 self.sim.vlad_pool_base_damage_by_rank[self.sim.vlad_pool_rank - 1];
             pool_damage += self.sim.vlad_pool_bonus_health_ratio
                 * (self.vlad_stats.health - self.vlad_base.base_health);
-            let total_pool_damage = pool_damage * self.enemy_count as f64;
+            let active_enemy_count = self
+                .enemy_state
+                .iter()
+                .enumerate()
+                .filter(|(idx, _)| self.enemy_is_active(*idx))
+                .count();
+            let total_pool_damage = pool_damage * active_enemy_count as f64;
+            self.damage_dealt_total += total_pool_damage.max(0.0);
             let pool_heal = total_pool_damage * self.sim.vlad_pool_heal_ratio_of_damage;
             self.pool_heal_rate = if self.pool_duration > 0.0 {
                 pool_heal / self.pool_duration
@@ -1006,26 +1022,20 @@ impl VladCombatSimulation {
         true
     }
 
-    fn run_until_end(&mut self) -> f64 {
+    fn run_until_end(&mut self) -> CombatOutcome {
         while self.step(1) {}
-        self.death_time
-            .unwrap_or(self.time.min(self.sim.max_time_seconds))
-    }
-
-    fn run_until_cap(&mut self, cap_time: f64) -> f64 {
-        let cap = cap_time.min(self.sim.max_time_seconds).max(0.0);
-        while self.time < cap && self.step(1) {}
-        if self.death_time.is_some() {
-            self.death_time
-                .unwrap_or(self.time.min(self.sim.max_time_seconds))
-        } else {
-            self.time.min(cap)
+        CombatOutcome {
+            time_alive_seconds: self
+                .death_time
+                .unwrap_or(self.time.min(self.sim.max_time_seconds)),
+            damage_dealt: self.damage_dealt_total,
+            healing_done: self.healing_done_total,
         }
     }
 }
 
 #[derive(Debug, Clone, Parser)]
-#[command(about = "URF Vladimir survival simulator")]
+#[command(about = "URF Vladimir objective simulator")]
 struct Cli {
     #[arg(long)]
     scenario: String,
@@ -1729,10 +1739,18 @@ fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("ensemble_seed_top_k")
             .and_then(Value::as_u64)
             .unwrap_or(25) as usize,
-        coarse_pool_limit: data
-            .get("coarse_pool_limit")
-            .and_then(Value::as_u64)
-            .unwrap_or(300) as usize,
+        objective_survival_weight: data
+            .get("objective_survival_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.55),
+        objective_damage_weight: data
+            .get("objective_damage_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.30),
+        objective_healing_weight: data
+            .get("objective_healing_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.15),
         robust_min_seed_hit_rate: data
             .get("robust_min_seed_hit_rate")
             .and_then(Value::as_f64)
@@ -1773,7 +1791,6 @@ fn apply_search_quality_profile(search: &mut BuildSearchConfig, profile: SearchQ
             search.mcts_rollouts_per_expansion = 1;
             search.ensemble_seeds = 1;
             search.ensemble_seed_top_k = 10;
-            search.coarse_pool_limit = 160;
             search.ranked_limit = 200;
             search.bleed_budget = 120;
         }
@@ -1791,7 +1808,6 @@ fn apply_search_quality_profile(search: &mut BuildSearchConfig, profile: SearchQ
             search.mcts_rollouts_per_expansion = 2;
             search.ensemble_seeds = 2;
             search.ensemble_seed_top_k = 18;
-            search.coarse_pool_limit = 260;
             search.ranked_limit = 320;
             search.bleed_budget = 300;
         }
@@ -1809,7 +1825,6 @@ fn apply_search_quality_profile(search: &mut BuildSearchConfig, profile: SearchQ
             search.mcts_rollouts_per_expansion = search.mcts_rollouts_per_expansion.max(3);
             search.ensemble_seeds = search.ensemble_seeds.max(4);
             search.ensemble_seed_top_k = search.ensemble_seed_top_k.max(36);
-            search.coarse_pool_limit = search.coarse_pool_limit.max(520);
             search.ranked_limit = search.ranked_limit.max(640);
             search.bleed_budget = search.bleed_budget.max(1200);
         }
@@ -2746,7 +2761,7 @@ fn compute_enemy_dps(enemy: &EnemyConfig, item_stats: &Stats, urf: &UrfBuffs) ->
     (physical_dps, ability_dps)
 }
 
-fn simulate_vlad_survival(
+fn simulate_vlad_combat(
     vlad_base: &ChampionBase,
     vlad_build_items: &[Item],
     vlad_bonus_stats: &Stats,
@@ -2754,7 +2769,7 @@ fn simulate_vlad_survival(
     enemies: &[(EnemyConfig, Vec<Item>, Stats)],
     sim: &SimulationConfig,
     urf: &UrfBuffs,
-) -> f64 {
+) -> CombatOutcome {
     let mut runner = VladCombatSimulation::new(
         vlad_base.clone(),
         vlad_build_items,
@@ -2767,7 +2782,7 @@ fn simulate_vlad_survival(
     runner.run_until_end()
 }
 
-fn simulate_vlad_survival_capped(
+fn simulate_vlad_survival(
     vlad_base: &ChampionBase,
     vlad_build_items: &[Item],
     vlad_bonus_stats: &Stats,
@@ -2775,18 +2790,123 @@ fn simulate_vlad_survival_capped(
     enemies: &[(EnemyConfig, Vec<Item>, Stats)],
     sim: &SimulationConfig,
     urf: &UrfBuffs,
-    cap_seconds: f64,
 ) -> f64 {
-    let mut runner = VladCombatSimulation::new(
-        vlad_base.clone(),
+    simulate_vlad_combat(
+        vlad_base,
         vlad_build_items,
         vlad_bonus_stats,
         vlad_item_acquired_levels,
         enemies,
-        sim.clone(),
-        urf.clone(),
-    );
-    runner.run_until_cap(cap_seconds)
+        sim,
+        urf,
+    )
+    .time_alive_seconds
+}
+
+fn normalized_objective_weights(
+    survival: f64,
+    damage: f64,
+    healing: f64,
+) -> ObjectiveComponentWeights {
+    let mut s = survival.max(0.0);
+    let mut d = damage.max(0.0);
+    let mut h = healing.max(0.0);
+    let sum = s + d + h;
+    if sum <= 0.0 {
+        s = 1.0;
+        d = 0.0;
+        h = 0.0;
+    } else {
+        s /= sum;
+        d /= sum;
+        h /= sum;
+    }
+    ObjectiveComponentWeights {
+        survival: s,
+        damage: d,
+        healing: h,
+    }
+}
+
+fn objective_score_from_outcome(
+    outcome: CombatOutcome,
+    reference: CombatOutcome,
+    weights: ObjectiveComponentWeights,
+) -> f64 {
+    let survival_ref = reference.time_alive_seconds.max(0.01);
+    let damage_ref = reference.damage_dealt.max(1.0);
+    let healing_ref = reference.healing_done.max(1.0);
+    weights.survival * (outcome.time_alive_seconds / survival_ref)
+        + weights.damage * (outcome.damage_dealt / damage_ref)
+        + weights.healing * (outcome.healing_done / healing_ref)
+}
+
+fn aggregate_objective_score_and_outcome(
+    vlad_base: &ChampionBase,
+    build_items: &[Item],
+    bonus_stats: &Stats,
+    enemy_build_scenarios: &[(String, f64, Vec<(EnemyConfig, Vec<Item>, Stats)>)],
+    sim: &SimulationConfig,
+    urf: &UrfBuffs,
+    scenario_reference_outcomes: &[CombatOutcome],
+    weights: ObjectiveComponentWeights,
+    worst_case_weight: f64,
+) -> (f64, CombatOutcome) {
+    let mut weighted_score_sum = 0.0;
+    let mut weighted_time_sum = 0.0;
+    let mut weighted_damage_sum = 0.0;
+    let mut weighted_healing_sum = 0.0;
+    let mut weight_sum = 0.0;
+    let mut worst = f64::INFINITY;
+
+    for (idx, (_, weight, enemy_builds_s)) in enemy_build_scenarios.iter().enumerate() {
+        let w = (*weight).max(0.0);
+        if w <= 0.0 {
+            continue;
+        }
+        let outcome = simulate_vlad_combat(
+            vlad_base,
+            build_items,
+            bonus_stats,
+            None,
+            enemy_builds_s,
+            sim,
+            urf,
+        );
+        let reference = scenario_reference_outcomes
+            .get(idx)
+            .copied()
+            .unwrap_or(CombatOutcome {
+                time_alive_seconds: sim.max_time_seconds.max(1.0),
+                damage_dealt: 1.0,
+                healing_done: 1.0,
+            });
+        let scenario_score = objective_score_from_outcome(outcome, reference, weights);
+        weighted_score_sum += w * scenario_score;
+        weighted_time_sum += w * outcome.time_alive_seconds;
+        weighted_damage_sum += w * outcome.damage_dealt;
+        weighted_healing_sum += w * outcome.healing_done;
+        weight_sum += w;
+        worst = worst.min(scenario_score);
+    }
+
+    if weight_sum <= 0.0 {
+        return (0.0, CombatOutcome::default());
+    }
+
+    let mean_score = weighted_score_sum / weight_sum;
+    let blended_score = if worst.is_finite() {
+        let ww = worst_case_weight.clamp(0.0, 1.0);
+        (1.0 - ww) * mean_score + ww * worst
+    } else {
+        mean_score
+    };
+    let mean_outcome = CombatOutcome {
+        time_alive_seconds: weighted_time_sum / weight_sum,
+        damage_dealt: weighted_damage_sum / weight_sum,
+        healing_done: weighted_healing_sum / weight_sum,
+    };
+    (blended_score, mean_outcome)
 }
 
 fn build_item_stats(items: &[Item]) -> Stats {
@@ -3715,9 +3835,11 @@ fn write_vladimir_report_markdown(
     vlad_loadout: &ResolvedLoadout,
     enemy_loadout: &ResolvedLoadout,
     baseline_build: &[Item],
-    baseline_time: f64,
+    baseline_score: f64,
+    baseline_outcome: &CombatOutcome,
     best_build: &[Item],
-    best_time: f64,
+    best_score: f64,
+    best_outcome: &CombatOutcome,
     enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     enemy_presets_used: &HashMap<String, EnemyUrfPreset>,
     diverse_top_builds: &[(Vec<Item>, f64)],
@@ -3736,8 +3858,8 @@ fn write_vladimir_report_markdown(
         .duration_since(UNIX_EPOCH)
         .unwrap_or_default()
         .as_secs();
-    let improvement = if baseline_time > 0.0 {
-        ((best_time - baseline_time) / baseline_time) * 100.0
+    let improvement = if baseline_score.abs() > f64::EPSILON {
+        ((best_score - baseline_score) / baseline_score) * 100.0
     } else {
         0.0
     };
@@ -3749,8 +3871,16 @@ fn write_vladimir_report_markdown(
 
     content.push_str("## Headline\n");
     content.push_str(&format!(
-        "- Baseline time alive: **{:.2}s**\n- Best time alive: **{:.2}s**\n- Improvement: **{:+.2}%**\n\n",
-        baseline_time, best_time, improvement
+        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done: **{:.2}s / {:.1} / {:.1}**\n- Best time alive / damage dealt / healing done: **{:.2}s / {:.1} / {:.1}**\n\n",
+        baseline_score,
+        best_score,
+        improvement,
+        baseline_outcome.time_alive_seconds,
+        baseline_outcome.damage_dealt,
+        baseline_outcome.healing_done,
+        best_outcome.time_alive_seconds,
+        best_outcome.damage_dealt,
+        best_outcome.healing_done,
     ));
 
     content.push_str(&format!(
@@ -3761,26 +3891,23 @@ fn write_vladimir_report_markdown(
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Full capped prechecks: `{}`\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing): `{:.2}/{:.2}/{:.2}`\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Unique candidate builds: `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
         diagnostics.scenario_count,
         diagnostics.loadout_candidates,
         diagnostics.loadout_finalists,
         diagnostics.ensemble_seeds,
-        diagnostics.coarse_evaluations,
-        diagnostics.coarse_cache_hits,
-        diagnostics.coarse_cache_misses,
-        diagnostics.coarse_cache_waits,
+        diagnostics.objective_survival_weight,
+        diagnostics.objective_damage_weight,
+        diagnostics.objective_healing_weight,
         diagnostics.full_evaluations,
         diagnostics.full_cache_hits,
         diagnostics.full_cache_misses,
         diagnostics.full_cache_waits,
         diagnostics.full_persistent_cache_hits,
         diagnostics.full_persistent_cache_entries,
-        diagnostics.full_capped_evaluations,
         diagnostics.unique_candidate_builds,
-        diagnostics.coarse_pool_limit,
         diagnostics.bleed_candidates_injected,
         diagnostics.adaptive_candidates_injected,
         seed_mean,
@@ -3929,7 +4056,7 @@ fn write_vladimir_report_markdown(
             let pareto = key.map(|k| pareto_front.contains(k)).unwrap_or(false);
             let pareto_tag = if pareto { " | Pareto-front" } else { "" };
             content.push_str(&format!(
-                "{}. `{:.2}s` ({:+.2}s vs top): {}{}{}\n",
+                "{}. `score {:.4}` ({:+.4} vs top): {}{}{}\n",
                 idx + 1,
                 score,
                 delta,
@@ -4022,9 +4149,11 @@ fn write_vladimir_report_json(
     scenario_path: &Path,
     sim: &SimulationConfig,
     baseline_build: &[Item],
-    baseline_time: f64,
+    baseline_score: f64,
+    baseline_outcome: &CombatOutcome,
     best_build: &[Item],
-    best_time: f64,
+    best_score: f64,
+    best_outcome: &CombatOutcome,
     vladimir_loadout: &ResolvedLoadout,
     enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     enemy_presets_used: &HashMap<String, EnemyUrfPreset>,
@@ -4036,8 +4165,8 @@ fn write_vladimir_report_json(
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
-    let improvement_percent = if baseline_time > 0.0 {
-        ((best_time - baseline_time) / baseline_time) * 100.0
+    let improvement_percent = if baseline_score.abs() > f64::EPSILON {
+        ((best_score - baseline_score) / baseline_score) * 100.0
     } else {
         0.0
     };
@@ -4045,9 +4174,19 @@ fn write_vladimir_report_json(
         "scenario_path": scenario_path.display().to_string(),
         "champion_level": sim.champion_level,
         "headline": {
-            "baseline_time_alive_seconds": baseline_time,
-            "best_time_alive_seconds": best_time,
+            "baseline_objective_score": baseline_score,
+            "best_objective_score": best_score,
             "improvement_percent": improvement_percent,
+            "baseline_outcome": {
+                "time_alive_seconds": baseline_outcome.time_alive_seconds,
+                "damage_dealt": baseline_outcome.damage_dealt,
+                "healing_done": baseline_outcome.healing_done,
+            },
+            "best_outcome": {
+                "time_alive_seconds": best_outcome.time_alive_seconds,
+                "damage_dealt": best_outcome.damage_dealt,
+                "healing_done": best_outcome.healing_done,
+            },
         },
         "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
@@ -4067,7 +4206,7 @@ fn write_vladimir_report_json(
         }).collect::<Vec<_>>(),
         "diverse_top_builds": diverse_top_builds.iter().map(|(build, score)| {
             json!({
-                "score_seconds": score,
+                "objective_score": score,
                 "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>()
             })
         }).collect::<Vec<_>>(),
@@ -4083,12 +4222,10 @@ fn write_vladimir_report_json(
             "strategy_summary": diagnostics.strategy_summary,
             "search_quality_profile": diagnostics.search_quality_profile,
             "ensemble_seeds": diagnostics.ensemble_seeds,
-            "coarse_evaluations": diagnostics.coarse_evaluations,
+            "objective_survival_weight": diagnostics.objective_survival_weight,
+            "objective_damage_weight": diagnostics.objective_damage_weight,
+            "objective_healing_weight": diagnostics.objective_healing_weight,
             "full_evaluations": diagnostics.full_evaluations,
-            "full_capped_evaluations": diagnostics.full_capped_evaluations,
-            "coarse_cache_hits": diagnostics.coarse_cache_hits,
-            "coarse_cache_misses": diagnostics.coarse_cache_misses,
-            "coarse_cache_waits": diagnostics.coarse_cache_waits,
             "full_cache_hits": diagnostics.full_cache_hits,
             "full_cache_misses": diagnostics.full_cache_misses,
             "full_cache_waits": diagnostics.full_cache_waits,
@@ -4388,8 +4525,8 @@ fn generate_bleed_candidates(
     let bleed_budget = if search.bleed_budget > 0 {
         search.bleed_budget
     } else {
-        // Max-quality default: at least coarse pool size, with a reasonable floor.
-        search.coarse_pool_limit.max(800)
+        // Max-quality default: at least ranked candidate pool size, with a reasonable floor.
+        search.ranked_limit.max(800)
     };
     let cross_budget = bleed_budget / 2;
     let mutate_budget = bleed_budget - cross_budget;
@@ -4528,70 +4665,13 @@ fn build_cost_timing_score(build: &[Item]) -> f64 {
     -weighted - 0.1 * total
 }
 
-fn precompute_coarse_features(item_pool: &[Item]) -> Vec<CoarseItemFeature> {
-    item_pool
-        .iter()
-        .map(|item| CoarseItemFeature {
-            stats: item.stats.clone(),
-            total_cost: item.total_cost,
-            has_zhonya: item.name == "Zhonya's Hourglass",
-            has_ga: item.name == "Guardian Angel",
-            has_protoplasm: item.name == "Protoplasm Harness",
-            has_heartsteel: item.name == "Heartsteel",
-        })
-        .collect()
-}
-
-fn coarse_proxy_survival_score(
-    vlad_base: &ChampionBase,
-    build_idx: &[usize],
-    features: &[CoarseItemFeature],
-    vlad_bonus_stats: &Stats,
-    sim: &SimulationConfig,
-) -> f64 {
-    let mut item_stats = Stats::default();
-    let mut total_cost = 0.0;
-    let mut has_zhonya = false;
-    let mut has_ga = false;
-    let mut has_protoplasm = false;
-    let mut has_heartsteel = false;
-    for &idx in build_idx {
-        if let Some(f) = features.get(idx) {
-            item_stats.add(&f.stats);
-            total_cost += f.total_cost.max(0.0);
-            has_zhonya |= f.has_zhonya;
-            has_ga |= f.has_ga;
-            has_protoplasm |= f.has_protoplasm;
-            has_heartsteel |= f.has_heartsteel;
-        }
-    }
-    item_stats.add(vlad_bonus_stats);
-    if has_heartsteel {
-        let stacks = sim.heartsteel_assumed_stacks_at_8m.max(0.0);
-        let base_max_health = vlad_base.base_health + item_stats.health;
-        item_stats.health += assumed_heartsteel_bonus_health(base_max_health, stacks);
-    }
-    let stats = compute_vlad_stats(vlad_base, &item_stats);
-    let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
-    let active_bonus = (has_zhonya as i32 as f64) * 250.0
-        + (has_ga as i32 as f64) * 300.0
-        + (has_protoplasm as i32 as f64) * 140.0;
-    let stat_signal = ehp * 0.010
-        + stats.ability_power * 0.040
-        + stats.ability_haste * 0.025
-        + stats.move_speed_flat * 0.005
-        + stats.move_speed_percent * 0.08;
-    // Coarse approximation of cost timing without full item materialization.
-    stat_signal + active_bonus - (0.001 * total_cost)
-}
-
 fn compute_build_metrics(
     key: &[usize],
     item_pool: &[Item],
     vlad_base: &ChampionBase,
     vlad_bonus_stats: &Stats,
     sim: &SimulationConfig,
-    survival: f64,
+    objective: f64,
 ) -> BuildMetrics {
     let build = build_from_indices(item_pool, key);
     let item_stats = compute_effective_item_stats_for_build(
@@ -4606,7 +4686,7 @@ fn compute_build_metrics(
     let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
     let total_cost = build.iter().map(|i| i.total_cost).sum::<f64>();
     BuildMetrics {
-        survival,
+        objective,
         ehp_mixed: ehp,
         ap: stats.ability_power,
         cost_timing: build_cost_timing_score(&build),
@@ -4615,11 +4695,11 @@ fn compute_build_metrics(
 }
 
 fn dominates(a: &BuildMetrics, b: &BuildMetrics) -> bool {
-    let ge = a.survival >= b.survival
+    let ge = a.objective >= b.objective
         && a.ehp_mixed >= b.ehp_mixed
         && a.ap >= b.ap
         && a.cost_timing >= b.cost_timing;
-    let gt = a.survival > b.survival
+    let gt = a.objective > b.objective
         || a.ehp_mixed > b.ehp_mixed
         || a.ap > b.ap
         || a.cost_timing > b.cost_timing;
@@ -5131,36 +5211,39 @@ fn run_vladimir_scenario(
     let best_loadout_by_item: Arc<Mutex<HashMap<Vec<usize>, (LoadoutSelection, ResolvedLoadout)>>> =
         Arc::new(Mutex::new(HashMap::new()));
 
-    let objective_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
-    let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
-        let mut weighted_sum = 0.0;
-        let mut weight_sum = 0.0;
-        let mut worst = f64::INFINITY;
-        for (_, weight, enemy_builds_s) in &enemy_build_scenarios {
-            let t = simulate_vlad_survival(
+    let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
+    let objective_component_weights = normalized_objective_weights(
+        search_cfg.objective_survival_weight,
+        search_cfg.objective_damage_weight,
+        search_cfg.objective_healing_weight,
+    );
+    let scenario_reference_outcomes = enemy_build_scenarios
+        .iter()
+        .map(|(_, _, enemy_builds_s)| {
+            simulate_vlad_combat(
                 &vlad_base,
-                build_items,
-                bonus_stats,
+                &baseline_fixed_build,
+                &vlad_base_loadout.bonus_stats,
                 None,
                 enemy_builds_s,
                 &sim,
                 &urf,
-            );
-            let w = (*weight).max(0.0);
-            weighted_sum += w * t;
-            weight_sum += w;
-            worst = worst.min(t);
-        }
-        let mean = if weight_sum > 0.0 {
-            weighted_sum / weight_sum
-        } else {
-            0.0
-        };
-        if worst.is_finite() {
-            (1.0 - objective_weight) * mean + objective_weight * worst
-        } else {
-            mean
-        }
+            )
+        })
+        .collect::<Vec<_>>();
+    let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
+        aggregate_objective_score_and_outcome(
+            &vlad_base,
+            build_items,
+            bonus_stats,
+            &enemy_build_scenarios,
+            &sim,
+            &urf,
+            &scenario_reference_outcomes,
+            objective_component_weights,
+            objective_worst_case_weight,
+        )
+        .0
     };
 
     let loadout_candidates_count = loadout_eval_budget;
@@ -5218,10 +5301,7 @@ fn run_vladimir_scenario(
         (best_score, best_sel, best_resolved)
     };
 
-    let coarse_eval_count = AtomicUsize::new(0);
     let full_eval_count = AtomicUsize::new(0);
-    let full_capped_eval_count = AtomicUsize::new(0);
-    let coarse_cache = Arc::new(BlockingScoreCache::new());
     let full_cache = Arc::new(BlockingScoreCache::new());
     let mut scenario_hasher = DefaultHasher::new();
     scenario.to_string().hash(&mut scenario_hasher);
@@ -5233,66 +5313,6 @@ fn run_vladimir_scenario(
         scenario_hasher.finish()
     ));
     let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
-    let coarse_features = precompute_coarse_features(&item_pool);
-    let coarse_bonus_stats = vlad_base_loadout.bonus_stats.clone();
-    let objective_capped_score_for_build = |build_items: &[Item], cap_seconds: f64| {
-        if deadline_reached(deadline) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            return f64::NEG_INFINITY;
-        }
-        let mut weighted_sum = 0.0;
-        let mut weight_sum = 0.0;
-        let mut worst = f64::INFINITY;
-        for (_, weight, enemy_builds_s) in &enemy_build_scenarios {
-            if deadline_reached(deadline) {
-                timeout_flag.store(1, AtomicOrdering::Relaxed);
-                break;
-            }
-            full_capped_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
-            let t = simulate_vlad_survival_capped(
-                &vlad_base,
-                build_items,
-                &vlad_base_loadout.bonus_stats,
-                None,
-                enemy_builds_s,
-                &sim,
-                &urf,
-                cap_seconds,
-            );
-            let w = (*weight).max(0.0);
-            weighted_sum += w * t;
-            weight_sum += w;
-            worst = worst.min(t);
-        }
-        let mean = if weight_sum > 0.0 {
-            weighted_sum / weight_sum
-        } else {
-            0.0
-        };
-        if worst.is_finite() {
-            (1.0 - objective_weight) * mean + objective_weight * worst
-        } else {
-            mean
-        }
-    };
-    let coarse_score_fn = |build_idx: &[usize]| {
-        if deadline_reached(deadline) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            return f64::NEG_INFINITY;
-        }
-        let key = canonical_key(build_idx);
-        let cache = Arc::clone(&coarse_cache);
-        cache.get_or_compute(key.clone(), || {
-            coarse_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
-            coarse_proxy_survival_score(
-                &vlad_base,
-                &key,
-                &coarse_features,
-                &coarse_bonus_stats,
-                &sim,
-            )
-        })
-    };
     let full_score_fn = |build_idx: &[usize]| {
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
@@ -5327,30 +5347,30 @@ fn run_vladimir_scenario(
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
     let active_strategies = portfolio_strategy_list(&search_cfg);
     status.emit(
-        "coarse_seed_search",
+        "seed_search",
         Some((0, ensemble_seeds)),
         None,
         Some("running ensemble seeds"),
         true,
     );
-    let mut seed_ranked_coarse = Vec::new();
+    let mut seed_ranked = Vec::new();
     for seed_idx in 0..ensemble_seeds {
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
         }
-        seed_ranked_coarse.push({
+        seed_ranked.push({
             let mut cfg = search_cfg.clone();
             cfg.seed = search_cfg.seed.wrapping_add(
                 search_cfg
                     .ensemble_seed_stride
                     .wrapping_mul(seed_idx as u64),
             );
-            cfg.ranked_limit = cfg.ranked_limit.max(search_cfg.coarse_pool_limit);
-            build_search_ranked(&item_pool, max_items, &cfg, &coarse_score_fn, deadline)
+            cfg.ranked_limit = cfg.ranked_limit.max(64);
+            build_search_ranked(&item_pool, max_items, &cfg, &full_score_fn, deadline)
         });
         status.emit(
-            "coarse_seed_search",
+            "seed_search",
             Some((seed_idx + 1, ensemble_seeds)),
             None,
             None,
@@ -5362,7 +5382,7 @@ fn run_vladimir_scenario(
         max_items,
         &search_cfg,
         &active_strategies,
-        &coarse_score_fn,
+        &full_score_fn,
         deadline,
     );
     let adaptive_candidates = adaptive_strategy_candidates(
@@ -5370,7 +5390,7 @@ fn run_vladimir_scenario(
         max_items,
         &search_cfg,
         &strategy_elites,
-        &coarse_score_fn,
+        &full_score_fn,
         deadline,
     );
     let bleed_candidates =
@@ -5379,15 +5399,15 @@ fn run_vladimir_scenario(
         "candidate_merge",
         None,
         None,
-        Some("merging coarse candidates"),
+        Some("merging strict candidates"),
         true,
     );
     let bleed_candidate_count = bleed_candidates.len();
     let adaptive_candidate_count = adaptive_candidates.len();
 
-    let mut coarse_candidates = Vec::new();
+    let mut candidate_keys = Vec::new();
     let mut seed_top_sets = Vec::new();
-    for ranked in &seed_ranked_coarse {
+    for ranked in &seed_ranked {
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
@@ -5398,8 +5418,8 @@ fn run_vladimir_scenario(
             .map(|(k, _)| k.clone())
             .collect::<HashSet<_>>();
         seed_top_sets.push(seed_top);
-        for (k, _) in ranked.iter().take(search_cfg.coarse_pool_limit.max(1)) {
-            coarse_candidates.push(k.clone());
+        for (k, _) in ranked {
+            candidate_keys.push(k.clone());
         }
     }
     for k in bleed_candidates {
@@ -5407,112 +5427,103 @@ fn run_vladimir_scenario(
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
         }
-        coarse_candidates.push(k);
+        candidate_keys.push(k);
     }
     for k in adaptive_candidates {
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
         }
-        coarse_candidates.push(k);
+        candidate_keys.push(k);
     }
-    let unique_coarse_keys = coarse_candidates
+    let mut unique_candidate_keys = candidate_keys
         .into_iter()
         .collect::<HashSet<_>>()
         .into_iter()
         .collect::<Vec<_>>();
-    let mut coarse_ordered = unique_coarse_keys
-        .iter()
-        .map(|k| (k.clone(), coarse_score_fn(k)))
-        .collect::<Vec<_>>();
-    coarse_ordered.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
-    if coarse_ordered.is_empty() {
+    unique_candidate_keys.sort_unstable();
+    if unique_candidate_keys.is_empty() {
         let baseline_key = canonical_key(
             &baseline_fixed_build
                 .iter()
                 .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
                 .collect::<Vec<_>>(),
         );
-        coarse_ordered.push((baseline_key.clone(), coarse_score_fn(&baseline_key)));
+        unique_candidate_keys.push(baseline_key);
     }
 
-    let keep_limit = search_cfg
-        .ranked_limit
-        .max(search_cfg.coarse_pool_limit)
-        .max(64);
-    let mut vlad_ranked: Vec<(Vec<usize>, f64)> = Vec::new();
-    let mut floor = f64::NEG_INFINITY;
-    let total_candidates = coarse_ordered.len();
-    let mut processed_candidates = 0usize;
+    let mut strict_scores = HashMap::<Vec<usize>, f64>::new();
+    for ranked in &seed_ranked {
+        for (k, s) in ranked {
+            if !s.is_finite() {
+                continue;
+            }
+            let entry = strict_scores.entry(k.clone()).or_insert(*s);
+            if *s > *entry {
+                *entry = *s;
+            }
+        }
+    }
+
+    let total_candidates = unique_candidate_keys.len();
+    let mut processed_keys = strict_scores.keys().cloned().collect::<HashSet<_>>();
+    let mut processed_candidates = processed_keys.len().min(total_candidates);
     let mut timed_out = timeout_flag.load(AtomicOrdering::Relaxed) > 0;
     status.emit(
-        "full_ranking",
-        Some((0, total_candidates)),
-        None,
-        Some("evaluating finalists"),
+        "strict_full_ranking",
+        Some((processed_candidates, total_candidates)),
+        strict_scores
+            .values()
+            .copied()
+            .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal)),
+        Some("evaluating all generated candidates"),
         true,
     );
-    let batch_size = (rayon::current_num_threads() * 8).max(32);
-    let mut idx = 0usize;
-    while idx < total_candidates {
+    for key in &unique_candidate_keys {
+        if processed_keys.contains(key) {
+            continue;
+        }
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             timed_out = true;
             break;
         }
-
-        let end = (idx + batch_size).min(total_candidates);
-        let floor_snapshot = floor;
-        let chunk = &coarse_ordered[idx..end];
-        let scored = chunk
-            .par_iter()
-            .filter_map(|(key, _)| {
-                if deadline_reached(deadline) {
-                    timeout_flag.store(1, AtomicOrdering::Relaxed);
-                    return None;
-                }
-                if floor_snapshot.is_finite() {
-                    let preview_build = build_from_indices(&item_pool, key);
-                    let capped = objective_capped_score_for_build(&preview_build, floor_snapshot);
-                    if capped < floor_snapshot {
-                        return None;
-                    }
-                }
-                Some((key.clone(), full_score_fn(key)))
-            })
-            .collect::<Vec<_>>();
-
-        processed_candidates = end;
-        for (key, score) in scored {
-            vlad_ranked.push((key, score));
+        let score = full_score_fn(key);
+        if score.is_finite() {
+            strict_scores.insert(key.clone(), score);
         }
-        vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
-        if vlad_ranked.len() > keep_limit {
-            vlad_ranked.truncate(keep_limit);
-        }
-        if vlad_ranked.len() >= keep_limit {
-            floor = vlad_ranked[keep_limit - 1].1;
-        }
-
+        processed_keys.insert(key.clone());
+        processed_candidates += 1;
         status.emit(
-            "full_ranking",
+            "strict_full_ranking",
             Some((processed_candidates, total_candidates)),
-            vlad_ranked.first().map(|(_, s)| *s),
+            strict_scores
+                .values()
+                .copied()
+                .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal)),
             None,
             false,
         );
-        idx = end;
     }
-    if vlad_ranked.is_empty() && !unique_coarse_keys.is_empty() && !deadline_reached(deadline) {
-        let fallback_key = unique_coarse_keys[0].clone();
-        let fallback_score = full_score_fn(&fallback_key);
-        vlad_ranked.push((fallback_key, fallback_score));
+
+    if strict_scores.is_empty() {
+        let baseline_key = canonical_key(
+            &baseline_fixed_build
+                .iter()
+                .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
+                .collect::<Vec<_>>(),
+        );
+        let baseline_score =
+            score_build_with_bonus(&baseline_fixed_build, &vlad_base_loadout.bonus_stats);
+        strict_scores.insert(baseline_key, baseline_score);
     }
+
+    let mut vlad_ranked = strict_scores.into_iter().collect::<Vec<_>>();
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
     vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
 
     let mut seed_best_scores = Vec::new();
-    for ranked in &seed_ranked_coarse {
+    for ranked in &seed_ranked {
         if deadline_reached(deadline) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
@@ -5520,7 +5531,7 @@ fn run_vladimir_scenario(
         let best = ranked
             .iter()
             .take(search_cfg.ensemble_seed_top_k.max(1))
-            .map(|(k, _)| full_score_fn(k))
+            .map(|(_, s)| *s)
             .fold(f64::NEG_INFINITY, |acc, v| acc.max(v));
         if best.is_finite() {
             seed_best_scores.push(best);
@@ -5550,12 +5561,41 @@ fn run_vladimir_scenario(
         .iter()
         .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
         .collect::<Vec<_>>();
-    let baseline_fixed_time = if deadline_reached(deadline) {
+    let baseline_fixed_score = if deadline_reached(deadline) {
         score_build_with_bonus(&baseline_fixed_build, &vlad_base_loadout.bonus_stats)
     } else {
         full_score_fn(&baseline_fixed_indices)
     };
-    let vlad_best_time = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
+    let baseline_fixed_key = canonical_key(&baseline_fixed_indices);
+    let baseline_loadout = best_loadout_by_item
+        .lock()
+        .ok()
+        .and_then(|m| m.get(&baseline_fixed_key).cloned())
+        .map(|(_, resolved)| resolved)
+        .unwrap_or_else(|| vlad_base_loadout.clone());
+    let (_, baseline_fixed_outcome) = aggregate_objective_score_and_outcome(
+        &vlad_base,
+        &baseline_fixed_build,
+        &baseline_loadout.bonus_stats,
+        &enemy_build_scenarios,
+        &sim,
+        &urf,
+        &scenario_reference_outcomes,
+        objective_component_weights,
+        objective_worst_case_weight,
+    );
+    let vlad_best_score = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
+    let (_, vlad_best_outcome) = aggregate_objective_score_and_outcome(
+        &vlad_base,
+        &vlad_best_build,
+        &vlad_loadout.bonus_stats,
+        &enemy_build_scenarios,
+        &sim,
+        &urf,
+        &scenario_reference_outcomes,
+        objective_component_weights,
+        objective_worst_case_weight,
+    );
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
 
     println!("Enemy builds (URF preset defaults):");
@@ -5586,9 +5626,15 @@ fn run_vladimir_scenario(
             .collect::<Vec<_>>()
             .join(", ")
     );
-    println!("- Time alive: {:.2}s", baseline_fixed_time);
+    println!("- Objective score: {:.4}", baseline_fixed_score);
+    println!(
+        "- Time alive / damage dealt / healing done: {:.2}s / {:.1} / {:.1}",
+        baseline_fixed_outcome.time_alive_seconds,
+        baseline_fixed_outcome.damage_dealt,
+        baseline_fixed_outcome.healing_done
+    );
 
-    println!("\nVladimir best build (optimized for survival):");
+    println!("\nVladimir best build (optimized for objective):");
     println!(
         "- Search strategy: {}",
         search_strategy_summary(&search_cfg)
@@ -5598,30 +5644,26 @@ fn run_vladimir_scenario(
         loadout_candidates_count, loadout_finalists_count
     );
     println!(
-        "- Candidate evaluations (coarse/full/full-capped): {}/{}/{}",
-        coarse_eval_count.load(AtomicOrdering::Relaxed),
-        full_eval_count.load(AtomicOrdering::Relaxed),
-        full_capped_eval_count.load(AtomicOrdering::Relaxed)
+        "- Candidate evaluations (full): {}",
+        full_eval_count.load(AtomicOrdering::Relaxed)
     );
-    println!(
-        "- Cache hits (coarse/full): {}/{}",
-        coarse_cache.hits(),
-        full_cache.hits()
-    );
+    println!("- Cache hits (full): {}", full_cache.hits());
     println!(
         "- Persistent full cache hits/entries: {}/{}",
         persistent_full_cache.hits(),
         persistent_full_cache.len()
     );
-    println!(
-        "- Cache waits (coarse/full): {}/{}",
-        coarse_cache.waits(),
-        full_cache.waits()
-    );
+    println!("- Cache waits (full): {}", full_cache.waits());
     println!("- Ensemble seeds: {}", ensemble_seeds);
     println!(
         "- Enemy scenarios in objective: {}",
         enemy_build_scenarios.len()
+    );
+    println!(
+        "- Objective weights (survival/damage/healing): {:.2}/{:.2}/{:.2}",
+        objective_component_weights.survival,
+        objective_component_weights.damage,
+        objective_component_weights.healing
     );
     if let Some(budget) = time_budget {
         println!(
@@ -5633,7 +5675,10 @@ fn run_vladimir_scenario(
             total_candidates
         );
     }
-    println!("- Unique coarse candidates: {}", unique_coarse_keys.len());
+    println!(
+        "- Unique strict candidates: {}",
+        unique_candidate_keys.len()
+    );
     println!("- Bleed candidates injected: {}", bleed_candidate_count);
     println!(
         "- Adaptive candidates injected: {}",
@@ -5647,7 +5692,13 @@ fn run_vladimir_scenario(
             .collect::<Vec<_>>()
             .join(", ")
     );
-    println!("- Time alive: {:.2}s", vlad_best_time);
+    println!("- Objective score: {:.4}", vlad_best_score);
+    println!(
+        "- Time alive / damage dealt / healing done: {:.2}s / {:.1} / {:.1}",
+        vlad_best_outcome.time_alive_seconds,
+        vlad_best_outcome.damage_dealt,
+        vlad_best_outcome.healing_done
+    );
     if !vlad_loadout.selection_labels.is_empty() {
         println!("\nVladimir runes/masteries:");
         for s in &vlad_loadout.selection_labels {
@@ -5712,21 +5763,18 @@ fn run_vladimir_scenario(
             SearchQualityProfile::MaximumQuality => "maximum_quality".to_string(),
         },
         ensemble_seeds,
-        coarse_evaluations: coarse_eval_count.load(AtomicOrdering::Relaxed),
+        objective_survival_weight: objective_component_weights.survival,
+        objective_damage_weight: objective_component_weights.damage,
+        objective_healing_weight: objective_component_weights.healing,
         full_evaluations: full_eval_count.load(AtomicOrdering::Relaxed),
-        full_capped_evaluations: full_capped_eval_count.load(AtomicOrdering::Relaxed),
-        coarse_cache_hits: coarse_cache.hits(),
-        coarse_cache_misses: coarse_cache.misses(),
-        coarse_cache_waits: coarse_cache.waits(),
         full_cache_hits: full_cache.hits(),
         full_cache_misses: full_cache.misses(),
         full_cache_waits: full_cache.waits(),
         full_persistent_cache_hits: persistent_full_cache.hits(),
         full_persistent_cache_entries: persistent_full_cache.len(),
-        unique_candidate_builds: unique_coarse_keys.len(),
+        unique_candidate_builds: unique_candidate_keys.len(),
         bleed_candidates_injected: bleed_candidate_count,
         adaptive_candidates_injected: adaptive_candidate_count,
-        coarse_pool_limit: search_cfg.coarse_pool_limit,
         scenario_count: enemy_build_scenarios.len(),
         loadout_candidates: loadout_candidates_count,
         loadout_finalists: loadout_finalists_count,
@@ -5807,7 +5855,12 @@ fn run_vladimir_scenario(
         );
     } else {
         for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
-            println!("- #{:02} {:.2}s: {}", idx + 1, score, item_names(build));
+            println!(
+                "- #{:02} score {:.4}: {}",
+                idx + 1,
+                score,
+                item_names(build)
+            );
         }
     }
     if !build_order_results.is_empty() {
@@ -5845,9 +5898,11 @@ fn run_vladimir_scenario(
         &vlad_loadout,
         &enemy_loadout,
         &baseline_fixed_build,
-        baseline_fixed_time,
+        baseline_fixed_score,
+        &baseline_fixed_outcome,
         &vlad_best_build,
-        vlad_best_time,
+        vlad_best_score,
+        &vlad_best_outcome,
         &enemy_builds,
         &enemy_presets_used,
         &diverse_top_builds,
@@ -5864,9 +5919,11 @@ fn run_vladimir_scenario(
         scenario_path,
         &sim,
         &baseline_fixed_build,
-        baseline_fixed_time,
+        baseline_fixed_score,
+        &baseline_fixed_outcome,
         &vlad_best_build,
-        vlad_best_time,
+        vlad_best_score,
+        &vlad_best_outcome,
         &vlad_loadout,
         &enemy_builds,
         &enemy_presets_used,
@@ -5878,7 +5935,7 @@ fn run_vladimir_scenario(
     status.emit(
         "finalization",
         Some((processed_candidates, total_candidates)),
-        Some(vlad_best_time),
+        Some(vlad_best_score),
         Some("reports and persistent cache written"),
         true,
     );
@@ -6165,5 +6222,26 @@ mod tests {
             produced_mastery_page,
             "expected to produce at least one legal mastery page"
         );
+    }
+
+    #[test]
+    fn objective_weights_and_scoring_are_normalized() {
+        let w = normalized_objective_weights(0.55, 0.30, 0.15);
+        assert!((w.survival + w.damage + w.healing - 1.0).abs() < 1e-9);
+
+        let reference = CombatOutcome {
+            time_alive_seconds: 20.0,
+            damage_dealt: 8000.0,
+            healing_done: 2000.0,
+        };
+        let baseline_score = objective_score_from_outcome(reference, reference, w);
+        assert!((baseline_score - 1.0).abs() < 1e-9);
+
+        let better = CombatOutcome {
+            time_alive_seconds: 22.0,
+            damage_dealt: 8800.0,
+            healing_done: 2400.0,
+        };
+        assert!(objective_score_from_outcome(better, reference, w) > baseline_score);
     }
 }

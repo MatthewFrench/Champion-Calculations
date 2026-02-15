@@ -9,80 +9,73 @@
   ],
   "best_build": [
     "Guardian Angel",
-    "Heartsteel",
+    "Liandry's Torment",
+    "Morellonomicon",
     "Protoplasm Harness",
-    "Randuin's Omen",
-    "Warmog's Armor",
     "Zhonya's Hourglass"
   ],
   "build_orders": [
     {
-      "cumulative_score": 179.57888644457748,
+      "cumulative_score": 99.41169466266902,
       "levels": [
         5,
-        8,
-        11,
-        14,
-        17,
+        9,
+        13,
+        16,
         20
       ],
       "ordered_items": [
         "Guardian Angel",
-        "Heartsteel",
         "Zhonya's Hourglass",
-        "Randuin's Omen",
-        "Warmog's Armor",
-        "Protoplasm Harness"
+        "Protoplasm Harness",
+        "Morellonomicon",
+        "Liandry's Torment"
       ],
       "stage_survival_seconds": [
         9.835467964287496,
-        13.79282562692893,
-        20.509538986582612,
-        28.048634743222177,
-        34.0,
-        73.39241912355627
+        15.680684248039912,
+        20.34072457147906,
+        26.0,
+        27.554817878862558
       ]
     }
   ],
   "champion_level": 20,
   "diagnostics": {
-    "adaptive_candidates_injected": 60,
-    "bleed_candidates_injected": 134,
-    "coarse_cache_hits": 21163,
-    "coarse_cache_misses": 17329,
-    "coarse_cache_waits": 0,
-    "coarse_evaluations": 17329,
-    "elapsed_seconds": 2.011760834,
+    "adaptive_candidates_injected": 0,
+    "bleed_candidates_injected": 0,
+    "elapsed_seconds": 1.003499667,
     "ensemble_seeds": 1,
     "full_cache_hits": 0,
-    "full_cache_misses": 29,
+    "full_cache_misses": 18,
     "full_cache_waits": 0,
-    "full_capped_evaluations": 0,
-    "full_evaluations": 29,
-    "full_persistent_cache_entries": 101,
-    "full_persistent_cache_hits": 71,
+    "full_evaluations": 18,
+    "full_persistent_cache_entries": 36,
+    "full_persistent_cache_hits": 17,
     "loadout_candidates": 192,
     "loadout_finalists": 1,
-    "processed_candidates": 144,
+    "objective_damage_weight": 0.3,
+    "objective_healing_weight": 0.15,
+    "objective_survival_weight": 0.55,
+    "processed_candidates": 0,
     "scenario_count": 1,
     "search_quality_profile": "fast",
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "time_budget_seconds": 2.0,
+    "time_budget_seconds": 1.0,
     "timed_out": true,
-    "total_candidates": 332,
-    "unique_candidate_builds": 332
+    "total_candidates": 1,
+    "unique_candidate_builds": 1
   },
   "diverse_top_builds": [
     {
       "items": [
         "Guardian Angel",
-        "Heartsteel",
+        "Liandry's Torment",
+        "Morellonomicon",
         "Protoplasm Harness",
-        "Randuin's Omen",
-        "Warmog's Armor",
         "Zhonya's Hourglass"
       ],
-      "score_seconds": 180.0
+      "objective_score": 1.0
     }
   ],
   "enemy_presets": [
@@ -268,9 +261,19 @@
     }
   ],
   "headline": {
-    "baseline_time_alive_seconds": 27.71461980889513,
-    "best_time_alive_seconds": 180.0,
-    "improvement_percent": 549.4767066666677
+    "baseline_objective_score": 1.0,
+    "baseline_outcome": {
+      "damage_dealt": 16392.455172413793,
+      "healing_done": 4684.041724137942,
+      "time_alive_seconds": 27.554817878862558
+    },
+    "best_objective_score": 1.0,
+    "best_outcome": {
+      "damage_dealt": 16392.455172413793,
+      "healing_done": 4684.041724137942,
+      "time_alive_seconds": 27.554817878862558
+    },
+    "improvement_percent": 0.0
   },
   "scenario_path": "scenario_vlad_urf.json",
   "vladimir_loadout_labels": [

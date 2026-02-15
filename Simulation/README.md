@@ -1,6 +1,6 @@
 # URF Vladimir Survival Simulator
 
-This simulator focuses on Vladimir's pool uptime and survival time against 5 enemies in URF. It is deterministic and now runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, ability damage ticks, and crowd control.
+This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is deterministic and now runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, ability damage ticks, and crowd control.
 
 ## What It Models
 - Vladimir only casts W (Sanguine Pool) on cooldown.
@@ -11,16 +11,18 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item mechanics can be extended in compiled Rust code paths.
 - Build candidate scoring is parallelized across CPU cores (Rayon).
-- Search now supports two-stage scoring:
-  - coarse proxy filter for broad exploration
-  - full event simulation for finalist ranking
+- Search uses strict full-simulation scoring for every generated candidate build.
 - Full simulation scoring is memoized by canonical build key.
 - Full simulation scores are persisted across runs under `Simulation/output/cache/`.
 - In-flight dedupe cache avoids duplicate parallel re-simulation of the same canonical build.
 - Ensemble seed runs are supported for confidence/robustness labeling.
 - Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
 - Adaptive strategy allocation adds extra candidates from strategies that contribute more unique elites.
-- Full ranking now uses capped prechecks to prune clearly non-competitive candidates before exact simulation.
+- Build scoring uses a composite objective over:
+  - time alive
+  - damage dealt to enemies
+  - healing done
+  with configurable weights and per-scenario baseline normalization.
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
@@ -72,7 +74,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - After top builds are selected, simulator also optimizes full-item build order:
   - Uses beam plus optimistic bound pruning over order states (no partial/intermediate items).
   - Uses stage levels evenly spaced from 5 to 20 across item slots.
-  - Scores each order by cumulative survival across stages.
+  - Scores each order by cumulative stage survival across stages.
 
 ## Taric (Max Attack Speed)
 ```bash
@@ -128,7 +130,8 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - `simulated_annealing_restarts`, `simulated_annealing_iterations`, `simulated_annealing_initial_temp`, `simulated_annealing_cooling_rate`
   - `mcts_iterations`, `mcts_rollouts_per_expansion`, `mcts_exploration`
   - `ensemble_seeds`, `ensemble_seed_stride`, `ensemble_seed_top_k`
-  - `coarse_pool_limit`, `robust_min_seed_hit_rate`
+  - `objective_survival_weight`, `objective_damage_weight`, `objective_healing_weight`
+  - `robust_min_seed_hit_rate`
   - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
   - `multi_scenario_worst_weight` (aggregation between weighted-mean and worst-case when using multiple enemy scenarios)
   - `ranked_limit`
@@ -151,10 +154,11 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
   - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per enemy use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
 - Report now includes:
-  - Search diagnostics (coarse/full eval counts, candidate pool, seed variance)
+  - Headline objective score and component outcomes (time alive, damage dealt, healing done)
+  - Search diagnostics (full eval counts, candidate pool, seed variance, objective weights)
   - Robust vs fragile build confidence based on ensemble seed hit rate
-  - Pareto-front tagging over survival/EHP/AP/cost-timing metrics
-  - Cache hit/miss/wait diagnostics and capped precheck counts
+  - Pareto-front tagging over objective/EHP/AP/cost-timing metrics
+  - Cache hit/miss/wait diagnostics
 - Build-order optimization is focused on robust/Pareto builds first, with fallback to top builds if needed.
 - Vladimir loadout (runes/masteries/shards) can be co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
 
