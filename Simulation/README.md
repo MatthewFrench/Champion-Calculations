@@ -12,7 +12,7 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 - Optional Python scripts can register hooks for champion/item logic that is not generically modeled.
 
 ## Files
-- `scenario_vlad_urf.json`: Scenario, base stats, enemy list, tick rate, and build search settings.
+- `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
 - `urf_sim.py`: Simulator and optimizer.
 
 ## Run
@@ -66,6 +66,12 @@ def register(sim):
   - `on_cast_zhonya`
   - `on_trigger_protoplasm`
   - `on_ga_revive`
+
+## Minimal Scenario Shape
+- Use champion references instead of hardcoding base stats:
+  - `vladimir_champion`: champion name from `Characters/`.
+  - `enemies[].champion`: champion name from `Characters/`.
+- Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence, script overrides).
 
 ## Notes
 - The base stats for champions are placeholders; adjust them in `scenario_vlad_urf.json` as needed.

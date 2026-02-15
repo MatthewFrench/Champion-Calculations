@@ -18,7 +18,7 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 **Data Notes**
 - Items are local JSON files with stats, passives, actives, and parsed effects.
 - URF mode data includes global buffs (haste, health cost multiplier, attack speed modifiers) and notes about patch variability.
-- Champion data exists and is structured for simulation, but it is not fully wired into the current simulator path yet.
+- Champion base stats and attack type are loaded from `Characters` by champion reference in scenario files; scenarios should only contain scenario-specific behavior knobs.
 
 **Simulator**
 - Entry point: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/urf_sim.py`

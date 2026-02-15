@@ -1,6 +1,5 @@
 {
   "simulation": {
-    "dt": 0.05,
     "server_tick_rate_hz": 30.0,
     "max_time_seconds": 180.0,
     "vlad_pool_rank": 5,
@@ -20,16 +19,7 @@
     "protoplasm_heal_total": 300.0,
     "protoplasm_duration_seconds": 5.0
   },
-  "vladimir_base": {
-    "name": "Vladimir",
-    "base_health": 650.0,
-    "base_armor": 30.0,
-    "base_magic_resist": 30.0,
-    "base_attack_damage": 60.0,
-    "base_attack_speed": 0.66,
-    "base_move_speed": 335.0,
-    "is_melee": false
-  },
+  "vladimir_champion": "Vladimir",
   "vladimir_baseline_fixed": [
     "Liandry's Torment",
     "Boots of Swiftness",
@@ -40,17 +30,7 @@
   ],
   "enemies": [
     {
-      "name": "Warwick",
-      "base": {
-        "name": "Warwick",
-        "base_health": 720.0,
-        "base_armor": 33.0,
-        "base_magic_resist": 32.0,
-        "base_attack_damage": 65.0,
-        "base_attack_speed": 0.68,
-        "base_move_speed": 335.0,
-        "is_melee": true
-      },
+      "champion": "Warwick",
       "ability_dps_flat": 30.0,
       "ability_dps_ad_ratio": 0.1,
       "ability_tick_interval_seconds": 0.5,
@@ -58,33 +38,13 @@
       "stun_duration_seconds": 0.75
     },
     {
-      "name": "Vayne",
-      "base": {
-        "name": "Vayne",
-        "base_health": 630.0,
-        "base_armor": 24.0,
-        "base_magic_resist": 30.0,
-        "base_attack_damage": 60.0,
-        "base_attack_speed": 0.68,
-        "base_move_speed": 330.0,
-        "is_melee": false
-      },
+      "champion": "Vayne",
       "ability_dps_flat": 20.0,
       "ability_dps_ad_ratio": 0.12,
       "ability_tick_interval_seconds": 0.5
     },
     {
-      "name": "Morgana",
-      "base": {
-        "name": "Morgana",
-        "base_health": 650.0,
-        "base_armor": 25.0,
-        "base_magic_resist": 30.0,
-        "base_attack_damage": 56.0,
-        "base_attack_speed": 0.62,
-        "base_move_speed": 335.0,
-        "is_melee": false
-      },
+      "champion": "Morgana",
       "ability_dps_flat": 45.0,
       "ability_dps_ap_ratio": 0.15,
       "ability_tick_interval_seconds": 0.5,
@@ -92,33 +52,13 @@
       "stun_duration_seconds": 1.5
     },
     {
-      "name": "Sona",
-      "base": {
-        "name": "Sona",
-        "base_health": 600.0,
-        "base_armor": 28.0,
-        "base_magic_resist": 30.0,
-        "base_attack_damage": 49.0,
-        "base_attack_speed": 0.64,
-        "base_move_speed": 325.0,
-        "is_melee": false
-      },
+      "champion": "Sona",
       "ability_dps_flat": 25.0,
       "ability_dps_ap_ratio": 0.12,
       "ability_tick_interval_seconds": 0.5
     },
     {
-      "name": "DrMundo",
-      "base": {
-        "name": "DrMundo",
-        "base_health": 710.0,
-        "base_armor": 32.0,
-        "base_magic_resist": 32.0,
-        "base_attack_damage": 64.0,
-        "base_attack_speed": 0.67,
-        "base_move_speed": 345.0,
-        "is_melee": true
-      },
+      "champion": "Dr. Mundo",
       "ability_dps_flat": 25.0,
       "ability_dps_ad_ratio": 0.08,
       "ability_tick_interval_seconds": 0.5,

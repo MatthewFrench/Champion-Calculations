@@ -11,6 +11,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 
 ITEMS_DIR = os.path.join(os.path.dirname(__file__), "..", "Items")
 GAME_MODE_DIR = os.path.join(os.path.dirname(__file__), "..", "Game Mode")
+CHARACTERS_DIR = os.path.join(os.path.dirname(__file__), "..", "Characters")
 
 STAT_KEY_MAP = {
     "abilityPower": "ability_power",
@@ -185,6 +186,62 @@ def load_items() -> Dict[str, Item]:
         )
         items[item.name] = item
     return items
+
+
+def normalize_name(value: str) -> str:
+    return "".join(ch.lower() for ch in value if ch.isalnum())
+
+
+def champion_base_from_character_data(character: Dict[str, Any], fallback_name: str) -> ChampionBase:
+    base_stats = character.get("base_stats") or {}
+    attack_speed = ((base_stats.get("attack_speed") or {}).get("base"))
+    armor = ((base_stats.get("armor") or {}).get("base"))
+    magic_resist = ((base_stats.get("magic_resist") or {}).get("base"))
+    attack_damage = ((base_stats.get("attack_damage") or {}).get("base"))
+    health = ((base_stats.get("health") or {}).get("base"))
+    move_speed = base_stats.get("move_speed")
+    if any(value is None for value in [attack_speed, armor, magic_resist, attack_damage, health, move_speed]):
+        raise ValueError(f"Character data missing required base_stats for {fallback_name}")
+    attack_type = str((character.get("basic_attack") or {}).get("attack_type", "")).lower()
+    is_melee = attack_type == "melee"
+    champion_name = character.get("name") or fallback_name
+    return ChampionBase(
+        name=champion_name,
+        base_health=float(health),
+        base_armor=float(armor),
+        base_magic_resist=float(magic_resist),
+        base_attack_damage=float(attack_damage),
+        base_attack_speed=float(attack_speed),
+        base_move_speed=float(move_speed),
+        is_melee=is_melee,
+    )
+
+
+def load_champion_bases() -> Dict[str, ChampionBase]:
+    bases: Dict[str, ChampionBase] = {}
+    for filename in os.listdir(CHARACTERS_DIR):
+        if not filename.endswith(".json"):
+            continue
+        path = os.path.join(CHARACTERS_DIR, filename)
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        stem = os.path.splitext(filename)[0]
+        base = champion_base_from_character_data(data, fallback_name=stem)
+        keys = {
+            normalize_name(stem),
+            normalize_name(base.name),
+        }
+        for key in keys:
+            bases[key] = base
+    return bases
+
+
+def lookup_champion_base(champion_bases: Dict[str, ChampionBase], champion_name: str) -> ChampionBase:
+    key = normalize_name(champion_name)
+    base = champion_bases.get(key)
+    if not base:
+        raise ValueError(f"Champion not found in Characters data: {champion_name}")
+    return base
 
 
 def is_boots(item: Item) -> bool:
@@ -652,10 +709,16 @@ def parse_champion_base(data: Dict) -> ChampionBase:
     )
 
 
-def parse_enemy_config(data: Dict) -> EnemyConfig:
-    base = parse_champion_base(data["base"])
+def parse_enemy_config(data: Dict, champion_bases: Dict[str, ChampionBase]) -> EnemyConfig:
+    champion_name = data.get("champion")
+    if champion_name:
+        base = lookup_champion_base(champion_bases, champion_name)
+    elif "base" in data:
+        base = parse_champion_base(data["base"])
+    else:
+        raise ValueError("Enemy config must include 'champion' or legacy 'base'")
     return EnemyConfig(
-        name=data["name"],
+        name=data.get("name", base.name),
         base=base,
         ability_dps_flat=float(data.get("ability_dps_flat", 0.0)),
         ability_dps_ad_ratio=float(data.get("ability_dps_ad_ratio", 0.0)),
@@ -704,12 +767,16 @@ def default_item_pool(items: Dict[str, Item]) -> List[Item]:
 def run_vlad_scenario(scenario_path: str) -> None:
     items = load_items()
     urf = load_urf_buffs()
+    champion_bases = load_champion_bases()
     scenario = load_scenario(scenario_path)
     scenario_dir = os.path.dirname(os.path.abspath(scenario_path))
 
     sim = parse_simulation_config(scenario["simulation"])
-    vlad_base = parse_champion_base(scenario["vladimir_base"])
-    enemy_configs = [parse_enemy_config(e) for e in scenario["enemies"]]
+    if "vladimir_champion" in scenario:
+        vlad_base = lookup_champion_base(champion_bases, scenario["vladimir_champion"])
+    else:
+        vlad_base = parse_champion_base(scenario["vladimir_base"])
+    enemy_configs = [parse_enemy_config(e, champion_bases) for e in scenario["enemies"]]
 
     search_cfg = parse_build_search(scenario["search"])
     max_items = search_cfg.max_items
@@ -753,12 +820,16 @@ def run_vlad_scenario(scenario_path: str) -> None:
 def run_vlad_stepper(scenario_path: str, ticks: int) -> None:
     items = load_items()
     urf = load_urf_buffs()
+    champion_bases = load_champion_bases()
     scenario = load_scenario(scenario_path)
     scenario_dir = os.path.dirname(os.path.abspath(scenario_path))
 
     sim_cfg = parse_simulation_config(scenario["simulation"])
-    vlad_base = parse_champion_base(scenario["vladimir_base"])
-    enemy_configs = [parse_enemy_config(e) for e in scenario["enemies"]]
+    if "vladimir_champion" in scenario:
+        vlad_base = lookup_champion_base(champion_bases, scenario["vladimir_champion"])
+    else:
+        vlad_base = parse_champion_base(scenario["vladimir_base"])
+    enemy_configs = [parse_enemy_config(e, champion_bases) for e in scenario["enemies"]]
 
     search_cfg = parse_build_search(scenario["search"])
     item_pool = default_item_pool(items)
