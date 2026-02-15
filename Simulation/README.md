@@ -24,6 +24,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode vlad
 ```
+- `vlad` mode now also writes a markdown report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vlad_run_report.md`.
 
 ## Threading
 - The Rust optimizer uses all available CPU cores by default.
@@ -33,6 +34,13 @@ RAYON_NUM_THREADS=8 cargo run --release --manifest-path "/Users/matthewfrench/Do
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode vlad
 ```
+
+## Diverse Top Builds
+- `vlad` mode can output top diverse builds near the best score:
+  - `--top-x` number of diverse builds to keep (default `8`)
+  - `--min-item-diff` minimum symmetric item difference between selected builds (default `2`)
+  - `--max-relative-gap-percent` max score drop from best to still be considered (default `5.0`)
+  - `--report-path` optional custom report output path
 
 ## Taric (Max Attack Speed)
 ```bash

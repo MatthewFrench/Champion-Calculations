@@ -6,6 +6,7 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 
@@ -568,6 +569,14 @@ struct Cli {
     mode: Mode,
     #[arg(long, default_value_t = 30)]
     ticks: usize,
+    #[arg(long, default_value_t = 8)]
+    top_x: usize,
+    #[arg(long, default_value_t = 2)]
+    min_item_diff: usize,
+    #[arg(long, default_value_t = 5.0)]
+    max_relative_gap_percent: f64,
+    #[arg(long)]
+    report_path: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -1057,6 +1066,249 @@ fn canonical_key(build: &[usize]) -> Vec<usize> {
     key
 }
 
+fn score_candidates<F>(
+    candidates: Vec<Vec<usize>>,
+    score_fn: &F,
+) -> Vec<(Vec<usize>, Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let unique_keys: HashSet<Vec<usize>> = candidates.iter().map(|c| canonical_key(c)).collect();
+    let mut key_list = unique_keys.into_iter().collect::<Vec<_>>();
+    key_list.sort_unstable();
+
+    let score_pairs = key_list
+        .par_iter()
+        .map(|key| (key.clone(), score_fn(key)))
+        .collect::<Vec<_>>();
+    let score_map = score_pairs
+        .into_iter()
+        .collect::<HashMap<Vec<usize>, f64>>();
+
+    let mut scored = candidates
+        .into_iter()
+        .map(|candidate| {
+            let key = canonical_key(&candidate);
+            let score = score_map.get(&key).copied().unwrap_or(f64::NEG_INFINITY);
+            (candidate, key, score)
+        })
+        .collect::<Vec<_>>();
+
+    scored.sort_by(|a, b| {
+        b.2.partial_cmp(&a.2)
+            .unwrap_or(Ordering::Equal)
+            .then_with(|| a.1.cmp(&b.1))
+            .then_with(|| a.0.cmp(&b.0))
+    });
+    scored
+}
+
+fn beam_search_ranked<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    beam_width: usize,
+    score_fn: F,
+) -> Vec<(Vec<usize>, f64)>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    let mut candidates: Vec<Vec<usize>> = vec![vec![]];
+    let mut final_scored: Vec<(Vec<usize>, Vec<usize>, f64)> = vec![];
+
+    for _ in 0..max_items {
+        let mut next_candidates = Vec::new();
+        for build in &candidates {
+            let has_boots = build.iter().any(|&i| is_boots(&item_pool[i]));
+            let used = build.iter().copied().collect::<HashSet<_>>();
+            for item_idx in 0..item_pool.len() {
+                if used.contains(&item_idx) {
+                    continue;
+                }
+                if is_boots(&item_pool[item_idx]) && has_boots {
+                    continue;
+                }
+                let mut next = build.clone();
+                next.push(item_idx);
+                next_candidates.push(next);
+            }
+        }
+
+        let scored = score_candidates(next_candidates, &score_fn);
+        candidates = scored
+            .iter()
+            .take(beam_width)
+            .map(|(candidate, _, _)| candidate.clone())
+            .collect();
+        final_scored = scored;
+    }
+
+    let mut ranked = Vec::new();
+    let mut seen = HashSet::new();
+    for (_, key, score) in final_scored {
+        if seen.insert(key.clone()) {
+            ranked.push((key, score));
+        }
+    }
+    ranked
+}
+
+fn symmetric_diff_count(a: &[usize], b: &[usize]) -> usize {
+    let sa = a.iter().copied().collect::<HashSet<_>>();
+    let sb = b.iter().copied().collect::<HashSet<_>>();
+    sa.symmetric_difference(&sb).count()
+}
+
+fn select_diverse_top_builds(
+    ranked: &[(Vec<usize>, f64)],
+    top_x: usize,
+    min_item_diff: usize,
+    max_relative_gap_percent: f64,
+) -> Vec<(Vec<usize>, f64)> {
+    if ranked.is_empty() || top_x == 0 {
+        return vec![];
+    }
+
+    let best_score = ranked[0].1;
+    let min_allowed = best_score * (1.0 - (max_relative_gap_percent / 100.0));
+
+    let mut selected: Vec<(Vec<usize>, f64)> = Vec::new();
+    for (build, score) in ranked {
+        if *score < min_allowed {
+            continue;
+        }
+        if selected
+            .iter()
+            .all(|(chosen, _)| symmetric_diff_count(chosen, build) >= min_item_diff)
+        {
+            selected.push((build.clone(), *score));
+            if selected.len() >= top_x {
+                break;
+            }
+        }
+    }
+    selected
+}
+
+fn item_names(items: &[Item]) -> String {
+    items
+        .iter()
+        .map(|i| i.name.clone())
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+fn default_report_path() -> PathBuf {
+    simulation_dir().join("output").join("vlad_run_report.md")
+}
+
+fn write_vlad_report(
+    report_path: &Path,
+    scenario_path: &Path,
+    baseline_build: &[Item],
+    baseline_time: f64,
+    best_build: &[Item],
+    best_time: f64,
+    enemy_builds: &[(EnemyConfig, Vec<Item>)],
+    diverse_top_builds: &[(Vec<Item>, f64)],
+) -> Result<()> {
+    if let Some(parent) = report_path.parent() {
+        fs::create_dir_all(parent)
+            .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
+    }
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+    let improvement = if baseline_time > 0.0 {
+        ((best_time - baseline_time) / baseline_time) * 100.0
+    } else {
+        0.0
+    };
+
+    let mut content = String::new();
+    content.push_str("# Vladimir URF Run Report\n\n");
+    content.push_str(&format!("- Generated (unix): `{}`\n", now));
+    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
+
+    content.push_str("## Headline\n");
+    content.push_str(&format!(
+        "- Baseline time alive: **{:.2}s**\n- Best time alive: **{:.2}s**\n- Improvement: **{:+.2}%**\n\n",
+        baseline_time, best_time, improvement
+    ));
+
+    content.push_str("## Baseline Build\n");
+    content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
+
+    content.push_str("## Best Build\n");
+    content.push_str(&format!("- {}\n\n", item_names(best_build)));
+
+    content.push_str("## Enemy Builds (DPS-Optimized)\n");
+    for (enemy, build) in enemy_builds {
+        content.push_str(&format!("- {}: {}\n", enemy.name, item_names(build)));
+    }
+    content.push('\n');
+
+    content.push_str("## Diverse Top Builds\n");
+    if diverse_top_builds.is_empty() {
+        content.push_str("- No diverse builds found under current thresholds.\n\n");
+    } else {
+        let best = diverse_top_builds[0].1;
+        for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
+            let delta = score - best;
+            content.push_str(&format!(
+                "{}. `{:.2}s` ({:+.2}s vs top): {}\n",
+                idx + 1,
+                score,
+                delta,
+                item_names(build)
+            ));
+        }
+        content.push('\n');
+    }
+
+    content.push_str("## Deeper Insights\n");
+    if !diverse_top_builds.is_empty() {
+        let mut item_counts: HashMap<String, usize> = HashMap::new();
+        for (build, _) in diverse_top_builds {
+            for item in build {
+                *item_counts.entry(item.name.clone()).or_insert(0) += 1;
+            }
+        }
+        let mut counts = item_counts.into_iter().collect::<Vec<_>>();
+        counts.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
+        let core_items = counts
+            .iter()
+            .filter(|(_, c)| *c == diverse_top_builds.len())
+            .map(|(n, _)| n.clone())
+            .collect::<Vec<_>>();
+        let top_freq = counts
+            .iter()
+            .take(8)
+            .map(|(n, c)| format!("{} ({}/{})", n, c, diverse_top_builds.len()))
+            .collect::<Vec<_>>();
+
+        if core_items.is_empty() {
+            content.push_str("- No single item appears in every selected diverse top build.\n");
+        } else {
+            content.push_str(&format!(
+                "- Common core across all selected top builds: {}.\n",
+                core_items.join(", ")
+            ));
+        }
+        content.push_str(&format!(
+            "- Most frequent items in selected top set: {}.\n",
+            top_freq.join(", ")
+        ));
+        content.push_str("- Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.\n");
+    } else {
+        content.push_str("- Broaden thresholds (`--max-relative-gap-percent`) or lower diversity constraint (`--min-item-diff`) to surface more alternatives.\n");
+    }
+
+    fs::write(report_path, content)
+        .with_context(|| format!("Failed writing report {}", report_path.display()))?;
+    Ok(())
+}
+
 fn choose_best_build_by_stat(
     item_pool: &[Item],
     stat_key: &str,
@@ -1132,63 +1384,11 @@ where
             }
             build
         }
-        "beam" => {
-            let mut candidates: Vec<Vec<usize>> = vec![vec![]];
-            for _ in 0..max_items {
-                let mut next_candidates = Vec::new();
-                for build in &candidates {
-                    let has_boots = build.iter().any(|&i| is_boots(&item_pool[i]));
-                    let used = build.iter().copied().collect::<HashSet<_>>();
-                    for item_idx in 0..item_pool.len() {
-                        if used.contains(&item_idx) {
-                            continue;
-                        }
-                        if is_boots(&item_pool[item_idx]) && has_boots {
-                            continue;
-                        }
-                        let mut next = build.clone();
-                        next.push(item_idx);
-                        next_candidates.push(next);
-                    }
-                }
-
-                let unique_keys: HashSet<Vec<usize>> =
-                    next_candidates.iter().map(|c| canonical_key(c)).collect();
-                let mut key_list = unique_keys.into_iter().collect::<Vec<_>>();
-                key_list.sort_unstable();
-
-                let score_pairs = key_list
-                    .par_iter()
-                    .map(|key| (key.clone(), score_fn(key)))
-                    .collect::<Vec<_>>();
-                let score_map = score_pairs
-                    .into_iter()
-                    .collect::<HashMap<Vec<usize>, f64>>();
-
-                let mut scored = next_candidates
-                    .into_iter()
-                    .map(|candidate| {
-                        let key = canonical_key(&candidate);
-                        let score = score_map.get(&key).copied().unwrap_or(f64::NEG_INFINITY);
-                        (candidate, key, score)
-                    })
-                    .collect::<Vec<_>>();
-
-                scored.sort_by(|a, b| {
-                    b.2.partial_cmp(&a.2)
-                        .unwrap_or(Ordering::Equal)
-                        .then_with(|| a.1.cmp(&b.1))
-                        .then_with(|| a.0.cmp(&b.0))
-                });
-
-                candidates = scored
-                    .into_iter()
-                    .take(search.beam_width)
-                    .map(|(candidate, _, _)| candidate)
-                    .collect();
-            }
-            candidates.into_iter().next().unwrap_or_default()
-        }
+        "beam" => beam_search_ranked(item_pool, max_items, search.beam_width, score_fn)
+            .into_iter()
+            .next()
+            .map(|(build, _)| build)
+            .unwrap_or_default(),
         "random" => {
             // Lightweight deterministic PRNG to avoid extra crate dependency.
             let mut seed = search.seed;
@@ -1250,7 +1450,13 @@ fn default_item_pool(items: &HashMap<String, Item>) -> Vec<Item> {
     pool
 }
 
-fn run_vlad_scenario(scenario_path: &Path) -> Result<()> {
+fn run_vlad_scenario(
+    scenario_path: &Path,
+    top_x: usize,
+    min_item_diff: usize,
+    max_relative_gap_percent: f64,
+    report_path_override: Option<&str>,
+) -> Result<()> {
     let items = load_items()?;
     let urf = load_urf_buffs()?;
     let champion_bases = load_champion_bases()?;
@@ -1319,11 +1525,24 @@ fn run_vlad_scenario(scenario_path: &Path) -> Result<()> {
         })
         .collect();
 
-    let vlad_best_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
-        let build_items = build_from_indices(&item_pool, build_idx);
-        simulate_vlad_survival(&vlad_base, &build_items, &enemy_builds, &sim, &urf)
-    });
-
+    let vlad_ranked = if search_cfg.strategy == "beam" {
+        beam_search_ranked(&item_pool, max_items, search_cfg.beam_width, |build_idx| {
+            let build_items = build_from_indices(&item_pool, build_idx);
+            simulate_vlad_survival(&vlad_base, &build_items, &enemy_builds, &sim, &urf)
+        })
+    } else {
+        let best = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
+            let build_items = build_from_indices(&item_pool, build_idx);
+            simulate_vlad_survival(&vlad_base, &build_items, &enemy_builds, &sim, &urf)
+        });
+        let best_items = build_from_indices(&item_pool, &best);
+        let best_score = simulate_vlad_survival(&vlad_base, &best_items, &enemy_builds, &sim, &urf);
+        vec![(canonical_key(&best), best_score)]
+    };
+    let vlad_best_indices = vlad_ranked
+        .first()
+        .map(|(build, _)| build.clone())
+        .unwrap_or_default();
     let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
 
     let baseline_fixed_time =
@@ -1365,6 +1584,39 @@ fn run_vlad_scenario(scenario_path: &Path) -> Result<()> {
             .join(", ")
     );
     println!("- Time alive: {:.2}s", vlad_best_time);
+
+    let diverse_top_raw =
+        select_diverse_top_builds(&vlad_ranked, top_x, min_item_diff, max_relative_gap_percent);
+    let diverse_top_builds = diverse_top_raw
+        .iter()
+        .map(|(indices, score)| (build_from_indices(&item_pool, indices), *score))
+        .collect::<Vec<_>>();
+
+    println!("\nTop diverse builds:");
+    if diverse_top_builds.is_empty() {
+        println!(
+            "- None found (try increasing --max-relative-gap-percent or lowering --min-item-diff)."
+        );
+    } else {
+        for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
+            println!("- #{:02} {:.2}s: {}", idx + 1, score, item_names(build));
+        }
+    }
+
+    let report_path = report_path_override
+        .map(PathBuf::from)
+        .unwrap_or_else(default_report_path);
+    write_vlad_report(
+        &report_path,
+        scenario_path,
+        &baseline_fixed_build,
+        baseline_fixed_time,
+        &vlad_best_build,
+        vlad_best_time,
+        &enemy_builds,
+        &diverse_top_builds,
+    )?;
+    println!("\nReport written: {}", report_path.display());
 
     Ok(())
 }
@@ -1505,7 +1757,13 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
     let scenario_path = PathBuf::from(cli.scenario);
     match cli.mode {
-        Mode::Vlad => run_vlad_scenario(&scenario_path),
+        Mode::Vlad => run_vlad_scenario(
+            &scenario_path,
+            cli.top_x,
+            cli.min_item_diff,
+            cli.max_relative_gap_percent,
+            cli.report_path.as_deref(),
+        ),
         Mode::VladStep => run_vlad_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
