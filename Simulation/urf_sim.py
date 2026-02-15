@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import argparse
+import importlib.util
+import heapq
 import json
 import math
 import os
 import random
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 ITEMS_DIR = os.path.join(os.path.dirname(__file__), "..", "Items")
 GAME_MODE_DIR = os.path.join(os.path.dirname(__file__), "..", "Game Mode")
@@ -73,13 +75,16 @@ class EnemyConfig:
     ability_dps_flat: float = 0.0
     ability_dps_ad_ratio: float = 0.0
     ability_dps_ap_ratio: float = 0.0
+    ability_tick_interval_seconds: float = 1.0
     stun_interval_seconds: float = 0.0
     stun_duration_seconds: float = 0.0
+    scripts: List[str] = field(default_factory=list)
 
 
 @dataclass
 class SimulationConfig:
     dt: float
+    server_tick_rate_hz: float
     max_time_seconds: float
     vlad_pool_rank: int
     vlad_pool_untargetable_seconds: float
@@ -97,6 +102,7 @@ class SimulationConfig:
     protoplasm_bonus_health: float
     protoplasm_heal_total: float
     protoplasm_duration_seconds: float
+    scripts: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -228,135 +234,287 @@ def compute_enemy_dps(enemy: EnemyConfig, item_stats: Stats, urf: UrfBuffs) -> T
     return physical_dps, magic_dps
 
 
+class VladCombatSimulation:
+    def __init__(
+        self,
+        vlad_base: ChampionBase,
+        vlad_build_items: List[Item],
+        enemies: List[Tuple[EnemyConfig, List[Item]]],
+        sim: SimulationConfig,
+        urf: UrfBuffs,
+        script_base_dir: Optional[str] = None,
+    ) -> None:
+        self.vlad_base = vlad_base
+        self.vlad_build_items = vlad_build_items
+        self.enemies = enemies
+        self.sim = sim
+        self.urf = urf
+        self.script_base_dir = script_base_dir or os.path.dirname(__file__)
+
+        self.tick_seconds = 1.0 / sim.server_tick_rate_hz if sim.server_tick_rate_hz > 0 else sim.dt
+        self.time = 0.0
+        self.finished = False
+        self.death_time: Optional[float] = None
+
+        self.hooks: Dict[str, List[Callable[["VladCombatSimulation", Dict[str, Any]], None]]] = {}
+        self._event_queue: List[Tuple[float, int, int, Dict[str, Any]]] = []
+        self._event_counter = 0
+
+        vlad_item_stats = Stats()
+        for item in vlad_build_items:
+            vlad_item_stats.add(item.stats)
+        self.vlad_item_stats = vlad_item_stats
+        self.vlad_stats = compute_vlad_stats(vlad_base, vlad_item_stats)
+        self.max_health = self.vlad_stats.health
+        self.health = self.max_health
+
+        self.armor = self.vlad_stats.armor
+        self.magic_resist = self.vlad_stats.magic_resist
+        self.physical_multiplier = 100.0 / (100.0 + max(0.0, self.armor))
+        self.magic_multiplier = 100.0 / (100.0 + max(0.0, self.magic_resist))
+
+        self.ability_haste = vlad_item_stats.ability_haste + urf.ability_haste
+        pool_base_cooldown = [28, 25, 22, 19, 16][sim.vlad_pool_rank - 1]
+        self.pool_cooldown = cooldown_after_haste(pool_base_cooldown, self.ability_haste)
+        self.pool_duration = sim.vlad_pool_untargetable_seconds
+
+        self.zhonya_available = any(item.name == "Zhonya's Hourglass" for item in vlad_build_items)
+        self.ga_available = any(item.name == "Guardian Angel" for item in vlad_build_items)
+        self.protoplasm_available = any(item.name == "Protoplasm Harness" for item in vlad_build_items)
+
+        self.ga_cooldown = cooldown_after_haste(sim.ga_cooldown_seconds, urf.item_haste)
+        self.zhonya_cooldown = cooldown_after_haste(sim.zhonya_cooldown_seconds, urf.item_haste)
+        self.protoplasm_cooldown = 120.0
+
+        self.zhonya_cd = 0.0
+        self.ga_cd = 0.0
+        self.pool_cd = 0.0
+        self.protoplasm_cd = 0.0
+
+        self.pool_until = 0.0
+        self.stasis_until = 0.0
+        self.ga_res_until = 0.0
+        self.stunned_until = 0.0
+
+        self.protoplasm_shield = 0.0
+        self.pool_heal_rate = 0.0
+        self.pool_heal_until = 0.0
+        self.protoplasm_hot_rate = 0.0
+        self.protoplasm_hot_until = 0.0
+
+        self.enemy_state: List[Dict[str, Any]] = []
+        for enemy, build in enemies:
+            enemy_stats = Stats()
+            for item in build:
+                enemy_stats.add(item.stats)
+            physical_dps, magic_dps = compute_enemy_dps(enemy, enemy_stats, urf)
+            attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage
+            attack_speed_bonus = enemy_stats.attack_speed_percent / 100.0
+            attack_speed = enemy.base.base_attack_speed * (1.0 + attack_speed_bonus)
+            attack_speed *= urf.bonus_attack_speed_multiplier_melee if enemy.base.is_melee else urf.bonus_attack_speed_multiplier_ranged
+            attack_interval = 1.0 / max(0.001, attack_speed)
+            ability_interval = max(0.05, enemy.ability_tick_interval_seconds)
+            ability_damage = magic_dps * ability_interval
+
+            state = {
+                "enemy": enemy,
+                "physical_hit_damage": attack_damage,
+                "attack_interval": attack_interval,
+                "ability_hit_damage": ability_damage,
+                "ability_interval": ability_interval,
+            }
+            self.enemy_state.append(state)
+            self.schedule_event(attack_interval, 30, "enemy_attack", {"enemy_idx": len(self.enemy_state) - 1}, recurring=attack_interval)
+            if ability_damage > 0:
+                self.schedule_event(ability_interval, 40, "enemy_ability", {"enemy_idx": len(self.enemy_state) - 1}, recurring=ability_interval)
+            if enemy.stun_interval_seconds > 0:
+                self.schedule_event(enemy.stun_interval_seconds, 20, "enemy_stun", {"enemy_idx": len(self.enemy_state) - 1}, recurring=enemy.stun_interval_seconds)
+
+        self.load_scripts(sim.scripts)
+        for enemy in self.enemy_state:
+            self.load_scripts(enemy["enemy"].scripts)
+        self.run_hooks("on_init", {"time": self.time})
+
+    def register_hook(self, hook_name: str, fn: Callable[["VladCombatSimulation", Dict[str, Any]], None]) -> None:
+        self.hooks.setdefault(hook_name, []).append(fn)
+
+    def run_hooks(self, hook_name: str, payload: Dict[str, Any]) -> None:
+        for fn in self.hooks.get(hook_name, []):
+            fn(self, payload)
+
+    def load_scripts(self, scripts: List[str]) -> None:
+        for idx, script_path in enumerate(scripts):
+            resolved_path = script_path
+            if not os.path.isabs(resolved_path):
+                resolved_path = os.path.join(self.script_base_dir, resolved_path)
+            spec = importlib.util.spec_from_file_location(f"sim_script_{idx}_{abs(hash(resolved_path))}", resolved_path)
+            if spec is None or spec.loader is None:
+                raise ValueError(f"Could not load script: {resolved_path}")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            register = getattr(module, "register", None)
+            if not callable(register):
+                raise ValueError(f"Script missing register(sim): {resolved_path}")
+            register(self)
+
+    def schedule_event(
+        self,
+        delay_seconds: float,
+        priority: int,
+        event_type: str,
+        payload: Dict[str, Any],
+        recurring: Optional[float] = None,
+    ) -> None:
+        event_time = self.time + max(0.0, delay_seconds)
+        self._event_counter += 1
+        event = {"type": event_type, "payload": payload, "recurring": recurring}
+        heapq.heappush(self._event_queue, (event_time, priority, self._event_counter, event))
+
+    def is_targetable(self) -> bool:
+        return self.time >= self.pool_until and self.time >= self.stasis_until and self.time >= self.ga_res_until
+
+    def can_cast(self) -> bool:
+        return self.is_targetable() and self.time >= self.stunned_until
+
+    def apply_hot_effects(self, to_time: float) -> None:
+        if to_time <= self.time:
+            return
+        delta = to_time - self.time
+        if self.pool_heal_until > self.time:
+            active = min(delta, self.pool_heal_until - self.time)
+            self.health = min(self.max_health, self.health + self.pool_heal_rate * active)
+        if self.protoplasm_hot_until > self.time:
+            active = min(delta, self.protoplasm_hot_until - self.time)
+            self.health = min(self.max_health, self.health + self.protoplasm_hot_rate * active)
+        self.time = to_time
+
+    def apply_damage(self, physical: float = 0.0, magic: float = 0.0, true: float = 0.0) -> None:
+        if self.finished or self.health <= 0:
+            return
+        if not self.is_targetable():
+            return
+        damage = physical * self.physical_multiplier + magic * self.magic_multiplier + true
+        if self.protoplasm_shield > 0 and damage > 0:
+            absorbed = min(self.protoplasm_shield, damage)
+            self.protoplasm_shield -= absorbed
+            damage -= absorbed
+        self.health -= damage
+        self.run_hooks("on_damage", {"time": self.time, "damage": damage, "health_after": self.health})
+        if self.health <= 0:
+            self.handle_death()
+
+    def handle_death(self) -> None:
+        if self.ga_available and self.time >= self.ga_cd:
+            self.ga_cd = self.time + self.ga_cooldown
+            self.ga_res_until = self.time + self.sim.ga_revive_duration_seconds
+            self.health = max(1.0, self.vlad_base.base_health * self.sim.ga_revive_base_health_ratio)
+            self.run_hooks("on_ga_revive", {"time": self.time, "health_after": self.health})
+            return
+        self.finished = True
+        self.death_time = self.time
+
+    def maybe_cast_vlad_defensives(self) -> None:
+        if self.finished:
+            return
+        if self.time >= self.pool_cd and self.can_cast():
+            self.pool_cd = self.time + self.pool_cooldown
+            self.pool_until = self.time + self.pool_duration
+            cost = self.health * self.sim.vlad_pool_cost_percent_current_health * self.urf.health_cost_multiplier
+            self.health -= cost
+            pool_damage = self.sim.vlad_pool_base_damage_by_rank[self.sim.vlad_pool_rank - 1]
+            pool_damage += self.sim.vlad_pool_bonus_health_ratio * (self.vlad_stats.health - self.vlad_base.base_health)
+            total_pool_damage = pool_damage * len(self.enemies)
+            pool_heal = total_pool_damage * self.sim.vlad_pool_heal_ratio_of_damage
+            self.pool_heal_rate = pool_heal / self.pool_duration if self.pool_duration > 0 else 0.0
+            self.pool_heal_until = self.time + self.pool_duration
+            self.run_hooks("on_cast_pool", {"time": self.time, "health_after_cost": self.health})
+            if self.health <= 0:
+                self.handle_death()
+                return
+
+        if (
+            self.zhonya_available
+            and self.time >= self.zhonya_cd
+            and self.health <= self.max_health * self.sim.zhonya_trigger_health_percent
+            and self.time >= self.pool_until
+            and self.time >= self.ga_res_until
+        ):
+            self.zhonya_cd = self.time + self.zhonya_cooldown
+            self.stasis_until = self.time + self.sim.zhonya_duration_seconds
+            self.run_hooks("on_cast_zhonya", {"time": self.time, "stasis_until": self.stasis_until})
+
+        if self.protoplasm_available and self.time >= self.protoplasm_cd and self.health <= self.max_health * self.sim.protoplasm_trigger_health_percent:
+            self.protoplasm_cd = self.time + self.protoplasm_cooldown
+            self.protoplasm_shield += self.sim.protoplasm_bonus_health
+            self.protoplasm_hot_rate = self.sim.protoplasm_heal_total / max(0.001, self.sim.protoplasm_duration_seconds)
+            self.protoplasm_hot_until = self.time + self.sim.protoplasm_duration_seconds
+            self.run_hooks("on_trigger_protoplasm", {"time": self.time, "shield": self.protoplasm_shield})
+
+    def process_event(self, event: Dict[str, Any]) -> None:
+        event_type = event["type"]
+        payload = event["payload"]
+        self.run_hooks("on_event_pre", {"time": self.time, "event_type": event_type, "payload": payload})
+        if event_type == "enemy_attack":
+            state = self.enemy_state[payload["enemy_idx"]]
+            self.apply_damage(physical=state["physical_hit_damage"])
+        elif event_type == "enemy_ability":
+            state = self.enemy_state[payload["enemy_idx"]]
+            self.apply_damage(magic=state["ability_hit_damage"])
+        elif event_type == "enemy_stun":
+            enemy = self.enemy_state[payload["enemy_idx"]]["enemy"]
+            if self.is_targetable():
+                self.stunned_until = max(self.stunned_until, self.time + enemy.stun_duration_seconds)
+        self.run_hooks("on_event_post", {"time": self.time, "event_type": event_type, "payload": payload})
+
+    def step(self, ticks: int = 1) -> bool:
+        for _ in range(max(1, ticks)):
+            if self.finished or self.time >= self.sim.max_time_seconds:
+                self.finished = True
+                return False
+
+            target_time = min(self.sim.max_time_seconds, self.time + self.tick_seconds)
+            self.run_hooks("on_pre_tick", {"time": self.time, "target_time": target_time})
+            self.maybe_cast_vlad_defensives()
+
+            while self._event_queue and self._event_queue[0][0] <= target_time and not self.finished:
+                event_time, priority, _, event = heapq.heappop(self._event_queue)
+                self.apply_hot_effects(event_time)
+                self.process_event(event)
+                recurring = event.get("recurring")
+                if recurring and recurring > 0 and not self.finished:
+                    self._event_counter += 1
+                    next_event = {"type": event["type"], "payload": dict(event["payload"]), "recurring": recurring}
+                    heapq.heappush(self._event_queue, (event_time + recurring, priority, self._event_counter, next_event))
+                self.maybe_cast_vlad_defensives()
+
+            self.apply_hot_effects(target_time)
+            self.maybe_cast_vlad_defensives()
+            self.run_hooks("on_post_tick", {"time": self.time, "health": self.health})
+
+            if self.health <= 0 and not self.finished:
+                self.handle_death()
+            if self.finished:
+                return False
+        return True
+
+    def run_until_end(self) -> float:
+        while self.step(1):
+            pass
+        if self.death_time is not None:
+            return self.death_time
+        return min(self.time, self.sim.max_time_seconds)
+
+
 def simulate_vlad_survival(
     vlad_base: ChampionBase,
     vlad_build_items: List[Item],
     enemies: List[Tuple[EnemyConfig, List[Item]]],
     sim: SimulationConfig,
     urf: UrfBuffs,
+    script_base_dir: Optional[str] = None,
 ) -> float:
-    vlad_item_stats = Stats()
-    for item in vlad_build_items:
-        vlad_item_stats.add(item.stats)
-
-    vlad_stats = compute_vlad_stats(vlad_base, vlad_item_stats)
-    max_health = vlad_stats.health
-    armor = vlad_stats.armor
-    magic_resist = vlad_stats.magic_resist
-
-    ability_haste = vlad_item_stats.ability_haste + urf.ability_haste
-    pool_base_cooldown = [28, 25, 22, 19, 16][sim.vlad_pool_rank - 1]
-    pool_cooldown = cooldown_after_haste(pool_base_cooldown, ability_haste)
-    pool_duration = sim.vlad_pool_untargetable_seconds
-
-    zhonya_available = any(item.name == "Zhonya's Hourglass" for item in vlad_build_items)
-    ga_available = any(item.name == "Guardian Angel" for item in vlad_build_items)
-    protoplasm_available = any(item.name == "Protoplasm Harness" for item in vlad_build_items)
-
-    zhonya_cd = 0.0
-    ga_cd = 0.0
-    pool_cd = 0.0
-
-    protoplasm_cd = 0.0
-    protoplasm_shield = 0.0
-    protoplasm_hot_remaining = 0.0
-
-    stunned_until = 0.0
-    pool_until = 0.0
-    stasis_until = 0.0
-    ga_res_until = 0.0
-
-    time = 0.0
-    health = max_health
-
-    enemy_state = []
-    for enemy, build in enemies:
-        enemy_stats = Stats()
-        for item in build:
-            enemy_stats.add(item.stats)
-        physical_dps, magic_dps = compute_enemy_dps(enemy, enemy_stats, urf)
-        enemy_state.append({
-            "enemy": enemy,
-            "physical_dps": physical_dps,
-            "magic_dps": magic_dps,
-            "next_stun": enemy.stun_interval_seconds if enemy.stun_interval_seconds > 0 else None,
-        })
-
-    def total_dps():
-        physical = sum(e["physical_dps"] for e in enemy_state)
-        magic = sum(e["magic_dps"] for e in enemy_state)
-        return physical, magic
-
-    pool_heal_per_second = 0.0
-    pool_heal_remaining = 0.0
-
-    physical_dps, magic_dps = total_dps()
-    physical_multiplier = 100.0 / (100.0 + max(0.0, armor))
-    magic_multiplier = 100.0 / (100.0 + max(0.0, magic_resist))
-
-    ga_cooldown = cooldown_after_haste(sim.ga_cooldown_seconds, urf.item_haste)
-    zhonya_cooldown = cooldown_after_haste(sim.zhonya_cooldown_seconds, urf.item_haste)
-
-    while time < sim.max_time_seconds:
-        targetable = time >= pool_until and time >= stasis_until and time >= ga_res_until
-        stunned = time < stunned_until
-
-        if time >= pool_cd and not stunned and time >= pool_until and time >= stasis_until and time >= ga_res_until:
-            pool_cd = time + pool_cooldown
-            pool_until = time + pool_duration
-            cost = health * sim.vlad_pool_cost_percent_current_health * urf.health_cost_multiplier
-            health -= cost
-            pool_damage = sim.vlad_pool_base_damage_by_rank[sim.vlad_pool_rank - 1] + sim.vlad_pool_bonus_health_ratio * (vlad_stats.health - vlad_base.base_health)
-            total_pool_damage = pool_damage * len(enemies)
-            pool_heal = total_pool_damage * sim.vlad_pool_heal_ratio_of_damage
-            pool_heal_per_second = pool_heal / pool_duration if pool_duration > 0 else 0.0
-            pool_heal_remaining = pool_duration
-
-        if zhonya_available and time >= zhonya_cd and health <= max_health * sim.zhonya_trigger_health_percent and time >= pool_until and time >= ga_res_until:
-            zhonya_cd = time + zhonya_cooldown
-            stasis_until = time + sim.zhonya_duration_seconds
-
-        if protoplasm_available and time >= protoplasm_cd and health <= max_health * sim.protoplasm_trigger_health_percent:
-            protoplasm_cd = time + 120.0
-            protoplasm_shield += sim.protoplasm_bonus_health
-            protoplasm_hot_remaining = sim.protoplasm_duration_seconds
-
-        for state in enemy_state:
-            next_stun = state["next_stun"]
-            enemy = state["enemy"]
-            if next_stun is not None and time >= next_stun:
-                stunned_until = max(stunned_until, time + enemy.stun_duration_seconds)
-                state["next_stun"] = time + enemy.stun_interval_seconds
-
-        if targetable and health > 0:
-            damage = (physical_dps * physical_multiplier + magic_dps * magic_multiplier) * sim.dt
-            if protoplasm_shield > 0:
-                absorbed = min(protoplasm_shield, damage)
-                protoplasm_shield -= absorbed
-                damage -= absorbed
-            health -= damage
-
-        if pool_heal_remaining > 0:
-            heal = pool_heal_per_second * sim.dt
-            health = min(max_health, health + heal)
-            pool_heal_remaining = max(0.0, pool_heal_remaining - sim.dt)
-
-        if protoplasm_hot_remaining > 0:
-            heal = (sim.protoplasm_heal_total / sim.protoplasm_duration_seconds) * sim.dt
-            health = min(max_health, health + heal)
-            protoplasm_hot_remaining = max(0.0, protoplasm_hot_remaining - sim.dt)
-
-        if health <= 0:
-            if ga_available and time >= ga_cd:
-                ga_cd = time + ga_cooldown
-                ga_res_until = time + sim.ga_revive_duration_seconds
-                health = max(1.0, vlad_base.base_health * sim.ga_revive_base_health_ratio)
-            else:
-                return time
-
-        time += sim.dt
-
-    return sim.max_time_seconds
+    runner = VladCombatSimulation(vlad_base, vlad_build_items, enemies, sim, urf, script_base_dir=script_base_dir)
+    return runner.run_until_end()
 
 
 def build_item_stats(items: List[Item]) -> Stats:
@@ -455,8 +613,11 @@ def build_search(
 
 
 def parse_simulation_config(data: Dict) -> SimulationConfig:
+    server_tick_rate_hz = float(data.get("server_tick_rate_hz", 30.0))
+    dt = float(data.get("dt", 1.0 / server_tick_rate_hz if server_tick_rate_hz > 0 else 0.05))
     return SimulationConfig(
-        dt=float(data["dt"]),
+        dt=dt,
+        server_tick_rate_hz=server_tick_rate_hz,
         max_time_seconds=float(data["max_time_seconds"]),
         vlad_pool_rank=int(data["vlad_pool_rank"]),
         vlad_pool_untargetable_seconds=float(data["vlad_pool_untargetable_seconds"]),
@@ -474,6 +635,7 @@ def parse_simulation_config(data: Dict) -> SimulationConfig:
         protoplasm_bonus_health=float(data["protoplasm_bonus_health"]),
         protoplasm_heal_total=float(data["protoplasm_heal_total"]),
         protoplasm_duration_seconds=float(data["protoplasm_duration_seconds"]),
+        scripts=list(data.get("scripts", [])),
     )
 
 
@@ -498,8 +660,10 @@ def parse_enemy_config(data: Dict) -> EnemyConfig:
         ability_dps_flat=float(data.get("ability_dps_flat", 0.0)),
         ability_dps_ad_ratio=float(data.get("ability_dps_ad_ratio", 0.0)),
         ability_dps_ap_ratio=float(data.get("ability_dps_ap_ratio", 0.0)),
+        ability_tick_interval_seconds=float(data.get("ability_tick_interval_seconds", 1.0)),
         stun_interval_seconds=float(data.get("stun_interval_seconds", 0.0)),
         stun_duration_seconds=float(data.get("stun_duration_seconds", 0.0)),
+        scripts=list(data.get("scripts", [])),
     )
 
 
@@ -541,6 +705,7 @@ def run_vlad_scenario(scenario_path: str) -> None:
     items = load_items()
     urf = load_urf_buffs()
     scenario = load_scenario(scenario_path)
+    scenario_dir = os.path.dirname(os.path.abspath(scenario_path))
 
     sim = parse_simulation_config(scenario["simulation"])
     vlad_base = parse_champion_base(scenario["vladimir_base"])
@@ -565,12 +730,12 @@ def run_vlad_scenario(scenario_path: str) -> None:
         enemy_builds.append((enemy, build))
 
     def vlad_score(build_items: List[Item]) -> float:
-        return simulate_vlad_survival(vlad_base, build_items, enemy_builds, sim, urf)
+        return simulate_vlad_survival(vlad_base, build_items, enemy_builds, sim, urf, script_base_dir=scenario_dir)
 
     vlad_best_build = build_search(item_pool, max_items, search_cfg, vlad_score)
 
-    baseline_fixed_time = simulate_vlad_survival(vlad_base, baseline_fixed_build, enemy_builds, sim, urf)
-    vlad_best_time = simulate_vlad_survival(vlad_base, vlad_best_build, enemy_builds, sim, urf)
+    baseline_fixed_time = simulate_vlad_survival(vlad_base, baseline_fixed_build, enemy_builds, sim, urf, script_base_dir=scenario_dir)
+    vlad_best_time = simulate_vlad_survival(vlad_base, vlad_best_build, enemy_builds, sim, urf, script_base_dir=scenario_dir)
 
     print("Enemy builds (optimized for DPS):")
     for enemy, build in enemy_builds:
@@ -583,6 +748,44 @@ def run_vlad_scenario(scenario_path: str) -> None:
     print("\nVladimir best build (optimized for survival):")
     print(f"- Items: {', '.join(i.name for i in vlad_best_build)}")
     print(f"- Time alive: {vlad_best_time:.2f}s")
+
+
+def run_vlad_stepper(scenario_path: str, ticks: int) -> None:
+    items = load_items()
+    urf = load_urf_buffs()
+    scenario = load_scenario(scenario_path)
+    scenario_dir = os.path.dirname(os.path.abspath(scenario_path))
+
+    sim_cfg = parse_simulation_config(scenario["simulation"])
+    vlad_base = parse_champion_base(scenario["vladimir_base"])
+    enemy_configs = [parse_enemy_config(e) for e in scenario["enemies"]]
+
+    search_cfg = parse_build_search(scenario["search"])
+    item_pool = default_item_pool(items)
+
+    enemy_builds = []
+    for enemy in enemy_configs:
+        def enemy_score(build_items: List[Item]) -> float:
+            stats = build_item_stats(build_items)
+            physical_dps, magic_dps = compute_enemy_dps(enemy, stats, urf)
+            return physical_dps + magic_dps
+
+        build = build_search(item_pool, search_cfg.max_items, search_cfg, enemy_score)
+        enemy_builds.append((enemy, build))
+
+    baseline_fixed_build = item_pool_from_names(items, scenario["vladimir_baseline_fixed"])
+    sim = VladCombatSimulation(vlad_base, baseline_fixed_build, enemy_builds, sim_cfg, urf, script_base_dir=scenario_dir)
+
+    print(f"Server tick rate: {sim_cfg.server_tick_rate_hz:.2f} Hz ({sim.tick_seconds:.5f}s/tick)")
+    for tick in range(max(1, ticks)):
+        alive = sim.step(1)
+        status = "alive" if alive else "finished"
+        print(
+            f"tick={tick + 1} time={sim.time:.3f}s health={sim.health:.2f} "
+            f"targetable={sim.is_targetable()} can_cast={sim.can_cast()} status={status}"
+        )
+        if not alive:
+            break
 
 
 def run_stat_optimization(stat_key: str, scenario_path: str, label: str) -> None:
@@ -603,11 +806,14 @@ def run_stat_optimization(stat_key: str, scenario_path: str, label: str) -> None
 def main() -> None:
     parser = argparse.ArgumentParser(description="URF Vladimir survival simulator")
     parser.add_argument("--scenario", required=True, help="Path to scenario JSON")
-    parser.add_argument("--mode", choices=["vlad", "taric_as", "hecarim_ms"], default="vlad")
+    parser.add_argument("--mode", choices=["vlad", "vlad_step", "taric_as", "hecarim_ms"], default="vlad")
+    parser.add_argument("--ticks", type=int, default=30, help="Ticks to run in vlad_step mode")
     args = parser.parse_args()
 
     if args.mode == "vlad":
         run_vlad_scenario(args.scenario)
+    elif args.mode == "vlad_step":
+        run_vlad_stepper(args.scenario, args.ticks)
     elif args.mode == "taric_as":
         run_stat_optimization("attack_speed_percent", args.scenario, "attack speed")
     elif args.mode == "hecarim_ms":

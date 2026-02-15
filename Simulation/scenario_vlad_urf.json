@@ -1,6 +1,7 @@
 {
   "simulation": {
     "dt": 0.05,
+    "server_tick_rate_hz": 30.0,
     "max_time_seconds": 180.0,
     "vlad_pool_rank": 5,
     "vlad_pool_untargetable_seconds": 2.0,
@@ -52,6 +53,7 @@
       },
       "ability_dps_flat": 30.0,
       "ability_dps_ad_ratio": 0.1,
+      "ability_tick_interval_seconds": 0.5,
       "stun_interval_seconds": 9.0,
       "stun_duration_seconds": 0.75
     },
@@ -68,7 +70,8 @@
         "is_melee": false
       },
       "ability_dps_flat": 20.0,
-      "ability_dps_ad_ratio": 0.12
+      "ability_dps_ad_ratio": 0.12,
+      "ability_tick_interval_seconds": 0.5
     },
     {
       "name": "Morgana",
@@ -84,6 +87,7 @@
       },
       "ability_dps_flat": 45.0,
       "ability_dps_ap_ratio": 0.15,
+      "ability_tick_interval_seconds": 0.5,
       "stun_interval_seconds": 11.0,
       "stun_duration_seconds": 1.5
     },
@@ -100,7 +104,8 @@
         "is_melee": false
       },
       "ability_dps_flat": 25.0,
-      "ability_dps_ap_ratio": 0.12
+      "ability_dps_ap_ratio": 0.12,
+      "ability_tick_interval_seconds": 0.5
     },
     {
       "name": "DrMundo",
@@ -116,6 +121,7 @@
       },
       "ability_dps_flat": 25.0,
       "ability_dps_ad_ratio": 0.08,
+      "ability_tick_interval_seconds": 0.5,
       "stun_interval_seconds": 12.0,
       "stun_duration_seconds": 0.5
     }
