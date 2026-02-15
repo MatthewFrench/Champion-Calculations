@@ -18,6 +18,8 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 - In-flight dedupe cache avoids duplicate parallel re-simulation of the same canonical build.
 - Ensemble seed runs are supported for confidence/robustness labeling.
 - Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
+- Adaptive strategy allocation adds extra candidates from strategies that contribute more unique elites.
+- Full ranking now uses capped prechecks to prune clearly non-competitive candidates before exact simulation.
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
@@ -115,6 +117,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - `ensemble_seeds`, `ensemble_seed_stride`, `ensemble_seed_top_k`
   - `coarse_pool_limit`, `robust_min_seed_hit_rate`
   - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
+  - `multi_scenario_worst_weight` (aggregation between weighted-mean and worst-case when using multiple enemy scenarios)
   - `ranked_limit`
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - Heartsteel assumptions:
@@ -130,6 +133,14 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Search diagnostics (coarse/full eval counts, candidate pool, seed variance)
   - Robust vs fragile build confidence based on ensemble seed hit rate
   - Pareto-front tagging over survival/EHP/AP/cost-timing metrics
+  - Cache hit/miss/wait diagnostics and capped precheck counts
+- Build-order optimization is focused on robust/Pareto builds first, with fallback to top builds if needed.
+
+## Multi-Scenario Objective
+- Optional `enemy_scenarios` array is supported:
+  - each entry can include `name`, `weight`, and `enemies` (same schema as top-level `enemies`)
+- If `enemy_scenarios` is omitted, simulator uses top-level `enemies` as a single scenario.
+- Objective score is aggregated across scenarios with worst-case blending via `search.multi_scenario_worst_weight`.
 
 ## Runes/Masteries
 - Optional scenario loadout blocks:

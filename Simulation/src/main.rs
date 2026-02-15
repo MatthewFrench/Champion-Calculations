@@ -4,8 +4,10 @@ use rayon::ThreadPoolBuilder;
 use rayon::prelude::*;
 use serde_json::Value;
 use std::cmp::Ordering;
+use std::collections::hash_map::DefaultHasher;
 use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::fs;
+use std::hash::{Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::sync::{Arc, Condvar, Mutex};
@@ -178,6 +180,7 @@ struct BuildSearchConfig {
     bleed_enabled: bool,
     bleed_budget: usize,
     bleed_mutation_rate: f64,
+    multi_scenario_worst_weight: f64,
     seed: u64,
 }
 
@@ -188,6 +191,16 @@ struct BuildMetrics {
     ap: f64,
     cost_timing: f64,
     total_cost: f64,
+}
+
+#[derive(Debug, Clone, Default)]
+struct CoarseItemFeature {
+    stats: Stats,
+    total_cost: f64,
+    has_zhonya: bool,
+    has_ga: bool,
+    has_protoplasm: bool,
+    has_heartsteel: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -204,6 +217,7 @@ struct SearchDiagnostics {
     ensemble_seeds: usize,
     coarse_evaluations: usize,
     full_evaluations: usize,
+    full_capped_evaluations: usize,
     coarse_cache_hits: usize,
     coarse_cache_misses: usize,
     coarse_cache_waits: usize,
@@ -212,7 +226,9 @@ struct SearchDiagnostics {
     full_cache_waits: usize,
     unique_candidate_builds: usize,
     bleed_candidates_injected: usize,
+    adaptive_candidates_injected: usize,
     coarse_pool_limit: usize,
+    scenario_count: usize,
     seed_best_scores: Vec<f64>,
 }
 
@@ -224,30 +240,53 @@ enum CacheState {
 
 #[derive(Debug)]
 struct BlockingScoreCache {
-    states: Mutex<HashMap<Vec<usize>, CacheState>>,
-    cv: Condvar,
+    shards: Vec<CacheShard>,
     hits: AtomicUsize,
     misses: AtomicUsize,
     waits: AtomicUsize,
 }
 
+#[derive(Debug)]
+struct CacheShard {
+    states: Mutex<HashMap<Vec<usize>, CacheState>>,
+    cv: Condvar,
+}
+
 impl BlockingScoreCache {
     fn new() -> Self {
+        let shard_count = std::thread::available_parallelism()
+            .map(|n| n.get())
+            .unwrap_or(8)
+            .next_power_of_two()
+            .max(8);
+        let shards = (0..shard_count)
+            .map(|_| CacheShard {
+                states: Mutex::new(HashMap::new()),
+                cv: Condvar::new(),
+            })
+            .collect::<Vec<_>>();
         Self {
-            states: Mutex::new(HashMap::new()),
-            cv: Condvar::new(),
+            shards,
             hits: AtomicUsize::new(0),
             misses: AtomicUsize::new(0),
             waits: AtomicUsize::new(0),
         }
     }
 
+    fn shard_idx(&self, key: &[usize]) -> usize {
+        let mut hasher = DefaultHasher::new();
+        key.hash(&mut hasher);
+        (hasher.finish() as usize) & (self.shards.len() - 1)
+    }
+
     fn get_or_compute<F>(&self, key: Vec<usize>, compute: F) -> f64
     where
         F: FnOnce() -> f64,
     {
+        let shard_idx = self.shard_idx(&key);
+        let shard = &self.shards[shard_idx];
         loop {
-            let mut guard = self.states.lock().expect("cache mutex poisoned");
+            let mut guard = shard.states.lock().expect("cache mutex poisoned");
             match guard.get(&key) {
                 Some(CacheState::Ready(v)) => {
                     self.hits.fetch_add(1, AtomicOrdering::Relaxed);
@@ -255,7 +294,7 @@ impl BlockingScoreCache {
                 }
                 Some(CacheState::InFlight) => {
                     self.waits.fetch_add(1, AtomicOrdering::Relaxed);
-                    guard = self.cv.wait(guard).expect("cache condvar wait poisoned");
+                    guard = shard.cv.wait(guard).expect("cache condvar wait poisoned");
                     drop(guard);
                     continue;
                 }
@@ -264,9 +303,9 @@ impl BlockingScoreCache {
                     guard.insert(key.clone(), CacheState::InFlight);
                     drop(guard);
                     let value = compute();
-                    let mut done = self.states.lock().expect("cache mutex poisoned");
+                    let mut done = shard.states.lock().expect("cache mutex poisoned");
                     done.insert(key.clone(), CacheState::Ready(value));
-                    self.cv.notify_all();
+                    shard.cv.notify_all();
                     return value;
                 }
             }
@@ -825,6 +864,17 @@ impl VladCombatSimulation {
         while self.step(1) {}
         self.death_time
             .unwrap_or(self.time.min(self.sim.max_time_seconds))
+    }
+
+    fn run_until_cap(&mut self, cap_time: f64) -> f64 {
+        let cap = cap_time.min(self.sim.max_time_seconds).max(0.0);
+        while self.time < cap && self.step(1) {}
+        if self.death_time.is_some() {
+            self.death_time
+                .unwrap_or(self.time.min(self.sim.max_time_seconds))
+        } else {
+            self.time.min(cap)
+        }
     }
 }
 
@@ -1529,6 +1579,10 @@ fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("bleed_mutation_rate")
             .and_then(Value::as_f64)
             .unwrap_or(0.35),
+        multi_scenario_worst_weight: data
+            .get("multi_scenario_worst_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.35),
         seed: data.get("seed").and_then(Value::as_u64).unwrap_or(1337),
     })
 }
@@ -2095,6 +2149,28 @@ fn simulate_vlad_survival(
         urf.clone(),
     );
     runner.run_until_end()
+}
+
+fn simulate_vlad_survival_capped(
+    vlad_base: &ChampionBase,
+    vlad_build_items: &[Item],
+    vlad_bonus_stats: &Stats,
+    vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
+    enemies: &[(EnemyConfig, Vec<Item>, Stats)],
+    sim: &SimulationConfig,
+    urf: &UrfBuffs,
+    cap_seconds: f64,
+) -> f64 {
+    let mut runner = VladCombatSimulation::new(
+        vlad_base.clone(),
+        vlad_build_items,
+        vlad_bonus_stats,
+        vlad_item_acquired_levels,
+        enemies,
+        sim.clone(),
+        urf.clone(),
+    );
+    runner.run_until_cap(cap_seconds)
 }
 
 fn build_item_stats(items: &[Item]) -> Stats {
@@ -2964,8 +3040,9 @@ fn write_vlad_report(
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
+        "- Strategy: `{}`\n- Enemy scenarios: `{}`\n- Ensemble seeds: `{}`\n- Coarse evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full capped prechecks: `{}`\n- Unique candidate builds: `{}` (coarse pool limit `{}`)\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
         diagnostics.strategy_summary,
+        diagnostics.scenario_count,
         diagnostics.ensemble_seeds,
         diagnostics.coarse_evaluations,
         diagnostics.coarse_cache_hits,
@@ -2975,9 +3052,11 @@ fn write_vlad_report(
         diagnostics.full_cache_hits,
         diagnostics.full_cache_misses,
         diagnostics.full_cache_waits,
+        diagnostics.full_capped_evaluations,
         diagnostics.unique_candidate_builds,
         diagnostics.coarse_pool_limit,
         diagnostics.bleed_candidates_injected,
+        diagnostics.adaptive_candidates_injected,
         seed_mean,
         seed_std
     ));
@@ -3499,6 +3578,70 @@ fn generate_bleed_candidates(
     out
 }
 
+fn adaptive_strategy_candidates<F>(
+    item_pool: &[Item],
+    max_items: usize,
+    search: &BuildSearchConfig,
+    strategy_elites: &HashMap<String, Vec<Vec<usize>>>,
+    score_fn: &F,
+) -> Vec<Vec<usize>>
+where
+    F: Fn(&[usize]) -> f64 + Sync,
+{
+    if strategy_elites.is_empty() {
+        return Vec::new();
+    }
+    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    let contributions = strategies
+        .iter()
+        .map(|s| {
+            let c = strategy_elites
+                .get(s)
+                .map(|v| v.len().max(1) as f64)
+                .unwrap_or(1.0);
+            (s.clone(), c)
+        })
+        .collect::<Vec<_>>();
+    let total_contrib = contributions.iter().map(|(_, c)| *c).sum::<f64>().max(1.0);
+    let extra_runs_total = (search.ensemble_seeds.max(1) * strategies.len()).max(8);
+    let per_strategy = contributions
+        .into_iter()
+        .map(|(s, c)| {
+            let share = c / total_contrib;
+            let runs = ((extra_runs_total as f64) * share).round() as usize;
+            (s, runs.max(1))
+        })
+        .collect::<Vec<_>>();
+
+    let gathered = per_strategy
+        .par_iter()
+        .enumerate()
+        .map(|(sidx, (strategy, runs))| {
+            let mut local = Vec::new();
+            for ridx in 0..*runs {
+                let mut cfg = search.clone();
+                cfg.strategy = strategy.clone();
+                cfg.seed = search.seed.wrapping_add(
+                    ((sidx as u64 + 1) * 131 + ridx as u64 + 1) * search.ensemble_seed_stride,
+                );
+                cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
+                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn);
+                for (k, _) in ranked.into_iter().take(search.ensemble_seed_top_k.max(1)) {
+                    local.push(k);
+                }
+            }
+            local
+        })
+        .collect::<Vec<_>>();
+
+    gathered
+        .into_iter()
+        .flatten()
+        .collect::<HashSet<_>>()
+        .into_iter()
+        .collect::<Vec<_>>()
+}
+
 fn effective_hp_mixed(health: f64, armor: f64, magic_resist: f64) -> f64 {
     let phys_mult = 1.0 + armor.max(0.0) / 100.0;
     let magic_mult = 1.0 + magic_resist.max(0.0) / 100.0;
@@ -3520,32 +3663,61 @@ fn build_cost_timing_score(build: &[Item]) -> f64 {
     -weighted - 0.1 * total
 }
 
+fn precompute_coarse_features(item_pool: &[Item]) -> Vec<CoarseItemFeature> {
+    item_pool
+        .iter()
+        .map(|item| CoarseItemFeature {
+            stats: item.stats.clone(),
+            total_cost: item.total_cost,
+            has_zhonya: item.name == "Zhonya's Hourglass",
+            has_ga: item.name == "Guardian Angel",
+            has_protoplasm: item.name == "Protoplasm Harness",
+            has_heartsteel: item.name == "Heartsteel",
+        })
+        .collect()
+}
+
 fn coarse_proxy_survival_score(
     vlad_base: &ChampionBase,
-    build_items: &[Item],
+    build_idx: &[usize],
+    features: &[CoarseItemFeature],
     vlad_bonus_stats: &Stats,
     sim: &SimulationConfig,
 ) -> f64 {
-    let item_stats = compute_effective_item_stats_for_build(
-        vlad_base,
-        build_items,
-        vlad_bonus_stats,
-        sim,
-        sim.champion_level,
-        None,
-    );
+    let mut item_stats = Stats::default();
+    let mut total_cost = 0.0;
+    let mut has_zhonya = false;
+    let mut has_ga = false;
+    let mut has_protoplasm = false;
+    let mut has_heartsteel = false;
+    for &idx in build_idx {
+        if let Some(f) = features.get(idx) {
+            item_stats.add(&f.stats);
+            total_cost += f.total_cost.max(0.0);
+            has_zhonya |= f.has_zhonya;
+            has_ga |= f.has_ga;
+            has_protoplasm |= f.has_protoplasm;
+            has_heartsteel |= f.has_heartsteel;
+        }
+    }
+    item_stats.add(vlad_bonus_stats);
+    if has_heartsteel {
+        let stacks = sim.heartsteel_assumed_stacks_at_8m.max(0.0);
+        let base_max_health = vlad_base.base_health + item_stats.health;
+        item_stats.health += assumed_heartsteel_bonus_health(base_max_health, stacks);
+    }
     let stats = compute_vlad_stats(vlad_base, &item_stats);
     let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
-    let active_bonus = (build_items.iter().any(|i| i.name == "Zhonya's Hourglass") as i32 as f64)
-        * 250.0
-        + (build_items.iter().any(|i| i.name == "Guardian Angel") as i32 as f64) * 300.0
-        + (build_items.iter().any(|i| i.name == "Protoplasm Harness") as i32 as f64) * 140.0;
+    let active_bonus = (has_zhonya as i32 as f64) * 250.0
+        + (has_ga as i32 as f64) * 300.0
+        + (has_protoplasm as i32 as f64) * 140.0;
     let stat_signal = ehp * 0.010
         + stats.ability_power * 0.040
         + stats.ability_haste * 0.025
         + stats.move_speed_flat * 0.005
         + stats.move_speed_percent * 0.08;
-    stat_signal + active_bonus + build_cost_timing_score(build_items) * 0.01
+    // Coarse approximation of cost timing without full item materialization.
+    stat_signal + active_bonus - (0.001 * total_cost)
 }
 
 fn compute_build_metrics(
@@ -3734,23 +3906,56 @@ fn run_vlad_scenario(
         };
     let vlad_base = champion_at_level(&vlad_base_raw, sim.champion_level);
 
-    let enemies_raw = scenario
-        .get("enemies")
-        .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing enemies"))?
-        .iter()
-        .map(|e| parse_enemy_config(e, &champion_bases))
-        .collect::<Result<Vec<_>>>()?;
-    let raw_enemy_bases = enemies_raw
+    let mut enemy_scenarios_raw: Vec<(String, f64, Vec<EnemyConfig>)> = Vec::new();
+    if let Some(groups) = scenario.get("enemy_scenarios").and_then(Value::as_array) {
+        for (idx, group) in groups.iter().enumerate() {
+            let enemies_arr = group
+                .get("enemies")
+                .and_then(Value::as_array)
+                .ok_or_else(|| anyhow!("enemy_scenarios[{}].enemies missing", idx))?;
+            let enemies_cfg = enemies_arr
+                .iter()
+                .map(|e| parse_enemy_config(e, &champion_bases))
+                .collect::<Result<Vec<_>>>()?;
+            let name = group
+                .get("name")
+                .and_then(Value::as_str)
+                .unwrap_or("scenario")
+                .to_string();
+            let weight = group.get("weight").and_then(Value::as_f64).unwrap_or(1.0);
+            enemy_scenarios_raw.push((name, weight.max(0.0), enemies_cfg));
+        }
+    }
+    if enemy_scenarios_raw.is_empty() {
+        let enemies_raw = scenario
+            .get("enemies")
+            .and_then(Value::as_array)
+            .ok_or_else(|| anyhow!("Missing enemies"))?
+            .iter()
+            .map(|e| parse_enemy_config(e, &champion_bases))
+            .collect::<Result<Vec<_>>>()?;
+        enemy_scenarios_raw.push(("default".to_string(), 1.0, enemies_raw));
+    }
+    let primary_enemy_raw = enemy_scenarios_raw
+        .first()
+        .map(|(_, _, v)| v.clone())
+        .unwrap_or_default();
+    let raw_enemy_bases = primary_enemy_raw
         .iter()
         .map(|e| (e.name.clone(), e.base.clone()))
         .collect::<HashMap<_, _>>();
-    let enemies = enemies_raw
+    let enemy_scenarios = enemy_scenarios_raw
         .iter()
-        .cloned()
-        .map(|mut e| {
-            e.base = champion_at_level(&e.base, sim.champion_level);
-            e
+        .map(|(name, weight, enemies)| {
+            let scaled = enemies
+                .iter()
+                .cloned()
+                .map(|mut e| {
+                    e.base = champion_at_level(&e.base, sim.champion_level);
+                    e
+                })
+                .collect::<Vec<_>>();
+            (name.clone(), *weight, scaled)
         })
         .collect::<Vec<_>>();
 
@@ -3779,44 +3984,126 @@ fn run_vlad_scenario(
 
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
-    let enemy_builds: Vec<(EnemyConfig, Vec<Item>, Stats)> = enemies
+    let enemy_build_scenarios = enemy_scenarios
         .par_iter()
-        .map(|enemy| {
-            let enemy_copy = enemy.clone();
-            let build_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
-                let build_items = build_from_indices(&item_pool, build_idx);
-                let mut stats = build_item_stats(&build_items);
-                stats.add(&enemy_loadout.bonus_stats);
-                apply_item_assumptions(
-                    &mut stats,
-                    &enemy_copy.base,
-                    &build_items,
-                    &sim,
-                    sim.champion_level,
-                    None,
-                );
-                let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
-                physical_dps + magic_dps
-            });
-            (
-                enemy.clone(),
-                build_from_indices(&item_pool, &build_indices),
-                enemy_loadout.bonus_stats.clone(),
-            )
+        .map(|(name, weight, enemies)| {
+            let builds = enemies
+                .par_iter()
+                .map(|enemy| {
+                    let enemy_copy = enemy.clone();
+                    let build_indices =
+                        build_search(&item_pool, max_items, &search_cfg, |build_idx| {
+                            let build_items = build_from_indices(&item_pool, build_idx);
+                            let mut stats = build_item_stats(&build_items);
+                            stats.add(&enemy_loadout.bonus_stats);
+                            apply_item_assumptions(
+                                &mut stats,
+                                &enemy_copy.base,
+                                &build_items,
+                                &sim,
+                                sim.champion_level,
+                                None,
+                            );
+                            let (physical_dps, magic_dps) =
+                                compute_enemy_dps(&enemy_copy, &stats, &urf);
+                            physical_dps + magic_dps
+                        });
+                    (
+                        enemy.clone(),
+                        build_from_indices(&item_pool, &build_indices),
+                        enemy_loadout.bonus_stats.clone(),
+                    )
+                })
+                .collect::<Vec<_>>();
+            (name.clone(), *weight, builds)
         })
-        .collect();
+        .collect::<Vec<_>>();
+    let enemy_builds = enemy_build_scenarios
+        .first()
+        .map(|(_, _, b)| b.clone())
+        .unwrap_or_default();
 
     let coarse_eval_count = AtomicUsize::new(0);
     let full_eval_count = AtomicUsize::new(0);
+    let full_capped_eval_count = AtomicUsize::new(0);
     let coarse_cache = Arc::new(BlockingScoreCache::new());
     let full_cache = Arc::new(BlockingScoreCache::new());
+    let coarse_features = precompute_coarse_features(&item_pool);
+    let objective_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
+    let objective_score_for_build = |build_items: &[Item]| {
+        let mut weighted_sum = 0.0;
+        let mut weight_sum = 0.0;
+        let mut worst = f64::INFINITY;
+        for (_, weight, enemy_builds_s) in &enemy_build_scenarios {
+            let t = simulate_vlad_survival(
+                &vlad_base,
+                build_items,
+                &vlad_loadout.bonus_stats,
+                None,
+                enemy_builds_s,
+                &sim,
+                &urf,
+            );
+            let w = (*weight).max(0.0);
+            weighted_sum += w * t;
+            weight_sum += w;
+            worst = worst.min(t);
+        }
+        let mean = if weight_sum > 0.0 {
+            weighted_sum / weight_sum
+        } else {
+            0.0
+        };
+        if worst.is_finite() {
+            (1.0 - objective_weight) * mean + objective_weight * worst
+        } else {
+            mean
+        }
+    };
+    let objective_capped_score_for_build = |build_items: &[Item], cap_seconds: f64| {
+        let mut weighted_sum = 0.0;
+        let mut weight_sum = 0.0;
+        let mut worst = f64::INFINITY;
+        for (_, weight, enemy_builds_s) in &enemy_build_scenarios {
+            full_capped_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
+            let t = simulate_vlad_survival_capped(
+                &vlad_base,
+                build_items,
+                &vlad_loadout.bonus_stats,
+                None,
+                enemy_builds_s,
+                &sim,
+                &urf,
+                cap_seconds,
+            );
+            let w = (*weight).max(0.0);
+            weighted_sum += w * t;
+            weight_sum += w;
+            worst = worst.min(t);
+        }
+        let mean = if weight_sum > 0.0 {
+            weighted_sum / weight_sum
+        } else {
+            0.0
+        };
+        if worst.is_finite() {
+            (1.0 - objective_weight) * mean + objective_weight * worst
+        } else {
+            mean
+        }
+    };
     let coarse_score_fn = |build_idx: &[usize]| {
         let key = canonical_key(build_idx);
         let cache = Arc::clone(&coarse_cache);
         cache.get_or_compute(key.clone(), || {
             coarse_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
-            let build_items = build_from_indices(&item_pool, &key);
-            coarse_proxy_survival_score(&vlad_base, &build_items, &vlad_loadout.bonus_stats, &sim)
+            coarse_proxy_survival_score(
+                &vlad_base,
+                &key,
+                &coarse_features,
+                &vlad_loadout.bonus_stats,
+                &sim,
+            )
         })
     };
     let full_score_fn = |build_idx: &[usize]| {
@@ -3825,15 +4112,7 @@ fn run_vlad_scenario(
         cache.get_or_compute(key.clone(), || {
             full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             let build_items = build_from_indices(&item_pool, &key);
-            simulate_vlad_survival(
-                &vlad_base,
-                &build_items,
-                &vlad_loadout.bonus_stats,
-                None,
-                &enemy_builds,
-                &sim,
-                &urf,
-            )
+            objective_score_for_build(&build_items)
         })
     };
 
@@ -3859,9 +4138,17 @@ fn run_vlad_scenario(
         &active_strategies,
         &coarse_score_fn,
     );
+    let adaptive_candidates = adaptive_strategy_candidates(
+        &item_pool,
+        max_items,
+        &search_cfg,
+        &strategy_elites,
+        &coarse_score_fn,
+    );
     let bleed_candidates =
         generate_bleed_candidates(&item_pool, max_items, &strategy_elites, &search_cfg);
     let bleed_candidate_count = bleed_candidates.len();
+    let adaptive_candidate_count = adaptive_candidates.len();
 
     let mut coarse_candidates = Vec::new();
     let mut seed_top_sets = Vec::new();
@@ -3879,16 +4166,44 @@ fn run_vlad_scenario(
     for k in bleed_candidates {
         coarse_candidates.push(k);
     }
+    for k in adaptive_candidates {
+        coarse_candidates.push(k);
+    }
     let unique_coarse_keys = coarse_candidates
         .into_iter()
         .collect::<HashSet<_>>()
         .into_iter()
         .collect::<Vec<_>>();
-    let mut vlad_ranked = unique_ranked_from_candidates(
-        unique_coarse_keys.clone(),
-        &full_score_fn,
-        search_cfg.ranked_limit.max(search_cfg.coarse_pool_limit),
-    );
+    let mut coarse_ordered = unique_coarse_keys
+        .iter()
+        .map(|k| (k.clone(), coarse_score_fn(k)))
+        .collect::<Vec<_>>();
+    coarse_ordered.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+
+    let keep_limit = search_cfg
+        .ranked_limit
+        .max(search_cfg.coarse_pool_limit)
+        .max(64);
+    let mut vlad_ranked: Vec<(Vec<usize>, f64)> = Vec::new();
+    let mut floor = f64::NEG_INFINITY;
+    for (key, _) in coarse_ordered {
+        if floor.is_finite() {
+            let preview_build = build_from_indices(&item_pool, &key);
+            let capped = objective_capped_score_for_build(&preview_build, floor);
+            if capped < floor {
+                continue;
+            }
+        }
+        let score = full_score_fn(&key);
+        vlad_ranked.push((key, score));
+        vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
+        if vlad_ranked.len() > keep_limit {
+            vlad_ranked.truncate(keep_limit);
+        }
+        if vlad_ranked.len() >= keep_limit {
+            floor = vlad_ranked[keep_limit - 1].1;
+        }
+    }
     vlad_ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
 
     let mut seed_best_scores = Vec::new();
@@ -3916,15 +4231,7 @@ fn run_vlad_scenario(
         .unwrap_or_default();
     let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
 
-    let baseline_fixed_time = simulate_vlad_survival(
-        &vlad_base,
-        &baseline_fixed_build,
-        &vlad_loadout.bonus_stats,
-        None,
-        &enemy_builds,
-        &sim,
-        &urf,
-    );
+    let baseline_fixed_time = objective_score_for_build(&baseline_fixed_build);
     let vlad_best_time = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
 
     println!("Enemy builds (optimized for DPS):");
@@ -3957,9 +4264,10 @@ fn run_vlad_scenario(
         search_strategy_summary(&search_cfg)
     );
     println!(
-        "- Candidate evaluations (coarse/full): {}/{}",
+        "- Candidate evaluations (coarse/full/full-capped): {}/{}/{}",
         coarse_eval_count.load(AtomicOrdering::Relaxed),
-        full_eval_count.load(AtomicOrdering::Relaxed)
+        full_eval_count.load(AtomicOrdering::Relaxed),
+        full_capped_eval_count.load(AtomicOrdering::Relaxed)
     );
     println!(
         "- Cache hits (coarse/full): {}/{}",
@@ -3972,8 +4280,16 @@ fn run_vlad_scenario(
         full_cache.waits()
     );
     println!("- Ensemble seeds: {}", ensemble_seeds);
+    println!(
+        "- Enemy scenarios in objective: {}",
+        enemy_build_scenarios.len()
+    );
     println!("- Unique coarse candidates: {}", unique_coarse_keys.len());
     println!("- Bleed candidates injected: {}", bleed_candidate_count);
+    println!(
+        "- Adaptive candidates injected: {}",
+        adaptive_candidate_count
+    );
     println!(
         "- Items: {}",
         vlad_best_build
@@ -4044,6 +4360,7 @@ fn run_vlad_scenario(
         ensemble_seeds,
         coarse_evaluations: coarse_eval_count.load(AtomicOrdering::Relaxed),
         full_evaluations: full_eval_count.load(AtomicOrdering::Relaxed),
+        full_capped_evaluations: full_capped_eval_count.load(AtomicOrdering::Relaxed),
         coarse_cache_hits: coarse_cache.hits(),
         coarse_cache_misses: coarse_cache.misses(),
         coarse_cache_waits: coarse_cache.waits(),
@@ -4052,12 +4369,42 @@ fn run_vlad_scenario(
         full_cache_waits: full_cache.waits(),
         unique_candidate_builds: unique_coarse_keys.len(),
         bleed_candidates_injected: bleed_candidate_count,
+        adaptive_candidates_injected: adaptive_candidate_count,
         coarse_pool_limit: search_cfg.coarse_pool_limit,
+        scenario_count: enemy_build_scenarios.len(),
         seed_best_scores,
     };
-    let build_order_results = diverse_top_builds
+    let confidence_by_key = build_confidence
         .iter()
-        .map(|(build, _)| {
+        .map(|c| (c.key.clone(), c.clone()))
+        .collect::<HashMap<_, _>>();
+    let mut order_input = diverse_top_builds
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, (build, _))| {
+            let key = diverse_top_keys.get(idx)?;
+            let robust = confidence_by_key
+                .get(key)
+                .map(|c| c.robustness == "robust")
+                .unwrap_or(false);
+            let pareto = pareto_front.contains(key);
+            if robust || pareto {
+                Some(build.clone())
+            } else {
+                None
+            }
+        })
+        .collect::<Vec<_>>();
+    if order_input.is_empty() {
+        order_input = diverse_top_builds
+            .iter()
+            .take(2)
+            .map(|(b, _)| b.clone())
+            .collect::<Vec<_>>();
+    }
+    let build_order_results = order_input
+        .iter()
+        .map(|build| {
             optimize_build_order(
                 build,
                 &vlad_base_raw,
