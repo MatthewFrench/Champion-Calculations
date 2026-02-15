@@ -9,7 +9,8 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 - Enemy auto-attacks and spell damage are modeled as recurring timed events.
 - Stuns are modeled as recurring timed events that delay Vladimir's casting.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
-- Optional Python scripts can register hooks for champion/item logic that is not generically modeled.
+- Champion/item mechanics can be extended in compiled Rust code paths.
+- Build candidate scoring is parallelized across CPU cores (Rayon).
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
@@ -20,6 +21,15 @@ This simulator focuses on Vladimir's pool uptime and survival time against 5 ene
 ```bash
 source "$HOME/.cargo/env"
 cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
+  --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
+  --mode vlad
+```
+
+## Threading
+- The Rust optimizer uses all available CPU cores by default.
+- You can cap threads with:
+```bash
+RAYON_NUM_THREADS=8 cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode vlad
 ```

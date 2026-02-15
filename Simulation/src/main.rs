@@ -1,5 +1,6 @@
 use anyhow::{Context, Result, anyhow, bail};
 use clap::{Parser, ValueEnum};
+use rayon::prelude::*;
 use serde_json::Value;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
@@ -174,7 +175,7 @@ impl Ord for QueuedEvent {
 
 struct VladCombatSimulation {
     vlad_base: ChampionBase,
-    enemies: Vec<(EnemyConfig, Vec<Item>)>,
+    enemy_count: usize,
     sim: SimulationConfig,
     urf: UrfBuffs,
 
@@ -227,7 +228,7 @@ impl VladCombatSimulation {
     fn new(
         vlad_base: ChampionBase,
         vlad_build_items: &[Item],
-        enemies: Vec<(EnemyConfig, Vec<Item>)>,
+        enemies: &[(EnemyConfig, Vec<Item>)],
         sim: SimulationConfig,
         urf: UrfBuffs,
     ) -> Self {
@@ -264,7 +265,7 @@ impl VladCombatSimulation {
 
         let mut runner = Self {
             vlad_base,
-            enemies,
+            enemy_count: enemies.len(),
             sim,
             urf,
             tick_seconds,
@@ -304,8 +305,7 @@ impl VladCombatSimulation {
 
         runner.pool_duration = runner.sim.vlad_pool_untargetable_seconds;
 
-        let enemy_inputs = runner.enemies.clone();
-        for (idx, (enemy, build)) in enemy_inputs.into_iter().enumerate() {
+        for (idx, (enemy, build)) in enemies.iter().cloned().enumerate() {
             let mut enemy_stats = Stats::default();
             for item in &build {
                 enemy_stats.add(&item.stats);
@@ -449,7 +449,7 @@ impl VladCombatSimulation {
                 self.sim.vlad_pool_base_damage_by_rank[self.sim.vlad_pool_rank - 1];
             pool_damage += self.sim.vlad_pool_bonus_health_ratio
                 * (self.vlad_stats.health - self.vlad_base.base_health);
-            let total_pool_damage = pool_damage * self.enemies.len() as f64;
+            let total_pool_damage = pool_damage * self.enemy_count as f64;
             let pool_heal = total_pool_damage * self.sim.vlad_pool_heal_ratio_of_damage;
             self.pool_heal_rate = if self.pool_duration > 0.0 {
                 pool_heal / self.pool_duration
@@ -1023,13 +1023,19 @@ fn compute_enemy_dps(enemy: &EnemyConfig, item_stats: &Stats, urf: &UrfBuffs) ->
 }
 
 fn simulate_vlad_survival(
-    vlad_base: ChampionBase,
+    vlad_base: &ChampionBase,
     vlad_build_items: &[Item],
-    enemies: Vec<(EnemyConfig, Vec<Item>)>,
-    sim: SimulationConfig,
-    urf: UrfBuffs,
+    enemies: &[(EnemyConfig, Vec<Item>)],
+    sim: &SimulationConfig,
+    urf: &UrfBuffs,
 ) -> f64 {
-    let mut runner = VladCombatSimulation::new(vlad_base, vlad_build_items, enemies, sim, urf);
+    let mut runner = VladCombatSimulation::new(
+        vlad_base.clone(),
+        vlad_build_items,
+        enemies,
+        sim.clone(),
+        urf.clone(),
+    );
     runner.run_until_end()
 }
 
@@ -1043,6 +1049,12 @@ fn build_item_stats(items: &[Item]) -> Stats {
 
 fn build_from_indices(item_pool: &[Item], build: &[usize]) -> Vec<Item> {
     build.iter().map(|&idx| item_pool[idx].clone()).collect()
+}
+
+fn canonical_key(build: &[usize]) -> Vec<usize> {
+    let mut key = build.to_vec();
+    key.sort_unstable();
+    key
 }
 
 fn choose_best_build_by_stat(
@@ -1084,10 +1096,10 @@ fn build_search<F>(
     item_pool: &[Item],
     max_items: usize,
     search: &BuildSearchConfig,
-    mut score_fn: F,
+    score_fn: F,
 ) -> Vec<usize>
 where
-    F: FnMut(&[usize]) -> f64,
+    F: Fn(&[usize]) -> f64 + Sync,
 {
     match search.strategy.as_str() {
         "greedy" => {
@@ -1121,7 +1133,6 @@ where
             build
         }
         "beam" => {
-            let mut cache: HashMap<Vec<usize>, f64> = HashMap::new();
             let mut candidates: Vec<Vec<usize>> = vec![vec![]];
             for _ in 0..max_items {
                 let mut next_candidates = Vec::new();
@@ -1141,18 +1152,40 @@ where
                     }
                 }
 
-                next_candidates.sort_by(|a, b| {
-                    let mut ka = a.clone();
-                    let mut kb = b.clone();
-                    ka.sort_unstable();
-                    kb.sort_unstable();
+                let unique_keys: HashSet<Vec<usize>> =
+                    next_candidates.iter().map(|c| canonical_key(c)).collect();
+                let mut key_list = unique_keys.into_iter().collect::<Vec<_>>();
+                key_list.sort_unstable();
 
-                    let sa = *cache.entry(ka.clone()).or_insert_with(|| score_fn(&ka));
-                    let sb = *cache.entry(kb.clone()).or_insert_with(|| score_fn(&kb));
-                    sb.partial_cmp(&sa).unwrap_or(Ordering::Equal)
+                let score_pairs = key_list
+                    .par_iter()
+                    .map(|key| (key.clone(), score_fn(key)))
+                    .collect::<Vec<_>>();
+                let score_map = score_pairs
+                    .into_iter()
+                    .collect::<HashMap<Vec<usize>, f64>>();
+
+                let mut scored = next_candidates
+                    .into_iter()
+                    .map(|candidate| {
+                        let key = canonical_key(&candidate);
+                        let score = score_map.get(&key).copied().unwrap_or(f64::NEG_INFINITY);
+                        (candidate, key, score)
+                    })
+                    .collect::<Vec<_>>();
+
+                scored.sort_by(|a, b| {
+                    b.2.partial_cmp(&a.2)
+                        .unwrap_or(Ordering::Equal)
+                        .then_with(|| a.1.cmp(&b.1))
+                        .then_with(|| a.0.cmp(&b.0))
                 });
-                next_candidates.truncate(search.beam_width);
-                candidates = next_candidates;
+
+                candidates = scored
+                    .into_iter()
+                    .take(search.beam_width)
+                    .map(|(candidate, _, _)| candidate)
+                    .collect();
             }
             candidates.into_iter().next().unwrap_or_default()
         }
@@ -1269,48 +1302,34 @@ fn run_vlad_scenario(scenario_path: &Path) -> Result<()> {
 
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
-    let mut enemy_builds: Vec<(EnemyConfig, Vec<Item>)> = Vec::new();
-    for enemy in &enemies {
-        let enemy_copy = enemy.clone();
-        let build_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
-            let build_items = build_from_indices(&item_pool, build_idx);
-            let stats = build_item_stats(&build_items);
-            let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
-            physical_dps + magic_dps
-        });
-        enemy_builds.push((
-            enemy.clone(),
-            build_from_indices(&item_pool, &build_indices),
-        ));
-    }
-
-    let enemy_builds_for_score = enemy_builds.clone();
-    let vlad_base_for_score = vlad_base.clone();
-    let sim_for_score = sim.clone();
-    let urf_for_score = urf.clone();
+    let enemy_builds: Vec<(EnemyConfig, Vec<Item>)> = enemies
+        .par_iter()
+        .map(|enemy| {
+            let enemy_copy = enemy.clone();
+            let build_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
+                let build_items = build_from_indices(&item_pool, build_idx);
+                let stats = build_item_stats(&build_items);
+                let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
+                physical_dps + magic_dps
+            });
+            (
+                enemy.clone(),
+                build_from_indices(&item_pool, &build_indices),
+            )
+        })
+        .collect();
 
     let vlad_best_indices = build_search(&item_pool, max_items, &search_cfg, |build_idx| {
         let build_items = build_from_indices(&item_pool, build_idx);
-        simulate_vlad_survival(
-            vlad_base_for_score.clone(),
-            &build_items,
-            enemy_builds_for_score.clone(),
-            sim_for_score.clone(),
-            urf_for_score.clone(),
-        )
+        simulate_vlad_survival(&vlad_base, &build_items, &enemy_builds, &sim, &urf)
     });
 
     let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
 
-    let baseline_fixed_time = simulate_vlad_survival(
-        vlad_base.clone(),
-        &baseline_fixed_build,
-        enemy_builds.clone(),
-        sim.clone(),
-        urf.clone(),
-    );
+    let baseline_fixed_time =
+        simulate_vlad_survival(&vlad_base, &baseline_fixed_build, &enemy_builds, &sim, &urf);
     let vlad_best_time =
-        simulate_vlad_survival(vlad_base, &vlad_best_build, enemy_builds.clone(), sim, urf);
+        simulate_vlad_survival(&vlad_base, &vlad_best_build, &enemy_builds, &sim, &urf);
 
     println!("Enemy builds (optimized for DPS):");
     for (enemy, build) in &enemy_builds {
@@ -1387,21 +1406,23 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
     )?;
     let item_pool = default_item_pool(&items);
 
-    let mut enemy_builds: Vec<(EnemyConfig, Vec<Item>)> = Vec::new();
-    for enemy in &enemies {
-        let enemy_copy = enemy.clone();
-        let build_indices =
-            build_search(&item_pool, search_cfg.max_items, &search_cfg, |build_idx| {
-                let build_items = build_from_indices(&item_pool, build_idx);
-                let stats = build_item_stats(&build_items);
-                let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
-                physical_dps + magic_dps
-            });
-        enemy_builds.push((
-            enemy.clone(),
-            build_from_indices(&item_pool, &build_indices),
-        ));
-    }
+    let enemy_builds: Vec<(EnemyConfig, Vec<Item>)> = enemies
+        .par_iter()
+        .map(|enemy| {
+            let enemy_copy = enemy.clone();
+            let build_indices =
+                build_search(&item_pool, search_cfg.max_items, &search_cfg, |build_idx| {
+                    let build_items = build_from_indices(&item_pool, build_idx);
+                    let stats = build_item_stats(&build_items);
+                    let (physical_dps, magic_dps) = compute_enemy_dps(&enemy_copy, &stats, &urf);
+                    physical_dps + magic_dps
+                });
+            (
+                enemy.clone(),
+                build_from_indices(&item_pool, &build_indices),
+            )
+        })
+        .collect();
 
     let baseline_fixed_names = scenario
         .get("vladimir_baseline_fixed")
@@ -1418,7 +1439,7 @@ fn run_vlad_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
     let mut sim = VladCombatSimulation::new(
         vlad_base,
         &baseline_fixed_build,
-        enemy_builds,
+        &enemy_builds,
         sim_cfg.clone(),
         urf,
     );
