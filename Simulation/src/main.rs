@@ -1,6 +1,7 @@
 use anyhow::{Context, Result, anyhow, bail};
 use clap::{Parser, ValueEnum};
 use rayon::prelude::*;
+use rayon::ThreadPoolBuilder;
 use serde_json::Value;
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet};
@@ -644,6 +645,8 @@ struct Cli {
     max_relative_gap_percent: f64,
     #[arg(long)]
     report_path: Option<String>,
+    #[arg(long)]
+    threads: Option<usize>,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -2917,6 +2920,13 @@ fn run_stat_optimization(stat_key: &str, scenario_path: &Path, label: &str) -> R
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
+    let available = std::thread::available_parallelism()
+        .map(|n| n.get())
+        .unwrap_or(1);
+    let default_threads = available.saturating_sub(1).max(1);
+    let threads = cli.threads.unwrap_or(default_threads).max(1);
+    let _ = ThreadPoolBuilder::new().num_threads(threads).build_global();
+
     let scenario_path = PathBuf::from(cli.scenario);
     match cli.mode {
         Mode::Vlad => run_vlad_scenario(

@@ -31,12 +31,14 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Stack assumptions/notes for stack-based items in the best build
 
 ## Threading
-- The Rust optimizer uses all available CPU cores by default.
+- The Rust optimizer leaves one core free by default (`available_cores - 1`, minimum 1 thread).
+- Override thread count with `--threads N` if needed.
 - You can cap threads with:
 ```bash
-RAYON_NUM_THREADS=8 cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
+cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
-  --mode vlad
+  --mode vlad \
+  --threads 8
 ```
 
 ## Diverse Top Builds
