@@ -1,6 +1,6 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771196044`
+- Generated (unix): `1771200664`
 - Scenario: `scenario_vlad_urf.json`
 
 ## Headline
@@ -21,8 +21,8 @@
 - Loadout candidates/finalists: `192/1`
 - Ensemble seeds: `1`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
-- Full evaluations: `18` (cache hits/misses/waits: `0/18/0`)
-- Full persistent cache hits/entries: `20/54`
+- Full evaluations: `15` (cache hits/misses/waits: `0/15/0`)
+- Full persistent cache hits/entries: `108/123`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
@@ -89,12 +89,12 @@
    - metrics: EHP~10545.4, AP~290.1, timing score -8405.00, total cost 14800
 
 ## Build Order Optimization
-1. Cumulative score: `261.24` | Order: Guardian Angel, Zhonya's Hourglass, Protoplasm Harness, Morellonomicon, Liandry's Torment
-   - Stage 1 (level 5): `9.84s`
-   - Stage 2 (level 9): `41.18s`
-   - Stage 3 (level 13): `55.03s`
-   - Stage 4 (level 16): `67.54s`
-   - Stage 5 (level 20): `87.66s`
+1. Cumulative score: `7.36` | Order: Guardian Angel, Zhonya's Hourglass, Morellonomicon, Protoplasm Harness, Liandry's Torment
+   - Stage 1 (level 5): objective `1.000`, time alive `9.84s`, damage `5485.0`, healing `616.1`
+   - Stage 2 (level 9): objective `3.153`, time alive `41.18s`, damage `12963.3`, healing `2052.0`
+   - Stage 3 (level 13): objective `1.079`, time alive `54.83s`, damage `16828.9`, healing `2984.3`
+   - Stage 4 (level 16): objective `1.128`, time alive `67.54s`, damage `20235.9`, healing `3887.8`
+   - Stage 5 (level 20): objective `1.000`, time alive `87.66s`, damage `28017.5`, healing `5596.5`
 
 ## Deeper Insights
 - Common core across all selected top builds: Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass.

@@ -32,6 +32,9 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
+- `src/build_order.rs`: Build-order stage simulation and optimization.
+- `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
+- `src/reporting.rs`: Markdown/JSON report generation.
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
@@ -100,7 +103,10 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - After top builds are selected, simulator also optimizes full-item build order:
   - Uses beam plus optimistic bound pruning over order states (no partial/intermediate items).
   - Uses stage levels evenly spaced from 5 to 20 across item slots.
-  - Scores each order by cumulative stage survival across stages.
+  - Scores each order by cumulative stage objective across stages:
+    - time alive
+    - damage dealt
+    - healing done
 
 ## Taric (Max Attack Speed)
 ```bash

@@ -2,7 +2,7 @@ use anyhow::{Context, Result, anyhow, bail};
 use clap::{Parser, ValueEnum};
 use rayon::ThreadPoolBuilder;
 use rayon::prelude::*;
-use serde_json::{Value, json};
+use serde_json::Value;
 use std::cmp::Ordering;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::{BinaryHeap, HashMap, HashSet};
@@ -11,17 +11,30 @@ use std::hash::{Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::sync::{Arc, Mutex};
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant};
 
+mod build_order;
 mod cache;
+mod reporting;
 mod respawn;
 mod scripts;
+mod search;
 mod status;
 
+use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
+use crate::reporting::{
+    default_report_path, write_vladimir_report_json, write_vladimir_report_markdown,
+};
 use crate::scripts::vladimir::{
     VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
     q_damage_raw, r_damage_raw,
+};
+use crate::search::{
+    adaptive_strategy_candidates, build_search_ranked, choose_best_build_by_stat,
+    compute_build_metrics, generate_bleed_candidates, item_names, pareto_front_keys,
+    portfolio_strategy_list, search_strategy_summary, select_diverse_top_builds,
+    strategy_seed_elites,
 };
 use crate::status::{StatusReporter, deadline_reached};
 
@@ -298,7 +311,61 @@ struct BuildOrderResult {
     levels: Vec<usize>,
     acquired_levels: Vec<usize>,
     stage_survival: Vec<f64>,
+    stage_damage: Vec<f64>,
+    stage_healing: Vec<f64>,
+    stage_objective_scores: Vec<f64>,
     cumulative_score: f64,
+}
+
+type BuildKey = Vec<usize>;
+type EnemyBuildEntry = (EnemyConfig, Vec<Item>, Stats);
+type EnemyBuildScenario = (String, f64, Vec<EnemyBuildEntry>);
+type BestLoadoutMap = HashMap<BuildKey, (LoadoutSelection, ResolvedLoadout)>;
+type BestOutcomeMap = HashMap<BuildKey, CombatOutcome>;
+
+struct ObjectiveEvalContext<'a> {
+    vlad_base: &'a ChampionBase,
+    enemy_build_scenarios: &'a [EnemyBuildScenario],
+    sim: &'a SimulationConfig,
+    urf: &'a UrfBuffs,
+    scenario_reference_outcomes: &'a [CombatOutcome],
+    weights: ObjectiveComponentWeights,
+    worst_case_weight: f64,
+}
+
+struct BuildOrderEvalContext<'a> {
+    vlad_base_raw: &'a ChampionBase,
+    vlad_bonus_stats: &'a Stats,
+    enemy_builds: &'a [EnemyBuildEntry],
+    raw_enemy_bases: &'a HashMap<String, ChampionBase>,
+    sim: &'a SimulationConfig,
+    urf: &'a UrfBuffs,
+    objective_weights: ObjectiveComponentWeights,
+}
+
+struct VladimirReportData<'a> {
+    scenario_path: &'a Path,
+    sim: &'a SimulationConfig,
+    vlad_base_level: &'a ChampionBase,
+    vlad_end_stats: &'a Stats,
+    stack_notes: &'a [String],
+    vladimir_loadout: &'a ResolvedLoadout,
+    enemy_loadout: &'a ResolvedLoadout,
+    baseline_build: &'a [Item],
+    baseline_score: f64,
+    baseline_outcome: &'a CombatOutcome,
+    best_build: &'a [Item],
+    best_score: f64,
+    best_outcome: &'a CombatOutcome,
+    enemy_builds: &'a [EnemyBuildEntry],
+    enemy_presets_used: &'a HashMap<String, EnemyUrfPreset>,
+    diverse_top_builds: &'a [(Vec<Item>, f64)],
+    diverse_top_keys: &'a [BuildKey],
+    build_confidence: &'a [BuildConfidence],
+    metrics_by_key: &'a HashMap<BuildKey, BuildMetrics>,
+    pareto_front: &'a HashSet<BuildKey>,
+    diagnostics: &'a SearchDiagnostics,
+    build_orders: &'a [BuildOrderResult],
 }
 
 #[derive(Debug, Clone)]
@@ -317,10 +384,10 @@ struct EnemyState {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum EventType {
-    EnemyAttack(usize),
-    EnemyAbility(usize),
-    EnemyStun(usize),
-    EnemyBurst(usize),
+    Attack(usize),
+    Ability(usize),
+    Stun(usize),
+    Burst(usize),
 }
 
 #[derive(Debug, Clone)]
@@ -577,14 +644,14 @@ impl VladCombatSimulation {
             runner.schedule_event(
                 attack_interval,
                 30,
-                EventType::EnemyAttack(idx),
+                EventType::Attack(idx),
                 Some(attack_interval),
             );
             if ability_hit_damage > 0.0 {
                 runner.schedule_event(
                     ability_interval,
                     40,
-                    EventType::EnemyAbility(idx),
+                    EventType::Ability(idx),
                     Some(ability_interval),
                 );
             }
@@ -592,7 +659,7 @@ impl VladCombatSimulation {
                 runner.schedule_event(
                     enemy.stun_interval_seconds,
                     20,
-                    EventType::EnemyStun(idx),
+                    EventType::Stun(idx),
                     Some(enemy.stun_interval_seconds),
                 );
             }
@@ -604,7 +671,7 @@ impl VladCombatSimulation {
                 runner.schedule_event(
                     enemy.burst_start_offset_seconds.max(0.0),
                     10,
-                    EventType::EnemyBurst(idx),
+                    EventType::Burst(idx),
                     Some(enemy.burst_interval_seconds),
                 );
             }
@@ -874,21 +941,21 @@ impl VladCombatSimulation {
 
     fn process_event(&mut self, ev: &QueuedEvent) {
         match ev.kind {
-            EventType::EnemyAttack(idx) => {
+            EventType::Attack(idx) => {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
                 let state = &self.enemy_state[idx];
                 self.apply_damage(state.physical_hit_damage, 0.0, 0.0);
             }
-            EventType::EnemyAbility(idx) => {
+            EventType::Ability(idx) => {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
                 let state = &self.enemy_state[idx];
                 self.apply_damage(0.0, state.ability_hit_damage, 0.0);
             }
-            EventType::EnemyStun(idx) => {
+            EventType::Stun(idx) => {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
@@ -899,7 +966,7 @@ impl VladCombatSimulation {
                         .max(self.time + enemy.stun_duration_seconds);
                 }
             }
-            EventType::EnemyBurst(idx) => {
+            EventType::Burst(idx) => {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
@@ -931,17 +998,18 @@ impl VladCombatSimulation {
                 self.apply_hot_effects(top.time);
                 self.refresh_enemy_respawns();
                 self.process_event(&top);
-                if let Some(recurring) = top.recurring {
-                    if recurring > 0.0 && !self.finished {
-                        self.event_counter += 1;
-                        self.event_queue.push(QueuedEvent {
-                            time: top.time + recurring,
-                            priority: top.priority,
-                            seq: self.event_counter,
-                            recurring: top.recurring,
-                            kind: top.kind.clone(),
-                        });
-                    }
+                if let Some(recurring) = top.recurring
+                    && recurring > 0.0
+                    && !self.finished
+                {
+                    self.event_counter += 1;
+                    self.event_queue.push(QueuedEvent {
+                        time: top.time + recurring,
+                        priority: top.priority,
+                        seq: self.event_counter,
+                        recurring: top.recurring,
+                        kind: top.kind.clone(),
+                    });
                 }
                 self.maybe_cast_vlad_defensives();
             }
@@ -1077,14 +1145,14 @@ fn value_from_effect(effect: &Value, rank: usize, level: usize) -> Option<f64> {
             return Some(v);
         }
     }
-    if let Some(vr) = effect.get("value_range").and_then(Value::as_object) {
-        if let (Some(min), Some(max)) = (
+    if let Some(vr) = effect.get("value_range").and_then(Value::as_object)
+        && let (Some(min), Some(max)) = (
             vr.get("min").and_then(Value::as_f64),
             vr.get("max").and_then(Value::as_f64),
-        ) {
-            let t = ((level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
-            return Some(min + (max - min) * t);
-        }
+        )
+    {
+        let t = ((level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+        return Some(min + (max - min) * t);
     }
     None
 }
@@ -1122,11 +1190,7 @@ fn apply_stat_bonus(
             true
         }
         "attack_speed" => {
-            if is_percent_unit {
-                stats.attack_speed_percent += value;
-            } else {
-                stats.attack_speed_percent += value;
-            }
+            stats.attack_speed_percent += value;
             true
         }
         "movement_speed" => {
@@ -1322,13 +1386,12 @@ fn resolve_loadout(
                     .unwrap_or(0.0);
                 if stat == "health" {
                     // health shard scales with level using extracted [min, max]
-                    if let Some(nums) = option.get("numbers_extracted").and_then(Value::as_array) {
-                        if nums.len() >= 2 {
-                            if let (Some(min), Some(max)) = (nums[0].as_f64(), nums[1].as_f64()) {
-                                let t = ((level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
-                                val = min + (max - min) * t;
-                            }
-                        }
+                    if let Some(nums) = option.get("numbers_extracted").and_then(Value::as_array)
+                        && nums.len() >= 2
+                        && let (Some(min), Some(max)) = (nums[0].as_f64(), nums[1].as_f64())
+                    {
+                        let t = ((level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+                        val = min + (max - min) * t;
                     }
                 }
                 let is_percent = option
@@ -2610,10 +2673,10 @@ fn get_item_acquired_level(
     default_level: usize,
 ) -> usize {
     if build_items.iter().any(|i| i.name == item_name) {
-        if let Some(map) = acquired_levels {
-            if let Some(level) = map.get(item_name) {
-                return *level;
-            }
+        if let Some(map) = acquired_levels
+            && let Some(level) = map.get(item_name)
+        {
+            return *level;
         }
         return default_level;
     }
@@ -2769,27 +2832,6 @@ fn simulate_vlad_combat(
     runner.run_until_end()
 }
 
-fn simulate_vlad_survival(
-    vlad_base: &ChampionBase,
-    vlad_build_items: &[Item],
-    vlad_bonus_stats: &Stats,
-    vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
-    enemies: &[(EnemyConfig, Vec<Item>, Stats)],
-    sim: &SimulationConfig,
-    urf: &UrfBuffs,
-) -> f64 {
-    simulate_vlad_combat(
-        vlad_base,
-        vlad_build_items,
-        vlad_bonus_stats,
-        vlad_item_acquired_levels,
-        enemies,
-        sim,
-        urf,
-    )
-    .time_alive_seconds
-}
-
 fn normalized_objective_weights(
     survival: f64,
     damage: f64,
@@ -2829,15 +2871,9 @@ fn objective_score_from_outcome(
 }
 
 fn aggregate_objective_score_and_outcome(
-    vlad_base: &ChampionBase,
+    ctx: &ObjectiveEvalContext<'_>,
     build_items: &[Item],
     bonus_stats: &Stats,
-    enemy_build_scenarios: &[(String, f64, Vec<(EnemyConfig, Vec<Item>, Stats)>)],
-    sim: &SimulationConfig,
-    urf: &UrfBuffs,
-    scenario_reference_outcomes: &[CombatOutcome],
-    weights: ObjectiveComponentWeights,
-    worst_case_weight: f64,
 ) -> (f64, CombatOutcome) {
     let mut weighted_score_sum = 0.0;
     let mut weighted_time_sum = 0.0;
@@ -2847,30 +2883,31 @@ fn aggregate_objective_score_and_outcome(
     let mut weight_sum = 0.0;
     let mut worst = f64::INFINITY;
 
-    for (idx, (_, weight, enemy_builds_s)) in enemy_build_scenarios.iter().enumerate() {
+    for (idx, (_, weight, enemy_builds_s)) in ctx.enemy_build_scenarios.iter().enumerate() {
         let w = (*weight).max(0.0);
         if w <= 0.0 {
             continue;
         }
         let outcome = simulate_vlad_combat(
-            vlad_base,
+            ctx.vlad_base,
             build_items,
             bonus_stats,
             None,
             enemy_builds_s,
-            sim,
-            urf,
+            ctx.sim,
+            ctx.urf,
         );
-        let reference = scenario_reference_outcomes
-            .get(idx)
-            .copied()
-            .unwrap_or(CombatOutcome {
-                time_alive_seconds: sim.max_time_seconds.max(1.0),
-                damage_dealt: 1.0,
-                healing_done: 1.0,
-                enemy_kills: 0,
-            });
-        let scenario_score = objective_score_from_outcome(outcome, reference, weights);
+        let reference =
+            ctx.scenario_reference_outcomes
+                .get(idx)
+                .copied()
+                .unwrap_or(CombatOutcome {
+                    time_alive_seconds: ctx.sim.max_time_seconds.max(1.0),
+                    damage_dealt: 1.0,
+                    healing_done: 1.0,
+                    enemy_kills: 0,
+                });
+        let scenario_score = objective_score_from_outcome(outcome, reference, ctx.weights);
         weighted_score_sum += w * scenario_score;
         weighted_time_sum += w * outcome.time_alive_seconds;
         weighted_damage_sum += w * outcome.damage_dealt;
@@ -2886,7 +2923,7 @@ fn aggregate_objective_score_and_outcome(
 
     let mean_score = weighted_score_sum / weight_sum;
     let blended_score = if worst.is_finite() {
-        let ww = worst_case_weight.clamp(0.0, 1.0);
+        let ww = ctx.worst_case_weight.clamp(0.0, 1.0);
         (1.0 - ww) * mean_score + ww * worst
     } else {
         mean_score
@@ -2995,1737 +3032,6 @@ fn repair_build(item_pool: &[Item], build: &mut Vec<usize>, max_items: usize, se
             build.push(item_idx);
         }
     }
-}
-
-fn unique_ranked_from_candidates<F>(
-    candidates: Vec<Vec<usize>>,
-    score_fn: &F,
-    limit: usize,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let scored = score_candidates(candidates, score_fn, deadline);
-    let mut ranked = Vec::new();
-    let mut seen = HashSet::new();
-    for (_, key, score) in scored {
-        if !score.is_finite() {
-            continue;
-        }
-        if seen.insert(key.clone()) {
-            ranked.push((key, score));
-            if ranked.len() >= limit.max(1) {
-                break;
-            }
-        }
-    }
-    ranked
-}
-
-fn score_candidates<F>(
-    candidates: Vec<Vec<usize>>,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    if candidates.is_empty() || deadline_reached(deadline) {
-        return Vec::new();
-    }
-    let unique_keys: HashSet<Vec<usize>> = candidates.iter().map(|c| canonical_key(c)).collect();
-    let mut key_list = unique_keys.into_iter().collect::<Vec<_>>();
-    key_list.sort_unstable();
-
-    let score_pairs = key_list
-        .par_iter()
-        .map(|key| {
-            if deadline_reached(deadline) {
-                (key.clone(), f64::NEG_INFINITY)
-            } else {
-                (key.clone(), score_fn(key))
-            }
-        })
-        .collect::<Vec<_>>();
-    let score_map = score_pairs
-        .into_iter()
-        .collect::<HashMap<Vec<usize>, f64>>();
-
-    let mut scored = candidates
-        .into_iter()
-        .map(|candidate| {
-            let key = canonical_key(&candidate);
-            let score = score_map.get(&key).copied().unwrap_or(f64::NEG_INFINITY);
-            (candidate, key, score)
-        })
-        .collect::<Vec<_>>();
-
-    scored.sort_by(|a, b| {
-        b.2.partial_cmp(&a.2)
-            .unwrap_or(Ordering::Equal)
-            .then_with(|| a.1.cmp(&b.1))
-            .then_with(|| a.0.cmp(&b.0))
-    });
-    scored
-}
-
-fn beam_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    beam_width: usize,
-    score_fn: F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let mut candidates: Vec<Vec<usize>> = vec![vec![]];
-    let mut final_scored: Vec<(Vec<usize>, Vec<usize>, f64)> = vec![];
-
-    for _ in 0..max_items {
-        if deadline_reached(deadline) {
-            break;
-        }
-        let mut next_candidates = Vec::new();
-        for build in &candidates {
-            let has_boots = build.iter().any(|&i| is_boots(&item_pool[i]));
-            let used = build.iter().copied().collect::<HashSet<_>>();
-            for item_idx in 0..item_pool.len() {
-                if used.contains(&item_idx) {
-                    continue;
-                }
-                if is_boots(&item_pool[item_idx]) && has_boots {
-                    continue;
-                }
-                let mut next = build.clone();
-                next.push(item_idx);
-                next_candidates.push(next);
-            }
-        }
-
-        let scored = score_candidates(next_candidates, &score_fn, deadline);
-        candidates = scored
-            .iter()
-            .take(beam_width)
-            .map(|(candidate, _, _)| candidate.clone())
-            .collect();
-        final_scored = scored;
-    }
-
-    let mut ranked = Vec::new();
-    let mut seen = HashSet::new();
-    for (_, key, score) in final_scored {
-        if seen.insert(key.clone()) {
-            ranked.push((key, score));
-        }
-    }
-    ranked
-}
-
-fn random_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    random_samples: usize,
-    seed: u64,
-    limit: usize,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let mut s = seed;
-    let mut candidates = Vec::with_capacity(random_samples.max(1));
-    for _ in 0..random_samples.max(1) {
-        if deadline_reached(deadline) {
-            break;
-        }
-        candidates.push(random_valid_build(item_pool, max_items, &mut s));
-    }
-    unique_ranked_from_candidates(candidates, score_fn, limit, deadline)
-}
-
-fn hill_climb_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    restarts: usize,
-    steps: usize,
-    neighbors_per_step: usize,
-    seed: u64,
-    limit: usize,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let mut s = seed;
-    let mut candidates = Vec::new();
-
-    for _ in 0..restarts.max(1) {
-        if deadline_reached(deadline) {
-            break;
-        }
-        let mut current = random_valid_build(item_pool, max_items, &mut s);
-        let mut current_score = score_fn(&canonical_key(&current));
-        candidates.push(current.clone());
-
-        for _ in 0..steps {
-            if deadline_reached(deadline) {
-                break;
-            }
-            let mut neighbor_builds = Vec::new();
-            for _ in 0..neighbors_per_step.max(1) {
-                if current.is_empty() {
-                    break;
-                }
-                let mut neighbor = current.clone();
-                let swap_idx = rand_index(&mut s, neighbor.len());
-                let mut proposed = rand_index(&mut s, item_pool.len());
-                let mut tries = 0usize;
-                while tries < item_pool.len()
-                    && (!can_add_item_to_build(item_pool, &neighbor, proposed)
-                        || proposed == neighbor[swap_idx])
-                {
-                    proposed = rand_index(&mut s, item_pool.len());
-                    tries += 1;
-                }
-                if tries < item_pool.len() {
-                    neighbor[swap_idx] = proposed;
-                    repair_build(item_pool, &mut neighbor, max_items, &mut s);
-                    neighbor_builds.push(neighbor);
-                }
-            }
-            if neighbor_builds.is_empty() {
-                break;
-            }
-            let ranked_neighbors = unique_ranked_from_candidates(
-                neighbor_builds,
-                score_fn,
-                neighbors_per_step.max(1),
-                deadline,
-            );
-            let Some((best_neighbor, best_score)) = ranked_neighbors.first().cloned() else {
-                break;
-            };
-            if best_score > current_score {
-                current = best_neighbor;
-                current_score = best_score;
-                candidates.push(current.clone());
-            } else {
-                break;
-            }
-        }
-    }
-
-    unique_ranked_from_candidates(candidates, score_fn, limit, deadline)
-}
-
-fn tournament_parent(
-    scored_population: &[(Vec<usize>, f64)],
-    seed: &mut u64,
-    tournament_size: usize,
-) -> Vec<usize> {
-    let mut best_idx = rand_index(seed, scored_population.len());
-    for _ in 1..tournament_size.max(1) {
-        let idx = rand_index(seed, scored_population.len());
-        if scored_population[idx].1 > scored_population[best_idx].1 {
-            best_idx = idx;
-        }
-    }
-    scored_population[best_idx].0.clone()
-}
-
-fn crossover_builds(
-    parent_a: &[usize],
-    parent_b: &[usize],
-    item_pool: &[Item],
-    max_items: usize,
-    seed: &mut u64,
-) -> Vec<usize> {
-    let mut merged = parent_a.to_vec();
-    for &idx in parent_b {
-        if !merged.contains(&idx) {
-            merged.push(idx);
-        }
-    }
-    shuffle_usize(&mut merged, seed);
-    let mut child = Vec::with_capacity(max_items);
-    for idx in merged {
-        if child.len() >= max_items {
-            break;
-        }
-        if can_add_item_to_build(item_pool, &child, idx) {
-            child.push(idx);
-        }
-    }
-    repair_build(item_pool, &mut child, max_items, seed);
-    child
-}
-
-fn mutate_build(
-    build: &mut Vec<usize>,
-    item_pool: &[Item],
-    max_items: usize,
-    mutation_rate: f64,
-    seed: &mut u64,
-) {
-    if build.is_empty() || rand_f64(seed) > mutation_rate.clamp(0.0, 1.0) {
-        return;
-    }
-    let slot = rand_index(seed, build.len());
-    let mut tries = 0usize;
-    while tries < item_pool.len() {
-        let candidate = rand_index(seed, item_pool.len());
-        if candidate != build[slot] {
-            let old = build[slot];
-            build[slot] = candidate;
-            if can_add_item_to_build(item_pool, &build[..slot], build[slot])
-                && !build[(slot + 1)..].contains(&build[slot])
-            {
-                repair_build(item_pool, build, max_items, seed);
-                return;
-            }
-            build[slot] = old;
-        }
-        tries += 1;
-    }
-    repair_build(item_pool, build, max_items, seed);
-}
-
-fn genetic_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    population_size: usize,
-    generations: usize,
-    mutation_rate: f64,
-    crossover_rate: f64,
-    seed: u64,
-    limit: usize,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let pop_n = population_size.max(8);
-    let mut s = seed;
-    let mut population = Vec::with_capacity(pop_n);
-    for _ in 0..pop_n {
-        if deadline_reached(deadline) {
-            break;
-        }
-        population.push(random_valid_build(item_pool, max_items, &mut s));
-    }
-
-    let mut all_seen = population.clone();
-    for _ in 0..generations.max(1) {
-        if deadline_reached(deadline) {
-            break;
-        }
-        let mut scored =
-            unique_ranked_from_candidates(population.clone(), score_fn, pop_n, deadline);
-        if scored.is_empty() {
-            break;
-        }
-        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
-
-        let elite_count = (pop_n / 8).max(1).min(scored.len());
-        let mut next_population = scored
-            .iter()
-            .take(elite_count)
-            .map(|(b, _)| b.clone())
-            .collect::<Vec<_>>();
-
-        while next_population.len() < pop_n {
-            if deadline_reached(deadline) {
-                break;
-            }
-            let parent_a = tournament_parent(&scored, &mut s, 3);
-            let parent_b = tournament_parent(&scored, &mut s, 3);
-            let mut child = if rand_f64(&mut s) <= crossover_rate.clamp(0.0, 1.0) {
-                crossover_builds(&parent_a, &parent_b, item_pool, max_items, &mut s)
-            } else {
-                parent_a
-            };
-            mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut s);
-            repair_build(item_pool, &mut child, max_items, &mut s);
-            next_population.push(child);
-        }
-
-        all_seen.extend(next_population.clone());
-        population = next_population;
-    }
-
-    unique_ranked_from_candidates(all_seen, score_fn, limit, deadline)
-}
-
-fn simulated_annealing_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    restarts: usize,
-    iterations: usize,
-    initial_temp: f64,
-    cooling_rate: f64,
-    seed: u64,
-    limit: usize,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let mut s = seed;
-    let mut candidates = Vec::new();
-
-    for _ in 0..restarts.max(1) {
-        if deadline_reached(deadline) {
-            break;
-        }
-        let mut current = random_valid_build(item_pool, max_items, &mut s);
-        let mut current_score = score_fn(&canonical_key(&current));
-        let mut best = current.clone();
-        let mut best_score = current_score;
-        let mut temp = initial_temp.max(0.0001);
-        candidates.push(current.clone());
-
-        for _ in 0..iterations.max(1) {
-            if deadline_reached(deadline) {
-                break;
-            }
-            let mut next = current.clone();
-            if !next.is_empty() {
-                let slot = rand_index(&mut s, next.len());
-                let candidate = rand_index(&mut s, item_pool.len());
-                next[slot] = candidate;
-                repair_build(item_pool, &mut next, max_items, &mut s);
-                let next_key = canonical_key(&next);
-                let next_score = score_fn(&next_key);
-                let delta = next_score - current_score;
-                let accept = delta >= 0.0 || rand_f64(&mut s) < (delta / temp).exp();
-                if accept {
-                    current = next;
-                    current_score = next_score;
-                    candidates.push(current.clone());
-                    if current_score > best_score {
-                        best_score = current_score;
-                        best = current.clone();
-                    }
-                }
-            }
-            temp = (temp * cooling_rate.clamp(0.8, 0.9999)).max(0.0001);
-        }
-        candidates.push(best);
-    }
-
-    unique_ranked_from_candidates(candidates, score_fn, limit, deadline)
-}
-
-#[derive(Debug, Clone)]
-struct MctsNode {
-    build: Vec<usize>,
-    parent: Option<usize>,
-    action_from_parent: Option<usize>,
-    children: Vec<usize>,
-    untried_actions: Vec<usize>,
-    visits: usize,
-    value_sum: f64,
-}
-
-fn available_actions(item_pool: &[Item], build: &[usize]) -> Vec<usize> {
-    (0..item_pool.len())
-        .filter(|&idx| can_add_item_to_build(item_pool, build, idx))
-        .collect()
-}
-
-fn rollout_completion<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    start_build: &[usize],
-    seed: &mut u64,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> (Vec<usize>, f64)
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let mut build = start_build.to_vec();
-    let mut actions = available_actions(item_pool, &build);
-    shuffle_usize(&mut actions, seed);
-    for action in actions {
-        if build.len() >= max_items {
-            break;
-        }
-        if can_add_item_to_build(item_pool, &build, action) {
-            build.push(action);
-        }
-    }
-    repair_build(item_pool, &mut build, max_items, seed);
-    let key = canonical_key(&build);
-    let score = if deadline_reached(deadline) {
-        f64::NEG_INFINITY
-    } else {
-        score_fn(&key)
-    };
-    (key, score)
-}
-
-fn mcts_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    iterations: usize,
-    rollouts_per_expansion: usize,
-    exploration: f64,
-    seed: u64,
-    limit: usize,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let mut s = seed;
-    let mut nodes = vec![MctsNode {
-        build: vec![],
-        parent: None,
-        action_from_parent: None,
-        children: vec![],
-        untried_actions: available_actions(item_pool, &[]),
-        visits: 0,
-        value_sum: 0.0,
-    }];
-    let mut all_rollout_keys = Vec::new();
-
-    for _ in 0..iterations.max(1) {
-        if deadline_reached(deadline) {
-            break;
-        }
-        let mut node_idx = 0usize;
-        loop {
-            if nodes[node_idx].build.len() >= max_items {
-                break;
-            }
-            if !nodes[node_idx].untried_actions.is_empty() {
-                break;
-            }
-            if nodes[node_idx].children.is_empty() {
-                break;
-            }
-            let parent_visits = nodes[node_idx].visits.max(1) as f64;
-            let mut best_child = nodes[node_idx].children[0];
-            let mut best_uct = f64::NEG_INFINITY;
-            for &child_idx in &nodes[node_idx].children {
-                let child = &nodes[child_idx];
-                let exploit = if child.visits == 0 {
-                    0.0
-                } else {
-                    child.value_sum / child.visits as f64
-                };
-                let explore =
-                    exploration * ((parent_visits.ln() / (child.visits.max(1) as f64)).sqrt());
-                let uct = exploit + explore;
-                if uct > best_uct {
-                    best_uct = uct;
-                    best_child = child_idx;
-                }
-            }
-            node_idx = best_child;
-        }
-
-        if !nodes[node_idx].untried_actions.is_empty() && nodes[node_idx].build.len() < max_items {
-            let action_pos = rand_index(&mut s, nodes[node_idx].untried_actions.len());
-            let action = nodes[node_idx].untried_actions.swap_remove(action_pos);
-            let mut child_build = nodes[node_idx].build.clone();
-            child_build.push(action);
-            repair_build(item_pool, &mut child_build, max_items, &mut s);
-            let child_idx = nodes.len();
-            nodes.push(MctsNode {
-                build: child_build.clone(),
-                parent: Some(node_idx),
-                action_from_parent: Some(action),
-                children: vec![],
-                untried_actions: available_actions(item_pool, &child_build),
-                visits: 0,
-                value_sum: 0.0,
-            });
-            nodes[node_idx].children.push(child_idx);
-            node_idx = child_idx;
-        }
-
-        let mut rollout_scores = Vec::new();
-        let rollouts = rollouts_per_expansion.max(1);
-        for _ in 0..rollouts {
-            if deadline_reached(deadline) {
-                break;
-            }
-            let (key, score) = rollout_completion(
-                item_pool,
-                max_items,
-                &nodes[node_idx].build,
-                &mut s,
-                score_fn,
-                deadline,
-            );
-            all_rollout_keys.push(key);
-            rollout_scores.push(score);
-        }
-        if rollout_scores.is_empty() {
-            break;
-        }
-        let mean_score = rollout_scores.iter().sum::<f64>() / rollout_scores.len() as f64;
-
-        let mut back = Some(node_idx);
-        while let Some(idx) = back {
-            nodes[idx].visits += 1;
-            nodes[idx].value_sum += mean_score;
-            back = nodes[idx].parent;
-        }
-    }
-
-    let _used_actions = nodes.iter().filter_map(|n| n.action_from_parent).count();
-    unique_ranked_from_candidates(all_rollout_keys, score_fn, limit, deadline)
-}
-
-fn symmetric_diff_count(a: &[usize], b: &[usize]) -> usize {
-    let sa = a.iter().copied().collect::<HashSet<_>>();
-    let sb = b.iter().copied().collect::<HashSet<_>>();
-    sa.symmetric_difference(&sb).count()
-}
-
-fn select_diverse_top_builds(
-    ranked: &[(Vec<usize>, f64)],
-    top_x: usize,
-    min_item_diff: usize,
-    max_relative_gap_percent: f64,
-) -> Vec<(Vec<usize>, f64)> {
-    if ranked.is_empty() || top_x == 0 {
-        return vec![];
-    }
-
-    let best_score = ranked[0].1;
-    let min_allowed = best_score * (1.0 - (max_relative_gap_percent / 100.0));
-
-    let mut selected: Vec<(Vec<usize>, f64)> = Vec::new();
-    for (build, score) in ranked {
-        if *score < min_allowed {
-            continue;
-        }
-        if selected
-            .iter()
-            .all(|(chosen, _)| symmetric_diff_count(chosen, build) >= min_item_diff)
-        {
-            selected.push((build.clone(), *score));
-            if selected.len() >= top_x {
-                break;
-            }
-        }
-    }
-    selected
-}
-
-fn item_names(items: &[Item]) -> String {
-    items
-        .iter()
-        .map(|i| i.name.clone())
-        .collect::<Vec<_>>()
-        .join(", ")
-}
-
-fn build_level_milestones(item_count: usize, start_level: usize, end_level: usize) -> Vec<usize> {
-    if item_count == 0 {
-        return vec![];
-    }
-    if item_count == 1 {
-        return vec![end_level.max(start_level)];
-    }
-    let start = start_level as f64;
-    let end = end_level as f64;
-    let denom = (item_count - 1) as f64;
-    (0..item_count)
-        .map(|i| {
-            let t = (i as f64) / denom;
-            (start + (end - start) * t).round().max(1.0) as usize
-        })
-        .collect()
-}
-
-fn acquisition_level_map(items: &[Item], levels: &[usize]) -> HashMap<String, usize> {
-    let mut map = HashMap::new();
-    for (item, lvl) in items.iter().zip(levels.iter()) {
-        map.insert(item.name.clone(), *lvl);
-    }
-    map
-}
-
-fn level_scaled_enemy_builds(
-    level: usize,
-    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
-    raw_enemy_bases: &HashMap<String, ChampionBase>,
-) -> Vec<(EnemyConfig, Vec<Item>, Stats)> {
-    enemy_builds
-        .iter()
-        .map(|(enemy_cfg, build, bonus_stats)| {
-            let raw_base = raw_enemy_bases
-                .get(&enemy_cfg.name)
-                .cloned()
-                .unwrap_or_else(|| enemy_cfg.base.clone());
-            let mut scaled_cfg = enemy_cfg.clone();
-            scaled_cfg.base = champion_at_level(&raw_base, level);
-            (scaled_cfg, build.clone(), bonus_stats.clone())
-        })
-        .collect()
-}
-
-fn score_build_order(
-    ordered_items: &[Item],
-    levels: &[usize],
-    vlad_base_raw: &ChampionBase,
-    vlad_bonus_stats: &Stats,
-    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
-    raw_enemy_bases: &HashMap<String, ChampionBase>,
-    sim: &SimulationConfig,
-    urf: &UrfBuffs,
-) -> BuildOrderResult {
-    let mut stage_survival = Vec::new();
-    let mut cumulative_score = 0.0;
-    for (idx, level) in levels.iter().enumerate() {
-        let prefix = &ordered_items[..=idx];
-        let prefix_levels = &levels[..=idx];
-        let acquired_map = acquisition_level_map(prefix, prefix_levels);
-        let vlad_base_level = champion_at_level(vlad_base_raw, *level);
-        let enemy_level_builds = level_scaled_enemy_builds(*level, enemy_builds, raw_enemy_bases);
-        let mut sim_at_level = sim.clone();
-        sim_at_level.champion_level = *level;
-        let t = simulate_vlad_survival(
-            &vlad_base_level,
-            prefix,
-            vlad_bonus_stats,
-            Some(&acquired_map),
-            &enemy_level_builds,
-            &sim_at_level,
-            urf,
-        );
-        stage_survival.push(t);
-        cumulative_score += t;
-    }
-    BuildOrderResult {
-        ordered_items: ordered_items.to_vec(),
-        levels: levels.to_vec(),
-        acquired_levels: levels.to_vec(),
-        stage_survival,
-        cumulative_score,
-    }
-}
-
-fn optimize_build_order(
-    build_items: &[Item],
-    vlad_base_raw: &ChampionBase,
-    vlad_bonus_stats: &Stats,
-    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
-    raw_enemy_bases: &HashMap<String, ChampionBase>,
-    sim: &SimulationConfig,
-    urf: &UrfBuffs,
-) -> BuildOrderResult {
-    let levels = build_level_milestones(build_items.len(), 5, 20);
-    let mut best = score_build_order(
-        build_items,
-        &levels,
-        vlad_base_raw,
-        vlad_bonus_stats,
-        enemy_builds,
-        raw_enemy_bases,
-        sim,
-        urf,
-    );
-    if build_items.len() <= 1 {
-        return best;
-    }
-
-    let beam_width = 40usize;
-    let mut frontier = vec![Vec::<usize>::new()];
-    for depth in 0..build_items.len() {
-        let mut expanded = Vec::<(Vec<usize>, f64)>::new();
-        for partial in &frontier {
-            let mut used = partial.iter().copied().collect::<HashSet<_>>();
-            for idx in 0..build_items.len() {
-                if used.contains(&idx) {
-                    continue;
-                }
-                let mut candidate = partial.clone();
-                candidate.push(idx);
-                used.insert(idx);
-                let ordered = candidate
-                    .iter()
-                    .map(|i| build_items[*i].clone())
-                    .collect::<Vec<_>>();
-                let partial_levels = levels[..candidate.len()].to_vec();
-                let current = score_build_order(
-                    &ordered,
-                    &partial_levels,
-                    vlad_base_raw,
-                    vlad_bonus_stats,
-                    enemy_builds,
-                    raw_enemy_bases,
-                    sim,
-                    urf,
-                );
-                let optimistic_upper_bound = current.cumulative_score
-                    + (build_items.len() - candidate.len()) as f64 * sim.max_time_seconds;
-                expanded.push((candidate, optimistic_upper_bound));
-            }
-        }
-        expanded.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
-        frontier = expanded
-            .into_iter()
-            .take(beam_width)
-            .map(|(candidate, _)| candidate)
-            .collect::<Vec<_>>();
-        if frontier.is_empty() {
-            break;
-        }
-        if depth + 1 == build_items.len() {
-            for order_idx in &frontier {
-                let ordered = order_idx
-                    .iter()
-                    .map(|i| build_items[*i].clone())
-                    .collect::<Vec<_>>();
-                let scored = score_build_order(
-                    &ordered,
-                    &levels,
-                    vlad_base_raw,
-                    vlad_bonus_stats,
-                    enemy_builds,
-                    raw_enemy_bases,
-                    sim,
-                    urf,
-                );
-                if scored.cumulative_score > best.cumulative_score {
-                    best = scored;
-                }
-            }
-        }
-    }
-
-    best
-}
-
-fn default_report_path() -> PathBuf {
-    simulation_dir()
-        .join("output")
-        .join("vladimir_run_report.md")
-}
-
-fn write_vladimir_report_markdown(
-    report_path: &Path,
-    scenario_path: &Path,
-    sim: &SimulationConfig,
-    vlad_base_level: &ChampionBase,
-    vlad_end_stats: &Stats,
-    stack_notes: &[String],
-    vlad_loadout: &ResolvedLoadout,
-    enemy_loadout: &ResolvedLoadout,
-    baseline_build: &[Item],
-    baseline_score: f64,
-    baseline_outcome: &CombatOutcome,
-    best_build: &[Item],
-    best_score: f64,
-    best_outcome: &CombatOutcome,
-    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
-    enemy_presets_used: &HashMap<String, EnemyUrfPreset>,
-    diverse_top_builds: &[(Vec<Item>, f64)],
-    diverse_top_keys: &[Vec<usize>],
-    build_confidence: &[BuildConfidence],
-    metrics_by_key: &HashMap<Vec<usize>, BuildMetrics>,
-    pareto_front: &HashSet<Vec<usize>>,
-    diagnostics: &SearchDiagnostics,
-    build_orders: &[BuildOrderResult],
-) -> Result<()> {
-    if let Some(parent) = report_path.parent() {
-        fs::create_dir_all(parent)
-            .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
-    }
-    let now = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_secs();
-    let improvement = if baseline_score.abs() > f64::EPSILON {
-        ((best_score - baseline_score) / baseline_score) * 100.0
-    } else {
-        0.0
-    };
-
-    let mut content = String::new();
-    content.push_str("# Vladimir URF Run Report\n\n");
-    content.push_str(&format!("- Generated (unix): `{}`\n", now));
-    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
-
-    content.push_str("## Headline\n");
-    content.push_str(&format!(
-        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills: **{:.2}s / {:.1} / {:.1} / {}**\n- Best time alive / damage dealt / healing done / enemy kills: **{:.2}s / {:.1} / {:.1} / {}**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
-        baseline_score,
-        best_score,
-        improvement,
-        baseline_outcome.time_alive_seconds,
-        baseline_outcome.damage_dealt,
-        baseline_outcome.healing_done,
-        baseline_outcome.enemy_kills,
-        best_outcome.time_alive_seconds,
-        best_outcome.damage_dealt,
-        best_outcome.healing_done,
-        best_outcome.enemy_kills,
-        baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
-        best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
-    ));
-
-    content.push_str(&format!(
-        "- Champion level assumption: **{}**\n\n",
-        sim.champion_level
-    ));
-
-    let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
-    content.push_str("## Search Diagnostics\n");
-    content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing): `{:.2}/{:.2}/{:.2}`\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Unique candidate builds: `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
-        diagnostics.strategy_summary,
-        diagnostics.search_quality_profile,
-        diagnostics.scenario_count,
-        diagnostics.loadout_candidates,
-        diagnostics.loadout_finalists,
-        diagnostics.ensemble_seeds,
-        diagnostics.objective_survival_weight,
-        diagnostics.objective_damage_weight,
-        diagnostics.objective_healing_weight,
-        diagnostics.full_evaluations,
-        diagnostics.full_cache_hits,
-        diagnostics.full_cache_misses,
-        diagnostics.full_cache_waits,
-        diagnostics.full_persistent_cache_hits,
-        diagnostics.full_persistent_cache_entries,
-        diagnostics.unique_candidate_builds,
-        diagnostics.bleed_candidates_injected,
-        diagnostics.adaptive_candidates_injected,
-        seed_mean,
-        seed_std
-    ));
-    if let Some(budget) = diagnostics.time_budget_seconds {
-        content.push_str(&format!(
-            "- Time budget: `{:.1}s`; elapsed: `{:.1}s`; timed_out: `{}`; progress: `{}/{}`\n\n",
-            budget,
-            diagnostics.elapsed_seconds,
-            diagnostics.timed_out,
-            diagnostics.processed_candidates,
-            diagnostics.total_candidates
-        ));
-    } else {
-        content.push_str(&format!(
-            "- Elapsed: `{:.1}s`; progress: `{}/{}`\n\n",
-            diagnostics.elapsed_seconds,
-            diagnostics.processed_candidates,
-            diagnostics.total_candidates
-        ));
-    }
-
-    content.push_str("## Vladimir Base Stats At Level\n");
-    content.push_str(&format!(
-        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AD: {:.1}, AS: {:.3}, MS: {:.1}\n\n",
-        vlad_base_level.base_health,
-        vlad_base_level.base_armor,
-        vlad_base_level.base_magic_resist,
-        vlad_base_level.base_attack_damage,
-        vlad_base_level.base_attack_speed,
-        vlad_base_level.base_move_speed
-    ));
-
-    content.push_str("## Selected Runes/Masteries\n");
-    if vlad_loadout.selection_labels.is_empty() {
-        content.push_str("- Vladimir: none selected.\n");
-    } else {
-        content.push_str("- Vladimir:\n");
-        for s in &vlad_loadout.selection_labels {
-            content.push_str(&format!("  - {}\n", s));
-        }
-    }
-    if enemy_loadout.selection_labels.is_empty() {
-        content.push_str("- Enemies: none selected.\n\n");
-    } else {
-        content.push_str("- Enemies (applied to all):\n");
-        for s in &enemy_loadout.selection_labels {
-            content.push_str(&format!("  - {}\n", s));
-        }
-        content.push('\n');
-    }
-    if !vlad_loadout.applied_notes.is_empty() || !enemy_loadout.applied_notes.is_empty() {
-        content.push_str("- Applied deterministic loadout effects:\n");
-        for note in &vlad_loadout.applied_notes {
-            content.push_str(&format!("  - Vladimir: {}\n", note));
-        }
-        for note in &enemy_loadout.applied_notes {
-            content.push_str(&format!("  - Enemies: {}\n", note));
-        }
-    }
-    if !vlad_loadout.skipped_notes.is_empty() || !enemy_loadout.skipped_notes.is_empty() {
-        content.push_str("- Skipped unsupported/non-deterministic effects:\n");
-        for note in &vlad_loadout.skipped_notes {
-            content.push_str(&format!("  - Vladimir: {}\n", note));
-        }
-        for note in &enemy_loadout.skipped_notes {
-            content.push_str(&format!("  - Enemies: {}\n", note));
-        }
-    }
-    content.push('\n');
-
-    content.push_str("## Baseline Build\n");
-    content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
-
-    content.push_str("## Best Build\n");
-    content.push_str(&format!("- {}\n\n", item_names(best_build)));
-
-    content.push_str("## Vladimir End Stats (Best Build)\n");
-    content.push_str(&format!(
-        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AP: {:.1}, AD: {:.1}, Ability Haste: {:.1}, Move Speed (flat bonus): {:.1}, Move Speed (% bonus): {:.1}\n\n",
-        vlad_end_stats.health,
-        vlad_end_stats.armor,
-        vlad_end_stats.magic_resist,
-        vlad_end_stats.ability_power,
-        vlad_end_stats.attack_damage,
-        vlad_end_stats.ability_haste,
-        vlad_end_stats.move_speed_flat,
-        vlad_end_stats.move_speed_percent
-    ));
-
-    content.push_str("## Stack Assumptions\n");
-    if stack_notes.is_empty() {
-        content.push_str(
-            "- No explicit stack assumptions triggered for selected best build items.\n\n",
-        );
-    } else {
-        for note in stack_notes {
-            content.push_str(&format!("- {}\n", note));
-        }
-        content.push('\n');
-    }
-
-    content.push_str("## Enemy Builds (URF Presets)\n");
-    for (enemy, build, _) in enemy_builds {
-        content.push_str(&format!("- {}: {}\n", enemy.name, item_names(build)));
-        if let Some(preset) = enemy_presets_used.get(&to_norm_key(&enemy.name)) {
-            content.push_str(&format!(
-                "  - Source: {} (last checked {})\n",
-                preset.source_url, preset.last_checked
-            ));
-            content.push_str(&format!("  - Runes: {}\n", preset.runes.join(", ")));
-            content.push_str(&format!(
-                "  - Masteries: {}\n",
-                preset
-                    .masteries
-                    .iter()
-                    .map(|m| format!("{} ({})", m.name, m.rank))
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            ));
-        }
-    }
-    content.push('\n');
-
-    content.push_str("## Diverse Top Builds\n");
-    if diverse_top_builds.is_empty() {
-        content.push_str("- No diverse builds found under current thresholds.\n\n");
-    } else {
-        let best = diverse_top_builds[0].1;
-        for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
-            let delta = score - best;
-            let key = diverse_top_keys.get(idx);
-            let confidence = key
-                .and_then(|k| build_confidence.iter().find(|c| c.key == *k))
-                .map(|c| {
-                    format!(
-                        " | seed hits: {}/{} ({:.0}%) {}",
-                        c.seed_hits,
-                        diagnostics.ensemble_seeds,
-                        c.seed_hit_rate * 100.0,
-                        c.robustness
-                    )
-                })
-                .unwrap_or_default();
-            let pareto = key.map(|k| pareto_front.contains(k)).unwrap_or(false);
-            let pareto_tag = if pareto { " | Pareto-front" } else { "" };
-            content.push_str(&format!(
-                "{}. `score {:.4}` ({:+.4} vs top): {}{}{}\n",
-                idx + 1,
-                score,
-                delta,
-                item_names(build),
-                confidence,
-                pareto_tag
-            ));
-            if let Some(k) = key {
-                if let Some(m) = metrics_by_key.get(k) {
-                    content.push_str(&format!(
-                        "   - metrics: EHP~{:.1}, AP~{:.1}, timing score {:+.2}, total cost {:.0}\n",
-                        m.ehp_mixed, m.ap, m.cost_timing, m.total_cost
-                    ));
-                }
-            }
-        }
-        content.push('\n');
-    }
-
-    content.push_str("## Build Order Optimization\n");
-    if build_orders.is_empty() {
-        content.push_str("- No build-order optimization results available.\n\n");
-    } else {
-        for (idx, br) in build_orders.iter().enumerate() {
-            content.push_str(&format!(
-                "{}. Cumulative score: `{:.2}` | Order: {}\n",
-                idx + 1,
-                br.cumulative_score,
-                item_names(&br.ordered_items)
-            ));
-            for (stage_idx, (lvl, surv)) in
-                br.levels.iter().zip(br.stage_survival.iter()).enumerate()
-            {
-                content.push_str(&format!(
-                    "   - Stage {} (level {}): `{:.2}s`\n",
-                    stage_idx + 1,
-                    lvl,
-                    surv
-                ));
-            }
-        }
-        content.push('\n');
-    }
-
-    content.push_str("## Deeper Insights\n");
-    if !diverse_top_builds.is_empty() {
-        let mut item_counts: HashMap<String, usize> = HashMap::new();
-        for (build, _) in diverse_top_builds {
-            for item in build {
-                *item_counts.entry(item.name.clone()).or_insert(0) += 1;
-            }
-        }
-        let mut counts = item_counts.into_iter().collect::<Vec<_>>();
-        counts.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
-        let core_items = counts
-            .iter()
-            .filter(|(_, c)| *c == diverse_top_builds.len())
-            .map(|(n, _)| n.clone())
-            .collect::<Vec<_>>();
-        let top_freq = counts
-            .iter()
-            .take(8)
-            .map(|(n, c)| format!("{} ({}/{})", n, c, diverse_top_builds.len()))
-            .collect::<Vec<_>>();
-
-        if core_items.is_empty() {
-            content.push_str("- No single item appears in every selected diverse top build.\n");
-        } else {
-            content.push_str(&format!(
-                "- Common core across all selected top builds: {}.\n",
-                core_items.join(", ")
-            ));
-        }
-        content.push_str(&format!(
-            "- Most frequent items in selected top set: {}.\n",
-            top_freq.join(", ")
-        ));
-        content.push_str("- Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.\n");
-    } else {
-        content.push_str("- Broaden thresholds (`--max-relative-gap-percent`) or lower diversity constraint (`--min-item-diff`) to surface more alternatives.\n");
-    }
-
-    fs::write(report_path, content)
-        .with_context(|| format!("Failed writing report {}", report_path.display()))?;
-    Ok(())
-}
-
-fn write_vladimir_report_json(
-    report_path: &Path,
-    scenario_path: &Path,
-    sim: &SimulationConfig,
-    baseline_build: &[Item],
-    baseline_score: f64,
-    baseline_outcome: &CombatOutcome,
-    best_build: &[Item],
-    best_score: f64,
-    best_outcome: &CombatOutcome,
-    vladimir_loadout: &ResolvedLoadout,
-    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
-    enemy_presets_used: &HashMap<String, EnemyUrfPreset>,
-    diverse_top_builds: &[(Vec<Item>, f64)],
-    diagnostics: &SearchDiagnostics,
-    build_orders: &[BuildOrderResult],
-) -> Result<()> {
-    if let Some(parent) = report_path.parent() {
-        fs::create_dir_all(parent)
-            .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
-    }
-    let improvement_percent = if baseline_score.abs() > f64::EPSILON {
-        ((best_score - baseline_score) / baseline_score) * 100.0
-    } else {
-        0.0
-    };
-    let json_value = json!({
-        "scenario_path": scenario_path.display().to_string(),
-        "champion_level": sim.champion_level,
-        "headline": {
-            "baseline_objective_score": baseline_score,
-            "best_objective_score": best_score,
-            "improvement_percent": improvement_percent,
-            "baseline_outcome": {
-                "time_alive_seconds": baseline_outcome.time_alive_seconds,
-                "damage_dealt": baseline_outcome.damage_dealt,
-                "healing_done": baseline_outcome.healing_done,
-                "enemy_kills": baseline_outcome.enemy_kills,
-                "cap_survivor": baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
-            },
-            "best_outcome": {
-                "time_alive_seconds": best_outcome.time_alive_seconds,
-                "damage_dealt": best_outcome.damage_dealt,
-                "healing_done": best_outcome.healing_done,
-                "enemy_kills": best_outcome.enemy_kills,
-                "cap_survivor": best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
-            },
-        },
-        "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
-        "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
-        "vladimir_loadout_labels": vladimir_loadout.selection_labels,
-        "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {
-            let key = to_norm_key(&enemy.name);
-            let preset = enemy_presets_used.get(&key);
-            json!({
-                "champion": enemy.name,
-                "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
-                "runes": preset.map(|p| p.runes.clone()).unwrap_or_default(),
-                "shards": preset.map(|p| p.shards.clone()).unwrap_or_default(),
-                "masteries": preset.map(|p| p.masteries.iter().map(|m| json!({"name": m.name, "rank": m.rank})).collect::<Vec<_>>()).unwrap_or_default(),
-                "source_url": preset.map(|p| p.source_url.clone()).unwrap_or_default(),
-                "last_checked": preset.map(|p| p.last_checked.clone()).unwrap_or_default(),
-            })
-        }).collect::<Vec<_>>(),
-        "diverse_top_builds": diverse_top_builds.iter().map(|(build, score)| {
-            json!({
-                "objective_score": score,
-                "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>()
-            })
-        }).collect::<Vec<_>>(),
-        "build_orders": build_orders.iter().map(|order| {
-            json!({
-                "cumulative_score": order.cumulative_score,
-                "ordered_items": order.ordered_items.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
-                "levels": order.levels,
-                "stage_survival_seconds": order.stage_survival,
-            })
-        }).collect::<Vec<_>>(),
-        "diagnostics": {
-            "strategy_summary": diagnostics.strategy_summary,
-            "search_quality_profile": diagnostics.search_quality_profile,
-            "ensemble_seeds": diagnostics.ensemble_seeds,
-            "objective_survival_weight": diagnostics.objective_survival_weight,
-            "objective_damage_weight": diagnostics.objective_damage_weight,
-            "objective_healing_weight": diagnostics.objective_healing_weight,
-            "full_evaluations": diagnostics.full_evaluations,
-            "full_cache_hits": diagnostics.full_cache_hits,
-            "full_cache_misses": diagnostics.full_cache_misses,
-            "full_cache_waits": diagnostics.full_cache_waits,
-            "full_persistent_cache_hits": diagnostics.full_persistent_cache_hits,
-            "full_persistent_cache_entries": diagnostics.full_persistent_cache_entries,
-            "unique_candidate_builds": diagnostics.unique_candidate_builds,
-            "bleed_candidates_injected": diagnostics.bleed_candidates_injected,
-            "adaptive_candidates_injected": diagnostics.adaptive_candidates_injected,
-            "scenario_count": diagnostics.scenario_count,
-            "loadout_candidates": diagnostics.loadout_candidates,
-            "loadout_finalists": diagnostics.loadout_finalists,
-            "time_budget_seconds": diagnostics.time_budget_seconds,
-            "elapsed_seconds": diagnostics.elapsed_seconds,
-            "timed_out": diagnostics.timed_out,
-            "processed_candidates": diagnostics.processed_candidates,
-            "total_candidates": diagnostics.total_candidates
-        }
-    });
-    fs::write(report_path, serde_json::to_string_pretty(&json_value)?)
-        .with_context(|| format!("Failed writing JSON report {}", report_path.display()))?;
-    Ok(())
-}
-
-fn choose_best_build_by_stat(
-    item_pool: &[Item],
-    stat_key: &str,
-    max_items: usize,
-    beam_width: usize,
-) -> Vec<usize> {
-    let mut candidates: Vec<Vec<usize>> = vec![vec![]];
-    for _ in 0..max_items {
-        let mut next_candidates = Vec::new();
-        for build in &candidates {
-            let has_boots = build.iter().any(|&i| is_boots(&item_pool[i]));
-            let used = build.iter().copied().collect::<HashSet<_>>();
-            for item_idx in 0..item_pool.len() {
-                if used.contains(&item_idx) {
-                    continue;
-                }
-                if is_boots(&item_pool[item_idx]) && has_boots {
-                    continue;
-                }
-                let mut next = build.clone();
-                next.push(item_idx);
-                next_candidates.push(next);
-            }
-        }
-        next_candidates.sort_by(|a, b| {
-            let sa = build_item_stats(&build_from_indices(item_pool, a)).get_stat(stat_key);
-            let sb = build_item_stats(&build_from_indices(item_pool, b)).get_stat(stat_key);
-            sb.partial_cmp(&sa).unwrap_or(Ordering::Equal)
-        });
-        next_candidates.truncate(beam_width);
-        candidates = next_candidates;
-    }
-    candidates.into_iter().next().unwrap_or_default()
-}
-
-fn build_search_ranked<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    search: &BuildSearchConfig,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<(Vec<usize>, f64)>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    if deadline_reached(deadline) {
-        return Vec::new();
-    }
-    match search.strategy.as_str() {
-        "greedy" => {
-            let mut build = Vec::new();
-            for _ in 0..max_items {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut best: Option<usize> = None;
-                let mut best_score = f64::NEG_INFINITY;
-                for item_idx in 0..item_pool.len() {
-                    if !can_add_item_to_build(item_pool, &build, item_idx) {
-                        continue;
-                    }
-                    let mut candidate = build.clone();
-                    candidate.push(item_idx);
-                    let score = score_fn(&canonical_key(&candidate));
-                    if score > best_score {
-                        best_score = score;
-                        best = Some(item_idx);
-                    }
-                }
-                if let Some(item_idx) = best {
-                    build.push(item_idx);
-                } else {
-                    break;
-                }
-            }
-            let key = canonical_key(&build);
-            vec![(key.clone(), score_fn(&key))]
-        }
-        "beam" => beam_search_ranked(item_pool, max_items, search.beam_width, score_fn, deadline),
-        "random" => random_search_ranked(
-            item_pool,
-            max_items,
-            search.random_samples,
-            search.seed,
-            search.ranked_limit,
-            score_fn,
-            deadline,
-        ),
-        "hill_climb" => hill_climb_search_ranked(
-            item_pool,
-            max_items,
-            search.hill_climb_restarts,
-            search.hill_climb_steps,
-            search.hill_climb_neighbors,
-            search.seed,
-            search.ranked_limit,
-            score_fn,
-            deadline,
-        ),
-        "genetic" => genetic_search_ranked(
-            item_pool,
-            max_items,
-            search.genetic_population,
-            search.genetic_generations,
-            search.genetic_mutation_rate,
-            search.genetic_crossover_rate,
-            search.seed,
-            search.ranked_limit,
-            score_fn,
-            deadline,
-        ),
-        "simulated_annealing" => simulated_annealing_search_ranked(
-            item_pool,
-            max_items,
-            search.simulated_annealing_restarts,
-            search.simulated_annealing_iterations,
-            search.simulated_annealing_initial_temp,
-            search.simulated_annealing_cooling_rate,
-            search.seed,
-            search.ranked_limit,
-            score_fn,
-            deadline,
-        ),
-        "mcts" => mcts_search_ranked(
-            item_pool,
-            max_items,
-            search.mcts_iterations,
-            search.mcts_rollouts_per_expansion,
-            search.mcts_exploration,
-            search.seed,
-            search.ranked_limit,
-            score_fn,
-            deadline,
-        ),
-        "portfolio" => {
-            let strategies = portfolio_strategy_list(search);
-            let mut ranked_sets = Vec::new();
-            for (idx, strat) in strategies.iter().enumerate() {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strat.clone();
-                cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
-                ranked_sets.push(build_search_ranked(
-                    item_pool, max_items, &cfg, score_fn, deadline,
-                ));
-            }
-            let mut merged_candidates = Vec::new();
-            for ranked in ranked_sets {
-                for (build, _) in ranked {
-                    merged_candidates.push(build);
-                }
-            }
-            unique_ranked_from_candidates(
-                merged_candidates,
-                score_fn,
-                search.ranked_limit,
-                deadline,
-            )
-        }
-        _ => vec![],
-    }
-}
-
-fn portfolio_strategy_list(search: &BuildSearchConfig) -> Vec<String> {
-    if search.strategy != "portfolio" {
-        return vec![search.strategy.clone()];
-    }
-    let mut strategies = if search.portfolio_strategies.is_empty() {
-        vec![
-            "beam".to_string(),
-            "hill_climb".to_string(),
-            "genetic".to_string(),
-            "simulated_annealing".to_string(),
-            "mcts".to_string(),
-            "random".to_string(),
-            "greedy".to_string(),
-        ]
-    } else {
-        search.portfolio_strategies.clone()
-    };
-    strategies.retain(|s| s != "portfolio");
-    if strategies.is_empty() {
-        strategies.push("beam".to_string());
-    }
-    strategies
-}
-
-fn search_strategy_summary(search: &BuildSearchConfig) -> String {
-    if search.strategy == "portfolio" {
-        let strategies = portfolio_strategy_list(search);
-        format!("portfolio({})", strategies.join(", "))
-    } else {
-        search.strategy.clone()
-    }
-}
-
-fn strategy_seed_elites<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    search: &BuildSearchConfig,
-    strategies: &[String],
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> HashMap<String, Vec<Vec<usize>>>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    let ensemble = search.ensemble_seeds.max(1);
-    let top_k = search.ensemble_seed_top_k.max(1);
-
-    let grouped = strategies
-        .iter()
-        .enumerate()
-        .map(|(sidx, strategy)| {
-            let mut aggregate = HashMap::<Vec<usize>, f64>::new();
-            for seed_idx in 0..ensemble {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strategy.clone();
-                cfg.seed = search.seed.wrapping_add(
-                    ((sidx as u64 + 1) * 31 + seed_idx as u64 + 1) * search.ensemble_seed_stride,
-                );
-                cfg.ranked_limit = top_k.max(64);
-                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
-                for (key, score) in ranked.into_iter().take(top_k) {
-                    let e = aggregate.entry(key).or_insert(score);
-                    if score > *e {
-                        *e = score;
-                    }
-                }
-            }
-            let mut items = aggregate.into_iter().collect::<Vec<_>>();
-            items.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
-            let keys = items.into_iter().map(|(k, _)| k).collect::<Vec<_>>();
-            (strategy.clone(), keys)
-        })
-        .collect::<Vec<_>>();
-
-    grouped.into_iter().collect::<HashMap<_, _>>()
-}
-
-fn generate_bleed_candidates(
-    item_pool: &[Item],
-    max_items: usize,
-    strategy_elites: &HashMap<String, Vec<Vec<usize>>>,
-    search: &BuildSearchConfig,
-) -> Vec<Vec<usize>> {
-    if !search.bleed_enabled {
-        return Vec::new();
-    }
-    let mut seed = search.seed ^ 0xB1EEDu64;
-    let mut out = Vec::new();
-    let mut seen = HashSet::new();
-    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
-    let mut elite_pool = Vec::new();
-
-    for builds in strategy_elites.values() {
-        for key in builds.iter().take(search.ensemble_seed_top_k.max(1)) {
-            let canon = canonical_key(key);
-            if seen.insert(canon.clone()) {
-                out.push(canon.clone());
-                elite_pool.push(canon);
-            }
-        }
-    }
-    if elite_pool.is_empty() {
-        return out;
-    }
-
-    let bleed_budget = if search.bleed_budget > 0 {
-        search.bleed_budget
-    } else {
-        // Max-quality default: at least ranked candidate pool size, with a reasonable floor.
-        search.ranked_limit.max(800)
-    };
-    let cross_budget = bleed_budget / 2;
-    let mutate_budget = bleed_budget - cross_budget;
-    let mutation_rate = search.bleed_mutation_rate.clamp(0.0, 1.0);
-
-    for _ in 0..cross_budget {
-        let a = rand_index(&mut seed, elite_pool.len());
-        let b = if strategies.len() >= 2 {
-            let sa = rand_index(&mut seed, strategies.len());
-            let mut sb = rand_index(&mut seed, strategies.len());
-            if sb == sa {
-                sb = (sb + 1) % strategies.len();
-            }
-            let list_a = strategy_elites.get(&strategies[sa]).unwrap_or(&elite_pool);
-            let list_b = strategy_elites.get(&strategies[sb]).unwrap_or(&elite_pool);
-            let pa = list_a
-                .get(rand_index(&mut seed, list_a.len()))
-                .cloned()
-                .unwrap_or_else(|| elite_pool[a].clone());
-            let pb = list_b
-                .get(rand_index(&mut seed, list_b.len()))
-                .cloned()
-                .unwrap_or_else(|| elite_pool[a].clone());
-            let mut child = crossover_builds(&pa, &pb, item_pool, max_items, &mut seed);
-            mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut seed);
-            canonical_key(&child)
-        } else {
-            let mut child = elite_pool[a].clone();
-            mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut seed);
-            canonical_key(&child)
-        };
-        if seen.insert(b.clone()) {
-            out.push(b);
-        }
-    }
-
-    for _ in 0..mutate_budget {
-        let mut child = elite_pool[rand_index(&mut seed, elite_pool.len())].clone();
-        mutate_build(&mut child, item_pool, max_items, mutation_rate, &mut seed);
-        repair_build(item_pool, &mut child, max_items, &mut seed);
-        let key = canonical_key(&child);
-        if seen.insert(key.clone()) {
-            out.push(key);
-        }
-    }
-
-    out
-}
-
-fn adaptive_strategy_candidates<F>(
-    item_pool: &[Item],
-    max_items: usize,
-    search: &BuildSearchConfig,
-    strategy_elites: &HashMap<String, Vec<Vec<usize>>>,
-    score_fn: &F,
-    deadline: Option<Instant>,
-) -> Vec<Vec<usize>>
-where
-    F: Fn(&[usize]) -> f64 + Sync,
-{
-    if strategy_elites.is_empty() {
-        return Vec::new();
-    }
-    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
-    let contributions = strategies
-        .iter()
-        .map(|s| {
-            let c = strategy_elites
-                .get(s)
-                .map(|v| v.len().max(1) as f64)
-                .unwrap_or(1.0);
-            (s.clone(), c)
-        })
-        .collect::<Vec<_>>();
-    let total_contrib = contributions.iter().map(|(_, c)| *c).sum::<f64>().max(1.0);
-    let extra_runs_total = (search.ensemble_seeds.max(1) * strategies.len()).max(8);
-    let per_strategy = contributions
-        .into_iter()
-        .map(|(s, c)| {
-            let share = c / total_contrib;
-            let runs = ((extra_runs_total as f64) * share).round() as usize;
-            (s, runs.max(1))
-        })
-        .collect::<Vec<_>>();
-
-    let gathered = per_strategy
-        .iter()
-        .enumerate()
-        .map(|(sidx, (strategy, runs))| {
-            let mut local = Vec::new();
-            for ridx in 0..*runs {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strategy.clone();
-                cfg.seed = search.seed.wrapping_add(
-                    ((sidx as u64 + 1) * 131 + ridx as u64 + 1) * search.ensemble_seed_stride,
-                );
-                cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
-                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
-                for (k, _) in ranked.into_iter().take(search.ensemble_seed_top_k.max(1)) {
-                    local.push(k);
-                }
-            }
-            local
-        })
-        .collect::<Vec<_>>();
-
-    gathered
-        .into_iter()
-        .flatten()
-        .collect::<HashSet<_>>()
-        .into_iter()
-        .collect::<Vec<_>>()
-}
-
-fn effective_hp_mixed(health: f64, armor: f64, magic_resist: f64) -> f64 {
-    let phys_mult = 1.0 + armor.max(0.0) / 100.0;
-    let magic_mult = 1.0 + magic_resist.max(0.0) / 100.0;
-    health.max(1.0) * 0.5 * (phys_mult + magic_mult)
-}
-
-fn build_cost_timing_score(build: &[Item]) -> f64 {
-    if build.is_empty() {
-        return 0.0;
-    }
-    let mut weighted = 0.0;
-    let mut total = 0.0;
-    for (idx, item) in build.iter().enumerate() {
-        let w = 1.0 / (1.0 + idx as f64);
-        weighted += w * item.total_cost.max(0.0);
-        total += item.total_cost.max(0.0);
-    }
-    // Higher is better. Penalize expensive early spikes more.
-    -weighted - 0.1 * total
-}
-
-fn compute_build_metrics(
-    key: &[usize],
-    item_pool: &[Item],
-    vlad_base: &ChampionBase,
-    vlad_bonus_stats: &Stats,
-    sim: &SimulationConfig,
-    objective: f64,
-) -> BuildMetrics {
-    let build = build_from_indices(item_pool, key);
-    let item_stats = compute_effective_item_stats_for_build(
-        vlad_base,
-        &build,
-        vlad_bonus_stats,
-        sim,
-        sim.champion_level,
-        None,
-    );
-    let stats = compute_vlad_stats(vlad_base, &item_stats);
-    let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
-    let total_cost = build.iter().map(|i| i.total_cost).sum::<f64>();
-    BuildMetrics {
-        objective,
-        ehp_mixed: ehp,
-        ap: stats.ability_power,
-        cost_timing: build_cost_timing_score(&build),
-        total_cost,
-    }
-}
-
-fn dominates(a: &BuildMetrics, b: &BuildMetrics) -> bool {
-    let ge = a.objective >= b.objective
-        && a.ehp_mixed >= b.ehp_mixed
-        && a.ap >= b.ap
-        && a.cost_timing >= b.cost_timing;
-    let gt = a.objective > b.objective
-        || a.ehp_mixed > b.ehp_mixed
-        || a.ap > b.ap
-        || a.cost_timing > b.cost_timing;
-    ge && gt
-}
-
-fn pareto_front_keys(metrics_by_key: &HashMap<Vec<usize>, BuildMetrics>) -> HashSet<Vec<usize>> {
-    let keys = metrics_by_key.keys().cloned().collect::<Vec<_>>();
-    let mut front = HashSet::new();
-    for key_a in &keys {
-        let Some(a) = metrics_by_key.get(key_a) else {
-            continue;
-        };
-        let dominated = keys.iter().any(|key_b| {
-            if key_a == key_b {
-                return false;
-            }
-            let Some(b) = metrics_by_key.get(key_b) else {
-                return false;
-            };
-            dominates(b, a)
-        });
-        if !dominated {
-            front.insert(key_a.clone());
-        }
-    }
-    front
 }
 
 fn mean_std(values: &[f64]) -> (f64, f64) {
@@ -5023,16 +3329,26 @@ fn enemy_loadout_from_preset(preset: &EnemyUrfPreset) -> LoadoutSelection {
     }
 }
 
-fn run_vladimir_scenario(
-    scenario_path: &Path,
+#[derive(Debug, Clone, Copy)]
+struct VladimirRunOptions<'a> {
     top_x: usize,
     min_item_diff: usize,
     max_relative_gap_percent: f64,
-    report_path_override: Option<&str>,
+    report_path_override: Option<&'a str>,
     max_runtime_seconds: Option<f64>,
     status_every_seconds: f64,
     search_quality_profile: SearchQualityProfile,
-) -> Result<()> {
+}
+
+fn run_vladimir_scenario(scenario_path: &Path, options: &VladimirRunOptions<'_>) -> Result<()> {
+    let top_x = options.top_x;
+    let min_item_diff = options.min_item_diff;
+    let max_relative_gap_percent = options.max_relative_gap_percent;
+    let report_path_override = options.report_path_override;
+    let max_runtime_seconds = options.max_runtime_seconds;
+    let status_every_seconds = options.status_every_seconds;
+    let search_quality_profile = options.search_quality_profile;
+
     let run_start = Instant::now();
     let time_budget = max_runtime_seconds
         .filter(|s| *s > 0.0)
@@ -5207,10 +3523,8 @@ fn run_vladimir_scenario(
             loadout_selection_key(&vlad_loadout_selection),
             vlad_base_loadout.clone(),
         )])));
-    let best_loadout_by_item: Arc<Mutex<HashMap<Vec<usize>, (LoadoutSelection, ResolvedLoadout)>>> =
-        Arc::new(Mutex::new(HashMap::new()));
-    let best_outcome_by_item: Arc<Mutex<HashMap<Vec<usize>, CombatOutcome>>> =
-        Arc::new(Mutex::new(HashMap::new()));
+    let best_loadout_by_item: Arc<Mutex<BestLoadoutMap>> = Arc::new(Mutex::new(HashMap::new()));
+    let best_outcome_by_item: Arc<Mutex<BestOutcomeMap>> = Arc::new(Mutex::new(HashMap::new()));
 
     let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
     let objective_component_weights = normalized_objective_weights(
@@ -5232,18 +3546,17 @@ fn run_vladimir_scenario(
             )
         })
         .collect::<Vec<_>>();
+    let objective_eval_ctx = ObjectiveEvalContext {
+        vlad_base: &vlad_base,
+        enemy_build_scenarios: &enemy_build_scenarios,
+        sim: &sim,
+        urf: &urf,
+        scenario_reference_outcomes: &scenario_reference_outcomes,
+        weights: objective_component_weights,
+        worst_case_weight: objective_worst_case_weight,
+    };
     let evaluate_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
-        aggregate_objective_score_and_outcome(
-            &vlad_base,
-            build_items,
-            bonus_stats,
-            &enemy_build_scenarios,
-            &sim,
-            &urf,
-            &scenario_reference_outcomes,
-            objective_component_weights,
-            objective_worst_case_weight,
-        )
+        aggregate_objective_score_and_outcome(&objective_eval_ctx, build_items, bonus_stats)
     };
     let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
         evaluate_build_with_bonus(build_items, bonus_stats).0
@@ -5461,7 +3774,7 @@ fn run_vladimir_scenario(
         unique_candidate_keys.push(baseline_key);
     }
 
-    let mut strict_scores = HashMap::<Vec<usize>, f64>::new();
+    let mut strict_scores = HashMap::<BuildKey, f64>::new();
     for ranked in &seed_ranked {
         for (k, s) in ranked {
             if !s.is_finite() {
@@ -5588,7 +3901,7 @@ fn run_vladimir_scenario(
         }
     }
 
-    let mut seed_hits_by_key: HashMap<Vec<usize>, usize> = HashMap::new();
+    let mut seed_hits_by_key: HashMap<BuildKey, usize> = HashMap::new();
     for top in &seed_top_sets {
         for key in top {
             *seed_hits_by_key.entry(key.clone()).or_insert(0) += 1;
@@ -5624,27 +3937,15 @@ fn run_vladimir_scenario(
         .map(|(_, resolved)| resolved)
         .unwrap_or_else(|| vlad_base_loadout.clone());
     let (_, baseline_fixed_outcome) = aggregate_objective_score_and_outcome(
-        &vlad_base,
+        &objective_eval_ctx,
         &baseline_fixed_build,
         &baseline_loadout.bonus_stats,
-        &enemy_build_scenarios,
-        &sim,
-        &urf,
-        &scenario_reference_outcomes,
-        objective_component_weights,
-        objective_worst_case_weight,
     );
     let vlad_best_score = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
     let (_, vlad_best_outcome) = aggregate_objective_score_and_outcome(
-        &vlad_base,
+        &objective_eval_ctx,
         &vlad_best_build,
         &vlad_loadout.bonus_stats,
-        &enemy_build_scenarios,
-        &sim,
-        &urf,
-        &scenario_reference_outcomes,
-        objective_component_weights,
-        objective_worst_case_weight,
     );
     let baseline_cap_survivor =
         baseline_fixed_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
@@ -5870,19 +4171,18 @@ fn run_vladimir_scenario(
             .map(|(b, _)| b.clone())
             .collect::<Vec<_>>();
     }
+    let build_order_ctx = BuildOrderEvalContext {
+        vlad_base_raw: &vlad_base_raw,
+        vlad_bonus_stats: &vlad_loadout.bonus_stats,
+        enemy_builds: &enemy_builds,
+        raw_enemy_bases: &raw_enemy_bases,
+        sim: &sim,
+        urf: &urf,
+        objective_weights: objective_component_weights,
+    };
     let build_order_results = order_input
         .iter()
-        .map(|build| {
-            optimize_build_order(
-                build,
-                &vlad_base_raw,
-                &vlad_loadout.bonus_stats,
-                &enemy_builds,
-                &raw_enemy_bases,
-                &sim,
-                &urf,
-            )
-        })
+        .map(|build| optimize_build_order(build, &build_order_ctx))
         .collect::<Vec<_>>();
     let best_order_acquired_map = build_order_results
         .first()
@@ -5929,14 +4229,23 @@ fn run_vladimir_scenario(
                 br.cumulative_score,
                 item_names(&br.ordered_items)
             );
-            for (stage_idx, (lvl, surv)) in
-                br.levels.iter().zip(br.stage_survival.iter()).enumerate()
-            {
+            for (stage_idx, lvl) in br.levels.iter().enumerate() {
+                let surv = br.stage_survival.get(stage_idx).copied().unwrap_or(0.0);
+                let dmg = br.stage_damage.get(stage_idx).copied().unwrap_or(0.0);
+                let heal = br.stage_healing.get(stage_idx).copied().unwrap_or(0.0);
+                let stage_objective = br
+                    .stage_objective_scores
+                    .get(stage_idx)
+                    .copied()
+                    .unwrap_or(0.0);
                 println!(
-                    "  - Stage {} @ level {} -> {:.2}s",
+                    "  - Stage {} @ level {} -> objective {:.3} | time {:.2}s | damage {:.1} | healing {:.1}",
                     stage_idx + 1,
                     lvl,
-                    surv
+                    stage_objective,
+                    surv,
+                    dmg,
+                    heal
                 );
             }
         }
@@ -5945,49 +4254,33 @@ fn run_vladimir_scenario(
     let report_path = report_path_override
         .map(PathBuf::from)
         .unwrap_or_else(default_report_path);
-    write_vladimir_report_markdown(
-        &report_path,
+    let report_data = VladimirReportData {
         scenario_path,
-        &sim,
-        &vlad_base,
-        &vlad_end_stats,
-        &stack_notes,
-        &vlad_loadout,
-        &enemy_loadout,
-        &baseline_fixed_build,
-        baseline_fixed_score,
-        &baseline_fixed_outcome,
-        &vlad_best_build,
-        vlad_best_score,
-        &vlad_best_outcome,
-        &enemy_builds,
-        &enemy_presets_used,
-        &diverse_top_builds,
-        &diverse_top_keys,
-        &build_confidence,
-        &metrics_by_key,
-        &pareto_front,
-        &diagnostics,
-        &build_order_results,
-    )?;
+        sim: &sim,
+        vlad_base_level: &vlad_base,
+        vlad_end_stats: &vlad_end_stats,
+        stack_notes: &stack_notes,
+        vladimir_loadout: &vlad_loadout,
+        enemy_loadout: &enemy_loadout,
+        baseline_build: &baseline_fixed_build,
+        baseline_score: baseline_fixed_score,
+        baseline_outcome: &baseline_fixed_outcome,
+        best_build: &vlad_best_build,
+        best_score: vlad_best_score,
+        best_outcome: &vlad_best_outcome,
+        enemy_builds: &enemy_builds,
+        enemy_presets_used: &enemy_presets_used,
+        diverse_top_builds: &diverse_top_builds,
+        diverse_top_keys: &diverse_top_keys,
+        build_confidence: &build_confidence,
+        metrics_by_key: &metrics_by_key,
+        pareto_front: &pareto_front,
+        diagnostics: &diagnostics,
+        build_orders: &build_order_results,
+    };
+    write_vladimir_report_markdown(&report_path, &report_data)?;
     let json_report_path = report_path.with_extension("json");
-    write_vladimir_report_json(
-        &json_report_path,
-        scenario_path,
-        &sim,
-        &baseline_fixed_build,
-        baseline_fixed_score,
-        &baseline_fixed_outcome,
-        &vlad_best_build,
-        vlad_best_score,
-        &vlad_best_outcome,
-        &vlad_loadout,
-        &enemy_builds,
-        &enemy_presets_used,
-        &diverse_top_builds,
-        &diagnostics,
-        &build_order_results,
-    )?;
+    write_vladimir_report_json(&json_report_path, &report_data)?;
     persistent_full_cache.flush()?;
     status.emit(
         "finalization",
@@ -6161,13 +4454,15 @@ fn main() -> Result<()> {
     match cli.mode {
         Mode::Vladimir => run_vladimir_scenario(
             &scenario_path,
-            cli.top_x,
-            cli.min_item_diff,
-            cli.max_relative_gap_percent,
-            cli.report_path.as_deref(),
-            cli.max_runtime_seconds,
-            cli.status_every_seconds,
-            cli.search_quality_profile,
+            &VladimirRunOptions {
+                top_x: cli.top_x,
+                min_item_diff: cli.min_item_diff,
+                max_relative_gap_percent: cli.max_relative_gap_percent,
+                report_path_override: cli.report_path.as_deref(),
+                max_runtime_seconds: cli.max_runtime_seconds,
+                status_every_seconds: cli.status_every_seconds,
+                search_quality_profile: cli.search_quality_profile,
+            },
         ),
         Mode::VladimirStep => run_vladimir_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {

@@ -14,6 +14,11 @@
   - `balanced`
   - `maximum_quality`
 - Replaced full permutation build order search with beam plus optimistic bound pruning.
+- Build-order optimization now uses composite stage objective accumulation:
+  - time alive
+  - damage dealt
+  - healing done
+  - per-stage objective components are emitted in reports/JSON output.
 - Added regression tests for legality and key rules.
 - Added persistent full-score cache across runs under:
   - `Simulation/output/cache/`
@@ -23,6 +28,10 @@
 - Added additional modular extraction for orchestration support:
   - `src/cache.rs`
   - `src/status.rs`
+- Added additional module split for maintainability:
+  - `src/build_order.rs`
+  - `src/reporting.rs`
+  - `src/search.rs`
 - Added enemy lifecycle simulation:
   - enemies can die from Vladimir damage
   - enemies respawn using URF-scaled death timer logic
@@ -35,6 +44,9 @@
 - Added repository automation workflows:
   - pull request and main branch continuous integration in `.github/workflows/continuous-integration.yml`
   - tag-based release generation with findings in `.github/workflows/release.yml`
+- Enforced strict lint gating:
+  - all current code passes `cargo clippy --all-targets --all-features -- -D warnings`
+  - CI now hard-fails on any new Clippy warning.
 
 ## Not Done
 - [P0] Full-fidelity Vladimir kit simulation (`Q`, `E`, `R`, passives)
@@ -46,18 +58,6 @@
   - Success criteria:
     - Offensive outcomes track expected ability scaling and timing behavior more closely.
     - Unit tests cover ability cooldown and cast ordering invariants.
-
-- [P1] Build-order scoring alignment to composite objective
-  - Goal: make build order optimize the same objective as end-state search.
-  - Scope:
-    - Replace stage survival-only accumulation with stage objective accumulation:
-      - time alive
-      - damage dealt
-      - healing done
-    - Continue stack progression by acquisition timing.
-  - Success criteria:
-    - Build-order ranking can differ from survival-only ranking.
-    - Output includes per-stage objective components and totals.
 
 - [P1] Composite objective refinement and guardrails
   - Goal: improve build quality under mixed metrics while avoiding pathological results.
