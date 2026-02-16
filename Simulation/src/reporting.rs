@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use chrono::{DateTime, Local, Utc};
 use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
@@ -18,6 +19,38 @@ pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
 #[allow(dead_code)]
 pub(super) fn default_report_path() -> PathBuf {
     default_report_path_for_champion("Vladimir")
+}
+
+fn comma_separated_digits(digits: &str) -> String {
+    let len = digits.len();
+    if len <= 3 {
+        return digits.to_string();
+    }
+    let mut out = String::with_capacity(len + len / 3);
+    for (idx, ch) in digits.chars().enumerate() {
+        if idx > 0 && (len - idx).is_multiple_of(3) {
+            out.push(',');
+        }
+        out.push(ch);
+    }
+    out
+}
+
+fn format_usize_with_commas(value: usize) -> String {
+    comma_separated_digits(&value.to_string())
+}
+
+fn format_f64_with_commas(value: f64, decimals: usize) -> String {
+    if !value.is_finite() {
+        return value.to_string();
+    }
+    let sign = if value.is_sign_negative() { "-" } else { "" };
+    let rendered = format!("{:.decimals$}", value.abs());
+    if let Some((integer, fraction)) = rendered.split_once('.') {
+        format!("{}{}.{}", sign, comma_separated_digits(integer), fraction)
+    } else {
+        format!("{}{}", sign, comma_separated_digits(&rendered))
+    }
 }
 
 pub(super) fn write_controlled_champion_report_markdown(
@@ -54,10 +87,10 @@ pub(super) fn write_controlled_champion_report_markdown(
     let diagnostics = data.diagnostics;
     let build_orders = data.build_orders;
 
-    let now = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_secs();
+    let now = SystemTime::now();
+    let now_unix = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+    let generated_utc: DateTime<Utc> = now.into();
+    let generated_local: DateTime<Local> = DateTime::from(now);
     let improvement = if baseline_score.abs() > f64::EPSILON {
         ((best_score - baseline_score) / baseline_score) * 100.0
     } else {
@@ -69,22 +102,37 @@ pub(super) fn write_controlled_champion_report_markdown(
         "# {} URF Run Report\n\n",
         controlled_champion_name
     ));
-    content.push_str(&format!("- Generated (unix): `{}`\n", now));
+    content.push_str(&format!(
+        "- Generated (local): `{}`\n",
+        generated_local.format("%Y-%m-%d %H:%M:%S %Z")
+    ));
+    content.push_str(&format!(
+        "- Generated (UTC): `{}`\n",
+        generated_utc.to_rfc3339()
+    ));
+    content.push_str(&format!(
+        "- Generated (unix): `{}`\n",
+        format_usize_with_commas(now_unix as usize)
+    ));
     content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
 
     content.push_str("## Headline\n");
+    let baseline_damage = format_f64_with_commas(baseline_outcome.damage_dealt, 1);
+    let baseline_healing = format_f64_with_commas(baseline_outcome.healing_done, 1);
+    let best_damage = format_f64_with_commas(best_outcome.damage_dealt, 1);
+    let best_healing = format_f64_with_commas(best_outcome.healing_done, 1);
     content.push_str(&format!(
-        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills: **{:.2}s / {:.1} / {:.1} / {}**\n- Best time alive / damage dealt / healing done / enemy kills: **{:.2}s / {:.1} / {:.1} / {}**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
+        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills: **{:.2}s / {} / {} / {}**\n- Best time alive / damage dealt / healing done / enemy kills: **{:.2}s / {} / {} / {}**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
         baseline_score,
         best_score,
         improvement,
         baseline_outcome.time_alive_seconds,
-        baseline_outcome.damage_dealt,
-        baseline_outcome.healing_done,
+        baseline_damage,
+        baseline_healing,
         baseline_outcome.enemy_kills,
         best_outcome.time_alive_seconds,
-        best_outcome.damage_dealt,
-        best_outcome.healing_done,
+        best_damage,
+        best_healing,
         best_outcome.enemy_kills,
         baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
         best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
@@ -96,45 +144,58 @@ pub(super) fn write_controlled_champion_report_markdown(
     ));
 
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
+    let processed_candidates = diagnostics
+        .processed_candidates
+        .min(diagnostics.total_candidates);
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing): `{:.2}/{:.2}/{:.2}`\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Unique candidate builds: `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{:.2}` / `{:.3}`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing): `{:.2}/{:.2}/{:.2}`\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
-        diagnostics.scenario_count,
-        diagnostics.loadout_candidates,
-        diagnostics.loadout_finalists,
-        diagnostics.ensemble_seeds,
+        format_usize_with_commas(diagnostics.scenario_count),
+        format_usize_with_commas(diagnostics.loadout_candidates),
+        format_usize_with_commas(diagnostics.loadout_finalists),
+        format_usize_with_commas(diagnostics.ensemble_seeds),
         diagnostics.objective_survival_weight,
         diagnostics.objective_damage_weight,
         diagnostics.objective_healing_weight,
-        diagnostics.full_evaluations,
-        diagnostics.full_cache_hits,
-        diagnostics.full_cache_misses,
-        diagnostics.full_cache_waits,
-        diagnostics.full_persistent_cache_hits,
-        diagnostics.full_persistent_cache_entries,
-        diagnostics.unique_candidate_builds,
-        diagnostics.bleed_candidates_injected,
-        diagnostics.adaptive_candidates_injected,
-        seed_mean,
-        seed_std
+        format_usize_with_commas(diagnostics.full_evaluations),
+        format_usize_with_commas(diagnostics.full_cache_hits),
+        format_usize_with_commas(diagnostics.full_cache_misses),
+        format_usize_with_commas(diagnostics.full_cache_waits),
+        format_usize_with_commas(diagnostics.full_persistent_cache_hits),
+        format_usize_with_commas(diagnostics.full_persistent_cache_entries),
+        format_usize_with_commas(diagnostics.candidate_keys_generated),
+        format_usize_with_commas(diagnostics.candidate_duplicates_pruned),
+        format_usize_with_commas(diagnostics.unique_candidate_builds),
+        format_usize_with_commas(diagnostics.strict_seed_scored_candidates),
+        format_usize_with_commas(diagnostics.strict_remaining_candidates),
+        format_usize_with_commas(processed_candidates),
+        format_usize_with_commas(diagnostics.strict_non_finite_candidates),
+        format_usize_with_commas(diagnostics.strict_candidates_skipped_timeout),
+        diagnostics.strict_completion_percent,
+        format_usize_with_commas(diagnostics.bleed_candidates_injected),
+        format_usize_with_commas(diagnostics.adaptive_candidates_injected),
+        format_f64_with_commas(seed_mean, 2),
+        format_f64_with_commas(seed_std, 3)
     ));
     if let Some(budget) = diagnostics.time_budget_seconds {
         content.push_str(&format!(
-            "- Time budget: `{:.1}s`; elapsed: `{:.1}s`; timed_out: `{}`; progress: `{}/{}`\n\n",
+            "- Time budget: `{:.1}s`; elapsed: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%)\n\n",
             budget,
             diagnostics.elapsed_seconds,
             diagnostics.timed_out,
-            diagnostics.processed_candidates,
-            diagnostics.total_candidates
+            format_usize_with_commas(processed_candidates),
+            format_usize_with_commas(diagnostics.total_candidates),
+            diagnostics.strict_completion_percent
         ));
     } else {
         content.push_str(&format!(
-            "- Elapsed: `{:.1}s`; progress: `{}/{}`\n\n",
+            "- Elapsed: `{:.1}s`; progress: `{}/{}` ({:.1}%)\n\n",
             diagnostics.elapsed_seconds,
-            diagnostics.processed_candidates,
-            diagnostics.total_candidates
+            format_usize_with_commas(processed_candidates),
+            format_usize_with_commas(diagnostics.total_candidates),
+            diagnostics.strict_completion_percent
         ));
     }
 
@@ -143,13 +204,13 @@ pub(super) fn write_controlled_champion_report_markdown(
         controlled_champion_name
     ));
     content.push_str(&format!(
-        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AD: {:.1}, AS: {:.3}, MS: {:.1}\n\n",
-        controlled_champion_base_level.base_health,
-        controlled_champion_base_level.base_armor,
-        controlled_champion_base_level.base_magic_resist,
-        controlled_champion_base_level.base_attack_damage,
-        controlled_champion_base_level.base_attack_speed,
-        controlled_champion_base_level.base_move_speed
+        "- HP: {}, Armor: {}, MR: {}, AD: {}, AS: {}, MS: {}\n\n",
+        format_f64_with_commas(controlled_champion_base_level.base_health, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_armor, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_magic_resist, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_attack_damage, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_attack_speed, 3),
+        format_f64_with_commas(controlled_champion_base_level.base_move_speed, 1)
     ));
 
     content.push_str("## Selected Runes/Masteries\n");
@@ -205,15 +266,15 @@ pub(super) fn write_controlled_champion_report_markdown(
         controlled_champion_name
     ));
     content.push_str(&format!(
-        "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AP: {:.1}, AD: {:.1}, Ability Haste: {:.1}, Move Speed (flat bonus): {:.1}, Move Speed (% bonus): {:.1}\n\n",
-        controlled_champion_end_stats.health,
-        controlled_champion_end_stats.armor,
-        controlled_champion_end_stats.magic_resist,
-        controlled_champion_end_stats.ability_power,
-        controlled_champion_end_stats.attack_damage,
-        controlled_champion_end_stats.ability_haste,
-        controlled_champion_end_stats.move_speed_flat,
-        controlled_champion_end_stats.move_speed_percent
+        "- HP: {}, Armor: {}, MR: {}, AP: {}, AD: {}, Ability Haste: {}, Move Speed (flat bonus): {}, Move Speed (% bonus): {}\n\n",
+        format_f64_with_commas(controlled_champion_end_stats.health, 1),
+        format_f64_with_commas(controlled_champion_end_stats.armor, 1),
+        format_f64_with_commas(controlled_champion_end_stats.magic_resist, 1),
+        format_f64_with_commas(controlled_champion_end_stats.ability_power, 1),
+        format_f64_with_commas(controlled_champion_end_stats.attack_damage, 1),
+        format_f64_with_commas(controlled_champion_end_stats.ability_haste, 1),
+        format_f64_with_commas(controlled_champion_end_stats.move_speed_flat, 1),
+        format_f64_with_commas(controlled_champion_end_stats.move_speed_percent, 1)
     ));
 
     content.push_str("## Stack Assumptions\n");
@@ -315,8 +376,11 @@ pub(super) fn write_controlled_champion_report_markdown(
                 && let Some(m) = metrics_by_key.get(k)
             {
                 content.push_str(&format!(
-                    "   - metrics: EHP~{:.1}, AP~{:.1}, timing score {:+.2}, total cost {:.0}\n",
-                    m.ehp_mixed, m.ap, m.cost_timing, m.total_cost
+                    "   - metrics: EHP~{}, AP~{}, timing score {:+.2}, total cost {}\n",
+                    format_f64_with_commas(m.ehp_mixed, 1),
+                    format_f64_with_commas(m.ap, 1),
+                    m.cost_timing,
+                    format_f64_with_commas(m.total_cost, 0)
                 ));
             }
         }
@@ -344,13 +408,13 @@ pub(super) fn write_controlled_champion_report_markdown(
                     .copied()
                     .unwrap_or(0.0);
                 content.push_str(&format!(
-                    "   - Stage {} (level {}): objective `{:.3}`, time alive `{:.2}s`, damage `{:.1}`, healing `{:.1}`\n",
+                    "   - Stage {} (level {}): objective `{:.3}`, time alive `{:.2}s`, damage `{}`, healing `{}`\n",
                     stage_idx + 1,
-                    lvl,
+                    format_usize_with_commas(*lvl),
                     stage_objective,
                     surv,
-                    dmg,
-                    heal
+                    format_f64_with_commas(dmg, 1),
+                    format_f64_with_commas(heal, 1)
                 ));
             }
         }
@@ -408,6 +472,10 @@ pub(super) fn write_controlled_champion_report_json(
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
+    let now = SystemTime::now();
+    let now_unix = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+    let generated_utc: DateTime<Utc> = now.into();
+    let generated_local: DateTime<Local> = DateTime::from(now);
     let scenario_path = data.scenario_path;
     let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
@@ -432,6 +500,9 @@ pub(super) fn write_controlled_champion_report_json(
         0.0
     };
     let json_value = json!({
+        "generated_unix_seconds": now_unix,
+        "generated_utc": generated_utc.to_rfc3339(),
+        "generated_local": generated_local.format("%Y-%m-%d %H:%M:%S %Z").to_string(),
         "scenario_path": scenario_path.display().to_string(),
         "controlled_champion_name": controlled_champion_name,
         "champion_level": sim.champion_level,
@@ -521,12 +592,19 @@ pub(super) fn write_controlled_champion_report_json(
             "full_cache_waits": diagnostics.full_cache_waits,
             "full_persistent_cache_hits": diagnostics.full_persistent_cache_hits,
             "full_persistent_cache_entries": diagnostics.full_persistent_cache_entries,
+            "candidate_keys_generated": diagnostics.candidate_keys_generated,
+            "candidate_duplicates_pruned": diagnostics.candidate_duplicates_pruned,
             "unique_candidate_builds": diagnostics.unique_candidate_builds,
             "bleed_candidates_injected": diagnostics.bleed_candidates_injected,
             "adaptive_candidates_injected": diagnostics.adaptive_candidates_injected,
             "scenario_count": diagnostics.scenario_count,
             "loadout_candidates": diagnostics.loadout_candidates,
             "loadout_finalists": diagnostics.loadout_finalists,
+            "strict_seed_scored_candidates": diagnostics.strict_seed_scored_candidates,
+            "strict_remaining_candidates": diagnostics.strict_remaining_candidates,
+            "strict_non_finite_candidates": diagnostics.strict_non_finite_candidates,
+            "strict_candidates_skipped_timeout": diagnostics.strict_candidates_skipped_timeout,
+            "strict_completion_percent": diagnostics.strict_completion_percent,
             "time_budget_seconds": diagnostics.time_budget_seconds,
             "elapsed_seconds": diagnostics.elapsed_seconds,
             "timed_out": diagnostics.timed_out,

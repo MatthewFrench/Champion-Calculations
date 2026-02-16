@@ -63,8 +63,8 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
 - `src/scripts/champions/vladimir.rs`: Vladimir scripted formulas and combat decision APIs (offense/defense/GA trigger).
-- `src/scripts/champions/enemies/mod.rs`: Enemy champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
-- `src/scripts/champions/enemies/*.rs`: Per-champion enemy behavior/event logic modules.
+- `src/scripts/champions/roster/mod.rs`: Champion roster script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
+- `src/scripts/champions/roster/*.rs`: Per-champion behavior/event logic modules.
 - `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
 - `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
 - `src/scripts/masteries/effects.rs`: Mastery runtime flag parsing and dynamic-runtime classification.
@@ -80,19 +80,27 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   --mode vladimir
 ```
 - `vladimir` mode writes a markdown report to:
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_run_report.md`
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.md`
 - `vladimir` mode writes a structured JSON report to:
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_run_report.json`
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.json`
   where `<controlled_champion_key>` is the normalized champion name (for example: `vladimir`).
+  where `<search_quality_profile>` is one of `fast`, `balanced`, `maximum_quality`.
+  where `<runtime_budget>` is `unbounded` when no runtime budget is set, otherwise the budget label (for example `300s`).
 - Report includes:
+  - Human-readable generation timestamps (local and UTC) plus unix timestamp
   - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
   - Vladimir end stats for best build
   - Stack assumptions/notes for stack-based items in the best build
   - Enemy derived combat profiles (HP/AD/AS/range/hit/burst stats) with similarity warnings for suspiciously close auto profiles
-  - If run with a time budget, report includes timeout/progress metadata
+  - Detailed search diagnostics including:
+    - full evaluations
+    - cache hits/misses
+    - generated/unique/pruned candidate counts
+    - strict-stage completion percentage and timeout-skipped candidate count
+  - If run with a time budget, report includes timeout and completion metadata
 - Trace outputs are also champion-keyed:
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_event_trace.md`
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_event_trace.json`
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.json`
 
 ## Runtime Controls
 - `--max-runtime-seconds N`:
@@ -192,7 +200,7 @@ src/scripts/
       abilities.rs
       decisions.rs
       hook.rs
-    enemies/
+    roster/
       mod.rs
       warwick.rs
       vayne.rs

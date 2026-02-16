@@ -17,8 +17,7 @@ use crate::engine::{
     simulate_controlled_champion_combat,
 };
 use crate::reporting::{
-    default_report_path_for_champion, write_controlled_champion_report_json,
-    write_controlled_champion_report_markdown,
+    write_controlled_champion_report_json, write_controlled_champion_report_markdown,
 };
 use crate::search::{
     adaptive_strategy_candidates, build_search_ranked, choose_best_build_by_stat,
@@ -38,6 +37,40 @@ fn scenario_value_with_legacy_alias<'a>(
     scenario
         .get(generic_key)
         .or_else(|| scenario.get(legacy_key))
+}
+
+fn search_quality_profile_key(search_quality_profile: SearchQualityProfile) -> &'static str {
+    match search_quality_profile {
+        SearchQualityProfile::Fast => "fast",
+        SearchQualityProfile::Balanced => "balanced",
+        SearchQualityProfile::MaximumQuality => "maximum_quality",
+    }
+}
+
+fn runtime_budget_key(max_runtime_seconds: Option<f64>) -> String {
+    match max_runtime_seconds {
+        Some(seconds) if seconds > 0.0 => {
+            let rounded = seconds.round();
+            if (seconds - rounded).abs() < 1e-9 {
+                format!("{rounded:.0}s")
+            } else {
+                format!("{seconds:.1}s")
+            }
+        }
+        _ => "unbounded".to_string(),
+    }
+}
+
+fn default_run_output_directory(
+    search_quality_profile: SearchQualityProfile,
+    max_runtime_seconds: Option<f64>,
+) -> PathBuf {
+    simulation_dir()
+        .join("output")
+        .join("runs")
+        .join("controlled_champion")
+        .join(search_quality_profile_key(search_quality_profile))
+        .join(runtime_budget_key(max_runtime_seconds))
 }
 
 pub(super) fn run_controlled_champion_scenario(
@@ -506,6 +539,7 @@ pub(super) fn run_controlled_champion_scenario(
         }
         candidate_keys.push(k);
     }
+    let candidate_keys_generated = candidate_keys.len();
     let mut unique_candidate_keys = candidate_keys
         .into_iter()
         .collect::<HashSet<_>>()
@@ -521,6 +555,8 @@ pub(super) fn run_controlled_champion_scenario(
         );
         unique_candidate_keys.push(baseline_key);
     }
+    let candidate_duplicates_pruned =
+        candidate_keys_generated.saturating_sub(unique_candidate_keys.len());
 
     let mut strict_scores = HashMap::<BuildKey, f64>::new();
     for ranked in &seed_ranked {
@@ -536,6 +572,7 @@ pub(super) fn run_controlled_champion_scenario(
     }
 
     let total_candidates = unique_candidate_keys.len();
+    let strict_seed_scored_candidates = strict_scores.len().min(total_candidates);
     let mut processed_keys = strict_scores.keys().cloned().collect::<HashSet<_>>();
     let mut processed_candidates = processed_keys.len().min(total_candidates);
     let mut timed_out = timeout_flag.load(AtomicOrdering::Relaxed) > 0;
@@ -554,6 +591,8 @@ pub(super) fn run_controlled_champion_scenario(
         .filter(|key| !processed_keys.contains(*key))
         .cloned()
         .collect::<Vec<_>>();
+    let strict_remaining_candidates = remaining_keys.len();
+    let mut strict_non_finite_candidates = 0usize;
     let batch_size = 128usize;
     for batch in remaining_keys.chunks(batch_size) {
         if deadline_reached(deadline) {
@@ -568,6 +607,8 @@ pub(super) fn run_controlled_champion_scenario(
         for (key, score) in scored_batch {
             if score.is_finite() {
                 strict_scores.insert(key.clone(), score);
+            } else {
+                strict_non_finite_candidates += 1;
             }
             processed_keys.insert(key);
             processed_candidates += 1;
@@ -601,6 +642,13 @@ pub(super) fn run_controlled_champion_scenario(
 
     let mut vlad_ranked = strict_scores.into_iter().collect::<Vec<_>>();
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
+    let strict_candidates_skipped_timeout =
+        total_candidates.saturating_sub(processed_candidates.min(total_candidates));
+    let strict_completion_percent = if total_candidates > 0 {
+        100.0 * (processed_candidates.min(total_candidates) as f64) / (total_candidates as f64)
+    } else {
+        100.0
+    };
     let outcome_map_for_tiebreak = best_outcome_by_item
         .lock()
         .map(|m| m.clone())
@@ -816,6 +864,18 @@ pub(super) fn run_controlled_champion_scenario(
         "- Unique strict candidates: {}",
         unique_candidate_keys.len()
     );
+    println!(
+        "- Candidate keys generated / duplicates pruned: {}/{}",
+        candidate_keys_generated, candidate_duplicates_pruned
+    );
+    println!(
+        "- Strict completion: {:.1}% (processed {}/{}, timeout-skipped {}, non-finite {})",
+        strict_completion_percent,
+        processed_candidates.min(total_candidates),
+        total_candidates,
+        strict_candidates_skipped_timeout,
+        strict_non_finite_candidates
+    );
     println!("- Bleed candidates injected: {}", bleed_candidate_count);
     println!(
         "- Adaptive candidates injected: {}",
@@ -911,12 +971,19 @@ pub(super) fn run_controlled_champion_scenario(
         full_cache_waits: full_cache.waits(),
         full_persistent_cache_hits: persistent_full_cache.hits(),
         full_persistent_cache_entries: persistent_full_cache.len(),
+        candidate_keys_generated,
+        candidate_duplicates_pruned,
         unique_candidate_builds: unique_candidate_keys.len(),
         bleed_candidates_injected: bleed_candidate_count,
         adaptive_candidates_injected: adaptive_candidate_count,
         scenario_count: enemy_build_scenarios.len(),
         loadout_candidates: loadout_candidates_count,
         loadout_finalists: loadout_finalists_count,
+        strict_seed_scored_candidates,
+        strict_remaining_candidates,
+        strict_non_finite_candidates,
+        strict_candidates_skipped_timeout,
+        strict_completion_percent,
         time_budget_seconds: time_budget.map(|d| d.as_secs_f64()),
         elapsed_seconds: run_start.elapsed().as_secs_f64(),
         timed_out,
@@ -1032,9 +1099,14 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    let report_path = report_path_override
-        .map(PathBuf::from)
-        .unwrap_or_else(|| default_report_path_for_champion(&controlled_champion_name));
+    let default_output_directory =
+        default_run_output_directory(search_quality_profile, max_runtime_seconds);
+    let report_path = report_path_override.map(PathBuf::from).unwrap_or_else(|| {
+        default_output_directory.join(format!(
+            "{}_run_report.md",
+            to_norm_key(&controlled_champion_name)
+        ))
+    });
     let report_data = ControlledChampionReportData {
         scenario_path,
         controlled_champion_name: &controlled_champion_name,

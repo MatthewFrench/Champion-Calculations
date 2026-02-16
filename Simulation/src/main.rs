@@ -1,3 +1,5 @@
+#![recursion_limit = "512"]
+
 use anyhow::Result;
 use clap::{Parser, ValueEnum};
 use rayon::ThreadPoolBuilder;
@@ -274,12 +276,19 @@ struct SearchDiagnostics {
     full_cache_waits: usize,
     full_persistent_cache_hits: usize,
     full_persistent_cache_entries: usize,
+    candidate_keys_generated: usize,
+    candidate_duplicates_pruned: usize,
     unique_candidate_builds: usize,
     bleed_candidates_injected: usize,
     adaptive_candidates_injected: usize,
     scenario_count: usize,
     loadout_candidates: usize,
     loadout_finalists: usize,
+    strict_seed_scored_candidates: usize,
+    strict_remaining_candidates: usize,
+    strict_non_finite_candidates: usize,
+    strict_candidates_skipped_timeout: usize,
+    strict_completion_percent: f64,
     time_budget_seconds: Option<f64>,
     elapsed_seconds: f64,
     timed_out: bool,

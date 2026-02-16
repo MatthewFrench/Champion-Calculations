@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
-use crate::scripts::champions::enemies::{
+use crate::scripts::champions::roster::{
     EnemyBehaviorProfile, EnemyLoadoutRuntime, EnemyScriptAction, EnemyScriptEvent,
     EnemyScriptExecutionInput, EnemyScriptPoint, attack_speed_multiplier, behavior_profile,
     build_enemy_loadout_runtime, clear_transient_combat_state, execute_enemy_script_event,

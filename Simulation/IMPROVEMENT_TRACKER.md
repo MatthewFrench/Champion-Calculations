@@ -1,6 +1,16 @@
 # Improvement Tracker
 
 ## Done
+- Improved report readability and diagnostics detail:
+  - added human-readable timestamps (local + UTC) and unix timestamp
+  - added comma-separated large-number formatting for major diagnostics values
+  - added explicit generated/duplicate-pruned/unique candidate counts
+  - added strict-stage completion percentage and timeout-skipped/non-finite candidate counts
+- Renamed champion behavior module folder from role-specific `enemies` to role-neutral `roster`:
+  - `src/scripts/champions/roster/`
+- Added run output partitioning by run type and runtime budget:
+  - outputs now default under `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/`
+  - keeps short and long-budget runs separated (for example `unbounded`, `300s`).
 - Added controlled champion orchestration/report abstraction updates:
   - scenario execution/report writing APIs now use controlled champion naming
   - report headers and loadout sections now use the selected controlled champion name
@@ -76,7 +86,7 @@
 - Migrated script architecture from flat files to domain-oriented hierarchy:
   - champions:
     - `src/scripts/champions/vladimir.rs`
-    - `src/scripts/champions/enemies/` with per-champion modules (`warwick.rs`, `vayne.rs`, `morgana.rs`, `sona.rs`, `doctor_mundo.rs`, `yasuo.rs`)
+    - `src/scripts/champions/roster/` with per-champion modules (`warwick.rs`, `vayne.rs`, `morgana.rs`, `sona.rs`, `doctor_mundo.rs`, `yasuo.rs`)
   - items:
     - `src/scripts/items/hooks.rs`
   - runes:
