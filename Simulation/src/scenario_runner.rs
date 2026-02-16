@@ -1,8 +1,9 @@
 use anyhow::{Result, anyhow};
 use rayon::prelude::*;
-use serde_json::Value;
+use serde_json::{Value, json};
 use std::collections::hash_map::DefaultHasher;
 use std::collections::{HashMap, HashSet};
+use std::fs;
 use std::hash::{Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
@@ -11,6 +12,7 @@ use std::time::{Duration, Instant};
 
 use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
+use crate::engine::{EnemyDerivedCombatStats, derive_enemy_combat_stats};
 use crate::reporting::{
     default_report_path, write_vladimir_report_json, write_vladimir_report_markdown,
 };
@@ -183,8 +185,13 @@ pub(super) fn run_vladimir_scenario(
                 false,
             )?;
             enemy_presets_used.insert(preset_key, preset.clone());
+            let mut enemy_with_loadout = enemy.clone();
+            enemy_with_loadout.loadout_item_names = preset.item_names.clone();
+            enemy_with_loadout.loadout_rune_names = preset.runes.clone();
+            enemy_with_loadout.loadout_shards = preset.shards.clone();
+            enemy_with_loadout.loadout_masteries = preset.masteries.clone();
             builds.push((
-                enemy.clone(),
+                enemy_with_loadout,
                 build_items,
                 resolved_enemy_loadout.bonus_stats,
             ));
@@ -195,6 +202,13 @@ pub(super) fn run_vladimir_scenario(
         .first()
         .map(|(_, _, b)| b.clone())
         .unwrap_or_default();
+    let enemy_derived_combat_stats = enemy_builds
+        .iter()
+        .map(|(enemy, build, bonus_stats)| {
+            derive_enemy_combat_stats(enemy, build, bonus_stats, &sim, &urf)
+        })
+        .collect::<Vec<_>>();
+    let enemy_similarity_notes = build_enemy_similarity_notes(&enemy_derived_combat_stats);
     let enemy_loadout = ResolvedLoadout::default();
     status.emit(
         "enemy_setup",
@@ -657,6 +671,29 @@ pub(super) fn run_vladimir_scenario(
             );
         }
     }
+    println!("\nEnemy derived combat profiles:");
+    for profile in &enemy_derived_combat_stats {
+        println!(
+            "- {}: HP {:.1}, Armor {:.1}, MR {:.1}, AD {:.1}, AS {:.3} (interval {:.3}s), range {:.0}, move speed {:.1}, hit physical {:.1}, hit ability {:.1}, burst phys/magic/true {:.1}/{:.1}/{:.1}",
+            profile.champion,
+            profile.max_health,
+            profile.armor,
+            profile.magic_resist,
+            profile.attack_damage,
+            profile.attack_speed,
+            profile.attack_interval_seconds,
+            profile.attack_range,
+            profile.move_speed,
+            profile.physical_hit_damage,
+            profile.ability_hit_damage,
+            profile.burst_physical_damage,
+            profile.burst_magic_damage,
+            profile.burst_true_damage
+        );
+    }
+    for note in &enemy_similarity_notes {
+        println!("- Warning: {}", note);
+    }
 
     println!("\nVladimir baseline build (fixed):");
     println!(
@@ -956,6 +993,8 @@ pub(super) fn run_vladimir_scenario(
         best_score: vlad_best_score,
         best_outcome: &vlad_best_outcome,
         enemy_builds: &enemy_builds,
+        enemy_derived_combat_stats: &enemy_derived_combat_stats,
+        enemy_similarity_notes: &enemy_similarity_notes,
         enemy_presets_used: &enemy_presets_used,
         diverse_top_builds: &diverse_top_builds,
         diverse_top_keys: &diverse_top_keys,
@@ -968,16 +1007,73 @@ pub(super) fn run_vladimir_scenario(
     write_vladimir_report_markdown(&report_path, &report_data)?;
     let json_report_path = report_path.with_extension("json");
     write_vladimir_report_json(&json_report_path, &report_data)?;
+
+    // Optional deterministic replay-style timeline for baseline and best runs.
+    let trace_markdown_path = report_path
+        .parent()
+        .unwrap_or_else(|| Path::new("."))
+        .join("vladimir_event_trace.md");
+    let trace_json_path = trace_markdown_path.with_extension("json");
+    let mut baseline_trace_sim = VladCombatSimulation::new(
+        vlad_base.clone(),
+        &baseline_fixed_build,
+        &vlad_loadout.bonus_stats,
+        None,
+        &enemy_builds,
+        sim.clone(),
+        urf.clone(),
+    );
+    baseline_trace_sim.enable_trace();
+    while baseline_trace_sim.step(1) {}
+    let baseline_trace = baseline_trace_sim.trace_events().to_vec();
+
+    let mut best_trace_sim = VladCombatSimulation::new(
+        vlad_base.clone(),
+        &vlad_best_build,
+        &vlad_loadout.bonus_stats,
+        best_order_acquired_map.as_ref(),
+        &enemy_builds,
+        sim.clone(),
+        urf.clone(),
+    );
+    best_trace_sim.enable_trace();
+    while best_trace_sim.step(1) {}
+    let best_trace = best_trace_sim.trace_events().to_vec();
+
+    let mut trace_md = String::new();
+    trace_md.push_str("# Vladimir Event Trace\n\n");
+    trace_md.push_str("## Baseline Build Trace\n");
+    for line in &baseline_trace {
+        trace_md.push_str("- ");
+        trace_md.push_str(line);
+        trace_md.push('\n');
+    }
+    trace_md.push_str("\n## Best Build Trace\n");
+    for line in &best_trace {
+        trace_md.push_str("- ");
+        trace_md.push_str(line);
+        trace_md.push('\n');
+    }
+    fs::write(&trace_markdown_path, trace_md)?;
+
+    let trace_json = json!({
+        "baseline": baseline_trace,
+        "best": best_trace,
+    });
+    fs::write(&trace_json_path, serde_json::to_string_pretty(&trace_json)?)?;
+
     persistent_full_cache.flush()?;
     status.emit(
         "finalization",
         Some((processed_candidates, total_candidates)),
         Some(vlad_best_score),
-        Some("reports and persistent cache written"),
+        Some("reports, trace outputs, and persistent cache written"),
         true,
     );
     println!("\nReport written: {}", report_path.display());
     println!("Structured report written: {}", json_report_path.display());
+    println!("Trace report written: {}", trace_markdown_path.display());
+    println!("Trace json written: {}", trace_json_path.display());
 
     Ok(())
 }
@@ -1046,7 +1142,12 @@ pub(super) fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result
         )?
         .bonus_stats;
         bonus_stats.add(&enemy_loadout.bonus_stats);
-        enemy_builds.push((enemy.clone(), build, bonus_stats));
+        let mut enemy_with_loadout = enemy.clone();
+        enemy_with_loadout.loadout_item_names = preset.item_names.clone();
+        enemy_with_loadout.loadout_rune_names = preset.runes.clone();
+        enemy_with_loadout.loadout_shards = preset.shards.clone();
+        enemy_with_loadout.loadout_masteries = preset.masteries.clone();
+        enemy_builds.push((enemy_with_loadout, build, bonus_stats));
     }
 
     let baseline_fixed_names = scenario
@@ -1131,4 +1232,43 @@ pub(super) fn run_stat_optimization(
     );
     println!("- Total {}: {:.2}", label, value);
     Ok(())
+}
+
+fn build_enemy_similarity_notes(profiles: &[EnemyDerivedCombatStats]) -> Vec<String> {
+    let mut pair_notes = Vec::new();
+    for i in 0..profiles.len() {
+        for j in (i + 1)..profiles.len() {
+            let a = &profiles[i];
+            let b = &profiles[j];
+            let attack_damage_close = (a.attack_damage - b.attack_damage).abs() <= 8.0;
+            let interval_close =
+                (a.attack_interval_seconds - b.attack_interval_seconds).abs() <= 0.10;
+            let range_close = (a.attack_range - b.attack_range).abs() <= 40.0;
+            if attack_damage_close && interval_close && range_close {
+                pair_notes.push(format!(
+                    "{} and {} have very similar auto profiles (AD {:.1}/{:.1}, interval {:.3}/{:.3}, range {:.0}/{:.0}).",
+                    a.champion,
+                    b.champion,
+                    a.attack_damage,
+                    b.attack_damage,
+                    a.attack_interval_seconds,
+                    b.attack_interval_seconds,
+                    a.attack_range,
+                    b.attack_range
+                ));
+            }
+        }
+    }
+
+    if pair_notes.is_empty() {
+        return Vec::new();
+    }
+
+    let mut out = Vec::new();
+    out.push(format!(
+        "Detected {} pair(s) of enemy auto profiles that are unusually similar; verify presets/loadout ingestion if this looks incorrect.",
+        pair_notes.len()
+    ));
+    out.extend(pair_notes.into_iter().take(8));
+    out
 }

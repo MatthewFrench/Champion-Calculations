@@ -623,6 +623,10 @@ pub(crate) fn parse_enemy_config(
             .get("uptime_phase_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
+        loadout_item_names: Vec::new(),
+        loadout_rune_names: Vec::new(),
+        loadout_shards: Vec::new(),
+        loadout_masteries: Vec::new(),
     })
 }
 

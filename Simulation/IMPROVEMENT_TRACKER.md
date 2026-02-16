@@ -67,6 +67,17 @@
 - Enforced strict lint gating:
   - all current code passes `cargo clippy --all-targets --all-features -- -D warnings`
   - CI now hard-fails on any new Clippy warning.
+- Added enemy derived-combat diagnostics and similarity warnings:
+  - report/JSON output now includes per-enemy HP/AD/AS/range/hit/burst derived stats
+  - warns when enemy auto-attack profiles look suspiciously similar
+- Improved death/respawn state realism:
+  - transient stack counters clear on enemy death and respawn
+  - enemies respawn at their original spawn position
+- Improved scripted event lifecycle correctness:
+  - scripted champion events are epoch-gated across death/respawn and uptime-window transitions
+  - stale queued script events are invalidated instead of leaking across lifecycle transitions
+- Fixed projectile-blocking segment intersection edge cases:
+  - colinear-but-disjoint projectile paths no longer register as blocked
 
 ## Not Done
 - [P0] Full-fidelity Vladimir kit simulation (`Q`, `E`, `R`, passives)

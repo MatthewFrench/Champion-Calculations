@@ -9,9 +9,12 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - URF global buffs (ability/item haste, health cost multiplier, attack speed multipliers) are applied.
 - Enemy auto-attacks use start, windup, and hit phases.
 - Ranged attacks/spells include projectile travel time based on distance and speed.
+- Projectile block checks use segment intersection with colinear overlap handling.
 - Enemy auto-attacks and spell damage are modeled as recurring timed events.
 - Stuns are modeled as recurring timed events that delay Vladimir's casting.
 - Enemy units can die and respawn on URF-scaled timers.
+- Enemy transient stack/buff counters are cleared on death and respawn, and enemies respawn at their original spawn positions.
+- Enemy scripted ability timelines are lifecycle-safe across death/respawn and uptime-window transitions.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
 - Scripted enemy behavior profiles are included for:
@@ -70,6 +73,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
   - Vladimir end stats for best build
   - Stack assumptions/notes for stack-based items in the best build
+  - Enemy derived combat profiles (HP/AD/AS/range/hit/burst stats) with similarity warnings for suspiciously close auto profiles
   - If run with a time budget, report includes timeout/progress metadata
 
 ## Runtime Controls
@@ -212,6 +216,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Report now includes:
   - Headline objective score and component outcomes (time alive, damage dealt, healing done, enemy kills)
   - Cap-survivor indicators for baseline and best build outcomes
+  - Enemy derived combat profile diagnostics and similarity warnings
   - Search diagnostics (full eval counts, candidate pool, seed variance, objective weights)
   - Robust vs fragile build confidence based on ensemble seed hit rate
   - Pareto-front tagging over objective/EHP/AP/cost-timing metrics

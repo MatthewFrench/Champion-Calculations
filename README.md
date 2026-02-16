@@ -45,3 +45,23 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 
 **Research Goal**
 Find a “best URF tier” survivability build for Vladimir and compare against fixed baselines (including a specific baseline item list). Expand later to attack speed (Taric) and move speed (Hecarim) optimization.
+
+**License**
+- Code and original repository content are licensed under `AGPL-3.0-or-later`. See `LICENSE`.
+- Some files include third-party content and references that are not relicensed as your own. See `THIRD_PARTY_NOTICES.md`.
+
+**Contributions**
+- Contributions are welcome.
+- Contributors must agree to `CLA.md` (details in `CONTRIBUTING.md`) to keep future licensing options available.
+
+**Commercial Licensing (Future)**
+- No separate commercial license is currently offered.
+- The maintainer may offer one in the future. See `COMMERCIAL_LICENSE.md`.
+
+**Name and Branding**
+- Project name is currently "Champion Calculations" (descriptive, no registered trademark claim at this time).
+- See `TRADEMARKS.md` for branding and anti-confusion guidance.
+
+**Riot / Third-Party Disclaimer**
+- This project is not affiliated with or endorsed by Riot Games.
+- League of Legends and Riot Games names, marks, and game IP belong to Riot Games, Inc.

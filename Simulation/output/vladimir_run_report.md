@@ -1,14 +1,14 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771203885`
-- Scenario: `scenario_vlad_urf.json`
+- Generated (unix): `1771206415`
+- Scenario: `Simulation/scenario_vlad_urf.json`
 
 ## Headline
 - Baseline objective score: **1.0000**
 - Best objective score: **1.0000**
 - Improvement: **+0.00%**
-- Baseline time alive / damage dealt / healing done / enemy kills: **74.94s / 18476.3 / 3798.5 / 5**
-- Best time alive / damage dealt / healing done / enemy kills: **74.94s / 18476.3 / 3798.5 / 5**
+- Baseline time alive / damage dealt / healing done / enemy kills: **16.56s / 10226.9 / 1807.8 / 0**
+- Best time alive / damage dealt / healing done / enemy kills: **16.56s / 10226.9 / 1807.8 / 0**
 - Baseline cap survivor: **false**
 - Best cap survivor: **false**
 
@@ -21,14 +21,14 @@
 - Loadout candidates/finalists: `192/1`
 - Ensemble seeds: `1`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
-- Full evaluations: `18` (cache hits/misses/waits: `0/18/0`)
-- Full persistent cache hits/entries: `161/216`
+- Full evaluations: `36` (cache hits/misses/waits: `0/36/0`)
+- Full persistent cache hits/entries: `200/288`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
 
-- Time budget: `1.0s`; elapsed: `1.0s`; timed_out: `true`; progress: `0/1`
+- Time budget: `2.0s`; elapsed: `2.0s`; timed_out: `true`; progress: `0/1`
 
 ## Vladimir Base Stats At Level
 - HP: 2690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
@@ -87,17 +87,24 @@
   - Runes: Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight
   - Masteries: Grasp of the Undying (1), Perseverance (1)
 
+## Enemy Derived Combat Profiles
+- Warwick: HP 3501.0, Armor 191.6, MR 70.9, AD 237.5, AS 2.681 (interval 0.373s), range 175, projectile speed 0, move speed 422.4, desired combat range 130, hit physical 237.5, hit ability 26.9, burst phys/magic/true 0.0/0.0/0.0
+- Vayne: HP 2641.5, Armor 111.4, MR 54.7, AD 294.6, AS 5.845 (interval 0.171s), range 550, projectile speed 2500, move speed 390.7, desired combat range 520, hit physical 294.6, hit ability 27.7, burst phys/magic/true 70.0/0.0/0.0
+- Morgana: HP 3440.5, Armor 154.8, MR 54.7, AD 122.5, AS 1.613 (interval 0.620s), range 450, projectile speed 1800, move speed 387.6, desired combat range 500, hit physical 122.5, hit ability 53.2, burst phys/magic/true 0.0/140.0/0.0
+- Sona: HP 2413.5, Armor 105.8, MR 54.7, AD 106.0, AS 1.851 (interval 0.540s), range 550, projectile speed 1900, move speed 387.6, desired combat range 520, hit physical 106.0, hit ability 44.3, burst phys/magic/true 0.0/100.0/0.0
+- Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 175, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 18.4, burst phys/magic/true 90.0/0.0/0.0
+
 ## Diverse Top Builds
 1. `score 1.0000` (+0.0000 vs top): Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass | seed hits: 0/1 (0%) fragile | Pareto-front
    - metrics: EHP~10545.4, AP~290.1, timing score -8405.00, total cost 14800
 
 ## Build Order Optimization
-1. Cumulative score: `7.71` | Order: Guardian Angel, Zhonya's Hourglass, Protoplasm Harness, Liandry's Torment, Morellonomicon
-   - Stage 1 (level 5): objective `1.000`, time alive `9.89s`, damage `5078.0`, healing `494.0`
-   - Stage 2 (level 9): objective `1.237`, time alive `14.86s`, damage `6631.8`, healing `607.5`
-   - Stage 3 (level 13): objective `1.062`, time alive `53.98s`, damage `16090.4`, healing `3150.7`
-   - Stage 4 (level 16): objective `3.410`, time alive `64.95s`, damage `18002.1`, healing `3475.2`
-   - Stage 5 (level 20): objective `1.000`, time alive `74.94s`, damage `18476.3`, healing `3798.5`
+1. Cumulative score: `5.56` | Order: Guardian Angel, Zhonya's Hourglass, Protoplasm Harness, Morellonomicon, Liandry's Torment
+   - Stage 1 (level 5): objective `1.000`, time alive `9.56s`, damage `5078.0`, healing `494.0`
+   - Stage 2 (level 9): objective `1.233`, time alive `14.50s`, damage `6631.8`, healing `607.5`
+   - Stage 3 (level 13): objective `1.322`, time alive `16.01s`, damage `7973.3`, healing `1272.0`
+   - Stage 4 (level 16): objective `1.002`, time alive `16.02s`, damage `9767.1`, healing `1668.7`
+   - Stage 5 (level 20): objective `1.000`, time alive `16.56s`, damage `10226.9`, healing `1807.8`
 
 ## Deeper Insights
 - Common core across all selected top builds: Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass.

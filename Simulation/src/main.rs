@@ -26,7 +26,7 @@ pub(crate) use crate::data::{
     parse_enemy_config, parse_loadout_selection, parse_simulation_config, random_loadout_selection,
     resolve_loadout, simulation_dir, to_norm_key, validate_enemy_urf_presets,
 };
-use crate::engine::{VladCombatSimulation, simulate_vlad_combat};
+use crate::engine::{EnemyDerivedCombatStats, VladCombatSimulation, simulate_vlad_combat};
 use crate::scenario_runner::{run_stat_optimization, run_vladimir_scenario, run_vladimir_stepper};
 use crate::scripts::vladimir::{
     VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
@@ -133,6 +133,10 @@ struct EnemyConfig {
     uptime_cycle_seconds: f64,
     uptime_active_seconds: f64,
     uptime_phase_seconds: f64,
+    loadout_item_names: Vec<String>,
+    loadout_rune_names: Vec<String>,
+    loadout_shards: Vec<String>,
+    loadout_masteries: Vec<MasterySelection>,
 }
 
 #[derive(Debug, Clone)]
@@ -353,6 +357,8 @@ struct VladimirReportData<'a> {
     best_score: f64,
     best_outcome: &'a CombatOutcome,
     enemy_builds: &'a [EnemyBuildEntry],
+    enemy_derived_combat_stats: &'a [EnemyDerivedCombatStats],
+    enemy_similarity_notes: &'a [String],
     enemy_presets_used: &'a HashMap<String, EnemyUrfPreset>,
     diverse_top_builds: &'a [(Vec<Item>, f64)],
     diverse_top_keys: &'a [BuildKey],
@@ -392,9 +398,9 @@ struct Cli {
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum Mode {
-    #[value(name = "vladimir", alias = "vlad")]
+    #[value(name = "vladimir")]
     Vladimir,
-    #[value(name = "vladimir_step", alias = "vlad_step")]
+    #[value(name = "vladimir_step")]
     VladimirStep,
     #[value(name = "taric_as")]
     TaricAs,

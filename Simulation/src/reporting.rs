@@ -37,6 +37,8 @@ pub(super) fn write_vladimir_report_markdown(
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
     let enemy_builds = data.enemy_builds;
+    let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
+    let enemy_similarity_notes = data.enemy_similarity_notes;
     let enemy_presets_used = data.enemy_presets_used;
     let diverse_top_builds = data.diverse_top_builds;
     let diverse_top_keys = data.diverse_top_keys;
@@ -229,6 +231,36 @@ pub(super) fn write_vladimir_report_markdown(
     }
     content.push('\n');
 
+    content.push_str("## Enemy Derived Combat Profiles\n");
+    for profile in enemy_derived_combat_stats {
+        content.push_str(&format!(
+            "- {}: HP {:.1}, Armor {:.1}, MR {:.1}, AD {:.1}, AS {:.3} (interval {:.3}s), range {:.0}, projectile speed {:.0}, move speed {:.1}, desired combat range {:.0}, hit physical {:.1}, hit ability {:.1}, burst phys/magic/true {:.1}/{:.1}/{:.1}\n",
+            profile.champion,
+            profile.max_health,
+            profile.armor,
+            profile.magic_resist,
+            profile.attack_damage,
+            profile.attack_speed,
+            profile.attack_interval_seconds,
+            profile.attack_range,
+            profile.attack_projectile_speed,
+            profile.move_speed,
+            profile.desired_combat_range,
+            profile.physical_hit_damage,
+            profile.ability_hit_damage,
+            profile.burst_physical_damage,
+            profile.burst_magic_damage,
+            profile.burst_true_damage
+        ));
+    }
+    if !enemy_similarity_notes.is_empty() {
+        content.push_str("- Similarity checks:\n");
+        for note in enemy_similarity_notes {
+            content.push_str(&format!("  - {}\n", note));
+        }
+    }
+    content.push('\n');
+
     content.push_str("## Diverse Top Builds\n");
     if diverse_top_builds.is_empty() {
         content.push_str("- No diverse builds found under current thresholds.\n\n");
@@ -367,6 +399,8 @@ pub(super) fn write_vladimir_report_json(
     let best_outcome = data.best_outcome;
     let vladimir_loadout = data.vladimir_loadout;
     let enemy_builds = data.enemy_builds;
+    let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
+    let enemy_similarity_notes = data.enemy_similarity_notes;
     let enemy_presets_used = data.enemy_presets_used;
     let diverse_top_builds = data.diverse_top_builds;
     let diagnostics = data.diagnostics;
@@ -415,6 +449,27 @@ pub(super) fn write_vladimir_report_json(
                 "last_checked": preset.map(|p| p.last_checked.clone()).unwrap_or_default(),
             })
         }).collect::<Vec<_>>(),
+        "enemy_derived_combat_stats": enemy_derived_combat_stats.iter().map(|profile| {
+            json!({
+                "champion": profile.champion,
+                "max_health": profile.max_health,
+                "armor": profile.armor,
+                "magic_resist": profile.magic_resist,
+                "attack_damage": profile.attack_damage,
+                "attack_speed": profile.attack_speed,
+                "attack_interval_seconds": profile.attack_interval_seconds,
+                "attack_range": profile.attack_range,
+                "attack_projectile_speed": profile.attack_projectile_speed,
+                "move_speed": profile.move_speed,
+                "desired_combat_range": profile.desired_combat_range,
+                "physical_hit_damage": profile.physical_hit_damage,
+                "ability_hit_damage": profile.ability_hit_damage,
+                "burst_physical_damage": profile.burst_physical_damage,
+                "burst_magic_damage": profile.burst_magic_damage,
+                "burst_true_damage": profile.burst_true_damage
+            })
+        }).collect::<Vec<_>>(),
+        "enemy_similarity_notes": enemy_similarity_notes,
         "diverse_top_builds": diverse_top_builds.iter().map(|(build, score)| {
             json!({
                 "objective_score": score,
