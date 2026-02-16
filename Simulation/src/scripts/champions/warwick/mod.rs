@@ -1,6 +1,6 @@
 use super::{
     ChampionBehaviorProfile, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptSchedule,
+    ChampionScriptExecutionInput, ChampionScriptSchedule, ScriptedEffectHitbox,
 };
 
 pub(crate) const CHAMPION_KEY: &str = "warwick";
@@ -33,6 +33,7 @@ pub(crate) fn execute_infinite_duress(
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: 0.0,
+        hitbox: ScriptedEffectHitbox::Circle { radius: 80.0 },
         physical: input.physical_hit_damage * 1.8,
         magic: 80.0 + 0.25 * input.physical_hit_damage,
         true_damage: 0.0,

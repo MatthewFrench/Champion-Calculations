@@ -1,6 +1,7 @@
 use super::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptSchedule, on_ability_bonus_damage,
+    ChampionScriptExecutionInput, ChampionScriptSchedule, ScriptedEffectHitbox,
+    on_ability_bonus_damage,
 };
 
 pub(crate) const CHAMPION_KEY: &str = "sona";
@@ -38,6 +39,7 @@ pub(crate) fn execute_crescendo(
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: input.burst_projectile_speed,
+        hitbox: ScriptedEffectHitbox::Circle { radius: 140.0 },
         physical: 0.0,
         magic: raw_magic + extra_magic,
         true_damage: extra_true,

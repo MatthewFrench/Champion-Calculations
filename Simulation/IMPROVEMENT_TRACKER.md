@@ -1,6 +1,12 @@
 # Improvement Tracker
 
 ## Done
+- Added hitbox-aware impact and interruption simulation in core combat loop:
+  - actor hitboxes are modeled as circles and included in range checks
+  - attack/spell/script effects now use configurable effect-hitbox radii
+  - projectile barrier checks now include projectile and barrier thickness
+  - impact outcomes are explicit (`applied`, `projectile_blocked`, `impact_nullified`, `*_missed`)
+  - melee auto-attacks cancel when attacker is stunned during windup
 - Improved report readability and diagnostics detail:
   - added human-readable timestamps (local + UTC) and unix timestamp
   - added comma-separated large-number formatting for major diagnostics values
@@ -163,6 +169,24 @@
   - deterministic per-tick updates wired into simulation time advancement
 
 ## Not Done
+- [P0] Slot-agnostic ability architecture (keybind decoupling and ability remapping)
+  - Goal: support runtime ability swapping/remapping without hardcoding abilities to fixed champion keybind slots.
+  - Scope:
+    - separate cast slot/input binding from ability identity and script behavior.
+    - represent per-actor slot maps in data/runtime state (not champion-specific struct fields).
+    - support ability theft/copy patterns (for example stolen ultimates) through generic runtime ownership/context.
+    - keep champion-specific exceptions in ability scripts/data, not in core engine branches.
+  - Success criteria:
+    - the same ability script can be attached to different actors and different keybind slots at runtime.
+    - no shared engine conditionals are needed for champion-specific stolen-ability routing.
+
+- [P2] Vertical `z` dimension modeling decision
+  - Goal: explicitly track and validate whether vertical `z` index impacts gameplay outcomes in simulator scope.
+  - Current policy:
+    - ignore `z` for combat checks and use 2D geometry only.
+  - Follow-up:
+    - revisit only when a verified gameplay interaction requires `z` in calculations.
+
 - [P0] Full codebase structure audit and abstraction-first reorganization
   - Goal: examine the entire simulator codebase layout and optimize it for long-term versatility.
   - Scope:

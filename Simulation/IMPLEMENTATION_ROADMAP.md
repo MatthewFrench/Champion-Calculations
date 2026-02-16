@@ -47,75 +47,93 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - all spells and attack phases use a single cast-state model.
 
-6. `PLANNED` Build a generic projectile system.
+6. `IN_PROGRESS` Build a generic projectile system.
 - Scope:
   - spawn, travel, hit resolution, block/reflect, expiration
   - collision layer and shape support
 - Success criteria:
   - projectile behavior is data/script-driven across champions.
 
-7. `PLANNED` Upgrade position simulation to command-based movement.
+7. `DONE` Add hitbox-aware impact resolution and interruption outcomes.
+- Scope:
+  - actor and effect hitbox radius checks for attacks and scripted effects
+  - explicit impact outcomes (applied, blocked, miss, untargetable nullification)
+  - melee auto-attack cancellation on attacker stun during windup
+- Success criteria:
+  - event traces and combat outcomes differentiate blocked/missed/nullified hits from applied damage.
+
+8. `PLANNED` Upgrade position simulation to command-based movement.
 - Scope:
   - chase, kite, hold, retreat commands
   - deterministic path updates and range-maintain behavior
 - Success criteria:
   - positioning changes materially affect damage windows.
 
-8. `PLANNED` Implement target-selection logic for both sides.
+9. `PLANNED` Introduce slot-agnostic ability architecture.
+- Scope:
+  - decouple ability identity from key binding slots (`Q`,`W`,`E`,`R`)
+  - model runtime slot-to-ability mapping as data/state instead of hardcoded champion fields
+  - support runtime ability remapping/swapping (for example stolen/captured abilities)
+  - keep champion-specific interaction rules in ability scripts, not engine branches
+- Success criteria:
+  - controlled champion and enemy actors cast through the same generic ability-instance interfaces.
+  - stolen/swapped ability execution does not require core engine conditionals by champion.
+
+10. `PLANNED` Implement target-selection logic for both sides.
 - Scope:
   - closest, lowest health, priority target, in-range fallback
 - Success criteria:
   - target selection is configurable and scriptable.
 
-9. `PLANNED` Expand Vladimir kit fidelity to full in-game nuance.
+11. `PLANNED` Expand Vladimir kit fidelity to full in-game nuance.
 - Scope:
   - empowered states, conditional effects, timing edge cases
 - Success criteria:
   - ability outcomes/timing align with documented in-game behavior.
 
-10. `PLANNED` Expand enemy kit fidelity for preset champions.
+12. `PLANNED` Expand enemy kit fidelity for preset champions.
 - Scope:
   - beyond first-pass constants into richer state interactions
 - Success criteria:
   - each champion exhibits clearly distinct kit timelines.
 
-11. `IN_PROGRESS` Full combat-time rune system.
+13. `IN_PROGRESS` Full combat-time rune system.
 - Scope:
   - move dynamic rune behavior from notes/simplifications into scripts
 - Success criteria:
   - selected runes contribute in real time when conditions trigger.
 
-12. `IN_PROGRESS` Full combat-time mastery system.
+14. `IN_PROGRESS` Full combat-time mastery system.
 - Scope:
   - move dynamic mastery behavior into scripts
 - Success criteria:
   - mastery runtime effects are deterministic and modeled.
 
-13. `PLANNED` Item script coverage for all high-frequency legendary items.
+15. `PLANNED` Item script coverage for all high-frequency legendary items.
 - Scope:
   - script mechanics for passives that materially alter combat outcomes
 - Success criteria:
   - top-search item effects are represented in combat-time logic.
 
-14. `PLANNED` Explicit item mode-availability model.
+16. `PLANNED` Explicit item mode-availability model.
 - Scope:
   - URF legality field and validation
 - Success criteria:
   - item pool generation is mode-correct without heuristic filters.
 
-15. `DONE` Full death-timer model including game-time scaling.
+17. `DONE` Full death-timer model including game-time scaling.
 - Scope:
   - include time increase factor and URF modifiers
 - Success criteria:
   - respawn timing tracks expected rules across level and game time.
 
-16. `PLANNED` Death-state cleanup rules by effect tags.
+18. `PLANNED` Death-state cleanup rules by effect tags.
 - Scope:
   - buffs/debuffs dropped or persisted based on metadata
 - Success criteria:
   - death transitions behave consistently with effect persistence semantics.
 
-17. `PLANNED` Cooldown behavior policy validation on death/respawn.
+19. `PLANNED` Cooldown behavior policy validation on death/respawn.
 - Scope:
   - verify cooldown progression rules for scripted abilities/effects
 - Success criteria:
@@ -123,25 +141,25 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 ## P1 Data Correctness, Calibration, Validation
 
-18. `PLANNED` Source-backed constants dataset with provenance.
+20. `PLANNED` Source-backed constants dataset with provenance.
 - Scope:
   - maintain sources, dates, and override policy for tuned constants
 - Success criteria:
   - constants are traceable and auditable.
 
-19. `PLANNED` Calibration tests versus expected interactions.
+21. `PLANNED` Calibration tests versus expected interactions.
 - Scope:
   - scenario fixtures with expected ranges/outcomes
 - Success criteria:
   - deviations are caught automatically.
 
-20. `PLANNED` Golden regression suite.
+22. `PLANNED` Golden regression suite.
 - Scope:
   - lock key scenario outputs with tolerances
 - Success criteria:
   - unintended model drift is detected in CI.
 
-21. `PLANNED` Property-based tests for invariants.
+23. `PLANNED` Property-based tests for invariants.
 - Scope:
   - deterministic replay, non-negative health constraints, event ordering
 - Success criteria:
@@ -149,49 +167,49 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 ## P1 Performance And Search Quality
 
-22. `PLANNED` Performance profiling workflow and flamegraphs.
+24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:
   - repeatable profiling command and report artifacts
 - Success criteria:
   - hotspot regressions become actionable quickly.
 
-23. `PLANNED` Reduce synchronization overhead in caches/scoring.
+25. `PLANNED` Reduce synchronization overhead in caches/scoring.
 - Scope:
   - minimize lock contention and shared hot-map pressure
 - Success criteria:
   - higher evaluations/second at same quality settings.
 
-24. `PLANNED` Two-stage evaluation pipeline.
+26. `PLANNED` Two-stage evaluation pipeline.
 - Scope:
   - approximate fast scorer, strict rerank by full simulation
 - Success criteria:
   - maintains top quality while expanding effective search width.
 
-25. `PLANNED` Adaptive algorithm budget allocation.
+27. `PLANNED` Adaptive algorithm budget allocation.
 - Scope:
   - allocate iterations based on marginal gain and novelty contribution
 - Success criteria:
   - better objective outcomes under fixed runtime budget.
 
-26. `PLANNED` Smarter cross-algorithm elite exchange rounds.
+28. `PLANNED` Smarter cross-algorithm elite exchange rounds.
 - Scope:
   - novelty pressure plus dedupe-aware injections
 - Success criteria:
   - more diverse high-quality candidates without wasted full evaluations.
 
-27. `PLANNED` Confidence intervals and robustness ranking.
+29. `PLANNED` Confidence intervals and robustness ranking.
 - Scope:
   - confidence bands beyond seed-hit labels
 - Success criteria:
   - report separates stable winners from fragile outliers.
 
-28. `PLANNED` First-class multi-scenario robust optimization.
+30. `PLANNED` First-class multi-scenario robust optimization.
 - Scope:
   - weighted mean, worst-case, and risk-sensitive options
 - Success criteria:
   - recommended builds remain strong across scenario variations.
 
-29. `PLANNED` Build-order optimization with economy/timing model.
+31. `PLANNED` Build-order optimization with economy/timing model.
 - Scope:
   - include gold flow and purchase times
 - Success criteria:
@@ -199,43 +217,43 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 ## P2 Product And Tooling
 
-30. `PLANNED` Optional summoner spell simulation.
+32. `PLANNED` Optional summoner spell simulation.
 - Scope:
   - include only when materially changing outcomes
 - Success criteria:
   - scenario supports realistic spell-driven survivability/damage spikes.
 
-31. `PLANNED` Richer report explainability.
+33. `PLANNED` Richer report explainability.
 - Scope:
   - per-component and per-enemy contribution breakdowns
 - Success criteria:
   - report explains why a build wins in concrete terms.
 
-32. `PLANNED` Resume/checkpoint support for long searches.
+34. `PLANNED` Resume/checkpoint support for long searches.
 - Scope:
   - save and continue in-progress runs
 - Success criteria:
   - interrupted runs can resume without restarting search from scratch.
 
-33. `PLANNED` Benchmark gates in CI.
+35. `PLANNED` Benchmark gates in CI.
 - Scope:
   - runtime and throughput trend checks
 - Success criteria:
   - performance regressions fail checks or raise warnings.
 
-34. `IN_PROGRESS` Enforce strict module boundaries to prevent core logic sprawl.
+36. `IN_PROGRESS` Enforce strict module boundaries to prevent core logic sprawl.
 - Scope:
   - keep champion/item/rune/mastery specifics outside engine core
 - Success criteria:
   - architecture remains extendable and maintainable.
 
-35. `PLANNED` Dead-code/config cleanup with strict warning policy.
+37. `PLANNED` Dead-code/config cleanup with strict warning policy.
 - Scope:
   - remove stale paths and enforce lint rigor
 - Success criteria:
   - cleaner build and lower maintenance risk.
 
-36. `IN_PROGRESS` Full codebase structure audit and abstraction-driven reorganization plan.
+38. `IN_PROGRESS` Full codebase structure audit and abstraction-driven reorganization plan.
 - Scope:
   - review the entire `Simulation/src` layout for abstraction boundaries and long-term extensibility
   - identify and prioritize high-friction files/modules for relocation or split
@@ -243,7 +261,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - a concrete target module layout exists with phased migration steps and acceptance criteria.
 
-37. `IN_PROGRESS` Domain-oriented script hierarchy for champions, items, runes, and masteries.
+39. `IN_PROGRESS` Domain-oriented script hierarchy for champions, items, runes, and masteries.
 - Scope:
   - replace flat script layout with domain folders (for example `scripts/champions/`, `scripts/items/`, `scripts/runes/`, `scripts/masteries/`)
   - move per-entity script logic into dedicated files (for example one champion per module)
@@ -251,7 +269,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - script organization is discoverable, scalable, and does not rely on monolithic files.
 
-38. `IN_PROGRESS` Naming scheme and module sizing standards.
+40. `IN_PROGRESS` Naming scheme and module sizing standards.
 - Scope:
   - establish file/module naming rules that are descriptive and consistent
   - set practical module size targets and split policies for large files
@@ -259,28 +277,30 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - new modules follow a documented naming and sizing standard; large modules are progressively split.
 
-39. `PLANNED` Architecture revisit checkpoints.
+41. `PLANNED` Architecture revisit checkpoints.
 - Scope:
   - add recurring architecture review checkpoints after each major simulation feature tranche
   - track follow-up cleanup items to prevent structural drift
 - Success criteria:
   - architecture debt is surfaced and resolved incrementally rather than deferred indefinitely.
 
-40. `DONE` Maintain explicit roadmap tracking with acceptance criteria.
+42. `DONE` Maintain explicit roadmap tracking with acceptance criteria.
 - Implemented in this file.
 
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
 - `DONE` Item 3
+- `DONE` Item 7 (hitbox-aware impact outcomes and melee windup interruption on stun)
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
-- `IN_PROGRESS` Item 11 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
-- `IN_PROGRESS` Item 12 (controlled champion runtime mastery effects are wired through simulation/objective; broader coverage pending)
-- `IN_PROGRESS` Item 36 (audit underway; structure migration phases being tracked)
-- `IN_PROGRESS` Item 34 (champion/item coupling reduced by moving defensive item and revive decisions into generic runtime/item capability scripts)
-- `IN_PROGRESS` Item 37 (phase-one scripts hierarchy landed; remaining migrations pending)
-- `IN_PROGRESS` Item 38 (descriptive naming and module-splitting pass underway)
+- `PLANNED` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities)
+- `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
+- `IN_PROGRESS` Item 14 (controlled champion runtime mastery effects are wired through simulation/objective; broader coverage pending)
+- `IN_PROGRESS` Item 38 (audit underway; structure migration phases being tracked)
+- `IN_PROGRESS` Item 36 (champion/item coupling reduced by moving defensive item and revive decisions into generic runtime/item capability scripts)
+- `IN_PROGRESS` Item 39 (phase-one scripts hierarchy landed; remaining migrations pending)
+- `IN_PROGRESS` Item 40 (descriptive naming and module-splitting pass underway)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

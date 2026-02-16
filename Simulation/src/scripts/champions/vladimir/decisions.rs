@@ -5,12 +5,15 @@ pub(crate) struct VladimirCastProfile {
     pub q_range: f64,
     pub q_windup_seconds: f64,
     pub q_projectile_speed: f64,
+    pub q_effect_hitbox_radius: f64,
     pub e_range: f64,
     pub e_windup_seconds: f64,
     pub e_projectile_speed: f64,
+    pub e_effect_hitbox_radius: f64,
     pub r_range: f64,
     pub r_windup_seconds: f64,
     pub r_projectile_speed: f64,
+    pub r_effect_hitbox_radius: f64,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -70,12 +73,15 @@ pub(crate) fn default_cast_profile() -> VladimirCastProfile {
         q_range: 600.0,
         q_windup_seconds: 0.20,
         q_projectile_speed: 0.0,
+        q_effect_hitbox_radius: 80.0,
         e_range: 600.0,
         e_windup_seconds: 0.30,
         e_projectile_speed: 0.0,
+        e_effect_hitbox_radius: 275.0,
         r_range: 700.0,
         r_windup_seconds: 0.25,
         r_projectile_speed: 0.0,
+        r_effect_hitbox_radius: 375.0,
     }
 }
 

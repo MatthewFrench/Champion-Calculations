@@ -1,6 +1,7 @@
 use super::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptSchedule, on_ability_bonus_damage,
+    ChampionScriptExecutionInput, ChampionScriptSchedule, ScriptedEffectHitbox,
+    on_ability_bonus_damage,
 };
 
 pub(crate) const CHAMPION_KEY: &str = "drmundo";
@@ -38,6 +39,7 @@ pub(crate) fn execute_infected_cleaver(
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: input.ability_projectile_speed,
+        hitbox: ScriptedEffectHitbox::Circle { radius: 75.0 },
         physical: 0.0,
         magic: raw_magic + extra_magic,
         true_damage: extra_true,

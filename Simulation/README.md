@@ -4,12 +4,23 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
-- Combat now runs with 2D positions (Vladimir fixed at origin, enemies spawned in range bands and standing still).
+- Combat runs with 2D positions (controlled champion fixed at origin; enemies maintain range with deterministic orbit/chase motion).
+- Simulation intentionally ignores vertical `z` index for now; combat checks use only 2D geometry (`x`,`y`) until a verified gameplay interaction requires `z`.
 - Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz` (legacy `VladCombatSimulation` alias remains available).
 - URF global buffs (ability/item haste, health cost multiplier, attack speed multipliers) are applied.
 - Enemy auto-attacks use start, windup, and hit phases.
 - Ranged attacks/spells include projectile travel time based on distance and speed.
-- Projectile block checks use segment intersection with colinear overlap handling.
+- Hit resolution is hitbox-aware:
+  - actor hitboxes are modeled as circles
+  - attack/spell/script effects carry configurable effect-hitbox radii
+  - range checks include actor hitboxes plus effect hitbox reach
+- Projectile block checks include projectile and barrier thickness.
+- Projectile impacts now resolve with explicit outcomes:
+  - blocked by projectile barriers
+  - missed target hitbox at impact time
+  - nullified by untargetable/stasis states
+  - applied normally
+- Melee auto-attacks are interrupted and cancelled if the attacker is stunned during windup (projectiles already released continue to resolve).
 - Enemy auto-attacks and spell damage are modeled as recurring timed events.
 - Stuns are modeled as recurring timed events that delay Vladimir's casting.
 - Enemy units can die and respawn on URF-scaled timers.
@@ -63,7 +74,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
-- `src/scripts/champions/mod.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
+- `src/scripts/champions/mod.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types (including script effect hitbox descriptors).
 - `src/scripts/champions/vladimir/mod.rs`: Vladimir scripted formulas and combat decision APIs (offense and defensive ability decisions).
 - `src/scripts/champions/<champion>/mod.rs`: Per-champion behavior/event logic modules.
 - `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
@@ -102,6 +113,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Trace outputs are also champion-keyed:
   - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
   - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.json`
+  - trace includes explicit impact outcome events such as `projectile_blocked`, `impact_nullified`, `attack_missed`, and `ability_missed`.
 
 ## Runtime Controls
 - `--max-runtime-seconds N`:
@@ -188,6 +200,11 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - shared simulation/core/search/reporting modules should remain champion-agnostic.
   - champion and loadout specifics should be delegated through script interfaces.
   - avoid abbreviations in new names and user-facing output.
+  - ability ownership should be slot-agnostic:
+    - ability behavior identity must not be hardcoded to a specific key binding (`Q`,`W`,`E`,`R`) or champion type.
+    - key bindings should map to ability instances via data and runtime state.
+    - runtime should support ability remapping/swapping across champions (for example stolen abilities) without changing core engine code.
+    - champion-specific exceptions should be implemented in ability scripts/data, not in shared engine branches.
 
 ## Current Script Structure
 The simulator now uses a domain-first script layout to keep champion/item/rune/mastery behavior organized:
@@ -247,6 +264,13 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - As a practical URF-safe rule, search excludes Arena/distributed-only item patterns and focuses on normal-rift-eligible legendary items.
 
 ## Notes
+- Future-proofing requirement:
+  - the simulator must support champions whose available abilities can change at runtime (for example ability theft/copy mechanics).
+  - this implies a separation between:
+    - input slot (key binding / cast slot)
+    - ability identity (script/data behavior)
+    - ability owner/source champion context
+  - current Vladimir-centric cast profile is an intermediate shape and should migrate toward this model.
 - Champion base stats are loaded from `Characters/*.json` by champion name.
 - This model now includes first-pass scripted Vladimir offensive abilities (`Q`, `E`, `R`) and enemy death/respawn handling.
 - The build search supports: `beam`, `greedy`, `random`, `hill_climb`, `genetic`, `simulated_annealing`, `mcts`, and `portfolio`.

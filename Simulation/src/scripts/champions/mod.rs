@@ -22,10 +22,13 @@ pub(crate) struct ChampionBehaviorProfile {
     pub attack_range: f64,
     pub attack_windup_seconds: f64,
     pub attack_projectile_speed: f64,
+    pub attack_effect_hitbox_radius: f64,
     pub ability_windup_seconds: f64,
     pub ability_projectile_speed: f64,
+    pub ability_effect_hitbox_radius: f64,
     pub burst_windup_seconds: f64,
     pub burst_projectile_speed: f64,
+    pub burst_effect_hitbox_radius: f64,
     pub desired_combat_range: f64,
     pub movement_speed_scale: f64,
     pub on_hit_magic_flat: f64,
@@ -43,10 +46,13 @@ impl ChampionBehaviorProfile {
                 attack_range: 175.0,
                 attack_windup_seconds: 0.24,
                 attack_projectile_speed: 0.0,
+                attack_effect_hitbox_radius: 80.0,
                 ability_windup_seconds: 0.10,
                 ability_projectile_speed: 0.0,
+                ability_effect_hitbox_radius: 90.0,
                 burst_windup_seconds: 0.10,
                 burst_projectile_speed: 0.0,
+                burst_effect_hitbox_radius: 120.0,
                 desired_combat_range: 135.0,
                 movement_speed_scale: 1.0,
                 on_hit_magic_flat: 0.0,
@@ -61,10 +67,13 @@ impl ChampionBehaviorProfile {
                 attack_range: 550.0,
                 attack_windup_seconds: 0.20,
                 attack_projectile_speed: 2000.0,
+                attack_effect_hitbox_radius: 45.0,
                 ability_windup_seconds: 0.10,
                 ability_projectile_speed: 1800.0,
+                ability_effect_hitbox_radius: 70.0,
                 burst_windup_seconds: 0.10,
                 burst_projectile_speed: 1800.0,
+                burst_effect_hitbox_radius: 100.0,
                 desired_combat_range: 500.0,
                 movement_speed_scale: 1.0,
                 on_hit_magic_flat: 0.0,
@@ -130,6 +139,19 @@ pub(crate) struct ChampionScriptPoint {
     pub y: f64,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub(crate) enum ScriptedEffectHitbox {
+    Circle { radius: f64 },
+}
+
+impl ScriptedEffectHitbox {
+    pub(crate) fn radius(self) -> f64 {
+        match self {
+            Self::Circle { radius } => radius.max(0.0),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct ChampionScriptExecutionInput {
     pub event: ChampionScriptEvent,
@@ -154,6 +176,7 @@ pub(crate) enum ChampionScriptAction {
     ApplyDamage {
         source: ChampionScriptPoint,
         projectile_speed: f64,
+        hitbox: ScriptedEffectHitbox,
         physical: f64,
         magic: f64,
         true_damage: f64,
@@ -167,6 +190,7 @@ pub(crate) enum ChampionScriptAction {
     CreateProjectileBlockZone {
         start: ChampionScriptPoint,
         end: ChampionScriptPoint,
+        half_width: f64,
         duration_seconds: f64,
     },
 }
@@ -354,8 +378,10 @@ mod tests {
             ChampionScriptAction::CreateProjectileBlockZone {
                 start,
                 end,
+                half_width,
                 duration_seconds,
             } => {
+                assert_eq!(half_width, 40.0);
                 assert_eq!(duration_seconds, 4.0);
                 assert_ne!(start, end);
             }

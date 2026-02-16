@@ -22,12 +22,15 @@ mod tests {
             q_range: 600.0,
             q_windup_seconds: 0.20,
             q_projectile_speed: 1200.0,
+            q_effect_hitbox_radius: 80.0,
             e_range: 600.0,
             e_windup_seconds: 0.30,
             e_projectile_speed: 1000.0,
+            e_effect_hitbox_radius: 275.0,
             r_range: 700.0,
             r_windup_seconds: 0.25,
             r_projectile_speed: 2000.0,
+            r_effect_hitbox_radius: 375.0,
         }
     }
 

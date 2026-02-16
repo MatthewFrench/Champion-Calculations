@@ -1,6 +1,7 @@
 use super::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptSchedule, on_ability_bonus_damage,
+    ChampionScriptExecutionInput, ChampionScriptSchedule, ScriptedEffectHitbox,
+    on_ability_bonus_damage,
 };
 
 pub(crate) const CHAMPION_KEY: &str = "morgana";
@@ -45,6 +46,7 @@ pub(crate) fn execute_dark_binding(
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: input.ability_projectile_speed,
+        hitbox: ScriptedEffectHitbox::Circle { radius: 80.0 },
         physical: 0.0,
         magic: raw_magic + extra_magic,
         true_damage: extra_true,
@@ -62,6 +64,7 @@ pub(crate) fn execute_soul_shackles(
         ChampionScriptAction::ApplyDamage {
             source: input.actor_position,
             projectile_speed: 0.0,
+            hitbox: ScriptedEffectHitbox::Circle { radius: 340.0 },
             physical: 0.0,
             magic: 70.0,
             true_damage: 0.0,
@@ -84,6 +87,7 @@ pub(crate) fn execute_soul_shackles_detonate(
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: 0.0,
+        hitbox: ScriptedEffectHitbox::Circle { radius: 340.0 },
         physical: 0.0,
         magic: 170.0,
         true_damage: 0.0,

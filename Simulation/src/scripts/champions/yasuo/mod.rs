@@ -39,6 +39,7 @@ pub(crate) fn execute_wind_wall(input: ChampionScriptExecutionInput) -> Vec<Cham
     vec![ChampionScriptAction::CreateProjectileBlockZone {
         start,
         end,
+        half_width: 40.0,
         duration_seconds: 4.0,
     }]
 }
