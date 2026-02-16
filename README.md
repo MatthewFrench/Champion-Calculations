@@ -4,6 +4,12 @@ Goal: In URF, maximize how long Vladimir survives and how much damage he deals t
 
 This project can be extended to other champions and scenarios, but the current focus is Vladimir versus 5 enemies.
 
+**Architecture Standard**
+- The long-term target is a champion-agnostic simulation core with script-driven specialization.
+- Core simulation systems should remain generic and reusable.
+- Champion-specific and item/rune/mastery-specific mechanics should live in script modules with shared interfaces.
+- New code and documentation should avoid abbreviations for champion names and major domain terms.
+
 **Intent**
 Create a local, reproducible dataset and deterministic simulator to search for survivability‑optimized URF builds without relying on external meta sites.
 
