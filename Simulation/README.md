@@ -32,9 +32,13 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
+- `src/core.rs`: Shared simulation math/helpers (objective scoring, stat transforms, build/random utilities).
+- `src/data.rs`: Scenario/data loading, config parsing, loadout legality generation, and enemy preset validation.
+- `src/engine.rs`: Fixed-tick combat engine and event-queue simulation loop.
 - `src/build_order.rs`: Build-order stage simulation and optimization.
 - `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
 - `src/reporting.rs`: Markdown/JSON report generation.
+- `src/scenario_runner.rs`: Scenario mode execution orchestration (`vladimir`, `vladimir_step`, stat modes).
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
@@ -134,7 +138,6 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ```
 
 ## Extensibility
-- Champion/item mechanics should be added as compiled Rust logic in `src/main.rs` (or split into modules as the codebase grows).
 - Champion/item mechanics should be added in dedicated modules (for example under `src/scripts/`) rather than growing `main.rs`.
 - Scenario JSON should stay minimal and reference canonical data from `Characters`, `Items`, and `Game Mode`.
 

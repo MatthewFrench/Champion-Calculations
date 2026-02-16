@@ -1,6 +1,6 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771200664`
+- Generated (unix): `1771202759`
 - Scenario: `scenario_vlad_urf.json`
 
 ## Headline
@@ -21,8 +21,8 @@
 - Loadout candidates/finalists: `192/1`
 - Ensemble seeds: `1`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
-- Full evaluations: `15` (cache hits/misses/waits: `0/15/0`)
-- Full persistent cache hits/entries: `108/123`
+- Full evaluations: `18` (cache hits/misses/waits: `0/18/0`)
+- Full persistent cache hits/entries: `147/180`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`

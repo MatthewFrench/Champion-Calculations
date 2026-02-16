@@ -29,9 +29,13 @@
   - `src/cache.rs`
   - `src/status.rs`
 - Added additional module split for maintainability:
+  - `src/core.rs`
   - `src/build_order.rs`
   - `src/reporting.rs`
   - `src/search.rs`
+  - `src/scenario_runner.rs`
+  - `src/engine.rs`
+  - `src/data.rs`
 - Added enemy lifecycle simulation:
   - enemies can die from Vladimir damage
   - enemies respawn using URF-scaled death timer logic
