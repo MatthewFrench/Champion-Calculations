@@ -47,7 +47,7 @@ mod tests {
             },
             cast_profile: profile,
             q_target: Some(VladimirTargetSnapshot {
-                enemy_index: 2,
+                target_index: 2,
                 distance: 600.0,
             }),
             e_max_distance: Some(500.0),
@@ -81,7 +81,7 @@ mod tests {
             },
             cast_profile: test_profile(),
             q_target: Some(VladimirTargetSnapshot {
-                enemy_index: 0,
+                target_index: 0,
                 distance: 200.0,
             }),
             e_max_distance: Some(200.0),

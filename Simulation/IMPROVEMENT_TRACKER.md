@@ -4,10 +4,16 @@
 - Improved report readability and diagnostics detail:
   - added human-readable timestamps (local + UTC) and unix timestamp
   - added comma-separated large-number formatting for major diagnostics values
+  - unix timestamp now renders as raw digits (no separators)
   - added explicit generated/duplicate-pruned/unique candidate counts
   - added strict-stage completion percentage and timeout-skipped/non-finite candidate counts
-- Renamed champion behavior module folder from role-specific `enemies` to role-neutral `roster`:
-  - `src/scripts/champions/roster/`
+- Standardized champion script layout to a uniform per-champion folder structure:
+  - `src/scripts/champions/<champion>/mod.rs`
+  - shared dispatch and types in `src/scripts/champions/mod.rs`
+- Removed role-coupled champion script API naming:
+  - renamed `EnemyScript*` types to `ChampionScript*`
+  - renamed script execution fields from enemy/controlled-champion coupling to actor/target semantics
+  - renamed `enemy_index` target snapshots to `target_index`
 - Added run output partitioning by run type and runtime budget:
   - outputs now default under `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/`
   - keeps short and long-budget runs separated (for example `unbounded`, `300s`).
@@ -45,7 +51,7 @@
   - `Simulation/output/cache/`
 - Added first-pass module split for simulation extensions:
   - `src/respawn.rs`
-  - `src/scripts/vladimir.rs`
+  - `src/scripts/champions/vladimir/mod.rs`
 - Added additional modular extraction for orchestration support:
   - `src/cache.rs`
   - `src/status.rs`
@@ -69,7 +75,7 @@
 - Added first-pass script hook framework for non-generic mechanics:
   - `src/scripts/hooks.rs` dispatches item/champion/loadout hooks
   - `src/scripts/item_hooks.rs` now owns Heartsteel stack assumptions
-  - `src/scripts/vladimir.rs` now owns Crimson Pact stat conversion logic
+  - `src/scripts/champions/vladimir/mod.rs` now owns Crimson Pact stat conversion logic
   - `src/scripts/loadout_hooks.rs` now annotates dynamic rune/mastery effects
 - Added controlled-champion loadout runtime integration across simulation and objective scoring:
   - new generic engine API (`ControlledChampionCombatSimulation`, `simulate_controlled_champion_combat`)
@@ -85,8 +91,14 @@
   - compatibility wrapper retained for `compute_vlad_stats`
 - Migrated script architecture from flat files to domain-oriented hierarchy:
   - champions:
-    - `src/scripts/champions/vladimir.rs`
-    - `src/scripts/champions/roster/` with per-champion modules (`warwick.rs`, `vayne.rs`, `morgana.rs`, `sona.rs`, `doctor_mundo.rs`, `yasuo.rs`)
+    - `src/scripts/champions/mod.rs`
+    - `src/scripts/champions/vladimir/mod.rs`
+    - `src/scripts/champions/warwick/mod.rs`
+    - `src/scripts/champions/vayne/mod.rs`
+    - `src/scripts/champions/morgana/mod.rs`
+    - `src/scripts/champions/sona/mod.rs`
+    - `src/scripts/champions/doctor_mundo/mod.rs`
+    - `src/scripts/champions/yasuo/mod.rs`
   - items:
     - `src/scripts/items/hooks.rs`
   - runes:
@@ -134,11 +146,11 @@
 - Fixed projectile-blocking segment intersection edge cases:
   - colinear-but-disjoint projectile paths no longer register as blocked
 - Extracted Vladimir combat decision logic into script-owned APIs:
-  - offensive cast scheduling delegated to `src/scripts/vladimir.rs`
-  - defensive activation decisions delegated to `src/scripts/vladimir.rs`
-  - Guardian Angel trigger decision delegated to `src/scripts/vladimir.rs`
+  - offensive cast scheduling delegated to `src/scripts/champions/vladimir/mod.rs`
+  - defensive activation decisions delegated to `src/scripts/champions/vladimir/mod.rs`
+  - Guardian Angel trigger decision delegated to `src/scripts/champions/vladimir/mod.rs`
 - Extracted enemy champion-specific script event behavior into scripts dispatch:
-  - `src/scripts/enemies.rs` now owns champion event action generation
+  - `src/scripts/champions/mod.rs` now owns champion event action generation
   - `src/engine.rs` now applies generic script actions
 - Added foundational generic combat primitives scaffold:
   - status effects model (`kind`, `duration`, `stacks`, `persistence`)

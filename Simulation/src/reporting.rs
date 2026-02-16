@@ -110,10 +110,7 @@ pub(super) fn write_controlled_champion_report_markdown(
         "- Generated (UTC): `{}`\n",
         generated_utc.to_rfc3339()
     ));
-    content.push_str(&format!(
-        "- Generated (unix): `{}`\n",
-        format_usize_with_commas(now_unix as usize)
-    ));
+    content.push_str(&format!("- Generated (unix): `{}`\n", now_unix));
     content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
 
     content.push_str("## Headline\n");

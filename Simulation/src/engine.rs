@@ -1,16 +1,17 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
-use crate::scripts::champions::roster::{
-    EnemyBehaviorProfile, EnemyLoadoutRuntime, EnemyScriptAction, EnemyScriptEvent,
-    EnemyScriptExecutionInput, EnemyScriptPoint, attack_speed_multiplier, behavior_profile,
-    build_enemy_loadout_runtime, clear_transient_combat_state, execute_enemy_script_event,
-    on_ability_bonus_damage, on_hit_bonus_damage, scripted_event_schedules, tick_regen_heal,
-};
 use crate::scripts::champions::vladimir::{
     VladimirCastProfile, VladimirDefensiveDecisionInput, VladimirGuardianAngelDecisionInput,
     VladimirOffensiveDecisionInput, VladimirTargetSnapshot, decide_defensive_activations,
     decide_offensive_casts, default_cast_profile, should_trigger_guardian_angel,
+};
+use crate::scripts::champions::{
+    ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
+    ChampionScriptExecutionInput, ChampionScriptPoint, attack_speed_multiplier, behavior_profile,
+    build_champion_loadout_runtime, clear_transient_combat_state, execute_champion_script_event,
+    on_ability_bonus_damage, on_hit_bonus_damage, scripted_champion_event_schedules,
+    tick_regen_heal,
 };
 use crate::scripts::runtime::controlled_champion_loadout::{
     ControlledChampionAbilityRuntimeInput, ControlledChampionLoadoutRuntime,
@@ -35,7 +36,7 @@ impl Vec2 {
     }
 }
 
-fn enemy_spawn_position(index: usize, total: usize, behavior: EnemyBehaviorProfile) -> Vec2 {
+fn enemy_spawn_position(index: usize, total: usize, behavior: ChampionBehaviorProfile) -> Vec2 {
     let angle = (index as f64 / total.max(1) as f64) * std::f64::consts::TAU;
     let radius = if behavior.attack_range <= 200.0 {
         160.0
@@ -119,8 +120,8 @@ fn uptime_window_active(enemy: &EnemyConfig, time: f64, enabled: bool) -> bool {
 
 struct EnemyState {
     enemy: EnemyConfig,
-    behavior: EnemyBehaviorProfile,
-    runtime: EnemyLoadoutRuntime,
+    behavior: ChampionBehaviorProfile,
+    runtime: ChampionLoadoutRuntime,
     position: Vec2,
     spawn_position: Vec2,
     move_speed: f64,
@@ -143,8 +144,8 @@ struct EnemyState {
 
 #[derive(Debug, Clone)]
 struct EnemyDerivedModel {
-    behavior: EnemyBehaviorProfile,
-    runtime: EnemyLoadoutRuntime,
+    behavior: ChampionBehaviorProfile,
+    runtime: ChampionLoadoutRuntime,
     max_health: f64,
     armor: f64,
     magic_resist: f64,
@@ -200,7 +201,7 @@ enum EventType {
     ControlledChampionQHit(usize),
     ControlledChampionEHit,
     ControlledChampionRHit,
-    EnemyScript(usize, EnemyScriptEvent, u64),
+    ChampionScript(usize, ChampionScriptEvent, u64),
 }
 
 #[derive(Debug, Clone)]
@@ -296,7 +297,7 @@ pub(super) struct ControlledChampionCombatSimulation {
     protoplasm_hot_rate: f64,
     protoplasm_hot_until: f64,
 
-    controlled_champion_position: Vec2,
+    target_position: Vec2,
     enemy_state: Vec<EnemyState>,
     projectile_block_zones: Vec<ProjectileBlockZone>,
     trace_enabled: bool,
@@ -447,7 +448,7 @@ impl ControlledChampionCombatSimulation {
             pool_heal_until: 0.0,
             protoplasm_hot_rate: 0.0,
             protoplasm_hot_until: 0.0,
-            controlled_champion_position: Vec2 { x: 0.0, y: 0.0 },
+            target_position: Vec2 { x: 0.0, y: 0.0 },
             enemy_state: Vec::new(),
             projectile_block_zones: Vec::new(),
             trace_enabled: false,
@@ -518,11 +519,11 @@ impl ControlledChampionCombatSimulation {
                     Some(enemy.burst_interval_seconds),
                 );
             }
-            for spec in scripted_event_schedules(&enemy.name) {
+            for spec in scripted_champion_event_schedules(&enemy.name) {
                 runner.schedule_event(
                     spec.start_offset_seconds.max(0.0),
                     12,
-                    EventType::EnemyScript(idx, spec.event, 0),
+                    EventType::ChampionScript(idx, spec.event, 0),
                     Some(spec.interval_seconds.max(0.1)),
                 );
             }
@@ -631,11 +632,11 @@ impl ControlledChampionCombatSimulation {
             }
         }
         for (idx, name, epoch) in respawned {
-            for spec in scripted_event_schedules(&self.enemy_state[idx].enemy.name) {
+            for spec in scripted_champion_event_schedules(&self.enemy_state[idx].enemy.name) {
                 self.schedule_event(
                     spec.start_offset_seconds.max(0.0),
                     12,
-                    EventType::EnemyScript(idx, spec.event, epoch),
+                    EventType::ChampionScript(idx, spec.event, epoch),
                     Some(spec.interval_seconds.max(0.1)),
                 );
             }
@@ -686,11 +687,11 @@ impl ControlledChampionCombatSimulation {
             }
         }
         for (idx, epoch, champion_name) in reschedule {
-            for spec in scripted_event_schedules(&champion_name) {
+            for spec in scripted_champion_event_schedules(&champion_name) {
                 self.schedule_event(
                     spec.start_offset_seconds.max(0.0),
                     12,
-                    EventType::EnemyScript(idx, spec.event, epoch),
+                    EventType::ChampionScript(idx, spec.event, epoch),
                     Some(spec.interval_seconds.max(0.1)),
                 );
             }
@@ -700,23 +701,22 @@ impl ControlledChampionCombatSimulation {
         }
     }
 
-    fn enemy_distance_to_controlled_champion(&self, idx: usize) -> f64 {
+    fn distance_to_target(&self, idx: usize) -> f64 {
         self.enemy_state[idx]
             .position
-            .distance_to(self.controlled_champion_position)
+            .distance_to(self.target_position)
     }
 
     fn enemy_in_attack_range(&self, idx: usize) -> bool {
-        self.enemy_distance_to_controlled_champion(idx)
-            <= self.enemy_state[idx].behavior.attack_range
+        self.distance_to_target(idx) <= self.enemy_state[idx].behavior.attack_range
     }
 
     fn enemy_in_controlled_champion_range(&self, idx: usize, range: f64) -> bool {
-        self.enemy_distance_to_controlled_champion(idx) <= range
+        self.distance_to_target(idx) <= range
     }
 
     fn enemy_projectile_delay(&self, idx: usize, speed: f64) -> f64 {
-        projectile_travel_seconds(self.enemy_distance_to_controlled_champion(idx), speed)
+        projectile_travel_seconds(self.distance_to_target(idx), speed)
     }
 
     fn cleanup_expired_projectile_blocks(&mut self) {
@@ -737,7 +737,7 @@ impl ControlledChampionCombatSimulation {
             if !self.enemy_is_active(idx) || !self.enemy_in_controlled_champion_range(idx, range) {
                 continue;
             }
-            let dist = self.enemy_distance_to_controlled_champion(idx);
+            let dist = self.distance_to_target(idx);
             match best {
                 Some((_, best_dist)) if dist >= best_dist => {}
                 _ => best = Some((idx, dist)),
@@ -752,7 +752,7 @@ impl ControlledChampionCombatSimulation {
             if !self.enemy_is_active(idx) || !self.enemy_in_controlled_champion_range(idx, range) {
                 continue;
             }
-            let distance = self.enemy_distance_to_controlled_champion(idx);
+            let distance = self.distance_to_target(idx);
             max_distance = Some(match max_distance {
                 Some(current) => distance.max(current),
                 None => distance,
@@ -800,14 +800,14 @@ impl ControlledChampionCombatSimulation {
         );
     }
 
-    fn script_point_from_vec2(point: Vec2) -> EnemyScriptPoint {
-        EnemyScriptPoint {
+    fn script_point_from_vec2(point: Vec2) -> ChampionScriptPoint {
+        ChampionScriptPoint {
             x: point.x,
             y: point.y,
         }
     }
 
-    fn vec2_from_script_point(point: EnemyScriptPoint) -> Vec2 {
+    fn vec2_from_script_point(point: ChampionScriptPoint) -> Vec2 {
         Vec2 {
             x: point.x,
             y: point.y,
@@ -818,11 +818,11 @@ impl ControlledChampionCombatSimulation {
         &mut self,
         idx: usize,
         epoch: u64,
-        actions: Vec<EnemyScriptAction>,
+        actions: Vec<ChampionScriptAction>,
     ) {
         for action in actions {
             match action {
-                EnemyScriptAction::AddNextAttackBonusPhysical {
+                ChampionScriptAction::AddNextAttackBonusPhysical {
                     amount,
                     trace_message,
                 } => {
@@ -833,7 +833,7 @@ impl ControlledChampionCombatSimulation {
                     };
                     self.trace_event("enemy_buff", format!("{} {}", enemy_name, trace_message));
                 }
-                EnemyScriptAction::ApplyDamage {
+                ChampionScriptAction::ApplyDamage {
                     source,
                     projectile_speed,
                     physical,
@@ -844,7 +844,7 @@ impl ControlledChampionCombatSimulation {
                     if projectile_speed > 0.0
                         && self.is_projectile_blocked(
                             Self::vec2_from_script_point(source),
-                            self.controlled_champion_position,
+                            self.target_position,
                         )
                     {
                         continue;
@@ -855,7 +855,7 @@ impl ControlledChampionCombatSimulation {
                         self.apply_stun_window(stun_duration);
                     }
                 }
-                EnemyScriptAction::ScheduleFollowup {
+                ChampionScriptAction::ScheduleFollowup {
                     delay_seconds,
                     priority,
                     event,
@@ -863,11 +863,11 @@ impl ControlledChampionCombatSimulation {
                     self.schedule_event(
                         delay_seconds,
                         priority,
-                        EventType::EnemyScript(idx, event, epoch),
+                        EventType::ChampionScript(idx, event, epoch),
                         None,
                     );
                 }
-                EnemyScriptAction::CreateProjectileBlockZone {
+                ChampionScriptAction::CreateProjectileBlockZone {
                     start,
                     end,
                     duration_seconds,
@@ -995,7 +995,7 @@ impl ControlledChampionCombatSimulation {
             self.healing_done_total += (self.health - before).max(0.0);
         }
         self.combat_primitives.tick(delta);
-        self.update_enemy_positions(delta);
+        self.update_actor_positions(delta);
         self.apply_enemy_regen(delta);
         self.time = to_time;
         self.refresh_uptime_transitions();
@@ -1015,7 +1015,7 @@ impl ControlledChampionCombatSimulation {
         }
     }
 
-    fn update_enemy_positions(&mut self, delta: f64) {
+    fn update_actor_positions(&mut self, delta: f64) {
         if delta <= 0.0 {
             return;
         }
@@ -1026,8 +1026,8 @@ impl ControlledChampionCombatSimulation {
             let speed = state.move_speed * state.behavior.movement_speed_scale;
             let step = speed * delta;
             let mut radial = Vec2 {
-                x: state.position.x - self.controlled_champion_position.x,
-                y: state.position.y - self.controlled_champion_position.y,
+                x: state.position.x - self.target_position.x,
+                y: state.position.y - self.target_position.y,
             };
             let distance = radial.distance_to(Vec2 { x: 0.0, y: 0.0 }).max(1e-6);
             radial.x /= distance;
@@ -1173,9 +1173,9 @@ impl ControlledChampionCombatSimulation {
         let can_cast = self.can_cast();
         let q_target = if can_cast && self.time >= self.q_cd {
             self.first_active_enemy_in_controlled_champion_range(self.cast_profile.q_range)
-                .map(|enemy_index| VladimirTargetSnapshot {
-                    enemy_index,
-                    distance: self.enemy_distance_to_controlled_champion(enemy_index),
+                .map(|target_index| VladimirTargetSnapshot {
+                    target_index,
+                    distance: self.distance_to_target(target_index),
                 })
         } else {
             None
@@ -1331,7 +1331,7 @@ impl ControlledChampionCombatSimulation {
                     out
                 };
                 if projectile_speed > 0.0
-                    && self.is_projectile_blocked(source, self.controlled_champion_position)
+                    && self.is_projectile_blocked(source, self.target_position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1388,7 +1388,7 @@ impl ControlledChampionCombatSimulation {
                     )
                 };
                 if projectile_speed > 0.0
-                    && self.is_projectile_blocked(source, self.controlled_champion_position)
+                    && self.is_projectile_blocked(source, self.target_position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1455,7 +1455,7 @@ impl ControlledChampionCombatSimulation {
                     )
                 };
                 if projectile_speed > 0.0
-                    && self.is_projectile_blocked(source, self.controlled_champion_position)
+                    && self.is_projectile_blocked(source, self.target_position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1481,10 +1481,8 @@ impl ControlledChampionCombatSimulation {
                     return;
                 }
                 if self.cast_profile.q_projectile_speed > 0.0
-                    && self.is_projectile_blocked(
-                        self.controlled_champion_position,
-                        self.enemy_state[idx].position,
-                    )
+                    && self
+                        .is_projectile_blocked(self.target_position, self.enemy_state[idx].position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1590,7 +1588,7 @@ impl ControlledChampionCombatSimulation {
                     format!("{} R dealt {:.1}", self.controlled_champion_name, dealt),
                 );
             }
-            EventType::EnemyScript(idx, script_event, epoch) => {
+            EventType::ChampionScript(idx, script_event, epoch) => {
                 if idx >= self.enemy_state.len()
                     || self.enemy_state[idx].script_epoch != epoch
                     || !self.enemy_is_active(idx)
@@ -1598,35 +1596,33 @@ impl ControlledChampionCombatSimulation {
                     return;
                 }
                 self.trace_event(
-                    "enemy_script",
+                    "champion_script",
                     format!(
                         "{} executed {:?}",
                         self.enemy_state[idx].enemy.name, script_event
                     ),
                 );
-                let enemy_distance_to_controlled_champion =
-                    self.enemy_distance_to_controlled_champion(idx);
-                let controlled_champion_position =
-                    Self::script_point_from_vec2(self.controlled_champion_position);
-                let controlled_champion_current_health = self.health;
-                let controlled_champion_max_health = self.max_health;
+                let distance_to_target = self.distance_to_target(idx);
+                let target_position = Self::script_point_from_vec2(self.target_position);
+                let target_current_health = self.health;
+                let target_max_health = self.max_health;
                 let now = self.time;
                 let actions = {
                     let state = &mut self.enemy_state[idx];
-                    let input = EnemyScriptExecutionInput {
+                    let input = ChampionScriptExecutionInput {
                         event: script_event,
-                        enemy_position: Self::script_point_from_vec2(state.position),
-                        controlled_champion_position,
-                        enemy_distance_to_controlled_champion,
-                        enemy_physical_hit_damage: state.physical_hit_damage,
-                        enemy_burst_magic_damage: state.burst_magic_damage,
-                        enemy_ability_projectile_speed: state.behavior.ability_projectile_speed,
-                        enemy_burst_projectile_speed: state.behavior.burst_projectile_speed,
-                        controlled_champion_current_health,
-                        controlled_champion_max_health,
+                        actor_position: Self::script_point_from_vec2(state.position),
+                        target_position,
+                        distance_to_target,
+                        physical_hit_damage: state.physical_hit_damage,
+                        burst_magic_damage: state.burst_magic_damage,
+                        ability_projectile_speed: state.behavior.ability_projectile_speed,
+                        burst_projectile_speed: state.behavior.burst_projectile_speed,
+                        target_current_health,
+                        target_max_health,
                         now,
                     };
-                    execute_enemy_script_event(input, &mut state.runtime)
+                    execute_champion_script_event(input, &mut state.runtime)
                 };
                 self.apply_enemy_script_actions(idx, epoch, actions);
             }
@@ -1652,7 +1648,7 @@ impl ControlledChampionCombatSimulation {
                 self.refresh_enemy_respawns();
                 self.process_event(&top);
                 let should_recur = match &top.kind {
-                    EventType::EnemyScript(idx, _, epoch) => self
+                    EventType::ChampionScript(idx, _, epoch) => self
                         .enemy_state
                         .get(*idx)
                         .map(|state| {
@@ -1792,7 +1788,7 @@ fn derive_enemy_model(
     } else {
         enemy.loadout_item_names.clone()
     };
-    let runtime = build_enemy_loadout_runtime(
+    let runtime = build_champion_loadout_runtime(
         &runtime_item_names,
         &enemy.loadout_rune_names,
         &enemy.loadout_masteries,
@@ -1916,8 +1912,8 @@ mod tests {
 
     #[test]
     fn spawn_positions_keep_melee_closer_than_ranged() {
-        let melee = EnemyBehaviorProfile::default_for(true);
-        let ranged = EnemyBehaviorProfile::default_for(false);
+        let melee = ChampionBehaviorProfile::default_for(true);
+        let ranged = ChampionBehaviorProfile::default_for(false);
         let melee_pos = enemy_spawn_position(0, 5, melee);
         let ranged_pos = enemy_spawn_position(0, 5, ranged);
         let origin = Vec2 { x: 0.0, y: 0.0 };

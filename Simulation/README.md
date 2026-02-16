@@ -62,9 +62,9 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
-- `src/scripts/champions/vladimir.rs`: Vladimir scripted formulas and combat decision APIs (offense/defense/GA trigger).
-- `src/scripts/champions/roster/mod.rs`: Champion roster script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
-- `src/scripts/champions/roster/*.rs`: Per-champion behavior/event logic modules.
+- `src/scripts/champions/mod.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
+- `src/scripts/champions/vladimir/mod.rs`: Vladimir scripted formulas and combat decision APIs (offense/defense/GA trigger).
+- `src/scripts/champions/<champion>/mod.rs`: Per-champion behavior/event logic modules.
 - `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
 - `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
 - `src/scripts/masteries/effects.rs`: Mastery runtime flag parsing and dynamic-runtime classification.
@@ -195,19 +195,23 @@ The simulator now uses a domain-first script layout to keep champion/item/rune/m
 src/scripts/
   champions/
     mod.rs
-    vladimir.rs
     vladimir/
+      mod.rs
       abilities.rs
       decisions.rs
       hook.rs
-    roster/
+    warwick/
       mod.rs
-      warwick.rs
-      vayne.rs
-      morgana.rs
-      sona.rs
-      doctor_mundo.rs
-      yasuo.rs
+    vayne/
+      mod.rs
+    morgana/
+      mod.rs
+    sona/
+      mod.rs
+    doctor_mundo/
+      mod.rs
+    yasuo/
+      mod.rs
   items/
     mod.rs
     hooks.rs

@@ -15,7 +15,7 @@ pub(crate) struct VladimirCastProfile {
 
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct VladimirTargetSnapshot {
-    pub enemy_index: usize,
+    pub target_index: usize,
     pub distance: f64,
 }
 
@@ -120,7 +120,7 @@ pub(crate) fn decide_offensive_casts(
         let travel =
             projectile_travel_seconds(target.distance, input.cast_profile.q_projectile_speed);
         decisions.q = Some(VladimirSingleTargetCastDecision {
-            target_index: target.enemy_index,
+            target_index: target.target_index,
             impact_delay_seconds: input.cast_profile.q_windup_seconds + travel,
             next_ready_at: input.now_seconds + input.cooldowns.q_seconds,
         });
