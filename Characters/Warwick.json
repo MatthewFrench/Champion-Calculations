@@ -438,12 +438,6 @@
   ],
   "sources": [
     {
-      "path": "/Users/matthewfrench/Downloads/Warwick.json",
-      "type": "Riot Data Dragon (local)",
-      "accessed": "2026-02-09",
-      "used_for": "base stats, base ability values, cooldowns, costs"
-    },
-    {
       "url": "https://leagueoflegends.fandom.com/wiki/Warwick/LoL",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (Fandom)",
@@ -463,7 +457,7 @@
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Warwick.json",
+      "path": "From Online/champions/Warwick.json",
       "used_for": "raw basic attack timing stats and radii"
     }
   ],

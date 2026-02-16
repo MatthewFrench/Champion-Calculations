@@ -27,6 +27,7 @@
       "raw": "Active: Enter stasis for 2.5s, becoming untargetable and invulnerable but unable to act.",
       "effect_type": "status",
       "applies_to": "self",
+      "cooldown_seconds": 120.0,
       "trigger": {
         "type": "on_activate"
       },

@@ -69,7 +69,8 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - Controlled champion spell readiness now tracks by ability identity with runtime slot-to-ability mapping foundations for remap/swap support.
 
 ## Files
-- `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
+- `scenarios/`: Scenario catalog directory.
+- `scenarios/vladimir_urf_teamfight.json`: Default URF team-fight scenario setup.
 - `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
 - `data/simulator_defaults.json`: Global simulator/search/engine and loadout-generation defaults.
 - `data/champion_ai_profiles.json`: Champion AI controller policy (combat spacing, movement scaling, script polling, script-event priority overrides, and non-canonical cooldown overrides when canonical data is missing).
@@ -103,14 +104,14 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 ## Run
 ```bash
 source "$HOME/.cargo/env"
-cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
-  --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
+cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
+  --scenario "vladimir_urf_teamfight" \
   --mode vladimir
 ```
 - `vladimir` mode writes a markdown report to:
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.md`
+  - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.md`
 - `vladimir` mode writes a structured JSON report to:
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.json`
+  - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.json`
   where `<controlled_champion_key>` is the normalized champion name (for example: `vladimir`).
   where `<search_quality_profile>` is one of `fast`, `balanced`, `maximum_quality`.
   where `<runtime_budget>` is `unbounded` when no runtime budget is set, otherwise the budget label (for example `300s`).
@@ -127,8 +128,8 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
     - strict-stage completion percentage and timeout-skipped candidate count
   - If run with a time budget, report includes timeout and completion metadata
 - Trace outputs are also champion-keyed:
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
-  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.json`
+  - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
+  - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.json`
   - trace includes explicit impact outcome events such as `projectile_blocked`, `impact_nullified`, `attack_missed`, and `ability_missed`.
 
 ## Runtime Controls
@@ -164,8 +165,8 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Override thread count with `--threads N` if needed.
 - You can cap threads with:
 ```bash
-cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
-  --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
+cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
+  --scenario "vladimir_urf_teamfight" \
   --mode vladimir \
   --threads 8
 ```
@@ -187,27 +188,31 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ## Taric (Max Attack Speed)
 ```bash
 source "$HOME/.cargo/env"
-cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
-  --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
+cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
+  --scenario "vladimir_urf_teamfight" \
   --mode taric_as
 ```
 
 ## Hecarim (Max Move Speed)
 ```bash
 source "$HOME/.cargo/env"
-cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
-  --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
+cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
+  --scenario "vladimir_urf_teamfight" \
   --mode hecarim_ms
 ```
 
 ## Vladimir Step Debug (Tick-by-Tick)
 ```bash
 source "$HOME/.cargo/env"
-cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/Cargo.toml" -- \
-  --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
+cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
+  --scenario "vladimir_urf_teamfight" \
   --mode vladimir_step \
   --ticks 60
 ```
+- Step mode uses the first entry in `opponents.encounters` and prints the selected encounter name.
+- `--scenario` accepts either:
+  - a full/relative file path, or
+  - a scenario name resolved from `Simulation/scenarios/<name>.json`.
 
 ## Extensibility
 - Champion/item mechanics should be added in dedicated modules (for example under `src/scripts/`) rather than growing `main.rs`.
@@ -267,9 +272,15 @@ This migration is active and tracked in the roadmap and improvement tracker for 
 
 ## Minimal Scenario Shape
 - Use champion references instead of hardcoding base stats:
-  - `vladimir_champion`: champion name from `Characters/`.
-  - `enemies[].champion`: champion name from `Characters/`.
+  - `controlled_champion.champion`: champion name from `Characters/`.
+  - `opponents.encounters[].actors[].champion`: champion name from `Characters/`.
+- Required structure:
+  - `controlled_champion.baseline_items`: baseline build item names.
+  - `controlled_champion.loadout`: optional runes/shards/masteries for the controlled champion.
+  - `opponents.encounters[]`: weighted encounter list used by objective aggregation.
+  - `opponents.shared_loadout`: optional runes/shards/masteries added to opponent preset loadouts.
 - Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence).
+- Legacy flat scenario keys are removed; scenario parsing is now strict and canonical.
 - Build search item pool is restricted to purchasable `LEGENDARY` items only.
 - Pre-evolution items are normalized to evolved forms in simulation lookups:
   - `Manamune` -> `Muramana`
@@ -318,15 +329,21 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - In build-order optimization, Heartsteel stacks are distributed by item acquisition level and current stage level (so buying it later yields fewer stacks by level 20).
 - Level assumption:
   - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
-- Respawn model knobs:
-  - scenario knobs:
-    - `simulation.urf_respawn_flat_reduction_seconds`
-    - `simulation.urf_respawn_extrapolation_per_level`
-    - `simulation.urf_respawn_time_scaling_enabled`
-    - `simulation.urf_respawn_time_scaling_start_seconds`
-    - `simulation.urf_respawn_time_scaling_per_minute_seconds`
-    - `simulation.urf_respawn_time_scaling_cap_seconds`
-  - fallback defaults are loaded from `../Game Mode/URF.json` under `respawn`.
+- Scenario simulation knobs are now minimal by default:
+  - required:
+    - `simulation.max_time_seconds`
+    - `simulation.heartsteel_assumed_stacks_at_8m`
+  - optional overrides:
+    - `simulation.server_tick_rate_hz`
+    - `simulation.champion_level`
+    - `simulation.enemy_uptime_model_enabled`
+- Fallback ownership by domain:
+  - URF respawn defaults load from `../Game Mode/URF.json` `respawn`.
+  - Vladimir Sanguine Pool defaults load from `../Characters/Vladimir.json` `abilities.basic_ability_2`.
+  - Zhonya's Hourglass defaults load from `../Items/Zhonyas Hourglass.json` (`effects_structured[id=zhonyas_time_stop]`).
+  - Guardian Angel defaults load from `../Items/Guardian Angel.json` (`effects_structured[id=rebirth_resurrection_with_post_revive_health_and_mana_restore]`).
+  - Protoplasm Harness defaults load from `../Items/Protoplasm Harness.json` (lifeline effects).
+  - controlled champion stasis activation policy default loads from `data/champion_ai_profiles.json`.
 - Protoplasm Harness lifeline cooldown:
   - fallback default is loaded from `../Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`.
 - Vladimir scripted ability knobs:
@@ -334,9 +351,10 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`
   - `simulation.vlad_r_base_damage`, `simulation.vlad_r_ap_ratio`, `simulation.vlad_r_base_cooldown_seconds`
   - fallback defaults are loaded from `../Characters/Vladimir.json` under `abilities.basic_ability_1`, `abilities.basic_ability_3`, and `abilities.ultimate` (effects plus cooldowns).
-- Enemy script hooks (scenario enemy fields):
+- Enemy script hooks (per actor in `opponents.encounters[].actors[].combat`):
   - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
-  - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per enemy use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
+  - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per actor use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
+  - Placement/movement policy: `opponents.encounters[].actors[].placement.position` plus `placement.movement` (`hold_position` or `maintain_combat_range`)
 - Report now includes:
   - Headline objective score and component outcomes (time alive, damage dealt, healing done, enemy kills)
   - Cap-survivor indicators for baseline and best build outcomes
@@ -349,15 +367,17 @@ This migration is active and tracked in the roadmap and improvement tracker for 
 - Vladimir loadout (runes/masteries/shards) can be co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
 
 ## Multi-Scenario Objective
-- Optional `enemy_scenarios` array is supported:
-  - each entry can include `name`, `weight`, and `enemies` (same schema as top-level `enemies`)
-- If `enemy_scenarios` is omitted, simulator uses top-level `enemies` as a single scenario.
+- `opponents.encounters` is required and supports multiple weighted encounters.
+- Each encounter entry includes:
+  - `name`
+  - `weight`
+  - `actors` (same actor schema as primary encounter)
 - Objective score is aggregated across scenarios with worst-case blending via `search.multi_scenario_worst_weight`.
 
 ## Runes/Masteries
 - Optional scenario loadout blocks:
-  - `vladimir_loadout`
-  - `enemy_loadout` (`vladimir_step` mode only)
+  - `controlled_champion.loadout`
+  - `opponents.shared_loadout` (applies to all opponents in addition to their URF presets)
 - Supported keys:
   - `runes_reforged.rune_ids` (array of rune IDs)
   - `runes_reforged.rune_names` (array of rune names)

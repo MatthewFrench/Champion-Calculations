@@ -4,7 +4,7 @@ use serde_json::json;
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::SystemTime;
 
 use crate::search::item_names;
 
@@ -19,6 +19,19 @@ pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
 #[allow(dead_code)]
 pub(super) fn default_report_path() -> PathBuf {
     default_report_path_for_champion("Vladimir")
+}
+
+fn format_repo_relative_path(path: &Path) -> String {
+    if !path.is_absolute() {
+        return path.display().to_string();
+    }
+    let repository_root = simulation_dir()
+        .parent()
+        .map(Path::to_path_buf)
+        .unwrap_or_else(simulation_dir);
+    path.strip_prefix(&repository_root)
+        .map(|p| p.display().to_string())
+        .unwrap_or_else(|_| path.display().to_string())
 }
 
 fn comma_separated_digits(digits: &str) -> String {
@@ -62,6 +75,7 @@ pub(super) fn write_controlled_champion_report_markdown(
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
     let scenario_path = data.scenario_path;
+    let scenario_path_display = format_repo_relative_path(scenario_path);
     let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
     let controlled_champion_base_level = data.controlled_champion_base_level;
@@ -88,7 +102,6 @@ pub(super) fn write_controlled_champion_report_markdown(
     let build_orders = data.build_orders;
 
     let now = SystemTime::now();
-    let now_unix = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
     let generated_utc: DateTime<Utc> = now.into();
     let generated_local: DateTime<Local> = DateTime::from(now);
     let improvement = if baseline_score.abs() > f64::EPSILON {
@@ -110,8 +123,7 @@ pub(super) fn write_controlled_champion_report_markdown(
         "- Generated (UTC): `{}`\n",
         generated_utc.to_rfc3339()
     ));
-    content.push_str(&format!("- Generated (unix): `{}`\n", now_unix));
-    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
+    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path_display));
 
     content.push_str("## Headline\n");
     let baseline_damage = format_f64_with_commas(baseline_outcome.damage_dealt, 1);
@@ -470,10 +482,10 @@ pub(super) fn write_controlled_champion_report_json(
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
     let now = SystemTime::now();
-    let now_unix = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
     let generated_utc: DateTime<Utc> = now.into();
     let generated_local: DateTime<Local> = DateTime::from(now);
     let scenario_path = data.scenario_path;
+    let scenario_path_display = format_repo_relative_path(scenario_path);
     let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
     let baseline_build = data.baseline_build;
@@ -497,10 +509,9 @@ pub(super) fn write_controlled_champion_report_json(
         0.0
     };
     let json_value = json!({
-        "generated_unix_seconds": now_unix,
         "generated_utc": generated_utc.to_rfc3339(),
         "generated_local": generated_local.format("%Y-%m-%d %H:%M:%S %Z").to_string(),
-        "scenario_path": scenario_path.display().to_string(),
+        "scenario_path": scenario_path_display,
         "controlled_champion_name": controlled_champion_name,
         "champion_level": sim.champion_level,
         "headline": {

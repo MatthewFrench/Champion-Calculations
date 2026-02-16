@@ -156,6 +156,45 @@ pub(crate) struct VladimirOffensiveAbilityDefaults {
     pub r_base_cooldown_seconds: f64,
 }
 
+#[derive(Debug, Clone)]
+pub(crate) struct VladimirSanguinePoolDefaults {
+    pub base_cooldown_seconds_by_rank: Vec<f64>,
+    pub default_rank: usize,
+    pub untargetable_seconds: f64,
+    pub cost_percent_current_health: f64,
+    pub heal_ratio_of_damage: f64,
+    pub base_damage_by_rank: Vec<f64>,
+    pub bonus_health_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct ZhonyaTimeStopDefaults {
+    pub duration_seconds: f64,
+    pub cooldown_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct GuardianAngelRebirthDefaults {
+    pub cooldown_seconds: f64,
+    pub revive_duration_seconds: f64,
+    pub revive_base_health_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct ProtoplasmLifelineDefaults {
+    pub trigger_health_percent: f64,
+    pub bonus_health_min: f64,
+    pub bonus_health_max: f64,
+    pub heal_total_min: f64,
+    pub heal_total_max: f64,
+    pub duration_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+struct ControlledChampionDefensiveItemPolicyDefaults {
+    pub stasis_trigger_health_percent: f64,
+}
+
 #[derive(Debug, Clone, Copy, Deserialize)]
 struct ChampionAiDefaults {
     pub script_poll_interval_seconds: f64,
@@ -177,6 +216,7 @@ struct ChampionAiProfileOverrideEntry {
 #[derive(Debug, Clone, Deserialize)]
 struct ChampionAiProfilesFile {
     defaults: ChampionAiDefaults,
+    controlled_champion_defaults: ControlledChampionDefensiveItemPolicyDefaults,
     #[serde(default)]
     champions: HashMap<String, ChampionAiProfileOverrideEntry>,
 }
@@ -446,6 +486,10 @@ static CHAMPION_ABILITY_EXECUTION_DATA: OnceLock<HashMap<String, ChampionAbility
 static CHAMPION_AI_PROFILES: OnceLock<ChampionAiProfilesFile> = OnceLock::new();
 static URF_RESPAWN_DEFAULTS: OnceLock<UrfRespawnDefaults> = OnceLock::new();
 static PROTOPLASM_LIFELINE_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> = OnceLock::new();
+static VLADIMIR_SANGUINE_POOL_DEFAULTS: OnceLock<VladimirSanguinePoolDefaults> = OnceLock::new();
+static ZHONYA_TIME_STOP_DEFAULTS: OnceLock<ZhonyaTimeStopDefaults> = OnceLock::new();
+static GUARDIAN_ANGEL_REBIRTH_DEFAULTS: OnceLock<GuardianAngelRebirthDefaults> = OnceLock::new();
+static PROTOPLASM_LIFELINE_DEFAULTS: OnceLock<ProtoplasmLifelineDefaults> = OnceLock::new();
 static DOCTOR_MUNDO_INFECTED_BONESAW_ABILITY_DEFAULTS: OnceLock<
     DoctorMundoInfectedBonesawAbilityDefaults,
 > = OnceLock::new();
@@ -829,6 +873,45 @@ fn read_champion_file(champion_file_name: &str) -> Result<(std::path::PathBuf, V
     Ok((path, data))
 }
 
+fn read_item_file(item_file_name: &str) -> Result<(std::path::PathBuf, Value)> {
+    let path = repository_root_dir().join("Items").join(item_file_name);
+    let text = std::fs::read_to_string(&path)
+        .with_context(|| format!("Failed reading item file: {}", path.display()))?;
+    let data: Value = serde_json::from_str(&text)
+        .with_context(|| format!("Failed parsing item file: {}", path.display()))?;
+    Ok((path, data))
+}
+
+fn item_effects<'a>(item_data: &'a Value, item_path: &std::path::Path) -> Result<&'a [Value]> {
+    item_data
+        .get("effects_structured")
+        .and_then(Value::as_array)
+        .map(Vec::as_slice)
+        .ok_or_else(|| anyhow!("Missing effects_structured in {}", item_path.display()))
+}
+
+fn effect_value_range(effect: &Value) -> Option<(f64, f64)> {
+    let min = effect.pointer("/value_range/min").and_then(Value::as_f64)?;
+    let max = effect.pointer("/value_range/max").and_then(Value::as_f64)?;
+    Some((min, max))
+}
+
+fn ratio_from_health_threshold_condition(effect: &Value) -> Option<f64> {
+    let conditions = effect.get("conditions").and_then(Value::as_array)?;
+    for condition in conditions {
+        let raw = condition.as_str()?.trim().to_ascii_lowercase();
+        if !raw.starts_with("health_below_") || !raw.ends_with("_percent") {
+            continue;
+        }
+        let middle = raw
+            .strip_prefix("health_below_")
+            .and_then(|value| value.strip_suffix("_percent"))?;
+        let percent = middle.parse::<f64>().ok()?;
+        return Some(percent / 100.0);
+    }
+    None
+}
+
 fn champion_ability<'a>(
     champion_data: &'a Value,
     ability_key: &str,
@@ -896,6 +979,34 @@ fn champion_ability_cooldown_seconds(
         })
 }
 
+fn champion_ability_cooldown_seconds_by_rank(
+    ability: &Value,
+    ability_key: &str,
+    champion_path: &std::path::Path,
+) -> Result<Vec<f64>> {
+    ability
+        .get("cooldown_seconds_by_rank")
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.{}.cooldown_seconds_by_rank in {}",
+                ability_key,
+                champion_path.display()
+            )
+        })?
+        .iter()
+        .map(|value| {
+            value.as_f64().ok_or_else(|| {
+                anyhow!(
+                    "Invalid abilities.{}.cooldown_seconds_by_rank value in {}",
+                    ability_key,
+                    champion_path.display()
+                )
+            })
+        })
+        .collect()
+}
+
 fn champion_is_melee_from_data(champion_data: &Value) -> bool {
     if let Some(attack_type) = champion_data
         .get("basic_attack")
@@ -952,6 +1063,14 @@ fn effect_base_by_rank(effects: &[Value], effect_id: &str) -> Option<f64> {
         .and_then(|effect| effect.get("base_by_rank"))
         .and_then(Value::as_array)
         .and_then(|values| highest_rank_value(values))
+}
+
+fn effect_base_by_rank_values(effects: &[Value], effect_id: &str) -> Option<Vec<f64>> {
+    ability_effect_by_id(effects, effect_id)
+        .and_then(|effect| effect.get("base_by_rank"))
+        .and_then(Value::as_array)
+        .map(|values| values.iter().filter_map(Value::as_f64).collect::<Vec<_>>())
+        .filter(|values| !values.is_empty())
 }
 
 fn effect_formula_coefficient(effect: &Value, input_stat: &str) -> Option<f64> {
@@ -1139,6 +1258,231 @@ fn load_vladimir_offensive_ability_defaults() -> Result<VladimirOffensiveAbility
             "ultimate",
             &champion_path,
         )?,
+    })
+}
+
+fn load_vladimir_sanguine_pool_defaults() -> Result<VladimirSanguinePoolDefaults> {
+    let (champion_path, champion_data) = read_champion_file("Vladimir.json")?;
+    let pool_ability = champion_ability(&champion_data, "basic_ability_2", &champion_path)?;
+    let pool_effects = champion_ability_effects(pool_ability, "basic_ability_2", &champion_path)?;
+
+    let base_cooldown_seconds_by_rank =
+        champion_ability_cooldown_seconds_by_rank(pool_ability, "basic_ability_2", &champion_path)?;
+    let default_rank = base_cooldown_seconds_by_rank.len().max(1);
+    let untargetable_seconds = effect_duration_seconds_by_id(pool_effects, "untargetable")
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_2.effects[id=untargetable] duration in {}",
+                champion_path.display()
+            )
+        })?;
+    let cost_percent_current_health = pool_ability
+        .pointer("/cost/ratio")
+        .and_then(Value::as_f64)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_2.cost.ratio in {}",
+                champion_path.display()
+            )
+        })?;
+    let heal_ratio_of_damage = ability_effect_by_id(pool_effects, "heal_from_damage")
+        .and_then(|effect| {
+            effect
+                .pointer("/formula/contextual_multipliers/by_target_type/champions")
+                .and_then(Value::as_f64)
+        })
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_2.effects[id=heal_from_damage] champion multiplier in {}",
+                champion_path.display()
+            )
+        })?;
+    let base_damage_by_rank =
+        effect_base_by_rank_values(pool_effects, "total_damage").ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_2.effects[id=total_damage].base_by_rank in {}",
+                champion_path.display()
+            )
+        })?;
+    let bonus_health_ratio =
+        effect_formula_coefficient_by_id(pool_effects, "total_damage", "bonus_health")
+            .ok_or_else(|| {
+                anyhow!(
+                    "Missing abilities.basic_ability_2.effects[id=total_damage] bonus_health coefficient in {}",
+                    champion_path.display()
+                )
+            })?;
+
+    Ok(VladimirSanguinePoolDefaults {
+        base_cooldown_seconds_by_rank,
+        default_rank,
+        untargetable_seconds,
+        cost_percent_current_health,
+        heal_ratio_of_damage,
+        base_damage_by_rank,
+        bonus_health_ratio,
+    })
+}
+
+fn load_zhonya_time_stop_defaults() -> Result<ZhonyaTimeStopDefaults> {
+    let (item_path, item_data) = read_item_file("Zhonyas Hourglass.json")?;
+    let effects = item_effects(&item_data, &item_path)?;
+    let time_stop = ability_effect_by_id(effects, "zhonyas_time_stop").ok_or_else(|| {
+        anyhow!(
+            "Missing effects_structured[id=zhonyas_time_stop] in {}",
+            item_path.display()
+        )
+    })?;
+    let duration_seconds = time_stop
+        .get("status_effects")
+        .and_then(Value::as_array)
+        .and_then(|effects| {
+            effects.iter().find_map(|status| {
+                let status_type = status.get("type").and_then(Value::as_str)?;
+                if status_type.eq_ignore_ascii_case("stasis") {
+                    status.get("duration_seconds").and_then(Value::as_f64)
+                } else {
+                    None
+                }
+            })
+        })
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing stasis duration in effects_structured[id=zhonyas_time_stop] in {}",
+                item_path.display()
+            )
+        })?;
+    let cooldown_seconds = time_stop
+        .get("cooldown_seconds")
+        .and_then(Value::as_f64)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing cooldown_seconds in effects_structured[id=zhonyas_time_stop] in {}",
+                item_path.display()
+            )
+        })?;
+    Ok(ZhonyaTimeStopDefaults {
+        duration_seconds,
+        cooldown_seconds,
+    })
+}
+
+fn load_guardian_angel_rebirth_defaults() -> Result<GuardianAngelRebirthDefaults> {
+    let (item_path, item_data) = read_item_file("Guardian Angel.json")?;
+    let effects = item_effects(&item_data, &item_path)?;
+    let rebirth = ability_effect_by_id(
+        effects,
+        "rebirth_resurrection_with_post_revive_health_and_mana_restore",
+    )
+    .ok_or_else(|| {
+        anyhow!(
+            "Missing Guardian Angel rebirth effect id in {}",
+            item_path.display()
+        )
+    })?;
+    let cooldown_seconds = rebirth
+        .get("cooldown_seconds")
+        .and_then(Value::as_f64)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing cooldown_seconds in Guardian Angel rebirth effect in {}",
+                item_path.display()
+            )
+        })?;
+    let revive_duration_seconds = rebirth
+        .get("duration_seconds")
+        .and_then(Value::as_f64)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing duration_seconds in Guardian Angel rebirth effect in {}",
+                item_path.display()
+            )
+        })?;
+    let revive_base_health_ratio = rebirth
+        .get("scaling_terms")
+        .and_then(Value::as_array)
+        .and_then(|terms| {
+            terms.iter().find_map(|term| {
+                let applies_to = term.get("applies_to").and_then(Value::as_str)?;
+                if applies_to != "heal_on_revive" {
+                    return None;
+                }
+                let stat = term.get("stat").and_then(Value::as_str)?;
+                if stat != "base_health" {
+                    return None;
+                }
+                term.get("ratio").and_then(Value::as_f64)
+            })
+        })
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing base_health revive ratio in Guardian Angel rebirth effect in {}",
+                item_path.display()
+            )
+        })?;
+    Ok(GuardianAngelRebirthDefaults {
+        cooldown_seconds,
+        revive_duration_seconds,
+        revive_base_health_ratio,
+    })
+}
+
+fn load_protoplasm_lifeline_defaults() -> Result<ProtoplasmLifelineDefaults> {
+    let (item_path, item_data) = read_item_file("Protoplasm Harness.json")?;
+    let effects = item_effects(&item_data, &item_path)?;
+    let lifeline_bonus =
+        ability_effect_by_id(effects, "lifeline_gain_bonus_health_below_health_threshold")
+            .ok_or_else(|| {
+                anyhow!(
+                    "Missing Protoplasm lifeline bonus health effect in {}",
+                    item_path.display()
+                )
+            })?;
+    let lifeline_heal =
+        ability_effect_by_id(effects, "lifeline_heal_over_time_scaling_with_resists").ok_or_else(
+            || {
+                anyhow!(
+                    "Missing Protoplasm lifeline heal effect in {}",
+                    item_path.display()
+                )
+            },
+        )?;
+    let trigger_health_percent =
+        ratio_from_health_threshold_condition(lifeline_bonus).ok_or_else(|| {
+            anyhow!(
+                "Missing parseable health threshold condition in Protoplasm lifeline effect in {}",
+                item_path.display()
+            )
+        })?;
+    let (bonus_health_min, bonus_health_max) =
+        effect_value_range(lifeline_bonus).ok_or_else(|| {
+            anyhow!(
+                "Missing value_range in Protoplasm lifeline bonus health effect in {}",
+                item_path.display()
+            )
+        })?;
+    let (heal_total_min, heal_total_max) = effect_value_range(lifeline_heal).ok_or_else(|| {
+        anyhow!(
+            "Missing value_range in Protoplasm lifeline heal effect in {}",
+            item_path.display()
+        )
+    })?;
+    let duration_seconds = lifeline_bonus
+        .get("duration_seconds")
+        .and_then(Value::as_f64)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing duration_seconds in Protoplasm lifeline bonus effect in {}",
+                item_path.display()
+            )
+        })?;
+    Ok(ProtoplasmLifelineDefaults {
+        trigger_health_percent,
+        bonus_health_min,
+        bonus_health_max,
+        heal_total_min,
+        heal_total_max,
+        duration_seconds,
     })
 }
 
@@ -1649,6 +1993,42 @@ pub(crate) fn protoplasm_lifeline_cooldown_seconds_default() -> f64 {
     *PROTOPLASM_LIFELINE_COOLDOWN_SECONDS_DEFAULT.get_or_init(|| {
         load_protoplasm_lifeline_cooldown_seconds_default().unwrap_or_else(|err| panic!("{}", err))
     })
+}
+
+pub(crate) fn vladimir_sanguine_pool_defaults(
+    champion_name: &str,
+) -> Option<VladimirSanguinePoolDefaults> {
+    if normalize_key(champion_name) != "vladimir" {
+        return None;
+    }
+    Some(
+        VLADIMIR_SANGUINE_POOL_DEFAULTS
+            .get_or_init(|| {
+                load_vladimir_sanguine_pool_defaults().unwrap_or_else(|err| panic!("{}", err))
+            })
+            .clone(),
+    )
+}
+
+pub(crate) fn zhonya_time_stop_defaults() -> &'static ZhonyaTimeStopDefaults {
+    ZHONYA_TIME_STOP_DEFAULTS
+        .get_or_init(|| load_zhonya_time_stop_defaults().unwrap_or_else(|err| panic!("{}", err)))
+}
+
+pub(crate) fn guardian_angel_rebirth_defaults() -> &'static GuardianAngelRebirthDefaults {
+    GUARDIAN_ANGEL_REBIRTH_DEFAULTS.get_or_init(|| {
+        load_guardian_angel_rebirth_defaults().unwrap_or_else(|err| panic!("{}", err))
+    })
+}
+
+pub(crate) fn protoplasm_lifeline_defaults() -> &'static ProtoplasmLifelineDefaults {
+    PROTOPLASM_LIFELINE_DEFAULTS
+        .get_or_init(|| load_protoplasm_lifeline_defaults().unwrap_or_else(|err| panic!("{}", err)))
+}
+
+pub(crate) fn controlled_champion_stasis_trigger_health_percent_default() -> f64 {
+    let defaults = champion_ai_profiles().controlled_champion_defaults;
+    defaults.stasis_trigger_health_percent
 }
 
 pub(crate) fn doctor_mundo_infected_bonesaw_ability_defaults()

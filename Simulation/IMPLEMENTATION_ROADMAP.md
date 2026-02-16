@@ -56,6 +56,26 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - slot binding defaults are canonical and do not duplicate data shape in champion root objects.
 
+3.4 `DONE` Replace legacy scenario schema with strict canonical scenario ownership.
+- Scope:
+  - remove legacy scenario aliases (`vladimir_*`, top-level `enemies`, `enemy_scenarios`, `enemy_loadout`)
+  - require canonical scenario shape under `controlled_champion` and `opponents.encounters`
+  - move opponent movement/placement to actor-level scenario placement policy and support explicit hold-position behavior
+  - apply optional `opponents.shared_loadout` on top of preset opponent loadouts
+- Success criteria:
+  - all scenario modes parse a single canonical shape and fail fast on invalid/unknown movement policy values.
+  - actor IDs are stable and used by staged build-order scaling logic.
+
+3.5 `DONE` Minimize scenario simulation block and load gameplay defaults from canonical data owners.
+- Scope:
+  - move Vladimir Sanguine Pool defaults to `Characters/Vladimir.json` loader usage
+  - move Zhonya/Guardian Angel/Protoplasm default gameplay values to item-data loader usage
+  - keep only controlled champion stasis activation policy in AI defaults (`data/champion_ai_profiles.json`)
+  - keep passive lifeline trigger thresholds in canonical item data
+  - keep URF respawn defaults in `Game Mode/URF.json` with optional scenario override only
+- Success criteria:
+  - default scenario simulation block only needs scenario-owned knobs plus optional explicit overrides.
+
 4. `IN_PROGRESS` Build a generic buff/debuff/status system.
 - Scope:
   - duration, stacks, refresh policy

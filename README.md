@@ -14,12 +14,12 @@ This project can be extended to other champions and scenarios, but the current f
 Create a local, reproducible dataset and deterministic simulator to search for survivability‑optimized URF builds without relying on external meta sites.
 
 **Folder Structure**
-- `/Users/matthewfrench/Documents/League of Legends/Vladimir/Characters` Champion data used by the simulator (abilities, effects).
-- `/Users/matthewfrench/Documents/League of Legends/Vladimir/Game Mode` Mode rules and URF global buffs.
-- `/Users/matthewfrench/Documents/League of Legends/Vladimir/Items` Item stats, passives, and actives in normalized JSON.
-- `/Users/matthewfrench/Documents/League of Legends/Vladimir/Masteries` Rune and mastery data.
-- `/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online` Raw and normalized imports, schemas, and item pipeline utilities.
-- `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation` Deterministic simulator and scenarios.
+- `Characters/` Champion data used by the simulator (abilities, effects).
+- `Game Mode/` Mode rules and URF global buffs.
+- `Items/` Item stats, passives, and actives in normalized JSON.
+- `Masteries/` Rune and mastery data.
+- `From Online/` Raw and normalized imports, schemas, and item pipeline utilities.
+- `Simulation/` Deterministic simulator and scenarios.
 
 **Data Notes**
 - Items are local JSON files with stats, passives, actives, and parsed effects.
@@ -27,8 +27,8 @@ Create a local, reproducible dataset and deterministic simulator to search for s
 - Champion base stats and attack type are loaded from `Characters` by champion reference in scenario files; scenarios should only contain scenario-specific behavior knobs.
 
 **Simulator**
-- Entry point: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/src/main.rs`
-- Scenario config: `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json`
+- Entry point: `Simulation/src/main.rs`
+- Scenario config catalog: `Simulation/scenarios/`
 - Focus: Vlad survival time while chaining W in a fight against 5 enemies.
 - Deterministic: Same inputs produce the same results.
 - Models: pool uptime, health costs, basic healing from pool, GA revive, Zhonya stasis, Protoplasm lifeline, and enemy attacks/spell damage/stuns as timed events on a fixed tick loop (default 30 Hz).

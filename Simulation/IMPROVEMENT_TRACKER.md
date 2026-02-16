@@ -1,6 +1,23 @@
 # Improvement Tracker
 
 ## Done
+- Reduced scenario simulation block to scenario-owned knobs and moved gameplay defaults to canonical owners:
+  - Vladimir Sanguine Pool defaults now load from `Characters/Vladimir.json` (`abilities.basic_ability_2`)
+  - Zhonya, Guardian Angel, and Protoplasm defaults now load from item data files
+  - controlled champion stasis activation default now loads from `Simulation/data/champion_ai_profiles.json`
+  - Protoplasm passive trigger threshold now loads from `Items/Protoplasm Harness.json` only
+  - URF respawn tuning remains owned by `Game Mode/URF.json` and is now treated as scenario override-only
+  - removed duplicated simulation constants from the default scenario file
+- Added dedicated scenario catalog and scenario-name resolution:
+  - moved default scenario into `Simulation/scenarios/vladimir_urf_teamfight.json`
+  - `--scenario` now accepts either a direct file path or a catalog name resolved to `Simulation/scenarios/<name>.json`
+- Replaced legacy scenario schema compatibility with strict canonical scenario shape:
+  - removed legacy parsing aliases (`vladimir_*`, top-level `enemies`, `enemy_scenarios`, and top-level `enemy_loadout`) from scenario execution paths
+  - required canonical structure:
+    - `controlled_champion.{champion, baseline_items, loadout}`
+    - `opponents.{shared_loadout, encounters[].{name, weight, actors[]}}`
+  - actor placement now supports explicit `placement.position` and strict `placement.movement` parsing (`hold_position`, `maintain_combat_range`)
+  - build-order enemy level scaling now keys raw bases by stable actor `id`, not champion name display keys
 - Removed duplicated top-level champion slot mapping data:
   - default slot bindings are now derived from canonical champion ability fields (`abilities.<ability>.slot` / `default_keybinding`)
   - removed `ability_slot_bindings` from `Characters/Vladimir.json`

@@ -5,19 +5,44 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::defaults::{
-    SearchQualityProfilePreset, simulator_defaults, urf_respawn_defaults,
-    vladimir_offensive_ability_defaults,
+    SearchQualityProfilePreset, controlled_champion_stasis_trigger_health_percent_default,
+    guardian_angel_rebirth_defaults, protoplasm_lifeline_defaults, simulator_defaults,
+    urf_respawn_defaults, vladimir_offensive_ability_defaults, vladimir_sanguine_pool_defaults,
+    zhonya_time_stop_defaults,
 };
 use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
 
 use super::{
     BuildSearchConfig, ChampionBase, EXCLUDED_RANKS, EnemyConfig, ITEM_EVOLUTION_REPLACEMENTS,
-    Item, LEGENDARY_RANK, LoadoutSelection, MasterySelection, ResolvedLoadout,
-    SearchQualityProfile, SimulationConfig, Stats, UrfBuffs, rand_index, shuffle_usize,
+    Item, LEGENDARY_RANK, LoadoutSelection, MasterySelection, OpponentMovementMode,
+    ResolvedLoadout, SearchQualityProfile, SimulationConfig, Stats, UrfBuffs, rand_index,
+    shuffle_usize,
 };
 
 pub(crate) fn simulation_dir() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf()
+}
+
+pub(crate) fn scenarios_dir() -> PathBuf {
+    simulation_dir().join("scenarios")
+}
+
+pub(crate) fn resolve_scenario_path(raw: &str) -> PathBuf {
+    let direct_candidate = PathBuf::from(raw);
+    let looks_like_path = direct_candidate.is_absolute()
+        || direct_candidate.exists()
+        || raw.contains(std::path::MAIN_SEPARATOR)
+        || raw.contains('/')
+        || raw.contains('\\');
+    if looks_like_path {
+        return direct_candidate;
+    }
+    let by_name = scenarios_dir().join(&direct_candidate);
+    if by_name.extension().is_some() {
+        by_name
+    } else {
+        by_name.with_extension("json")
+    }
 }
 
 pub(crate) fn items_dir() -> PathBuf {
@@ -427,6 +452,16 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
     let defaults = simulator_defaults();
     let sim_defaults = &defaults.simulation_defaults;
     let urf_respawn = urf_respawn_defaults();
+    let pool_defaults = vladimir_sanguine_pool_defaults("vladimir").ok_or_else(|| {
+        anyhow!(
+            "Missing Characters/Vladimir.json abilities.basic_ability_2 defaults for Sanguine Pool"
+        )
+    })?;
+    let zhonya_defaults = zhonya_time_stop_defaults();
+    let guardian_angel_defaults = guardian_angel_rebirth_defaults();
+    let protoplasm_defaults = protoplasm_lifeline_defaults();
+    let controlled_champion_stasis_trigger_health_percent =
+        controlled_champion_stasis_trigger_health_percent_default();
     let vladimir_ability_defaults =
         vladimir_offensive_ability_defaults("vladimir").ok_or_else(|| {
             anyhow!(
@@ -437,6 +472,10 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         .get("server_tick_rate_hz")
         .and_then(Value::as_f64)
         .unwrap_or(sim_defaults.server_tick_rate_hz);
+    let champion_level = data
+        .get("champion_level")
+        .and_then(Value::as_u64)
+        .unwrap_or(sim_defaults.champion_level as u64) as usize;
     let dt = data.get("dt").and_then(Value::as_f64).unwrap_or_else(|| {
         if server_tick_rate_hz > 0.0 {
             1.0 / server_tick_rate_hz
@@ -444,45 +483,111 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             sim_defaults.dt_fallback_seconds
         }
     });
+    let protoplasm_level_t = ((champion_level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+    let protoplasm_bonus_health_default = protoplasm_defaults.bonus_health_min
+        + (protoplasm_defaults.bonus_health_max - protoplasm_defaults.bonus_health_min)
+            * protoplasm_level_t;
+    let protoplasm_heal_total_default = protoplasm_defaults.heal_total_min
+        + (protoplasm_defaults.heal_total_max - protoplasm_defaults.heal_total_min)
+            * protoplasm_level_t;
 
     let base_damage = data
         .get("vlad_pool_base_damage_by_rank")
         .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing vlad_pool_base_damage_by_rank"))?
-        .iter()
-        .map(|v| v.as_f64().ok_or_else(|| anyhow!("Invalid base damage")))
-        .collect::<Result<Vec<_>>>()?;
+        .map(|values| {
+            values
+                .iter()
+                .map(|v| v.as_f64().ok_or_else(|| anyhow!("Invalid base damage")))
+                .collect::<Result<Vec<_>>>()
+        })
+        .transpose()?
+        .unwrap_or_else(|| pool_defaults.base_damage_by_rank.clone());
+    let pool_cooldown_by_rank = data
+        .get("vlad_pool_base_cooldown_seconds_by_rank")
+        .and_then(Value::as_array)
+        .map(|values| {
+            values
+                .iter()
+                .map(|v| {
+                    v.as_f64()
+                        .ok_or_else(|| anyhow!("Invalid Sanguine Pool cooldown value"))
+                })
+                .collect::<Result<Vec<_>>>()
+        })
+        .transpose()?
+        .unwrap_or_else(|| pool_defaults.base_cooldown_seconds_by_rank.clone());
+    if base_damage.is_empty() {
+        bail!("vlad_pool_base_damage_by_rank must include at least one value");
+    }
+    if pool_cooldown_by_rank.is_empty() {
+        bail!("vlad_pool_base_cooldown_seconds_by_rank must include at least one value");
+    }
 
     Ok(SimulationConfig {
         dt,
         server_tick_rate_hz,
-        champion_level: data
-            .get("champion_level")
-            .and_then(Value::as_u64)
-            .unwrap_or(sim_defaults.champion_level as u64) as usize,
+        champion_level,
         max_time_seconds: as_f64(data, "max_time_seconds")?,
         vlad_pool_rank: data
             .get("vlad_pool_rank")
             .and_then(Value::as_u64)
-            .ok_or_else(|| anyhow!("Missing vlad_pool_rank"))? as usize,
-        vlad_pool_untargetable_seconds: as_f64(data, "vlad_pool_untargetable_seconds")?,
-        vlad_pool_cost_percent_current_health: as_f64(
-            data,
-            "vlad_pool_cost_percent_current_health",
-        )?,
-        vlad_pool_heal_ratio_of_damage: as_f64(data, "vlad_pool_heal_ratio_of_damage")?,
+            .unwrap_or(pool_defaults.default_rank as u64)
+            .max(1) as usize,
+        vlad_pool_untargetable_seconds: data
+            .get("vlad_pool_untargetable_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(pool_defaults.untargetable_seconds),
+        vlad_pool_cost_percent_current_health: data
+            .get("vlad_pool_cost_percent_current_health")
+            .and_then(Value::as_f64)
+            .unwrap_or(pool_defaults.cost_percent_current_health),
+        vlad_pool_heal_ratio_of_damage: data
+            .get("vlad_pool_heal_ratio_of_damage")
+            .and_then(Value::as_f64)
+            .unwrap_or(pool_defaults.heal_ratio_of_damage),
         vlad_pool_base_damage_by_rank: base_damage,
-        vlad_pool_bonus_health_ratio: as_f64(data, "vlad_pool_bonus_health_ratio")?,
-        zhonya_duration_seconds: as_f64(data, "zhonya_duration_seconds")?,
-        zhonya_cooldown_seconds: as_f64(data, "zhonya_cooldown_seconds")?,
-        zhonya_trigger_health_percent: as_f64(data, "zhonya_trigger_health_percent")?,
-        ga_cooldown_seconds: as_f64(data, "ga_cooldown_seconds")?,
-        ga_revive_duration_seconds: as_f64(data, "ga_revive_duration_seconds")?,
-        ga_revive_base_health_ratio: as_f64(data, "ga_revive_base_health_ratio")?,
-        protoplasm_trigger_health_percent: as_f64(data, "protoplasm_trigger_health_percent")?,
-        protoplasm_bonus_health: as_f64(data, "protoplasm_bonus_health")?,
-        protoplasm_heal_total: as_f64(data, "protoplasm_heal_total")?,
-        protoplasm_duration_seconds: as_f64(data, "protoplasm_duration_seconds")?,
+        vlad_pool_base_cooldown_seconds_by_rank: pool_cooldown_by_rank,
+        vlad_pool_bonus_health_ratio: data
+            .get("vlad_pool_bonus_health_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(pool_defaults.bonus_health_ratio),
+        zhonya_duration_seconds: data
+            .get("zhonya_duration_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(zhonya_defaults.duration_seconds),
+        zhonya_cooldown_seconds: data
+            .get("zhonya_cooldown_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(zhonya_defaults.cooldown_seconds),
+        zhonya_trigger_health_percent: data
+            .get("zhonya_trigger_health_percent")
+            .and_then(Value::as_f64)
+            .unwrap_or(controlled_champion_stasis_trigger_health_percent),
+        ga_cooldown_seconds: data
+            .get("ga_cooldown_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(guardian_angel_defaults.cooldown_seconds),
+        ga_revive_duration_seconds: data
+            .get("ga_revive_duration_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(guardian_angel_defaults.revive_duration_seconds),
+        ga_revive_base_health_ratio: data
+            .get("ga_revive_base_health_ratio")
+            .and_then(Value::as_f64)
+            .unwrap_or(guardian_angel_defaults.revive_base_health_ratio),
+        protoplasm_trigger_health_percent: protoplasm_defaults.trigger_health_percent,
+        protoplasm_bonus_health: data
+            .get("protoplasm_bonus_health")
+            .and_then(Value::as_f64)
+            .unwrap_or(protoplasm_bonus_health_default),
+        protoplasm_heal_total: data
+            .get("protoplasm_heal_total")
+            .and_then(Value::as_f64)
+            .unwrap_or(protoplasm_heal_total_default),
+        protoplasm_duration_seconds: data
+            .get("protoplasm_duration_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(protoplasm_defaults.duration_seconds),
         heartsteel_assumed_stacks_at_8m: data
             .get("heartsteel_assumed_stacks_at_8m")
             .and_then(Value::as_f64)
@@ -562,139 +667,119 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
     })
 }
 
-pub(crate) fn parse_champion_base(data: &Value) -> Result<ChampionBase> {
-    Ok(ChampionBase {
-        name: as_str(data, "name")?.to_string(),
-        base_health: as_f64(data, "base_health")?,
-        health_per_level: data
-            .get("health_per_level")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        base_armor: as_f64(data, "base_armor")?,
-        armor_per_level: data
-            .get("armor_per_level")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        base_magic_resist: as_f64(data, "base_magic_resist")?,
-        magic_resist_per_level: data
-            .get("magic_resist_per_level")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        base_attack_damage: as_f64(data, "base_attack_damage")?,
-        attack_damage_per_level: data
-            .get("attack_damage_per_level")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        base_attack_speed: as_f64(data, "base_attack_speed")?,
-        attack_speed_per_level_percent: data
-            .get("attack_speed_per_level_percent")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        base_attack_range: data
-            .get("base_attack_range")
-            .and_then(Value::as_f64)
-            .unwrap_or_else(|| {
-                if data
-                    .get("is_melee")
-                    .and_then(Value::as_bool)
-                    .unwrap_or(false)
-                {
-                    125.0
-                } else {
-                    550.0
-                }
-            }),
-        base_attack_projectile_speed: data
-            .get("base_attack_projectile_speed")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        base_move_speed: as_f64(data, "base_move_speed")?,
-        is_melee: data
-            .get("is_melee")
-            .and_then(Value::as_bool)
-            .ok_or_else(|| anyhow!("Missing is_melee"))?,
-    })
-}
-
 pub(crate) fn parse_enemy_config(
     data: &Value,
     champion_bases: &HashMap<String, ChampionBase>,
 ) -> Result<EnemyConfig> {
-    let base = if let Some(champion) = data.get("champion").and_then(Value::as_str) {
-        lookup_champion_base(champion_bases, champion)?
-    } else if let Some(legacy) = data.get("base") {
-        parse_champion_base(legacy)?
+    let champion = data
+        .get("champion")
+        .and_then(Value::as_str)
+        .ok_or_else(|| anyhow!("Opponent actor requires champion"))?;
+    let base = lookup_champion_base(champion_bases, champion)?;
+    let actor_id = data
+        .get("id")
+        .and_then(Value::as_str)
+        .unwrap_or(champion)
+        .to_string();
+    let combat = data.get("combat").unwrap_or(&Value::Null);
+    let placement = data.get("placement").unwrap_or(&Value::Null);
+    let spawn_position_xy = if let Some(position) = placement.get("position") {
+        let position_object = position.as_object().ok_or_else(|| {
+            anyhow!("Opponent actor placement.position must be an object with x/y fields")
+        })?;
+        let x = position_object
+            .get("x")
+            .and_then(Value::as_f64)
+            .ok_or_else(|| anyhow!("Opponent actor placement.position.x is required"))?;
+        let y = position_object
+            .get("y")
+            .and_then(Value::as_f64)
+            .ok_or_else(|| anyhow!("Opponent actor placement.position.y is required"))?;
+        Some((x, y))
     } else {
-        bail!("Enemy requires champion or base field");
+        None
+    };
+    let movement_mode = match placement.get("movement").and_then(Value::as_str) {
+        Some(movement) => match to_norm_key(movement).as_str() {
+            "holdposition" | "hold" | "static" => OpponentMovementMode::HoldPosition,
+            "maintaincombatrange" | "maintainrange" | "orbit" | "kite" => {
+                OpponentMovementMode::MaintainCombatRange
+            }
+            _ => bail!(
+                "Opponent actor '{}' has unsupported placement.movement '{}'. Allowed values: hold_position, maintain_combat_range.",
+                actor_id,
+                movement
+            ),
+        },
+        None => OpponentMovementMode::MaintainCombatRange,
     };
     Ok(EnemyConfig {
-        name: data
-            .get("name")
-            .and_then(Value::as_str)
-            .unwrap_or(&base.name)
-            .to_string(),
+        id: actor_id,
+        name: base.name.clone(),
         base,
-        ability_dps_flat: data
+        spawn_position_xy,
+        movement_mode,
+        ability_dps_flat: combat
             .get("ability_dps_flat")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        ability_dps_ad_ratio: data
+        ability_dps_ad_ratio: combat
             .get("ability_dps_ad_ratio")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        ability_dps_ap_ratio: data
+        ability_dps_ap_ratio: combat
             .get("ability_dps_ap_ratio")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        ability_tick_interval_seconds: data
+        ability_tick_interval_seconds: combat
             .get("ability_tick_interval_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(1.0),
-        stun_interval_seconds: data
+        stun_interval_seconds: combat
             .get("stun_interval_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        stun_duration_seconds: data
+        stun_duration_seconds: combat
             .get("stun_duration_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_interval_seconds: data
+        burst_interval_seconds: combat
             .get("burst_interval_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_start_offset_seconds: data
+        burst_start_offset_seconds: combat
             .get("burst_start_offset_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_magic_flat: data
+        burst_magic_flat: combat
             .get("burst_magic_flat")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_physical_flat: data
+        burst_physical_flat: combat
             .get("burst_physical_flat")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_true_flat: data
+        burst_true_flat: combat
             .get("burst_true_flat")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_ad_ratio: data
+        burst_ad_ratio: combat
             .get("burst_ad_ratio")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        burst_ap_ratio: data
+        burst_ap_ratio: combat
             .get("burst_ap_ratio")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        uptime_cycle_seconds: data
+        uptime_cycle_seconds: combat
             .get("uptime_cycle_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        uptime_active_seconds: data
+        uptime_active_seconds: combat
             .get("uptime_active_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
-        uptime_phase_seconds: data
+        uptime_phase_seconds: combat
             .get("uptime_phase_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
@@ -1965,13 +2050,36 @@ mod tests {
 
     #[test]
     fn scenario_vladimir_offense_uses_canonical_ability_defaults() {
-        let scenario_path = simulation_dir().join("scenario_vlad_urf.json");
-        let scenario = load_json(&scenario_path).expect("scenario_vlad_urf.json should parse");
+        let scenario_path = scenarios_dir().join("vladimir_urf_teamfight.json");
+        let scenario =
+            load_json(&scenario_path).expect("scenarios/vladimir_urf_teamfight.json should parse");
         let simulation = scenario
             .get("simulation")
-            .expect("scenario_vlad_urf.json should include simulation");
+            .expect("scenarios/vladimir_urf_teamfight.json should include simulation");
 
         for key in [
+            "vlad_pool_rank",
+            "vlad_pool_untargetable_seconds",
+            "vlad_pool_cost_percent_current_health",
+            "vlad_pool_heal_ratio_of_damage",
+            "vlad_pool_base_damage_by_rank",
+            "vlad_pool_bonus_health_ratio",
+            "zhonya_duration_seconds",
+            "zhonya_cooldown_seconds",
+            "zhonya_trigger_health_percent",
+            "ga_cooldown_seconds",
+            "ga_revive_duration_seconds",
+            "ga_revive_base_health_ratio",
+            "protoplasm_trigger_health_percent",
+            "protoplasm_bonus_health",
+            "protoplasm_heal_total",
+            "protoplasm_duration_seconds",
+            "urf_respawn_flat_reduction_seconds",
+            "urf_respawn_extrapolation_per_level",
+            "urf_respawn_time_scaling_enabled",
+            "urf_respawn_time_scaling_start_seconds",
+            "urf_respawn_time_scaling_per_minute_seconds",
+            "urf_respawn_time_scaling_cap_seconds",
             "vlad_q_base_damage",
             "vlad_q_ap_ratio",
             "vlad_q_heal_ratio_of_damage",

@@ -198,6 +198,7 @@ fn uptime_window_active(enemy: &EnemyConfig, time: f64, enabled: bool) -> bool {
 
 struct EnemyState {
     enemy: EnemyConfig,
+    movement_mode: OpponentMovementMode,
     behavior: ChampionBehaviorProfile,
     ability_execution: AbilityExecutionProfile,
     burst_execution: AbilityExecutionProfile,
@@ -497,7 +498,12 @@ impl ControlledChampionCombatSimulation {
         let magic_multiplier = 100.0 / (100.0 + vlad_stats.magic_resist.max(0.0));
 
         let ability_haste = vlad_item_stats.ability_haste + urf.ability_haste;
-        let pool_base_cd = [28.0, 25.0, 22.0, 19.0, 16.0][sim.vlad_pool_rank - 1];
+        let pool_base_cd = sim
+            .vlad_pool_base_cooldown_seconds_by_rank
+            .get(sim.vlad_pool_rank.saturating_sub(1))
+            .copied()
+            .or_else(|| sim.vlad_pool_base_cooldown_seconds_by_rank.last().copied())
+            .unwrap_or(16.0);
         let pool_cooldown = cooldown_after_haste(pool_base_cd, ability_haste);
         let offensive_tuning = VladimirAbilityTuning {
             q_base_damage: sim.vlad_q_base_damage,
@@ -630,12 +636,16 @@ impl ControlledChampionCombatSimulation {
         let enemy_count = enemies.len();
         for (idx, (enemy, build, enemy_bonus)) in enemies.iter().cloned().enumerate() {
             let model = derive_enemy_model(&enemy, &build, &enemy_bonus, &runner.sim, &runner.urf);
-            let position = enemy_spawn_position(idx, enemy_count.max(1), model.behavior);
+            let position = enemy
+                .spawn_position_xy
+                .map(|(x, y)| Vec2 { x, y })
+                .unwrap_or_else(|| enemy_spawn_position(idx, enemy_count.max(1), model.behavior));
             let ai_profile = champion_ai_profile(&enemy.name, model.behavior.attack_range);
             let script_poll_interval_seconds = ai_profile.script_poll_interval_seconds.max(0.05);
 
             runner.enemy_state.push(EnemyState {
                 enemy: enemy.clone(),
+                movement_mode: enemy.movement_mode,
                 behavior: model.behavior,
                 ability_execution: model.ability_execution,
                 burst_execution: model.burst_execution,
@@ -1301,6 +1311,9 @@ impl ControlledChampionCombatSimulation {
             if state.respawn_at.is_some() || state.health <= 0.0 {
                 continue;
             }
+            if state.movement_mode == OpponentMovementMode::HoldPosition {
+                continue;
+            }
             let speed = state.move_speed * state.behavior.movement_speed_scale;
             let step = speed * delta;
             let mut radial = Vec2 {
@@ -1432,8 +1445,13 @@ impl ControlledChampionCombatSimulation {
                 * self.urf.health_cost_multiplier;
             self.health -= cost;
 
-            let mut pool_damage =
-                self.sim.vlad_pool_base_damage_by_rank[self.sim.vlad_pool_rank - 1];
+            let mut pool_damage = self
+                .sim
+                .vlad_pool_base_damage_by_rank
+                .get(self.sim.vlad_pool_rank.saturating_sub(1))
+                .copied()
+                .or_else(|| self.sim.vlad_pool_base_damage_by_rank.last().copied())
+                .unwrap_or(0.0);
             pool_damage += self.sim.vlad_pool_bonus_health_ratio
                 * (self.vlad_stats.health - self.vlad_base.base_health);
             let total_pool_damage = self.apply_magic_damage_to_all_active_enemies(pool_damage, 0.0);
@@ -2617,8 +2635,11 @@ mod tests {
 
     fn test_enemy(name: &str, ability_dps_flat: f64) -> EnemyConfig {
         EnemyConfig {
+            id: name.to_string(),
             name: name.to_string(),
             base: test_enemy_base(name),
+            spawn_position_xy: None,
+            movement_mode: OpponentMovementMode::MaintainCombatRange,
             ability_dps_flat,
             ability_dps_ad_ratio: 0.0,
             ability_dps_ap_ratio: 0.0,
@@ -2659,6 +2680,7 @@ mod tests {
             vlad_pool_cost_percent_current_health: 0.0,
             vlad_pool_heal_ratio_of_damage: 0.0,
             vlad_pool_base_damage_by_rank: vec![0.0, 0.0, 0.0, 0.0, 0.0],
+            vlad_pool_base_cooldown_seconds_by_rank: vec![28.0, 25.0, 22.0, 19.0, 16.0],
             vlad_pool_bonus_health_ratio: 0.0,
             zhonya_duration_seconds: 2.5,
             zhonya_cooldown_seconds: 120.0,

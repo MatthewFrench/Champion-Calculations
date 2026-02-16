@@ -604,12 +604,6 @@
   "data_version": "16.3.1",
   "sources": [
     {
-      "path": "/Users/matthewfrench/Downloads/DrMundo.json",
-      "used_for": "base stats, base ability values, cooldowns, costs",
-      "type": "Riot Data Dragon (local)",
-      "accessed": "2026-02-09"
-    },
-    {
       "url": "https://leagueoflegends.fandom.com/wiki/Dr._Mundo/LoL",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (Fandom)",
@@ -623,7 +617,7 @@
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/DrMundo.json",
+      "path": "From Online/champions/DrMundo.json",
       "used_for": "raw basic attack timing stats and radii"
     }
   ],

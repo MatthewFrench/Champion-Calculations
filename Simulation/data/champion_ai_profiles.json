@@ -3,6 +3,9 @@
     "script_poll_interval_seconds": 0.1,
     "movement_speed_scale": 1.0
   },
+  "controlled_champion_defaults": {
+    "stasis_trigger_health_percent": 0.18
+  },
   "champions": {
     "drmundo": {
       "desired_combat_range": 140.0,

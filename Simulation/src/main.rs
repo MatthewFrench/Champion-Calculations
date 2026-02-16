@@ -5,7 +5,7 @@ use clap::{Parser, ValueEnum};
 use rayon::ThreadPoolBuilder;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 mod build_order;
 mod cache;
@@ -25,9 +25,9 @@ pub(crate) use crate::data::{
     EnemyUrfPreset, apply_search_quality_profile, build_loadout_domain, default_item_pool,
     enemy_loadout_from_preset, enemy_preset_data_path, item_pool_from_names, load_champion_bases,
     load_enemy_urf_presets, load_items, load_json, load_urf_buffs, loadout_eval_budget,
-    loadout_selection_key, lookup_champion_base, parse_build_search, parse_champion_base,
-    parse_enemy_config, parse_loadout_selection, parse_simulation_config, random_loadout_selection,
-    resolve_loadout, simulation_dir, to_norm_key, validate_enemy_urf_presets,
+    loadout_selection_key, lookup_champion_base, parse_build_search, parse_enemy_config,
+    parse_loadout_selection, parse_simulation_config, random_loadout_selection, resolve_loadout,
+    resolve_scenario_path, simulation_dir, to_norm_key, validate_enemy_urf_presets,
 };
 use crate::engine::EnemyDerivedCombatStats;
 use crate::scenario_runner::{
@@ -120,10 +120,20 @@ struct ChampionBase {
     is_melee: bool,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+enum OpponentMovementMode {
+    HoldPosition,
+    #[default]
+    MaintainCombatRange,
+}
+
 #[derive(Debug, Clone)]
 struct EnemyConfig {
+    id: String,
     name: String,
     base: ChampionBase,
+    spawn_position_xy: Option<(f64, f64)>,
+    movement_mode: OpponentMovementMode,
     ability_dps_flat: f64,
     ability_dps_ad_ratio: f64,
     ability_dps_ap_ratio: f64,
@@ -157,6 +167,7 @@ struct SimulationConfig {
     vlad_pool_cost_percent_current_health: f64,
     vlad_pool_heal_ratio_of_damage: f64,
     vlad_pool_base_damage_by_rank: Vec<f64>,
+    vlad_pool_base_cooldown_seconds_by_rank: Vec<f64>,
     vlad_pool_bonus_health_ratio: f64,
     zhonya_duration_seconds: f64,
     zhonya_cooldown_seconds: f64,
@@ -391,7 +402,10 @@ struct ControlledChampionReportData<'a> {
 #[derive(Debug, Clone, Parser)]
 #[command(about = "URF Vladimir objective simulator")]
 struct Cli {
-    #[arg(long)]
+    #[arg(
+        long,
+        help = "Scenario path or scenario name (resolved as Simulation/scenarios/<name>.json)"
+    )]
     scenario: String,
     #[arg(long, value_enum, default_value_t = Mode::Vladimir)]
     mode: Mode,
@@ -457,7 +471,7 @@ fn main() -> Result<()> {
     let threads = cli.threads.unwrap_or(default_threads).max(1);
     let _ = ThreadPoolBuilder::new().num_threads(threads).build_global();
 
-    let scenario_path = PathBuf::from(cli.scenario);
+    let scenario_path = resolve_scenario_path(&cli.scenario);
     match cli.mode {
         Mode::Vladimir => run_controlled_champion_scenario(
             &scenario_path,

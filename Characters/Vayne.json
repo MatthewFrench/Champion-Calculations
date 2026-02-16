@@ -371,12 +371,6 @@
   "data_version": "16.3.1",
   "sources": [
     {
-      "path": "/Users/matthewfrench/Downloads/Vayne.json",
-      "type": "Riot Data Dragon (local)",
-      "accessed": "2026-02-09",
-      "used_for": "base stats, base ability values, cooldowns, costs"
-    },
-    {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vayne/Night_Hunter",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (ability data template)",
@@ -420,7 +414,7 @@
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Vayne.json",
+      "path": "From Online/champions/Vayne.json",
       "used_for": "raw basic attack timing stats and radii"
     }
   ],

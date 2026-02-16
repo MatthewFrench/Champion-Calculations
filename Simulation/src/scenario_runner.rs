@@ -29,14 +29,107 @@ use crate::status::{StatusReporter, deadline_reached};
 
 use super::*;
 
-fn scenario_value_with_legacy_alias<'a>(
-    scenario: &'a Value,
-    generic_key: &str,
-    legacy_key: &str,
-) -> Option<&'a Value> {
-    scenario
-        .get(generic_key)
-        .or_else(|| scenario.get(legacy_key))
+fn format_repo_relative_path(path: &Path) -> String {
+    if !path.is_absolute() {
+        return path.display().to_string();
+    }
+    let repository_root = simulation_dir()
+        .parent()
+        .map(Path::to_path_buf)
+        .unwrap_or_else(simulation_dir);
+    path.strip_prefix(&repository_root)
+        .map(|p| p.display().to_string())
+        .unwrap_or_else(|_| path.display().to_string())
+}
+
+fn parse_controlled_champion_config(
+    scenario: &Value,
+    champion_bases: &HashMap<String, ChampionBase>,
+) -> Result<(ChampionBase, Vec<String>, LoadoutSelection)> {
+    let controlled_champion = scenario
+        .get("controlled_champion")
+        .and_then(Value::as_object)
+        .ok_or_else(|| anyhow!("Missing controlled_champion object"))?;
+    let champion_name = controlled_champion
+        .get("champion")
+        .and_then(Value::as_str)
+        .ok_or_else(|| anyhow!("Missing controlled_champion.champion"))?;
+    let baseline_items = controlled_champion
+        .get("baseline_items")
+        .and_then(Value::as_array)
+        .ok_or_else(|| anyhow!("Missing controlled_champion.baseline_items"))?
+        .iter()
+        .map(|value| {
+            value
+                .as_str()
+                .ok_or_else(|| anyhow!("controlled_champion.baseline_items must be strings"))
+        })
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
+        .map(ToOwned::to_owned)
+        .collect::<Vec<_>>();
+    let loadout_selection = parse_loadout_selection(controlled_champion.get("loadout"));
+    let champion_base = lookup_champion_base(champion_bases, champion_name)?;
+    Ok((champion_base, baseline_items, loadout_selection))
+}
+
+fn parse_opponent_encounters(
+    scenario: &Value,
+    champion_bases: &HashMap<String, ChampionBase>,
+) -> Result<Vec<(String, f64, Vec<EnemyConfig>)>> {
+    let opponents = scenario
+        .get("opponents")
+        .and_then(Value::as_object)
+        .ok_or_else(|| anyhow!("Missing opponents object"))?;
+    let encounters = opponents
+        .get("encounters")
+        .and_then(Value::as_array)
+        .ok_or_else(|| anyhow!("Missing opponents.encounters"))?;
+    if encounters.is_empty() {
+        return Err(anyhow!(
+            "opponents.encounters must include at least one encounter"
+        ));
+    }
+    let mut parsed = Vec::with_capacity(encounters.len());
+    for (index, encounter) in encounters.iter().enumerate() {
+        let name = encounter
+            .get("name")
+            .and_then(Value::as_str)
+            .ok_or_else(|| anyhow!("Missing opponents.encounters[{index}].name"))?;
+        let weight = encounter
+            .get("weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(1.0);
+        if weight < 0.0 {
+            return Err(anyhow!(
+                "opponents.encounters[{index}].weight must be >= 0.0"
+            ));
+        }
+        let actors = encounter
+            .get("actors")
+            .and_then(Value::as_array)
+            .ok_or_else(|| anyhow!("Missing opponents.encounters[{index}].actors"))?;
+        if actors.is_empty() {
+            return Err(anyhow!(
+                "opponents.encounters[{index}].actors must include at least one actor"
+            ));
+        }
+        let parsed_actors = actors
+            .iter()
+            .map(|actor| parse_enemy_config(actor, champion_bases))
+            .collect::<Result<Vec<_>>>()?;
+        parsed.push((name.to_string(), weight, parsed_actors));
+    }
+    Ok(parsed)
+}
+
+fn parse_opponent_shared_loadout_selection(scenario: &Value) -> LoadoutSelection {
+    parse_loadout_selection(
+        scenario
+            .get("opponents")
+            .and_then(Value::as_object)
+            .and_then(|opponents| opponents.get("shared_loadout")),
+    )
 }
 
 fn search_quality_profile_key(search_quality_profile: SearchQualityProfile) -> &'static str {
@@ -109,65 +202,20 @@ pub(super) fn run_controlled_champion_scenario(
         timeout_flag.store(1, AtomicOrdering::Relaxed);
     }
 
-    let vlad_base_raw = if let Some(champion) =
-        scenario_value_with_legacy_alias(&scenario, "controlled_champion", "vladimir_champion")
-            .and_then(Value::as_str)
-    {
-        lookup_champion_base(&champion_bases, champion)?
-    } else {
-        parse_champion_base(
-                scenario_value_with_legacy_alias(
-                    &scenario,
-                    "controlled_champion_base",
-                    "vladimir_base",
-                )
-                .ok_or_else(|| {
-                    anyhow!(
-                        "Missing controlled_champion/controlled_champion_base (legacy: vladimir_champion/vladimir_base)"
-                    )
-                })?,
-            )?
-    };
+    let (vlad_base_raw, baseline_fixed_names, vlad_loadout_selection) =
+        parse_controlled_champion_config(&scenario, &champion_bases)?;
     let vlad_base = champion_at_level(&vlad_base_raw, sim.champion_level);
     let controlled_champion_name = vlad_base_raw.name.clone();
+    let enemy_loadout_selection = parse_opponent_shared_loadout_selection(&scenario);
 
-    let mut enemy_scenarios_raw: Vec<(String, f64, Vec<EnemyConfig>)> = Vec::new();
-    if let Some(groups) = scenario.get("enemy_scenarios").and_then(Value::as_array) {
-        for (idx, group) in groups.iter().enumerate() {
-            let enemies_arr = group
-                .get("enemies")
-                .and_then(Value::as_array)
-                .ok_or_else(|| anyhow!("enemy_scenarios[{}].enemies missing", idx))?;
-            let enemies_cfg = enemies_arr
-                .iter()
-                .map(|e| parse_enemy_config(e, &champion_bases))
-                .collect::<Result<Vec<_>>>()?;
-            let name = group
-                .get("name")
-                .and_then(Value::as_str)
-                .unwrap_or("scenario")
-                .to_string();
-            let weight = group.get("weight").and_then(Value::as_f64).unwrap_or(1.0);
-            enemy_scenarios_raw.push((name, weight.max(0.0), enemies_cfg));
-        }
-    }
-    if enemy_scenarios_raw.is_empty() {
-        let enemies_raw = scenario
-            .get("enemies")
-            .and_then(Value::as_array)
-            .ok_or_else(|| anyhow!("Missing enemies"))?
-            .iter()
-            .map(|e| parse_enemy_config(e, &champion_bases))
-            .collect::<Result<Vec<_>>>()?;
-        enemy_scenarios_raw.push(("default".to_string(), 1.0, enemies_raw));
-    }
+    let enemy_scenarios_raw = parse_opponent_encounters(&scenario, &champion_bases)?;
     let primary_enemy_raw = enemy_scenarios_raw
         .first()
         .map(|(_, _, v)| v.clone())
         .unwrap_or_default();
     let raw_enemy_bases = primary_enemy_raw
         .iter()
-        .map(|e| (e.name.clone(), e.base.clone()))
+        .map(|e| (e.id.clone(), e.base.clone()))
         .collect::<HashMap<_, _>>();
     let enemy_scenarios = enemy_scenarios_raw
         .iter()
@@ -190,15 +238,11 @@ pub(super) fn run_controlled_champion_scenario(
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
     apply_search_quality_profile(&mut search_cfg, search_quality_profile);
-    let vlad_loadout_selection = parse_loadout_selection(scenario_value_with_legacy_alias(
-        &scenario,
-        "controlled_champion_loadout",
-        "vladimir_loadout",
-    ));
     let loadout_domain = Arc::new(build_loadout_domain());
     let loadout_eval_budget = loadout_eval_budget(&search_cfg, search_quality_profile);
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain)?;
+    let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim.champion_level, false)?;
     let max_items = search_cfg.max_items;
     let item_pool = default_item_pool(&items);
     status.emit(
@@ -208,22 +252,6 @@ pub(super) fn run_controlled_champion_scenario(
         Some("search profile and enemy presets ready"),
         true,
     );
-
-    let baseline_fixed_names = scenario_value_with_legacy_alias(
-        &scenario,
-        "controlled_champion_baseline_fixed",
-        "vladimir_baseline_fixed",
-    )
-    .and_then(Value::as_array)
-    .ok_or_else(|| {
-        anyhow!("Missing controlled_champion_baseline_fixed (legacy: vladimir_baseline_fixed)")
-    })?
-    .iter()
-    .map(|v| v.as_str().ok_or_else(|| anyhow!("Invalid baseline item")))
-    .collect::<Result<Vec<_>>>()?
-    .into_iter()
-    .map(|s| s.to_string())
-    .collect::<Vec<_>>();
 
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
@@ -245,22 +273,20 @@ pub(super) fn run_controlled_champion_scenario(
                 )
             })?;
             let build_items = item_pool_from_names(&items, &preset.item_names)?;
-            let resolved_enemy_loadout = resolve_loadout(
+            let preset_enemy_loadout = resolve_loadout(
                 &enemy_loadout_from_preset(preset),
                 sim.champion_level,
                 false,
             )?;
+            let mut enemy_bonus_stats = preset_enemy_loadout.bonus_stats;
+            enemy_bonus_stats.add(&enemy_loadout.bonus_stats);
             enemy_presets_used.insert(preset_key, preset.clone());
             let mut enemy_with_loadout = enemy.clone();
             enemy_with_loadout.loadout_item_names = preset.item_names.clone();
             enemy_with_loadout.loadout_rune_names = preset.runes.clone();
             enemy_with_loadout.loadout_shards = preset.shards.clone();
             enemy_with_loadout.loadout_masteries = preset.masteries.clone();
-            builds.push((
-                enemy_with_loadout,
-                build_items,
-                resolved_enemy_loadout.bonus_stats,
-            ));
+            builds.push((enemy_with_loadout, build_items, enemy_bonus_stats));
         }
         enemy_build_scenarios.push((name.clone(), *weight, builds));
     }
@@ -275,7 +301,6 @@ pub(super) fn run_controlled_champion_scenario(
         })
         .collect::<Vec<_>>();
     let enemy_similarity_notes = build_enemy_similarity_notes(&enemy_derived_combat_stats);
-    let enemy_loadout = ResolvedLoadout::default();
     status.emit(
         "enemy_setup",
         None,
@@ -1207,10 +1232,22 @@ pub(super) fn run_controlled_champion_scenario(
         Some("reports, trace outputs, and persistent cache written"),
         true,
     );
-    println!("\nReport written: {}", report_path.display());
-    println!("Structured report written: {}", json_report_path.display());
-    println!("Trace report written: {}", trace_markdown_path.display());
-    println!("Trace json written: {}", trace_json_path.display());
+    println!(
+        "\nReport written: {}",
+        format_repo_relative_path(&report_path)
+    );
+    println!(
+        "Structured report written: {}",
+        format_repo_relative_path(&json_report_path)
+    );
+    println!(
+        "Trace report written: {}",
+        format_repo_relative_path(&trace_markdown_path)
+    );
+    println!(
+        "Trace json written: {}",
+        format_repo_relative_path(&trace_json_path)
+    );
 
     Ok(())
 }
@@ -1226,35 +1263,16 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    let vlad_base_raw = if let Some(champion) =
-        scenario_value_with_legacy_alias(&scenario, "controlled_champion", "vladimir_champion")
-            .and_then(Value::as_str)
-    {
-        lookup_champion_base(&champion_bases, champion)?
-    } else {
-        parse_champion_base(
-                scenario_value_with_legacy_alias(
-                    &scenario,
-                    "controlled_champion_base",
-                    "vladimir_base",
-                )
-                .ok_or_else(|| {
-                    anyhow!(
-                        "Missing controlled_champion/controlled_champion_base (legacy: vladimir_champion/vladimir_base)"
-                    )
-                })?,
-            )?
-    };
+    let (vlad_base_raw, baseline_fixed_names, vlad_loadout_selection) =
+        parse_controlled_champion_config(&scenario, &champion_bases)?;
     let vlad_base = champion_at_level(&vlad_base_raw, sim_cfg.champion_level);
 
-    let enemies_raw = scenario
-        .get("enemies")
-        .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing enemies"))?
-        .iter()
-        .map(|e| parse_enemy_config(e, &champion_bases))
-        .collect::<Result<Vec<_>>>()?;
-    let enemies = enemies_raw
+    let enemy_encounters = parse_opponent_encounters(&scenario, &champion_bases)?;
+    let (selected_encounter_name, _, selected_enemies_raw) = enemy_encounters
+        .first()
+        .cloned()
+        .ok_or_else(|| anyhow!("opponents.encounters must include at least one encounter"))?;
+    let enemies = selected_enemies_raw
         .into_iter()
         .map(|mut e| {
             e.base = champion_at_level(&e.base, sim_cfg.champion_level);
@@ -1262,12 +1280,7 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         })
         .collect::<Vec<_>>();
 
-    let vlad_loadout_selection = parse_loadout_selection(scenario_value_with_legacy_alias(
-        &scenario,
-        "controlled_champion_loadout",
-        "vladimir_loadout",
-    ));
-    let enemy_loadout_selection = parse_loadout_selection(scenario.get("enemy_loadout"));
+    let enemy_loadout_selection = parse_opponent_shared_loadout_selection(&scenario);
     let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim_cfg.champion_level, true)?;
     let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim_cfg.champion_level, false)?;
     let loadout_domain = build_loadout_domain();
@@ -1299,22 +1312,6 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         enemy_with_loadout.loadout_masteries = preset.masteries.clone();
         enemy_builds.push((enemy_with_loadout, build, bonus_stats));
     }
-
-    let baseline_fixed_names = scenario_value_with_legacy_alias(
-        &scenario,
-        "controlled_champion_baseline_fixed",
-        "vladimir_baseline_fixed",
-    )
-    .and_then(Value::as_array)
-    .ok_or_else(|| {
-        anyhow!("Missing controlled_champion_baseline_fixed (legacy: vladimir_baseline_fixed)")
-    })?
-    .iter()
-    .map(|v| v.as_str().ok_or_else(|| anyhow!("Invalid baseline item")))
-    .collect::<Result<Vec<_>>>()?
-    .into_iter()
-    .map(|s| s.to_string())
-    .collect::<Vec<_>>();
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
     let mut sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
@@ -1333,6 +1330,7 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         sim_cfg.server_tick_rate_hz,
         sim.tick_seconds()
     );
+    println!("Using opponent encounter: {}", selected_encounter_name);
 
     for tick in 0..ticks.max(1) {
         let alive = sim.step(1);

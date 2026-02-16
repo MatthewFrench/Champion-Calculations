@@ -43,7 +43,7 @@ fn level_scaled_enemy_builds(
         .iter()
         .map(|(enemy_cfg, build, bonus_stats)| {
             let raw_base = raw_enemy_bases
-                .get(&enemy_cfg.name)
+                .get(&enemy_cfg.id)
                 .cloned()
                 .unwrap_or_else(|| enemy_cfg.base.clone());
             let mut scaled_cfg = enemy_cfg.clone();
