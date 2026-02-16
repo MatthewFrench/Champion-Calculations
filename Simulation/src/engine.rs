@@ -1,12 +1,23 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
-use crate::scripts::enemies::{
-    EnemyBehaviorProfile, EnemyLoadoutRuntime, EnemyScriptEvent, attack_speed_multiplier,
-    behavior_profile, build_enemy_loadout_runtime, clear_transient_combat_state,
+use crate::scripts::champions::enemies::{
+    EnemyBehaviorProfile, EnemyLoadoutRuntime, EnemyScriptAction, EnemyScriptEvent,
+    EnemyScriptExecutionInput, EnemyScriptPoint, attack_speed_multiplier, behavior_profile,
+    build_enemy_loadout_runtime, clear_transient_combat_state, execute_enemy_script_event,
     on_ability_bonus_damage, on_hit_bonus_damage, scripted_event_schedules, tick_regen_heal,
 };
-use crate::scripts::vladimir::{VladimirCastProfile, default_cast_profile};
+use crate::scripts::champions::vladimir::{
+    VladimirCastProfile, VladimirDefensiveDecisionInput, VladimirGuardianAngelDecisionInput,
+    VladimirOffensiveDecisionInput, VladimirTargetSnapshot, decide_defensive_activations,
+    decide_offensive_casts, default_cast_profile, should_trigger_guardian_angel,
+};
+use crate::scripts::runtime::controlled_champion_loadout::{
+    ControlledChampionAbilityRuntimeInput, ControlledChampionLoadoutRuntime,
+    build_controlled_champion_loadout_runtime, controlled_champion_damage_taken_multiplier,
+    controlled_champion_heal_multiplier, on_controlled_champion_ability_bonus,
+    on_controlled_champion_enemy_kill, tick_controlled_champion_regen_heal,
+};
 
 use super::*;
 
@@ -186,9 +197,9 @@ enum EventType {
     Stun(usize),
     Burst(usize),
     BurstHit(usize),
-    VladQHit(usize),
-    VladEHit,
-    VladRHit,
+    ControlledChampionQHit(usize),
+    ControlledChampionEHit,
+    ControlledChampionRHit,
     EnemyScript(usize, EnemyScriptEvent, u64),
 }
 
@@ -226,7 +237,7 @@ impl Ord for QueuedEvent {
     }
 }
 
-pub(super) struct VladCombatSimulation {
+pub(super) struct ControlledChampionCombatSimulation {
     vlad_base: ChampionBase,
     sim: SimulationConfig,
     urf: UrfBuffs,
@@ -243,6 +254,8 @@ pub(super) struct VladCombatSimulation {
     event_counter: u64,
 
     vlad_stats: Stats,
+    controlled_champion_runtime: ControlledChampionLoadoutRuntime,
+    controlled_champion_name: String,
     max_health: f64,
     health: f64,
 
@@ -275,6 +288,7 @@ pub(super) struct VladCombatSimulation {
     stasis_until: f64,
     ga_res_until: f64,
     stunned_until: f64,
+    combat_primitives: CombatPrimitivesState,
 
     protoplasm_shield: f64,
     pool_heal_rate: f64,
@@ -282,14 +296,15 @@ pub(super) struct VladCombatSimulation {
     protoplasm_hot_rate: f64,
     protoplasm_hot_until: f64,
 
-    vlad_position: Vec2,
+    controlled_champion_position: Vec2,
     enemy_state: Vec<EnemyState>,
     projectile_block_zones: Vec<ProjectileBlockZone>,
     trace_enabled: bool,
     trace_events: Vec<String>,
 }
 
-impl VladCombatSimulation {
+impl ControlledChampionCombatSimulation {
+    #[allow(dead_code)]
     pub(super) fn new(
         vlad_base: ChampionBase,
         vlad_build_items: &[Item],
@@ -299,6 +314,34 @@ impl VladCombatSimulation {
         sim: SimulationConfig,
         urf: UrfBuffs,
     ) -> Self {
+        Self::new_with_controlled_champion_loadout(
+            vlad_base,
+            vlad_build_items,
+            vlad_bonus_stats,
+            None,
+            vlad_item_acquired_levels,
+            enemies,
+            sim,
+            urf,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub(super) fn new_with_controlled_champion_loadout(
+        controlled_champion_base: ChampionBase,
+        controlled_champion_build_items: &[Item],
+        controlled_champion_bonus_stats: &Stats,
+        controlled_champion_loadout_selection: Option<&LoadoutSelection>,
+        controlled_champion_item_acquired_levels: Option<&HashMap<String, usize>>,
+        enemies: &[(EnemyConfig, Vec<Item>, Stats)],
+        sim: SimulationConfig,
+        urf: UrfBuffs,
+    ) -> Self {
+        let vlad_base = controlled_champion_base;
+        let vlad_build_items = controlled_champion_build_items;
+        let vlad_bonus_stats = controlled_champion_bonus_stats;
+        let vlad_item_acquired_levels = controlled_champion_item_acquired_levels;
+        let controlled_champion_name = vlad_base.name.clone();
         let mut vlad_item_stats = Stats::default();
         for item in vlad_build_items {
             vlad_item_stats.add(&item.stats);
@@ -312,7 +355,10 @@ impl VladCombatSimulation {
             sim.champion_level,
             vlad_item_acquired_levels,
         );
-        let vlad_stats = compute_vlad_stats(&vlad_base, &vlad_item_stats);
+        let vlad_stats = compute_champion_final_stats(&vlad_base, &vlad_item_stats);
+        let controlled_champion_runtime = controlled_champion_loadout_selection
+            .map(build_controlled_champion_loadout_runtime)
+            .unwrap_or_default();
 
         let max_health = vlad_stats.health;
         let physical_multiplier = 100.0 / (100.0 + vlad_stats.armor.max(0.0));
@@ -367,6 +413,8 @@ impl VladCombatSimulation {
             event_queue: BinaryHeap::new(),
             event_counter: 0,
             vlad_stats,
+            controlled_champion_runtime,
+            controlled_champion_name,
             max_health,
             health: max_health,
             physical_multiplier,
@@ -393,12 +441,13 @@ impl VladCombatSimulation {
             stasis_until: 0.0,
             ga_res_until: 0.0,
             stunned_until: 0.0,
+            combat_primitives: CombatPrimitivesState::default(),
             protoplasm_shield: 0.0,
             pool_heal_rate: 0.0,
             pool_heal_until: 0.0,
             protoplasm_hot_rate: 0.0,
             protoplasm_hot_until: 0.0,
-            vlad_position: Vec2 { x: 0.0, y: 0.0 },
+            controlled_champion_position: Vec2 { x: 0.0, y: 0.0 },
             enemy_state: Vec::new(),
             projectile_block_zones: Vec::new(),
             trace_enabled: false,
@@ -517,11 +566,44 @@ impl VladCombatSimulation {
         self.is_targetable() && self.time >= self.stunned_until
     }
 
+    fn apply_status_effect(&mut self, effect: StatusEffect) {
+        self.combat_primitives.apply_status(effect);
+    }
+
+    fn apply_stun_window(&mut self, duration_seconds: f64) {
+        if duration_seconds <= 0.0 {
+            return;
+        }
+        self.apply_status_effect(StatusEffect::timed(
+            StatusEffectKind::Stun,
+            duration_seconds,
+            1,
+            StatusPersistence::RefreshDuration,
+        ));
+    }
+
+    fn begin_cast_lock_window(&mut self, windup_seconds: f64, channel_seconds: f64, lockout: f64) {
+        self.combat_primitives.begin_cast_lock(CastLockWindow::new(
+            windup_seconds,
+            channel_seconds,
+            lockout,
+        ));
+    }
+
     fn enemy_respawn_delay_seconds(&self) -> f64 {
         respawn::urf_respawn_delay_seconds(
             self.sim.champion_level,
-            self.sim.urf_respawn_flat_reduction_seconds,
-            self.sim.urf_respawn_extrapolation_per_level,
+            self.time,
+            respawn::UrfRespawnTuning {
+                urf_flat_reduction_seconds: self.sim.urf_respawn_flat_reduction_seconds,
+                extrapolation_per_level: self.sim.urf_respawn_extrapolation_per_level,
+                time_scaling_enabled: self.sim.urf_respawn_time_scaling_enabled,
+                time_scaling_start_seconds: self.sim.urf_respawn_time_scaling_start_seconds,
+                time_scaling_per_minute_seconds: self
+                    .sim
+                    .urf_respawn_time_scaling_per_minute_seconds,
+                time_scaling_cap_seconds: self.sim.urf_respawn_time_scaling_cap_seconds,
+            },
         )
     }
 
@@ -618,22 +700,23 @@ impl VladCombatSimulation {
         }
     }
 
-    fn enemy_distance_to_vlad(&self, idx: usize) -> f64 {
+    fn enemy_distance_to_controlled_champion(&self, idx: usize) -> f64 {
         self.enemy_state[idx]
             .position
-            .distance_to(self.vlad_position)
+            .distance_to(self.controlled_champion_position)
     }
 
     fn enemy_in_attack_range(&self, idx: usize) -> bool {
-        self.enemy_distance_to_vlad(idx) <= self.enemy_state[idx].behavior.attack_range
+        self.enemy_distance_to_controlled_champion(idx)
+            <= self.enemy_state[idx].behavior.attack_range
     }
 
-    fn enemy_in_vlad_range(&self, idx: usize, range: f64) -> bool {
-        self.enemy_distance_to_vlad(idx) <= range
+    fn enemy_in_controlled_champion_range(&self, idx: usize, range: f64) -> bool {
+        self.enemy_distance_to_controlled_champion(idx) <= range
     }
 
     fn enemy_projectile_delay(&self, idx: usize, speed: f64) -> f64 {
-        projectile_travel_seconds(self.enemy_distance_to_vlad(idx), speed)
+        projectile_travel_seconds(self.enemy_distance_to_controlled_champion(idx), speed)
     }
 
     fn cleanup_expired_projectile_blocks(&mut self) {
@@ -648,13 +731,13 @@ impl VladCombatSimulation {
             .any(|zone| line_segments_intersect(source, target, zone.start, zone.end))
     }
 
-    fn first_active_enemy_in_vlad_range(&self, range: f64) -> Option<usize> {
+    fn first_active_enemy_in_controlled_champion_range(&self, range: f64) -> Option<usize> {
         let mut best: Option<(usize, f64)> = None;
         for idx in 0..self.enemy_state.len() {
-            if !self.enemy_is_active(idx) || !self.enemy_in_vlad_range(idx, range) {
+            if !self.enemy_is_active(idx) || !self.enemy_in_controlled_champion_range(idx, range) {
                 continue;
             }
-            let dist = self.enemy_distance_to_vlad(idx);
+            let dist = self.enemy_distance_to_controlled_champion(idx);
             match best {
                 Some((_, best_dist)) if dist >= best_dist => {}
                 _ => best = Some((idx, dist)),
@@ -663,19 +746,29 @@ impl VladCombatSimulation {
         best.map(|(idx, _)| idx)
     }
 
-    fn max_enemy_distance_in_vlad_range(&self, range: f64) -> Option<f64> {
+    fn max_enemy_distance_in_controlled_champion_range(&self, range: f64) -> Option<f64> {
         let mut max_distance = None;
         for idx in 0..self.enemy_state.len() {
-            if !self.enemy_is_active(idx) || !self.enemy_in_vlad_range(idx, range) {
+            if !self.enemy_is_active(idx) || !self.enemy_in_controlled_champion_range(idx, range) {
                 continue;
             }
-            let distance = self.enemy_distance_to_vlad(idx);
+            let distance = self.enemy_distance_to_controlled_champion(idx);
             max_distance = Some(match max_distance {
                 Some(current) => distance.max(current),
                 None => distance,
             });
         }
         max_distance
+    }
+
+    fn active_enemy_count_in_controlled_champion_range(&self, range: f64) -> usize {
+        self.enemy_state
+            .iter()
+            .enumerate()
+            .filter(|(idx, _)| {
+                self.enemy_is_active(*idx) && self.enemy_in_controlled_champion_range(*idx, range)
+            })
+            .count()
     }
 
     fn schedule_next_attack(&mut self, idx: usize) {
@@ -705,6 +798,88 @@ impl VladCombatSimulation {
                 duration.max(0.0)
             ),
         );
+    }
+
+    fn script_point_from_vec2(point: Vec2) -> EnemyScriptPoint {
+        EnemyScriptPoint {
+            x: point.x,
+            y: point.y,
+        }
+    }
+
+    fn vec2_from_script_point(point: EnemyScriptPoint) -> Vec2 {
+        Vec2 {
+            x: point.x,
+            y: point.y,
+        }
+    }
+
+    fn apply_enemy_script_actions(
+        &mut self,
+        idx: usize,
+        epoch: u64,
+        actions: Vec<EnemyScriptAction>,
+    ) {
+        for action in actions {
+            match action {
+                EnemyScriptAction::AddNextAttackBonusPhysical {
+                    amount,
+                    trace_message,
+                } => {
+                    let enemy_name = {
+                        let state = &mut self.enemy_state[idx];
+                        state.next_attack_bonus_physical += amount;
+                        state.enemy.name.clone()
+                    };
+                    self.trace_event("enemy_buff", format!("{} {}", enemy_name, trace_message));
+                }
+                EnemyScriptAction::ApplyDamage {
+                    source,
+                    projectile_speed,
+                    physical,
+                    magic,
+                    true_damage,
+                    stun_duration,
+                } => {
+                    if projectile_speed > 0.0
+                        && self.is_projectile_blocked(
+                            Self::vec2_from_script_point(source),
+                            self.controlled_champion_position,
+                        )
+                    {
+                        continue;
+                    }
+                    self.apply_damage(physical, magic, true_damage);
+                    if stun_duration > 0.0 && self.is_targetable() {
+                        self.stunned_until = self.stunned_until.max(self.time + stun_duration);
+                        self.apply_stun_window(stun_duration);
+                    }
+                }
+                EnemyScriptAction::ScheduleFollowup {
+                    delay_seconds,
+                    priority,
+                    event,
+                } => {
+                    self.schedule_event(
+                        delay_seconds,
+                        priority,
+                        EventType::EnemyScript(idx, event, epoch),
+                        None,
+                    );
+                }
+                EnemyScriptAction::CreateProjectileBlockZone {
+                    start,
+                    end,
+                    duration_seconds,
+                } => {
+                    self.add_projectile_block_zone(
+                        Self::vec2_from_script_point(start),
+                        Self::vec2_from_script_point(end),
+                        duration_seconds,
+                    );
+                }
+            }
+        }
     }
 
     fn apply_magic_damage_to_enemy(&mut self, idx: usize, raw_magic_damage: f64) -> f64 {
@@ -739,6 +914,21 @@ impl VladCombatSimulation {
         };
         if let Some(name) = killed_name {
             self.enemy_kills_total += 1;
+            let runtime_kill_heal = on_controlled_champion_enemy_kill(
+                &mut self.controlled_champion_runtime,
+                self.max_health,
+            );
+            if runtime_kill_heal > 0.0 {
+                let before = self.health;
+                self.health = self.max_health.min(
+                    self.health
+                        + runtime_kill_heal
+                            * controlled_champion_heal_multiplier(
+                                &self.controlled_champion_runtime,
+                            ),
+                );
+                self.healing_done_total += (self.health - before).max(0.0);
+            }
             self.trace_event(
                 "enemy_death",
                 format!("{} died; respawn in {:.1}s", name, respawn_delay),
@@ -748,10 +938,13 @@ impl VladCombatSimulation {
     }
 
     fn apply_magic_damage_to_all_active_enemies(&mut self, raw_magic_damage: f64) -> f64 {
-        self.apply_magic_damage_to_enemies_in_vlad_range(raw_magic_damage, f64::INFINITY)
+        self.apply_magic_damage_to_enemies_in_controlled_champion_range(
+            raw_magic_damage,
+            f64::INFINITY,
+        )
     }
 
-    fn apply_magic_damage_to_enemies_in_vlad_range(
+    fn apply_magic_damage_to_enemies_in_controlled_champion_range(
         &mut self,
         raw_magic_damage: f64,
         range: f64,
@@ -761,7 +954,7 @@ impl VladCombatSimulation {
         }
         let mut total = 0.0;
         for idx in 0..self.enemy_state.len() {
-            if !self.enemy_in_vlad_range(idx, range) {
+            if !self.enemy_in_controlled_champion_range(idx, range) {
                 continue;
             }
             total += self.apply_magic_damage_to_enemy(idx, raw_magic_damage);
@@ -790,6 +983,18 @@ impl VladCombatSimulation {
                 .min(self.health + self.protoplasm_hot_rate * active);
             self.healing_done_total += (self.health - before).max(0.0);
         }
+        let runtime_regen = tick_controlled_champion_regen_heal(
+            &self.controlled_champion_runtime,
+            self.health,
+            self.max_health,
+            delta,
+        );
+        if runtime_regen > 0.0 {
+            let before = self.health;
+            self.health = self.max_health.min(self.health + runtime_regen);
+            self.healing_done_total += (self.health - before).max(0.0);
+        }
+        self.combat_primitives.tick(delta);
         self.update_enemy_positions(delta);
         self.apply_enemy_regen(delta);
         self.time = to_time;
@@ -821,8 +1026,8 @@ impl VladCombatSimulation {
             let speed = state.move_speed * state.behavior.movement_speed_scale;
             let step = speed * delta;
             let mut radial = Vec2 {
-                x: state.position.x - self.vlad_position.x,
-                y: state.position.y - self.vlad_position.y,
+                x: state.position.x - self.controlled_champion_position.x,
+                y: state.position.y - self.controlled_champion_position.y,
             };
             let distance = radial.distance_to(Vec2 { x: 0.0, y: 0.0 }).max(1e-6);
             radial.x /= distance;
@@ -857,6 +1062,15 @@ impl VladCombatSimulation {
         }
         let mut damage =
             physical * self.physical_multiplier + magic * self.magic_multiplier + true_damage;
+        let active_enemy_count = self
+            .enemy_state
+            .iter()
+            .filter(|state| state.respawn_at.is_none() && state.health > 0.0 && state.uptime_active)
+            .count();
+        damage *= controlled_champion_damage_taken_multiplier(
+            &self.controlled_champion_runtime,
+            active_enemy_count,
+        );
         if self.protoplasm_shield > 0.0 && damage > 0.0 {
             let absorbed = self.protoplasm_shield.min(damage);
             self.protoplasm_shield -= absorbed;
@@ -876,28 +1090,60 @@ impl VladCombatSimulation {
     }
 
     fn handle_death(&mut self) {
-        if self.ga_available && self.time >= self.ga_cd {
+        if should_trigger_guardian_angel(VladimirGuardianAngelDecisionInput {
+            available: self.ga_available,
+            now_seconds: self.time,
+            ready_at: self.ga_cd,
+        }) {
             self.ga_cd = self.time + self.ga_cooldown;
             self.ga_res_until = self.time + self.sim.ga_revive_duration_seconds;
             self.health =
                 1.0_f64.max(self.vlad_base.base_health * self.sim.ga_revive_base_health_ratio);
-            self.trace_event("ga_revive", "Guardian Angel revived Vladimir".to_string());
+            self.trace_event(
+                "ga_revive",
+                format!("Guardian Angel revived {}", self.controlled_champion_name),
+            );
             return;
         }
         self.finished = true;
         self.death_time = Some(self.time);
-        self.trace_event("vladimir_death", "Vladimir died".to_string());
+        self.trace_event(
+            "controlled_champion_death",
+            format!("{} died", self.controlled_champion_name),
+        );
     }
 
-    fn maybe_cast_vlad_defensives(&mut self) {
+    fn maybe_cast_controlled_champion_abilities_and_defensives(&mut self) {
         if self.finished {
             return;
         }
         self.refresh_enemy_respawns();
 
-        if self.time >= self.pool_cd && self.can_cast() {
+        let defensive = decide_defensive_activations(VladimirDefensiveDecisionInput {
+            now_seconds: self.time,
+            can_cast: self.can_cast(),
+            health: self.health,
+            max_health: self.max_health,
+            pool_ready_at: self.pool_cd,
+            zhonya_available: self.zhonya_available,
+            zhonya_ready_at: self.zhonya_cd,
+            zhonya_trigger_health_percent: self.sim.zhonya_trigger_health_percent,
+            pool_active_until: self.pool_until,
+            ga_revive_active_until: self.ga_res_until,
+            protoplasm_available: self.protoplasm_available,
+            protoplasm_ready_at: self.protoplasm_cd,
+            protoplasm_trigger_health_percent: self.sim.protoplasm_trigger_health_percent,
+        });
+
+        if defensive.cast_pool {
             self.pool_cd = self.time + self.pool_cooldown;
             self.pool_until = self.time + self.pool_duration;
+            self.apply_status_effect(StatusEffect::timed(
+                StatusEffectKind::Untargetable,
+                self.pool_duration,
+                1,
+                StatusPersistence::RefreshDuration,
+            ));
             let cost = self.health
                 * self.sim.vlad_pool_cost_percent_current_health
                 * self.urf.health_cost_multiplier;
@@ -923,70 +1169,99 @@ impl VladCombatSimulation {
             }
         }
 
-        // Scripted offensive cadence for Vladimir abilities.
-        if self.can_cast() {
-            if self.time >= self.q_cd
-                && let Some(target_idx) =
-                    self.first_active_enemy_in_vlad_range(self.cast_profile.q_range)
-            {
-                self.q_cd = self.time + self.offensive_cooldowns.q_seconds;
-                let travel = projectile_travel_seconds(
-                    self.enemy_distance_to_vlad(target_idx),
-                    self.cast_profile.q_projectile_speed,
-                );
-                self.schedule_event(
-                    self.cast_profile.q_windup_seconds + travel,
-                    50,
-                    EventType::VladQHit(target_idx),
-                    None,
-                );
-            }
+        // Script-owned cadence for controlled champion offensive spell scheduling.
+        let can_cast = self.can_cast();
+        let q_target = if can_cast && self.time >= self.q_cd {
+            self.first_active_enemy_in_controlled_champion_range(self.cast_profile.q_range)
+                .map(|enemy_index| VladimirTargetSnapshot {
+                    enemy_index,
+                    distance: self.enemy_distance_to_controlled_champion(enemy_index),
+                })
+        } else {
+            None
+        };
+        let e_max_distance = if can_cast && self.time >= self.e_cd {
+            self.max_enemy_distance_in_controlled_champion_range(self.cast_profile.e_range)
+        } else {
+            None
+        };
+        let r_max_distance = if can_cast && self.time >= self.r_cd {
+            self.max_enemy_distance_in_controlled_champion_range(self.cast_profile.r_range)
+        } else {
+            None
+        };
+        let offensive = decide_offensive_casts(VladimirOffensiveDecisionInput {
+            now_seconds: self.time,
+            can_cast,
+            q_ready_at: self.q_cd,
+            e_ready_at: self.e_cd,
+            r_ready_at: self.r_cd,
+            cooldowns: self.offensive_cooldowns,
+            cast_profile: self.cast_profile,
+            q_target,
+            e_max_distance,
+            r_max_distance,
+        });
 
-            if self.time >= self.e_cd
-                && let Some(max_distance) =
-                    self.max_enemy_distance_in_vlad_range(self.cast_profile.e_range)
-            {
-                self.e_cd = self.time + self.offensive_cooldowns.e_seconds;
-                let travel =
-                    projectile_travel_seconds(max_distance, self.cast_profile.e_projectile_speed);
-                self.schedule_event(
-                    self.cast_profile.e_windup_seconds + travel,
-                    49,
-                    EventType::VladEHit,
-                    None,
-                );
-            }
-
-            if self.time >= self.r_cd
-                && let Some(max_distance) =
-                    self.max_enemy_distance_in_vlad_range(self.cast_profile.r_range)
-            {
-                self.r_cd = self.time + self.offensive_cooldowns.r_seconds;
-                let travel =
-                    projectile_travel_seconds(max_distance, self.cast_profile.r_projectile_speed);
-                self.schedule_event(
-                    self.cast_profile.r_windup_seconds + travel,
-                    48,
-                    EventType::VladRHit,
-                    None,
-                );
-            }
+        if let Some(q) = offensive.q {
+            self.q_cd = q.next_ready_at;
+            self.begin_cast_lock_window(self.cast_profile.q_windup_seconds, 0.0, 0.0);
+            self.schedule_event(
+                q.impact_delay_seconds,
+                50,
+                EventType::ControlledChampionQHit(q.target_index),
+                None,
+            );
+        }
+        if let Some(e) = offensive.e {
+            self.e_cd = e.next_ready_at;
+            self.begin_cast_lock_window(self.cast_profile.e_windup_seconds, 0.0, 0.0);
+            self.schedule_event(
+                e.impact_delay_seconds,
+                49,
+                EventType::ControlledChampionEHit,
+                None,
+            );
+        }
+        if let Some(r) = offensive.r {
+            self.r_cd = r.next_ready_at;
+            self.begin_cast_lock_window(self.cast_profile.r_windup_seconds, 0.0, 0.0);
+            self.schedule_event(
+                r.impact_delay_seconds,
+                48,
+                EventType::ControlledChampionRHit,
+                None,
+            );
         }
 
-        if self.zhonya_available
-            && self.time >= self.zhonya_cd
-            && self.health <= self.max_health * self.sim.zhonya_trigger_health_percent
-            && self.time >= self.pool_until
-            && self.time >= self.ga_res_until
-        {
+        let defensive = decide_defensive_activations(VladimirDefensiveDecisionInput {
+            now_seconds: self.time,
+            can_cast: self.can_cast(),
+            health: self.health,
+            max_health: self.max_health,
+            pool_ready_at: self.pool_cd,
+            zhonya_available: self.zhonya_available,
+            zhonya_ready_at: self.zhonya_cd,
+            zhonya_trigger_health_percent: self.sim.zhonya_trigger_health_percent,
+            pool_active_until: self.pool_until,
+            ga_revive_active_until: self.ga_res_until,
+            protoplasm_available: self.protoplasm_available,
+            protoplasm_ready_at: self.protoplasm_cd,
+            protoplasm_trigger_health_percent: self.sim.protoplasm_trigger_health_percent,
+        });
+
+        if defensive.activate_zhonya {
             self.zhonya_cd = self.time + self.zhonya_cooldown;
             self.stasis_until = self.time + self.sim.zhonya_duration_seconds;
+            self.apply_status_effect(StatusEffect::timed(
+                StatusEffectKind::Stasis,
+                self.sim.zhonya_duration_seconds,
+                1,
+                StatusPersistence::RefreshDuration,
+            ));
         }
 
-        if self.protoplasm_available
-            && self.time >= self.protoplasm_cd
-            && self.health <= self.max_health * self.sim.protoplasm_trigger_health_percent
-        {
+        if defensive.activate_protoplasm {
             self.protoplasm_cd = self.time + self.protoplasm_cooldown;
             self.protoplasm_shield += self.sim.protoplasm_bonus_health;
             self.protoplasm_hot_rate =
@@ -1055,7 +1330,8 @@ impl VladCombatSimulation {
                     state.next_attack_bonus_true = 0.0;
                     out
                 };
-                if projectile_speed > 0.0 && self.is_projectile_blocked(source, self.vlad_position)
+                if projectile_speed > 0.0
+                    && self.is_projectile_blocked(source, self.controlled_champion_position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1068,8 +1344,12 @@ impl VladCombatSimulation {
                 self.trace_event(
                     "attack_hit",
                     format!(
-                        "{} hit Vladimir (phys {:.1}, magic {:.1}, true {:.1})",
-                        self.enemy_state[idx].enemy.name, physical, magic, true_damage
+                        "{} hit {} (phys {:.1}, magic {:.1}, true {:.1})",
+                        self.enemy_state[idx].enemy.name,
+                        self.controlled_champion_name,
+                        physical,
+                        magic,
+                        true_damage
                     ),
                 );
                 self.schedule_next_attack(idx);
@@ -1107,7 +1387,8 @@ impl VladCombatSimulation {
                         extra_true,
                     )
                 };
-                if projectile_speed > 0.0 && self.is_projectile_blocked(source, self.vlad_position)
+                if projectile_speed > 0.0
+                    && self.is_projectile_blocked(source, self.controlled_champion_position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1119,8 +1400,11 @@ impl VladCombatSimulation {
                 self.trace_event(
                     "ability_hit",
                     format!(
-                        "{} ability hit Vladimir (magic {:.1}, true {:.1})",
-                        self.enemy_state[idx].enemy.name, magic, true_damage
+                        "{} ability hit {} (magic {:.1}, true {:.1})",
+                        self.enemy_state[idx].enemy.name,
+                        self.controlled_champion_name,
+                        magic,
+                        true_damage
                     ),
                 );
             }
@@ -1133,6 +1417,7 @@ impl VladCombatSimulation {
                     self.stunned_until = self
                         .stunned_until
                         .max(self.time + enemy.stun_duration_seconds);
+                    self.apply_stun_window(enemy.stun_duration_seconds);
                 }
             }
             EventType::Burst(idx) => {
@@ -1169,7 +1454,8 @@ impl VladCombatSimulation {
                         state.burst_true_damage + extra_true,
                     )
                 };
-                if projectile_speed > 0.0 && self.is_projectile_blocked(source, self.vlad_position)
+                if projectile_speed > 0.0
+                    && self.is_projectile_blocked(source, self.controlled_champion_position)
                 {
                     self.trace_event(
                         "projectile_blocked",
@@ -1181,60 +1467,128 @@ impl VladCombatSimulation {
                 self.trace_event(
                     "burst_hit",
                     format!(
-                        "{} burst hit Vladimir (phys {:.1}, magic {:.1}, true {:.1})",
-                        self.enemy_state[idx].enemy.name, physical, magic, true_damage
+                        "{} burst hit {} (phys {:.1}, magic {:.1}, true {:.1})",
+                        self.enemy_state[idx].enemy.name,
+                        self.controlled_champion_name,
+                        physical,
+                        magic,
+                        true_damage
                     ),
                 );
             }
-            EventType::VladQHit(idx) => {
+            EventType::ControlledChampionQHit(idx) => {
                 if idx >= self.enemy_state.len() || !self.enemy_is_active(idx) {
                     return;
                 }
                 if self.cast_profile.q_projectile_speed > 0.0
-                    && self
-                        .is_projectile_blocked(self.vlad_position, self.enemy_state[idx].position)
+                    && self.is_projectile_blocked(
+                        self.controlled_champion_position,
+                        self.enemy_state[idx].position,
+                    )
                 {
-                    self.trace_event("projectile_blocked", "Vladimir Q blocked".to_string());
+                    self.trace_event(
+                        "projectile_blocked",
+                        format!("{} Q blocked", self.controlled_champion_name),
+                    );
                     return;
                 }
                 let q_raw_damage =
                     q_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
-                let dealt = self.apply_magic_damage_to_enemy(idx, q_raw_damage);
+                let runtime_bonus = on_controlled_champion_ability_bonus(
+                    &mut self.controlled_champion_runtime,
+                    ControlledChampionAbilityRuntimeInput {
+                        raw_magic_damage: q_raw_damage,
+                        ability_power: self.vlad_stats.ability_power,
+                        ability_ap_ratio: self.offensive_tuning.q_ap_ratio,
+                        now_seconds: self.time,
+                    },
+                );
+                let dealt = self.apply_magic_damage_to_enemy(idx, q_raw_damage)
+                    + self.apply_magic_damage_to_enemy(idx, runtime_bonus.extra_magic_damage);
                 self.damage_dealt_total += dealt.max(0.0);
                 if dealt > 0.0 {
                     let before = self.health;
-                    self.health = self
-                        .max_health
-                        .min(self.health + dealt * self.offensive_tuning.q_heal_ratio_of_damage);
+                    self.health = self.max_health.min(
+                        self.health
+                            + dealt
+                                * self.offensive_tuning.q_heal_ratio_of_damage
+                                * controlled_champion_heal_multiplier(
+                                    &self.controlled_champion_runtime,
+                                ),
+                    );
                     self.healing_done_total += (self.health - before).max(0.0);
                 }
                 self.trace_event(
-                    "vladimir_q_hit",
+                    "controlled_champion_q_hit",
                     format!(
-                        "Vladimir Q hit {} for {:.1}",
-                        self.enemy_state[idx].enemy.name, dealt
+                        "{} Q hit {} for {:.1}",
+                        self.controlled_champion_name, self.enemy_state[idx].enemy.name, dealt
                     ),
                 );
             }
-            EventType::VladEHit => {
+            EventType::ControlledChampionEHit => {
                 let e_raw_damage =
                     e_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
-                let dealt = self.apply_magic_damage_to_enemies_in_vlad_range(
+                let target_count =
+                    self.active_enemy_count_in_controlled_champion_range(self.cast_profile.e_range);
+                let runtime_bonus = on_controlled_champion_ability_bonus(
+                    &mut self.controlled_champion_runtime,
+                    ControlledChampionAbilityRuntimeInput {
+                        raw_magic_damage: e_raw_damage,
+                        ability_power: self.vlad_stats.ability_power,
+                        ability_ap_ratio: self.offensive_tuning.e_ap_ratio,
+                        now_seconds: self.time,
+                    },
+                );
+                let runtime_bonus_per_target = if target_count > 0 {
+                    runtime_bonus.extra_magic_damage / target_count as f64
+                } else {
+                    0.0
+                };
+                let dealt = self.apply_magic_damage_to_enemies_in_controlled_champion_range(
                     e_raw_damage,
+                    self.cast_profile.e_range,
+                ) + self.apply_magic_damage_to_enemies_in_controlled_champion_range(
+                    runtime_bonus_per_target,
                     self.cast_profile.e_range,
                 );
                 self.damage_dealt_total += dealt.max(0.0);
-                self.trace_event("vladimir_e_hit", format!("Vladimir E dealt {:.1}", dealt));
+                self.trace_event(
+                    "controlled_champion_e_hit",
+                    format!("{} E dealt {:.1}", self.controlled_champion_name, dealt),
+                );
             }
-            EventType::VladRHit => {
+            EventType::ControlledChampionRHit => {
                 let r_raw_damage =
                     r_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
-                let dealt = self.apply_magic_damage_to_enemies_in_vlad_range(
+                let target_count =
+                    self.active_enemy_count_in_controlled_champion_range(self.cast_profile.r_range);
+                let runtime_bonus = on_controlled_champion_ability_bonus(
+                    &mut self.controlled_champion_runtime,
+                    ControlledChampionAbilityRuntimeInput {
+                        raw_magic_damage: r_raw_damage,
+                        ability_power: self.vlad_stats.ability_power,
+                        ability_ap_ratio: self.offensive_tuning.r_ap_ratio,
+                        now_seconds: self.time,
+                    },
+                );
+                let runtime_bonus_per_target = if target_count > 0 {
+                    runtime_bonus.extra_magic_damage / target_count as f64
+                } else {
+                    0.0
+                };
+                let dealt = self.apply_magic_damage_to_enemies_in_controlled_champion_range(
                     r_raw_damage,
+                    self.cast_profile.r_range,
+                ) + self.apply_magic_damage_to_enemies_in_controlled_champion_range(
+                    runtime_bonus_per_target,
                     self.cast_profile.r_range,
                 );
                 self.damage_dealt_total += dealt.max(0.0);
-                self.trace_event("vladimir_r_hit", format!("Vladimir R dealt {:.1}", dealt));
+                self.trace_event(
+                    "controlled_champion_r_hit",
+                    format!("{} R dealt {:.1}", self.controlled_champion_name, dealt),
+                );
             }
             EventType::EnemyScript(idx, script_event, epoch) => {
                 if idx >= self.enemy_state.len()
@@ -1250,172 +1604,31 @@ impl VladCombatSimulation {
                         self.enemy_state[idx].enemy.name, script_event
                     ),
                 );
-                match script_event {
-                    EnemyScriptEvent::WarwickInfiniteDuress => {
-                        if !self.enemy_in_vlad_range(idx, 700.0) {
-                            return;
-                        }
-                        let (physical, magic) = {
-                            let state = &self.enemy_state[idx];
-                            (
-                                state.physical_hit_damage * 1.8,
-                                80.0 + 0.25 * state.physical_hit_damage,
-                            )
-                        };
-                        self.apply_damage(physical, magic, 0.0);
-                        if self.is_targetable() {
-                            self.stunned_until = self.stunned_until.max(self.time + 1.4);
-                        }
-                    }
-                    EnemyScriptEvent::VayneTumbleEmpower => {
-                        let enemy_name = {
-                            let state = &mut self.enemy_state[idx];
-                            state.next_attack_bonus_physical += 0.75 * state.physical_hit_damage;
-                            state.enemy.name.clone()
-                        };
-                        self.trace_event(
-                            "enemy_buff",
-                            format!("{} empowered next attack", enemy_name),
-                        );
-                    }
-                    EnemyScriptEvent::MorganaDarkBinding => {
-                        if !self.enemy_in_vlad_range(idx, 1300.0) {
-                            return;
-                        }
-                        let (source, projectile_speed, magic, true_damage) = {
-                            let state = &mut self.enemy_state[idx];
-                            let raw_magic = 140.0 + 0.25 * state.burst_magic_damage.max(0.0);
-                            let (extra_magic, extra_true) = on_ability_bonus_damage(
-                                &mut state.runtime,
-                                raw_magic,
-                                self.max_health,
-                                self.time,
-                            );
-                            (
-                                state.position,
-                                state.behavior.ability_projectile_speed,
-                                raw_magic + extra_magic,
-                                extra_true,
-                            )
-                        };
-                        if projectile_speed > 0.0
-                            && self.is_projectile_blocked(source, self.vlad_position)
-                        {
-                            return;
-                        }
-                        self.apply_damage(0.0, magic, true_damage);
-                        if self.is_targetable() {
-                            self.stunned_until = self.stunned_until.max(self.time + 2.0);
-                        }
-                    }
-                    EnemyScriptEvent::MorganaSoulShackles => {
-                        if !self.enemy_in_vlad_range(idx, 650.0) {
-                            return;
-                        }
-                        self.apply_damage(0.0, 70.0, 0.0);
-                        self.schedule_event(
-                            2.5,
-                            11,
-                            EventType::EnemyScript(
-                                idx,
-                                EnemyScriptEvent::MorganaSoulShacklesDetonate,
-                                epoch,
-                            ),
-                            None,
-                        );
-                    }
-                    EnemyScriptEvent::MorganaSoulShacklesDetonate => {
-                        if !self.enemy_in_vlad_range(idx, 700.0) {
-                            return;
-                        }
-                        self.apply_damage(0.0, 170.0, 0.0);
-                        if self.is_targetable() {
-                            self.stunned_until = self.stunned_until.max(self.time + 1.5);
-                        }
-                    }
-                    EnemyScriptEvent::SonaCrescendo => {
-                        if !self.enemy_in_vlad_range(idx, 1000.0) {
-                            return;
-                        }
-                        let (source, projectile_speed, magic, true_damage) = {
-                            let state = &mut self.enemy_state[idx];
-                            let raw_magic = 190.0 + 0.20 * state.burst_magic_damage.max(0.0);
-                            let (extra_magic, extra_true) = on_ability_bonus_damage(
-                                &mut state.runtime,
-                                raw_magic,
-                                self.max_health,
-                                self.time,
-                            );
-                            (
-                                state.position,
-                                state.behavior.burst_projectile_speed,
-                                raw_magic + extra_magic,
-                                extra_true,
-                            )
-                        };
-                        if projectile_speed > 0.0
-                            && self.is_projectile_blocked(source, self.vlad_position)
-                        {
-                            return;
-                        }
-                        self.apply_damage(0.0, magic, true_damage);
-                        if self.is_targetable() {
-                            self.stunned_until = self.stunned_until.max(self.time + 1.5);
-                        }
-                    }
-                    EnemyScriptEvent::DrMundoInfectedCleaver => {
-                        if !self.enemy_in_vlad_range(idx, 1050.0) {
-                            return;
-                        }
-                        let (source, projectile_speed, magic, true_damage) = {
-                            let state = &mut self.enemy_state[idx];
-                            let raw_magic = (0.15 * self.health.max(0.0)).clamp(80.0, 320.0) + 20.0;
-                            let (extra_magic, extra_true) = on_ability_bonus_damage(
-                                &mut state.runtime,
-                                raw_magic,
-                                self.max_health,
-                                self.time,
-                            );
-                            (
-                                state.position,
-                                state.behavior.ability_projectile_speed,
-                                raw_magic + extra_magic,
-                                extra_true,
-                            )
-                        };
-                        if projectile_speed > 0.0
-                            && self.is_projectile_blocked(source, self.vlad_position)
-                        {
-                            return;
-                        }
-                        self.apply_damage(0.0, magic, true_damage);
-                    }
-                    EnemyScriptEvent::YasuoWindWall => {
-                        let state = &self.enemy_state[idx];
-                        let to_vlad = Vec2 {
-                            x: self.vlad_position.x - state.position.x,
-                            y: self.vlad_position.y - state.position.y,
-                        };
-                        let length = to_vlad.distance_to(Vec2 { x: 0.0, y: 0.0 }).max(1e-6);
-                        let nx = to_vlad.x / length;
-                        let ny = to_vlad.y / length;
-                        let center = Vec2 {
-                            x: state.position.x + nx * 180.0,
-                            y: state.position.y + ny * 180.0,
-                        };
-                        let tangent = Vec2 { x: -ny, y: nx };
-                        let half_width = 180.0;
-                        let start = Vec2 {
-                            x: center.x + tangent.x * half_width,
-                            y: center.y + tangent.y * half_width,
-                        };
-                        let end = Vec2 {
-                            x: center.x - tangent.x * half_width,
-                            y: center.y - tangent.y * half_width,
-                        };
-                        self.add_projectile_block_zone(start, end, 4.0);
-                    }
-                }
+                let enemy_distance_to_controlled_champion =
+                    self.enemy_distance_to_controlled_champion(idx);
+                let controlled_champion_position =
+                    Self::script_point_from_vec2(self.controlled_champion_position);
+                let controlled_champion_current_health = self.health;
+                let controlled_champion_max_health = self.max_health;
+                let now = self.time;
+                let actions = {
+                    let state = &mut self.enemy_state[idx];
+                    let input = EnemyScriptExecutionInput {
+                        event: script_event,
+                        enemy_position: Self::script_point_from_vec2(state.position),
+                        controlled_champion_position,
+                        enemy_distance_to_controlled_champion,
+                        enemy_physical_hit_damage: state.physical_hit_damage,
+                        enemy_burst_magic_damage: state.burst_magic_damage,
+                        enemy_ability_projectile_speed: state.behavior.ability_projectile_speed,
+                        enemy_burst_projectile_speed: state.behavior.burst_projectile_speed,
+                        controlled_champion_current_health,
+                        controlled_champion_max_health,
+                        now,
+                    };
+                    execute_enemy_script_event(input, &mut state.runtime)
+                };
+                self.apply_enemy_script_actions(idx, epoch, actions);
             }
         }
     }
@@ -1428,7 +1641,7 @@ impl VladCombatSimulation {
             }
 
             let target_time = self.sim.max_time_seconds.min(self.time + self.tick_seconds);
-            self.maybe_cast_vlad_defensives();
+            self.maybe_cast_controlled_champion_abilities_and_defensives();
 
             while let Some(top) = self.event_queue.peek().cloned() {
                 if top.time > target_time || self.finished {
@@ -1465,12 +1678,12 @@ impl VladCombatSimulation {
                         kind: top.kind.clone(),
                     });
                 }
-                self.maybe_cast_vlad_defensives();
+                self.maybe_cast_controlled_champion_abilities_and_defensives();
             }
 
             self.apply_hot_effects(target_time);
             self.refresh_enemy_respawns();
-            self.maybe_cast_vlad_defensives();
+            self.maybe_cast_controlled_champion_abilities_and_defensives();
 
             if self.health <= 0.0 && !self.finished {
                 self.handle_death();
@@ -1642,6 +1855,34 @@ pub(crate) fn derive_enemy_combat_stats(
     }
 }
 
+#[allow(dead_code)]
+pub(super) type VladCombatSimulation = ControlledChampionCombatSimulation;
+
+#[allow(clippy::too_many_arguments)]
+pub(super) fn simulate_controlled_champion_combat(
+    controlled_champion_base: &ChampionBase,
+    controlled_champion_build_items: &[Item],
+    controlled_champion_bonus_stats: &Stats,
+    controlled_champion_loadout_selection: Option<&LoadoutSelection>,
+    controlled_champion_item_acquired_levels: Option<&HashMap<String, usize>>,
+    enemies: &[(EnemyConfig, Vec<Item>, Stats)],
+    sim: &SimulationConfig,
+    urf: &UrfBuffs,
+) -> CombatOutcome {
+    let mut runner = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+        controlled_champion_base.clone(),
+        controlled_champion_build_items,
+        controlled_champion_bonus_stats,
+        controlled_champion_loadout_selection,
+        controlled_champion_item_acquired_levels,
+        enemies,
+        sim.clone(),
+        urf.clone(),
+    );
+    runner.run_until_end()
+}
+
+#[allow(dead_code)]
 pub(super) fn simulate_vlad_combat(
     vlad_base: &ChampionBase,
     vlad_build_items: &[Item],
@@ -1651,7 +1892,7 @@ pub(super) fn simulate_vlad_combat(
     sim: &SimulationConfig,
     urf: &UrfBuffs,
 ) -> CombatOutcome {
-    let mut runner = VladCombatSimulation::new(
+    let mut runner = ControlledChampionCombatSimulation::new(
         vlad_base.clone(),
         vlad_build_items,
         vlad_bonus_stats,
@@ -1710,5 +1951,203 @@ mod tests {
             colinear_disjoint_start,
             colinear_disjoint_end
         ));
+    }
+
+    fn test_controlled_champion_base() -> ChampionBase {
+        ChampionBase {
+            name: "Vladimir".to_string(),
+            base_health: 2000.0,
+            health_per_level: 0.0,
+            base_armor: 45.0,
+            armor_per_level: 0.0,
+            base_magic_resist: 45.0,
+            magic_resist_per_level: 0.0,
+            base_attack_damage: 60.0,
+            attack_damage_per_level: 0.0,
+            base_attack_speed: 0.658,
+            attack_speed_per_level_percent: 0.0,
+            base_move_speed: 335.0,
+            is_melee: false,
+        }
+    }
+
+    fn test_enemy_base(name: &str) -> ChampionBase {
+        ChampionBase {
+            name: name.to_string(),
+            base_health: 2200.0,
+            health_per_level: 0.0,
+            base_armor: 35.0,
+            armor_per_level: 0.0,
+            base_magic_resist: 35.0,
+            magic_resist_per_level: 0.0,
+            base_attack_damage: 80.0,
+            attack_damage_per_level: 0.0,
+            base_attack_speed: 0.70,
+            attack_speed_per_level_percent: 0.0,
+            base_move_speed: 330.0,
+            is_melee: false,
+        }
+    }
+
+    fn test_enemy(name: &str, ability_dps_flat: f64) -> EnemyConfig {
+        EnemyConfig {
+            name: name.to_string(),
+            base: test_enemy_base(name),
+            ability_dps_flat,
+            ability_dps_ad_ratio: 0.0,
+            ability_dps_ap_ratio: 0.0,
+            ability_tick_interval_seconds: 1.0,
+            stun_interval_seconds: 0.0,
+            stun_duration_seconds: 0.0,
+            burst_interval_seconds: 0.0,
+            burst_start_offset_seconds: 0.0,
+            burst_magic_flat: 0.0,
+            burst_physical_flat: 0.0,
+            burst_true_flat: 0.0,
+            burst_ad_ratio: 0.0,
+            burst_ap_ratio: 0.0,
+            uptime_cycle_seconds: 0.0,
+            uptime_active_seconds: 0.0,
+            uptime_phase_seconds: 0.0,
+            loadout_item_names: Vec::new(),
+            loadout_rune_names: Vec::new(),
+            loadout_shards: Vec::new(),
+            loadout_masteries: Vec::new(),
+        }
+    }
+
+    fn test_simulation(max_time_seconds: f64, q_base_damage: f64) -> SimulationConfig {
+        SimulationConfig {
+            dt: 1.0 / 30.0,
+            server_tick_rate_hz: 30.0,
+            champion_level: 20,
+            max_time_seconds,
+            vlad_pool_rank: 5,
+            vlad_pool_untargetable_seconds: 0.0,
+            vlad_pool_cost_percent_current_health: 0.0,
+            vlad_pool_heal_ratio_of_damage: 0.0,
+            vlad_pool_base_damage_by_rank: vec![0.0, 0.0, 0.0, 0.0, 0.0],
+            vlad_pool_bonus_health_ratio: 0.0,
+            zhonya_duration_seconds: 2.5,
+            zhonya_cooldown_seconds: 120.0,
+            zhonya_trigger_health_percent: 0.0,
+            ga_cooldown_seconds: 300.0,
+            ga_revive_duration_seconds: 4.0,
+            ga_revive_base_health_ratio: 0.3,
+            protoplasm_trigger_health_percent: 0.0,
+            protoplasm_bonus_health: 0.0,
+            protoplasm_heal_total: 0.0,
+            protoplasm_duration_seconds: 0.0,
+            heartsteel_assumed_stacks_at_8m: 0.0,
+            enemy_uptime_model_enabled: false,
+            urf_respawn_flat_reduction_seconds: 3.0,
+            urf_respawn_extrapolation_per_level: 2.5,
+            urf_respawn_time_scaling_enabled: true,
+            urf_respawn_time_scaling_start_seconds: 300.0,
+            urf_respawn_time_scaling_per_minute_seconds: 0.4,
+            urf_respawn_time_scaling_cap_seconds: 20.0,
+            vlad_q_base_damage: q_base_damage,
+            vlad_q_ap_ratio: 0.6,
+            vlad_q_heal_ratio_of_damage: 0.0,
+            vlad_q_base_cooldown_seconds: 1.0,
+            vlad_e_base_damage: 0.0,
+            vlad_e_ap_ratio: 0.0,
+            vlad_e_base_cooldown_seconds: 999.0,
+            vlad_r_base_damage: 0.0,
+            vlad_r_ap_ratio: 0.0,
+            vlad_r_base_cooldown_seconds: 999.0,
+        }
+    }
+
+    fn test_urf() -> UrfBuffs {
+        UrfBuffs {
+            ability_haste: 0.0,
+            item_haste: 0.0,
+            health_cost_multiplier: 1.0,
+            bonus_attack_speed_multiplier_melee: 1.0,
+            bonus_attack_speed_multiplier_ranged: 1.0,
+        }
+    }
+
+    #[test]
+    fn controlled_champion_loadout_runtime_increases_spell_damage_when_selected() {
+        let base = test_controlled_champion_base();
+        let enemy = test_enemy("Target Dummy", 0.0);
+        let enemies = vec![(enemy, Vec::new(), Stats::default())];
+        let bonus_stats = Stats {
+            ability_power: 250.0,
+            ..Stats::default()
+        };
+        let sim = test_simulation(4.0, 200.0);
+        let urf = test_urf();
+        let outcome_without_runtime = simulate_controlled_champion_combat(
+            &base,
+            &[],
+            &bonus_stats,
+            None,
+            None,
+            &enemies,
+            &sim,
+            &urf,
+        );
+        let arcane_comet_selection = LoadoutSelection {
+            rune_ids: Vec::new(),
+            rune_names: vec!["Arcane Comet".to_string()],
+            shard_stats: Vec::new(),
+            masteries: Vec::new(),
+        };
+        let outcome_with_runtime = simulate_controlled_champion_combat(
+            &base,
+            &[],
+            &bonus_stats,
+            Some(&arcane_comet_selection),
+            None,
+            &enemies,
+            &sim,
+            &urf,
+        );
+        assert!(outcome_with_runtime.damage_dealt > outcome_without_runtime.damage_dealt);
+    }
+
+    #[test]
+    fn controlled_champion_perseverance_runtime_adds_regeneration_ticks() {
+        let base = test_controlled_champion_base();
+        let enemy = test_enemy("Sona", 120.0);
+        let enemies = vec![(enemy, Vec::new(), Stats::default())];
+        let sim = test_simulation(12.0, 0.0);
+        let urf = test_urf();
+        let outcome_without_runtime = simulate_controlled_champion_combat(
+            &base,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            &enemies,
+            &sim,
+            &urf,
+        );
+        let perseverance_selection = LoadoutSelection {
+            rune_ids: Vec::new(),
+            rune_names: Vec::new(),
+            shard_stats: Vec::new(),
+            masteries: vec![MasterySelection {
+                name: "Perseverance".to_string(),
+                rank: 1,
+            }],
+        };
+        let outcome_with_runtime = simulate_controlled_champion_combat(
+            &base,
+            &[],
+            &Stats::default(),
+            Some(&perseverance_selection),
+            None,
+            &enemies,
+            &sim,
+            &urf,
+        );
+        assert!(outcome_with_runtime.healing_done > outcome_without_runtime.healing_done);
+        assert!(
+            outcome_with_runtime.time_alive_seconds >= outcome_without_runtime.time_alive_seconds
+        );
     }
 }

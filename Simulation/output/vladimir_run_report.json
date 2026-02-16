@@ -62,25 +62,36 @@
     }
   ],
   "champion_level": 20,
+  "controlled_champion_loadout_labels": [
+    "Rune: Grasp of the Undying",
+    "Rune: Conditioning",
+    "Rune: Overgrowth",
+    "Rune: Transcendence",
+    "Rune: Gathering Storm",
+    "Shard 1: ability_haste",
+    "Shard 2: health",
+    "Shard 3: health"
+  ],
+  "controlled_champion_name": "Vladimir",
   "diagnostics": {
     "adaptive_candidates_injected": 0,
     "bleed_candidates_injected": 0,
-    "elapsed_seconds": 2.004568167,
-    "ensemble_seeds": 1,
+    "elapsed_seconds": 2.003260417,
+    "ensemble_seeds": 8,
     "full_cache_hits": 0,
-    "full_cache_misses": 36,
+    "full_cache_misses": 9,
     "full_cache_waits": 0,
-    "full_evaluations": 36,
-    "full_persistent_cache_entries": 288,
-    "full_persistent_cache_hits": 200,
-    "loadout_candidates": 192,
+    "full_evaluations": 9,
+    "full_persistent_cache_entries": 9,
+    "full_persistent_cache_hits": 0,
+    "loadout_candidates": 1200,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.3,
     "objective_healing_weight": 0.15,
     "objective_survival_weight": 0.55,
     "processed_candidates": 0,
     "scenario_count": 1,
-    "search_quality_profile": "fast",
+    "search_quality_profile": "maximum_quality",
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
     "time_budget_seconds": 2.0,
     "timed_out": true,
@@ -393,15 +404,5 @@
     },
     "improvement_percent": 0.0
   },
-  "scenario_path": "Simulation/scenario_vlad_urf.json",
-  "vladimir_loadout_labels": [
-    "Rune: Grasp of the Undying",
-    "Rune: Conditioning",
-    "Rune: Overgrowth",
-    "Rune: Transcendence",
-    "Rune: Gathering Storm",
-    "Shard 1: ability_haste",
-    "Shard 2: health",
-    "Shard 3: health"
-  ]
+  "scenario_path": "Simulation/scenario_vlad_urf.json"
 }

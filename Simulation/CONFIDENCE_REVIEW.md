@@ -3,6 +3,8 @@
 ## High Confidence
 - Core simulation/search pipeline compiles cleanly and passes strict linting and tests.
 - Enemy death and respawn loops are active, with URF-scaled respawn delays.
+- Vladimir combat sequencing decisions are now delegated through script APIs.
+- Enemy champion script-event behavior is now generated in scripts and applied by generic engine action handlers.
 - Enemy temporary combat stacks now clear on death and on respawn:
   - Lethal Tempo stacks
   - Guinsoo stacks
@@ -33,6 +35,6 @@
 4. Do we want a stricter verification mode that compares scripted values against sourced tables and fails on unknown/unsourced constants?
 
 ## Script-Extraction Backlog (From Audit)
-- Vladimir defensive activation logic (Pool + stasis/revive item behavior) is still in `src/engine.rs` and should move into a dedicated Vladimir script module.
-- Vladimir offensive cast cadence scheduling (Q/E/R rotation details) is still in `src/engine.rs` and should move into script-owned rotation logic.
-- Enemy script-event handling switch is still centralized in `src/engine.rs`; champion-specific event effects should move into per-champion script handlers.
+- Vladimir defensive/offensive decisions are script-owned, but the engine still executes some Vladimir effect applications directly after script decisions.
+- Enemy script-event behavior generation is script-owned, but effect application remains in engine as generic actions (intended architectural boundary).
+- Next extraction opportunity: move more effect execution semantics behind script/config interfaces while keeping engine generic.

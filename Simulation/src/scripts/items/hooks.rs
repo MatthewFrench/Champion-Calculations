@@ -1,6 +1,6 @@
 use crate::{Item, Stats};
 
-use super::hooks::{ItemAssumptionContext, ScriptHook, StackNoteContext};
+use crate::scripts::registry::hooks::{ItemAssumptionContext, ScriptHook, StackNoteContext};
 
 pub(crate) struct ItemHook;
 

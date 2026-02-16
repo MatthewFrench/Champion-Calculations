@@ -1,9 +1,11 @@
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 
+use crate::engine::simulate_controlled_champion_combat;
+
 use super::{
     BuildOrderEvalContext, BuildOrderResult, ChampionBase, CombatOutcome, EnemyConfig, Item, Stats,
-    champion_at_level, objective_score_from_outcome, simulate_vlad_combat,
+    champion_at_level, objective_score_from_outcome,
 };
 
 fn build_level_milestones(item_count: usize, start_level: usize, end_level: usize) -> Vec<usize> {
@@ -61,15 +63,17 @@ fn simulate_build_order_stage_outcomes(
         let prefix = &ordered_items[..=idx];
         let prefix_levels = &levels[..=idx];
         let acquired_map = acquisition_level_map(prefix, prefix_levels);
-        let vlad_base_level = champion_at_level(ctx.vlad_base_raw, *level);
+        let controlled_champion_base_level =
+            champion_at_level(ctx.controlled_champion_base_raw, *level);
         let enemy_level_builds =
             level_scaled_enemy_builds(*level, ctx.enemy_builds, ctx.raw_enemy_bases);
         let mut sim_at_level = ctx.sim.clone();
         sim_at_level.champion_level = *level;
-        let outcome = simulate_vlad_combat(
-            &vlad_base_level,
+        let outcome = simulate_controlled_champion_combat(
+            &controlled_champion_base_level,
             prefix,
-            ctx.vlad_bonus_stats,
+            ctx.controlled_champion_bonus_stats,
+            None,
             Some(&acquired_map),
             &enemy_level_builds,
             &sim_at_level,

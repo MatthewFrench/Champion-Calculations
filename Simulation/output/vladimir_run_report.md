@@ -1,6 +1,6 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771206415`
+- Generated (unix): `1771211811`
 - Scenario: `Simulation/scenario_vlad_urf.json`
 
 ## Headline
@@ -16,13 +16,13 @@
 
 ## Search Diagnostics
 - Strategy: `portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)`
-- Search quality profile: `fast`
+- Search quality profile: `maximum_quality`
 - Enemy scenarios: `1`
-- Loadout candidates/finalists: `192/1`
-- Ensemble seeds: `1`
+- Loadout candidates/finalists: `1200/1`
+- Ensemble seeds: `8`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
-- Full evaluations: `36` (cache hits/misses/waits: `0/36/0`)
-- Full persistent cache hits/entries: `200/288`
+- Full evaluations: `9` (cache hits/misses/waits: `0/9/0`)
+- Full persistent cache hits/entries: `0/9`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
@@ -95,7 +95,7 @@
 - Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 175, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 18.4, burst phys/magic/true 90.0/0.0/0.0
 
 ## Diverse Top Builds
-1. `score 1.0000` (+0.0000 vs top): Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass | seed hits: 0/1 (0%) fragile | Pareto-front
+1. `score 1.0000` (+0.0000 vs top): Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass | seed hits: 0/8 (0%) fragile | Pareto-front
    - metrics: EHP~10545.4, AP~290.1, timing score -8405.00, total cost 14800
 
 ## Build Order Optimization

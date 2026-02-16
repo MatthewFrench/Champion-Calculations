@@ -26,9 +26,11 @@ pub(crate) use crate::data::{
     parse_enemy_config, parse_loadout_selection, parse_simulation_config, random_loadout_selection,
     resolve_loadout, simulation_dir, to_norm_key, validate_enemy_urf_presets,
 };
-use crate::engine::{EnemyDerivedCombatStats, VladCombatSimulation, simulate_vlad_combat};
-use crate::scenario_runner::{run_stat_optimization, run_vladimir_scenario, run_vladimir_stepper};
-use crate::scripts::vladimir::{
+use crate::engine::EnemyDerivedCombatStats;
+use crate::scenario_runner::{
+    run_controlled_champion_scenario, run_controlled_champion_stepper, run_stat_optimization,
+};
+use crate::scripts::champions::vladimir::{
     VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
     q_damage_raw, r_damage_raw,
 };
@@ -165,6 +167,10 @@ struct SimulationConfig {
     enemy_uptime_model_enabled: bool,
     urf_respawn_flat_reduction_seconds: f64,
     urf_respawn_extrapolation_per_level: f64,
+    urf_respawn_time_scaling_enabled: bool,
+    urf_respawn_time_scaling_start_seconds: f64,
+    urf_respawn_time_scaling_per_minute_seconds: f64,
+    urf_respawn_time_scaling_cap_seconds: f64,
     vlad_q_base_damage: f64,
     vlad_q_ap_ratio: f64,
     vlad_q_heal_ratio_of_damage: f64,
@@ -323,7 +329,7 @@ type BestLoadoutMap = HashMap<BuildKey, (LoadoutSelection, ResolvedLoadout)>;
 type BestOutcomeMap = HashMap<BuildKey, CombatOutcome>;
 
 struct ObjectiveEvalContext<'a> {
-    vlad_base: &'a ChampionBase,
+    controlled_champion_base: &'a ChampionBase,
     enemy_build_scenarios: &'a [EnemyBuildScenario],
     sim: &'a SimulationConfig,
     urf: &'a UrfBuffs,
@@ -333,8 +339,8 @@ struct ObjectiveEvalContext<'a> {
 }
 
 struct BuildOrderEvalContext<'a> {
-    vlad_base_raw: &'a ChampionBase,
-    vlad_bonus_stats: &'a Stats,
+    controlled_champion_base_raw: &'a ChampionBase,
+    controlled_champion_bonus_stats: &'a Stats,
     enemy_builds: &'a [EnemyBuildEntry],
     raw_enemy_bases: &'a HashMap<String, ChampionBase>,
     sim: &'a SimulationConfig,
@@ -342,13 +348,14 @@ struct BuildOrderEvalContext<'a> {
     objective_weights: ObjectiveComponentWeights,
 }
 
-struct VladimirReportData<'a> {
+struct ControlledChampionReportData<'a> {
     scenario_path: &'a Path,
+    controlled_champion_name: &'a str,
     sim: &'a SimulationConfig,
-    vlad_base_level: &'a ChampionBase,
-    vlad_end_stats: &'a Stats,
+    controlled_champion_base_level: &'a ChampionBase,
+    controlled_champion_end_stats: &'a Stats,
     stack_notes: &'a [String],
-    vladimir_loadout: &'a ResolvedLoadout,
+    controlled_champion_loadout: &'a ResolvedLoadout,
     enemy_loadout: &'a ResolvedLoadout,
     baseline_build: &'a [Item],
     baseline_score: f64,
@@ -419,7 +426,7 @@ enum SearchQualityProfile {
 }
 
 #[derive(Debug, Clone, Copy)]
-struct VladimirRunOptions<'a> {
+struct ControlledChampionRunOptions<'a> {
     top_x: usize,
     min_item_diff: usize,
     max_relative_gap_percent: f64,
@@ -440,9 +447,9 @@ fn main() -> Result<()> {
 
     let scenario_path = PathBuf::from(cli.scenario);
     match cli.mode {
-        Mode::Vladimir => run_vladimir_scenario(
+        Mode::Vladimir => run_controlled_champion_scenario(
             &scenario_path,
-            &VladimirRunOptions {
+            &ControlledChampionRunOptions {
                 top_x: cli.top_x,
                 min_item_diff: cli.min_item_diff,
                 max_relative_gap_percent: cli.max_relative_gap_percent,
@@ -452,7 +459,7 @@ fn main() -> Result<()> {
                 search_quality_profile: cli.search_quality_profile,
             },
         ),
-        Mode::VladimirStep => run_vladimir_stepper(&scenario_path, cli.ticks),
+        Mode::VladimirStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
         }
@@ -521,7 +528,7 @@ mod tests {
             health: 200.0,
             ..Stats::default()
         };
-        let out = compute_vlad_stats(&base, &item_stats);
+        let out = compute_champion_final_stats(&base, &item_stats);
         let expected_ap = 100.0 + 0.033 * 200.0;
         let expected_health = 1000.0 + 200.0 + 1.6 * 100.0;
         assert!((out.ability_power - expected_ap).abs() < 1e-9);
@@ -589,13 +596,41 @@ mod tests {
 
     #[test]
     fn urf_respawn_timer_scales_with_level() {
+        let tuning = respawn::UrfRespawnTuning {
+            urf_flat_reduction_seconds: 3.0,
+            extrapolation_per_level: 2.5,
+            time_scaling_enabled: true,
+            time_scaling_start_seconds: 300.0,
+            time_scaling_per_minute_seconds: 0.4,
+            time_scaling_cap_seconds: 20.0,
+        };
         let mut prev = 0.0;
         for lvl in 1..=30 {
-            let t = respawn::urf_respawn_delay_seconds(lvl, 3.0, 2.5);
+            let t = respawn::urf_respawn_delay_seconds(lvl, 600.0, tuning);
             assert!(t >= 1.0);
             assert!(t >= prev);
             prev = t;
         }
-        assert!((respawn::urf_respawn_delay_seconds(1, 3.0, 2.5) - 7.0).abs() < 1e-9);
+        let no_scale_tuning = respawn::UrfRespawnTuning {
+            time_scaling_enabled: false,
+            ..tuning
+        };
+        assert!((respawn::urf_respawn_delay_seconds(1, 0.0, no_scale_tuning) - 7.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn urf_respawn_timer_increases_with_game_time_after_scaling_start() {
+        let tuning = respawn::UrfRespawnTuning {
+            urf_flat_reduction_seconds: 3.0,
+            extrapolation_per_level: 2.5,
+            time_scaling_enabled: true,
+            time_scaling_start_seconds: 300.0,
+            time_scaling_per_minute_seconds: 0.4,
+            time_scaling_cap_seconds: 20.0,
+        };
+        let level = 16;
+        let before = respawn::urf_respawn_delay_seconds(level, 240.0, tuning);
+        let after = respawn::urf_respawn_delay_seconds(level, 1200.0, tuning);
+        assert!(after > before);
     }
 }

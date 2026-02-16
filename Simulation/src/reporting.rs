@@ -7,28 +7,34 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::search::item_names;
 
-use super::{VladimirReportData, mean_std, simulation_dir, to_norm_key};
+use super::{ControlledChampionReportData, mean_std, simulation_dir, to_norm_key};
 
-pub(super) fn default_report_path() -> PathBuf {
+pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
     simulation_dir()
         .join("output")
-        .join("vladimir_run_report.md")
+        .join(format!("{}_run_report.md", to_norm_key(champion_name)))
 }
 
-pub(super) fn write_vladimir_report_markdown(
+#[allow(dead_code)]
+pub(super) fn default_report_path() -> PathBuf {
+    default_report_path_for_champion("Vladimir")
+}
+
+pub(super) fn write_controlled_champion_report_markdown(
     report_path: &Path,
-    data: &VladimirReportData<'_>,
+    data: &ControlledChampionReportData<'_>,
 ) -> Result<()> {
     if let Some(parent) = report_path.parent() {
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
     let scenario_path = data.scenario_path;
+    let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
-    let vlad_base_level = data.vlad_base_level;
-    let vlad_end_stats = data.vlad_end_stats;
+    let controlled_champion_base_level = data.controlled_champion_base_level;
+    let controlled_champion_end_stats = data.controlled_champion_end_stats;
     let stack_notes = data.stack_notes;
-    let vlad_loadout = data.vladimir_loadout;
+    let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_loadout = data.enemy_loadout;
     let baseline_build = data.baseline_build;
     let baseline_score = data.baseline_score;
@@ -59,7 +65,10 @@ pub(super) fn write_vladimir_report_markdown(
     };
 
     let mut content = String::new();
-    content.push_str("# Vladimir URF Run Report\n\n");
+    content.push_str(&format!(
+        "# {} URF Run Report\n\n",
+        controlled_champion_name
+    ));
     content.push_str(&format!("- Generated (unix): `{}`\n", now));
     content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
 
@@ -129,23 +138,26 @@ pub(super) fn write_vladimir_report_markdown(
         ));
     }
 
-    content.push_str("## Vladimir Base Stats At Level\n");
+    content.push_str(&format!(
+        "## {} Base Stats At Level\n",
+        controlled_champion_name
+    ));
     content.push_str(&format!(
         "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AD: {:.1}, AS: {:.3}, MS: {:.1}\n\n",
-        vlad_base_level.base_health,
-        vlad_base_level.base_armor,
-        vlad_base_level.base_magic_resist,
-        vlad_base_level.base_attack_damage,
-        vlad_base_level.base_attack_speed,
-        vlad_base_level.base_move_speed
+        controlled_champion_base_level.base_health,
+        controlled_champion_base_level.base_armor,
+        controlled_champion_base_level.base_magic_resist,
+        controlled_champion_base_level.base_attack_damage,
+        controlled_champion_base_level.base_attack_speed,
+        controlled_champion_base_level.base_move_speed
     ));
 
     content.push_str("## Selected Runes/Masteries\n");
-    if vlad_loadout.selection_labels.is_empty() {
-        content.push_str("- Vladimir: none selected.\n");
+    if controlled_champion_loadout.selection_labels.is_empty() {
+        content.push_str(&format!("- {}: none selected.\n", controlled_champion_name));
     } else {
-        content.push_str("- Vladimir:\n");
-        for s in &vlad_loadout.selection_labels {
+        content.push_str(&format!("- {}:\n", controlled_champion_name));
+        for s in &controlled_champion_loadout.selection_labels {
             content.push_str(&format!("  - {}\n", s));
         }
     }
@@ -158,19 +170,23 @@ pub(super) fn write_vladimir_report_markdown(
         }
         content.push('\n');
     }
-    if !vlad_loadout.applied_notes.is_empty() || !enemy_loadout.applied_notes.is_empty() {
+    if !controlled_champion_loadout.applied_notes.is_empty()
+        || !enemy_loadout.applied_notes.is_empty()
+    {
         content.push_str("- Applied deterministic loadout effects:\n");
-        for note in &vlad_loadout.applied_notes {
-            content.push_str(&format!("  - Vladimir: {}\n", note));
+        for note in &controlled_champion_loadout.applied_notes {
+            content.push_str(&format!("  - {}: {}\n", controlled_champion_name, note));
         }
         for note in &enemy_loadout.applied_notes {
             content.push_str(&format!("  - Enemies: {}\n", note));
         }
     }
-    if !vlad_loadout.skipped_notes.is_empty() || !enemy_loadout.skipped_notes.is_empty() {
+    if !controlled_champion_loadout.skipped_notes.is_empty()
+        || !enemy_loadout.skipped_notes.is_empty()
+    {
         content.push_str("- Skipped unsupported/non-deterministic effects:\n");
-        for note in &vlad_loadout.skipped_notes {
-            content.push_str(&format!("  - Vladimir: {}\n", note));
+        for note in &controlled_champion_loadout.skipped_notes {
+            content.push_str(&format!("  - {}: {}\n", controlled_champion_name, note));
         }
         for note in &enemy_loadout.skipped_notes {
             content.push_str(&format!("  - Enemies: {}\n", note));
@@ -184,17 +200,20 @@ pub(super) fn write_vladimir_report_markdown(
     content.push_str("## Best Build\n");
     content.push_str(&format!("- {}\n\n", item_names(best_build)));
 
-    content.push_str("## Vladimir End Stats (Best Build)\n");
+    content.push_str(&format!(
+        "## {} End Stats (Best Build)\n",
+        controlled_champion_name
+    ));
     content.push_str(&format!(
         "- HP: {:.1}, Armor: {:.1}, MR: {:.1}, AP: {:.1}, AD: {:.1}, Ability Haste: {:.1}, Move Speed (flat bonus): {:.1}, Move Speed (% bonus): {:.1}\n\n",
-        vlad_end_stats.health,
-        vlad_end_stats.armor,
-        vlad_end_stats.magic_resist,
-        vlad_end_stats.ability_power,
-        vlad_end_stats.attack_damage,
-        vlad_end_stats.ability_haste,
-        vlad_end_stats.move_speed_flat,
-        vlad_end_stats.move_speed_percent
+        controlled_champion_end_stats.health,
+        controlled_champion_end_stats.armor,
+        controlled_champion_end_stats.magic_resist,
+        controlled_champion_end_stats.ability_power,
+        controlled_champion_end_stats.attack_damage,
+        controlled_champion_end_stats.ability_haste,
+        controlled_champion_end_stats.move_speed_flat,
+        controlled_champion_end_stats.move_speed_percent
     ));
 
     content.push_str("## Stack Assumptions\n");
@@ -381,15 +400,16 @@ pub(super) fn write_vladimir_report_markdown(
     Ok(())
 }
 
-pub(super) fn write_vladimir_report_json(
+pub(super) fn write_controlled_champion_report_json(
     report_path: &Path,
-    data: &VladimirReportData<'_>,
+    data: &ControlledChampionReportData<'_>,
 ) -> Result<()> {
     if let Some(parent) = report_path.parent() {
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
     let scenario_path = data.scenario_path;
+    let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
     let baseline_build = data.baseline_build;
     let baseline_score = data.baseline_score;
@@ -397,7 +417,7 @@ pub(super) fn write_vladimir_report_json(
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
-    let vladimir_loadout = data.vladimir_loadout;
+    let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
     let enemy_similarity_notes = data.enemy_similarity_notes;
@@ -413,6 +433,7 @@ pub(super) fn write_vladimir_report_json(
     };
     let json_value = json!({
         "scenario_path": scenario_path.display().to_string(),
+        "controlled_champion_name": controlled_champion_name,
         "champion_level": sim.champion_level,
         "headline": {
             "baseline_objective_score": baseline_score,
@@ -435,7 +456,7 @@ pub(super) fn write_vladimir_report_json(
         },
         "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
-        "vladimir_loadout_labels": vladimir_loadout.selection_labels,
+        "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
         "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {
             let key = to_norm_key(&enemy.name);
             let preset = enemy_presets_used.get(&key);
@@ -516,4 +537,16 @@ pub(super) fn write_vladimir_report_json(
     fs::write(report_path, serde_json::to_string_pretty(&json_value)?)
         .with_context(|| format!("Failed writing JSON report {}", report_path.display()))?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn report_path_uses_normalized_champion_key() {
+        let path = default_report_path_for_champion("Dr. Mundo");
+        let path_text = path.to_string_lossy();
+        assert!(path_text.ends_with("output/drmundo_run_report.md"));
+    }
 }

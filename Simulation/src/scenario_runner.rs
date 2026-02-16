@@ -12,9 +12,13 @@ use std::time::{Duration, Instant};
 
 use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
-use crate::engine::{EnemyDerivedCombatStats, derive_enemy_combat_stats};
+use crate::engine::{
+    ControlledChampionCombatSimulation, EnemyDerivedCombatStats, derive_enemy_combat_stats,
+    simulate_controlled_champion_combat,
+};
 use crate::reporting::{
-    default_report_path, write_vladimir_report_json, write_vladimir_report_markdown,
+    default_report_path_for_champion, write_controlled_champion_report_json,
+    write_controlled_champion_report_markdown,
 };
 use crate::search::{
     adaptive_strategy_candidates, build_search_ranked, choose_best_build_by_stat,
@@ -26,9 +30,19 @@ use crate::status::{StatusReporter, deadline_reached};
 
 use super::*;
 
-pub(super) fn run_vladimir_scenario(
+fn scenario_value_with_legacy_alias<'a>(
+    scenario: &'a Value,
+    generic_key: &str,
+    legacy_key: &str,
+) -> Option<&'a Value> {
+    scenario
+        .get(generic_key)
+        .or_else(|| scenario.get(legacy_key))
+}
+
+pub(super) fn run_controlled_champion_scenario(
     scenario_path: &Path,
-    options: &VladimirRunOptions<'_>,
+    options: &ControlledChampionRunOptions<'_>,
 ) -> Result<()> {
     let top_x = options.top_x;
     let min_item_diff = options.min_item_diff;
@@ -62,17 +76,27 @@ pub(super) fn run_vladimir_scenario(
         timeout_flag.store(1, AtomicOrdering::Relaxed);
     }
 
-    let vlad_base_raw =
-        if let Some(champion) = scenario.get("vladimir_champion").and_then(Value::as_str) {
-            lookup_champion_base(&champion_bases, champion)?
-        } else {
-            parse_champion_base(
-                scenario
-                    .get("vladimir_base")
-                    .ok_or_else(|| anyhow!("Missing vladimir_champion/vladimir_base"))?,
+    let vlad_base_raw = if let Some(champion) =
+        scenario_value_with_legacy_alias(&scenario, "controlled_champion", "vladimir_champion")
+            .and_then(Value::as_str)
+    {
+        lookup_champion_base(&champion_bases, champion)?
+    } else {
+        parse_champion_base(
+                scenario_value_with_legacy_alias(
+                    &scenario,
+                    "controlled_champion_base",
+                    "vladimir_base",
+                )
+                .ok_or_else(|| {
+                    anyhow!(
+                        "Missing controlled_champion/controlled_champion_base (legacy: vladimir_champion/vladimir_base)"
+                    )
+                })?,
             )?
-        };
+    };
     let vlad_base = champion_at_level(&vlad_base_raw, sim.champion_level);
+    let controlled_champion_name = vlad_base_raw.name.clone();
 
     let mut enemy_scenarios_raw: Vec<(String, f64, Vec<EnemyConfig>)> = Vec::new();
     if let Some(groups) = scenario.get("enemy_scenarios").and_then(Value::as_array) {
@@ -133,7 +157,11 @@ pub(super) fn run_vladimir_scenario(
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
     apply_search_quality_profile(&mut search_cfg, search_quality_profile);
-    let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
+    let vlad_loadout_selection = parse_loadout_selection(scenario_value_with_legacy_alias(
+        &scenario,
+        "controlled_champion_loadout",
+        "vladimir_loadout",
+    ));
     let loadout_domain = Arc::new(build_loadout_domain());
     let loadout_eval_budget = loadout_eval_budget(&search_cfg, search_quality_profile);
     let enemy_presets = load_enemy_urf_presets()?;
@@ -148,16 +176,21 @@ pub(super) fn run_vladimir_scenario(
         true,
     );
 
-    let baseline_fixed_names = scenario
-        .get("vladimir_baseline_fixed")
-        .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing vladimir_baseline_fixed"))?
-        .iter()
-        .map(|v| v.as_str().ok_or_else(|| anyhow!("Invalid baseline item")))
-        .collect::<Result<Vec<_>>>()?
-        .into_iter()
-        .map(|s| s.to_string())
-        .collect::<Vec<_>>();
+    let baseline_fixed_names = scenario_value_with_legacy_alias(
+        &scenario,
+        "controlled_champion_baseline_fixed",
+        "vladimir_baseline_fixed",
+    )
+    .and_then(Value::as_array)
+    .ok_or_else(|| {
+        anyhow!("Missing controlled_champion_baseline_fixed (legacy: vladimir_baseline_fixed)")
+    })?
+    .iter()
+    .map(|v| v.as_str().ok_or_else(|| anyhow!("Invalid baseline item")))
+    .collect::<Result<Vec<_>>>()?
+    .into_iter()
+    .map(|s| s.to_string())
+    .collect::<Vec<_>>();
 
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
@@ -236,10 +269,11 @@ pub(super) fn run_vladimir_scenario(
     let scenario_reference_outcomes = enemy_build_scenarios
         .iter()
         .map(|(_, _, enemy_builds_s)| {
-            simulate_vlad_combat(
+            simulate_controlled_champion_combat(
                 &vlad_base,
                 &baseline_fixed_build,
                 &vlad_base_loadout.bonus_stats,
+                Some(&vlad_loadout_selection),
                 None,
                 enemy_builds_s,
                 &sim,
@@ -248,7 +282,7 @@ pub(super) fn run_vladimir_scenario(
         })
         .collect::<Vec<_>>();
     let objective_eval_ctx = ObjectiveEvalContext {
-        vlad_base: &vlad_base,
+        controlled_champion_base: &vlad_base,
         enemy_build_scenarios: &enemy_build_scenarios,
         sim: &sim,
         urf: &urf,
@@ -256,12 +290,23 @@ pub(super) fn run_vladimir_scenario(
         weights: objective_component_weights,
         worst_case_weight: objective_worst_case_weight,
     };
-    let evaluate_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
-        aggregate_objective_score_and_outcome(&objective_eval_ctx, build_items, bonus_stats)
-    };
-    let score_build_with_bonus = |build_items: &[Item], bonus_stats: &Stats| {
-        evaluate_build_with_bonus(build_items, bonus_stats).0
-    };
+    let evaluate_build_with_bonus =
+        |build_items: &[Item],
+         bonus_stats: &Stats,
+         loadout_selection: Option<&LoadoutSelection>| {
+            aggregate_objective_score_and_outcome_with_loadout_selection(
+                &objective_eval_ctx,
+                build_items,
+                bonus_stats,
+                loadout_selection,
+            )
+        };
+    let score_build_with_bonus =
+        |build_items: &[Item],
+         bonus_stats: &Stats,
+         loadout_selection: Option<&LoadoutSelection>| {
+            evaluate_build_with_bonus(build_items, bonus_stats, loadout_selection).0
+        };
 
     let loadout_candidates_count = loadout_eval_budget;
     let loadout_finalists_count = 1usize;
@@ -274,7 +319,7 @@ pub(super) fn run_vladimir_scenario(
         let mut best_sel = vlad_loadout_selection.clone();
         let mut best_resolved = vlad_base_loadout.clone();
         let (mut best_score, mut best_outcome) =
-            evaluate_build_with_bonus(build_items, &best_resolved.bonus_stats);
+            evaluate_build_with_bonus(build_items, &best_resolved.bonus_stats, Some(&best_sel));
         seen.insert(loadout_selection_key(&best_sel));
 
         let mut evaluated = 0usize;
@@ -308,7 +353,8 @@ pub(super) fn run_vladimir_scenario(
             let Some(resolved) = resolved else {
                 continue;
             };
-            let (score, outcome) = evaluate_build_with_bonus(build_items, &resolved.bonus_stats);
+            let (score, outcome) =
+                evaluate_build_with_bonus(build_items, &resolved.bonus_stats, Some(&candidate));
             if score > best_score {
                 best_score = score;
                 best_sel = candidate;
@@ -328,7 +374,8 @@ pub(super) fn run_vladimir_scenario(
     search_cfg.seed.hash(&mut scenario_hasher);
     loadout_eval_budget.hash(&mut scenario_hasher);
     let persistent_full_cache_path = simulation_dir().join("output").join("cache").join(format!(
-        "vladimir_full_scores_{:016x}.json",
+        "{}_full_scores_{:016x}.json",
+        to_norm_key(&controlled_champion_name),
         scenario_hasher.finish()
     ));
     let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
@@ -544,8 +591,11 @@ pub(super) fn run_vladimir_scenario(
                 .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
                 .collect::<Vec<_>>(),
         );
-        let baseline_score =
-            score_build_with_bonus(&baseline_fixed_build, &vlad_base_loadout.bonus_stats);
+        let baseline_score = score_build_with_bonus(
+            &baseline_fixed_build,
+            &vlad_base_loadout.bonus_stats,
+            Some(&vlad_loadout_selection),
+        );
         strict_scores.insert(baseline_key, baseline_score);
     }
 
@@ -614,39 +664,43 @@ pub(super) fn run_vladimir_scenario(
         .map(|(build, _)| build.clone())
         .unwrap_or_default();
     let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
-    let vlad_loadout = best_loadout_by_item
+    let (vlad_runtime_loadout_selection, vlad_loadout) = best_loadout_by_item
         .lock()
         .ok()
         .and_then(|m| m.get(&vlad_best_indices).cloned())
-        .map(|(_, resolved)| resolved)
-        .unwrap_or_else(|| vlad_base_loadout.clone());
+        .unwrap_or_else(|| (vlad_loadout_selection.clone(), vlad_base_loadout.clone()));
 
     let baseline_fixed_indices = baseline_fixed_build
         .iter()
         .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
         .collect::<Vec<_>>();
     let baseline_fixed_score = if deadline_reached(deadline) {
-        score_build_with_bonus(&baseline_fixed_build, &vlad_base_loadout.bonus_stats)
+        score_build_with_bonus(
+            &baseline_fixed_build,
+            &vlad_base_loadout.bonus_stats,
+            Some(&vlad_loadout_selection),
+        )
     } else {
         full_score_fn(&baseline_fixed_indices)
     };
     let baseline_fixed_key = canonical_key(&baseline_fixed_indices);
-    let baseline_loadout = best_loadout_by_item
+    let (baseline_runtime_loadout_selection, baseline_loadout) = best_loadout_by_item
         .lock()
         .ok()
         .and_then(|m| m.get(&baseline_fixed_key).cloned())
-        .map(|(_, resolved)| resolved)
-        .unwrap_or_else(|| vlad_base_loadout.clone());
-    let (_, baseline_fixed_outcome) = aggregate_objective_score_and_outcome(
+        .unwrap_or_else(|| (vlad_loadout_selection.clone(), vlad_base_loadout.clone()));
+    let (_, baseline_fixed_outcome) = aggregate_objective_score_and_outcome_with_loadout_selection(
         &objective_eval_ctx,
         &baseline_fixed_build,
         &baseline_loadout.bonus_stats,
+        Some(&baseline_runtime_loadout_selection),
     );
     let vlad_best_score = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
-    let (_, vlad_best_outcome) = aggregate_objective_score_and_outcome(
+    let (_, vlad_best_outcome) = aggregate_objective_score_and_outcome_with_loadout_selection(
         &objective_eval_ctx,
         &vlad_best_build,
         &vlad_loadout.bonus_stats,
+        Some(&vlad_runtime_loadout_selection),
     );
     let baseline_cap_survivor =
         baseline_fixed_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
@@ -695,7 +749,7 @@ pub(super) fn run_vladimir_scenario(
         println!("- Warning: {}", note);
     }
 
-    println!("\nVladimir baseline build (fixed):");
+    println!("\n{} baseline build (fixed):", controlled_champion_name);
     println!(
         "- Items: {}",
         baseline_fixed_build
@@ -714,7 +768,10 @@ pub(super) fn run_vladimir_scenario(
     );
     println!("- Cap survivor: {}", baseline_cap_survivor);
 
-    println!("\nVladimir best build (optimized for objective):");
+    println!(
+        "\n{} best build (optimized for objective):",
+        controlled_champion_name
+    );
     println!(
         "- Search strategy: {}",
         search_strategy_summary(&search_cfg)
@@ -782,7 +839,7 @@ pub(super) fn run_vladimir_scenario(
     );
     println!("- Cap survivor: {}", best_cap_survivor);
     if !vlad_loadout.selection_labels.is_empty() {
-        println!("\nVladimir runes/masteries:");
+        println!("\n{} runes/masteries:", controlled_champion_name);
         for s in &vlad_loadout.selection_labels {
             println!("- {}", s);
         }
@@ -896,8 +953,8 @@ pub(super) fn run_vladimir_scenario(
             .collect::<Vec<_>>();
     }
     let build_order_ctx = BuildOrderEvalContext {
-        vlad_base_raw: &vlad_base_raw,
-        vlad_bonus_stats: &vlad_loadout.bonus_stats,
+        controlled_champion_base_raw: &vlad_base_raw,
+        controlled_champion_bonus_stats: &vlad_loadout.bonus_stats,
         enemy_builds: &enemy_builds,
         raw_enemy_bases: &raw_enemy_bases,
         sim: &sim,
@@ -920,7 +977,7 @@ pub(super) fn run_vladimir_scenario(
         sim.champion_level,
         best_order_acquired_map.as_ref(),
     );
-    let vlad_end_stats = compute_vlad_stats(&vlad_base, &best_effective_item_stats);
+    let vlad_end_stats = compute_champion_final_stats(&vlad_base, &best_effective_item_stats);
     let stack_notes = build_stack_notes(
         &vlad_best_build,
         &vlad_base,
@@ -977,14 +1034,15 @@ pub(super) fn run_vladimir_scenario(
 
     let report_path = report_path_override
         .map(PathBuf::from)
-        .unwrap_or_else(default_report_path);
-    let report_data = VladimirReportData {
+        .unwrap_or_else(|| default_report_path_for_champion(&controlled_champion_name));
+    let report_data = ControlledChampionReportData {
         scenario_path,
+        controlled_champion_name: &controlled_champion_name,
         sim: &sim,
-        vlad_base_level: &vlad_base,
-        vlad_end_stats: &vlad_end_stats,
+        controlled_champion_base_level: &vlad_base,
+        controlled_champion_end_stats: &vlad_end_stats,
         stack_notes: &stack_notes,
-        vladimir_loadout: &vlad_loadout,
+        controlled_champion_loadout: &vlad_loadout,
         enemy_loadout: &enemy_loadout,
         baseline_build: &baseline_fixed_build,
         baseline_score: baseline_fixed_score,
@@ -1004,44 +1062,51 @@ pub(super) fn run_vladimir_scenario(
         diagnostics: &diagnostics,
         build_orders: &build_order_results,
     };
-    write_vladimir_report_markdown(&report_path, &report_data)?;
+    write_controlled_champion_report_markdown(&report_path, &report_data)?;
     let json_report_path = report_path.with_extension("json");
-    write_vladimir_report_json(&json_report_path, &report_data)?;
+    write_controlled_champion_report_json(&json_report_path, &report_data)?;
 
     // Optional deterministic replay-style timeline for baseline and best runs.
     let trace_markdown_path = report_path
         .parent()
         .unwrap_or_else(|| Path::new("."))
-        .join("vladimir_event_trace.md");
+        .join(format!(
+            "{}_event_trace.md",
+            to_norm_key(&controlled_champion_name)
+        ));
     let trace_json_path = trace_markdown_path.with_extension("json");
-    let mut baseline_trace_sim = VladCombatSimulation::new(
-        vlad_base.clone(),
-        &baseline_fixed_build,
-        &vlad_loadout.bonus_stats,
-        None,
-        &enemy_builds,
-        sim.clone(),
-        urf.clone(),
-    );
+    let mut baseline_trace_sim =
+        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+            vlad_base.clone(),
+            &baseline_fixed_build,
+            &vlad_loadout.bonus_stats,
+            Some(&baseline_runtime_loadout_selection),
+            None,
+            &enemy_builds,
+            sim.clone(),
+            urf.clone(),
+        );
     baseline_trace_sim.enable_trace();
     while baseline_trace_sim.step(1) {}
     let baseline_trace = baseline_trace_sim.trace_events().to_vec();
 
-    let mut best_trace_sim = VladCombatSimulation::new(
-        vlad_base.clone(),
-        &vlad_best_build,
-        &vlad_loadout.bonus_stats,
-        best_order_acquired_map.as_ref(),
-        &enemy_builds,
-        sim.clone(),
-        urf.clone(),
-    );
+    let mut best_trace_sim =
+        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+            vlad_base.clone(),
+            &vlad_best_build,
+            &vlad_loadout.bonus_stats,
+            Some(&vlad_runtime_loadout_selection),
+            best_order_acquired_map.as_ref(),
+            &enemy_builds,
+            sim.clone(),
+            urf.clone(),
+        );
     best_trace_sim.enable_trace();
     while best_trace_sim.step(1) {}
     let best_trace = best_trace_sim.trace_events().to_vec();
 
     let mut trace_md = String::new();
-    trace_md.push_str("# Vladimir Event Trace\n\n");
+    trace_md.push_str(&format!("# {} Event Trace\n\n", controlled_champion_name));
     trace_md.push_str("## Baseline Build Trace\n");
     for line in &baseline_trace {
         trace_md.push_str("- ");
@@ -1078,7 +1143,7 @@ pub(super) fn run_vladimir_scenario(
     Ok(())
 }
 
-pub(super) fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
+pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize) -> Result<()> {
     let items = load_items()?;
     let urf = load_urf_buffs()?;
     let champion_bases = load_champion_bases()?;
@@ -1089,16 +1154,25 @@ pub(super) fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    let vlad_base_raw =
-        if let Some(champion) = scenario.get("vladimir_champion").and_then(Value::as_str) {
-            lookup_champion_base(&champion_bases, champion)?
-        } else {
-            parse_champion_base(
-                scenario
-                    .get("vladimir_base")
-                    .ok_or_else(|| anyhow!("Missing vladimir_champion/vladimir_base"))?,
+    let vlad_base_raw = if let Some(champion) =
+        scenario_value_with_legacy_alias(&scenario, "controlled_champion", "vladimir_champion")
+            .and_then(Value::as_str)
+    {
+        lookup_champion_base(&champion_bases, champion)?
+    } else {
+        parse_champion_base(
+                scenario_value_with_legacy_alias(
+                    &scenario,
+                    "controlled_champion_base",
+                    "vladimir_base",
+                )
+                .ok_or_else(|| {
+                    anyhow!(
+                        "Missing controlled_champion/controlled_champion_base (legacy: vladimir_champion/vladimir_base)"
+                    )
+                })?,
             )?
-        };
+    };
     let vlad_base = champion_at_level(&vlad_base_raw, sim_cfg.champion_level);
 
     let enemies_raw = scenario
@@ -1116,7 +1190,11 @@ pub(super) fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result
         })
         .collect::<Vec<_>>();
 
-    let vlad_loadout_selection = parse_loadout_selection(scenario.get("vladimir_loadout"));
+    let vlad_loadout_selection = parse_loadout_selection(scenario_value_with_legacy_alias(
+        &scenario,
+        "controlled_champion_loadout",
+        "vladimir_loadout",
+    ));
     let enemy_loadout_selection = parse_loadout_selection(scenario.get("enemy_loadout"));
     let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim_cfg.champion_level, true)?;
     let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim_cfg.champion_level, false)?;
@@ -1150,22 +1228,28 @@ pub(super) fn run_vladimir_stepper(scenario_path: &Path, ticks: usize) -> Result
         enemy_builds.push((enemy_with_loadout, build, bonus_stats));
     }
 
-    let baseline_fixed_names = scenario
-        .get("vladimir_baseline_fixed")
-        .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing vladimir_baseline_fixed"))?
-        .iter()
-        .map(|v| v.as_str().ok_or_else(|| anyhow!("Invalid baseline item")))
-        .collect::<Result<Vec<_>>>()?
-        .into_iter()
-        .map(|s| s.to_string())
-        .collect::<Vec<_>>();
+    let baseline_fixed_names = scenario_value_with_legacy_alias(
+        &scenario,
+        "controlled_champion_baseline_fixed",
+        "vladimir_baseline_fixed",
+    )
+    .and_then(Value::as_array)
+    .ok_or_else(|| {
+        anyhow!("Missing controlled_champion_baseline_fixed (legacy: vladimir_baseline_fixed)")
+    })?
+    .iter()
+    .map(|v| v.as_str().ok_or_else(|| anyhow!("Invalid baseline item")))
+    .collect::<Result<Vec<_>>>()?
+    .into_iter()
+    .map(|s| s.to_string())
+    .collect::<Vec<_>>();
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
-    let mut sim = VladCombatSimulation::new(
+    let mut sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
         vlad_base,
         &baseline_fixed_build,
         &vlad_loadout.bonus_stats,
+        Some(&vlad_loadout_selection),
         None,
         &enemy_builds,
         sim_cfg.clone(),

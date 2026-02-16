@@ -5,7 +5,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
 - Combat now runs with 2D positions (Vladimir fixed at origin, enemies spawned in range bands and standing still).
-- Fixed-timestep stepping via `VladCombatSimulation.step()` at `server_tick_rate_hz`.
+- Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz` (legacy `VladCombatSimulation` alias remains available).
 - URF global buffs (ability/item haste, health cost multiplier, attack speed multipliers) are applied.
 - Enemy auto-attacks use start, windup, and hit phases.
 - Ranged attacks/spells include projectile travel time based on distance and speed.
@@ -17,6 +17,13 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - Enemy scripted ability timelines are lifecycle-safe across death/respawn and uptime-window transitions.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
+- Controlled champion loadout runtime scripts are now applied during combat-time spell hits, kill events, and regeneration ticks.
+- Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).
+- Vladimir combat sequencing decisions are script-owned and delegated from engine.
+- Enemy champion script events are generated in scripts and applied by generic engine action handling.
+- Foundational combat primitives are present for future fidelity work:
+  - generic status effects (duration/stacks/persistence)
+  - generic cast-lock windows (windup/channel/lockout)
 - Scripted enemy behavior profiles are included for:
   - Warwick
   - Vayne
@@ -37,6 +44,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
   - damage dealt to enemies
   - healing done
   with configurable weights and per-scenario baseline normalization.
+- Objective evaluation now supports selection-aware combat simulation so candidate loadout scoring includes combat-time runtime scripts.
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
@@ -44,7 +52,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
-- `src/core.rs`: Shared simulation math/helpers (objective scoring, stat transforms, build/random utilities).
+- `src/core.rs`: Shared simulation math/helpers plus foundational generic combat primitives (status/cast-lock scaffolding).
 - `src/data.rs`: Scenario/data loading, config parsing, loadout legality generation, and enemy preset validation.
 - `src/engine.rs`: Fixed-tick combat engine and event-queue simulation loop.
 - `src/build_order.rs`: Build-order stage simulation and optimization.
@@ -54,11 +62,15 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
-- `src/scripts/vladimir.rs`: Vladimir scripted ability formulas/cooldowns and champion-specific hooks.
-- `src/scripts/enemies.rs`: Enemy champion behavior profiles and attack on-hit scripting.
-- `src/scripts/hooks.rs`: Script hook interfaces and dispatch points.
-- `src/scripts/item_hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
-- `src/scripts/loadout_hooks.rs`: Loadout/rune/mastery script notes and extension point.
+- `src/scripts/champions/vladimir.rs`: Vladimir scripted formulas and combat decision APIs (offense/defense/GA trigger).
+- `src/scripts/champions/enemies/mod.rs`: Enemy champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
+- `src/scripts/champions/enemies/*.rs`: Per-champion enemy behavior/event logic modules.
+- `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
+- `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
+- `src/scripts/masteries/effects.rs`: Mastery runtime flag parsing and dynamic-runtime classification.
+- `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion runtime effects and loadout hook implementation.
+- `src/scripts/runtime/loadout_runtime.rs`: Shared combat-time loadout runtime state and effect helpers.
+- `src/scripts/registry/hooks.rs`: Script hook interfaces, contexts, and dispatch registry.
 
 ## Run
 ```bash
@@ -67,14 +79,20 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   --scenario "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenario_vlad_urf.json" \
   --mode vladimir
 ```
-- `vladimir` mode now also writes a markdown report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vladimir_run_report.md`.
-- `vladimir` mode also writes a structured JSON report to `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/vladimir_run_report.json`.
+- `vladimir` mode writes a markdown report to:
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_run_report.md`
+- `vladimir` mode writes a structured JSON report to:
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_run_report.json`
+  where `<controlled_champion_key>` is the normalized champion name (for example: `vladimir`).
 - Report includes:
   - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
   - Vladimir end stats for best build
   - Stack assumptions/notes for stack-based items in the best build
   - Enemy derived combat profiles (HP/AD/AS/range/hit/burst stats) with similarity warnings for suspiciously close auto profiles
   - If run with a time budget, report includes timeout/progress metadata
+- Trace outputs are also champion-keyed:
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_event_trace.md`
+  - `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/output/<controlled_champion_key>_event_trace.json`
 
 ## Runtime Controls
 - `--max-runtime-seconds N`:
@@ -157,6 +175,50 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 ## Extensibility
 - Champion/item mechanics should be added in dedicated modules (for example under `src/scripts/`) rather than growing `main.rs`.
 - Scenario JSON should stay minimal and reference canonical data from `Characters`, `Items`, and `Game Mode`.
+- Architecture direction:
+  - shared simulation/core/search/reporting modules should remain champion-agnostic.
+  - champion and loadout specifics should be delegated through script interfaces.
+  - avoid abbreviations in new names and user-facing output.
+
+## Current Script Structure
+The simulator now uses a domain-first script layout to keep champion/item/rune/mastery behavior organized:
+
+```text
+src/scripts/
+  champions/
+    mod.rs
+    vladimir.rs
+    vladimir/
+      abilities.rs
+      decisions.rs
+      hook.rs
+    enemies/
+      mod.rs
+      warwick.rs
+      vayne.rs
+      morgana.rs
+      sona.rs
+      doctor_mundo.rs
+      yasuo.rs
+  items/
+    mod.rs
+    hooks.rs
+  runes/
+    mod.rs
+    effects.rs
+  masteries/
+    mod.rs
+    effects.rs
+  runtime/
+    mod.rs
+    controlled_champion_loadout.rs
+    loadout_runtime.rs
+  registry/
+    mod.rs
+    hooks.rs
+```
+
+This migration is active and tracked in the roadmap and improvement tracker for follow-up phases.
 
 ## Minimal Scenario Shape
 - Use champion references instead of hardcoding base stats:
@@ -192,7 +254,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
   - Rune pages are generated from legal primary/secondary slot rules in `RunesReforged.json`.
   - Shards are generated from legal `stat_shards` slot options.
   - Mastery pages are generated from legal Season 2016 tree/tier/point constraints in `Season2016.json`.
-  - Loadout optimization is always on for Vladimir build scoring; there is no scenario shortlist/sample knob for runes/shards/masteries.
+  - Loadout optimization is always on for controlled champion build scoring; there is no scenario shortlist/sample knob for runes/shards/masteries.
 - Enemy presets:
   - `vladimir` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune/mastery pages.
   - Startup validation fails fast if a preset references missing item/rune/shard/mastery data.
@@ -206,6 +268,10 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
 - Respawn model knobs:
   - `simulation.urf_respawn_flat_reduction_seconds` (default `3.0`)
   - `simulation.urf_respawn_extrapolation_per_level` (default `2.5`)
+  - `simulation.urf_respawn_time_scaling_enabled` (default `true`)
+  - `simulation.urf_respawn_time_scaling_start_seconds` (default `300.0`)
+  - `simulation.urf_respawn_time_scaling_per_minute_seconds` (default `0.4`)
+  - `simulation.urf_respawn_time_scaling_cap_seconds` (default `20.0`)
 - Vladimir scripted ability knobs:
   - `simulation.vlad_q_base_damage`, `simulation.vlad_q_ap_ratio`, `simulation.vlad_q_heal_ratio_of_damage`, `simulation.vlad_q_base_cooldown_seconds`
   - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`

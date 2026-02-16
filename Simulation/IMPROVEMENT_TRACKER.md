@@ -1,6 +1,17 @@
 # Improvement Tracker
 
 ## Done
+- Added controlled champion orchestration/report abstraction updates:
+  - scenario execution/report writing APIs now use controlled champion naming
+  - report headers and loadout sections now use the selected controlled champion name
+  - default report and trace file names are now champion-keyed instead of hardcoded to Vladimir
+- Added configurable URF respawn game-time scaling:
+  - respawn delay now supports post-threshold time scaling with per-minute growth and cap
+  - added simulation knobs:
+    - `urf_respawn_time_scaling_enabled`
+    - `urf_respawn_time_scaling_start_seconds`
+    - `urf_respawn_time_scaling_per_minute_seconds`
+    - `urf_respawn_time_scaling_cap_seconds`
 - Enforced runtime budget checks across all major phases and search loops.
 - Added phase-aware periodic status updates from initialization through finalization.
 - Moved enemy URF presets into a data file:
@@ -50,6 +61,40 @@
   - `src/scripts/item_hooks.rs` now owns Heartsteel stack assumptions
   - `src/scripts/vladimir.rs` now owns Crimson Pact stat conversion logic
   - `src/scripts/loadout_hooks.rs` now annotates dynamic rune/mastery effects
+- Added controlled-champion loadout runtime integration across simulation and objective scoring:
+  - new generic engine API (`ControlledChampionCombatSimulation`, `simulate_controlled_champion_combat`)
+  - compatibility wrappers retained for legacy Vladimir names
+  - combat-time loadout runtime effects now apply on controlled champion spell hits, kill events, and regeneration ticks
+  - objective evaluation now threads loadout selection into combat simulation for candidate loadout scoring
+- Removed remaining legacy hook and enemy-script interface hardcoding:
+  - `LoadoutHookContext` now uses only `for_controlled_champion`
+  - enemy script execution input now uses controlled champion naming for position, range, and health fields
+  - engine event and helper names now prefer controlled champion terminology across shared combat flow
+- Added generic champion end-stat helper and migrated internal use:
+  - `compute_champion_final_stats` is now the primary helper
+  - compatibility wrapper retained for `compute_vlad_stats`
+- Migrated script architecture from flat files to domain-oriented hierarchy:
+  - champions:
+    - `src/scripts/champions/vladimir.rs`
+    - `src/scripts/champions/enemies/` with per-champion modules (`warwick.rs`, `vayne.rs`, `morgana.rs`, `sona.rs`, `doctor_mundo.rs`, `yasuo.rs`)
+  - items:
+    - `src/scripts/items/hooks.rs`
+  - runes:
+    - `src/scripts/runes/effects.rs`
+  - masteries:
+    - `src/scripts/masteries/effects.rs`
+  - runtime:
+    - `src/scripts/runtime/controlled_champion_loadout.rs`
+    - `src/scripts/runtime/loadout_runtime.rs`
+  - registry:
+    - `src/scripts/registry/hooks.rs`
+- Removed obsolete root-level script files after migration:
+  - `src/scripts/enemies.rs`
+  - `src/scripts/hooks.rs`
+  - `src/scripts/item_hooks.rs`
+  - `src/scripts/loadout_hooks.rs`
+  - `src/scripts/loadout_runtime.rs`
+  - `src/scripts/vladimir.rs`
 - Added first-pass 2D action timeline realism:
   - enemies are placed in 2D range bands around Vladimir and remain stationary
   - auto-attacks use start/windup/hit phases
@@ -78,8 +123,59 @@
   - stale queued script events are invalidated instead of leaking across lifecycle transitions
 - Fixed projectile-blocking segment intersection edge cases:
   - colinear-but-disjoint projectile paths no longer register as blocked
+- Extracted Vladimir combat decision logic into script-owned APIs:
+  - offensive cast scheduling delegated to `src/scripts/vladimir.rs`
+  - defensive activation decisions delegated to `src/scripts/vladimir.rs`
+  - Guardian Angel trigger decision delegated to `src/scripts/vladimir.rs`
+- Extracted enemy champion-specific script event behavior into scripts dispatch:
+  - `src/scripts/enemies.rs` now owns champion event action generation
+  - `src/engine.rs` now applies generic script actions
+- Added foundational generic combat primitives scaffold:
+  - status effects model (`kind`, `duration`, `stacks`, `persistence`)
+  - cast-lock model (`windup`, `channel`, `lockout`)
+  - deterministic per-tick updates wired into simulation time advancement
 
 ## Not Done
+- [P0] Full codebase structure audit and abstraction-first reorganization
+  - Goal: examine the entire simulator codebase layout and optimize it for long-term versatility.
+  - Scope:
+    - review all modules for abstraction boundaries and ownership clarity.
+    - identify files that should move, split, or be grouped by domain.
+    - define phased migration checkpoints so functionality remains stable while restructuring.
+  - Success criteria:
+    - documented target architecture with an ordered migration checklist.
+    - reduced cross-module coupling and cleaner extension points.
+
+- [P0] Domain-based script folder hierarchy (`champions`, `items`, `runes`, `masteries`)
+  - Goal: replace the current flat script organization with domain-first structure.
+  - Scope:
+    - migrate champion scripts into `scripts/champions/` with per-champion modules.
+    - migrate item logic into `scripts/items/` and split by item or item families.
+    - migrate rune/mastery logic into `scripts/runes/` and `scripts/masteries/`.
+    - keep shared registries and runtime primitives in dedicated shared modules.
+  - Success criteria:
+    - script discovery is intuitive and scales as champion/item coverage grows.
+    - no single generic script file becomes a long-term dumping ground.
+
+- [P1] File naming and module-size standards for maintainability
+  - Goal: enforce consistent, descriptive naming and avoid oversized files.
+  - Scope:
+    - define naming standards for files, folders, modules, and registries.
+    - apply progressive splits to large files into focused submodules where practical.
+    - preserve language idioms while favoring descriptive names.
+  - Success criteria:
+    - new and migrated modules follow documented naming conventions.
+    - large modules are split into smaller units with clear responsibilities.
+
+- [P1] Architecture revisit checkpoints after each major feature tranche
+  - Goal: continually reassess structure as functionality expands.
+  - Scope:
+    - add explicit post-tranche architecture review tasks.
+    - track and close structural follow-up items before they accumulate.
+  - Success criteria:
+    - architecture debt remains bounded and visible.
+    - structural improvements land continuously instead of as rare large rewrites.
+
 - [P0] Full-fidelity Vladimir kit simulation (`Q`, `E`, `R`, passives)
   - Goal: upgrade first-pass scripted abilities to closer in-game behavior fidelity.
   - Scope:

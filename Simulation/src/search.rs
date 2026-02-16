@@ -8,8 +8,8 @@ use crate::status::deadline_reached;
 use super::{
     BuildMetrics, BuildSearchConfig, ChampionBase, Item, SimulationConfig, Stats,
     build_from_indices, build_item_stats, can_add_item_to_build, canonical_key,
-    compute_effective_item_stats_for_build, compute_vlad_stats, is_boots, rand_f64, rand_index,
-    random_valid_build, repair_build, shuffle_usize,
+    compute_champion_final_stats, compute_effective_item_stats_for_build, is_boots, rand_f64,
+    rand_index, random_valid_build, repair_build, shuffle_usize,
 };
 
 fn unique_ranked_from_candidates<F>(
@@ -1096,21 +1096,21 @@ fn build_cost_timing_score(build: &[Item]) -> f64 {
 pub(super) fn compute_build_metrics(
     key: &[usize],
     item_pool: &[Item],
-    vlad_base: &ChampionBase,
-    vlad_bonus_stats: &Stats,
+    controlled_champion_base: &ChampionBase,
+    controlled_champion_bonus_stats: &Stats,
     sim: &SimulationConfig,
     objective: f64,
 ) -> BuildMetrics {
     let build = build_from_indices(item_pool, key);
     let item_stats = compute_effective_item_stats_for_build(
-        vlad_base,
+        controlled_champion_base,
         &build,
-        vlad_bonus_stats,
+        controlled_champion_bonus_stats,
         sim,
         sim.champion_level,
         None,
     );
-    let stats = compute_vlad_stats(vlad_base, &item_stats);
+    let stats = compute_champion_final_stats(controlled_champion_base, &item_stats);
     let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
     let total_cost = build.iter().map(|i| i.total_cost).sum::<f64>();
     BuildMetrics {

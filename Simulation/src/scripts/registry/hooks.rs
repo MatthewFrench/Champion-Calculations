@@ -1,9 +1,10 @@
 use anyhow::Result;
 use std::collections::HashMap;
 
+use crate::scripts::champions::vladimir::VLADIMIR_HOOK;
+use crate::scripts::items::hooks::ITEM_HOOK;
+use crate::scripts::runtime::controlled_champion_loadout::CONTROLLED_CHAMPION_LOADOUT_HOOK;
 use crate::{ChampionBase, Item, LoadoutSelection, ResolvedLoadout, SimulationConfig, Stats};
-
-use super::{item_hooks::ITEM_HOOK, loadout_hooks::LOADOUT_HOOK, vladimir::VLADIMIR_HOOK};
 
 pub(crate) struct ItemAssumptionContext<'a> {
     pub champion: &'a ChampionBase,
@@ -30,7 +31,7 @@ pub(crate) struct ChampionStatContext<'a> {
 pub(crate) struct LoadoutHookContext<'a> {
     pub selection: &'a LoadoutSelection,
     pub level: usize,
-    pub for_vlad: bool,
+    pub for_controlled_champion: bool,
 }
 
 pub(crate) trait ScriptHook: Sync {
@@ -52,7 +53,11 @@ pub(crate) trait ScriptHook: Sync {
 }
 
 fn registry() -> [&'static dyn ScriptHook; 3] {
-    [&VLADIMIR_HOOK, &ITEM_HOOK, &LOADOUT_HOOK]
+    [
+        &VLADIMIR_HOOK,
+        &ITEM_HOOK,
+        &CONTROLLED_CHAMPION_LOADOUT_HOOK,
+    ]
 }
 
 pub(crate) fn apply_item_assumption_hooks(ctx: &ItemAssumptionContext<'_>, stats: &mut Stats) {

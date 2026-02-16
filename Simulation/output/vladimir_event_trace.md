@@ -39,7 +39,7 @@
 - 1.836s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 1.7)
 - 1.939s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
 - 1.988s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
-- 2.000s [enemy_script] Dr. Mundo executed DrMundoInfectedCleaver
+- 2.000s [enemy_script] Dr. Mundo executed DoctorMundoInfectedCleaver
 - 2.000s [damage_in] physical 0.0, magic 340.0, true 0.0, total 219.8
 - 2.063s [damage_in] physical 0.0, magic 287.6, true 0.0, total 185.9
 - 2.063s [ability_hit] Morgana ability hit Vladimir (magic 287.6, true 0.0)
@@ -50,14 +50,14 @@
 - 2.142s [attack_hit] Vayne hit Vladimir (phys 544.7, magic 0.0, true 0.0)
 - 2.200s [enemy_script] Vayne executed VayneTumbleEmpower
 - 2.200s [enemy_buff] Vayne empowered next attack
-- 2.200s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
-- 2.250s [vladimir_r_hit] Vladimir R dealt 1716.4
+- 2.200s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
+- 2.250s [controlled_champion_r_hit] Vladimir R dealt 1716.4
 - 2.270s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
 - 2.270s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
 - 2.280s [attack_start] Vayne begins auto attack
 - 2.290s [damage_in] physical 480.3, magic 47.5, true 0.0, total 188.4
 - 2.290s [attack_hit] Warwick hit Vladimir (phys 480.3, magic 47.5, true 0.0)
-- 2.300s [vladimir_e_hit] Vladimir E dealt 1008.7
+- 2.300s [controlled_champion_e_hit] Vladimir E dealt 1008.7
 - 2.315s [attack_start] Dr. Mundo begins auto attack
 - 2.336s [damage_in] physical 0.0, magic 27.7, true 2.2, total 20.1
 - 2.336s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 2.2)
@@ -92,7 +92,7 @@
 - 3.063s [ability_hit] Morgana ability hit Vladimir (magic 237.0, true 0.0)
 - 3.080s [damage_in] physical 0.0, magic 26.9, true 2.7, total 20.1
 - 3.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 2.7)
-- 3.133s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
+- 3.133s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
 - 3.142s [attack_start] Warwick begins auto attack
 - 3.166s [attack_start] Dr. Mundo begins auto attack
 - 3.168s [damage_in] physical 444.2, magic 0.0, true 503.4, total 649.2
@@ -236,7 +236,7 @@
 - 8.939s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
 - 9.000s [enemy_script] Morgana executed MorganaDarkBinding
 - 9.000s [damage_in] physical 0.0, magic 433.7, true 0.0, total 280.4
-- 9.000s [enemy_script] Dr. Mundo executed DrMundoInfectedCleaver
+- 9.000s [enemy_script] Dr. Mundo executed DoctorMundoInfectedCleaver
 - 9.000s [damage_in] physical 0.0, magic 185.3, true 0.0, total 119.8
 - 9.018s [enemy_uptime] Vayne left combat window
 - 9.032s [attack_start] Sona begins auto attack
@@ -246,8 +246,8 @@
 - 9.063s [ability_hit] Morgana ability hit Vladimir (magic 237.0, true 0.0)
 - 9.080s [damage_in] physical 0.0, magic 26.9, true 3.2, total 20.6
 - 9.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 3.2)
-- 9.139s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
-- 9.239s [vladimir_e_hit] Vladimir E dealt 798.6
+- 9.139s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
+- 9.239s [controlled_champion_e_hit] Vladimir E dealt 798.6
 - 9.259s [attack_start] Dr. Mundo begins auto attack
 - 9.270s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
 - 9.270s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
@@ -399,17 +399,17 @@
 - 15.618s [attack_start] Vayne begins auto attack
 - 15.770s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
 - 15.770s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
-- 15.780s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
+- 15.780s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
 - 15.827s [attack_start] Warwick begins auto attack
 - 15.836s [damage_in] physical 0.0, magic 27.7, true 1.1, total 19.0
 - 15.836s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 1.1)
-- 15.880s [vladimir_e_hit] Vladimir E dealt 1008.7
+- 15.880s [controlled_champion_e_hit] Vladimir E dealt 1008.7
 - 15.939s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
 - 15.939s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
 - 15.990s [attack_start] Sona begins auto attack
 - 15.996s [damage_in] physical 391.2, magic 0.0, true 499.2, total 627.7
 - 15.996s [attack_hit] Vayne hit Vladimir (phys 391.2, magic 0.0, true 499.2)
-- 16.000s [enemy_script] Dr. Mundo executed DrMundoInfectedCleaver
+- 16.000s [enemy_script] Dr. Mundo executed DoctorMundoInfectedCleaver
 - 16.000s [damage_in] physical 0.0, magic 167.3, true 0.0, total 108.1
 - 16.047s [damage_in] physical 289.9, magic 48.4, true 0.0, total 126.5
 - 16.047s [attack_hit] Warwick hit Vladimir (phys 289.9, magic 48.4, true 0.0)
@@ -437,7 +437,7 @@
 - 16.519s [damage_in] physical 309.5, magic 0.0, true 0.0, total 101.6
 - 16.519s [attack_hit] Vayne hit Vladimir (phys 309.5, magic 0.0, true 0.0)
 - 16.563s [damage_in] physical 0.0, magic 237.0, true 0.0, total 153.2
-- 16.563s [vladimir_death] Vladimir died
+- 16.563s [controlled_champion_death] Vladimir died
 - 16.563s [ability_hit] Morgana ability hit Vladimir (magic 237.0, true 0.0)
 
 ## Best Build Trace
@@ -479,7 +479,7 @@
 - 1.836s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 1.7)
 - 1.939s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
 - 1.988s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
-- 2.000s [enemy_script] Dr. Mundo executed DrMundoInfectedCleaver
+- 2.000s [enemy_script] Dr. Mundo executed DoctorMundoInfectedCleaver
 - 2.000s [damage_in] physical 0.0, magic 340.0, true 0.0, total 219.8
 - 2.063s [damage_in] physical 0.0, magic 287.6, true 0.0, total 185.9
 - 2.063s [ability_hit] Morgana ability hit Vladimir (magic 287.6, true 0.0)
@@ -490,14 +490,14 @@
 - 2.142s [attack_hit] Vayne hit Vladimir (phys 544.7, magic 0.0, true 0.0)
 - 2.200s [enemy_script] Vayne executed VayneTumbleEmpower
 - 2.200s [enemy_buff] Vayne empowered next attack
-- 2.200s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
-- 2.250s [vladimir_r_hit] Vladimir R dealt 1716.4
+- 2.200s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
+- 2.250s [controlled_champion_r_hit] Vladimir R dealt 1716.4
 - 2.270s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
 - 2.270s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
 - 2.280s [attack_start] Vayne begins auto attack
 - 2.290s [damage_in] physical 480.3, magic 47.5, true 0.0, total 188.4
 - 2.290s [attack_hit] Warwick hit Vladimir (phys 480.3, magic 47.5, true 0.0)
-- 2.300s [vladimir_e_hit] Vladimir E dealt 1008.7
+- 2.300s [controlled_champion_e_hit] Vladimir E dealt 1008.7
 - 2.315s [attack_start] Dr. Mundo begins auto attack
 - 2.336s [damage_in] physical 0.0, magic 27.7, true 2.2, total 20.1
 - 2.336s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 2.2)
@@ -532,7 +532,7 @@
 - 3.063s [ability_hit] Morgana ability hit Vladimir (magic 237.0, true 0.0)
 - 3.080s [damage_in] physical 0.0, magic 26.9, true 2.7, total 20.1
 - 3.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 2.7)
-- 3.133s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
+- 3.133s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
 - 3.142s [attack_start] Warwick begins auto attack
 - 3.166s [attack_start] Dr. Mundo begins auto attack
 - 3.168s [damage_in] physical 444.2, magic 0.0, true 503.4, total 649.2
@@ -676,7 +676,7 @@
 - 8.939s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
 - 9.000s [enemy_script] Morgana executed MorganaDarkBinding
 - 9.000s [damage_in] physical 0.0, magic 433.7, true 0.0, total 280.4
-- 9.000s [enemy_script] Dr. Mundo executed DrMundoInfectedCleaver
+- 9.000s [enemy_script] Dr. Mundo executed DoctorMundoInfectedCleaver
 - 9.000s [damage_in] physical 0.0, magic 185.3, true 0.0, total 119.8
 - 9.018s [enemy_uptime] Vayne left combat window
 - 9.032s [attack_start] Sona begins auto attack
@@ -686,8 +686,8 @@
 - 9.063s [ability_hit] Morgana ability hit Vladimir (magic 237.0, true 0.0)
 - 9.080s [damage_in] physical 0.0, magic 26.9, true 3.2, total 20.6
 - 9.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 3.2)
-- 9.139s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
-- 9.239s [vladimir_e_hit] Vladimir E dealt 798.6
+- 9.139s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
+- 9.239s [controlled_champion_e_hit] Vladimir E dealt 798.6
 - 9.259s [attack_start] Dr. Mundo begins auto attack
 - 9.270s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
 - 9.270s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
@@ -839,17 +839,17 @@
 - 15.618s [attack_start] Vayne begins auto attack
 - 15.770s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
 - 15.770s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
-- 15.780s [vladimir_q_hit] Vladimir Q hit Warwick for 230.5
+- 15.780s [controlled_champion_q_hit] Vladimir Q hit Warwick for 230.5
 - 15.827s [attack_start] Warwick begins auto attack
 - 15.836s [damage_in] physical 0.0, magic 27.7, true 1.1, total 19.0
 - 15.836s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 1.1)
-- 15.880s [vladimir_e_hit] Vladimir E dealt 1008.7
+- 15.880s [controlled_champion_e_hit] Vladimir E dealt 1008.7
 - 15.939s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
 - 15.939s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
 - 15.990s [attack_start] Sona begins auto attack
 - 15.996s [damage_in] physical 391.2, magic 0.0, true 499.2, total 627.7
 - 15.996s [attack_hit] Vayne hit Vladimir (phys 391.2, magic 0.0, true 499.2)
-- 16.000s [enemy_script] Dr. Mundo executed DrMundoInfectedCleaver
+- 16.000s [enemy_script] Dr. Mundo executed DoctorMundoInfectedCleaver
 - 16.000s [damage_in] physical 0.0, magic 167.3, true 0.0, total 108.1
 - 16.047s [damage_in] physical 289.9, magic 48.4, true 0.0, total 126.5
 - 16.047s [attack_hit] Warwick hit Vladimir (phys 289.9, magic 48.4, true 0.0)
@@ -877,5 +877,5 @@
 - 16.519s [damage_in] physical 309.5, magic 0.0, true 0.0, total 101.6
 - 16.519s [attack_hit] Vayne hit Vladimir (phys 309.5, magic 0.0, true 0.0)
 - 16.563s [damage_in] physical 0.0, magic 237.0, true 0.0, total 153.2
-- 16.563s [vladimir_death] Vladimir died
+- 16.563s [controlled_champion_death] Vladimir died
 - 16.563s [ability_hit] Morgana ability hit Vladimir (magic 237.0, true 0.0)

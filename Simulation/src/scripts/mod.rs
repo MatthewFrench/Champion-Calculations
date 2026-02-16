@@ -1,5 +1,6 @@
-pub(crate) mod enemies;
-pub(crate) mod hooks;
-pub(crate) mod item_hooks;
-pub(crate) mod loadout_hooks;
-pub(crate) mod vladimir;
+pub(crate) mod champions;
+pub(crate) mod items;
+pub(crate) mod masteries;
+pub(crate) mod registry;
+pub(crate) mod runes;
+pub(crate) mod runtime;

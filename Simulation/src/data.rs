@@ -4,7 +4,7 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::scripts::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
+use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
 
 use super::{
     BuildSearchConfig, ChampionBase, EXCLUDED_RANKS, EnemyConfig, ITEM_EVOLUTION_REPLACEMENTS,
@@ -84,7 +84,7 @@ pub(crate) fn apply_stat_bonus(
     stat: &str,
     value: f64,
     is_percent_unit: bool,
-    for_vlad: bool,
+    for_controlled_champion: bool,
 ) -> bool {
     match stat {
         "health" => {
@@ -124,7 +124,7 @@ pub(crate) fn apply_stat_bonus(
             true
         }
         "adaptive" => {
-            if for_vlad {
+            if for_controlled_champion {
                 stats.ability_power += value;
                 true
             } else {
@@ -151,7 +151,7 @@ pub(crate) fn apply_structured_effect(
     effect: &Value,
     rank: usize,
     level: usize,
-    for_vlad: bool,
+    for_controlled_champion: bool,
     stats: &mut Stats,
 ) -> Result<bool> {
     let effect_type = effect
@@ -183,14 +183,14 @@ pub(crate) fn apply_structured_effect(
         stat,
         value,
         is_percent_unit,
-        for_vlad,
+        for_controlled_champion,
     ))
 }
 
 pub(crate) fn resolve_loadout(
     selection: &LoadoutSelection,
     level: usize,
-    for_vlad: bool,
+    for_controlled_champion: bool,
 ) -> Result<ResolvedLoadout> {
     let runes_data = load_json(&masteries_dir().join("RunesReforged.json"))?;
     let masteries_data = load_json(&masteries_dir().join("Season2016.json"))?;
@@ -245,7 +245,13 @@ pub(crate) fn resolve_loadout(
                 .cloned()
                 .unwrap_or_default()
             {
-                if apply_structured_effect(&effect, 1, level, for_vlad, &mut out.bonus_stats)? {
+                if apply_structured_effect(
+                    &effect,
+                    1,
+                    level,
+                    for_controlled_champion,
+                    &mut out.bonus_stats,
+                )? {
                     out.applied_notes
                         .push(format!("Applied rune stat effect from {}.", name));
                 }
@@ -267,7 +273,13 @@ pub(crate) fn resolve_loadout(
                 .cloned()
                 .unwrap_or_default()
             {
-                if apply_structured_effect(&effect, 1, level, for_vlad, &mut out.bonus_stats)? {
+                if apply_structured_effect(
+                    &effect,
+                    1,
+                    level,
+                    for_controlled_champion,
+                    &mut out.bonus_stats,
+                )? {
                     out.applied_notes
                         .push(format!("Applied rune stat effect from {}.", real_name));
                 }
@@ -321,7 +333,13 @@ pub(crate) fn resolve_loadout(
                     .and_then(Value::as_str)
                     .unwrap_or("")
                     .contains("percent");
-                if apply_stat_bonus(&mut out.bonus_stats, stat, val, is_percent, for_vlad) {
+                if apply_stat_bonus(
+                    &mut out.bonus_stats,
+                    stat,
+                    val,
+                    is_percent,
+                    for_controlled_champion,
+                ) {
                     out.selection_labels
                         .push(format!("Shard {}: {}", idx + 1, shard_key));
                     out.applied_notes.push(format!(
@@ -366,7 +384,13 @@ pub(crate) fn resolve_loadout(
             .cloned()
             .unwrap_or_default()
         {
-            if apply_structured_effect(&effect, rank, level, for_vlad, &mut out.bonus_stats)? {
+            if apply_structured_effect(
+                &effect,
+                rank,
+                level,
+                for_controlled_champion,
+                &mut out.bonus_stats,
+            )? {
                 out.applied_notes
                     .push(format!("Applied mastery stat effect from {}.", name));
             }
@@ -376,7 +400,7 @@ pub(crate) fn resolve_loadout(
     let hook_ctx = LoadoutHookContext {
         selection,
         level,
-        for_vlad,
+        for_controlled_champion,
     };
     resolve_loadout_with_hooks(&hook_ctx, &mut out)?;
 
@@ -462,6 +486,22 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             .get("urf_respawn_extrapolation_per_level")
             .and_then(Value::as_f64)
             .unwrap_or(2.5),
+        urf_respawn_time_scaling_enabled: data
+            .get("urf_respawn_time_scaling_enabled")
+            .and_then(Value::as_bool)
+            .unwrap_or(true),
+        urf_respawn_time_scaling_start_seconds: data
+            .get("urf_respawn_time_scaling_start_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(300.0),
+        urf_respawn_time_scaling_per_minute_seconds: data
+            .get("urf_respawn_time_scaling_per_minute_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.4),
+        urf_respawn_time_scaling_cap_seconds: data
+            .get("urf_respawn_time_scaling_cap_seconds")
+            .and_then(Value::as_f64)
+            .unwrap_or(20.0),
         vlad_q_base_damage: data
             .get("vlad_q_base_damage")
             .and_then(Value::as_f64)
