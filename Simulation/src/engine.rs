@@ -1,7 +1,11 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
-use crate::defaults::{champion_hitbox_radius, simulator_defaults};
+use crate::defaults::{
+    AbilityExecutionProfile, champion_ability_execution_profile, champion_ai_profile,
+    champion_hitbox_radius, default_ability_execution_profile,
+    protoplasm_lifeline_cooldown_seconds_default, simulator_defaults,
+};
 use crate::scripts::champions::vladimir::{
     VladimirCastProfile, VladimirDefensiveAbilityDecisionInput, VladimirOffensiveDecisionInput,
     VladimirTargetSnapshot, decide_defensive_ability_activations, decide_offensive_casts,
@@ -10,9 +14,9 @@ use crate::scripts::champions::vladimir::{
 use crate::scripts::champions::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
     ChampionScriptExecutionInput, ChampionScriptPoint, attack_speed_multiplier, behavior_profile,
-    build_champion_loadout_runtime, clear_transient_combat_state, execute_champion_script_event,
-    on_ability_bonus_damage, on_hit_bonus_damage, scripted_champion_event_schedules,
-    tick_regen_heal,
+    build_champion_loadout_runtime, champion_script_event_cooldown_seconds,
+    clear_transient_combat_state, execute_champion_script_event, on_ability_bonus_damage,
+    on_hit_bonus_damage, scripted_champion_events, tick_regen_heal,
 };
 use crate::scripts::items::hooks::controlled_champion_defensive_item_capabilities;
 use crate::scripts::runtime::ability_slots::{
@@ -195,6 +199,8 @@ fn uptime_window_active(enemy: &EnemyConfig, time: f64, enabled: bool) -> bool {
 struct EnemyState {
     enemy: EnemyConfig,
     behavior: ChampionBehaviorProfile,
+    ability_execution: AbilityExecutionProfile,
+    burst_execution: AbilityExecutionProfile,
     runtime: ChampionLoadoutRuntime,
     position: Vec2,
     spawn_position: Vec2,
@@ -214,6 +220,8 @@ struct EnemyState {
     respawn_at: Option<f64>,
     uptime_active: bool,
     script_epoch: u64,
+    script_poll_interval_seconds: f64,
+    script_event_ready_at: HashMap<ChampionScriptEvent, f64>,
     attack_sequence: u64,
     stunned_until: f64,
     hitbox_radius: f64,
@@ -222,6 +230,8 @@ struct EnemyState {
 #[derive(Debug, Clone)]
 struct EnemyDerivedModel {
     behavior: ChampionBehaviorProfile,
+    ability_execution: AbilityExecutionProfile,
+    burst_execution: AbilityExecutionProfile,
     runtime: ChampionLoadoutRuntime,
     max_health: f64,
     armor: f64,
@@ -551,9 +561,7 @@ impl ControlledChampionCombatSimulation {
         let stasis_item_cooldown_seconds =
             cooldown_after_haste(sim.zhonya_cooldown_seconds, urf.item_haste);
         let emergency_shield_item_cooldown_seconds = cooldown_after_haste(
-            simulator_defaults()
-                .engine_defaults
-                .emergency_shield_item_cooldown_seconds,
+            protoplasm_lifeline_cooldown_seconds_default(),
             urf.item_haste,
         );
 
@@ -623,10 +631,14 @@ impl ControlledChampionCombatSimulation {
         for (idx, (enemy, build, enemy_bonus)) in enemies.iter().cloned().enumerate() {
             let model = derive_enemy_model(&enemy, &build, &enemy_bonus, &runner.sim, &runner.urf);
             let position = enemy_spawn_position(idx, enemy_count.max(1), model.behavior);
+            let ai_profile = champion_ai_profile(&enemy.name, model.behavior.attack_range);
+            let script_poll_interval_seconds = ai_profile.script_poll_interval_seconds.max(0.05);
 
             runner.enemy_state.push(EnemyState {
                 enemy: enemy.clone(),
                 behavior: model.behavior,
+                ability_execution: model.ability_execution,
+                burst_execution: model.burst_execution,
                 runtime: model.runtime,
                 position,
                 spawn_position: position,
@@ -650,6 +662,8 @@ impl ControlledChampionCombatSimulation {
                     runner.sim.enemy_uptime_model_enabled,
                 ),
                 script_epoch: 0,
+                script_poll_interval_seconds,
+                script_event_ready_at: HashMap::new(),
                 attack_sequence: 0,
                 stunned_until: 0.0,
                 hitbox_radius: champion_hitbox_radius(&enemy.base.name),
@@ -684,12 +698,12 @@ impl ControlledChampionCombatSimulation {
                     Some(enemy.burst_interval_seconds),
                 );
             }
-            for spec in scripted_champion_event_schedules(&enemy.name) {
+            for event in scripted_champion_events(&enemy.name) {
                 runner.schedule_event(
-                    spec.start_offset_seconds.max(0.0),
+                    0.0,
                     12,
-                    EventType::ChampionScript(idx, spec.event, 0),
-                    Some(spec.interval_seconds.max(0.1)),
+                    EventType::ChampionScript(idx, event, 0),
+                    Some(script_poll_interval_seconds),
                 );
             }
         }
@@ -800,6 +814,7 @@ impl ControlledChampionCombatSimulation {
                 state.next_attack_bonus_magic = 0.0;
                 state.next_attack_bonus_true = 0.0;
                 state.script_epoch = state.script_epoch.wrapping_add(1);
+                state.script_event_ready_at.clear();
                 state.attack_sequence = state.attack_sequence.wrapping_add(1);
                 state.stunned_until = 0.0;
                 state.uptime_active = uptime_window_active(
@@ -811,12 +826,14 @@ impl ControlledChampionCombatSimulation {
             }
         }
         for (idx, name, epoch) in respawned {
-            for spec in scripted_champion_event_schedules(&self.enemy_state[idx].enemy.name) {
+            let champion_name = self.enemy_state[idx].enemy.name.clone();
+            let poll_interval = self.enemy_state[idx].script_poll_interval_seconds.max(0.05);
+            for event in scripted_champion_events(&champion_name) {
                 self.schedule_event(
-                    spec.start_offset_seconds.max(0.0),
+                    0.0,
                     12,
-                    EventType::ChampionScript(idx, spec.event, epoch),
-                    Some(spec.interval_seconds.max(0.1)),
+                    EventType::ChampionScript(idx, event, epoch),
+                    Some(poll_interval),
                 );
             }
             self.trace_event("enemy_respawn", format!("{} respawned", name));
@@ -861,19 +878,25 @@ impl ControlledChampionCombatSimulation {
                 };
                 trace.push(("enemy_uptime", msg));
                 state.script_epoch = state.script_epoch.wrapping_add(1);
+                state.script_event_ready_at.clear();
                 if active_now {
-                    reschedule.push((idx, state.script_epoch, state.enemy.name.clone()));
+                    reschedule.push((
+                        idx,
+                        state.script_epoch,
+                        state.enemy.name.clone(),
+                        state.script_poll_interval_seconds.max(0.05),
+                    ));
                 }
                 state.uptime_active = active_now;
             }
         }
-        for (idx, epoch, champion_name) in reschedule {
-            for spec in scripted_champion_event_schedules(&champion_name) {
+        for (idx, epoch, champion_name, poll_interval) in reschedule {
+            for event in scripted_champion_events(&champion_name) {
                 self.schedule_event(
-                    spec.start_offset_seconds.max(0.0),
+                    0.0,
                     12,
-                    EventType::ChampionScript(idx, spec.event, epoch),
-                    Some(spec.interval_seconds.max(0.1)),
+                    EventType::ChampionScript(idx, event, epoch),
+                    Some(poll_interval),
                 );
             }
         }
@@ -1010,33 +1033,6 @@ impl ControlledChampionCombatSimulation {
         self.schedule_event(interval, 30, EventType::Attack(idx), None);
     }
 
-    fn add_projectile_block_zone(
-        &mut self,
-        start: Vec2,
-        end: Vec2,
-        half_width: f64,
-        duration: f64,
-    ) {
-        self.projectile_block_zones.push(ProjectileBlockZone {
-            start,
-            end,
-            half_width: half_width.max(0.0),
-            expires_at: self.time + duration.max(0.0),
-        });
-        self.trace_event(
-            "projectile_block",
-            format!(
-                "barrier created from ({:.1},{:.1}) to ({:.1},{:.1}), half-width {:.1}, for {:.2}s",
-                start.x,
-                start.y,
-                end.x,
-                end.y,
-                half_width.max(0.0),
-                duration.max(0.0)
-            ),
-        );
-    }
-
     fn script_point_from_vec2(point: Vec2) -> ChampionScriptPoint {
         ChampionScriptPoint {
             x: point.x,
@@ -1151,19 +1147,6 @@ impl ControlledChampionCombatSimulation {
                         None,
                     );
                 }
-                ChampionScriptAction::CreateProjectileBlockZone {
-                    start,
-                    end,
-                    half_width,
-                    duration_seconds,
-                } => {
-                    self.add_projectile_block_zone(
-                        Self::vec2_from_script_point(start),
-                        Self::vec2_from_script_point(end),
-                        half_width,
-                        duration_seconds,
-                    );
-                }
             }
         }
     }
@@ -1194,6 +1177,7 @@ impl ControlledChampionCombatSimulation {
                 state.next_attack_bonus_true = 0.0;
                 state.uptime_active = false;
                 state.script_epoch = state.script_epoch.wrapping_add(1);
+                state.script_event_ready_at.clear();
                 state.attack_sequence = state.attack_sequence.wrapping_add(1);
                 state.stunned_until = 0.0;
                 killed_name = Some(state.enemy.name.clone());
@@ -1789,23 +1773,23 @@ impl ControlledChampionCombatSimulation {
                 if !self.enemy_can_take_actions(idx) {
                     return;
                 }
-                let behavior = self.enemy_state[idx].behavior;
+                let execution = self.enemy_state[idx].ability_execution;
                 let source = self.enemy_state[idx].position;
                 let target_at_cast = self.target_position;
                 let travel = self.enemy_projectile_delay_from_points(
                     source,
                     target_at_cast,
-                    behavior.ability_projectile_speed,
+                    execution.projectile_speed,
                 );
                 self.schedule_event(
-                    behavior.ability_windup_seconds.max(0.0) + travel,
+                    execution.cast_windup_seconds.max(0.0) + travel,
                     45,
                     EventType::AbilityHit {
                         idx,
                         source,
                         target_at_cast,
-                        projectile_speed: behavior.ability_projectile_speed,
-                        effect_hitbox_radius: behavior.ability_effect_hitbox_radius,
+                        projectile_speed: execution.projectile_speed,
+                        effect_hitbox_radius: execution.effect_hitbox_radius,
                     },
                     None,
                 );
@@ -1914,23 +1898,23 @@ impl ControlledChampionCombatSimulation {
                 if !self.enemy_can_take_actions(idx) {
                     return;
                 }
-                let behavior = self.enemy_state[idx].behavior;
+                let execution = self.enemy_state[idx].burst_execution;
                 let source = self.enemy_state[idx].position;
                 let target_at_cast = self.target_position;
                 let travel = self.enemy_projectile_delay_from_points(
                     source,
                     target_at_cast,
-                    behavior.burst_projectile_speed,
+                    execution.projectile_speed,
                 );
                 self.schedule_event(
-                    behavior.burst_windup_seconds.max(0.0) + travel,
+                    execution.cast_windup_seconds.max(0.0) + travel,
                     25,
                     EventType::BurstHit {
                         idx,
                         source,
                         target_at_cast,
-                        projectile_speed: behavior.burst_projectile_speed,
-                        effect_hitbox_radius: behavior.burst_effect_hitbox_radius,
+                        projectile_speed: execution.projectile_speed,
+                        effect_hitbox_radius: execution.effect_hitbox_radius,
                     },
                     None,
                 );
@@ -2189,15 +2173,16 @@ impl ControlledChampionCombatSimulation {
                 {
                     return;
                 }
-                self.trace_event(
-                    "champion_script",
-                    format!(
-                        "{} executed {:?}",
-                        self.enemy_state[idx].enemy.name, script_event
-                    ),
-                );
+                let script_ready_at = self.enemy_state[idx]
+                    .script_event_ready_at
+                    .get(&script_event)
+                    .copied()
+                    .unwrap_or(0.0);
+                if self.time + 1e-9 < script_ready_at {
+                    return;
+                }
+                let champion_name = self.enemy_state[idx].enemy.name.clone();
                 let distance_to_target = self.distance_to_target(idx);
-                let target_position = Self::script_point_from_vec2(self.target_position);
                 let target_current_health = self.health;
                 let target_max_health = self.max_health;
                 let now = self.time;
@@ -2206,18 +2191,29 @@ impl ControlledChampionCombatSimulation {
                     let input = ChampionScriptExecutionInput {
                         event: script_event,
                         actor_position: Self::script_point_from_vec2(state.position),
-                        target_position,
                         distance_to_target,
                         physical_hit_damage: state.physical_hit_damage,
                         burst_magic_damage: state.burst_magic_damage,
-                        ability_projectile_speed: state.behavior.ability_projectile_speed,
-                        burst_projectile_speed: state.behavior.burst_projectile_speed,
                         target_current_health,
                         target_max_health,
                         now,
                     };
                     execute_champion_script_event(input, &mut state.runtime)
                 };
+                if !actions.is_empty() {
+                    self.trace_event(
+                        "champion_script",
+                        format!("{} executed {:?}", champion_name, script_event),
+                    );
+                    if let Some(cooldown_seconds) =
+                        champion_script_event_cooldown_seconds(&champion_name, script_event)
+                    {
+                        let next_ready = self.time + cooldown_seconds.max(0.0);
+                        if let Some(state) = self.enemy_state.get_mut(idx) {
+                            state.script_event_ready_at.insert(script_event, next_ready);
+                        }
+                    }
+                }
                 self.apply_enemy_script_actions(idx, epoch, actions);
             }
         }
@@ -2396,10 +2392,23 @@ fn derive_enemy_model(
     let burst_magic_damage =
         enemy.burst_magic_flat + enemy.burst_ap_ratio * enemy_stats.ability_power;
     let burst_true_damage = enemy.burst_true_flat;
-    let behavior = behavior_profile(&enemy.name, enemy.base.is_melee);
+    let behavior = behavior_profile(
+        &enemy.name,
+        enemy.base.is_melee,
+        enemy.base.base_attack_range,
+        enemy.base.base_attack_projectile_speed,
+    );
+    let ability_execution =
+        champion_ability_execution_profile(&enemy.name, "basic_ability_1", enemy.base.is_melee)
+            .unwrap_or_else(|| default_ability_execution_profile(enemy.base.is_melee));
+    let burst_execution =
+        champion_ability_execution_profile(&enemy.name, "ultimate", enemy.base.is_melee)
+            .unwrap_or_else(|| default_ability_execution_profile(enemy.base.is_melee));
 
     EnemyDerivedModel {
         behavior,
+        ability_execution,
+        burst_execution,
         runtime,
         max_health,
         armor,
@@ -2506,8 +2515,8 @@ mod tests {
 
     #[test]
     fn spawn_positions_keep_melee_closer_than_ranged() {
-        let melee = ChampionBehaviorProfile::default_for(true);
-        let ranged = ChampionBehaviorProfile::default_for(false);
+        let melee = ChampionBehaviorProfile::default_for(true, 125.0, 0.0);
+        let ranged = ChampionBehaviorProfile::default_for(false, 550.0, 2000.0);
         let melee_pos = enemy_spawn_position(0, 5, melee);
         let ranged_pos = enemy_spawn_position(0, 5, ranged);
         let origin = Vec2 { x: 0.0, y: 0.0 };
@@ -2569,6 +2578,8 @@ mod tests {
             attack_damage_per_level: 0.0,
             base_attack_speed: 0.658,
             attack_speed_per_level_percent: 0.0,
+            base_attack_range: 450.0,
+            base_attack_projectile_speed: 1600.0,
             base_move_speed: 335.0,
             is_melee: false,
         }
@@ -2587,6 +2598,8 @@ mod tests {
             attack_damage_per_level: 0.0,
             base_attack_speed: 0.70,
             attack_speed_per_level_percent: 0.0,
+            base_attack_range: 550.0,
+            base_attack_projectile_speed: 1800.0,
             base_move_speed: 330.0,
             is_melee: false,
         }
@@ -2595,6 +2608,10 @@ mod tests {
     fn test_enemy_base_with_role(name: &str, is_melee: bool) -> ChampionBase {
         let mut base = test_enemy_base(name);
         base.is_melee = is_melee;
+        if is_melee {
+            base.base_attack_range = 125.0;
+            base.base_attack_projectile_speed = 0.0;
+        }
         base
     }
 
@@ -2769,7 +2786,7 @@ mod tests {
     #[test]
     fn melee_attack_is_cancelled_when_attacker_is_stunned_during_windup() {
         let controlled_champion = test_controlled_champion_base();
-        let enemy = test_enemy_with_role("Warwick", 0.0, true);
+        let enemy = test_enemy_with_role("Melee Tester", 0.0, true);
         let enemies = vec![(enemy, Vec::new(), Stats::default())];
         let simulation = test_simulation(2.0, 0.0);
         let urf = test_urf();

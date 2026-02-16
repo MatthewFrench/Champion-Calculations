@@ -450,7 +450,12 @@
         }
       ],
       "default_keybinding": "Q",
-      "description": "Throw a cleaver that deals magic damage based on target current health (with minimum and monster cap) and slows; heals based on health cost, full against champions and monsters."
+      "description": "Throw a cleaver that deals magic damage based on target current health (with minimum and monster cap) and slows; heals based on health cost, full against champions and monsters.",
+      "execution": {
+        "cast_windup_seconds": 0.2,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 75.0
+      }
     },
     "ultimate": {
       "slot": "R",
@@ -557,7 +562,12 @@
         }
       ],
       "default_keybinding": "R",
-      "description": "Heal for a portion of missing health and gain move speed; regenerate a percent of max health over the duration. At rank 3, nearby enemies increase the healing."
+      "description": "Heal for a portion of missing health and gain move speed; regenerate a percent of max health over the duration. At rank 3, nearby enemies increase the healing.",
+      "execution": {
+        "cast_windup_seconds": 0.15,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 100.0
+      }
     }
   },
   "name": "Dr. Mundo",

@@ -366,6 +366,8 @@ pub(crate) fn champion_at_level(base: &ChampionBase, level: usize) -> ChampionBa
         base_attack_speed: base.base_attack_speed
             * (1.0 + (base.attack_speed_per_level_percent / 100.0) * growth_levels),
         attack_speed_per_level_percent: base.attack_speed_per_level_percent,
+        base_attack_range: base.base_attack_range,
+        base_attack_projectile_speed: base.base_attack_projectile_speed,
         base_move_speed: base.base_move_speed,
         is_melee: base.is_melee,
     }

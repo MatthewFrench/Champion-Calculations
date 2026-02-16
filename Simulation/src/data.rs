@@ -4,7 +4,10 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
-use crate::defaults::{SearchQualityProfilePreset, simulator_defaults};
+use crate::defaults::{
+    SearchQualityProfilePreset, simulator_defaults, urf_respawn_defaults,
+    vladimir_offensive_ability_defaults,
+};
 use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
 
 use super::{
@@ -423,6 +426,13 @@ pub(crate) fn as_str<'a>(obj: &'a Value, key: &str) -> Result<&'a str> {
 pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
     let defaults = simulator_defaults();
     let sim_defaults = &defaults.simulation_defaults;
+    let urf_respawn = urf_respawn_defaults();
+    let vladimir_ability_defaults =
+        vladimir_offensive_ability_defaults("vladimir").ok_or_else(|| {
+            anyhow!(
+                "Missing Characters/Vladimir.json abilities.basic_ability_1/abilities.basic_ability_3/abilities.ultimate offensive defaults"
+            )
+        })?;
     let server_tick_rate_hz = data
         .get("server_tick_rate_hz")
         .and_then(Value::as_f64)
@@ -476,7 +486,11 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         heartsteel_assumed_stacks_at_8m: data
             .get("heartsteel_assumed_stacks_at_8m")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.heartsteel_assumed_stacks_at_8m),
+            .ok_or_else(|| {
+                anyhow!(
+                    "Missing simulation.heartsteel_assumed_stacks_at_8m (scenario-specific assumption)"
+                )
+            })?,
         enemy_uptime_model_enabled: data
             .get("enemy_uptime_model_enabled")
             .and_then(Value::as_bool)
@@ -484,67 +498,67 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         urf_respawn_flat_reduction_seconds: data
             .get("urf_respawn_flat_reduction_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.urf_respawn_flat_reduction_seconds),
+            .unwrap_or(urf_respawn.flat_reduction_seconds),
         urf_respawn_extrapolation_per_level: data
             .get("urf_respawn_extrapolation_per_level")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.urf_respawn_extrapolation_per_level),
+            .unwrap_or(urf_respawn.extrapolation_per_level),
         urf_respawn_time_scaling_enabled: data
             .get("urf_respawn_time_scaling_enabled")
             .and_then(Value::as_bool)
-            .unwrap_or(sim_defaults.urf_respawn_time_scaling_enabled),
+            .unwrap_or(urf_respawn.time_scaling_enabled),
         urf_respawn_time_scaling_start_seconds: data
             .get("urf_respawn_time_scaling_start_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.urf_respawn_time_scaling_start_seconds),
+            .unwrap_or(urf_respawn.time_scaling_start_seconds),
         urf_respawn_time_scaling_per_minute_seconds: data
             .get("urf_respawn_time_scaling_per_minute_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.urf_respawn_time_scaling_per_minute_seconds),
+            .unwrap_or(urf_respawn.time_scaling_per_minute_seconds),
         urf_respawn_time_scaling_cap_seconds: data
             .get("urf_respawn_time_scaling_cap_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.urf_respawn_time_scaling_cap_seconds),
+            .unwrap_or(urf_respawn.time_scaling_cap_seconds),
         vlad_q_base_damage: data
             .get("vlad_q_base_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_q_base_damage),
+            .unwrap_or(vladimir_ability_defaults.q_base_damage),
         vlad_q_ap_ratio: data
             .get("vlad_q_ap_ratio")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_q_ap_ratio),
+            .unwrap_or(vladimir_ability_defaults.q_ap_ratio),
         vlad_q_heal_ratio_of_damage: data
             .get("vlad_q_heal_ratio_of_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_q_heal_ratio_of_damage),
+            .unwrap_or(vladimir_ability_defaults.q_heal_ratio_of_damage),
         vlad_q_base_cooldown_seconds: data
             .get("vlad_q_base_cooldown_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_q_base_cooldown_seconds),
+            .unwrap_or(vladimir_ability_defaults.q_base_cooldown_seconds),
         vlad_e_base_damage: data
             .get("vlad_e_base_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_e_base_damage),
+            .unwrap_or(vladimir_ability_defaults.e_base_damage),
         vlad_e_ap_ratio: data
             .get("vlad_e_ap_ratio")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_e_ap_ratio),
+            .unwrap_or(vladimir_ability_defaults.e_ap_ratio),
         vlad_e_base_cooldown_seconds: data
             .get("vlad_e_base_cooldown_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_e_base_cooldown_seconds),
+            .unwrap_or(vladimir_ability_defaults.e_base_cooldown_seconds),
         vlad_r_base_damage: data
             .get("vlad_r_base_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_r_base_damage),
+            .unwrap_or(vladimir_ability_defaults.r_base_damage),
         vlad_r_ap_ratio: data
             .get("vlad_r_ap_ratio")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_r_ap_ratio),
+            .unwrap_or(vladimir_ability_defaults.r_ap_ratio),
         vlad_r_base_cooldown_seconds: data
             .get("vlad_r_base_cooldown_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(sim_defaults.vlad_r_base_cooldown_seconds),
+            .unwrap_or(vladimir_ability_defaults.r_base_cooldown_seconds),
     })
 }
 
@@ -574,6 +588,24 @@ pub(crate) fn parse_champion_base(data: &Value) -> Result<ChampionBase> {
         base_attack_speed: as_f64(data, "base_attack_speed")?,
         attack_speed_per_level_percent: data
             .get("attack_speed_per_level_percent")
+            .and_then(Value::as_f64)
+            .unwrap_or(0.0),
+        base_attack_range: data
+            .get("base_attack_range")
+            .and_then(Value::as_f64)
+            .unwrap_or_else(|| {
+                if data
+                    .get("is_melee")
+                    .and_then(Value::as_bool)
+                    .unwrap_or(false)
+                {
+                    125.0
+                } else {
+                    550.0
+                }
+            }),
+        base_attack_projectile_speed: data
+            .get("base_attack_projectile_speed")
             .and_then(Value::as_f64)
             .unwrap_or(0.0),
         base_move_speed: as_f64(data, "base_move_speed")?,
@@ -1341,6 +1373,10 @@ pub(crate) fn normalize_name(input: &str) -> String {
         .collect()
 }
 
+fn is_character_support_file(stem: &str) -> bool {
+    normalize_name(stem) == "championdefaults"
+}
+
 pub(crate) fn champion_base_from_character_data(
     character: &Value,
     fallback_name: &str,
@@ -1411,6 +1447,15 @@ pub(crate) fn champion_base_from_character_data(
         .unwrap_or("")
         .to_lowercase();
     let is_melee = attack_type == "melee";
+    let base_attack_projectile_speed = character
+        .get("basic_attack")
+        .and_then(|v| v.get("missile_speed"))
+        .and_then(Value::as_f64)
+        .unwrap_or(0.0);
+    let attack_range = base_stats
+        .get("attack_range")
+        .and_then(Value::as_f64)
+        .ok_or_else(|| anyhow!("Missing attack_range for {}", fallback_name))?;
 
     let champion_name = character
         .get("name")
@@ -1430,6 +1475,8 @@ pub(crate) fn champion_base_from_character_data(
         attack_damage_per_level,
         base_attack_speed: attack_speed,
         attack_speed_per_level_percent,
+        base_attack_range: attack_range,
+        base_attack_projectile_speed,
         base_move_speed: move_speed,
         is_melee,
     })
@@ -1445,11 +1492,14 @@ pub(crate) fn load_champion_bases() -> Result<HashMap<String, ChampionBase>> {
     entries.sort();
 
     for path in entries {
-        let data = load_json(&path)?;
         let stem = path
             .file_stem()
             .and_then(|s| s.to_str())
             .ok_or_else(|| anyhow!("Invalid character filename"))?;
+        if is_character_support_file(stem) {
+            continue;
+        }
+        let data = load_json(&path)?;
         let base = champion_base_from_character_data(&data, stem)?;
         out.insert(normalize_name(stem), base.clone());
         out.insert(normalize_name(&base.name), base);
@@ -1898,5 +1948,113 @@ pub(crate) fn enemy_loadout_from_preset(preset: &EnemyUrfPreset) -> LoadoutSelec
         rune_names: preset.runes.clone(),
         shard_stats: preset.shards.clone(),
         masteries: preset.masteries.clone(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn assert_close(actual: f64, expected: f64, field: &str) {
+        let epsilon = 1e-9;
+        assert!(
+            (actual - expected).abs() <= epsilon,
+            "{field} mismatch: actual={actual}, expected={expected}"
+        );
+    }
+
+    #[test]
+    fn scenario_vladimir_offense_uses_canonical_ability_defaults() {
+        let scenario_path = simulation_dir().join("scenario_vlad_urf.json");
+        let scenario = load_json(&scenario_path).expect("scenario_vlad_urf.json should parse");
+        let simulation = scenario
+            .get("simulation")
+            .expect("scenario_vlad_urf.json should include simulation");
+
+        for key in [
+            "vlad_q_base_damage",
+            "vlad_q_ap_ratio",
+            "vlad_q_heal_ratio_of_damage",
+            "vlad_q_base_cooldown_seconds",
+            "vlad_e_base_damage",
+            "vlad_e_ap_ratio",
+            "vlad_e_base_cooldown_seconds",
+            "vlad_r_base_damage",
+            "vlad_r_ap_ratio",
+            "vlad_r_base_cooldown_seconds",
+        ] {
+            assert!(
+                simulation.get(key).is_none(),
+                "Scenario should not duplicate canonical Vladimir offensive constant '{key}'"
+            );
+        }
+
+        let parsed = parse_simulation_config(simulation).expect("simulation config should parse");
+        let canonical = vladimir_offensive_ability_defaults("vladimir")
+            .expect("canonical Vladimir offensive defaults should load");
+
+        assert_close(
+            parsed.vlad_q_base_damage,
+            canonical.q_base_damage,
+            "vlad_q_base_damage",
+        );
+        assert_close(
+            parsed.vlad_q_ap_ratio,
+            canonical.q_ap_ratio,
+            "vlad_q_ap_ratio",
+        );
+        assert_close(
+            parsed.vlad_q_heal_ratio_of_damage,
+            canonical.q_heal_ratio_of_damage,
+            "vlad_q_heal_ratio_of_damage",
+        );
+        assert_close(
+            parsed.vlad_q_base_cooldown_seconds,
+            canonical.q_base_cooldown_seconds,
+            "vlad_q_base_cooldown_seconds",
+        );
+        assert_close(
+            parsed.vlad_e_base_damage,
+            canonical.e_base_damage,
+            "vlad_e_base_damage",
+        );
+        assert_close(
+            parsed.vlad_e_ap_ratio,
+            canonical.e_ap_ratio,
+            "vlad_e_ap_ratio",
+        );
+        assert_close(
+            parsed.vlad_e_base_cooldown_seconds,
+            canonical.e_base_cooldown_seconds,
+            "vlad_e_base_cooldown_seconds",
+        );
+        assert_close(
+            parsed.vlad_r_base_damage,
+            canonical.r_base_damage,
+            "vlad_r_base_damage",
+        );
+        assert_close(
+            parsed.vlad_r_ap_ratio,
+            canonical.r_ap_ratio,
+            "vlad_r_ap_ratio",
+        );
+        assert_close(
+            parsed.vlad_r_base_cooldown_seconds,
+            canonical.r_base_cooldown_seconds,
+            "vlad_r_base_cooldown_seconds",
+        );
+    }
+
+    #[test]
+    fn load_champion_bases_skips_support_defaults_file() {
+        let bases = load_champion_bases().expect("champion bases should load");
+        assert!(
+            !bases.contains_key(&normalize_name("ChampionDefaults")),
+            "support defaults file should not be treated as a champion base"
+        );
+        assert!(
+            bases.contains_key(&normalize_name("Vladimir")),
+            "known champion base should still be present"
+        );
     }
 }

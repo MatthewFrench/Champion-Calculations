@@ -259,7 +259,10 @@
         }
       ],
       "type": "Active",
-      "description": "Dash and empower your next basic attack within 3s to deal bonus physical damage based on total AD and ability power."
+      "description": "Dash and empower your next basic attack within 3s to deal bonus physical damage based on total AD and ability power.",
+      "execution": {
+        "projectile_speed": 2200.0
+      }
     },
     "ultimate": {
       "slot": "R",
@@ -328,7 +331,10 @@
         }
       ],
       "type": "Active",
-      "description": "Empower yourself for a duration with bonus attack damage; Tumble has reduced cooldown and grants brief invisibility. Takedowns extend the duration. Night Hunter bonus movement speed is tripled during the effect."
+      "description": "Empower yourself for a duration with bonus attack damage; Tumble has reduced cooldown and grants brief invisibility. Takedowns extend the duration. Night Hunter bonus movement speed is tripled during the effect.",
+      "execution": {
+        "projectile_speed": 2200.0
+      }
     }
   },
   "name": "Vayne",

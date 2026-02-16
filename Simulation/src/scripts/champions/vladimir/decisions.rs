@@ -1,5 +1,5 @@
 use super::abilities::VladimirAbilityCooldowns;
-use crate::defaults::simulator_defaults;
+use crate::defaults::vladimir_cast_profile_defaults;
 
 #[derive(Debug, Clone)]
 pub(crate) struct VladimirCastProfile {
@@ -76,7 +76,8 @@ pub(crate) struct VladimirDefensiveAbilityDecisions {
 }
 
 pub(crate) fn default_cast_profile() -> VladimirCastProfile {
-    let defaults = &simulator_defaults().vladimir_cast_profile_defaults;
+    let defaults = vladimir_cast_profile_defaults("vladimir")
+        .unwrap_or_else(|| panic!("Missing Characters/Vladimir.json abilities.*.execution"));
     VladimirCastProfile {
         q_ability_id: defaults.q_ability_id.clone(),
         e_ability_id: defaults.e_ability_id.clone(),

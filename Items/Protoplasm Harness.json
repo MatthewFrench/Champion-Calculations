@@ -39,7 +39,7 @@
       },
       "unit": "flat",
       "duration_seconds": 5.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 120.0,
       "interval_seconds": null,
       "trigger": "on_health_threshold",
       "applies_to": "self",

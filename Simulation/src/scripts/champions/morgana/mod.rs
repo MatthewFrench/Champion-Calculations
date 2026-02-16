@@ -1,9 +1,10 @@
 use super::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptSchedule, ScriptedEffectHitbox,
-    on_ability_bonus_damage,
+    ChampionScriptExecutionInput, ScriptedEffectHitbox, on_ability_bonus_damage,
 };
-use crate::defaults::simulator_defaults;
+use crate::defaults::{
+    champion_ai_script_priority_override, morgana_binding_and_soul_shackles_ability_defaults,
+};
 
 pub(crate) const CHAMPION_KEY: &str = "morgana";
 
@@ -11,69 +12,71 @@ pub(crate) fn apply_behavior(profile: &mut ChampionBehaviorProfile) {
     super::apply_behavior_override(CHAMPION_KEY, profile);
 }
 
-pub(crate) fn schedules() -> Vec<ChampionScriptSchedule> {
-    let defaults = &simulator_defaults().champion_script_defaults.morgana;
-    vec![
-        ChampionScriptSchedule {
-            event: ChampionScriptEvent::MorganaDarkBinding,
-            start_offset_seconds: defaults.dark_binding_schedule.start_offset_seconds,
-            interval_seconds: defaults.dark_binding_schedule.interval_seconds,
-        },
-        ChampionScriptSchedule {
-            event: ChampionScriptEvent::MorganaSoulShackles,
-            start_offset_seconds: defaults.soul_shackles_schedule.start_offset_seconds,
-            interval_seconds: defaults.soul_shackles_schedule.interval_seconds,
-        },
-    ]
+pub(crate) fn event_cooldown_seconds(event: ChampionScriptEvent) -> Option<f64> {
+    let defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    match event {
+        ChampionScriptEvent::MorganaDarkBinding => Some(defaults.dark_binding_cooldown_seconds),
+        ChampionScriptEvent::MorganaSoulShackles => Some(defaults.soul_shackles_cooldown_seconds),
+        _ => None,
+    }
 }
 
 pub(crate) fn execute_dark_binding(
     input: ChampionScriptExecutionInput,
     runtime: &mut ChampionLoadoutRuntime,
 ) -> Vec<ChampionScriptAction> {
-    let defaults = &simulator_defaults().champion_script_defaults.morgana;
-    if input.distance_to_target > defaults.dark_binding_cast_range {
+    let ability_defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    if input.distance_to_target > ability_defaults.dark_binding_cast_range {
         return Vec::new();
     }
-    let raw_magic = defaults.dark_binding_magic_base_damage
-        + defaults.dark_binding_magic_ability_power_ratio * input.burst_magic_damage.max(0.0);
+    let raw_magic = ability_defaults.dark_binding_magic_base_damage
+        + ability_defaults.dark_binding_magic_ability_power_ratio
+            * input.burst_magic_damage.max(0.0);
     let (extra_magic, extra_true) =
         on_ability_bonus_damage(runtime, raw_magic, input.target_max_health, input.now);
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
-        projectile_speed: input.ability_projectile_speed,
+        projectile_speed: ability_defaults.dark_binding_execution.projectile_speed,
         hitbox: ScriptedEffectHitbox::Circle {
-            radius: defaults.dark_binding_hitbox_radius,
+            radius: ability_defaults.dark_binding_execution.effect_hitbox_radius,
         },
         physical: 0.0,
         magic: raw_magic + extra_magic,
         true_damage: extra_true,
-        stun_duration: defaults.dark_binding_stun_duration_seconds,
+        stun_duration: ability_defaults.dark_binding_stun_duration_seconds,
     }]
 }
 
 pub(crate) fn execute_soul_shackles(
     input: ChampionScriptExecutionInput,
 ) -> Vec<ChampionScriptAction> {
-    let defaults = &simulator_defaults().champion_script_defaults.morgana;
-    if input.distance_to_target > defaults.soul_shackles_cast_range {
+    let ability_defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    if input.distance_to_target > ability_defaults.soul_shackles_cast_range {
         return Vec::new();
     }
     vec![
         ChampionScriptAction::ApplyDamage {
             source: input.actor_position,
-            projectile_speed: 0.0,
+            projectile_speed: ability_defaults.soul_shackles_execution.projectile_speed,
             hitbox: ScriptedEffectHitbox::Circle {
-                radius: defaults.soul_shackles_hitbox_radius,
+                radius: ability_defaults
+                    .soul_shackles_execution
+                    .effect_hitbox_radius,
             },
             physical: 0.0,
-            magic: defaults.soul_shackles_initial_magic_damage,
+            magic: ability_defaults.soul_shackles_initial_magic_damage
+                + ability_defaults.soul_shackles_initial_magic_ability_power_ratio
+                    * input.burst_magic_damage.max(0.0),
             true_damage: 0.0,
             stun_duration: 0.0,
         },
         ChampionScriptAction::ScheduleFollowup {
-            delay_seconds: defaults.soul_shackles_detonate_delay_seconds,
-            priority: defaults.soul_shackles_detonate_priority,
+            delay_seconds: ability_defaults.soul_shackles_detonate_delay_seconds,
+            priority: champion_ai_script_priority_override(CHAMPION_KEY, "soul_shackles_detonate")
+                .unwrap_or(11),
             event: ChampionScriptEvent::MorganaSoulShacklesDetonate,
         },
     ]
@@ -82,19 +85,24 @@ pub(crate) fn execute_soul_shackles(
 pub(crate) fn execute_soul_shackles_detonate(
     input: ChampionScriptExecutionInput,
 ) -> Vec<ChampionScriptAction> {
-    let defaults = &simulator_defaults().champion_script_defaults.morgana;
-    if input.distance_to_target > defaults.soul_shackles_detonate_cast_range {
+    let ability_defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    if input.distance_to_target > ability_defaults.soul_shackles_cast_range {
         return Vec::new();
     }
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
-        projectile_speed: 0.0,
+        projectile_speed: ability_defaults.soul_shackles_execution.projectile_speed,
         hitbox: ScriptedEffectHitbox::Circle {
-            radius: defaults.soul_shackles_hitbox_radius,
+            radius: ability_defaults
+                .soul_shackles_execution
+                .effect_hitbox_radius,
         },
         physical: 0.0,
-        magic: defaults.soul_shackles_detonate_magic_damage,
+        magic: ability_defaults.soul_shackles_detonate_magic_damage
+            + ability_defaults.soul_shackles_detonate_magic_ability_power_ratio
+                * input.burst_magic_damage.max(0.0),
         true_damage: 0.0,
-        stun_duration: defaults.soul_shackles_detonate_stun_duration_seconds,
+        stun_duration: ability_defaults.soul_shackles_detonate_stun_duration_seconds,
     }]
 }

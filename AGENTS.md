@@ -38,18 +38,54 @@ These instructions apply to the entire repository.
   - `Masteries/`
 - Do not duplicate base data in scenario JSON unless it is scenario-specific behavior.
 
+## AI Controller Policy Ownership
+- Champion canonical data files (`Characters/*.json`) must not store AI controller cadence/policy fields (for example scripted cast schedules).
+- AI behavior policy (combat spacing, movement scaling, cast polling cadence, non-canonical cooldown overrides) belongs in dedicated AI policy data under `Simulation/data/`.
+- Champion files may keep only champion-owned gameplay data and per-ability execution geometry/routing overrides required by scripts.
+
 ## Data-Driven Defaults Policy
 - Do not scatter fallback tuning numbers through Rust modules.
-- New default tuning values must be added to:
-  - `Simulation/data/simulator_defaults.json`
-  - `Simulation/src/defaults.rs` (typed schema/loader)
-- Shared modules should read defaults through `simulator_defaults()` instead of hardcoding profile constants.
+- Default ownership must follow domain boundaries:
+  - global simulator/search/engine defaults: `Simulation/data/simulator_defaults.json`
+  - game-mode defaults (for example URF respawn behavior): `Game Mode/<mode>.json`
+  - champion-specific simulation defaults (behavior, script constants, slot bindings): `Characters/<Champion>.json`
+- `Simulation/src/defaults.rs` is a loader layer and must read from the owning data file above.
+- Do not move champion-specific or mode-specific values into `simulator_defaults.json`.
+- Shared modules should read defaults via loader helpers instead of hardcoded profile constants.
 - This rule applies to:
-  - simulation/search defaults
-  - quality profile presets
-  - champion behavior/script defaults
-  - loadout-generation fallback defaults
+  - simulation/search defaults and quality profile presets (global)
+  - mode-specific simulation defaults (mode file)
+  - champion behavior/script defaults and ability-slot mapping (champion file)
+  - loadout-generation fallback defaults (global)
 - Inline literals are acceptable only for obvious structural values (for example `0.0`, `1.0`) when they are not a tunable gameplay assumption.
+
+## Schema Ownership And Placement Rules
+- Do not use catch-all containers to hold data that already has a canonical domain object.
+- In `Characters/<Champion>.json`:
+  - canonical champion stats belong in `base_stats`
+  - canonical gameplay ability data belongs in `abilities`
+  - simulator-only policy knobs may exist in `simulation`, but must be minimal and keyed by stable ability/mechanic identity
+- Avoid champion-prefixed keys inside generic structures when an ability/mechanic identity key can be used instead.
+- Do not duplicate the same gameplay value across sections unless one is explicitly declared a derived/runtime value.
+- If duplication is unavoidable, document source-of-truth and derivation path in the file notes/schema notes.
+
+## Mandatory Pre-Edit Review For Data Changes
+- Before changing any JSON schema or moving values:
+  - read the full destination object and immediate sibling objects
+  - list top-level keys and check whether the target value already has a canonical home
+  - verify ownership boundary (global vs mode vs champion vs item vs rune vs mastery)
+- If field placement is ambiguous, stop and ask the user before writing changes.
+- Do not perform structural edits based on partial-file assumptions.
+
+## Mandatory Post-Edit Self-Audit
+- After any schema/data refactor:
+  - verify no old schema keys remain unless intentionally preserved for compatibility
+  - verify loaders and error messages reference the new canonical path names
+  - update `Simulation/README.md`, `Simulation/IMPLEMENTATION_ROADMAP.md`, and `Simulation/IMPROVEMENT_TRACKER.md` when architecture or schema ownership changed
+- In the user report, explicitly state:
+  - what moved
+  - why it belongs there
+  - what was intentionally left unchanged
 
 ## Ability Swapping And Slot Architecture
 - Keep ability identity separate from cast slot (`Q`, `W`, `E`, `R`, `D`, `F`).

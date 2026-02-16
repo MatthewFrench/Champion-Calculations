@@ -1,15 +1,47 @@
 # Improvement Tracker
 
 ## Done
-- Added centralized simulator defaults dataset and typed loader:
-  - `Simulation/data/simulator_defaults.json`
-  - `Simulation/src/defaults.rs`
-  - shared modules now consume `simulator_defaults()` for tunable defaults
+- Removed duplicated top-level champion slot mapping data:
+  - default slot bindings are now derived from canonical champion ability fields (`abilities.<ability>.slot` / `default_keybinding`)
+  - removed `ability_slot_bindings` from `Characters/Vladimir.json`
+  - updated defaults loader to derive stable runtime ability identifiers from champion + ability names when explicit ability identifiers are not present
+- Completed roster-wide champion data cleanup aligned to canonical ownership:
+  - removed remaining `behavior` and `scripts` gameplay constants from `Characters/Vayne.json` and `Characters/Warwick.json`
+  - migrated Vayne Silver Bolts periodic true-hit defaults and Warwick Eternal Hunger/Infinite Duress scaling to typed loaders that read canonical ability/passive effects
+  - removed Yasuo from champion script dispatch and deleted the Yasuo champion script module from `Simulation/src/scripts/champions/`
+- Tightened data ownership and removed misplaced defaults from global simulator defaults:
+  - Heartsteel stack assumptions are scenario-owned (`simulation.heartsteel_assumed_stacks_at_8m`) and no longer stored in `Items/Heartsteel.json`
+  - Protoplasm Harness lifeline cooldown now comes from canonical item effects data in `Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`
+  - removed item-specific defaults from `Simulation/data/simulator_defaults.json`
+- Normalized champion simulation script config shape:
+  - replaced champion-specific `simulation.<champion>_script_defaults` keys with `scripts.<script_key>`
+  - updated typed loaders and champion script modules to read from the generic `scripts` container
+- Normalized URF mode simulation key naming:
+  - `Game Mode/URF.json` now uses `respawn` instead of `simulation_defaults.respawn`
+
+- Added typed defaults loader layer with domain ownership:
+  - global simulator/search/engine defaults: `Simulation/data/simulator_defaults.json`
+  - mode defaults (URF respawn tuning): `Game Mode/URF.json`
+  - champion simulation defaults: `Characters/*.json`
+  - loader and accessors: `Simulation/src/defaults.rs`
 - Moved search quality profile presets and loadout-generation fallback constants out of code and into defaults data:
   - `fast`, `balanced`, and `maximum_quality` profile numbers now come from defaults file
   - mastery fallback selection rules and random tree-attempt budget now come from defaults file
-- Moved champion script numeric assumptions out of champion modules and into defaults data:
-  - Warwick, Vayne, Morgana, Sona, Doctor Mundo, and Yasuo scripted schedules/effect constants now load from defaults
+- Split champion execution data ownership between champion data and AI controller policy:
+  - per-ability execution geometry/routing overrides are now canonical under `Characters/*.json` `abilities.<ability_key>.execution`
+  - controller policy (combat spacing, movement scaling, script polling, and non-canonical cooldown overrides) now loads from `Simulation/data/champion_ai_profiles.json`
+  - removed script schedule constants from champion files and switched script casting to cooldown-ready polling (`cast when ready`)
+- Completed ability-execution schema migration from behavior/scripts to canonical ability data:
+  - removed generic ability/burst execution keys from `behavior` in champion data and defaults
+  - reworked `Characters/ChampionDefaults.json` into champion-style nested schema (`base_stats`, `basic_attack`, `abilities.execution_defaults`) and removed explicit zero-value entries
+  - moved champion-specific execution settings to `abilities.<ability_key>.execution`
+  - updated engine and champion scripts to consume ability execution profiles from ability data with defaults fallback
+- Removed duplicated Morgana script timing field and promoted canonical ability ownership:
+  - `scripts.dark_binding_and_soul_shackles.soul_shackles_detonate_delay_seconds` was removed from `Characters/Morgana.json`
+  - Soul Shackles detonation delay now loads from `abilities.ultimate.effects[id=tether_duration]` in `Simulation/src/defaults.rs`
+- Moved Morgana script followup priority policy to AI ownership:
+  - removed `scripts.dark_binding_and_soul_shackles.soul_shackles_detonate_priority` from `Characters/Morgana.json`
+  - added `script_priority_overrides.soul_shackles_detonate` under `Simulation/data/champion_ai_profiles.json` for Morgana
 - Added runtime ability-slot mapping foundation for slot-agnostic casting:
   - introduced `ActorAbilityLoadout` with runtime slot-to-ability mapping in `src/scripts/runtime/ability_slots.rs`
   - controlled champion cooldown tracking now keys by ability identity rather than fixed slot cooldown fields
@@ -121,7 +153,6 @@
     - `src/scripts/champions/morgana/mod.rs`
     - `src/scripts/champions/sona/mod.rs`
     - `src/scripts/champions/doctor_mundo/mod.rs`
-    - `src/scripts/champions/yasuo/mod.rs`
   - items:
     - `src/scripts/items/hooks.rs`
   - runes:

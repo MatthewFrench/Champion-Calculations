@@ -367,7 +367,11 @@
         }
       ],
       "type": "Active",
-      "description": "Deal magic damage and grant a bonus magic-damage Melody attack."
+      "description": "Deal magic damage and grant a bonus magic-damage Melody attack.",
+      "execution": {
+        "cast_windup_seconds": 0.15,
+        "effect_hitbox_radius": 140.0
+      }
     },
     "ultimate": {
       "slot": "R",
@@ -421,7 +425,11 @@
         }
       ],
       "type": "Active",
-      "description": "Deal magic damage and stun."
+      "description": "Deal magic damage and stun.",
+      "execution": {
+        "cast_windup_seconds": 0.12,
+        "effect_hitbox_radius": 140.0
+      }
     }
   },
   "name": "Sona",

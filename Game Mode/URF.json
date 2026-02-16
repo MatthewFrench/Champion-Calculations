@@ -2747,5 +2747,13 @@
         "fallback": "If type is 'unparsed', use raw/effects_raw for exact meaning."
       }
     }
+  },
+  "respawn": {
+    "flat_reduction_seconds": 3.0,
+    "extrapolation_per_level": 2.5,
+    "time_scaling_enabled": true,
+    "time_scaling_start_seconds": 300.0,
+    "time_scaling_per_minute_seconds": 0.4,
+    "time_scaling_cap_seconds": 20.0
   }
 }

@@ -1,0 +1,30 @@
+{
+  "defaults": {
+    "script_poll_interval_seconds": 0.1,
+    "movement_speed_scale": 1.0
+  },
+  "champions": {
+    "drmundo": {
+      "desired_combat_range": 140.0,
+      "movement_speed_scale": 0.98
+    },
+    "morgana": {
+      "movement_speed_scale": 0.95,
+      "script_priority_overrides": {
+        "soul_shackles_detonate": 11
+      }
+    },
+    "sona": {
+      "desired_combat_range": 520.0,
+      "movement_speed_scale": 1.02
+    },
+    "vayne": {
+      "desired_combat_range": 520.0,
+      "movement_speed_scale": 1.1
+    },
+    "warwick": {
+      "desired_combat_range": 130.0,
+      "movement_speed_scale": 1.08
+    }
+  }
+}

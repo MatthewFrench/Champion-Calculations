@@ -57,19 +57,31 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
   - healing done
   with configurable weights and per-scenario baseline normalization.
 - Objective evaluation now supports selection-aware combat simulation so candidate loadout scoring includes combat-time runtime scripts.
-- Default simulation/search/script tuning values are centralized in `data/simulator_defaults.json` and loaded through typed schema in `src/defaults.rs`.
+- Default ownership is domain-based:
+  - global simulator/search/engine defaults: `data/simulator_defaults.json`
+  - champion AI controller policy defaults: `data/champion_ai_profiles.json`
+  - game-mode simulation defaults: `../Game Mode/*.json`
+  - champion simulation defaults: `../Characters/*.json`
+  loaded through typed schema/helpers in `src/defaults.rs`.
+- Ability execution geometry/routing overrides belong on canonical ability objects (`abilities.<ability_key>.execution`).
+- Champion script blocks should only keep script-policy values that are not canonical gameplay ability data (for example followup priority).
+- Script cast timing is controller-driven: enemies poll script abilities and cast when ready (cooldown-ready, alive, active, and not stunned), rather than using champion-file schedule constants.
 - Controlled champion spell readiness now tracks by ability identity with runtime slot-to-ability mapping foundations for remap/swap support.
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
 - `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
-- `data/simulator_defaults.json`: Centralized tunable defaults for simulation, search profiles, engine, and script constants.
+- `data/simulator_defaults.json`: Global simulator/search/engine and loadout-generation defaults.
+- `data/champion_ai_profiles.json`: Champion AI controller policy (combat spacing, movement scaling, script polling, script-event priority overrides, and non-canonical cooldown overrides when canonical data is missing).
+- `../Game Mode/URF.json`: URF mode data, including mode-specific simulation defaults (for example respawn tuning).
+- `../Characters/<Champion>.json`: Champion canonical gameplay data, including per-ability execution fields (`abilities.<ability_key>.execution`) and ability/passive effect data used by scripts.
+- `../Characters/ChampionDefaults.json`: Champion-style nested role defaults (`base_stats`, `basic_attack`, `abilities.execution_defaults`) used as fallback when champion files omit those canonical fields.
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
 - `src/core.rs`: Shared simulation math/helpers plus foundational generic combat primitives (status/cast-lock scaffolding).
 - `src/data.rs`: Scenario/data loading, config parsing, loadout legality generation, and enemy preset validation.
-- `src/defaults.rs`: Typed schema and loader for centralized simulator defaults.
+- `src/defaults.rs`: Typed schema and loader for global defaults plus domain-file champion/mode simulation defaults.
 - `src/engine.rs`: Fixed-tick combat engine and event-queue simulation loop.
 - `src/build_order.rs`: Build-order stage simulation and optimization.
 - `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
@@ -209,7 +221,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
     - key bindings should map to ability instances via data and runtime state.
     - runtime should support ability remapping/swapping across champions (for example stolen abilities) without changing core engine code.
     - champion-specific exceptions should be implemented in ability scripts/data, not in shared engine branches.
-    - default slot bindings and scripted default constants should come from `data/simulator_defaults.json` (not inline literals).
+    - default slot bindings should be derived from canonical ability data (`abilities.<ability>.slot` / `default_keybinding`) in champion files, not from separate top-level mapping blocks or global defaults.
 
 ## Current Script Structure
 The simulator now uses a domain-first script layout to keep champion/item/rune/mastery behavior organized:
@@ -232,8 +244,6 @@ src/scripts/
     sona/
       mod.rs
     doctor_mundo/
-      mod.rs
-    yasuo/
       mod.rs
   items/
     mod.rs
@@ -302,22 +312,28 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - Startup validation fails fast if a preset references missing item/rune/shard/mastery data.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - Heartsteel assumptions:
-  - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes (default `20`).
+  - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes.
+  - this value is scenario-owned and must be provided by the scenario.
   - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
   - In build-order optimization, Heartsteel stacks are distributed by item acquisition level and current stage level (so buying it later yields fewer stacks by level 20).
 - Level assumption:
   - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
 - Respawn model knobs:
-  - `simulation.urf_respawn_flat_reduction_seconds` (default `3.0`)
-  - `simulation.urf_respawn_extrapolation_per_level` (default `2.5`)
-  - `simulation.urf_respawn_time_scaling_enabled` (default `true`)
-  - `simulation.urf_respawn_time_scaling_start_seconds` (default `300.0`)
-  - `simulation.urf_respawn_time_scaling_per_minute_seconds` (default `0.4`)
-  - `simulation.urf_respawn_time_scaling_cap_seconds` (default `20.0`)
+  - scenario knobs:
+    - `simulation.urf_respawn_flat_reduction_seconds`
+    - `simulation.urf_respawn_extrapolation_per_level`
+    - `simulation.urf_respawn_time_scaling_enabled`
+    - `simulation.urf_respawn_time_scaling_start_seconds`
+    - `simulation.urf_respawn_time_scaling_per_minute_seconds`
+    - `simulation.urf_respawn_time_scaling_cap_seconds`
+  - fallback defaults are loaded from `../Game Mode/URF.json` under `respawn`.
+- Protoplasm Harness lifeline cooldown:
+  - fallback default is loaded from `../Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`.
 - Vladimir scripted ability knobs:
   - `simulation.vlad_q_base_damage`, `simulation.vlad_q_ap_ratio`, `simulation.vlad_q_heal_ratio_of_damage`, `simulation.vlad_q_base_cooldown_seconds`
   - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`
   - `simulation.vlad_r_base_damage`, `simulation.vlad_r_ap_ratio`, `simulation.vlad_r_base_cooldown_seconds`
+  - fallback defaults are loaded from `../Characters/Vladimir.json` under `abilities.basic_ability_1`, `abilities.basic_ability_3`, and `abilities.ultimate` (effects plus cooldowns).
 - Enemy script hooks (scenario enemy fields):
   - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
   - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per enemy use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`

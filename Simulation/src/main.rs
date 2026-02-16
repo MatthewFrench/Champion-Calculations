@@ -114,6 +114,8 @@ struct ChampionBase {
     attack_damage_per_level: f64,
     base_attack_speed: f64,
     attack_speed_per_level_percent: f64,
+    base_attack_range: f64,
+    base_attack_projectile_speed: f64,
     base_move_speed: f64,
     is_melee: bool,
 }
@@ -530,6 +532,8 @@ mod tests {
             attack_damage_per_level: 0.0,
             base_attack_speed: 0.658,
             attack_speed_per_level_percent: 0.0,
+            base_attack_range: 450.0,
+            base_attack_projectile_speed: 1600.0,
             base_move_speed: 340.0,
             is_melee: false,
         };

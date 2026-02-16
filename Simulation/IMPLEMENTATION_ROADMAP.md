@@ -32,6 +32,30 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - shared script interfaces do not hardcode Vladimir-specific identifiers.
 
+3.1 `DONE` Separate champion AI controller policy from champion canonical data.
+- Scope:
+  - move script cast cadence policy out of `Characters/*.json`
+  - move AI movement/spacing policy (`desired_combat_range`, `movement_speed_scale`) into dedicated AI data
+  - move per-ability execution timing/projectile/hitbox ownership to `abilities.<ability_key>.execution` with role defaults in `Characters/ChampionDefaults.json`
+  - introduce cooldown-ready script polling (`cast when ready`) for scripted enemy abilities
+- Success criteria:
+  - champion files contain canonical champion gameplay data (including `abilities.<ability_key>.execution`) while controller policy lives in AI profiles.
+
+3.2 `DONE` Remove remaining champion `behavior` and `scripts` gameplay overrides from roster files.
+- Scope:
+  - migrate Vayne Silver Bolts periodic true-hit tuning to canonical ability effects
+  - migrate Warwick Eternal Hunger and Infinite Duress scaling to canonical passive/ultimate effects
+  - remove Yasuo champion script module from simulation roster
+- Success criteria:
+  - roster champion files keep canonical gameplay data only; no leftover simulator-only gameplay constants in champion JSON.
+
+3.3 `DONE` Remove champion top-level `ability_slot_bindings` and derive default bindings from canonical ability data.
+- Scope:
+  - derive runtime slot-to-ability defaults from `abilities.<ability>.slot` / `default_keybinding`
+  - remove top-level `ability_slot_bindings` from champion JSON
+- Success criteria:
+  - slot binding defaults are canonical and do not duplicate data shape in champion root objects.
+
 4. `IN_PROGRESS` Build a generic buff/debuff/status system.
 - Scope:
   - duration, stacks, refresh policy
@@ -144,6 +168,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 20. `IN_PROGRESS` Source-backed constants dataset with provenance.
 - Scope:
   - maintain sources, dates, and override policy for tuned constants
+- Recent progress:
+  - moved Morgana Soul Shackles detonation delay ownership to `Characters/Morgana.json` `abilities.ultimate.effects[id=tether_duration]` and removed duplicated script storage
 - Success criteria:
   - constants are traceable and auditable.
 
