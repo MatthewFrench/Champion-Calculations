@@ -2,9 +2,9 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
 use crate::scripts::champions::vladimir::{
-    VladimirCastProfile, VladimirDefensiveDecisionInput, VladimirGuardianAngelDecisionInput,
-    VladimirOffensiveDecisionInput, VladimirTargetSnapshot, decide_defensive_activations,
-    decide_offensive_casts, default_cast_profile, should_trigger_guardian_angel,
+    VladimirCastProfile, VladimirDefensiveAbilityDecisionInput, VladimirOffensiveDecisionInput,
+    VladimirTargetSnapshot, decide_defensive_ability_activations, decide_offensive_casts,
+    default_cast_profile,
 };
 use crate::scripts::champions::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
@@ -13,11 +13,14 @@ use crate::scripts::champions::{
     on_ability_bonus_damage, on_hit_bonus_damage, scripted_champion_event_schedules,
     tick_regen_heal,
 };
+use crate::scripts::items::hooks::controlled_champion_defensive_item_capabilities;
 use crate::scripts::runtime::controlled_champion_loadout::{
     ControlledChampionAbilityRuntimeInput, ControlledChampionLoadoutRuntime,
+    DefensiveItemActivationInput, ReviveEffectDecisionInput,
     build_controlled_champion_loadout_runtime, controlled_champion_damage_taken_multiplier,
-    controlled_champion_heal_multiplier, on_controlled_champion_ability_bonus,
-    on_controlled_champion_enemy_kill, tick_controlled_champion_regen_heal,
+    controlled_champion_heal_multiplier, decide_defensive_item_activations,
+    on_controlled_champion_ability_bonus, on_controlled_champion_enemy_kill,
+    should_trigger_revive_effect, tick_controlled_champion_regen_heal,
 };
 
 use super::*;
@@ -269,33 +272,33 @@ pub(super) struct ControlledChampionCombatSimulation {
     offensive_cooldowns: VladimirAbilityCooldowns,
     cast_profile: VladimirCastProfile,
 
-    zhonya_available: bool,
-    ga_available: bool,
-    protoplasm_available: bool,
+    stasis_item_available: bool,
+    revive_item_available: bool,
+    emergency_shield_item_available: bool,
 
-    ga_cooldown: f64,
-    zhonya_cooldown: f64,
-    protoplasm_cooldown: f64,
+    revive_item_cooldown_seconds: f64,
+    stasis_item_cooldown_seconds: f64,
+    emergency_shield_item_cooldown_seconds: f64,
 
-    zhonya_cd: f64,
-    ga_cd: f64,
+    stasis_item_ready_at: f64,
+    revive_item_ready_at: f64,
     pool_cd: f64,
     q_cd: f64,
     e_cd: f64,
     r_cd: f64,
-    protoplasm_cd: f64,
+    emergency_shield_item_ready_at: f64,
 
     pool_until: f64,
     stasis_until: f64,
-    ga_res_until: f64,
+    revive_lockout_until: f64,
     stunned_until: f64,
     combat_primitives: CombatPrimitivesState,
 
-    protoplasm_shield: f64,
+    emergency_shield_amount: f64,
     pool_heal_rate: f64,
     pool_heal_until: f64,
-    protoplasm_hot_rate: f64,
-    protoplasm_hot_until: f64,
+    emergency_heal_rate: f64,
+    emergency_heal_until: f64,
 
     target_position: Vec2,
     enemy_state: Vec<EnemyState>,
@@ -383,16 +386,17 @@ impl ControlledChampionCombatSimulation {
         let offensive_cooldowns = offensive_cooldowns_after_haste(offensive_tuning, ability_haste);
         let cast_profile = default_cast_profile();
 
-        let zhonya_available = vlad_build_items
-            .iter()
-            .any(|i| i.name == "Zhonya's Hourglass");
-        let ga_available = vlad_build_items.iter().any(|i| i.name == "Guardian Angel");
-        let protoplasm_available = vlad_build_items
-            .iter()
-            .any(|i| i.name == "Protoplasm Harness");
+        let defensive_item_capabilities =
+            controlled_champion_defensive_item_capabilities(vlad_build_items);
+        let stasis_item_available = defensive_item_capabilities.has_stasis_item;
+        let revive_item_available = defensive_item_capabilities.has_revive_item;
+        let emergency_shield_item_available = defensive_item_capabilities.has_emergency_shield_item;
 
-        let ga_cooldown = cooldown_after_haste(sim.ga_cooldown_seconds, urf.item_haste);
-        let zhonya_cooldown = cooldown_after_haste(sim.zhonya_cooldown_seconds, urf.item_haste);
+        let revive_item_cooldown_seconds =
+            cooldown_after_haste(sim.ga_cooldown_seconds, urf.item_haste);
+        let stasis_item_cooldown_seconds =
+            cooldown_after_haste(sim.zhonya_cooldown_seconds, urf.item_haste);
+        let emergency_shield_item_cooldown_seconds = cooldown_after_haste(120.0, urf.item_haste);
 
         let tick_seconds = if sim.server_tick_rate_hz > 0.0 {
             1.0 / sim.server_tick_rate_hz
@@ -425,29 +429,29 @@ impl ControlledChampionCombatSimulation {
             offensive_tuning,
             offensive_cooldowns,
             cast_profile,
-            zhonya_available,
-            ga_available,
-            protoplasm_available,
-            ga_cooldown,
-            zhonya_cooldown,
-            protoplasm_cooldown: 120.0,
-            zhonya_cd: 0.0,
-            ga_cd: 0.0,
+            stasis_item_available,
+            revive_item_available,
+            emergency_shield_item_available,
+            revive_item_cooldown_seconds,
+            stasis_item_cooldown_seconds,
+            emergency_shield_item_cooldown_seconds,
+            stasis_item_ready_at: 0.0,
+            revive_item_ready_at: 0.0,
             pool_cd: 0.0,
             q_cd: 0.0,
             e_cd: 0.0,
             r_cd: 0.0,
-            protoplasm_cd: 0.0,
+            emergency_shield_item_ready_at: 0.0,
             pool_until: 0.0,
             stasis_until: 0.0,
-            ga_res_until: 0.0,
+            revive_lockout_until: 0.0,
             stunned_until: 0.0,
             combat_primitives: CombatPrimitivesState::default(),
-            protoplasm_shield: 0.0,
+            emergency_shield_amount: 0.0,
             pool_heal_rate: 0.0,
             pool_heal_until: 0.0,
-            protoplasm_hot_rate: 0.0,
-            protoplasm_hot_until: 0.0,
+            emergency_heal_rate: 0.0,
+            emergency_heal_until: 0.0,
             target_position: Vec2 { x: 0.0, y: 0.0 },
             enemy_state: Vec::new(),
             projectile_block_zones: Vec::new(),
@@ -560,7 +564,7 @@ impl ControlledChampionCombatSimulation {
     pub(super) fn is_targetable(&self) -> bool {
         self.time >= self.pool_until
             && self.time >= self.stasis_until
-            && self.time >= self.ga_res_until
+            && self.time >= self.revive_lockout_until
     }
 
     pub(super) fn can_cast(&self) -> bool {
@@ -975,12 +979,12 @@ impl ControlledChampionCombatSimulation {
                 .min(self.health + self.pool_heal_rate * active);
             self.healing_done_total += (self.health - before).max(0.0);
         }
-        if self.protoplasm_hot_until > self.time {
-            let active = delta.min(self.protoplasm_hot_until - self.time);
+        if self.emergency_heal_until > self.time {
+            let active = delta.min(self.emergency_heal_until - self.time);
             let before = self.health;
             self.health = self
                 .max_health
-                .min(self.health + self.protoplasm_hot_rate * active);
+                .min(self.health + self.emergency_heal_rate * active);
             self.healing_done_total += (self.health - before).max(0.0);
         }
         let runtime_regen = tick_controlled_champion_regen_heal(
@@ -1071,9 +1075,9 @@ impl ControlledChampionCombatSimulation {
             &self.controlled_champion_runtime,
             active_enemy_count,
         );
-        if self.protoplasm_shield > 0.0 && damage > 0.0 {
-            let absorbed = self.protoplasm_shield.min(damage);
-            self.protoplasm_shield -= absorbed;
+        if self.emergency_shield_amount > 0.0 && damage > 0.0 {
+            let absorbed = self.emergency_shield_amount.min(damage);
+            self.emergency_shield_amount -= absorbed;
             damage -= absorbed;
         }
         self.trace_event(
@@ -1090,18 +1094,18 @@ impl ControlledChampionCombatSimulation {
     }
 
     fn handle_death(&mut self) {
-        if should_trigger_guardian_angel(VladimirGuardianAngelDecisionInput {
-            available: self.ga_available,
+        if should_trigger_revive_effect(ReviveEffectDecisionInput {
+            available: self.revive_item_available,
             now_seconds: self.time,
-            ready_at: self.ga_cd,
+            ready_at: self.revive_item_ready_at,
         }) {
-            self.ga_cd = self.time + self.ga_cooldown;
-            self.ga_res_until = self.time + self.sim.ga_revive_duration_seconds;
+            self.revive_item_ready_at = self.time + self.revive_item_cooldown_seconds;
+            self.revive_lockout_until = self.time + self.sim.ga_revive_duration_seconds;
             self.health =
                 1.0_f64.max(self.vlad_base.base_health * self.sim.ga_revive_base_health_ratio);
             self.trace_event(
-                "ga_revive",
-                format!("Guardian Angel revived {}", self.controlled_champion_name),
+                "revive_effect",
+                format!("Revive item restored {}", self.controlled_champion_name),
             );
             return;
         }
@@ -1119,23 +1123,14 @@ impl ControlledChampionCombatSimulation {
         }
         self.refresh_enemy_respawns();
 
-        let defensive = decide_defensive_activations(VladimirDefensiveDecisionInput {
-            now_seconds: self.time,
-            can_cast: self.can_cast(),
-            health: self.health,
-            max_health: self.max_health,
-            pool_ready_at: self.pool_cd,
-            zhonya_available: self.zhonya_available,
-            zhonya_ready_at: self.zhonya_cd,
-            zhonya_trigger_health_percent: self.sim.zhonya_trigger_health_percent,
-            pool_active_until: self.pool_until,
-            ga_revive_active_until: self.ga_res_until,
-            protoplasm_available: self.protoplasm_available,
-            protoplasm_ready_at: self.protoplasm_cd,
-            protoplasm_trigger_health_percent: self.sim.protoplasm_trigger_health_percent,
-        });
+        let defensive_ability =
+            decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
+                now_seconds: self.time,
+                can_cast: self.can_cast(),
+                pool_ready_at: self.pool_cd,
+            });
 
-        if defensive.cast_pool {
+        if defensive_ability.cast_pool {
             self.pool_cd = self.time + self.pool_cooldown;
             self.pool_until = self.time + self.pool_duration;
             self.apply_status_effect(StatusEffect::timed(
@@ -1234,24 +1229,23 @@ impl ControlledChampionCombatSimulation {
             );
         }
 
-        let defensive = decide_defensive_activations(VladimirDefensiveDecisionInput {
+        let defensive_items = decide_defensive_item_activations(DefensiveItemActivationInput {
             now_seconds: self.time,
             can_cast: self.can_cast(),
             health: self.health,
             max_health: self.max_health,
-            pool_ready_at: self.pool_cd,
-            zhonya_available: self.zhonya_available,
-            zhonya_ready_at: self.zhonya_cd,
-            zhonya_trigger_health_percent: self.sim.zhonya_trigger_health_percent,
-            pool_active_until: self.pool_until,
-            ga_revive_active_until: self.ga_res_until,
-            protoplasm_available: self.protoplasm_available,
-            protoplasm_ready_at: self.protoplasm_cd,
-            protoplasm_trigger_health_percent: self.sim.protoplasm_trigger_health_percent,
+            stasis_available: self.stasis_item_available,
+            stasis_ready_at: self.stasis_item_ready_at,
+            stasis_trigger_health_percent: self.sim.zhonya_trigger_health_percent,
+            untargetable_active_until: self.pool_until,
+            revive_lock_active_until: self.revive_lockout_until,
+            emergency_shield_available: self.emergency_shield_item_available,
+            emergency_shield_ready_at: self.emergency_shield_item_ready_at,
+            emergency_shield_trigger_health_percent: self.sim.protoplasm_trigger_health_percent,
         });
 
-        if defensive.activate_zhonya {
-            self.zhonya_cd = self.time + self.zhonya_cooldown;
+        if defensive_items.activate_stasis {
+            self.stasis_item_ready_at = self.time + self.stasis_item_cooldown_seconds;
             self.stasis_until = self.time + self.sim.zhonya_duration_seconds;
             self.apply_status_effect(StatusEffect::timed(
                 StatusEffectKind::Stasis,
@@ -1261,12 +1255,13 @@ impl ControlledChampionCombatSimulation {
             ));
         }
 
-        if defensive.activate_protoplasm {
-            self.protoplasm_cd = self.time + self.protoplasm_cooldown;
-            self.protoplasm_shield += self.sim.protoplasm_bonus_health;
-            self.protoplasm_hot_rate =
+        if defensive_items.activate_emergency_shield {
+            self.emergency_shield_item_ready_at =
+                self.time + self.emergency_shield_item_cooldown_seconds;
+            self.emergency_shield_amount += self.sim.protoplasm_bonus_health;
+            self.emergency_heal_rate =
                 self.sim.protoplasm_heal_total / self.sim.protoplasm_duration_seconds.max(0.001);
-            self.protoplasm_hot_until = self.time + self.sim.protoplasm_duration_seconds;
+            self.emergency_heal_until = self.time + self.sim.protoplasm_duration_seconds;
         }
     }
 

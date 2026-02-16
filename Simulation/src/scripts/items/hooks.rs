@@ -6,6 +6,28 @@ pub(crate) struct ItemHook;
 
 pub(crate) const ITEM_HOOK: ItemHook = ItemHook;
 
+#[derive(Debug, Clone, Copy, Default)]
+pub(crate) struct ControlledChampionDefensiveItemCapabilities {
+    pub has_stasis_item: bool,
+    pub has_revive_item: bool,
+    pub has_emergency_shield_item: bool,
+}
+
+pub(crate) fn controlled_champion_defensive_item_capabilities(
+    build_items: &[Item],
+) -> ControlledChampionDefensiveItemCapabilities {
+    let mut capabilities = ControlledChampionDefensiveItemCapabilities::default();
+    for item in build_items {
+        match item.name.as_str() {
+            "Zhonya's Hourglass" => capabilities.has_stasis_item = true,
+            "Guardian Angel" => capabilities.has_revive_item = true,
+            "Protoplasm Harness" => capabilities.has_emergency_shield_item = true,
+            _ => {}
+        }
+    }
+    capabilities
+}
+
 impl ScriptHook for ItemHook {
     fn apply_item_assumptions(&self, ctx: &ItemAssumptionContext<'_>, stats: &mut Stats) {
         if ctx.build_items.iter().any(|i| i.name == "Heartsteel") {
@@ -99,4 +121,34 @@ fn heartsteel_stacks_by_level(
     let elapsed = (current - acquired).max(0.0);
     let reference_window = (reference_end - reference_start).max(1.0_f64);
     (full_stacks_at_level_20 * (elapsed / reference_window)).clamp(0.0, full_stacks_at_level_20)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::Stats;
+
+    fn test_item(name: &str) -> Item {
+        Item {
+            name: name.to_string(),
+            stats: Stats::default(),
+            rank: vec!["LEGENDARY".to_string()],
+            shop_purchasable: true,
+            total_cost: 3000.0,
+            passive_effects_text: Vec::new(),
+        }
+    }
+
+    #[test]
+    fn defensive_item_capabilities_detect_supported_items() {
+        let build_items = vec![
+            test_item("Zhonya's Hourglass"),
+            test_item("Guardian Angel"),
+            test_item("Protoplasm Harness"),
+        ];
+        let capabilities = controlled_champion_defensive_item_capabilities(&build_items);
+        assert!(capabilities.has_stasis_item);
+        assert!(capabilities.has_revive_item);
+        assert!(capabilities.has_emergency_shield_item);
+    }
 }

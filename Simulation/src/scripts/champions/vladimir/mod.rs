@@ -7,9 +7,9 @@ pub(crate) use abilities::{
     q_damage_raw, r_damage_raw,
 };
 pub(crate) use decisions::{
-    VladimirCastProfile, VladimirDefensiveDecisionInput, VladimirGuardianAngelDecisionInput,
-    VladimirOffensiveDecisionInput, VladimirTargetSnapshot, decide_defensive_activations,
-    decide_offensive_casts, default_cast_profile, should_trigger_guardian_angel,
+    VladimirCastProfile, VladimirDefensiveAbilityDecisionInput, VladimirOffensiveDecisionInput,
+    VladimirTargetSnapshot, decide_defensive_ability_activations, decide_offensive_casts,
+    default_cast_profile,
 };
 pub(crate) use hook::VLADIMIR_HOOK;
 
@@ -93,90 +93,32 @@ mod tests {
     }
 
     #[test]
-    fn defensive_decisions_match_trigger_conditions() {
-        let decisions = decide_defensive_activations(VladimirDefensiveDecisionInput {
-            now_seconds: 10.0,
-            can_cast: true,
-            health: 320.0,
-            max_health: 1000.0,
-            pool_ready_at: 8.0,
-            zhonya_available: true,
-            zhonya_ready_at: 7.0,
-            zhonya_trigger_health_percent: 0.35,
-            pool_active_until: 10.0,
-            ga_revive_active_until: 9.0,
-            protoplasm_available: true,
-            protoplasm_ready_at: 6.0,
-            protoplasm_trigger_health_percent: 0.40,
-        });
-        assert!(decisions.cast_pool);
-        assert!(decisions.activate_zhonya);
-        assert!(decisions.activate_protoplasm);
-    }
-
-    #[test]
-    fn defensive_decisions_block_zhonya_while_pool_or_revive_active() {
-        let blocked_by_pool = decide_defensive_activations(VladimirDefensiveDecisionInput {
-            now_seconds: 10.0,
-            can_cast: true,
-            health: 200.0,
-            max_health: 1000.0,
-            pool_ready_at: 0.0,
-            zhonya_available: true,
-            zhonya_ready_at: 0.0,
-            zhonya_trigger_health_percent: 0.50,
-            pool_active_until: 11.0,
-            ga_revive_active_until: 0.0,
-            protoplasm_available: false,
-            protoplasm_ready_at: 0.0,
-            protoplasm_trigger_health_percent: 0.0,
-        });
-        assert!(!blocked_by_pool.activate_zhonya);
-
-        let blocked_by_revive = decide_defensive_activations(VladimirDefensiveDecisionInput {
-            ga_revive_active_until: 11.0,
-            pool_active_until: 0.0,
-            ..VladimirDefensiveDecisionInput {
+    fn defensive_ability_decisions_match_trigger_conditions() {
+        let decisions =
+            decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
                 now_seconds: 10.0,
                 can_cast: true,
-                health: 200.0,
-                max_health: 1000.0,
-                pool_ready_at: 0.0,
-                zhonya_available: true,
-                zhonya_ready_at: 0.0,
-                zhonya_trigger_health_percent: 0.50,
-                pool_active_until: 0.0,
-                ga_revive_active_until: 0.0,
-                protoplasm_available: false,
-                protoplasm_ready_at: 0.0,
-                protoplasm_trigger_health_percent: 0.0,
-            }
-        });
-        assert!(!blocked_by_revive.activate_zhonya);
+                pool_ready_at: 8.0,
+            });
+        assert!(decisions.cast_pool);
     }
 
     #[test]
-    fn guardian_angel_trigger_checks_cooldown_and_availability() {
-        assert!(should_trigger_guardian_angel(
-            VladimirGuardianAngelDecisionInput {
-                available: true,
-                now_seconds: 120.0,
-                ready_at: 120.0,
-            }
-        ));
-        assert!(!should_trigger_guardian_angel(
-            VladimirGuardianAngelDecisionInput {
-                available: true,
-                now_seconds: 119.9,
-                ready_at: 120.0,
-            }
-        ));
-        assert!(!should_trigger_guardian_angel(
-            VladimirGuardianAngelDecisionInput {
-                available: false,
-                now_seconds: 120.0,
-                ready_at: 0.0,
-            }
-        ));
+    fn defensive_ability_decisions_require_readiness_and_cast_permission() {
+        let not_ready =
+            decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
+                now_seconds: 10.0,
+                can_cast: true,
+                pool_ready_at: 11.0,
+            });
+        assert!(!not_ready.cast_pool);
+
+        let cannot_cast =
+            decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
+                now_seconds: 10.0,
+                can_cast: false,
+                pool_ready_at: 0.0,
+            });
+        assert!(!cannot_cast.cast_pool);
     }
 }

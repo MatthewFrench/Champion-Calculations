@@ -223,7 +223,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - performance regressions fail checks or raise warnings.
 
-34. `PLANNED` Enforce strict module boundaries to prevent core logic sprawl.
+34. `IN_PROGRESS` Enforce strict module boundaries to prevent core logic sprawl.
 - Scope:
   - keep champion/item/rune/mastery specifics outside engine core
 - Success criteria:
@@ -278,6 +278,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 11 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `IN_PROGRESS` Item 12 (controlled champion runtime mastery effects are wired through simulation/objective; broader coverage pending)
 - `IN_PROGRESS` Item 36 (audit underway; structure migration phases being tracked)
+- `IN_PROGRESS` Item 34 (champion/item coupling reduced by moving defensive item and revive decisions into generic runtime/item capability scripts)
 - `IN_PROGRESS` Item 37 (phase-one scripts hierarchy landed; remaining migrations pending)
 - `IN_PROGRESS` Item 38 (descriptive naming and module-splitting pass underway)
 

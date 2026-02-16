@@ -18,6 +18,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
 - Controlled champion loadout runtime scripts are now applied during combat-time spell hits, kill events, and regeneration ticks.
+- Defensive item activation and revive triggers are modeled through generic controlled champion runtime/item script capabilities (not champion-specific decision structs).
 - Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).
 - Vladimir combat sequencing decisions are script-owned and delegated from engine.
 - Enemy champion script events are generated in scripts and applied by generic engine action handling.
@@ -63,12 +64,12 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
 - `src/scripts/champions/mod.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types.
-- `src/scripts/champions/vladimir/mod.rs`: Vladimir scripted formulas and combat decision APIs (offense/defense/GA trigger).
+- `src/scripts/champions/vladimir/mod.rs`: Vladimir scripted formulas and combat decision APIs (offense and defensive ability decisions).
 - `src/scripts/champions/<champion>/mod.rs`: Per-champion behavior/event logic modules.
 - `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
 - `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
 - `src/scripts/masteries/effects.rs`: Mastery runtime flag parsing and dynamic-runtime classification.
-- `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion runtime effects and loadout hook implementation.
+- `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion runtime effects, defensive item/revive decision helpers, and loadout hook implementation.
 - `src/scripts/runtime/loadout_runtime.rs`: Shared combat-time loadout runtime state and effect helpers.
 - `src/scripts/registry/hooks.rs`: Script hook interfaces, contexts, and dispatch registry.
 

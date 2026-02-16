@@ -14,6 +14,11 @@
   - renamed `EnemyScript*` types to `ChampionScript*`
   - renamed script execution fields from enemy/controlled-champion coupling to actor/target semantics
   - renamed `enemy_index` target snapshots to `target_index`
+- Extracted defensive item and revive decisions into generic runtime/item script capabilities:
+  - moved stasis/revive/emergency-shield trigger logic out of Vladimir-specific decision types
+  - added role-neutral defensive decision APIs in `src/scripts/runtime/controlled_champion_loadout.rs`
+  - moved defensive item availability detection into `src/scripts/items/hooks.rs`
+  - engine now consumes generic item/runtime capability APIs
 - Added run output partitioning by run type and runtime budget:
   - outputs now default under `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/`
   - keeps short and long-budget runs separated (for example `unbounded`, `300s`).
@@ -147,8 +152,8 @@
   - colinear-but-disjoint projectile paths no longer register as blocked
 - Extracted Vladimir combat decision logic into script-owned APIs:
   - offensive cast scheduling delegated to `src/scripts/champions/vladimir/mod.rs`
-  - defensive activation decisions delegated to `src/scripts/champions/vladimir/mod.rs`
-  - Guardian Angel trigger decision delegated to `src/scripts/champions/vladimir/mod.rs`
+  - Vladimir defensive ability (pool) decision delegated to `src/scripts/champions/vladimir/mod.rs`
+  - defensive item/revive decisions delegated to `src/scripts/runtime/controlled_champion_loadout.rs`
 - Extracted enemy champion-specific script event behavior into scripts dispatch:
   - `src/scripts/champions/mod.rs` now owns champion event action generation
   - `src/engine.rs` now applies generic script actions

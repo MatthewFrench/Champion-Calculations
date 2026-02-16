@@ -54,34 +54,15 @@ pub(crate) struct VladimirOffensiveCastDecisions {
 }
 
 #[derive(Debug, Clone, Copy)]
-pub(crate) struct VladimirDefensiveDecisionInput {
+pub(crate) struct VladimirDefensiveAbilityDecisionInput {
     pub now_seconds: f64,
     pub can_cast: bool,
-    pub health: f64,
-    pub max_health: f64,
     pub pool_ready_at: f64,
-    pub zhonya_available: bool,
-    pub zhonya_ready_at: f64,
-    pub zhonya_trigger_health_percent: f64,
-    pub pool_active_until: f64,
-    pub ga_revive_active_until: f64,
-    pub protoplasm_available: bool,
-    pub protoplasm_ready_at: f64,
-    pub protoplasm_trigger_health_percent: f64,
 }
 
 #[derive(Debug, Clone, Copy, Default)]
-pub(crate) struct VladimirDefensiveDecisions {
+pub(crate) struct VladimirDefensiveAbilityDecisions {
     pub cast_pool: bool,
-    pub activate_zhonya: bool,
-    pub activate_protoplasm: bool,
-}
-
-#[derive(Debug, Clone, Copy)]
-pub(crate) struct VladimirGuardianAngelDecisionInput {
-    pub available: bool,
-    pub now_seconds: f64,
-    pub ready_at: f64,
 }
 
 pub(crate) fn default_cast_profile() -> VladimirCastProfile {
@@ -149,22 +130,10 @@ pub(crate) fn decide_offensive_casts(
     decisions
 }
 
-pub(crate) fn decide_defensive_activations(
-    input: VladimirDefensiveDecisionInput,
-) -> VladimirDefensiveDecisions {
-    VladimirDefensiveDecisions {
+pub(crate) fn decide_defensive_ability_activations(
+    input: VladimirDefensiveAbilityDecisionInput,
+) -> VladimirDefensiveAbilityDecisions {
+    VladimirDefensiveAbilityDecisions {
         cast_pool: input.can_cast && input.now_seconds >= input.pool_ready_at,
-        activate_zhonya: input.zhonya_available
-            && input.now_seconds >= input.zhonya_ready_at
-            && input.health <= input.max_health * input.zhonya_trigger_health_percent
-            && input.now_seconds >= input.pool_active_until
-            && input.now_seconds >= input.ga_revive_active_until,
-        activate_protoplasm: input.protoplasm_available
-            && input.now_seconds >= input.protoplasm_ready_at
-            && input.health <= input.max_health * input.protoplasm_trigger_health_percent,
     }
-}
-
-pub(crate) fn should_trigger_guardian_angel(input: VladimirGuardianAngelDecisionInput) -> bool {
-    input.available && input.now_seconds >= input.ready_at
 }

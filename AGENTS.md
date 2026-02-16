@@ -12,6 +12,13 @@ These instructions apply to the entire repository.
   - `Simulation/src/reporting.rs`
 - Place specialized behavior in script modules under `Simulation/src/scripts/` with clean interfaces.
 
+## Abstraction-First Scripting Policy
+- Avoid champion-and-item pair hardcoding (for example champion module types/functions that directly encode one specific item behavior).
+- Item behavior should be expressed through item/runtime script capabilities and consumed through generic actor/target interfaces.
+- Champion scripts should describe champion kit behavior only; shared defensive/offensive item activation logic belongs in generic runtime or item script modules.
+- When a special interaction is needed, prefer introducing a reusable capability abstraction first, then attach it through scripts.
+- New shared interfaces must use role-neutral terminology (`actor`, `target`, `opponent`, `controlled champion`) rather than role-locked naming.
+
 ## Champion And Enemy Symmetry
 - Use the same abstractions for the controlled champion and enemies where practical.
 - Avoid one-off logic paths that only exist for one champion unless represented as a script capability that any champion can use.
@@ -43,4 +50,3 @@ These instructions apply to the entire repository.
   - `cargo fmt --manifest-path Simulation/Cargo.toml`
   - `cargo clippy --all-targets --all-features --manifest-path Simulation/Cargo.toml -- -D warnings`
   - `cargo test --release --manifest-path Simulation/Cargo.toml`
-
