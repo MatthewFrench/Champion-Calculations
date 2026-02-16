@@ -57,15 +57,19 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
   - healing done
   with configurable weights and per-scenario baseline normalization.
 - Objective evaluation now supports selection-aware combat simulation so candidate loadout scoring includes combat-time runtime scripts.
+- Default simulation/search/script tuning values are centralized in `data/simulator_defaults.json` and loaded through typed schema in `src/defaults.rs`.
+- Controlled champion spell readiness now tracks by ability identity with runtime slot-to-ability mapping foundations for remap/swap support.
 
 ## Files
 - `scenario_vlad_urf.json`: Scenario setup (champion references, behavior knobs, tick rate, build search settings).
 - `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
+- `data/simulator_defaults.json`: Centralized tunable defaults for simulation, search profiles, engine, and script constants.
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
 - `src/core.rs`: Shared simulation math/helpers plus foundational generic combat primitives (status/cast-lock scaffolding).
 - `src/data.rs`: Scenario/data loading, config parsing, loadout legality generation, and enemy preset validation.
+- `src/defaults.rs`: Typed schema and loader for centralized simulator defaults.
 - `src/engine.rs`: Fixed-tick combat engine and event-queue simulation loop.
 - `src/build_order.rs`: Build-order stage simulation and optimization.
 - `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
@@ -205,6 +209,7 @@ cargo run --release --manifest-path "/Users/matthewfrench/Documents/League of Le
     - key bindings should map to ability instances via data and runtime state.
     - runtime should support ability remapping/swapping across champions (for example stolen abilities) without changing core engine code.
     - champion-specific exceptions should be implemented in ability scripts/data, not in shared engine branches.
+    - default slot bindings and scripted default constants should come from `data/simulator_defaults.json` (not inline literals).
 
 ## Current Script Structure
 The simulator now uses a domain-first script layout to keep champion/item/rune/mastery behavior organized:

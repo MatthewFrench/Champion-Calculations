@@ -2,36 +2,30 @@ use super::{
     ChampionBehaviorProfile, ChampionScriptAction, ChampionScriptEvent,
     ChampionScriptExecutionInput, ChampionScriptSchedule,
 };
+use crate::defaults::simulator_defaults;
 
 pub(crate) const CHAMPION_KEY: &str = "vayne";
 
 pub(crate) fn apply_behavior(profile: &mut ChampionBehaviorProfile) {
-    profile.attack_range = 550.0;
-    profile.attack_windup_seconds = 0.17;
-    profile.attack_projectile_speed = 2500.0;
-    profile.periodic_true_hit_every = 3;
-    profile.periodic_true_hit_base = 40.0;
-    profile.periodic_true_hit_ad_ratio = 0.25;
-    profile.periodic_true_hit_target_max_health_ratio = 0.04;
-    profile.ability_projectile_speed = 2200.0;
-    profile.burst_projectile_speed = 2200.0;
-    profile.desired_combat_range = 520.0;
-    profile.movement_speed_scale = 1.10;
+    super::apply_behavior_override(CHAMPION_KEY, profile);
 }
 
 pub(crate) fn schedules() -> Vec<ChampionScriptSchedule> {
+    let defaults = &simulator_defaults().champion_script_defaults.vayne;
+    let schedule = defaults.tumble_empower_schedule;
     vec![ChampionScriptSchedule {
         event: ChampionScriptEvent::VayneTumbleEmpower,
-        start_offset_seconds: 2.2,
-        interval_seconds: 5.0,
+        start_offset_seconds: schedule.start_offset_seconds,
+        interval_seconds: schedule.interval_seconds,
     }]
 }
 
 pub(crate) fn execute_tumble_empower(
     input: ChampionScriptExecutionInput,
 ) -> Vec<ChampionScriptAction> {
+    let defaults = &simulator_defaults().champion_script_defaults.vayne;
     vec![ChampionScriptAction::AddNextAttackBonusPhysical {
-        amount: 0.75 * input.physical_hit_damage,
+        amount: defaults.tumble_bonus_physical_attack_damage_ratio * input.physical_hit_damage,
         trace_message: "empowered next attack",
     }]
 }

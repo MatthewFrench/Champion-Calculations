@@ -13,6 +13,8 @@
   - periodic on-hit counters (for example Vayne-style third-hit tracking)
 - Enemy respawn now also resets position to original spawn position.
 - Reports now include per-enemy derived combat profiles and similarity warnings for suspiciously close auto-attack profiles.
+- Core simulation/search/champion-script defaults are now centralized in `Simulation/data/simulator_defaults.json` and loaded via typed schema in `Simulation/src/defaults.rs`.
+- Controlled champion spell readiness now tracks by ability identity through runtime slot mapping primitives.
 
 ## Medium Confidence (Likely Correct But Approximate)
 - Scripted enemy ability timing and damage constants are intentionally first-pass approximations.
@@ -28,7 +30,7 @@
   - Some dynamic effects are still represented as notes or simplified assumptions.
 - Respawn timing currently uses level-scaling and URF flat reduction, but does not yet include full game-time increase-factor modeling from live rules.
 - Projectile interaction is not yet full collision/hitbox/path-block fidelity.
-- Ability identity is still partially represented by champion-specific cast fields; full slot-agnostic runtime remapping support (for stolen/swapped abilities) is not yet implemented.
+- Ability identity is still partially represented by champion-specific cast fields; slot mapping foundations exist, but full actor-wide slot-agnostic runtime remapping support (for stolen/swapped abilities) is not yet implemented.
 
 ## Questions To Review
 1. Do we want to include game-time as an explicit simulation input so death timers can apply full time-based scaling (not just level-based scaling)?
@@ -37,6 +39,21 @@
 4. Do we want a stricter verification mode that compares scripted values against sourced tables and fails on unknown/unsourced constants?
 5. Should we treat key bindings as pure actor input slots mapped to runtime ability instances so stolen abilities and remaps are first-class?
 6. For ability theft behavior, should stolen abilities inherit source-champion scaling rules exactly, or should they resolve through recipient-champion overrides when documented?
+
+## Research Notes (2026-02-16)
+- Cooldowns during death:
+  - Community-maintained League wiki states cooldowns continue while dead.
+  - Source: [Death (League Wiki)](https://wiki.leagueoflegends.com/en-us/Death)
+- Current base death-timer direction:
+  - Official patch notes show recent Summoner's Rift death-timer rule changes (example: 26.1 adjusted by-level values and time-scaling window).
+  - Source: [Patch 26.1 Notes](https://www.leagueoflegends.com/en-us/news/game-updates/patch-26-1-notes/)
+- ARURF/URF details:
+  - Official recent ARURF patch notes expose many mode-specific knobs but do not clearly publish a full respawn formula.
+  - Source: [Patch 25.04 Notes](https://www.leagueoflegends.com/en-us/news/game-updates/patch-25-04-notes/)
+  - Implication: URF respawn math should stay configurable via data defaults until we can verify formula details from authoritative sources.
+- Ability theft baseline semantics:
+  - League wiki documents Sylas Hijack as on-target cooldown-gated steal with hijacked cast held temporarily and cast as recast behavior.
+  - Source: [Sylas (League Wiki)](https://wiki.leagueoflegends.com/en-us/Sylas)
 
 ## Script-Extraction Backlog (From Audit)
 - Vladimir defensive/offensive decisions are script-owned, but the engine still executes some Vladimir effect applications directly after script decisions.

@@ -1,3 +1,4 @@
+use crate::defaults::{ChampionBehaviorDefaultsEntry, simulator_defaults};
 use crate::{MasterySelection, to_norm_key};
 
 use crate::scripts::runtime::loadout_runtime::{
@@ -41,49 +42,43 @@ pub(crate) struct ChampionBehaviorProfile {
 
 impl ChampionBehaviorProfile {
     pub(crate) fn default_for(is_melee: bool) -> Self {
-        if is_melee {
-            Self {
-                attack_range: 175.0,
-                attack_windup_seconds: 0.24,
-                attack_projectile_speed: 0.0,
-                attack_effect_hitbox_radius: 80.0,
-                ability_windup_seconds: 0.10,
-                ability_projectile_speed: 0.0,
-                ability_effect_hitbox_radius: 90.0,
-                burst_windup_seconds: 0.10,
-                burst_projectile_speed: 0.0,
-                burst_effect_hitbox_radius: 120.0,
-                desired_combat_range: 135.0,
-                movement_speed_scale: 1.0,
-                on_hit_magic_flat: 0.0,
-                on_hit_magic_ad_ratio: 0.0,
-                periodic_true_hit_every: 0,
-                periodic_true_hit_base: 0.0,
-                periodic_true_hit_ad_ratio: 0.0,
-                periodic_true_hit_target_max_health_ratio: 0.0,
-            }
+        let defaults = &simulator_defaults().champion_behavior_defaults;
+        let source = if is_melee {
+            defaults.default_melee
         } else {
-            Self {
-                attack_range: 550.0,
-                attack_windup_seconds: 0.20,
-                attack_projectile_speed: 2000.0,
-                attack_effect_hitbox_radius: 45.0,
-                ability_windup_seconds: 0.10,
-                ability_projectile_speed: 1800.0,
-                ability_effect_hitbox_radius: 70.0,
-                burst_windup_seconds: 0.10,
-                burst_projectile_speed: 1800.0,
-                burst_effect_hitbox_radius: 100.0,
-                desired_combat_range: 500.0,
-                movement_speed_scale: 1.0,
-                on_hit_magic_flat: 0.0,
-                on_hit_magic_ad_ratio: 0.0,
-                periodic_true_hit_every: 0,
-                periodic_true_hit_base: 0.0,
-                periodic_true_hit_ad_ratio: 0.0,
-                periodic_true_hit_target_max_health_ratio: 0.0,
-            }
-        }
+            defaults.default_ranged
+        };
+        profile_from_defaults(source)
+    }
+}
+
+fn profile_from_defaults(source: ChampionBehaviorDefaultsEntry) -> ChampionBehaviorProfile {
+    ChampionBehaviorProfile {
+        attack_range: source.attack_range,
+        attack_windup_seconds: source.attack_windup_seconds,
+        attack_projectile_speed: source.attack_projectile_speed,
+        attack_effect_hitbox_radius: source.attack_effect_hitbox_radius,
+        ability_windup_seconds: source.ability_windup_seconds,
+        ability_projectile_speed: source.ability_projectile_speed,
+        ability_effect_hitbox_radius: source.ability_effect_hitbox_radius,
+        burst_windup_seconds: source.burst_windup_seconds,
+        burst_projectile_speed: source.burst_projectile_speed,
+        burst_effect_hitbox_radius: source.burst_effect_hitbox_radius,
+        desired_combat_range: source.desired_combat_range,
+        movement_speed_scale: source.movement_speed_scale,
+        on_hit_magic_flat: source.on_hit_magic_flat,
+        on_hit_magic_ad_ratio: source.on_hit_magic_ad_ratio,
+        periodic_true_hit_every: source.periodic_true_hit_every,
+        periodic_true_hit_base: source.periodic_true_hit_base,
+        periodic_true_hit_ad_ratio: source.periodic_true_hit_ad_ratio,
+        periodic_true_hit_target_max_health_ratio: source.periodic_true_hit_target_max_health_ratio,
+    }
+}
+
+pub(crate) fn apply_behavior_override(champion_key: &str, profile: &mut ChampionBehaviorProfile) {
+    let defaults = &simulator_defaults().champion_behavior_defaults;
+    if let Some(override_entry) = defaults.overrides.get(champion_key).copied() {
+        *profile = profile_from_defaults(override_entry);
     }
 }
 

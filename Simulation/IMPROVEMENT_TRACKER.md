@@ -1,6 +1,18 @@
 # Improvement Tracker
 
 ## Done
+- Added centralized simulator defaults dataset and typed loader:
+  - `Simulation/data/simulator_defaults.json`
+  - `Simulation/src/defaults.rs`
+  - shared modules now consume `simulator_defaults()` for tunable defaults
+- Moved search quality profile presets and loadout-generation fallback constants out of code and into defaults data:
+  - `fast`, `balanced`, and `maximum_quality` profile numbers now come from defaults file
+  - mastery fallback selection rules and random tree-attempt budget now come from defaults file
+- Moved champion script numeric assumptions out of champion modules and into defaults data:
+  - Warwick, Vayne, Morgana, Sona, Doctor Mundo, and Yasuo scripted schedules/effect constants now load from defaults
+- Added runtime ability-slot mapping foundation for slot-agnostic casting:
+  - introduced `ActorAbilityLoadout` with runtime slot-to-ability mapping in `src/scripts/runtime/ability_slots.rs`
+  - controlled champion cooldown tracking now keys by ability identity rather than fixed slot cooldown fields
 - Added hitbox-aware impact and interruption simulation in core combat loop:
   - actor hitboxes are modeled as circles and included in range checks
   - attack/spell/script effects now use configurable effect-hitbox radii
@@ -196,17 +208,6 @@
   - Success criteria:
     - documented target architecture with an ordered migration checklist.
     - reduced cross-module coupling and cleaner extension points.
-
-- [P0] Domain-based script folder hierarchy (`champions`, `items`, `runes`, `masteries`)
-  - Goal: replace the current flat script organization with domain-first structure.
-  - Scope:
-    - migrate champion scripts into `scripts/champions/` with per-champion modules.
-    - migrate item logic into `scripts/items/` and split by item or item families.
-    - migrate rune/mastery logic into `scripts/runes/` and `scripts/masteries/`.
-    - keep shared registries and runtime primitives in dedicated shared modules.
-  - Success criteria:
-    - script discovery is intuitive and scales as champion/item coverage grows.
-    - no single generic script file becomes a long-term dumping ground.
 
 - [P1] File naming and module-size standards for maintainability
   - Goal: enforce consistent, descriptive naming and avoid oversized files.

@@ -1,7 +1,12 @@
 use super::abilities::VladimirAbilityCooldowns;
+use crate::defaults::simulator_defaults;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub(crate) struct VladimirCastProfile {
+    pub q_ability_id: String,
+    pub e_ability_id: String,
+    pub r_ability_id: String,
+    pub pool_ability_id: String,
     pub q_range: f64,
     pub q_windup_seconds: f64,
     pub q_projectile_speed: f64,
@@ -22,7 +27,7 @@ pub(crate) struct VladimirTargetSnapshot {
     pub distance: f64,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub(crate) struct VladimirOffensiveDecisionInput {
     pub now_seconds: f64,
     pub can_cast: bool,
@@ -36,20 +41,22 @@ pub(crate) struct VladimirOffensiveDecisionInput {
     pub r_max_distance: Option<f64>,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub(crate) struct VladimirSingleTargetCastDecision {
+    pub ability_id: String,
     pub target_index: usize,
     pub impact_delay_seconds: f64,
     pub next_ready_at: f64,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub(crate) struct VladimirAreaCastDecision {
+    pub ability_id: String,
     pub impact_delay_seconds: f64,
     pub next_ready_at: f64,
 }
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Default)]
 pub(crate) struct VladimirOffensiveCastDecisions {
     pub q: Option<VladimirSingleTargetCastDecision>,
     pub e: Option<VladimirAreaCastDecision>,
@@ -69,19 +76,24 @@ pub(crate) struct VladimirDefensiveAbilityDecisions {
 }
 
 pub(crate) fn default_cast_profile() -> VladimirCastProfile {
+    let defaults = &simulator_defaults().vladimir_cast_profile_defaults;
     VladimirCastProfile {
-        q_range: 600.0,
-        q_windup_seconds: 0.20,
-        q_projectile_speed: 0.0,
-        q_effect_hitbox_radius: 80.0,
-        e_range: 600.0,
-        e_windup_seconds: 0.30,
-        e_projectile_speed: 0.0,
-        e_effect_hitbox_radius: 275.0,
-        r_range: 700.0,
-        r_windup_seconds: 0.25,
-        r_projectile_speed: 0.0,
-        r_effect_hitbox_radius: 375.0,
+        q_ability_id: defaults.q_ability_id.clone(),
+        e_ability_id: defaults.e_ability_id.clone(),
+        r_ability_id: defaults.r_ability_id.clone(),
+        pool_ability_id: defaults.pool_ability_id.clone(),
+        q_range: defaults.q_range,
+        q_windup_seconds: defaults.q_windup_seconds,
+        q_projectile_speed: defaults.q_projectile_speed,
+        q_effect_hitbox_radius: defaults.q_effect_hitbox_radius,
+        e_range: defaults.e_range,
+        e_windup_seconds: defaults.e_windup_seconds,
+        e_projectile_speed: defaults.e_projectile_speed,
+        e_effect_hitbox_radius: defaults.e_effect_hitbox_radius,
+        r_range: defaults.r_range,
+        r_windup_seconds: defaults.r_windup_seconds,
+        r_projectile_speed: defaults.r_projectile_speed,
+        r_effect_hitbox_radius: defaults.r_effect_hitbox_radius,
     }
 }
 
@@ -107,6 +119,7 @@ pub(crate) fn decide_offensive_casts(
         let travel =
             projectile_travel_seconds(target.distance, input.cast_profile.q_projectile_speed);
         decisions.q = Some(VladimirSingleTargetCastDecision {
+            ability_id: input.cast_profile.q_ability_id.clone(),
             target_index: target.target_index,
             impact_delay_seconds: input.cast_profile.q_windup_seconds + travel,
             next_ready_at: input.now_seconds + input.cooldowns.q_seconds,
@@ -118,6 +131,7 @@ pub(crate) fn decide_offensive_casts(
     {
         let travel = projectile_travel_seconds(max_distance, input.cast_profile.e_projectile_speed);
         decisions.e = Some(VladimirAreaCastDecision {
+            ability_id: input.cast_profile.e_ability_id.clone(),
             impact_delay_seconds: input.cast_profile.e_windup_seconds + travel,
             next_ready_at: input.now_seconds + input.cooldowns.e_seconds,
         });
@@ -128,6 +142,7 @@ pub(crate) fn decide_offensive_casts(
     {
         let travel = projectile_travel_seconds(max_distance, input.cast_profile.r_projectile_speed);
         decisions.r = Some(VladimirAreaCastDecision {
+            ability_id: input.cast_profile.r_ability_id.clone(),
             impact_delay_seconds: input.cast_profile.r_windup_seconds + travel,
             next_ready_at: input.now_seconds + input.cooldowns.r_seconds,
         });

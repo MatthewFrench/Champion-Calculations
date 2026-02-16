@@ -69,7 +69,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - positioning changes materially affect damage windows.
 
-9. `PLANNED` Introduce slot-agnostic ability architecture.
+9. `IN_PROGRESS` Introduce slot-agnostic ability architecture.
 - Scope:
   - decouple ability identity from key binding slots (`Q`,`W`,`E`,`R`)
   - model runtime slot-to-ability mapping as data/state instead of hardcoded champion fields
@@ -141,7 +141,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 ## P1 Data Correctness, Calibration, Validation
 
-20. `PLANNED` Source-backed constants dataset with provenance.
+20. `IN_PROGRESS` Source-backed constants dataset with provenance.
 - Scope:
   - maintain sources, dates, and override policy for tuned constants
 - Success criteria:
@@ -287,6 +287,14 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 42. `DONE` Maintain explicit roadmap tracking with acceptance criteria.
 - Implemented in this file.
 
+43. `PLANNED` Cross-actor component search (champion/passive/ability/item/rune/mastery composition).
+- Scope:
+  - generalize search domain to support interchangeable champion kits and passive/ability attachments
+  - preserve deterministic, script-driven behavior mapping across swapped components
+  - support both maximize and minimize objective modes (best/worst compositions)
+- Success criteria:
+  - search pipeline can evaluate legal mixed-component compositions without champion-locked engine branching.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -294,7 +302,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 7 (hitbox-aware impact outcomes and melee windup interruption on stun)
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
-- `PLANNED` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities)
+- `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `IN_PROGRESS` Item 14 (controlled champion runtime mastery effects are wired through simulation/objective; broader coverage pending)
 - `IN_PROGRESS` Item 38 (audit underway; structure migration phases being tracked)

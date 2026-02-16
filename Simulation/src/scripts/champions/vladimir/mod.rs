@@ -19,6 +19,10 @@ mod tests {
 
     fn test_profile() -> VladimirCastProfile {
         VladimirCastProfile {
+            q_ability_id: "vladimir_transfusion".to_string(),
+            e_ability_id: "vladimir_tides_of_blood".to_string(),
+            r_ability_id: "vladimir_hemoplague".to_string(),
+            pool_ability_id: "vladimir_sanguine_pool".to_string(),
             q_range: 600.0,
             q_windup_seconds: 0.20,
             q_projectile_speed: 1200.0,
@@ -58,11 +62,13 @@ mod tests {
         });
 
         let q = decisions.q.expect("q cast should be scheduled");
+        assert_eq!(q.ability_id, "vladimir_transfusion");
         assert_eq!(q.target_index, 2);
         assert!((q.impact_delay_seconds - 0.70).abs() < 1e-9);
         assert!((q.next_ready_at - 13.50).abs() < 1e-9);
 
         let e = decisions.e.expect("e cast should be scheduled");
+        assert_eq!(e.ability_id, "vladimir_tides_of_blood");
         assert!((e.impact_delay_seconds - 0.80).abs() < 1e-9);
         assert!((e.next_ready_at - 15.00).abs() < 1e-9);
 

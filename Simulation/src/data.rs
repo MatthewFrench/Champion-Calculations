@@ -4,6 +4,7 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use crate::defaults::{SearchQualityProfilePreset, simulator_defaults};
 use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
 
 use super::{
@@ -420,15 +421,17 @@ pub(crate) fn as_str<'a>(obj: &'a Value, key: &str) -> Result<&'a str> {
 }
 
 pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
+    let defaults = simulator_defaults();
+    let sim_defaults = &defaults.simulation_defaults;
     let server_tick_rate_hz = data
         .get("server_tick_rate_hz")
         .and_then(Value::as_f64)
-        .unwrap_or(30.0);
+        .unwrap_or(sim_defaults.server_tick_rate_hz);
     let dt = data.get("dt").and_then(Value::as_f64).unwrap_or_else(|| {
         if server_tick_rate_hz > 0.0 {
             1.0 / server_tick_rate_hz
         } else {
-            0.05
+            sim_defaults.dt_fallback_seconds
         }
     });
 
@@ -446,7 +449,7 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         champion_level: data
             .get("champion_level")
             .and_then(Value::as_u64)
-            .unwrap_or(20) as usize,
+            .unwrap_or(sim_defaults.champion_level as u64) as usize,
         max_time_seconds: as_f64(data, "max_time_seconds")?,
         vlad_pool_rank: data
             .get("vlad_pool_rank")
@@ -473,75 +476,75 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         heartsteel_assumed_stacks_at_8m: data
             .get("heartsteel_assumed_stacks_at_8m")
             .and_then(Value::as_f64)
-            .unwrap_or(20.0),
+            .unwrap_or(sim_defaults.heartsteel_assumed_stacks_at_8m),
         enemy_uptime_model_enabled: data
             .get("enemy_uptime_model_enabled")
             .and_then(Value::as_bool)
-            .unwrap_or(false),
+            .unwrap_or(sim_defaults.enemy_uptime_model_enabled),
         urf_respawn_flat_reduction_seconds: data
             .get("urf_respawn_flat_reduction_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(3.0),
+            .unwrap_or(sim_defaults.urf_respawn_flat_reduction_seconds),
         urf_respawn_extrapolation_per_level: data
             .get("urf_respawn_extrapolation_per_level")
             .and_then(Value::as_f64)
-            .unwrap_or(2.5),
+            .unwrap_or(sim_defaults.urf_respawn_extrapolation_per_level),
         urf_respawn_time_scaling_enabled: data
             .get("urf_respawn_time_scaling_enabled")
             .and_then(Value::as_bool)
-            .unwrap_or(true),
+            .unwrap_or(sim_defaults.urf_respawn_time_scaling_enabled),
         urf_respawn_time_scaling_start_seconds: data
             .get("urf_respawn_time_scaling_start_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(300.0),
+            .unwrap_or(sim_defaults.urf_respawn_time_scaling_start_seconds),
         urf_respawn_time_scaling_per_minute_seconds: data
             .get("urf_respawn_time_scaling_per_minute_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(0.4),
+            .unwrap_or(sim_defaults.urf_respawn_time_scaling_per_minute_seconds),
         urf_respawn_time_scaling_cap_seconds: data
             .get("urf_respawn_time_scaling_cap_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(20.0),
+            .unwrap_or(sim_defaults.urf_respawn_time_scaling_cap_seconds),
         vlad_q_base_damage: data
             .get("vlad_q_base_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(220.0),
+            .unwrap_or(sim_defaults.vlad_q_base_damage),
         vlad_q_ap_ratio: data
             .get("vlad_q_ap_ratio")
             .and_then(Value::as_f64)
-            .unwrap_or(0.60),
+            .unwrap_or(sim_defaults.vlad_q_ap_ratio),
         vlad_q_heal_ratio_of_damage: data
             .get("vlad_q_heal_ratio_of_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(0.30),
+            .unwrap_or(sim_defaults.vlad_q_heal_ratio_of_damage),
         vlad_q_base_cooldown_seconds: data
             .get("vlad_q_base_cooldown_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(4.0),
+            .unwrap_or(sim_defaults.vlad_q_base_cooldown_seconds),
         vlad_e_base_damage: data
             .get("vlad_e_base_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(180.0),
+            .unwrap_or(sim_defaults.vlad_e_base_damage),
         vlad_e_ap_ratio: data
             .get("vlad_e_ap_ratio")
             .and_then(Value::as_f64)
-            .unwrap_or(0.50),
+            .unwrap_or(sim_defaults.vlad_e_ap_ratio),
         vlad_e_base_cooldown_seconds: data
             .get("vlad_e_base_cooldown_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(8.0),
+            .unwrap_or(sim_defaults.vlad_e_base_cooldown_seconds),
         vlad_r_base_damage: data
             .get("vlad_r_base_damage")
             .and_then(Value::as_f64)
-            .unwrap_or(350.0),
+            .unwrap_or(sim_defaults.vlad_r_base_damage),
         vlad_r_ap_ratio: data
             .get("vlad_r_ap_ratio")
             .and_then(Value::as_f64)
-            .unwrap_or(0.70),
+            .unwrap_or(sim_defaults.vlad_r_ap_ratio),
         vlad_r_base_cooldown_seconds: data
             .get("vlad_r_base_cooldown_seconds")
             .and_then(Value::as_f64)
-            .unwrap_or(90.0),
+            .unwrap_or(sim_defaults.vlad_r_base_cooldown_seconds),
     })
 }
 
@@ -671,6 +674,8 @@ pub(crate) fn parse_enemy_config(
 }
 
 pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
+    let defaults = simulator_defaults();
+    let search_defaults = &defaults.search_defaults;
     let portfolio_strategies = data
         .get("portfolio_strategies")
         .and_then(Value::as_array)
@@ -683,118 +688,135 @@ pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
         .unwrap_or_default();
     Ok(BuildSearchConfig {
         strategy: as_str(data, "strategy")?.to_string(),
-        beam_width: data.get("beam_width").and_then(Value::as_u64).unwrap_or(20) as usize,
-        max_items: data.get("max_items").and_then(Value::as_u64).unwrap_or(6) as usize,
+        beam_width: data
+            .get("beam_width")
+            .and_then(Value::as_u64)
+            .unwrap_or(search_defaults.beam_width as u64) as usize,
+        max_items: data
+            .get("max_items")
+            .and_then(Value::as_u64)
+            .unwrap_or(search_defaults.max_items as u64) as usize,
         random_samples: data
             .get("random_samples")
             .and_then(Value::as_u64)
-            .unwrap_or(200) as usize,
+            .unwrap_or(search_defaults.random_samples as u64) as usize,
         hill_climb_restarts: data
             .get("hill_climb_restarts")
             .and_then(Value::as_u64)
-            .unwrap_or(64) as usize,
+            .unwrap_or(search_defaults.hill_climb_restarts as u64)
+            as usize,
         hill_climb_steps: data
             .get("hill_climb_steps")
             .and_then(Value::as_u64)
-            .unwrap_or(20) as usize,
+            .unwrap_or(search_defaults.hill_climb_steps as u64) as usize,
         hill_climb_neighbors: data
             .get("hill_climb_neighbors")
             .and_then(Value::as_u64)
-            .unwrap_or(24) as usize,
+            .unwrap_or(search_defaults.hill_climb_neighbors as u64)
+            as usize,
         genetic_population: data
             .get("genetic_population")
             .and_then(Value::as_u64)
-            .unwrap_or(80) as usize,
+            .unwrap_or(search_defaults.genetic_population as u64)
+            as usize,
         genetic_generations: data
             .get("genetic_generations")
             .and_then(Value::as_u64)
-            .unwrap_or(30) as usize,
+            .unwrap_or(search_defaults.genetic_generations as u64)
+            as usize,
         genetic_mutation_rate: data
             .get("genetic_mutation_rate")
             .and_then(Value::as_f64)
-            .unwrap_or(0.18),
+            .unwrap_or(search_defaults.genetic_mutation_rate),
         genetic_crossover_rate: data
             .get("genetic_crossover_rate")
             .and_then(Value::as_f64)
-            .unwrap_or(0.90),
+            .unwrap_or(search_defaults.genetic_crossover_rate),
         portfolio_strategies,
         ranked_limit: data
             .get("ranked_limit")
             .and_then(Value::as_u64)
-            .unwrap_or(400) as usize,
+            .unwrap_or(search_defaults.ranked_limit as u64) as usize,
         simulated_annealing_restarts: data
             .get("simulated_annealing_restarts")
             .and_then(Value::as_u64)
-            .unwrap_or(32) as usize,
+            .unwrap_or(search_defaults.simulated_annealing_restarts as u64)
+            as usize,
         simulated_annealing_iterations: data
             .get("simulated_annealing_iterations")
             .and_then(Value::as_u64)
-            .unwrap_or(220) as usize,
+            .unwrap_or(search_defaults.simulated_annealing_iterations as u64)
+            as usize,
         simulated_annealing_initial_temp: data
             .get("simulated_annealing_initial_temp")
             .and_then(Value::as_f64)
-            .unwrap_or(1.2),
+            .unwrap_or(search_defaults.simulated_annealing_initial_temp),
         simulated_annealing_cooling_rate: data
             .get("simulated_annealing_cooling_rate")
             .and_then(Value::as_f64)
-            .unwrap_or(0.985),
+            .unwrap_or(search_defaults.simulated_annealing_cooling_rate),
         mcts_iterations: data
             .get("mcts_iterations")
             .and_then(Value::as_u64)
-            .unwrap_or(5000) as usize,
+            .unwrap_or(search_defaults.mcts_iterations as u64) as usize,
         mcts_rollouts_per_expansion: data
             .get("mcts_rollouts_per_expansion")
             .and_then(Value::as_u64)
-            .unwrap_or(2) as usize,
+            .unwrap_or(search_defaults.mcts_rollouts_per_expansion as u64)
+            as usize,
         mcts_exploration: data
             .get("mcts_exploration")
             .and_then(Value::as_f64)
-            .unwrap_or(1.2),
+            .unwrap_or(search_defaults.mcts_exploration),
         ensemble_seeds: data
             .get("ensemble_seeds")
             .and_then(Value::as_u64)
-            .unwrap_or(3) as usize,
+            .unwrap_or(search_defaults.ensemble_seeds as u64) as usize,
         ensemble_seed_stride: data
             .get("ensemble_seed_stride")
             .and_then(Value::as_u64)
-            .unwrap_or(1_000_003),
+            .unwrap_or(search_defaults.ensemble_seed_stride),
         ensemble_seed_top_k: data
             .get("ensemble_seed_top_k")
             .and_then(Value::as_u64)
-            .unwrap_or(25) as usize,
+            .unwrap_or(search_defaults.ensemble_seed_top_k as u64)
+            as usize,
         objective_survival_weight: data
             .get("objective_survival_weight")
             .and_then(Value::as_f64)
-            .unwrap_or(0.55),
+            .unwrap_or(search_defaults.objective_survival_weight),
         objective_damage_weight: data
             .get("objective_damage_weight")
             .and_then(Value::as_f64)
-            .unwrap_or(0.30),
+            .unwrap_or(search_defaults.objective_damage_weight),
         objective_healing_weight: data
             .get("objective_healing_weight")
             .and_then(Value::as_f64)
-            .unwrap_or(0.15),
+            .unwrap_or(search_defaults.objective_healing_weight),
         robust_min_seed_hit_rate: data
             .get("robust_min_seed_hit_rate")
             .and_then(Value::as_f64)
-            .unwrap_or(0.5),
+            .unwrap_or(search_defaults.robust_min_seed_hit_rate),
         bleed_enabled: data
             .get("bleed_enabled")
             .and_then(Value::as_bool)
-            .unwrap_or(true),
+            .unwrap_or(search_defaults.bleed_enabled),
         bleed_budget: data
             .get("bleed_budget")
             .and_then(Value::as_u64)
-            .unwrap_or(0) as usize,
+            .unwrap_or(search_defaults.bleed_budget as u64) as usize,
         bleed_mutation_rate: data
             .get("bleed_mutation_rate")
             .and_then(Value::as_f64)
-            .unwrap_or(0.35),
+            .unwrap_or(search_defaults.bleed_mutation_rate),
         multi_scenario_worst_weight: data
             .get("multi_scenario_worst_weight")
             .and_then(Value::as_f64)
-            .unwrap_or(0.35),
-        seed: data.get("seed").and_then(Value::as_u64).unwrap_or(1337),
+            .unwrap_or(search_defaults.multi_scenario_worst_weight),
+        seed: data
+            .get("seed")
+            .and_then(Value::as_u64)
+            .unwrap_or(search_defaults.seed),
     })
 }
 
@@ -802,57 +824,58 @@ pub(crate) fn apply_search_quality_profile(
     search: &mut BuildSearchConfig,
     profile: SearchQualityProfile,
 ) {
+    fn apply_profile_overrides(search: &mut BuildSearchConfig, preset: SearchQualityProfilePreset) {
+        search.beam_width = preset.beam_width;
+        search.random_samples = preset.random_samples;
+        search.hill_climb_restarts = preset.hill_climb_restarts;
+        search.hill_climb_steps = preset.hill_climb_steps;
+        search.hill_climb_neighbors = preset.hill_climb_neighbors;
+        search.genetic_population = preset.genetic_population;
+        search.genetic_generations = preset.genetic_generations;
+        search.simulated_annealing_restarts = preset.simulated_annealing_restarts;
+        search.simulated_annealing_iterations = preset.simulated_annealing_iterations;
+        search.mcts_iterations = preset.mcts_iterations;
+        search.mcts_rollouts_per_expansion = preset.mcts_rollouts_per_expansion;
+        search.ensemble_seeds = preset.ensemble_seeds;
+        search.ensemble_seed_top_k = preset.ensemble_seed_top_k;
+        search.ranked_limit = preset.ranked_limit;
+        search.bleed_budget = preset.bleed_budget;
+    }
+
+    fn apply_profile_minimums(search: &mut BuildSearchConfig, preset: SearchQualityProfilePreset) {
+        search.beam_width = search.beam_width.max(preset.beam_width);
+        search.random_samples = search.random_samples.max(preset.random_samples);
+        search.hill_climb_restarts = search.hill_climb_restarts.max(preset.hill_climb_restarts);
+        search.hill_climb_steps = search.hill_climb_steps.max(preset.hill_climb_steps);
+        search.hill_climb_neighbors = search.hill_climb_neighbors.max(preset.hill_climb_neighbors);
+        search.genetic_population = search.genetic_population.max(preset.genetic_population);
+        search.genetic_generations = search.genetic_generations.max(preset.genetic_generations);
+        search.simulated_annealing_restarts = search
+            .simulated_annealing_restarts
+            .max(preset.simulated_annealing_restarts);
+        search.simulated_annealing_iterations = search
+            .simulated_annealing_iterations
+            .max(preset.simulated_annealing_iterations);
+        search.mcts_iterations = search.mcts_iterations.max(preset.mcts_iterations);
+        search.mcts_rollouts_per_expansion = search
+            .mcts_rollouts_per_expansion
+            .max(preset.mcts_rollouts_per_expansion);
+        search.ensemble_seeds = search.ensemble_seeds.max(preset.ensemble_seeds);
+        search.ensemble_seed_top_k = search.ensemble_seed_top_k.max(preset.ensemble_seed_top_k);
+        search.ranked_limit = search.ranked_limit.max(preset.ranked_limit);
+        search.bleed_budget = search.bleed_budget.max(preset.bleed_budget);
+    }
+
+    let profile_defaults = &simulator_defaults().search_quality_profile_defaults;
     match profile {
         SearchQualityProfile::Fast => {
-            search.beam_width = 24;
-            search.random_samples = 192;
-            search.hill_climb_restarts = 24;
-            search.hill_climb_steps = 12;
-            search.hill_climb_neighbors = 12;
-            search.genetic_population = 48;
-            search.genetic_generations = 14;
-            search.simulated_annealing_restarts = 12;
-            search.simulated_annealing_iterations = 96;
-            search.mcts_iterations = 1200;
-            search.mcts_rollouts_per_expansion = 1;
-            search.ensemble_seeds = 1;
-            search.ensemble_seed_top_k = 10;
-            search.ranked_limit = 200;
-            search.bleed_budget = 120;
+            apply_profile_overrides(search, profile_defaults.fast);
         }
         SearchQualityProfile::Balanced => {
-            search.beam_width = 36;
-            search.random_samples = 360;
-            search.hill_climb_restarts = 48;
-            search.hill_climb_steps = 18;
-            search.hill_climb_neighbors = 20;
-            search.genetic_population = 72;
-            search.genetic_generations = 24;
-            search.simulated_annealing_restarts = 24;
-            search.simulated_annealing_iterations = 180;
-            search.mcts_iterations = 2600;
-            search.mcts_rollouts_per_expansion = 2;
-            search.ensemble_seeds = 2;
-            search.ensemble_seed_top_k = 18;
-            search.ranked_limit = 320;
-            search.bleed_budget = 300;
+            apply_profile_overrides(search, profile_defaults.balanced);
         }
         SearchQualityProfile::MaximumQuality => {
-            search.beam_width = search.beam_width.max(64);
-            search.random_samples = search.random_samples.max(900);
-            search.hill_climb_restarts = search.hill_climb_restarts.max(128);
-            search.hill_climb_steps = search.hill_climb_steps.max(28);
-            search.hill_climb_neighbors = search.hill_climb_neighbors.max(30);
-            search.genetic_population = search.genetic_population.max(140);
-            search.genetic_generations = search.genetic_generations.max(52);
-            search.simulated_annealing_restarts = search.simulated_annealing_restarts.max(56);
-            search.simulated_annealing_iterations = search.simulated_annealing_iterations.max(340);
-            search.mcts_iterations = search.mcts_iterations.max(9000);
-            search.mcts_rollouts_per_expansion = search.mcts_rollouts_per_expansion.max(3);
-            search.ensemble_seeds = search.ensemble_seeds.max(4);
-            search.ensemble_seed_top_k = search.ensemble_seed_top_k.max(36);
-            search.ranked_limit = search.ranked_limit.max(640);
-            search.bleed_budget = search.bleed_budget.max(1200);
+            apply_profile_minimums(search, profile_defaults.maximum_quality_minimums);
         }
     }
 }
@@ -1083,7 +1106,12 @@ pub(crate) fn build_loadout_domain() -> LoadoutDomain {
                                         points_available: tier
                                             .get("points_available")
                                             .and_then(Value::as_u64)
-                                            .unwrap_or(5)
+                                            .unwrap_or(
+                                                simulator_defaults()
+                                                    .loadout_generation_defaults
+                                                    .mastery_tier_points_available_fallback
+                                                    as u64,
+                                            )
                                             as usize,
                                         is_keystone_tier: tier
                                             .get("is_keystone_tier")
@@ -1106,6 +1134,7 @@ pub(crate) fn build_loadout_domain() -> LoadoutDomain {
         .and_then(Value::as_object)
         .cloned()
         .unwrap_or_default();
+    let loadout_generation_defaults = &simulator_defaults().loadout_generation_defaults;
     LoadoutDomain {
         rune_paths,
         shard_slots,
@@ -1113,15 +1142,18 @@ pub(crate) fn build_loadout_domain() -> LoadoutDomain {
         mastery_primary_points: rules
             .get("primary_tree_points")
             .and_then(Value::as_u64)
-            .unwrap_or(18) as usize,
+            .unwrap_or(loadout_generation_defaults.mastery_primary_points as u64)
+            as usize,
         mastery_secondary_points: rules
             .get("secondary_tree_points")
             .and_then(Value::as_u64)
-            .unwrap_or(12) as usize,
+            .unwrap_or(loadout_generation_defaults.mastery_secondary_points as u64)
+            as usize,
         mastery_keystone_requirement: rules
             .get("keystone_requirement_points_in_tree")
             .and_then(Value::as_u64)
-            .unwrap_or(17) as usize,
+            .unwrap_or(loadout_generation_defaults.mastery_keystone_requirement as u64)
+            as usize,
     }
 }
 
@@ -1134,7 +1166,10 @@ pub(crate) fn random_tree_masteries(
     if tree.tiers.is_empty() || target_points == 0 {
         return Some(Vec::new());
     }
-    for _ in 0..128 {
+    let random_tree_attempts = simulator_defaults()
+        .loadout_generation_defaults
+        .random_tree_attempts;
+    for _ in 0..random_tree_attempts {
         let mut points = 0usize;
         let mut tier_spent = vec![0usize; tree.tiers.len()];
         let mut ranks = tree

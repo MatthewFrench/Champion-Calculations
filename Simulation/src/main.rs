@@ -11,6 +11,7 @@ mod build_order;
 mod cache;
 mod core;
 mod data;
+mod defaults;
 mod engine;
 mod reporting;
 mod respawn;

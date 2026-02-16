@@ -38,6 +38,30 @@ These instructions apply to the entire repository.
   - `Masteries/`
 - Do not duplicate base data in scenario JSON unless it is scenario-specific behavior.
 
+## Data-Driven Defaults Policy
+- Do not scatter fallback tuning numbers through Rust modules.
+- New default tuning values must be added to:
+  - `Simulation/data/simulator_defaults.json`
+  - `Simulation/src/defaults.rs` (typed schema/loader)
+- Shared modules should read defaults through `simulator_defaults()` instead of hardcoding profile constants.
+- This rule applies to:
+  - simulation/search defaults
+  - quality profile presets
+  - champion behavior/script defaults
+  - loadout-generation fallback defaults
+- Inline literals are acceptable only for obvious structural values (for example `0.0`, `1.0`) when they are not a tunable gameplay assumption.
+
+## Ability Swapping And Slot Architecture
+- Keep ability identity separate from cast slot (`Q`, `W`, `E`, `R`, `D`, `F`).
+- Slot bindings must be treated as runtime/data state, not baked into engine branches.
+- Shared engine logic must cast/track cooldowns by ability identity and runtime mapping, not by champion-specific fixed slot fields.
+- Champion/item/rune/mastery special cases should be implemented in scripts/capabilities, not in `engine.rs`.
+
+## Mechanics Research And Confidence
+- If behavior is uncertain, research online using authoritative sources before locking assumptions.
+- Prefer Riot/Data Dragon/official patch notes first; use wiki/community sources as secondary validation.
+- Record unresolved ambiguity or low-confidence assumptions in `Simulation/CONFIDENCE_REVIEW.md`.
+
 ## Change Hygiene
 - When adding or changing architecture behavior:
   - Update `Simulation/README.md` if behavior or extension points changed.
