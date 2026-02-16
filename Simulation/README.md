@@ -4,13 +4,22 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
+- Combat now runs with 2D positions (Vladimir fixed at origin, enemies spawned in range bands and standing still).
 - Fixed-timestep stepping via `VladCombatSimulation.step()` at `server_tick_rate_hz`.
 - URF global buffs (ability/item haste, health cost multiplier, attack speed multipliers) are applied.
+- Enemy auto-attacks use start, windup, and hit phases.
+- Ranged attacks/spells include projectile travel time based on distance and speed.
 - Enemy auto-attacks and spell damage are modeled as recurring timed events.
 - Stuns are modeled as recurring timed events that delay Vladimir's casting.
 - Enemy units can die and respawn on URF-scaled timers.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
-- Champion/item mechanics can be extended in compiled Rust code paths.
+- Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
+- Scripted enemy behavior profiles are included for:
+  - Warwick
+  - Vayne
+  - Morgana
+  - Sona
+  - Doctor Mundo
 - Build candidate scoring is parallelized across CPU cores (Rayon).
 - Search uses strict full-simulation scoring for every generated candidate build.
 - Full simulation scoring is memoized by canonical build key.
@@ -42,7 +51,11 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
-- `src/scripts/vladimir.rs`: Vladimir scripted ability formulas/cooldowns.
+- `src/scripts/vladimir.rs`: Vladimir scripted ability formulas/cooldowns and champion-specific hooks.
+- `src/scripts/enemies.rs`: Enemy champion behavior profiles and attack on-hit scripting.
+- `src/scripts/hooks.rs`: Script hook interfaces and dispatch points.
+- `src/scripts/item_hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
+- `src/scripts/loadout_hooks.rs`: Loadout/rune/mastery script notes and extension point.
 
 ## Run
 ```bash

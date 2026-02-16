@@ -1,15 +1,56 @@
 use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
+use crate::scripts::enemies::{EnemyBehaviorProfile, behavior_profile, on_hit_bonus_damage};
+use crate::scripts::vladimir::{VladimirCastProfile, default_cast_profile};
+
 use super::*;
+
+#[derive(Debug, Clone, Copy)]
+struct Vec2 {
+    x: f64,
+    y: f64,
+}
+
+impl Vec2 {
+    fn distance_to(self, other: Vec2) -> f64 {
+        let dx = self.x - other.x;
+        let dy = self.y - other.y;
+        (dx * dx + dy * dy).sqrt()
+    }
+}
+
+fn enemy_spawn_position(index: usize, total: usize, behavior: EnemyBehaviorProfile) -> Vec2 {
+    let angle = (index as f64 / total.max(1) as f64) * std::f64::consts::TAU;
+    let radius = if behavior.attack_range <= 200.0 {
+        160.0
+    } else {
+        (behavior.attack_range * 0.80).clamp(360.0, 520.0)
+    };
+    Vec2 {
+        x: radius * angle.cos(),
+        y: radius * angle.sin(),
+    }
+}
+
+fn projectile_travel_seconds(distance: f64, speed: f64) -> f64 {
+    if speed <= 0.0 {
+        0.0
+    } else {
+        (distance / speed).max(0.0)
+    }
+}
 
 struct EnemyState {
     enemy: EnemyConfig,
+    behavior: EnemyBehaviorProfile,
+    position: Vec2,
     physical_hit_damage: f64,
     ability_hit_damage: f64,
     burst_physical_damage: f64,
     burst_magic_damage: f64,
     burst_true_damage: f64,
+    attacks_landed: usize,
     max_health: f64,
     health: f64,
     magic_multiplier: f64,
@@ -19,9 +60,16 @@ struct EnemyState {
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum EventType {
     Attack(usize),
+    AttackWindup(usize),
+    AttackHit(usize),
     Ability(usize),
+    AbilityHit(usize),
     Stun(usize),
     Burst(usize),
+    BurstHit(usize),
+    VladQHit(usize),
+    VladEHit,
+    VladRHit,
 }
 
 #[derive(Debug, Clone)]
@@ -85,6 +133,7 @@ pub(super) struct VladCombatSimulation {
     pool_duration: f64,
     offensive_tuning: VladimirAbilityTuning,
     offensive_cooldowns: VladimirAbilityCooldowns,
+    cast_profile: VladimirCastProfile,
 
     zhonya_available: bool,
     ga_available: bool,
@@ -113,6 +162,7 @@ pub(super) struct VladCombatSimulation {
     protoplasm_hot_rate: f64,
     protoplasm_hot_until: f64,
 
+    vlad_position: Vec2,
     enemy_state: Vec<EnemyState>,
 }
 
@@ -161,6 +211,7 @@ impl VladCombatSimulation {
             r_base_cooldown_seconds: sim.vlad_r_base_cooldown_seconds,
         };
         let offensive_cooldowns = offensive_cooldowns_after_haste(offensive_tuning, ability_haste);
+        let cast_profile = default_cast_profile();
 
         let zhonya_available = vlad_build_items
             .iter()
@@ -201,6 +252,7 @@ impl VladCombatSimulation {
             pool_duration: 0.0,
             offensive_tuning,
             offensive_cooldowns,
+            cast_profile,
             zhonya_available,
             ga_available,
             protoplasm_available,
@@ -223,11 +275,13 @@ impl VladCombatSimulation {
             pool_heal_until: 0.0,
             protoplasm_hot_rate: 0.0,
             protoplasm_hot_until: 0.0,
+            vlad_position: Vec2 { x: 0.0, y: 0.0 },
             enemy_state: Vec::new(),
         };
 
         runner.pool_duration = runner.sim.vlad_pool_untargetable_seconds;
 
+        let enemy_count = enemies.len();
         for (idx, (enemy, build, enemy_bonus)) in enemies.iter().cloned().enumerate() {
             let mut enemy_stats = Stats::default();
             for item in &build {
@@ -261,14 +315,19 @@ impl VladCombatSimulation {
             let burst_magic_damage =
                 enemy.burst_magic_flat + enemy.burst_ap_ratio * enemy_stats.ability_power;
             let burst_true_damage = enemy.burst_true_flat;
+            let behavior = behavior_profile(&enemy.name, enemy.base.is_melee);
+            let position = enemy_spawn_position(idx, enemy_count.max(1), behavior);
 
             runner.enemy_state.push(EnemyState {
                 enemy: enemy.clone(),
+                behavior,
+                position,
                 physical_hit_damage: attack_damage,
                 ability_hit_damage,
                 burst_physical_damage,
                 burst_magic_damage,
                 burst_true_damage,
+                attacks_landed: 0,
                 max_health,
                 health: max_health,
                 magic_multiplier: 100.0 / (100.0 + magic_resist.max(0.0)),
@@ -384,6 +443,54 @@ impl VladCombatSimulation {
         t <= active
     }
 
+    fn enemy_distance_to_vlad(&self, idx: usize) -> f64 {
+        self.enemy_state[idx]
+            .position
+            .distance_to(self.vlad_position)
+    }
+
+    fn enemy_in_attack_range(&self, idx: usize) -> bool {
+        self.enemy_distance_to_vlad(idx) <= self.enemy_state[idx].behavior.attack_range
+    }
+
+    fn enemy_in_vlad_range(&self, idx: usize, range: f64) -> bool {
+        self.enemy_distance_to_vlad(idx) <= range
+    }
+
+    fn enemy_projectile_delay(&self, idx: usize, speed: f64) -> f64 {
+        projectile_travel_seconds(self.enemy_distance_to_vlad(idx), speed)
+    }
+
+    fn first_active_enemy_in_vlad_range(&self, range: f64) -> Option<usize> {
+        let mut best: Option<(usize, f64)> = None;
+        for idx in 0..self.enemy_state.len() {
+            if !self.enemy_is_active(idx) || !self.enemy_in_vlad_range(idx, range) {
+                continue;
+            }
+            let dist = self.enemy_distance_to_vlad(idx);
+            match best {
+                Some((_, best_dist)) if dist >= best_dist => {}
+                _ => best = Some((idx, dist)),
+            }
+        }
+        best.map(|(idx, _)| idx)
+    }
+
+    fn max_enemy_distance_in_vlad_range(&self, range: f64) -> Option<f64> {
+        let mut max_distance = None;
+        for idx in 0..self.enemy_state.len() {
+            if !self.enemy_is_active(idx) || !self.enemy_in_vlad_range(idx, range) {
+                continue;
+            }
+            let distance = self.enemy_distance_to_vlad(idx);
+            max_distance = Some(match max_distance {
+                Some(current) => distance.max(current),
+                None => distance,
+            });
+        }
+        max_distance
+    }
+
     fn apply_magic_damage_to_enemy(&mut self, idx: usize, raw_magic_damage: f64) -> f64 {
         if raw_magic_damage <= 0.0 || !self.enemy_is_active(idx) {
             return 0.0;
@@ -415,11 +522,22 @@ impl VladCombatSimulation {
     }
 
     fn apply_magic_damage_to_all_active_enemies(&mut self, raw_magic_damage: f64) -> f64 {
+        self.apply_magic_damage_to_enemies_in_vlad_range(raw_magic_damage, f64::INFINITY)
+    }
+
+    fn apply_magic_damage_to_enemies_in_vlad_range(
+        &mut self,
+        raw_magic_damage: f64,
+        range: f64,
+    ) -> f64 {
         if raw_magic_damage <= 0.0 {
             return 0.0;
         }
         let mut total = 0.0;
         for idx in 0..self.enemy_state.len() {
+            if !self.enemy_in_vlad_range(idx, range) {
+                continue;
+            }
             total += self.apply_magic_damage_to_enemy(idx, raw_magic_damage);
         }
         total
@@ -514,40 +632,51 @@ impl VladCombatSimulation {
 
         // Scripted offensive cadence for Vladimir abilities.
         if self.can_cast() {
-            if self.time >= self.q_cd {
+            if self.time >= self.q_cd
+                && let Some(target_idx) =
+                    self.first_active_enemy_in_vlad_range(self.cast_profile.q_range)
+            {
                 self.q_cd = self.time + self.offensive_cooldowns.q_seconds;
-                let q_raw_damage =
-                    q_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
-                let mut dealt = 0.0;
-                if let Some(target_idx) =
-                    (0..self.enemy_state.len()).find(|idx| self.enemy_is_active(*idx))
-                {
-                    dealt = self.apply_magic_damage_to_enemy(target_idx, q_raw_damage);
-                }
-                self.damage_dealt_total += dealt.max(0.0);
-                if dealt > 0.0 {
-                    let before = self.health;
-                    self.health = self
-                        .max_health
-                        .min(self.health + dealt * self.offensive_tuning.q_heal_ratio_of_damage);
-                    self.healing_done_total += (self.health - before).max(0.0);
-                }
+                let travel = projectile_travel_seconds(
+                    self.enemy_distance_to_vlad(target_idx),
+                    self.cast_profile.q_projectile_speed,
+                );
+                self.schedule_event(
+                    self.cast_profile.q_windup_seconds + travel,
+                    50,
+                    EventType::VladQHit(target_idx),
+                    None,
+                );
             }
 
-            if self.time >= self.e_cd {
+            if self.time >= self.e_cd
+                && let Some(max_distance) =
+                    self.max_enemy_distance_in_vlad_range(self.cast_profile.e_range)
+            {
                 self.e_cd = self.time + self.offensive_cooldowns.e_seconds;
-                let e_raw_damage =
-                    e_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
-                let dealt = self.apply_magic_damage_to_all_active_enemies(e_raw_damage);
-                self.damage_dealt_total += dealt.max(0.0);
+                let travel =
+                    projectile_travel_seconds(max_distance, self.cast_profile.e_projectile_speed);
+                self.schedule_event(
+                    self.cast_profile.e_windup_seconds + travel,
+                    49,
+                    EventType::VladEHit,
+                    None,
+                );
             }
 
-            if self.time >= self.r_cd {
+            if self.time >= self.r_cd
+                && let Some(max_distance) =
+                    self.max_enemy_distance_in_vlad_range(self.cast_profile.r_range)
+            {
                 self.r_cd = self.time + self.offensive_cooldowns.r_seconds;
-                let r_raw_damage =
-                    r_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
-                let dealt = self.apply_magic_damage_to_all_active_enemies(r_raw_damage);
-                self.damage_dealt_total += dealt.max(0.0);
+                let travel =
+                    projectile_travel_seconds(max_distance, self.cast_profile.r_projectile_speed);
+                self.schedule_event(
+                    self.cast_profile.r_windup_seconds + travel,
+                    48,
+                    EventType::VladRHit,
+                    None,
+                );
             }
         }
 
@@ -576,13 +705,56 @@ impl VladCombatSimulation {
     fn process_event(&mut self, ev: &QueuedEvent) {
         match ev.kind {
             EventType::Attack(idx) => {
+                if !self.enemy_is_active(idx) || !self.enemy_in_attack_range(idx) {
+                    return;
+                }
+                let windup = self.enemy_state[idx]
+                    .behavior
+                    .attack_windup_seconds
+                    .max(0.0);
+                self.schedule_event(windup, 35, EventType::AttackWindup(idx), None);
+            }
+            EventType::AttackWindup(idx) => {
+                if !self.enemy_is_active(idx) || !self.enemy_in_attack_range(idx) {
+                    return;
+                }
+                let travel = self.enemy_projectile_delay(
+                    idx,
+                    self.enemy_state[idx].behavior.attack_projectile_speed,
+                );
+                self.schedule_event(travel, 34, EventType::AttackHit(idx), None);
+            }
+            EventType::AttackHit(idx) => {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
-                let state = &self.enemy_state[idx];
-                self.apply_damage(state.physical_hit_damage, 0.0, 0.0);
+                let (physical, magic, true_damage) = {
+                    let state = &mut self.enemy_state[idx];
+                    state.attacks_landed += 1;
+                    let (magic_bonus, true_bonus) = on_hit_bonus_damage(
+                        state.behavior,
+                        state.attacks_landed,
+                        state.physical_hit_damage,
+                        self.max_health,
+                    );
+                    (state.physical_hit_damage, magic_bonus, true_bonus)
+                };
+                self.apply_damage(physical, magic, true_damage);
             }
             EventType::Ability(idx) => {
+                if !self.enemy_is_active(idx) {
+                    return;
+                }
+                let behavior = self.enemy_state[idx].behavior;
+                let travel = self.enemy_projectile_delay(idx, behavior.ability_projectile_speed);
+                self.schedule_event(
+                    behavior.ability_windup_seconds.max(0.0) + travel,
+                    45,
+                    EventType::AbilityHit(idx),
+                    None,
+                );
+            }
+            EventType::AbilityHit(idx) => {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
@@ -604,12 +776,56 @@ impl VladCombatSimulation {
                 if !self.enemy_is_active(idx) {
                     return;
                 }
+                let behavior = self.enemy_state[idx].behavior;
+                let travel = self.enemy_projectile_delay(idx, behavior.burst_projectile_speed);
+                self.schedule_event(
+                    behavior.burst_windup_seconds.max(0.0) + travel,
+                    25,
+                    EventType::BurstHit(idx),
+                    None,
+                );
+            }
+            EventType::BurstHit(idx) => {
+                if !self.enemy_is_active(idx) {
+                    return;
+                }
                 let state = &self.enemy_state[idx];
                 self.apply_damage(
                     state.burst_physical_damage,
                     state.burst_magic_damage,
                     state.burst_true_damage,
                 );
+            }
+            EventType::VladQHit(idx) => {
+                let q_raw_damage =
+                    q_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let dealt = self.apply_magic_damage_to_enemy(idx, q_raw_damage);
+                self.damage_dealt_total += dealt.max(0.0);
+                if dealt > 0.0 {
+                    let before = self.health;
+                    self.health = self
+                        .max_health
+                        .min(self.health + dealt * self.offensive_tuning.q_heal_ratio_of_damage);
+                    self.healing_done_total += (self.health - before).max(0.0);
+                }
+            }
+            EventType::VladEHit => {
+                let e_raw_damage =
+                    e_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let dealt = self.apply_magic_damage_to_enemies_in_vlad_range(
+                    e_raw_damage,
+                    self.cast_profile.e_range,
+                );
+                self.damage_dealt_total += dealt.max(0.0);
+            }
+            EventType::VladRHit => {
+                let r_raw_damage =
+                    r_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let dealt = self.apply_magic_damage_to_enemies_in_vlad_range(
+                    r_raw_damage,
+                    self.cast_profile.r_range,
+                );
+                self.damage_dealt_total += dealt.max(0.0);
             }
         }
     }
@@ -723,4 +939,25 @@ pub(super) fn simulate_vlad_combat(
         urf.clone(),
     );
     runner.run_until_end()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn projectile_travel_time_handles_instant_and_ranged() {
+        assert_eq!(projectile_travel_seconds(400.0, 0.0), 0.0);
+        assert!((projectile_travel_seconds(500.0, 2000.0) - 0.25).abs() < 1e-9);
+    }
+
+    #[test]
+    fn spawn_positions_keep_melee_closer_than_ranged() {
+        let melee = EnemyBehaviorProfile::default_for(true);
+        let ranged = EnemyBehaviorProfile::default_for(false);
+        let melee_pos = enemy_spawn_position(0, 5, melee);
+        let ranged_pos = enemy_spawn_position(0, 5, ranged);
+        let origin = Vec2 { x: 0.0, y: 0.0 };
+        assert!(melee_pos.distance_to(origin) < ranged_pos.distance_to(origin));
+    }
 }

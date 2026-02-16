@@ -1,14 +1,14 @@
 # Vladimir URF Run Report
 
-- Generated (unix): `1771202759`
+- Generated (unix): `1771203885`
 - Scenario: `scenario_vlad_urf.json`
 
 ## Headline
 - Baseline objective score: **1.0000**
 - Best objective score: **1.0000**
 - Improvement: **+0.00%**
-- Baseline time alive / damage dealt / healing done / enemy kills: **87.66s / 28017.5 / 5596.5 / 6**
-- Best time alive / damage dealt / healing done / enemy kills: **87.66s / 28017.5 / 5596.5 / 6**
+- Baseline time alive / damage dealt / healing done / enemy kills: **74.94s / 18476.3 / 3798.5 / 5**
+- Best time alive / damage dealt / healing done / enemy kills: **74.94s / 18476.3 / 3798.5 / 5**
 - Baseline cap survivor: **false**
 - Best cap survivor: **false**
 
@@ -22,7 +22,7 @@
 - Ensemble seeds: `1`
 - Objective weights (survival/damage/healing): `0.55/0.30/0.15`
 - Full evaluations: `18` (cache hits/misses/waits: `0/18/0`)
-- Full persistent cache hits/entries: `147/180`
+- Full persistent cache hits/entries: `161/216`
 - Unique candidate builds: `1`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
@@ -49,6 +49,9 @@
   - Vladimir: Applied shard 'ability_haste' in slot 1.
   - Vladimir: Applied shard 'health' in slot 2.
   - Vladimir: Applied shard 'health' in slot 3.
+- Skipped unsupported/non-deterministic effects:
+  - Vladimir: Rune 'Grasp of the Undying' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
+  - Vladimir: Rune 'Gathering Storm' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
 
 ## Baseline Build
 - Liandry's Torment, Boots of Swiftness, Zhonya's Hourglass, Guardian Angel, Protoplasm Harness, Morellonomicon
@@ -89,12 +92,12 @@
    - metrics: EHP~10545.4, AP~290.1, timing score -8405.00, total cost 14800
 
 ## Build Order Optimization
-1. Cumulative score: `7.36` | Order: Guardian Angel, Zhonya's Hourglass, Morellonomicon, Protoplasm Harness, Liandry's Torment
-   - Stage 1 (level 5): objective `1.000`, time alive `9.84s`, damage `5485.0`, healing `616.1`
-   - Stage 2 (level 9): objective `3.153`, time alive `41.18s`, damage `12963.3`, healing `2052.0`
-   - Stage 3 (level 13): objective `1.079`, time alive `54.83s`, damage `16828.9`, healing `2984.3`
-   - Stage 4 (level 16): objective `1.128`, time alive `67.54s`, damage `20235.9`, healing `3887.8`
-   - Stage 5 (level 20): objective `1.000`, time alive `87.66s`, damage `28017.5`, healing `5596.5`
+1. Cumulative score: `7.71` | Order: Guardian Angel, Zhonya's Hourglass, Protoplasm Harness, Liandry's Torment, Morellonomicon
+   - Stage 1 (level 5): objective `1.000`, time alive `9.89s`, damage `5078.0`, healing `494.0`
+   - Stage 2 (level 9): objective `1.237`, time alive `14.86s`, damage `6631.8`, healing `607.5`
+   - Stage 3 (level 13): objective `1.062`, time alive `53.98s`, damage `16090.4`, healing `3150.7`
+   - Stage 4 (level 16): objective `3.410`, time alive `64.95s`, damage `18002.1`, healing `3475.2`
+   - Stage 5 (level 20): objective `1.000`, time alive `74.94s`, damage `18476.3`, healing `3798.5`
 
 ## Deeper Insights
 - Common core across all selected top builds: Guardian Angel, Liandry's Torment, Morellonomicon, Protoplasm Harness, Zhonya's Hourglass.

@@ -45,6 +45,22 @@
 - Added cap-survivor handling in output and tie-break:
   - cap-survivor labeling in reports/output
   - tie-break uses existing objective damage/healing weights
+- Added first-pass script hook framework for non-generic mechanics:
+  - `src/scripts/hooks.rs` dispatches item/champion/loadout hooks
+  - `src/scripts/item_hooks.rs` now owns Heartsteel stack assumptions
+  - `src/scripts/vladimir.rs` now owns Crimson Pact stat conversion logic
+  - `src/scripts/loadout_hooks.rs` now annotates dynamic rune/mastery effects
+- Added first-pass 2D action timeline realism:
+  - enemies are placed in 2D range bands around Vladimir and remain stationary
+  - auto-attacks use start/windup/hit phases
+  - ranged attacks and enemy spells use projectile travel time
+  - Vladimir `Q`/`E`/`R` now use cast windup timing (and travel where configured)
+- Added first-pass enemy champion behavior script profiles:
+  - Warwick
+  - Vayne
+  - Morgana
+  - Sona
+  - Doctor Mundo
 - Added repository automation workflows:
   - pull request and main branch continuous integration in `.github/workflows/continuous-integration.yml`
   - tag-based release generation with findings in `.github/workflows/release.yml`
@@ -73,13 +89,14 @@
     - Top builds satisfy survivability floor.
     - Reports clearly explain why a build scored highly.
 
-- [P2] Script hooks for non-generic item/champion mechanics
-  - Goal: support behavior not expressible by static data.
+- [P2] Expand script hooks to full mechanic coverage
+  - Goal: extend hook coverage for all non-generic item/champion/rune/mastery behavior.
   - Scope:
-    - Define idiomatic Rust hook points for bespoke mechanic scripts.
+    - Add script implementations for additional stack items and champion passives.
+    - Add hook-driven combat-time rune/mastery behavior (not only notes).
     - Keep hooks deterministic and compatible with search parallelism.
   - Success criteria:
-    - At least one complex mechanic implemented through the hook API.
+    - Multiple complex mechanics implemented entirely through hooks.
     - No regression to strict candidate search stability.
 
 - [P2] Robustness and stability sweeps
@@ -92,25 +109,24 @@
     - Repeat runs show reduced variance in recommended top builds.
 
 
-- [P0] Action timeline realism (windup, projectile travel, blocking, position)
-  - Goal: improve combat fidelity beyond instant-hit abstractions.
+- [P0] Action timeline realism follow-up (blocking, collision, movement)
+  - Goal: complete fidelity work beyond current 2D+windup+travel model.
   - Scope:
-    - Add melee auto-attack windup and hit frame timing.
-    - Add ranged projectile travel time with per-projectile hit resolution.
-    - Add position state and movement/spacing assumptions.
-    - Add support for projectile-blocking interactions where applicable.
+    - Add projectile-blocking interactions where applicable.
+    - Add collision/pathing-aware projectile resolution.
+    - Add explicit movement updates for champions (currently stationary).
   - Success criteria:
-    - Time-to-damage differs by range/position and projectile speed.
-    - Replays/debug traces show action start, launch, travel, and hit events.
+    - Projectile-block interactions are represented in combat outcomes.
+    - Position changes and movement materially affect hit timing and uptime.
 
-- [P1] Enemy ability simulation and champion behavior scripts
-  - Goal: model champion kits with deterministic scripted execution.
+- [P1] Enemy ability simulation depth for champion scripts
+  - Goal: deepen champion kit fidelity beyond first-pass behavior profiles.
   - Scope:
-    - Expand enemy simulation beyond generic periodic damage.
-    - Implement script modules for per-champion ability usage patterns.
+    - Expand per-champion scripts beyond profile-level timing and on-hit effects.
+    - Add ability-state interactions and per-champion sequencing nuances.
     - Keep scripts outside the core engine loop and data-driven where possible.
   - Success criteria:
-    - Enemy champions no longer feel equivalent under same stat profile.
+    - Enemy champions show distinct, kit-driven combat timelines.
     - Script modules are testable independently from the core simulation engine.
 
 - [P1] Preset/build correctness audit (enemy autos and itemization variance)

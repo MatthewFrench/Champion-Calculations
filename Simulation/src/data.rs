@@ -4,6 +4,8 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use crate::scripts::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
+
 use super::{
     BuildSearchConfig, ChampionBase, EXCLUDED_RANKS, EnemyConfig, ITEM_EVOLUTION_REPLACEMENTS,
     Item, LEGENDARY_RANK, LoadoutSelection, MasterySelection, ResolvedLoadout,
@@ -370,6 +372,13 @@ pub(crate) fn resolve_loadout(
             }
         }
     }
+
+    let hook_ctx = LoadoutHookContext {
+        selection,
+        level,
+        for_vlad,
+    };
+    resolve_loadout_with_hooks(&hook_ctx, &mut out)?;
 
     Ok(out)
 }

@@ -1,6 +1,10 @@
 use std::collections::HashMap;
 
 use crate::engine::simulate_vlad_combat;
+use crate::scripts::hooks::{
+    ChampionStatContext, ItemAssumptionContext, StackNoteContext, apply_item_assumption_hooks,
+    finalize_champion_stats_with_hooks, stack_notes_from_hooks,
+};
 
 use super::{
     ChampionBase, CombatOutcome, Item, ObjectiveComponentWeights, ObjectiveEvalContext,
@@ -36,55 +40,6 @@ pub(crate) fn champion_at_level(base: &ChampionBase, level: usize) -> ChampionBa
     }
 }
 
-pub(crate) fn assumed_heartsteel_bonus_health(base_max_health: f64, stacks_at_8m: f64) -> f64 {
-    if stacks_at_8m <= 0.0 {
-        return 0.0;
-    }
-    // Approximate permanent health gained by repeatedly proccing Heartsteel:
-    // per proc ~= 8% * (70 + 6% max_health) = 5.6 + 0.0048 * max_health.
-    // Use an iterative approximation because max_health grows as stacks are gained.
-    let procs = stacks_at_8m.max(0.0).round() as usize;
-    let mut max_health = base_max_health;
-    let mut gained = 0.0;
-    for _ in 0..procs {
-        let delta = 5.6 + 0.0048 * max_health;
-        gained += delta;
-        max_health += delta;
-    }
-    gained
-}
-
-pub(crate) fn assumed_heartsteel_stacks_by_level(
-    full_stacks_at_level_20: f64,
-    acquired_level: usize,
-    current_level: usize,
-) -> f64 {
-    let ref_start: f64 = 5.0;
-    let ref_end: f64 = 20.0;
-    let acquired = acquired_level as f64;
-    let current = current_level as f64;
-    let elapsed = (current - acquired).max(0.0);
-    let reference_window = (ref_end - ref_start).max(1.0_f64);
-    (full_stacks_at_level_20 * (elapsed / reference_window)).clamp(0.0, full_stacks_at_level_20)
-}
-
-pub(crate) fn get_item_acquired_level(
-    build_items: &[Item],
-    item_name: &str,
-    acquired_levels: Option<&HashMap<String, usize>>,
-    default_level: usize,
-) -> usize {
-    if build_items.iter().any(|i| i.name == item_name) {
-        if let Some(map) = acquired_levels
-            && let Some(level) = map.get(item_name)
-        {
-            return *level;
-        }
-        return default_level;
-    }
-    default_level
-}
-
 pub(crate) fn apply_item_assumptions(
     stats: &mut Stats,
     base: &ChampionBase,
@@ -93,16 +48,14 @@ pub(crate) fn apply_item_assumptions(
     current_level: usize,
     acquired_levels: Option<&HashMap<String, usize>>,
 ) {
-    if build_items.iter().any(|i| i.name == "Heartsteel") {
-        let acquired_level = get_item_acquired_level(build_items, "Heartsteel", acquired_levels, 5);
-        let stacks = assumed_heartsteel_stacks_by_level(
-            sim.heartsteel_assumed_stacks_at_8m,
-            acquired_level,
-            current_level,
-        );
-        let base_max_health = base.base_health + stats.health;
-        stats.health += assumed_heartsteel_bonus_health(base_max_health, stacks);
-    }
+    let ctx = ItemAssumptionContext {
+        champion: base,
+        build_items,
+        sim,
+        current_level,
+        acquired_levels,
+    };
+    apply_item_assumption_hooks(&ctx, stats);
 }
 
 pub(crate) fn compute_effective_item_stats_for_build(
@@ -135,23 +88,19 @@ pub(crate) fn build_stack_notes(
 ) -> Vec<String> {
     let mut notes = Vec::new();
     for item in build_items {
-        if item.name == "Heartsteel" {
-            let mut base_stats = build_item_stats(build_items);
-            // Remove Heartsteel's own flat health so the estimate is anchored to pre-heartsteel max HP.
-            base_stats.health -= item.stats.health;
-            let base_max_hp = base.base_health + base_stats.health.max(0.0);
-            let acquired_level =
-                get_item_acquired_level(build_items, "Heartsteel", acquired_levels, 5);
-            let stacks = assumed_heartsteel_stacks_by_level(
-                sim.heartsteel_assumed_stacks_at_8m,
-                acquired_level,
-                current_level,
-            );
-            let bonus = assumed_heartsteel_bonus_health(base_max_hp, stacks);
-            notes.push(format!(
-                "Heartsteel estimated stacks by level {}: {:.1} (acquired at level {}, reference full-at-20 stack target {:.0}, estimated permanent bonus health: +{:.1}).",
-                current_level, stacks, acquired_level, sim.heartsteel_assumed_stacks_at_8m, bonus
-            ));
+        let hook_ctx = StackNoteContext {
+            champion: base,
+            build_items,
+            item,
+            sim,
+            current_level,
+            acquired_levels,
+        };
+        let hook_notes = stack_notes_from_hooks(&hook_ctx);
+        let has_explicit_item_note = !hook_notes.is_empty();
+        notes.extend(hook_notes);
+
+        if has_explicit_item_note {
             continue;
         }
 
@@ -170,26 +119,12 @@ pub(crate) fn build_stack_notes(
 }
 
 pub(crate) fn compute_vlad_stats(base: &ChampionBase, item_stats: &Stats) -> Stats {
-    let ap_items = item_stats.ability_power;
-    let bonus_health_items = item_stats.health;
-    // Crimson Pact should not self-recursively amplify:
-    // - AP gained from bonus health does not grant extra health again
-    // - Health gained from AP does not grant extra AP again
-    let bonus_health = bonus_health_items + 1.6 * ap_items;
-    let ability_power = ap_items + 0.033 * bonus_health_items;
-
-    let mut stats = Stats {
-        ability_power,
-        health: bonus_health,
-        armor: item_stats.armor,
-        magic_resist: item_stats.magic_resist,
-        attack_damage: item_stats.attack_damage,
-        attack_speed_percent: item_stats.attack_speed_percent,
-        ability_haste: item_stats.ability_haste,
-        move_speed_flat: item_stats.move_speed_flat,
-        move_speed_percent: item_stats.move_speed_percent,
-        crit_chance_percent: item_stats.crit_chance_percent,
+    let mut stats = item_stats.clone();
+    let hook_ctx = ChampionStatContext {
+        champion: base,
+        item_stats,
     };
+    finalize_champion_stats_with_hooks(&hook_ctx, &mut stats);
     stats.health += base.base_health;
     stats.armor += base.base_armor;
     stats.magic_resist += base.base_magic_resist;
