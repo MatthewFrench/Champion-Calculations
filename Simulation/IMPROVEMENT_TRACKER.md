@@ -1,6 +1,14 @@
 # Improvement Tracker
 
 ## Done
+- Removed opponent scenario combat proxy fields and uptime-window toggle:
+  - deleted `opponents.uptime_windows_enabled` support
+  - deleted per-actor `combat` proxy support (`ability_dps_*`, `burst_*`, `stun_*`, `uptime_*`)
+  - enemy runtime now uses only auto-attacks plus champion scripts sourced from canonical champion data
+  - parser now fails fast if deprecated actor `combat` or opponent uptime-window fields are present
+- Prevented controlled-champion cross-contamination from Vladimir script logic:
+  - Vladimir offensive/defensive ability logic now executes only when the controlled champion is Vladimir
+  - non-Vladimir controlled champions no longer inherit Vladimir pool/cast behavior implicitly
 - Reduced scenario simulation block to scenario-owned knobs and moved gameplay defaults to canonical owners:
   - Vladimir Sanguine Pool defaults now load from `Characters/Vladimir.json` (`abilities.basic_ability_2`)
   - Zhonya, Guardian Angel, and Protoplasm defaults now load from item data files
@@ -209,7 +217,7 @@
   - transient stack counters clear on enemy death and respawn
   - enemies respawn at their original spawn position
 - Improved scripted event lifecycle correctness:
-  - scripted champion events are epoch-gated across death/respawn and uptime-window transitions
+  - scripted champion events are epoch-gated across death/respawn transitions
   - stale queued script events are invalidated instead of leaking across lifecycle transitions
 - Fixed projectile-blocking segment intersection edge cases:
   - colinear-but-disjoint projectile paths no longer register as blocked

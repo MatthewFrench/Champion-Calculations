@@ -307,6 +307,11 @@ fn parse_opponent_encounters(
             "opponents.shared_loadout is no longer supported. Enemy champions always use their own preset rune pages and shard selections."
         ));
     }
+    if opponents.get("uptime_windows_enabled").is_some() {
+        return Err(anyhow!(
+            "opponents.uptime_windows_enabled is no longer supported. Enemy combat windows are modeled by champion scripts and runtime state."
+        ));
+    }
     let mut opponent_default_stack_overrides = default_stack_overrides.clone();
     opponent_default_stack_overrides
         .extend(parse_stack_overrides_map(opponents.get("stack_overrides"))?);
@@ -540,14 +545,6 @@ pub(super) fn run_controlled_champion_scenario(
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    if let Some(opponent_uptime_windows_enabled) = scenario
-        .get("opponents")
-        .and_then(Value::as_object)
-        .and_then(|opponents| opponents.get("uptime_windows_enabled"))
-        .and_then(Value::as_bool)
-    {
-        sim.enemy_uptime_model_enabled = opponent_uptime_windows_enabled;
-    }
     if deadline_reached(current_deadline()) {
         timeout_flag.store(1, AtomicOrdering::Relaxed);
     }
@@ -1845,14 +1842,6 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    if let Some(opponent_uptime_windows_enabled) = scenario
-        .get("opponents")
-        .and_then(Value::as_object)
-        .and_then(|opponents| opponents.get("uptime_windows_enabled"))
-        .and_then(Value::as_bool)
-    {
-        sim_cfg.enemy_uptime_model_enabled = opponent_uptime_windows_enabled;
-    }
     let controlled_champion_config = parse_controlled_champion_config(
         &scenario,
         &champion_bases,

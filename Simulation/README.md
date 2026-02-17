@@ -1,6 +1,6 @@
 # URF Vladimir Objective Simulator
 
-This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is deterministic and now runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, ability damage ticks, and crowd control.
+This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
@@ -21,11 +21,11 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
   - nullified by untargetable/stasis states
   - applied normally
 - Melee auto-attacks are interrupted and cancelled if the attacker is stunned during windup (projectiles already released continue to resolve).
-- Enemy auto-attacks and spell damage are modeled as recurring timed events.
-- Stuns are modeled as recurring timed events that delay Vladimir's casting.
+- Enemy auto-attacks are modeled as recurring timed events.
+- Enemy champion abilities and crowd control come from champion scripts and canonical champion data (no scenario combat proxies).
 - Enemy units can die and respawn on URF-scaled timers.
 - Enemy transient stack/buff counters are cleared on death and respawn, and enemies respawn at their original spawn positions.
-- Enemy scripted ability timelines are lifecycle-safe across death/respawn and uptime-window transitions.
+- Enemy scripted ability timelines are lifecycle-safe across death/respawn transitions.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
 - Controlled champion loadout runtime scripts are now applied during combat-time spell hits, kill events, and regeneration ticks.
@@ -235,6 +235,8 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 ## Extensibility
 - Champion/item mechanics should be added in dedicated modules (for example under `src/scripts/`) rather than growing `main.rs`.
 - Scenario JSON should stay minimal and reference canonical data from `Characters`, `Items`, and `Game Mode`.
+- Opponent actors no longer accept `combat` proxy blocks; use champion scripts/data only.
+- Opponent groups no longer accept `opponents.uptime_windows_enabled`; combat windows are script/runtime driven.
 - Architecture direction:
   - shared simulation/core/search/reporting modules should remain champion-agnostic.
   - champion and loadout specifics should be delegated through script interfaces.
@@ -295,7 +297,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
 - Optional reference fields:
   - `controlled_champion.baseline_items`: baseline-only report/reference build (not used to seed item search).
   - `controlled_champion.loadout`: optional controlled champion loadout block (not used as the optimization seed).
-- Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence).
+- Keep only scenario setup data in scenario JSON (for example actor placement, per-actor level, and stack overrides).
 - Legacy flat scenario keys are removed; scenario parsing is now strict and canonical.
 - Build search item pool is restricted to purchasable `LEGENDARY` items only.
 - Pre-evolution items are normalized to evolved forms in simulation lookups:
@@ -354,7 +356,6 @@ This migration is active and tracked in the roadmap and improvement tracker for 
     - `simulation.server_tick_rate_hz`
     - `simulation.champion_level`
     - `simulation.stack_overrides`
-    - `opponents.uptime_windows_enabled`
 - Fallback ownership by domain:
   - URF respawn defaults load from `../Game Mode/URF.json` `respawn`.
   - Vladimir Sanguine Pool defaults load from `../Characters/Vladimir.json` `abilities.basic_ability_2`.
@@ -369,10 +370,10 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`
   - `simulation.vlad_r_base_damage`, `simulation.vlad_r_ap_ratio`, `simulation.vlad_r_base_cooldown_seconds`
   - fallback defaults are loaded from `../Characters/Vladimir.json` under `abilities.basic_ability_1`, `abilities.basic_ability_3`, and `abilities.ultimate` (effects plus cooldowns).
-- Enemy script hooks (per actor in `opponents.encounters[].actors[].combat`):
-  - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
-  - Optional uptime model: enable with `opponents.uptime_windows_enabled`, then per actor use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
-  - Placement/movement policy: `opponents.encounters[].actors[].placement.position` plus `placement.movement` (`hold_position` or `maintain_combat_range`)
+- Enemy actor policy is scenario-minimal and data-driven:
+  - `opponents.encounters[].actors[]` config only actor identity, level, placement, and optional stack overrides.
+  - Champion damage/crowd-control behavior comes from canonical champion data plus champion scripts.
+  - Placement/movement policy: `opponents.encounters[].actors[].placement.position` plus `placement.movement` (`hold_position` or `maintain_combat_range`).
 - Report now includes:
   - Headline objective score and component outcomes (time alive, damage dealt, healing done, enemy kills)
   - Objective score breakdown for baseline and best builds:

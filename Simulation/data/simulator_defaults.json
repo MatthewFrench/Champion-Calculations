@@ -3,8 +3,7 @@
     "server_tick_rate_hz": 30.0,
     "dt_fallback_seconds": 0.05,
     "champion_level": 20,
-    "time_limit_seconds": 1200.0,
-    "enemy_uptime_model_enabled": false
+    "time_limit_seconds": 1200.0
   },
   "search_defaults": {
     "beam_width": 24,

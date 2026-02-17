@@ -34,10 +34,6 @@ use crate::engine::EnemyDerivedCombatStats;
 use crate::scenario_runner::{
     run_controlled_champion_scenario, run_controlled_champion_stepper, run_stat_optimization,
 };
-use crate::scripts::champions::vladimir::{
-    VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
-    q_damage_raw, r_damage_raw,
-};
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 const LEGENDARY_RANK: &str = "LEGENDARY";
@@ -136,22 +132,6 @@ struct EnemyConfig {
     base: ChampionBase,
     spawn_position_xy: Option<(f64, f64)>,
     movement_mode: OpponentMovementMode,
-    ability_dps_flat: f64,
-    ability_dps_ad_ratio: f64,
-    ability_dps_ap_ratio: f64,
-    ability_tick_interval_seconds: f64,
-    stun_interval_seconds: f64,
-    stun_duration_seconds: f64,
-    burst_interval_seconds: f64,
-    burst_start_offset_seconds: f64,
-    burst_magic_flat: f64,
-    burst_physical_flat: f64,
-    burst_true_flat: f64,
-    burst_ad_ratio: f64,
-    burst_ap_ratio: f64,
-    uptime_cycle_seconds: f64,
-    uptime_active_seconds: f64,
-    uptime_phase_seconds: f64,
     loadout_item_names: Vec<String>,
     loadout_rune_names: Vec<String>,
     loadout_shards: Vec<String>,
@@ -182,7 +162,6 @@ struct SimulationConfig {
     protoplasm_heal_total: f64,
     protoplasm_duration_seconds: f64,
     stack_overrides: HashMap<String, f64>,
-    enemy_uptime_model_enabled: bool,
     urf_respawn_flat_reduction_seconds: f64,
     urf_respawn_extrapolation_per_level: f64,
     urf_respawn_time_scaling_enabled: bool,

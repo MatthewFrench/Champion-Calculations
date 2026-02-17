@@ -31,7 +31,7 @@ pub(crate) fn execute_crescendo(
         return Vec::new();
     }
     let raw_magic = ability_defaults.crescendo_magic_base_damage
-        + ability_defaults.crescendo_magic_ability_power_ratio * input.burst_magic_damage.max(0.0);
+        + ability_defaults.crescendo_magic_ability_power_ratio * input.actor_ability_power.max(0.0);
     let (extra_magic, extra_true) =
         on_ability_bonus_damage(runtime, raw_magic, input.target_max_health, input.now);
     vec![ChampionScriptAction::ApplyDamage {

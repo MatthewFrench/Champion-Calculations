@@ -10,7 +10,6 @@ pub(crate) struct SimulationDefaults {
     pub dt_fallback_seconds: f64,
     pub champion_level: usize,
     pub time_limit_seconds: f64,
-    pub enemy_uptime_model_enabled: bool,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -251,6 +250,7 @@ struct AbilityExecutionOverrideEntry {
 }
 
 #[derive(Debug, Clone, Default)]
+#[allow(dead_code)]
 struct ChampionAbilityExecutionData {
     is_melee: bool,
     abilities: HashMap<String, AbilityExecutionOverrideEntry>,
@@ -474,6 +474,7 @@ static CHAMPION_SLOT_BINDINGS: OnceLock<HashMap<String, HashMap<String, String>>
 static CHAMPION_BEHAVIOR_DEFAULTS: OnceLock<ChampionBehaviorDefaults> = OnceLock::new();
 static CHAMPION_ABILITY_EXECUTION_DEFAULTS: OnceLock<AbilityExecutionDefaultsByRole> =
     OnceLock::new();
+#[allow(dead_code)]
 static CHAMPION_ABILITY_EXECUTION_DATA: OnceLock<HashMap<String, ChampionAbilityExecutionData>> =
     OnceLock::new();
 static CHAMPION_AI_PROFILES: OnceLock<ChampionAiProfilesFile> = OnceLock::new();
@@ -735,6 +736,7 @@ fn load_champion_ai_profiles() -> Result<ChampionAiProfilesFile> {
         .with_context(|| format!("Failed parsing champion AI profiles: {}", path.display()))
 }
 
+#[allow(dead_code)]
 fn load_champion_ability_execution_data() -> Result<HashMap<String, ChampionAbilityExecutionData>> {
     let mut data = HashMap::new();
     let characters_dir = repository_root_dir().join("Characters");
@@ -1938,6 +1940,7 @@ pub(crate) fn champion_behavior_defaults_for_role(is_melee: bool) -> ChampionBeh
     }
 }
 
+#[allow(dead_code)]
 pub(crate) fn default_ability_execution_profile(is_melee: bool) -> AbilityExecutionProfile {
     let defaults = champion_ability_execution_defaults_for_role_internal(is_melee);
     AbilityExecutionProfile {
@@ -1947,6 +1950,7 @@ pub(crate) fn default_ability_execution_profile(is_melee: bool) -> AbilityExecut
     }
 }
 
+#[allow(dead_code)]
 pub(crate) fn champion_ability_execution_profile(
     champion_name: &str,
     ability_key: &str,

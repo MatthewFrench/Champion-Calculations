@@ -33,7 +33,7 @@ pub(crate) fn execute_dark_binding(
     }
     let raw_magic = ability_defaults.dark_binding_magic_base_damage
         + ability_defaults.dark_binding_magic_ability_power_ratio
-            * input.burst_magic_damage.max(0.0);
+            * input.actor_ability_power.max(0.0);
     let (extra_magic, extra_true) =
         on_ability_bonus_damage(runtime, raw_magic, input.target_max_health, input.now);
     vec![ChampionScriptAction::ApplyDamage {
@@ -69,7 +69,7 @@ pub(crate) fn execute_soul_shackles(
             physical: 0.0,
             magic: ability_defaults.soul_shackles_initial_magic_damage
                 + ability_defaults.soul_shackles_initial_magic_ability_power_ratio
-                    * input.burst_magic_damage.max(0.0),
+                    * input.actor_ability_power.max(0.0),
             true_damage: 0.0,
             stun_duration: 0.0,
         },
@@ -101,7 +101,7 @@ pub(crate) fn execute_soul_shackles_detonate(
         physical: 0.0,
         magic: ability_defaults.soul_shackles_detonate_magic_damage
             + ability_defaults.soul_shackles_detonate_magic_ability_power_ratio
-                * input.burst_magic_damage.max(0.0),
+                * input.actor_ability_power.max(0.0),
         true_damage: 0.0,
         stun_duration: ability_defaults.soul_shackles_detonate_stun_duration_seconds,
     }]

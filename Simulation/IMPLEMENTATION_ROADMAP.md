@@ -81,9 +81,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - add `controlled_champion.level`, `opponents.default_level`, and `opponents.encounters[].actors[].level`
   - add generic stack override maps: `simulation.stack_overrides`, `controlled_champion.stack_overrides`, `opponents.stack_overrides`, and actor-level overrides
   - add `simulation.time_limit_seconds` parsing and enforce 20-minute hard cap
-  - add `opponents.uptime_windows_enabled` as canonical uptime toggle
 - Success criteria:
   - scenario can independently set controlled and opponent levels, stack overrides are generic/per-actor, runtime horizon is bounded by validated time limit, and legacy keys are rejected.
+  - opponent actors are minimal setup objects and do not carry proxy combat cadence fields.
 
 4. `IN_PROGRESS` Build a generic buff/debuff/status system.
 - Scope:
@@ -150,9 +150,10 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - each champion exhibits clearly distinct kit timelines.
 
-12a. `PLANNED` Opponent-first realism sequencing.
+12a. `DONE` Opponent-first realism sequencing.
 - Scope:
-  - prioritize replacing opponent DPS proxy fields with scripted ability/event behavior before broader search-domain expansion.
+  - replaced opponent DPS/crowd-control proxy fields with script- and data-driven behavior.
+  - removed scenario actor `combat` blocks and removed `opponents.uptime_windows_enabled`.
   - stage improvements champion-by-champion with deterministic validation fixtures.
 - Success criteria:
   - realism gains are measurable and land in high-impact order.

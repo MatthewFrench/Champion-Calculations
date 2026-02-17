@@ -412,11 +412,6 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             "simulation.heartsteel_assumed_stacks_at_8m is no longer supported. Use simulation.stack_overrides.heartsteel."
         );
     }
-    if data.get("enemy_uptime_model_enabled").is_some() {
-        bail!(
-            "simulation.enemy_uptime_model_enabled is no longer supported. Use opponents.uptime_windows_enabled."
-        );
-    }
     if data.get("item_stacks_at_level_20").is_some() {
         bail!(
             "simulation.item_stacks_at_level_20 is no longer supported. Use simulation.stack_overrides."
@@ -564,7 +559,6 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             .and_then(Value::as_f64)
             .unwrap_or(protoplasm_defaults.duration_seconds),
         stack_overrides,
-        enemy_uptime_model_enabled: sim_defaults.enemy_uptime_model_enabled,
         urf_respawn_flat_reduction_seconds: data
             .get("urf_respawn_flat_reduction_seconds")
             .and_then(Value::as_f64)
@@ -648,7 +642,12 @@ pub(crate) fn parse_enemy_config(
         .and_then(Value::as_str)
         .unwrap_or(champion)
         .to_string();
-    let combat = data.get("combat").unwrap_or(&Value::Null);
+    if data.get("combat").is_some() {
+        bail!(
+            "Opponent actor '{}' uses deprecated combat proxy settings. Remove actor.combat and model champion behavior through champion scripts/data.",
+            actor_id
+        );
+    }
     let placement = data.get("placement").unwrap_or(&Value::Null);
     let spawn_position_xy = if let Some(position) = placement.get("position") {
         let position_object = position.as_object().ok_or_else(|| {
@@ -707,70 +706,6 @@ pub(crate) fn parse_enemy_config(
         base,
         spawn_position_xy,
         movement_mode,
-        ability_dps_flat: combat
-            .get("ability_dps_flat")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        ability_dps_ad_ratio: combat
-            .get("ability_dps_ad_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        ability_dps_ap_ratio: combat
-            .get("ability_dps_ap_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        ability_tick_interval_seconds: combat
-            .get("ability_tick_interval_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(1.0),
-        stun_interval_seconds: combat
-            .get("stun_interval_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        stun_duration_seconds: combat
-            .get("stun_duration_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_interval_seconds: combat
-            .get("burst_interval_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_start_offset_seconds: combat
-            .get("burst_start_offset_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_magic_flat: combat
-            .get("burst_magic_flat")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_physical_flat: combat
-            .get("burst_physical_flat")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_true_flat: combat
-            .get("burst_true_flat")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_ad_ratio: combat
-            .get("burst_ad_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        burst_ap_ratio: combat
-            .get("burst_ap_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        uptime_cycle_seconds: combat
-            .get("uptime_cycle_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        uptime_active_seconds: combat
-            .get("uptime_active_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
-        uptime_phase_seconds: combat
-            .get("uptime_phase_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(0.0),
         loadout_item_names: Vec::new(),
         loadout_rune_names: Vec::new(),
         loadout_shards: Vec::new(),
@@ -2096,22 +2031,6 @@ mod tests {
     }
 
     #[test]
-    fn parse_simulation_config_rejects_legacy_enemy_uptime_field() {
-        let simulation = serde_json::json!({
-            "time_limit_seconds": 60.0,
-            "enemy_uptime_model_enabled": true
-        });
-        let error = parse_simulation_config(&simulation)
-            .expect_err("legacy simulation.enemy_uptime_model_enabled should be rejected");
-        assert!(
-            error
-                .to_string()
-                .contains("simulation.enemy_uptime_model_enabled is no longer supported"),
-            "unexpected error: {error}"
-        );
-    }
-
-    #[test]
     fn parse_simulation_config_rejects_legacy_item_stacks_map() {
         let simulation = serde_json::json!({
             "time_limit_seconds": 60.0,
@@ -2158,6 +2077,26 @@ mod tests {
             (parsed.max_time_seconds - 1200.0).abs() < 1e-9,
             "expected default time_limit_seconds of 1200.0, got {}",
             parsed.max_time_seconds
+        );
+    }
+
+    #[test]
+    fn parse_enemy_config_rejects_deprecated_combat_proxy() {
+        let champion_bases = load_champion_bases().expect("champion bases should load");
+        let enemy = serde_json::json!({
+            "id": "test_enemy",
+            "champion": "Warwick",
+            "combat": {
+                "ability_dps_flat": 30.0
+            }
+        });
+        let error = parse_enemy_config(&enemy, &champion_bases, 20, &HashMap::new())
+            .expect_err("opponent combat proxy should be rejected");
+        assert!(
+            error
+                .to_string()
+                .contains("deprecated combat proxy settings"),
+            "unexpected error: {error}"
         );
     }
 }

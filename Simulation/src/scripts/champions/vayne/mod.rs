@@ -37,7 +37,7 @@ pub(crate) fn execute_tumble_empower(
         amount: ability_defaults.tumble_bonus_physical_attack_damage_ratio
             * input.physical_hit_damage
             + ability_defaults.tumble_bonus_physical_ability_power_ratio
-                * input.burst_magic_damage.max(0.0),
+                * input.actor_ability_power.max(0.0),
         trace_message: "empowered next attack",
     }]
 }

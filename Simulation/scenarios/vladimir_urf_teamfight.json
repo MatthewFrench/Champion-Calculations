@@ -1,0 +1,128 @@
+{
+  "simulation": {},
+  "controlled_champion": {
+    "champion": "Vladimir",
+    "level": 20,
+    "stack_overrides": {
+      "heartsteel": 20.0
+    }
+  },
+  "opponents": {
+    "default_level": 20,
+    "stack_overrides": {
+      "heartsteel": 20.0
+    },
+    "encounters": [
+      {
+        "name": "primary_team_fight",
+        "weight": 1.0,
+        "actors": [
+          {
+            "id": "warwick_frontline",
+            "champion": "Warwick",
+            "level": 20,
+            "placement": {
+              "position": {
+                "x": 140.0,
+                "y": 0.0
+              },
+              "movement": "hold_position"
+            }
+          },
+          {
+            "id": "vayne_backline",
+            "champion": "Vayne",
+            "level": 20,
+            "placement": {
+              "position": {
+                "x": 520.0,
+                "y": 150.0
+              },
+              "movement": "hold_position"
+            }
+          },
+          {
+            "id": "morgana_control",
+            "champion": "Morgana",
+            "level": 20,
+            "placement": {
+              "position": {
+                "x": -650.0,
+                "y": 120.0
+              },
+              "movement": "hold_position"
+            }
+          },
+          {
+            "id": "sona_support",
+            "champion": "Sona",
+            "level": 20,
+            "placement": {
+              "position": {
+                "x": -550.0,
+                "y": -180.0
+              },
+              "movement": "hold_position"
+            }
+          },
+          {
+            "id": "doctor_mundo_frontline",
+            "champion": "Dr. Mundo",
+            "level": 20,
+            "placement": {
+              "position": {
+                "x": 180.0,
+                "y": -120.0
+              },
+              "movement": "hold_position"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "search": {
+    "strategy": "portfolio",
+    "portfolio_strategies": [
+      "beam",
+      "hill_climb",
+      "genetic",
+      "simulated_annealing",
+      "mcts",
+      "random",
+      "greedy"
+    ],
+    "beam_width": 48,
+    "max_items": 6,
+    "random_samples": 1200,
+    "hill_climb_restarts": 128,
+    "hill_climb_steps": 36,
+    "hill_climb_neighbors": 48,
+    "genetic_population": 192,
+    "genetic_generations": 80,
+    "genetic_mutation_rate": 0.18,
+    "genetic_crossover_rate": 0.9,
+    "simulated_annealing_restarts": 64,
+    "simulated_annealing_iterations": 420,
+    "simulated_annealing_initial_temp": 1.2,
+    "simulated_annealing_cooling_rate": 0.985,
+    "mcts_iterations": 20000,
+    "mcts_rollouts_per_expansion": 4,
+    "mcts_exploration": 1.2,
+    "ensemble_seeds": 8,
+    "ensemble_seed_stride": 1000003,
+    "ensemble_seed_top_k": 60,
+    "objective_survival_weight": 0.5,
+    "objective_damage_weight": 0.25,
+    "objective_healing_weight": 0.15,
+    "objective_enemy_kills_weight": 1.0,
+    "objective_invulnerable_seconds_weight": 0.05,
+    "robust_min_seed_hit_rate": 0.6,
+    "bleed_enabled": true,
+    "bleed_budget": 2000,
+    "bleed_mutation_rate": 0.35,
+    "multi_scenario_worst_weight": 0.35,
+    "ranked_limit": 1600,
+    "seed": 1337
+  }
+}
