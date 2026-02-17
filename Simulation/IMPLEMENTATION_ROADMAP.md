@@ -267,6 +267,14 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - run outputs no longer perform or present baseline comparisons.
 
+23d. `DONE` Improve run-output key clarity and trace JSON contract stability.
+- Scope:
+  - make popcorn runtime-stop keys deterministic and human-readable
+  - avoid duplicate budget/window tokens when values are equal
+  - emit schema-versioned structured trace JSON events for tooling consumers
+- Success criteria:
+  - output directories are self-describing and trace JSON parsers can rely on stable typed fields.
+
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:
   - repeatable profiling command and report artifacts

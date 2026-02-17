@@ -637,14 +637,54 @@ fn runtime_stop_key(
     let budget = runtime_budget_key(max_runtime_seconds);
     match popcorn_window_seconds {
         Some(seconds) if seconds > 0.0 => {
-            format!(
-                "{budget}__popcorn_with_progress_{}_percent_minumum_in_{}_max_gap",
-                format_percent_key(popcorn_min_relative_improvement_percent),
-                format_seconds_key(seconds)
-            )
+            let min_improvement = format_percent_key(popcorn_min_relative_improvement_percent);
+            let popcorn_window = format_seconds_key(seconds);
+            if popcorn_window == budget {
+                format!("{budget}__popcorn__min_improvement_{min_improvement}pct")
+            } else {
+                format!("{budget}__popcorn_{popcorn_window}__min_improvement_{min_improvement}pct")
+            }
         }
         _ => budget,
     }
+}
+
+fn structured_trace_event(line: &str) -> Value {
+    let (header, multiline_details) = match line.split_once('\n') {
+        Some((head, details)) => (head, Some(details)),
+        None => (line, None),
+    };
+
+    let mut timestamp_seconds = None::<f64>;
+    let mut event_type = "unknown".to_string();
+    let mut details = header.to_string();
+
+    if let Some((time_part, rest)) = header.split_once("s [") {
+        timestamp_seconds = time_part.parse::<f64>().ok();
+        if let Some((kind, event_details)) = rest.split_once("] ") {
+            event_type = kind.to_string();
+            details = event_details.to_string();
+        } else if let Some((kind, event_details)) = rest.split_once(']') {
+            event_type = kind.to_string();
+            details = event_details.trim_start().to_string();
+        }
+    }
+
+    if let Some(extra) = multiline_details {
+        if details.is_empty() {
+            details = extra.to_string();
+        } else {
+            details.push('\n');
+            details.push_str(extra);
+        }
+    }
+
+    json!({
+        "timestamp_seconds": timestamp_seconds,
+        "event_type": event_type,
+        "details": details,
+        "raw": line,
+    })
 }
 
 fn default_run_output_directory(
@@ -2066,7 +2106,12 @@ pub(super) fn run_controlled_champion_scenario(
     fs::write(&trace_markdown_path, trace_md)?;
 
     let trace_json = json!({
-        "events": best_trace,
+        "schema_version": 1,
+        "event_encoding": "structured",
+        "events": best_trace
+            .iter()
+            .map(|line| structured_trace_event(line))
+            .collect::<Vec<_>>(),
     });
     fs::write(&trace_json_path, serde_json::to_string_pretty(&trace_json)?)?;
 

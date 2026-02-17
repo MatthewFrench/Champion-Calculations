@@ -125,7 +125,8 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   where `<runtime_budget>` is:
   - `no_hard_cap` when no runtime budget is set.
   - `<seconds>s` when only fixed budget is used (for example `300s`).
-  - `<budget>__popcorn_with_progress_<relative_percent>_percent_minumum_in_<window>_max_gap` when popcorn mode is enabled.
+  - `<budget>__popcorn_<window>__min_improvement_<relative_percent>pct` when popcorn mode is enabled and `window != budget`.
+  - `<budget>__popcorn__min_improvement_<relative_percent>pct` when popcorn mode is enabled and `window == budget`.
 - Report includes:
   - Human-readable generation timestamps (local and UTC)
   - Vladimir base stats at configured level (`controlled_champion.level` override, fallback `simulation.champion_level`, default `20`)
@@ -148,6 +149,10 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 - Trace outputs are also champion-keyed:
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.json`
+  - Trace JSON schema:
+    - `schema_version`: integer schema version for trace consumers
+    - `event_encoding`: currently `structured`
+    - `events[]`: objects with `timestamp_seconds`, `event_type`, `details`, and `raw`
   - trace includes explicit impact outcome events such as `projectile_blocked`, `impact_nullified`, `attack_missed`, and `ability_missed`.
 
 ## Runtime Controls

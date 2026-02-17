@@ -12,6 +12,10 @@
   - removed baseline parsing/evaluation (`controlled_champion.baseline_items` is now rejected)
   - report headline and objective-breakdown sections are now optimized-build only
   - event trace output now contains a single optimized-build timeline (no baseline vs best split)
+- Improved run artifact naming and trace JSON structure:
+  - popcorn run directory key now uses explicit labels and avoids duplicated `60s` segments when window equals hard budget
+  - fixed historical `minumum` typo in runtime-stop key naming
+  - trace JSON now emits versioned structured events (`schema_version`, `event_encoding`, `events[]`) with parsed timestamp/type/details fields
 - Expanded runtime stat resolution to scalar combat metrics:
   - added resolver query paths for incoming damage taken, healing amounts, movement speed, and outgoing bonus-ability damage
   - controlled champion damage intake and healing application now resolve through shared stat queries instead of direct raw multipliers

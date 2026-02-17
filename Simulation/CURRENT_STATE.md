@@ -17,6 +17,7 @@ This file is a concise handoff for developers and AI agents.
 - URF item allow-list restrictions and enemy URF preset loadouts.
 - Parallelized search/ranking with persistent score cache.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
+- Trace JSON output is schema-versioned and structured for downstream tooling.
 
 ## Search Behavior (Important)
 - Seed behavior:
