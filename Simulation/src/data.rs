@@ -1585,26 +1585,6 @@ pub(crate) fn item_is_allowed_in_urf(item_name: &str, urf: &UrfBuffs) -> bool {
     urf.allowed_item_keys.contains(mapped)
 }
 
-pub(crate) fn ensure_item_names_allowed_in_urf(
-    item_names: &[String],
-    urf: &UrfBuffs,
-    context: &str,
-) -> Result<()> {
-    let disallowed = item_names
-        .iter()
-        .filter(|name| !item_is_allowed_in_urf(name, urf))
-        .cloned()
-        .collect::<Vec<_>>();
-    if disallowed.is_empty() {
-        return Ok(());
-    }
-    bail!(
-        "{} includes item(s) not present in URF allowed_items: {}",
-        context,
-        disallowed.join(", ")
-    );
-}
-
 pub(crate) fn default_item_pool(items: &HashMap<String, Item>, urf: &UrfBuffs) -> Vec<Item> {
     let mut pool = items
         .values()

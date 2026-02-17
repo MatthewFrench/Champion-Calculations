@@ -170,10 +170,6 @@ pub(super) fn write_controlled_champion_report_markdown(
     let stack_notes = data.stack_notes;
     let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_loadout = data.enemy_loadout;
-    let baseline_build = data.baseline_build;
-    let baseline_score = data.baseline_score;
-    let baseline_outcome = data.baseline_outcome;
-    let baseline_score_breakdown = data.baseline_score_breakdown;
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
@@ -193,11 +189,6 @@ pub(super) fn write_controlled_champion_report_markdown(
     let now = SystemTime::now();
     let generated_utc: DateTime<Utc> = now.into();
     let generated_local: DateTime<Local> = DateTime::from(now);
-    let improvement = if baseline_score.abs() > f64::EPSILON {
-        ((best_score - baseline_score) / baseline_score) * 100.0
-    } else {
-        0.0
-    };
 
     let mut content = String::new();
     content.push_str(&format!(
@@ -215,29 +206,17 @@ pub(super) fn write_controlled_champion_report_markdown(
     content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path_display));
 
     content.push_str("## Headline\n");
-    let baseline_damage = format_f64_with_commas(baseline_outcome.damage_dealt, 1);
-    let baseline_healing = format_f64_with_commas(baseline_outcome.healing_done, 1);
     let best_damage = format_f64_with_commas(best_outcome.damage_dealt, 1);
     let best_healing = format_f64_with_commas(best_outcome.healing_done, 1);
-    let baseline_invulnerable_seconds =
-        format_f64_with_commas(baseline_outcome.invulnerable_seconds, 2);
     let best_invulnerable_seconds = format_f64_with_commas(best_outcome.invulnerable_seconds, 2);
     content.push_str(&format!(
-        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **{:.2}s / {} / {} / {} / {}s**\n- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **{:.2}s / {} / {} / {} / {}s**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
-        baseline_score,
+        "- Best objective score: **{:.4}**\n- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **{:.2}s / {} / {} / {} / {}s**\n- Best cap survivor: **{}**\n\n",
         best_score,
-        improvement,
-        baseline_outcome.time_alive_seconds,
-        baseline_damage,
-        baseline_healing,
-        baseline_outcome.enemy_kills,
-        baseline_invulnerable_seconds,
         best_outcome.time_alive_seconds,
         best_damage,
         best_healing,
         best_outcome.enemy_kills,
         best_invulnerable_seconds,
-        baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
         best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
     ));
 
@@ -246,11 +225,6 @@ pub(super) fn write_controlled_champion_report_markdown(
         sim.champion_level
     ));
     content.push_str("## Objective Score Breakdown\n");
-    append_objective_score_breakdown_block(
-        &mut content,
-        "Baseline Build",
-        baseline_score_breakdown,
-    );
     append_objective_score_breakdown_block(&mut content, "Best Build", best_score_breakdown);
 
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
@@ -452,13 +426,6 @@ pub(super) fn write_controlled_champion_report_markdown(
         }
     }
     content.push('\n');
-
-    content.push_str("## Baseline Build\n");
-    if baseline_build.is_empty() {
-        content.push_str("- none provided\n\n");
-    } else {
-        content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
-    }
 
     content.push_str("## Best Build\n");
     content.push_str(&format!("- {}\n\n", item_names(best_build)));
@@ -727,10 +694,6 @@ pub(super) fn write_controlled_champion_report_json(
     let scenario_path_display = format_repo_relative_path(scenario_path);
     let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
-    let baseline_build = data.baseline_build;
-    let baseline_score = data.baseline_score;
-    let baseline_outcome = data.baseline_outcome;
-    let baseline_score_breakdown = data.baseline_score_breakdown;
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
@@ -748,12 +711,6 @@ pub(super) fn write_controlled_champion_report_json(
         .iter()
         .map(|breakdown| breakdown.score_requests)
         .sum::<usize>();
-
-    let improvement_percent = if baseline_score.abs() > f64::EPSILON {
-        ((best_score - baseline_score) / baseline_score) * 100.0
-    } else {
-        0.0
-    };
     let json_value = json!({
         "generated_utc": generated_utc.to_rfc3339(),
         "generated_local": generated_local.format("%Y-%m-%d %H:%M:%S %Z").to_string(),
@@ -761,18 +718,7 @@ pub(super) fn write_controlled_champion_report_json(
         "controlled_champion_name": controlled_champion_name,
         "champion_level": sim.champion_level,
         "headline": {
-            "baseline_objective_score": baseline_score,
             "best_objective_score": best_score,
-            "improvement_percent": improvement_percent,
-            "baseline_outcome": {
-                "time_alive_seconds": baseline_outcome.time_alive_seconds,
-                "damage_dealt": baseline_outcome.damage_dealt,
-                "healing_done": baseline_outcome.healing_done,
-                "enemy_kills": baseline_outcome.enemy_kills,
-                "invulnerable_seconds": baseline_outcome.invulnerable_seconds,
-                "cap_survivor": baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
-            },
-            "baseline_objective_breakdown": objective_breakdown_json(baseline_score_breakdown),
             "best_outcome": {
                 "time_alive_seconds": best_outcome.time_alive_seconds,
                 "damage_dealt": best_outcome.damage_dealt,
@@ -783,7 +729,6 @@ pub(super) fn write_controlled_champion_report_json(
             },
             "best_objective_breakdown": objective_breakdown_json(best_score_breakdown),
         },
-        "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
         "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {

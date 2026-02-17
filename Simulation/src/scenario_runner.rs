@@ -33,7 +33,6 @@ use super::*;
 struct ControlledChampionScenarioConfig {
     base: ChampionBase,
     level: usize,
-    baseline_items: Vec<String>,
     loadout_selection: LoadoutSelection,
     stack_overrides: HashMap<String, f64>,
 }
@@ -464,22 +463,11 @@ fn parse_controlled_champion_config(
         .get("champion")
         .and_then(Value::as_str)
         .ok_or_else(|| anyhow!("Missing controlled_champion.champion"))?;
-    let baseline_items = controlled_champion
-        .get("baseline_items")
-        .and_then(Value::as_array)
-        .map(|values| {
-            values
-                .iter()
-                .map(|value| {
-                    value.as_str().ok_or_else(|| {
-                        anyhow!("controlled_champion.baseline_items must be strings")
-                    })
-                })
-                .collect::<Result<Vec<_>>>()
-                .map(|names| names.into_iter().map(ToOwned::to_owned).collect::<Vec<_>>())
-        })
-        .transpose()?
-        .unwrap_or_default();
+    if controlled_champion.get("baseline_items").is_some() {
+        return Err(anyhow!(
+            "controlled_champion.baseline_items is no longer supported."
+        ));
+    }
     let loadout_selection = parse_loadout_selection(controlled_champion.get("loadout"));
     let champion_base = lookup_champion_base(champion_bases, champion_name)?;
     let level = controlled_champion
@@ -504,7 +492,6 @@ fn parse_controlled_champion_config(
     Ok(ControlledChampionScenarioConfig {
         base: champion_base,
         level,
-        baseline_items,
         loadout_selection,
         stack_overrides,
     })
@@ -746,17 +733,17 @@ pub(super) fn run_controlled_champion_scenario(
             let significant = if !state.best_significant_score.is_finite() {
                 true
             } else {
-                let baseline = previous_best_overall;
-                let delta = if baseline.is_finite() {
-                    score - baseline
+                let previous_best = previous_best_overall;
+                let delta = if previous_best.is_finite() {
+                    score - previous_best
                 } else {
                     score - state.best_significant_score
                 };
                 if delta <= 0.0 {
                     false
                 } else {
-                    let threshold_base = if baseline.is_finite() {
-                        baseline.abs().max(1e-9)
+                    let threshold_base = if previous_best.is_finite() {
+                        previous_best.abs().max(1e-9)
                     } else {
                         state.best_significant_score.abs().max(1e-9)
                     };
@@ -799,7 +786,6 @@ pub(super) fn run_controlled_champion_scenario(
     sim.champion_level = controlled_champion_config.level;
     let vlad_base = champion_at_level(&controlled_champion_config.base, sim.champion_level);
     let vlad_base_raw = controlled_champion_config.base;
-    let baseline_fixed_names = controlled_champion_config.baseline_items;
     let vlad_loadout_selection = controlled_champion_config.loadout_selection;
     let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
     let controlled_champion_name = vlad_base_raw.name.clone();
@@ -858,13 +844,6 @@ pub(super) fn run_controlled_champion_scenario(
         Some("search profile and enemy presets ready"),
         true,
     );
-
-    ensure_item_names_allowed_in_urf(
-        &baseline_fixed_names,
-        &urf,
-        "controlled_champion.baseline_items",
-    )?;
-    let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
     let mut enemy_presets_used: HashMap<String, EnemyUrfPreset> = HashMap::new();
     let mut enemy_build_scenarios = Vec::new();
@@ -976,12 +955,6 @@ pub(super) fn run_controlled_champion_scenario(
                 bonus_stats,
                 loadout_selection,
             )
-        };
-    let score_build_with_bonus =
-        |build_items: &[Item],
-         bonus_stats: &Stats,
-         loadout_selection: Option<&LoadoutSelection>| {
-            evaluate_build_with_bonus(build_items, bonus_stats, loadout_selection).0
         };
 
     let loadout_candidates_count = 1usize;
@@ -1531,43 +1504,6 @@ pub(super) fn run_controlled_champion_scenario(
         .or_else(|| resolve_loadout_for_selection(&vlad_runtime_loadout_selection))
         .unwrap_or_else(|| vlad_base_loadout.clone());
 
-    let baseline_fixed_indices = baseline_fixed_build
-        .iter()
-        .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
-        .collect::<Vec<_>>();
-    let baseline_fixed_key = canonical_build_candidate(BuildKey {
-        item_indices: baseline_fixed_indices,
-        loadout_selection: vlad_loadout_selection.clone(),
-    });
-    let baseline_fixed_score = if deadline_reached(current_deadline()) {
-        score_build_with_bonus(
-            &baseline_fixed_build,
-            &vlad_base_loadout.bonus_stats,
-            Some(&vlad_loadout_selection),
-        )
-    } else {
-        full_score_for_search_type("baseline_reference", &baseline_fixed_key)
-    };
-    let baseline_runtime_loadout_selection = baseline_fixed_key.loadout_selection.clone();
-    let baseline_loadout = best_loadout_by_candidate
-        .lock()
-        .ok()
-        .and_then(|m| m.get(&baseline_fixed_key).cloned())
-        .or_else(|| resolve_loadout_for_selection(&baseline_runtime_loadout_selection))
-        .unwrap_or_else(|| vlad_base_loadout.clone());
-    let baseline_fixed_outcome = best_outcome_by_candidate
-        .lock()
-        .ok()
-        .and_then(|m| m.get(&baseline_fixed_key).copied())
-        .unwrap_or_else(|| {
-            aggregate_objective_score_and_outcome_with_loadout_selection(
-                &objective_eval_ctx,
-                &baseline_fixed_build,
-                &baseline_loadout.bonus_stats,
-                Some(&baseline_runtime_loadout_selection),
-            )
-            .1
-        });
     let vlad_best_score = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
     let vlad_best_outcome = best_outcome_by_candidate
         .lock()
@@ -1582,13 +1518,6 @@ pub(super) fn run_controlled_champion_scenario(
             )
             .1
         });
-    let (_, _, baseline_score_breakdown) =
-        aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
-            &objective_eval_ctx,
-            &baseline_fixed_build,
-            &baseline_loadout.bonus_stats,
-            Some(&baseline_runtime_loadout_selection),
-        );
     let (_, _, best_score_breakdown) =
         aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
             &objective_eval_ctx,
@@ -1596,8 +1525,6 @@ pub(super) fn run_controlled_champion_scenario(
             &vlad_loadout.bonus_stats,
             Some(&vlad_runtime_loadout_selection),
         );
-    let baseline_cap_survivor =
-        baseline_fixed_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
     let best_cap_survivor = vlad_best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
     let progress_snapshot =
@@ -1694,33 +1621,6 @@ pub(super) fn run_controlled_champion_scenario(
     for note in &enemy_similarity_notes {
         println!("- Warning: {}", note);
     }
-
-    println!(
-        "\n{} baseline build (optional reference):",
-        controlled_champion_name
-    );
-    println!(
-        "- Items: {}",
-        if baseline_fixed_build.is_empty() {
-            "none provided".to_string()
-        } else {
-            baseline_fixed_build
-                .iter()
-                .map(|i| i.name.clone())
-                .collect::<Vec<_>>()
-                .join(", ")
-        }
-    );
-    println!("- Objective score: {:.4}", baseline_fixed_score);
-    println!(
-        "- Time alive / damage dealt / healing done / enemy kills / invulnerable seconds: {:.2}s / {:.1} / {:.1} / {} / {:.2}",
-        baseline_fixed_outcome.time_alive_seconds,
-        baseline_fixed_outcome.damage_dealt,
-        baseline_fixed_outcome.healing_done,
-        baseline_fixed_outcome.enemy_kills,
-        baseline_fixed_outcome.invulnerable_seconds
-    );
-    println!("- Cap survivor: {}", baseline_cap_survivor);
 
     println!(
         "\n{} best build (optimized for objective):",
@@ -2118,7 +2018,7 @@ pub(super) fn run_controlled_champion_scenario(
     if let Some(parent) = report_path.parent() {
         fs::create_dir_all(parent)?;
     }
-    // Optional deterministic replay-style timeline for baseline and best runs.
+    // Optional deterministic replay-style timeline for the optimized build run.
     let trace_markdown_path = report_path
         .parent()
         .unwrap_or_else(|| Path::new("."))
@@ -2127,22 +2027,6 @@ pub(super) fn run_controlled_champion_scenario(
             to_norm_key(&controlled_champion_name)
         ));
     let trace_json_path = trace_markdown_path.with_extension("json");
-    let mut baseline_trace_sim =
-        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
-            vlad_base.clone(),
-            &baseline_fixed_build,
-            &vlad_loadout.bonus_stats,
-            Some(&baseline_runtime_loadout_selection),
-            None,
-            Some(&controlled_champion_stack_overrides),
-            &enemy_builds,
-            sim.clone(),
-            urf.clone(),
-        );
-    baseline_trace_sim.enable_trace();
-    while baseline_trace_sim.step(1) {}
-    let baseline_trace = baseline_trace_sim.trace_events().to_vec();
-
     let mut best_trace_sim =
         ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
             vlad_base.clone(),
@@ -2161,23 +2045,28 @@ pub(super) fn run_controlled_champion_scenario(
 
     let mut trace_md = String::new();
     trace_md.push_str(&format!("# {} Event Trace\n\n", controlled_champion_name));
-    trace_md.push_str("## Baseline Build Trace\n");
-    for line in &baseline_trace {
-        trace_md.push_str("- ");
-        trace_md.push_str(line);
-        trace_md.push('\n');
-    }
-    trace_md.push_str("\n## Best Build Trace\n");
+    trace_md.push_str("## Optimized Build Trace\n");
     for line in &best_trace {
-        trace_md.push_str("- ");
-        trace_md.push_str(line);
-        trace_md.push('\n');
+        if let Some((header, details)) = line.split_once('\n') {
+            trace_md.push_str("- ");
+            trace_md.push_str(header);
+            trace_md.push('\n');
+            trace_md.push_str("  ```text\n");
+            trace_md.push_str(details);
+            if !details.ends_with('\n') {
+                trace_md.push('\n');
+            }
+            trace_md.push_str("  ```\n");
+        } else {
+            trace_md.push_str("- ");
+            trace_md.push_str(line);
+            trace_md.push('\n');
+        }
     }
     fs::write(&trace_markdown_path, trace_md)?;
 
     let trace_json = json!({
-        "baseline": baseline_trace,
-        "best": best_trace,
+        "events": best_trace,
     });
     fs::write(&trace_json_path, serde_json::to_string_pretty(&trace_json)?)?;
 
@@ -2191,10 +2080,6 @@ pub(super) fn run_controlled_champion_scenario(
         stack_notes: &stack_notes,
         controlled_champion_loadout: &vlad_loadout,
         enemy_loadout: &enemy_loadout,
-        baseline_build: &baseline_fixed_build,
-        baseline_score: baseline_fixed_score,
-        baseline_outcome: &baseline_fixed_outcome,
-        baseline_score_breakdown,
         best_build: &vlad_best_build,
         best_score: vlad_best_score,
         best_outcome: &vlad_best_outcome,
@@ -2262,7 +2147,6 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
     )?;
     sim_cfg.champion_level = controlled_champion_config.level;
     let vlad_base = champion_at_level(&controlled_champion_config.base, sim_cfg.champion_level);
-    let baseline_fixed_names = controlled_champion_config.baseline_items;
     let vlad_loadout_selection = controlled_champion_config.loadout_selection;
     let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
 
@@ -2308,16 +2192,11 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         enemy_with_loadout.loadout_shards = preset.shards.clone();
         enemy_builds.push((enemy_with_loadout, build, bonus_stats));
     }
-    ensure_item_names_allowed_in_urf(
-        &baseline_fixed_names,
-        &urf,
-        "controlled_champion.baseline_items",
-    )?;
-    let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
+    let controlled_champion_items: Vec<Item> = Vec::new();
 
     let mut sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
         vlad_base,
-        &baseline_fixed_build,
+        &controlled_champion_items,
         &vlad_loadout.bonus_stats,
         Some(&vlad_loadout_selection),
         None,

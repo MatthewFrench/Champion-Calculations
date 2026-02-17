@@ -1,5 +1,4 @@
 {
-  "baseline_build": [],
   "best_build": [
     "Abyssal Mask",
     "Actualizer",
@@ -10,7 +9,7 @@
   ],
   "build_orders": [
     {
-      "cumulative_score": 11.880327374297831,
+      "cumulative_score": 3.290758250277973,
       "levels": [
         5,
         8,
@@ -22,42 +21,42 @@
       "ordered_items": [
         "Bloodletter's Curse",
         "Unending Despair",
-        "Abyssal Mask",
         "Void Staff",
         "Actualizer",
+        "Abyssal Mask",
         "Umbral Glaive"
       ],
       "stage_damage": [
-        3887.097439249009,
-        7443.273142807522,
-        14250.031468369241,
-        15874.817968540725,
-        16945.207290669015,
-        13633.581612740913
+        1373.1149773266816,
+        3145.1323714929304,
+        4504.081533996633,
+        4909.199159608943,
+        4983.070840214418,
+        4832.222270831923
       ],
       "stage_healing": [
-        152.69728958630523,
-        741.8442975845555,
-        1713.6385915897495,
-        1803.3556905609291,
-        1915.2513508722036,
-        1493.1211864446786
+        115.79999999999995,
+        207.24969251793664,
+        251.2639344262293,
+        293.5957295934445,
+        343.7308859223299,
+        366.6648142731792
       ],
       "stage_objective_scores": [
-        0.8585161531642069,
-        2.1366671503580448,
-        2.3009757007375584,
-        2.5072703012321647,
-        3.076898068805856,
-        1.0
+        0.5041034275689106,
+        0.7364929542582059,
+        0.5351546252845776,
+        0.5195399865190651,
+        0.5082877694677259,
+        0.4871794871794873
       ],
       "stage_survival_seconds": [
-        2.7263525858546234,
-        6.3290070566035155,
-        40.993128375984064,
-        48.51283702128908,
-        53.966666666666164,
-        9.99999999999998
+        2.0615966371280576,
+        2.3000000000000007,
+        3.788833943808779,
+        3.778115851721098,
+        3.716272679677316,
+        3.6619555974089906
       ]
     }
   ],
@@ -66,7 +65,7 @@
   "controlled_champion_name": "Vladimir",
   "diagnostics": {
     "adaptive_candidates_injected": 0,
-    "best_significant_score": 42.9557834083399,
+    "best_significant_score": 33.719297976466194,
     "bleed_candidates_injected": 0,
     "candidate_duplicates_pruned": 0,
     "candidate_keys_generated": 128,
@@ -76,19 +75,19 @@
     "coverage_stage_enabled": false,
     "coverage_stage_seed_candidates": 0,
     "coverage_stage_seed_candidates_unique": 0,
-    "effective_seed": 12345,
-    "elapsed_seconds": 1.076020416,
+    "effective_seed": 17727861846512464062,
+    "elapsed_seconds": 1.123188625,
     "ensemble_seeds": 1,
-    "estimated_cache_space_coverage_percent": 2.197051872724777e-10,
-    "estimated_close_to_optimal_probability": 0.000021869761072546012,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 2187 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 2.197051872724777e-10,
+    "estimated_cache_space_coverage_percent": 2.239244912804539e-10,
+    "estimated_close_to_optimal_probability": 0.000022289751803294955,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 2229 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 2.239244912804539e-10,
     "estimated_total_candidate_space": 995424835958784.0,
     "full_cache_hits": 0,
-    "full_cache_misses": 2187,
+    "full_cache_misses": 2229,
     "full_cache_waits": 0,
-    "full_evaluations": 2187,
-    "full_persistent_cache_entries": 2187,
+    "full_evaluations": 2229,
+    "full_persistent_cache_entries": 2229,
     "full_persistent_cache_hits": 0,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
@@ -105,17 +104,17 @@
     "search_type_breakdown": [
       {
         "name": "seed_search:portfolio",
-        "new_simulations": 2187,
+        "new_simulations": 2229,
         "persistent_cache_hits": 0,
-        "score_requests": 2187
+        "score_requests": 2229
       }
     ],
-    "seconds_since_last_significant_improvement": 0.431269167,
-    "significant_improvement_events": 9,
+    "seconds_since_last_significant_improvement": 0.345576958,
+    "significant_improvement_events": 13,
     "simulation_counts": {
-      "new_full_simulations": 2187,
-      "total_score_requests": 2187,
-      "unique_scored_candidates": 2187
+      "new_full_simulations": 2229,
+      "total_score_requests": 2229,
+      "unique_scored_candidates": 2229
     },
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
     "strict_candidates_skipped_timeout": 128,
@@ -126,9 +125,9 @@
     "time_budget_seconds": 1.0,
     "timed_out": true,
     "total_candidates": 128,
-    "total_run_seconds": 2.468994,
+    "total_run_seconds": 1.653318708,
     "unique_candidate_builds": 128,
-    "unique_scored_candidates": 2187
+    "unique_scored_candidates": 2229
   },
   "diverse_top_builds": [
     {
@@ -140,7 +139,7 @@
         "Unending Despair",
         "Void Staff"
       ],
-      "objective_score": 0.49841050763278727
+      "objective_score": 0.09607999988614382
     }
   ],
   "enemy_derived_combat_stats": [
@@ -368,16 +367,16 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-16 21:49:46 -06:00",
-  "generated_utc": "2026-02-17T03:49:46.026368+00:00",
+  "generated_local": "2026-02-17 04:33:40 -06:00",
+  "generated_utc": "2026-02-17T10:33:40.135605+00:00",
   "headline": {
-    "baseline_objective_breakdown": {
+    "best_objective_breakdown": {
       "components": {
         "damage": {
-          "contribution": 0.03403268142579546,
-          "delta_vs_weight_percent_points": 9.404432646858373,
-          "impact_percent": 22.224945467371196,
-          "normalized_ratio": 0.2654549151212045,
+          "contribution": 0.03353035465885578,
+          "delta_vs_weight_percent_points": 22.077858014822034,
+          "impact_percent": 34.89837083533486,
+          "normalized_ratio": 0.2615367663390751,
           "weight": 0.12820512820512822
         },
         "enemy_kills": {
@@ -388,94 +387,41 @@
           "weight": 0.5128205128205129
         },
         "healing": {
-          "contribution": 0.015094055606510288,
-          "delta_vs_weight_percent_points": 2.1648222393317953,
-          "impact_percent": 9.857129931639488,
-          "normalized_ratio": 0.19622272288463374,
+          "contribution": 0.010485124800491257,
+          "delta_vs_weight_percent_points": 3.2206032287125828,
+          "impact_percent": 10.912910921020275,
+          "normalized_ratio": 0.13630662240638633,
           "weight": 0.07692307692307693
         },
         "invulnerable_seconds": {
-          "contribution": 0.10256410256410259,
-          "delta_vs_weight_percent_points": 64.41509187190468,
-          "impact_percent": 66.97919443600725,
-          "normalized_ratio": 4.000000000000001,
+          "contribution": 0.051282051282051294,
+          "delta_vs_weight_percent_points": 50.810222313937885,
+          "impact_percent": 53.37432487804045,
+          "normalized_ratio": 2.0000000000000004,
           "weight": 0.025641025641025644
         },
         "survival": {
-          "contribution": 0.0014374615540237133,
-          "delta_vs_weight_percent_points": -24.702295476043563,
-          "impact_percent": 0.9387301649820842,
-          "normalized_ratio": 0.005606100060692482,
+          "contribution": 0.0007824691447455109,
+          "delta_vs_weight_percent_points": -24.826632275421204,
+          "impact_percent": 0.8143933656044421,
+          "normalized_ratio": 0.003051629664507492,
           "weight": 0.25641025641025644
         }
       },
-      "final_score": 0.15312830115043202,
-      "weighted_mean_score": 0.15312830115043202,
-      "worst_case_score": 0.15312830115043202,
+      "final_score": 0.09607999988614382,
+      "weighted_mean_score": 0.09607999988614382,
+      "worst_case_score": 0.09607999988614382,
       "worst_case_weight": 0.35
     },
-    "baseline_objective_score": 0.15312830115043202,
-    "baseline_outcome": {
-      "cap_survivor": false,
-      "damage_dealt": 4904.6150210768055,
-      "enemy_kills": 0,
-      "healing_done": 527.8391245596647,
-      "invulnerable_seconds": 4.0,
-      "time_alive_seconds": 6.727320072830977
-    },
-    "best_objective_breakdown": {
-      "components": {
-        "damage": {
-          "contribution": 0.09460219359217432,
-          "delta_vs_weight_percent_points": 6.160265502458282,
-          "impact_percent": 18.980778322971105,
-          "normalized_ratio": 0.7378971100189596,
-          "weight": 0.12820512820512822
-        },
-        "enemy_kills": {
-          "contribution": 0.20512820512820518,
-          "delta_vs_weight_percent_points": -10.125574444821972,
-          "impact_percent": 41.15647683722932,
-          "normalized_ratio": 0.4,
-          "weight": 0.5128205128205129
-        },
-        "healing": {
-          "contribution": 0.04269720292950182,
-          "delta_vs_weight_percent_points": 0.8743662191820976,
-          "impact_percent": 8.56667391148979,
-          "normalized_ratio": 0.5550636380835237,
-          "weight": 0.07692307692307693
-        },
-        "invulnerable_seconds": {
-          "contribution": 0.15384615384615383,
-          "delta_vs_weight_percent_points": 28.303255063819417,
-          "impact_percent": 30.867357627921983,
-          "normalized_ratio": 5.999999999999998,
-          "weight": 0.025641025641025644
-        },
-        "survival": {
-          "contribution": 0.002136752136752133,
-          "delta_vs_weight_percent_points": -25.21231234063784,
-          "impact_percent": 0.4287133003878046,
-          "normalized_ratio": 0.008333333333333318,
-          "weight": 0.25641025641025644
-        }
-      },
-      "final_score": 0.49841050763278727,
-      "weighted_mean_score": 0.49841050763278727,
-      "worst_case_score": 0.49841050763278727,
-      "worst_case_weight": 0.35
-    },
-    "best_objective_score": 0.49841050763278727,
+    "best_objective_score": 0.09607999988614382,
     "best_outcome": {
       "cap_survivor": false,
-      "damage_dealt": 13633.581612740913,
-      "enemy_kills": 2,
-      "healing_done": 1493.1211864446786,
-      "invulnerable_seconds": 5.999999999999999,
-      "time_alive_seconds": 9.99999999999998
-    },
-    "improvement_percent": 225.48555942193386
+      "damage_dealt": 4832.222270831923,
+      "enemy_kills": 0,
+      "healing_done": 366.6648142731792,
+      "invulnerable_seconds": 2.0,
+      "time_alive_seconds": 3.6619555974089906
+    }
   },
   "scenario_path": "Simulation/scenarios/vladimir_urf_teamfight.json"
 }

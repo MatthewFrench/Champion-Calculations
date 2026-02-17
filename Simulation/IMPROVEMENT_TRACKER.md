@@ -8,6 +8,10 @@
     - Luden's Echo cooldown from `Items/Ludens Echo.json` (`effects_structured[id=echo_consume_stacks_for_primary_and_secondary_magic_damage]`)
     - Guardian Angel / Zhonya's Hourglass / Protoplasm Harness cooldowns resolve through the same runtime stat resolver path
   - enemy champion script ability cooldown scheduling now resolves from base cooldown plus runtime ability haste instead of using raw cooldown values directly
+- Removed baseline reference-build workflow from controlled champion scenario outputs:
+  - removed baseline parsing/evaluation (`controlled_champion.baseline_items` is now rejected)
+  - report headline and objective-breakdown sections are now optimized-build only
+  - event trace output now contains a single optimized-build timeline (no baseline vs best split)
 - Expanded runtime stat resolution to scalar combat metrics:
   - added resolver query paths for incoming damage taken, healing amounts, movement speed, and outgoing bonus-ability damage
   - controlled champion damage intake and healing application now resolve through shared stat queries instead of direct raw multipliers
@@ -43,7 +47,7 @@
 - Replaced legacy scenario schema compatibility with strict canonical scenario shape:
   - removed legacy parsing aliases (`vladimir_*`, top-level `enemies`, `enemy_scenarios`, and top-level `enemy_loadout`) from scenario execution paths
   - required canonical structure:
-    - `controlled_champion.{champion, baseline_items, loadout}`
+    - `controlled_champion.{champion, loadout}`
     - `opponents.{shared_loadout, encounters[].{name, weight, actors[]}}`
   - actor placement now supports explicit `placement.position` and strict `placement.movement` parsing (`hold_position`, `maintain_combat_range`)
   - build-order enemy level scaling now keys raw bases by stable actor `id`, not champion name display keys

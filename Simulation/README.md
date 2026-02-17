@@ -61,7 +61,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
   - healing done
   - enemy champions killed
   - invulnerable/untargetable seconds
-  with configurable weights and per-scenario baseline normalization.
+  with configurable weights and per-scenario reference normalization.
 - Objective evaluation now supports selection-aware combat simulation so candidate loadout scoring includes combat-time runtime scripts.
 - Default ownership is domain-based:
   - global simulator/search/engine defaults: `data/simulator_defaults.json`
@@ -308,8 +308,9 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `controlled_champion` with at least `champion`.
   - `opponents.encounters[]`: weighted encounter list used by objective aggregation.
 - Optional reference fields:
-  - `controlled_champion.baseline_items`: baseline-only report/reference build (not used to seed item search).
   - `controlled_champion.loadout`: optional controlled champion loadout block (not used as the optimization seed).
+- Deprecated/removed:
+  - `controlled_champion.baseline_items` is no longer supported.
 - Keep only scenario setup data in scenario JSON (for example actor placement, per-actor level, and stack overrides).
 - Legacy flat scenario keys are removed; scenario parsing is now strict and canonical.
 - Build search item pool is restricted to purchasable `LEGENDARY` items only.
@@ -391,10 +392,10 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - Placement/movement policy: `opponents.encounters[].actors[].placement.position` plus `placement.movement` (`hold_position` or `maintain_combat_range`).
 - Report now includes:
   - Headline objective score and component outcomes (time alive, damage dealt, healing done, enemy kills)
-  - Objective score breakdown for baseline and best builds:
+  - Objective score breakdown for the optimized build:
     - weighted contribution and impact share (%) of survival, damage, healing, and enemy kills
     - delta vs configured weight to reveal overshadowed or underperforming objective components
-  - Cap-survivor indicators for baseline and best build outcomes
+  - Cap-survivor indicator for the optimized build outcome
   - Enemy derived combat profile diagnostics and similarity warnings
   - Search diagnostics (full eval counts, candidate pool, seed variance, objective weights)
   - Robust vs fragile build confidence based on ensemble seed hit rate
@@ -410,7 +411,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `weight`
   - `actors` (same actor schema as primary encounter)
 - Objective score is aggregated across scenarios with worst-case blending via `search.multi_scenario_worst_weight`.
-- Objective normalization references are derived from scenario horizon and enemy total effective health, not from a configured baseline build.
+- Objective normalization references are derived from scenario horizon and enemy total effective health.
 
 ## Rune Pages
 - Optional scenario loadout blocks:

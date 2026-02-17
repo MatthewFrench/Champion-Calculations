@@ -23,12 +23,11 @@ mod status;
 pub(crate) use crate::core::*;
 pub(crate) use crate::data::{
     EnemyUrfPreset, apply_search_quality_profile, build_loadout_domain, default_item_pool,
-    enemy_loadout_from_preset, enemy_preset_data_path, ensure_item_names_allowed_in_urf,
-    item_pool_from_names, load_champion_bases, load_enemy_urf_presets, load_items, load_json,
-    load_urf_buffs, loadout_selection_key, lookup_champion_base, parse_build_search,
-    parse_enemy_config, parse_loadout_selection, parse_simulation_config, random_loadout_selection,
-    resolve_loadout, resolve_scenario_path, simulation_dir, to_norm_key,
-    validate_enemy_urf_presets,
+    enemy_loadout_from_preset, enemy_preset_data_path, item_pool_from_names, load_champion_bases,
+    load_enemy_urf_presets, load_items, load_json, load_urf_buffs, loadout_selection_key,
+    lookup_champion_base, parse_build_search, parse_enemy_config, parse_loadout_selection,
+    parse_simulation_config, random_loadout_selection, resolve_loadout, resolve_scenario_path,
+    simulation_dir, to_norm_key, validate_enemy_urf_presets,
 };
 use crate::engine::EnemyDerivedCombatStats;
 use crate::scenario_runner::{
@@ -418,10 +417,6 @@ struct ControlledChampionReportData<'a> {
     stack_notes: &'a [String],
     controlled_champion_loadout: &'a ResolvedLoadout,
     enemy_loadout: &'a ResolvedLoadout,
-    baseline_build: &'a [Item],
-    baseline_score: f64,
-    baseline_outcome: &'a CombatOutcome,
-    baseline_score_breakdown: ObjectiveScoreBreakdown,
     best_build: &'a [Item],
     best_score: f64,
     best_outcome: &'a CombatOutcome,
@@ -645,8 +640,8 @@ mod tests {
             enemy_kills: 2,
             invulnerable_seconds: 1.0,
         };
-        let baseline_score = objective_score_from_outcome(reference, reference, w);
-        assert!((baseline_score - 1.0).abs() < 1e-9);
+        let reference_score = objective_score_from_outcome(reference, reference, w);
+        assert!((reference_score - 1.0).abs() < 1e-9);
 
         let better = CombatOutcome {
             time_alive_seconds: 22.0,
@@ -655,20 +650,20 @@ mod tests {
             enemy_kills: 3,
             invulnerable_seconds: 2.0,
         };
-        assert!(objective_score_from_outcome(better, reference, w) > baseline_score);
+        assert!(objective_score_from_outcome(better, reference, w) > reference_score);
 
         let kills_only_upgrade = CombatOutcome {
             enemy_kills: reference.enemy_kills + 1,
             ..reference
         };
-        assert!(objective_score_from_outcome(kills_only_upgrade, reference, w) > baseline_score);
+        assert!(objective_score_from_outcome(kills_only_upgrade, reference, w) > reference_score);
 
         let invulnerable_only_upgrade = CombatOutcome {
             invulnerable_seconds: reference.invulnerable_seconds + 1.0,
             ..reference
         };
         assert!(
-            objective_score_from_outcome(invulnerable_only_upgrade, reference, w) > baseline_score
+            objective_score_from_outcome(invulnerable_only_upgrade, reference, w) > reference_score
         );
     }
 

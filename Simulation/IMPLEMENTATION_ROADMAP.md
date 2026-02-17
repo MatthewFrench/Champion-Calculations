@@ -259,6 +259,14 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - breadth floor is guaranteed for high-quality runs and reported in diagnostics.
 
+23c. `DONE` Remove baseline-reference reporting/evaluation workflow.
+- Scope:
+  - remove baseline build parsing and evaluation from scenario execution
+  - emit optimized-build-only report headline/breakdowns
+  - emit a single optimized-build trace timeline (no baseline/best split)
+- Success criteria:
+  - run outputs no longer perform or present baseline comparisons.
+
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:
   - repeatable profiling command and report artifacts

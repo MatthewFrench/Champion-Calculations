@@ -14,6 +14,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Runtime metrics are resolved from canonical base data plus active buff state through shared stat queries:
   - cooldown metrics (ability/item/neutral)
   - scalar combat metrics (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
+- Controlled champion reports and trace outputs focus on the optimized build outcome (no baseline comparison workflow).
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`
   - `Items/`

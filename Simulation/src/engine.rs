@@ -983,55 +983,28 @@ impl ControlledChampionCombatSimulation {
         entries.into_iter().map(|(_, line)| line).collect()
     }
 
-    fn collect_state_snapshot_lines(&self, checkpoint_seconds: f64) -> Vec<String> {
-        let mut lines = Vec::new();
-        lines.push(format!(
-            "checkpoint {:.1}s (captured_at {:.3}s)",
-            checkpoint_seconds, self.time
-        ));
+    fn collect_state_snapshot_summary(&self, checkpoint_seconds: f64) -> String {
+        fn list_or_none(values: &[String]) -> String {
+            if values.is_empty() {
+                "none".to_string()
+            } else {
+                values.join(", ")
+            }
+        }
+
+        fn join_or_none(values: &[String], separator: &str) -> String {
+            if values.is_empty() {
+                "none".to_string()
+            } else {
+                values.join(separator)
+            }
+        }
 
         let health_ratio = if self.max_health > 0.0 {
             (self.health / self.max_health).clamp(0.0, 1.0) * 100.0
         } else {
             0.0
         };
-        lines.push(format!(
-            "controlled_champion {} pos=({:.1}, {:.1}) health={:.1}/{:.1} ({:.1}%) armor={:.1} magic_resist={:.1} ability_power={:.1} ability_haste={:.1}",
-            self.controlled_champion_name,
-            self.target_position.x,
-            self.target_position.y,
-            self.health.max(0.0),
-            self.max_health,
-            health_ratio,
-            self.vlad_stats.armor,
-            self.vlad_stats.magic_resist,
-            self.vlad_stats.ability_power,
-            self.controlled_champion_buffs.ability_haste
-        ));
-        lines.push(format!(
-            "controlled_champion_items {}",
-            if self.controlled_champion_item_names.is_empty() {
-                "none".to_string()
-            } else {
-                self.controlled_champion_item_names.join(", ")
-            }
-        ));
-        lines.push(format!(
-            "controlled_champion_runes {}",
-            if self.controlled_champion_rune_names.is_empty() {
-                "none".to_string()
-            } else {
-                self.controlled_champion_rune_names.join(", ")
-            }
-        ));
-        lines.push(format!(
-            "controlled_champion_shards {}",
-            if self.controlled_champion_shard_names.is_empty() {
-                "none".to_string()
-            } else {
-                self.controlled_champion_shard_names.join(", ")
-            }
-        ));
 
         let mut controlled_champion_cooldowns = Vec::new();
         if self.stasis_item_available {
@@ -1052,14 +1025,18 @@ impl ControlledChampionCombatSimulation {
                 Self::trace_cooldown_status(self.time, self.emergency_shield_item_ready_at)
             ));
         }
-        controlled_champion_cooldowns.extend(describe_controlled_champion_runtime_cooldowns(
+        let runtime_controlled_champion_cooldowns = describe_controlled_champion_runtime_cooldowns(
             &self.controlled_champion_runtime,
             self.time,
-        ));
-        lines.push(format!(
-            "controlled_champion_cooldowns {}",
-            controlled_champion_cooldowns.join("; ")
-        ));
+        );
+        let runtime_cooldowns_are_none = runtime_controlled_champion_cooldowns.len() == 1
+            && runtime_controlled_champion_cooldowns[0] == "none";
+        if !runtime_cooldowns_are_none {
+            controlled_champion_cooldowns.extend(runtime_controlled_champion_cooldowns);
+        }
+        if controlled_champion_cooldowns.is_empty() {
+            controlled_champion_cooldowns.push("none".to_string());
+        }
 
         let controlled_champion_abilities = self
             .controlled_champion_ability_loadout
@@ -1077,119 +1054,142 @@ impl ControlledChampionCombatSimulation {
                 )
             })
             .collect::<Vec<_>>();
+        let controlled_champion_buffs = self.controlled_champion_status_lines();
+
+        let mut lines = Vec::new();
         lines.push(format!(
-            "controlled_champion_abilities {}",
-            if controlled_champion_abilities.is_empty() {
-                "none".to_string()
-            } else {
-                controlled_champion_abilities.join("; ")
-            }
+            "checkpoint {:.1}s (captured_at {:.3}s)",
+            checkpoint_seconds, self.time
+        ));
+        lines.push("controlled_champion:".to_string());
+        lines.push(format!("  identity: {}", self.controlled_champion_name));
+        lines.push(format!(
+            "  core: pos=({:.1}, {:.1}) hp={:.1}/{:.1} ({:.1}%) armor={:.1} mr={:.1}",
+            self.target_position.x,
+            self.target_position.y,
+            self.health.max(0.0),
+            self.max_health,
+            health_ratio,
+            self.vlad_stats.armor,
+            self.vlad_stats.magic_resist
         ));
         lines.push(format!(
-            "controlled_champion_buffs {}",
-            self.controlled_champion_status_lines().join("; ")
+            "  offense: ap={:.1} ah={:.1}",
+            self.vlad_stats.ability_power, self.controlled_champion_buffs.ability_haste
+        ));
+        lines.push(format!(
+            "  loadout: items [{}] | runes [{}] | shards [{}]",
+            list_or_none(&self.controlled_champion_item_names),
+            list_or_none(&self.controlled_champion_rune_names),
+            list_or_none(&self.controlled_champion_shard_names)
+        ));
+        lines.push(format!(
+            "  cooldowns: {}",
+            join_or_none(&controlled_champion_cooldowns, "; ")
+        ));
+        lines.push(format!(
+            "  abilities: {}",
+            join_or_none(&controlled_champion_abilities, "; ")
+        ));
+        lines.push(format!(
+            "  buffs: {}",
+            join_or_none(&controlled_champion_buffs, "; ")
         ));
 
-        for (idx, state) in self.enemy_state.iter().enumerate() {
-            let attack_speed = state.base_attack_speed * attack_speed_multiplier(&state.runtime);
-            let attack_interval = 1.0 / attack_speed.max(0.001);
-            lines.push(format!(
-                "enemy {} pos=({:.1}, {:.1}) health={:.1}/{:.1} armor={:.1} magic_resist={:.1} attack_damage={:.1} attack_speed={:.3} attack_interval={:.3}s ability_power={:.1} ability_haste={:.1}",
-                state.enemy.name,
-                state.position.x,
-                state.position.y,
-                state.health.max(0.0),
-                state.max_health,
-                state.armor,
-                state.magic_resist,
-                state.physical_hit_damage,
-                attack_speed,
-                attack_interval,
-                state.ability_power,
-                state.ability_haste
-            ));
-            lines.push(format!(
-                "enemy_items {} {}",
-                state.enemy.name,
-                if state.runtime_item_names.is_empty() {
-                    "none".to_string()
-                } else {
-                    state.runtime_item_names.join(", ")
-                }
-            ));
-            lines.push(format!(
-                "enemy_runes {} {}",
-                state.enemy.name,
-                if state.runtime_rune_names.is_empty() {
-                    "none".to_string()
-                } else {
-                    state.runtime_rune_names.join(", ")
-                }
-            ));
+        if self.enemy_state.is_empty() {
+            lines.push("enemies: none".to_string());
+        } else {
+            lines.push("enemies:".to_string());
+            for (idx, state) in self.enemy_state.iter().enumerate() {
+                let attack_speed =
+                    state.base_attack_speed * attack_speed_multiplier(&state.runtime);
+                let attack_interval = 1.0 / attack_speed.max(0.001);
 
-            let mut enemy_abilities = Vec::new();
-            if let Some(impact_at) = self.enemy_next_attack_impact_at(idx) {
-                enemy_abilities.push(format!(
-                    "Auto Attack in-flight ({:.2}s to impact)",
-                    (impact_at - self.time).max(0.0)
+                let mut enemy_abilities = Vec::new();
+                if let Some(impact_at) = self.enemy_next_attack_impact_at(idx) {
+                    enemy_abilities.push(format!(
+                        "Auto Attack in-flight ({:.2}s to impact)",
+                        (impact_at - self.time).max(0.0)
+                    ));
+                } else if let Some(next_attack_ready_at) = self.enemy_next_attack_ready_at(idx) {
+                    enemy_abilities.push(format!(
+                        "Auto Attack {}",
+                        Self::trace_cooldown_status(self.time, next_attack_ready_at)
+                    ));
+                } else {
+                    enemy_abilities.push("Auto Attack unavailable".to_string());
+                }
+                for event in scripted_champion_events(&state.enemy.name) {
+                    let ready_at = state
+                        .script_event_ready_at
+                        .get(&event)
+                        .copied()
+                        .unwrap_or(0.0);
+                    enemy_abilities.push(format!(
+                        "{} {}",
+                        champion_script_event_label(event),
+                        Self::trace_cooldown_status(self.time, ready_at)
+                    ));
+                }
+
+                let runtime_cooldowns =
+                    describe_runtime_effect_cooldowns(&state.runtime, self.time);
+                let runtime_stacks = describe_runtime_effect_stacks(&state.runtime);
+                let enemy_buffs = self.enemy_status_lines(idx);
+
+                lines.push(format!("  {}:", state.enemy.name));
+                lines.push(format!(
+                    "    core: pos=({:.1}, {:.1}) hp={:.1}/{:.1} armor={:.1} mr={:.1}",
+                    state.position.x,
+                    state.position.y,
+                    state.health.max(0.0),
+                    state.max_health,
+                    state.armor,
+                    state.magic_resist
                 ));
-            } else if let Some(next_attack_ready_at) = self.enemy_next_attack_ready_at(idx) {
-                enemy_abilities.push(format!(
-                    "Auto Attack {}",
-                    Self::trace_cooldown_status(self.time, next_attack_ready_at)
+                lines.push(format!(
+                    "    combat: ad={:.1} ap={:.1} as={:.3} (interval {:.3}s) ah={:.1}",
+                    state.physical_hit_damage,
+                    state.ability_power,
+                    attack_speed,
+                    attack_interval,
+                    state.ability_haste
                 ));
-            } else {
-                enemy_abilities.push("Auto Attack unavailable".to_string());
+                lines.push(format!(
+                    "    loadout: items [{}] | runes [{}]",
+                    list_or_none(&state.runtime_item_names),
+                    list_or_none(&state.runtime_rune_names)
+                ));
+                lines.push(format!(
+                    "    abilities: {}",
+                    join_or_none(&enemy_abilities, "; ")
+                ));
+                lines.push(format!(
+                    "    runtime: cooldowns [{}] | stacks [{}]",
+                    join_or_none(&runtime_cooldowns, "; "),
+                    join_or_none(&runtime_stacks, "; ")
+                ));
+                lines.push(format!("    buffs: {}", join_or_none(&enemy_buffs, "; ")));
             }
-            for event in scripted_champion_events(&state.enemy.name) {
-                let ready_at = state
-                    .script_event_ready_at
-                    .get(&event)
-                    .copied()
-                    .unwrap_or(0.0);
-                enemy_abilities.push(format!(
-                    "{} {}",
-                    champion_script_event_label(event),
-                    Self::trace_cooldown_status(self.time, ready_at)
-                ));
-            }
-            lines.push(format!(
-                "enemy_abilities {} {}",
-                state.enemy.name,
-                enemy_abilities.join("; ")
-            ));
-            lines.push(format!(
-                "enemy_runtime_cooldowns {} {}",
-                state.enemy.name,
-                describe_runtime_effect_cooldowns(&state.runtime, self.time).join("; ")
-            ));
-            lines.push(format!(
-                "enemy_runtime_stacks {} {}",
-                state.enemy.name,
-                describe_runtime_effect_stacks(&state.runtime).join("; ")
-            ));
-            lines.push(format!(
-                "enemy_buffs {} {}",
-                state.enemy.name,
-                self.enemy_status_lines(idx).join("; ")
-            ));
         }
 
+        lines.push("field:".to_string());
         let projectile_lines = self.queued_projectile_lines();
         if projectile_lines.len() == 1 && projectile_lines[0] == "none" {
-            lines.push("projectiles none".to_string());
+            lines.push("  projectiles: none".to_string());
         } else {
-            for projectile_line in projectile_lines {
-                lines.push(format!("projectile {projectile_line}"));
+            lines.push("  projectiles:".to_string());
+            for projectile in projectile_lines {
+                lines.push(format!("    - {projectile}"));
             }
         }
-
         if self.projectile_block_zones.is_empty() {
-            lines.push("projectile_block_zones none".to_string());
+            lines.push("  projectile_block_zones: none".to_string());
         } else {
+            lines.push("  projectile_block_zones:".to_string());
             for (idx, zone) in self.projectile_block_zones.iter().enumerate() {
                 lines.push(format!(
-                    "projectile_block_zone {} start=({:.1}, {:.1}) end=({:.1}, {:.1}) width={:.1} expires_in={:.2}s",
+                    "    - zone {}: start=({:.1}, {:.1}) end=({:.1}, {:.1}) width={:.1} expires_in={:.2}s",
                     idx + 1,
                     zone.start.x,
                     zone.start.y,
@@ -1201,17 +1201,15 @@ impl ControlledChampionCombatSimulation {
             }
         }
 
-        lines
+        lines.join("\n")
     }
 
     fn emit_trace_snapshot(&mut self, checkpoint_seconds: f64) {
         if !self.trace_enabled {
             return;
         }
-        let lines = self.collect_state_snapshot_lines(checkpoint_seconds);
-        for line in lines {
-            self.trace_event("state_snapshot", line);
-        }
+        let snapshot = self.collect_state_snapshot_summary(checkpoint_seconds);
+        self.trace_event("state_snapshot", snapshot);
     }
 
     fn emit_trace_snapshots_due(&mut self) {

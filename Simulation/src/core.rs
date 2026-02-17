@@ -453,7 +453,7 @@ pub(crate) fn build_stack_notes(
             .any(|t| t.to_ascii_lowercase().contains("stack"));
         if has_stack_text {
             notes.push(format!(
-                "{} has stack-based passive text in item data; currently treated as baseline/implicit unless explicitly modeled.",
+                "{} has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.",
                 item.name
             ));
         }

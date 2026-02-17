@@ -16,6 +16,7 @@ This file is a concise handoff for developers and AI agents.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
 - URF item allow-list restrictions and enemy URF preset loadouts.
 - Parallelized search/ranking with persistent score cache.
+- Report and trace outputs are optimized-build only (baseline comparison path removed).
 
 ## Search Behavior (Important)
 - Seed behavior:
