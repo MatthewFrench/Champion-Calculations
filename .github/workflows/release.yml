@@ -34,7 +34,7 @@ jobs:
         run: |
           ./target/release/urf_sim \
             --mode vladimir \
-            --scenario scenario_vlad_urf.json \
+            --scenario vladimir_urf_teamfight.json \
             --max-runtime-seconds 15 \
             --status-every-seconds 2 \
             --search-quality-profile maximum_quality
