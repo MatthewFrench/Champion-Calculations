@@ -4,6 +4,9 @@ use crate::LoadoutSelection;
 
 use crate::scripts::registry::hooks::{LoadoutHookContext, ScriptHook};
 use crate::scripts::runes::effects::{apply_rune_runtime_flag, has_dynamic_rune_effect};
+use crate::scripts::runtime::stat_resolution::{
+    RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
+};
 
 pub(crate) struct ControlledChampionLoadoutHook;
 
@@ -97,7 +100,14 @@ pub(crate) fn on_controlled_champion_ability_bonus(
     }
 
     ControlledChampionAbilityRuntimeBonus {
-        extra_magic_damage: extra_magic_damage.max(0.0),
+        extra_magic_damage: resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: extra_magic_damage,
+                source: ScalarMetricSource::OutgoingAbilityDamage,
+                clamp_min_zero: true,
+            },
+            RuntimeBuffState::default(),
+        ),
     }
 }
 
@@ -147,20 +157,41 @@ pub(crate) fn tick_controlled_champion_regen_heal(
     } else {
         0.0
     };
-    base_regen + missing_health_bonus
+    resolve_stat(
+        StatQuery::ScalarAmount {
+            base_amount: base_regen + missing_health_bonus,
+            source: ScalarMetricSource::Healing,
+            clamp_min_zero: true,
+        },
+        RuntimeBuffState::default(),
+    )
 }
 
 pub(crate) fn controlled_champion_heal_multiplier(
     _runtime: &ControlledChampionLoadoutRuntime,
 ) -> f64 {
-    1.0
+    resolve_stat(
+        StatQuery::ScalarAmount {
+            base_amount: 1.0,
+            source: ScalarMetricSource::Neutral,
+            clamp_min_zero: true,
+        },
+        RuntimeBuffState::default(),
+    )
 }
 
 pub(crate) fn controlled_champion_damage_taken_multiplier(
     _runtime: &ControlledChampionLoadoutRuntime,
     _nearby_enemies: usize,
 ) -> f64 {
-    1.0
+    resolve_stat(
+        StatQuery::ScalarAmount {
+            base_amount: 1.0,
+            source: ScalarMetricSource::Neutral,
+            clamp_min_zero: true,
+        },
+        RuntimeBuffState::default(),
+    )
 }
 
 impl ScriptHook for ControlledChampionLoadoutHook {

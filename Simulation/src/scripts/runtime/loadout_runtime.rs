@@ -5,7 +5,7 @@ use crate::{
         luden_echo_cooldown_seconds_default,
     },
     scripts::runtime::stat_resolution::{
-        CooldownMetricSource, RuntimeBuffState, StatQuery, resolve_stat,
+        CooldownMetricSource, RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
     },
 };
 
@@ -195,9 +195,30 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     }
 
     (
-        extra_physical.max(0.0),
-        extra_magic.max(0.0),
-        extra_true.max(0.0),
+        resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: extra_physical,
+                source: ScalarMetricSource::OutgoingAbilityDamage,
+                clamp_min_zero: true,
+            },
+            RuntimeBuffState::default(),
+        ),
+        resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: extra_magic,
+                source: ScalarMetricSource::OutgoingAbilityDamage,
+                clamp_min_zero: true,
+            },
+            RuntimeBuffState::default(),
+        ),
+        resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: extra_true,
+                source: ScalarMetricSource::OutgoingAbilityDamage,
+                clamp_min_zero: true,
+            },
+            RuntimeBuffState::default(),
+        ),
     )
 }
 
@@ -219,7 +240,24 @@ pub(crate) fn calculate_ability_bonus_damage(
         runtime.luden_ready_at = now + runtime.luden_cooldown_seconds;
     }
 
-    (extra_magic.max(0.0), extra_true.max(0.0))
+    (
+        resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: extra_magic,
+                source: ScalarMetricSource::OutgoingAbilityDamage,
+                clamp_min_zero: true,
+            },
+            RuntimeBuffState::default(),
+        ),
+        resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: extra_true,
+                source: ScalarMetricSource::OutgoingAbilityDamage,
+                clamp_min_zero: true,
+            },
+            RuntimeBuffState::default(),
+        ),
+    )
 }
 
 pub(crate) fn tick_loadout_regeneration(
@@ -238,7 +276,14 @@ pub(crate) fn tick_loadout_regeneration(
     } else {
         0.0
     };
-    base_regen + bonus
+    resolve_stat(
+        StatQuery::ScalarAmount {
+            base_amount: base_regen + bonus,
+            source: ScalarMetricSource::Healing,
+            clamp_min_zero: true,
+        },
+        RuntimeBuffState::default(),
+    )
 }
 
 #[cfg(test)]

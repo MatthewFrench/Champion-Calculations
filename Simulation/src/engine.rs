@@ -31,7 +31,7 @@ use crate::scripts::runtime::controlled_champion_loadout::{
     should_trigger_revive_effect, tick_controlled_champion_regen_heal,
 };
 use crate::scripts::runtime::stat_resolution::{
-    CooldownMetricSource, RuntimeBuffState, StatQuery, resolve_stat,
+    CooldownMetricSource, RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
 };
 
 use super::*;
@@ -353,6 +353,7 @@ pub(super) struct ControlledChampionCombatSimulation {
     event_counter: u64,
 
     vlad_stats: Stats,
+    controlled_champion_buffs: RuntimeBuffState,
     controlled_champion_runtime: ControlledChampionLoadoutRuntime,
     controlled_champion_name: String,
     controlled_champion_hitbox_radius: f64,
@@ -473,6 +474,10 @@ impl ControlledChampionCombatSimulation {
             ability_haste,
             item_haste: urf.item_haste,
             cooldown_rate_multiplier: 1.0,
+            incoming_damage_taken_multiplier: 1.0,
+            healing_multiplier: 1.0,
+            movement_speed_multiplier: 1.0,
+            outgoing_ability_damage_multiplier: 1.0,
         };
         let pool_base_cd = sim
             .vlad_pool_base_cooldown_seconds_by_rank
@@ -592,6 +597,7 @@ impl ControlledChampionCombatSimulation {
             event_queue: BinaryHeap::new(),
             event_counter: 0,
             vlad_stats,
+            controlled_champion_buffs: runtime_buffs,
             controlled_champion_runtime,
             controlled_champion_name,
             controlled_champion_hitbox_radius,
@@ -1150,14 +1156,18 @@ impl ControlledChampionCombatSimulation {
                 self.max_health,
             );
             if runtime_kill_heal > 0.0 {
-                let before = self.health;
-                self.health = self.max_health.min(
-                    self.health
-                        + runtime_kill_heal
-                            * controlled_champion_heal_multiplier(
-                                &self.controlled_champion_runtime,
-                            ),
+                let script_heal_multiplier =
+                    controlled_champion_heal_multiplier(&self.controlled_champion_runtime);
+                let resolved_heal = resolve_stat(
+                    StatQuery::ScalarAmount {
+                        base_amount: runtime_kill_heal * script_heal_multiplier,
+                        source: ScalarMetricSource::Healing,
+                        clamp_min_zero: true,
+                    },
+                    self.controlled_champion_buffs,
                 );
+                let before = self.health;
+                self.health = self.max_health.min(self.health + resolved_heal);
                 self.healing_done_total += (self.health - before).max(0.0);
             }
             self.trace_event(
@@ -1214,18 +1224,30 @@ impl ControlledChampionCombatSimulation {
         }
         if self.pool_heal_until > self.time {
             let active = delta.min(self.pool_heal_until - self.time);
+            let resolved_heal = resolve_stat(
+                StatQuery::ScalarAmount {
+                    base_amount: self.pool_heal_rate * active,
+                    source: ScalarMetricSource::Healing,
+                    clamp_min_zero: true,
+                },
+                self.controlled_champion_buffs,
+            );
             let before = self.health;
-            self.health = self
-                .max_health
-                .min(self.health + self.pool_heal_rate * active);
+            self.health = self.max_health.min(self.health + resolved_heal);
             self.healing_done_total += (self.health - before).max(0.0);
         }
         if self.emergency_heal_until > self.time {
             let active = delta.min(self.emergency_heal_until - self.time);
+            let resolved_heal = resolve_stat(
+                StatQuery::ScalarAmount {
+                    base_amount: self.emergency_heal_rate * active,
+                    source: ScalarMetricSource::Healing,
+                    clamp_min_zero: true,
+                },
+                self.controlled_champion_buffs,
+            );
             let before = self.health;
-            self.health = self
-                .max_health
-                .min(self.health + self.emergency_heal_rate * active);
+            self.health = self.max_health.min(self.health + resolved_heal);
             self.healing_done_total += (self.health - before).max(0.0);
         }
         let runtime_regen = tick_controlled_champion_regen_heal(
@@ -1235,8 +1257,16 @@ impl ControlledChampionCombatSimulation {
             delta,
         );
         if runtime_regen > 0.0 {
+            let resolved_regen = resolve_stat(
+                StatQuery::ScalarAmount {
+                    base_amount: runtime_regen,
+                    source: ScalarMetricSource::Healing,
+                    clamp_min_zero: true,
+                },
+                self.controlled_champion_buffs,
+            );
             let before = self.health;
-            self.health = self.max_health.min(self.health + runtime_regen);
+            self.health = self.max_health.min(self.health + resolved_regen);
             self.healing_done_total += (self.health - before).max(0.0);
         }
         self.combat_primitives.tick(delta);
@@ -1270,7 +1300,14 @@ impl ControlledChampionCombatSimulation {
             if state.movement_mode == OpponentMovementMode::HoldPosition {
                 continue;
             }
-            let speed = state.move_speed * state.behavior.movement_speed_scale;
+            let speed = resolve_stat(
+                StatQuery::ScalarAmount {
+                    base_amount: state.move_speed * state.behavior.movement_speed_scale,
+                    source: ScalarMetricSource::MovementSpeed,
+                    clamp_min_zero: true,
+                },
+                RuntimeBuffState::default(),
+            );
             let step = speed * delta;
             let mut radial = Vec2 {
                 x: state.position.x - self.target_position.x,
@@ -1322,9 +1359,17 @@ impl ControlledChampionCombatSimulation {
             .iter()
             .filter(|state| state.respawn_at.is_none() && state.health > 0.0)
             .count();
-        damage *= controlled_champion_damage_taken_multiplier(
+        let script_damage_taken_multiplier = controlled_champion_damage_taken_multiplier(
             &self.controlled_champion_runtime,
             active_enemy_count,
+        );
+        damage = resolve_stat(
+            StatQuery::ScalarAmount {
+                base_amount: damage * script_damage_taken_multiplier,
+                source: ScalarMetricSource::IncomingDamageTaken,
+                clamp_min_zero: true,
+            },
+            self.controlled_champion_buffs,
         );
         if self.emergency_shield_amount > 0.0 && damage > 0.0 {
             let absorbed = self.emergency_shield_amount.min(damage);
@@ -1807,19 +1852,32 @@ impl ControlledChampionCombatSimulation {
                         now_seconds: self.time,
                     },
                 );
+                let runtime_bonus_magic = resolve_stat(
+                    StatQuery::ScalarAmount {
+                        base_amount: runtime_bonus.extra_magic_damage,
+                        source: ScalarMetricSource::OutgoingAbilityDamage,
+                        clamp_min_zero: true,
+                    },
+                    self.controlled_champion_buffs,
+                );
                 let dealt = self.apply_magic_damage_to_enemy(idx, q_raw_damage)
-                    + self.apply_magic_damage_to_enemy(idx, runtime_bonus.extra_magic_damage);
+                    + self.apply_magic_damage_to_enemy(idx, runtime_bonus_magic);
                 self.damage_dealt_total += dealt.max(0.0);
                 if dealt > 0.0 {
-                    let before = self.health;
-                    self.health = self.max_health.min(
-                        self.health
-                            + dealt
+                    let script_heal_multiplier =
+                        controlled_champion_heal_multiplier(&self.controlled_champion_runtime);
+                    let resolved_heal = resolve_stat(
+                        StatQuery::ScalarAmount {
+                            base_amount: dealt
                                 * self.offensive_tuning.q_heal_ratio_of_damage
-                                * controlled_champion_heal_multiplier(
-                                    &self.controlled_champion_runtime,
-                                ),
+                                * script_heal_multiplier,
+                            source: ScalarMetricSource::Healing,
+                            clamp_min_zero: true,
+                        },
+                        self.controlled_champion_buffs,
                     );
+                    let before = self.health;
+                    self.health = self.max_health.min(self.health + resolved_heal);
                     self.healing_done_total += (self.health - before).max(0.0);
                 }
                 self.trace_event(
@@ -1849,7 +1907,14 @@ impl ControlledChampionCombatSimulation {
                     },
                 );
                 let runtime_bonus_per_target = if target_count > 0 {
-                    runtime_bonus.extra_magic_damage / target_count as f64
+                    resolve_stat(
+                        StatQuery::ScalarAmount {
+                            base_amount: runtime_bonus.extra_magic_damage / target_count as f64,
+                            source: ScalarMetricSource::OutgoingAbilityDamage,
+                            clamp_min_zero: true,
+                        },
+                        self.controlled_champion_buffs,
+                    )
                 } else {
                     0.0
                 };
@@ -1887,7 +1952,14 @@ impl ControlledChampionCombatSimulation {
                     },
                 );
                 let runtime_bonus_per_target = if target_count > 0 {
-                    runtime_bonus.extra_magic_damage / target_count as f64
+                    resolve_stat(
+                        StatQuery::ScalarAmount {
+                            base_amount: runtime_bonus.extra_magic_damage / target_count as f64,
+                            source: ScalarMetricSource::OutgoingAbilityDamage,
+                            clamp_min_zero: true,
+                        },
+                        self.controlled_champion_buffs,
+                    )
                 } else {
                     0.0
                 };
@@ -1962,6 +2034,7 @@ impl ControlledChampionCombatSimulation {
                                 ability_haste,
                                 item_haste: self.urf.item_haste,
                                 cooldown_rate_multiplier: 1.0,
+                                ..RuntimeBuffState::default()
                             },
                         );
                         let next_ready = self.time + resolved_cooldown.max(0.0);
@@ -2096,11 +2169,24 @@ fn derive_enemy_model(
     let attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage;
     let ability_power = enemy_stats.ability_power.max(0.0);
     let ability_haste = enemy_stats.ability_haste + urf.ability_haste;
+    let runtime_buffs = RuntimeBuffState {
+        ability_haste,
+        item_haste: urf.item_haste,
+        cooldown_rate_multiplier: 1.0,
+        ..RuntimeBuffState::default()
+    };
     let armor = (enemy.base.base_armor + enemy_stats.armor).max(0.0);
     let magic_resist = (enemy.base.base_magic_resist + enemy_stats.magic_resist).max(0.0);
     let max_health = (enemy.base.base_health + enemy_stats.health).max(1.0);
-    let move_speed = ((enemy.base.base_move_speed + enemy_stats.move_speed_flat).max(150.0))
-        * (1.0 + enemy_stats.move_speed_percent / 100.0);
+    let move_speed = resolve_stat(
+        StatQuery::MovementSpeedUnits {
+            base_units: enemy.base.base_move_speed,
+            flat_bonus_units: enemy_stats.move_speed_flat,
+            percent_bonus: enemy_stats.move_speed_percent,
+            minimum_units: 150.0,
+        },
+        runtime_buffs,
+    );
 
     let attack_speed_bonus = enemy_stats.attack_speed_percent / 100.0;
     let mut attack_speed = enemy.base.base_attack_speed * (1.0 + attack_speed_bonus);

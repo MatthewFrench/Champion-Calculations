@@ -8,6 +8,11 @@
     - Luden's Echo cooldown from `Items/Ludens Echo.json` (`effects_structured[id=echo_consume_stacks_for_primary_and_secondary_magic_damage]`)
     - Guardian Angel / Zhonya's Hourglass / Protoplasm Harness cooldowns resolve through the same runtime stat resolver path
   - enemy champion script ability cooldown scheduling now resolves from base cooldown plus runtime ability haste instead of using raw cooldown values directly
+- Expanded runtime stat resolution to scalar combat metrics:
+  - added resolver query paths for incoming damage taken, healing amounts, movement speed, and outgoing bonus-ability damage
+  - controlled champion damage intake and healing application now resolve through shared stat queries instead of direct raw multipliers
+  - enemy movement speed derivation now resolves from base move speed + flat/% bonuses through shared stat queries
+  - controlled champion and loadout runtime bonus-damage/regen outputs now resolve through shared stat queries
 - Added random-by-default search seed policy with explicit deterministic override:
   - `search.seed: 0` now means runtime-random seed
   - CLI now supports `--seed <u64>` to force deterministic reproducibility

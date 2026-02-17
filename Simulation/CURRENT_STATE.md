@@ -12,6 +12,7 @@ This file is a concise handoff for developers and AI agents.
 - Generic actor/champion abstractions for controlled champion and opponents.
 - Champion script dispatch under `src/scripts/champions/`.
 - Item and runtime loadout script hooks under `src/scripts/items/` and `src/scripts/runtime/`.
+- Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
 - URF item allow-list restrictions and enemy URF preset loadouts.
 - Parallelized search/ranking with persistent score cache.

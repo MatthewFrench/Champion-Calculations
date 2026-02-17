@@ -90,6 +90,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - duration, stacks, refresh policy
   - persist-through-death flags
   - deterministic ticking
+- Recent progress:
+  - shared runtime stat-query resolver now covers cooldowns plus scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage)
+  - key combat-time engine/runtime call sites now resolve from base metric data + runtime buff state instead of direct raw values
 - Success criteria:
   - combat effects represented as status instances, not ad hoc booleans.
 
