@@ -76,6 +76,40 @@ pub(crate) fn build_controlled_champion_loadout_runtime(
     runtime
 }
 
+fn cooldown_status(now: f64, ready_at: f64) -> String {
+    let remaining = (ready_at - now).max(0.0);
+    if remaining <= 1e-9 {
+        "ready".to_string()
+    } else {
+        format!("{remaining:.2}s")
+    }
+}
+
+pub(crate) fn describe_controlled_champion_runtime_cooldowns(
+    runtime: &ControlledChampionLoadoutRuntime,
+    now: f64,
+) -> Vec<String> {
+    let mut lines = Vec::new();
+
+    if runtime.has_arcane_comet {
+        lines.push(format!(
+            "Arcane Comet: {}",
+            cooldown_status(now, runtime.arcane_comet_ready_at)
+        ));
+    }
+    if runtime.has_summon_aery {
+        lines.push(format!(
+            "Summon Aery: {}",
+            cooldown_status(now, runtime.aery_ready_at)
+        ));
+    }
+
+    if lines.is_empty() {
+        lines.push("none".to_string());
+    }
+    lines
+}
+
 pub(crate) fn on_controlled_champion_ability_bonus(
     runtime: &mut ControlledChampionLoadoutRuntime,
     input: ControlledChampionAbilityRuntimeInput,

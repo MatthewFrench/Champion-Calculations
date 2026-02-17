@@ -24,6 +24,28 @@ impl AbilitySlotKey {
             _ => None,
         }
     }
+
+    pub(crate) fn label(self) -> &'static str {
+        match self {
+            Self::Q => "Q",
+            Self::W => "W",
+            Self::E => "E",
+            Self::R => "R",
+            Self::D => "D",
+            Self::F => "F",
+        }
+    }
+
+    pub(crate) fn order(self) -> usize {
+        match self {
+            Self::Q => 0,
+            Self::W => 1,
+            Self::E => 2,
+            Self::R => 3,
+            Self::D => 4,
+            Self::F => 5,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -63,6 +85,16 @@ impl ActorAbilityLoadout {
         }
         self.slot_to_ability.insert(slot, ability_id.clone());
         self.ability_to_slot.insert(ability_id, slot);
+    }
+
+    pub(crate) fn slot_bindings(&self) -> Vec<(AbilitySlotKey, &str)> {
+        let mut bindings = self
+            .slot_to_ability
+            .iter()
+            .map(|(slot, ability_id)| (*slot, ability_id.as_str()))
+            .collect::<Vec<_>>();
+        bindings.sort_by_key(|(slot, _)| slot.order());
+        bindings
     }
 }
 

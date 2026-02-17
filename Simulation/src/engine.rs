@@ -15,7 +15,8 @@ use crate::scripts::champions::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
     ChampionScriptExecutionInput, ChampionScriptPoint, attack_speed_multiplier, behavior_profile,
     build_champion_loadout_runtime, champion_script_event_cooldown_seconds,
-    clear_transient_combat_state, execute_champion_script_event, on_hit_bonus_damage,
+    champion_script_event_label, clear_transient_combat_state, describe_runtime_effect_cooldowns,
+    describe_runtime_effect_stacks, execute_champion_script_event, on_hit_bonus_damage,
     scripted_champion_events, tick_regen_heal,
 };
 use crate::scripts::items::hooks::controlled_champion_defensive_item_capabilities;
@@ -27,8 +28,9 @@ use crate::scripts::runtime::controlled_champion_loadout::{
     DefensiveItemActivationInput, ReviveEffectDecisionInput,
     build_controlled_champion_loadout_runtime, controlled_champion_damage_taken_multiplier,
     controlled_champion_heal_multiplier, decide_defensive_item_activations,
-    on_controlled_champion_ability_bonus, on_controlled_champion_enemy_kill,
-    should_trigger_revive_effect, tick_controlled_champion_regen_heal,
+    describe_controlled_champion_runtime_cooldowns, on_controlled_champion_ability_bonus,
+    on_controlled_champion_enemy_kill, should_trigger_revive_effect,
+    tick_controlled_champion_regen_heal,
 };
 use crate::scripts::runtime::stat_resolution::{
     CooldownMetricSource, RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
@@ -185,11 +187,32 @@ fn within_reach_with_hitboxes(
             + effect_hitbox_radius.max(0.0)
 }
 
+fn hitbox_miss_reason(
+    source: Vec2,
+    aim_point: Vec2,
+    target_center: Vec2,
+    target_hitbox_radius: f64,
+    effect_hitbox_radius: f64,
+) -> String {
+    let reach = target_hitbox_radius.max(0.0) + effect_hitbox_radius.max(0.0);
+    let path_distance = if source.distance_to(aim_point) <= 1e-9 {
+        source.distance_to(target_center)
+    } else {
+        distance_point_to_segment(target_center, source, aim_point)
+    };
+    format!(
+        "target outside hitbox path (distance {:.1} > reach {:.1})",
+        path_distance, reach
+    )
+}
+
 struct EnemyState {
     enemy: EnemyConfig,
     movement_mode: OpponentMovementMode,
     behavior: ChampionBehaviorProfile,
     runtime: ChampionLoadoutRuntime,
+    runtime_item_names: Vec<String>,
+    runtime_rune_names: Vec<String>,
     position: Vec2,
     spawn_position: Vec2,
     move_speed: f64,
@@ -197,6 +220,8 @@ struct EnemyState {
     ability_haste: f64,
     physical_hit_damage: f64,
     ability_power: f64,
+    armor: f64,
+    magic_resist: f64,
     next_attack_bonus_physical: f64,
     next_attack_bonus_magic: f64,
     next_attack_bonus_true: f64,
@@ -219,6 +244,8 @@ struct EnemyState {
 struct EnemyDerivedModel {
     behavior: ChampionBehaviorProfile,
     runtime: ChampionLoadoutRuntime,
+    runtime_item_names: Vec<String>,
+    runtime_rune_names: Vec<String>,
     max_health: f64,
     armor: f64,
     magic_resist: f64,
@@ -265,6 +292,7 @@ enum IncomingImpactOutcome {
     ProjectileBlocked,
     MissedHitbox,
     NullifiedUntargetable,
+    IgnoredTargetUnavailable,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -272,6 +300,12 @@ enum DamageApplicationOutcome {
     Applied,
     NullifiedUntargetable,
     Ignored,
+}
+
+#[derive(Debug, Clone)]
+struct DamageSourceContext {
+    champion_name: String,
+    ability_name: String,
 }
 
 #[derive(Debug, Clone)]
@@ -356,6 +390,9 @@ pub(super) struct ControlledChampionCombatSimulation {
     controlled_champion_buffs: RuntimeBuffState,
     controlled_champion_runtime: ControlledChampionLoadoutRuntime,
     controlled_champion_name: String,
+    controlled_champion_item_names: Vec<String>,
+    controlled_champion_rune_names: Vec<String>,
+    controlled_champion_shard_names: Vec<String>,
     controlled_champion_hitbox_radius: f64,
     max_health: f64,
     health: f64,
@@ -400,6 +437,8 @@ pub(super) struct ControlledChampionCombatSimulation {
     projectile_block_zones: Vec<ProjectileBlockZone>,
     trace_enabled: bool,
     trace_events: Vec<String>,
+    trace_snapshot_interval_seconds: f64,
+    trace_next_snapshot_at: f64,
 }
 
 impl ControlledChampionCombatSimulation {
@@ -445,6 +484,14 @@ impl ControlledChampionCombatSimulation {
         let vlad_bonus_stats = controlled_champion_bonus_stats;
         let vlad_item_acquired_levels = controlled_champion_item_acquired_levels;
         let controlled_champion_name = vlad_base.name.clone();
+        let controlled_champion_item_names = vlad_build_items
+            .iter()
+            .map(|item| item.name.clone())
+            .collect::<Vec<_>>();
+        let (controlled_champion_rune_names, controlled_champion_shard_names) =
+            controlled_champion_loadout_selection
+                .map(|selection| (selection.rune_names.clone(), selection.shard_stats.clone()))
+                .unwrap_or_default();
         let controlled_champion_hitbox_radius = champion_hitbox_radius(&vlad_base.name);
         let mut vlad_item_stats = Stats::default();
         for item in vlad_build_items {
@@ -600,6 +647,9 @@ impl ControlledChampionCombatSimulation {
             controlled_champion_buffs: runtime_buffs,
             controlled_champion_runtime,
             controlled_champion_name,
+            controlled_champion_item_names,
+            controlled_champion_rune_names,
+            controlled_champion_shard_names,
             controlled_champion_hitbox_radius,
             max_health,
             health: max_health,
@@ -636,6 +686,8 @@ impl ControlledChampionCombatSimulation {
             projectile_block_zones: Vec::new(),
             trace_enabled: false,
             trace_events: Vec::new(),
+            trace_snapshot_interval_seconds: 5.0,
+            trace_next_snapshot_at: 0.0,
         };
 
         runner.pool_duration = if uses_vladimir_script {
@@ -659,6 +711,8 @@ impl ControlledChampionCombatSimulation {
                 movement_mode: enemy.movement_mode,
                 behavior: model.behavior,
                 runtime: model.runtime,
+                runtime_item_names: model.runtime_item_names,
+                runtime_rune_names: model.runtime_rune_names,
                 position,
                 spawn_position: position,
                 move_speed: model.move_speed,
@@ -666,6 +720,8 @@ impl ControlledChampionCombatSimulation {
                 ability_haste: model.ability_haste,
                 physical_hit_damage: model.attack_damage,
                 ability_power: model.ability_power,
+                armor: model.armor,
+                magic_resist: model.magic_resist,
                 next_attack_bonus_physical: 0.0,
                 next_attack_bonus_magic: 0.0,
                 next_attack_bonus_true: 0.0,
@@ -721,6 +777,453 @@ impl ControlledChampionCombatSimulation {
         }
         self.trace_events
             .push(format!("{:.3}s [{}] {}", self.time, kind, details));
+    }
+
+    fn trace_cooldown_status(now: f64, ready_at: f64) -> String {
+        let remaining = (ready_at - now).max(0.0);
+        if remaining <= 1e-9 {
+            "ready".to_string()
+        } else {
+            format!("{remaining:.2}s")
+        }
+    }
+
+    fn status_effect_kind_label(kind: &StatusEffectKind) -> String {
+        match kind {
+            StatusEffectKind::Stun => "Stun".to_string(),
+            StatusEffectKind::Silence => "Silence".to_string(),
+            StatusEffectKind::Root => "Root".to_string(),
+            StatusEffectKind::Slow => "Slow".to_string(),
+            StatusEffectKind::Untargetable => "Untargetable".to_string(),
+            StatusEffectKind::Stasis => "Stasis".to_string(),
+            StatusEffectKind::Custom(name) => (*name).to_string(),
+        }
+    }
+
+    fn status_effect_summary(effect: &StatusEffect) -> String {
+        let duration = match effect.duration {
+            StatusDuration::Timed { remaining_seconds } => {
+                let remaining = remaining_seconds.max(0.0);
+                if remaining <= 1e-9 {
+                    "expired".to_string()
+                } else {
+                    format!("{remaining:.2}s")
+                }
+            }
+            StatusDuration::Persistent => "persistent".to_string(),
+        };
+        format!(
+            "{} x{} ({})",
+            Self::status_effect_kind_label(&effect.kind),
+            effect.stacks,
+            duration
+        )
+    }
+
+    fn controlled_champion_status_lines(&self) -> Vec<String> {
+        let mut lines = Vec::new();
+        if self.time < self.stunned_until {
+            lines.push(format!(
+                "Stunned {:.2}s",
+                (self.stunned_until - self.time).max(0.0)
+            ));
+        }
+        if self.time < self.pool_until {
+            lines.push(format!(
+                "Pool untargetable {:.2}s",
+                (self.pool_until - self.time).max(0.0)
+            ));
+        }
+        if self.time < self.stasis_until {
+            lines.push(format!(
+                "Stasis {:.2}s",
+                (self.stasis_until - self.time).max(0.0)
+            ));
+        }
+        if self.time < self.revive_lockout_until {
+            lines.push(format!(
+                "Revive lockout {:.2}s",
+                (self.revive_lockout_until - self.time).max(0.0)
+            ));
+        }
+        if self.pool_heal_until > self.time {
+            lines.push(format!(
+                "Pool heal-over-time {:.2}s",
+                (self.pool_heal_until - self.time).max(0.0)
+            ));
+        }
+        if self.emergency_heal_until > self.time {
+            lines.push(format!(
+                "Emergency heal-over-time {:.2}s",
+                (self.emergency_heal_until - self.time).max(0.0)
+            ));
+        }
+        if self.emergency_shield_amount > 0.0 {
+            lines.push(format!(
+                "Emergency shield {:.1}",
+                self.emergency_shield_amount
+            ));
+        }
+        lines.extend(
+            self.combat_primitives
+                .status_effects()
+                .effects()
+                .iter()
+                .map(Self::status_effect_summary),
+        );
+        if lines.is_empty() {
+            lines.push("none".to_string());
+        }
+        lines
+    }
+
+    fn enemy_status_lines(&self, idx: usize) -> Vec<String> {
+        let Some(state) = self.enemy_state.get(idx) else {
+            return vec!["none".to_string()];
+        };
+        let mut lines = Vec::new();
+        if let Some(respawn_at) = state.respawn_at {
+            lines.push(format!(
+                "Respawning in {:.2}s",
+                (respawn_at - self.time).max(0.0)
+            ));
+        }
+        if self.time < state.stunned_until {
+            lines.push(format!(
+                "Stunned {:.2}s",
+                (state.stunned_until - self.time).max(0.0)
+            ));
+        }
+        if self.time < state.untargetable_until {
+            lines.push(format!(
+                "Untargetable {:.2}s",
+                (state.untargetable_until - self.time).max(0.0)
+            ));
+        }
+        if self.time < state.stasis_until {
+            lines.push(format!(
+                "Stasis {:.2}s",
+                (state.stasis_until - self.time).max(0.0)
+            ));
+        }
+        if self.time < state.invulnerable_until {
+            lines.push(format!(
+                "Invulnerable {:.2}s",
+                (state.invulnerable_until - self.time).max(0.0)
+            ));
+        }
+        if lines.is_empty() {
+            lines.push("none".to_string());
+        }
+        lines
+    }
+
+    fn enemy_next_attack_ready_at(&self, idx: usize) -> Option<f64> {
+        self.event_queue
+            .iter()
+            .filter_map(|queued| match &queued.kind {
+                EventType::Attack(event_idx) if *event_idx == idx => Some(queued.time),
+                _ => None,
+            })
+            .min_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal))
+    }
+
+    fn enemy_next_attack_impact_at(&self, idx: usize) -> Option<f64> {
+        self.event_queue
+            .iter()
+            .filter_map(|queued| match &queued.kind {
+                EventType::AttackHit { idx: event_idx, .. } if *event_idx == idx => {
+                    Some(queued.time)
+                }
+                _ => None,
+            })
+            .min_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal))
+    }
+
+    fn queued_projectile_lines(&self) -> Vec<String> {
+        let mut entries = Vec::<(f64, String)>::new();
+        for queued in &self.event_queue {
+            if queued.time + 1e-9 < self.time {
+                continue;
+            }
+            match &queued.kind {
+                EventType::AttackHit { idx, .. } => {
+                    if let Some(state) = self.enemy_state.get(*idx) {
+                        entries.push((
+                            queued.time,
+                            format!(
+                                "{} Auto Attack -> {} (impact in {:.2}s)",
+                                state.enemy.name,
+                                self.controlled_champion_name,
+                                (queued.time - self.time).max(0.0)
+                            ),
+                        ));
+                    }
+                }
+                EventType::ControlledChampionQHit { idx, .. } => {
+                    if let Some(state) = self.enemy_state.get(*idx) {
+                        entries.push((
+                            queued.time,
+                            format!(
+                                "{} Transfusion -> {} (impact in {:.2}s)",
+                                self.controlled_champion_name,
+                                state.enemy.name,
+                                (queued.time - self.time).max(0.0)
+                            ),
+                        ));
+                    }
+                }
+                _ => {}
+            }
+        }
+        entries.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(Ordering::Equal));
+        if entries.is_empty() {
+            return vec!["none".to_string()];
+        }
+        entries.into_iter().map(|(_, line)| line).collect()
+    }
+
+    fn collect_state_snapshot_lines(&self, checkpoint_seconds: f64) -> Vec<String> {
+        let mut lines = Vec::new();
+        lines.push(format!(
+            "checkpoint {:.1}s (captured_at {:.3}s)",
+            checkpoint_seconds, self.time
+        ));
+
+        let health_ratio = if self.max_health > 0.0 {
+            (self.health / self.max_health).clamp(0.0, 1.0) * 100.0
+        } else {
+            0.0
+        };
+        lines.push(format!(
+            "controlled_champion {} pos=({:.1}, {:.1}) health={:.1}/{:.1} ({:.1}%) armor={:.1} magic_resist={:.1} ability_power={:.1} ability_haste={:.1}",
+            self.controlled_champion_name,
+            self.target_position.x,
+            self.target_position.y,
+            self.health.max(0.0),
+            self.max_health,
+            health_ratio,
+            self.vlad_stats.armor,
+            self.vlad_stats.magic_resist,
+            self.vlad_stats.ability_power,
+            self.controlled_champion_buffs.ability_haste
+        ));
+        lines.push(format!(
+            "controlled_champion_items {}",
+            if self.controlled_champion_item_names.is_empty() {
+                "none".to_string()
+            } else {
+                self.controlled_champion_item_names.join(", ")
+            }
+        ));
+        lines.push(format!(
+            "controlled_champion_runes {}",
+            if self.controlled_champion_rune_names.is_empty() {
+                "none".to_string()
+            } else {
+                self.controlled_champion_rune_names.join(", ")
+            }
+        ));
+        lines.push(format!(
+            "controlled_champion_shards {}",
+            if self.controlled_champion_shard_names.is_empty() {
+                "none".to_string()
+            } else {
+                self.controlled_champion_shard_names.join(", ")
+            }
+        ));
+
+        let mut controlled_champion_cooldowns = Vec::new();
+        if self.stasis_item_available {
+            controlled_champion_cooldowns.push(format!(
+                "Stasis item {}",
+                Self::trace_cooldown_status(self.time, self.stasis_item_ready_at)
+            ));
+        }
+        if self.revive_item_available {
+            controlled_champion_cooldowns.push(format!(
+                "Revive item {}",
+                Self::trace_cooldown_status(self.time, self.revive_item_ready_at)
+            ));
+        }
+        if self.emergency_shield_item_available {
+            controlled_champion_cooldowns.push(format!(
+                "Emergency shield item {}",
+                Self::trace_cooldown_status(self.time, self.emergency_shield_item_ready_at)
+            ));
+        }
+        controlled_champion_cooldowns.extend(describe_controlled_champion_runtime_cooldowns(
+            &self.controlled_champion_runtime,
+            self.time,
+        ));
+        lines.push(format!(
+            "controlled_champion_cooldowns {}",
+            controlled_champion_cooldowns.join("; ")
+        ));
+
+        let controlled_champion_abilities = self
+            .controlled_champion_ability_loadout
+            .slot_bindings()
+            .into_iter()
+            .map(|(slot, ability_id)| {
+                format!(
+                    "{}:{} {}",
+                    slot.label(),
+                    ability_id,
+                    Self::trace_cooldown_status(
+                        self.time,
+                        self.controlled_champion_ability_ready_at(ability_id)
+                    )
+                )
+            })
+            .collect::<Vec<_>>();
+        lines.push(format!(
+            "controlled_champion_abilities {}",
+            if controlled_champion_abilities.is_empty() {
+                "none".to_string()
+            } else {
+                controlled_champion_abilities.join("; ")
+            }
+        ));
+        lines.push(format!(
+            "controlled_champion_buffs {}",
+            self.controlled_champion_status_lines().join("; ")
+        ));
+
+        for (idx, state) in self.enemy_state.iter().enumerate() {
+            let attack_speed = state.base_attack_speed * attack_speed_multiplier(&state.runtime);
+            let attack_interval = 1.0 / attack_speed.max(0.001);
+            lines.push(format!(
+                "enemy {} pos=({:.1}, {:.1}) health={:.1}/{:.1} armor={:.1} magic_resist={:.1} attack_damage={:.1} attack_speed={:.3} attack_interval={:.3}s ability_power={:.1} ability_haste={:.1}",
+                state.enemy.name,
+                state.position.x,
+                state.position.y,
+                state.health.max(0.0),
+                state.max_health,
+                state.armor,
+                state.magic_resist,
+                state.physical_hit_damage,
+                attack_speed,
+                attack_interval,
+                state.ability_power,
+                state.ability_haste
+            ));
+            lines.push(format!(
+                "enemy_items {} {}",
+                state.enemy.name,
+                if state.runtime_item_names.is_empty() {
+                    "none".to_string()
+                } else {
+                    state.runtime_item_names.join(", ")
+                }
+            ));
+            lines.push(format!(
+                "enemy_runes {} {}",
+                state.enemy.name,
+                if state.runtime_rune_names.is_empty() {
+                    "none".to_string()
+                } else {
+                    state.runtime_rune_names.join(", ")
+                }
+            ));
+
+            let mut enemy_abilities = Vec::new();
+            if let Some(impact_at) = self.enemy_next_attack_impact_at(idx) {
+                enemy_abilities.push(format!(
+                    "Auto Attack in-flight ({:.2}s to impact)",
+                    (impact_at - self.time).max(0.0)
+                ));
+            } else if let Some(next_attack_ready_at) = self.enemy_next_attack_ready_at(idx) {
+                enemy_abilities.push(format!(
+                    "Auto Attack {}",
+                    Self::trace_cooldown_status(self.time, next_attack_ready_at)
+                ));
+            } else {
+                enemy_abilities.push("Auto Attack unavailable".to_string());
+            }
+            for event in scripted_champion_events(&state.enemy.name) {
+                let ready_at = state
+                    .script_event_ready_at
+                    .get(&event)
+                    .copied()
+                    .unwrap_or(0.0);
+                enemy_abilities.push(format!(
+                    "{} {}",
+                    champion_script_event_label(event),
+                    Self::trace_cooldown_status(self.time, ready_at)
+                ));
+            }
+            lines.push(format!(
+                "enemy_abilities {} {}",
+                state.enemy.name,
+                enemy_abilities.join("; ")
+            ));
+            lines.push(format!(
+                "enemy_runtime_cooldowns {} {}",
+                state.enemy.name,
+                describe_runtime_effect_cooldowns(&state.runtime, self.time).join("; ")
+            ));
+            lines.push(format!(
+                "enemy_runtime_stacks {} {}",
+                state.enemy.name,
+                describe_runtime_effect_stacks(&state.runtime).join("; ")
+            ));
+            lines.push(format!(
+                "enemy_buffs {} {}",
+                state.enemy.name,
+                self.enemy_status_lines(idx).join("; ")
+            ));
+        }
+
+        let projectile_lines = self.queued_projectile_lines();
+        if projectile_lines.len() == 1 && projectile_lines[0] == "none" {
+            lines.push("projectiles none".to_string());
+        } else {
+            for projectile_line in projectile_lines {
+                lines.push(format!("projectile {projectile_line}"));
+            }
+        }
+
+        if self.projectile_block_zones.is_empty() {
+            lines.push("projectile_block_zones none".to_string());
+        } else {
+            for (idx, zone) in self.projectile_block_zones.iter().enumerate() {
+                lines.push(format!(
+                    "projectile_block_zone {} start=({:.1}, {:.1}) end=({:.1}, {:.1}) width={:.1} expires_in={:.2}s",
+                    idx + 1,
+                    zone.start.x,
+                    zone.start.y,
+                    zone.end.x,
+                    zone.end.y,
+                    zone.half_width * 2.0,
+                    (zone.expires_at - self.time).max(0.0)
+                ));
+            }
+        }
+
+        lines
+    }
+
+    fn emit_trace_snapshot(&mut self, checkpoint_seconds: f64) {
+        if !self.trace_enabled {
+            return;
+        }
+        let lines = self.collect_state_snapshot_lines(checkpoint_seconds);
+        for line in lines {
+            self.trace_event("state_snapshot", line);
+        }
+    }
+
+    fn emit_trace_snapshots_due(&mut self) {
+        if !self.trace_enabled {
+            return;
+        }
+        let interval = self.trace_snapshot_interval_seconds.max(0.1);
+        while self.time + 1e-9 >= self.trace_next_snapshot_at {
+            let checkpoint = self.trace_next_snapshot_at;
+            self.emit_trace_snapshot(checkpoint);
+            self.trace_next_snapshot_at += interval;
+        }
     }
 
     pub(super) fn is_targetable(&self) -> bool {
@@ -1013,6 +1516,7 @@ impl ControlledChampionCombatSimulation {
     fn apply_enemy_script_actions(
         &mut self,
         idx: usize,
+        script_event: ChampionScriptEvent,
         epoch: u64,
         actions: Vec<ChampionScriptAction>,
     ) {
@@ -1040,6 +1544,7 @@ impl ControlledChampionCombatSimulation {
                 } => {
                     let source = Self::vec2_from_script_point(source);
                     let effect_hitbox_radius = hitbox.radius();
+                    let enemy_name = self.enemy_state[idx].enemy.name.clone();
                     let outcome = if projectile_speed > 0.0
                         && self.is_projectile_blocked(
                             source,
@@ -1058,13 +1563,22 @@ impl ControlledChampionCombatSimulation {
                         if !hit {
                             IncomingImpactOutcome::MissedHitbox
                         } else {
-                            match self.apply_damage(physical, magic, true_damage) {
+                            match self.apply_damage(
+                                DamageSourceContext {
+                                    champion_name: enemy_name.clone(),
+                                    ability_name: champion_script_event_label(script_event)
+                                        .to_string(),
+                                },
+                                physical,
+                                magic,
+                                true_damage,
+                            ) {
                                 DamageApplicationOutcome::Applied => IncomingImpactOutcome::Applied,
                                 DamageApplicationOutcome::NullifiedUntargetable => {
                                     IncomingImpactOutcome::NullifiedUntargetable
                                 }
                                 DamageApplicationOutcome::Ignored => {
-                                    IncomingImpactOutcome::MissedHitbox
+                                    IncomingImpactOutcome::IgnoredTargetUnavailable
                                 }
                             }
                         }
@@ -1078,22 +1592,43 @@ impl ControlledChampionCombatSimulation {
                         IncomingImpactOutcome::ProjectileBlocked => self.trace_event(
                             "projectile_blocked",
                             format!(
-                                "{} scripted projectile blocked",
-                                self.enemy_state[idx].enemy.name
+                                "{} {} projectile blocked by active projectile block zone",
+                                enemy_name,
+                                champion_script_event_label(script_event)
                             ),
                         ),
                         IncomingImpactOutcome::NullifiedUntargetable => self.trace_event(
                             "impact_nullified",
                             format!(
-                                "{} scripted impact on {} was nullified by untargetable state",
-                                self.enemy_state[idx].enemy.name, self.controlled_champion_name
+                                "{} {} on {} was nullified by untargetable or stasis state",
+                                enemy_name,
+                                champion_script_event_label(script_event),
+                                self.controlled_champion_name
                             ),
                         ),
                         IncomingImpactOutcome::MissedHitbox => self.trace_event(
                             "impact_missed",
                             format!(
-                                "{} scripted impact missed {} hitbox",
-                                self.enemy_state[idx].enemy.name, self.controlled_champion_name
+                                "{} {} missed {} ({})",
+                                enemy_name,
+                                champion_script_event_label(script_event),
+                                self.controlled_champion_name,
+                                hitbox_miss_reason(
+                                    source,
+                                    self.target_position,
+                                    self.target_position,
+                                    self.controlled_champion_hitbox_radius,
+                                    effect_hitbox_radius
+                                )
+                            ),
+                        ),
+                        IncomingImpactOutcome::IgnoredTargetUnavailable => self.trace_event(
+                            "impact_ignored",
+                            format!(
+                                "{} {} skipped because {} is unavailable",
+                                enemy_name,
+                                champion_script_event_label(script_event),
+                                self.controlled_champion_name
                             ),
                         ),
                     }
@@ -1274,6 +1809,7 @@ impl ControlledChampionCombatSimulation {
         self.apply_enemy_regen(delta);
         self.time = to_time;
         self.cleanup_expired_projectile_blocks();
+        self.emit_trace_snapshots_due();
     }
 
     fn apply_enemy_regen(&mut self, delta: f64) {
@@ -1342,6 +1878,7 @@ impl ControlledChampionCombatSimulation {
 
     fn apply_damage(
         &mut self,
+        source: DamageSourceContext,
         physical: f64,
         magic: f64,
         true_damage: f64,
@@ -1379,8 +1916,14 @@ impl ControlledChampionCombatSimulation {
         self.trace_event(
             "damage_in",
             format!(
-                "physical {:.1}, magic {:.1}, true {:.1}, total {:.1}",
-                physical, magic, true_damage, damage
+                "{} {} -> {} | physical {:.1}, magic {:.1}, true {:.1}, total {:.1}",
+                source.champion_name,
+                source.ability_name,
+                self.controlled_champion_name,
+                physical,
+                magic,
+                true_damage,
+                damage
             ),
         );
         self.health -= damage;
@@ -1466,6 +2009,13 @@ impl ControlledChampionCombatSimulation {
                     0.0
                 };
                 self.pool_heal_until = self.time + self.pool_duration;
+                self.trace_event(
+                    "controlled_champion_cast",
+                    format!(
+                        "{} cast Sanguine Pool (untargetable {:.2}s)",
+                        self.controlled_champion_name, self.pool_duration
+                    ),
+                );
 
                 if self.health <= 0.0 {
                     self.handle_death();
@@ -1538,6 +2088,7 @@ impl ControlledChampionCombatSimulation {
                 self.set_controlled_champion_ability_ready_at(&q.ability_id, q.next_ready_at);
                 self.begin_cast_lock_window(self.cast_profile.q_windup_seconds, 0.0, 0.0);
                 let target_at_cast = self.enemy_state[q.target_index].position;
+                let target_name = self.enemy_state[q.target_index].enemy.name.clone();
                 self.schedule_event(
                     q.impact_delay_seconds,
                     50,
@@ -1550,6 +2101,13 @@ impl ControlledChampionCombatSimulation {
                     },
                     None,
                 );
+                self.trace_event(
+                    "controlled_champion_cast",
+                    format!(
+                        "{} cast Transfusion on {} (impact in {:.2}s)",
+                        self.controlled_champion_name, target_name, q.impact_delay_seconds
+                    ),
+                );
             }
             if let Some(e) = offensive.e {
                 self.set_controlled_champion_ability_ready_at(&e.ability_id, e.next_ready_at);
@@ -1560,6 +2118,13 @@ impl ControlledChampionCombatSimulation {
                     EventType::ControlledChampionEHit,
                     None,
                 );
+                self.trace_event(
+                    "controlled_champion_cast",
+                    format!(
+                        "{} cast Tides of Blood (impact in {:.2}s)",
+                        self.controlled_champion_name, e.impact_delay_seconds
+                    ),
+                );
             }
             if let Some(r) = offensive.r {
                 self.set_controlled_champion_ability_ready_at(&r.ability_id, r.next_ready_at);
@@ -1569,6 +2134,13 @@ impl ControlledChampionCombatSimulation {
                     48,
                     EventType::ControlledChampionRHit,
                     None,
+                );
+                self.trace_event(
+                    "controlled_champion_cast",
+                    format!(
+                        "{} cast Hemoplague (impact in {:.2}s)",
+                        self.controlled_champion_name, r.impact_delay_seconds
+                    ),
                 );
             }
         }
@@ -1597,6 +2169,13 @@ impl ControlledChampionCombatSimulation {
                 1,
                 StatusPersistence::RefreshDuration,
             ));
+            self.trace_event(
+                "controlled_champion_item_active",
+                format!(
+                    "{} activated stasis item for {:.2}s",
+                    self.controlled_champion_name, self.sim.zhonya_duration_seconds
+                ),
+            );
         }
 
         if defensive_items.activate_emergency_shield {
@@ -1606,6 +2185,15 @@ impl ControlledChampionCombatSimulation {
             self.emergency_heal_rate =
                 self.sim.protoplasm_heal_total / self.sim.protoplasm_duration_seconds.max(0.001);
             self.emergency_heal_until = self.time + self.sim.protoplasm_duration_seconds;
+            self.trace_event(
+                "controlled_champion_item_active",
+                format!(
+                    "{} activated emergency shield ({:.1} shield, {:.1}s heal window)",
+                    self.controlled_champion_name,
+                    self.sim.protoplasm_bonus_health,
+                    self.sim.protoplasm_duration_seconds
+                ),
+            );
         }
     }
 
@@ -1722,6 +2310,7 @@ impl ControlledChampionCombatSimulation {
                     state.next_attack_bonus_true = 0.0;
                     out
                 };
+                let enemy_name = self.enemy_state[idx].enemy.name.clone();
                 let outcome = if projectile_speed > 0.0
                     && self.is_projectile_blocked(source, target_at_release, effect_hitbox_radius)
                 {
@@ -1747,13 +2336,21 @@ impl ControlledChampionCombatSimulation {
                     if !hit {
                         IncomingImpactOutcome::MissedHitbox
                     } else {
-                        match self.apply_damage(physical, magic, true_damage) {
+                        match self.apply_damage(
+                            DamageSourceContext {
+                                champion_name: enemy_name.clone(),
+                                ability_name: "Auto Attack".to_string(),
+                            },
+                            physical,
+                            magic,
+                            true_damage,
+                        ) {
                             DamageApplicationOutcome::Applied => IncomingImpactOutcome::Applied,
                             DamageApplicationOutcome::NullifiedUntargetable => {
                                 IncomingImpactOutcome::NullifiedUntargetable
                             }
                             DamageApplicationOutcome::Ignored => {
-                                IncomingImpactOutcome::MissedHitbox
+                                IncomingImpactOutcome::IgnoredTargetUnavailable
                             }
                         }
                     }
@@ -1763,29 +2360,47 @@ impl ControlledChampionCombatSimulation {
                         "attack_hit",
                         format!(
                             "{} hit {} (phys {:.1}, magic {:.1}, true {:.1})",
-                            self.enemy_state[idx].enemy.name,
-                            self.controlled_champion_name,
-                            physical,
-                            magic,
-                            true_damage
+                            enemy_name, self.controlled_champion_name, physical, magic, true_damage
                         ),
                     ),
                     IncomingImpactOutcome::ProjectileBlocked => self.trace_event(
                         "projectile_blocked",
-                        format!("{} auto attack blocked", self.enemy_state[idx].enemy.name),
+                        format!(
+                            "{} auto attack blocked by active projectile block zone",
+                            enemy_name
+                        ),
                     ),
                     IncomingImpactOutcome::MissedHitbox => self.trace_event(
                         "attack_missed",
                         format!(
-                            "{} auto attack missed {} hitbox",
-                            self.enemy_state[idx].enemy.name, self.controlled_champion_name
+                            "{} auto attack missed {} ({})",
+                            enemy_name,
+                            self.controlled_champion_name,
+                            hitbox_miss_reason(
+                                source,
+                                if projectile_speed > 0.0 {
+                                    target_at_release
+                                } else {
+                                    source
+                                },
+                                self.target_position,
+                                self.controlled_champion_hitbox_radius,
+                                effect_hitbox_radius
+                            )
                         ),
                     ),
                     IncomingImpactOutcome::NullifiedUntargetable => self.trace_event(
                         "impact_nullified",
                         format!(
-                            "{} auto attack impacted {} during untargetable state",
-                            self.enemy_state[idx].enemy.name, self.controlled_champion_name
+                            "{} auto attack on {} was nullified by untargetable or stasis state",
+                            enemy_name, self.controlled_champion_name
+                        ),
+                    ),
+                    IncomingImpactOutcome::IgnoredTargetUnavailable => self.trace_event(
+                        "impact_ignored",
+                        format!(
+                            "{} auto attack skipped because {} is unavailable",
+                            enemy_name, self.controlled_champion_name
                         ),
                     ),
                 }
@@ -1804,12 +2419,16 @@ impl ControlledChampionCombatSimulation {
                 if idx >= self.enemy_state.len() || !self.enemy_is_active(idx) {
                     return;
                 }
+                let enemy_name = self.enemy_state[idx].enemy.name.clone();
                 if projectile_speed > 0.0
                     && self.is_projectile_blocked(source, target_at_cast, effect_hitbox_radius)
                 {
                     self.trace_event(
                         "projectile_blocked",
-                        format!("{} Q blocked", self.controlled_champion_name),
+                        format!(
+                            "{} Transfusion blocked by active projectile block zone",
+                            self.controlled_champion_name
+                        ),
                     );
                     return;
                 }
@@ -1836,8 +2455,20 @@ impl ControlledChampionCombatSimulation {
                     self.trace_event(
                         "controlled_champion_q_miss",
                         format!(
-                            "{} Q missed {}",
-                            self.controlled_champion_name, self.enemy_state[idx].enemy.name
+                            "{} Transfusion missed {} ({})",
+                            self.controlled_champion_name,
+                            enemy_name,
+                            hitbox_miss_reason(
+                                source,
+                                if projectile_speed > 0.0 {
+                                    target_at_cast
+                                } else {
+                                    source
+                                },
+                                enemy_position,
+                                enemy_hitbox_radius,
+                                effect_hitbox_radius
+                            )
                         ),
                     );
                     return;
@@ -1883,8 +2514,8 @@ impl ControlledChampionCombatSimulation {
                 self.trace_event(
                     "controlled_champion_q_hit",
                     format!(
-                        "{} Q hit {} for {:.1}",
-                        self.controlled_champion_name, self.enemy_state[idx].enemy.name, dealt
+                        "{} Transfusion hit {} for {:.1}",
+                        self.controlled_champion_name, enemy_name, dealt
                     ),
                 );
             }
@@ -2015,7 +2646,11 @@ impl ControlledChampionCombatSimulation {
                 if !actions.is_empty() {
                     self.trace_event(
                         "champion_script",
-                        format!("{} executed {:?}", champion_name, script_event),
+                        format!(
+                            "{} executed {}",
+                            champion_name,
+                            champion_script_event_label(script_event)
+                        ),
                     );
                     if let Some(cooldown_seconds) =
                         champion_script_event_cooldown_seconds(&champion_name, script_event)
@@ -2043,7 +2678,7 @@ impl ControlledChampionCombatSimulation {
                         }
                     }
                 }
-                self.apply_enemy_script_actions(idx, epoch, actions);
+                self.apply_enemy_script_actions(idx, script_event, epoch, actions);
             }
         }
     }
@@ -2137,6 +2772,8 @@ impl ControlledChampionCombatSimulation {
     pub(super) fn enable_trace(&mut self) {
         self.trace_enabled = true;
         self.trace_events.clear();
+        self.trace_next_snapshot_at = 0.0;
+        self.emit_trace_snapshots_due();
     }
 
     pub(super) fn trace_events(&self) -> &[String] {
@@ -2205,11 +2842,9 @@ fn derive_enemy_model(
     } else {
         enemy.loadout_item_names.clone()
     };
-    let runtime = build_champion_loadout_runtime(
-        &runtime_item_names,
-        &enemy.loadout_rune_names,
-        urf.item_haste,
-    );
+    let runtime_rune_names = enemy.loadout_rune_names.clone();
+    let runtime =
+        build_champion_loadout_runtime(&runtime_item_names, &runtime_rune_names, urf.item_haste);
     attack_speed = base_attack_speed * attack_speed_multiplier(&runtime);
 
     let attack_interval = 1.0 / attack_speed.max(0.001);
@@ -2223,6 +2858,8 @@ fn derive_enemy_model(
     EnemyDerivedModel {
         behavior,
         runtime,
+        runtime_item_names,
+        runtime_rune_names,
         max_health,
         armor,
         magic_resist,
@@ -2579,6 +3216,148 @@ mod tests {
         assert!(outcome_with_runtime.healing_done > outcome_without_runtime.healing_done);
         assert!(
             outcome_with_runtime.time_alive_seconds >= outcome_without_runtime.time_alive_seconds
+        );
+    }
+
+    #[test]
+    fn trace_emits_initial_state_snapshot_with_checkpoint_zero() {
+        let controlled_champion = test_controlled_champion_base();
+        let enemy = test_enemy("Sona");
+        let enemies = vec![(enemy, Vec::new(), Stats::default())];
+        let simulation = test_simulation(1.0, 0.0);
+        let urf = test_urf();
+
+        let mut runner = ControlledChampionCombatSimulation::new(
+            controlled_champion,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            &enemies,
+            simulation,
+            urf,
+        );
+        runner.enable_trace();
+
+        assert!(
+            runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("[state_snapshot] checkpoint 0.0s"))
+        );
+    }
+
+    #[test]
+    fn trace_emits_periodic_snapshots_every_five_seconds() {
+        let controlled_champion = test_controlled_champion_base();
+        let enemies: Vec<(EnemyConfig, Vec<Item>, Stats)> = Vec::new();
+        let simulation = test_simulation(12.0, 0.0);
+        let urf = test_urf();
+
+        let mut runner = ControlledChampionCombatSimulation::new(
+            controlled_champion,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            &enemies,
+            simulation,
+            urf,
+        );
+        runner.enable_trace();
+        while runner.step(1) {}
+
+        assert!(
+            runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("[state_snapshot] checkpoint 5.0s"))
+        );
+        assert!(
+            runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("[state_snapshot] checkpoint 10.0s"))
+        );
+    }
+
+    #[test]
+    fn damage_trace_includes_source_champion_and_ability() {
+        let controlled_champion = test_controlled_champion_base();
+        let enemy = test_enemy("Sona");
+        let enemies = vec![(enemy, Vec::new(), Stats::default())];
+        let simulation = test_simulation(3.0, 0.0);
+        let urf = test_urf();
+
+        let mut runner = ControlledChampionCombatSimulation::new(
+            controlled_champion,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            &enemies,
+            simulation,
+            urf,
+        );
+        runner.enable_trace();
+        for _ in 0..120 {
+            if !runner.step(1) {
+                break;
+            }
+        }
+
+        assert!(
+            runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("[damage_in]") && entry.contains("Auto Attack ->")),
+            "expected damage_in trace to include source ability context"
+        );
+    }
+
+    #[test]
+    fn miss_trace_includes_reason_text() {
+        let controlled_champion = test_controlled_champion_base();
+        let enemy = test_enemy("Sona");
+        let enemies = vec![(enemy, Vec::new(), Stats::default())];
+        let simulation = test_simulation(1.0, 120.0);
+        let urf = test_urf();
+
+        let mut runner = ControlledChampionCombatSimulation::new(
+            controlled_champion,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            &enemies,
+            simulation,
+            urf,
+        );
+        runner.enable_trace();
+        runner.schedule_event(
+            0.0,
+            34,
+            EventType::ControlledChampionQHit {
+                idx: 0,
+                source: Vec2 { x: 0.0, y: 0.0 },
+                target_at_cast: Vec2 {
+                    x: 4000.0,
+                    y: 4000.0,
+                },
+                projectile_speed: 1200.0,
+                effect_hitbox_radius: 0.0,
+            },
+            None,
+        );
+        let _ = runner.step(1);
+
+        assert!(
+            runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("[controlled_champion_q_miss]")
+                    && entry.contains("target outside hitbox path")),
+            "expected miss trace to include miss reason"
         );
     }
 

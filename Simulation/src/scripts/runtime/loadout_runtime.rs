@@ -286,6 +286,66 @@ pub(crate) fn tick_loadout_regeneration(
     )
 }
 
+fn cooldown_status(now: f64, ready_at: f64) -> String {
+    let remaining = (ready_at - now).max(0.0);
+    if remaining <= 1e-9 {
+        "ready".to_string()
+    } else {
+        format!("{remaining:.2}s")
+    }
+}
+
+pub(crate) fn describe_runtime_cooldowns(runtime: &LoadoutRuntimeState, now: f64) -> Vec<String> {
+    let mut lines = Vec::new();
+
+    if runtime.has_grasp {
+        lines.push(format!(
+            "Grasp of the Undying: {} (cooldown {:.2}s)",
+            cooldown_status(now, runtime.grasp_ready_at),
+            runtime.grasp_cooldown_seconds
+        ));
+    }
+    if runtime.has_heartsteel {
+        lines.push(format!(
+            "Heartsteel Colossal Consumption: {} (cooldown {:.2}s)",
+            cooldown_status(now, runtime.heartsteel_ready_at),
+            runtime.heartsteel_cooldown_seconds
+        ));
+    }
+    if runtime.has_luden {
+        lines.push(format!(
+            "Luden's Echo: {} (cooldown {:.2}s)",
+            cooldown_status(now, runtime.luden_ready_at),
+            runtime.luden_cooldown_seconds
+        ));
+    }
+
+    if lines.is_empty() {
+        lines.push("none".to_string());
+    }
+    lines
+}
+
+pub(crate) fn describe_runtime_stacks(runtime: &LoadoutRuntimeState) -> Vec<String> {
+    let mut lines = Vec::new();
+    if runtime.has_lethal_tempo {
+        lines.push(format!(
+            "Lethal Tempo stacks: {}/6",
+            runtime.lethal_tempo_stacks
+        ));
+    }
+    if runtime.has_guinsoo {
+        lines.push(format!("Guinsoo stacks: {}/8", runtime.guinsoo_stacks));
+    }
+    if runtime.has_kraken || runtime.has_blade_of_the_ruined_king {
+        lines.push(format!("Attacks landed: {}", runtime.attacks_landed));
+    }
+    if lines.is_empty() {
+        lines.push("none".to_string());
+    }
+    lines
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
