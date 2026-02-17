@@ -266,8 +266,9 @@ pub(crate) fn execute_champion_script_event(
 pub(crate) fn build_champion_loadout_runtime(
     item_names: &[String],
     rune_names: &[String],
+    item_haste: f64,
 ) -> ChampionLoadoutRuntime {
-    build_loadout_runtime_state(item_names, rune_names)
+    build_loadout_runtime_state(item_names, rune_names, item_haste)
 }
 
 pub(crate) fn attack_speed_multiplier(runtime: &ChampionLoadoutRuntime) -> f64 {

@@ -11,6 +11,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Runtime implementation is Rust (`Simulation/`).
 - Search is parallelized and supports multiple algorithms (`beam`, `hill_climb`, `genetic`, `simulated_annealing`, `mcts`, `random`, `portfolio`).
 - Controlled-champion and opponent simulation use shared generic abstractions (actors/champions), not enemy-only core paths.
+- Runtime cooldown metrics are resolved from canonical base data plus active buff state (for example URF haste effects) instead of using raw constants directly.
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`
   - `Items/`

@@ -479,6 +479,8 @@ static CHAMPION_ABILITY_EXECUTION_DATA: OnceLock<HashMap<String, ChampionAbility
     OnceLock::new();
 static CHAMPION_AI_PROFILES: OnceLock<ChampionAiProfilesFile> = OnceLock::new();
 static URF_RESPAWN_DEFAULTS: OnceLock<UrfRespawnDefaults> = OnceLock::new();
+static HEARTSTEEL_COLOSSAL_CONSUMPTION_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> = OnceLock::new();
+static LUDEN_ECHO_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> = OnceLock::new();
 static PROTOPLASM_LIFELINE_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> = OnceLock::new();
 static VLADIMIR_SANGUINE_POOL_DEFAULTS: OnceLock<VladimirSanguinePoolDefaults> = OnceLock::new();
 static ZHONYA_TIME_STOP_DEFAULTS: OnceLock<ZhonyaTimeStopDefaults> = OnceLock::new();
@@ -808,43 +810,51 @@ fn load_urf_respawn_defaults() -> Result<UrfRespawnDefaults> {
 }
 
 fn load_protoplasm_lifeline_cooldown_seconds_default() -> Result<f64> {
-    let path = repository_root_dir()
-        .join("Items")
-        .join("Protoplasm Harness.json");
-    let text = std::fs::read_to_string(&path).with_context(|| {
-        format!(
-            "Failed reading Protoplasm Harness item file: {}",
-            path.display()
-        )
-    })?;
-    let item_file: Value = serde_json::from_str(&text).with_context(|| {
-        format!(
-            "Failed parsing Protoplasm Harness item file: {}",
-            path.display()
-        )
-    })?;
-    let effects = item_file
-        .get("effects_structured")
-        .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing effects_structured in {}", path.display()))?;
-    let lifeline_cooldown_seconds = ability_effect_by_id(
-        effects,
+    load_item_effect_cooldown_seconds(
+        "Protoplasm Harness.json",
         "lifeline_gain_bonus_health_below_health_threshold",
+        "Protoplasm Harness lifeline",
     )
-    .and_then(|effect| effect.get("cooldown_seconds"))
-    .and_then(Value::as_f64)
-    .or_else(|| {
-        effects
-            .iter()
-            .find_map(|effect| effect.get("cooldown_seconds").and_then(Value::as_f64))
-    })
-    .ok_or_else(|| {
-        anyhow!(
-            "Missing effects_structured[*].cooldown_seconds for Protoplasm Harness lifeline in {}",
-            path.display()
-        )
-    })?;
-    Ok(lifeline_cooldown_seconds)
+}
+
+fn load_heartsteel_colossal_consumption_cooldown_seconds_default() -> Result<f64> {
+    load_item_effect_cooldown_seconds(
+        "Heartsteel.json",
+        "colossal_consumption_empowered_hit_damage_and_permanent_bonus_health",
+        "Heartsteel colossal consumption",
+    )
+}
+
+fn load_luden_echo_cooldown_seconds_default() -> Result<f64> {
+    load_item_effect_cooldown_seconds(
+        "Ludens Echo.json",
+        "echo_consume_stacks_for_primary_and_secondary_magic_damage",
+        "Luden's Echo",
+    )
+}
+
+fn load_item_effect_cooldown_seconds(
+    item_file_name: &str,
+    effect_id: &str,
+    effect_label: &str,
+) -> Result<f64> {
+    let (item_path, item_data) = read_item_file(item_file_name)?;
+    let effects = item_effects(&item_data, &item_path)?;
+    ability_effect_by_id(effects, effect_id)
+        .and_then(|effect| effect.get("cooldown_seconds"))
+        .and_then(Value::as_f64)
+        .or_else(|| {
+            effects
+                .iter()
+                .find_map(|effect| effect.get("cooldown_seconds").and_then(Value::as_f64))
+        })
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing effects_structured[*].cooldown_seconds for {} in {}",
+                effect_label,
+                item_path.display()
+            )
+        })
 }
 
 fn ability_effect_by_id<'a>(effects: &'a [Value], effect_id: &str) -> Option<&'a Value> {
@@ -1984,6 +1994,19 @@ pub(crate) fn champion_ability_execution_profile(
 pub(crate) fn urf_respawn_defaults() -> &'static UrfRespawnDefaults {
     URF_RESPAWN_DEFAULTS
         .get_or_init(|| load_urf_respawn_defaults().unwrap_or_else(|err| panic!("{}", err)))
+}
+
+pub(crate) fn heartsteel_colossal_consumption_cooldown_seconds_default() -> f64 {
+    *HEARTSTEEL_COLOSSAL_CONSUMPTION_COOLDOWN_SECONDS_DEFAULT.get_or_init(|| {
+        load_heartsteel_colossal_consumption_cooldown_seconds_default()
+            .unwrap_or_else(|err| panic!("{}", err))
+    })
+}
+
+pub(crate) fn luden_echo_cooldown_seconds_default() -> f64 {
+    *LUDEN_ECHO_COOLDOWN_SECONDS_DEFAULT.get_or_init(|| {
+        load_luden_echo_cooldown_seconds_default().unwrap_or_else(|err| panic!("{}", err))
+    })
 }
 
 pub(crate) fn protoplasm_lifeline_cooldown_seconds_default() -> f64 {

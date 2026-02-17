@@ -1,6 +1,13 @@
 # Improvement Tracker
 
 ## Done
+- Added buff-aware runtime stat resolution for cooldown metrics:
+  - introduced shared runtime stat resolver (`src/scripts/runtime/stat_resolution.rs`) that starts from base metric data and applies runtime buff state before use
+  - item cooldowns for modeled runtime effects now load from canonical item data and resolve through buff state:
+    - Heartsteel cooldown from `Items/Heartsteel.json` (`effects_structured[id=colossal_consumption_empowered_hit_damage_and_permanent_bonus_health]`)
+    - Luden's Echo cooldown from `Items/Ludens Echo.json` (`effects_structured[id=echo_consume_stacks_for_primary_and_secondary_magic_damage]`)
+    - Guardian Angel / Zhonya's Hourglass / Protoplasm Harness cooldowns resolve through the same runtime stat resolver path
+  - enemy champion script ability cooldown scheduling now resolves from base cooldown plus runtime ability haste instead of using raw cooldown values directly
 - Added random-by-default search seed policy with explicit deterministic override:
   - `search.seed: 0` now means runtime-random seed
   - CLI now supports `--seed <u64>` to force deterministic reproducibility

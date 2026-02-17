@@ -31,6 +31,9 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
 - Controlled champion loadout runtime scripts are now applied during combat-time spell hits, kill events, and regeneration ticks.
 - Defensive item activation and revive triggers are modeled through generic controlled champion runtime/item script capabilities (not champion-specific decision structs).
 - Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).
+- Runtime stat resolution is buff-aware and starts from canonical base data before applying state transforms:
+  - cooldown metrics resolve through shared runtime stat queries (ability/item/neutral sources)
+  - modeled item cooldown passives (for example Heartsteel and Luden's Echo) load base cooldowns from canonical item effects data and then apply runtime haste/buff state
 - Vladimir combat sequencing decisions are script-owned and delegated from engine.
 - Enemy champion script events are generated in scripts and applied by generic engine action handling.
 - Foundational combat primitives are present for future fidelity work:
@@ -102,6 +105,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
 - `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
 - `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion runtime effects, defensive item/revive decision helpers, and loadout hook implementation.
 - `src/scripts/runtime/loadout_runtime.rs`: Shared combat-time loadout runtime state and effect helpers.
+- `src/scripts/runtime/stat_resolution.rs`: Shared runtime stat-query resolver for buff-aware metric transformations (for example cooldown resolution from base data + runtime haste state).
 - `src/scripts/registry/hooks.rs`: Script hook interfaces, contexts, and dispatch registry.
 
 ## Run

@@ -1,4 +1,13 @@
 use crate::to_norm_key;
+use crate::{
+    defaults::{
+        heartsteel_colossal_consumption_cooldown_seconds_default,
+        luden_echo_cooldown_seconds_default,
+    },
+    scripts::runtime::stat_resolution::{
+        CooldownMetricSource, RuntimeBuffState, StatQuery, resolve_stat,
+    },
+};
 
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct OnHitEffectProfile {
@@ -25,6 +34,9 @@ pub(crate) struct LoadoutRuntimeState {
     pub attacks_landed: usize,
     pub lethal_tempo_stacks: usize,
     pub guinsoo_stacks: usize,
+    pub grasp_cooldown_seconds: f64,
+    pub heartsteel_cooldown_seconds: f64,
+    pub luden_cooldown_seconds: f64,
     pub grasp_ready_at: f64,
     pub heartsteel_ready_at: f64,
     pub luden_ready_at: f64,
@@ -45,6 +57,9 @@ impl Default for LoadoutRuntimeState {
             attacks_landed: 0,
             lethal_tempo_stacks: 0,
             guinsoo_stacks: 0,
+            grasp_cooldown_seconds: 4.0,
+            heartsteel_cooldown_seconds: 0.0,
+            luden_cooldown_seconds: 0.0,
             grasp_ready_at: 0.0,
             heartsteel_ready_at: 0.0,
             luden_ready_at: 0.0,
@@ -55,8 +70,35 @@ impl Default for LoadoutRuntimeState {
 pub(crate) fn build_loadout_runtime_state(
     item_names: &[String],
     rune_names: &[String],
+    item_haste: f64,
 ) -> LoadoutRuntimeState {
     let mut runtime = LoadoutRuntimeState::default();
+    let clamped_item_haste = item_haste.max(-99.0);
+    let item_buff_state = RuntimeBuffState {
+        item_haste: clamped_item_haste,
+        ..RuntimeBuffState::default()
+    };
+    runtime.heartsteel_cooldown_seconds = resolve_stat(
+        StatQuery::CooldownSeconds {
+            base_seconds: heartsteel_colossal_consumption_cooldown_seconds_default(),
+            source: CooldownMetricSource::Item,
+        },
+        item_buff_state,
+    );
+    runtime.luden_cooldown_seconds = resolve_stat(
+        StatQuery::CooldownSeconds {
+            base_seconds: luden_echo_cooldown_seconds_default(),
+            source: CooldownMetricSource::Item,
+        },
+        item_buff_state,
+    );
+    runtime.grasp_cooldown_seconds = resolve_stat(
+        StatQuery::CooldownSeconds {
+            base_seconds: 4.0,
+            source: CooldownMetricSource::Neutral,
+        },
+        RuntimeBuffState::default(),
+    );
 
     for item in item_names {
         match to_norm_key(item).as_str() {
@@ -144,12 +186,12 @@ pub(crate) fn calculate_on_hit_bonus_damage(
 
     if runtime.has_grasp && now >= runtime.grasp_ready_at {
         extra_magic += 8.0 + 0.035 * target_max_health.max(0.0);
-        runtime.grasp_ready_at = now + 4.0;
+        runtime.grasp_ready_at = now + runtime.grasp_cooldown_seconds;
     }
 
     if runtime.has_heartsteel && now >= runtime.heartsteel_ready_at {
         extra_physical += 70.0 + 0.06 * attacker_max_health.max(0.0);
-        runtime.heartsteel_ready_at = now + 5.0;
+        runtime.heartsteel_ready_at = now + runtime.heartsteel_cooldown_seconds;
     }
 
     (
@@ -174,7 +216,7 @@ pub(crate) fn calculate_ability_bonus_damage(
 
     if runtime.has_luden && now >= runtime.luden_ready_at {
         extra_magic += 90.0 + 0.10 * ability_raw_damage.max(0.0);
-        runtime.luden_ready_at = now + 8.0;
+        runtime.luden_ready_at = now + runtime.luden_cooldown_seconds;
     }
 
     (extra_magic.max(0.0), extra_true.max(0.0))
@@ -227,6 +269,7 @@ mod tests {
                 "Grasp of the Undying".to_string(),
                 "Second Wind".to_string(),
             ],
+            0.0,
         );
 
         assert!(runtime.has_kraken);
@@ -242,6 +285,7 @@ mod tests {
         let mut runtime = build_loadout_runtime_state(
             &["Kraken Slayer".to_string()],
             &["Lethal Tempo".to_string()],
+            0.0,
         );
         assert!(loadout_attack_speed_multiplier(&runtime) >= 1.0);
 
@@ -285,6 +329,7 @@ mod tests {
                 "Guinsoo's Rageblade".to_string(),
             ],
             &["Lethal Tempo".to_string()],
+            0.0,
         );
         runtime.attacks_landed = 7;
         runtime.lethal_tempo_stacks = 6;
@@ -297,7 +342,7 @@ mod tests {
 
     #[test]
     fn ability_bonus_damage_respects_luden_cooldown() {
-        let mut runtime = build_loadout_runtime_state(&["Luden's Echo".to_string()], &[]);
+        let mut runtime = build_loadout_runtime_state(&["Luden's Echo".to_string()], &[], 0.0);
         let (magic_a, true_a) = calculate_ability_bonus_damage(&mut runtime, 300.0, 2500.0, 0.0);
         let (magic_b, true_b) = calculate_ability_bonus_damage(&mut runtime, 300.0, 2500.0, 1.0);
         assert!(magic_a > magic_b);
@@ -305,8 +350,19 @@ mod tests {
     }
 
     #[test]
+    fn luden_and_heartsteel_cooldowns_scale_with_item_haste() {
+        let runtime = build_loadout_runtime_state(
+            &["Luden's Echo".to_string(), "Heartsteel".to_string()],
+            &[],
+            300.0,
+        );
+        assert!((runtime.luden_cooldown_seconds - 3.0).abs() < 1e-9);
+        assert!((runtime.heartsteel_cooldown_seconds - 7.5).abs() < 1e-9);
+    }
+
+    #[test]
     fn second_wind_regen_scales_when_low_health() {
-        let runtime = build_loadout_runtime_state(&[], &["Second Wind".to_string()]);
+        let runtime = build_loadout_runtime_state(&[], &["Second Wind".to_string()], 0.0);
         let high = tick_loadout_regeneration(&runtime, 2800.0, 3000.0, 1.0);
         let low = tick_loadout_regeneration(&runtime, 900.0, 3000.0, 1.0);
         assert!(high > 0.0);

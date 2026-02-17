@@ -30,6 +30,9 @@ use crate::scripts::runtime::controlled_champion_loadout::{
     on_controlled_champion_ability_bonus, on_controlled_champion_enemy_kill,
     should_trigger_revive_effect, tick_controlled_champion_regen_heal,
 };
+use crate::scripts::runtime::stat_resolution::{
+    CooldownMetricSource, RuntimeBuffState, StatQuery, resolve_stat,
+};
 
 use super::*;
 
@@ -191,6 +194,7 @@ struct EnemyState {
     spawn_position: Vec2,
     move_speed: f64,
     base_attack_speed: f64,
+    ability_haste: f64,
     physical_hit_damage: f64,
     ability_power: f64,
     next_attack_bonus_physical: f64,
@@ -221,6 +225,7 @@ struct EnemyDerivedModel {
     magic_multiplier: f64,
     attack_damage: f64,
     ability_power: f64,
+    ability_haste: f64,
     attack_speed: f64,
     attack_interval: f64,
     move_speed: f64,
@@ -464,13 +469,24 @@ impl ControlledChampionCombatSimulation {
         let magic_multiplier = 100.0 / (100.0 + vlad_stats.magic_resist.max(0.0));
 
         let ability_haste = vlad_item_stats.ability_haste + urf.ability_haste;
+        let runtime_buffs = RuntimeBuffState {
+            ability_haste,
+            item_haste: urf.item_haste,
+            cooldown_rate_multiplier: 1.0,
+        };
         let pool_base_cd = sim
             .vlad_pool_base_cooldown_seconds_by_rank
             .get(sim.vlad_pool_rank.saturating_sub(1))
             .copied()
             .or_else(|| sim.vlad_pool_base_cooldown_seconds_by_rank.last().copied())
             .unwrap_or(16.0);
-        let pool_cooldown = cooldown_after_haste(pool_base_cd, ability_haste);
+        let pool_cooldown = resolve_stat(
+            StatQuery::CooldownSeconds {
+                base_seconds: pool_base_cd,
+                source: CooldownMetricSource::Ability,
+            },
+            runtime_buffs,
+        );
         let offensive_tuning = VladimirAbilityTuning {
             q_base_damage: sim.vlad_q_base_damage,
             q_ap_ratio: sim.vlad_q_ap_ratio,
@@ -533,13 +549,26 @@ impl ControlledChampionCombatSimulation {
         let revive_item_available = defensive_item_capabilities.has_revive_item;
         let emergency_shield_item_available = defensive_item_capabilities.has_emergency_shield_item;
 
-        let revive_item_cooldown_seconds =
-            cooldown_after_haste(sim.ga_cooldown_seconds, urf.item_haste);
-        let stasis_item_cooldown_seconds =
-            cooldown_after_haste(sim.zhonya_cooldown_seconds, urf.item_haste);
-        let emergency_shield_item_cooldown_seconds = cooldown_after_haste(
-            protoplasm_lifeline_cooldown_seconds_default(),
-            urf.item_haste,
+        let revive_item_cooldown_seconds = resolve_stat(
+            StatQuery::CooldownSeconds {
+                base_seconds: sim.ga_cooldown_seconds,
+                source: CooldownMetricSource::Item,
+            },
+            runtime_buffs,
+        );
+        let stasis_item_cooldown_seconds = resolve_stat(
+            StatQuery::CooldownSeconds {
+                base_seconds: sim.zhonya_cooldown_seconds,
+                source: CooldownMetricSource::Item,
+            },
+            runtime_buffs,
+        );
+        let emergency_shield_item_cooldown_seconds = resolve_stat(
+            StatQuery::CooldownSeconds {
+                base_seconds: protoplasm_lifeline_cooldown_seconds_default(),
+                source: CooldownMetricSource::Item,
+            },
+            runtime_buffs,
         );
 
         let tick_seconds = if sim.server_tick_rate_hz > 0.0 {
@@ -628,6 +657,7 @@ impl ControlledChampionCombatSimulation {
                 spawn_position: position,
                 move_speed: model.move_speed,
                 base_attack_speed: model.attack_speed.max(0.001),
+                ability_haste: model.ability_haste,
                 physical_hit_damage: model.attack_damage,
                 ability_power: model.ability_power,
                 next_attack_bonus_physical: 0.0,
@@ -1918,7 +1948,23 @@ impl ControlledChampionCombatSimulation {
                     if let Some(cooldown_seconds) =
                         champion_script_event_cooldown_seconds(&champion_name, script_event)
                     {
-                        let next_ready = self.time + cooldown_seconds.max(0.0);
+                        let ability_haste = self
+                            .enemy_state
+                            .get(idx)
+                            .map(|state| state.ability_haste)
+                            .unwrap_or(self.urf.ability_haste);
+                        let resolved_cooldown = resolve_stat(
+                            StatQuery::CooldownSeconds {
+                                base_seconds: cooldown_seconds,
+                                source: CooldownMetricSource::Ability,
+                            },
+                            RuntimeBuffState {
+                                ability_haste,
+                                item_haste: self.urf.item_haste,
+                                cooldown_rate_multiplier: 1.0,
+                            },
+                        );
+                        let next_ready = self.time + resolved_cooldown.max(0.0);
                         if let Some(state) = self.enemy_state.get_mut(idx) {
                             state.script_event_ready_at.insert(script_event, next_ready);
                         }
@@ -2049,6 +2095,7 @@ fn derive_enemy_model(
 
     let attack_damage = enemy.base.base_attack_damage + enemy_stats.attack_damage;
     let ability_power = enemy_stats.ability_power.max(0.0);
+    let ability_haste = enemy_stats.ability_haste + urf.ability_haste;
     let armor = (enemy.base.base_armor + enemy_stats.armor).max(0.0);
     let magic_resist = (enemy.base.base_magic_resist + enemy_stats.magic_resist).max(0.0);
     let max_health = (enemy.base.base_health + enemy_stats.health).max(1.0);
@@ -2072,7 +2119,11 @@ fn derive_enemy_model(
     } else {
         enemy.loadout_item_names.clone()
     };
-    let runtime = build_champion_loadout_runtime(&runtime_item_names, &enemy.loadout_rune_names);
+    let runtime = build_champion_loadout_runtime(
+        &runtime_item_names,
+        &enemy.loadout_rune_names,
+        urf.item_haste,
+    );
     attack_speed = base_attack_speed * attack_speed_multiplier(&runtime);
 
     let attack_interval = 1.0 / attack_speed.max(0.001);
@@ -2092,6 +2143,7 @@ fn derive_enemy_model(
         magic_multiplier: 100.0 / (100.0 + magic_resist),
         attack_damage,
         ability_power,
+        ability_haste,
         attack_speed,
         attack_interval,
         move_speed,
