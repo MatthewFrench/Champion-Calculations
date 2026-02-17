@@ -75,6 +75,7 @@ fn simulate_build_order_stage_outcomes(
             ctx.controlled_champion_bonus_stats,
             None,
             Some(&acquired_map),
+            Some(ctx.controlled_champion_stack_overrides),
             &enemy_level_builds,
             &sim_at_level,
             ctx.urf,
@@ -108,6 +109,7 @@ fn score_build_order(
                 damage_dealt: 1.0,
                 healing_done: 1.0,
                 enemy_kills: 0,
+                invulnerable_seconds: 0.0,
             });
         let stage_score = objective_score_from_outcome(*outcome, reference, ctx.objective_weights);
         stage_survival.push(outcome.time_alive_seconds);

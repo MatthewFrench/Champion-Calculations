@@ -2,7 +2,7 @@ use crate::defaults::{
     ChampionBehaviorDefaultsEntry, ChampionBehaviorOverrideEntry, champion_ai_profile,
     champion_behavior_defaults_for_role, champion_behavior_override,
 };
-use crate::{MasterySelection, to_norm_key};
+use crate::to_norm_key;
 
 use crate::scripts::runtime::loadout_runtime::{
     LoadoutRuntimeState, OnHitEffectProfile, build_loadout_runtime_state,
@@ -266,9 +266,8 @@ pub(crate) fn execute_champion_script_event(
 pub(crate) fn build_champion_loadout_runtime(
     item_names: &[String],
     rune_names: &[String],
-    masteries: &[MasterySelection],
 ) -> ChampionLoadoutRuntime {
-    build_loadout_runtime_state(item_names, rune_names, masteries)
+    build_loadout_runtime_state(item_names, rune_names)
 }
 
 pub(crate) fn attack_speed_multiplier(runtime: &ChampionLoadoutRuntime) -> f64 {

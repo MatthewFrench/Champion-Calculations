@@ -7,6 +7,7 @@ pub(crate) const DYNAMIC_RUNE_KEYS: &[&str] = &[
     "lethaltempo",
     "arcanecomet",
     "summonaery",
+    "secondwind",
     "triumph",
     "gatheringstorm",
 ];
@@ -18,6 +19,7 @@ pub(crate) fn apply_rune_runtime_flag(
     match to_norm_key(rune_name).as_str() {
         "arcanecomet" => runtime.has_arcane_comet = true,
         "summonaery" => runtime.has_summon_aery = true,
+        "secondwind" => runtime.has_second_wind = true,
         "triumph" => runtime.has_triumph = true,
         "gatheringstorm" => runtime.has_gathering_storm = true,
         _ => {}

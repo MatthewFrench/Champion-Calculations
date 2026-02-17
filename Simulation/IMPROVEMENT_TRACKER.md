@@ -27,7 +27,7 @@
   - migrated Vayne Silver Bolts periodic true-hit defaults and Warwick Eternal Hunger/Infinite Duress scaling to typed loaders that read canonical ability/passive effects
   - removed Yasuo from champion script dispatch and deleted the Yasuo champion script module from `Simulation/src/scripts/champions/`
 - Tightened data ownership and removed misplaced defaults from global simulator defaults:
-  - Heartsteel stack assumptions are scenario-owned (`simulation.heartsteel_assumed_stacks_at_8m`) and no longer stored in `Items/Heartsteel.json`
+  - Item stack assumptions are scenario-owned (`simulation.item_stacks_at_level_20` with controlled/opponent override maps) and no longer stored in `Items/Heartsteel.json`
   - Protoplasm Harness lifeline cooldown now comes from canonical item effects data in `Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`
   - removed item-specific defaults from `Simulation/data/simulator_defaults.json`
 - Normalized champion simulation script config shape:
@@ -41,9 +41,8 @@
   - mode defaults (URF respawn tuning): `Game Mode/URF.json`
   - champion simulation defaults: `Characters/*.json`
   - loader and accessors: `Simulation/src/defaults.rs`
-- Moved search quality profile presets and loadout-generation fallback constants out of code and into defaults data:
+- Moved search quality profile presets out of code and into defaults data:
   - `fast`, `balanced`, and `maximum_quality` profile numbers now come from defaults file
-  - mastery fallback selection rules and random tree-attempt budget now come from defaults file
 - Split champion execution data ownership between champion data and AI controller policy:
   - per-ability execution geometry/routing overrides are now canonical under `Characters/*.json` `abilities.<ability_key>.execution`
   - controller policy (combat spacing, movement scaling, script polling, and non-canonical cooldown overrides) now loads from `Simulation/data/champion_ai_profiles.json`
@@ -69,9 +68,9 @@
   - impact outcomes are explicit (`applied`, `projectile_blocked`, `impact_nullified`, `*_missed`)
   - melee auto-attacks cancel when attacker is stunned during windup
 - Improved report readability and diagnostics detail:
-  - added human-readable timestamps (local + UTC) and unix timestamp
+  - added human-readable timestamps (local + UTC)
   - added comma-separated large-number formatting for major diagnostics values
-  - unix timestamp now renders as raw digits (no separators)
+  - removed unix timestamp output from generated reports
   - added explicit generated/duplicate-pruned/unique candidate counts
   - added strict-stage completion percentage and timeout-skipped/non-finite candidate counts
 - Standardized champion script layout to a uniform per-champion folder structure:
@@ -105,7 +104,7 @@
 - Moved enemy URF presets into a data file:
   - `Simulation/data/enemy_urf_presets.json`
   - Includes source links and last checked date.
-- Added strict startup validation for enemy preset items, runes, shards, and masteries.
+- Added strict startup validation for enemy preset items, runes, and shards.
 - Added structured run output JSON:
   - default path mirrors markdown report with `.json` extension.
 - Added search quality profiles:
@@ -148,7 +147,7 @@
   - `src/scripts/hooks.rs` dispatches item/champion/loadout hooks
   - `src/scripts/item_hooks.rs` now owns Heartsteel stack assumptions
   - `src/scripts/champions/vladimir/mod.rs` now owns Crimson Pact stat conversion logic
-  - `src/scripts/loadout_hooks.rs` now annotates dynamic rune/mastery effects
+  - `src/scripts/loadout_hooks.rs` now annotates dynamic rune effects
 - Added controlled-champion loadout runtime integration across simulation and objective scoring:
   - new generic engine API (`ControlledChampionCombatSimulation`, `simulate_controlled_champion_combat`)
   - compatibility wrappers retained for legacy Vladimir names
@@ -174,8 +173,6 @@
     - `src/scripts/items/hooks.rs`
   - runes:
     - `src/scripts/runes/effects.rs`
-  - masteries:
-    - `src/scripts/masteries/effects.rs`
   - runtime:
     - `src/scripts/runtime/controlled_champion_loadout.rs`
     - `src/scripts/runtime/loadout_runtime.rs`
@@ -297,10 +294,10 @@
     - Reports clearly explain why a build scored highly.
 
 - [P2] Expand script hooks to full mechanic coverage
-  - Goal: extend hook coverage for all non-generic item/champion/rune/mastery behavior.
+  - Goal: extend hook coverage for all non-generic item/champion/rune behavior.
   - Scope:
     - Add script implementations for additional stack items and champion passives.
-    - Add hook-driven combat-time rune/mastery behavior (not only notes).
+    - Add hook-driven combat-time rune behavior (not only notes).
     - Keep hooks deterministic and compatible with search parallelism.
   - Success criteria:
     - Multiple complex mechanics implemented entirely through hooks.
@@ -314,6 +311,78 @@
   - Success criteria:
     - Report explicitly identifies high-confidence stable loadouts.
     - Repeat runs show reduced variance in recommended top builds.
+
+- [P1] Scenario preflight validator command
+  - Goal: fail fast on bad scenario/preset input before expensive search begins.
+  - Scope:
+    - add a `--mode validate_scenario` (or equivalent) command path.
+    - validate scenario schema, rune-page legality, shard-slot legality, and opponent preset availability.
+    - return actionable error messages with exact failing path/field.
+  - Success criteria:
+    - invalid scenarios/presets fail in seconds with clear messages.
+    - valid scenarios pass without running search.
+
+- [P1] Score cache versioning and invalidation policy
+  - Goal: prevent stale full-score cache reuse after schema/engine/scoring changes.
+  - Scope:
+    - add cache version stamp components (engine version, scoring config version, scenario schema version) to cache keys or cache metadata.
+    - invalidate or bypass incompatible cache entries automatically.
+  - Success criteria:
+    - no cross-version cache contamination after scoring/model changes.
+    - cache hit behavior is deterministic and auditable.
+
+- [P1] Explicit rune-page structure input model
+  - Goal: remove ambiguity from rune-page input by representing selection structurally.
+  - Scope:
+    - add optional structured fields for primary path, secondary path, and per-slot rune picks.
+    - derive ordered `rune_names` from structural input in one canonical path.
+    - preserve strict legality checks and deterministic serialization.
+  - Success criteria:
+    - scenario/preset authors cannot accidentally provide ambiguous rune ordering.
+    - generated and parsed rune pages round-trip without information loss.
+
+- [P1] Legal rune-page domain table/export
+  - Goal: make the constrained rune-page search space explicit and auditable.
+  - Scope:
+    - enumerate all legal rune pages from `RunesReforged.json` constraints.
+    - emit a deterministic table/report with:
+      - total legal pages
+      - grouped counts by primary path and secondary path pair
+      - optional shard-combination expansion counts
+    - provide a command/output artifact so results can be regenerated after data updates.
+  - Success criteria:
+    - total legal rune-page domain size is visible and reproducible.
+    - changes in rune data produce clear before/after domain diffs.
+
+- [P1] Ability-driven opponent scripts to replace DPS proxy fields
+  - Goal: increase realism by modeling opponent combat timelines through scripted abilities/events.
+  - Priority:
+    - highest immediate realism impact among remaining simulator upgrades.
+  - Scope:
+    - migrate high-impact opponents from flat `ability_dps_*` proxies to ability/event casts.
+    - keep shared engine role-neutral while champion-specific behavior stays in scripts/data.
+    - maintain deterministic tick/event outcomes.
+  - Success criteria:
+    - reduced reliance on proxy DPS fields in primary scenarios.
+    - opponent output timelines are ability/state driven.
+
+- [P2] Combat-time rune coverage expansion plan
+  - Goal: broaden dynamic rune behavior coverage in runtime scripts.
+  - Scope:
+    - prioritize high-impact runes appearing in top builds and opponent presets.
+    - add script behavior tests for trigger timing, cooldown, and stacking semantics.
+  - Success criteria:
+    - runtime rune coverage materially increases for commonly selected pages.
+    - report skipped-dynamic-rune notes decrease for top results.
+
+- [P2] Opponent preset refresh workflow and staleness checks
+  - Goal: keep `enemy_urf_presets.json` maintainable and easy to refresh when desired.
+  - Scope:
+    - add a small utility/workflow to review and update preset metadata (`source_url`, `last_checked`).
+    - add optional warning/report line when preset age exceeds a configured threshold.
+  - Success criteria:
+    - preset refresh process is scripted and repeatable.
+    - stale preset metadata is visible in run output.
 
 
 - [P0] Action timeline realism follow-up (blocking, collision, movement)
@@ -340,7 +409,7 @@
   - Goal: explain and fix cases where enemy champions appear to use overly similar auto-attack behavior/build outcomes.
   - Scope:
     - Audit enemy preset ingestion and per-champion stat application.
-    - Verify item/rune/mastery effects are applied distinctly per champion.
+    - Verify item/rune effects are applied distinctly per champion.
     - Add validation/report checks to flag suspiciously similar enemy profiles.
   - Success criteria:
     - Per-enemy derived combat stats are printed in diagnostics.
@@ -350,7 +419,7 @@
   - Goal: eliminate single-file bottleneck and keep champion/item logic out of `main.rs`.
   - Scope:
     - Split core into modules (engine, search, reporting, data loading, scripts, CLI).
-    - Move item/champion/mastery special cases into dedicated script modules/hooks.
+    - Move item/champion/rune special cases into dedicated script modules/hooks.
     - Define clear interfaces for extending champion/item behavior.
   - Success criteria:
     - `main.rs` becomes a thin CLI orchestration entrypoint.

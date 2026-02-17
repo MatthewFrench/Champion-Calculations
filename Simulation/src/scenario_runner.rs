@@ -12,22 +12,197 @@ use std::time::{Duration, Instant};
 
 use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
+use crate::data::parse_stack_overrides_map;
 use crate::engine::{
     ControlledChampionCombatSimulation, EnemyDerivedCombatStats, derive_enemy_combat_stats,
-    simulate_controlled_champion_combat,
 };
 use crate::reporting::{
     write_controlled_champion_report_json, write_controlled_champion_report_markdown,
 };
 use crate::search::{
-    adaptive_strategy_candidates, build_search_ranked, choose_best_build_by_stat,
-    compute_build_metrics, generate_bleed_candidates, item_names, pareto_front_keys,
-    portfolio_strategy_list, search_strategy_summary, select_diverse_top_builds,
-    strategy_seed_elites,
+    FullLoadoutSearchParams, adaptive_strategy_candidates_full_loadout,
+    build_search_ranked_full_loadout, candidate_pareto_front_keys, choose_best_build_by_stat,
+    compute_build_metrics_for_candidate, generate_bleed_candidates_full_loadout, item_names,
+    portfolio_strategy_list, search_strategy_summary, select_diverse_top_candidates,
+    strategy_seed_elites_full_loadout,
 };
 use crate::status::{StatusReporter, deadline_reached};
 
 use super::*;
+
+struct ControlledChampionScenarioConfig {
+    base: ChampionBase,
+    level: usize,
+    baseline_items: Vec<String>,
+    loadout_selection: LoadoutSelection,
+    stack_overrides: HashMap<String, f64>,
+}
+
+#[derive(Debug, Clone, Copy)]
+struct SignificantProgressState {
+    best_overall_score: f64,
+    best_significant_score: f64,
+    significant_events: usize,
+    last_significant_at: Instant,
+}
+
+#[derive(Debug, Clone, Default)]
+struct SearchTypeRuntimeCounter {
+    score_requests: usize,
+    new_simulations: usize,
+    persistent_cache_hits: usize,
+}
+
+fn increment_search_type_counter(
+    counters: &Arc<Mutex<HashMap<String, SearchTypeRuntimeCounter>>>,
+    search_type: &str,
+    score_requests: usize,
+    new_simulations: usize,
+    persistent_cache_hits: usize,
+) {
+    if let Ok(mut map) = counters.lock() {
+        let entry = map.entry(search_type.to_string()).or_default();
+        entry.score_requests = entry.score_requests.saturating_add(score_requests);
+        entry.new_simulations = entry.new_simulations.saturating_add(new_simulations);
+        entry.persistent_cache_hits = entry
+            .persistent_cache_hits
+            .saturating_add(persistent_cache_hits);
+    }
+}
+
+fn n_choose_k(n: usize, k: usize) -> u128 {
+    if k > n {
+        return 0;
+    }
+    let k = k.min(n - k);
+    if k == 0 {
+        return 1;
+    }
+    let mut result = 1u128;
+    for i in 1..=k {
+        let numerator = (n - k + i) as u128;
+        let denominator = i as u128;
+        result = (result * numerator) / denominator;
+    }
+    result
+}
+
+fn estimated_legal_item_build_count(item_pool: &[Item], max_items: usize) -> f64 {
+    if max_items == 0 {
+        return 1.0;
+    }
+    let boots_count = item_pool.iter().filter(|item| is_boots(item)).count();
+    let non_boots_count = item_pool.len().saturating_sub(boots_count);
+    let max_boots = boots_count.min(1).min(max_items);
+    let mut total = 0u128;
+    for boots_used in 0..=max_boots {
+        let non_boots_used = max_items.saturating_sub(boots_used);
+        if non_boots_used > non_boots_count {
+            continue;
+        }
+        total = total.saturating_add(
+            n_choose_k(boots_count, boots_used)
+                .saturating_mul(n_choose_k(non_boots_count, non_boots_used)),
+        );
+    }
+    total as f64
+}
+
+fn estimated_legal_loadout_count(loadout_domain: &crate::data::LoadoutDomain) -> f64 {
+    if loadout_domain.rune_paths.len() < 2 {
+        return 0.0;
+    }
+    let shard_count = loadout_domain
+        .shard_slots
+        .iter()
+        .map(|slot| slot.len() as u128)
+        .product::<u128>();
+    if shard_count == 0 {
+        return 0.0;
+    }
+    let mut rune_pages = 0u128;
+    for (primary_index, primary_path) in loadout_domain.rune_paths.iter().enumerate() {
+        if primary_path.slot_runes.len() < 4 {
+            continue;
+        }
+        let primary_count = primary_path.slot_runes[..4]
+            .iter()
+            .map(|slot| slot.len() as u128)
+            .product::<u128>();
+        if primary_count == 0 {
+            continue;
+        }
+        for (secondary_index, secondary_path) in loadout_domain.rune_paths.iter().enumerate() {
+            if secondary_index == primary_index || secondary_path.slot_runes.len() < 4 {
+                continue;
+            }
+            let secondary_pair_count = [(1usize, 2usize), (1usize, 3usize), (2usize, 3usize)]
+                .iter()
+                .map(|(slot_a, slot_b)| {
+                    (secondary_path.slot_runes[*slot_a].len() as u128)
+                        .saturating_mul(secondary_path.slot_runes[*slot_b].len() as u128)
+                })
+                .sum::<u128>();
+            rune_pages =
+                rune_pages.saturating_add(primary_count.saturating_mul(secondary_pair_count));
+        }
+    }
+    rune_pages.saturating_mul(shard_count) as f64
+}
+
+fn estimate_close_to_optimal_probability(
+    evaluated_candidates: usize,
+    total_candidate_space: Option<f64>,
+) -> (Option<f64>, String) {
+    let Some(total) = total_candidate_space else {
+        return (
+            None,
+            "Unavailable: total legal candidate space estimate was not finite.".to_string(),
+        );
+    };
+    if !total.is_finite() || total <= 0.0 {
+        return (
+            None,
+            "Unavailable: total legal candidate space estimate was not positive.".to_string(),
+        );
+    }
+    let draws = evaluated_candidates as f64;
+    if draws <= 0.0 {
+        return (
+            Some(0.0),
+            "0.0%: no unique candidates were scored in this run.".to_string(),
+        );
+    }
+    let conservative_top_quantile = 0.00000001_f64; // top 0.000001%
+    let minimum_quantile = (1.0 / total).clamp(0.0, 1.0);
+    let hit_rate = conservative_top_quantile
+        .max(minimum_quantile)
+        .clamp(0.0, 1.0);
+    let probability = if hit_rate >= 1.0 {
+        1.0
+    } else {
+        1.0 - (1.0 - hit_rate).powf(draws)
+    };
+    let implied_top_candidate_count = (hit_rate * total).max(1.0).round();
+    let note = format!(
+        "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = {:.9}% (about top {:.0} candidates in the legal space) and n = {} unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+        hit_rate * 100.0,
+        implied_top_candidate_count,
+        evaluated_candidates
+    );
+    (Some(probability.clamp(0.0, 1.0)), note)
+}
+
+fn format_percent_display(percent: f64) -> String {
+    if !percent.is_finite() {
+        return percent.to_string();
+    }
+    if percent > 0.0 && percent < 0.000001 {
+        format!("{percent:.3e}%")
+    } else {
+        format!("{percent:.6}%")
+    }
+}
 
 fn format_repo_relative_path(path: &Path) -> String {
     if !path.is_absolute() {
@@ -45,7 +220,9 @@ fn format_repo_relative_path(path: &Path) -> String {
 fn parse_controlled_champion_config(
     scenario: &Value,
     champion_bases: &HashMap<String, ChampionBase>,
-) -> Result<(ChampionBase, Vec<String>, LoadoutSelection)> {
+    default_level: usize,
+    default_stack_overrides: &HashMap<String, f64>,
+) -> Result<ControlledChampionScenarioConfig> {
     let controlled_champion = scenario
         .get("controlled_champion")
         .and_then(Value::as_object)
@@ -57,30 +234,82 @@ fn parse_controlled_champion_config(
     let baseline_items = controlled_champion
         .get("baseline_items")
         .and_then(Value::as_array)
-        .ok_or_else(|| anyhow!("Missing controlled_champion.baseline_items"))?
-        .iter()
-        .map(|value| {
-            value
-                .as_str()
-                .ok_or_else(|| anyhow!("controlled_champion.baseline_items must be strings"))
+        .map(|values| {
+            values
+                .iter()
+                .map(|value| {
+                    value.as_str().ok_or_else(|| {
+                        anyhow!("controlled_champion.baseline_items must be strings")
+                    })
+                })
+                .collect::<Result<Vec<_>>>()
+                .map(|names| names.into_iter().map(ToOwned::to_owned).collect::<Vec<_>>())
         })
-        .collect::<Result<Vec<_>>>()?
-        .into_iter()
-        .map(ToOwned::to_owned)
-        .collect::<Vec<_>>();
+        .transpose()?
+        .unwrap_or_default();
     let loadout_selection = parse_loadout_selection(controlled_champion.get("loadout"));
     let champion_base = lookup_champion_base(champion_bases, champion_name)?;
-    Ok((champion_base, baseline_items, loadout_selection))
+    let level = controlled_champion
+        .get("level")
+        .and_then(Value::as_u64)
+        .unwrap_or(default_level as u64)
+        .max(1) as usize;
+    if controlled_champion.get("assumptions").is_some() {
+        return Err(anyhow!(
+            "controlled_champion.assumptions is no longer supported. Use controlled_champion.stack_overrides."
+        ));
+    }
+    if controlled_champion.get("item_stacks_at_level_20").is_some() {
+        return Err(anyhow!(
+            "controlled_champion.item_stacks_at_level_20 is no longer supported. Use controlled_champion.stack_overrides."
+        ));
+    }
+    let mut stack_overrides = default_stack_overrides.clone();
+    stack_overrides.extend(parse_stack_overrides_map(
+        controlled_champion.get("stack_overrides"),
+    )?);
+    Ok(ControlledChampionScenarioConfig {
+        base: champion_base,
+        level,
+        baseline_items,
+        loadout_selection,
+        stack_overrides,
+    })
 }
 
 fn parse_opponent_encounters(
     scenario: &Value,
     champion_bases: &HashMap<String, ChampionBase>,
+    default_level: usize,
+    default_stack_overrides: &HashMap<String, f64>,
 ) -> Result<Vec<(String, f64, Vec<EnemyConfig>)>> {
     let opponents = scenario
         .get("opponents")
         .and_then(Value::as_object)
         .ok_or_else(|| anyhow!("Missing opponents object"))?;
+    let opponent_default_level = opponents
+        .get("default_level")
+        .and_then(Value::as_u64)
+        .unwrap_or(default_level as u64)
+        .max(1) as usize;
+    if opponents.get("assumptions").is_some() {
+        return Err(anyhow!(
+            "opponents.assumptions is no longer supported. Use opponents.stack_overrides."
+        ));
+    }
+    if opponents.get("item_stacks_at_level_20").is_some() {
+        return Err(anyhow!(
+            "opponents.item_stacks_at_level_20 is no longer supported. Use opponents.stack_overrides."
+        ));
+    }
+    if opponents.get("shared_loadout").is_some() {
+        return Err(anyhow!(
+            "opponents.shared_loadout is no longer supported. Enemy champions always use their own preset rune pages and shard selections."
+        ));
+    }
+    let mut opponent_default_stack_overrides = default_stack_overrides.clone();
+    opponent_default_stack_overrides
+        .extend(parse_stack_overrides_map(opponents.get("stack_overrides"))?);
     let encounters = opponents
         .get("encounters")
         .and_then(Value::as_array)
@@ -116,20 +345,18 @@ fn parse_opponent_encounters(
         }
         let parsed_actors = actors
             .iter()
-            .map(|actor| parse_enemy_config(actor, champion_bases))
+            .map(|actor| {
+                parse_enemy_config(
+                    actor,
+                    champion_bases,
+                    opponent_default_level,
+                    &opponent_default_stack_overrides,
+                )
+            })
             .collect::<Result<Vec<_>>>()?;
         parsed.push((name.to_string(), weight, parsed_actors));
     }
     Ok(parsed)
-}
-
-fn parse_opponent_shared_loadout_selection(scenario: &Value) -> LoadoutSelection {
-    parse_loadout_selection(
-        scenario
-            .get("opponents")
-            .and_then(Value::as_object)
-            .and_then(|opponents| opponents.get("shared_loadout")),
-    )
 }
 
 fn search_quality_profile_key(search_quality_profile: SearchQualityProfile) -> &'static str {
@@ -150,20 +377,67 @@ fn runtime_budget_key(max_runtime_seconds: Option<f64>) -> String {
                 format!("{seconds:.1}s")
             }
         }
-        _ => "unbounded".to_string(),
+        _ => "no_hard_cap".to_string(),
+    }
+}
+
+fn format_seconds_key(seconds: f64) -> String {
+    let rounded = seconds.round();
+    if (seconds - rounded).abs() < 1e-9 {
+        format!("{rounded:.0}s")
+    } else {
+        format!("{seconds:.1}s")
+    }
+}
+
+fn format_percent_key(percent: f64) -> String {
+    let clamped = percent.max(0.0);
+    let rounded = clamped.round();
+    let rendered = if (clamped - rounded).abs() < 1e-9 {
+        format!("{rounded:.0}")
+    } else {
+        format!("{clamped:.2}")
+            .trim_end_matches('0')
+            .trim_end_matches('.')
+            .to_string()
+    };
+    rendered.replace('.', "_")
+}
+
+fn runtime_stop_key(
+    max_runtime_seconds: Option<f64>,
+    popcorn_window_seconds: Option<f64>,
+    popcorn_min_relative_improvement_percent: f64,
+) -> String {
+    let budget = runtime_budget_key(max_runtime_seconds);
+    match popcorn_window_seconds {
+        Some(seconds) if seconds > 0.0 => {
+            format!(
+                "{budget}__popcorn_with_progress_{}_percent_minumum_in_{}_max_gap",
+                format_percent_key(popcorn_min_relative_improvement_percent),
+                format_seconds_key(seconds)
+            )
+        }
+        _ => budget,
     }
 }
 
 fn default_run_output_directory(
     search_quality_profile: SearchQualityProfile,
     max_runtime_seconds: Option<f64>,
+    popcorn_window_seconds: Option<f64>,
+    popcorn_min_relative_improvement_percent: f64,
 ) -> PathBuf {
     simulation_dir()
         .join("output")
         .join("runs")
         .join("controlled_champion")
         .join(search_quality_profile_key(search_quality_profile))
-        .join(runtime_budget_key(max_runtime_seconds))
+        .join(runtime_stop_key(
+            max_runtime_seconds,
+            popcorn_window_seconds,
+            popcorn_min_relative_improvement_percent,
+        ))
 }
 
 pub(super) fn run_controlled_champion_scenario(
@@ -175,14 +449,82 @@ pub(super) fn run_controlled_champion_scenario(
     let max_relative_gap_percent = options.max_relative_gap_percent;
     let report_path_override = options.report_path_override;
     let max_runtime_seconds = options.max_runtime_seconds;
+    let popcorn_window_seconds = options.popcorn_window_seconds.filter(|s| *s > 0.0);
+    let popcorn_window = popcorn_window_seconds.map(Duration::from_secs_f64);
+    let popcorn_min_relative_improvement_percent =
+        options.popcorn_min_relative_improvement_percent.max(0.0);
+    let popcorn_min_relative_improvement = popcorn_min_relative_improvement_percent / 100.0;
     let status_every_seconds = options.status_every_seconds;
-    let search_quality_profile = options.search_quality_profile;
+    let search_quality_profile = if popcorn_window_seconds.is_some() {
+        SearchQualityProfile::MaximumQuality
+    } else {
+        options.search_quality_profile
+    };
 
     let run_start = Instant::now();
     let time_budget = max_runtime_seconds
         .filter(|s| *s > 0.0)
         .map(Duration::from_secs_f64);
-    let deadline = time_budget.map(|d| run_start + d);
+    let hard_deadline = time_budget.map(|d| run_start + d);
+    let progress_state = Arc::new(Mutex::new(SignificantProgressState {
+        best_overall_score: f64::NEG_INFINITY,
+        best_significant_score: f64::NEG_INFINITY,
+        significant_events: 0,
+        last_significant_at: run_start,
+    }));
+    let current_deadline = || {
+        let progress_deadline = popcorn_window.map(|window| {
+            let last_significant_at = progress_state
+                .lock()
+                .ok()
+                .map(|state| state.last_significant_at)
+                .unwrap_or(run_start);
+            last_significant_at + window
+        });
+        match (hard_deadline, progress_deadline) {
+            (Some(a), Some(b)) => Some(a.min(b)),
+            (Some(a), None) => Some(a),
+            (None, Some(b)) => Some(b),
+            (None, None) => None,
+        }
+    };
+    let record_score_progress = |score: f64| {
+        if !score.is_finite() {
+            return;
+        }
+        if let Ok(mut state) = progress_state.lock() {
+            let previous_best_overall = state.best_overall_score;
+            if score > state.best_overall_score {
+                state.best_overall_score = score;
+            }
+            let significant = if !state.best_significant_score.is_finite() {
+                true
+            } else {
+                let baseline = previous_best_overall;
+                let delta = if baseline.is_finite() {
+                    score - baseline
+                } else {
+                    score - state.best_significant_score
+                };
+                if delta <= 0.0 {
+                    false
+                } else {
+                    let threshold_base = if baseline.is_finite() {
+                        baseline.abs().max(1e-9)
+                    } else {
+                        state.best_significant_score.abs().max(1e-9)
+                    };
+                    let threshold = threshold_base * popcorn_min_relative_improvement;
+                    delta >= threshold
+                }
+            };
+            if significant {
+                state.best_significant_score = score;
+                state.last_significant_at = Instant::now();
+                state.significant_events += 1;
+            }
+        }
+    };
     let status_every = Duration::from_secs_f64(status_every_seconds.max(1.0));
     let mut status = StatusReporter::new(run_start, status_every);
     let timeout_flag = Arc::new(AtomicUsize::new(0));
@@ -193,22 +535,43 @@ pub(super) fn run_controlled_champion_scenario(
     let scenario = load_json(scenario_path)?;
     status.emit("initialization", None, None, Some("core data loaded"), true);
 
-    let sim = parse_simulation_config(
+    let mut sim = parse_simulation_config(
         scenario
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    if deadline_reached(deadline) {
+    if let Some(opponent_uptime_windows_enabled) = scenario
+        .get("opponents")
+        .and_then(Value::as_object)
+        .and_then(|opponents| opponents.get("uptime_windows_enabled"))
+        .and_then(Value::as_bool)
+    {
+        sim.enemy_uptime_model_enabled = opponent_uptime_windows_enabled;
+    }
+    if deadline_reached(current_deadline()) {
         timeout_flag.store(1, AtomicOrdering::Relaxed);
     }
 
-    let (vlad_base_raw, baseline_fixed_names, vlad_loadout_selection) =
-        parse_controlled_champion_config(&scenario, &champion_bases)?;
-    let vlad_base = champion_at_level(&vlad_base_raw, sim.champion_level);
+    let controlled_champion_config = parse_controlled_champion_config(
+        &scenario,
+        &champion_bases,
+        sim.champion_level,
+        &sim.stack_overrides,
+    )?;
+    sim.champion_level = controlled_champion_config.level;
+    let vlad_base = champion_at_level(&controlled_champion_config.base, sim.champion_level);
+    let vlad_base_raw = controlled_champion_config.base;
+    let baseline_fixed_names = controlled_champion_config.baseline_items;
+    let vlad_loadout_selection = controlled_champion_config.loadout_selection;
+    let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
     let controlled_champion_name = vlad_base_raw.name.clone();
-    let enemy_loadout_selection = parse_opponent_shared_loadout_selection(&scenario);
 
-    let enemy_scenarios_raw = parse_opponent_encounters(&scenario, &champion_bases)?;
+    let enemy_scenarios_raw = parse_opponent_encounters(
+        &scenario,
+        &champion_bases,
+        sim.champion_level,
+        &sim.stack_overrides,
+    )?;
     let primary_enemy_raw = enemy_scenarios_raw
         .first()
         .map(|(_, _, v)| v.clone())
@@ -224,7 +587,7 @@ pub(super) fn run_controlled_champion_scenario(
                 .iter()
                 .cloned()
                 .map(|mut e| {
-                    e.base = champion_at_level(&e.base, sim.champion_level);
+                    e.base = champion_at_level(&e.base, e.level);
                     e
                 })
                 .collect::<Vec<_>>();
@@ -239,12 +602,11 @@ pub(super) fn run_controlled_champion_scenario(
     )?;
     apply_search_quality_profile(&mut search_cfg, search_quality_profile);
     let loadout_domain = Arc::new(build_loadout_domain());
-    let loadout_eval_budget = loadout_eval_budget(&search_cfg, search_quality_profile);
     let enemy_presets = load_enemy_urf_presets()?;
-    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain)?;
-    let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim.champion_level, false)?;
+    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
+    let enemy_loadout = ResolvedLoadout::default();
     let max_items = search_cfg.max_items;
-    let item_pool = default_item_pool(&items);
+    let item_pool = default_item_pool(&items, &urf);
     status.emit(
         "configuration",
         None,
@@ -253,12 +615,17 @@ pub(super) fn run_controlled_champion_scenario(
         true,
     );
 
+    ensure_item_names_allowed_in_urf(
+        &baseline_fixed_names,
+        &urf,
+        "controlled_champion.baseline_items",
+    )?;
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
     let mut enemy_presets_used: HashMap<String, EnemyUrfPreset> = HashMap::new();
     let mut enemy_build_scenarios = Vec::new();
     for (name, weight, enemies) in &enemy_scenarios {
-        if deadline_reached(deadline) {
+        if deadline_reached(current_deadline()) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
         }
@@ -273,19 +640,14 @@ pub(super) fn run_controlled_champion_scenario(
                 )
             })?;
             let build_items = item_pool_from_names(&items, &preset.item_names)?;
-            let preset_enemy_loadout = resolve_loadout(
-                &enemy_loadout_from_preset(preset),
-                sim.champion_level,
-                false,
-            )?;
-            let mut enemy_bonus_stats = preset_enemy_loadout.bonus_stats;
-            enemy_bonus_stats.add(&enemy_loadout.bonus_stats);
+            let preset_enemy_loadout =
+                resolve_loadout(&enemy_loadout_from_preset(preset), enemy.level, false)?;
+            let enemy_bonus_stats = preset_enemy_loadout.bonus_stats;
             enemy_presets_used.insert(preset_key, preset.clone());
             let mut enemy_with_loadout = enemy.clone();
             enemy_with_loadout.loadout_item_names = preset.item_names.clone();
             enemy_with_loadout.loadout_rune_names = preset.runes.clone();
             enemy_with_loadout.loadout_shards = preset.shards.clone();
-            enemy_with_loadout.loadout_masteries = preset.masteries.clone();
             builds.push((enemy_with_loadout, build_items, enemy_bonus_stats));
         }
         enemy_build_scenarios.push((name.clone(), *weight, builds));
@@ -311,36 +673,48 @@ pub(super) fn run_controlled_champion_scenario(
 
     let vlad_base_loadout = resolve_loadout(&vlad_loadout_selection, sim.champion_level, true)?;
     let resolve_cache: Arc<Mutex<HashMap<String, ResolvedLoadout>>> =
-        Arc::new(Mutex::new(HashMap::from([(
+        Arc::new(Mutex::new(HashMap::new()));
+    if let Ok(mut map) = resolve_cache.lock() {
+        map.insert(
             loadout_selection_key(&vlad_loadout_selection),
             vlad_base_loadout.clone(),
-        )])));
-    let best_loadout_by_item: Arc<Mutex<BestLoadoutMap>> = Arc::new(Mutex::new(HashMap::new()));
-    let best_outcome_by_item: Arc<Mutex<BestOutcomeMap>> = Arc::new(Mutex::new(HashMap::new()));
+        );
+    }
+    let best_loadout_by_candidate: Arc<Mutex<ResolvedByCandidateMap>> =
+        Arc::new(Mutex::new(HashMap::new()));
+    let best_outcome_by_candidate: Arc<Mutex<OutcomeByCandidateMap>> =
+        Arc::new(Mutex::new(HashMap::new()));
 
     let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
     let objective_component_weights = normalized_objective_weights(
         search_cfg.objective_survival_weight,
         search_cfg.objective_damage_weight,
         search_cfg.objective_healing_weight,
+        search_cfg.objective_enemy_kills_weight,
+        search_cfg.objective_invulnerable_seconds_weight,
     );
     let scenario_reference_outcomes = enemy_build_scenarios
         .iter()
         .map(|(_, _, enemy_builds_s)| {
-            simulate_controlled_champion_combat(
-                &vlad_base,
-                &baseline_fixed_build,
-                &vlad_base_loadout.bonus_stats,
-                Some(&vlad_loadout_selection),
-                None,
-                enemy_builds_s,
-                &sim,
-                &urf,
-            )
+            let damage_reference = enemy_builds_s
+                .iter()
+                .map(|(enemy, build, bonus_stats)| {
+                    derive_enemy_combat_stats(enemy, build, bonus_stats, &sim, &urf).max_health
+                })
+                .sum::<f64>()
+                .max(1.0);
+            CombatOutcome {
+                time_alive_seconds: sim.max_time_seconds.max(1.0),
+                damage_dealt: damage_reference,
+                healing_done: vlad_base.base_health.max(1.0),
+                enemy_kills: enemy_builds_s.len().max(1),
+                invulnerable_seconds: 1.0,
+            }
         })
         .collect::<Vec<_>>();
     let objective_eval_ctx = ObjectiveEvalContext {
         controlled_champion_base: &vlad_base,
+        controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
         enemy_build_scenarios: &enemy_build_scenarios,
         sim: &sim,
         urf: &urf,
@@ -366,110 +740,112 @@ pub(super) fn run_controlled_champion_scenario(
             evaluate_build_with_bonus(build_items, bonus_stats, loadout_selection).0
         };
 
-    let loadout_candidates_count = loadout_eval_budget;
+    let loadout_candidates_count = 1usize;
     let loadout_finalists_count = 1usize;
-    let optimize_loadout_for_build = |build_key: &[usize], build_items: &[Item]| {
-        let mut hasher = DefaultHasher::new();
-        build_key.hash(&mut hasher);
-        let mut seed = search_cfg.seed ^ hasher.finish();
-        let mut seen = HashSet::new();
-
-        let mut best_sel = vlad_loadout_selection.clone();
-        let mut best_resolved = vlad_base_loadout.clone();
-        let (mut best_score, mut best_outcome) =
-            evaluate_build_with_bonus(build_items, &best_resolved.bonus_stats, Some(&best_sel));
-        seen.insert(loadout_selection_key(&best_sel));
-
-        let mut evaluated = 0usize;
-        while evaluated < loadout_eval_budget {
-            if deadline_reached(deadline) {
-                timeout_flag.store(1, AtomicOrdering::Relaxed);
-                break;
-            }
-            let candidate =
-                random_loadout_selection(&vlad_loadout_selection, &loadout_domain, &mut seed);
-            let key = loadout_selection_key(&candidate);
-            if !seen.insert(key.clone()) {
-                continue;
-            }
-
-            let resolved = if let Ok(map) = resolve_cache.lock() {
-                map.get(&key).cloned()
-            } else {
-                None
-            }
-            .or_else(|| {
-                resolve_loadout(&candidate, sim.champion_level, true)
-                    .ok()
-                    .inspect(|resolved| {
-                        if let Ok(mut map) = resolve_cache.lock() {
-                            map.insert(key.clone(), resolved.clone());
-                        }
-                    })
-            });
-
-            let Some(resolved) = resolved else {
-                continue;
-            };
-            let (score, outcome) =
-                evaluate_build_with_bonus(build_items, &resolved.bonus_stats, Some(&candidate));
-            if score > best_score {
-                best_score = score;
-                best_sel = candidate;
-                best_resolved = resolved;
-                best_outcome = outcome;
-            }
-            evaluated += 1;
+    let resolve_loadout_for_selection = |selection: &LoadoutSelection| -> Option<ResolvedLoadout> {
+        let key = loadout_selection_key(selection);
+        if let Ok(map) = resolve_cache.lock()
+            && let Some(existing) = map.get(&key).cloned()
+        {
+            return Some(existing);
         }
-        (best_score, best_outcome, best_sel, best_resolved)
+        let resolved = resolve_loadout(selection, sim.champion_level, true).ok()?;
+        if let Ok(mut map) = resolve_cache.lock() {
+            map.insert(key, resolved.clone());
+        }
+        Some(resolved)
     };
 
     let full_eval_count = AtomicUsize::new(0);
     let full_cache = Arc::new(BlockingScoreCache::new());
+    let unique_scored_candidate_keys: Arc<Mutex<HashSet<String>>> =
+        Arc::new(Mutex::new(HashSet::new()));
+    let search_type_counters: Arc<Mutex<HashMap<String, SearchTypeRuntimeCounter>>> =
+        Arc::new(Mutex::new(HashMap::new()));
     let mut scenario_hasher = DefaultHasher::new();
     scenario.to_string().hash(&mut scenario_hasher);
     search_strategy_summary(&search_cfg).hash(&mut scenario_hasher);
     search_cfg.seed.hash(&mut scenario_hasher);
-    loadout_eval_budget.hash(&mut scenario_hasher);
+    "full_loadout_candidate_v1".hash(&mut scenario_hasher);
     let persistent_full_cache_path = simulation_dir().join("output").join("cache").join(format!(
         "{}_full_scores_{:016x}.json",
         to_norm_key(&controlled_champion_name),
         scenario_hasher.finish()
     ));
     let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
-    let full_score_fn = |build_idx: &[usize]| {
-        if deadline_reached(deadline) {
+    let full_score_for_search_type = |search_type: &str, candidate: &BuildKey| {
+        if candidate.item_indices.len() != max_items {
+            return f64::NEG_INFINITY;
+        }
+        increment_search_type_counter(&search_type_counters, search_type, 1, 0, 0);
+        if deadline_reached(current_deadline()) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             return f64::NEG_INFINITY;
         }
-        let key = canonical_key(build_idx);
-        if let Some(score) = persistent_full_cache.get(&key) {
+        let key = canonical_build_candidate(candidate.clone());
+        let cache_key = build_key_cache_string(&key);
+        if let Ok(mut keys) = unique_scored_candidate_keys.lock() {
+            keys.insert(cache_key.clone());
+        }
+        if let Some(score) = persistent_full_cache.get(&cache_key) {
+            increment_search_type_counter(&search_type_counters, search_type, 0, 0, 1);
+            record_score_progress(score);
             return score;
         }
         let cache = Arc::clone(&full_cache);
-        cache.get_or_compute(key.clone(), || {
-            if deadline_reached(deadline) {
+        let search_type_owned = search_type.to_string();
+        cache.get_or_compute(cache_key.clone(), || {
+            if deadline_reached(current_deadline()) {
                 timeout_flag.store(1, AtomicOrdering::Relaxed);
                 return f64::NEG_INFINITY;
             }
-            if let Some(score) = persistent_full_cache.get(&key) {
+            if let Some(score) = persistent_full_cache.get(&cache_key) {
+                increment_search_type_counter(&search_type_counters, &search_type_owned, 0, 0, 1);
+                record_score_progress(score);
                 return score;
             }
+            let Some(resolved_loadout) = resolve_loadout_for_selection(&key.loadout_selection)
+            else {
+                return f64::NEG_INFINITY;
+            };
             full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
-            let build_items = build_from_indices(&item_pool, &key);
-            let (score, outcome, best_sel, best_resolved) =
-                optimize_loadout_for_build(&key, &build_items);
-            if let Ok(mut map) = best_loadout_by_item.lock() {
-                map.insert(key.clone(), (best_sel, best_resolved));
+            increment_search_type_counter(&search_type_counters, &search_type_owned, 0, 1, 0);
+            let build_items = build_from_indices(&item_pool, &key.item_indices);
+            let (score, outcome) = evaluate_build_with_bonus(
+                &build_items,
+                &resolved_loadout.bonus_stats,
+                Some(&key.loadout_selection),
+            );
+            if let Ok(mut map) = best_loadout_by_candidate.lock() {
+                map.insert(key.clone(), resolved_loadout);
             }
-            if let Ok(mut map) = best_outcome_by_item.lock() {
+            if let Ok(mut map) = best_outcome_by_candidate.lock() {
                 map.insert(key.clone(), outcome);
             }
             if score.is_finite() {
-                persistent_full_cache.insert(&key, score);
+                persistent_full_cache.insert(&cache_key, score);
             }
+            record_score_progress(score);
             score
         })
+    };
+    let evaluate_candidate_direct = |candidate: &BuildKey| {
+        let key = canonical_build_candidate(candidate.clone());
+        let resolved_loadout = resolve_loadout_for_selection(&key.loadout_selection)?;
+        let build_items = build_from_indices(&item_pool, &key.item_indices);
+        let (score, outcome) = evaluate_build_with_bonus(
+            &build_items,
+            &resolved_loadout.bonus_stats,
+            Some(&key.loadout_selection),
+        );
+        Some((key, score, outcome, resolved_loadout))
+    };
+
+    let full_search_params = FullLoadoutSearchParams {
+        item_pool: &item_pool,
+        max_items,
+        loadout_domain: loadout_domain.as_ref(),
+        base_loadout: &vlad_loadout_selection,
     };
 
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
@@ -483,7 +859,7 @@ pub(super) fn run_controlled_champion_scenario(
     );
     let mut seed_ranked = Vec::new();
     for seed_idx in 0..ensemble_seeds {
-        if deadline_reached(deadline) {
+        if deadline_reached(current_deadline()) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
         }
@@ -495,7 +871,15 @@ pub(super) fn run_controlled_champion_scenario(
                     .wrapping_mul(seed_idx as u64),
             );
             cfg.ranked_limit = cfg.ranked_limit.max(64);
-            build_search_ranked(&item_pool, max_items, &cfg, &full_score_fn, deadline)
+            let search_type = format!("seed_search:{}", cfg.strategy);
+            let score_fn =
+                |candidate: &BuildKey| full_score_for_search_type(search_type.as_str(), candidate);
+            build_search_ranked_full_loadout(
+                &full_search_params,
+                &cfg,
+                &score_fn,
+                current_deadline(),
+            )
         });
         status.emit(
             "seed_search",
@@ -505,24 +889,26 @@ pub(super) fn run_controlled_champion_scenario(
             false,
         );
     }
-    let strategy_elites = strategy_seed_elites(
-        &item_pool,
-        max_items,
+    let strategy_elite_score_fn =
+        |candidate: &BuildKey| full_score_for_search_type("strategy_elites", candidate);
+    let strategy_elites = strategy_seed_elites_full_loadout(
+        &full_search_params,
         &search_cfg,
         &active_strategies,
-        &full_score_fn,
-        deadline,
+        &strategy_elite_score_fn,
+        current_deadline(),
     );
-    let adaptive_candidates = adaptive_strategy_candidates(
-        &item_pool,
-        max_items,
+    let adaptive_score_fn =
+        |candidate: &BuildKey| full_score_for_search_type("adaptive_search", candidate);
+    let adaptive_candidates = adaptive_strategy_candidates_full_loadout(
+        &full_search_params,
         &search_cfg,
         &strategy_elites,
-        &full_score_fn,
-        deadline,
+        &adaptive_score_fn,
+        current_deadline(),
     );
     let bleed_candidates =
-        generate_bleed_candidates(&item_pool, max_items, &strategy_elites, &search_cfg);
+        generate_bleed_candidates_full_loadout(&full_search_params, &search_cfg, &strategy_elites);
     status.emit(
         "candidate_merge",
         None,
@@ -536,49 +922,44 @@ pub(super) fn run_controlled_champion_scenario(
     let mut candidate_keys = Vec::new();
     let mut seed_top_sets = Vec::new();
     for ranked in &seed_ranked {
-        if deadline_reached(deadline) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            break;
-        }
         let seed_top = ranked
             .iter()
             .take(search_cfg.ensemble_seed_top_k.max(1))
-            .map(|(k, _)| k.clone())
+            .map(|(k, _)| k)
+            .filter(|k| k.item_indices.len() == max_items)
+            .cloned()
             .collect::<HashSet<_>>();
         seed_top_sets.push(seed_top);
         for (k, _) in ranked {
-            candidate_keys.push(k.clone());
+            if k.item_indices.len() == max_items {
+                candidate_keys.push(k.clone());
+            }
         }
     }
     for k in bleed_candidates {
-        if deadline_reached(deadline) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            break;
-        }
         candidate_keys.push(k);
     }
     for k in adaptive_candidates {
-        if deadline_reached(deadline) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            break;
-        }
         candidate_keys.push(k);
     }
     let candidate_keys_generated = candidate_keys.len();
     let mut unique_candidate_keys = candidate_keys
         .into_iter()
+        .map(canonical_build_candidate)
         .collect::<HashSet<_>>()
         .into_iter()
         .collect::<Vec<_>>();
-    unique_candidate_keys.sort_unstable();
+    unique_candidate_keys.sort_by_key(build_key_cache_string);
     if unique_candidate_keys.is_empty() {
-        let baseline_key = canonical_key(
-            &baseline_fixed_build
-                .iter()
-                .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
-                .collect::<Vec<_>>(),
-        );
-        unique_candidate_keys.push(baseline_key);
+        let mut fallback_seed = search_cfg.seed ^ 0x9e37_79b9_7f4a_7c15;
+        unique_candidate_keys.push(canonical_build_candidate(BuildKey {
+            item_indices: random_valid_build(&item_pool, max_items, &mut fallback_seed),
+            loadout_selection: random_loadout_selection(
+                &vlad_loadout_selection,
+                loadout_domain.as_ref(),
+                &mut fallback_seed,
+            ),
+        }));
     }
     let candidate_duplicates_pruned =
         candidate_keys_generated.saturating_sub(unique_candidate_keys.len());
@@ -586,6 +967,9 @@ pub(super) fn run_controlled_champion_scenario(
     let mut strict_scores = HashMap::<BuildKey, f64>::new();
     for ranked in &seed_ranked {
         for (k, s) in ranked {
+            if k.item_indices.len() != max_items {
+                continue;
+            }
             if !s.is_finite() {
                 continue;
             }
@@ -620,14 +1004,19 @@ pub(super) fn run_controlled_champion_scenario(
     let mut strict_non_finite_candidates = 0usize;
     let batch_size = 128usize;
     for batch in remaining_keys.chunks(batch_size) {
-        if deadline_reached(deadline) {
+        if deadline_reached(current_deadline()) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             timed_out = true;
             break;
         }
         let scored_batch = batch
             .par_iter()
-            .map(|key| (key.clone(), full_score_fn(key)))
+            .map(|key| {
+                (
+                    key.clone(),
+                    full_score_for_search_type("strict_full_ranking", key),
+                )
+            })
             .collect::<Vec<_>>();
         for (key, score) in scored_batch {
             if score.is_finite() {
@@ -650,19 +1039,18 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    if strict_scores.is_empty() {
-        let baseline_key = canonical_key(
-            &baseline_fixed_build
-                .iter()
-                .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
-                .collect::<Vec<_>>(),
-        );
-        let baseline_score = score_build_with_bonus(
-            &baseline_fixed_build,
-            &vlad_base_loadout.bonus_stats,
-            Some(&vlad_loadout_selection),
-        );
-        strict_scores.insert(baseline_key, baseline_score);
+    if strict_scores.is_empty()
+        && let Some(fallback_key) = unique_candidate_keys.first().cloned()
+        && let Some((key, fallback_score, fallback_outcome, fallback_loadout)) =
+            evaluate_candidate_direct(&fallback_key)
+    {
+        strict_scores.insert(key.clone(), fallback_score);
+        if let Ok(mut map) = best_outcome_by_candidate.lock() {
+            map.insert(key.clone(), fallback_outcome);
+        }
+        if let Ok(mut map) = best_loadout_by_candidate.lock() {
+            map.insert(key, fallback_loadout);
+        }
     }
 
     let mut vlad_ranked = strict_scores.into_iter().collect::<Vec<_>>();
@@ -674,7 +1062,7 @@ pub(super) fn run_controlled_champion_scenario(
     } else {
         100.0
     };
-    let outcome_map_for_tiebreak = best_outcome_by_item
+    let outcome_map_for_tiebreak = best_outcome_by_candidate
         .lock()
         .map(|m| m.clone())
         .unwrap_or_default();
@@ -696,12 +1084,16 @@ pub(super) fn run_controlled_champion_scenario(
                 .map(|o| {
                     objective_component_weights.damage * o.damage_dealt
                         + objective_component_weights.healing * o.healing_done
+                        + objective_component_weights.enemy_kills * o.enemy_kills as f64
+                        + objective_component_weights.invulnerable_seconds * o.invulnerable_seconds
                 })
                 .unwrap_or(0.0);
             let combo_b = out_b
                 .map(|o| {
                     objective_component_weights.damage * o.damage_dealt
                         + objective_component_weights.healing * o.healing_done
+                        + objective_component_weights.enemy_kills * o.enemy_kills as f64
+                        + objective_component_weights.invulnerable_seconds * o.invulnerable_seconds
                 })
                 .unwrap_or(0.0);
             return combo_b.partial_cmp(&combo_a).unwrap_or(Ordering::Equal);
@@ -711,7 +1103,7 @@ pub(super) fn run_controlled_champion_scenario(
 
     let mut seed_best_scores = Vec::new();
     for ranked in &seed_ranked {
-        if deadline_reached(deadline) {
+        if deadline_reached(current_deadline()) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             break;
         }
@@ -732,53 +1124,143 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    let vlad_best_indices = vlad_ranked
+    let vlad_best_candidate = vlad_ranked
         .first()
-        .map(|(build, _)| build.clone())
-        .unwrap_or_default();
-    let vlad_best_build = build_from_indices(&item_pool, &vlad_best_indices);
-    let (vlad_runtime_loadout_selection, vlad_loadout) = best_loadout_by_item
+        .map(|(candidate, _)| candidate.clone())
+        .unwrap_or_else(|| BuildKey {
+            item_indices: Vec::new(),
+            loadout_selection: vlad_loadout_selection.clone(),
+        });
+    let vlad_best_build = build_from_indices(&item_pool, &vlad_best_candidate.item_indices);
+    let vlad_runtime_loadout_selection = vlad_best_candidate.loadout_selection.clone();
+    let vlad_loadout = best_loadout_by_candidate
         .lock()
         .ok()
-        .and_then(|m| m.get(&vlad_best_indices).cloned())
-        .unwrap_or_else(|| (vlad_loadout_selection.clone(), vlad_base_loadout.clone()));
+        .and_then(|m| m.get(&vlad_best_candidate).cloned())
+        .or_else(|| resolve_loadout_for_selection(&vlad_runtime_loadout_selection))
+        .unwrap_or_else(|| vlad_base_loadout.clone());
 
     let baseline_fixed_indices = baseline_fixed_build
         .iter()
         .filter_map(|item| item_pool.iter().position(|p| p.name == item.name))
         .collect::<Vec<_>>();
-    let baseline_fixed_score = if deadline_reached(deadline) {
+    let baseline_fixed_key = canonical_build_candidate(BuildKey {
+        item_indices: baseline_fixed_indices,
+        loadout_selection: vlad_loadout_selection.clone(),
+    });
+    let baseline_fixed_score = if deadline_reached(current_deadline()) {
         score_build_with_bonus(
             &baseline_fixed_build,
             &vlad_base_loadout.bonus_stats,
             Some(&vlad_loadout_selection),
         )
     } else {
-        full_score_fn(&baseline_fixed_indices)
+        full_score_for_search_type("baseline_reference", &baseline_fixed_key)
     };
-    let baseline_fixed_key = canonical_key(&baseline_fixed_indices);
-    let (baseline_runtime_loadout_selection, baseline_loadout) = best_loadout_by_item
+    let baseline_runtime_loadout_selection = baseline_fixed_key.loadout_selection.clone();
+    let baseline_loadout = best_loadout_by_candidate
         .lock()
         .ok()
         .and_then(|m| m.get(&baseline_fixed_key).cloned())
-        .unwrap_or_else(|| (vlad_loadout_selection.clone(), vlad_base_loadout.clone()));
-    let (_, baseline_fixed_outcome) = aggregate_objective_score_and_outcome_with_loadout_selection(
-        &objective_eval_ctx,
-        &baseline_fixed_build,
-        &baseline_loadout.bonus_stats,
-        Some(&baseline_runtime_loadout_selection),
-    );
+        .or_else(|| resolve_loadout_for_selection(&baseline_runtime_loadout_selection))
+        .unwrap_or_else(|| vlad_base_loadout.clone());
+    let baseline_fixed_outcome = best_outcome_by_candidate
+        .lock()
+        .ok()
+        .and_then(|m| m.get(&baseline_fixed_key).copied())
+        .unwrap_or_else(|| {
+            aggregate_objective_score_and_outcome_with_loadout_selection(
+                &objective_eval_ctx,
+                &baseline_fixed_build,
+                &baseline_loadout.bonus_stats,
+                Some(&baseline_runtime_loadout_selection),
+            )
+            .1
+        });
     let vlad_best_score = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
-    let (_, vlad_best_outcome) = aggregate_objective_score_and_outcome_with_loadout_selection(
-        &objective_eval_ctx,
-        &vlad_best_build,
-        &vlad_loadout.bonus_stats,
-        Some(&vlad_runtime_loadout_selection),
-    );
+    let vlad_best_outcome = best_outcome_by_candidate
+        .lock()
+        .ok()
+        .and_then(|m| m.get(&vlad_best_candidate).copied())
+        .unwrap_or_else(|| {
+            aggregate_objective_score_and_outcome_with_loadout_selection(
+                &objective_eval_ctx,
+                &vlad_best_build,
+                &vlad_loadout.bonus_stats,
+                Some(&vlad_runtime_loadout_selection),
+            )
+            .1
+        });
+    let (_, _, baseline_score_breakdown) =
+        aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
+            &objective_eval_ctx,
+            &baseline_fixed_build,
+            &baseline_loadout.bonus_stats,
+            Some(&baseline_runtime_loadout_selection),
+        );
+    let (_, _, best_score_breakdown) =
+        aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
+            &objective_eval_ctx,
+            &vlad_best_build,
+            &vlad_loadout.bonus_stats,
+            Some(&vlad_runtime_loadout_selection),
+        );
     let baseline_cap_survivor =
         baseline_fixed_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
     let best_cap_survivor = vlad_best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
+    let progress_snapshot =
+        progress_state
+            .lock()
+            .ok()
+            .map(|state| *state)
+            .unwrap_or(SignificantProgressState {
+                best_overall_score: f64::NEG_INFINITY,
+                best_significant_score: f64::NEG_INFINITY,
+                significant_events: 0,
+                last_significant_at: run_start,
+            });
+    let seconds_since_last_significant_improvement = Instant::now()
+        .saturating_duration_since(progress_snapshot.last_significant_at)
+        .as_secs_f64();
+    let mut search_type_breakdown = search_type_counters
+        .lock()
+        .map(|map| {
+            map.iter()
+                .map(|(name, counters)| SearchTypeBreakdown {
+                    name: name.clone(),
+                    score_requests: counters.score_requests,
+                    new_simulations: counters.new_simulations,
+                    persistent_cache_hits: counters.persistent_cache_hits,
+                })
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
+    search_type_breakdown.sort_by(|a, b| {
+        b.new_simulations
+            .cmp(&a.new_simulations)
+            .then_with(|| b.score_requests.cmp(&a.score_requests))
+            .then_with(|| a.name.cmp(&b.name))
+    });
+    let estimated_total_candidate_space = {
+        let item_space = estimated_legal_item_build_count(&item_pool, max_items);
+        let loadout_space = estimated_legal_loadout_count(loadout_domain.as_ref());
+        let total = item_space * loadout_space;
+        (total.is_finite() && total > 0.0).then_some(total)
+    };
+    let unique_scored_candidates = unique_scored_candidate_keys
+        .lock()
+        .map(|keys| keys.len())
+        .unwrap_or(0);
+    let estimated_run_space_coverage_percent = estimated_total_candidate_space
+        .map(|total| ((unique_scored_candidates as f64) / total * 100.0).clamp(0.0, 100.0));
+    let estimated_cache_space_coverage_percent = estimated_total_candidate_space
+        .map(|total| ((persistent_full_cache.len() as f64) / total * 100.0).clamp(0.0, 100.0));
+    let (estimated_close_to_optimal_probability, estimated_close_to_optimal_probability_note) =
+        estimate_close_to_optimal_probability(
+            unique_scored_candidates,
+            estimated_total_candidate_space,
+        );
 
     println!("Enemy builds (URF preset defaults):");
     for (enemy, build, _) in &enemy_builds {
@@ -822,22 +1304,30 @@ pub(super) fn run_controlled_champion_scenario(
         println!("- Warning: {}", note);
     }
 
-    println!("\n{} baseline build (fixed):", controlled_champion_name);
+    println!(
+        "\n{} baseline build (optional reference):",
+        controlled_champion_name
+    );
     println!(
         "- Items: {}",
-        baseline_fixed_build
-            .iter()
-            .map(|i| i.name.clone())
-            .collect::<Vec<_>>()
-            .join(", ")
+        if baseline_fixed_build.is_empty() {
+            "none provided".to_string()
+        } else {
+            baseline_fixed_build
+                .iter()
+                .map(|i| i.name.clone())
+                .collect::<Vec<_>>()
+                .join(", ")
+        }
     );
     println!("- Objective score: {:.4}", baseline_fixed_score);
     println!(
-        "- Time alive / damage dealt / healing done / enemy kills: {:.2}s / {:.1} / {:.1} / {}",
+        "- Time alive / damage dealt / healing done / enemy kills / invulnerable seconds: {:.2}s / {:.1} / {:.1} / {} / {:.2}",
         baseline_fixed_outcome.time_alive_seconds,
         baseline_fixed_outcome.damage_dealt,
         baseline_fixed_outcome.healing_done,
-        baseline_fixed_outcome.enemy_kills
+        baseline_fixed_outcome.enemy_kills,
+        baseline_fixed_outcome.invulnerable_seconds
     );
     println!("- Cap survivor: {}", baseline_cap_survivor);
 
@@ -870,10 +1360,12 @@ pub(super) fn run_controlled_champion_scenario(
         enemy_build_scenarios.len()
     );
     println!(
-        "- Objective weights (survival/damage/healing): {:.2}/{:.2}/{:.2}",
+        "- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): {:.2}/{:.2}/{:.2}/{:.2}/{:.2}",
         objective_component_weights.survival,
         objective_component_weights.damage,
-        objective_component_weights.healing
+        objective_component_weights.healing,
+        objective_component_weights.enemy_kills,
+        objective_component_weights.invulnerable_seconds
     );
     if let Some(budget) = time_budget {
         println!(
@@ -883,6 +1375,15 @@ pub(super) fn run_controlled_champion_scenario(
             timed_out,
             processed_candidates,
             total_candidates
+        );
+    }
+    if let Some(window) = popcorn_window {
+        println!(
+            "- Popcorn mode: window {:.1}s | significant threshold {:.2}% of last best score | significant events {} | seconds since last significant improvement {:.1}",
+            window.as_secs_f64(),
+            popcorn_min_relative_improvement_percent,
+            progress_snapshot.significant_events,
+            seconds_since_last_significant_improvement
         );
     }
     println!(
@@ -901,11 +1402,49 @@ pub(super) fn run_controlled_champion_scenario(
         strict_candidates_skipped_timeout,
         strict_non_finite_candidates
     );
+    println!(
+        "- Unique scored candidates (all search stages): {}",
+        unique_scored_candidates
+    );
+    if let Some(total) = estimated_total_candidate_space {
+        println!("- Estimated total legal candidate space: {:.0}", total);
+    }
+    if let Some(run_coverage) = estimated_run_space_coverage_percent {
+        println!(
+            "- Estimated legal-space coverage (this run): {}",
+            format_percent_display(run_coverage)
+        );
+    }
+    if let Some(cache_coverage) = estimated_cache_space_coverage_percent {
+        println!(
+            "- Estimated legal-space coverage (persistent cache): {}",
+            format_percent_display(cache_coverage)
+        );
+    }
+    if let Some(probability) = estimated_close_to_optimal_probability {
+        println!(
+            "- Estimated closeness probability (top 0.000001% heuristic): {:.2}% | {}",
+            probability * 100.0,
+            estimated_close_to_optimal_probability_note
+        );
+    }
     println!("- Bleed candidates injected: {}", bleed_candidate_count);
     println!(
         "- Adaptive candidates injected: {}",
         adaptive_candidate_count
     );
+    if !search_type_breakdown.is_empty() {
+        println!("- Search-type simulation breakdown:");
+        for entry in &search_type_breakdown {
+            println!(
+                "  - {} => score requests {}, new simulations {}, persistent cache hits {}",
+                entry.name,
+                entry.score_requests,
+                entry.new_simulations,
+                entry.persistent_cache_hits
+            );
+        }
+    }
     println!(
         "- Items: {}",
         vlad_best_build
@@ -916,51 +1455,59 @@ pub(super) fn run_controlled_champion_scenario(
     );
     println!("- Objective score: {:.4}", vlad_best_score);
     println!(
-        "- Time alive / damage dealt / healing done / enemy kills: {:.2}s / {:.1} / {:.1} / {}",
+        "- Time alive / damage dealt / healing done / enemy kills / invulnerable seconds: {:.2}s / {:.1} / {:.1} / {} / {:.2}",
         vlad_best_outcome.time_alive_seconds,
         vlad_best_outcome.damage_dealt,
         vlad_best_outcome.healing_done,
-        vlad_best_outcome.enemy_kills
+        vlad_best_outcome.enemy_kills,
+        vlad_best_outcome.invulnerable_seconds
     );
     println!("- Cap survivor: {}", best_cap_survivor);
     if !vlad_loadout.selection_labels.is_empty() {
-        println!("\n{} runes/masteries:", controlled_champion_name);
+        println!("\n{} rune page:", controlled_champion_name);
         for s in &vlad_loadout.selection_labels {
-            println!("- {}", s);
-        }
-    }
-    if !enemy_loadout.selection_labels.is_empty() {
-        println!("\nEnemy runes/masteries (applied to all enemies):");
-        for s in &enemy_loadout.selection_labels {
             println!("- {}", s);
         }
     }
 
     let diverse_top_raw =
-        select_diverse_top_builds(&vlad_ranked, top_x, min_item_diff, max_relative_gap_percent);
+        select_diverse_top_candidates(&vlad_ranked, top_x, min_item_diff, max_relative_gap_percent);
     let diverse_top_keys = diverse_top_raw
         .iter()
-        .map(|(indices, _)| indices.clone())
+        .map(|(candidate, _)| candidate.clone())
         .collect::<Vec<_>>();
     let diverse_top_builds = diverse_top_raw
         .iter()
-        .map(|(indices, score)| (build_from_indices(&item_pool, indices), *score))
+        .map(|(candidate, score)| {
+            (
+                build_from_indices(&item_pool, &candidate.item_indices),
+                *score,
+            )
+        })
         .collect::<Vec<_>>();
+    let resolved_by_candidate_snapshot = best_loadout_by_candidate
+        .lock()
+        .map(|map| map.clone())
+        .unwrap_or_default();
     let mut metrics_by_key = HashMap::new();
-    for (key, score) in &vlad_ranked {
+    for (candidate, score) in &vlad_ranked {
+        let candidate_bonus_stats = resolved_by_candidate_snapshot
+            .get(candidate)
+            .map(|resolved| resolved.bonus_stats.clone())
+            .unwrap_or_else(|| vlad_base_loadout.bonus_stats.clone());
         metrics_by_key.insert(
-            key.clone(),
-            compute_build_metrics(
-                key,
+            candidate.clone(),
+            compute_build_metrics_for_candidate(
+                candidate,
                 &item_pool,
                 &vlad_base,
-                &vlad_loadout.bonus_stats,
+                &candidate_bonus_stats,
                 &sim,
                 *score,
             ),
         );
     }
-    let pareto_front = pareto_front_keys(&metrics_by_key);
+    let pareto_front = candidate_pareto_front_keys(&metrics_by_key);
     let build_confidence = vlad_ranked
         .iter()
         .map(|(key, _)| {
@@ -979,7 +1526,7 @@ pub(super) fn run_controlled_champion_scenario(
             }
         })
         .collect::<Vec<_>>();
-    let diagnostics = SearchDiagnostics {
+    let mut diagnostics = SearchDiagnostics {
         strategy_summary: search_strategy_summary(&search_cfg),
         search_quality_profile: match search_quality_profile {
             SearchQualityProfile::Fast => "fast".to_string(),
@@ -990,6 +1537,8 @@ pub(super) fn run_controlled_champion_scenario(
         objective_survival_weight: objective_component_weights.survival,
         objective_damage_weight: objective_component_weights.damage,
         objective_healing_weight: objective_component_weights.healing,
+        objective_enemy_kills_weight: objective_component_weights.enemy_kills,
+        objective_invulnerable_seconds_weight: objective_component_weights.invulnerable_seconds,
         full_evaluations: full_eval_count.load(AtomicOrdering::Relaxed),
         full_cache_hits: full_cache.hits(),
         full_cache_misses: full_cache.misses(),
@@ -1009,8 +1558,26 @@ pub(super) fn run_controlled_champion_scenario(
         strict_non_finite_candidates,
         strict_candidates_skipped_timeout,
         strict_completion_percent,
+        unique_scored_candidates,
         time_budget_seconds: time_budget.map(|d| d.as_secs_f64()),
+        popcorn_window_seconds,
+        popcorn_min_relative_improvement_percent,
+        significant_improvement_events: progress_snapshot.significant_events,
+        best_significant_score: progress_snapshot
+            .best_significant_score
+            .is_finite()
+            .then_some(progress_snapshot.best_significant_score),
+        seconds_since_last_significant_improvement: Some(
+            seconds_since_last_significant_improvement,
+        ),
+        search_type_breakdown,
+        estimated_total_candidate_space,
+        estimated_run_space_coverage_percent,
+        estimated_cache_space_coverage_percent,
+        estimated_close_to_optimal_probability,
+        estimated_close_to_optimal_probability_note,
         elapsed_seconds: run_start.elapsed().as_secs_f64(),
+        total_run_seconds: 0.0,
         timed_out,
         processed_candidates,
         total_candidates,
@@ -1047,6 +1614,7 @@ pub(super) fn run_controlled_champion_scenario(
     let build_order_ctx = BuildOrderEvalContext {
         controlled_champion_base_raw: &vlad_base_raw,
         controlled_champion_bonus_stats: &vlad_loadout.bonus_stats,
+        controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
         enemy_builds: &enemy_builds,
         raw_enemy_bases: &raw_enemy_bases,
         sim: &sim,
@@ -1068,6 +1636,7 @@ pub(super) fn run_controlled_champion_scenario(
         &sim,
         sim.champion_level,
         best_order_acquired_map.as_ref(),
+        Some(&controlled_champion_stack_overrides),
     );
     let vlad_end_stats = compute_champion_final_stats(&vlad_base, &best_effective_item_stats);
     let stack_notes = build_stack_notes(
@@ -1076,6 +1645,7 @@ pub(super) fn run_controlled_champion_scenario(
         &sim,
         sim.champion_level,
         best_order_acquired_map.as_ref(),
+        Some(&controlled_champion_stack_overrides),
     );
 
     println!("\nTop diverse builds:");
@@ -1124,45 +1694,21 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    let default_output_directory =
-        default_run_output_directory(search_quality_profile, max_runtime_seconds);
+    let default_output_directory = default_run_output_directory(
+        search_quality_profile,
+        max_runtime_seconds,
+        popcorn_window_seconds,
+        popcorn_min_relative_improvement_percent,
+    );
     let report_path = report_path_override.map(PathBuf::from).unwrap_or_else(|| {
         default_output_directory.join(format!(
             "{}_run_report.md",
             to_norm_key(&controlled_champion_name)
         ))
     });
-    let report_data = ControlledChampionReportData {
-        scenario_path,
-        controlled_champion_name: &controlled_champion_name,
-        sim: &sim,
-        controlled_champion_base_level: &vlad_base,
-        controlled_champion_end_stats: &vlad_end_stats,
-        stack_notes: &stack_notes,
-        controlled_champion_loadout: &vlad_loadout,
-        enemy_loadout: &enemy_loadout,
-        baseline_build: &baseline_fixed_build,
-        baseline_score: baseline_fixed_score,
-        baseline_outcome: &baseline_fixed_outcome,
-        best_build: &vlad_best_build,
-        best_score: vlad_best_score,
-        best_outcome: &vlad_best_outcome,
-        enemy_builds: &enemy_builds,
-        enemy_derived_combat_stats: &enemy_derived_combat_stats,
-        enemy_similarity_notes: &enemy_similarity_notes,
-        enemy_presets_used: &enemy_presets_used,
-        diverse_top_builds: &diverse_top_builds,
-        diverse_top_keys: &diverse_top_keys,
-        build_confidence: &build_confidence,
-        metrics_by_key: &metrics_by_key,
-        pareto_front: &pareto_front,
-        diagnostics: &diagnostics,
-        build_orders: &build_order_results,
-    };
-    write_controlled_champion_report_markdown(&report_path, &report_data)?;
-    let json_report_path = report_path.with_extension("json");
-    write_controlled_champion_report_json(&json_report_path, &report_data)?;
-
+    if let Some(parent) = report_path.parent() {
+        fs::create_dir_all(parent)?;
+    }
     // Optional deterministic replay-style timeline for baseline and best runs.
     let trace_markdown_path = report_path
         .parent()
@@ -1179,6 +1725,7 @@ pub(super) fn run_controlled_champion_scenario(
             &vlad_loadout.bonus_stats,
             Some(&baseline_runtime_loadout_selection),
             None,
+            Some(&controlled_champion_stack_overrides),
             &enemy_builds,
             sim.clone(),
             urf.clone(),
@@ -1194,6 +1741,7 @@ pub(super) fn run_controlled_champion_scenario(
             &vlad_loadout.bonus_stats,
             Some(&vlad_runtime_loadout_selection),
             best_order_acquired_map.as_ref(),
+            Some(&controlled_champion_stack_overrides),
             &enemy_builds,
             sim.clone(),
             urf.clone(),
@@ -1223,6 +1771,40 @@ pub(super) fn run_controlled_champion_scenario(
         "best": best_trace,
     });
     fs::write(&trace_json_path, serde_json::to_string_pretty(&trace_json)?)?;
+
+    diagnostics.total_run_seconds = run_start.elapsed().as_secs_f64();
+    let report_data = ControlledChampionReportData {
+        scenario_path,
+        controlled_champion_name: &controlled_champion_name,
+        sim: &sim,
+        controlled_champion_base_level: &vlad_base,
+        controlled_champion_end_stats: &vlad_end_stats,
+        stack_notes: &stack_notes,
+        controlled_champion_loadout: &vlad_loadout,
+        enemy_loadout: &enemy_loadout,
+        baseline_build: &baseline_fixed_build,
+        baseline_score: baseline_fixed_score,
+        baseline_outcome: &baseline_fixed_outcome,
+        baseline_score_breakdown,
+        best_build: &vlad_best_build,
+        best_score: vlad_best_score,
+        best_outcome: &vlad_best_outcome,
+        best_score_breakdown,
+        enemy_builds: &enemy_builds,
+        enemy_derived_combat_stats: &enemy_derived_combat_stats,
+        enemy_similarity_notes: &enemy_similarity_notes,
+        enemy_presets_used: &enemy_presets_used,
+        diverse_top_builds: &diverse_top_builds,
+        diverse_top_keys: &diverse_top_keys,
+        build_confidence: &build_confidence,
+        metrics_by_key: &metrics_by_key,
+        pareto_front: &pareto_front,
+        diagnostics: &diagnostics,
+        build_orders: &build_order_results,
+    };
+    write_controlled_champion_report_markdown(&report_path, &report_data)?;
+    let json_report_path = report_path.with_extension("json");
+    write_controlled_champion_report_json(&json_report_path, &report_data)?;
 
     persistent_full_cache.flush()?;
     status.emit(
@@ -1258,16 +1840,37 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
     let champion_bases = load_champion_bases()?;
     let scenario = load_json(scenario_path)?;
 
-    let sim_cfg = parse_simulation_config(
+    let mut sim_cfg = parse_simulation_config(
         scenario
             .get("simulation")
             .ok_or_else(|| anyhow!("Missing simulation"))?,
     )?;
-    let (vlad_base_raw, baseline_fixed_names, vlad_loadout_selection) =
-        parse_controlled_champion_config(&scenario, &champion_bases)?;
-    let vlad_base = champion_at_level(&vlad_base_raw, sim_cfg.champion_level);
+    if let Some(opponent_uptime_windows_enabled) = scenario
+        .get("opponents")
+        .and_then(Value::as_object)
+        .and_then(|opponents| opponents.get("uptime_windows_enabled"))
+        .and_then(Value::as_bool)
+    {
+        sim_cfg.enemy_uptime_model_enabled = opponent_uptime_windows_enabled;
+    }
+    let controlled_champion_config = parse_controlled_champion_config(
+        &scenario,
+        &champion_bases,
+        sim_cfg.champion_level,
+        &sim_cfg.stack_overrides,
+    )?;
+    sim_cfg.champion_level = controlled_champion_config.level;
+    let vlad_base = champion_at_level(&controlled_champion_config.base, sim_cfg.champion_level);
+    let baseline_fixed_names = controlled_champion_config.baseline_items;
+    let vlad_loadout_selection = controlled_champion_config.loadout_selection;
+    let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
 
-    let enemy_encounters = parse_opponent_encounters(&scenario, &champion_bases)?;
+    let enemy_encounters = parse_opponent_encounters(
+        &scenario,
+        &champion_bases,
+        sim_cfg.champion_level,
+        &sim_cfg.stack_overrides,
+    )?;
     let (selected_encounter_name, _, selected_enemies_raw) = enemy_encounters
         .first()
         .cloned()
@@ -1275,17 +1878,15 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
     let enemies = selected_enemies_raw
         .into_iter()
         .map(|mut e| {
-            e.base = champion_at_level(&e.base, sim_cfg.champion_level);
+            e.base = champion_at_level(&e.base, e.level);
             e
         })
         .collect::<Vec<_>>();
 
-    let enemy_loadout_selection = parse_opponent_shared_loadout_selection(&scenario);
     let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim_cfg.champion_level, true)?;
-    let enemy_loadout = resolve_loadout(&enemy_loadout_selection, sim_cfg.champion_level, false)?;
     let loadout_domain = build_loadout_domain();
     let enemy_presets = load_enemy_urf_presets()?;
-    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain)?;
+    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
 
     let mut enemy_builds: Vec<(EnemyConfig, Vec<Item>, Stats)> = Vec::new();
     for enemy in &enemies {
@@ -1298,20 +1899,19 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
             )
         })?;
         let build = item_pool_from_names(&items, &preset.item_names)?;
-        let mut bonus_stats = resolve_loadout(
-            &enemy_loadout_from_preset(preset),
-            sim_cfg.champion_level,
-            false,
-        )?
-        .bonus_stats;
-        bonus_stats.add(&enemy_loadout.bonus_stats);
+        let bonus_stats =
+            resolve_loadout(&enemy_loadout_from_preset(preset), enemy.level, false)?.bonus_stats;
         let mut enemy_with_loadout = enemy.clone();
         enemy_with_loadout.loadout_item_names = preset.item_names.clone();
         enemy_with_loadout.loadout_rune_names = preset.runes.clone();
         enemy_with_loadout.loadout_shards = preset.shards.clone();
-        enemy_with_loadout.loadout_masteries = preset.masteries.clone();
         enemy_builds.push((enemy_with_loadout, build, bonus_stats));
     }
+    ensure_item_names_allowed_in_urf(
+        &baseline_fixed_names,
+        &urf,
+        "controlled_champion.baseline_items",
+    )?;
     let baseline_fixed_build = item_pool_from_names(&items, &baseline_fixed_names)?;
 
     let mut sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
@@ -1320,6 +1920,7 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         &vlad_loadout.bonus_stats,
         Some(&vlad_loadout_selection),
         None,
+        Some(&controlled_champion_stack_overrides),
         &enemy_builds,
         sim_cfg.clone(),
         urf,
@@ -1357,13 +1958,14 @@ pub(super) fn run_stat_optimization(
     label: &str,
 ) -> Result<()> {
     let items = load_items()?;
+    let urf = load_urf_buffs()?;
     let scenario = load_json(scenario_path)?;
     let search_cfg = parse_build_search(
         scenario
             .get("search")
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
-    let item_pool = default_item_pool(&items);
+    let item_pool = default_item_pool(&items, &urf);
 
     let build_indices = choose_best_build_by_stat(
         &item_pool,

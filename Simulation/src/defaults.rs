@@ -9,6 +9,7 @@ pub(crate) struct SimulationDefaults {
     pub server_tick_rate_hz: f64,
     pub dt_fallback_seconds: f64,
     pub champion_level: usize,
+    pub time_limit_seconds: f64,
     pub enemy_uptime_model_enabled: bool,
 }
 
@@ -38,6 +39,8 @@ pub(crate) struct SearchDefaults {
     pub objective_survival_weight: f64,
     pub objective_damage_weight: f64,
     pub objective_healing_weight: f64,
+    pub objective_enemy_kills_weight: f64,
+    pub objective_invulnerable_seconds_weight: f64,
     pub robust_min_seed_hit_rate: f64,
     pub bleed_enabled: bool,
     pub bleed_budget: usize,
@@ -457,21 +460,11 @@ struct UrfFileEnvelope {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub(crate) struct LoadoutGenerationDefaults {
-    pub mastery_primary_points: usize,
-    pub mastery_secondary_points: usize,
-    pub mastery_keystone_requirement: usize,
-    pub mastery_tier_points_available_fallback: usize,
-    pub random_tree_attempts: usize,
-}
-
-#[derive(Debug, Clone, Deserialize)]
 pub(crate) struct SimulatorDefaults {
     pub simulation_defaults: SimulationDefaults,
     pub search_defaults: SearchDefaults,
     pub search_quality_profile_defaults: SearchQualityProfileDefaults,
     pub engine_defaults: EngineDefaults,
-    pub loadout_generation_defaults: LoadoutGenerationDefaults,
 }
 
 static SIMULATOR_DEFAULTS: OnceLock<SimulatorDefaults> = OnceLock::new();

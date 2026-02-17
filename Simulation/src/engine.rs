@@ -225,6 +225,9 @@ struct EnemyState {
     script_event_ready_at: HashMap<ChampionScriptEvent, f64>,
     attack_sequence: u64,
     stunned_until: f64,
+    untargetable_until: f64,
+    stasis_until: f64,
+    invulnerable_until: f64,
     hitbox_radius: f64,
 }
 
@@ -308,6 +311,13 @@ enum EventType {
         effect_hitbox_radius: f64,
     },
     Ability(usize),
+    AbilityWindup {
+        idx: usize,
+        source: Vec2,
+        target_at_cast: Vec2,
+        projectile_speed: f64,
+        effect_hitbox_radius: f64,
+    },
     AbilityHit {
         idx: usize,
         source: Vec2,
@@ -317,6 +327,13 @@ enum EventType {
     },
     Stun(usize),
     Burst(usize),
+    BurstWindup {
+        idx: usize,
+        source: Vec2,
+        target_at_cast: Vec2,
+        projectile_speed: f64,
+        effect_hitbox_radius: f64,
+    },
     BurstHit {
         idx: usize,
         source: Vec2,
@@ -382,6 +399,7 @@ pub(super) struct ControlledChampionCombatSimulation {
     damage_dealt_total: f64,
     healing_done_total: f64,
     enemy_kills_total: usize,
+    invulnerable_seconds_total: f64,
 
     event_queue: BinaryHeap<QueuedEvent>,
     event_counter: u64,
@@ -437,11 +455,13 @@ pub(super) struct ControlledChampionCombatSimulation {
 
 impl ControlledChampionCombatSimulation {
     #[allow(dead_code)]
+    #[allow(clippy::too_many_arguments)]
     pub(super) fn new(
         vlad_base: ChampionBase,
         vlad_build_items: &[Item],
         vlad_bonus_stats: &Stats,
         vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
+        vlad_stack_overrides: Option<&HashMap<String, f64>>,
         enemies: &[(EnemyConfig, Vec<Item>, Stats)],
         sim: SimulationConfig,
         urf: UrfBuffs,
@@ -452,6 +472,7 @@ impl ControlledChampionCombatSimulation {
             vlad_bonus_stats,
             None,
             vlad_item_acquired_levels,
+            vlad_stack_overrides,
             enemies,
             sim,
             urf,
@@ -465,6 +486,7 @@ impl ControlledChampionCombatSimulation {
         controlled_champion_bonus_stats: &Stats,
         controlled_champion_loadout_selection: Option<&LoadoutSelection>,
         controlled_champion_item_acquired_levels: Option<&HashMap<String, usize>>,
+        controlled_champion_stack_overrides: Option<&HashMap<String, f64>>,
         enemies: &[(EnemyConfig, Vec<Item>, Stats)],
         sim: SimulationConfig,
         urf: UrfBuffs,
@@ -487,6 +509,7 @@ impl ControlledChampionCombatSimulation {
             &sim,
             sim.champion_level,
             vlad_item_acquired_levels,
+            controlled_champion_stack_overrides,
         );
         let vlad_stats = compute_champion_final_stats(&vlad_base, &vlad_item_stats);
         let controlled_champion_runtime = controlled_champion_loadout_selection
@@ -588,6 +611,7 @@ impl ControlledChampionCombatSimulation {
             damage_dealt_total: 0.0,
             healing_done_total: 0.0,
             enemy_kills_total: 0,
+            invulnerable_seconds_total: 0.0,
             event_queue: BinaryHeap::new(),
             event_counter: 0,
             vlad_stats,
@@ -676,6 +700,9 @@ impl ControlledChampionCombatSimulation {
                 script_event_ready_at: HashMap::new(),
                 attack_sequence: 0,
                 stunned_until: 0.0,
+                untargetable_until: 0.0,
+                stasis_until: 0.0,
+                invulnerable_until: 0.0,
                 hitbox_radius: champion_hitbox_radius(&enemy.base.name),
             });
 
@@ -752,8 +779,29 @@ impl ControlledChampionCombatSimulation {
             && self.time >= self.revive_lockout_until
     }
 
+    fn controlled_champion_is_stunned(&self) -> bool {
+        self.time < self.stunned_until
+            || self
+                .combat_primitives
+                .status_effects()
+                .is_active(&StatusEffectKind::Stun)
+    }
+
+    fn controlled_champion_is_invulnerable_or_untargetable(&self) -> bool {
+        !self.is_targetable()
+            || self
+                .combat_primitives
+                .status_effects()
+                .is_active(&StatusEffectKind::Stasis)
+            || self
+                .combat_primitives
+                .status_effects()
+                .is_active(&StatusEffectKind::Untargetable)
+    }
+
     pub(super) fn can_cast(&self) -> bool {
-        self.is_targetable() && self.time >= self.stunned_until
+        !self.controlled_champion_is_stunned()
+            && !self.controlled_champion_is_invulnerable_or_untargetable()
     }
 
     fn controlled_champion_ability_ready_at(&self, ability_id: &str) -> f64 {
@@ -827,6 +875,9 @@ impl ControlledChampionCombatSimulation {
                 state.script_event_ready_at.clear();
                 state.attack_sequence = state.attack_sequence.wrapping_add(1);
                 state.stunned_until = 0.0;
+                state.untargetable_until = 0.0;
+                state.stasis_until = 0.0;
+                state.invulnerable_until = 0.0;
                 state.uptime_active = uptime_window_active(
                     &state.enemy,
                     self.time,
@@ -881,6 +932,9 @@ impl ControlledChampionCombatSimulation {
                 state.next_attack_bonus_true = 0.0;
                 state.attack_sequence = state.attack_sequence.wrapping_add(1);
                 state.stunned_until = 0.0;
+                state.untargetable_until = 0.0;
+                state.stasis_until = 0.0;
+                state.invulnerable_until = 0.0;
                 let msg = if active_now {
                     format!("{} re-entered combat window", state.enemy.name)
                 } else {
@@ -971,8 +1025,17 @@ impl ControlledChampionCombatSimulation {
         self.time < self.enemy_state[idx].stunned_until
     }
 
+    fn enemy_is_invulnerable_or_untargetable(&self, idx: usize) -> bool {
+        let state = &self.enemy_state[idx];
+        self.time < state.untargetable_until
+            || self.time < state.stasis_until
+            || self.time < state.invulnerable_until
+    }
+
     fn enemy_can_take_actions(&self, idx: usize) -> bool {
-        self.enemy_is_active(idx) && !self.enemy_is_stunned(idx)
+        self.enemy_is_active(idx)
+            && !self.enemy_is_stunned(idx)
+            && !self.enemy_is_invulnerable_or_untargetable(idx)
     }
 
     fn first_active_enemy_in_controlled_champion_range(
@@ -1190,6 +1253,9 @@ impl ControlledChampionCombatSimulation {
                 state.script_event_ready_at.clear();
                 state.attack_sequence = state.attack_sequence.wrapping_add(1);
                 state.stunned_until = 0.0;
+                state.untargetable_until = 0.0;
+                state.stasis_until = 0.0;
+                state.invulnerable_until = 0.0;
                 killed_name = Some(state.enemy.name.clone());
             }
             d
@@ -1255,6 +1321,14 @@ impl ControlledChampionCombatSimulation {
             return;
         }
         let delta = to_time - self.time;
+        if delta > 0.0 {
+            let invulnerable_until = self
+                .pool_until
+                .max(self.stasis_until)
+                .max(self.revive_lockout_until);
+            let invulnerable_overlap = (to_time.min(invulnerable_until) - self.time).max(0.0);
+            self.invulnerable_seconds_total += invulnerable_overlap;
+        }
         if self.pool_heal_until > self.time {
             let active = delta.min(self.pool_heal_until - self.time);
             let before = self.health;
@@ -1635,11 +1709,11 @@ impl ControlledChampionCombatSimulation {
                     self.schedule_next_attack(idx);
                     return;
                 }
-                if self.enemy_is_stunned(idx) {
+                if !self.enemy_can_take_actions(idx) {
                     self.trace_event(
                         "attack_cancelled",
                         format!(
-                            "{} auto attack cancelled during windup by stun",
+                            "{} auto attack cancelled during windup by crowd control or invulnerability",
                             self.enemy_state[idx].enemy.name
                         ),
                     );
@@ -1682,11 +1756,11 @@ impl ControlledChampionCombatSimulation {
                     self.schedule_next_attack(idx);
                     return;
                 }
-                if projectile_speed <= 0.0 && self.enemy_is_stunned(idx) {
+                if projectile_speed <= 0.0 && !self.enemy_can_take_actions(idx) {
                     self.trace_event(
                         "attack_cancelled",
                         format!(
-                            "{} melee attack cancelled before impact by stun",
+                            "{} melee attack cancelled before impact by crowd control or invulnerability",
                             self.enemy_state[idx].enemy.name
                         ),
                     );
@@ -1794,20 +1868,50 @@ impl ControlledChampionCombatSimulation {
                 let execution = self.enemy_state[idx].ability_execution;
                 let source = self.enemy_state[idx].position;
                 let target_at_cast = self.target_position;
-                let travel = self.enemy_projectile_delay_from_points(
-                    source,
-                    target_at_cast,
-                    execution.projectile_speed,
-                );
                 self.schedule_event(
-                    execution.cast_windup_seconds.max(0.0) + travel,
-                    45,
-                    EventType::AbilityHit {
+                    execution.cast_windup_seconds.max(0.0),
+                    46,
+                    EventType::AbilityWindup {
                         idx,
                         source,
                         target_at_cast,
                         projectile_speed: execution.projectile_speed,
                         effect_hitbox_radius: execution.effect_hitbox_radius,
+                    },
+                    None,
+                );
+            }
+            EventType::AbilityWindup {
+                idx,
+                source,
+                target_at_cast,
+                projectile_speed,
+                effect_hitbox_radius,
+            } => {
+                if !self.enemy_can_take_actions(idx) {
+                    self.trace_event(
+                        "ability_cancelled",
+                        format!(
+                            "{} ability cancelled during windup by crowd control or invulnerability",
+                            self.enemy_state[idx].enemy.name
+                        ),
+                    );
+                    return;
+                }
+                let travel = self.enemy_projectile_delay_from_points(
+                    source,
+                    target_at_cast,
+                    projectile_speed,
+                );
+                self.schedule_event(
+                    travel,
+                    45,
+                    EventType::AbilityHit {
+                        idx,
+                        source,
+                        target_at_cast,
+                        projectile_speed,
+                        effect_hitbox_radius,
                     },
                     None,
                 );
@@ -1919,20 +2023,50 @@ impl ControlledChampionCombatSimulation {
                 let execution = self.enemy_state[idx].burst_execution;
                 let source = self.enemy_state[idx].position;
                 let target_at_cast = self.target_position;
-                let travel = self.enemy_projectile_delay_from_points(
-                    source,
-                    target_at_cast,
-                    execution.projectile_speed,
-                );
                 self.schedule_event(
-                    execution.cast_windup_seconds.max(0.0) + travel,
-                    25,
-                    EventType::BurstHit {
+                    execution.cast_windup_seconds.max(0.0),
+                    26,
+                    EventType::BurstWindup {
                         idx,
                         source,
                         target_at_cast,
                         projectile_speed: execution.projectile_speed,
                         effect_hitbox_radius: execution.effect_hitbox_radius,
+                    },
+                    None,
+                );
+            }
+            EventType::BurstWindup {
+                idx,
+                source,
+                target_at_cast,
+                projectile_speed,
+                effect_hitbox_radius,
+            } => {
+                if !self.enemy_can_take_actions(idx) {
+                    self.trace_event(
+                        "burst_cancelled",
+                        format!(
+                            "{} burst cancelled during windup by crowd control or invulnerability",
+                            self.enemy_state[idx].enemy.name
+                        ),
+                    );
+                    return;
+                }
+                let travel = self.enemy_projectile_delay_from_points(
+                    source,
+                    target_at_cast,
+                    projectile_speed,
+                );
+                self.schedule_event(
+                    travel,
+                    25,
+                    EventType::BurstHit {
+                        idx,
+                        source,
+                        target_at_cast,
+                        projectile_speed,
+                        effect_hitbox_radius,
                     },
                     None,
                 );
@@ -2083,7 +2217,6 @@ impl ControlledChampionCombatSimulation {
                 let runtime_bonus = on_controlled_champion_ability_bonus(
                     &mut self.controlled_champion_runtime,
                     ControlledChampionAbilityRuntimeInput {
-                        raw_magic_damage: q_raw_damage,
                         ability_power: self.vlad_stats.ability_power,
                         ability_ap_ratio: self.offensive_tuning.q_ap_ratio,
                         now_seconds: self.time,
@@ -2122,7 +2255,6 @@ impl ControlledChampionCombatSimulation {
                 let runtime_bonus = on_controlled_champion_ability_bonus(
                     &mut self.controlled_champion_runtime,
                     ControlledChampionAbilityRuntimeInput {
-                        raw_magic_damage: e_raw_damage,
                         ability_power: self.vlad_stats.ability_power,
                         ability_ap_ratio: self.offensive_tuning.e_ap_ratio,
                         now_seconds: self.time,
@@ -2158,7 +2290,6 @@ impl ControlledChampionCombatSimulation {
                 let runtime_bonus = on_controlled_champion_ability_bonus(
                     &mut self.controlled_champion_runtime,
                     ControlledChampionAbilityRuntimeInput {
-                        raw_magic_damage: r_raw_damage,
                         ability_power: self.vlad_stats.ability_power,
                         ability_ap_ratio: self.offensive_tuning.r_ap_ratio,
                         now_seconds: self.time,
@@ -2308,6 +2439,7 @@ impl ControlledChampionCombatSimulation {
             damage_dealt: self.damage_dealt_total,
             healing_done: self.healing_done_total,
             enemy_kills: self.enemy_kills_total,
+            invulnerable_seconds: self.invulnerable_seconds_total,
         }
     }
 
@@ -2367,8 +2499,9 @@ fn derive_enemy_model(
         &enemy.base,
         build,
         sim,
-        sim.champion_level,
+        enemy.level,
         None,
+        Some(&enemy.stack_overrides),
     );
 
     let (_physical_dps, magic_dps) = compute_enemy_dps(enemy, &enemy_stats, urf);
@@ -2396,11 +2529,7 @@ fn derive_enemy_model(
     } else {
         enemy.loadout_item_names.clone()
     };
-    let runtime = build_champion_loadout_runtime(
-        &runtime_item_names,
-        &enemy.loadout_rune_names,
-        &enemy.loadout_masteries,
-    );
+    let runtime = build_champion_loadout_runtime(&runtime_item_names, &enemy.loadout_rune_names);
     attack_speed = base_attack_speed * attack_speed_multiplier(&runtime);
 
     let attack_interval = 1.0 / attack_speed.max(0.001);
@@ -2482,6 +2611,7 @@ pub(super) fn simulate_controlled_champion_combat(
     controlled_champion_bonus_stats: &Stats,
     controlled_champion_loadout_selection: Option<&LoadoutSelection>,
     controlled_champion_item_acquired_levels: Option<&HashMap<String, usize>>,
+    controlled_champion_stack_overrides: Option<&HashMap<String, f64>>,
     enemies: &[(EnemyConfig, Vec<Item>, Stats)],
     sim: &SimulationConfig,
     urf: &UrfBuffs,
@@ -2492,6 +2622,7 @@ pub(super) fn simulate_controlled_champion_combat(
         controlled_champion_bonus_stats,
         controlled_champion_loadout_selection,
         controlled_champion_item_acquired_levels,
+        controlled_champion_stack_overrides,
         enemies,
         sim.clone(),
         urf.clone(),
@@ -2514,6 +2645,7 @@ pub(super) fn simulate_vlad_combat(
         vlad_build_items,
         vlad_bonus_stats,
         vlad_item_acquired_levels,
+        None,
         enemies,
         sim.clone(),
         urf.clone(),
@@ -2637,6 +2769,7 @@ mod tests {
         EnemyConfig {
             id: name.to_string(),
             name: name.to_string(),
+            level: 20,
             base: test_enemy_base(name),
             spawn_position_xy: None,
             movement_mode: OpponentMovementMode::MaintainCombatRange,
@@ -2659,7 +2792,7 @@ mod tests {
             loadout_item_names: Vec::new(),
             loadout_rune_names: Vec::new(),
             loadout_shards: Vec::new(),
-            loadout_masteries: Vec::new(),
+            stack_overrides: HashMap::new(),
         }
     }
 
@@ -2692,7 +2825,7 @@ mod tests {
             protoplasm_bonus_health: 0.0,
             protoplasm_heal_total: 0.0,
             protoplasm_duration_seconds: 0.0,
-            heartsteel_assumed_stacks_at_8m: 0.0,
+            stack_overrides: HashMap::new(),
             enemy_uptime_model_enabled: false,
             urf_respawn_flat_reduction_seconds: 3.0,
             urf_respawn_extrapolation_per_level: 2.5,
@@ -2720,6 +2853,7 @@ mod tests {
             health_cost_multiplier: 1.0,
             bonus_attack_speed_multiplier_melee: 1.0,
             bonus_attack_speed_multiplier_ranged: 1.0,
+            allowed_item_keys: Default::default(),
         }
     }
 
@@ -2740,21 +2874,21 @@ mod tests {
             &bonus_stats,
             None,
             None,
+            None,
             &enemies,
             &sim,
             &urf,
         );
         let arcane_comet_selection = LoadoutSelection {
-            rune_ids: Vec::new(),
             rune_names: vec!["Arcane Comet".to_string()],
             shard_stats: Vec::new(),
-            masteries: Vec::new(),
         };
         let outcome_with_runtime = simulate_controlled_champion_combat(
             &base,
             &[],
             &bonus_stats,
             Some(&arcane_comet_selection),
+            None,
             None,
             &enemies,
             &sim,
@@ -2764,7 +2898,7 @@ mod tests {
     }
 
     #[test]
-    fn controlled_champion_perseverance_runtime_adds_regeneration_ticks() {
+    fn controlled_champion_second_wind_runtime_adds_regeneration_ticks() {
         let base = test_controlled_champion_base();
         let enemy = test_enemy("Sona", 120.0);
         let enemies = vec![(enemy, Vec::new(), Stats::default())];
@@ -2776,24 +2910,21 @@ mod tests {
             &Stats::default(),
             None,
             None,
+            None,
             &enemies,
             &sim,
             &urf,
         );
-        let perseverance_selection = LoadoutSelection {
-            rune_ids: Vec::new(),
-            rune_names: Vec::new(),
+        let second_wind_selection = LoadoutSelection {
+            rune_names: vec!["Second Wind".to_string()],
             shard_stats: Vec::new(),
-            masteries: vec![MasterySelection {
-                name: "Perseverance".to_string(),
-                rank: 1,
-            }],
         };
         let outcome_with_runtime = simulate_controlled_champion_combat(
             &base,
             &[],
             &Stats::default(),
-            Some(&perseverance_selection),
+            Some(&second_wind_selection),
+            None,
             None,
             &enemies,
             &sim,
@@ -2817,6 +2948,7 @@ mod tests {
             controlled_champion,
             &[],
             &Stats::default(),
+            None,
             None,
             &enemies,
             simulation,
@@ -2851,6 +2983,7 @@ mod tests {
             &[],
             &Stats::default(),
             None,
+            None,
             &enemies,
             simulation,
             urf,
@@ -2871,6 +3004,47 @@ mod tests {
                 .trace_events()
                 .iter()
                 .any(|entry| entry.contains("[impact_nullified]"))
+        );
+    }
+
+    #[test]
+    fn enemy_cannot_auto_attack_or_cast_while_invulnerable() {
+        let controlled_champion = test_controlled_champion_base();
+        let mut enemy = test_enemy("Sona", 120.0);
+        enemy.ability_tick_interval_seconds = 0.25;
+        let enemies = vec![(enemy, Vec::new(), Stats::default())];
+        let simulation = test_simulation(1.0, 0.0);
+        let urf = test_urf();
+
+        let mut runner = ControlledChampionCombatSimulation::new(
+            controlled_champion,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            &enemies,
+            simulation,
+            urf,
+        );
+        runner.enable_trace();
+        runner.enemy_state[0].invulnerable_until = runner.current_time() + 0.8;
+        runner.schedule_event(0.0, 30, EventType::Attack(0), None);
+        runner.schedule_event(0.0, 40, EventType::Ability(0), None);
+        for _ in 0..24 {
+            let _ = runner.step(1);
+        }
+        assert_eq!(runner.current_health(), runner.max_health);
+        assert!(
+            !runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("begins auto attack"))
+        );
+        assert!(
+            !runner
+                .trace_events()
+                .iter()
+                .any(|entry| entry.contains("ability hit"))
         );
     }
 }

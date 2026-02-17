@@ -14,9 +14,8 @@ use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_h
 
 use super::{
     BuildSearchConfig, ChampionBase, EXCLUDED_RANKS, EnemyConfig, ITEM_EVOLUTION_REPLACEMENTS,
-    Item, LEGENDARY_RANK, LoadoutSelection, MasterySelection, OpponentMovementMode,
-    ResolvedLoadout, SearchQualityProfile, SimulationConfig, Stats, UrfBuffs, rand_index,
-    shuffle_usize,
+    Item, LEGENDARY_RANK, LoadoutSelection, OpponentMovementMode, ResolvedLoadout,
+    SearchQualityProfile, SimulationConfig, Stats, UrfBuffs, rand_index, shuffle_usize,
 };
 
 pub(crate) fn simulation_dir() -> PathBuf {
@@ -57,7 +56,7 @@ pub(crate) fn characters_dir() -> PathBuf {
     simulation_dir().join("..").join("Characters")
 }
 
-pub(crate) fn masteries_dir() -> PathBuf {
+pub(crate) fn rune_data_dir() -> PathBuf {
     simulation_dir().join("..").join("Masteries")
 }
 
@@ -221,10 +220,9 @@ pub(crate) fn resolve_loadout(
     level: usize,
     for_controlled_champion: bool,
 ) -> Result<ResolvedLoadout> {
-    let runes_data = load_json(&masteries_dir().join("RunesReforged.json"))?;
-    let masteries_data = load_json(&masteries_dir().join("Season2016.json"))?;
+    let runes_data = load_json(&rune_data_dir().join("RunesReforged.json"))?;
+    let loadout_domain = build_loadout_domain();
 
-    let mut runes_by_id: HashMap<i64, Value> = HashMap::new();
     let mut runes_by_name: HashMap<String, Value> = HashMap::new();
     if let Some(paths) = runes_data.get("paths").and_then(Value::as_array) {
         for path in paths {
@@ -232,9 +230,6 @@ pub(crate) fn resolve_loadout(
                 for slot in slots {
                     if let Some(runes) = slot.get("runes").and_then(Value::as_array) {
                         for rune in runes {
-                            if let Some(id) = rune.get("id").and_then(Value::as_i64) {
-                                runes_by_id.insert(id, rune.clone());
-                            }
                             if let Some(name) = rune.get("name").and_then(Value::as_str) {
                                 runes_by_name.insert(to_norm_key(name), rune.clone());
                             }
@@ -245,51 +240,8 @@ pub(crate) fn resolve_loadout(
         }
     }
 
-    let mastery_by_name = masteries_data
-        .get("masteries")
-        .and_then(Value::as_array)
-        .map(|arr| {
-            arr.iter()
-                .filter_map(|m| {
-                    m.get("display_name")
-                        .and_then(Value::as_str)
-                        .map(|name| (to_norm_key(name), m.clone()))
-                })
-                .collect::<HashMap<_, _>>()
-        })
-        .unwrap_or_default();
-
     let mut out = ResolvedLoadout::default();
-
-    for id in &selection.rune_ids {
-        if let Some(rune) = runes_by_id.get(id) {
-            let name = rune
-                .get("name")
-                .and_then(Value::as_str)
-                .unwrap_or("unknown rune");
-            out.selection_labels.push(format!("Rune: {}", name));
-            for effect in rune
-                .get("effects_structured")
-                .and_then(Value::as_array)
-                .cloned()
-                .unwrap_or_default()
-            {
-                if apply_structured_effect(
-                    &effect,
-                    1,
-                    level,
-                    for_controlled_champion,
-                    &mut out.bonus_stats,
-                )? {
-                    out.applied_notes
-                        .push(format!("Applied rune stat effect from {}.", name));
-                }
-            }
-        } else {
-            out.skipped_notes
-                .push(format!("Rune id {} not found in RunesReforged.", id));
-        }
-    }
+    validate_rune_page_selection(selection, &loadout_domain)?;
 
     for name in &selection.rune_names {
         let key = to_norm_key(name);
@@ -390,42 +342,6 @@ pub(crate) fn resolve_loadout(
         }
     }
 
-    for mastery in &selection.masteries {
-        let key = to_norm_key(&mastery.name);
-        let Some(m) = mastery_by_name.get(&key) else {
-            out.skipped_notes.push(format!(
-                "Mastery '{}' not found in Season2016.",
-                mastery.name
-            ));
-            continue;
-        };
-        let max_ranks = m.get("ranks").and_then(Value::as_u64).unwrap_or(1) as usize;
-        let rank = mastery.rank.clamp(1, max_ranks);
-        let name = m
-            .get("display_name")
-            .and_then(Value::as_str)
-            .unwrap_or(&mastery.name);
-        out.selection_labels
-            .push(format!("Mastery: {} ({}/{})", name, rank, max_ranks));
-        for effect in m
-            .get("effects_structured")
-            .and_then(Value::as_array)
-            .cloned()
-            .unwrap_or_default()
-        {
-            if apply_structured_effect(
-                &effect,
-                rank,
-                level,
-                for_controlled_champion,
-                &mut out.bonus_stats,
-            )? {
-                out.applied_notes
-                    .push(format!("Applied mastery stat effect from {}.", name));
-            }
-        }
-    }
-
     let hook_ctx = LoadoutHookContext {
         selection,
         level,
@@ -436,16 +352,34 @@ pub(crate) fn resolve_loadout(
     Ok(out)
 }
 
-pub(crate) fn as_f64(obj: &Value, key: &str) -> Result<f64> {
-    obj.get(key)
-        .and_then(Value::as_f64)
-        .ok_or_else(|| anyhow!("Missing f64 key: {}", key))
-}
-
 pub(crate) fn as_str<'a>(obj: &'a Value, key: &str) -> Result<&'a str> {
     obj.get(key)
         .and_then(Value::as_str)
         .ok_or_else(|| anyhow!("Missing string key: {}", key))
+}
+
+pub(crate) fn parse_stack_overrides_map(data: Option<&Value>) -> Result<HashMap<String, f64>> {
+    let Some(raw) = data else {
+        return Ok(HashMap::new());
+    };
+    let object = raw
+        .as_object()
+        .ok_or_else(|| anyhow!("stack_overrides must be an object keyed by stack identifier"))?;
+    let mut out = HashMap::new();
+    for (stack_identifier, value) in object {
+        let stack_value = value
+            .as_f64()
+            .ok_or_else(|| anyhow!("stack_overrides.{} must be numeric", stack_identifier))?;
+        if stack_value < 0.0 {
+            bail!(
+                "stack_overrides.{} must be >= 0.0, got {}",
+                stack_identifier,
+                stack_value
+            );
+        }
+        out.insert(stack_identifier.clone(), stack_value);
+    }
+    Ok(out)
 }
 
 pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> {
@@ -468,6 +402,26 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
                 "Missing Characters/Vladimir.json abilities.basic_ability_1/abilities.basic_ability_3/abilities.ultimate offensive defaults"
             )
         })?;
+    if data.get("max_time_seconds").is_some() {
+        bail!(
+            "simulation.max_time_seconds is no longer supported. Use simulation.time_limit_seconds."
+        );
+    }
+    if data.get("heartsteel_assumed_stacks_at_8m").is_some() {
+        bail!(
+            "simulation.heartsteel_assumed_stacks_at_8m is no longer supported. Use simulation.stack_overrides.heartsteel."
+        );
+    }
+    if data.get("enemy_uptime_model_enabled").is_some() {
+        bail!(
+            "simulation.enemy_uptime_model_enabled is no longer supported. Use opponents.uptime_windows_enabled."
+        );
+    }
+    if data.get("item_stacks_at_level_20").is_some() {
+        bail!(
+            "simulation.item_stacks_at_level_20 is no longer supported. Use simulation.stack_overrides."
+        );
+    }
     let server_tick_rate_hz = data
         .get("server_tick_rate_hz")
         .and_then(Value::as_f64)
@@ -523,11 +477,32 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         bail!("vlad_pool_base_cooldown_seconds_by_rank must include at least one value");
     }
 
+    let max_time_seconds = data
+        .get("time_limit_seconds")
+        .and_then(Value::as_f64)
+        .unwrap_or(sim_defaults.time_limit_seconds);
+    if !(max_time_seconds.is_finite() && max_time_seconds > 0.0) {
+        bail!(
+            "simulation.time_limit_seconds must be a positive finite number, got {}",
+            max_time_seconds
+        );
+    }
+    const MAX_TIME_LIMIT_SECONDS: f64 = 20.0 * 60.0;
+    if max_time_seconds > MAX_TIME_LIMIT_SECONDS {
+        bail!(
+            "simulation.time_limit_seconds must be <= {:.0} seconds (20 minutes), got {}",
+            MAX_TIME_LIMIT_SECONDS,
+            max_time_seconds
+        );
+    }
+
+    let stack_overrides = parse_stack_overrides_map(data.get("stack_overrides"))?;
+
     Ok(SimulationConfig {
         dt,
         server_tick_rate_hz,
         champion_level,
-        max_time_seconds: as_f64(data, "max_time_seconds")?,
+        max_time_seconds,
         vlad_pool_rank: data
             .get("vlad_pool_rank")
             .and_then(Value::as_u64)
@@ -588,18 +563,8 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             .get("protoplasm_duration_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(protoplasm_defaults.duration_seconds),
-        heartsteel_assumed_stacks_at_8m: data
-            .get("heartsteel_assumed_stacks_at_8m")
-            .and_then(Value::as_f64)
-            .ok_or_else(|| {
-                anyhow!(
-                    "Missing simulation.heartsteel_assumed_stacks_at_8m (scenario-specific assumption)"
-                )
-            })?,
-        enemy_uptime_model_enabled: data
-            .get("enemy_uptime_model_enabled")
-            .and_then(Value::as_bool)
-            .unwrap_or(sim_defaults.enemy_uptime_model_enabled),
+        stack_overrides,
+        enemy_uptime_model_enabled: sim_defaults.enemy_uptime_model_enabled,
         urf_respawn_flat_reduction_seconds: data
             .get("urf_respawn_flat_reduction_seconds")
             .and_then(Value::as_f64)
@@ -670,6 +635,8 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
 pub(crate) fn parse_enemy_config(
     data: &Value,
     champion_bases: &HashMap<String, ChampionBase>,
+    default_level: usize,
+    default_stack_overrides: &HashMap<String, f64>,
 ) -> Result<EnemyConfig> {
     let champion = data
         .get("champion")
@@ -713,9 +680,30 @@ pub(crate) fn parse_enemy_config(
         },
         None => OpponentMovementMode::MaintainCombatRange,
     };
+    let level = data
+        .get("level")
+        .and_then(Value::as_u64)
+        .unwrap_or(default_level as u64)
+        .max(1) as usize;
+    if data.get("assumptions").is_some() {
+        bail!(
+            "Opponent actor '{}' uses deprecated assumptions. Use actor.stack_overrides instead.",
+            actor_id
+        );
+    }
+    if data.get("item_stacks_at_level_20").is_some() {
+        bail!(
+            "Opponent actor '{}' uses deprecated item_stacks_at_level_20. Use actor.stack_overrides instead.",
+            actor_id
+        );
+    }
+    let mut stack_overrides = default_stack_overrides.clone();
+    stack_overrides.extend(parse_stack_overrides_map(data.get("stack_overrides"))?);
+
     Ok(EnemyConfig {
         id: actor_id,
         name: base.name.clone(),
+        level,
         base,
         spawn_position_xy,
         movement_mode,
@@ -786,7 +774,7 @@ pub(crate) fn parse_enemy_config(
         loadout_item_names: Vec::new(),
         loadout_rune_names: Vec::new(),
         loadout_shards: Vec::new(),
-        loadout_masteries: Vec::new(),
+        stack_overrides,
     })
 }
 
@@ -910,6 +898,14 @@ pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("objective_healing_weight")
             .and_then(Value::as_f64)
             .unwrap_or(search_defaults.objective_healing_weight),
+        objective_enemy_kills_weight: data
+            .get("objective_enemy_kills_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(search_defaults.objective_enemy_kills_weight),
+        objective_invulnerable_seconds_weight: data
+            .get("objective_invulnerable_seconds_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(search_defaults.objective_invulnerable_seconds_weight),
         robust_min_seed_hit_rate: data
             .get("robust_min_seed_hit_rate")
             .and_then(Value::as_f64)
@@ -1004,9 +1000,6 @@ pub(crate) fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection 
     };
 
     if let Some(runes_obj) = obj.get("runes_reforged").and_then(Value::as_object) {
-        if let Some(ids) = runes_obj.get("rune_ids").and_then(Value::as_array) {
-            out.rune_ids = ids.iter().filter_map(Value::as_i64).collect();
-        }
         if let Some(names) = runes_obj.get("rune_names").and_then(Value::as_array) {
             out.rune_names = names
                 .iter()
@@ -1022,48 +1015,14 @@ pub(crate) fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection 
                 .collect();
         }
     }
-
-    if let Some(masteries) = obj.get("season2016_masteries").and_then(Value::as_array) {
-        for entry in masteries {
-            if let Some(name) = entry.as_str() {
-                out.masteries.push(MasterySelection {
-                    name: name.to_string(),
-                    rank: 1,
-                });
-                continue;
-            }
-            let Some(mo) = entry.as_object() else {
-                continue;
-            };
-            let Some(name) = mo.get("name").and_then(Value::as_str) else {
-                continue;
-            };
-            let rank = mo.get("rank").and_then(Value::as_u64).unwrap_or(1) as usize;
-            out.masteries.push(MasterySelection {
-                name: name.to_string(),
-                rank,
-            });
-        }
-    }
     out
 }
 
 pub(crate) fn loadout_selection_key(sel: &LoadoutSelection) -> String {
-    let mut runes = sel.rune_names.clone();
-    runes.sort();
-    let mut shards = sel.shard_stats.clone();
-    shards.sort();
-    let mut masteries = sel
-        .masteries
-        .iter()
-        .map(|m| format!("{}:{}", m.name, m.rank))
-        .collect::<Vec<_>>();
-    masteries.sort();
     format!(
-        "r={}|s={}|m={}",
-        runes.join(","),
-        shards.join(","),
-        masteries.join(",")
+        "r={}|s={}",
+        sel.rune_names.join(","),
+        sel.shard_stats.join(",")
     )
 }
 
@@ -1073,38 +1032,13 @@ pub(crate) struct RunePathDomain {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) struct MasteryOptionDomain {
-    pub(crate) name: String,
-    pub(crate) max_rank: usize,
-    pub(crate) points_required_in_tree: usize,
-}
-
-#[derive(Debug, Clone)]
-pub(crate) struct MasteryTierDomain {
-    pub(crate) points_required: usize,
-    pub(crate) points_available: usize,
-    pub(crate) is_keystone_tier: bool,
-    pub(crate) options: Vec<MasteryOptionDomain>,
-}
-
-#[derive(Debug, Clone)]
-pub(crate) struct MasteryTreeDomain {
-    pub(crate) tiers: Vec<MasteryTierDomain>,
-}
-
-#[derive(Debug, Clone)]
 pub(crate) struct LoadoutDomain {
     pub(crate) rune_paths: Vec<RunePathDomain>,
     pub(crate) shard_slots: [Vec<String>; 3],
-    pub(crate) mastery_trees: Vec<MasteryTreeDomain>,
-    pub(crate) mastery_primary_points: usize,
-    pub(crate) mastery_secondary_points: usize,
-    pub(crate) mastery_keystone_requirement: usize,
 }
 
 pub(crate) fn build_loadout_domain() -> LoadoutDomain {
-    let runes_data = load_json(&masteries_dir().join("RunesReforged.json")).unwrap_or(Value::Null);
-    let masteries_data = load_json(&masteries_dir().join("Season2016.json")).unwrap_or(Value::Null);
+    let runes_data = load_json(&rune_data_dir().join("RunesReforged.json")).unwrap_or(Value::Null);
 
     let rune_paths = runes_data
         .get("paths")
@@ -1162,187 +1096,97 @@ pub(crate) fn build_loadout_domain() -> LoadoutDomain {
         [read_slot(0), read_slot(1), read_slot(2)]
     };
 
-    let mastery_lookup = masteries_data
-        .get("masteries")
-        .and_then(Value::as_array)
-        .map(|arr| {
-            arr.iter()
-                .filter_map(|m| {
-                    let name = m.get("display_name").and_then(Value::as_str)?;
-                    let ranks = m.get("ranks").and_then(Value::as_u64).unwrap_or(1) as usize;
-                    let points_required_in_tree = m
-                        .get("points_required_in_tree")
-                        .and_then(Value::as_u64)
-                        .unwrap_or(0) as usize;
-                    Some((
-                        to_norm_key(name),
-                        MasteryOptionDomain {
-                            name: name.to_string(),
-                            max_rank: ranks.max(1),
-                            points_required_in_tree,
-                        },
-                    ))
-                })
-                .collect::<HashMap<_, _>>()
-        })
-        .unwrap_or_default();
-
-    let mastery_trees = masteries_data
-        .get("trees")
-        .and_then(Value::as_array)
-        .map(|trees| {
-            trees
-                .iter()
-                .map(|tree| {
-                    let tiers = tree
-                        .get("tiers")
-                        .and_then(Value::as_array)
-                        .map(|tier_arr| {
-                            tier_arr
-                                .iter()
-                                .map(|tier| {
-                                    let options = tier
-                                        .get("masteries")
-                                        .and_then(Value::as_array)
-                                        .map(|names| {
-                                            names
-                                                .iter()
-                                                .filter_map(Value::as_str)
-                                                .filter_map(|name| {
-                                                    mastery_lookup.get(&to_norm_key(name)).cloned()
-                                                })
-                                                .collect::<Vec<_>>()
-                                        })
-                                        .unwrap_or_default();
-                                    MasteryTierDomain {
-                                        points_required: tier
-                                            .get("points_in_tree_required")
-                                            .and_then(Value::as_u64)
-                                            .unwrap_or(0)
-                                            as usize,
-                                        points_available: tier
-                                            .get("points_available")
-                                            .and_then(Value::as_u64)
-                                            .unwrap_or(
-                                                simulator_defaults()
-                                                    .loadout_generation_defaults
-                                                    .mastery_tier_points_available_fallback
-                                                    as u64,
-                                            )
-                                            as usize,
-                                        is_keystone_tier: tier
-                                            .get("is_keystone_tier")
-                                            .and_then(Value::as_bool)
-                                            .unwrap_or(false),
-                                        options,
-                                    }
-                                })
-                                .collect::<Vec<_>>()
-                        })
-                        .unwrap_or_default();
-                    MasteryTreeDomain { tiers }
-                })
-                .collect::<Vec<_>>()
-        })
-        .unwrap_or_default();
-
-    let rules = masteries_data
-        .get("selection_rules")
-        .and_then(Value::as_object)
-        .cloned()
-        .unwrap_or_default();
-    let loadout_generation_defaults = &simulator_defaults().loadout_generation_defaults;
     LoadoutDomain {
         rune_paths,
         shard_slots,
-        mastery_trees,
-        mastery_primary_points: rules
-            .get("primary_tree_points")
-            .and_then(Value::as_u64)
-            .unwrap_or(loadout_generation_defaults.mastery_primary_points as u64)
-            as usize,
-        mastery_secondary_points: rules
-            .get("secondary_tree_points")
-            .and_then(Value::as_u64)
-            .unwrap_or(loadout_generation_defaults.mastery_secondary_points as u64)
-            as usize,
-        mastery_keystone_requirement: rules
-            .get("keystone_requirement_points_in_tree")
-            .and_then(Value::as_u64)
-            .unwrap_or(loadout_generation_defaults.mastery_keystone_requirement as u64)
-            as usize,
     }
 }
 
-pub(crate) fn random_tree_masteries(
-    tree: &MasteryTreeDomain,
-    target_points: usize,
-    keystone_requirement: usize,
-    seed: &mut u64,
-) -> Option<Vec<MasterySelection>> {
-    if tree.tiers.is_empty() || target_points == 0 {
-        return Some(Vec::new());
+fn is_rune_name_in_slot(slot_runes: &[String], rune_name: &str) -> bool {
+    let key = to_norm_key(rune_name);
+    slot_runes.iter().any(|r| to_norm_key(r) == key)
+}
+
+fn is_shard_name_in_slot(slot_shards: &[String], shard_name: &str) -> bool {
+    let key = to_norm_key(shard_name);
+    slot_shards.iter().any(|s| to_norm_key(s) == key)
+}
+
+pub(crate) fn is_legal_rune_page_selection(
+    selection: &LoadoutSelection,
+    loadout_domain: &LoadoutDomain,
+) -> bool {
+    let has_any_selection = !selection.rune_names.is_empty() || !selection.shard_stats.is_empty();
+    if !has_any_selection {
+        return true;
     }
-    let random_tree_attempts = simulator_defaults()
-        .loadout_generation_defaults
-        .random_tree_attempts;
-    for _ in 0..random_tree_attempts {
-        let mut points = 0usize;
-        let mut tier_spent = vec![0usize; tree.tiers.len()];
-        let mut ranks = tree
-            .tiers
-            .iter()
-            .map(|t| vec![0usize; t.options.len()])
-            .collect::<Vec<_>>();
-
-        while points < target_points {
-            let mut choices = Vec::new();
-            for (tier_idx, tier) in tree.tiers.iter().enumerate() {
-                if tier.options.is_empty()
-                    || points < tier.points_required
-                    || tier_spent[tier_idx] >= tier.points_available
-                {
-                    continue;
-                }
-                if tier.is_keystone_tier && points < keystone_requirement {
-                    continue;
-                }
-                for (opt_idx, opt) in tier.options.iter().enumerate() {
-                    if ranks[tier_idx][opt_idx] >= opt.max_rank
-                        || points < opt.points_required_in_tree
-                    {
-                        continue;
-                    }
-                    choices.push((tier_idx, opt_idx));
-                }
-            }
-            if choices.is_empty() {
-                break;
-            }
-            let (tier_idx, opt_idx) = choices[rand_index(seed, choices.len())];
-            ranks[tier_idx][opt_idx] += 1;
-            tier_spent[tier_idx] += 1;
-            points += 1;
+    if selection.rune_names.len() != 6 || selection.shard_stats.len() != 3 {
+        return false;
+    }
+    if loadout_domain.rune_paths.len() < 2 {
+        return false;
+    }
+    for (idx, shard_name) in selection.shard_stats.iter().enumerate() {
+        let valid = loadout_domain
+            .shard_slots
+            .get(idx)
+            .map(|slot| is_shard_name_in_slot(slot, shard_name))
+            .unwrap_or(false);
+        if !valid {
+            return false;
         }
+    }
 
-        if points != target_points {
+    let primary_keystone = &selection.rune_names[0];
+    let primary_minor_1 = &selection.rune_names[1];
+    let primary_minor_2 = &selection.rune_names[2];
+    let primary_minor_3 = &selection.rune_names[3];
+    let secondary_minor_1 = &selection.rune_names[4];
+    let secondary_minor_2 = &selection.rune_names[5];
+
+    for (primary_idx, primary_path) in loadout_domain.rune_paths.iter().enumerate() {
+        if primary_path.slot_runes.len() < 4 {
             continue;
         }
-        let mut out = Vec::new();
-        for (tier_idx, tier) in tree.tiers.iter().enumerate() {
-            for (opt_idx, opt) in tier.options.iter().enumerate() {
-                let rank = ranks[tier_idx][opt_idx];
-                if rank > 0 {
-                    out.push(MasterySelection {
-                        name: opt.name.clone(),
-                        rank,
-                    });
-                }
+        if !is_rune_name_in_slot(&primary_path.slot_runes[0], primary_keystone)
+            || !is_rune_name_in_slot(&primary_path.slot_runes[1], primary_minor_1)
+            || !is_rune_name_in_slot(&primary_path.slot_runes[2], primary_minor_2)
+            || !is_rune_name_in_slot(&primary_path.slot_runes[3], primary_minor_3)
+        {
+            continue;
+        }
+
+        for (secondary_idx, secondary_path) in loadout_domain.rune_paths.iter().enumerate() {
+            if secondary_idx == primary_idx || secondary_path.slot_runes.len() < 4 {
+                continue;
+            }
+            let secondary_minor_1_slot = (1..=3).find(|slot| {
+                is_rune_name_in_slot(&secondary_path.slot_runes[*slot], secondary_minor_1)
+            });
+            let secondary_minor_2_slot = (1..=3).find(|slot| {
+                is_rune_name_in_slot(&secondary_path.slot_runes[*slot], secondary_minor_2)
+            });
+            if let (Some(slot_a), Some(slot_b)) = (secondary_minor_1_slot, secondary_minor_2_slot)
+                && slot_a < slot_b
+            {
+                return true;
             }
         }
-        return Some(out);
     }
-    None
+
+    false
+}
+
+pub(crate) fn validate_rune_page_selection(
+    selection: &LoadoutSelection,
+    loadout_domain: &LoadoutDomain,
+) -> Result<()> {
+    if is_legal_rune_page_selection(selection, loadout_domain) {
+        return Ok(());
+    }
+    bail!(
+        "Invalid rune page selection. Provide ordered runes_reforged.rune_names with six runes [primary keystone, primary slot2, primary slot3, primary slot4, secondary slot2/3/4 rune A, secondary higher-slot rune B], plus ordered shard_stats for the three shard slots."
+    );
 }
 
 pub(crate) fn random_loadout_selection(
@@ -1377,8 +1221,11 @@ pub(crate) fn random_loadout_selection(
                 if secondary_slots.len() >= 2 {
                     let mut picks = secondary_slots.clone();
                     shuffle_usize(&mut picks, seed);
-                    let sa = picks[0];
-                    let sb = picks[1];
+                    let (sa, sb) = if picks[0] <= picks[1] {
+                        (picks[0], picks[1])
+                    } else {
+                        (picks[1], picks[0])
+                    };
                     out.rune_names = vec![
                         primary.slot_runes[0][rand_index(seed, primary.slot_runes[0].len())]
                             .clone(),
@@ -1393,7 +1240,6 @@ pub(crate) fn random_loadout_selection(
                         secondary.slot_runes[sb][rand_index(seed, secondary.slot_runes[sb].len())]
                             .clone(),
                     ];
-                    out.rune_ids.clear();
                     out.shard_stats = domain
                         .shard_slots
                         .iter()
@@ -1404,50 +1250,7 @@ pub(crate) fn random_loadout_selection(
         }
     }
 
-    if domain.mastery_trees.len() >= 2 {
-        let primary_idx = rand_index(seed, domain.mastery_trees.len());
-        let secondary_choices = (0..domain.mastery_trees.len())
-            .filter(|idx| *idx != primary_idx)
-            .collect::<Vec<_>>();
-        if !secondary_choices.is_empty() {
-            let secondary_idx = secondary_choices[rand_index(seed, secondary_choices.len())];
-            let primary = random_tree_masteries(
-                &domain.mastery_trees[primary_idx],
-                domain.mastery_primary_points,
-                domain.mastery_keystone_requirement,
-                seed,
-            );
-            let secondary = random_tree_masteries(
-                &domain.mastery_trees[secondary_idx],
-                domain.mastery_secondary_points,
-                domain.mastery_keystone_requirement,
-                seed,
-            );
-            if let (Some(mut p), Some(s)) = (primary, secondary) {
-                p.extend(s);
-                out.masteries = p;
-            }
-        }
-    }
-
     out
-}
-
-pub(crate) fn loadout_eval_budget(
-    search: &BuildSearchConfig,
-    profile: SearchQualityProfile,
-) -> usize {
-    let base = search
-        .random_samples
-        .max(search.beam_width * 8)
-        .max(search.hill_climb_restarts * 4)
-        .max(search.genetic_population * 2)
-        .max(128);
-    match profile {
-        SearchQualityProfile::Fast => base.min(256),
-        SearchQualityProfile::Balanced => base.min(1024),
-        SearchQualityProfile::MaximumQuality => base.min(4096),
-    }
 }
 
 pub(crate) fn normalize_name(input: &str) -> String {
@@ -1606,6 +1409,22 @@ pub(crate) fn load_urf_buffs() -> Result<UrfBuffs> {
     let path = game_mode_dir().join("URF.json");
     let data = load_json(&path)?;
     let buffs = data.get("global_buffs").cloned().unwrap_or(Value::Null);
+    let allowed_item_keys = data
+        .get("allowed_items")
+        .and_then(|v| v.get("items"))
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing Game Mode/URF.json allowed_items.items; URF item legality must be explicit."
+            )
+        })?
+        .iter()
+        .filter_map(Value::as_str)
+        .map(to_norm_key)
+        .collect::<HashSet<_>>();
+    if allowed_item_keys.is_empty() {
+        bail!("Game Mode/URF.json allowed_items.items must not be empty.");
+    }
 
     Ok(UrfBuffs {
         ability_haste: buffs
@@ -1631,6 +1450,7 @@ pub(crate) fn load_urf_buffs() -> Result<UrfBuffs> {
             .and_then(|v| v.get("ranged"))
             .and_then(Value::as_f64)
             .unwrap_or(1.0),
+        allowed_item_keys,
     })
 }
 
@@ -1820,13 +1640,44 @@ pub(crate) fn looks_arena_or_non_summoners_rift(item: &Item) -> bool {
     arena_like_tokens.iter().any(|t| lower.contains(t))
 }
 
-pub(crate) fn default_item_pool(items: &HashMap<String, Item>) -> Vec<Item> {
+pub(crate) fn item_is_allowed_in_urf(item_name: &str, urf: &UrfBuffs) -> bool {
+    let key = to_norm_key(item_name);
+    let mapped = match key.as_str() {
+        // Item dataset may lag rename migrations; treat renamed canonical entries as equivalent.
+        "ludensecho" => "ludenscompanion",
+        _ => key.as_str(),
+    };
+    urf.allowed_item_keys.contains(mapped)
+}
+
+pub(crate) fn ensure_item_names_allowed_in_urf(
+    item_names: &[String],
+    urf: &UrfBuffs,
+    context: &str,
+) -> Result<()> {
+    let disallowed = item_names
+        .iter()
+        .filter(|name| !item_is_allowed_in_urf(name, urf))
+        .cloned()
+        .collect::<Vec<_>>();
+    if disallowed.is_empty() {
+        return Ok(());
+    }
+    bail!(
+        "{} includes item(s) not present in URF allowed_items: {}",
+        context,
+        disallowed.join(", ")
+    );
+}
+
+pub(crate) fn default_item_pool(items: &HashMap<String, Item>, urf: &UrfBuffs) -> Vec<Item> {
     let mut pool = items
         .values()
         .filter(|item| item.shop_purchasable || is_evolution_target(&item.name))
         .filter(|item| is_legendary(item))
         .filter(|item| !is_pre_evolution_item(items, &item.name))
         .filter(|item| !looks_arena_or_non_summoners_rift(item))
+        .filter(|item| item_is_allowed_in_urf(&item.name, urf))
         .cloned()
         .collect::<Vec<_>>();
     pool.sort_by(|a, b| a.name.cmp(&b.name));
@@ -1841,7 +1692,6 @@ pub(crate) struct EnemyUrfPreset {
     pub(crate) item_names: Vec<String>,
     pub(crate) runes: Vec<String>,
     pub(crate) shards: Vec<String>,
-    pub(crate) masteries: Vec<MasterySelection>,
 }
 
 pub(crate) fn enemy_preset_data_path() -> PathBuf {
@@ -1903,21 +1753,6 @@ pub(crate) fn load_enemy_urf_presets() -> Result<HashMap<String, EnemyUrfPreset>
             .filter_map(Value::as_str)
             .map(ToOwned::to_owned)
             .collect::<Vec<_>>();
-        let masteries = preset
-            .get("masteries")
-            .and_then(Value::as_array)
-            .ok_or_else(|| anyhow!("Missing masteries for preset {}", champion))?
-            .iter()
-            .filter_map(|m| {
-                let name = m.get("name").and_then(Value::as_str)?;
-                let rank = m.get("rank").and_then(Value::as_u64).unwrap_or(1) as usize;
-                Some(MasterySelection {
-                    name: name.to_string(),
-                    rank,
-                })
-            })
-            .collect::<Vec<_>>();
-
         let source_url = preset
             .get("source_url")
             .and_then(Value::as_str)
@@ -1936,7 +1771,6 @@ pub(crate) fn load_enemy_urf_presets() -> Result<HashMap<String, EnemyUrfPreset>
             item_names,
             runes,
             shards,
-            masteries,
         };
         by_champion.insert(to_norm_key(&champion), loaded);
     }
@@ -1947,6 +1781,7 @@ pub(crate) fn validate_enemy_urf_presets(
     presets: &HashMap<String, EnemyUrfPreset>,
     items: &HashMap<String, Item>,
     loadout_domain: &LoadoutDomain,
+    urf: &UrfBuffs,
 ) -> Result<()> {
     let all_runes = loadout_domain
         .rune_paths
@@ -1954,13 +1789,6 @@ pub(crate) fn validate_enemy_urf_presets(
         .flat_map(|p| p.slot_runes.iter())
         .flat_map(|slot| slot.iter())
         .map(|s| to_norm_key(s))
-        .collect::<HashSet<_>>();
-    let all_masteries = loadout_domain
-        .mastery_trees
-        .iter()
-        .flat_map(|t| t.tiers.iter())
-        .flat_map(|tier| tier.options.iter())
-        .map(|m| to_norm_key(&m.name))
         .collect::<HashSet<_>>();
     for preset in presets.values() {
         if preset.item_names.len() != 6 {
@@ -1989,6 +1817,13 @@ pub(crate) fn validate_enemy_urf_presets(
                     preset.champion
                 );
             }
+            if !item_is_allowed_in_urf(item_name, urf) {
+                bail!(
+                    "Enemy preset item '{}' for {} is not present in Game Mode/URF.json allowed_items.",
+                    item_name,
+                    preset.champion
+                );
+            }
         }
         for rune_name in &preset.runes {
             if !all_runes.contains(&to_norm_key(rune_name)) {
@@ -1999,6 +1834,13 @@ pub(crate) fn validate_enemy_urf_presets(
                 );
             }
         }
+        validate_rune_page_selection(
+            &LoadoutSelection {
+                rune_names: preset.runes.clone(),
+                shard_stats: preset.shards.clone(),
+            },
+            loadout_domain,
+        )?;
         for (idx, shard) in preset.shards.iter().enumerate() {
             let valid = loadout_domain
                 .shard_slots
@@ -2014,25 +1856,14 @@ pub(crate) fn validate_enemy_urf_presets(
                 );
             }
         }
-        for mastery in &preset.masteries {
-            if !all_masteries.contains(&to_norm_key(&mastery.name)) {
-                bail!(
-                    "Enemy preset mastery '{}' for {} is not present in Season2016",
-                    mastery.name,
-                    preset.champion
-                );
-            }
-        }
     }
     Ok(())
 }
 
 pub(crate) fn enemy_loadout_from_preset(preset: &EnemyUrfPreset) -> LoadoutSelection {
     LoadoutSelection {
-        rune_ids: Vec::new(),
         rune_names: preset.runes.clone(),
         shard_stats: preset.shards.clone(),
-        masteries: preset.masteries.clone(),
     }
 }
 
@@ -2163,6 +1994,170 @@ mod tests {
         assert!(
             bases.contains_key(&normalize_name("Vladimir")),
             "known champion base should still be present"
+        );
+    }
+
+    #[test]
+    fn validate_rune_page_selection_rejects_secondary_slot_order_violation() {
+        let domain = build_loadout_domain();
+        let valid = LoadoutSelection {
+            rune_names: vec![
+                "Arcane Comet".to_string(),
+                "Manaflow Band".to_string(),
+                "Transcendence".to_string(),
+                "Gathering Storm".to_string(),
+                "Cheap Shot".to_string(),
+                "Ultimate Hunter".to_string(),
+            ],
+            shard_stats: vec![
+                "ability_haste".to_string(),
+                "movement_speed".to_string(),
+                "health".to_string(),
+            ],
+        };
+        validate_rune_page_selection(&valid, &domain)
+            .expect("known rune page should pass legality validation");
+
+        let invalid_secondary_order = LoadoutSelection {
+            rune_names: vec![
+                "Arcane Comet".to_string(),
+                "Manaflow Band".to_string(),
+                "Transcendence".to_string(),
+                "Gathering Storm".to_string(),
+                "Ultimate Hunter".to_string(),
+                "Cheap Shot".to_string(),
+            ],
+            shard_stats: vec![
+                "ability_haste".to_string(),
+                "movement_speed".to_string(),
+                "health".to_string(),
+            ],
+        };
+        assert!(
+            validate_rune_page_selection(&invalid_secondary_order, &domain).is_err(),
+            "secondary runes out of slot order should fail validation"
+        );
+    }
+
+    #[test]
+    fn validate_rune_page_selection_rejects_invalid_shard_slot() {
+        let domain = build_loadout_domain();
+        let invalid_shard_slot = LoadoutSelection {
+            rune_names: vec![
+                "Lethal Tempo".to_string(),
+                "Triumph".to_string(),
+                "Legend: Alacrity".to_string(),
+                "Last Stand".to_string(),
+                "Conditioning".to_string(),
+                "Overgrowth".to_string(),
+            ],
+            shard_stats: vec![
+                "health".to_string(),
+                "movement_speed".to_string(),
+                "tenacity".to_string(),
+            ],
+        };
+        assert!(
+            validate_rune_page_selection(&invalid_shard_slot, &domain).is_err(),
+            "slot 1 shard should reject unsupported stat keys"
+        );
+    }
+
+    #[test]
+    fn parse_simulation_config_rejects_legacy_max_time_field() {
+        let simulation = serde_json::json!({
+            "time_limit_seconds": 60.0,
+            "max_time_seconds": 60.0
+        });
+        let error = parse_simulation_config(&simulation)
+            .expect_err("legacy simulation.max_time_seconds should be rejected");
+        assert!(
+            error
+                .to_string()
+                .contains("simulation.max_time_seconds is no longer supported"),
+            "unexpected error: {error}"
+        );
+    }
+
+    #[test]
+    fn parse_simulation_config_rejects_legacy_heartsteel_stack_field() {
+        let simulation = serde_json::json!({
+            "time_limit_seconds": 60.0,
+            "heartsteel_assumed_stacks_at_8m": 20.0
+        });
+        let error = parse_simulation_config(&simulation)
+            .expect_err("legacy simulation.heartsteel_assumed_stacks_at_8m should be rejected");
+        assert!(
+            error
+                .to_string()
+                .contains("simulation.heartsteel_assumed_stacks_at_8m is no longer supported"),
+            "unexpected error: {error}"
+        );
+    }
+
+    #[test]
+    fn parse_simulation_config_rejects_legacy_enemy_uptime_field() {
+        let simulation = serde_json::json!({
+            "time_limit_seconds": 60.0,
+            "enemy_uptime_model_enabled": true
+        });
+        let error = parse_simulation_config(&simulation)
+            .expect_err("legacy simulation.enemy_uptime_model_enabled should be rejected");
+        assert!(
+            error
+                .to_string()
+                .contains("simulation.enemy_uptime_model_enabled is no longer supported"),
+            "unexpected error: {error}"
+        );
+    }
+
+    #[test]
+    fn parse_simulation_config_rejects_legacy_item_stacks_map() {
+        let simulation = serde_json::json!({
+            "time_limit_seconds": 60.0,
+            "item_stacks_at_level_20": {
+                "Heartsteel": 20.0
+            }
+        });
+        let error = parse_simulation_config(&simulation)
+            .expect_err("legacy simulation.item_stacks_at_level_20 should be rejected");
+        assert!(
+            error
+                .to_string()
+                .contains("simulation.item_stacks_at_level_20 is no longer supported"),
+            "unexpected error: {error}"
+        );
+    }
+
+    #[test]
+    fn parse_simulation_config_accepts_stack_overrides_by_identifier() {
+        let simulation = serde_json::json!({
+            "stack_overrides": {
+                "heartsteel": 20.0
+            }
+        });
+        let parsed =
+            parse_simulation_config(&simulation).expect("simulation.stack_overrides should parse");
+        let stacks = parsed
+            .stack_overrides
+            .get("heartsteel")
+            .copied()
+            .unwrap_or_default();
+        assert!(
+            (stacks - 20.0).abs() < 1e-9,
+            "unexpected stack value: {stacks}"
+        );
+    }
+
+    #[test]
+    fn parse_simulation_config_uses_default_time_limit_when_missing() {
+        let simulation = serde_json::json!({});
+        let parsed = parse_simulation_config(&simulation)
+            .expect("simulation config should parse with default time limit");
+        assert!(
+            (parsed.max_time_seconds - 1200.0).abs() < 1e-9,
+            "expected default time_limit_seconds of 1200.0, got {}",
+            parsed.max_time_seconds
         );
     }
 }

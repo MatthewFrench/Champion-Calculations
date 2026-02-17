@@ -24,7 +24,7 @@ pub(crate) struct BlockingScoreCache {
 
 #[derive(Debug)]
 struct CacheShard {
-    states: Mutex<HashMap<Vec<usize>, CacheState>>,
+    states: Mutex<HashMap<String, CacheState>>,
     cv: Condvar,
 }
 
@@ -49,13 +49,13 @@ impl BlockingScoreCache {
         }
     }
 
-    fn shard_idx(&self, key: &[usize]) -> usize {
+    fn shard_idx(&self, key: &str) -> usize {
         let mut hasher = DefaultHasher::new();
         key.hash(&mut hasher);
         (hasher.finish() as usize) & (self.shards.len() - 1)
     }
 
-    pub(crate) fn get_or_compute<F>(&self, key: Vec<usize>, compute: F) -> f64
+    pub(crate) fn get_or_compute<F>(&self, key: String, compute: F) -> f64
     where
         F: FnOnce() -> f64,
     {
@@ -126,30 +126,21 @@ impl PersistentScoreCache {
         }
     }
 
-    fn key(build: &[usize]) -> String {
-        build
-            .iter()
-            .map(|idx| idx.to_string())
-            .collect::<Vec<_>>()
-            .join(",")
-    }
-
-    pub(crate) fn get(&self, build: &[usize]) -> Option<f64> {
-        let key = Self::key(build);
+    pub(crate) fn get(&self, key: &str) -> Option<f64> {
         let value = self
             .values
             .lock()
             .ok()
-            .and_then(|map| map.get(&key).copied());
+            .and_then(|map| map.get(key).copied());
         if value.is_some() {
             self.hits.fetch_add(1, AtomicOrdering::Relaxed);
         }
         value
     }
 
-    pub(crate) fn insert(&self, build: &[usize], score: f64) {
+    pub(crate) fn insert(&self, key: &str, score: f64) {
         if let Ok(mut map) = self.values.lock() {
-            map.insert(Self::key(build), score);
+            map.insert(key.to_string(), score);
         }
     }
 

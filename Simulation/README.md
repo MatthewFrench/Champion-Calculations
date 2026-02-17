@@ -55,6 +55,8 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
   - time alive
   - damage dealt to enemies
   - healing done
+  - enemy champions killed
+  - invulnerable/untargetable seconds
   with configurable weights and per-scenario baseline normalization.
 - Objective evaluation now supports selection-aware combat simulation so candidate loadout scoring includes combat-time runtime scripts.
 - Default ownership is domain-based:
@@ -72,7 +74,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `scenarios/`: Scenario catalog directory.
 - `scenarios/vladimir_urf_teamfight.json`: Default URF team-fight scenario setup.
 - `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
-- `data/simulator_defaults.json`: Global simulator/search/engine and loadout-generation defaults.
+- `data/simulator_defaults.json`: Global simulator/search/engine defaults.
 - `data/champion_ai_profiles.json`: Champion AI controller policy (combat spacing, movement scaling, script polling, script-event priority overrides, and non-canonical cooldown overrides when canonical data is missing).
 - `../Game Mode/URF.json`: URF mode data, including mode-specific simulation defaults (for example respawn tuning).
 - `../Characters/<Champion>.json`: Champion canonical gameplay data, including per-ability execution fields (`abilities.<ability_key>.execution`) and ability/passive effect data used by scripts.
@@ -94,9 +96,8 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `src/scripts/champions/mod.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types (including script effect hitbox descriptors).
 - `src/scripts/champions/vladimir/mod.rs`: Vladimir scripted formulas and combat decision APIs (offense and defensive ability decisions).
 - `src/scripts/champions/<champion>/mod.rs`: Per-champion behavior/event logic modules.
-- `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack assumptions).
+- `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack override handling).
 - `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
-- `src/scripts/masteries/effects.rs`: Mastery runtime flag parsing and dynamic-runtime classification.
 - `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion runtime effects, defensive item/revive decision helpers, and loadout hook implementation.
 - `src/scripts/runtime/loadout_runtime.rs`: Shared combat-time loadout runtime state and effect helpers.
 - `src/scripts/registry/hooks.rs`: Script hook interfaces, contexts, and dispatch registry.
@@ -114,18 +115,26 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.json`
   where `<controlled_champion_key>` is the normalized champion name (for example: `vladimir`).
   where `<search_quality_profile>` is one of `fast`, `balanced`, `maximum_quality`.
-  where `<runtime_budget>` is `unbounded` when no runtime budget is set, otherwise the budget label (for example `300s`).
+  where `<runtime_budget>` is:
+  - `no_hard_cap` when no runtime budget is set.
+  - `<seconds>s` when only fixed budget is used (for example `300s`).
+  - `<budget>__popcorn_with_progress_<relative_percent>_percent_minumum_in_<window>_max_gap` when popcorn mode is enabled.
 - Report includes:
-  - Human-readable generation timestamps (local and UTC) plus unix timestamp
-  - Vladimir base stats at configured level (`simulation.champion_level`, default `20`)
+  - Human-readable generation timestamps (local and UTC)
+  - Vladimir base stats at configured level (`controlled_champion.level` override, fallback `simulation.champion_level`, default `20`)
   - Vladimir end stats for best build
-  - Stack assumptions/notes for stack-based items in the best build
+  - Stack override notes for stack-based items in the best build
   - Enemy derived combat profiles (HP/AD/AS/range/hit/burst stats) with similarity warnings for suspiciously close auto profiles
   - Detailed search diagnostics including:
-    - full evaluations
+    - explicit simulation counts (new full simulations, unique scored candidates, total score requests)
+    - search elapsed time and total run time (end-to-end)
     - cache hits/misses
+    - unique scored candidates across all search stages
+    - per-search-type breakdown (requests/new simulations/persistent cache hits)
     - generated/unique/pruned candidate counts
     - strict-stage completion percentage and timeout-skipped candidate count
+    - estimated legal candidate-space size and coverage percentages
+    - heuristic closeness-to-optimal probability estimate with explicit assumptions
   - If run with a time budget, report includes timeout and completion metadata
 - Trace outputs are also champion-keyed:
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
@@ -135,6 +144,15 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 ## Runtime Controls
 - `--max-runtime-seconds N`:
   - Stops search after `N` seconds and reports best-so-far findings.
+- `--popcorn-window-seconds W`:
+  - Enables progress-window stopping ("microwave popcorn mode").
+  - Search continues while significant improvements keep happening; run stops when no significant improvement is observed for `W` seconds.
+  - Popcorn mode always uses the `maximum_quality` search profile, regardless of `--search-quality-profile`.
+  - Can be combined with `--max-runtime-seconds`:
+    - stop condition is whichever comes first.
+- `--popcorn-min-relative-improvement-percent R`:
+  - Relative objective-score delta required to count as significant progress.
+  - Significant threshold is `R%` of the last best score.
 - `--status-every-seconds N`:
   - Prints periodic status lines (phase, elapsed, progress, best score) while searching.
 - `--search-quality-profile {fast|balanced|maximum_quality}`:
@@ -229,7 +247,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
     - default slot bindings should be derived from canonical ability data (`abilities.<ability>.slot` / `default_keybinding`) in champion files, not from separate top-level mapping blocks or global defaults.
 
 ## Current Script Structure
-The simulator now uses a domain-first script layout to keep champion/item/rune/mastery behavior organized:
+The simulator now uses a domain-first script layout to keep champion/item/rune behavior organized:
 
 ```text
 src/scripts/
@@ -256,9 +274,6 @@ src/scripts/
   runes/
     mod.rs
     effects.rs
-  masteries/
-    mod.rs
-    effects.rs
   runtime/
     mod.rs
     controlled_champion_loadout.rs
@@ -275,10 +290,11 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `controlled_champion.champion`: champion name from `Characters/`.
   - `opponents.encounters[].actors[].champion`: champion name from `Characters/`.
 - Required structure:
-  - `controlled_champion.baseline_items`: baseline build item names.
-  - `controlled_champion.loadout`: optional runes/shards/masteries for the controlled champion.
+  - `controlled_champion` with at least `champion`.
   - `opponents.encounters[]`: weighted encounter list used by objective aggregation.
-  - `opponents.shared_loadout`: optional runes/shards/masteries added to opponent preset loadouts.
+- Optional reference fields:
+  - `controlled_champion.baseline_items`: baseline-only report/reference build (not used to seed item search).
+  - `controlled_champion.loadout`: optional controlled champion loadout block (not used as the optimization seed).
 - Keep only scenario-specific behavior in scenario JSON (example: simplified `ability_dps_*`, stun cadence).
 - Legacy flat scenario keys are removed; scenario parsing is now strict and canonical.
 - Build search item pool is restricted to purchasable `LEGENDARY` items only.
@@ -308,7 +324,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `simulated_annealing_restarts`, `simulated_annealing_iterations`, `simulated_annealing_initial_temp`, `simulated_annealing_cooling_rate`
   - `mcts_iterations`, `mcts_rollouts_per_expansion`, `mcts_exploration`
   - `ensemble_seeds`, `ensemble_seed_stride`, `ensemble_seed_top_k`
-  - `objective_survival_weight`, `objective_damage_weight`, `objective_healing_weight`
+  - `objective_survival_weight`, `objective_damage_weight`, `objective_healing_weight`, `objective_enemy_kills_weight`, `objective_invulnerable_seconds_weight`
   - `robust_min_seed_hit_rate`
   - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
   - `multi_scenario_worst_weight` (aggregation between weighted-mean and worst-case when using multiple enemy scenarios)
@@ -316,27 +332,29 @@ This migration is active and tracked in the roadmap and improvement tracker for 
 - Loadout search legality:
   - Rune pages are generated from legal primary/secondary slot rules in `RunesReforged.json`.
   - Shards are generated from legal `stat_shards` slot options.
-  - Mastery pages are generated from legal Season 2016 tree/tier/point constraints in `Season2016.json`.
-  - Loadout optimization is always on for controlled champion build scoring; there is no scenario shortlist/sample knob for runes/shards/masteries.
+  - Runtime validation rejects illegal pages before simulation (invalid path/slot/shard structure).
+  - Loadout optimization is always on for controlled champion build scoring; there is no scenario shortlist/sample knob.
 - Enemy presets:
-  - `vladimir` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune/mastery pages.
-  - Startup validation fails fast if a preset references missing item/rune/shard/mastery data.
+  - `vladimir` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune pages/shards.
+  - Startup validation fails fast if a preset references missing item/rune/shard data.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
-- Heartsteel assumptions:
-  - `simulation.heartsteel_assumed_stacks_at_8m` controls expected proc count by 8 minutes.
-  - this value is scenario-owned and must be provided by the scenario.
-  - Simulator converts that proc count into an estimated permanent bonus health and applies it as effective bonus health.
-  - In build-order optimization, Heartsteel stacks are distributed by item acquisition level and current stage level (so buying it later yields fewer stacks by level 20).
-- Level assumption:
-  - `simulation.champion_level` sets champion level used for base stat scaling in simulation and report (default `20`).
+- Stack overrides (generic, keyed by stack identifier):
+  - `simulation.stack_overrides` sets global stack overrides by stack identifier (example: `{ "heartsteel": 20.0 }`).
+  - `controlled_champion.stack_overrides` overrides global stack overrides for the controlled champion.
+  - `opponents.stack_overrides` sets default opponent overrides, and each actor can further override with `opponents.encounters[].actors[].stack_overrides`.
+  - In build-order optimization, stack overrides are distributed by item acquisition level and current stage level (buying later yields fewer stacks by level 20).
+- Level defaults:
+  - `simulation.champion_level` is the fallback level.
+  - `controlled_champion.level` overrides controlled champion level.
+  - `opponents.default_level` overrides fallback for opponent actors, and `opponents.encounters[].actors[].level` overrides per actor.
 - Scenario simulation knobs are now minimal by default:
-  - required:
-    - `simulation.max_time_seconds`
-    - `simulation.heartsteel_assumed_stacks_at_8m`
   - optional overrides:
+    - `simulation.time_limit_seconds` (default from `Simulation/data/simulator_defaults.json`; default value `1200` seconds)
+    - hard cap: `<= 1200` seconds (20 minutes)
     - `simulation.server_tick_rate_hz`
     - `simulation.champion_level`
-    - `simulation.enemy_uptime_model_enabled`
+    - `simulation.stack_overrides`
+    - `opponents.uptime_windows_enabled`
 - Fallback ownership by domain:
   - URF respawn defaults load from `../Game Mode/URF.json` `respawn`.
   - Vladimir Sanguine Pool defaults load from `../Characters/Vladimir.json` `abilities.basic_ability_2`.
@@ -353,10 +371,13 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - fallback defaults are loaded from `../Characters/Vladimir.json` under `abilities.basic_ability_1`, `abilities.basic_ability_3`, and `abilities.ultimate` (effects plus cooldowns).
 - Enemy script hooks (per actor in `opponents.encounters[].actors[].combat`):
   - Burst windows: `burst_interval_seconds`, `burst_start_offset_seconds`, `burst_magic_flat`, `burst_physical_flat`, `burst_true_flat`, `burst_ad_ratio`, `burst_ap_ratio`
-  - Optional uptime model: enable with `simulation.enemy_uptime_model_enabled`, then per actor use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
+  - Optional uptime model: enable with `opponents.uptime_windows_enabled`, then per actor use `uptime_cycle_seconds`, `uptime_active_seconds`, `uptime_phase_seconds`
   - Placement/movement policy: `opponents.encounters[].actors[].placement.position` plus `placement.movement` (`hold_position` or `maintain_combat_range`)
 - Report now includes:
   - Headline objective score and component outcomes (time alive, damage dealt, healing done, enemy kills)
+  - Objective score breakdown for baseline and best builds:
+    - weighted contribution and impact share (%) of survival, damage, healing, and enemy kills
+    - delta vs configured weight to reveal overshadowed or underperforming objective components
   - Cap-survivor indicators for baseline and best build outcomes
   - Enemy derived combat profile diagnostics and similarity warnings
   - Search diagnostics (full eval counts, candidate pool, seed variance, objective weights)
@@ -364,7 +385,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - Pareto-front tagging over objective/EHP/AP/cost-timing metrics
   - Cache hit/miss/wait diagnostics
 - Build-order optimization is focused on robust/Pareto builds first, with fallback to top builds if needed.
-- Vladimir loadout (runes/masteries/shards) can be co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
+- Vladimir loadout (runes/shards) is co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
 
 ## Multi-Scenario Objective
 - `opponents.encounters` is required and supports multiple weighted encounters.
@@ -373,15 +394,15 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `weight`
   - `actors` (same actor schema as primary encounter)
 - Objective score is aggregated across scenarios with worst-case blending via `search.multi_scenario_worst_weight`.
+- Objective normalization references are derived from scenario horizon and enemy total effective health, not from a configured baseline build.
 
-## Runes/Masteries
+## Rune Pages
 - Optional scenario loadout blocks:
   - `controlled_champion.loadout`
-  - `opponents.shared_loadout` (applies to all opponents in addition to their URF presets)
+- Controlled champion loadout optimization samples legal loadouts from the full generated domain and does not use `controlled_champion.loadout` as a search seed.
 - Supported keys:
-  - `runes_reforged.rune_ids` (array of rune IDs)
-  - `runes_reforged.rune_names` (array of rune names)
-  - `runes_reforged.shard_stats` (slot-ordered shard stat keys, e.g. `ability_haste`, `health`, `attack_speed`)
-  - `season2016_masteries` (array of mastery names, or objects `{ \"name\": \"...\", \"rank\": N }`)
+  - `runes_reforged.rune_names` (ordered array of 6 rune names:
+    primary `[keystone, slot2, slot3, slot4]`, secondary `[two runes from different secondary slots in slot order]`)
+  - `runes_reforged.shard_stats` (ordered array of 3 shard stats by shard slot)
 - Current implementation applies deterministic stat bonuses from direct passive/stat effects and reports selections/skips in output.
-- Conditional or highly dynamic rune/mastery effects that cannot be represented deterministically are skipped and documented in the report.
+- Conditional or highly dynamic rune effects that cannot be represented deterministically are skipped and documented in the report.

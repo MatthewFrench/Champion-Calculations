@@ -1,4 +1,4 @@
-use crate::{MasterySelection, to_norm_key};
+use crate::to_norm_key;
 
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct OnHitEffectProfile {
@@ -20,15 +20,11 @@ pub(crate) struct LoadoutRuntimeState {
     has_liandry: bool,
     has_luden: bool,
     has_guinsoo: bool,
-    has_fervor: bool,
-    has_thunderlords: bool,
-    has_perseverance: bool,
+    has_second_wind: bool,
 
     pub attacks_landed: usize,
     pub lethal_tempo_stacks: usize,
     pub guinsoo_stacks: usize,
-    pub fervor_stacks: usize,
-    pub thunderlords_stacks: usize,
     pub grasp_ready_at: f64,
     pub heartsteel_ready_at: f64,
     pub luden_ready_at: f64,
@@ -45,14 +41,10 @@ impl Default for LoadoutRuntimeState {
             has_liandry: false,
             has_luden: false,
             has_guinsoo: false,
-            has_fervor: false,
-            has_thunderlords: false,
-            has_perseverance: false,
+            has_second_wind: false,
             attacks_landed: 0,
             lethal_tempo_stacks: 0,
             guinsoo_stacks: 0,
-            fervor_stacks: 0,
-            thunderlords_stacks: 0,
             grasp_ready_at: 0.0,
             heartsteel_ready_at: 0.0,
             luden_ready_at: 0.0,
@@ -63,7 +55,6 @@ impl Default for LoadoutRuntimeState {
 pub(crate) fn build_loadout_runtime_state(
     item_names: &[String],
     rune_names: &[String],
-    masteries: &[MasterySelection],
 ) -> LoadoutRuntimeState {
     let mut runtime = LoadoutRuntimeState::default();
 
@@ -83,15 +74,7 @@ pub(crate) fn build_loadout_runtime_state(
         match to_norm_key(rune).as_str() {
             "lethaltempo" => runtime.has_lethal_tempo = true,
             "graspoftheundying" => runtime.has_grasp = true,
-            _ => {}
-        }
-    }
-
-    for mastery in masteries {
-        match to_norm_key(&mastery.name).as_str() {
-            "fervorofbattle" => runtime.has_fervor = true,
-            "thunderlordsdecree" => runtime.has_thunderlords = true,
-            "perseverance" => runtime.has_perseverance = true,
+            "secondwind" => runtime.has_second_wind = true,
             _ => {}
         }
     }
@@ -117,8 +100,6 @@ pub(crate) fn reset_transient_loadout_state(runtime: &mut LoadoutRuntimeState) {
     runtime.attacks_landed = 0;
     runtime.lethal_tempo_stacks = 0;
     runtime.guinsoo_stacks = 0;
-    runtime.fervor_stacks = 0;
-    runtime.thunderlords_stacks = 0;
 }
 
 pub(crate) fn calculate_on_hit_bonus_damage(
@@ -137,18 +118,8 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     if runtime.has_guinsoo {
         runtime.guinsoo_stacks = (runtime.guinsoo_stacks + 1).min(8);
     }
-    if runtime.has_fervor {
-        runtime.fervor_stacks = (runtime.fervor_stacks + 1).min(8);
-    }
 
-    let fervor_bonus_ad = if runtime.has_fervor {
-        2.0 * runtime.fervor_stacks as f64
-    } else {
-        0.0
-    };
-
-    let magic = profile.on_hit_magic_flat
-        + profile.on_hit_magic_ad_ratio * (attack_damage + fervor_bonus_ad);
+    let magic = profile.on_hit_magic_flat + profile.on_hit_magic_ad_ratio * attack_damage;
     let mut extra_physical = 0.0;
     let mut extra_magic = magic.max(0.0);
     let mut extra_true = 0.0;
@@ -159,7 +130,7 @@ pub(crate) fn calculate_on_hit_bonus_damage(
             .is_multiple_of(profile.periodic_true_hit_every)
     {
         extra_true += profile.periodic_true_hit_base
-            + profile.periodic_true_hit_ad_ratio * (attack_damage + fervor_bonus_ad)
+            + profile.periodic_true_hit_ad_ratio * attack_damage
             + profile.periodic_true_hit_target_max_health_ratio * target_max_health;
     }
 
@@ -168,7 +139,7 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     }
 
     if runtime.has_kraken && runtime.attacks_landed.is_multiple_of(3) {
-        extra_true += 65.0 + 0.45 * (attack_damage + fervor_bonus_ad);
+        extra_true += 65.0 + 0.45 * attack_damage;
     }
 
     if runtime.has_grasp && now >= runtime.grasp_ready_at {
@@ -179,14 +150,6 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     if runtime.has_heartsteel && now >= runtime.heartsteel_ready_at {
         extra_physical += 70.0 + 0.06 * attacker_max_health.max(0.0);
         runtime.heartsteel_ready_at = now + 5.0;
-    }
-
-    if runtime.has_thunderlords {
-        runtime.thunderlords_stacks += 1;
-        if runtime.thunderlords_stacks >= 3 {
-            extra_magic += 30.0 + 0.30 * (attack_damage + fervor_bonus_ad);
-            runtime.thunderlords_stacks = 0;
-        }
     }
 
     (
@@ -203,7 +166,7 @@ pub(crate) fn calculate_ability_bonus_damage(
     now: f64,
 ) -> (f64, f64) {
     let mut extra_magic = 0.0;
-    let mut extra_true = 0.0;
+    let extra_true = 0.0_f64;
 
     if runtime.has_liandry {
         extra_magic += 0.04 * target_max_health.max(0.0);
@@ -212,18 +175,6 @@ pub(crate) fn calculate_ability_bonus_damage(
     if runtime.has_luden && now >= runtime.luden_ready_at {
         extra_magic += 90.0 + 0.10 * ability_raw_damage.max(0.0);
         runtime.luden_ready_at = now + 8.0;
-    }
-
-    if runtime.has_thunderlords {
-        runtime.thunderlords_stacks += 1;
-        if runtime.thunderlords_stacks >= 3 {
-            extra_magic += 40.0 + 0.20 * ability_raw_damage.max(0.0);
-            runtime.thunderlords_stacks = 0;
-        }
-    }
-
-    if runtime.has_fervor {
-        extra_true += 0.02 * runtime.fervor_stacks as f64 * ability_raw_damage.max(0.0);
     }
 
     (extra_magic.max(0.0), extra_true.max(0.0))
@@ -235,7 +186,7 @@ pub(crate) fn tick_loadout_regeneration(
     max_health: f64,
     dt: f64,
 ) -> f64 {
-    if !runtime.has_perseverance || max_health <= 0.0 || dt <= 0.0 {
+    if !runtime.has_second_wind || max_health <= 0.0 || dt <= 0.0 {
         return 0.0;
     }
     let health_ratio = (current_health / max_health).clamp(0.0, 1.0);
@@ -264,7 +215,7 @@ mod tests {
     }
 
     #[test]
-    fn builder_marks_item_rune_and_mastery_runtime_flags() {
+    fn builder_marks_item_and_rune_runtime_flags() {
         let runtime = build_loadout_runtime_state(
             &[
                 "Kraken Slayer".to_string(),
@@ -274,16 +225,7 @@ mod tests {
             &[
                 "Lethal Tempo".to_string(),
                 "Grasp of the Undying".to_string(),
-            ],
-            &[
-                MasterySelection {
-                    name: "Fervor of Battle".to_string(),
-                    rank: 1,
-                },
-                MasterySelection {
-                    name: "Perseverance".to_string(),
-                    rank: 1,
-                },
+                "Second Wind".to_string(),
             ],
         );
 
@@ -292,8 +234,7 @@ mod tests {
         assert!(runtime.has_heartsteel);
         assert!(runtime.has_lethal_tempo);
         assert!(runtime.has_grasp);
-        assert!(runtime.has_fervor);
-        assert!(runtime.has_perseverance);
+        assert!(runtime.has_second_wind);
     }
 
     #[test]
@@ -301,7 +242,6 @@ mod tests {
         let mut runtime = build_loadout_runtime_state(
             &["Kraken Slayer".to_string()],
             &["Lethal Tempo".to_string()],
-            &[],
         );
         assert!(loadout_attack_speed_multiplier(&runtime) >= 1.0);
 
@@ -345,27 +285,19 @@ mod tests {
                 "Guinsoo's Rageblade".to_string(),
             ],
             &["Lethal Tempo".to_string()],
-            &[MasterySelection {
-                name: "Fervor of Battle".to_string(),
-                rank: 1,
-            }],
         );
         runtime.attacks_landed = 7;
         runtime.lethal_tempo_stacks = 6;
         runtime.guinsoo_stacks = 8;
-        runtime.fervor_stacks = 8;
-        runtime.thunderlords_stacks = 2;
         reset_transient_loadout_state(&mut runtime);
         assert_eq!(runtime.attacks_landed, 0);
         assert_eq!(runtime.lethal_tempo_stacks, 0);
         assert_eq!(runtime.guinsoo_stacks, 0);
-        assert_eq!(runtime.fervor_stacks, 0);
-        assert_eq!(runtime.thunderlords_stacks, 0);
     }
 
     #[test]
     fn ability_bonus_damage_respects_luden_cooldown() {
-        let mut runtime = build_loadout_runtime_state(&["Luden's Echo".to_string()], &[], &[]);
+        let mut runtime = build_loadout_runtime_state(&["Luden's Echo".to_string()], &[]);
         let (magic_a, true_a) = calculate_ability_bonus_damage(&mut runtime, 300.0, 2500.0, 0.0);
         let (magic_b, true_b) = calculate_ability_bonus_damage(&mut runtime, 300.0, 2500.0, 1.0);
         assert!(magic_a > magic_b);
@@ -373,15 +305,8 @@ mod tests {
     }
 
     #[test]
-    fn perseverance_bonus_regen_scales_when_low_health() {
-        let runtime = build_loadout_runtime_state(
-            &[],
-            &[],
-            &[MasterySelection {
-                name: "Perseverance".to_string(),
-                rank: 1,
-            }],
-        );
+    fn second_wind_regen_scales_when_low_health() {
+        let runtime = build_loadout_runtime_state(&[], &["Second Wind".to_string()]);
         let high = tick_loadout_regeneration(&runtime, 2800.0, 3000.0, 1.0);
         let low = tick_loadout_regeneration(&runtime, 900.0, 3000.0, 1.0);
         assert!(high > 0.0);

@@ -1,0 +1,306 @@
+# Vladimir Event Trace
+
+## Baseline Build Trace
+- 0.000s [champion_script] Vayne executed VayneTumbleEmpower
+- 0.000s [enemy_buff] Vayne empowered next attack
+- 0.000s [champion_script] Morgana executed MorganaDarkBinding
+- 0.000s [impact_nullified] Morgana scripted impact on Vladimir was nullified by untargetable state
+- 0.000s [champion_script] Sona executed SonaCrescendo
+- 0.000s [impact_nullified] Sona scripted impact on Vladimir was nullified by untargetable state
+- 0.000s [champion_script] Dr. Mundo executed DoctorMundoInfectedBonesaw
+- 0.000s [impact_nullified] Dr. Mundo scripted impact on Vladimir was nullified by untargetable state
+- 0.159s [attack_start] Vayne begins auto attack
+- 0.294s [impact_nullified] Dr. Mundo burst impacted Vladimir during untargetable state
+- 0.346s [impact_nullified] Vayne burst impacted Vladimir during untargetable state
+- 0.373s [attack_start] Warwick begins auto attack
+- 0.442s [impact_nullified] Sona burst impacted Vladimir during untargetable state
+- 0.540s [attack_start] Sona begins auto attack
+- 0.580s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 0.612s [attack_start] Dr. Mundo begins auto attack
+- 0.613s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 0.630s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 0.780s [attack_start] Vayne begins auto attack
+- 0.808s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 0.846s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 0.852s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 0.972s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 0.972s [attack_start] Warwick begins auto attack
+- 1.080s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 1.126s [impact_nullified] Sona auto attack impacted Vladimir during untargetable state
+- 1.163s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 1.212s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 1.251s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 1.308s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 1.346s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 1.393s [attack_start] Vayne begins auto attack
+- 1.463s [attack_start] Dr. Mundo begins auto attack
+- 1.472s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 1.557s [attack_start] Warwick begins auto attack
+- 1.580s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 1.663s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 1.666s [attack_start] Sona begins auto attack
+- 1.703s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 1.797s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 1.808s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 1.846s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 1.864s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 1.972s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 1.999s [attack_start] Vayne begins auto attack
+- 2.000s [champion_script] Vayne executed VayneTumbleEmpower
+- 2.000s [enemy_buff] Vayne empowered next attack
+- 2.080s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 2.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 2.130s [attack_start] Warwick begins auto attack
+- 2.163s [damage_in] physical 0.0, magic 160.9, true 0.0, total 104.0
+- 2.163s [ability_hit] Morgana ability hit Vladimir (magic 160.9, true 0.0)
+- 2.200s [controlled_champion_q_hit] Vladimir Q hit Warwick for 93.6
+- 2.250s [controlled_champion_r_hit] Vladimir R dealt 1086.1
+- 2.252s [damage_in] physical 106.0, magic 0.0, true 0.0, total 50.6
+- 2.252s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
+- 2.300s [controlled_champion_e_hit] Vladimir E dealt 558.6
+- 2.308s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
+- 2.308s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
+- 2.315s [attack_start] Dr. Mundo begins auto attack
+- 2.346s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 2.346s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 2.370s [damage_in] physical 388.2, magic 81.6, true 0.0, total 238.1
+- 2.370s [attack_hit] Warwick hit Vladimir (phys 388.2, magic 81.6, true 0.0)
+- 2.470s [damage_in] physical 769.9, magic 0.0, true 0.0, total 367.5
+- 2.470s [attack_hit] Vayne hit Vladimir (phys 769.9, magic 0.0, true 0.0)
+- 2.472s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 2.472s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 2.555s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 2.580s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 2.580s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 2.598s [attack_start] Vayne begins auto attack
+- 2.641s [damage_in] physical 0.0, magic 247.6, true 0.0, total 160.1
+- 2.641s [burst_hit] Morgana burst hit Vladimir (phys 0.0, magic 247.6, true 0.0)
+- 2.663s [damage_in] physical 0.0, magic 160.9, true 0.0, total 104.0
+- 2.663s [ability_hit] Morgana ability hit Vladimir (magic 160.9, true 0.0)
+- 2.692s [attack_start] Warwick begins auto attack
+- 2.792s [attack_start] Sona begins auto attack
+- 2.808s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
+- 2.808s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
+- 2.846s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 2.846s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 2.932s [damage_in] physical 331.5, magic 81.6, true 0.0, total 211.0
+- 2.932s [attack_hit] Warwick hit Vladimir (phys 331.5, magic 81.6, true 0.0)
+- 2.972s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 2.972s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 3.069s [damage_in] physical 374.2, magic 0.0, true 0.0, total 178.6
+- 3.069s [attack_hit] Vayne hit Vladimir (phys 374.2, magic 0.0, true 0.0)
+- 3.080s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 3.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 3.163s [damage_in] physical 0.0, magic 160.9, true 0.0, total 104.0
+- 3.163s [ability_hit] Morgana ability hit Vladimir (magic 160.9, true 0.0)
+- 3.166s [attack_start] Dr. Mundo begins auto attack
+- 3.191s [attack_start] Vayne begins auto attack
+- 3.242s [attack_start] Warwick begins auto attack
+- 3.308s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
+- 3.308s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
+- 3.346s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 3.346s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 3.363s [controlled_champion_q_hit] Vladimir Q hit Warwick for 93.6
+- 3.378s [damage_in] physical 106.0, magic 0.0, true 0.0, total 50.6
+- 3.378s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
+- 3.406s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 3.472s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 3.472s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 3.482s [damage_in] physical 294.0, magic 81.6, true 171.9, total 365.0
+- 3.482s [attack_hit] Warwick hit Vladimir (phys 294.0, magic 81.6, true 171.9)
+- 3.567s [controlled_champion_e_hit] Vladimir E dealt 558.6
+- 3.580s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 3.580s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 3.662s [damage_in] physical 328.2, magic 0.0, true 576.6, total 733.2
+- 3.662s [controlled_champion_death] Vladimir died
+- 3.662s [attack_hit] Vayne hit Vladimir (phys 328.2, magic 0.0, true 576.6)
+
+## Best Build Trace
+- 0.000s [champion_script] Vayne executed VayneTumbleEmpower
+- 0.000s [enemy_buff] Vayne empowered next attack
+- 0.000s [champion_script] Morgana executed MorganaDarkBinding
+- 0.000s [impact_nullified] Morgana scripted impact on Vladimir was nullified by untargetable state
+- 0.000s [champion_script] Sona executed SonaCrescendo
+- 0.000s [impact_nullified] Sona scripted impact on Vladimir was nullified by untargetable state
+- 0.000s [champion_script] Dr. Mundo executed DoctorMundoInfectedBonesaw
+- 0.000s [impact_nullified] Dr. Mundo scripted impact on Vladimir was nullified by untargetable state
+- 0.159s [attack_start] Vayne begins auto attack
+- 0.294s [impact_nullified] Dr. Mundo burst impacted Vladimir during untargetable state
+- 0.346s [impact_nullified] Vayne burst impacted Vladimir during untargetable state
+- 0.373s [attack_start] Warwick begins auto attack
+- 0.442s [impact_nullified] Sona burst impacted Vladimir during untargetable state
+- 0.540s [attack_start] Sona begins auto attack
+- 0.580s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 0.612s [attack_start] Dr. Mundo begins auto attack
+- 0.613s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 0.630s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 0.780s [attack_start] Vayne begins auto attack
+- 0.808s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 0.846s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 0.852s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 0.972s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 0.972s [attack_start] Warwick begins auto attack
+- 1.080s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 1.126s [impact_nullified] Sona auto attack impacted Vladimir during untargetable state
+- 1.163s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 1.212s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 1.251s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 1.308s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 1.346s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 1.393s [attack_start] Vayne begins auto attack
+- 1.463s [attack_start] Dr. Mundo begins auto attack
+- 1.472s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 1.557s [attack_start] Warwick begins auto attack
+- 1.580s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 1.663s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 1.666s [attack_start] Sona begins auto attack
+- 1.703s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 1.797s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 1.808s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 1.846s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 1.864s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 1.972s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 1.999s [attack_start] Vayne begins auto attack
+- 2.000s [champion_script] Vayne executed VayneTumbleEmpower
+- 2.000s [enemy_buff] Vayne empowered next attack
+- 2.080s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 2.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 2.130s [attack_start] Warwick begins auto attack
+- 2.163s [damage_in] physical 0.0, magic 205.7, true 0.0, total 133.0
+- 2.163s [ability_hit] Morgana ability hit Vladimir (magic 205.7, true 0.0)
+- 2.200s [controlled_champion_q_hit] Vladimir Q hit Warwick for 121.6
+- 2.250s [controlled_champion_r_hit] Vladimir R dealt 1259.2
+- 2.252s [damage_in] physical 106.0, magic 0.0, true 0.0, total 45.2
+- 2.252s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
+- 2.300s [controlled_champion_e_hit] Vladimir E dealt 756.3
+- 2.308s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
+- 2.308s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
+- 2.315s [attack_start] Dr. Mundo begins auto attack
+- 2.346s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 2.346s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 2.370s [damage_in] physical 454.5, magic 81.6, true 0.0, total 246.6
+- 2.370s [attack_hit] Warwick hit Vladimir (phys 454.5, magic 81.6, true 0.0)
+- 2.470s [damage_in] physical 835.7, magic 0.0, true 0.0, total 356.4
+- 2.470s [attack_hit] Vayne hit Vladimir (phys 835.7, magic 0.0, true 0.0)
+- 2.472s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 2.472s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 2.555s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 2.580s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 2.580s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 2.598s [attack_start] Vayne begins auto attack
+- 2.641s [damage_in] physical 0.0, magic 292.5, true 0.0, total 189.1
+- 2.641s [burst_hit] Morgana burst hit Vladimir (phys 0.0, magic 292.5, true 0.0)
+- 2.663s [damage_in] physical 0.0, magic 205.7, true 0.0, total 133.0
+- 2.663s [ability_hit] Morgana ability hit Vladimir (magic 205.7, true 0.0)
+- 2.692s [attack_start] Warwick begins auto attack
+- 2.792s [attack_start] Sona begins auto attack
+- 2.808s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
+- 2.808s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
+- 2.846s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 2.846s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 2.932s [damage_in] physical 394.5, magic 81.6, true 0.0, total 221.0
+- 2.932s [attack_hit] Warwick hit Vladimir (phys 394.5, magic 81.6, true 0.0)
+- 2.972s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 2.972s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 3.069s [damage_in] physical 436.6, magic 0.0, true 0.0, total 186.2
+- 3.069s [attack_hit] Vayne hit Vladimir (phys 436.6, magic 0.0, true 0.0)
+- 3.080s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 3.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 3.163s [damage_in] physical 0.0, magic 205.7, true 0.0, total 133.0
+- 3.163s [ability_hit] Morgana ability hit Vladimir (magic 205.7, true 0.0)
+- 3.166s [attack_start] Dr. Mundo begins auto attack
+- 3.191s [attack_start] Vayne begins auto attack
+- 3.233s [controlled_champion_q_hit] Vladimir Q hit Warwick for 121.6
+- 3.242s [attack_start] Warwick begins auto attack
+- 3.308s [damage_in] physical 0.0, magic 18.4, true 0.0, total 11.9
+- 3.308s [ability_hit] Dr. Mundo ability hit Vladimir (magic 18.4, true 0.0)
+- 3.346s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 3.346s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 3.378s [damage_in] physical 106.0, magic 0.0, true 0.0, total 45.2
+- 3.378s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
+- 3.399s [controlled_champion_e_hit] Vladimir E dealt 756.3
+- 3.406s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 3.472s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 3.472s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 3.482s [damage_in] physical 354.9, magic 81.6, true 171.9, total 376.0
+- 3.482s [attack_hit] Warwick hit Vladimir (phys 354.9, magic 81.6, true 171.9)
+- 3.580s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 3.662s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 3.663s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 3.779s [attack_start] Vayne begins auto attack
+- 3.783s [attack_start] Warwick begins auto attack
+- 3.808s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 3.846s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 3.919s [attack_start] Sona begins auto attack
+- 3.972s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 4.000s [enemy_uptime] Vayne left combat window
+- 4.000s [champion_script] Dr. Mundo executed DoctorMundoInfectedBonesaw
+- 4.000s [impact_nullified] Dr. Mundo scripted impact on Vladimir was nullified by untargetable state
+- 4.018s [attack_start] Dr. Mundo begins auto attack
+- 4.023s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 4.080s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 4.100s [burst_cancelled] Vayne burst cancelled during windup by crowd control or invulnerability
+- 4.100s [ability_cancelled] Vayne ability cancelled during windup by crowd control or invulnerability
+- 4.163s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 4.258s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 4.308s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 4.324s [attack_start] Warwick begins auto attack
+- 4.472s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 4.500s [enemy_uptime] Vayne re-entered combat window
+- 4.500s [champion_script] Vayne executed VayneTumbleEmpower
+- 4.500s [enemy_buff] Vayne empowered next attack
+- 4.504s [impact_nullified] Sona auto attack impacted Vladimir during untargetable state
+- 4.564s [impact_nullified] Warwick auto attack impacted Vladimir during untargetable state
+- 4.569s [attack_start] Vayne begins auto attack
+- 4.580s [impact_nullified] Warwick ability impacted Vladimir during untargetable state
+- 4.663s [impact_nullified] Morgana ability impacted Vladimir during untargetable state
+- 4.808s [enemy_uptime] Warwick left combat window
+- 4.808s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 4.846s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 4.869s [attack_start] Dr. Mundo begins auto attack
+- 4.972s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 5.033s [enemy_uptime] Morgana left combat window
+- 5.039s [impact_nullified] Vayne auto attack impacted Vladimir during untargetable state
+- 5.045s [attack_start] Sona begins auto attack
+- 5.109s [attack_missed] Dr. Mundo auto attack missed Vladimir hitbox
+- 5.190s [attack_start] Vayne begins auto attack
+- 5.250s [ability_cancelled] Morgana ability cancelled during windup by crowd control or invulnerability
+- 5.308s [impact_nullified] Dr. Mundo ability impacted Vladimir during untargetable state
+- 5.346s [impact_nullified] Vayne ability impacted Vladimir during untargetable state
+- 5.472s [impact_nullified] Sona ability impacted Vladimir during untargetable state
+- 5.533s [enemy_uptime] Sona left combat window
+- 5.533s [enemy_uptime] Dr. Mundo left combat window
+- 5.650s [ability_cancelled] Sona ability cancelled during windup by crowd control or invulnerability
+- 5.660s [damage_in] physical 408.5, magic 0.0, true 0.0, total 174.2
+- 5.660s [attack_hit] Vayne hit Vladimir (phys 408.5, magic 0.0, true 0.0)
+- 5.700s [ability_cancelled] Dr. Mundo ability cancelled during windup by crowd control or invulnerability
+- 5.767s [controlled_champion_q_miss] Vladimir Q missed Vayne
+- 5.802s [attack_start] Vayne begins auto attack
+- 5.846s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 5.846s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 5.867s [controlled_champion_e_hit] Vladimir E dealt 157.5
+- 6.000s [enemy_uptime] Warwick re-entered combat window
+- 6.000s [enemy_uptime] Morgana re-entered combat window
+- 6.000s [enemy_uptime] Sona re-entered combat window
+- 6.000s [champion_script] Morgana executed MorganaDarkBinding
+- 6.000s [damage_in] physical 0.0, magic 578.5, true 0.0, total 373.9
+- 6.000s [champion_script] Sona executed SonaCrescendo
+- 6.000s [damage_in] physical 0.0, magic 400.0, true 0.0, total 258.6
+- 6.080s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 6.080s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 6.171s [attack_start] Sona begins auto attack
+- 6.273s [damage_in] physical 358.0, magic 0.0, true 688.8, total 841.5
+- 6.273s [attack_hit] Vayne hit Vladimir (phys 358.0, magic 0.0, true 688.8)
+- 6.346s [damage_in] physical 0.0, magic 27.7, true 0.0, total 17.9
+- 6.346s [ability_hit] Vayne ability hit Vladimir (magic 27.7, true 0.0)
+- 6.357s [attack_start] Warwick begins auto attack
+- 6.408s [attack_start] Vayne begins auto attack
+- 6.472s [damage_in] physical 0.0, magic 44.3, true 0.0, total 28.6
+- 6.472s [ability_hit] Sona ability hit Vladimir (magic 44.3, true 0.0)
+- 6.500s [champion_script] Vayne executed VayneTumbleEmpower
+- 6.500s [enemy_buff] Vayne empowered next attack
+- 6.580s [damage_in] physical 0.0, magic 26.9, true 0.0, total 17.4
+- 6.580s [ability_hit] Warwick ability hit Vladimir (magic 26.9, true 0.0)
+- 6.597s [damage_in] physical 246.5, magic 81.6, true 0.0, total 157.9
+- 6.597s [controlled_champion_death] Vladimir died
+- 6.597s [attack_hit] Warwick hit Vladimir (phys 246.5, magic 81.6, true 0.0)

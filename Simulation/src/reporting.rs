@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use chrono::{DateTime, Local, Utc};
-use serde_json::json;
+use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -8,7 +8,9 @@ use std::time::SystemTime;
 
 use crate::search::item_names;
 
-use super::{ControlledChampionReportData, mean_std, simulation_dir, to_norm_key};
+use super::{
+    ControlledChampionReportData, ObjectiveScoreBreakdown, mean_std, simulation_dir, to_norm_key,
+};
 
 pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
     simulation_dir()
@@ -66,6 +68,91 @@ fn format_f64_with_commas(value: f64, decimals: usize) -> String {
     }
 }
 
+fn format_percent_display(percent: f64) -> String {
+    if !percent.is_finite() {
+        return percent.to_string();
+    }
+    if percent > 0.0 && percent < 0.000001 {
+        format!("{percent:.3e}%")
+    } else {
+        format!("{percent:.6}%")
+    }
+}
+
+fn append_objective_score_breakdown_block(
+    content: &mut String,
+    title: &str,
+    breakdown: ObjectiveScoreBreakdown,
+) {
+    let push_component = |content: &mut String,
+                          label: &str,
+                          weight: f64,
+                          normalized_ratio: f64,
+                          contribution: f64,
+                          impact_percent: f64| {
+        let delta_vs_weight = impact_percent - weight * 100.0;
+        content.push_str(&format!(
+            "- {}: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%` | delta vs weight `{:+.2}pp`\n",
+            label,
+            weight,
+            normalized_ratio,
+            contribution,
+            impact_percent,
+            delta_vs_weight
+        ));
+    };
+
+    content.push_str(&format!("### {}\n", title));
+    content.push_str(&format!(
+        "- Weighted-mean score: `{:.4}`\n- Worst-case scenario score: `{:.4}`\n- Worst-case blend weight: `{:.2}`\n- Final blended objective score: `{:.4}`\n",
+        breakdown.weighted_mean_score,
+        breakdown.worst_case_score,
+        breakdown.worst_case_weight,
+        breakdown.final_score
+    ));
+    push_component(
+        content,
+        "survival",
+        breakdown.survival.weight,
+        breakdown.survival.normalized_ratio,
+        breakdown.survival.contribution,
+        breakdown.survival.impact_percent,
+    );
+    push_component(
+        content,
+        "damage",
+        breakdown.damage.weight,
+        breakdown.damage.normalized_ratio,
+        breakdown.damage.contribution,
+        breakdown.damage.impact_percent,
+    );
+    push_component(
+        content,
+        "healing",
+        breakdown.healing.weight,
+        breakdown.healing.normalized_ratio,
+        breakdown.healing.contribution,
+        breakdown.healing.impact_percent,
+    );
+    push_component(
+        content,
+        "enemy_kills",
+        breakdown.enemy_kills.weight,
+        breakdown.enemy_kills.normalized_ratio,
+        breakdown.enemy_kills.contribution,
+        breakdown.enemy_kills.impact_percent,
+    );
+    push_component(
+        content,
+        "invulnerable_seconds",
+        breakdown.invulnerable_seconds.weight,
+        breakdown.invulnerable_seconds.normalized_ratio,
+        breakdown.invulnerable_seconds.contribution,
+        breakdown.invulnerable_seconds.impact_percent,
+    );
+    content.push('\n');
+}
+
 pub(super) fn write_controlled_champion_report_markdown(
     report_path: &Path,
     data: &ControlledChampionReportData<'_>,
@@ -86,9 +173,11 @@ pub(super) fn write_controlled_champion_report_markdown(
     let baseline_build = data.baseline_build;
     let baseline_score = data.baseline_score;
     let baseline_outcome = data.baseline_outcome;
+    let baseline_score_breakdown = data.baseline_score_breakdown;
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
+    let best_score_breakdown = data.best_score_breakdown;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
     let enemy_similarity_notes = data.enemy_similarity_notes;
@@ -130,8 +219,11 @@ pub(super) fn write_controlled_champion_report_markdown(
     let baseline_healing = format_f64_with_commas(baseline_outcome.healing_done, 1);
     let best_damage = format_f64_with_commas(best_outcome.damage_dealt, 1);
     let best_healing = format_f64_with_commas(best_outcome.healing_done, 1);
+    let baseline_invulnerable_seconds =
+        format_f64_with_commas(baseline_outcome.invulnerable_seconds, 2);
+    let best_invulnerable_seconds = format_f64_with_commas(best_outcome.invulnerable_seconds, 2);
     content.push_str(&format!(
-        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills: **{:.2}s / {} / {} / {}**\n- Best time alive / damage dealt / healing done / enemy kills: **{:.2}s / {} / {} / {}**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
+        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **{:.2}s / {} / {} / {} / {}s**\n- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **{:.2}s / {} / {} / {} / {}s**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
         baseline_score,
         best_score,
         improvement,
@@ -139,10 +231,12 @@ pub(super) fn write_controlled_champion_report_markdown(
         baseline_damage,
         baseline_healing,
         baseline_outcome.enemy_kills,
+        baseline_invulnerable_seconds,
         best_outcome.time_alive_seconds,
         best_damage,
         best_healing,
         best_outcome.enemy_kills,
+        best_invulnerable_seconds,
         baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
         best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
     ));
@@ -151,14 +245,26 @@ pub(super) fn write_controlled_champion_report_markdown(
         "- Champion level assumption: **{}**\n\n",
         sim.champion_level
     ));
+    content.push_str("## Objective Score Breakdown\n");
+    append_objective_score_breakdown_block(
+        &mut content,
+        "Baseline Build",
+        baseline_score_breakdown,
+    );
+    append_objective_score_breakdown_block(&mut content, "Best Build", best_score_breakdown);
 
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     let processed_candidates = diagnostics
         .processed_candidates
         .min(diagnostics.total_candidates);
+    let total_score_requests = diagnostics
+        .search_type_breakdown
+        .iter()
+        .map(|breakdown| breakdown.score_requests)
+        .sum::<usize>();
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing): `{:.2}/{:.2}/{:.2}`\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `{:.2}/{:.2}/{:.2}/{:.2}/{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- Full evaluations cache hits/misses/waits: `{}/{}/{}`\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
         format_usize_with_commas(diagnostics.scenario_count),
@@ -168,7 +274,11 @@ pub(super) fn write_controlled_champion_report_markdown(
         diagnostics.objective_survival_weight,
         diagnostics.objective_damage_weight,
         diagnostics.objective_healing_weight,
+        diagnostics.objective_enemy_kills_weight,
+        diagnostics.objective_invulnerable_seconds_weight,
         format_usize_with_commas(diagnostics.full_evaluations),
+        format_usize_with_commas(diagnostics.unique_scored_candidates),
+        format_usize_with_commas(total_score_requests),
         format_usize_with_commas(diagnostics.full_cache_hits),
         format_usize_with_commas(diagnostics.full_cache_misses),
         format_usize_with_commas(diagnostics.full_cache_waits),
@@ -186,13 +296,14 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_usize_with_commas(diagnostics.bleed_candidates_injected),
         format_usize_with_commas(diagnostics.adaptive_candidates_injected),
         format_f64_with_commas(seed_mean, 2),
-        format_f64_with_commas(seed_std, 3)
+        format_f64_with_commas(seed_std, 3),
+        diagnostics.elapsed_seconds,
+        diagnostics.total_run_seconds
     ));
     if let Some(budget) = diagnostics.time_budget_seconds {
         content.push_str(&format!(
-            "- Time budget: `{:.1}s`; elapsed: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%)\n\n",
+            "- Time budget: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%)\n\n",
             budget,
-            diagnostics.elapsed_seconds,
             diagnostics.timed_out,
             format_usize_with_commas(processed_candidates),
             format_usize_with_commas(diagnostics.total_candidates),
@@ -200,13 +311,69 @@ pub(super) fn write_controlled_champion_report_markdown(
         ));
     } else {
         content.push_str(&format!(
-            "- Elapsed: `{:.1}s`; progress: `{}/{}` ({:.1}%)\n\n",
-            diagnostics.elapsed_seconds,
+            "- Progress: `{}/{}` ({:.1}%)\n\n",
             format_usize_with_commas(processed_candidates),
             format_usize_with_commas(diagnostics.total_candidates),
             diagnostics.strict_completion_percent
         ));
     }
+    if let Some(window) = diagnostics.popcorn_window_seconds {
+        content.push_str(&format!(
+            "- Popcorn mode: window `{:.1}s`; significant threshold `{:.2}% of last best score`; significant events `{}`; seconds since last significant improvement `{:.1}`\n\n",
+            window,
+            diagnostics.popcorn_min_relative_improvement_percent,
+            format_usize_with_commas(diagnostics.significant_improvement_events),
+            diagnostics
+                .seconds_since_last_significant_improvement
+                .unwrap_or(0.0)
+        ));
+    }
+    if let Some(total) = diagnostics.estimated_total_candidate_space {
+        content.push_str(&format!(
+            "- Estimated total legal candidate space: `{}`\n",
+            format_f64_with_commas(total, 0)
+        ));
+    }
+    if let Some(run_coverage) = diagnostics.estimated_run_space_coverage_percent {
+        content.push_str(&format!(
+            "- Estimated legal-space coverage (this run): `{}`\n",
+            format_percent_display(run_coverage)
+        ));
+    }
+    if let Some(cache_coverage) = diagnostics.estimated_cache_space_coverage_percent {
+        content.push_str(&format!(
+            "- Estimated legal-space coverage (persistent cache): `{}`\n",
+            format_percent_display(cache_coverage)
+        ));
+    }
+    if let Some(probability) = diagnostics.estimated_close_to_optimal_probability {
+        content.push_str(&format!(
+            "- Estimated closeness probability (top 0.000001% heuristic): `{:.2}%`\n",
+            probability * 100.0
+        ));
+    }
+    if !diagnostics
+        .estimated_close_to_optimal_probability_note
+        .is_empty()
+    {
+        content.push_str(&format!(
+            "- Closeness probability note: {}\n",
+            diagnostics.estimated_close_to_optimal_probability_note
+        ));
+    }
+    if !diagnostics.search_type_breakdown.is_empty() {
+        content.push_str("- Search-type simulation breakdown:\n");
+        for breakdown in &diagnostics.search_type_breakdown {
+            content.push_str(&format!(
+                "  - {}: requests `{}`, new simulations `{}`, persistent cache hits `{}`\n",
+                breakdown.name,
+                format_usize_with_commas(breakdown.score_requests),
+                format_usize_with_commas(breakdown.new_simulations),
+                format_usize_with_commas(breakdown.persistent_cache_hits)
+            ));
+        }
+    }
+    content.push('\n');
 
     content.push_str(&format!(
         "## {} Base Stats At Level\n",
@@ -222,7 +389,7 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_f64_with_commas(controlled_champion_base_level.base_move_speed, 1)
     ));
 
-    content.push_str("## Selected Runes/Masteries\n");
+    content.push_str("## Selected Rune Page And Shards\n");
     if controlled_champion_loadout.selection_labels.is_empty() {
         content.push_str(&format!("- {}: none selected.\n", controlled_champion_name));
     } else {
@@ -232,9 +399,11 @@ pub(super) fn write_controlled_champion_report_markdown(
         }
     }
     if enemy_loadout.selection_labels.is_empty() {
-        content.push_str("- Enemies: none selected.\n\n");
+        content.push_str(
+            "- Opponents: champion-specific preset rune pages are listed in Enemy Builds.\n\n",
+        );
     } else {
-        content.push_str("- Enemies (applied to all):\n");
+        content.push_str("- Opponents (shared):\n");
         for s in &enemy_loadout.selection_labels {
             content.push_str(&format!("  - {}\n", s));
         }
@@ -265,7 +434,11 @@ pub(super) fn write_controlled_champion_report_markdown(
     content.push('\n');
 
     content.push_str("## Baseline Build\n");
-    content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
+    if baseline_build.is_empty() {
+        content.push_str("- none provided\n\n");
+    } else {
+        content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
+    }
 
     content.push_str("## Best Build\n");
     content.push_str(&format!("- {}\n\n", item_names(best_build)));
@@ -286,11 +459,10 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_f64_with_commas(controlled_champion_end_stats.move_speed_percent, 1)
     ));
 
-    content.push_str("## Stack Assumptions\n");
+    content.push_str("## Stack Overrides\n");
     if stack_notes.is_empty() {
-        content.push_str(
-            "- No explicit stack assumptions triggered for selected best build items.\n\n",
-        );
+        content
+            .push_str("- No explicit stack overrides triggered for selected best build items.\n\n");
     } else {
         for note in stack_notes {
             content.push_str(&format!("- {}\n", note));
@@ -307,15 +479,7 @@ pub(super) fn write_controlled_champion_report_markdown(
                 preset.source_url, preset.last_checked
             ));
             content.push_str(&format!("  - Runes: {}\n", preset.runes.join(", ")));
-            content.push_str(&format!(
-                "  - Masteries: {}\n",
-                preset
-                    .masteries
-                    .iter()
-                    .map(|m| format!("{} ({})", m.name, m.rank))
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            ));
+            content.push_str(&format!("  - Shards: {}\n", preset.shards.join(", ")));
         }
     }
     content.push('\n');
@@ -477,6 +641,61 @@ pub(super) fn write_controlled_champion_report_json(
     report_path: &Path,
     data: &ControlledChampionReportData<'_>,
 ) -> Result<()> {
+    fn component_json(
+        weight: f64,
+        normalized_ratio: f64,
+        contribution: f64,
+        impact_percent: f64,
+    ) -> Value {
+        json!({
+            "weight": weight,
+            "normalized_ratio": normalized_ratio,
+            "contribution": contribution,
+            "impact_percent": impact_percent,
+            "delta_vs_weight_percent_points": impact_percent - weight * 100.0
+        })
+    }
+    fn objective_breakdown_json(breakdown: ObjectiveScoreBreakdown) -> Value {
+        json!({
+            "weighted_mean_score": breakdown.weighted_mean_score,
+            "worst_case_score": breakdown.worst_case_score,
+            "worst_case_weight": breakdown.worst_case_weight,
+            "final_score": breakdown.final_score,
+            "components": {
+                "survival": component_json(
+                    breakdown.survival.weight,
+                    breakdown.survival.normalized_ratio,
+                    breakdown.survival.contribution,
+                    breakdown.survival.impact_percent
+                ),
+                "damage": component_json(
+                    breakdown.damage.weight,
+                    breakdown.damage.normalized_ratio,
+                    breakdown.damage.contribution,
+                    breakdown.damage.impact_percent
+                ),
+                "healing": component_json(
+                    breakdown.healing.weight,
+                    breakdown.healing.normalized_ratio,
+                    breakdown.healing.contribution,
+                    breakdown.healing.impact_percent
+                ),
+                "enemy_kills": component_json(
+                    breakdown.enemy_kills.weight,
+                    breakdown.enemy_kills.normalized_ratio,
+                    breakdown.enemy_kills.contribution,
+                    breakdown.enemy_kills.impact_percent
+                ),
+                "invulnerable_seconds": component_json(
+                    breakdown.invulnerable_seconds.weight,
+                    breakdown.invulnerable_seconds.normalized_ratio,
+                    breakdown.invulnerable_seconds.contribution,
+                    breakdown.invulnerable_seconds.impact_percent
+                )
+            }
+        })
+    }
+
     if let Some(parent) = report_path.parent() {
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
@@ -491,9 +710,11 @@ pub(super) fn write_controlled_champion_report_json(
     let baseline_build = data.baseline_build;
     let baseline_score = data.baseline_score;
     let baseline_outcome = data.baseline_outcome;
+    let baseline_score_breakdown = data.baseline_score_breakdown;
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
+    let best_score_breakdown = data.best_score_breakdown;
     let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
@@ -502,6 +723,11 @@ pub(super) fn write_controlled_champion_report_json(
     let diverse_top_builds = data.diverse_top_builds;
     let diagnostics = data.diagnostics;
     let build_orders = data.build_orders;
+    let total_score_requests = diagnostics
+        .search_type_breakdown
+        .iter()
+        .map(|breakdown| breakdown.score_requests)
+        .sum::<usize>();
 
     let improvement_percent = if baseline_score.abs() > f64::EPSILON {
         ((best_score - baseline_score) / baseline_score) * 100.0
@@ -523,15 +749,19 @@ pub(super) fn write_controlled_champion_report_json(
                 "damage_dealt": baseline_outcome.damage_dealt,
                 "healing_done": baseline_outcome.healing_done,
                 "enemy_kills": baseline_outcome.enemy_kills,
+                "invulnerable_seconds": baseline_outcome.invulnerable_seconds,
                 "cap_survivor": baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
             },
+            "baseline_objective_breakdown": objective_breakdown_json(baseline_score_breakdown),
             "best_outcome": {
                 "time_alive_seconds": best_outcome.time_alive_seconds,
                 "damage_dealt": best_outcome.damage_dealt,
                 "healing_done": best_outcome.healing_done,
                 "enemy_kills": best_outcome.enemy_kills,
+                "invulnerable_seconds": best_outcome.invulnerable_seconds,
                 "cap_survivor": best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
             },
+            "best_objective_breakdown": objective_breakdown_json(best_score_breakdown),
         },
         "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
@@ -544,7 +774,6 @@ pub(super) fn write_controlled_champion_report_json(
                 "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
                 "runes": preset.map(|p| p.runes.clone()).unwrap_or_default(),
                 "shards": preset.map(|p| p.shards.clone()).unwrap_or_default(),
-                "masteries": preset.map(|p| p.masteries.iter().map(|m| json!({"name": m.name, "rank": m.rank})).collect::<Vec<_>>()).unwrap_or_default(),
                 "source_url": preset.map(|p| p.source_url.clone()).unwrap_or_default(),
                 "last_checked": preset.map(|p| p.last_checked.clone()).unwrap_or_default(),
             })
@@ -594,6 +823,8 @@ pub(super) fn write_controlled_champion_report_json(
             "objective_survival_weight": diagnostics.objective_survival_weight,
             "objective_damage_weight": diagnostics.objective_damage_weight,
             "objective_healing_weight": diagnostics.objective_healing_weight,
+            "objective_enemy_kills_weight": diagnostics.objective_enemy_kills_weight,
+            "objective_invulnerable_seconds_weight": diagnostics.objective_invulnerable_seconds_weight,
             "full_evaluations": diagnostics.full_evaluations,
             "full_cache_hits": diagnostics.full_cache_hits,
             "full_cache_misses": diagnostics.full_cache_misses,
@@ -613,11 +844,36 @@ pub(super) fn write_controlled_champion_report_json(
             "strict_non_finite_candidates": diagnostics.strict_non_finite_candidates,
             "strict_candidates_skipped_timeout": diagnostics.strict_candidates_skipped_timeout,
             "strict_completion_percent": diagnostics.strict_completion_percent,
+            "unique_scored_candidates": diagnostics.unique_scored_candidates,
             "time_budget_seconds": diagnostics.time_budget_seconds,
+            "popcorn_window_seconds": diagnostics.popcorn_window_seconds,
+            "popcorn_min_relative_improvement_percent": diagnostics.popcorn_min_relative_improvement_percent,
+            "significant_improvement_events": diagnostics.significant_improvement_events,
+            "best_significant_score": diagnostics.best_significant_score,
+            "seconds_since_last_significant_improvement": diagnostics.seconds_since_last_significant_improvement,
+            "search_type_breakdown": diagnostics.search_type_breakdown.iter().map(|breakdown| {
+                json!({
+                    "name": breakdown.name.clone(),
+                    "score_requests": breakdown.score_requests,
+                    "new_simulations": breakdown.new_simulations,
+                    "persistent_cache_hits": breakdown.persistent_cache_hits
+                })
+            }).collect::<Vec<_>>(),
+            "estimated_total_candidate_space": diagnostics.estimated_total_candidate_space,
+            "estimated_run_space_coverage_percent": diagnostics.estimated_run_space_coverage_percent,
+            "estimated_cache_space_coverage_percent": diagnostics.estimated_cache_space_coverage_percent,
+            "estimated_close_to_optimal_probability": diagnostics.estimated_close_to_optimal_probability,
+            "estimated_close_to_optimal_probability_note": diagnostics.estimated_close_to_optimal_probability_note,
             "elapsed_seconds": diagnostics.elapsed_seconds,
+            "total_run_seconds": diagnostics.total_run_seconds,
             "timed_out": diagnostics.timed_out,
             "processed_candidates": diagnostics.processed_candidates,
-            "total_candidates": diagnostics.total_candidates
+            "total_candidates": diagnostics.total_candidates,
+            "simulation_counts": {
+                "new_full_simulations": diagnostics.full_evaluations,
+                "unique_scored_candidates": diagnostics.unique_scored_candidates,
+                "total_score_requests": total_score_requests
+            }
         }
     });
     fs::write(report_path, serde_json::to_string_pretty(&json_value)?)

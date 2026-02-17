@@ -76,6 +76,15 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - default scenario simulation block only needs scenario-owned knobs plus optional explicit overrides.
 
+3.6 `DONE` Add actor-level level overrides and generic stack override ownership.
+- Scope:
+  - add `controlled_champion.level`, `opponents.default_level`, and `opponents.encounters[].actors[].level`
+  - add generic stack override maps: `simulation.stack_overrides`, `controlled_champion.stack_overrides`, `opponents.stack_overrides`, and actor-level overrides
+  - add `simulation.time_limit_seconds` parsing and enforce 20-minute hard cap
+  - add `opponents.uptime_windows_enabled` as canonical uptime toggle
+- Success criteria:
+  - scenario can independently set controlled and opponent levels, stack overrides are generic/per-actor, runtime horizon is bounded by validated time limit, and legacy keys are rejected.
+
 4. `IN_PROGRESS` Build a generic buff/debuff/status system.
 - Scope:
   - duration, stacks, refresh policy
@@ -141,17 +150,34 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - each champion exhibits clearly distinct kit timelines.
 
+12a. `PLANNED` Opponent-first realism sequencing.
+- Scope:
+  - prioritize replacing opponent DPS proxy fields with scripted ability/event behavior before broader search-domain expansion.
+  - stage improvements champion-by-champion with deterministic validation fixtures.
+- Success criteria:
+  - realism gains are measurable and land in high-impact order.
+  - opponent behavior dominates fewer outcomes through proxy approximations.
+
 13. `IN_PROGRESS` Full combat-time rune system.
 - Scope:
   - move dynamic rune behavior from notes/simplifications into scripts
 - Success criteria:
   - selected runes contribute in real time when conditions trigger.
 
-14. `IN_PROGRESS` Full combat-time mastery system.
+13a. `PLANNED` Legal rune-page domain enumeration/reporting.
 - Scope:
-  - move dynamic mastery behavior into scripts
+  - generate deterministic counts/tables for all legal rune pages from current selection constraints.
+  - include grouped counts by path pair and optional shard-expanded totals.
 - Success criteria:
-  - mastery runtime effects are deterministic and modeled.
+  - legal rune-page domain size is explicit, versionable, and easy to diff across data changes.
+
+14. `DONE` Retire legacy mastery system (rune pages only).
+- Scope:
+  - remove mastery parsing, preset fields, docs, and script modules
+  - enforce modern rune-page legality and shard-slot legality as the only loadout page system
+- Success criteria:
+  - no mastery fields remain in scenario/preset/runtime schemas.
+  - invalid rune pages are rejected before simulation.
 
 15. `PLANNED` Item script coverage for all high-frequency legendary items.
 - Scope:
@@ -289,7 +315,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 36. `IN_PROGRESS` Enforce strict module boundaries to prevent core logic sprawl.
 - Scope:
-  - keep champion/item/rune/mastery specifics outside engine core
+  - keep champion/item/rune specifics outside engine core
 - Success criteria:
   - architecture remains extendable and maintainable.
 
@@ -307,9 +333,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - a concrete target module layout exists with phased migration steps and acceptance criteria.
 
-39. `IN_PROGRESS` Domain-oriented script hierarchy for champions, items, runes, and masteries.
+39. `IN_PROGRESS` Domain-oriented script hierarchy for champions, items, and runes.
 - Scope:
-  - replace flat script layout with domain folders (for example `scripts/champions/`, `scripts/items/`, `scripts/runes/`, `scripts/masteries/`)
+  - replace flat script layout with domain folders (for example `scripts/champions/`, `scripts/items/`, `scripts/runes/`)
   - move per-entity script logic into dedicated files (for example one champion per module)
   - keep shared runtime primitives and registries in separate shared modules
 - Success criteria:
@@ -333,7 +359,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 42. `DONE` Maintain explicit roadmap tracking with acceptance criteria.
 - Implemented in this file.
 
-43. `PLANNED` Cross-actor component search (champion/passive/ability/item/rune/mastery composition).
+43. `PLANNED` Cross-actor component search (champion/passive/ability/item/rune-page composition).
 - Scope:
   - generalize search domain to support interchangeable champion kits and passive/ability attachments
   - preserve deterministic, script-driven behavior mapping across swapped components
@@ -350,7 +376,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
-- `IN_PROGRESS` Item 14 (controlled champion runtime mastery effects are wired through simulation/objective; broader coverage pending)
+- `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
 - `IN_PROGRESS` Item 38 (audit underway; structure migration phases being tracked)
 - `IN_PROGRESS` Item 36 (champion/item coupling reduced by moving defensive item and revive decisions into generic runtime/item capability scripts)
 - `IN_PROGRESS` Item 39 (phase-one scripts hierarchy landed; remaining migrations pending)
