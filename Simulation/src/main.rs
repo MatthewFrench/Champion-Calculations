@@ -296,6 +296,7 @@ struct SearchTypeBreakdown {
 struct SearchDiagnostics {
     strategy_summary: String,
     search_quality_profile: String,
+    effective_seed: u64,
     ensemble_seeds: usize,
     objective_survival_weight: f64,
     objective_damage_weight: f64,
@@ -334,6 +335,12 @@ struct SearchDiagnostics {
     estimated_cache_space_coverage_percent: Option<f64>,
     estimated_close_to_optimal_probability: Option<f64>,
     estimated_close_to_optimal_probability_note: String,
+    coverage_stage_enabled: bool,
+    coverage_stage_elapsed_seconds: f64,
+    coverage_stage_assets_total: usize,
+    coverage_stage_assets_covered: usize,
+    coverage_stage_seed_candidates: usize,
+    coverage_stage_seed_candidates_unique: usize,
     elapsed_seconds: f64,
     total_run_seconds: f64,
     timed_out: bool,
@@ -467,6 +474,11 @@ struct Cli {
     status_every_seconds: f64,
     #[arg(long, value_enum, default_value_t = SearchQualityProfile::MaximumQuality)]
     search_quality_profile: SearchQualityProfile,
+    #[arg(
+        long,
+        help = "Deterministic search seed override (default behavior is random)"
+    )]
+    seed: Option<u64>,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -502,6 +514,7 @@ struct ControlledChampionRunOptions<'a> {
     popcorn_min_relative_improvement_percent: f64,
     status_every_seconds: f64,
     search_quality_profile: SearchQualityProfile,
+    seed_override: Option<u64>,
 }
 
 fn main() -> Result<()> {
@@ -528,6 +541,7 @@ fn main() -> Result<()> {
                     .popcorn_min_relative_improvement_percent,
                 status_every_seconds: cli.status_every_seconds,
                 search_quality_profile: cli.search_quality_profile,
+                seed_override: cli.seed,
             },
         ),
         Mode::VladimirStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),

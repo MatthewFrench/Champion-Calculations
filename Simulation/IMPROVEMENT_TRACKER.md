@@ -1,6 +1,15 @@
 # Improvement Tracker
 
 ## Done
+- Added random-by-default search seed policy with explicit deterministic override:
+  - `search.seed: 0` now means runtime-random seed
+  - CLI now supports `--seed <u64>` to force deterministic reproducibility
+  - reports now include the effective seed used by the run
+- Added maximum-quality pre-budget coverage stage for breadth guarantees:
+  - coverage now locks each legal item/rune/shard asset at least once
+  - per-asset top diverse candidates are injected into main search as additional seeds
+  - timed search budgets now start after coverage stage completion in `maximum_quality`
+  - reports now include coverage-stage elapsed time, assets covered, and seeded-candidate counts
 - Removed opponent scenario combat proxy fields and uptime-window toggle:
   - deleted `opponents.uptime_windows_enabled` support
   - deleted per-actor `combat` proxy support (`ability_dps_*`, `burst_*`, `stun_*`, `uptime_*`)

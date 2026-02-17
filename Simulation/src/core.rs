@@ -1,4 +1,7 @@
 use std::collections::HashMap;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use crate::engine::simulate_controlled_champion_combat;
 use crate::scripts::registry::hooks::{
@@ -814,6 +817,21 @@ pub(crate) fn build_key_cache_string(key: &BuildKey) -> String {
 pub(crate) fn next_u64(seed: &mut u64) -> u64 {
     *seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1);
     *seed
+}
+
+pub(crate) fn runtime_random_seed() -> u64 {
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default();
+    let mut hasher = DefaultHasher::new();
+    now.as_secs().hash(&mut hasher);
+    now.subsec_nanos().hash(&mut hasher);
+    now.as_nanos().hash(&mut hasher);
+    std::process::id().hash(&mut hasher);
+    std::thread::current().id().hash(&mut hasher);
+    let stack_entropy = (&now as *const _) as usize;
+    stack_entropy.hash(&mut hasher);
+    hasher.finish().max(1)
 }
 
 pub(crate) fn rand_index(seed: &mut u64, upper: usize) -> usize {

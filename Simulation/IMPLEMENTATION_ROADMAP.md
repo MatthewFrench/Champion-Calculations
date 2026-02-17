@@ -240,6 +240,22 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 ## P1 Performance And Search Quality
 
+23a. `DONE` Random-by-default seed policy with deterministic override.
+- Scope:
+  - runtime-random seed default for broader exploration
+  - explicit deterministic override via CLI/config seed
+  - effective seed surfaced in diagnostics/report output
+- Success criteria:
+  - reproducibility is explicit and opt-in, while default search remains broad.
+
+23b. `DONE` Maximum-quality pre-budget coverage stage.
+- Scope:
+  - touch each legal item/rune/shard asset at least once before timed optimization
+  - collect per-asset top diverse candidates and inject into main search pool
+  - start time-budget accounting after coverage stage completion
+- Success criteria:
+  - breadth floor is guaranteed for high-quality runs and reported in diagnostics.
+
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:
   - repeatable profiling command and report artifacts

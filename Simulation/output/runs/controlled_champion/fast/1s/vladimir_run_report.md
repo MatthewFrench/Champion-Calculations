@@ -1,7 +1,7 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-16 21:03:59 -06:00`
-- Generated (UTC): `2026-02-17T03:03:59.126256+00:00`
+- Generated (local): `2026-02-16 21:49:46 -06:00`
+- Generated (UTC): `2026-02-17T03:49:46.025814+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
@@ -40,40 +40,36 @@
 
 ## Search Diagnostics
 - Strategy: `portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)`
-- Search quality profile: `maximum_quality`
+- Search quality profile: `fast`
 - Enemy scenarios: `1`
 - Loadout candidates/finalists: `1/1`
-- Ensemble seeds: `8`
+- Ensemble seeds: `1`
 - Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
-- Simulations executed (new full combat runs): `48,828`
-- Unique scored candidates (all search stages): `48,828`
-- Total score requests (all search stages): `53,744`
-- Full evaluations cache hits/misses/waits: `0/48,828/0`
-- Full persistent cache hits/entries: `4,916/48,828`
-- Candidate keys generated / duplicate-pruned / unique: `5,629/2,020/3,609`
-- Strict candidates seed-scored / remaining / processed: `0/3,609/0`
-- Strict non-finite / timeout-skipped: `0/3,609`
+- Simulations executed (new full combat runs): `2,187`
+- Unique scored candidates (all search stages): `2,187`
+- Total score requests (all search stages): `2,187`
+- Full evaluations cache hits/misses/waits: `0/2,187/0`
+- Full persistent cache hits/entries: `0/2,187`
+- Candidate keys generated / duplicate-pruned / unique: `128/0/128`
+- Strict candidates seed-scored / remaining / processed: `0/128/0`
+- Strict non-finite / timeout-skipped: `0/128`
 - Strict completion: `0.0%`
-- Bleed candidates injected: `1,886`
+- Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `92.04s`
-- Total run time (end-to-end): `93.48s`
+- Search elapsed time: `1.08s`
+- Total run time (end-to-end): `2.47s`
 
-- Effective seed: `10991860155855630782`
-- Coverage stage (pre-budget): `23.60s`; assets covered `181/181`; seeded candidates unique/raw `543/543`
-- Progress: `0/3,609` (0.0%)
-
-- Popcorn mode: window `60.0s`; significant threshold `1.00% of last best score`; significant events `9`; seconds since last significant improvement `60.2`
+- Effective seed: `12345`
+- Time budget: `1.0s`; timed_out: `true`; progress: `0/128` (0.0%)
 
 - Estimated total legal candidate space: `995,424,835,958,784`
-- Estimated legal-space coverage (this run): `4.905e-9%`
-- Estimated legal-space coverage (persistent cache): `4.905e-9%`
-- Estimated closeness probability (top 0.000001% heuristic): `0.05%`
-- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 48828 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
+- Estimated legal-space coverage (this run): `2.197e-10%`
+- Estimated legal-space coverage (persistent cache): `2.197e-10%`
+- Estimated closeness probability (top 0.000001% heuristic): `0.00%`
+- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 2187 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
 - Search-type simulation breakdown:
-  - seed_search:portfolio: requests `43,629`, new simulations `38,713`, persistent cache hits `4,916`
-  - coverage_stage: requests `10,115`, new simulations `10,115`, persistent cache hits `0`
+  - seed_search:portfolio: requests `2,187`, new simulations `2,187`, persistent cache hits `0`
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
@@ -125,7 +121,7 @@
 - Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 125, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 0.0, burst phys/magic/true 0.0/0.0/0.0
 
 ## Diverse Top Builds
-1. `score 0.4984` (+0.0000 vs top): Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Void Staff | seed hits: 2/8 (25%) fragile | Pareto-front
+1. `score 0.4984` (+0.0000 vs top): Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Void Staff | seed hits: 1/1 (100%) robust | Pareto-front
    - metrics: EHP~8,781.0, AP~287.9, timing score -8471.67, total cost 16,950
 
 ## Build Order Optimization

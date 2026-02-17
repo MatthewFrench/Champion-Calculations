@@ -66,23 +66,30 @@
   "controlled_champion_name": "Vladimir",
   "diagnostics": {
     "adaptive_candidates_injected": 0,
-    "best_significant_score": 46.1093211769851,
-    "bleed_candidates_injected": 0,
-    "candidate_duplicates_pruned": 0,
-    "candidate_keys_generated": 1600,
-    "elapsed_seconds": 1.161564166,
+    "best_significant_score": 45.1298424070823,
+    "bleed_candidates_injected": 1843,
+    "candidate_duplicates_pruned": 420,
+    "candidate_keys_generated": 3986,
+    "coverage_stage_assets_covered": 181,
+    "coverage_stage_assets_total": 181,
+    "coverage_stage_elapsed_seconds": 30.353703667,
+    "coverage_stage_enabled": true,
+    "coverage_stage_seed_candidates": 543,
+    "coverage_stage_seed_candidates_unique": 543,
+    "effective_seed": 14733025714516320549,
+    "elapsed_seconds": 31.602754417,
     "ensemble_seeds": 8,
-    "estimated_cache_space_coverage_percent": 5.3487715070637986e-9,
-    "estimated_close_to_optimal_probability": 0.000532288289634586,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 53243 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 5.3487715070637986e-9,
+    "estimated_cache_space_coverage_percent": 1.2381648071025548e-9,
+    "estimated_close_to_optimal_probability": 0.00012324240626615524,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 12325 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 1.2381648071025548e-9,
     "estimated_total_candidate_space": 995424835958784.0,
     "full_cache_hits": 0,
-    "full_cache_misses": 70,
+    "full_cache_misses": 12325,
     "full_cache_waits": 0,
-    "full_evaluations": 70,
-    "full_persistent_cache_entries": 53243,
-    "full_persistent_cache_hits": 67993,
+    "full_evaluations": 12325,
+    "full_persistent_cache_entries": 12325,
+    "full_persistent_cache_hits": 0,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -97,31 +104,37 @@
     "search_quality_profile": "maximum_quality",
     "search_type_breakdown": [
       {
+        "name": "coverage_stage",
+        "new_simulations": 10110,
+        "persistent_cache_hits": 0,
+        "score_requests": 10110
+      },
+      {
         "name": "seed_search:portfolio",
-        "new_simulations": 70,
-        "persistent_cache_hits": 67993,
-        "score_requests": 68063
+        "new_simulations": 2215,
+        "persistent_cache_hits": 0,
+        "score_requests": 2215
       }
     ],
-    "seconds_since_last_significant_improvement": 0.910264584,
-    "significant_improvement_events": 10,
+    "seconds_since_last_significant_improvement": 28.861995833,
+    "significant_improvement_events": 5,
     "simulation_counts": {
-      "new_full_simulations": 70,
-      "total_score_requests": 68063,
-      "unique_scored_candidates": 53243
+      "new_full_simulations": 12325,
+      "total_score_requests": 12325,
+      "unique_scored_candidates": 12325
     },
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "strict_candidates_skipped_timeout": 1600,
+    "strict_candidates_skipped_timeout": 3566,
     "strict_completion_percent": 0.0,
     "strict_non_finite_candidates": 0,
-    "strict_remaining_candidates": 1600,
+    "strict_remaining_candidates": 3566,
     "strict_seed_scored_candidates": 0,
     "time_budget_seconds": 1.0,
     "timed_out": true,
-    "total_candidates": 1600,
-    "total_run_seconds": 2.416994875,
-    "unique_candidate_builds": 1600,
-    "unique_scored_candidates": 53243
+    "total_candidates": 3566,
+    "total_run_seconds": 33.055822375,
+    "unique_candidate_builds": 3566,
+    "unique_scored_candidates": 12325
   },
   "diverse_top_builds": [
     {
@@ -361,8 +374,8 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-16 20:02:35 -06:00",
-  "generated_utc": "2026-02-17T02:02:35.710448+00:00",
+  "generated_local": "2026-02-16 20:57:49 -06:00",
+  "generated_utc": "2026-02-17T02:57:49.354786+00:00",
   "headline": {
     "baseline_objective_breakdown": {
       "components": {

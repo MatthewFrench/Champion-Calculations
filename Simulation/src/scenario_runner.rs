@@ -53,6 +53,239 @@ struct SearchTypeRuntimeCounter {
     persistent_cache_hits: usize,
 }
 
+#[derive(Debug, Clone, Default)]
+struct CoverageStageDiagnostics {
+    enabled: bool,
+    elapsed_seconds: f64,
+    assets_total: usize,
+    assets_covered: usize,
+    seed_candidates: usize,
+    seed_candidates_unique: usize,
+}
+
+#[derive(Debug, Clone)]
+enum CoverageLockedAsset {
+    Item(usize),
+    Rune(String),
+    Shard { slot: usize, stat: String },
+}
+
+impl CoverageLockedAsset {
+    fn display_label(&self, item_pool: &[Item]) -> String {
+        match self {
+            Self::Item(item_idx) => item_pool
+                .get(*item_idx)
+                .map(|item| format!("item:{}", item.name))
+                .unwrap_or_else(|| format!("item_index:{item_idx}")),
+            Self::Rune(name) => format!("rune:{name}"),
+            Self::Shard { slot, stat } => format!("shard_slot_{}:{}", slot + 1, stat),
+        }
+    }
+}
+
+fn coverage_locked_assets(
+    item_pool: &[Item],
+    loadout_domain: &crate::data::LoadoutDomain,
+) -> Vec<CoverageLockedAsset> {
+    let mut out = Vec::new();
+    for item_idx in 0..item_pool.len() {
+        out.push(CoverageLockedAsset::Item(item_idx));
+    }
+
+    let mut rune_by_key = HashMap::<String, String>::new();
+    for path in &loadout_domain.rune_paths {
+        for slot in path.slot_runes.iter().take(4) {
+            for rune_name in slot {
+                let key = to_norm_key(rune_name);
+                rune_by_key.entry(key).or_insert_with(|| rune_name.clone());
+            }
+        }
+    }
+    let mut rune_values = rune_by_key.into_values().collect::<Vec<_>>();
+    rune_values.sort_by_key(|name| to_norm_key(name));
+    out.extend(rune_values.into_iter().map(CoverageLockedAsset::Rune));
+
+    for (slot_idx, slot_stats) in loadout_domain.shard_slots.iter().enumerate() {
+        for stat in slot_stats {
+            out.push(CoverageLockedAsset::Shard {
+                slot: slot_idx,
+                stat: stat.clone(),
+            });
+        }
+    }
+    out
+}
+
+fn candidate_matches_locked_asset(candidate: &BuildKey, asset: &CoverageLockedAsset) -> bool {
+    match asset {
+        CoverageLockedAsset::Item(item_idx) => candidate.item_indices.contains(item_idx),
+        CoverageLockedAsset::Rune(name) => {
+            let target = to_norm_key(name);
+            candidate
+                .loadout_selection
+                .rune_names
+                .iter()
+                .any(|rune| to_norm_key(rune) == target)
+        }
+        CoverageLockedAsset::Shard { slot, stat } => candidate
+            .loadout_selection
+            .shard_stats
+            .get(*slot)
+            .map(|value| to_norm_key(value) == to_norm_key(stat))
+            .unwrap_or(false),
+    }
+}
+
+fn enforce_locked_item(
+    item_pool: &[Item],
+    max_items: usize,
+    item_idx: usize,
+    build: &mut Vec<usize>,
+    seed: &mut u64,
+) -> bool {
+    if build.contains(&item_idx) {
+        return true;
+    }
+    if build.len() < max_items && can_add_item_to_build(item_pool, build, item_idx) {
+        build.push(item_idx);
+        *build = canonical_key(build);
+        return true;
+    }
+
+    let mut slots = (0..build.len()).collect::<Vec<_>>();
+    shuffle_usize(&mut slots, seed);
+    for slot in slots {
+        let mut trial = build.clone();
+        trial[slot] = item_idx;
+        repair_build(item_pool, &mut trial, max_items, seed);
+        if trial.contains(&item_idx) {
+            *build = canonical_key(&trial);
+            return true;
+        }
+    }
+
+    let mut fallback = vec![item_idx];
+    repair_build(item_pool, &mut fallback, max_items, seed);
+    if fallback.contains(&item_idx) {
+        *build = canonical_key(&fallback);
+        return true;
+    }
+    false
+}
+
+fn random_loadout_matching_asset(
+    base_loadout: &LoadoutSelection,
+    loadout_domain: &crate::data::LoadoutDomain,
+    asset: &CoverageLockedAsset,
+    seed: &mut u64,
+) -> Option<LoadoutSelection> {
+    let attempts = 4096usize;
+    for _ in 0..attempts {
+        let selection = random_loadout_selection(base_loadout, loadout_domain, seed);
+        let candidate = BuildKey {
+            item_indices: Vec::new(),
+            loadout_selection: selection.clone(),
+        };
+        if candidate_matches_locked_asset(&candidate, asset) {
+            return Some(selection);
+        }
+    }
+    None
+}
+
+fn enforce_locked_asset(
+    params: &FullLoadoutSearchParams<'_>,
+    candidate: &mut BuildKey,
+    asset: &CoverageLockedAsset,
+    seed: &mut u64,
+) -> bool {
+    match asset {
+        CoverageLockedAsset::Item(item_idx) => {
+            if !enforce_locked_item(
+                params.item_pool,
+                params.max_items,
+                *item_idx,
+                &mut candidate.item_indices,
+                seed,
+            ) {
+                return false;
+            }
+        }
+        CoverageLockedAsset::Rune(_) | CoverageLockedAsset::Shard { .. } => {
+            if let Some(selection) = random_loadout_matching_asset(
+                params.base_loadout,
+                params.loadout_domain,
+                asset,
+                seed,
+            ) {
+                candidate.loadout_selection = selection;
+            } else {
+                return false;
+            }
+        }
+    }
+    candidate.item_indices = canonical_key(&candidate.item_indices);
+    candidate_matches_locked_asset(candidate, asset)
+}
+
+fn random_locked_candidate(
+    params: &FullLoadoutSearchParams<'_>,
+    asset: &CoverageLockedAsset,
+    seed: &mut u64,
+) -> Option<BuildKey> {
+    let mut candidate = BuildKey {
+        item_indices: random_valid_build(params.item_pool, params.max_items, seed),
+        loadout_selection: random_loadout_selection(
+            params.base_loadout,
+            params.loadout_domain,
+            seed,
+        ),
+    };
+    if !enforce_locked_asset(params, &mut candidate, asset, seed) {
+        return None;
+    }
+    Some(canonical_build_candidate(candidate))
+}
+
+fn mutate_locked_candidate(
+    params: &FullLoadoutSearchParams<'_>,
+    candidate: &BuildKey,
+    asset: &CoverageLockedAsset,
+    seed: &mut u64,
+) -> Option<BuildKey> {
+    let mut out = candidate.clone();
+
+    if !out.item_indices.is_empty() && rand_f64(seed) < 0.85 {
+        let slot = rand_index(seed, out.item_indices.len());
+        for _ in 0..params.item_pool.len().max(1) {
+            let replacement = rand_index(seed, params.item_pool.len());
+            if out.item_indices[slot] == replacement {
+                continue;
+            }
+            out.item_indices[slot] = replacement;
+            repair_build(
+                params.item_pool,
+                &mut out.item_indices,
+                params.max_items,
+                seed,
+            );
+            if out.item_indices.contains(&replacement) {
+                break;
+            }
+        }
+    }
+
+    if rand_f64(seed) < 0.85 {
+        out.loadout_selection =
+            random_loadout_selection(&out.loadout_selection, params.loadout_domain, seed);
+    }
+
+    if !enforce_locked_asset(params, &mut out, asset, seed) {
+        return None;
+    }
+    Some(canonical_build_candidate(out))
+}
+
 fn increment_search_type_counter(
     counters: &Arc<Mutex<HashMap<String, SearchTypeRuntimeCounter>>>,
     search_type: &str,
@@ -460,6 +693,7 @@ pub(super) fn run_controlled_champion_scenario(
         options.popcorn_min_relative_improvement_percent.max(0.0);
     let popcorn_min_relative_improvement = popcorn_min_relative_improvement_percent / 100.0;
     let status_every_seconds = options.status_every_seconds;
+    let seed_override = options.seed_override;
     let search_quality_profile = if popcorn_window_seconds.is_some() {
         SearchQualityProfile::MaximumQuality
     } else {
@@ -470,7 +704,13 @@ pub(super) fn run_controlled_champion_scenario(
     let time_budget = max_runtime_seconds
         .filter(|s| *s > 0.0)
         .map(Duration::from_secs_f64);
-    let hard_deadline = time_budget.map(|d| run_start + d);
+    let defer_hard_budget_until_coverage =
+        matches!(search_quality_profile, SearchQualityProfile::MaximumQuality);
+    let hard_deadline_state = Arc::new(Mutex::new(if defer_hard_budget_until_coverage {
+        None
+    } else {
+        time_budget.map(|duration| run_start + duration)
+    }));
     let progress_state = Arc::new(Mutex::new(SignificantProgressState {
         best_overall_score: f64::NEG_INFINITY,
         best_significant_score: f64::NEG_INFINITY,
@@ -478,6 +718,7 @@ pub(super) fn run_controlled_champion_scenario(
         last_significant_at: run_start,
     }));
     let current_deadline = || {
+        let hard_deadline = hard_deadline_state.lock().ok().and_then(|state| *state);
         let progress_deadline = popcorn_window.map(|window| {
             let last_significant_at = progress_state
                 .lock()
@@ -598,6 +839,12 @@ pub(super) fn run_controlled_champion_scenario(
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
     apply_search_quality_profile(&mut search_cfg, search_quality_profile);
+    if let Some(seed) = seed_override {
+        search_cfg.seed = seed.max(1);
+    }
+    if search_cfg.seed == 0 {
+        search_cfg.seed = runtime_random_seed();
+    }
     let loadout_domain = Arc::new(build_loadout_domain());
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
@@ -845,6 +1092,126 @@ pub(super) fn run_controlled_champion_scenario(
         base_loadout: &vlad_loadout_selection,
     };
 
+    let mut coverage_stage_diagnostics = CoverageStageDiagnostics::default();
+    let mut coverage_seed_candidates = Vec::<BuildKey>::new();
+    if matches!(search_quality_profile, SearchQualityProfile::MaximumQuality) {
+        coverage_stage_diagnostics.enabled = true;
+        let coverage_start = Instant::now();
+        let coverage_assets = coverage_locked_assets(&item_pool, loadout_domain.as_ref());
+        coverage_stage_diagnostics.assets_total = coverage_assets.len();
+        let coverage_trials_per_asset = (search_cfg.random_samples / 14).clamp(12, 48);
+        let coverage_refinement_steps = (search_cfg.hill_climb_steps / 4).clamp(2, 8);
+
+        status.emit(
+            "coverage_stage",
+            Some((0, coverage_assets.len())),
+            None,
+            Some("locking each item/rune/shard at least once"),
+            true,
+        );
+        for (asset_index, asset) in coverage_assets.iter().enumerate() {
+            if deadline_reached(current_deadline()) {
+                timeout_flag.store(1, AtomicOrdering::Relaxed);
+                break;
+            }
+
+            let mut local_seed = search_cfg
+                .seed
+                .wrapping_add((asset_index as u64 + 1).wrapping_mul(0x9e37_79b9_7f4a_7c15));
+            let mut local_candidates = Vec::<BuildKey>::new();
+            for _ in 0..coverage_trials_per_asset {
+                if deadline_reached(current_deadline()) {
+                    timeout_flag.store(1, AtomicOrdering::Relaxed);
+                    break;
+                }
+                if let Some(candidate) =
+                    random_locked_candidate(&full_search_params, asset, &mut local_seed)
+                {
+                    local_candidates.push(candidate);
+                }
+            }
+
+            let seed_snapshot = local_candidates.clone();
+            for _ in 0..coverage_refinement_steps {
+                if deadline_reached(current_deadline()) {
+                    timeout_flag.store(1, AtomicOrdering::Relaxed);
+                    break;
+                }
+                if seed_snapshot.is_empty() {
+                    break;
+                }
+                let parent = &seed_snapshot[rand_index(&mut local_seed, seed_snapshot.len())];
+                if let Some(mutated) =
+                    mutate_locked_candidate(&full_search_params, parent, asset, &mut local_seed)
+                {
+                    local_candidates.push(mutated);
+                }
+            }
+
+            let mut unique_local = local_candidates
+                .into_iter()
+                .map(canonical_build_candidate)
+                .collect::<HashSet<_>>()
+                .into_iter()
+                .collect::<Vec<_>>();
+            unique_local.sort_by_key(build_key_cache_string);
+            let mut ranked = unique_local
+                .par_iter()
+                .map(|candidate| {
+                    (
+                        candidate.clone(),
+                        full_score_for_search_type("coverage_stage", candidate),
+                    )
+                })
+                .filter(|(_, score)| score.is_finite())
+                .collect::<Vec<_>>();
+            ranked.sort_by(|a, b| {
+                b.1.partial_cmp(&a.1)
+                    .unwrap_or(Ordering::Equal)
+                    .then_with(|| build_key_cache_string(&a.0).cmp(&build_key_cache_string(&b.0)))
+            });
+
+            if !ranked.is_empty() {
+                coverage_stage_diagnostics.assets_covered += 1;
+                let diverse =
+                    select_diverse_top_candidates(&ranked, 3, min_item_diff.max(1), 100.0);
+                if diverse.is_empty() {
+                    coverage_seed_candidates.push(ranked[0].0.clone());
+                } else {
+                    coverage_seed_candidates
+                        .extend(diverse.into_iter().map(|(candidate, _)| candidate));
+                }
+            }
+
+            let note = asset.display_label(&item_pool);
+            status.emit(
+                "coverage_stage",
+                Some((asset_index + 1, coverage_assets.len())),
+                None,
+                Some(note.as_str()),
+                false,
+            );
+        }
+
+        coverage_stage_diagnostics.seed_candidates = coverage_seed_candidates.len();
+        coverage_seed_candidates = coverage_seed_candidates
+            .into_iter()
+            .map(canonical_build_candidate)
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect::<Vec<_>>();
+        coverage_seed_candidates.sort_by_key(build_key_cache_string);
+        coverage_stage_diagnostics.seed_candidates_unique = coverage_seed_candidates.len();
+        coverage_stage_diagnostics.elapsed_seconds = coverage_start.elapsed().as_secs_f64();
+    }
+
+    if defer_hard_budget_until_coverage
+        && let Some(duration) = time_budget
+        && let Ok(mut state) = hard_deadline_state.lock()
+    {
+        *state = Some(Instant::now() + duration);
+    }
+
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
     let active_strategies = portfolio_strategy_list(&search_cfg);
     status.emit(
@@ -888,13 +1255,37 @@ pub(super) fn run_controlled_champion_scenario(
     }
     let strategy_elite_score_fn =
         |candidate: &BuildKey| full_score_for_search_type("strategy_elites", candidate);
-    let strategy_elites = strategy_seed_elites_full_loadout(
+    let mut strategy_elites = strategy_seed_elites_full_loadout(
         &full_search_params,
         &search_cfg,
         &active_strategies,
         &strategy_elite_score_fn,
         current_deadline(),
     );
+    if !coverage_seed_candidates.is_empty() {
+        let mut target_strategies = active_strategies.clone();
+        if target_strategies.is_empty() {
+            target_strategies.push(search_cfg.strategy.clone());
+        }
+        for (idx, candidate) in coverage_seed_candidates.iter().enumerate() {
+            let strategy = target_strategies[idx % target_strategies.len()].clone();
+            strategy_elites
+                .entry(strategy)
+                .or_default()
+                .push(candidate.clone());
+        }
+        for candidates in strategy_elites.values_mut() {
+            let mut unique = candidates
+                .iter()
+                .cloned()
+                .map(canonical_build_candidate)
+                .collect::<HashSet<_>>()
+                .into_iter()
+                .collect::<Vec<_>>();
+            unique.sort_by_key(build_key_cache_string);
+            *candidates = unique;
+        }
+    }
     let adaptive_score_fn =
         |candidate: &BuildKey| full_score_for_search_type("adaptive_search", candidate);
     let adaptive_candidates = adaptive_strategy_candidates_full_loadout(
@@ -932,6 +1323,9 @@ pub(super) fn run_controlled_champion_scenario(
                 candidate_keys.push(k.clone());
             }
         }
+    }
+    for candidate in &coverage_seed_candidates {
+        candidate_keys.push(candidate.clone());
     }
     for k in bleed_candidates {
         candidate_keys.push(k);
@@ -1340,6 +1734,17 @@ pub(super) fn run_controlled_champion_scenario(
         "- Loadout candidates/finalists: {}/{}",
         loadout_candidates_count, loadout_finalists_count
     );
+    println!("- Effective search seed: {}", search_cfg.seed);
+    if coverage_stage_diagnostics.enabled {
+        println!(
+            "- Coverage stage (pre-budget): {:.2}s | assets covered {}/{} | seeded candidates {}/{}",
+            coverage_stage_diagnostics.elapsed_seconds,
+            coverage_stage_diagnostics.assets_covered,
+            coverage_stage_diagnostics.assets_total,
+            coverage_stage_diagnostics.seed_candidates_unique,
+            coverage_stage_diagnostics.seed_candidates
+        );
+    }
     println!(
         "- Candidate evaluations (full): {}",
         full_eval_count.load(AtomicOrdering::Relaxed)
@@ -1530,6 +1935,7 @@ pub(super) fn run_controlled_champion_scenario(
             SearchQualityProfile::Balanced => "balanced".to_string(),
             SearchQualityProfile::MaximumQuality => "maximum_quality".to_string(),
         },
+        effective_seed: search_cfg.seed,
         ensemble_seeds,
         objective_survival_weight: objective_component_weights.survival,
         objective_damage_weight: objective_component_weights.damage,
@@ -1573,6 +1979,12 @@ pub(super) fn run_controlled_champion_scenario(
         estimated_cache_space_coverage_percent,
         estimated_close_to_optimal_probability,
         estimated_close_to_optimal_probability_note,
+        coverage_stage_enabled: coverage_stage_diagnostics.enabled,
+        coverage_stage_elapsed_seconds: coverage_stage_diagnostics.elapsed_seconds,
+        coverage_stage_assets_total: coverage_stage_diagnostics.assets_total,
+        coverage_stage_assets_covered: coverage_stage_diagnostics.assets_covered,
+        coverage_stage_seed_candidates: coverage_stage_diagnostics.seed_candidates,
+        coverage_stage_seed_candidates_unique: coverage_stage_diagnostics.seed_candidates_unique,
         elapsed_seconds: run_start.elapsed().as_secs_f64(),
         total_run_seconds: 0.0,
         timed_out,

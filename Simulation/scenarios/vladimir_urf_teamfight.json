@@ -122,7 +122,6 @@
     "bleed_budget": 2000,
     "bleed_mutation_rate": 0.35,
     "multi_scenario_worst_weight": 0.35,
-    "ranked_limit": 1600,
-    "seed": 1337
+    "ranked_limit": 1600
   }
 }

@@ -37,7 +37,7 @@
     "bleed_budget": 300,
     "bleed_mutation_rate": 0.35,
     "multi_scenario_worst_weight": 0.35,
-    "seed": 1337
+    "seed": 0
   },
   "search_quality_profile_defaults": {
     "fast": {

@@ -300,14 +300,34 @@ pub(super) fn write_controlled_champion_report_markdown(
         diagnostics.elapsed_seconds,
         diagnostics.total_run_seconds
     ));
-    if let Some(budget) = diagnostics.time_budget_seconds {
+    content.push_str(&format!(
+        "- Effective seed: `{}`\n",
+        diagnostics.effective_seed
+    ));
+    if diagnostics.coverage_stage_enabled {
         content.push_str(&format!(
-            "- Time budget: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%)\n\n",
+            "- Coverage stage (pre-budget): `{:.2}s`; assets covered `{}/{}`; seeded candidates unique/raw `{}/{}`\n",
+            diagnostics.coverage_stage_elapsed_seconds,
+            format_usize_with_commas(diagnostics.coverage_stage_assets_covered),
+            format_usize_with_commas(diagnostics.coverage_stage_assets_total),
+            format_usize_with_commas(diagnostics.coverage_stage_seed_candidates_unique),
+            format_usize_with_commas(diagnostics.coverage_stage_seed_candidates)
+        ));
+    }
+    if let Some(budget) = diagnostics.time_budget_seconds {
+        let coverage_note = if diagnostics.coverage_stage_enabled {
+            " (budget starts after pre-budget coverage stage)"
+        } else {
+            ""
+        };
+        content.push_str(&format!(
+            "- Time budget: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%){}\n\n",
             budget,
             diagnostics.timed_out,
             format_usize_with_commas(processed_candidates),
             format_usize_with_commas(diagnostics.total_candidates),
-            diagnostics.strict_completion_percent
+            diagnostics.strict_completion_percent,
+            coverage_note
         ));
     } else {
         content.push_str(&format!(
@@ -819,6 +839,7 @@ pub(super) fn write_controlled_champion_report_json(
         "diagnostics": {
             "strategy_summary": diagnostics.strategy_summary,
             "search_quality_profile": diagnostics.search_quality_profile,
+            "effective_seed": diagnostics.effective_seed,
             "ensemble_seeds": diagnostics.ensemble_seeds,
             "objective_survival_weight": diagnostics.objective_survival_weight,
             "objective_damage_weight": diagnostics.objective_damage_weight,
@@ -864,6 +885,12 @@ pub(super) fn write_controlled_champion_report_json(
             "estimated_cache_space_coverage_percent": diagnostics.estimated_cache_space_coverage_percent,
             "estimated_close_to_optimal_probability": diagnostics.estimated_close_to_optimal_probability,
             "estimated_close_to_optimal_probability_note": diagnostics.estimated_close_to_optimal_probability_note,
+            "coverage_stage_enabled": diagnostics.coverage_stage_enabled,
+            "coverage_stage_elapsed_seconds": diagnostics.coverage_stage_elapsed_seconds,
+            "coverage_stage_assets_total": diagnostics.coverage_stage_assets_total,
+            "coverage_stage_assets_covered": diagnostics.coverage_stage_assets_covered,
+            "coverage_stage_seed_candidates": diagnostics.coverage_stage_seed_candidates,
+            "coverage_stage_seed_candidates_unique": diagnostics.coverage_stage_seed_candidates_unique,
             "elapsed_seconds": diagnostics.elapsed_seconds,
             "total_run_seconds": diagnostics.total_run_seconds,
             "timed_out": diagnostics.timed_out,

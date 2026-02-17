@@ -1,6 +1,6 @@
 # URF Vladimir Objective Simulator
 
-This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
+This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a fixed seed, it is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
@@ -79,7 +79,9 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. It is
 - `../Game Mode/URF.json`: URF mode data, including mode-specific simulation defaults (for example respawn tuning).
 - `../Characters/<Champion>.json`: Champion canonical gameplay data, including per-ability execution fields (`abilities.<ability_key>.execution`) and ability/passive effect data used by scripts.
 - `../Characters/ChampionDefaults.json`: Champion-style nested role defaults (`base_stats`, `basic_attack`, `abilities.execution_defaults`) used as fallback when champion files omit those canonical fields.
+- `CURRENT_STATE.md`: concise current-state handoff for developers and AI agents.
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
+- `IMPLEMENTATION_ROADMAP.md`: roadmap status and planned phases.
 - `Cargo.toml`: Rust package manifest.
 - `src/main.rs`: CLI and orchestration.
 - `src/core.rs`: Shared simulation math/helpers plus foundational generic combat primitives (status/cast-lock scaffolding).
@@ -126,6 +128,8 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Stack override notes for stack-based items in the best build
   - Enemy derived combat profiles (HP/AD/AS/range/hit/burst stats) with similarity warnings for suspiciously close auto profiles
   - Detailed search diagnostics including:
+    - effective search seed used
+    - coverage-stage diagnostics for `maximum_quality` (elapsed, assets covered, seeded candidates)
     - explicit simulation counts (new full simulations, unique scored candidates, total score requests)
     - search elapsed time and total run time (end-to-end)
     - cache hits/misses
@@ -144,6 +148,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 ## Runtime Controls
 - `--max-runtime-seconds N`:
   - Stops search after `N` seconds and reports best-so-far findings.
+  - In `maximum_quality`, the timer starts after the pre-budget coverage stage completes.
 - `--popcorn-window-seconds W`:
   - Enables progress-window stopping ("microwave popcorn mode").
   - Search continues while significant improvements keep happening; run stops when no significant improvement is observed for `W` seconds.
@@ -157,6 +162,9 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Prints periodic status lines (phase, elapsed, progress, best score) while searching.
 - `--search-quality-profile {fast|balanced|maximum_quality}`:
   - Applies opinionated search settings. Default is `maximum_quality`.
+- `--seed N`:
+  - Overrides runtime seed with deterministic value `N`.
+  - If not provided, runtime seed is random unless the scenario explicitly sets `search.seed`.
 
 ## Continuous Integration and Release
 - Repository workflows are defined under:
@@ -331,6 +339,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
   - `multi_scenario_worst_weight` (aggregation between weighted-mean and worst-case when using multiple enemy scenarios)
   - `ranked_limit`
+  - `seed` (optional; if omitted or `0`, runtime random seed is used)
 - Loadout search legality:
   - Rune pages are generated from legal primary/secondary slot rules in `RunesReforged.json`.
   - Shards are generated from legal `stat_shards` slot options.
@@ -340,6 +349,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `vladimir` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune pages/shards.
   - Startup validation fails fast if a preset references missing item/rune/shard data.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
+- `maximum_quality` runs a pre-budget coverage stage that locks each item/rune/shard at least once, keeps top diverse candidates per locked asset, and injects those seeds into the main search.
 - Stack overrides (generic, keyed by stack identifier):
   - `simulation.stack_overrides` sets global stack overrides by stack identifier (example: `{ "heartsteel": 20.0 }`).
   - `controlled_champion.stack_overrides` overrides global stack overrides for the controlled champion.

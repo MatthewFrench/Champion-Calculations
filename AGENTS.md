@@ -100,10 +100,21 @@ These instructions apply to the entire repository.
 
 ## Change Hygiene
 - When adding or changing architecture behavior:
+  - Update repository-root `README.md` for high-level project state changes.
   - Update `Simulation/README.md` if behavior or extension points changed.
   - Update `Simulation/IMPLEMENTATION_ROADMAP.md` status when milestones move.
   - Update `Simulation/IMPROVEMENT_TRACKER.md` when meaningful work lands.
-- Keep deterministic behavior unless explicitly asked otherwise.
+- If behavior or search semantics changed materially, add/update a current-state handoff note under `Simulation/` so future contributors have a concise snapshot.
+
+## Search And Reproducibility Policy
+- Search seed policy:
+  - default behavior is runtime-random seed (breadth-first exploration).
+  - deterministic reproducibility must be explicitly enabled with a fixed seed override (for example CLI `--seed` or scenario `search.seed`).
+  - reports must include the effective seed used by the run.
+- Maximum-quality search policy:
+  - includes a pre-budget coverage stage that must touch each legal item/rune/shard asset at least once.
+  - time budgets (for example `--max-runtime-seconds`) are applied after coverage completes.
+  - if changing this behavior, update docs and diagnostics sections together.
 
 ## Validation Requirements
 - Run and pass before finishing:
