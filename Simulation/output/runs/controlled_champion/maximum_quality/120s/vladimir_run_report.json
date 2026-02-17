@@ -70,19 +70,19 @@
     "bleed_candidates_injected": 0,
     "candidate_duplicates_pruned": 0,
     "candidate_keys_generated": 1600,
-    "elapsed_seconds": 1.161564166,
+    "elapsed_seconds": 120.421631375,
     "ensemble_seeds": 8,
-    "estimated_cache_space_coverage_percent": 5.3487715070637986e-9,
-    "estimated_close_to_optimal_probability": 0.000532288289634586,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 53243 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 5.3487715070637986e-9,
+    "estimated_cache_space_coverage_percent": 4.657810245948069e-9,
+    "estimated_close_to_optimal_probability": 0.00046354253559455216,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 46365 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 4.657810245948069e-9,
     "estimated_total_candidate_space": 995424835958784.0,
     "full_cache_hits": 0,
-    "full_cache_misses": 70,
+    "full_cache_misses": 42926,
     "full_cache_waits": 0,
-    "full_evaluations": 70,
-    "full_persistent_cache_entries": 53243,
-    "full_persistent_cache_hits": 67993,
+    "full_evaluations": 42926,
+    "full_persistent_cache_entries": 46365,
+    "full_persistent_cache_hits": 18259,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -98,17 +98,17 @@
     "search_type_breakdown": [
       {
         "name": "seed_search:portfolio",
-        "new_simulations": 70,
-        "persistent_cache_hits": 67993,
-        "score_requests": 68063
+        "new_simulations": 42926,
+        "persistent_cache_hits": 18259,
+        "score_requests": 61185
       }
     ],
-    "seconds_since_last_significant_improvement": 0.910264584,
-    "significant_improvement_events": 10,
+    "seconds_since_last_significant_improvement": 110.659880875,
+    "significant_improvement_events": 14,
     "simulation_counts": {
-      "new_full_simulations": 70,
-      "total_score_requests": 68063,
-      "unique_scored_candidates": 53243
+      "new_full_simulations": 42926,
+      "total_score_requests": 61185,
+      "unique_scored_candidates": 46365
     },
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
     "strict_candidates_skipped_timeout": 1600,
@@ -116,12 +116,12 @@
     "strict_non_finite_candidates": 0,
     "strict_remaining_candidates": 1600,
     "strict_seed_scored_candidates": 0,
-    "time_budget_seconds": 1.0,
+    "time_budget_seconds": 120.0,
     "timed_out": true,
     "total_candidates": 1600,
-    "total_run_seconds": 2.416994875,
+    "total_run_seconds": 121.709040834,
     "unique_candidate_builds": 1600,
-    "unique_scored_candidates": 53243
+    "unique_scored_candidates": 46365
   },
   "diverse_top_builds": [
     {
@@ -361,8 +361,8 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-16 20:02:35 -06:00",
-  "generated_utc": "2026-02-17T02:02:35.710448+00:00",
+  "generated_local": "2026-02-16 20:00:48 -06:00",
+  "generated_utc": "2026-02-17T02:00:48.993497+00:00",
   "headline": {
     "baseline_objective_breakdown": {
       "components": {

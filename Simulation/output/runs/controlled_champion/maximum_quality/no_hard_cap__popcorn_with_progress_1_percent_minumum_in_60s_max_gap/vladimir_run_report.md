@@ -1,7 +1,7 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-16 20:02:35 -06:00`
-- Generated (UTC): `2026-02-17T02:02:35.710101+00:00`
+- Generated (local): `2026-02-16 20:02:16 -06:00`
+- Generated (UTC): `2026-02-17T02:02:16.340867+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
@@ -45,11 +45,11 @@
 - Loadout candidates/finalists: `1/1`
 - Ensemble seeds: `8`
 - Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
-- Simulations executed (new full combat runs): `70`
-- Unique scored candidates (all search stages): `53,243`
-- Total score requests (all search stages): `68,063`
-- Full evaluations cache hits/misses/waits: `0/70/0`
-- Full persistent cache hits/entries: `67,993/53,243`
+- Simulations executed (new full combat runs): `6,808`
+- Unique scored candidates (all search stages): `53,173`
+- Total score requests (all search stages): `67,993`
+- Full evaluations cache hits/misses/waits: `0/6,808/0`
+- Full persistent cache hits/entries: `61,185/53,173`
 - Candidate keys generated / duplicate-pruned / unique: `1,600/0/1,600`
 - Strict candidates seed-scored / remaining / processed: `0/1,600/0`
 - Strict non-finite / timeout-skipped: `0/1,600`
@@ -57,18 +57,20 @@
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `1.16s`
-- Total run time (end-to-end): `2.42s`
+- Search elapsed time: `60.31s`
+- Total run time (end-to-end): `61.63s`
 
-- Time budget: `1.0s`; timed_out: `true`; progress: `0/1,600` (0.0%)
+- Progress: `0/1,600` (0.0%)
+
+- Popcorn mode: window `60.0s`; significant threshold `1.00% of last best score`; significant events `10`; seconds since last significant improvement `60.1`
 
 - Estimated total legal candidate space: `995,424,835,958,784`
-- Estimated legal-space coverage (this run): `5.349e-9%`
-- Estimated legal-space coverage (persistent cache): `5.349e-9%`
+- Estimated legal-space coverage (this run): `5.342e-9%`
+- Estimated legal-space coverage (persistent cache): `5.342e-9%`
 - Estimated closeness probability (top 0.000001% heuristic): `0.05%`
-- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 53243 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
+- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 53173 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
 - Search-type simulation breakdown:
-  - seed_search:portfolio: requests `68,063`, new simulations `70`, persistent cache hits `67,993`
+  - seed_search:portfolio: requests `67,993`, new simulations `6,808`, persistent cache hits `61,185`
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
