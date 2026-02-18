@@ -1,15 +1,15 @@
 {
   "best_build": [
+    "Bloodletter's Curse",
     "Guardian Angel",
-    "Heartsteel",
-    "Protoplasm Harness",
-    "Rylai's Crystal Scepter",
+    "Kaenic Rookern",
+    "Overlord's Bloodmail",
     "Warmog's Armor",
     "Zhonya's Hourglass"
   ],
   "build_orders": [
     {
-      "cumulative_score": 9.63204063445984,
+      "cumulative_score": 11.680091797047757,
       "levels": [
         5,
         8,
@@ -20,434 +20,87 @@
       ],
       "ordered_items": [
         "Guardian Angel",
-        "Heartsteel",
         "Zhonya's Hourglass",
-        "Warmog's Armor",
-        "Rylai's Crystal Scepter",
-        "Protoplasm Harness"
-      ],
-      "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11605.64301169996,
-        13103.981903436592,
-        14370.70814927735
-      ],
-      "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1514.2150993555342,
-        1744.6551545893312,
-        2384.5313405025277
-      ],
-      "stage_objective_scores": [
-        1.0,
-        1.0,
-        2.1959604766527594,
-        2.2282297474166284,
-        2.2078504103904515,
-        1.0
-      ],
-      "stage_survival_seconds": [
-        9.199999999999983,
-        9.199999999999983,
-        16.09999999999996,
-        16.99999999999997,
-        16.99999999999997,
-        18.39999999999999
-      ]
-    },
-    {
-      "cumulative_score": 11.731500501327671,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Warmog's Armor",
         "Bloodletter's Curse",
-        "Protoplasm Harness"
-      ],
-      "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11605.64301169996,
-        13103.981903436592,
-        14370.70814927735
-      ],
-      "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1514.2150993555342,
-        1744.6551545893312,
-        2384.5313405025277
-      ],
-      "stage_objective_scores": [
-        2.7697286776879677,
-        1.0134375424813424,
-        2.224699018590927,
-        2.2323332771372564,
-        2.2121672062861655,
-        1.2791347791440122
-      ],
-      "stage_survival_seconds": [
-        9.199999999999983,
-        9.199999999999983,
-        16.09999999999996,
-        16.99999999999997,
-        16.99999999999997,
-        18.39999999999999
-      ]
-    },
-    {
-      "cumulative_score": 9.654849934020787,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Morellonomicon",
-        "Protoplasm Harness",
+        "Overlord's Bloodmail",
+        "Kaenic Rookern",
         "Warmog's Armor"
       ],
       "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11547.549158018033,
-        12813.225250537103,
-        14389.042090766878
+        5853.771370967685,
+        8606.544871275213,
+        10078.369390364627,
+        11169.964693211567,
+        11950.357665955886,
+        13374.503662802465
       ],
       "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1357.807459733273,
-        1996.486531457187,
-        2369.9857522809607
+        497.2421738165674,
+        830.9928929613012,
+        1036.0781732503897,
+        1311.7277235613326,
+        1516.73311732213,
+        1858.349959610693
       ],
       "stage_objective_scores": [
-        1.0,
-        1.0,
-        2.219922623210522,
-        2.196764256857341,
-        2.2381630539529245,
+        2.764521402532685,
+        2.2246912292464547,
+        2.237596038066622,
+        1.7335393052476098,
+        1.7197438219543866,
         1.0
       ],
       "stage_survival_seconds": [
         9.199999999999983,
-        9.199999999999983,
+        13.799999999999967,
         16.09999999999996,
         16.09999999999996,
-        17.999999999999986,
-        18.39999999999999
-      ]
-    },
-    {
-      "cumulative_score": 11.743462987592476,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Warmog's Armor",
-        "Cosmic Drive",
-        "Protoplasm Harness"
-      ],
-      "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11605.64301169996,
-        13094.426192874955,
-        14360.734167891704
-      ],
-      "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1514.2150993555342,
-        1733.2642913776117,
-        2373.243129669153
-      ],
-      "stage_objective_scores": [
-        2.7785060393436054,
-        1.0148054570772005,
-        2.225926861518069,
-        2.2330254524925053,
-        2.2120735051276936,
-        1.2791256720334014
-      ],
-      "stage_survival_seconds": [
-        9.199999999999983,
-        9.199999999999983,
         16.09999999999996,
-        16.99999999999997,
-        16.99999999999997,
-        18.39999999999999
-      ]
-    },
-    {
-      "cumulative_score": 9.632680277175973,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Warmog's Armor",
-        "Riftmaker",
-        "Protoplasm Harness"
-      ],
-      "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11605.64301169996,
-        13094.426192874955,
-        14360.734167891704
-      ],
-      "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1514.2150993555342,
-        1733.2642913776117,
-        2373.243129669153
-      ],
-      "stage_objective_scores": [
-        1.0,
-        1.0,
-        2.1959604766527594,
-        2.228938521422841,
-        2.2077812791003724,
-        1.0
-      ],
-      "stage_survival_seconds": [
-        9.199999999999983,
-        9.199999999999983,
-        16.09999999999996,
-        16.99999999999997,
-        16.99999999999997,
-        18.39999999999999
-      ]
-    },
-    {
-      "cumulative_score": 11.743462987592476,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Warmog's Armor",
-        "Dusk and Dawn",
-        "Protoplasm Harness"
-      ],
-      "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11605.64301169996,
-        13094.426192874955,
-        14360.734167891704
-      ],
-      "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1514.2150993555342,
-        1733.2642913776117,
-        2373.243129669153
-      ],
-      "stage_objective_scores": [
-        2.7785060393436054,
-        1.0148054570772005,
-        2.225926861518069,
-        2.2330254524925053,
-        2.2120735051276936,
-        1.2791256720334014
-      ],
-      "stage_survival_seconds": [
-        9.199999999999983,
-        9.199999999999983,
-        16.09999999999996,
-        16.99999999999997,
-        16.99999999999997,
-        18.39999999999999
-      ]
-    },
-    {
-      "cumulative_score": 9.352503778059397,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Guardian Angel",
-        "Warmog's Armor",
-        "Protoplasm Harness",
-        "Titanic Hydra"
-      ],
-      "stage_damage": [
-        3817.53657097751,
-        7938.765917506239,
-        10073.412627302127,
-        11683.284777599318,
-        12969.404136882053,
-        14177.892495927266
-      ],
-      "stage_healing": [
-        145.5,
-        738.769975486082,
-        1157.8321449889424,
-        1531.8620444097683,
-        2170.017049504683,
-        2480.6087858178953
-      ],
-      "stage_objective_scores": [
-        0.17436033966902525,
-        1.4714451307953318,
-        2.197803095956004,
-        2.2407486773629173,
-        2.266017415049022,
-        1.0021291192270951
-      ],
-      "stage_survival_seconds": [
-        2.096210621524107,
-        6.999999999999991,
-        16.09999999999996,
-        16.99999999999997,
-        18.39999999999999,
-        16.99999999999997
-      ]
-    },
-    {
-      "cumulative_score": 9.663980135481104,
-      "levels": [
-        5,
-        8,
-        11,
-        14,
-        17,
-        20
-      ],
-      "ordered_items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Zhonya's Hourglass",
-        "Warmog's Armor",
-        "Hextech Rocketbelt",
-        "Protoplasm Harness"
-      ],
-      "stage_damage": [
-        5730.319655999571,
-        6890.842355428597,
-        10015.095186189716,
-        11605.64301169996,
-        13055.619731192639,
-        14322.452263630877
-      ],
-      "stage_healing": [
-        464.0825016427908,
-        691.5615877287375,
-        1144.4729473315087,
-        1514.2150993555342,
-        1725.20409431085,
-        2365.2122962239896
-      ],
-      "stage_objective_scores": [
-        1.0,
-        1.0,
-        2.224265637974469,
-        2.2310564612446537,
-        2.208658036261982,
-        1.0
-      ],
-      "stage_survival_seconds": [
-        9.199999999999983,
-        9.199999999999983,
-        16.09999999999996,
-        16.99999999999997,
-        16.99999999999997,
-        18.39999999999999
+        16.09999999999996
       ]
     }
   ],
   "champion_level": 20,
-  "controlled_champion_loadout_labels": [],
+  "controlled_champion_loadout_labels": [
+    "Rune: Unsealed Spellbook",
+    "Rune: Magical Footwear",
+    "Rune: Biscuit Delivery",
+    "Rune: Approach Velocity",
+    "Rune: Triumph",
+    "Rune: Legend: Bloodline",
+    "Shard 1: attack_speed",
+    "Shard 2: health"
+  ],
   "controlled_champion_name": "Vladimir",
   "diagnostics": {
-    "adaptive_candidates_injected": 0,
-    "best_significant_score": 0.6781150640383022,
-    "bleed_candidates_injected": 1866,
-    "candidate_duplicates_pruned": 11454,
-    "candidate_keys_generated": 15209,
+    "adaptive_candidates_injected": 3285,
+    "best_significant_score": 44.98501464348908,
+    "bleed_candidates_injected": 1849,
+    "candidate_duplicates_pruned": 601,
+    "candidate_keys_generated": 18477,
     "coverage_stage_assets_covered": 181,
     "coverage_stage_assets_total": 181,
-    "coverage_stage_elapsed_seconds": 3.5237483750000003,
+    "coverage_stage_elapsed_seconds": 4.483859291,
     "coverage_stage_enabled": true,
     "coverage_stage_incomplete": false,
     "coverage_stage_seed_candidates": 543,
     "coverage_stage_seed_candidates_unique": 543,
     "coverage_stage_warning": "",
-    "effective_seed": 17544274344834918393,
-    "elapsed_seconds": 611.87820075,
+    "effective_seed": 15540744735400828093,
+    "effective_threads": 9,
+    "elapsed_seconds": 544.086718709,
     "ensemble_seeds": 8,
-    "estimated_cache_space_coverage_percent": 2.5453021749850206e-7,
-    "estimated_close_to_optimal_probability": 0.022387173473593536,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 2264157 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 2.2745635011398776e-7,
+    "estimated_cache_space_coverage_percent": 7.045018113542797e-7,
+    "estimated_close_to_optimal_probability": 0.0436361484147999,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 4461684 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 4.482190757981789e-7,
     "estimated_total_candidate_space": 995424835958784.0,
-    "full_cache_hits": 264930,
-    "full_cache_misses": 2282143,
-    "full_cache_waits": 0,
-    "full_evaluations": 2260001,
-    "full_persistent_cache_entries": 2533657,
-    "full_persistent_cache_hits": 1640997,
+    "full_cache_hits": 317946,
+    "full_cache_misses": 4486655,
+    "full_cache_waits": 161,
+    "full_evaluations": 4458913,
+    "full_persistent_cache_entries": 7012786,
+    "full_persistent_cache_hits": 3336026,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -457,137 +110,75 @@
     "objective_survival_weight": 0.25641025641025644,
     "popcorn_min_relative_improvement_percent": 1.0,
     "popcorn_window_seconds": 600.0,
-    "processed_candidates": 1600,
+    "portfolio_strategy_parallel": true,
+    "processed_candidates": 17876,
     "scenario_count": 1,
     "search_quality_profile": "maximum_quality",
     "search_type_breakdown": [
       {
+        "name": "adaptive_search",
+        "new_simulations": 1804282,
+        "persistent_cache_hits": 1291200,
+        "score_requests": 3148468
+      },
+      {
         "name": "seed_search:portfolio",
-        "new_simulations": 1335595,
-        "persistent_cache_hits": 1065941,
-        "score_requests": 2525170
+        "new_simulations": 1347461,
+        "persistent_cache_hits": 1063211,
+        "score_requests": 2534336
       },
       {
         "name": "strategy_elites",
-        "new_simulations": 936441,
-        "persistent_cache_hits": 575056,
-        "score_requests": 1652793
+        "new_simulations": 1323400,
+        "persistent_cache_hits": 977662,
+        "score_requests": 2442358
       },
       {
         "name": "coverage_stage",
-        "new_simulations": 10107,
+        "new_simulations": 10103,
         "persistent_cache_hits": 0,
-        "score_requests": 10107
+        "score_requests": 10103
+      },
+      {
+        "name": "strict_full_ranking",
+        "new_simulations": 1409,
+        "persistent_cache_hits": 3953,
+        "score_requests": 5362
       }
     ],
-    "seconds_since_last_significant_improvement": 600.785014917,
-    "significant_improvement_events": 9,
+    "seconds_since_last_significant_improvement": 216.037592917,
+    "seed_orchestration_parallel": true,
+    "significant_improvement_events": 15,
     "simulation_counts": {
-      "new_full_simulations": 2260001,
-      "total_score_requests": 4188070,
-      "unique_scored_candidates": 2264157
+      "new_full_simulations": 4458913,
+      "total_score_requests": 8140627,
+      "unique_scored_candidates": 4461684
     },
+    "strategy_elites_parallel": true,
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "strict_candidates_skipped_timeout": 2155,
-    "strict_completion_percent": 42.6098535286285,
+    "strict_candidates_skipped_timeout": 0,
+    "strict_completion_percent": 100.0,
     "strict_non_finite_candidates": 0,
-    "strict_remaining_candidates": 2155,
-    "strict_seed_scored_candidates": 1600,
+    "strict_remaining_candidates": 5362,
+    "strict_seed_scored_candidates": 12514,
     "time_budget_seconds": 600.0,
-    "timed_out": true,
-    "total_candidates": 3755,
-    "total_run_seconds": 620.476333208,
-    "unique_candidate_builds": 3755,
-    "unique_scored_candidates": 2264157
+    "timed_out": false,
+    "total_candidates": 17876,
+    "total_run_seconds": 545.288790834,
+    "unique_candidate_builds": 17876,
+    "unique_scored_candidates": 4461684
   },
   "diverse_top_builds": [
     {
       "items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Protoplasm Harness",
-        "Rylai's Crystal Scepter",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.6967726776029946
-    },
-    {
-      "items": [
         "Bloodletter's Curse",
         "Guardian Angel",
-        "Heartsteel",
-        "Protoplasm Harness",
+        "Kaenic Rookern",
+        "Overlord's Bloodmail",
         "Warmog's Armor",
         "Zhonya's Hourglass"
       ],
-      "objective_score": 0.6967726776029946
-    },
-    {
-      "items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Morellonomicon",
-        "Protoplasm Harness",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.6965898079329742
-    },
-    {
-      "items": [
-        "Cosmic Drive",
-        "Guardian Angel",
-        "Heartsteel",
-        "Protoplasm Harness",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.696278384588531
-    },
-    {
-      "items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Protoplasm Harness",
-        "Riftmaker",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.696278384588531
-    },
-    {
-      "items": [
-        "Dusk and Dawn",
-        "Guardian Angel",
-        "Heartsteel",
-        "Protoplasm Harness",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.696278384588531
-    },
-    {
-      "items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Protoplasm Harness",
-        "Titanic Hydra",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.6959470395608593
-    },
-    {
-      "items": [
-        "Guardian Angel",
-        "Heartsteel",
-        "Hextech Rocketbelt",
-        "Protoplasm Harness",
-        "Warmog's Armor",
-        "Zhonya's Hourglass"
-      ],
-      "objective_score": 0.6954726682296244
+      "objective_score": 44.98501464348908
     }
   ],
   "enemy_derived_combat_stats": [
@@ -815,60 +406,60 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-18 04:01:27 -06:00",
-  "generated_utc": "2026-02-18T10:01:27.200401+00:00",
+  "generated_local": "2026-02-18 04:43:18 -06:00",
+  "generated_utc": "2026-02-18T10:43:18.048003+00:00",
   "headline": {
     "best_objective_breakdown": {
       "components": {
         "damage": {
-          "contribution": 0.10041123146513763,
-          "delta_vs_weight_percent_points": 8.051084196012058,
-          "impact_percent": 20.87159701652488,
-          "normalized_ratio": 0.7832076054280734,
+          "contribution": 0.09280447505630286,
+          "delta_vs_weight_percent_points": 11.608553844307794,
+          "impact_percent": 24.429066664820617,
+          "normalized_ratio": 0.7238749054391622,
           "weight": 0.12820512820512822
         },
         "enemy_kills": {
-          "contribution": 0.3076923076923077,
-          "delta_vs_weight_percent_points": 12.6752347459378,
-          "impact_percent": 63.95728602798909,
-          "normalized_ratio": 0.6,
+          "contribution": 0.20512820512820518,
+          "delta_vs_weight_percent_points": 2.714165978719606,
+          "impact_percent": 53.9962172607709,
+          "normalized_ratio": 0.4,
           "weight": 0.5128205128205129
         },
         "healing": {
-          "contribution": 0.06878805613454382,
-          "delta_vs_weight_percent_points": 6.6060587975880685,
-          "impact_percent": 14.298366489895761,
-          "normalized_ratio": 0.8942447297490697,
+          "contribution": 0.07806082931055196,
+          "delta_vs_weight_percent_points": 12.855766115358819,
+          "impact_percent": 20.548073807666512,
+          "normalized_ratio": 1.0147907810371755,
           "weight": 0.07692307692307693
         },
         "invulnerable_seconds": {
           "contribution": 0.0002670940170940171,
-          "delta_vs_weight_percent_points": -2.5085840866477125,
-          "impact_percent": 0.05551847745485164,
+          "delta_vs_weight_percent_points": -2.493794989544269,
+          "impact_percent": 0.07030757455829542,
           "normalized_ratio": 0.010416666666666666,
           "weight": 0.025641025641025644
         },
         "survival": {
-          "contribution": 0.00393162393162393,
-          "delta_vs_weight_percent_points": -24.82379365289023,
-          "impact_percent": 0.8172319881354159,
-          "normalized_ratio": 0.015333333333333326,
+          "contribution": 0.003633054848306818,
+          "delta_vs_weight_percent_points": -24.68469094884197,
+          "impact_percent": 0.9563346921836758,
+          "normalized_ratio": 0.014168913908396589,
           "weight": 0.25641025641025644
         }
       },
-      "final_score": 0.4810903132407071,
-      "weighted_mean_score": 0.4810903132407071,
-      "worst_case_score": 0.4810903132407071,
+      "final_score": 0.37989365836046085,
+      "weighted_mean_score": 0.37989365836046085,
+      "worst_case_score": 0.37989365836046085,
       "worst_case_weight": 0.35
     },
-    "best_objective_score": 0.6967726776029946,
+    "best_objective_score": 44.98501464348908,
     "best_outcome": {
       "cap_survivor": false,
-      "damage_dealt": 14470.750275805609,
-      "enemy_kills": 3,
-      "healing_done": 2405.5183230249972,
+      "damage_dealt": 13374.503662802465,
+      "enemy_kills": 2,
+      "healing_done": 2729.787200990002,
       "invulnerable_seconds": 12.5,
-      "time_alive_seconds": 18.39999999999999
+      "time_alive_seconds": 17.002696690075904
     }
   },
   "scenario_path": "Simulation/scenarios/vladimir_urf_teamfight.json"

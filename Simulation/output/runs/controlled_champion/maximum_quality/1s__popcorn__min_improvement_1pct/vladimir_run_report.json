@@ -2,14 +2,14 @@
   "best_build": [
     "Abyssal Mask",
     "Actualizer",
+    "Bloodletter's Curse",
     "Bloodthirster",
-    "Edge of Night",
-    "Spirit Visage",
-    "Zephyr"
+    "Morellonomicon",
+    "Shadowflame"
   ],
   "build_orders": [
     {
-      "cumulative_score": 2.9987254879484455,
+      "cumulative_score": 3.1574495593607557,
       "levels": [
         5,
         8,
@@ -19,40 +19,40 @@
         20
       ],
       "ordered_items": [
-        "Spirit Visage",
-        "Abyssal Mask",
-        "Edge of Night",
+        "Bloodletter's Curse",
+        "Morellonomicon",
+        "Shadowflame",
         "Actualizer",
-        "Bloodthirster",
-        "Zephyr"
+        "Abyssal Mask",
+        "Bloodthirster"
       ],
       "stage_damage": [
-        3545.7917100382747,
-        3673.26696365768,
-        4559.252201634164,
-        5233.962769876856,
-        5069.5712522359245,
-        4915.6194394133945
+        3987.079039028539,
+        4769.065511488613,
+        6723.1397293889795,
+        7327.021180026542,
+        7357.85538114065,
+        7134.086981014933
       ],
       "stage_healing": [
-        118.08620689655163,
-        169.08620689655163,
-        242.49813453928755,
-        285.3979085386395,
-        308.7573778038168,
-        332.2168969551494
+        125.88620689655181,
+        230.5586972656481,
+        277.5268230638776,
+        319.5048262821001,
+        369.31259625041866,
+        391.942693971821
       ],
       "stage_objective_scores": [
-        0.4910607014622965,
-        0.48727766280909435,
-        0.534313093225836,
-        0.5117150560922441,
-        0.4871794871794873,
+        0.5124330455794958,
+        0.5891584479478672,
+        0.5131566849400037,
+        0.5436230806226613,
+        0.5118988130912403,
         0.4871794871794873
       ],
       "stage_survival_seconds": [
         2.0615966371280576,
-        2.0237784835491546,
+        2.3000000000000007,
         3.788833943808779,
         3.778115851721098,
         3.716272679677316,
@@ -62,45 +62,45 @@
   ],
   "champion_level": 20,
   "controlled_champion_loadout_labels": [
-    "Rune: Fleet Footwork",
-    "Rune: Absorb Life",
-    "Rune: Legend: Haste",
-    "Rune: Cut Down",
+    "Rune: First Strike",
+    "Rune: Magical Footwear",
+    "Rune: Time Warp Tonic",
+    "Rune: Cosmic Insight",
     "Rune: Nimbus Cloak",
-    "Rune: Absolute Focus",
+    "Rune: Waterwalking",
     "Shard 1: attack_speed",
     "Shard 2: health"
   ],
   "controlled_champion_name": "Vladimir",
   "diagnostics": {
     "adaptive_candidates_injected": 0,
-    "best_significant_score": 0.1219867352994953,
-    "bleed_candidates_injected": 1856,
+    "best_significant_score": 0.44941296616795257,
+    "bleed_candidates_injected": 1866,
     "candidate_duplicates_pruned": 420,
-    "candidate_keys_generated": 3273,
+    "candidate_keys_generated": 2409,
     "coverage_stage_assets_covered": 181,
     "coverage_stage_assets_total": 181,
-    "coverage_stage_elapsed_seconds": 0.276779417,
+    "coverage_stage_elapsed_seconds": 4.871185166,
     "coverage_stage_enabled": true,
     "coverage_stage_incomplete": false,
     "coverage_stage_seed_candidates": 543,
     "coverage_stage_seed_candidates_unique": 543,
     "coverage_stage_warning": "",
-    "effective_seed": 42,
+    "effective_seed": 15776479977196226112,
     "effective_threads": 9,
-    "elapsed_seconds": 1.6342008749999999,
+    "elapsed_seconds": 9.903704917,
     "ensemble_seeds": 8,
-    "estimated_cache_space_coverage_percent": 1.2808601452785049e-9,
-    "estimated_close_to_optimal_probability": 0.00011013393591685627,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 11014 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 1.1064622462821532e-9,
+    "estimated_cache_space_coverage_percent": 2.565611091610079e-7,
+    "estimated_close_to_optimal_probability": 0.00010109489058063303,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 10110 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 1.0156467504914262e-9,
     "estimated_total_candidate_space": 995424835958784.0,
-    "full_cache_hits": 22166,
-    "full_cache_misses": 6131,
-    "full_cache_waits": 30,
-    "full_evaluations": 656,
-    "full_persistent_cache_entries": 12750,
-    "full_persistent_cache_hits": 10358,
+    "full_cache_hits": 0,
+    "full_cache_misses": 10110,
+    "full_cache_waits": 0,
+    "full_evaluations": 10110,
+    "full_persistent_cache_entries": 2553873,
+    "full_persistent_cache_hits": 0,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -116,51 +116,45 @@
     "search_quality_profile": "maximum_quality",
     "search_type_breakdown": [
       {
-        "name": "seed_search:portfolio",
-        "new_simulations": 6131,
-        "persistent_cache_hits": 245,
-        "score_requests": 28542
-      },
-      {
         "name": "coverage_stage",
-        "new_simulations": 0,
-        "persistent_cache_hits": 10113,
-        "score_requests": 10113
+        "new_simulations": 10110,
+        "persistent_cache_hits": 0,
+        "score_requests": 10110
       }
     ],
-    "seconds_since_last_significant_improvement": 1.570670458,
+    "seconds_since_last_significant_improvement": 1.689961,
     "seed_orchestration_parallel": true,
-    "significant_improvement_events": 9,
+    "significant_improvement_events": 10,
     "simulation_counts": {
-      "new_full_simulations": 656,
-      "total_score_requests": 38655,
-      "unique_scored_candidates": 11014
+      "new_full_simulations": 10110,
+      "total_score_requests": 10110,
+      "unique_scored_candidates": 10110
     },
     "strategy_elites_parallel": true,
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "strict_candidates_skipped_timeout": 2853,
+    "strict_candidates_skipped_timeout": 1989,
     "strict_completion_percent": 0.0,
     "strict_non_finite_candidates": 0,
-    "strict_remaining_candidates": 2853,
+    "strict_remaining_candidates": 1989,
     "strict_seed_scored_candidates": 0,
     "time_budget_seconds": 1.0,
     "timed_out": true,
-    "total_candidates": 2853,
-    "total_run_seconds": 2.03059475,
-    "unique_candidate_builds": 2853,
-    "unique_scored_candidates": 11014
+    "total_candidates": 1989,
+    "total_run_seconds": 10.298501834,
+    "unique_candidate_builds": 1989,
+    "unique_scored_candidates": 10110
   },
   "diverse_top_builds": [
     {
       "items": [
         "Abyssal Mask",
         "Actualizer",
+        "Bloodletter's Curse",
         "Bloodthirster",
-        "Edge of Night",
-        "Spirit Visage",
-        "Zephyr"
+        "Morellonomicon",
+        "Shadowflame"
       ],
-      "objective_score": 0.04443429852515765
+      "objective_score": 0.06153596004757829
     }
   ],
   "enemy_derived_combat_stats": [
@@ -388,16 +382,16 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-18 04:31:07 -06:00",
-  "generated_utc": "2026-02-18T10:31:07.878523+00:00",
+  "generated_local": "2026-02-18 04:34:05 -06:00",
+  "generated_utc": "2026-02-18T10:34:05.216358+00:00",
   "headline": {
     "best_objective_breakdown": {
       "components": {
         "damage": {
-          "contribution": 0.03410904009246265,
-          "delta_vs_weight_percent_points": 63.94235105850378,
-          "impact_percent": 76.7628638790166,
-          "normalized_ratio": 0.2660505127212086,
+          "contribution": 0.04950278634417493,
+          "delta_vs_weight_percent_points": 67.62478502793293,
+          "impact_percent": 80.44529784844575,
+          "normalized_ratio": 0.3861217334845644,
           "weight": 0.12820512820512822
         },
         "enemy_kills": {
@@ -408,38 +402,38 @@
           "weight": 0.5128205128205129
         },
         "healing": {
-          "contribution": 0.009500054245214454,
-          "delta_vs_weight_percent_points": 13.687695054524795,
-          "impact_percent": 21.38000274683249,
-          "normalized_ratio": 0.1235007051877879,
+          "contribution": 0.01120796951592282,
+          "delta_vs_weight_percent_points": 10.5213831435175,
+          "impact_percent": 18.213690835825194,
+          "normalized_ratio": 0.14570360370699664,
           "weight": 0.07692307692307693
         },
         "invulnerable_seconds": {
           "contribution": 0.00004273504273504274,
-          "delta_vs_weight_percent_points": -2.467926762630539,
-          "impact_percent": 0.09617580147202542,
+          "delta_vs_weight_percent_points": -2.494655296680392,
+          "impact_percent": 0.06944726742217221,
           "normalized_ratio": 0.0016666666666666668,
           "weight": 0.025641025641025644
         },
         "survival": {
           "contribution": 0.0007824691447455109,
-          "delta_vs_weight_percent_points": -23.88006806834675,
-          "impact_percent": 1.7609575726788964,
+          "delta_vs_weight_percent_points": -24.369461592718732,
+          "impact_percent": 1.2715640483069126,
           "normalized_ratio": 0.003051629664507492,
           "weight": 0.25641025641025644
         }
       },
-      "final_score": 0.04443429852515765,
-      "weighted_mean_score": 0.04443429852515765,
-      "worst_case_score": 0.04443429852515765,
+      "final_score": 0.06153596004757829,
+      "weighted_mean_score": 0.06153596004757829,
+      "worst_case_score": 0.06153596004757829,
       "worst_case_weight": 0.35
     },
-    "best_objective_score": 0.04443429852515765,
+    "best_objective_score": 0.06153596004757829,
     "best_outcome": {
       "cap_survivor": false,
-      "damage_dealt": 4915.6194394133945,
+      "damage_dealt": 7134.086981014933,
       "enemy_kills": 0,
-      "healing_done": 332.2168969551494,
+      "healing_done": 391.942693971821,
       "invulnerable_seconds": 2.0,
       "time_alive_seconds": 3.6619555974089906
     }

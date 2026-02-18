@@ -1,27 +1,27 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-18 04:30:00 -06:00`
-- Generated (UTC): `2026-02-18T10:30:00.403669+00:00`
+- Generated (local): `2026-02-18 04:33:48 -06:00`
+- Generated (UTC): `2026-02-18T10:33:48.357362+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
-- Best objective score: **0.0461**
-- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **3.66s / 5,093.7 / 347.8 / 0 / 2.00s**
+- Best objective score: **0.0344**
+- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **3.66s / 3,778.3 / 256.4 / 0 / 2.00s**
 - Best cap survivor: **false**
 
 - Champion level assumption: **20**
 
 ## Objective Score Breakdown
 ### Best Build
-- Weighted-mean score: `0.0461`
-- Worst-case scenario score: `0.0461`
+- Weighted-mean score: `0.0344`
+- Worst-case scenario score: `0.0344`
 - Worst-case blend weight: `0.35`
-- Final blended objective score: `0.0461`
-- survival: weight `0.26` | normalized `0.0031` | contribution `0.0008` | impact `1.70%` | delta vs weight `-23.94pp`
-- damage: weight `0.13` | normalized `0.2757` | contribution `0.0353` | impact `76.64%` | delta vs weight `+63.82pp`
-- healing: weight `0.08` | normalized `0.1293` | contribution `0.0099` | impact `21.57%` | delta vs weight `+13.87pp`
+- Final blended objective score: `0.0344`
+- survival: weight `0.26` | normalized `0.0031` | contribution `0.0008` | impact `2.28%` | delta vs weight `-23.36pp`
+- damage: weight `0.13` | normalized `0.2045` | contribution `0.0262` | impact `76.27%` | delta vs weight `+63.45pp`
+- healing: weight `0.08` | normalized `0.0953` | contribution `0.0073` | impact `21.33%` | delta vs weight `+13.64pp`
 - enemy_kills: weight `0.51` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-51.28pp`
-- invulnerable_seconds: weight `0.03` | normalized `0.0017` | contribution `0.0000` | impact `0.09%` | delta vs weight `-2.47pp`
+- invulnerable_seconds: weight `0.03` | normalized `0.0017` | contribution `0.0000` | impact `0.12%` | delta vs weight `-2.44pp`
 
 ## Search Diagnostics
 - Strategy: `portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)`
@@ -31,64 +31,59 @@
 - Ensemble seeds: `1`
 - Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `9` / `false` / `true` / `true`
 - Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
-- Simulations executed (new full combat runs): `632`
-- Unique scored candidates (all search stages): `1,869`
-- Total score requests (all search stages): `7,676`
-- Full evaluations cache hits/misses/waits: `0/6,138/0`
-- Full persistent cache hits/entries: `1,538/12,152`
-- Candidate keys generated / duplicate-pruned / unique: `92/0/92`
-- Strict candidates seed-scored / remaining / processed: `0/92/0`
-- Strict non-finite / timeout-skipped: `0/92`
+- Simulations executed (new full combat runs): `0`
+- Unique scored candidates (all search stages): `0`
+- Total score requests (all search stages): `0`
+- Full evaluations cache hits/misses/waits: `0/0/0`
+- Full persistent cache hits/entries: `0/2,543,763`
+- Candidate keys generated / duplicate-pruned / unique: `0/0/1`
+- Strict candidates seed-scored / remaining / processed: `0/1/0`
+- Strict non-finite / timeout-skipped: `0/1`
 - Strict completion: `0.0%`
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `1.15s`
-- Total run time (end-to-end): `1.53s`
+- Search elapsed time: `4.39s`
+- Total run time (end-to-end): `4.75s`
 
-- Effective seed: `42`
-- Time budget: `1.0s`; timed_out: `true`; progress: `0/92` (0.0%)
+- Effective seed: `1738881412323637786`
+- Time budget: `1.0s`; timed_out: `true`; progress: `0/1` (0.0%)
 
 - Estimated total legal candidate space: `995,424,835,958,784`
-- Estimated legal-space coverage (this run): `1.878e-10%`
-- Estimated legal-space coverage (persistent cache): `1.221e-9%`
+- Estimated legal-space coverage (this run): `0.000000%`
+- Estimated legal-space coverage (persistent cache): `2.555e-7%`
 - Estimated closeness probability (top 0.000001% heuristic): `0.00%`
-- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 1869 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
-- Search-type simulation breakdown:
-  - seed_search:portfolio: requests `7,676`, new simulations `6,138`, persistent cache hits `1,538`
+- Closeness probability note: 0.0%: no unique candidates were scored in this run.
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
 
 ## Selected Rune Page And Shards
 - Vladimir:
-  - Rune: Arcane Comet
-  - Rune: Nimbus Cloak
-  - Rune: Transcendence
-  - Rune: Gathering Storm
-  - Rune: Shield Bash
-  - Rune: Overgrowth
-  - Shard 1: attack_speed
-  - Shard 2: health
+  - Rune: Dark Harvest
+  - Rune: Taste of Blood
+  - Rune: Sixth Sense
+  - Rune: Relentless Hunter
+  - Rune: Bone Plating
+  - Rune: Unflinching
+  - Shard 1: ability_haste
+  - Shard 2: movement_speed
+  - Shard 3: health
 - Opponents: champion-specific preset rune pages are listed in Enemy Builds.
 
 - Applied deterministic loadout effects:
-  - Vladimir: Applied rune stat effect from Nimbus Cloak.
-  - Vladimir: Applied shard 'attack_speed' in slot 1.
-  - Vladimir: Applied shard 'health' in slot 2.
-- Skipped unsupported/non-deterministic effects:
-  - Vladimir: Shard 'tenacity' in slot 3 not applicable in current stat model.
-  - Vladimir: Rune 'Arcane Comet' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
-  - Vladimir: Rune 'Gathering Storm' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
+  - Vladimir: Applied shard 'ability_haste' in slot 1.
+  - Vladimir: Applied shard 'movement_speed' in slot 2.
+  - Vladimir: Applied shard 'health' in slot 3.
 
 ## Best Build
-- Abyssal Mask, Actualizer, Endless Hunger, Kaenic Rookern, Spear of Shojin, Youmuu's Ghostblade
+- Axiom Arc, Bloodthirster, Hubris, Infinity Edge, Moonstone Renewer, Umbral Glaive
 
 ## Vladimir End Stats (Best Build)
-- HP: 4,168.5, Armor: 109.5, MR: 54.7, AP: 134.0, AD: 165.0, Ability Haste: 25.0, Move Speed (flat bonus): 4.0, Move Speed (% bonus): 15.0
+- HP: 3,064.5, Armor: 109.5, MR: 54.7, AP: 36.0, AD: 330.0, Ability Haste: 73.0, Move Speed (flat bonus): 0.0, Move Speed (% bonus): 2.0
 
 ## Stack Overrides
-- Spear of Shojin has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
+- Hubris has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
 
 ## Enemy Builds (URF Presets)
 - Warwick: Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail
@@ -120,19 +115,19 @@
 - Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 125, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 0.0, burst phys/magic/true 0.0/0.0/0.0
 
 ## Diverse Top Builds
-1. `score 0.0461` (+0.0000 vs top): Abyssal Mask, Actualizer, Endless Hunger, Kaenic Rookern, Spear of Shojin, Youmuu's Ghostblade | seed hits: 1/1 (100%) robust | Pareto-front
-   - metrics: EHP~7,590.8, AP~134.0, timing score -8630.00, total cost 17,350
+1. `score 0.0344` (+0.0000 vs top): Axiom Arc, Bloodthirster, Hubris, Infinity Edge, Moonstone Renewer, Umbral Glaive | seed hits: 0/1 (0%) fragile | Pareto-front
+   - metrics: EHP~5,580.4, AP~36.0, timing score -8996.67, total cost 17,650
 
 ## Build Order Optimization
-1. Cumulative score: `3.09` | Order: Spear of Shojin, Kaenic Rookern, Actualizer, Abyssal Mask, Endless Hunger, Youmuu's Ghostblade
-   - Stage 1 (level 5): objective `0.495`, time alive `2.06s`, damage `3,583.0`, healing `121.8`
-   - Stage 2 (level 8): objective `0.548`, time alive `2.30s`, damage `3,867.7`, healing `207.2`
-   - Stage 3 (level 11): objective `0.556`, time alive `3.79s`, damage `5,290.5`, healing `250.4`
-   - Stage 4 (level 14): objective `0.513`, time alive `3.78s`, damage `5,388.1`, healing `301.0`
-   - Stage 5 (level 17): objective `0.487`, time alive `3.72s`, damage `5,218.9`, healing `324.4`
-   - Stage 6 (level 20): objective `0.487`, time alive `3.66s`, damage `5,060.5`, healing `347.8`
+1. Cumulative score: `3.04` | Order: Moonstone Renewer, Axiom Arc, Bloodthirster, Hubris, Infinity Edge, Umbral Glaive
+   - Stage 1 (level 5): objective `0.515`, time alive `2.06s`, damage `3,566.8`, healing `106.1`
+   - Stage 2 (level 8): objective `0.512`, time alive `2.01s`, damage `3,442.4`, healing `130.8`
+   - Stage 3 (level 11): objective `0.527`, time alive `3.19s`, damage `4,158.3`, healing `185.4`
+   - Stage 4 (level 14): objective `0.509`, time alive `3.17s`, damage `4,023.0`, healing `209.0`
+   - Stage 5 (level 17): objective `0.487`, time alive `3.58s`, damage `3,896.6`, healing `232.6`
+   - Stage 6 (level 20): objective `0.487`, time alive `3.66s`, damage `3,778.3`, healing `256.4`
 
 ## Deeper Insights
-- Common core across all selected top builds: Abyssal Mask, Actualizer, Endless Hunger, Kaenic Rookern, Spear of Shojin, Youmuu's Ghostblade.
-- Most frequent items in selected top set: Abyssal Mask (1/1), Actualizer (1/1), Endless Hunger (1/1), Kaenic Rookern (1/1), Spear of Shojin (1/1), Youmuu's Ghostblade (1/1).
+- Common core across all selected top builds: Axiom Arc, Bloodthirster, Hubris, Infinity Edge, Moonstone Renewer, Umbral Glaive.
+- Most frequent items in selected top set: Axiom Arc (1/1), Bloodthirster (1/1), Hubris (1/1), Infinity Edge (1/1), Moonstone Renewer (1/1), Umbral Glaive (1/1).
 - Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.
