@@ -1,27 +1,27 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-18 03:50:59 -06:00`
-- Generated (UTC): `2026-02-18T09:50:59.076282+00:00`
+- Generated (local): `2026-02-18 04:31:07 -06:00`
+- Generated (UTC): `2026-02-18T10:31:07.878172+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
-- Best objective score: **0.0566**
-- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **3.66s / 6,281.4 / 425.4 / 0 / 2.00s**
+- Best objective score: **0.0444**
+- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **3.66s / 4,915.6 / 332.2 / 0 / 2.00s**
 - Best cap survivor: **false**
 
 - Champion level assumption: **20**
 
 ## Objective Score Breakdown
 ### Best Build
-- Weighted-mean score: `0.0566`
-- Worst-case scenario score: `0.0566`
+- Weighted-mean score: `0.0444`
+- Worst-case scenario score: `0.0444`
 - Worst-case blend weight: `0.35`
-- Final blended objective score: `0.0566`
-- survival: weight `0.26` | normalized `0.0031` | contribution `0.0008` | impact `1.38%` | delta vs weight `-24.26pp`
-- damage: weight `0.13` | normalized `0.3400` | contribution `0.0436` | impact `77.04%` | delta vs weight `+64.22pp`
-- healing: weight `0.08` | normalized `0.1582` | contribution `0.0122` | impact `21.50%` | delta vs weight `+13.81pp`
+- Final blended objective score: `0.0444`
+- survival: weight `0.26` | normalized `0.0031` | contribution `0.0008` | impact `1.76%` | delta vs weight `-23.88pp`
+- damage: weight `0.13` | normalized `0.2661` | contribution `0.0341` | impact `76.76%` | delta vs weight `+63.94pp`
+- healing: weight `0.08` | normalized `0.1235` | contribution `0.0095` | impact `21.38%` | delta vs weight `+13.69pp`
 - enemy_kills: weight `0.51` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-51.28pp`
-- invulnerable_seconds: weight `0.03` | normalized `0.0017` | contribution `0.0000` | impact `0.08%` | delta vs weight `-2.49pp`
+- invulnerable_seconds: weight `0.03` | normalized `0.0017` | contribution `0.0000` | impact `0.10%` | delta vs weight `-2.47pp`
 
 ## Search Diagnostics
 - Strategy: `portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)`
@@ -29,66 +29,69 @@
 - Enemy scenarios: `1`
 - Loadout candidates/finalists: `1/1`
 - Ensemble seeds: `8`
+- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `9` / `true` / `true` / `true`
 - Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
-- Simulations executed (new full combat runs): `10,113`
-- Unique scored candidates (all search stages): `10,113`
-- Total score requests (all search stages): `10,249`
-- Full evaluations cache hits/misses/waits: `0/10,249/0`
-- Full persistent cache hits/entries: `0/273,656`
-- Candidate keys generated / duplicate-pruned / unique: `2,392/420/1,972`
-- Strict candidates seed-scored / remaining / processed: `0/1,972/0`
-- Strict non-finite / timeout-skipped: `0/1,972`
+- Simulations executed (new full combat runs): `656`
+- Unique scored candidates (all search stages): `11,014`
+- Total score requests (all search stages): `38,655`
+- Full evaluations cache hits/misses/waits: `22,166/6,131/30`
+- Full persistent cache hits/entries: `10,358/12,750`
+- Candidate keys generated / duplicate-pruned / unique: `3,273/420/2,853`
+- Strict candidates seed-scored / remaining / processed: `0/2,853/0`
+- Strict non-finite / timeout-skipped: `0/2,853`
 - Strict completion: `0.0%`
-- Bleed candidates injected: `1,849`
+- Bleed candidates injected: `1,856`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `3.78s`
-- Total run time (end-to-end): `4.14s`
+- Search elapsed time: `1.63s`
+- Total run time (end-to-end): `2.03s`
 
-- Effective seed: `5673826355809875254`
-- Coverage stage (pre-budget): `3.32s`; assets covered `181/181`; seeded candidates unique/raw `543/543`
-- Time budget: `1.0s`; timed_out: `true`; progress: `0/1,972` (0.0%) (budget starts after pre-budget coverage stage)
+- Effective seed: `42`
+- Coverage stage (pre-budget): `0.28s`; assets covered `181/181`; seeded candidates unique/raw `543/543`
+- Time budget: `1.0s`; timed_out: `true`; progress: `0/2,853` (0.0%) (budget starts after pre-budget coverage stage)
 
-- Popcorn mode: window `1.0s`; significant threshold `1.00% of last best score`; significant events `11`; seconds since last significant improvement `1.1`
+- Popcorn mode: window `1.0s`; significant threshold `1.00% of last best score`; significant events `9`; seconds since last significant improvement `1.6`
 
 - Estimated total legal candidate space: `995,424,835,958,784`
-- Estimated legal-space coverage (this run): `1.016e-9%`
-- Estimated legal-space coverage (persistent cache): `2.749e-8%`
+- Estimated legal-space coverage (this run): `1.106e-9%`
+- Estimated legal-space coverage (persistent cache): `1.281e-9%`
 - Estimated closeness probability (top 0.000001% heuristic): `0.01%`
-- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 10113 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
+- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 11014 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
 - Search-type simulation breakdown:
-  - coverage_stage: requests `10,113`, new simulations `10,113`, persistent cache hits `0`
-  - seed_search:portfolio: requests `136`, new simulations `136`, persistent cache hits `0`
+  - seed_search:portfolio: requests `28,542`, new simulations `6,131`, persistent cache hits `245`
+  - coverage_stage: requests `10,113`, new simulations `0`, persistent cache hits `10,113`
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
 
 ## Selected Rune Page And Shards
 - Vladimir:
-  - Rune: Aftershock
-  - Rune: Shield Bash
-  - Rune: Conditioning
-  - Rune: Overgrowth
-  - Rune: Presence of Mind
+  - Rune: Fleet Footwork
+  - Rune: Absorb Life
+  - Rune: Legend: Haste
   - Rune: Cut Down
-  - Shard 1: ability_haste
-  - Shard 2: movement_speed
-  - Shard 3: health
+  - Rune: Nimbus Cloak
+  - Rune: Absolute Focus
+  - Shard 1: attack_speed
+  - Shard 2: health
 - Opponents: champion-specific preset rune pages are listed in Enemy Builds.
 
 - Applied deterministic loadout effects:
-  - Vladimir: Applied shard 'ability_haste' in slot 1.
-  - Vladimir: Applied shard 'movement_speed' in slot 2.
-  - Vladimir: Applied shard 'health' in slot 3.
+  - Vladimir: Applied rune stat effect from Legend: Haste.
+  - Vladimir: Applied rune stat effect from Nimbus Cloak.
+  - Vladimir: Applied shard 'attack_speed' in slot 1.
+  - Vladimir: Applied shard 'health' in slot 2.
+- Skipped unsupported/non-deterministic effects:
+  - Vladimir: Shard 'tenacity' in slot 3 not applicable in current stat model.
 
 ## Best Build
-- Abyssal Mask, Actualizer, Bloodthirster, Cryptbloom, Heartsteel, Solstice Sleigh
+- Abyssal Mask, Actualizer, Bloodthirster, Edge of Night, Spirit Visage, Zephyr
 
 ## Vladimir End Stats (Best Build)
-- HP: 5,085.4, Armor: 109.5, MR: 54.7, AP: 235.3, AD: 80.0, Ability Haste: 53.0, Move Speed (flat bonus): 0.0, Move Speed (% bonus): 2.0
+- HP: 3,968.5, Armor: 109.5, MR: 54.7, AP: 127.4, AD: 130.0, Ability Haste: 66.0, Move Speed (flat bonus): 10.0, Move Speed (% bonus): 15.0
 
 ## Stack Overrides
-- Heartsteel estimated stacks by level 20: 20.0 (acquired at level 5, reference full-at-20 stack target 20, estimated permanent bonus health: +442.9).
+- Zephyr has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
 
 ## Enemy Builds (URF Presets)
 - Warwick: Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail
@@ -120,19 +123,19 @@
 - Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 125, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 0.0, burst phys/magic/true 0.0/0.0/0.0
 
 ## Diverse Top Builds
-1. `score 0.0566` (+0.0000 vs top): Abyssal Mask, Actualizer, Bloodthirster, Cryptbloom, Heartsteel, Solstice Sleigh | seed hits: 0/8 (0%) fragile | Pareto-front
-   - metrics: EHP~9,260.4, AP~235.3, timing score -8125.00, total cost 15,250
+1. `score 0.0444` (+0.0000 vs top): Abyssal Mask, Actualizer, Bloodthirster, Edge of Night, Spirit Visage, Zephyr | seed hits: 1/8 (12%) fragile | Pareto-front
+   - metrics: EHP~7,226.6, AP~127.4, timing score -8595.00, total cost 17,050
 
 ## Build Order Optimization
-1. Cumulative score: `3.26` | Order: Heartsteel, Actualizer, Cryptbloom, Abyssal Mask, Solstice Sleigh, Bloodthirster
-   - Stage 1 (level 5): objective `0.534`, time alive `2.10s`, damage `3,917.5`, healing `155.6`
-   - Stage 2 (level 8): objective `0.586`, time alive `2.30s`, damage `4,581.2`, healing `236.6`
-   - Stage 3 (level 11): objective `0.591`, time alive `3.79s`, damage `6,160.6`, healing `282.6`
-   - Stage 4 (level 14): objective `0.544`, time alive `3.78s`, damage `6,321.3`, healing `342.2`
-   - Stage 5 (level 17): objective `0.508`, time alive `3.72s`, damage `6,373.6`, healing `391.4`
-   - Stage 6 (level 20): objective `0.501`, time alive `3.66s`, damage `6,281.4`, healing `425.4`
+1. Cumulative score: `3.00` | Order: Spirit Visage, Abyssal Mask, Edge of Night, Actualizer, Bloodthirster, Zephyr
+   - Stage 1 (level 5): objective `0.491`, time alive `2.06s`, damage `3,545.8`, healing `118.1`
+   - Stage 2 (level 8): objective `0.487`, time alive `2.02s`, damage `3,673.3`, healing `169.1`
+   - Stage 3 (level 11): objective `0.534`, time alive `3.79s`, damage `4,559.3`, healing `242.5`
+   - Stage 4 (level 14): objective `0.512`, time alive `3.78s`, damage `5,234.0`, healing `285.4`
+   - Stage 5 (level 17): objective `0.487`, time alive `3.72s`, damage `5,069.6`, healing `308.8`
+   - Stage 6 (level 20): objective `0.487`, time alive `3.66s`, damage `4,915.6`, healing `332.2`
 
 ## Deeper Insights
-- Common core across all selected top builds: Abyssal Mask, Actualizer, Bloodthirster, Cryptbloom, Heartsteel, Solstice Sleigh.
-- Most frequent items in selected top set: Abyssal Mask (1/1), Actualizer (1/1), Bloodthirster (1/1), Cryptbloom (1/1), Heartsteel (1/1), Solstice Sleigh (1/1).
+- Common core across all selected top builds: Abyssal Mask, Actualizer, Bloodthirster, Edge of Night, Spirit Visage, Zephyr.
+- Most frequent items in selected top set: Abyssal Mask (1/1), Actualizer (1/1), Bloodthirster (1/1), Edge of Night (1/1), Spirit Visage (1/1), Zephyr (1/1).
 - Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.

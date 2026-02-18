@@ -5,10 +5,10 @@
   ```text
 controlled_champion:
   identity: Vladimir
-  core: pos=(0.0, 0.0) hp=3774.5/3774.5 (100.0%) armor=109.5 mr=54.7
-  offense: ap=35.8 ah=363.0
-  loadout: items [Abyssal Mask, Axiom Arc, Black Cleaver, Bloodthirster, Navori Flickerblade, Zaz'Zak's Realmspike] | runes [Electrocute, Taste of Blood, Grisly Mementos, Treasure Hunter, Shield Bash, Bone Plating] | shards [ability_haste, movement_speed, health]
-  cooldowns: none
+  core: pos=(0.0, 0.0) hp=4168.5/4168.5 (100.0%) armor=109.5 mr=54.7
+  offense: ap=134.0 ah=325.0
+  loadout: items [Abyssal Mask, Actualizer, Endless Hunger, Kaenic Rookern, Spear of Shojin, Youmuu's Ghostblade] | runes [Arcane Comet, Nimbus Cloak, Transcendence, Gathering Storm, Shield Bash, Overgrowth] | shards [attack_speed, health, tenacity]
+  cooldowns: Arcane Comet: ready
   abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready
   buffs: none
 enemies:
@@ -64,9 +64,9 @@ field:
 - 0.000s [champion_script] Dr. Mundo executed Infected Bonesaw
 - 0.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state
 - 0.159s [attack_start] Vayne begins auto attack
-- 0.200s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 106.2
-- 0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 1163.9
-- 0.300s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 647.4
+- 0.200s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 173.9
+- 0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 1377.3
+- 0.300s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 891.3
 - 0.373s [attack_start] Warwick begins auto attack
 - 0.500s [champion_script] Vayne executed Tumble Empower
 - 0.500s [enemy_buff] Vayne empowered next attack
@@ -97,45 +97,45 @@ field:
 - 2.000s [champion_script] Vayne executed Tumble Empower
 - 2.000s [enemy_buff] Vayne empowered next attack
 - 2.000s [champion_script] Dr. Mundo executed Infected Bonesaw
-- 2.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 1132.3, true 0.0, total 732.0
+- 2.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 1250.5, true 0.0, total 808.4
 - 2.000s [controlled_champion_cast] Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)
 - 2.000s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)
 - 2.130s [attack_start] Warwick begins auto attack
-- 2.200s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 106.2
+- 2.200s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 140.6
 - 2.252s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 50.6
 - 2.252s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
 - 2.300s [champion_script] Morgana executed Dark Binding
-- 2.300s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 820.0, true 0.0, total 530.0
-- 2.300s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 647.4
+- 2.300s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 835.7, true 0.0, total 540.2
+- 2.300s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 891.3
 - 2.315s [attack_start] Dr. Mundo begins auto attack
-- 2.370s [damage_in] Warwick Auto Attack -> Vladimir | physical 386.8, magic 81.6, true 0.0, total 237.4
-- 2.370s [attack_hit] Warwick hit Vladimir (phys 386.8, magic 81.6, true 0.0)
-- 2.470s [damage_in] Vayne Auto Attack -> Vladimir | physical 783.6, magic 0.0, true 0.0, total 374.0
-- 2.470s [attack_hit] Vayne hit Vladimir (phys 783.6, magic 0.0, true 0.0)
+- 2.370s [damage_in] Warwick Auto Attack -> Vladimir | physical 405.8, magic 81.6, true 0.0, total 246.4
+- 2.370s [attack_hit] Warwick hit Vladimir (phys 405.8, magic 81.6, true 0.0)
+- 2.470s [damage_in] Vayne Auto Attack -> Vladimir | physical 802.0, magic 0.0, true 0.0, total 382.8
+- 2.470s [attack_hit] Vayne hit Vladimir (phys 802.0, magic 0.0, true 0.0)
 - 2.500s [champion_script] Vayne executed Tumble Empower
 - 2.500s [enemy_buff] Vayne empowered next attack
 - 2.555s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
 - 2.598s [attack_start] Vayne begins auto attack
 - 2.692s [attack_start] Warwick begins auto attack
 - 2.792s [attack_start] Sona begins auto attack
-- 2.932s [damage_in] Warwick Auto Attack -> Vladimir | physical 350.1, magic 81.6, true 0.0, total 219.9
-- 2.932s [attack_hit] Warwick hit Vladimir (phys 350.1, magic 81.6, true 0.0)
+- 2.932s [damage_in] Warwick Auto Attack -> Vladimir | physical 368.0, magic 81.6, true 0.0, total 228.4
+- 2.932s [attack_hit] Warwick hit Vladimir (phys 368.0, magic 81.6, true 0.0)
 - 3.000s [champion_script] Vayne executed Tumble Empower
 - 3.000s [enemy_buff] Vayne empowered next attack
 - 3.000s [champion_script] Dr. Mundo executed Infected Bonesaw
-- 3.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 497.1, true 0.0, total 321.4
-- 3.069s [damage_in] Vayne Auto Attack -> Vladimir | physical 1082.5, magic 0.0, true 0.0, total 516.7
-- 3.069s [attack_hit] Vayne hit Vladimir (phys 1082.5, magic 0.0, true 0.0)
+- 3.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 584.0, true 0.0, total 377.5
+- 3.069s [damage_in] Vayne Auto Attack -> Vladimir | physical 1096.5, magic 0.0, true 0.0, total 523.4
+- 3.069s [attack_hit] Vayne hit Vladimir (phys 1096.5, magic 0.0, true 0.0)
 - 3.166s [attack_start] Dr. Mundo begins auto attack
 - 3.191s [attack_start] Vayne begins auto attack
 - 3.242s [attack_start] Warwick begins auto attack
 - 3.378s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 50.6
 - 3.378s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
 - 3.406s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
-- 3.482s [damage_in] Warwick Auto Attack -> Vladimir | physical 283.6, magic 81.6, true 171.9, total 360.0
-- 3.482s [attack_hit] Warwick hit Vladimir (phys 283.6, magic 81.6, true 171.9)
+- 3.482s [damage_in] Warwick Auto Attack -> Vladimir | physical 297.2, magic 81.6, true 171.9, total 366.5
+- 3.482s [attack_hit] Warwick hit Vladimir (phys 297.2, magic 81.6, true 171.9)
 - 3.500s [champion_script] Vayne executed Tumble Empower
 - 3.500s [enemy_buff] Vayne empowered next attack
-- 3.662s [damage_in] Vayne Auto Attack -> Vladimir | physical 673.0, magic 0.0, true 844.3, total 1165.5
+- 3.662s [damage_in] Vayne Auto Attack -> Vladimir | physical 686.2, magic 0.0, true 883.7, total 1211.2
 - 3.662s [controlled_champion_death] Vladimir died
-- 3.662s [attack_hit] Vayne hit Vladimir (phys 673.0, magic 0.0, true 844.3)
+- 3.662s [attack_hit] Vayne hit Vladimir (phys 686.2, magic 0.0, true 883.7)

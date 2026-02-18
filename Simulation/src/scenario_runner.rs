@@ -12,7 +12,7 @@ use std::time::{Duration, Instant};
 
 use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
-use crate::data::parse_stack_overrides_map;
+use crate::data::{ensure_complete_loadout_selection, parse_stack_overrides_map};
 use crate::defaults::protoplasm_lifeline_defaults;
 use crate::engine::{
     ControlledChampionCombatSimulation, EnemyDerivedCombatStats, derive_enemy_combat_stats,
@@ -52,6 +52,71 @@ struct SearchTypeRuntimeCounter {
     score_requests: usize,
     new_simulations: usize,
     persistent_cache_hits: usize,
+}
+
+#[derive(Debug, Default)]
+struct AtomicSearchTypeRuntimeCounter {
+    score_requests: AtomicUsize,
+    new_simulations: AtomicUsize,
+    persistent_cache_hits: AtomicUsize,
+}
+
+impl AtomicSearchTypeRuntimeCounter {
+    fn add(&self, score_requests: usize, new_simulations: usize, persistent_cache_hits: usize) {
+        self.score_requests
+            .fetch_add(score_requests, AtomicOrdering::Relaxed);
+        self.new_simulations
+            .fetch_add(new_simulations, AtomicOrdering::Relaxed);
+        self.persistent_cache_hits
+            .fetch_add(persistent_cache_hits, AtomicOrdering::Relaxed);
+    }
+
+    fn snapshot(&self) -> SearchTypeRuntimeCounter {
+        SearchTypeRuntimeCounter {
+            score_requests: self.score_requests.load(AtomicOrdering::Relaxed),
+            new_simulations: self.new_simulations.load(AtomicOrdering::Relaxed),
+            persistent_cache_hits: self.persistent_cache_hits.load(AtomicOrdering::Relaxed),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct ShardedStringSet {
+    shards: Vec<Mutex<HashSet<String>>>,
+}
+
+impl ShardedStringSet {
+    fn new() -> Self {
+        let shard_count = std::thread::available_parallelism()
+            .map(|n| n.get())
+            .unwrap_or(8)
+            .next_power_of_two()
+            .max(8);
+        let shards = (0..shard_count)
+            .map(|_| Mutex::new(HashSet::new()))
+            .collect::<Vec<_>>();
+        Self { shards }
+    }
+
+    fn shard_index(&self, key: &str) -> usize {
+        let mut hasher = DefaultHasher::new();
+        key.hash(&mut hasher);
+        (hasher.finish() as usize) & (self.shards.len() - 1)
+    }
+
+    fn insert(&self, key: String) {
+        let shard = self.shard_index(&key);
+        if let Ok(mut set) = self.shards[shard].lock() {
+            set.insert(key);
+        }
+    }
+
+    fn len(&self) -> usize {
+        self.shards
+            .iter()
+            .map(|shard| shard.lock().map(|set| set.len()).unwrap_or(0))
+            .sum()
+    }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -301,21 +366,60 @@ fn mutate_locked_candidate(
     Some(canonical_build_candidate(out))
 }
 
+fn initialize_search_type_counters(
+    active_strategies: &[String],
+    configured_strategy: &str,
+) -> Arc<HashMap<String, Arc<AtomicSearchTypeRuntimeCounter>>> {
+    let mut keys = vec![
+        "coverage_stage".to_string(),
+        "strategy_elites".to_string(),
+        "adaptive_search".to_string(),
+        "strict_full_ranking".to_string(),
+        format!("seed_search:{}", configured_strategy),
+    ];
+    for strategy in active_strategies {
+        keys.push(format!("seed_search:{strategy}"));
+    }
+    keys.sort();
+    keys.dedup();
+
+    Arc::new(
+        keys.into_iter()
+            .map(|key| (key, Arc::new(AtomicSearchTypeRuntimeCounter::default())))
+            .collect::<HashMap<_, _>>(),
+    )
+}
+
 fn increment_search_type_counter(
-    counters: &Arc<Mutex<HashMap<String, SearchTypeRuntimeCounter>>>,
+    counters: &HashMap<String, Arc<AtomicSearchTypeRuntimeCounter>>,
     search_type: &str,
     score_requests: usize,
     new_simulations: usize,
     persistent_cache_hits: usize,
 ) {
-    if let Ok(mut map) = counters.lock() {
-        let entry = map.entry(search_type.to_string()).or_default();
-        entry.score_requests = entry.score_requests.saturating_add(score_requests);
-        entry.new_simulations = entry.new_simulations.saturating_add(new_simulations);
-        entry.persistent_cache_hits = entry
-            .persistent_cache_hits
-            .saturating_add(persistent_cache_hits);
+    if let Some(counter) = counters.get(search_type) {
+        counter.add(score_requests, new_simulations, persistent_cache_hits);
     }
+}
+
+fn snapshot_search_type_counters(
+    counters: &HashMap<String, Arc<AtomicSearchTypeRuntimeCounter>>,
+) -> Vec<SearchTypeBreakdown> {
+    counters
+        .iter()
+        .filter_map(|(name, counter)| {
+            let snapshot = counter.snapshot();
+            let touched = snapshot.score_requests > 0
+                || snapshot.new_simulations > 0
+                || snapshot.persistent_cache_hits > 0;
+            touched.then(|| SearchTypeBreakdown {
+                name: name.clone(),
+                score_requests: snapshot.score_requests,
+                new_simulations: snapshot.new_simulations,
+                persistent_cache_hits: snapshot.persistent_cache_hits,
+            })
+        })
+        .collect::<Vec<_>>()
 }
 
 fn n_choose_k(n: usize, k: usize) -> u128 {
@@ -913,9 +1017,14 @@ pub(super) fn run_controlled_champion_scenario(
     if search_cfg.seed == 0 {
         search_cfg.seed = runtime_random_seed();
     }
+    let active_strategies = portfolio_strategy_list(&search_cfg);
     let persistent_cache_seed_partition =
         persistent_cache_seed_partition(configured_search_seed, seed_override, search_cfg.seed);
     let loadout_domain = Arc::new(build_loadout_domain());
+    let controlled_champion_loadout_selection = ensure_complete_loadout_selection(
+        &controlled_champion_loadout_selection,
+        loadout_domain.as_ref(),
+    )?;
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
     let enemy_loadout = ResolvedLoadout::default();
@@ -1063,10 +1172,9 @@ pub(super) fn run_controlled_champion_scenario(
 
     let full_eval_count = AtomicUsize::new(0);
     let full_cache = Arc::new(BlockingScoreCache::new());
-    let unique_scored_candidate_keys: Arc<Mutex<HashSet<String>>> =
-        Arc::new(Mutex::new(HashSet::new()));
-    let search_type_counters: Arc<Mutex<HashMap<String, SearchTypeRuntimeCounter>>> =
-        Arc::new(Mutex::new(HashMap::new()));
+    let unique_scored_candidate_keys = Arc::new(ShardedStringSet::new());
+    let search_type_counters =
+        initialize_search_type_counters(&active_strategies, &search_cfg.strategy);
     let mut scenario_hasher = DefaultHasher::new();
     scenario.to_string().hash(&mut scenario_hasher);
     search_strategy_summary(&search_cfg).hash(&mut scenario_hasher);
@@ -1079,7 +1187,7 @@ pub(super) fn run_controlled_champion_scenario(
     ));
     let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
     let full_score_for_search_type = |search_type: &str, candidate: &BuildKey| {
-        increment_search_type_counter(&search_type_counters, search_type, 1, 0, 0);
+        increment_search_type_counter(search_type_counters.as_ref(), search_type, 1, 0, 0);
         if deadline_reached(deadline_for_search_type(search_type)) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             return f64::NEG_INFINITY;
@@ -1087,11 +1195,11 @@ pub(super) fn run_controlled_champion_scenario(
         let key = canonical_build_candidate(candidate.clone());
         let is_full_candidate = key.item_indices.len() == max_items;
         let cache_key = build_key_cache_string(&key);
-        if is_full_candidate && let Ok(mut keys) = unique_scored_candidate_keys.lock() {
-            keys.insert(cache_key.clone());
+        if is_full_candidate {
+            unique_scored_candidate_keys.insert(cache_key.clone());
         }
         if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
-            increment_search_type_counter(&search_type_counters, search_type, 0, 0, 1);
+            increment_search_type_counter(search_type_counters.as_ref(), search_type, 0, 0, 1);
             record_score_progress(score);
             return score;
         }
@@ -1103,7 +1211,13 @@ pub(super) fn run_controlled_champion_scenario(
                 return f64::NEG_INFINITY;
             }
             if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
-                increment_search_type_counter(&search_type_counters, &search_type_owned, 0, 0, 1);
+                increment_search_type_counter(
+                    search_type_counters.as_ref(),
+                    &search_type_owned,
+                    0,
+                    0,
+                    1,
+                );
                 record_score_progress(score);
                 return score;
             }
@@ -1114,7 +1228,13 @@ pub(super) fn run_controlled_champion_scenario(
             if is_full_candidate {
                 full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             }
-            increment_search_type_counter(&search_type_counters, &search_type_owned, 0, 1, 0);
+            increment_search_type_counter(
+                search_type_counters.as_ref(),
+                &search_type_owned,
+                0,
+                1,
+                0,
+            );
             let build_items = build_from_indices(&item_pool, &key.item_indices);
             let (score, outcome) = evaluate_build_with_bonus(
                 &build_items,
@@ -1297,7 +1417,6 @@ pub(super) fn run_controlled_champion_scenario(
     }
 
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
-    let active_strategies = portfolio_strategy_list(&search_cfg);
     status.emit(
         "seed_search",
         Some((0, ensemble_seeds)),
@@ -1305,13 +1424,13 @@ pub(super) fn run_controlled_champion_scenario(
         Some("running ensemble seeds"),
         true,
     );
-    let mut seed_ranked = Vec::new();
-    for seed_idx in 0..ensemble_seeds {
-        if deadline_reached(current_deadline()) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            break;
-        }
-        seed_ranked.push({
+    let mut seed_ranked = (0..ensemble_seeds)
+        .into_par_iter()
+        .map(|seed_idx| {
+            if deadline_reached(current_deadline()) {
+                timeout_flag.store(1, AtomicOrdering::Relaxed);
+                return (seed_idx, Vec::new());
+            }
             let mut cfg = search_cfg.clone();
             cfg.seed = search_cfg.seed.wrapping_add(
                 search_cfg
@@ -1322,21 +1441,27 @@ pub(super) fn run_controlled_champion_scenario(
             let search_type = format!("seed_search:{}", cfg.strategy);
             let score_fn =
                 |candidate: &BuildKey| full_score_for_search_type(search_type.as_str(), candidate);
-            build_search_ranked_full_loadout(
+            let ranked = build_search_ranked_full_loadout(
                 &full_search_params,
                 &cfg,
                 &score_fn,
                 current_deadline(),
-            )
-        });
-        status.emit(
-            "seed_search",
-            Some((seed_idx + 1, ensemble_seeds)),
-            None,
-            None,
-            false,
-        );
-    }
+            );
+            (seed_idx, ranked)
+        })
+        .collect::<Vec<_>>();
+    seed_ranked.sort_by_key(|(seed_idx, _)| *seed_idx);
+    let seed_ranked = seed_ranked
+        .into_iter()
+        .map(|(_, ranked)| ranked)
+        .collect::<Vec<_>>();
+    status.emit(
+        "seed_search",
+        Some((seed_ranked.len().min(ensemble_seeds), ensemble_seeds)),
+        None,
+        None,
+        false,
+    );
     let strategy_elite_score_fn =
         |candidate: &BuildKey| full_score_for_search_type("strategy_elites", candidate);
     let mut strategy_elites = strategy_seed_elites_full_loadout(
@@ -1658,35 +1783,25 @@ pub(super) fn run_controlled_champion_scenario(
     let seconds_since_last_significant_improvement = Instant::now()
         .saturating_duration_since(progress_snapshot.last_significant_at)
         .as_secs_f64();
-    let mut search_type_breakdown = search_type_counters
-        .lock()
-        .map(|map| {
-            map.iter()
-                .map(|(name, counters)| SearchTypeBreakdown {
-                    name: name.clone(),
-                    score_requests: counters.score_requests,
-                    new_simulations: counters.new_simulations,
-                    persistent_cache_hits: counters.persistent_cache_hits,
-                })
-                .collect::<Vec<_>>()
-        })
-        .unwrap_or_default();
+    let mut search_type_breakdown = snapshot_search_type_counters(search_type_counters.as_ref());
     search_type_breakdown.sort_by(|a, b| {
         b.new_simulations
             .cmp(&a.new_simulations)
             .then_with(|| b.score_requests.cmp(&a.score_requests))
             .then_with(|| a.name.cmp(&b.name))
     });
+    let effective_threads = rayon::current_num_threads();
+    let seed_orchestration_parallel = ensemble_seeds > 1;
+    let portfolio_strategy_parallel =
+        search_cfg.strategy == "portfolio" && active_strategies.len() > 1;
+    let strategy_elites_parallel = active_strategies.len() > 1 || ensemble_seeds > 1;
     let estimated_total_candidate_space = {
         let item_space = estimated_legal_item_build_count(&item_pool, max_items);
         let loadout_space = estimated_legal_loadout_count(loadout_domain.as_ref());
         let total = item_space * loadout_space;
         (total.is_finite() && total > 0.0).then_some(total)
     };
-    let unique_scored_candidates = unique_scored_candidate_keys
-        .lock()
-        .map(|keys| keys.len())
-        .unwrap_or(0);
+    let unique_scored_candidates = unique_scored_candidate_keys.len();
     let estimated_run_space_coverage_percent = estimated_total_candidate_space
         .map(|total| ((unique_scored_candidates as f64) / total * 100.0).clamp(0.0, 100.0));
     let estimated_cache_space_coverage_percent = estimated_total_candidate_space
@@ -1782,6 +1897,13 @@ pub(super) fn run_controlled_champion_scenario(
     );
     println!("- Cache waits (full): {}", full_cache.waits());
     println!("- Ensemble seeds: {}", ensemble_seeds);
+    println!(
+        "- Parallelism: threads {} | seed orchestration parallel {} | portfolio strategy parallel {} | strategy-elites parallel {}",
+        effective_threads,
+        seed_orchestration_parallel,
+        portfolio_strategy_parallel,
+        strategy_elites_parallel
+    );
     println!(
         "- Enemy scenarios in objective: {}",
         enemy_build_scenarios.len()
@@ -1967,6 +2089,10 @@ pub(super) fn run_controlled_champion_scenario(
         },
         effective_seed: search_cfg.seed,
         ensemble_seeds,
+        effective_threads,
+        seed_orchestration_parallel,
+        portfolio_strategy_parallel,
+        strategy_elites_parallel,
         objective_survival_weight: objective_component_weights.survival,
         objective_damage_weight: objective_component_weights.damage,
         objective_healing_weight: objective_component_weights.healing,
@@ -2309,12 +2435,14 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         })
         .collect::<Vec<_>>();
 
+    let loadout_domain = build_loadout_domain();
+    let controlled_champion_loadout_selection =
+        ensure_complete_loadout_selection(&controlled_champion_loadout_selection, &loadout_domain)?;
     let controlled_champion_loadout = resolve_loadout(
         &controlled_champion_loadout_selection,
         sim_cfg.champion_level,
         true,
     )?;
-    let loadout_domain = build_loadout_domain();
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
 

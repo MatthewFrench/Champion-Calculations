@@ -983,10 +983,6 @@ pub(crate) fn is_legal_rune_page_selection(
     selection: &LoadoutSelection,
     loadout_domain: &LoadoutDomain,
 ) -> bool {
-    let has_any_selection = !selection.rune_names.is_empty() || !selection.shard_stats.is_empty();
-    if !has_any_selection {
-        return true;
-    }
     if selection.rune_names.len() != 6 || selection.shard_stats.len() != 3 {
         return false;
     }
@@ -1044,6 +1040,59 @@ pub(crate) fn is_legal_rune_page_selection(
     false
 }
 
+fn deterministic_default_loadout_selection(domain: &LoadoutDomain) -> Option<LoadoutSelection> {
+    if domain.rune_paths.len() < 2 || domain.shard_slots.iter().any(Vec::is_empty) {
+        return None;
+    }
+
+    for (primary_idx, primary_path) in domain.rune_paths.iter().enumerate() {
+        if primary_path.slot_runes.len() < 4
+            || primary_path.slot_runes[..4].iter().any(Vec::is_empty)
+        {
+            continue;
+        }
+
+        for (secondary_idx, secondary_path) in domain.rune_paths.iter().enumerate() {
+            if secondary_idx == primary_idx || secondary_path.slot_runes.len() < 4 {
+                continue;
+            }
+
+            let secondary_slots = (1..=3)
+                .filter(|slot| {
+                    secondary_path
+                        .slot_runes
+                        .get(*slot)
+                        .map(|runes| !runes.is_empty())
+                        .unwrap_or(false)
+                })
+                .collect::<Vec<_>>();
+            if secondary_slots.len() < 2 {
+                continue;
+            }
+
+            let slot_a = secondary_slots[0];
+            let slot_b = secondary_slots[1];
+            return Some(LoadoutSelection {
+                rune_names: vec![
+                    primary_path.slot_runes[0][0].clone(),
+                    primary_path.slot_runes[1][0].clone(),
+                    primary_path.slot_runes[2][0].clone(),
+                    primary_path.slot_runes[3][0].clone(),
+                    secondary_path.slot_runes[slot_a][0].clone(),
+                    secondary_path.slot_runes[slot_b][0].clone(),
+                ],
+                shard_stats: domain
+                    .shard_slots
+                    .iter()
+                    .map(|slot| slot[0].clone())
+                    .collect::<Vec<_>>(),
+            });
+        }
+    }
+
+    None
+}
+
 pub(crate) fn validate_rune_page_selection(
     selection: &LoadoutSelection,
     loadout_domain: &LoadoutDomain,
@@ -1054,6 +1103,23 @@ pub(crate) fn validate_rune_page_selection(
     bail!(
         "Invalid rune page selection. Provide ordered runes_reforged.rune_names with six runes [primary keystone, primary slot2, primary slot3, primary slot4, secondary slot2/3/4 rune A, secondary higher-slot rune B], plus ordered shard_stats for the three shard slots."
     );
+}
+
+pub(crate) fn ensure_complete_loadout_selection(
+    selection: &LoadoutSelection,
+    loadout_domain: &LoadoutDomain,
+) -> Result<LoadoutSelection> {
+    if selection.rune_names.is_empty() && selection.shard_stats.is_empty() {
+        let generated = deterministic_default_loadout_selection(loadout_domain).ok_or_else(|| {
+            anyhow!(
+                "Unable to derive a default rune page and shard selection from loaded rune domain data."
+            )
+        })?;
+        validate_rune_page_selection(&generated, loadout_domain)?;
+        return Ok(generated);
+    }
+    validate_rune_page_selection(selection, loadout_domain)?;
+    Ok(selection.clone())
 }
 
 pub(crate) fn random_loadout_selection(

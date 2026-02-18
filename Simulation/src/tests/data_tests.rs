@@ -280,6 +280,26 @@ fn validate_rune_page_selection_rejects_invalid_shard_slot() {
 }
 
 #[test]
+fn validate_rune_page_selection_rejects_empty_selection() {
+    let domain = build_loadout_domain();
+    assert!(
+        validate_rune_page_selection(&LoadoutSelection::default(), &domain).is_err(),
+        "empty rune page and shard selection should be invalid"
+    );
+}
+
+#[test]
+fn ensure_complete_loadout_selection_fills_missing_selection() {
+    let domain = build_loadout_domain();
+    let filled = ensure_complete_loadout_selection(&LoadoutSelection::default(), &domain)
+        .expect("missing selection should be auto-filled with a legal default");
+    assert_eq!(filled.rune_names.len(), 6, "expected six rune names");
+    assert_eq!(filled.shard_stats.len(), 3, "expected three shard stats");
+    validate_rune_page_selection(&filled, &domain)
+        .expect("auto-filled selection should validate as legal");
+}
+
+#[test]
 fn parse_simulation_config_rejects_legacy_max_time_field() {
     let simulation = serde_json::json!({
         "time_limit_seconds": 60.0,

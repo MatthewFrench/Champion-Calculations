@@ -18,6 +18,7 @@ This file is a concise handoff for developers and AI agents.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
 - URF item allow-list restrictions and enemy URF preset loadouts.
 - Parallelized search/ranking with persistent score cache.
+- Top-level search orchestration is parallelized for ensemble seeds and portfolio strategies, and strategy-elite/adaptive generation is parallelized with deterministic merge ordering.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
 
@@ -36,6 +37,7 @@ This file is a concise handoff for developers and AI agents.
 - Candidate scoring behavior:
   - generation-time strategy ranking can score partial candidates (improves greedy/beam branching quality before full builds are complete).
   - strict final ranking remains full-candidate only.
+  - diagnostics now report effective thread count and parallel-mode flags for orchestration phases.
 
 ## Data/Runtime Correctness Updates
 - `simulation.protoplasm_trigger_health_percent` is honored when set.

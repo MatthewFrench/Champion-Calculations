@@ -288,15 +288,27 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - output directories are self-describing and trace JSON parsers can rely on stable typed fields.
 
+23e. `DONE` Parallelize top-level search orchestration paths.
+- Scope:
+  - parallelize ensemble seed orchestration
+  - parallelize portfolio strategy execution
+  - parallelize strategy-elite/adaptive generation loops
+  - preserve deterministic merge ordering for reproducible seeded runs
+- Success criteria:
+  - multiple strategy families run concurrently and reports expose effective parallelism state.
+
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:
   - repeatable profiling command and report artifacts
 - Success criteria:
   - hotspot regressions become actionable quickly.
 
-25. `PLANNED` Reduce synchronization overhead in caches/scoring.
+25. `IN_PROGRESS` Reduce synchronization overhead in caches/scoring.
 - Scope:
   - minimize lock contention and shared hot-map pressure
+- Recent progress:
+  - replaced high-frequency search-type counter mutex updates with per-type atomics
+  - replaced global unique-scored-key mutex set with sharded key-set storage
 - Success criteria:
   - higher evaluations/second at same quality settings.
 

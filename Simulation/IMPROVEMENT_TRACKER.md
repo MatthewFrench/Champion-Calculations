@@ -1,6 +1,13 @@
 # Improvement Tracker
 
 ## Done
+- Expanded parallel search orchestration and reduced scoring-path contention:
+  - ensemble seed orchestration now runs in parallel
+  - portfolio strategy execution now runs in parallel
+  - strategy-elite and adaptive strategy candidate generation now run in parallel
+  - search-type runtime counters now use atomic per-type counters (removed hot global mutex path)
+  - unique scored-candidate key tracking now uses a sharded concurrent set (removed hot global mutex path)
+  - report/JSON diagnostics now include explicit parallelism fields (effective threads + parallel mode flags)
 - Continued generic controlled-champion decoupling in shared runtime paths:
   - added `src/scripts/champions/controlled_champion.rs` as the engine-facing controlled-champion script facade
   - removed remaining legacy Vladimir-named compatibility aliases in shared modules (`compute_vlad_stats`, `simulate_vlad_combat`, `VladCombatSimulation`)

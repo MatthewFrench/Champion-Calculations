@@ -47,6 +47,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - Sona
   - Doctor Mundo
 - Build candidate scoring is parallelized across CPU cores (Rayon).
+- Ensemble seed orchestration, portfolio strategy execution, and strategy-elite generation are also parallelized across CPU cores with deterministic merge ordering.
 - Search uses simulation scoring during candidate generation (including partial candidates for strategy ranking) and strict full-simulation scoring for final candidate ranking.
 - Full simulation scoring is memoized by canonical build key.
 - Full simulation scores are persisted across runs under `Simulation/output/cache/`.
@@ -134,8 +135,9 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Vladimir end stats for best build
   - Stack override notes for stack-based items in the best build
   - Enemy derived combat profiles (HP/AD/AS/range/hit/burst stats) with similarity warnings for suspiciously close auto profiles
-  - Detailed search diagnostics including:
+- Detailed search diagnostics including:
     - effective search seed used
+    - effective thread count and parallelism-mode flags (seed orchestration, portfolio, strategy elites)
     - coverage-stage diagnostics for `maximum_quality` (elapsed, assets covered, seeded candidates)
     - explicit degraded-coverage warning/flag when coverage stage is incomplete
     - explicit simulation counts (new full simulations, unique scored candidates, total score requests)
@@ -205,6 +207,11 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 ## Threading
 - The Rust optimizer leaves one core free by default (`available_cores - 1`, minimum 1 thread).
 - Override thread count with `--threads N` if needed.
+- Current parallel execution includes:
+  - candidate scoring batches
+  - ensemble seed orchestration
+  - portfolio strategy execution
+  - strategy-elite/adaptive candidate generation
 - You can cap threads with:
 ```bash
 cargo run --release --manifest-path "Simulation/Cargo.toml" -- \

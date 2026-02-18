@@ -830,20 +830,25 @@ where
         ),
         "portfolio" => {
             let strategies = portfolio_strategy_list(search);
-            let mut ranked_sets = Vec::new();
-            for (idx, strat) in strategies.iter().enumerate() {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strat.clone();
-                cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
-                ranked_sets.push(build_search_ranked(
-                    item_pool, max_items, &cfg, score_fn, deadline,
-                ));
-            }
+            let mut ranked_sets = strategies
+                .par_iter()
+                .enumerate()
+                .map(|(idx, strat)| {
+                    if deadline_reached(deadline) {
+                        return (idx, Vec::new());
+                    }
+                    let mut cfg = search.clone();
+                    cfg.strategy = strat.clone();
+                    cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
+                    (
+                        idx,
+                        build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline),
+                    )
+                })
+                .collect::<Vec<_>>();
+            ranked_sets.sort_by_key(|(idx, _)| *idx);
             let mut merged_candidates = Vec::new();
-            for ranked in ranked_sets {
+            for (_, ranked) in ranked_sets {
                 for (build, _) in ranked {
                     merged_candidates.push(build);
                 }
@@ -908,21 +913,27 @@ where
     let top_k = search.ensemble_seed_top_k.max(1);
 
     let grouped = strategies
-        .iter()
+        .par_iter()
         .enumerate()
         .map(|(sidx, strategy)| {
             let mut aggregate = HashMap::<Vec<usize>, f64>::new();
-            for seed_idx in 0..ensemble {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strategy.clone();
-                cfg.seed = search.seed.wrapping_add(
-                    ((sidx as u64 + 1) * 31 + seed_idx as u64 + 1) * search.ensemble_seed_stride,
-                );
-                cfg.ranked_limit = top_k.max(64);
-                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
+            let seed_ranked = (0..ensemble)
+                .into_par_iter()
+                .map(|seed_idx| {
+                    if deadline_reached(deadline) {
+                        return Vec::new();
+                    }
+                    let mut cfg = search.clone();
+                    cfg.strategy = strategy.clone();
+                    cfg.seed = search.seed.wrapping_add(
+                        ((sidx as u64 + 1) * 31 + seed_idx as u64 + 1)
+                            * search.ensemble_seed_stride,
+                    );
+                    cfg.ranked_limit = top_k.max(64);
+                    build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline)
+                })
+                .collect::<Vec<_>>();
+            for ranked in seed_ranked {
                 for (key, score) in ranked.into_iter().take(top_k) {
                     let e = aggregate.entry(key).or_insert(score);
                     if score > *e {
@@ -933,11 +944,16 @@ where
             let mut items = aggregate.into_iter().collect::<Vec<_>>();
             items.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal));
             let keys = items.into_iter().map(|(k, _)| k).collect::<Vec<_>>();
-            (strategy.clone(), keys)
+            (sidx, strategy.clone(), keys)
         })
         .collect::<Vec<_>>();
 
-    grouped.into_iter().collect::<HashMap<_, _>>()
+    let mut ordered = grouped;
+    ordered.sort_by_key(|(idx, _, _)| *idx);
+    ordered
+        .into_iter()
+        .map(|(_, strategy, keys)| (strategy, keys))
+        .collect::<HashMap<_, _>>()
 }
 
 #[allow(dead_code)]
@@ -1061,26 +1077,31 @@ where
         .collect::<Vec<_>>();
 
     let gathered = per_strategy
-        .iter()
+        .par_iter()
         .enumerate()
         .map(|(sidx, (strategy, runs))| {
-            let mut local = Vec::new();
-            for ridx in 0..*runs {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strategy.clone();
-                cfg.seed = search.seed.wrapping_add(
-                    ((sidx as u64 + 1) * 131 + ridx as u64 + 1) * search.ensemble_seed_stride,
-                );
-                cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
-                let ranked = build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
-                for (k, _) in ranked.into_iter().take(search.ensemble_seed_top_k.max(1)) {
-                    local.push(k);
-                }
-            }
-            local
+            (0..*runs)
+                .into_par_iter()
+                .flat_map_iter(|ridx| {
+                    if deadline_reached(deadline) {
+                        return Vec::<Vec<usize>>::new().into_iter();
+                    }
+                    let mut cfg = search.clone();
+                    cfg.strategy = strategy.clone();
+                    cfg.seed = search.seed.wrapping_add(
+                        ((sidx as u64 + 1) * 131 + ridx as u64 + 1) * search.ensemble_seed_stride,
+                    );
+                    cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
+                    let ranked =
+                        build_search_ranked(item_pool, max_items, &cfg, score_fn, deadline);
+                    ranked
+                        .into_iter()
+                        .take(search.ensemble_seed_top_k.max(1))
+                        .map(|(k, _)| k)
+                        .collect::<Vec<_>>()
+                        .into_iter()
+                })
+                .collect::<Vec<_>>()
         })
         .collect::<Vec<_>>();
 
@@ -1828,21 +1849,26 @@ where
         ),
         "portfolio" => {
             let strategies = portfolio_strategy_list(search);
-            let mut ranked_sets = Vec::new();
-            for (idx, strategy) in strategies.iter().enumerate() {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strategy.clone();
-                cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
-                ranked_sets.push(build_search_ranked_full_loadout(
-                    params, &cfg, score_fn, deadline,
-                ));
-            }
+            let mut ranked_sets = strategies
+                .par_iter()
+                .enumerate()
+                .map(|(idx, strategy)| {
+                    if deadline_reached(deadline) {
+                        return (idx, Vec::new());
+                    }
+                    let mut cfg = search.clone();
+                    cfg.strategy = strategy.clone();
+                    cfg.seed = search.seed.wrapping_add((idx as u64 + 1) * 1_000_003);
+                    (
+                        idx,
+                        build_search_ranked_full_loadout(params, &cfg, score_fn, deadline),
+                    )
+                })
+                .collect::<Vec<_>>();
+            ranked_sets.sort_by_key(|(idx, _)| *idx);
             let merged = ranked_sets
                 .into_iter()
-                .flat_map(|ranked| ranked.into_iter().map(|(candidate, _)| candidate))
+                .flat_map(|(_, ranked)| ranked.into_iter().map(|(candidate, _)| candidate))
                 .collect::<Vec<_>>();
             unique_ranked_full_candidates(merged, score_fn, search.ranked_limit, deadline)
         }
@@ -1862,23 +1888,28 @@ where
 {
     let ensemble = search.ensemble_seeds.max(1);
     let top_k = search.ensemble_seed_top_k.max(1);
-    strategies
-        .iter()
+    let mut grouped = strategies
+        .par_iter()
         .enumerate()
         .map(|(strategy_index, strategy)| {
             let mut aggregate = HashMap::<BuildKey, f64>::new();
-            for seed_idx in 0..ensemble {
-                if deadline_reached(deadline) {
-                    break;
-                }
-                let mut cfg = search.clone();
-                cfg.strategy = strategy.clone();
-                cfg.seed = search.seed.wrapping_add(
-                    ((strategy_index as u64 + 1) * 31 + seed_idx as u64 + 1)
-                        * search.ensemble_seed_stride,
-                );
-                cfg.ranked_limit = top_k.max(64);
-                let ranked = build_search_ranked_full_loadout(params, &cfg, score_fn, deadline);
+            let seed_ranked = (0..ensemble)
+                .into_par_iter()
+                .map(|seed_idx| {
+                    if deadline_reached(deadline) {
+                        return Vec::new();
+                    }
+                    let mut cfg = search.clone();
+                    cfg.strategy = strategy.clone();
+                    cfg.seed = search.seed.wrapping_add(
+                        ((strategy_index as u64 + 1) * 31 + seed_idx as u64 + 1)
+                            * search.ensemble_seed_stride,
+                    );
+                    cfg.ranked_limit = top_k.max(64);
+                    build_search_ranked_full_loadout(params, &cfg, score_fn, deadline)
+                })
+                .collect::<Vec<_>>();
+            for ranked in seed_ranked {
                 for (candidate, score) in ranked.into_iter().take(top_k) {
                     let entry = aggregate.entry(candidate).or_insert(score);
                     if score > *entry {
@@ -1892,8 +1923,13 @@ where
                 .into_iter()
                 .map(|(candidate, _)| candidate)
                 .collect::<Vec<_>>();
-            (strategy.clone(), elites)
+            (strategy_index, strategy.clone(), elites)
         })
+        .collect::<Vec<_>>();
+    grouped.sort_by_key(|(idx, _, _)| *idx);
+    grouped
+        .into_iter()
+        .map(|(_, strategy, elites)| (strategy, elites))
         .collect::<HashMap<_, _>>()
 }
 
@@ -1937,22 +1973,37 @@ where
         .collect::<Vec<_>>();
 
     let mut out = HashSet::<BuildKey>::new();
-    for (strategy_idx, (strategy, runs)) in per_strategy.iter().enumerate() {
-        for run_idx in 0..*runs {
-            if deadline_reached(deadline) {
-                break;
-            }
-            let mut cfg = search.clone();
-            cfg.strategy = strategy.clone();
-            cfg.seed = search.seed.wrapping_add(
-                ((strategy_idx as u64 + 1) * 131 + run_idx as u64 + 1)
-                    * search.ensemble_seed_stride,
-            );
-            cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
-            let ranked = build_search_ranked_full_loadout(params, &cfg, score_fn, deadline);
-            for (candidate, _) in ranked.into_iter().take(search.ensemble_seed_top_k.max(1)) {
-                out.insert(candidate);
-            }
+    let gathered = per_strategy
+        .par_iter()
+        .enumerate()
+        .map(|(strategy_idx, (strategy, runs))| {
+            (0..*runs)
+                .into_par_iter()
+                .flat_map_iter(|run_idx| {
+                    if deadline_reached(deadline) {
+                        return Vec::<BuildKey>::new().into_iter();
+                    }
+                    let mut cfg = search.clone();
+                    cfg.strategy = strategy.clone();
+                    cfg.seed = search.seed.wrapping_add(
+                        ((strategy_idx as u64 + 1) * 131 + run_idx as u64 + 1)
+                            * search.ensemble_seed_stride,
+                    );
+                    cfg.ranked_limit = (search.ensemble_seed_top_k.max(1) * 2).max(50);
+                    let ranked = build_search_ranked_full_loadout(params, &cfg, score_fn, deadline);
+                    ranked
+                        .into_iter()
+                        .take(search.ensemble_seed_top_k.max(1))
+                        .map(|(candidate, _)| candidate)
+                        .collect::<Vec<_>>()
+                        .into_iter()
+                })
+                .collect::<Vec<_>>()
+        })
+        .collect::<Vec<_>>();
+    for candidates in gathered {
+        for candidate in candidates {
+            out.insert(candidate);
         }
     }
     out.into_iter().collect::<Vec<_>>()
