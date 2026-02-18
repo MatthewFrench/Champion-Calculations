@@ -6,7 +6,6 @@ use crate::scripts::runtime::stat_resolution::{
 pub(crate) struct VladimirAbilityTuning {
     pub q_base_damage: f64,
     pub q_ap_ratio: f64,
-    pub q_heal_ratio_of_damage: f64,
     pub q_base_cooldown_seconds: f64,
     pub e_base_damage: f64,
     pub e_ap_ratio: f64,

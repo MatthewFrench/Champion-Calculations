@@ -20,6 +20,7 @@ use crate::engine::{
 use crate::reporting::{
     write_controlled_champion_report_json, write_controlled_champion_report_markdown,
 };
+use crate::scripts::champions::resolve_controlled_champion_script;
 use crate::search::{
     FullLoadoutSearchParams, adaptive_strategy_candidates_full_loadout,
     build_search_ranked_full_loadout, candidate_pareto_front_keys, choose_best_build_by_stat,
@@ -61,6 +62,8 @@ struct CoverageStageDiagnostics {
     assets_covered: usize,
     seed_candidates: usize,
     seed_candidates_unique: usize,
+    coverage_incomplete: bool,
+    coverage_warning: String,
 }
 
 #[derive(Debug, Clone)]
@@ -114,6 +117,18 @@ fn coverage_locked_assets(
         }
     }
     out
+}
+
+fn persistent_cache_seed_partition(
+    configured_seed: u64,
+    seed_override: Option<u64>,
+    effective_seed: u64,
+) -> u64 {
+    if seed_override.is_none() && configured_seed == 0 {
+        0
+    } else {
+        effective_seed
+    }
 }
 
 fn candidate_matches_locked_asset(candidate: &BuildKey, asset: &CoverageLockedAsset) -> bool {
@@ -848,11 +863,13 @@ pub(super) fn run_controlled_champion_scenario(
                     * protoplasm_level_t;
         }
     }
-    let vlad_base = champion_at_level(&controlled_champion_config.base, sim.champion_level);
-    let vlad_base_raw = controlled_champion_config.base;
-    let vlad_loadout_selection = controlled_champion_config.loadout_selection;
+    let controlled_champion_base =
+        champion_at_level(&controlled_champion_config.base, sim.champion_level);
+    let controlled_champion_base_raw = controlled_champion_config.base;
+    let controlled_champion_loadout_selection = controlled_champion_config.loadout_selection;
     let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
-    let controlled_champion_name = vlad_base_raw.name.clone();
+    let controlled_champion_name = controlled_champion_base_raw.name.clone();
+    sim.controlled_champion_script = resolve_controlled_champion_script(&controlled_champion_name);
 
     let enemy_scenarios_raw = parse_opponent_encounters(
         &scenario,
@@ -889,12 +906,15 @@ pub(super) fn run_controlled_champion_scenario(
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
     apply_search_quality_profile(&mut search_cfg, search_quality_profile);
+    let configured_search_seed = search_cfg.seed;
     if let Some(seed) = seed_override {
         search_cfg.seed = seed.max(1);
     }
     if search_cfg.seed == 0 {
         search_cfg.seed = runtime_random_seed();
     }
+    let persistent_cache_seed_partition =
+        persistent_cache_seed_partition(configured_search_seed, seed_override, search_cfg.seed);
     let loadout_domain = Arc::new(build_loadout_domain());
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
@@ -958,13 +978,17 @@ pub(super) fn run_controlled_champion_scenario(
         true,
     );
 
-    let vlad_base_loadout = resolve_loadout(&vlad_loadout_selection, sim.champion_level, true)?;
+    let controlled_champion_base_loadout = resolve_loadout(
+        &controlled_champion_loadout_selection,
+        sim.champion_level,
+        true,
+    )?;
     let resolve_cache: Arc<Mutex<HashMap<String, ResolvedLoadout>>> =
         Arc::new(Mutex::new(HashMap::new()));
     if let Ok(mut map) = resolve_cache.lock() {
         map.insert(
-            loadout_selection_key(&vlad_loadout_selection),
-            vlad_base_loadout.clone(),
+            loadout_selection_key(&controlled_champion_loadout_selection),
+            controlled_champion_base_loadout.clone(),
         );
     }
     let best_loadout_by_candidate: Arc<Mutex<ResolvedByCandidateMap>> =
@@ -993,14 +1017,14 @@ pub(super) fn run_controlled_champion_scenario(
             CombatOutcome {
                 time_alive_seconds: sim.max_time_seconds.max(1.0),
                 damage_dealt: damage_reference,
-                healing_done: vlad_base.base_health.max(1.0),
+                healing_done: controlled_champion_base.base_health.max(1.0),
                 enemy_kills: enemy_builds_s.len().max(1),
                 invulnerable_seconds: 1.0,
             }
         })
         .collect::<Vec<_>>();
     let objective_eval_ctx = ObjectiveEvalContext {
-        controlled_champion_base: &vlad_base,
+        controlled_champion_base: &controlled_champion_base,
         controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
         enemy_build_scenarios: &enemy_build_scenarios,
         sim: &sim,
@@ -1046,7 +1070,7 @@ pub(super) fn run_controlled_champion_scenario(
     let mut scenario_hasher = DefaultHasher::new();
     scenario.to_string().hash(&mut scenario_hasher);
     search_strategy_summary(&search_cfg).hash(&mut scenario_hasher);
-    search_cfg.seed.hash(&mut scenario_hasher);
+    persistent_cache_seed_partition.hash(&mut scenario_hasher);
     "full_loadout_candidate_v1".hash(&mut scenario_hasher);
     let persistent_full_cache_path = simulation_dir().join("output").join("cache").join(format!(
         "{}_full_scores_{:016x}.json",
@@ -1130,7 +1154,7 @@ pub(super) fn run_controlled_champion_scenario(
         item_pool: &item_pool,
         max_items,
         loadout_domain: loadout_domain.as_ref(),
-        base_loadout: &vlad_loadout_selection,
+        base_loadout: &controlled_champion_loadout_selection,
     };
 
     let mut coverage_stage_diagnostics = CoverageStageDiagnostics::default();
@@ -1140,6 +1164,7 @@ pub(super) fn run_controlled_champion_scenario(
         let coverage_start = Instant::now();
         let coverage_assets = coverage_locked_assets(&item_pool, loadout_domain.as_ref());
         coverage_stage_diagnostics.assets_total = coverage_assets.len();
+        let mut coverage_stage_stopped_early = false;
         let coverage_trials_per_asset = (search_cfg.random_samples / 14).clamp(12, 48);
         let coverage_refinement_steps = (search_cfg.hill_climb_steps / 4).clamp(2, 8);
 
@@ -1153,6 +1178,7 @@ pub(super) fn run_controlled_champion_scenario(
         for (asset_index, asset) in coverage_assets.iter().enumerate() {
             if deadline_reached(coverage_stage_deadline()) {
                 timeout_flag.store(1, AtomicOrdering::Relaxed);
+                coverage_stage_stopped_early = true;
                 break;
             }
 
@@ -1163,6 +1189,7 @@ pub(super) fn run_controlled_champion_scenario(
             for _ in 0..coverage_trials_per_asset {
                 if deadline_reached(coverage_stage_deadline()) {
                     timeout_flag.store(1, AtomicOrdering::Relaxed);
+                    coverage_stage_stopped_early = true;
                     break;
                 }
                 if let Some(candidate) =
@@ -1176,6 +1203,7 @@ pub(super) fn run_controlled_champion_scenario(
             for _ in 0..coverage_refinement_steps {
                 if deadline_reached(coverage_stage_deadline()) {
                     timeout_flag.store(1, AtomicOrdering::Relaxed);
+                    coverage_stage_stopped_early = true;
                     break;
                 }
                 if seed_snapshot.is_empty() {
@@ -1244,6 +1272,21 @@ pub(super) fn run_controlled_champion_scenario(
         coverage_seed_candidates.sort_by_key(build_key_cache_string);
         coverage_stage_diagnostics.seed_candidates_unique = coverage_seed_candidates.len();
         coverage_stage_diagnostics.elapsed_seconds = coverage_start.elapsed().as_secs_f64();
+        coverage_stage_diagnostics.coverage_incomplete =
+            coverage_stage_diagnostics.assets_covered < coverage_stage_diagnostics.assets_total;
+        if coverage_stage_diagnostics.coverage_incomplete {
+            let reason = if coverage_stage_stopped_early {
+                "coverage stage reached a timeout boundary before all assets were touched"
+            } else {
+                "coverage stage could not produce finite candidates for at least one locked asset"
+            };
+            coverage_stage_diagnostics.coverage_warning = format!(
+                "Coverage incomplete: touched {}/{} assets; {}. Continuing search in degraded coverage mode.",
+                coverage_stage_diagnostics.assets_covered,
+                coverage_stage_diagnostics.assets_total,
+                reason
+            );
+        }
     }
 
     if defer_hard_budget_until_coverage
@@ -1387,7 +1430,7 @@ pub(super) fn run_controlled_champion_scenario(
         unique_candidate_keys.push(canonical_build_candidate(BuildKey {
             item_indices: random_valid_build(&item_pool, max_items, &mut fallback_seed),
             loadout_selection: random_loadout_selection(
-                &vlad_loadout_selection,
+                &controlled_champion_loadout_selection,
                 loadout_domain.as_ref(),
                 &mut fallback_seed,
             ),
@@ -1485,7 +1528,7 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    let mut vlad_ranked = strict_scores.into_iter().collect::<Vec<_>>();
+    let mut controlled_champion_ranked = strict_scores.into_iter().collect::<Vec<_>>();
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
     let strict_candidates_skipped_timeout =
         total_candidates.saturating_sub(processed_candidates.min(total_candidates));
@@ -1498,7 +1541,7 @@ pub(super) fn run_controlled_champion_scenario(
         .lock()
         .map(|m| m.clone())
         .unwrap_or_default();
-    vlad_ranked.sort_by(|a, b| {
+    controlled_champion_ranked.sort_by(|a, b| {
         let by_score = b.1.partial_cmp(&a.1).unwrap_or(Ordering::Equal);
         if by_score != Ordering::Equal {
             return by_score;
@@ -1556,44 +1599,50 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    let vlad_best_candidate = vlad_ranked
+    let controlled_champion_best_candidate = controlled_champion_ranked
         .first()
         .map(|(candidate, _)| candidate.clone())
         .unwrap_or_else(|| BuildKey {
             item_indices: Vec::new(),
-            loadout_selection: vlad_loadout_selection.clone(),
+            loadout_selection: controlled_champion_loadout_selection.clone(),
         });
-    let vlad_best_build = build_from_indices(&item_pool, &vlad_best_candidate.item_indices);
-    let vlad_runtime_loadout_selection = vlad_best_candidate.loadout_selection.clone();
-    let vlad_loadout = best_loadout_by_candidate
+    let controlled_champion_best_build =
+        build_from_indices(&item_pool, &controlled_champion_best_candidate.item_indices);
+    let controlled_champion_runtime_loadout_selection =
+        controlled_champion_best_candidate.loadout_selection.clone();
+    let controlled_champion_loadout = best_loadout_by_candidate
         .lock()
         .ok()
-        .and_then(|m| m.get(&vlad_best_candidate).cloned())
-        .or_else(|| resolve_loadout_for_selection(&vlad_runtime_loadout_selection))
-        .unwrap_or_else(|| vlad_base_loadout.clone());
+        .and_then(|m| m.get(&controlled_champion_best_candidate).cloned())
+        .or_else(|| resolve_loadout_for_selection(&controlled_champion_runtime_loadout_selection))
+        .unwrap_or_else(|| controlled_champion_base_loadout.clone());
 
-    let vlad_best_score = vlad_ranked.first().map(|(_, s)| *s).unwrap_or(0.0);
-    let vlad_best_outcome = best_outcome_by_candidate
+    let controlled_champion_best_score = controlled_champion_ranked
+        .first()
+        .map(|(_, s)| *s)
+        .unwrap_or(0.0);
+    let controlled_champion_best_outcome = best_outcome_by_candidate
         .lock()
         .ok()
-        .and_then(|m| m.get(&vlad_best_candidate).copied())
+        .and_then(|m| m.get(&controlled_champion_best_candidate).copied())
         .unwrap_or_else(|| {
             aggregate_objective_score_and_outcome_with_loadout_selection(
                 &objective_eval_ctx,
-                &vlad_best_build,
-                &vlad_loadout.bonus_stats,
-                Some(&vlad_runtime_loadout_selection),
+                &controlled_champion_best_build,
+                &controlled_champion_loadout.bonus_stats,
+                Some(&controlled_champion_runtime_loadout_selection),
             )
             .1
         });
     let (_, _, best_score_breakdown) =
         aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
             &objective_eval_ctx,
-            &vlad_best_build,
-            &vlad_loadout.bonus_stats,
-            Some(&vlad_runtime_loadout_selection),
+            &controlled_champion_best_build,
+            &controlled_champion_loadout.bonus_stats,
+            Some(&controlled_champion_runtime_loadout_selection),
         );
-    let best_cap_survivor = vlad_best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
+    let best_cap_survivor =
+        controlled_champion_best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
     timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
     let progress_snapshot =
         progress_state
@@ -1712,6 +1761,14 @@ pub(super) fn run_controlled_champion_scenario(
             coverage_stage_diagnostics.seed_candidates_unique,
             coverage_stage_diagnostics.seed_candidates
         );
+        if coverage_stage_diagnostics.coverage_incomplete
+            && !coverage_stage_diagnostics.coverage_warning.is_empty()
+        {
+            println!(
+                "- Coverage warning: {}",
+                coverage_stage_diagnostics.coverage_warning
+            );
+        }
     }
     println!(
         "- Candidate evaluations (full): {}",
@@ -1817,31 +1874,35 @@ pub(super) fn run_controlled_champion_scenario(
     }
     println!(
         "- Items: {}",
-        vlad_best_build
+        controlled_champion_best_build
             .iter()
             .map(|i| i.name.clone())
             .collect::<Vec<_>>()
             .join(", ")
     );
-    println!("- Objective score: {:.4}", vlad_best_score);
+    println!("- Objective score: {:.4}", controlled_champion_best_score);
     println!(
         "- Time alive / damage dealt / healing done / enemy kills / invulnerable seconds: {:.2}s / {:.1} / {:.1} / {} / {:.2}",
-        vlad_best_outcome.time_alive_seconds,
-        vlad_best_outcome.damage_dealt,
-        vlad_best_outcome.healing_done,
-        vlad_best_outcome.enemy_kills,
-        vlad_best_outcome.invulnerable_seconds
+        controlled_champion_best_outcome.time_alive_seconds,
+        controlled_champion_best_outcome.damage_dealt,
+        controlled_champion_best_outcome.healing_done,
+        controlled_champion_best_outcome.enemy_kills,
+        controlled_champion_best_outcome.invulnerable_seconds
     );
     println!("- Cap survivor: {}", best_cap_survivor);
-    if !vlad_loadout.selection_labels.is_empty() {
+    if !controlled_champion_loadout.selection_labels.is_empty() {
         println!("\n{} rune page:", controlled_champion_name);
-        for s in &vlad_loadout.selection_labels {
+        for s in &controlled_champion_loadout.selection_labels {
             println!("- {}", s);
         }
     }
 
-    let diverse_top_raw =
-        select_diverse_top_candidates(&vlad_ranked, top_x, min_item_diff, max_relative_gap_percent);
+    let diverse_top_raw = select_diverse_top_candidates(
+        &controlled_champion_ranked,
+        top_x,
+        min_item_diff,
+        max_relative_gap_percent,
+    );
     let diverse_top_keys = diverse_top_raw
         .iter()
         .map(|(candidate, _)| candidate.clone())
@@ -1860,17 +1921,17 @@ pub(super) fn run_controlled_champion_scenario(
         .map(|map| map.clone())
         .unwrap_or_default();
     let mut metrics_by_key = HashMap::new();
-    for (candidate, score) in &vlad_ranked {
+    for (candidate, score) in &controlled_champion_ranked {
         let candidate_bonus_stats = resolved_by_candidate_snapshot
             .get(candidate)
             .map(|resolved| resolved.bonus_stats.clone())
-            .unwrap_or_else(|| vlad_base_loadout.bonus_stats.clone());
+            .unwrap_or_else(|| controlled_champion_base_loadout.bonus_stats.clone());
         metrics_by_key.insert(
             candidate.clone(),
             compute_build_metrics_for_candidate(
                 candidate,
                 &item_pool,
-                &vlad_base,
+                &controlled_champion_base,
                 &candidate_bonus_stats,
                 &controlled_champion_stack_overrides,
                 &sim,
@@ -1879,7 +1940,7 @@ pub(super) fn run_controlled_champion_scenario(
         );
     }
     let pareto_front = candidate_pareto_front_keys(&metrics_by_key);
-    let build_confidence = vlad_ranked
+    let build_confidence = controlled_champion_ranked
         .iter()
         .map(|(key, _)| {
             let hits = seed_hits_by_key.get(key).copied().unwrap_or(0);
@@ -1954,6 +2015,8 @@ pub(super) fn run_controlled_champion_scenario(
         coverage_stage_assets_covered: coverage_stage_diagnostics.assets_covered,
         coverage_stage_seed_candidates: coverage_stage_diagnostics.seed_candidates,
         coverage_stage_seed_candidates_unique: coverage_stage_diagnostics.seed_candidates_unique,
+        coverage_stage_incomplete: coverage_stage_diagnostics.coverage_incomplete,
+        coverage_stage_warning: coverage_stage_diagnostics.coverage_warning.clone(),
         elapsed_seconds: run_start.elapsed().as_secs_f64(),
         total_run_seconds: 0.0,
         timed_out,
@@ -1990,8 +2053,8 @@ pub(super) fn run_controlled_champion_scenario(
             .collect::<Vec<_>>();
     }
     let build_order_ctx = BuildOrderEvalContext {
-        controlled_champion_base_raw: &vlad_base_raw,
-        controlled_champion_bonus_stats: &vlad_loadout.bonus_stats,
+        controlled_champion_base_raw: &controlled_champion_base_raw,
+        controlled_champion_bonus_stats: &controlled_champion_loadout.bonus_stats,
         controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
         enemy_builds: &enemy_builds,
         raw_enemy_bases: &raw_enemy_bases,
@@ -2008,18 +2071,19 @@ pub(super) fn run_controlled_champion_scenario(
         .map(|br| acquisition_level_map(&br.ordered_items, &br.acquired_levels));
 
     let best_effective_item_stats = compute_effective_item_stats_for_build(
-        &vlad_base,
-        &vlad_best_build,
-        &vlad_loadout.bonus_stats,
+        &controlled_champion_base,
+        &controlled_champion_best_build,
+        &controlled_champion_loadout.bonus_stats,
         &sim,
         sim.champion_level,
         best_order_acquired_map.as_ref(),
         Some(&controlled_champion_stack_overrides),
     );
-    let vlad_end_stats = compute_champion_final_stats(&vlad_base, &best_effective_item_stats);
+    let controlled_champion_end_stats =
+        compute_champion_final_stats(&controlled_champion_base, &best_effective_item_stats);
     let stack_notes = build_stack_notes(
-        &vlad_best_build,
-        &vlad_base,
+        &controlled_champion_best_build,
+        &controlled_champion_base,
         &sim,
         sim.champion_level,
         best_order_acquired_map.as_ref(),
@@ -2098,10 +2162,10 @@ pub(super) fn run_controlled_champion_scenario(
     let trace_json_path = trace_markdown_path.with_extension("json");
     let mut best_trace_sim =
         ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
-            vlad_base.clone(),
-            &vlad_best_build,
-            &vlad_loadout.bonus_stats,
-            Some(&vlad_runtime_loadout_selection),
+            controlled_champion_base.clone(),
+            &controlled_champion_best_build,
+            &controlled_champion_loadout.bonus_stats,
+            Some(&controlled_champion_runtime_loadout_selection),
             best_order_acquired_map.as_ref(),
             Some(&controlled_champion_stack_overrides),
             &enemy_builds,
@@ -2149,14 +2213,14 @@ pub(super) fn run_controlled_champion_scenario(
         scenario_path,
         controlled_champion_name: &controlled_champion_name,
         sim: &sim,
-        controlled_champion_base_level: &vlad_base,
-        controlled_champion_end_stats: &vlad_end_stats,
+        controlled_champion_base_level: &controlled_champion_base,
+        controlled_champion_end_stats: &controlled_champion_end_stats,
         stack_notes: &stack_notes,
-        controlled_champion_loadout: &vlad_loadout,
+        controlled_champion_loadout: &controlled_champion_loadout,
         enemy_loadout: &enemy_loadout,
-        best_build: &vlad_best_build,
-        best_score: vlad_best_score,
-        best_outcome: &vlad_best_outcome,
+        best_build: &controlled_champion_best_build,
+        best_score: controlled_champion_best_score,
+        best_outcome: &controlled_champion_best_outcome,
         best_score_breakdown,
         enemy_builds: &enemy_builds,
         enemy_derived_combat_stats: &enemy_derived_combat_stats,
@@ -2178,7 +2242,7 @@ pub(super) fn run_controlled_champion_scenario(
     status.emit(
         "finalization",
         Some((processed_candidates, total_candidates)),
-        Some(vlad_best_score),
+        Some(controlled_champion_best_score),
         Some("reports, trace outputs, and persistent cache written"),
         true,
     );
@@ -2220,8 +2284,11 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         &sim_cfg.stack_overrides,
     )?;
     sim_cfg.champion_level = controlled_champion_config.level;
-    let vlad_base = champion_at_level(&controlled_champion_config.base, sim_cfg.champion_level);
-    let vlad_loadout_selection = controlled_champion_config.loadout_selection;
+    let controlled_champion_base =
+        champion_at_level(&controlled_champion_config.base, sim_cfg.champion_level);
+    sim_cfg.controlled_champion_script =
+        resolve_controlled_champion_script(&controlled_champion_base.name);
+    let controlled_champion_loadout_selection = controlled_champion_config.loadout_selection;
     let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
 
     let enemy_encounters = parse_opponent_encounters(
@@ -2242,7 +2309,11 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         })
         .collect::<Vec<_>>();
 
-    let vlad_loadout = resolve_loadout(&vlad_loadout_selection, sim_cfg.champion_level, true)?;
+    let controlled_champion_loadout = resolve_loadout(
+        &controlled_champion_loadout_selection,
+        sim_cfg.champion_level,
+        true,
+    )?;
     let loadout_domain = build_loadout_domain();
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
@@ -2269,10 +2340,10 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
     let controlled_champion_items: Vec<Item> = Vec::new();
 
     let mut sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
-        vlad_base,
+        controlled_champion_base,
         &controlled_champion_items,
-        &vlad_loadout.bonus_stats,
-        Some(&vlad_loadout_selection),
+        &controlled_champion_loadout.bonus_stats,
+        Some(&controlled_champion_loadout_selection),
         None,
         Some(&controlled_champion_stack_overrides),
         &enemy_builds,
@@ -2382,3 +2453,7 @@ fn build_enemy_similarity_notes(profiles: &[EnemyDerivedCombatStats]) -> Vec<Str
     out.extend(pair_notes.into_iter().take(8));
     out
 }
+
+#[cfg(test)]
+#[path = "tests/scenario_runner_tests.rs"]
+mod tests;

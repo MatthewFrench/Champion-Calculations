@@ -1,6 +1,17 @@
 # Improvement Tracker
 
 ## Done
+- Continued generic controlled-champion decoupling in shared runtime paths:
+  - added `src/scripts/champions/controlled_champion.rs` as the engine-facing controlled-champion script facade
+  - removed remaining legacy Vladimir-named compatibility aliases in shared modules (`compute_vlad_stats`, `simulate_vlad_combat`, `VladCombatSimulation`)
+  - normalized orchestration locals in `src/scenario_runner.rs` away from `vlad_*` naming
+  - removed legacy `simulation.vlad_*` tuning overrides from shared parser; those keys now fail fast
+  - primary CLI modes are now `controlled_champion` and `controlled_champion_step` (with Vladimir aliases retained for compatibility)
+  - removed Vladimir ability-name hardcoding from shared engine trace/event paths; labels now come from controlled champion ability identifiers
+- Improved maximum-quality coverage semantics and diagnostics:
+  - incomplete coverage no longer implies hard failure and now emits explicit degraded-mode warning text/flags in console/report/JSON diagnostics
+- Prevented persistent cache fragmentation for default random-seed runs:
+  - persistent full-score cache partitioning now uses deterministic configured seed ownership; runtime-random default seeds share a stable cache partition
 - Hardened search/runtime correctness and schema fail-fast behavior:
   - candidate generation can now score partial builds during strategy branching (improves greedy/beam pruning quality), while strict final ranking remains full-candidate only
   - `maximum_quality` coverage stage no longer uses popcorn progress-window timeout checks, preserving coverage guarantees before timed search
@@ -197,7 +208,7 @@
   - `src/scripts/loadout_hooks.rs` now annotates dynamic rune effects
 - Added controlled-champion loadout runtime integration across simulation and objective scoring:
   - new generic engine API (`ControlledChampionCombatSimulation`, `simulate_controlled_champion_combat`)
-  - compatibility wrappers retained for legacy Vladimir names
+  - transitional compatibility wrappers for legacy Vladimir names were retained at that stage (later removed)
   - combat-time loadout runtime effects now apply on controlled champion spell hits, kill events, and regeneration ticks
   - objective evaluation now threads loadout selection into combat simulation for candidate loadout scoring
 - Removed remaining legacy hook and enemy-script interface hardcoding:
@@ -206,7 +217,7 @@
   - engine event and helper names now prefer controlled champion terminology across shared combat flow
 - Added generic champion end-stat helper and migrated internal use:
   - `compute_champion_final_stats` is now the primary helper
-  - compatibility wrapper retained for `compute_vlad_stats`
+  - transitional compatibility wrapper for `compute_vlad_stats` was retained at that stage (later removed)
 - Migrated script architecture from flat files to domain-oriented hierarchy:
   - champions:
     - `src/scripts/champions/mod.rs`
@@ -283,6 +294,46 @@
   - Success criteria:
     - the same ability script can be attached to different actors and different keybind slots at runtime.
     - no shared engine conditionals are needed for champion-specific stolen-ability routing.
+
+- [P1] Add a second controlled champion script end-to-end (non-Vladimir)
+  - Goal: validate that the controlled-champion architecture is truly multi-champion in production paths.
+  - Scope:
+    - add one non-Vladimir controlled champion script implementation with canonical data loaders.
+    - add/update one scenario that runs `--mode controlled_champion` using the new champion.
+    - keep engine/shared modules unchanged except for generic extension points.
+  - Success criteria:
+    - controlled-champion scenario runs successfully for at least one non-Vladimir champion.
+    - no champion-specific hardcoding is added to shared core modules.
+
+- [P1] Optional strict maximum-quality coverage gate
+  - Goal: support reproducibility/CI runs that require complete pre-budget coverage.
+  - Scope:
+    - add an explicit opt-in flag (for example `--require-full-coverage`) that fails the run when coverage is incomplete.
+    - preserve current default behavior: degraded mode with warning and output flag.
+    - document the semantics in CLI/docs/report diagnostics.
+  - Success criteria:
+    - default runs keep warning-mode behavior.
+    - strict mode deterministically fails with actionable diagnostics when coverage is incomplete.
+
+- [P1] Data-driven controlled champion script registry
+  - Goal: remove static registry coupling in `src/scripts/champions/controlled_champion.rs`.
+  - Scope:
+    - introduce a cleaner registration pattern for controlled champion script capabilities.
+    - keep interface role-neutral and preserve current script resolution semantics.
+    - ensure new champions can be added with minimal registry boilerplate.
+  - Success criteria:
+    - adding a new controlled champion script is a small, localized change.
+    - no engine changes required for registry growth.
+
+- [P1] Controlled champion non-Vladimir integration guardrail
+  - Goal: prevent regressions where generic mode silently drifts back to Vladimir-only assumptions.
+  - Scope:
+    - add an integration test that runs `--mode controlled_champion` with a non-Vladimir scenario.
+    - assert stable run/report contract behavior for that scenario.
+    - keep assertions deterministic and CI-friendly.
+  - Success criteria:
+    - CI includes at least one passing non-Vladimir controlled-champion integration path.
+    - regressions in generic controlled-champion orchestration are caught early.
 
 - [P2] Vertical `z` dimension modeling decision
   - Goal: explicitly track and validate whether vertical `z` index impacts gameplay outcomes in simulator scope.

@@ -143,13 +143,7 @@ struct SimulationConfig {
     server_tick_rate_hz: f64,
     champion_level: usize,
     max_time_seconds: f64,
-    vlad_pool_rank: usize,
-    vlad_pool_untargetable_seconds: f64,
-    vlad_pool_cost_percent_current_health: f64,
-    vlad_pool_heal_ratio_of_damage: f64,
-    vlad_pool_base_damage_by_rank: Vec<f64>,
-    vlad_pool_base_cooldown_seconds_by_rank: Vec<f64>,
-    vlad_pool_bonus_health_ratio: f64,
+    controlled_champion_script: Option<crate::scripts::champions::ControlledChampionScriptHandle>,
     zhonya_duration_seconds: f64,
     zhonya_cooldown_seconds: f64,
     zhonya_trigger_health_percent: f64,
@@ -167,16 +161,6 @@ struct SimulationConfig {
     urf_respawn_time_scaling_start_seconds: f64,
     urf_respawn_time_scaling_per_minute_seconds: f64,
     urf_respawn_time_scaling_cap_seconds: f64,
-    vlad_q_base_damage: f64,
-    vlad_q_ap_ratio: f64,
-    vlad_q_heal_ratio_of_damage: f64,
-    vlad_q_base_cooldown_seconds: f64,
-    vlad_e_base_damage: f64,
-    vlad_e_ap_ratio: f64,
-    vlad_e_base_cooldown_seconds: f64,
-    vlad_r_base_damage: f64,
-    vlad_r_ap_ratio: f64,
-    vlad_r_base_cooldown_seconds: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -340,6 +324,8 @@ struct SearchDiagnostics {
     coverage_stage_assets_covered: usize,
     coverage_stage_seed_candidates: usize,
     coverage_stage_seed_candidates_unique: usize,
+    coverage_stage_incomplete: bool,
+    coverage_stage_warning: String,
     elapsed_seconds: f64,
     total_run_seconds: f64,
     timed_out: bool,
@@ -435,14 +421,14 @@ struct ControlledChampionReportData<'a> {
 }
 
 #[derive(Debug, Clone, Parser)]
-#[command(about = "URF Vladimir objective simulator")]
+#[command(about = "URF controlled champion objective simulator")]
 struct Cli {
     #[arg(
         long,
         help = "Scenario path or scenario name (resolved as Simulation/scenarios/<name>.json)"
     )]
     scenario: String,
-    #[arg(long, value_enum, default_value_t = Mode::Vladimir)]
+    #[arg(long, value_enum, default_value_t = Mode::ControlledChampion)]
     mode: Mode,
     #[arg(long, default_value_t = 30)]
     ticks: usize,
@@ -478,10 +464,10 @@ struct Cli {
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum Mode {
-    #[value(name = "vladimir")]
-    Vladimir,
-    #[value(name = "vladimir_step")]
-    VladimirStep,
+    #[value(name = "controlled_champion", alias = "vladimir")]
+    ControlledChampion,
+    #[value(name = "controlled_champion_step", alias = "vladimir_step")]
+    ControlledChampionStep,
     #[value(name = "taric_as")]
     TaricAs,
     #[value(name = "hecarim_ms")]
@@ -523,7 +509,7 @@ fn main() -> Result<()> {
 
     let scenario_path = resolve_scenario_path(&cli.scenario);
     match cli.mode {
-        Mode::Vladimir => run_controlled_champion_scenario(
+        Mode::ControlledChampion => run_controlled_champion_scenario(
             &scenario_path,
             &ControlledChampionRunOptions {
                 top_x: cli.top_x,
@@ -539,7 +525,7 @@ fn main() -> Result<()> {
                 seed_override: cli.seed,
             },
         ),
-        Mode::VladimirStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),
+        Mode::ControlledChampionStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
         }

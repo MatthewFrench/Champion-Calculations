@@ -11,6 +11,7 @@ use crate::scripts::runtime::loadout_runtime::{
     tick_loadout_regeneration,
 };
 
+mod controlled_champion;
 pub(crate) mod vladimir;
 
 mod doctor_mundo;
@@ -20,6 +21,7 @@ mod vayne;
 mod warwick;
 
 pub(crate) type ChampionLoadoutRuntime = LoadoutRuntimeState;
+pub(crate) use controlled_champion::*;
 
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct ChampionBehaviorProfile {

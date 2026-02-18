@@ -9,7 +9,6 @@ pub(crate) use abilities::{
 pub(crate) use decisions::{
     VladimirCastProfile, VladimirDefensiveAbilityDecisionInput, VladimirOffensiveDecisionInput,
     VladimirTargetSnapshot, decide_defensive_ability_activations, decide_offensive_casts,
-    default_cast_profile,
 };
 pub(crate) use hook::VLADIMIR_HOOK;
 

@@ -11,6 +11,8 @@ This file is a concise handoff for developers and AI agents.
 - Rust simulation engine with fixed server-tick stepping (URF default 30 Hz).
 - Generic actor/champion abstractions for controlled champion and opponents.
 - Champion script dispatch under `src/scripts/champions/`.
+- Engine-facing controlled champion script facade under `src/scripts/champions/controlled_champion.rs`.
+- CLI primary modes are `controlled_champion` and `controlled_champion_step` (`vladimir`/`vladimir_step` aliases still accepted).
 - Item and runtime loadout script hooks under `src/scripts/items/` and `src/scripts/runtime/`.
 - Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
@@ -24,11 +26,13 @@ This file is a concise handoff for developers and AI agents.
   - default is runtime-random seed (`search.seed: 0`).
   - deterministic reproducibility is explicit (`--seed <u64>` or scenario `search.seed`).
   - reports include the effective seed.
+  - persistent full-score cache partitioning ignores runtime-random default seeds to preserve cache reuse across default runs.
 - `maximum_quality` behavior:
   - runs a pre-budget coverage stage that explicitly touches each legal item/rune/shard asset.
   - retains top diverse candidates per locked asset and injects them into main search.
   - starts runtime budget accounting only after coverage stage completes.
   - popcorn progress-window timeout does not interrupt this coverage stage.
+  - if coverage cannot complete, search proceeds in explicit degraded mode and diagnostics include coverage warning flags.
 - Candidate scoring behavior:
   - generation-time strategy ranking can score partial candidates (improves greedy/beam branching quality before full builds are complete).
   - strict final ranking remains full-candidate only.
@@ -39,6 +43,8 @@ This file is a concise handoff for developers and AI agents.
 - Legacy loadout keys now fail fast:
   - `loadout.runes_reforged.rune_ids`
   - `loadout.season2016_masteries`
+- Legacy simulation tuning keys now fail fast:
+  - `simulation.vlad_*`
 - Enemy respawn delay now uses each enemy actor's own level.
 - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions.
 

@@ -14,6 +14,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Scope:
   - offensive rotation ownership in scripts
   - defensive logic and survivability item activation ownership in scripts
+- Recent progress:
+  - introduced `src/scripts/champions/controlled_champion.rs` as the engine-facing controlled champion script facade
+  - removed legacy Vladimir-named compatibility aliases from shared modules (`compute_vlad_stats`, `simulate_vlad_combat`, `VladCombatSimulation`)
 - Success criteria:
   - engine no longer hardcodes Vladimir-specific combat sequencing.
 
@@ -73,6 +76,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - keep only controlled champion stasis activation policy in AI defaults (`data/champion_ai_profiles.json`)
   - keep passive lifeline trigger thresholds in canonical item data
   - keep URF respawn defaults in `Game Mode/URF.json` with optional scenario override only
+- Recent progress:
+  - removed legacy `simulation.vlad_*` overrides from shared simulation parser; parser now fails fast on those keys
+  - controlled champion script capabilities are now resolved from selected controlled champion identity in scenario orchestration
 - Success criteria:
   - default scenario simulation block only needs scenario-owned knobs plus optional explicit overrides.
 
@@ -262,6 +268,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - start time-budget accounting after coverage stage completion
 - Recent progress:
   - popcorn progress-window timeout no longer interrupts coverage-stage execution; coverage remains pre-budget and breadth-guaranteed.
+  - incomplete coverage now runs in explicit degraded mode (warning + output flag) instead of hard-failing the run.
 - Success criteria:
   - breadth floor is guaranteed for high-quality runs and reported in diagnostics.
 

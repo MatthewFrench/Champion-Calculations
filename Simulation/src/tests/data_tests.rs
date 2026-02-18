@@ -9,7 +9,7 @@ fn assert_close(actual: f64, expected: f64, field: &str) {
 }
 
 #[test]
-fn scenario_vladimir_offense_uses_canonical_ability_defaults() {
+fn scenario_controlled_champion_script_uses_canonical_ability_defaults() {
     let scenario_path = scenarios_dir().join("vladimir_urf_teamfight.json");
     let scenario =
         load_json(&scenario_path).expect("scenarios/vladimir_urf_teamfight.json should parse");
@@ -58,58 +58,95 @@ fn scenario_vladimir_offense_uses_canonical_ability_defaults() {
     }
 
     let parsed = parse_simulation_config(simulation).expect("simulation config should parse");
-    let canonical = vladimir_offensive_ability_defaults("vladimir")
+    assert!(
+        parsed.controlled_champion_script.is_none(),
+        "simulation parser should not inject champion-specific script config"
+    );
+
+    let script = crate::scripts::champions::resolve_controlled_champion_script("Vladimir");
+    assert!(
+        script.is_some(),
+        "Vladimir script capability should resolve"
+    );
+    let canonical = crate::defaults::vladimir_offensive_ability_defaults("vladimir")
         .expect("canonical Vladimir offensive defaults should load");
+    let cooldowns = crate::scripts::champions::controlled_champion_offensive_cooldowns_after_haste(
+        script.as_ref(),
+        0.0,
+    );
 
     assert_close(
-        parsed.vlad_q_base_damage,
+        crate::scripts::champions::controlled_champion_offensive_raw_damage(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Primary,
+            0.0,
+        ),
         canonical.q_base_damage,
-        "vlad_q_base_damage",
+        "offensive_primary_base_damage",
     );
     assert_close(
-        parsed.vlad_q_ap_ratio,
+        crate::scripts::champions::controlled_champion_offensive_ap_ratio(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Primary,
+        ),
         canonical.q_ap_ratio,
-        "vlad_q_ap_ratio",
+        "offensive_primary_ap_ratio",
     );
     assert_close(
-        parsed.vlad_q_heal_ratio_of_damage,
+        crate::scripts::champions::controlled_champion_offensive_primary_heal_ratio(
+            script.as_ref(),
+        ),
         canonical.q_heal_ratio_of_damage,
-        "vlad_q_heal_ratio_of_damage",
+        "offensive_primary_heal_ratio_of_damage",
     );
     assert_close(
-        parsed.vlad_q_base_cooldown_seconds,
+        cooldowns.offensive_primary_seconds,
         canonical.q_base_cooldown_seconds,
-        "vlad_q_base_cooldown_seconds",
+        "offensive_primary_base_cooldown_seconds",
     );
     assert_close(
-        parsed.vlad_e_base_damage,
+        crate::scripts::champions::controlled_champion_offensive_raw_damage(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Secondary,
+            0.0,
+        ),
         canonical.e_base_damage,
-        "vlad_e_base_damage",
+        "offensive_secondary_base_damage",
     );
     assert_close(
-        parsed.vlad_e_ap_ratio,
+        crate::scripts::champions::controlled_champion_offensive_ap_ratio(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Secondary,
+        ),
         canonical.e_ap_ratio,
-        "vlad_e_ap_ratio",
+        "offensive_secondary_ap_ratio",
     );
     assert_close(
-        parsed.vlad_e_base_cooldown_seconds,
+        cooldowns.offensive_secondary_seconds,
         canonical.e_base_cooldown_seconds,
-        "vlad_e_base_cooldown_seconds",
+        "offensive_secondary_base_cooldown_seconds",
     );
     assert_close(
-        parsed.vlad_r_base_damage,
+        crate::scripts::champions::controlled_champion_offensive_raw_damage(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Ultimate,
+            0.0,
+        ),
         canonical.r_base_damage,
-        "vlad_r_base_damage",
+        "offensive_ultimate_base_damage",
     );
     assert_close(
-        parsed.vlad_r_ap_ratio,
+        crate::scripts::champions::controlled_champion_offensive_ap_ratio(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Ultimate,
+        ),
         canonical.r_ap_ratio,
-        "vlad_r_ap_ratio",
+        "offensive_ultimate_ap_ratio",
     );
     assert_close(
-        parsed.vlad_r_base_cooldown_seconds,
+        cooldowns.offensive_ultimate_seconds,
         canonical.r_base_cooldown_seconds,
-        "vlad_r_base_cooldown_seconds",
+        "offensive_ultimate_base_cooldown_seconds",
     );
 }
 
@@ -238,6 +275,21 @@ fn parse_simulation_config_rejects_legacy_item_stacks_map() {
         error
             .to_string()
             .contains("simulation.item_stacks_at_level_20 is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_rejects_legacy_vladimir_tuning_keys() {
+    let simulation = serde_json::json!({
+        "vlad_q_base_damage": 200.0
+    });
+    let error = parse_simulation_config(&simulation)
+        .expect_err("legacy simulation.vlad_q_base_damage should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("simulation.vlad_q_base_damage is no longer supported"),
         "unexpected error: {error}"
     );
 }

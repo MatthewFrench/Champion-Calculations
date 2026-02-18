@@ -3,7 +3,9 @@ use chrono::{DateTime, Local, Utc};
 use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
+#[cfg(test)]
+use std::path::PathBuf;
 use std::time::SystemTime;
 
 use crate::search::item_names;
@@ -12,15 +14,11 @@ use super::{
     ControlledChampionReportData, ObjectiveScoreBreakdown, mean_std, simulation_dir, to_norm_key,
 };
 
+#[cfg(test)]
 pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
     simulation_dir()
         .join("output")
         .join(format!("{}_run_report.md", to_norm_key(champion_name)))
-}
-
-#[allow(dead_code)]
-pub(super) fn default_report_path() -> PathBuf {
-    default_report_path_for_champion("Vladimir")
 }
 
 fn format_repo_relative_path(path: &Path) -> String {
@@ -287,6 +285,12 @@ pub(super) fn write_controlled_champion_report_markdown(
             format_usize_with_commas(diagnostics.coverage_stage_seed_candidates_unique),
             format_usize_with_commas(diagnostics.coverage_stage_seed_candidates)
         ));
+        if diagnostics.coverage_stage_incomplete && !diagnostics.coverage_stage_warning.is_empty() {
+            content.push_str(&format!(
+                "- Coverage warning: {}\n",
+                diagnostics.coverage_stage_warning
+            ));
+        }
     }
     if let Some(budget) = diagnostics.time_budget_seconds {
         let coverage_note = if diagnostics.coverage_stage_enabled {
@@ -836,6 +840,8 @@ pub(super) fn write_controlled_champion_report_json(
             "coverage_stage_assets_covered": diagnostics.coverage_stage_assets_covered,
             "coverage_stage_seed_candidates": diagnostics.coverage_stage_seed_candidates,
             "coverage_stage_seed_candidates_unique": diagnostics.coverage_stage_seed_candidates_unique,
+            "coverage_stage_incomplete": diagnostics.coverage_stage_incomplete,
+            "coverage_stage_warning": diagnostics.coverage_stage_warning,
             "elapsed_seconds": diagnostics.elapsed_seconds,
             "total_run_seconds": diagnostics.total_run_seconds,
             "timed_out": diagnostics.timed_out,

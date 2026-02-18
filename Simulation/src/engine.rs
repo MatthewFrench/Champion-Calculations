@@ -5,23 +5,28 @@ use crate::defaults::{
     champion_ai_profile, champion_hitbox_radius, protoplasm_lifeline_cooldown_seconds_default,
     simulator_defaults,
 };
-use crate::scripts::champions::vladimir::{
-    VladimirAbilityCooldowns, VladimirAbilityTuning, VladimirCastProfile,
-    VladimirDefensiveAbilityDecisionInput, VladimirOffensiveDecisionInput, VladimirTargetSnapshot,
-    decide_defensive_ability_activations, decide_offensive_casts, default_cast_profile,
-    e_damage_raw, offensive_cooldowns_after_haste, q_damage_raw, r_damage_raw,
-};
 use crate::scripts::champions::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptPoint, attack_speed_multiplier, behavior_profile,
+    ChampionScriptExecutionInput, ChampionScriptPoint, ControlledChampionAbilityCooldowns,
+    ControlledChampionCastProfile, ControlledChampionDefensiveAbilityDecisionInput,
+    ControlledChampionDefensiveAbilityTwoConfig, ControlledChampionOffensiveAbility,
+    ControlledChampionOffensiveDecisionInput, ControlledChampionScriptHandle,
+    ControlledChampionTargetSnapshot, attack_speed_multiplier, behavior_profile,
     build_champion_loadout_runtime, champion_script_event_cooldown_seconds,
-    champion_script_event_label, clear_transient_combat_state, describe_runtime_effect_cooldowns,
-    describe_runtime_effect_stacks, execute_champion_script_event, on_hit_bonus_damage,
-    scripted_champion_events, tick_regen_heal,
+    champion_script_event_label, clear_transient_combat_state,
+    controlled_champion_default_cast_profile, controlled_champion_defensive_ability_two_config,
+    controlled_champion_defensive_ability_two_raw_damage, controlled_champion_offensive_ap_ratio,
+    controlled_champion_offensive_cooldowns_after_haste,
+    controlled_champion_offensive_primary_heal_ratio, controlled_champion_offensive_raw_damage,
+    controlled_champion_script_enabled, decide_controlled_champion_defensive_ability_activations,
+    decide_controlled_champion_offensive_casts, describe_runtime_effect_cooldowns,
+    describe_runtime_effect_stacks, execute_champion_script_event,
+    initialize_controlled_champion_ability_slots, on_hit_bonus_damage, scripted_champion_events,
+    tick_regen_heal,
 };
 use crate::scripts::items::hooks::controlled_champion_defensive_item_capabilities;
 use crate::scripts::runtime::ability_slots::{
-    AbilitySlotKey, ActorAbilityLoadout, default_champion_ability_loadout,
+    ActorAbilityLoadout, default_champion_ability_loadout,
 };
 use crate::scripts::runtime::controlled_champion_loadout::{
     ControlledChampionAbilityRuntimeInput, ControlledChampionLoadoutRuntime,
@@ -323,15 +328,15 @@ enum EventType {
         projectile_speed: f64,
         effect_hitbox_radius: f64,
     },
-    ControlledChampionQHit {
+    ControlledChampionOffensivePrimaryHit {
         idx: usize,
         source: Vec2,
         target_at_cast: Vec2,
         projectile_speed: f64,
         effect_hitbox_radius: f64,
     },
-    ControlledChampionEHit,
-    ControlledChampionRHit,
+    ControlledChampionOffensiveSecondaryHit,
+    ControlledChampionOffensiveUltimateHit,
     ChampionScript(usize, ChampionScriptEvent, u64),
 }
 
@@ -370,7 +375,7 @@ impl Ord for QueuedEvent {
 }
 
 pub(super) struct ControlledChampionCombatSimulation {
-    vlad_base: ChampionBase,
+    controlled_champion_base: ChampionBase,
     sim: SimulationConfig,
     urf: UrfBuffs,
 
@@ -386,7 +391,7 @@ pub(super) struct ControlledChampionCombatSimulation {
     event_queue: BinaryHeap<QueuedEvent>,
     event_counter: u64,
 
-    vlad_stats: Stats,
+    controlled_champion_stats: Stats,
     controlled_champion_buffs: RuntimeBuffState,
     controlled_champion_runtime: ControlledChampionLoadoutRuntime,
     controlled_champion_name: String,
@@ -400,11 +405,15 @@ pub(super) struct ControlledChampionCombatSimulation {
     physical_multiplier: f64,
     magic_multiplier: f64,
 
+    controlled_champion_script: Option<ControlledChampionScriptHandle>,
     pool_cooldown: f64,
     pool_duration: f64,
-    offensive_tuning: VladimirAbilityTuning,
-    offensive_cooldowns: VladimirAbilityCooldowns,
-    cast_profile: VladimirCastProfile,
+    controlled_champion_defensive_ability_two_cost_percent_current_health: f64,
+    controlled_champion_defensive_ability_two_heal_ratio_of_damage: f64,
+    controlled_champion_defensive_ability_two_base_damage: f64,
+    controlled_champion_defensive_ability_two_bonus_health_ratio: f64,
+    offensive_cooldowns: ControlledChampionAbilityCooldowns,
+    cast_profile: ControlledChampionCastProfile,
     controlled_champion_ability_loadout: ActorAbilityLoadout,
     controlled_champion_ability_ready_at: HashMap<String, f64>,
 
@@ -445,22 +454,22 @@ impl ControlledChampionCombatSimulation {
     #[allow(dead_code)]
     #[allow(clippy::too_many_arguments)]
     pub(super) fn new(
-        vlad_base: ChampionBase,
-        vlad_build_items: &[Item],
-        vlad_bonus_stats: &Stats,
-        vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
-        vlad_stack_overrides: Option<&HashMap<String, f64>>,
+        controlled_champion_base: ChampionBase,
+        controlled_champion_build_items: &[Item],
+        controlled_champion_bonus_stats: &Stats,
+        controlled_champion_item_acquired_levels: Option<&HashMap<String, usize>>,
+        controlled_champion_stack_overrides: Option<&HashMap<String, f64>>,
         enemies: &[(EnemyConfig, Vec<Item>, Stats)],
         sim: SimulationConfig,
         urf: UrfBuffs,
     ) -> Self {
         Self::new_with_controlled_champion_loadout(
-            vlad_base,
-            vlad_build_items,
-            vlad_bonus_stats,
+            controlled_champion_base,
+            controlled_champion_build_items,
+            controlled_champion_bonus_stats,
             None,
-            vlad_item_acquired_levels,
-            vlad_stack_overrides,
+            controlled_champion_item_acquired_levels,
+            controlled_champion_stack_overrides,
             enemies,
             sim,
             urf,
@@ -479,12 +488,8 @@ impl ControlledChampionCombatSimulation {
         sim: SimulationConfig,
         urf: UrfBuffs,
     ) -> Self {
-        let vlad_base = controlled_champion_base;
-        let vlad_build_items = controlled_champion_build_items;
-        let vlad_bonus_stats = controlled_champion_bonus_stats;
-        let vlad_item_acquired_levels = controlled_champion_item_acquired_levels;
-        let controlled_champion_name = vlad_base.name.clone();
-        let controlled_champion_item_names = vlad_build_items
+        let controlled_champion_name = controlled_champion_base.name.clone();
+        let controlled_champion_item_names = controlled_champion_build_items
             .iter()
             .map(|item| item.name.clone())
             .collect::<Vec<_>>();
@@ -492,31 +497,35 @@ impl ControlledChampionCombatSimulation {
             controlled_champion_loadout_selection
                 .map(|selection| (selection.rune_names.clone(), selection.shard_stats.clone()))
                 .unwrap_or_default();
-        let controlled_champion_hitbox_radius = champion_hitbox_radius(&vlad_base.name);
-        let mut vlad_item_stats = Stats::default();
-        for item in vlad_build_items {
-            vlad_item_stats.add(&item.stats);
+        let controlled_champion_hitbox_radius =
+            champion_hitbox_radius(&controlled_champion_base.name);
+        let mut controlled_champion_item_stats = Stats::default();
+        for item in controlled_champion_build_items {
+            controlled_champion_item_stats.add(&item.stats);
         }
-        vlad_item_stats.add(vlad_bonus_stats);
+        controlled_champion_item_stats.add(controlled_champion_bonus_stats);
         apply_item_assumptions(
-            &mut vlad_item_stats,
-            &vlad_base,
-            vlad_build_items,
+            &mut controlled_champion_item_stats,
+            &controlled_champion_base,
+            controlled_champion_build_items,
             &sim,
             sim.champion_level,
-            vlad_item_acquired_levels,
+            controlled_champion_item_acquired_levels,
             controlled_champion_stack_overrides,
         );
-        let vlad_stats = compute_champion_final_stats(&vlad_base, &vlad_item_stats);
+        let controlled_champion_stats = compute_champion_final_stats(
+            &controlled_champion_base,
+            &controlled_champion_item_stats,
+        );
         let controlled_champion_runtime = controlled_champion_loadout_selection
             .map(build_controlled_champion_loadout_runtime)
             .unwrap_or_default();
 
-        let max_health = vlad_stats.health;
-        let physical_multiplier = 100.0 / (100.0 + vlad_stats.armor.max(0.0));
-        let magic_multiplier = 100.0 / (100.0 + vlad_stats.magic_resist.max(0.0));
+        let max_health = controlled_champion_stats.health;
+        let physical_multiplier = 100.0 / (100.0 + controlled_champion_stats.armor.max(0.0));
+        let magic_multiplier = 100.0 / (100.0 + controlled_champion_stats.magic_resist.max(0.0));
 
-        let ability_haste = vlad_item_stats.ability_haste + urf.ability_haste;
+        let ability_haste = controlled_champion_item_stats.ability_haste + urf.ability_haste;
         let runtime_buffs = RuntimeBuffState {
             ability_haste,
             item_haste: urf.item_haste,
@@ -526,77 +535,30 @@ impl ControlledChampionCombatSimulation {
             movement_speed_multiplier: 1.0,
             outgoing_ability_damage_multiplier: 1.0,
         };
-        let pool_base_cd = sim
-            .vlad_pool_base_cooldown_seconds_by_rank
-            .get(sim.vlad_pool_rank.saturating_sub(1))
-            .copied()
-            .or_else(|| sim.vlad_pool_base_cooldown_seconds_by_rank.last().copied())
-            .unwrap_or(16.0);
-        let pool_cooldown = resolve_stat(
-            StatQuery::CooldownSeconds {
-                base_seconds: pool_base_cd,
-                source: CooldownMetricSource::Ability,
-            },
-            runtime_buffs,
+        let controlled_champion_script = sim.controlled_champion_script.clone();
+        let controlled_champion_defensive_ability_two =
+            controlled_champion_defensive_ability_two_config(
+                controlled_champion_script.as_ref(),
+                ability_haste,
+            );
+        let offensive_cooldowns = controlled_champion_offensive_cooldowns_after_haste(
+            controlled_champion_script.as_ref(),
+            ability_haste,
         );
-        let offensive_tuning = VladimirAbilityTuning {
-            q_base_damage: sim.vlad_q_base_damage,
-            q_ap_ratio: sim.vlad_q_ap_ratio,
-            q_heal_ratio_of_damage: sim.vlad_q_heal_ratio_of_damage,
-            q_base_cooldown_seconds: sim.vlad_q_base_cooldown_seconds,
-            e_base_damage: sim.vlad_e_base_damage,
-            e_ap_ratio: sim.vlad_e_ap_ratio,
-            e_base_cooldown_seconds: sim.vlad_e_base_cooldown_seconds,
-            r_base_damage: sim.vlad_r_base_damage,
-            r_ap_ratio: sim.vlad_r_ap_ratio,
-            r_base_cooldown_seconds: sim.vlad_r_base_cooldown_seconds,
-        };
-        let offensive_cooldowns = offensive_cooldowns_after_haste(offensive_tuning, ability_haste);
-        let cast_profile = default_cast_profile();
-        let uses_vladimir_script = to_norm_key(&controlled_champion_name) == "vladimir";
+        let cast_profile =
+            controlled_champion_default_cast_profile(controlled_champion_script.as_ref());
         let mut controlled_champion_ability_loadout =
             default_champion_ability_loadout(&controlled_champion_name);
         let mut controlled_champion_ability_ready_at = HashMap::new();
-        if uses_vladimir_script {
-            // Vladimir script uses ability IDs from canonical champion data and can be remapped by slot.
-            if controlled_champion_ability_loadout
-                .slot_for_ability(&cast_profile.q_ability_id)
-                .is_none()
-            {
-                controlled_champion_ability_loadout
-                    .assign_ability_to_slot(cast_profile.q_ability_id.clone(), AbilitySlotKey::Q);
-            }
-            if controlled_champion_ability_loadout
-                .slot_for_ability(&cast_profile.pool_ability_id)
-                .is_none()
-            {
-                controlled_champion_ability_loadout.assign_ability_to_slot(
-                    cast_profile.pool_ability_id.clone(),
-                    AbilitySlotKey::W,
-                );
-            }
-            if controlled_champion_ability_loadout
-                .slot_for_ability(&cast_profile.e_ability_id)
-                .is_none()
-            {
-                controlled_champion_ability_loadout
-                    .assign_ability_to_slot(cast_profile.e_ability_id.clone(), AbilitySlotKey::E);
-            }
-            if controlled_champion_ability_loadout
-                .slot_for_ability(&cast_profile.r_ability_id)
-                .is_none()
-            {
-                controlled_champion_ability_loadout
-                    .assign_ability_to_slot(cast_profile.r_ability_id.clone(), AbilitySlotKey::R);
-            }
-            controlled_champion_ability_ready_at.insert(cast_profile.q_ability_id.clone(), 0.0);
-            controlled_champion_ability_ready_at.insert(cast_profile.pool_ability_id.clone(), 0.0);
-            controlled_champion_ability_ready_at.insert(cast_profile.e_ability_id.clone(), 0.0);
-            controlled_champion_ability_ready_at.insert(cast_profile.r_ability_id.clone(), 0.0);
-        }
+        initialize_controlled_champion_ability_slots(
+            controlled_champion_script.as_ref(),
+            &cast_profile,
+            &mut controlled_champion_ability_loadout,
+            &mut controlled_champion_ability_ready_at,
+        );
 
         let defensive_item_capabilities =
-            controlled_champion_defensive_item_capabilities(vlad_build_items);
+            controlled_champion_defensive_item_capabilities(controlled_champion_build_items);
         let stasis_item_available = defensive_item_capabilities.has_stasis_item;
         let revive_item_available = defensive_item_capabilities.has_revive_item;
         let emergency_shield_item_available = defensive_item_capabilities.has_emergency_shield_item;
@@ -630,7 +592,7 @@ impl ControlledChampionCombatSimulation {
         };
 
         let mut runner = Self {
-            vlad_base,
+            controlled_champion_base,
             sim,
             urf,
             tick_seconds,
@@ -643,7 +605,7 @@ impl ControlledChampionCombatSimulation {
             invulnerable_seconds_total: 0.0,
             event_queue: BinaryHeap::new(),
             event_counter: 0,
-            vlad_stats,
+            controlled_champion_stats,
             controlled_champion_buffs: runtime_buffs,
             controlled_champion_runtime,
             controlled_champion_name,
@@ -655,9 +617,17 @@ impl ControlledChampionCombatSimulation {
             health: max_health,
             physical_multiplier,
             magic_multiplier,
-            pool_cooldown,
-            pool_duration: 0.0,
-            offensive_tuning,
+            controlled_champion_script,
+            pool_cooldown: controlled_champion_defensive_ability_two.cooldown_seconds,
+            pool_duration: controlled_champion_defensive_ability_two.duration_seconds,
+            controlled_champion_defensive_ability_two_cost_percent_current_health:
+                controlled_champion_defensive_ability_two.cost_percent_current_health,
+            controlled_champion_defensive_ability_two_heal_ratio_of_damage:
+                controlled_champion_defensive_ability_two.heal_ratio_of_damage,
+            controlled_champion_defensive_ability_two_base_damage:
+                controlled_champion_defensive_ability_two.base_damage,
+            controlled_champion_defensive_ability_two_bonus_health_ratio:
+                controlled_champion_defensive_ability_two.bonus_health_ratio,
             offensive_cooldowns,
             cast_profile,
             controlled_champion_ability_loadout,
@@ -688,12 +658,6 @@ impl ControlledChampionCombatSimulation {
             trace_events: Vec::new(),
             trace_snapshot_interval_seconds: 5.0,
             trace_next_snapshot_at: 0.0,
-        };
-
-        runner.pool_duration = if uses_vladimir_script {
-            runner.sim.vlad_pool_untargetable_seconds
-        } else {
-            0.0
         };
 
         let enemy_count = enemies.len();
@@ -960,13 +924,14 @@ impl ControlledChampionCombatSimulation {
                         ));
                     }
                 }
-                EventType::ControlledChampionQHit { idx, .. } => {
+                EventType::ControlledChampionOffensivePrimaryHit { idx, .. } => {
                     if let Some(state) = self.enemy_state.get(*idx) {
                         entries.push((
                             queued.time,
                             format!(
-                                "{} Transfusion -> {} (impact in {:.2}s)",
+                                "{} {} -> {} (impact in {:.2}s)",
                                 self.controlled_champion_name,
+                                self.cast_profile.offensive_primary_ability_id,
                                 state.enemy.name,
                                 (queued.time - self.time).max(0.0)
                             ),
@@ -1070,12 +1035,13 @@ impl ControlledChampionCombatSimulation {
             self.health.max(0.0),
             self.max_health,
             health_ratio,
-            self.vlad_stats.armor,
-            self.vlad_stats.magic_resist
+            self.controlled_champion_stats.armor,
+            self.controlled_champion_stats.magic_resist
         ));
         lines.push(format!(
             "  offense: ap={:.1} ah={:.1}",
-            self.vlad_stats.ability_power, self.controlled_champion_buffs.ability_haste
+            self.controlled_champion_stats.ability_power,
+            self.controlled_champion_buffs.ability_haste
         ));
         lines.push(format!(
             "  loadout: items [{}] | runes [{}] | shards [{}]",
@@ -1255,8 +1221,8 @@ impl ControlledChampionCombatSimulation {
             && !self.controlled_champion_is_invulnerable_or_untargetable()
     }
 
-    fn controlled_champion_uses_vladimir_script(&self) -> bool {
-        to_norm_key(&self.controlled_champion_name) == "vladimir"
+    fn controlled_champion_script_enabled(&self) -> bool {
+        controlled_champion_script_enabled(self.controlled_champion_script.as_ref())
     }
 
     fn controlled_champion_ability_ready_at(&self, ability_id: &str) -> f64 {
@@ -1944,8 +1910,9 @@ impl ControlledChampionCombatSimulation {
         }) {
             self.revive_item_ready_at = self.time + self.revive_item_cooldown_seconds;
             self.revive_lockout_until = self.time + self.sim.ga_revive_duration_seconds;
-            self.health =
-                1.0_f64.max(self.vlad_base.base_health * self.sim.ga_revive_base_health_ratio);
+            self.health = 1.0_f64.max(
+                self.controlled_champion_base.base_health * self.sim.ga_revive_base_health_ratio,
+            );
             self.trace_event(
                 "revive_effect",
                 format!("Revive item restored {}", self.controlled_champion_name),
@@ -1966,19 +1933,22 @@ impl ControlledChampionCombatSimulation {
         }
         self.refresh_enemy_respawns();
 
-        if self.controlled_champion_uses_vladimir_script() {
-            let defensive_ability =
-                decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
+        if self.controlled_champion_script_enabled() {
+            let defensive_ability = decide_controlled_champion_defensive_ability_activations(
+                self.controlled_champion_script.as_ref(),
+                ControlledChampionDefensiveAbilityDecisionInput {
                     now_seconds: self.time,
                     can_cast: self.can_cast(),
-                    pool_ready_at: self
-                        .controlled_champion_ability_ready_at(&self.cast_profile.pool_ability_id),
-                });
+                    defensive_ability_two_ready_at: self.controlled_champion_ability_ready_at(
+                        &self.cast_profile.defensive_ability_two_id,
+                    ),
+                },
+            );
 
-            if defensive_ability.cast_pool {
-                let pool_ability_id = self.cast_profile.pool_ability_id.clone();
+            if defensive_ability.cast_defensive_ability_two {
+                let defensive_ability_two_id = self.cast_profile.defensive_ability_two_id.clone();
                 self.set_controlled_champion_ability_ready_at(
-                    &pool_ability_id,
+                    &defensive_ability_two_id,
                     self.time + self.pool_cooldown,
                 );
                 self.pool_until = self.time + self.pool_duration;
@@ -1989,23 +1959,32 @@ impl ControlledChampionCombatSimulation {
                     StatusPersistence::RefreshDuration,
                 ));
                 let cost = self.health
-                    * self.sim.vlad_pool_cost_percent_current_health
+                    * self.controlled_champion_defensive_ability_two_cost_percent_current_health
                     * self.urf.health_cost_multiplier;
                 self.health -= cost;
 
-                let mut pool_damage = self
-                    .sim
-                    .vlad_pool_base_damage_by_rank
-                    .get(self.sim.vlad_pool_rank.saturating_sub(1))
-                    .copied()
-                    .or_else(|| self.sim.vlad_pool_base_damage_by_rank.last().copied())
-                    .unwrap_or(0.0);
-                pool_damage += self.sim.vlad_pool_bonus_health_ratio
-                    * (self.vlad_stats.health - self.vlad_base.base_health);
+                let defensive_ability_two_config = ControlledChampionDefensiveAbilityTwoConfig {
+                    cooldown_seconds: self.pool_cooldown,
+                    duration_seconds: self.pool_duration,
+                    cost_percent_current_health: self
+                        .controlled_champion_defensive_ability_two_cost_percent_current_health,
+                    base_damage: self.controlled_champion_defensive_ability_two_base_damage,
+                    bonus_health_ratio: self
+                        .controlled_champion_defensive_ability_two_bonus_health_ratio,
+                    heal_ratio_of_damage: self
+                        .controlled_champion_defensive_ability_two_heal_ratio_of_damage,
+                };
+                let pool_damage = controlled_champion_defensive_ability_two_raw_damage(
+                    self.controlled_champion_script.as_ref(),
+                    defensive_ability_two_config,
+                    &self.controlled_champion_stats,
+                    &self.controlled_champion_base,
+                );
                 let total_pool_damage =
                     self.apply_magic_damage_to_all_active_enemies(pool_damage, 0.0);
                 self.damage_dealt_total += total_pool_damage.max(0.0);
-                let pool_heal = total_pool_damage * self.sim.vlad_pool_heal_ratio_of_damage;
+                let pool_heal = total_pool_damage
+                    * self.controlled_champion_defensive_ability_two_heal_ratio_of_damage;
                 self.pool_heal_rate = if self.pool_duration > 0.0 {
                     pool_heal / self.pool_duration
                 } else {
@@ -2015,8 +1994,10 @@ impl ControlledChampionCombatSimulation {
                 self.trace_event(
                     "controlled_champion_cast",
                     format!(
-                        "{} cast Sanguine Pool (untargetable {:.2}s)",
-                        self.controlled_champion_name, self.pool_duration
+                        "{} cast {} (untargetable {:.2}s)",
+                        self.controlled_champion_name,
+                        self.cast_profile.defensive_ability_two_id,
+                        self.pool_duration
                     ),
                 );
 
@@ -2028,121 +2009,169 @@ impl ControlledChampionCombatSimulation {
 
             // Script-owned cadence for controlled champion offensive spell scheduling.
             let can_cast = self.can_cast();
-            let q_ability_ready_at =
-                self.controlled_champion_ability_ready_at(&self.cast_profile.q_ability_id);
-            let q_equipped = self
+            let offensive_primary_ready_at = self.controlled_champion_ability_ready_at(
+                &self.cast_profile.offensive_primary_ability_id,
+            );
+            let offensive_primary_equipped = self
                 .controlled_champion_ability_loadout
-                .slot_for_ability(&self.cast_profile.q_ability_id)
+                .slot_for_ability(&self.cast_profile.offensive_primary_ability_id)
                 .is_some();
-            let q_target = if can_cast && q_equipped && self.time >= q_ability_ready_at {
+            let offensive_primary_target = if can_cast
+                && offensive_primary_equipped
+                && self.time >= offensive_primary_ready_at
+            {
                 self.first_active_enemy_in_controlled_champion_range(
-                    self.cast_profile.q_range,
-                    self.cast_profile.q_effect_hitbox_radius,
+                    self.cast_profile.offensive_primary_range,
+                    self.cast_profile.offensive_primary_effect_hitbox_radius,
                 )
-                .map(|target_index| VladimirTargetSnapshot {
+                .map(|target_index| ControlledChampionTargetSnapshot {
                     target_index,
                     distance: self.distance_to_target(target_index),
                 })
             } else {
                 None
             };
-            let e_ability_ready_at =
-                self.controlled_champion_ability_ready_at(&self.cast_profile.e_ability_id);
-            let e_equipped = self
+            let offensive_secondary_ready_at = self.controlled_champion_ability_ready_at(
+                &self.cast_profile.offensive_secondary_ability_id,
+            );
+            let offensive_secondary_equipped = self
                 .controlled_champion_ability_loadout
-                .slot_for_ability(&self.cast_profile.e_ability_id)
+                .slot_for_ability(&self.cast_profile.offensive_secondary_ability_id)
                 .is_some();
-            let e_max_distance = if can_cast && e_equipped && self.time >= e_ability_ready_at {
+            let offensive_secondary_max_distance = if can_cast
+                && offensive_secondary_equipped
+                && self.time >= offensive_secondary_ready_at
+            {
                 self.max_enemy_distance_in_controlled_champion_range(
-                    self.cast_profile.e_range,
-                    self.cast_profile.e_effect_hitbox_radius,
+                    self.cast_profile.offensive_secondary_range,
+                    self.cast_profile.offensive_secondary_effect_hitbox_radius,
                 )
             } else {
                 None
             };
-            let r_ability_ready_at =
-                self.controlled_champion_ability_ready_at(&self.cast_profile.r_ability_id);
-            let r_equipped = self
+            let offensive_ultimate_ready_at = self.controlled_champion_ability_ready_at(
+                &self.cast_profile.offensive_ultimate_ability_id,
+            );
+            let offensive_ultimate_equipped = self
                 .controlled_champion_ability_loadout
-                .slot_for_ability(&self.cast_profile.r_ability_id)
+                .slot_for_ability(&self.cast_profile.offensive_ultimate_ability_id)
                 .is_some();
-            let r_max_distance = if can_cast && r_equipped && self.time >= r_ability_ready_at {
+            let offensive_ultimate_max_distance = if can_cast
+                && offensive_ultimate_equipped
+                && self.time >= offensive_ultimate_ready_at
+            {
                 self.max_enemy_distance_in_controlled_champion_range(
-                    self.cast_profile.r_range,
-                    self.cast_profile.r_effect_hitbox_radius,
+                    self.cast_profile.offensive_ultimate_range,
+                    self.cast_profile.offensive_ultimate_effect_hitbox_radius,
                 )
             } else {
                 None
             };
-            let offensive = decide_offensive_casts(VladimirOffensiveDecisionInput {
-                now_seconds: self.time,
-                can_cast,
-                q_ready_at: q_ability_ready_at,
-                e_ready_at: e_ability_ready_at,
-                r_ready_at: r_ability_ready_at,
-                cooldowns: self.offensive_cooldowns,
-                cast_profile: self.cast_profile.clone(),
-                q_target,
-                e_max_distance,
-                r_max_distance,
-            });
+            let offensive = decide_controlled_champion_offensive_casts(
+                self.controlled_champion_script.as_ref(),
+                ControlledChampionOffensiveDecisionInput {
+                    now_seconds: self.time,
+                    can_cast,
+                    offensive_primary_ready_at,
+                    offensive_secondary_ready_at,
+                    offensive_ultimate_ready_at,
+                    cooldowns: self.offensive_cooldowns,
+                    cast_profile: self.cast_profile.clone(),
+                    offensive_primary_target,
+                    offensive_secondary_max_distance,
+                    offensive_ultimate_max_distance,
+                },
+            );
 
-            if let Some(q) = offensive.q {
-                self.set_controlled_champion_ability_ready_at(&q.ability_id, q.next_ready_at);
-                self.begin_cast_lock_window(self.cast_profile.q_windup_seconds, 0.0, 0.0);
-                let target_at_cast = self.enemy_state[q.target_index].position;
-                let target_name = self.enemy_state[q.target_index].enemy.name.clone();
+            if let Some(offensive_primary) = offensive.offensive_primary {
+                self.set_controlled_champion_ability_ready_at(
+                    &offensive_primary.ability_id,
+                    offensive_primary.next_ready_at,
+                );
+                self.begin_cast_lock_window(
+                    self.cast_profile.offensive_primary_windup_seconds,
+                    0.0,
+                    0.0,
+                );
+                let target_at_cast = self.enemy_state[offensive_primary.target_index].position;
+                let target_name = self.enemy_state[offensive_primary.target_index]
+                    .enemy
+                    .name
+                    .clone();
                 self.schedule_event(
-                    q.impact_delay_seconds,
+                    offensive_primary.impact_delay_seconds,
                     50,
-                    EventType::ControlledChampionQHit {
-                        idx: q.target_index,
+                    EventType::ControlledChampionOffensivePrimaryHit {
+                        idx: offensive_primary.target_index,
                         source: self.target_position,
                         target_at_cast,
-                        projectile_speed: self.cast_profile.q_projectile_speed,
-                        effect_hitbox_radius: self.cast_profile.q_effect_hitbox_radius,
+                        projectile_speed: self.cast_profile.offensive_primary_projectile_speed,
+                        effect_hitbox_radius: self
+                            .cast_profile
+                            .offensive_primary_effect_hitbox_radius,
                     },
                     None,
                 );
                 self.trace_event(
                     "controlled_champion_cast",
                     format!(
-                        "{} cast Transfusion on {} (impact in {:.2}s)",
-                        self.controlled_champion_name, target_name, q.impact_delay_seconds
+                        "{} cast {} on {} (impact in {:.2}s)",
+                        self.controlled_champion_name,
+                        self.cast_profile.offensive_primary_ability_id,
+                        target_name,
+                        offensive_primary.impact_delay_seconds
                     ),
                 );
             }
-            if let Some(e) = offensive.e {
-                self.set_controlled_champion_ability_ready_at(&e.ability_id, e.next_ready_at);
-                self.begin_cast_lock_window(self.cast_profile.e_windup_seconds, 0.0, 0.0);
+            if let Some(offensive_secondary) = offensive.offensive_secondary {
+                self.set_controlled_champion_ability_ready_at(
+                    &offensive_secondary.ability_id,
+                    offensive_secondary.next_ready_at,
+                );
+                self.begin_cast_lock_window(
+                    self.cast_profile.offensive_secondary_windup_seconds,
+                    0.0,
+                    0.0,
+                );
                 self.schedule_event(
-                    e.impact_delay_seconds,
+                    offensive_secondary.impact_delay_seconds,
                     49,
-                    EventType::ControlledChampionEHit,
+                    EventType::ControlledChampionOffensiveSecondaryHit,
                     None,
                 );
                 self.trace_event(
                     "controlled_champion_cast",
                     format!(
-                        "{} cast Tides of Blood (impact in {:.2}s)",
-                        self.controlled_champion_name, e.impact_delay_seconds
+                        "{} cast {} (impact in {:.2}s)",
+                        self.controlled_champion_name,
+                        self.cast_profile.offensive_secondary_ability_id,
+                        offensive_secondary.impact_delay_seconds
                     ),
                 );
             }
-            if let Some(r) = offensive.r {
-                self.set_controlled_champion_ability_ready_at(&r.ability_id, r.next_ready_at);
-                self.begin_cast_lock_window(self.cast_profile.r_windup_seconds, 0.0, 0.0);
+            if let Some(offensive_ultimate) = offensive.offensive_ultimate {
+                self.set_controlled_champion_ability_ready_at(
+                    &offensive_ultimate.ability_id,
+                    offensive_ultimate.next_ready_at,
+                );
+                self.begin_cast_lock_window(
+                    self.cast_profile.offensive_ultimate_windup_seconds,
+                    0.0,
+                    0.0,
+                );
                 self.schedule_event(
-                    r.impact_delay_seconds,
+                    offensive_ultimate.impact_delay_seconds,
                     48,
-                    EventType::ControlledChampionRHit,
+                    EventType::ControlledChampionOffensiveUltimateHit,
                     None,
                 );
                 self.trace_event(
                     "controlled_champion_cast",
                     format!(
-                        "{} cast Hemoplague (impact in {:.2}s)",
-                        self.controlled_champion_name, r.impact_delay_seconds
+                        "{} cast {} (impact in {:.2}s)",
+                        self.controlled_champion_name,
+                        self.cast_profile.offensive_ultimate_ability_id,
+                        offensive_ultimate.impact_delay_seconds
                     ),
                 );
             }
@@ -2409,14 +2438,14 @@ impl ControlledChampionCombatSimulation {
                 }
                 self.schedule_next_attack(idx);
             }
-            EventType::ControlledChampionQHit {
+            EventType::ControlledChampionOffensivePrimaryHit {
                 idx,
                 source,
                 target_at_cast,
                 projectile_speed,
                 effect_hitbox_radius,
             } => {
-                if !self.controlled_champion_uses_vladimir_script() {
+                if !self.controlled_champion_script_enabled() {
                     return;
                 }
                 if idx >= self.enemy_state.len() || !self.enemy_is_active(idx) {
@@ -2429,8 +2458,9 @@ impl ControlledChampionCombatSimulation {
                     self.trace_event(
                         "projectile_blocked",
                         format!(
-                            "{} Transfusion blocked by active projectile block zone",
-                            self.controlled_champion_name
+                            "{} {} blocked by active projectile block zone",
+                            self.controlled_champion_name,
+                            self.cast_profile.offensive_primary_ability_id
                         ),
                     );
                     return;
@@ -2456,10 +2486,11 @@ impl ControlledChampionCombatSimulation {
                 };
                 if !hit {
                     self.trace_event(
-                        "controlled_champion_q_miss",
+                        "controlled_champion_primary_miss",
                         format!(
-                            "{} Transfusion missed {} ({})",
+                            "{} {} missed {} ({})",
                             self.controlled_champion_name,
+                            self.cast_profile.offensive_primary_ability_id,
                             enemy_name,
                             hitbox_miss_reason(
                                 source,
@@ -2476,13 +2507,19 @@ impl ControlledChampionCombatSimulation {
                     );
                     return;
                 }
-                let q_raw_damage =
-                    q_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let q_raw_damage = controlled_champion_offensive_raw_damage(
+                    self.controlled_champion_script.as_ref(),
+                    ControlledChampionOffensiveAbility::Primary,
+                    self.controlled_champion_stats.ability_power,
+                );
                 let runtime_bonus = on_controlled_champion_ability_bonus(
                     &mut self.controlled_champion_runtime,
                     ControlledChampionAbilityRuntimeInput {
-                        ability_power: self.vlad_stats.ability_power,
-                        ability_ap_ratio: self.offensive_tuning.q_ap_ratio,
+                        ability_power: self.controlled_champion_stats.ability_power,
+                        ability_ap_ratio: controlled_champion_offensive_ap_ratio(
+                            self.controlled_champion_script.as_ref(),
+                            ControlledChampionOffensiveAbility::Primary,
+                        ),
                         now_seconds: self.time,
                     },
                 );
@@ -2503,7 +2540,9 @@ impl ControlledChampionCombatSimulation {
                     let resolved_heal = resolve_stat(
                         StatQuery::ScalarAmount {
                             base_amount: dealt
-                                * self.offensive_tuning.q_heal_ratio_of_damage
+                                * controlled_champion_offensive_primary_heal_ratio(
+                                    self.controlled_champion_script.as_ref(),
+                                )
                                 * script_heal_multiplier,
                             source: ScalarMetricSource::Healing,
                             clamp_min_zero: true,
@@ -2515,28 +2554,37 @@ impl ControlledChampionCombatSimulation {
                     self.healing_done_total += (self.health - before).max(0.0);
                 }
                 self.trace_event(
-                    "controlled_champion_q_hit",
+                    "controlled_champion_primary_hit",
                     format!(
-                        "{} Transfusion hit {} for {:.1}",
-                        self.controlled_champion_name, enemy_name, dealt
+                        "{} {} hit {} for {:.1}",
+                        self.controlled_champion_name,
+                        self.cast_profile.offensive_primary_ability_id,
+                        enemy_name,
+                        dealt
                     ),
                 );
             }
-            EventType::ControlledChampionEHit => {
-                if !self.controlled_champion_uses_vladimir_script() {
+            EventType::ControlledChampionOffensiveSecondaryHit => {
+                if !self.controlled_champion_script_enabled() {
                     return;
                 }
-                let e_raw_damage =
-                    e_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let e_raw_damage = controlled_champion_offensive_raw_damage(
+                    self.controlled_champion_script.as_ref(),
+                    ControlledChampionOffensiveAbility::Secondary,
+                    self.controlled_champion_stats.ability_power,
+                );
                 let target_count = self.active_enemy_count_in_controlled_champion_range(
-                    self.cast_profile.e_range,
-                    self.cast_profile.e_effect_hitbox_radius,
+                    self.cast_profile.offensive_secondary_range,
+                    self.cast_profile.offensive_secondary_effect_hitbox_radius,
                 );
                 let runtime_bonus = on_controlled_champion_ability_bonus(
                     &mut self.controlled_champion_runtime,
                     ControlledChampionAbilityRuntimeInput {
-                        ability_power: self.vlad_stats.ability_power,
-                        ability_ap_ratio: self.offensive_tuning.e_ap_ratio,
+                        ability_power: self.controlled_champion_stats.ability_power,
+                        ability_ap_ratio: controlled_champion_offensive_ap_ratio(
+                            self.controlled_champion_script.as_ref(),
+                            ControlledChampionOffensiveAbility::Secondary,
+                        ),
                         now_seconds: self.time,
                     },
                 );
@@ -2554,34 +2602,45 @@ impl ControlledChampionCombatSimulation {
                 };
                 let dealt = self.apply_magic_damage_to_enemies_in_controlled_champion_range(
                     e_raw_damage,
-                    self.cast_profile.e_range,
-                    self.cast_profile.e_effect_hitbox_radius,
+                    self.cast_profile.offensive_secondary_range,
+                    self.cast_profile.offensive_secondary_effect_hitbox_radius,
                 ) + self.apply_magic_damage_to_enemies_in_controlled_champion_range(
                     runtime_bonus_per_target,
-                    self.cast_profile.e_range,
-                    self.cast_profile.e_effect_hitbox_radius,
+                    self.cast_profile.offensive_secondary_range,
+                    self.cast_profile.offensive_secondary_effect_hitbox_radius,
                 );
                 self.damage_dealt_total += dealt.max(0.0);
                 self.trace_event(
-                    "controlled_champion_e_hit",
-                    format!("{} E dealt {:.1}", self.controlled_champion_name, dealt),
+                    "controlled_champion_secondary_hit",
+                    format!(
+                        "{} {} dealt {:.1}",
+                        self.controlled_champion_name,
+                        self.cast_profile.offensive_secondary_ability_id,
+                        dealt
+                    ),
                 );
             }
-            EventType::ControlledChampionRHit => {
-                if !self.controlled_champion_uses_vladimir_script() {
+            EventType::ControlledChampionOffensiveUltimateHit => {
+                if !self.controlled_champion_script_enabled() {
                     return;
                 }
-                let r_raw_damage =
-                    r_damage_raw(self.offensive_tuning, self.vlad_stats.ability_power);
+                let r_raw_damage = controlled_champion_offensive_raw_damage(
+                    self.controlled_champion_script.as_ref(),
+                    ControlledChampionOffensiveAbility::Ultimate,
+                    self.controlled_champion_stats.ability_power,
+                );
                 let target_count = self.active_enemy_count_in_controlled_champion_range(
-                    self.cast_profile.r_range,
-                    self.cast_profile.r_effect_hitbox_radius,
+                    self.cast_profile.offensive_ultimate_range,
+                    self.cast_profile.offensive_ultimate_effect_hitbox_radius,
                 );
                 let runtime_bonus = on_controlled_champion_ability_bonus(
                     &mut self.controlled_champion_runtime,
                     ControlledChampionAbilityRuntimeInput {
-                        ability_power: self.vlad_stats.ability_power,
-                        ability_ap_ratio: self.offensive_tuning.r_ap_ratio,
+                        ability_power: self.controlled_champion_stats.ability_power,
+                        ability_ap_ratio: controlled_champion_offensive_ap_ratio(
+                            self.controlled_champion_script.as_ref(),
+                            ControlledChampionOffensiveAbility::Ultimate,
+                        ),
                         now_seconds: self.time,
                     },
                 );
@@ -2599,17 +2658,22 @@ impl ControlledChampionCombatSimulation {
                 };
                 let dealt = self.apply_magic_damage_to_enemies_in_controlled_champion_range(
                     r_raw_damage,
-                    self.cast_profile.r_range,
-                    self.cast_profile.r_effect_hitbox_radius,
+                    self.cast_profile.offensive_ultimate_range,
+                    self.cast_profile.offensive_ultimate_effect_hitbox_radius,
                 ) + self.apply_magic_damage_to_enemies_in_controlled_champion_range(
                     runtime_bonus_per_target,
-                    self.cast_profile.r_range,
-                    self.cast_profile.r_effect_hitbox_radius,
+                    self.cast_profile.offensive_ultimate_range,
+                    self.cast_profile.offensive_ultimate_effect_hitbox_radius,
                 );
                 self.damage_dealt_total += dealt.max(0.0);
                 self.trace_event(
-                    "controlled_champion_r_hit",
-                    format!("{} R dealt {:.1}", self.controlled_champion_name, dealt),
+                    "controlled_champion_ultimate_hit",
+                    format!(
+                        "{} {} dealt {:.1}",
+                        self.controlled_champion_name,
+                        self.cast_profile.offensive_ultimate_ability_id,
+                        dealt
+                    ),
                 );
             }
             EventType::ChampionScript(idx, script_event, epoch) => {
@@ -2904,9 +2968,6 @@ pub(crate) fn derive_enemy_combat_stats(
     }
 }
 
-#[allow(dead_code)]
-pub(super) type VladCombatSimulation = ControlledChampionCombatSimulation;
-
 #[allow(clippy::too_many_arguments)]
 pub(super) fn simulate_controlled_champion_combat(
     controlled_champion_base: &ChampionBase,
@@ -2926,29 +2987,6 @@ pub(super) fn simulate_controlled_champion_combat(
         controlled_champion_loadout_selection,
         controlled_champion_item_acquired_levels,
         controlled_champion_stack_overrides,
-        enemies,
-        sim.clone(),
-        urf.clone(),
-    );
-    runner.run_until_end()
-}
-
-#[allow(dead_code)]
-pub(super) fn simulate_vlad_combat(
-    vlad_base: &ChampionBase,
-    vlad_build_items: &[Item],
-    vlad_bonus_stats: &Stats,
-    vlad_item_acquired_levels: Option<&HashMap<String, usize>>,
-    enemies: &[(EnemyConfig, Vec<Item>, Stats)],
-    sim: &SimulationConfig,
-    urf: &UrfBuffs,
-) -> CombatOutcome {
-    let mut runner = ControlledChampionCombatSimulation::new(
-        vlad_base.clone(),
-        vlad_build_items,
-        vlad_bonus_stats,
-        vlad_item_acquired_levels,
-        None,
         enemies,
         sim.clone(),
         urf.clone(),

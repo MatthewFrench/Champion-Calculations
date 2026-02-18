@@ -1,12 +1,12 @@
-# URF Vladimir Objective Simulator
+# URF Controlled Champion Objective Simulator
 
-This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a fixed seed, it is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
+This simulator targets controlled-champion URF teamfight optimization with champion-specific behavior delegated through script capabilities (Vladimir is the current implemented controlled champion script). For a fixed seed, it is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
 - Combat runs with 2D positions (controlled champion fixed at origin; enemies maintain range with deterministic orbit/chase motion).
 - Simulation intentionally ignores vertical `z` index for now; combat checks use only 2D geometry (`x`,`y`) until a verified gameplay interaction requires `z`.
-- Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz` (legacy `VladCombatSimulation` alias remains available).
+- Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz`.
 - URF global buffs (ability/item haste, health cost multiplier, attack speed multipliers) are applied.
 - Enemy auto-attacks use start, windup, and hit phases.
 - Ranged attacks/spells include projectile travel time based on distance and speed.
@@ -35,7 +35,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
   - cooldown metrics resolve through shared runtime stat queries (ability/item/neutral sources)
   - scalar combat metrics resolve through shared runtime stat queries (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
   - modeled item cooldown passives (for example Heartsteel and Luden's Echo) load base cooldowns from canonical item effects data and then apply runtime haste/buff state
-- Vladimir combat sequencing decisions are script-owned and delegated from engine.
+- Controlled-champion combat sequencing decisions are delegated through a champion-script facade from engine (Vladimir is currently the implemented controlled-champion script).
 - Enemy champion script events are generated in scripts and applied by generic engine action handling.
 - Foundational combat primitives are present for future fidelity work:
   - generic status effects (duration/stacks/persistence)
@@ -95,7 +95,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
 - `src/build_order.rs`: Build-order stage simulation and optimization.
 - `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
 - `src/reporting.rs`: Markdown/JSON report generation.
-- `src/scenario_runner.rs`: Scenario mode execution orchestration (`vladimir`, `vladimir_step`, stat modes).
+- `src/scenario_runner.rs`: Scenario mode execution orchestration (`controlled_champion`, `controlled_champion_step`, stat modes).
 - `src/cache.rs`: In-memory and persisted score cache implementations.
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
@@ -114,11 +114,11 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
 source "$HOME/.cargo/env"
 cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   --scenario "vladimir_urf_teamfight" \
-  --mode vladimir
+  --mode controlled_champion
 ```
-- `vladimir` mode writes a markdown report to:
+- `controlled_champion` mode writes a markdown report to:
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.md`
-- `vladimir` mode writes a structured JSON report to:
+- `controlled_champion` mode writes a structured JSON report to:
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_run_report.json`
   where `<controlled_champion_key>` is the normalized champion name (for example: `vladimir`).
   where `<search_quality_profile>` is one of `fast`, `balanced`, `maximum_quality`.
@@ -136,6 +136,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Detailed search diagnostics including:
     - effective search seed used
     - coverage-stage diagnostics for `maximum_quality` (elapsed, assets covered, seeded candidates)
+    - explicit degraded-coverage warning/flag when coverage stage is incomplete
     - explicit simulation counts (new full simulations, unique scored candidates, total score requests)
     - search elapsed time and total run time (end-to-end)
     - cache hits/misses
@@ -154,6 +155,9 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
     - `event_encoding`: currently `structured`
     - `events[]`: objects with `timestamp_seconds`, `event_type`, `details`, and `raw`
   - trace includes explicit impact outcome events such as `projectile_blocked`, `impact_nullified`, `attack_missed`, and `ability_missed`.
+- Compatibility aliases:
+  - `--mode vladimir` maps to `--mode controlled_champion`.
+  - `--mode vladimir_step` maps to `--mode controlled_champion_step`.
 
 ## Runtime Controls
 - `--max-runtime-seconds N`:
@@ -204,12 +208,12 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 ```bash
 cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   --scenario "vladimir_urf_teamfight" \
-  --mode vladimir \
+  --mode controlled_champion \
   --threads 8
 ```
 
 ## Diverse Top Builds
-- `vladimir` mode can output top diverse builds near the best score:
+- `controlled_champion` mode can output top diverse builds near the best score:
   - `--top-x` number of diverse builds to keep (default `8`)
   - `--min-item-diff` minimum symmetric item difference between selected builds (default `2`)
   - `--max-relative-gap-percent` max score drop from best to still be considered (default `5.0`)
@@ -238,15 +242,16 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   --mode hecarim_ms
 ```
 
-## Vladimir Step Debug (Tick-by-Tick)
+## Controlled Champion Step Debug (Tick-by-Tick)
 ```bash
 source "$HOME/.cargo/env"
 cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   --scenario "vladimir_urf_teamfight" \
-  --mode vladimir_step \
+  --mode controlled_champion_step \
   --ticks 60
 ```
 - Step mode uses the first entry in `opponents.encounters` and prints the selected encounter name.
+- Compatibility alias: `--mode vladimir_step` is still accepted.
 - `--scenario` accepts either:
   - a full/relative file path, or
   - a scenario name resolved from `Simulation/scenarios/<name>.json`.
@@ -360,7 +365,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - Runtime validation rejects illegal pages before simulation (invalid path/slot/shard structure).
   - Loadout optimization is always on for controlled champion build scoring; there is no scenario shortlist/sample knob.
 - Enemy presets:
-  - `vladimir` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune pages/shards.
+  - `controlled_champion` mode uses `data/enemy_urf_presets.json` for enemy full builds and rune pages/shards.
   - Startup validation fails fast if a preset references missing item/rune/shard data.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - `maximum_quality` runs a pre-budget coverage stage that locks each item/rune/shard at least once, keeps top diverse candidates per locked asset, and injects those seeds into the main search.
@@ -393,11 +398,9 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - fallback default is loaded from `../Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`.
 - Protoplasm Harness lifeline trigger health:
   - `simulation.protoplasm_trigger_health_percent` is honored when provided; otherwise canonical item-data default is used.
-- Vladimir scripted ability knobs:
-  - `simulation.vlad_q_base_damage`, `simulation.vlad_q_ap_ratio`, `simulation.vlad_q_heal_ratio_of_damage`, `simulation.vlad_q_base_cooldown_seconds`
-  - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`
-  - `simulation.vlad_r_base_damage`, `simulation.vlad_r_ap_ratio`, `simulation.vlad_r_base_cooldown_seconds`
-  - fallback defaults are loaded from `../Characters/Vladimir.json` under `abilities.basic_ability_1`, `abilities.basic_ability_3`, and `abilities.ultimate` (effects plus cooldowns).
+- Legacy controlled champion tuning keys removed:
+  - parser rejects legacy `simulation.vlad_*` knobs.
+  - controlled champion offensive/defensive ability tuning must come from canonical champion data and script capabilities.
 - Enemy actor policy is scenario-minimal and data-driven:
   - `opponents.encounters[].actors[]` config only actor identity, level, placement, and optional stack overrides.
   - Champion damage/crowd-control behavior comes from canonical champion data plus champion scripts.
@@ -414,7 +417,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - Pareto-front tagging over objective/EHP/AP/cost-timing metrics (uses the same controlled champion stack overrides as objective simulation)
   - Cache hit/miss/wait diagnostics
 - Build-order optimization is focused on robust/Pareto builds first, with fallback to top builds if needed.
-- Vladimir loadout (runes/shards) is co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
+- Controlled champion loadout (runes/shards) is co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
 
 ## Multi-Scenario Objective
 - `opponents.encounters` is required and supports multiple weighted encounters.

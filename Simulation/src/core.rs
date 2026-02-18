@@ -474,11 +474,6 @@ pub(crate) fn compute_champion_final_stats(base: &ChampionBase, item_stats: &Sta
     stats
 }
 
-#[allow(dead_code)]
-pub(crate) fn compute_vlad_stats(base: &ChampionBase, item_stats: &Stats) -> Stats {
-    compute_champion_final_stats(base, item_stats)
-}
-
 pub(crate) fn normalized_objective_weights(
     survival: f64,
     damage: f64,

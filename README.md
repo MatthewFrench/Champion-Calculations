@@ -34,6 +34,10 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - top diverse seeds from that stage are injected into main search
   - runtime budget starts after coverage stage completes
   - popcorn progress-window timeout is applied after coverage (coverage itself is protected from popcorn early-stop checks)
+  - if coverage is incomplete (timeout boundary or non-finite candidate gaps), search continues in explicit degraded mode and reports a coverage warning flag
+- Persistent full-score cache partitioning now ignores runtime-random default seed values:
+  - deterministic seeds still partition cache explicitly
+  - default random-seed runs reuse a shared cache partition
 
 ## Directory Overview
 - `Simulation/`: Rust simulator, scenarios, reports, docs, and search pipeline.
@@ -59,8 +63,9 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 source "$HOME/.cargo/env"
 cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   --scenario "vladimir_urf_teamfight" \
-  --mode vladimir
+  --mode controlled_champion
 ```
+`vladimir` remains accepted as a compatibility alias for `controlled_champion`.
 
 ## License And Notices
 - Code and original repository content: `AGPL-3.0-or-later` (`LICENSE`).

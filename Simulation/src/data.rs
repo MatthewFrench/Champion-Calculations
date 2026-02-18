@@ -7,8 +7,7 @@ use std::path::{Path, PathBuf};
 use crate::defaults::{
     SearchQualityProfilePreset, controlled_champion_stasis_trigger_health_percent_default,
     guardian_angel_rebirth_defaults, protoplasm_lifeline_defaults, simulator_defaults,
-    urf_respawn_defaults, vladimir_offensive_ability_defaults, vladimir_sanguine_pool_defaults,
-    zhonya_time_stop_defaults,
+    urf_respawn_defaults, zhonya_time_stop_defaults,
 };
 use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
 
@@ -386,22 +385,11 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
     let defaults = simulator_defaults();
     let sim_defaults = &defaults.simulation_defaults;
     let urf_respawn = urf_respawn_defaults();
-    let pool_defaults = vladimir_sanguine_pool_defaults("vladimir").ok_or_else(|| {
-        anyhow!(
-            "Missing Characters/Vladimir.json abilities.basic_ability_2 defaults for Sanguine Pool"
-        )
-    })?;
     let zhonya_defaults = zhonya_time_stop_defaults();
     let guardian_angel_defaults = guardian_angel_rebirth_defaults();
     let protoplasm_defaults = protoplasm_lifeline_defaults();
     let controlled_champion_stasis_trigger_health_percent =
         controlled_champion_stasis_trigger_health_percent_default();
-    let vladimir_ability_defaults =
-        vladimir_offensive_ability_defaults("vladimir").ok_or_else(|| {
-            anyhow!(
-                "Missing Characters/Vladimir.json abilities.basic_ability_1/abilities.basic_ability_3/abilities.ultimate offensive defaults"
-            )
-        })?;
     if data.get("max_time_seconds").is_some() {
         bail!(
             "simulation.max_time_seconds is no longer supported. Use simulation.time_limit_seconds."
@@ -416,6 +404,32 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         bail!(
             "simulation.item_stacks_at_level_20 is no longer supported. Use simulation.stack_overrides."
         );
+    }
+    for legacy_key in [
+        "vlad_pool_rank",
+        "vlad_pool_untargetable_seconds",
+        "vlad_pool_cost_percent_current_health",
+        "vlad_pool_heal_ratio_of_damage",
+        "vlad_pool_base_damage_by_rank",
+        "vlad_pool_base_cooldown_seconds_by_rank",
+        "vlad_pool_bonus_health_ratio",
+        "vlad_q_base_damage",
+        "vlad_q_ap_ratio",
+        "vlad_q_heal_ratio_of_damage",
+        "vlad_q_base_cooldown_seconds",
+        "vlad_e_base_damage",
+        "vlad_e_ap_ratio",
+        "vlad_e_base_cooldown_seconds",
+        "vlad_r_base_damage",
+        "vlad_r_ap_ratio",
+        "vlad_r_base_cooldown_seconds",
+    ] {
+        if data.get(legacy_key).is_some() {
+            bail!(
+                "simulation.{} is no longer supported. Controlled champion ability tuning must come from canonical champion data and controlled champion script capabilities.",
+                legacy_key
+            );
+        }
     }
     let server_tick_rate_hz = data
         .get("server_tick_rate_hz")
@@ -439,38 +453,6 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
     let protoplasm_heal_total_default = protoplasm_defaults.heal_total_min
         + (protoplasm_defaults.heal_total_max - protoplasm_defaults.heal_total_min)
             * protoplasm_level_t;
-
-    let base_damage = data
-        .get("vlad_pool_base_damage_by_rank")
-        .and_then(Value::as_array)
-        .map(|values| {
-            values
-                .iter()
-                .map(|v| v.as_f64().ok_or_else(|| anyhow!("Invalid base damage")))
-                .collect::<Result<Vec<_>>>()
-        })
-        .transpose()?
-        .unwrap_or_else(|| pool_defaults.base_damage_by_rank.clone());
-    let pool_cooldown_by_rank = data
-        .get("vlad_pool_base_cooldown_seconds_by_rank")
-        .and_then(Value::as_array)
-        .map(|values| {
-            values
-                .iter()
-                .map(|v| {
-                    v.as_f64()
-                        .ok_or_else(|| anyhow!("Invalid Sanguine Pool cooldown value"))
-                })
-                .collect::<Result<Vec<_>>>()
-        })
-        .transpose()?
-        .unwrap_or_else(|| pool_defaults.base_cooldown_seconds_by_rank.clone());
-    if base_damage.is_empty() {
-        bail!("vlad_pool_base_damage_by_rank must include at least one value");
-    }
-    if pool_cooldown_by_rank.is_empty() {
-        bail!("vlad_pool_base_cooldown_seconds_by_rank must include at least one value");
-    }
 
     let max_time_seconds = data
         .get("time_limit_seconds")
@@ -498,29 +480,7 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         server_tick_rate_hz,
         champion_level,
         max_time_seconds,
-        vlad_pool_rank: data
-            .get("vlad_pool_rank")
-            .and_then(Value::as_u64)
-            .unwrap_or(pool_defaults.default_rank as u64)
-            .max(1) as usize,
-        vlad_pool_untargetable_seconds: data
-            .get("vlad_pool_untargetable_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(pool_defaults.untargetable_seconds),
-        vlad_pool_cost_percent_current_health: data
-            .get("vlad_pool_cost_percent_current_health")
-            .and_then(Value::as_f64)
-            .unwrap_or(pool_defaults.cost_percent_current_health),
-        vlad_pool_heal_ratio_of_damage: data
-            .get("vlad_pool_heal_ratio_of_damage")
-            .and_then(Value::as_f64)
-            .unwrap_or(pool_defaults.heal_ratio_of_damage),
-        vlad_pool_base_damage_by_rank: base_damage,
-        vlad_pool_base_cooldown_seconds_by_rank: pool_cooldown_by_rank,
-        vlad_pool_bonus_health_ratio: data
-            .get("vlad_pool_bonus_health_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(pool_defaults.bonus_health_ratio),
+        controlled_champion_script: None,
         zhonya_duration_seconds: data
             .get("zhonya_duration_seconds")
             .and_then(Value::as_f64)
@@ -586,46 +546,6 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             .get("urf_respawn_time_scaling_cap_seconds")
             .and_then(Value::as_f64)
             .unwrap_or(urf_respawn.time_scaling_cap_seconds),
-        vlad_q_base_damage: data
-            .get("vlad_q_base_damage")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.q_base_damage),
-        vlad_q_ap_ratio: data
-            .get("vlad_q_ap_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.q_ap_ratio),
-        vlad_q_heal_ratio_of_damage: data
-            .get("vlad_q_heal_ratio_of_damage")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.q_heal_ratio_of_damage),
-        vlad_q_base_cooldown_seconds: data
-            .get("vlad_q_base_cooldown_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.q_base_cooldown_seconds),
-        vlad_e_base_damage: data
-            .get("vlad_e_base_damage")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.e_base_damage),
-        vlad_e_ap_ratio: data
-            .get("vlad_e_ap_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.e_ap_ratio),
-        vlad_e_base_cooldown_seconds: data
-            .get("vlad_e_base_cooldown_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.e_base_cooldown_seconds),
-        vlad_r_base_damage: data
-            .get("vlad_r_base_damage")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.r_base_damage),
-        vlad_r_ap_ratio: data
-            .get("vlad_r_ap_ratio")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.r_ap_ratio),
-        vlad_r_base_cooldown_seconds: data
-            .get("vlad_r_base_cooldown_seconds")
-            .and_then(Value::as_f64)
-            .unwrap_or(vladimir_ability_defaults.r_base_cooldown_seconds),
     })
 }
 

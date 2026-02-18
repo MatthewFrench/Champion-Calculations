@@ -1,4 +1,5 @@
 use super::*;
+use clap::Parser;
 
 #[test]
 fn loadout_selection_key_is_order_sensitive() {
@@ -71,6 +72,49 @@ fn random_loadout_generation_produces_legal_shapes() {
         assert_eq!(sample.rune_names.len(), 6);
         assert_eq!(sample.shard_stats.len(), 3);
     }
+}
+
+#[test]
+fn cli_mode_parsing_accepts_generic_names_and_legacy_aliases() {
+    let controlled = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "controlled_champion",
+    ])
+    .expect("controlled_champion mode should parse");
+    assert!(matches!(controlled.mode, Mode::ControlledChampion));
+
+    let controlled_alias = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "vladimir",
+    ])
+    .expect("legacy vladimir alias should parse");
+    assert!(matches!(controlled_alias.mode, Mode::ControlledChampion));
+
+    let step = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "controlled_champion_step",
+    ])
+    .expect("controlled_champion_step mode should parse");
+    assert!(matches!(step.mode, Mode::ControlledChampionStep));
+
+    let step_alias = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "vladimir_step",
+    ])
+    .expect("legacy vladimir_step alias should parse");
+    assert!(matches!(step_alias.mode, Mode::ControlledChampionStep));
 }
 
 #[test]
@@ -153,4 +197,29 @@ fn urf_respawn_timer_increases_with_game_time_after_scaling_start() {
     let before = respawn::urf_respawn_delay_seconds(level, 240.0, tuning);
     let after = respawn::urf_respawn_delay_seconds(level, 1200.0, tuning);
     assert!(after > before);
+}
+
+#[test]
+fn shared_core_modules_do_not_include_vladimir_shortcuts() {
+    let src_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
+    for module_path in ["engine.rs", "core.rs", "search.rs", "reporting.rs"] {
+        let source = std::fs::read_to_string(src_dir.join(module_path))
+            .unwrap_or_else(|err| panic!("failed reading {}: {}", module_path, err));
+        let lowered = source.to_ascii_lowercase();
+        for forbidden in [
+            "vlad_",
+            "simulate_vlad",
+            "transfusion",
+            "tides of blood",
+            "hemoplague",
+            "sanguine pool",
+        ] {
+            assert!(
+                !lowered.contains(forbidden),
+                "{} contains forbidden Vladimir-specific shortcut '{}'",
+                module_path,
+                forbidden
+            );
+        }
+    }
 }

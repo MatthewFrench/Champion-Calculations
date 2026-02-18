@@ -129,19 +129,20 @@ fn test_enemy_with_role(name: &str, is_melee: bool) -> EnemyConfig {
     enemy
 }
 
-fn test_simulation(max_time_seconds: f64, q_base_damage: f64) -> SimulationConfig {
+fn test_simulation(
+    max_time_seconds: f64,
+    controlled_champion_script_enabled: bool,
+) -> SimulationConfig {
     SimulationConfig {
         dt: 1.0 / 30.0,
         server_tick_rate_hz: 30.0,
         champion_level: 20,
         max_time_seconds,
-        vlad_pool_rank: 5,
-        vlad_pool_untargetable_seconds: 0.0,
-        vlad_pool_cost_percent_current_health: 0.0,
-        vlad_pool_heal_ratio_of_damage: 0.0,
-        vlad_pool_base_damage_by_rank: vec![0.0, 0.0, 0.0, 0.0, 0.0],
-        vlad_pool_base_cooldown_seconds_by_rank: vec![28.0, 25.0, 22.0, 19.0, 16.0],
-        vlad_pool_bonus_health_ratio: 0.0,
+        controlled_champion_script: if controlled_champion_script_enabled {
+            crate::scripts::champions::resolve_controlled_champion_script("Vladimir")
+        } else {
+            None
+        },
         zhonya_duration_seconds: 2.5,
         zhonya_cooldown_seconds: 120.0,
         zhonya_trigger_health_percent: 0.0,
@@ -159,16 +160,6 @@ fn test_simulation(max_time_seconds: f64, q_base_damage: f64) -> SimulationConfi
         urf_respawn_time_scaling_start_seconds: 300.0,
         urf_respawn_time_scaling_per_minute_seconds: 0.4,
         urf_respawn_time_scaling_cap_seconds: 20.0,
-        vlad_q_base_damage: q_base_damage,
-        vlad_q_ap_ratio: 0.6,
-        vlad_q_heal_ratio_of_damage: 0.0,
-        vlad_q_base_cooldown_seconds: 1.0,
-        vlad_e_base_damage: 0.0,
-        vlad_e_ap_ratio: 0.0,
-        vlad_e_base_cooldown_seconds: 999.0,
-        vlad_r_base_damage: 0.0,
-        vlad_r_ap_ratio: 0.0,
-        vlad_r_base_cooldown_seconds: 999.0,
     }
 }
 
@@ -192,7 +183,7 @@ fn controlled_champion_loadout_runtime_increases_spell_damage_when_selected() {
         ability_power: 250.0,
         ..Stats::default()
     };
-    let sim = test_simulation(4.0, 200.0);
+    let sim = test_simulation(4.0, true);
     let urf = test_urf();
     let outcome_without_runtime = simulate_controlled_champion_combat(
         &base,
@@ -228,7 +219,7 @@ fn controlled_champion_second_wind_runtime_adds_regeneration_ticks() {
     let base = test_controlled_champion_base();
     let enemy = test_enemy("Sona");
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let sim = test_simulation(12.0, 0.0);
+    let sim = test_simulation(12.0, false);
     let urf = test_urf();
     let outcome_without_runtime = simulate_controlled_champion_combat(
         &base,
@@ -265,7 +256,7 @@ fn trace_emits_initial_state_snapshot_with_checkpoint_zero() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy("Sona");
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let simulation = test_simulation(1.0, 0.0);
+    let simulation = test_simulation(1.0, false);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(
@@ -292,7 +283,7 @@ fn trace_emits_initial_state_snapshot_with_checkpoint_zero() {
 fn trace_emits_periodic_snapshots_every_five_seconds() {
     let controlled_champion = test_controlled_champion_base();
     let enemies: Vec<(EnemyConfig, Vec<Item>, Stats)> = Vec::new();
-    let simulation = test_simulation(12.0, 0.0);
+    let simulation = test_simulation(12.0, false);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(
@@ -327,7 +318,7 @@ fn damage_trace_includes_source_champion_and_ability() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy("Sona");
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let simulation = test_simulation(3.0, 0.0);
+    let simulation = test_simulation(3.0, false);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(
@@ -361,7 +352,7 @@ fn miss_trace_includes_reason_text() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy("Sona");
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let simulation = test_simulation(1.0, 120.0);
+    let simulation = test_simulation(1.0, true);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(
@@ -378,7 +369,7 @@ fn miss_trace_includes_reason_text() {
     runner.schedule_event(
         0.0,
         34,
-        EventType::ControlledChampionQHit {
+        EventType::ControlledChampionOffensivePrimaryHit {
             idx: 0,
             source: Vec2 { x: 0.0, y: 0.0 },
             target_at_cast: Vec2 {
@@ -396,7 +387,7 @@ fn miss_trace_includes_reason_text() {
         runner
             .trace_events()
             .iter()
-            .any(|entry| entry.contains("[controlled_champion_q_miss]")
+            .any(|entry| entry.contains("[controlled_champion_primary_miss]")
                 && entry.contains("target outside hitbox path")),
         "expected miss trace to include miss reason"
     );
@@ -407,7 +398,7 @@ fn melee_attack_is_cancelled_when_attacker_is_stunned_during_windup() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy_with_role("Melee Tester", true);
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let simulation = test_simulation(2.0, 0.0);
+    let simulation = test_simulation(2.0, false);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(
@@ -441,7 +432,7 @@ fn projectile_impact_on_stasis_is_nullified() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy("Sona");
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let simulation = test_simulation(1.0, 0.0);
+    let simulation = test_simulation(1.0, false);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(
@@ -478,7 +469,7 @@ fn enemy_cannot_auto_attack_while_invulnerable() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy("Sona");
     let enemies = vec![(enemy, Vec::new(), Stats::default())];
-    let simulation = test_simulation(1.0, 0.0);
+    let simulation = test_simulation(1.0, false);
     let urf = test_urf();
 
     let mut runner = ControlledChampionCombatSimulation::new(

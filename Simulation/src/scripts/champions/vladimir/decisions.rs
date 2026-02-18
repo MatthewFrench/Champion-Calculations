@@ -1,5 +1,4 @@
 use super::abilities::VladimirAbilityCooldowns;
-use crate::defaults::vladimir_cast_profile_defaults;
 
 #[derive(Debug, Clone)]
 pub(crate) struct VladimirCastProfile {
@@ -73,29 +72,6 @@ pub(crate) struct VladimirDefensiveAbilityDecisionInput {
 #[derive(Debug, Clone, Copy, Default)]
 pub(crate) struct VladimirDefensiveAbilityDecisions {
     pub cast_pool: bool,
-}
-
-pub(crate) fn default_cast_profile() -> VladimirCastProfile {
-    let defaults = vladimir_cast_profile_defaults("vladimir")
-        .unwrap_or_else(|| panic!("Missing Characters/Vladimir.json abilities.*.execution"));
-    VladimirCastProfile {
-        q_ability_id: defaults.q_ability_id.clone(),
-        e_ability_id: defaults.e_ability_id.clone(),
-        r_ability_id: defaults.r_ability_id.clone(),
-        pool_ability_id: defaults.pool_ability_id.clone(),
-        q_range: defaults.q_range,
-        q_windup_seconds: defaults.q_windup_seconds,
-        q_projectile_speed: defaults.q_projectile_speed,
-        q_effect_hitbox_radius: defaults.q_effect_hitbox_radius,
-        e_range: defaults.e_range,
-        e_windup_seconds: defaults.e_windup_seconds,
-        e_projectile_speed: defaults.e_projectile_speed,
-        e_effect_hitbox_radius: defaults.e_effect_hitbox_radius,
-        r_range: defaults.r_range,
-        r_windup_seconds: defaults.r_windup_seconds,
-        r_projectile_speed: defaults.r_projectile_speed,
-        r_effect_hitbox_radius: defaults.r_effect_hitbox_radius,
-    }
 }
 
 fn projectile_travel_seconds(distance: f64, speed: f64) -> f64 {
