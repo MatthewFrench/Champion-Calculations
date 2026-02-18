@@ -1,4 +1,3 @@
-
 use super::*;
 
 fn selection_with(rune_names: &[&str]) -> LoadoutSelection {

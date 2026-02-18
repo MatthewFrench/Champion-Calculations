@@ -1,4 +1,3 @@
-
 use super::*;
 
 fn base_script_input(event: ChampionScriptEvent) -> ChampionScriptExecutionInput {

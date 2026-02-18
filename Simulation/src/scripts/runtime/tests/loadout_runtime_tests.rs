@@ -1,4 +1,3 @@
-
 use super::*;
 
 fn default_on_hit_profile() -> OnHitEffectProfile {
