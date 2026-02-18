@@ -1019,7 +1019,7 @@ pub(super) fn run_controlled_champion_scenario(
                 damage_dealt: damage_reference,
                 healing_done: controlled_champion_base.base_health.max(1.0),
                 enemy_kills: enemy_builds_s.len().max(1),
-                invulnerable_seconds: 1.0,
+                invulnerable_seconds: sim.max_time_seconds.max(1.0),
             }
         })
         .collect::<Vec<_>>();

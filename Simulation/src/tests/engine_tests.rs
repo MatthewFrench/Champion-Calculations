@@ -348,6 +348,43 @@ fn damage_trace_includes_source_champion_and_ability() {
 }
 
 #[test]
+fn offensive_ultimate_is_prioritized_before_defensive_ability_two_when_both_ready() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Sona");
+    enemy.spawn_position_xy = Some((200.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(1.0, true);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let defensive_ability_two_id = runner.cast_profile.defensive_ability_two_id.clone();
+    let offensive_ultimate_id = runner.cast_profile.offensive_ultimate_ability_id.clone();
+
+    let _ = runner.step(1);
+
+    assert!(
+        runner.controlled_champion_ability_ready_at(&offensive_ultimate_id) > 0.0,
+        "offensive ultimate should be cast when ready and target is in range"
+    );
+    assert_eq!(
+        runner.controlled_champion_ability_ready_at(&defensive_ability_two_id),
+        0.0,
+        "defensive ability two should be delayed when offensive ultimate is ready this tick"
+    );
+}
+
+#[test]
 fn miss_trace_includes_reason_text() {
     let controlled_champion = test_controlled_champion_base();
     let enemy = test_enemy("Sona");

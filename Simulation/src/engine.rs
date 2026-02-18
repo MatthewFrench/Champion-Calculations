@@ -1934,18 +1934,40 @@ impl ControlledChampionCombatSimulation {
         self.refresh_enemy_respawns();
 
         if self.controlled_champion_script_enabled() {
+            let can_cast_now = self.can_cast();
+            let offensive_ultimate_equipped = self
+                .controlled_champion_ability_loadout
+                .slot_for_ability(&self.cast_profile.offensive_ultimate_ability_id)
+                .is_some();
+            let offensive_ultimate_ready_at = self.controlled_champion_ability_ready_at(
+                &self.cast_profile.offensive_ultimate_ability_id,
+            );
+            // Give offensive ultimate one tick of priority over defensive ability two so script
+            // cadence can weave key offense before entering untargetable windows.
+            let prioritize_offensive_ultimate_over_defensive_ability_two = can_cast_now
+                && offensive_ultimate_equipped
+                && self.time >= offensive_ultimate_ready_at
+                && self
+                    .max_enemy_distance_in_controlled_champion_range(
+                        self.cast_profile.offensive_ultimate_range,
+                        self.cast_profile.offensive_ultimate_effect_hitbox_radius,
+                    )
+                    .is_some();
+
             let defensive_ability = decide_controlled_champion_defensive_ability_activations(
                 self.controlled_champion_script.as_ref(),
                 ControlledChampionDefensiveAbilityDecisionInput {
                     now_seconds: self.time,
-                    can_cast: self.can_cast(),
+                    can_cast: can_cast_now,
                     defensive_ability_two_ready_at: self.controlled_champion_ability_ready_at(
                         &self.cast_profile.defensive_ability_two_id,
                     ),
                 },
             );
 
-            if defensive_ability.cast_defensive_ability_two {
+            if defensive_ability.cast_defensive_ability_two
+                && !prioritize_offensive_ultimate_over_defensive_ability_two
+            {
                 let defensive_ability_two_id = self.cast_profile.defensive_ability_two_id.clone();
                 self.set_controlled_champion_ability_ready_at(
                     &defensive_ability_two_id,

@@ -159,12 +159,13 @@ pub(crate) fn apply_stat_bonus(
             }
         }
         "cooldown" => {
-            // Approximate CDR% to AH for deterministic use.
-            let pct = if is_percent_unit {
-                value / 100.0
-            } else {
-                value
-            };
+            // Only percentage cooldown reduction maps to deterministic ability haste.
+            // Cooldown values expressed in seconds describe ability/summoner timings and should
+            // not inflate champion runtime stats.
+            if !is_percent_unit {
+                return false;
+            }
+            let pct = value / 100.0;
             let pct = pct.clamp(0.0, 0.95);
             let ah = 100.0 * pct / (1.0 - pct);
             stats.ability_haste += ah;

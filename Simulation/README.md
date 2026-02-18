@@ -62,6 +62,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - enemy champions killed
   - invulnerable/untargetable seconds
   with configurable weights and per-scenario reference normalization.
+  - invulnerable-seconds normalization is anchored to scenario horizon (time limit), preventing runaway objective inflation from near-permanent untargetable loops.
 - Objective evaluation now supports selection-aware combat simulation so candidate loadout scoring includes combat-time runtime scripts.
 - Default ownership is domain-based:
   - global simulator/search/engine defaults: `data/simulator_defaults.json`

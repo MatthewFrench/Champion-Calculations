@@ -45,6 +45,8 @@ This file is a concise handoff for developers and AI agents.
   - `loadout.season2016_masteries`
 - Legacy simulation tuning keys now fail fast:
   - `simulation.vlad_*`
+- Deterministic loadout stat parsing no longer maps cooldown values expressed in seconds to ability haste.
+- Scenario objective invulnerable-seconds normalization now references scenario horizon (instead of a fixed one-second baseline).
 - Enemy respawn delay now uses each enemy actor's own level.
 - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions.
 

@@ -13,6 +13,8 @@
 - Prevented persistent cache fragmentation for default random-seed runs:
   - persistent full-score cache partitioning now uses deterministic configured seed ownership; runtime-random default seeds share a stable cache partition
 - Hardened search/runtime correctness and schema fail-fast behavior:
+  - cooldown effects expressed in seconds are no longer converted into ability haste during deterministic loadout stat parsing
+  - invulnerable-seconds objective normalization now references scenario horizon instead of a fixed one-second baseline
   - candidate generation can now score partial builds during strategy branching (improves greedy/beam pruning quality), while strict final ranking remains full-candidate only
   - `maximum_quality` coverage stage no longer uses popcorn progress-window timeout checks, preserving coverage guarantees before timed search
   - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions
@@ -334,6 +336,26 @@
   - Success criteria:
     - CI includes at least one passing non-Vladimir controlled-champion integration path.
     - regressions in generic controlled-champion orchestration are caught early.
+
+- [P1] Controlled champion defensive ability risk-gate policy (discussion needed)
+  - Goal: avoid unconditional defensive-ability spam while preserving intended “pool in multi-enemy windows” behavior.
+  - Scope:
+    - design a reusable risk gate for defensive ability two (for example low-health threshold and/or imminent-burst/projectile window).
+    - keep defensive ability damage identity in scripts, but gate activation based on risk-aware policy.
+    - ensure offensive weaving opportunities (for example ultimate priority) remain possible when risk is low.
+  - Success criteria:
+    - defensive ability casts are no longer purely cooldown-driven.
+    - behavior remains deterministic and data/script-driven.
+
+- [P1] Objective invulnerability contribution guardrail cap/curve (discussion needed)
+  - Goal: prevent objective exploitation from excessive invulnerable/untargetable uptime under future tuning drift.
+  - Scope:
+    - evaluate soft cap and/or diminishing-return curve for invulnerability objective contribution.
+    - preserve invulnerability as a meaningful metric without allowing it to dominate mixed objectives.
+    - document selected approach and rationale in simulator docs/report diagnostics.
+  - Success criteria:
+    - invulnerability contribution cannot overwhelm objective ranking.
+    - scoring remains interpretable and stable across search profiles.
 
 - [P2] Vertical `z` dimension modeling decision
   - Goal: explicitly track and validate whether vertical `z` index impacts gameplay outcomes in simulator scope.

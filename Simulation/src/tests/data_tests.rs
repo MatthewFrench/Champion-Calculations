@@ -151,6 +151,56 @@ fn scenario_controlled_champion_script_uses_canonical_ability_defaults() {
 }
 
 #[test]
+fn apply_structured_effect_ignores_cooldown_seconds_for_static_stats() {
+    let mut stats = Stats::default();
+    let effect = serde_json::json!({
+        "effect_type": "cooldown",
+        "stat": "cooldown",
+        "unit": "seconds",
+        "formula": {
+            "type": "flat",
+            "value": 6.0
+        }
+    });
+    let applied = apply_structured_effect(&effect, 1, 20, true, &mut stats)
+        .expect("seconds-based cooldown effect should parse");
+    assert!(
+        !applied,
+        "seconds-based cooldown effects should not be converted into ability haste"
+    );
+    assert_close(
+        stats.ability_haste,
+        0.0,
+        "seconds-based cooldown effect must not change ability_haste",
+    );
+}
+
+#[test]
+fn apply_structured_effect_maps_percent_cooldown_to_ability_haste() {
+    let mut stats = Stats::default();
+    let effect = serde_json::json!({
+        "effect_type": "cooldown",
+        "stat": "cooldown",
+        "unit": "percent",
+        "formula": {
+            "type": "flat",
+            "value": 10.0
+        }
+    });
+    let applied = apply_structured_effect(&effect, 1, 20, true, &mut stats)
+        .expect("percent cooldown effect should parse");
+    assert!(
+        applied,
+        "percent cooldown effect should map to ability haste"
+    );
+    assert_close(
+        stats.ability_haste,
+        100.0 * 0.10 / (1.0 - 0.10),
+        "10% cooldown should map to deterministic ability haste",
+    );
+}
+
+#[test]
 fn load_champion_bases_skips_support_defaults_file() {
     let bases = load_champion_bases().expect("champion bases should load");
     assert!(
