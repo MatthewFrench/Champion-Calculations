@@ -1295,9 +1295,9 @@ impl ControlledChampionCombatSimulation {
         ));
     }
 
-    fn enemy_respawn_delay_seconds(&self) -> f64 {
+    fn enemy_respawn_delay_seconds(&self, enemy_level: usize) -> f64 {
         respawn::urf_respawn_delay_seconds(
-            self.sim.champion_level,
+            enemy_level,
             self.time,
             respawn::UrfRespawnTuning {
                 urf_flat_reduction_seconds: self.sim.urf_respawn_flat_reduction_seconds,
@@ -1658,7 +1658,12 @@ impl ControlledChampionCombatSimulation {
         if mitigated <= 0.0 {
             return 0.0;
         }
-        let respawn_delay = self.enemy_respawn_delay_seconds();
+        let enemy_level = self
+            .enemy_state
+            .get(idx)
+            .map(|state| state.enemy.level)
+            .unwrap_or(self.sim.champion_level);
+        let respawn_delay = self.enemy_respawn_delay_seconds(enemy_level);
         let mut killed_name = None;
         let dealt = {
             let state = &mut self.enemy_state[idx];

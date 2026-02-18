@@ -1,6 +1,16 @@
 # Improvement Tracker
 
 ## Done
+- Hardened search/runtime correctness and schema fail-fast behavior:
+  - candidate generation can now score partial builds during strategy branching (improves greedy/beam pruning quality), while strict final ranking remains full-candidate only
+  - `maximum_quality` coverage stage no longer uses popcorn progress-window timeout checks, preserving coverage guarantees before timed search
+  - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions
+  - `simulation.protoplasm_trigger_health_percent` is now honored when provided
+  - when `controlled_champion.level` overrides simulation fallback level, Protoplasm level-scaled defaults are recomputed to the effective controlled level unless explicitly overridden
+  - loadout parsing now fails fast on deprecated keys instead of silently ignoring them:
+    - `loadout.runes_reforged.rune_ids`
+    - `loadout.season2016_masteries`
+  - enemy respawn delay now uses each enemy actor's own level in mixed-level scenarios
 - Added buff-aware runtime stat resolution for cooldown metrics:
   - introduced shared runtime stat resolver (`src/scripts/runtime/stat_resolution.rs`) that starts from base metric data and applies runtime buff state before use
   - item cooldowns for modeled runtime effects now load from canonical item data and resolve through buff state:

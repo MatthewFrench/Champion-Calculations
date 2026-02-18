@@ -179,6 +179,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Scope:
   - remove mastery parsing, preset fields, docs, and script modules
   - enforce modern rune-page legality and shard-slot legality as the only loadout page system
+- Recent progress:
+  - loadout parsing now fails fast on deprecated keys (`loadout.runes_reforged.rune_ids`, `loadout.season2016_masteries`) instead of silently dropping them.
 - Success criteria:
   - no mastery fields remain in scenario/preset/runtime schemas.
   - invalid rune pages are rejected before simulation.
@@ -198,6 +200,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 17. `DONE` Full death-timer model including game-time scaling.
 - Scope:
   - include time increase factor and URF modifiers
+- Recent progress:
+  - enemy respawn delay now resolves with each enemy actor's level (not global controlled-champion level), preserving mixed-level encounter correctness.
 - Success criteria:
   - respawn timing tracks expected rules across level and game time.
 
@@ -256,6 +260,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - touch each legal item/rune/shard asset at least once before timed optimization
   - collect per-asset top diverse candidates and inject into main search pool
   - start time-budget accounting after coverage stage completion
+- Recent progress:
+  - popcorn progress-window timeout no longer interrupts coverage-stage execution; coverage remains pre-budget and breadth-guaranteed.
 - Success criteria:
   - breadth floor is guaranteed for high-quality runs and reported in diagnostics.
 

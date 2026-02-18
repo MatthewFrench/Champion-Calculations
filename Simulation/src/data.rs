@@ -545,7 +545,10 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
             .get("ga_revive_base_health_ratio")
             .and_then(Value::as_f64)
             .unwrap_or(guardian_angel_defaults.revive_base_health_ratio),
-        protoplasm_trigger_health_percent: protoplasm_defaults.trigger_health_percent,
+        protoplasm_trigger_health_percent: data
+            .get("protoplasm_trigger_health_percent")
+            .and_then(Value::as_f64)
+            .unwrap_or(protoplasm_defaults.trigger_health_percent),
         protoplasm_bonus_health: data
             .get("protoplasm_bonus_health")
             .and_then(Value::as_f64)
@@ -928,13 +931,21 @@ pub(crate) fn apply_search_quality_profile(
     }
 }
 
-pub(crate) fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection {
+pub(crate) fn parse_loadout_selection(data: Option<&Value>) -> Result<LoadoutSelection> {
     let mut out = LoadoutSelection::default();
     let Some(obj) = data.and_then(Value::as_object) else {
-        return out;
+        return Ok(out);
     };
+    if obj.get("season2016_masteries").is_some() {
+        bail!("loadout.season2016_masteries is no longer supported. Use loadout.runes_reforged.");
+    }
 
     if let Some(runes_obj) = obj.get("runes_reforged").and_then(Value::as_object) {
+        if runes_obj.get("rune_ids").is_some() {
+            bail!(
+                "loadout.runes_reforged.rune_ids is no longer supported. Use loadout.runes_reforged.rune_names."
+            );
+        }
         if let Some(names) = runes_obj.get("rune_names").and_then(Value::as_array) {
             out.rune_names = names
                 .iter()
@@ -950,7 +961,7 @@ pub(crate) fn parse_loadout_selection(data: Option<&Value>) -> LoadoutSelection 
                 .collect();
         }
     }
-    out
+    Ok(out)
 }
 
 pub(crate) fn loadout_selection_key(sel: &LoadoutSelection) -> String {

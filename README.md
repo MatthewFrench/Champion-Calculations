@@ -33,6 +33,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - every legal item/rune/shard asset is explicitly touched at least once
   - top diverse seeds from that stage are injected into main search
   - runtime budget starts after coverage stage completes
+  - popcorn progress-window timeout is applied after coverage (coverage itself is protected from popcorn early-stop checks)
 
 ## Directory Overview
 - `Simulation/`: Rust simulator, scenarios, reports, docs, and search pipeline.

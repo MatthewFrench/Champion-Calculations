@@ -13,6 +13,7 @@ use std::time::{Duration, Instant};
 use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
 use crate::data::parse_stack_overrides_map;
+use crate::defaults::protoplasm_lifeline_defaults;
 use crate::engine::{
     ControlledChampionCombatSimulation, EnemyDerivedCombatStats, derive_enemy_combat_stats,
 };
@@ -468,7 +469,7 @@ fn parse_controlled_champion_config(
             "controlled_champion.baseline_items is no longer supported."
         ));
     }
-    let loadout_selection = parse_loadout_selection(controlled_champion.get("loadout"));
+    let loadout_selection = parse_loadout_selection(controlled_champion.get("loadout"))?;
     let champion_base = lookup_champion_base(champion_bases, champion_name)?;
     let level = controlled_champion
         .get("level")
@@ -744,8 +745,10 @@ pub(super) fn run_controlled_champion_scenario(
         significant_events: 0,
         last_significant_at: run_start,
     }));
+    let hard_deadline_value = || hard_deadline_state.lock().ok().and_then(|state| *state);
+    let coverage_stage_deadline = || hard_deadline_value();
     let current_deadline = || {
-        let hard_deadline = hard_deadline_state.lock().ok().and_then(|state| *state);
+        let hard_deadline = hard_deadline_value();
         let progress_deadline = popcorn_window.map(|window| {
             let last_significant_at = progress_state
                 .lock()
@@ -759,6 +762,13 @@ pub(super) fn run_controlled_champion_scenario(
             (Some(a), None) => Some(a),
             (None, Some(b)) => Some(b),
             (None, None) => None,
+        }
+    };
+    let deadline_for_search_type = |search_type: &str| {
+        if search_type == "coverage_stage" {
+            coverage_stage_deadline()
+        } else {
+            current_deadline()
         }
     };
     let record_score_progress = |score: f64| {
@@ -808,11 +818,10 @@ pub(super) fn run_controlled_champion_scenario(
     let scenario = load_json(scenario_path)?;
     status.emit("initialization", None, None, Some("core data loaded"), true);
 
-    let mut sim = parse_simulation_config(
-        scenario
-            .get("simulation")
-            .ok_or_else(|| anyhow!("Missing simulation"))?,
-    )?;
+    let simulation_config = scenario
+        .get("simulation")
+        .ok_or_else(|| anyhow!("Missing simulation"))?;
+    let mut sim = parse_simulation_config(simulation_config)?;
     if deadline_reached(current_deadline()) {
         timeout_flag.store(1, AtomicOrdering::Relaxed);
     }
@@ -823,7 +832,22 @@ pub(super) fn run_controlled_champion_scenario(
         sim.champion_level,
         &sim.stack_overrides,
     )?;
+    let simulation_level_before_controlled_override = sim.champion_level;
     sim.champion_level = controlled_champion_config.level;
+    if sim.champion_level != simulation_level_before_controlled_override {
+        let protoplasm_defaults = protoplasm_lifeline_defaults();
+        let protoplasm_level_t = ((sim.champion_level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+        if simulation_config.get("protoplasm_bonus_health").is_none() {
+            sim.protoplasm_bonus_health = protoplasm_defaults.bonus_health_min
+                + (protoplasm_defaults.bonus_health_max - protoplasm_defaults.bonus_health_min)
+                    * protoplasm_level_t;
+        }
+        if simulation_config.get("protoplasm_heal_total").is_none() {
+            sim.protoplasm_heal_total = protoplasm_defaults.heal_total_min
+                + (protoplasm_defaults.heal_total_max - protoplasm_defaults.heal_total_min)
+                    * protoplasm_level_t;
+        }
+    }
     let vlad_base = champion_at_level(&controlled_champion_config.base, sim.champion_level);
     let vlad_base_raw = controlled_champion_config.base;
     let vlad_loadout_selection = controlled_champion_config.loadout_selection;
@@ -1031,20 +1055,18 @@ pub(super) fn run_controlled_champion_scenario(
     ));
     let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
     let full_score_for_search_type = |search_type: &str, candidate: &BuildKey| {
-        if candidate.item_indices.len() != max_items {
-            return f64::NEG_INFINITY;
-        }
         increment_search_type_counter(&search_type_counters, search_type, 1, 0, 0);
-        if deadline_reached(current_deadline()) {
+        if deadline_reached(deadline_for_search_type(search_type)) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             return f64::NEG_INFINITY;
         }
         let key = canonical_build_candidate(candidate.clone());
+        let is_full_candidate = key.item_indices.len() == max_items;
         let cache_key = build_key_cache_string(&key);
-        if let Ok(mut keys) = unique_scored_candidate_keys.lock() {
+        if is_full_candidate && let Ok(mut keys) = unique_scored_candidate_keys.lock() {
             keys.insert(cache_key.clone());
         }
-        if let Some(score) = persistent_full_cache.get(&cache_key) {
+        if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
             increment_search_type_counter(&search_type_counters, search_type, 0, 0, 1);
             record_score_progress(score);
             return score;
@@ -1052,11 +1074,11 @@ pub(super) fn run_controlled_champion_scenario(
         let cache = Arc::clone(&full_cache);
         let search_type_owned = search_type.to_string();
         cache.get_or_compute(cache_key.clone(), || {
-            if deadline_reached(current_deadline()) {
+            if deadline_reached(deadline_for_search_type(&search_type_owned)) {
                 timeout_flag.store(1, AtomicOrdering::Relaxed);
                 return f64::NEG_INFINITY;
             }
-            if let Some(score) = persistent_full_cache.get(&cache_key) {
+            if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
                 increment_search_type_counter(&search_type_counters, &search_type_owned, 0, 0, 1);
                 record_score_progress(score);
                 return score;
@@ -1065,7 +1087,9 @@ pub(super) fn run_controlled_champion_scenario(
             else {
                 return f64::NEG_INFINITY;
             };
-            full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
+            if is_full_candidate {
+                full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
+            }
             increment_search_type_counter(&search_type_counters, &search_type_owned, 0, 1, 0);
             let build_items = build_from_indices(&item_pool, &key.item_indices);
             let (score, outcome) = evaluate_build_with_bonus(
@@ -1073,16 +1097,20 @@ pub(super) fn run_controlled_champion_scenario(
                 &resolved_loadout.bonus_stats,
                 Some(&key.loadout_selection),
             );
-            if let Ok(mut map) = best_loadout_by_candidate.lock() {
-                map.insert(key.clone(), resolved_loadout);
+            if is_full_candidate {
+                if let Ok(mut map) = best_loadout_by_candidate.lock() {
+                    map.insert(key.clone(), resolved_loadout);
+                }
+                if let Ok(mut map) = best_outcome_by_candidate.lock() {
+                    map.insert(key.clone(), outcome);
+                }
             }
-            if let Ok(mut map) = best_outcome_by_candidate.lock() {
-                map.insert(key.clone(), outcome);
-            }
-            if score.is_finite() {
+            if is_full_candidate && score.is_finite() {
                 persistent_full_cache.insert(&cache_key, score);
             }
-            record_score_progress(score);
+            if is_full_candidate {
+                record_score_progress(score);
+            }
             score
         })
     };
@@ -1123,7 +1151,7 @@ pub(super) fn run_controlled_champion_scenario(
             true,
         );
         for (asset_index, asset) in coverage_assets.iter().enumerate() {
-            if deadline_reached(current_deadline()) {
+            if deadline_reached(coverage_stage_deadline()) {
                 timeout_flag.store(1, AtomicOrdering::Relaxed);
                 break;
             }
@@ -1133,7 +1161,7 @@ pub(super) fn run_controlled_champion_scenario(
                 .wrapping_add((asset_index as u64 + 1).wrapping_mul(0x9e37_79b9_7f4a_7c15));
             let mut local_candidates = Vec::<BuildKey>::new();
             for _ in 0..coverage_trials_per_asset {
-                if deadline_reached(current_deadline()) {
+                if deadline_reached(coverage_stage_deadline()) {
                     timeout_flag.store(1, AtomicOrdering::Relaxed);
                     break;
                 }
@@ -1146,7 +1174,7 @@ pub(super) fn run_controlled_champion_scenario(
 
             let seed_snapshot = local_candidates.clone();
             for _ in 0..coverage_refinement_steps {
-                if deadline_reached(current_deadline()) {
+                if deadline_reached(coverage_stage_deadline()) {
                     timeout_flag.store(1, AtomicOrdering::Relaxed);
                     break;
                 }
@@ -1844,6 +1872,7 @@ pub(super) fn run_controlled_champion_scenario(
                 &item_pool,
                 &vlad_base,
                 &candidate_bonus_stats,
+                &controlled_champion_stack_overrides,
                 &sim,
                 *score,
             ),

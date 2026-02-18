@@ -263,6 +263,54 @@ fn parse_simulation_config_accepts_stack_overrides_by_identifier() {
 }
 
 #[test]
+fn parse_simulation_config_reads_protoplasm_trigger_override() {
+    let simulation = serde_json::json!({
+        "protoplasm_trigger_health_percent": 0.42
+    });
+    let parsed = parse_simulation_config(&simulation)
+        .expect("simulation config with protoplasm trigger override should parse");
+    assert!(
+        (parsed.protoplasm_trigger_health_percent - 0.42).abs() < 1e-9,
+        "unexpected protoplasm trigger health percent: {}",
+        parsed.protoplasm_trigger_health_percent
+    );
+}
+
+#[test]
+fn parse_loadout_selection_rejects_legacy_rune_ids() {
+    let loadout = serde_json::json!({
+        "runes_reforged": {
+            "rune_ids": [8229, 8226, 8210, 8237, 8345, 8347]
+        }
+    });
+    let error = parse_loadout_selection(Some(&loadout))
+        .expect_err("legacy loadout.runes_reforged.rune_ids should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("loadout.runes_reforged.rune_ids is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_loadout_selection_rejects_legacy_season2016_masteries() {
+    let loadout = serde_json::json!({
+        "season2016_masteries": {
+            "Ferocity": []
+        }
+    });
+    let error = parse_loadout_selection(Some(&loadout))
+        .expect_err("legacy loadout.season2016_masteries should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("loadout.season2016_masteries is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
 fn parse_simulation_config_uses_default_time_limit_when_missing() {
     let simulation = serde_json::json!({});
     let parsed = parse_simulation_config(&simulation)

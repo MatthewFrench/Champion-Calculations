@@ -1,4 +1,4 @@
-# Current State Snapshot (2026-02-17)
+# Current State Snapshot (2026-02-18)
 
 This file is a concise handoff for developers and AI agents.
 
@@ -28,6 +28,19 @@ This file is a concise handoff for developers and AI agents.
   - runs a pre-budget coverage stage that explicitly touches each legal item/rune/shard asset.
   - retains top diverse candidates per locked asset and injects them into main search.
   - starts runtime budget accounting only after coverage stage completes.
+  - popcorn progress-window timeout does not interrupt this coverage stage.
+- Candidate scoring behavior:
+  - generation-time strategy ranking can score partial candidates (improves greedy/beam branching quality before full builds are complete).
+  - strict final ranking remains full-candidate only.
+
+## Data/Runtime Correctness Updates
+- `simulation.protoplasm_trigger_health_percent` is honored when set.
+- If controlled champion level overrides simulation fallback level, Protoplasm level-scaled defaults are recalculated to the effective controlled level unless explicitly overridden.
+- Legacy loadout keys now fail fast:
+  - `loadout.runes_reforged.rune_ids`
+  - `loadout.season2016_masteries`
+- Enemy respawn delay now uses each enemy actor's own level.
+- Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions.
 
 ## Recent Observed Runtime Characteristic
 - Coverage stage is currently the dominant fixed cost in short runs.

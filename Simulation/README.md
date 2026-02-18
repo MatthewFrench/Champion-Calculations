@@ -23,7 +23,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
 - Melee auto-attacks are interrupted and cancelled if the attacker is stunned during windup (projectiles already released continue to resolve).
 - Enemy auto-attacks are modeled as recurring timed events.
 - Enemy champion abilities and crowd control come from champion scripts and canonical champion data (no scenario combat proxies).
-- Enemy units can die and respawn on URF-scaled timers.
+- Enemy units can die and respawn on URF-scaled timers (using each enemy actor's own level).
 - Enemy transient stack/buff counters are cleared on death and respawn, and enemies respawn at their original spawn positions.
 - Enemy scripted ability timelines are lifecycle-safe across death/respawn transitions.
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
@@ -47,7 +47,7 @@ This simulator focuses on Vladimir's pool uptime against 5 enemies in URF. For a
   - Sona
   - Doctor Mundo
 - Build candidate scoring is parallelized across CPU cores (Rayon).
-- Search uses strict full-simulation scoring for every generated candidate build.
+- Search uses simulation scoring during candidate generation (including partial candidates for strategy ranking) and strict full-simulation scoring for final candidate ranking.
 - Full simulation scoring is memoized by canonical build key.
 - Full simulation scores are persisted across runs under `Simulation/output/cache/`.
 - In-flight dedupe cache avoids duplicate parallel re-simulation of the same canonical build.
@@ -163,6 +163,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Enables progress-window stopping ("microwave popcorn mode").
   - Search continues while significant improvements keep happening; run stops when no significant improvement is observed for `W` seconds.
   - Popcorn mode always uses the `maximum_quality` search profile, regardless of `--search-quality-profile`.
+  - In `maximum_quality`, popcorn early-stop checks are deferred until after the pre-budget coverage stage completes.
   - Can be combined with `--max-runtime-seconds`:
     - stop condition is whichever comes first.
 - `--popcorn-min-relative-improvement-percent R`:
@@ -316,6 +317,8 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `controlled_champion.loadout`: optional controlled champion loadout block (not used as the optimization seed).
 - Deprecated/removed:
   - `controlled_champion.baseline_items` is no longer supported.
+  - `loadout.runes_reforged.rune_ids` is no longer supported (use ordered `loadout.runes_reforged.rune_names`).
+  - `loadout.season2016_masteries` is no longer supported.
 - Keep only scenario setup data in scenario JSON (for example actor placement, per-actor level, and stack overrides).
 - Legacy flat scenario keys are removed; scenario parsing is now strict and canonical.
 - Build search item pool is restricted to purchasable `LEGENDARY` items only.
@@ -370,6 +373,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `simulation.champion_level` is the fallback level.
   - `controlled_champion.level` overrides controlled champion level.
   - `opponents.default_level` overrides fallback for opponent actors, and `opponents.encounters[].actors[].level` overrides per actor.
+  - If `controlled_champion.level` overrides the fallback level, Protoplasm level-scaled default values are recalculated to match the effective controlled champion level unless explicitly set in `simulation`.
 - Scenario simulation knobs are now minimal by default:
   - optional overrides:
     - `simulation.time_limit_seconds` (default from `Simulation/data/simulator_defaults.json`; default value `1200` seconds)
@@ -377,6 +381,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
     - `simulation.server_tick_rate_hz`
     - `simulation.champion_level`
     - `simulation.stack_overrides`
+    - `simulation.protoplasm_trigger_health_percent`
 - Fallback ownership by domain:
   - URF respawn defaults load from `../Game Mode/URF.json` `respawn`.
   - Vladimir Sanguine Pool defaults load from `../Characters/Vladimir.json` `abilities.basic_ability_2`.
@@ -386,6 +391,8 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - controlled champion stasis activation policy default loads from `data/champion_ai_profiles.json`.
 - Protoplasm Harness lifeline cooldown:
   - fallback default is loaded from `../Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`.
+- Protoplasm Harness lifeline trigger health:
+  - `simulation.protoplasm_trigger_health_percent` is honored when provided; otherwise canonical item-data default is used.
 - Vladimir scripted ability knobs:
   - `simulation.vlad_q_base_damage`, `simulation.vlad_q_ap_ratio`, `simulation.vlad_q_heal_ratio_of_damage`, `simulation.vlad_q_base_cooldown_seconds`
   - `simulation.vlad_e_base_damage`, `simulation.vlad_e_ap_ratio`, `simulation.vlad_e_base_cooldown_seconds`
@@ -404,7 +411,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - Enemy derived combat profile diagnostics and similarity warnings
   - Search diagnostics (full eval counts, candidate pool, seed variance, objective weights)
   - Robust vs fragile build confidence based on ensemble seed hit rate
-  - Pareto-front tagging over objective/EHP/AP/cost-timing metrics
+  - Pareto-front tagging over objective/EHP/AP/cost-timing metrics (uses the same controlled champion stack overrides as objective simulation)
   - Cache hit/miss/wait diagnostics
 - Build-order optimization is focused on robust/Pareto builds first, with fallback to top builds if needed.
 - Vladimir loadout (runes/shards) is co-optimized with items in joint scoring (no loadout shortlist pre-elimination).
@@ -426,5 +433,8 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `runes_reforged.rune_names` (ordered array of 6 rune names:
     primary `[keystone, slot2, slot3, slot4]`, secondary `[two runes from different secondary slots in slot order]`)
   - `runes_reforged.shard_stats` (ordered array of 3 shard stats by shard slot)
+- Legacy keys fail fast instead of being silently ignored:
+  - `runes_reforged.rune_ids`
+  - `season2016_masteries`
 - Current implementation applies deterministic stat bonuses from direct passive/stat effects and reports selections/skips in output.
 - Conditional or highly dynamic rune effects that cannot be represented deterministically are skipped and documented in the report.

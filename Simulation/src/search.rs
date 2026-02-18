@@ -2087,6 +2087,7 @@ pub(super) fn compute_build_metrics_for_candidate(
     item_pool: &[Item],
     controlled_champion_base: &ChampionBase,
     controlled_champion_bonus_stats: &Stats,
+    controlled_champion_stack_overrides: &HashMap<String, f64>,
     sim: &SimulationConfig,
     objective: f64,
 ) -> BuildMetrics {
@@ -2098,7 +2099,7 @@ pub(super) fn compute_build_metrics_for_candidate(
         sim,
         sim.champion_level,
         None,
-        None,
+        Some(controlled_champion_stack_overrides),
     );
     let stats = compute_champion_final_stats(controlled_champion_base, &item_stats);
     let ehp = effective_hp_mixed(stats.health, stats.armor, stats.magic_resist);
