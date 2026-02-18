@@ -38,6 +38,9 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Persistent full-score cache partitioning now ignores runtime-random default seed values:
   - deterministic seeds still partition cache explicitly
   - default random-seed runs reuse a shared cache partition
+- Full-loadout `beam` and `greedy` now co-optimize loadout selection with item expansion.
+- Adaptive/bleed strategy-key ordering is normalized before seed-index derivation for fixed-seed reproducibility.
+- Seed-stage partial candidates are deterministically completed before strict full-ranking fallback in short-budget runs.
 
 ## Directory Overview
 - `Simulation/`: Rust simulator, scenarios, reports, docs, and search pipeline.

@@ -196,6 +196,73 @@ fn persistent_cache_seed_partition(
     }
 }
 
+fn apply_level_scaled_sim_defaults_after_controlled_level_override(
+    sim: &mut SimulationConfig,
+    simulation_config: &Value,
+    previous_level: usize,
+) {
+    if sim.champion_level == previous_level {
+        return;
+    }
+    let protoplasm_defaults = protoplasm_lifeline_defaults();
+    let protoplasm_level_t = ((sim.champion_level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
+    if simulation_config.get("protoplasm_bonus_health").is_none() {
+        sim.protoplasm_bonus_health = protoplasm_defaults.bonus_health_min
+            + (protoplasm_defaults.bonus_health_max - protoplasm_defaults.bonus_health_min)
+                * protoplasm_level_t;
+    }
+    if simulation_config.get("protoplasm_heal_total").is_none() {
+        sim.protoplasm_heal_total = protoplasm_defaults.heal_total_min
+            + (protoplasm_defaults.heal_total_max - protoplasm_defaults.heal_total_min)
+                * protoplasm_level_t;
+    }
+}
+
+fn partial_candidate_completion_seed(
+    search_seed: u64,
+    seed_index: usize,
+    ranked_index: usize,
+    candidate: &BuildKey,
+) -> u64 {
+    let mut hasher = DefaultHasher::new();
+    candidate.hash(&mut hasher);
+    search_seed
+        ^ hasher.finish()
+        ^ ((seed_index as u64 + 1).wrapping_mul(0x9e37_79b9_7f4a_7c15))
+        ^ ((ranked_index as u64 + 1).wrapping_mul(0xbf58_476d_1ce4_e5b9))
+}
+
+fn complete_partial_candidate_to_full(
+    partial: &BuildKey,
+    item_pool: &[Item],
+    max_items: usize,
+    seed: &mut u64,
+) -> BuildKey {
+    let mut candidate = canonical_build_candidate(partial.clone());
+    if candidate.item_indices.len() >= max_items {
+        candidate.item_indices.truncate(max_items);
+        candidate.item_indices = canonical_key(&candidate.item_indices);
+        return canonical_build_candidate(candidate);
+    }
+
+    while candidate.item_indices.len() < max_items {
+        let options = (0..item_pool.len())
+            .filter(|idx| can_add_item_to_build(item_pool, &candidate.item_indices, *idx))
+            .collect::<Vec<_>>();
+        if options.is_empty() {
+            break;
+        }
+        let pick = options[rand_index(seed, options.len())];
+        candidate.item_indices.push(pick);
+        candidate.item_indices = canonical_key(&candidate.item_indices);
+    }
+
+    if candidate.item_indices.len() < max_items {
+        candidate.item_indices = random_valid_build(item_pool, max_items, seed);
+    }
+    canonical_build_candidate(candidate)
+}
+
 fn candidate_matches_locked_asset(candidate: &BuildKey, asset: &CoverageLockedAsset) -> bool {
     match asset {
         CoverageLockedAsset::Item(item_idx) => candidate.item_indices.contains(item_idx),
@@ -665,6 +732,8 @@ fn parse_opponent_encounters(
         ));
     }
     let mut parsed = Vec::with_capacity(encounters.len());
+    let mut total_weight = 0.0;
+    let mut positive_weight_count = 0usize;
     for (index, encounter) in encounters.iter().enumerate() {
         let name = encounter
             .get("name")
@@ -678,6 +747,10 @@ fn parse_opponent_encounters(
             return Err(anyhow!(
                 "opponents.encounters[{index}].weight must be >= 0.0"
             ));
+        }
+        total_weight += weight;
+        if weight > 0.0 {
+            positive_weight_count += 1;
         }
         let actors = encounter
             .get("actors")
@@ -700,6 +773,11 @@ fn parse_opponent_encounters(
             })
             .collect::<Result<Vec<_>>>()?;
         parsed.push((name.to_string(), weight, parsed_actors));
+    }
+    if positive_weight_count == 0 || total_weight <= 0.0 {
+        return Err(anyhow!(
+            "opponents.encounters must include at least one encounter with weight > 0.0"
+        ));
     }
     Ok(parsed)
 }
@@ -953,20 +1031,11 @@ pub(super) fn run_controlled_champion_scenario(
     )?;
     let simulation_level_before_controlled_override = sim.champion_level;
     sim.champion_level = controlled_champion_config.level;
-    if sim.champion_level != simulation_level_before_controlled_override {
-        let protoplasm_defaults = protoplasm_lifeline_defaults();
-        let protoplasm_level_t = ((sim.champion_level.max(1) as f64 - 1.0) / 29.0).clamp(0.0, 1.0);
-        if simulation_config.get("protoplasm_bonus_health").is_none() {
-            sim.protoplasm_bonus_health = protoplasm_defaults.bonus_health_min
-                + (protoplasm_defaults.bonus_health_max - protoplasm_defaults.bonus_health_min)
-                    * protoplasm_level_t;
-        }
-        if simulation_config.get("protoplasm_heal_total").is_none() {
-            sim.protoplasm_heal_total = protoplasm_defaults.heal_total_min
-                + (protoplasm_defaults.heal_total_max - protoplasm_defaults.heal_total_min)
-                    * protoplasm_level_t;
-        }
-    }
+    apply_level_scaled_sim_defaults_after_controlled_level_override(
+        &mut sim,
+        simulation_config,
+        simulation_level_before_controlled_override,
+    );
     let controlled_champion_base =
         champion_at_level(&controlled_champion_config.base, sim.champion_level);
     let controlled_champion_base_raw = controlled_champion_config.base;
@@ -1199,6 +1268,11 @@ pub(super) fn run_controlled_champion_scenario(
             unique_scored_candidate_keys.insert(cache_key.clone());
         }
         if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
+            if let Some(resolved_loadout) = resolve_loadout_for_selection(&key.loadout_selection)
+                && let Ok(mut map) = best_loadout_by_candidate.lock()
+            {
+                map.entry(key.clone()).or_insert(resolved_loadout);
+            }
             increment_search_type_counter(search_type_counters.as_ref(), search_type, 0, 0, 1);
             record_score_progress(score);
             return score;
@@ -1211,6 +1285,12 @@ pub(super) fn run_controlled_champion_scenario(
                 return f64::NEG_INFINITY;
             }
             if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
+                if let Some(resolved_loadout) =
+                    resolve_loadout_for_selection(&key.loadout_selection)
+                    && let Ok(mut map) = best_loadout_by_candidate.lock()
+                {
+                    map.entry(key.clone()).or_insert(resolved_loadout);
+                }
                 increment_search_type_counter(
                     search_type_counters.as_ref(),
                     &search_type_owned,
@@ -1518,20 +1598,36 @@ pub(super) fn run_controlled_champion_scenario(
 
     let mut candidate_keys = Vec::new();
     let mut seed_top_sets = Vec::new();
-    for ranked in &seed_ranked {
-        let seed_top = ranked
-            .iter()
-            .take(search_cfg.ensemble_seed_top_k.max(1))
-            .map(|(k, _)| k)
-            .filter(|k| k.item_indices.len() == max_items)
-            .cloned()
-            .collect::<HashSet<_>>();
-        seed_top_sets.push(seed_top);
-        for (k, _) in ranked {
-            if k.item_indices.len() == max_items {
-                candidate_keys.push(k.clone());
+    for (seed_idx, ranked) in seed_ranked.iter().enumerate() {
+        let mut seed_top = HashSet::new();
+        for (ranked_idx, (candidate, score)) in ranked.iter().enumerate() {
+            if candidate.item_indices.len() == max_items {
+                candidate_keys.push(candidate.clone());
+                if ranked_idx < search_cfg.ensemble_seed_top_k.max(1) {
+                    seed_top.insert(candidate.clone());
+                }
+                continue;
+            }
+            if !score.is_finite() {
+                continue;
+            }
+            let mut completion_seed =
+                partial_candidate_completion_seed(search_cfg.seed, seed_idx, ranked_idx, candidate);
+            let completed = complete_partial_candidate_to_full(
+                candidate,
+                &item_pool,
+                max_items,
+                &mut completion_seed,
+            );
+            if completed.item_indices.len() != max_items {
+                continue;
+            }
+            candidate_keys.push(completed.clone());
+            if ranked_idx < search_cfg.ensemble_seed_top_k.max(1) {
+                seed_top.insert(completed);
             }
         }
+        seed_top_sets.push(seed_top);
     }
     for candidate in &coverage_seed_candidates {
         candidate_keys.push(candidate.clone());
@@ -2047,6 +2143,10 @@ pub(super) fn run_controlled_champion_scenario(
         let candidate_bonus_stats = resolved_by_candidate_snapshot
             .get(candidate)
             .map(|resolved| resolved.bonus_stats.clone())
+            .or_else(|| {
+                resolve_loadout_for_selection(&candidate.loadout_selection)
+                    .map(|resolved| resolved.bonus_stats)
+            })
             .unwrap_or_else(|| controlled_champion_base_loadout.bonus_stats.clone());
         metrics_by_key.insert(
             candidate.clone(),
@@ -2154,43 +2254,59 @@ pub(super) fn run_controlled_champion_scenario(
         .iter()
         .map(|c| (c.key.clone(), c.clone()))
         .collect::<HashMap<_, _>>();
-    let mut order_input = diverse_top_builds
+    let mut order_input = diverse_top_raw
         .iter()
-        .enumerate()
-        .filter_map(|(idx, (build, _))| {
-            let key = diverse_top_keys.get(idx)?;
+        .filter_map(|(candidate, _)| {
             let robust = confidence_by_key
-                .get(key)
+                .get(candidate)
                 .map(|c| c.robustness == "robust")
                 .unwrap_or(false);
-            let pareto = pareto_front.contains(key);
+            let pareto = pareto_front.contains(candidate);
             if robust || pareto {
-                Some(build.clone())
+                Some((
+                    candidate.clone(),
+                    build_from_indices(&item_pool, &candidate.item_indices),
+                ))
             } else {
                 None
             }
         })
         .collect::<Vec<_>>();
     if order_input.is_empty() {
-        order_input = diverse_top_builds
+        order_input = diverse_top_raw
             .iter()
             .take(2)
-            .map(|(b, _)| b.clone())
+            .map(|(candidate, _)| {
+                (
+                    candidate.clone(),
+                    build_from_indices(&item_pool, &candidate.item_indices),
+                )
+            })
             .collect::<Vec<_>>();
     }
-    let build_order_ctx = BuildOrderEvalContext {
-        controlled_champion_base_raw: &controlled_champion_base_raw,
-        controlled_champion_bonus_stats: &controlled_champion_loadout.bonus_stats,
-        controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
-        enemy_builds: &enemy_builds,
-        raw_enemy_bases: &raw_enemy_bases,
-        sim: &sim,
-        urf: &urf,
-        objective_weights: objective_component_weights,
-    };
     let build_order_results = order_input
         .iter()
-        .map(|build| optimize_build_order(build, &build_order_ctx))
+        .map(|(candidate, build)| {
+            let candidate_bonus_stats = resolved_by_candidate_snapshot
+                .get(candidate)
+                .map(|resolved| resolved.bonus_stats.clone())
+                .or_else(|| {
+                    resolve_loadout_for_selection(&candidate.loadout_selection)
+                        .map(|resolved| resolved.bonus_stats)
+                })
+                .unwrap_or_else(|| controlled_champion_base_loadout.bonus_stats.clone());
+            let build_order_ctx = BuildOrderEvalContext {
+                controlled_champion_base_raw: &controlled_champion_base_raw,
+                controlled_champion_bonus_stats: &candidate_bonus_stats,
+                controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
+                enemy_builds: &enemy_builds,
+                raw_enemy_bases: &raw_enemy_bases,
+                sim: &sim,
+                urf: &urf,
+                objective_weights: objective_component_weights,
+            };
+            optimize_build_order(build, &build_order_ctx)
+        })
         .collect::<Vec<_>>();
     let best_order_acquired_map = build_order_results
         .first()
@@ -2398,18 +2514,23 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
     let champion_bases = load_champion_bases()?;
     let scenario = load_json(scenario_path)?;
 
-    let mut sim_cfg = parse_simulation_config(
-        scenario
-            .get("simulation")
-            .ok_or_else(|| anyhow!("Missing simulation"))?,
-    )?;
+    let simulation_config = scenario
+        .get("simulation")
+        .ok_or_else(|| anyhow!("Missing simulation"))?;
+    let mut sim_cfg = parse_simulation_config(simulation_config)?;
     let controlled_champion_config = parse_controlled_champion_config(
         &scenario,
         &champion_bases,
         sim_cfg.champion_level,
         &sim_cfg.stack_overrides,
     )?;
+    let simulation_level_before_controlled_override = sim_cfg.champion_level;
     sim_cfg.champion_level = controlled_champion_config.level;
+    apply_level_scaled_sim_defaults_after_controlled_level_override(
+        &mut sim_cfg,
+        simulation_config,
+        simulation_level_before_controlled_override,
+    );
     let controlled_champion_base =
         champion_at_level(&controlled_champion_config.base, sim_cfg.champion_level);
     sim_cfg.controlled_champion_script =

@@ -1,6 +1,14 @@
 # Improvement Tracker
 
 ## Done
+- Closed high-impact search and reporting correctness gaps from PR review:
+  - full-loadout `beam` and `greedy` now co-optimize loadout selection while expanding item candidates
+  - adaptive/bleed strategy ordering is now deterministic before index-based seed math (fixed-seed reruns stay reproducible)
+  - seed-stage partial candidates are now deterministically completed before strict full-ranking fallback under timeouts
+  - persistent-cache candidate scores now re-resolve candidate loadouts for metrics and build-order diagnostics
+  - build-order optimization now evaluates each top candidate with that candidate's own loadout bonus stats
+  - `controlled_champion_step` now recomputes level-scaled simulation defaults after controlled-level override
+  - opponent encounter parsing now rejects all-zero-weight scenario sets
 - Expanded parallel search orchestration and reduced scoring-path contention:
   - ensemble seed orchestration now runs in parallel
   - portfolio strategy execution now runs in parallel

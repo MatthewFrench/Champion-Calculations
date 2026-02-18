@@ -297,6 +297,15 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - multiple strategy families run concurrently and reports expose effective parallelism state.
 
+23f. `DONE` Harden full-loadout strategy correctness and determinism.
+- Scope:
+  - co-optimize loadout selection during `beam` and `greedy` full-loadout item search
+  - normalize adaptive/bleed strategy-key ordering before index-based seed derivation
+  - recover and complete timed-out seed-stage partial candidates before strict full ranking fallback
+  - keep report/build-order metrics loadout-accurate on persistent-cache hits
+- Success criteria:
+  - fixed-seed reruns are reproducible, short-budget runs do not random-fallback when partial progress exists, and diagnostics reflect each candidate's own loadout stats.
+
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:
   - repeatable profiling command and report artifacts

@@ -969,15 +969,18 @@ pub(super) fn generate_bleed_candidates(
     let mut seed = search.seed ^ 0xB1EEDu64;
     let mut out = Vec::new();
     let mut seen = HashSet::new();
-    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    let mut strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    strategies.sort_unstable();
     let mut elite_pool = Vec::new();
 
-    for builds in strategy_elites.values() {
-        for key in builds.iter().take(search.ensemble_seed_top_k.max(1)) {
-            let canon = canonical_key(key);
-            if seen.insert(canon.clone()) {
-                out.push(canon.clone());
-                elite_pool.push(canon);
+    for strategy in &strategies {
+        if let Some(builds) = strategy_elites.get(strategy) {
+            for key in builds.iter().take(search.ensemble_seed_top_k.max(1)) {
+                let canon = canonical_key(key);
+                if seen.insert(canon.clone()) {
+                    out.push(canon.clone());
+                    elite_pool.push(canon);
+                }
             }
         }
     }
@@ -1036,6 +1039,7 @@ pub(super) fn generate_bleed_candidates(
         }
     }
 
+    out.sort_unstable();
     out
 }
 
@@ -1054,7 +1058,8 @@ where
     if strategy_elites.is_empty() {
         return Vec::new();
     }
-    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    let mut strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    strategies.sort_unstable();
     let contributions = strategies
         .iter()
         .map(|s| {
@@ -1105,12 +1110,14 @@ where
         })
         .collect::<Vec<_>>();
 
-    gathered
+    let mut out = gathered
         .into_iter()
         .flatten()
         .collect::<HashSet<_>>()
         .into_iter()
-        .collect::<Vec<_>>()
+        .collect::<Vec<_>>();
+    out.sort_unstable();
+    out
 }
 
 fn effective_hp_mixed(health: f64, armor: f64, magic_resist: f64) -> f64 {
@@ -1233,6 +1240,33 @@ fn random_full_candidate(params: &FullLoadoutSearchParams<'_>, seed: &mut u64) -
             seed,
         ),
     })
+}
+
+fn candidate_loadout_variants(
+    anchor: &LoadoutSelection,
+    params: &FullLoadoutSearchParams<'_>,
+    seed: &mut u64,
+    random_samples: usize,
+) -> Vec<LoadoutSelection> {
+    let mut variants = Vec::new();
+    let mut seen = HashSet::<String>::new();
+    for base in [anchor.clone(), params.base_loadout.clone()] {
+        let key = loadout_selection_key(&base);
+        if seen.insert(key) {
+            variants.push(base);
+        }
+    }
+    for _ in 0..random_samples {
+        let sampled = random_loadout_selection(anchor, params.loadout_domain, seed);
+        let key = loadout_selection_key(&sampled);
+        if seen.insert(key) {
+            variants.push(sampled);
+        }
+    }
+    if variants.is_empty() {
+        variants.push(params.base_loadout.clone());
+    }
+    variants
 }
 
 fn repair_full_candidate(
@@ -1362,12 +1396,14 @@ where
 fn beam_search_ranked_full<F>(
     params: &FullLoadoutSearchParams<'_>,
     beam_width: usize,
+    seed: u64,
     score_fn: &F,
     deadline: Option<Instant>,
 ) -> Vec<(BuildKey, f64)>
 where
     F: Fn(&BuildKey) -> f64 + Sync,
 {
+    let mut local_seed = seed;
     let mut candidates: Vec<BuildKey> = vec![BuildKey {
         item_indices: Vec::new(),
         loadout_selection: params.base_loadout.clone(),
@@ -1399,7 +1435,13 @@ where
                 let mut next = candidate.clone();
                 next.item_indices.push(item_idx);
                 next.item_indices = canonical_key(&next.item_indices);
-                next_candidates.push(next);
+                let loadout_variants =
+                    candidate_loadout_variants(&next.loadout_selection, params, &mut local_seed, 1);
+                for loadout_selection in loadout_variants {
+                    let mut variant = next.clone();
+                    variant.loadout_selection = loadout_selection;
+                    next_candidates.push(canonical_build_candidate(variant));
+                }
             }
         }
         let scored = score_full_candidates(next_candidates, score_fn, deadline);
@@ -1755,11 +1797,7 @@ where
             let mut seed = search.seed;
             let mut candidate = BuildKey {
                 item_indices: Vec::new(),
-                loadout_selection: random_loadout_selection(
-                    params.base_loadout,
-                    params.loadout_domain,
-                    &mut seed,
-                ),
+                loadout_selection: params.base_loadout.clone(),
             };
             for _ in 0..params.max_items {
                 if deadline_reached(deadline) {
@@ -1773,11 +1811,18 @@ where
                     }
                     let mut next = candidate.clone();
                     next.item_indices.push(item_idx);
-                    next = canonical_build_candidate(next);
-                    let score = score_fn(&next);
-                    if score > best_score {
-                        best_score = score;
-                        best = Some(next);
+                    next.item_indices = canonical_key(&next.item_indices);
+                    let loadout_variants =
+                        candidate_loadout_variants(&next.loadout_selection, params, &mut seed, 4);
+                    for loadout_selection in loadout_variants {
+                        let mut probe = next.clone();
+                        probe.loadout_selection = loadout_selection;
+                        probe = canonical_build_candidate(probe);
+                        let score = score_fn(&probe);
+                        if score > best_score {
+                            best_score = score;
+                            best = Some(probe);
+                        }
                     }
                 }
                 if let Some(next) = best {
@@ -1788,7 +1833,9 @@ where
             }
             vec![(candidate.clone(), score_fn(&candidate))]
         }
-        "beam" => beam_search_ranked_full(params, search.beam_width, score_fn, deadline),
+        "beam" => {
+            beam_search_ranked_full(params, search.beam_width, search.seed, score_fn, deadline)
+        }
         "random" => random_search_ranked_full(
             params,
             search.random_samples,
@@ -1946,7 +1993,8 @@ where
     if strategy_elites.is_empty() {
         return Vec::new();
     }
-    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    let mut strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    strategies.sort_unstable();
     let contributions = strategies
         .iter()
         .map(|strategy| {
@@ -2006,7 +2054,9 @@ where
             out.insert(candidate);
         }
     }
-    out.into_iter().collect::<Vec<_>>()
+    let mut out_vec = out.into_iter().collect::<Vec<_>>();
+    out_vec.sort_by_key(candidate_order_key);
+    out_vec
 }
 
 pub(super) fn generate_bleed_candidates_full_loadout(
@@ -2020,15 +2070,18 @@ pub(super) fn generate_bleed_candidates_full_loadout(
     let mut seed = search.seed ^ 0xB1EED_u64;
     let mut out = Vec::new();
     let mut seen = HashSet::<BuildKey>::new();
-    let strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    let mut strategies = strategy_elites.keys().cloned().collect::<Vec<_>>();
+    strategies.sort_unstable();
     let mut elite_pool = Vec::new();
 
-    for candidates in strategy_elites.values() {
-        for candidate in candidates.iter().take(search.ensemble_seed_top_k.max(1)) {
-            let canonical = canonical_build_candidate(candidate.clone());
-            if seen.insert(canonical.clone()) {
-                out.push(canonical.clone());
-                elite_pool.push(canonical);
+    for strategy in &strategies {
+        if let Some(candidates) = strategy_elites.get(strategy) {
+            for candidate in candidates.iter().take(search.ensemble_seed_top_k.max(1)) {
+                let canonical = canonical_build_candidate(candidate.clone());
+                if seen.insert(canonical.clone()) {
+                    out.push(canonical.clone());
+                    elite_pool.push(canonical);
+                }
             }
         }
     }
@@ -2094,6 +2147,7 @@ pub(super) fn generate_bleed_candidates_full_loadout(
             out.push(canonical);
         }
     }
+    out.sort_by_key(candidate_order_key);
     out
 }
 

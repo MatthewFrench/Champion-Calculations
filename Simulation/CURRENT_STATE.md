@@ -37,6 +37,9 @@ This file is a concise handoff for developers and AI agents.
 - Candidate scoring behavior:
   - generation-time strategy ranking can score partial candidates (improves greedy/beam branching quality before full builds are complete).
   - strict final ranking remains full-candidate only.
+  - if time limits interrupt seed search, finite partial candidates are deterministically completed to full candidates before strict fallback selection.
+  - full-loadout `beam` and `greedy` now co-optimize loadout selection (runes/shards) during item search.
+  - adaptive/bleed strategy-key ordering is normalized before index-based seed math for fixed-seed reproducibility.
   - diagnostics now report effective thread count and parallel-mode flags for orchestration phases.
 
 ## Data/Runtime Correctness Updates
@@ -51,6 +54,8 @@ This file is a concise handoff for developers and AI agents.
 - Scenario objective invulnerable-seconds normalization now references scenario horizon (instead of a fixed one-second baseline).
 - Enemy respawn delay now uses each enemy actor's own level.
 - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions.
+- Report metrics/build-order diagnostics re-resolve candidate loadout stats on persistent-cache hits (avoids base-loadout fallback skew).
+- Opponent encounters now require at least one positive encounter weight; all-zero-weight scenario sets are rejected.
 
 ## Recent Observed Runtime Characteristic
 - Coverage stage is currently the dominant fixed cost in short runs.

@@ -26,6 +26,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Enemy units can die and respawn on URF-scaled timers (using each enemy actor's own level).
 - Enemy transient stack/buff counters are cleared on death and respawn, and enemies respawn at their original spawn positions.
 - Enemy scripted ability timelines are lifecycle-safe across death/respawn transitions.
+- Opponent encounter parsing requires at least one positive scenario weight (all-zero-weight encounter sets are rejected).
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
 - Controlled champion loadout runtime scripts are now applied during combat-time spell hits, kill events, and regeneration ticks.
@@ -55,7 +56,11 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Ensemble seed runs are supported for confidence/robustness labeling.
 - Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
 - Adaptive strategy allocation adds extra candidates from strategies that contribute more unique elites.
+- Full-loadout `beam` and `greedy` strategies co-optimize loadout selection (runes/shards) during item expansion, not a single fixed loadout page.
+- Fixed-seed reproducibility is preserved in adaptive/bleed candidate generation by sorting strategy keys before index-based seed derivation.
+- Timed-out seed-stage partial candidates are deterministically completed to full candidates before strict full ranking, avoiding random fallback winners in short-budget runs.
 - Strict final candidate ranking evaluates remaining candidates in parallel batches.
+- Report metrics and build-order diagnostics resolve candidate loadout bonus stats even when candidate objective scores are served from persistent cache.
 - Build scoring uses a composite objective over:
   - time alive
   - damage dealt to enemies
