@@ -121,3 +121,10 @@ These instructions apply to the entire repository.
   - `cargo fmt --manifest-path Simulation/Cargo.toml`
   - `cargo clippy --all-targets --all-features --manifest-path Simulation/Cargo.toml -- -D warnings`
   - `cargo test --release --manifest-path Simulation/Cargo.toml`
+
+## Rust Test Layout Standard
+- Do not place inline Rust test modules directly inside production `.rs` files.
+- Keep Rust test code in dedicated test files, referenced from production modules via `#[cfg(test)]` + `#[path = "..."] mod tests;` when module-private access is required.
+- Use clear, explicit test file names (for example `engine_tests.rs`, `stat_resolution_tests.rs`).
+- Place integration/overall tests under the crate root `tests/` directory.
+- Place unit tests in co-located relative `tests/` directories near the module they validate (for example `src/scripts/runtime/tests/loadout_runtime_tests.rs`).
