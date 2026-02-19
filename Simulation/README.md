@@ -41,6 +41,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Combat-time rune coverage now also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
 - Controlled champion and enemy actors consume the same shared rune-combat runtime interfaces; controlled-champion runtime module now only owns defensive item/revive policy helpers.
 - Search scoring now also supports explicit unmodeled-item-effect quality gating (hard gate or per-item penalty) to reduce ranking bias from unimplemented item effects.
+- When unmodeled hard gates are enabled, controlled-champion candidate generation space is constrained up front (modeled-rune loadout domain and modeled-runtime-item pool) so invalid candidates are not generated and then rejected later.
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
 - Full rune-proc telemetry collection is disabled for search-time scoring simulations and enabled explicitly for trace/report replay simulations.
 - Rune telemetry runtime bookkeeping uses fixed-index counter arrays (no per-event hashmap lookup/allocation in hot paths).

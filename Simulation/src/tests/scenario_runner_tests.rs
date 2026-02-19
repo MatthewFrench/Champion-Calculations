@@ -177,6 +177,72 @@ fn parse_opponent_encounters_accepts_positive_weight_mix() {
     assert_eq!(encounters.len(), 2);
 }
 
+fn test_item(name: &str, boots: bool) -> Item {
+    Item {
+        name: name.to_string(),
+        stats: Stats::default(),
+        rank: if boots {
+            vec!["BOOTS".to_string()]
+        } else {
+            Vec::new()
+        },
+        shop_purchasable: true,
+        total_cost: 0.0,
+        passive_effects_text: Vec::new(),
+        has_active_effect: false,
+        structured_effect_count: 0,
+    }
+}
+
+#[test]
+fn max_legal_build_size_enforces_single_boot_slot() {
+    let items = vec![
+        test_item("Boots A", true),
+        test_item("Boots B", true),
+        test_item("Item 1", false),
+        test_item("Item 2", false),
+        test_item("Item 3", false),
+    ];
+    assert_eq!(
+        max_legal_build_size(&items),
+        4,
+        "pool with two boots and three non-boots can only fill four legal slots"
+    );
+}
+
+#[test]
+fn filter_item_pool_to_modeled_runtime_effects_drops_unmodeled_effect_items() {
+    let mut modeled_runtime_item = test_item("Zhonya's Hourglass", false);
+    modeled_runtime_item.has_active_effect = true;
+
+    let mut unmodeled_runtime_item = test_item("Unmodeled Runtime Item", false);
+    unmodeled_runtime_item.passive_effects_text = vec!["Deals bonus magic damage.".to_string()];
+
+    let stat_only_item = test_item("Stat Stick", false);
+    let filtered = filter_item_pool_to_modeled_runtime_effects(&[
+        modeled_runtime_item,
+        unmodeled_runtime_item,
+        stat_only_item,
+    ]);
+    let names = filtered
+        .iter()
+        .map(|item| item.name.as_str())
+        .collect::<HashSet<_>>();
+
+    assert!(
+        names.contains("Zhonya's Hourglass"),
+        "known modeled runtime effect item should remain"
+    );
+    assert!(
+        names.contains("Stat Stick"),
+        "stat-only items should remain legal because they have no runtime-effect surface"
+    );
+    assert!(
+        !names.contains("Unmodeled Runtime Item"),
+        "hard-gated unmodeled runtime effect items should be removed from generation pool"
+    );
+}
+
 #[test]
 fn level_scaled_defaults_recompute_after_controlled_level_override() {
     let simulation_config = json!({ "champion_level": 1 });

@@ -1042,6 +1042,102 @@ pub(crate) fn build_loadout_domain() -> LoadoutDomain {
     }
 }
 
+fn rune_has_modeled_static_or_dynamic_effect(
+    rune: &Value,
+    level: usize,
+    for_controlled_champion: bool,
+) -> Result<bool> {
+    let rune_name = rune.get("name").and_then(Value::as_str).unwrap_or("");
+    if !rune_name.is_empty() && has_dynamic_rune_effect(rune_name) {
+        return Ok(true);
+    }
+
+    let effects = rune
+        .get("effects_structured")
+        .and_then(Value::as_array)
+        .cloned()
+        .unwrap_or_default();
+    for effect in effects {
+        let mut stats = Stats::default();
+        if apply_structured_effect(&effect, 1, level, for_controlled_champion, &mut stats)? {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+pub(crate) fn filter_loadout_domain_to_modeled_runes(
+    domain: &LoadoutDomain,
+    level: usize,
+    for_controlled_champion: bool,
+) -> Result<LoadoutDomain> {
+    let runes_data = load_json(&rune_data_dir().join("RunesReforged.json"))?;
+    let mut modeled_rune_keys = HashSet::<String>::new();
+    if let Some(paths) = runes_data.get("paths").and_then(Value::as_array) {
+        for path in paths {
+            let Some(slots) = path.get("slots").and_then(Value::as_array) else {
+                continue;
+            };
+            for slot in slots {
+                let Some(runes) = slot.get("runes").and_then(Value::as_array) else {
+                    continue;
+                };
+                for rune in runes {
+                    let Some(name) = rune.get("name").and_then(Value::as_str) else {
+                        continue;
+                    };
+                    if rune_has_modeled_static_or_dynamic_effect(
+                        rune,
+                        level,
+                        for_controlled_champion,
+                    )? {
+                        modeled_rune_keys.insert(to_norm_key(name));
+                    }
+                }
+            }
+        }
+    }
+
+    let rune_paths = domain
+        .rune_paths
+        .iter()
+        .filter_map(|path| {
+            if path.slot_runes.len() < 4 {
+                return None;
+            }
+            let slot_runes = path
+                .slot_runes
+                .iter()
+                .map(|slot| {
+                    slot.iter()
+                        .filter(|rune| modeled_rune_keys.contains(&to_norm_key(rune)))
+                        .cloned()
+                        .collect::<Vec<_>>()
+                })
+                .collect::<Vec<_>>();
+            let usable_as_primary = slot_runes.iter().take(4).all(|slot| !slot.is_empty());
+            let usable_as_secondary = (1..=3)
+                .filter(|slot| {
+                    slot_runes
+                        .get(*slot)
+                        .map(|runes| !runes.is_empty())
+                        .unwrap_or(false)
+                })
+                .count()
+                >= 2;
+            if !usable_as_primary && !usable_as_secondary {
+                return None;
+            }
+            Some(RunePathDomain { slot_runes })
+        })
+        .collect::<Vec<_>>();
+
+    Ok(LoadoutDomain {
+        rune_paths,
+        shard_slots: domain.shard_slots.clone(),
+    })
+}
+
 fn is_rune_name_in_slot(slot_runes: &[String], rune_name: &str) -> bool {
     let key = to_norm_key(rune_name);
     slot_runes.iter().any(|r| to_norm_key(r) == key)
@@ -1206,15 +1302,43 @@ pub(crate) fn random_loadout_selection(
         && domain.shard_slots.iter().all(|s| !s.is_empty())
         && domain.rune_paths.iter().all(|p| p.slot_runes.len() >= 4)
     {
-        let primary_idx = rand_index(seed, domain.rune_paths.len());
-        let secondary_choices = (0..domain.rune_paths.len())
-            .filter(|idx| *idx != primary_idx)
+        let primary_choices = domain
+            .rune_paths
+            .iter()
+            .enumerate()
+            .filter_map(|(idx, path)| {
+                path.slot_runes
+                    .iter()
+                    .take(4)
+                    .all(|slot| !slot.is_empty())
+                    .then_some(idx)
+            })
             .collect::<Vec<_>>();
-        if !secondary_choices.is_empty() {
-            let secondary_idx = secondary_choices[rand_index(seed, secondary_choices.len())];
-            let primary = &domain.rune_paths[primary_idx];
-            let secondary = &domain.rune_paths[secondary_idx];
-            if primary.slot_runes[..4].iter().all(|slot| !slot.is_empty()) {
+        if !primary_choices.is_empty() {
+            let primary_idx = primary_choices[rand_index(seed, primary_choices.len())];
+            let secondary_choices = domain
+                .rune_paths
+                .iter()
+                .enumerate()
+                .filter_map(|(idx, path)| {
+                    if idx == primary_idx {
+                        return None;
+                    }
+                    let secondary_slot_count = (1..=3)
+                        .filter(|slot| {
+                            path.slot_runes
+                                .get(*slot)
+                                .map(|runes| !runes.is_empty())
+                                .unwrap_or(false)
+                        })
+                        .count();
+                    (secondary_slot_count >= 2).then_some(idx)
+                })
+                .collect::<Vec<_>>();
+            if !secondary_choices.is_empty() {
+                let secondary_idx = secondary_choices[rand_index(seed, secondary_choices.len())];
+                let primary = &domain.rune_paths[primary_idx];
+                let secondary = &domain.rune_paths[secondary_idx];
                 let secondary_slots = (1..=3)
                     .filter(|slot| {
                         secondary

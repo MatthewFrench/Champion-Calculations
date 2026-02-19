@@ -1,35 +1,35 @@
 {
   "best_build": [
+    "Blade of the Ruined King",
     "Guardian Angel",
+    "Guinsoo's Rageblade",
     "Heartsteel",
-    "Liandry's Torment",
-    "Protoplasm Harness",
-    "Void Staff",
+    "Infinity Edge",
     "Zhonya's Hourglass"
   ],
   "best_rune_proc_telemetry": [
     {
-      "attempt_count": 17,
-      "bonus_damage": 277.0666253194763,
-      "bonus_damage_share": 0.021750124954649445,
+      "attempt_count": 12,
+      "bonus_damage": 317.74411287153566,
+      "bonus_damage_share": 0.041842891637275254,
       "bonus_healing": 0.0,
       "bonus_healing_share": 0.0,
-      "eligible_count": 3,
-      "opportunity_count": 3,
-      "proc_attempt_rate": 0.17647058823529413,
-      "proc_count": 3,
+      "eligible_count": 2,
+      "opportunity_count": 2,
+      "proc_attempt_rate": 0.16666666666666666,
+      "proc_count": 2,
       "proc_eligible_rate": 1.0,
       "proc_opportunity_rate": 1.0,
-      "rune_name": "Summon Aery",
+      "rune_name": "Arcane Comet",
       "source_breakdown": [
         {
-          "attempt_count": 17,
-          "bonus_damage": 277.0666253194763,
+          "attempt_count": 12,
+          "bonus_damage": 317.74411287153566,
           "bonus_healing": 0.0,
-          "eligible_count": 3,
-          "opportunity_count": 3,
-          "proc_attempt_rate": 0.17647058823529413,
-          "proc_count": 3,
+          "eligible_count": 2,
+          "opportunity_count": 2,
+          "proc_attempt_rate": 0.16666666666666666,
+          "proc_count": 2,
           "proc_eligible_rate": 1.0,
           "proc_opportunity_rate": 1.0,
           "source": "ability"
@@ -39,7 +39,7 @@
   ],
   "build_orders": [
     {
-      "cumulative_score": 4.5810645883539545,
+      "cumulative_score": 635.3584647684481,
       "levels": [
         5,
         8,
@@ -50,90 +50,90 @@
       ],
       "ordered_items": [
         "Guardian Angel",
-        "Heartsteel",
-        "Liandry's Torment",
         "Zhonya's Hourglass",
-        "Protoplasm Harness",
-        "Void Staff"
+        "Blade of the Ruined King",
+        "Heartsteel",
+        "Guinsoo's Rageblade",
+        "Infinity Edge"
       ],
       "stage_damage": [
         3261.9886131245007,
-        3056.723688597978,
-        5128.803179638838,
-        10440.815199969133,
-        11577.95262658986,
-        12375.720388035203
+        2886.1131376130793,
+        5192.101765432063,
+        7695.77114671276,
+        6703.312121963641,
+        6930.927570011268
       ],
       "stage_healing": [
         380.89089603022296,
-        513.4615452329358,
-        593.6462738153253,
-        1515.2398829196827,
-        2128.7339179447913,
-        2216.460297051415
+        404.92765733424744,
+        829.2418335177067,
+        1208.879975715327,
+        1235.6787952429581,
+        1241.7546826384046
       ],
       "stage_objective_scores": [
-        0.4871794871794873,
-        0.4871794871794873,
-        0.4871794871794873,
-        1.285117128164385,
-        1.34722951147162,
+        631.614439813486,
+        0.5151301677983499,
+        0.9552515713548768,
+        0.9460152068254544,
+        0.8404485218040068,
         0.4871794871794873
       ],
       "stage_survival_seconds": [
         6.58034739901278,
-        6.999999999999991,
-        7.768158846057961,
-        13.799999999999967,
-        13.799965102555019,
-        14.062419532276262
+        6.4039010938477325,
+        11.499999999999975,
+        13.357767308245878,
+        13.313201463089818,
+        13.10364601413674
       ]
     }
   ],
   "champion_level": 20,
   "controlled_champion_loadout_labels": [
-    "Rune: Summon Aery",
+    "Rune: Arcane Comet",
     "Rune: Nimbus Cloak",
     "Rune: Celerity",
     "Rune: Gathering Storm",
     "Rune: Magical Footwear",
     "Rune: Jack Of All Trades",
-    "Shard 1: attack_speed",
-    "Shard 2: health",
-    "Shard 3: tenacity"
+    "Shard 1: ability_haste",
+    "Shard 2: movement_speed",
+    "Shard 3: health"
   ],
   "controlled_champion_name": "Vladimir",
   "controlled_champion_unmodeled_item_effects": [],
   "controlled_champion_unmodeled_runes": [],
   "diagnostics": {
-    "adaptive_candidates_injected": 3225,
-    "best_significant_score": 0.15724737503066824,
-    "bleed_candidates_injected": 1751,
-    "candidate_duplicates_pruned": 231,
-    "candidate_keys_generated": 17776,
-    "coverage_stage_assets_covered": 0,
-    "coverage_stage_assets_total": 181,
-    "coverage_stage_elapsed_seconds": 4.976161333,
+    "adaptive_candidates_injected": 0,
+    "best_significant_score": 0.1602333349048083,
+    "bleed_candidates_injected": 721,
+    "candidate_duplicates_pruned": 7061,
+    "candidate_keys_generated": 9148,
+    "coverage_stage_assets_covered": 22,
+    "coverage_stage_assets_total": 33,
+    "coverage_stage_elapsed_seconds": 4.181286708,
     "coverage_stage_enabled": true,
     "coverage_stage_incomplete": true,
-    "coverage_stage_seed_candidates": 0,
-    "coverage_stage_seed_candidates_unique": 0,
-    "coverage_stage_warning": "Coverage incomplete: touched 0/181 assets; coverage stage could not produce finite candidates for at least one locked asset. Continuing search in degraded coverage mode.",
-    "effective_seed": 17153168798231823016,
+    "coverage_stage_seed_candidates": 66,
+    "coverage_stage_seed_candidates_unique": 57,
+    "coverage_stage_warning": "Coverage incomplete: touched 22/33 assets; coverage stage could not produce finite candidates for at least one locked asset. Continuing search in degraded coverage mode.",
+    "effective_seed": 17481730509162292401,
     "effective_threads": 9,
-    "elapsed_seconds": 108.057882625,
+    "elapsed_seconds": 6.058754459,
     "ensemble_seeds": 8,
-    "estimated_cache_space_coverage_percent": 1.004596192375298e-11,
-    "estimated_close_to_optimal_probability": 0.03362899981922285,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 3420746 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 3.436468406683031e-7,
-    "estimated_total_candidate_space": 995424835958784.0,
-    "full_cache_hits": 2638674,
-    "full_cache_misses": 4404275,
-    "full_cache_waits": 8,
-    "full_evaluations": 0,
-    "full_persistent_cache_entries": 100,
-    "full_persistent_cache_hits": 160,
+    "estimated_cache_space_coverage_percent": 8.48063973063973,
+    "estimated_close_to_optimal_probability": 0.08131104305187609,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.003006253% (about top 1 candidates in the legal space) and n = 2821 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 8.48063973063973,
+    "estimated_total_candidate_space": 33264.0,
+    "full_cache_hits": 4765,
+    "full_cache_misses": 3909,
+    "full_cache_waits": 120,
+    "full_evaluations": 2821,
+    "full_persistent_cache_entries": 2821,
+    "full_persistent_cache_hits": 119849,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -142,88 +142,70 @@
     "objective_invulnerable_seconds_weight": 0.025641025641025644,
     "objective_survival_weight": 0.25641025641025644,
     "popcorn_min_relative_improvement_percent": 1.0,
-    "popcorn_window_seconds": 600.0,
+    "popcorn_window_seconds": null,
     "portfolio_strategy_parallel": true,
-    "processed_candidates": 17545,
+    "processed_candidates": 0,
     "scenario_count": 1,
     "search_quality_profile": "maximum_quality",
     "search_type_breakdown": [
       {
-        "name": "strategy_elites",
-        "new_simulations": 300,
-        "persistent_cache_hits": 100,
-        "score_requests": 2218396
-      },
-      {
-        "name": "adaptive_search",
-        "new_simulations": 0,
-        "persistent_cache_hits": 0,
-        "score_requests": 2473969
-      },
-      {
         "name": "seed_search:portfolio",
-        "new_simulations": 0,
-        "persistent_cache_hits": 0,
-        "score_requests": 2323087
-      },
-      {
-        "name": "strict_full_ranking",
-        "new_simulations": 0,
-        "persistent_cache_hits": 60,
-        "score_requests": 17545
+        "new_simulations": 3069,
+        "persistent_cache_hits": 119513,
+        "score_requests": 727123
       },
       {
         "name": "coverage_stage",
-        "new_simulations": 0,
-        "persistent_cache_hits": 0,
-        "score_requests": 10112
+        "new_simulations": 840,
+        "persistent_cache_hits": 336,
+        "score_requests": 1176
       }
     ],
-    "seconds_since_last_significant_improvement": 45.637256625,
+    "seconds_since_last_significant_improvement": 6.003687709,
     "seed_orchestration_parallel": true,
-    "significant_improvement_events": 7,
+    "significant_improvement_events": 9,
     "simulation_counts": {
-      "new_full_simulations": 0,
-      "total_score_requests": 7043109,
-      "unique_scored_candidates": 3420746
+      "new_full_simulations": 2821,
+      "total_score_requests": 728299,
+      "unique_scored_candidates": 2821
     },
     "strategy_elites_parallel": true,
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "strict_candidates_skipped_timeout": 0,
-    "strict_completion_percent": 100.0,
+    "strict_candidates_skipped_timeout": 2087,
+    "strict_completion_percent": 0.0,
     "strict_heuristic_ordering_enabled": true,
-    "strict_non_finite_candidates": 17485,
+    "strict_non_finite_candidates": 0,
     "strict_random_promotions_done": 1,
     "strict_ranking_rune_signal_weight": 0.3,
     "strict_ranking_shard_signal_weight": 0.2,
-    "strict_remaining_candidates": 17545,
+    "strict_remaining_candidates": 2087,
     "strict_seed_scored_candidates": 0,
-    "time_budget_seconds": 600.0,
-    "timed_out": false,
-    "total_candidates": 17545,
-    "total_run_seconds": 108.913372166,
-    "unique_candidate_builds": 17545,
-    "unique_scored_candidates": 3420746,
+    "time_budget_seconds": 1.0,
+    "timed_out": true,
+    "total_candidates": 2087,
+    "total_run_seconds": 6.9238613749999995,
+    "unique_candidate_builds": 2087,
+    "unique_scored_candidates": 2821,
     "unmodeled_item_effect_candidates_penalized": 0,
-    "unmodeled_item_effect_candidates_rejected": 16556,
+    "unmodeled_item_effect_candidates_rejected": 0,
     "unmodeled_item_effect_hard_gate": true,
     "unmodeled_item_effect_penalty_per_item": 0.0,
     "unmodeled_rune_candidates_penalized": 0,
-    "unmodeled_rune_candidates_rejected": 4387419,
+    "unmodeled_rune_candidates_rejected": 0,
     "unmodeled_rune_hard_gate": true,
     "unmodeled_rune_penalty_per_rune": 0.0
   },
   "diverse_top_builds": [
     {
       "items": [
+        "Blade of the Ruined King",
         "Guardian Angel",
+        "Guinsoo's Rageblade",
         "Heartsteel",
-        "Liandry's Torment",
-        "Protoplasm Harness",
-        "Void Staff",
+        "Infinity Edge",
         "Zhonya's Hourglass"
       ],
-      "objective_score": 0.15724737503066824
+      "objective_score": 0.09554294285251543
     }
   ],
   "enemy_derived_combat_stats": [
@@ -451,16 +433,16 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-19 13:54:21 -06:00",
-  "generated_utc": "2026-02-19T19:54:21.097803+00:00",
+  "generated_local": "2026-02-19 14:20:55 -06:00",
+  "generated_utc": "2026-02-19T20:20:55.503995+00:00",
   "headline": {
     "best_objective_breakdown": {
       "components": {
         "damage": {
-          "contribution": 0.08839215114719565,
-          "delta_vs_weight_percent_points": 43.391650422248055,
-          "impact_percent": 56.21216324276088,
-          "normalized_ratio": 0.6894587789481259,
+          "contribution": 0.052692289294237096,
+          "delta_vs_weight_percent_points": 42.32986011239483,
+          "impact_percent": 55.15037293290766,
+          "normalized_ratio": 0.4109998564950493,
           "weight": 0.12820512820512822
         },
         "enemy_kills": {
@@ -471,40 +453,40 @@
           "weight": 0.5128205128205129
         },
         "healing": {
-          "contribution": 0.065626074410764,
-          "delta_vs_weight_percent_points": 34.041981606934876,
-          "impact_percent": 41.73428929924257,
-          "normalized_ratio": 0.8531389673399319,
+          "contribution": 0.039826370221924326,
+          "delta_vs_weight_percent_points": 33.99195388983991,
+          "impact_percent": 41.684261582147606,
+          "normalized_ratio": 0.5177428128850162,
           "weight": 0.07692307692307693
         },
         "invulnerable_seconds": {
           "contribution": 0.0002243589743589744,
-          "delta_vs_weight_percent_points": -2.4214235691017145,
-          "impact_percent": 0.14267899500084963,
+          "delta_vs_weight_percent_points": -2.3292772932237873,
+          "impact_percent": 0.23482527087877697,
           "normalized_ratio": 0.00875,
           "weight": 0.025641025641025644
         },
         "survival": {
-          "contribution": 0.0030047904983496287,
-          "delta_vs_weight_percent_points": -23.730157178029938,
-          "impact_percent": 1.9108684629957091,
-          "normalized_ratio": 0.011718682943563551,
+          "contribution": 0.0027999243619950304,
+          "delta_vs_weight_percent_points": -22.71048542695968,
+          "impact_percent": 2.9305402140659673,
+          "normalized_ratio": 0.010919705011780616,
           "weight": 0.25641025641025644
         }
       },
-      "final_score": 0.15724737503066824,
-      "weighted_mean_score": 0.15724737503066824,
-      "worst_case_score": 0.15724737503066824,
+      "final_score": 0.09554294285251543,
+      "weighted_mean_score": 0.09554294285251543,
+      "worst_case_score": 0.09554294285251543,
       "worst_case_weight": 0.35
     },
-    "best_objective_score": 0.15724737503066824,
+    "best_objective_score": 0.09554294285251543,
     "best_outcome": {
       "cap_survivor": false,
-      "damage_dealt": 12738.622233075897,
+      "damage_dealt": 7593.74174294582,
       "enemy_kills": 0,
-      "healing_done": 2294.943822144417,
+      "healing_done": 1392.7281666606937,
       "invulnerable_seconds": 10.5,
-      "time_alive_seconds": 14.062419532276262
+      "time_alive_seconds": 13.10364601413674
     }
   },
   "scenario_path": "Simulation/scenarios/vladimir_urf_teamfight.json",

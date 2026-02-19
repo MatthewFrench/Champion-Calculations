@@ -1,6 +1,12 @@
 # Improvement Tracker
 
 ## Done
+- Aligned hard-gated search with generation-time legality (no post-generation invalid-candidate churn):
+  - when `unmodeled_rune_hard_gate` is enabled, controlled-champion search now uses a modeled-rune-filtered loadout domain instead of generating unmodeled rune pages and rejecting them at score time
+  - when `unmodeled_item_effect_hard_gate` is enabled, controlled-champion search now uses a modeled-runtime-item pool instead of generating unmodeled runtime-effect items and rejecting them at score time
+  - controlled-champion search now validates that the constrained item pool can still form a legal full build before search starts and fails fast with a clear error otherwise
+  - random loadout generation now samples from legal primary/secondary path sets directly, avoiding dead-end path picks
+  - added regression coverage for modeled-rune domain filtering and hard-gated modeled-item search pool filtering
 - Hardened strict-ranking/report validity for missing-candidate and shard-label edge cases:
   - deterministic shard parsing now supports `tenacity` in loadout stat resolution
   - resolved loadout labeling now preserves all selected shard labels even when a shard has no deterministic stat impact

@@ -61,6 +61,7 @@ This file is a concise handoff for developers and AI agents.
     - quality profiles now apply policy defaults:
       - `maximum_quality`: hard gate enabled
       - `fast`/`balanced`: penalty mode
+    - when hard gate is enabled, generation domain is filtered to modeled rune choices before search (invalid rune pages are not generated and then rejected later).
   - unmodeled-item-effect quality gating is explicit and configurable:
     - optional hard gate (`unmodeled_item_effect_hard_gate`)
     - optional per-item score penalty (`unmodeled_item_effect_penalty_per_item`)
@@ -68,6 +69,7 @@ This file is a concise handoff for developers and AI agents.
     - quality profiles now apply policy defaults:
       - `maximum_quality`: hard gate enabled
       - `fast`/`balanced`: penalty mode
+    - when hard gate is enabled, controlled-champion item generation pool is filtered to modeled runtime-effect items before search (invalid runtime-effect items are not generated and then rejected later).
   - diagnostics now report effective thread count and parallel-mode flags for orchestration phases.
 
 ## Data/Runtime Correctness Updates

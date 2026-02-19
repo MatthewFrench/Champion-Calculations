@@ -319,6 +319,44 @@ fn ensure_complete_loadout_selection_fills_missing_selection() {
 }
 
 #[test]
+fn filter_loadout_domain_to_modeled_runes_prunes_unmodeled_entries() {
+    let domain = build_loadout_domain();
+    let filtered = filter_loadout_domain_to_modeled_runes(&domain, 18, true)
+        .expect("modeled rune filtering should succeed");
+
+    let has_rune = |target: &str, candidate_domain: &LoadoutDomain| {
+        candidate_domain
+            .rune_paths
+            .iter()
+            .flat_map(|path| path.slot_runes.iter())
+            .flat_map(|slot| slot.iter())
+            .any(|rune| rune == target)
+    };
+
+    assert!(
+        filtered.rune_paths.len() >= 2,
+        "modeled rune domain should preserve at least two legal rune paths"
+    );
+    assert!(
+        has_rune("Axiom Arcanist", &domain),
+        "fixture assumption changed: Axiom Arcanist missing from source rune domain"
+    );
+    assert!(
+        !has_rune("Axiom Arcanist", &filtered),
+        "Axiom Arcanist should be filtered out until modeled"
+    );
+    assert!(
+        has_rune("Lethal Tempo", &filtered),
+        "known modeled runtime rune should remain in filtered domain"
+    );
+
+    let generated = ensure_complete_loadout_selection(&LoadoutSelection::default(), &filtered)
+        .expect("filtered domain should still support a generated legal loadout");
+    validate_rune_page_selection(&generated, &filtered)
+        .expect("generated loadout from filtered domain should be legal");
+}
+
+#[test]
 fn resolve_loadout_applies_tenacity_shard_and_preserves_shard_labels() {
     let domain = build_loadout_domain();
     let selection = LoadoutSelection {

@@ -12,7 +12,10 @@ use std::time::{Duration, Instant};
 
 use crate::build_order::{acquisition_level_map, optimize_build_order};
 use crate::cache::{BlockingScoreCache, PersistentScoreCache};
-use crate::data::{ensure_complete_loadout_selection, parse_stack_overrides_map};
+use crate::data::{
+    ensure_complete_loadout_selection, filter_loadout_domain_to_modeled_runes,
+    is_legal_rune_page_selection, parse_stack_overrides_map,
+};
 use crate::defaults::protoplasm_lifeline_defaults;
 use crate::engine::{
     ControlledChampionCombatSimulation, EnemyDerivedCombatStats, derive_enemy_combat_stats,
@@ -291,11 +294,60 @@ fn coverage_locked_assets(
     }
 
     let mut rune_by_key = HashMap::<String, String>::new();
-    for path in &loadout_domain.rune_paths {
-        for slot in path.slot_runes.iter().take(4) {
+    let primary_path_indices = loadout_domain
+        .rune_paths
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, path)| {
+            (path.slot_runes.len() >= 4
+                && path.slot_runes.iter().take(4).all(|slot| !slot.is_empty()))
+            .then_some(idx)
+        })
+        .collect::<Vec<_>>();
+    for &primary_idx in &primary_path_indices {
+        let primary_path = &loadout_domain.rune_paths[primary_idx];
+        let secondary_path_indices = loadout_domain
+            .rune_paths
+            .iter()
+            .enumerate()
+            .filter_map(|(idx, path)| {
+                if idx == primary_idx || path.slot_runes.len() < 4 {
+                    return None;
+                }
+                let secondary_slot_count = (1..=3)
+                    .filter(|slot| {
+                        path.slot_runes
+                            .get(*slot)
+                            .map(|slot_runes| !slot_runes.is_empty())
+                            .unwrap_or(false)
+                    })
+                    .count();
+                (secondary_slot_count >= 2).then_some(idx)
+            })
+            .collect::<Vec<_>>();
+        if secondary_path_indices.is_empty() {
+            continue;
+        }
+
+        for slot in primary_path.slot_runes.iter().take(4) {
             for rune_name in slot {
                 let key = to_norm_key(rune_name);
                 rune_by_key.entry(key).or_insert_with(|| rune_name.clone());
+            }
+        }
+        for secondary_idx in secondary_path_indices {
+            let secondary_path = &loadout_domain.rune_paths[secondary_idx];
+            for slot_idx in 1..=3 {
+                let Some(slot) = secondary_path.slot_runes.get(slot_idx) else {
+                    continue;
+                };
+                if slot.is_empty() {
+                    continue;
+                }
+                for rune_name in slot {
+                    let key = to_norm_key(rune_name);
+                    rune_by_key.entry(key).or_insert_with(|| rune_name.clone());
+                }
             }
         }
     }
@@ -312,6 +364,30 @@ fn coverage_locked_assets(
         }
     }
     out
+}
+
+fn filter_item_pool_to_modeled_runtime_effects(item_pool: &[Item]) -> Vec<Item> {
+    item_pool
+        .iter()
+        .filter(|item| !is_item_effect_unmodeled(item))
+        .cloned()
+        .collect::<Vec<_>>()
+}
+
+fn max_legal_build_size(item_pool: &[Item]) -> usize {
+    let boots_count = item_pool.iter().filter(|item| is_boots(item)).count();
+    let non_boots_count = item_pool.len().saturating_sub(boots_count);
+    non_boots_count + usize::from(boots_count > 0)
+}
+
+fn select_search_base_loadout_selection(
+    configured: &LoadoutSelection,
+    search_domain: &crate::data::LoadoutDomain,
+) -> Result<LoadoutSelection> {
+    if is_legal_rune_page_selection(configured, search_domain) {
+        return Ok(configured.clone());
+    }
+    ensure_complete_loadout_selection(&LoadoutSelection::default(), search_domain)
 }
 
 fn persistent_cache_seed_partition(
@@ -2397,16 +2473,56 @@ pub(super) fn run_controlled_champion_scenario(
     let active_strategies = portfolio_strategy_list(&search_cfg);
     let persistent_cache_seed_partition =
         persistent_cache_seed_partition(configured_search_seed, seed_override, search_cfg.seed);
-    let loadout_domain = Arc::new(build_loadout_domain());
+    let full_loadout_domain = Arc::new(build_loadout_domain());
     let controlled_champion_loadout_selection = ensure_complete_loadout_selection(
         &controlled_champion_loadout_selection,
-        loadout_domain.as_ref(),
+        full_loadout_domain.as_ref(),
     )?;
     let enemy_presets = load_enemy_urf_presets()?;
-    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
+    validate_enemy_urf_presets(&enemy_presets, &items, &full_loadout_domain, &urf)?;
     let enemy_loadout = ResolvedLoadout::default();
     let max_items = search_cfg.max_items;
-    let item_pool = default_item_pool(&items, &urf);
+    let full_item_pool = default_item_pool(&items, &urf);
+    let search_loadout_domain = if search_cfg.unmodeled_rune_hard_gate {
+        Arc::new(filter_loadout_domain_to_modeled_runes(
+            full_loadout_domain.as_ref(),
+            sim.champion_level,
+            true,
+        )?)
+    } else {
+        Arc::clone(&full_loadout_domain)
+    };
+    if search_cfg.unmodeled_rune_hard_gate && search_loadout_domain.rune_paths.len() < 2 {
+        return Err(anyhow!(
+            "Unmodeled rune hard gate left fewer than two legal rune paths for controlled champion search."
+        ));
+    }
+    let controlled_champion_search_base_loadout_selection = if search_cfg.unmodeled_rune_hard_gate {
+        select_search_base_loadout_selection(
+            &controlled_champion_loadout_selection,
+            search_loadout_domain.as_ref(),
+        )?
+    } else {
+        controlled_champion_loadout_selection.clone()
+    };
+    let item_pool = if search_cfg.unmodeled_item_effect_hard_gate {
+        filter_item_pool_to_modeled_runtime_effects(&full_item_pool)
+    } else {
+        full_item_pool
+    };
+    if item_pool.is_empty() {
+        return Err(anyhow!(
+            "Unmodeled item-effect hard gate left zero legal items in the controlled champion search pool."
+        ));
+    }
+    let max_legal_items = max_legal_build_size(&item_pool);
+    if max_legal_items < max_items {
+        return Err(anyhow!(
+            "Controlled champion search cannot form a full build under active item constraints: max_items={} but at most {} legal item slots are available.",
+            max_items,
+            max_legal_items
+        ));
+    }
     status.emit(
         "configuration",
         None,
@@ -2746,8 +2862,8 @@ pub(super) fn run_controlled_champion_scenario(
     let full_search_params = FullLoadoutSearchParams {
         item_pool: &item_pool,
         max_items,
-        loadout_domain: loadout_domain.as_ref(),
-        base_loadout: &controlled_champion_loadout_selection,
+        loadout_domain: search_loadout_domain.as_ref(),
+        base_loadout: &controlled_champion_search_base_loadout_selection,
     };
 
     let mut coverage_stage_diagnostics = CoverageStageDiagnostics::default();
@@ -2755,7 +2871,7 @@ pub(super) fn run_controlled_champion_scenario(
     if matches!(search_quality_profile, SearchQualityProfile::MaximumQuality) {
         coverage_stage_diagnostics.enabled = true;
         let coverage_start = Instant::now();
-        let coverage_assets = coverage_locked_assets(&item_pool, loadout_domain.as_ref());
+        let coverage_assets = coverage_locked_assets(&item_pool, search_loadout_domain.as_ref());
         coverage_stage_diagnostics.assets_total = coverage_assets.len();
         let mut coverage_stage_stopped_early = false;
         let coverage_trials_per_asset = (search_cfg.random_samples / 14).clamp(12, 48);
@@ -3037,8 +3153,8 @@ pub(super) fn run_controlled_champion_scenario(
         unique_candidate_keys.push(canonical_build_candidate(BuildKey {
             item_indices: random_valid_build(&item_pool, max_items, &mut fallback_seed),
             loadout_selection: random_loadout_selection(
-                &controlled_champion_loadout_selection,
-                loadout_domain.as_ref(),
+                &controlled_champion_search_base_loadout_selection,
+                search_loadout_domain.as_ref(),
                 &mut fallback_seed,
             ),
         }));
@@ -3303,7 +3419,7 @@ pub(super) fn run_controlled_champion_scenario(
     let strategy_elites_parallel = active_strategies.len() > 1 || ensemble_seeds > 1;
     let estimated_total_candidate_space = {
         let item_space = estimated_legal_item_build_count(&item_pool, max_items);
-        let loadout_space = estimated_legal_loadout_count(loadout_domain.as_ref());
+        let loadout_space = estimated_legal_loadout_count(search_loadout_domain.as_ref());
         let total = item_space * loadout_space;
         (total.is_finite() && total > 0.0).then_some(total)
     };
