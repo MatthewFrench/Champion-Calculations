@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, bail};
 use chrono::{DateTime, Local, Utc};
 use serde_json::{Value, json};
 use std::collections::HashMap;
@@ -75,6 +75,29 @@ fn format_percent_display(percent: f64) -> String {
     } else {
         format!("{percent:.6}%")
     }
+}
+
+pub(super) fn validate_controlled_champion_selection_labels(
+    controlled_champion_name: &str,
+    selection_labels: &[String],
+) -> Result<()> {
+    let rune_count = selection_labels
+        .iter()
+        .filter(|label| label.starts_with("Rune: "))
+        .count();
+    let shard_count = selection_labels
+        .iter()
+        .filter(|label| label.starts_with("Shard "))
+        .count();
+    if rune_count < 6 || shard_count < 3 {
+        bail!(
+            "Controlled champion '{}' report invariant violation: expected >=6 rune labels and >=3 shard labels, got runes={} shards={}.",
+            controlled_champion_name,
+            rune_count,
+            shard_count
+        );
+    }
+    Ok(())
 }
 
 fn append_objective_score_breakdown_block(
@@ -171,6 +194,7 @@ pub(super) fn write_controlled_champion_report_markdown(
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
+    let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
     let best_score_breakdown = data.best_score_breakdown;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
@@ -183,6 +207,11 @@ pub(super) fn write_controlled_champion_report_markdown(
     let pareto_front = data.pareto_front;
     let diagnostics = data.diagnostics;
     let build_orders = data.build_orders;
+
+    validate_controlled_champion_selection_labels(
+        controlled_champion_name,
+        &controlled_champion_loadout.selection_labels,
+    )?;
 
     let now = SystemTime::now();
     let generated_utc: DateTime<Utc> = now.into();
@@ -224,6 +253,54 @@ pub(super) fn write_controlled_champion_report_markdown(
     ));
     content.push_str("## Objective Score Breakdown\n");
     append_objective_score_breakdown_block(&mut content, "Best Build", best_score_breakdown);
+    content.push_str("## Rune Proc Telemetry (Best Trace)\n");
+    if best_rune_proc_telemetry.is_empty() {
+        content.push_str("- No rune procs were recorded during the best-trace replay.\n\n");
+    } else {
+        for entry in best_rune_proc_telemetry {
+            let damage_share_percent = if best_outcome.damage_dealt > 0.0 {
+                (entry.bonus_damage.max(0.0) / best_outcome.damage_dealt) * 100.0
+            } else {
+                0.0
+            };
+            let healing_share_percent = if best_outcome.healing_done > 0.0 {
+                (entry.bonus_healing.max(0.0) / best_outcome.healing_done) * 100.0
+            } else {
+                0.0
+            };
+            content.push_str(&format!(
+                "- {}: procs `{}` / opportunities `{}` ({:.1}% rate), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
+                entry.rune_name,
+                entry.proc_count,
+                entry.opportunity_count,
+                entry.proc_opportunity_rate * 100.0,
+                entry.bonus_damage,
+                damage_share_percent,
+                entry.bonus_healing,
+                healing_share_percent
+            ));
+            if !entry.source_breakdown.is_empty() {
+                let sources = entry
+                    .source_breakdown
+                    .iter()
+                    .map(|source| {
+                        format!(
+                            "{} (procs {}, opportunities {}, rate {:.1}%, damage {:.2}, healing {:.2})",
+                            source.source,
+                            source.proc_count,
+                            source.opportunity_count,
+                            source.proc_opportunity_rate * 100.0,
+                            source.bonus_damage,
+                            source.bonus_healing
+                        )
+                    })
+                    .collect::<Vec<_>>()
+                    .join("; ");
+                content.push_str(&format!("  - sources: {}\n", sources));
+            }
+        }
+        content.push('\n');
+    }
 
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     let processed_candidates = diagnostics
@@ -403,13 +480,9 @@ pub(super) fn write_controlled_champion_report_markdown(
     ));
 
     content.push_str("## Selected Rune Page And Shards\n");
-    if controlled_champion_loadout.selection_labels.is_empty() {
-        content.push_str(&format!("- {}: none selected.\n", controlled_champion_name));
-    } else {
-        content.push_str(&format!("- {}:\n", controlled_champion_name));
-        for s in &controlled_champion_loadout.selection_labels {
-            content.push_str(&format!("  - {}\n", s));
-        }
+    content.push_str(&format!("- {}:\n", controlled_champion_name));
+    for s in &controlled_champion_loadout.selection_labels {
+        content.push_str(&format!("  - {}\n", s));
     }
     if enemy_loadout.selection_labels.is_empty() {
         content.push_str(
@@ -724,6 +797,7 @@ pub(super) fn write_controlled_champion_report_json(
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
+    let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
     let best_score_breakdown = data.best_score_breakdown;
     let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_builds = data.enemy_builds;
@@ -733,6 +807,10 @@ pub(super) fn write_controlled_champion_report_json(
     let diverse_top_builds = data.diverse_top_builds;
     let diagnostics = data.diagnostics;
     let build_orders = data.build_orders;
+    validate_controlled_champion_selection_labels(
+        controlled_champion_name,
+        &controlled_champion_loadout.selection_labels,
+    )?;
     let total_score_requests = diagnostics
         .search_type_breakdown
         .iter()
@@ -756,6 +834,38 @@ pub(super) fn write_controlled_champion_report_json(
             },
             "best_objective_breakdown": objective_breakdown_json(best_score_breakdown),
         },
+        "best_rune_proc_telemetry": best_rune_proc_telemetry.iter().map(|entry| {
+            let damage_share = if best_outcome.damage_dealt > 0.0 {
+                entry.bonus_damage.max(0.0) / best_outcome.damage_dealt
+            } else {
+                0.0
+            };
+            let healing_share = if best_outcome.healing_done > 0.0 {
+                entry.bonus_healing.max(0.0) / best_outcome.healing_done
+            } else {
+                0.0
+            };
+            json!({
+                "rune_name": entry.rune_name,
+                "proc_count": entry.proc_count,
+                "opportunity_count": entry.opportunity_count,
+                "proc_opportunity_rate": entry.proc_opportunity_rate,
+                "bonus_damage": entry.bonus_damage,
+                "bonus_damage_share": damage_share,
+                "bonus_healing": entry.bonus_healing,
+                "bonus_healing_share": healing_share,
+                "source_breakdown": entry.source_breakdown.iter().map(|source| {
+                    json!({
+                        "source": source.source,
+                        "proc_count": source.proc_count,
+                        "opportunity_count": source.opportunity_count,
+                        "proc_opportunity_rate": source.proc_opportunity_rate,
+                        "bonus_damage": source.bonus_damage,
+                        "bonus_healing": source.bonus_healing
+                    })
+                }).collect::<Vec<_>>()
+            })
+        }).collect::<Vec<_>>(),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
         "controlled_champion_unmodeled_runes": controlled_champion_loadout.unmodeled_rune_names,

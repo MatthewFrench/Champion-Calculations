@@ -488,12 +488,14 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
     }
 
     let stack_overrides = parse_stack_overrides_map(data.get("stack_overrides"))?;
+    let combat_seed = data.get("combat_seed").and_then(Value::as_u64);
 
     Ok(SimulationConfig {
         dt,
         server_tick_rate_hz,
         champion_level,
         max_time_seconds,
+        combat_seed,
         controlled_champion_script: None,
         zhonya_duration_seconds: data
             .get("zhonya_duration_seconds")
@@ -880,12 +882,20 @@ pub(crate) fn apply_search_quality_profile(
     match profile {
         SearchQualityProfile::Fast => {
             apply_profile_overrides(search, profile_defaults.fast);
+            search.unmodeled_rune_hard_gate = false;
+            search.unmodeled_rune_penalty_per_rune =
+                search.unmodeled_rune_penalty_per_rune.max(0.0);
         }
         SearchQualityProfile::Balanced => {
             apply_profile_overrides(search, profile_defaults.balanced);
+            search.unmodeled_rune_hard_gate = false;
+            search.unmodeled_rune_penalty_per_rune =
+                search.unmodeled_rune_penalty_per_rune.max(0.0);
         }
         SearchQualityProfile::MaximumQuality => {
             apply_profile_minimums(search, profile_defaults.maximum_quality_minimums);
+            search.unmodeled_rune_hard_gate = true;
+            search.unmodeled_rune_penalty_per_rune = 0.0;
         }
     }
 }

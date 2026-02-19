@@ -30,19 +30,25 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Opponent encounter parsing requires at least one positive scenario weight (all-zero-weight encounter sets are rejected).
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
-- Controlled champion loadout runtime scripts are now applied during combat-time auto attacks, spell hits, kill events, and regeneration ticks.
+- Shared loadout runtime scripts are applied during combat-time auto attacks, spell hits, kill events, and regeneration ticks for both controlled champion and enemies.
 - Shared loadout runtime now exposes generic rune trigger hooks for:
   - on-hit events
   - ability-hit events
   - outgoing-damage healing resolution
   - immobilize-triggered effects
 - Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, and Aftershock in addition to previously modeled runtime runes.
+- Combat-time keystone coverage also includes Electrocute, First Strike, and Phase Rush.
+- Combat-time rune coverage now also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
+- Controlled champion and enemy actors consume the same shared rune-combat runtime interfaces; controlled-champion runtime module now only owns defensive item/revive policy helpers.
+- Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
+- Aftershock now models an active resist window that reduces incoming physical and magic damage while active.
 - Defensive item activation and revive triggers are modeled through generic controlled champion runtime/item script capabilities (not champion-specific decision structs).
 - Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).
 - Runtime stat resolution is buff-aware and starts from canonical base data before applying state transforms:
   - cooldown metrics resolve through shared runtime stat queries (ability/item/neutral sources)
   - scalar combat metrics resolve through shared runtime stat queries (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
   - modeled item cooldown passives (for example Heartsteel and Luden's Echo) load base cooldowns from canonical item effects data and then apply runtime haste/buff state
+- Rune runtime tuning defaults are loaded from `data/simulator_defaults.json` under `rune_runtime_defaults` (global ownership).
 - Controlled-champion combat sequencing decisions are delegated through a champion-script facade from engine (Vladimir is currently the implemented controlled-champion script).
 - Enemy champion script events are generated in scripts and applied by generic engine action handling.
 - Foundational combat primitives are present for future fidelity work:
@@ -118,8 +124,8 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/scripts/champions/vladimir/mod.rs`: Vladimir scripted formulas and combat decision APIs (offense and defensive ability decisions).
 - `src/scripts/champions/<champion>/mod.rs`: Per-champion behavior/event logic modules.
 - `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack override handling).
-- `src/scripts/runes/effects.rs`: Rune runtime flag parsing and dynamic-runtime classification.
-- `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion runtime effects, defensive item/revive decision helpers, and loadout hook implementation.
+- `src/scripts/runes/effects.rs`: Dynamic-runtime rune classification list for loadout/runtime diagnostics.
+- `src/scripts/runtime/controlled_champion_loadout.rs`: Controlled champion defensive item/revive decision helpers plus loadout hook implementation.
 - `src/scripts/runtime/loadout_runtime.rs`: Shared combat-time loadout runtime state and effect helpers.
 - `src/scripts/runtime/stat_resolution.rs`: Shared runtime stat-query resolver for buff-aware metric transformations (cooldowns plus scalar combat metrics from base data + runtime buff state).
 - `src/scripts/registry/hooks.rs`: Script hook interfaces, contexts, and dispatch registry.
@@ -167,10 +173,11 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 - Trace outputs are also champion-keyed:
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.md`
   - `Simulation/output/runs/controlled_champion/<search_quality_profile>/<runtime_budget>/<controlled_champion_key>_event_trace.json`
-  - Trace JSON schema:
-    - `schema_version`: integer schema version for trace consumers
-    - `event_encoding`: currently `structured`
-    - `events[]`: objects with `timestamp_seconds`, `event_type`, `details`, and `raw`
+	  - Trace JSON schema:
+	    - `schema_version`: integer schema version for trace consumers
+	    - `event_encoding`: currently `structured`
+	    - `rune_proc_telemetry[]`: rune proc totals plus calibration metrics (`proc_count`, `opportunity_count`, `proc_opportunity_rate`, `bonus_damage`, `bonus_damage_share`, `bonus_healing`, `bonus_healing_share`) plus `source_breakdown[]`
+	    - `events[]`: objects with `timestamp_seconds`, `event_type`, `details`, and `raw`
   - trace includes explicit impact outcome events such as `projectile_blocked`, `impact_nullified`, `attack_missed`, and `ability_missed`.
 - Compatibility aliases:
   - `--mode vladimir` maps to `--mode controlled_champion`.
@@ -184,6 +191,13 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
     - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_report.json`
     - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_trace.md`
     - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_trace.json`
+- `controlled_champion_fixed_loadout_rune_sweep` mode:
+  - evaluates one fixed item build while sweeping all legal keystones in the same primary rune path as the baseline keystone.
+  - required: `--fixed-item-names "<comma-separated six items>"`.
+  - optional overrides: `--fixed-rune-names`, `--fixed-shard-stats`, `--fixed-eval-label`, `--fixed-sweep-seed-repeats`.
+  - writes outputs to:
+    - `Simulation/output/runs/controlled_champion/fixed_loadout_rune_sweep/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_rune_sweep_report.md`
+    - `Simulation/output/runs/controlled_champion/fixed_loadout_rune_sweep/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_rune_sweep_report.json`
 
 ## Runtime Controls
 - `--max-runtime-seconds N`:
@@ -204,9 +218,15 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Prints periodic status lines (phase, elapsed, progress, best score) while searching.
 - `--search-quality-profile {fast|balanced|maximum_quality}`:
   - Applies opinionated search settings. Default is `maximum_quality`.
+  - Also applies unmodeled-rune policy:
+    - `maximum_quality`: hard gate (reject candidates with unmodeled runes)
+    - `fast`/`balanced`: score-penalty mode
 - `--seed N`:
   - Overrides runtime seed with deterministic value `N`.
   - If not provided, runtime seed is random unless the scenario explicitly sets `search.seed`.
+- `simulation.combat_seed` (scenario key):
+  - Optional deterministic combat-variation seed for enemy initialization order and initial auto-attack jitter.
+  - `controlled_champion_fixed_loadout_rune_sweep --fixed-sweep-seed-repeats` now derives unique combat seeds per repeat from this run's effective search seed and keystone identity.
 
 ## Continuous Integration and Release
 - Repository workflows are defined under:

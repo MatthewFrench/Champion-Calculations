@@ -1,14 +1,14 @@
 use crate::to_norm_key;
 use crate::{
     defaults::{
-        heartsteel_colossal_consumption_cooldown_seconds_default,
-        luden_echo_cooldown_seconds_default,
+        LevelScalingRange, heartsteel_colossal_consumption_cooldown_seconds_default,
+        luden_echo_cooldown_seconds_default, rune_runtime_defaults,
     },
     scripts::runtime::stat_resolution::{
         CooldownMetricSource, RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
     },
 };
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct OnHitEffectProfile {
@@ -27,6 +27,61 @@ struct PressTheAttackTargetState {
     vulnerable_until: f64,
 }
 
+#[derive(Debug, Clone, Copy, Default)]
+struct HitWindowTargetState {
+    stacks: usize,
+    expires_at: f64,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+struct RuneProcTotals {
+    proc_count: usize,
+    bonus_damage: f64,
+    bonus_healing: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub(crate) enum RuneProcTriggerSource {
+    OnHit,
+    Ability,
+    Immobilize,
+    EnemyKill,
+    RuntimeActivation,
+}
+
+impl RuneProcTriggerSource {
+    fn label(self) -> &'static str {
+        match self {
+            Self::OnHit => "on_hit",
+            Self::Ability => "ability",
+            Self::Immobilize => "immobilize",
+            Self::EnemyKill => "enemy_kill",
+            Self::RuntimeActivation => "runtime_activation",
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) struct RuneProcTelemetrySourceEntry {
+    pub source: String,
+    pub proc_count: usize,
+    pub opportunity_count: usize,
+    pub proc_opportunity_rate: f64,
+    pub bonus_damage: f64,
+    pub bonus_healing: f64,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) struct RuneProcTelemetryEntry {
+    pub rune_name: String,
+    pub proc_count: usize,
+    pub opportunity_count: usize,
+    pub proc_opportunity_rate: f64,
+    pub bonus_damage: f64,
+    pub bonus_healing: f64,
+    pub source_breakdown: Vec<RuneProcTelemetrySourceEntry>,
+}
+
 #[derive(Debug, Clone)]
 pub(crate) struct LoadoutRuntimeState {
     has_lethal_tempo: bool,
@@ -42,12 +97,23 @@ pub(crate) struct LoadoutRuntimeState {
     has_fleet_footwork: bool,
     has_conqueror: bool,
     has_aftershock: bool,
+    has_electrocute: bool,
+    has_first_strike: bool,
+    has_phase_rush: bool,
+    has_arcane_comet: bool,
+    has_summon_aery: bool,
+    has_hail_of_blades: bool,
+    has_dark_harvest: bool,
+    has_triumph: bool,
+    has_gathering_storm: bool,
     owner_is_melee: bool,
 
     pub attacks_landed: usize,
     pub lethal_tempo_stacks: usize,
+    pub hail_of_blades_remaining_attacks: usize,
     pub guinsoo_stacks: usize,
     pub conqueror_stacks: usize,
+    pub dark_harvest_souls: usize,
     pub grasp_cooldown_seconds: f64,
     pub heartsteel_cooldown_seconds: f64,
     pub luden_cooldown_seconds: f64,
@@ -57,8 +123,25 @@ pub(crate) struct LoadoutRuntimeState {
     pub conqueror_expires_at: f64,
     pub fleet_ready_at: f64,
     pub aftershock_ready_at: f64,
-    pub pending_heal: f64,
+    pub aftershock_active_until: f64,
+    pub electrocute_ready_at: f64,
+    pub first_strike_ready_at: f64,
+    pub first_strike_window_until: f64,
+    pub phase_rush_ready_at: f64,
+    pub phase_rush_active_until: f64,
+    pub arcane_comet_ready_at: f64,
+    pub summon_aery_ready_at: f64,
+    pub hail_of_blades_ready_at: f64,
+    pub hail_of_blades_expires_at: f64,
+    pub dark_harvest_ready_at: f64,
+    pub pending_fleet_heal: f64,
     press_the_attack_targets: HashMap<usize, PressTheAttackTargetState>,
+    electrocute_targets: HashMap<usize, HitWindowTargetState>,
+    phase_rush_targets: HashMap<usize, HitWindowTargetState>,
+    rune_proc_totals: HashMap<String, RuneProcTotals>,
+    rune_proc_totals_by_source: HashMap<String, HashMap<RuneProcTriggerSource, RuneProcTotals>>,
+    rune_proc_opportunities: HashMap<String, usize>,
+    rune_proc_opportunities_by_source: HashMap<String, HashMap<RuneProcTriggerSource, usize>>,
 }
 
 impl Default for LoadoutRuntimeState {
@@ -77,11 +160,22 @@ impl Default for LoadoutRuntimeState {
             has_fleet_footwork: false,
             has_conqueror: false,
             has_aftershock: false,
+            has_electrocute: false,
+            has_first_strike: false,
+            has_phase_rush: false,
+            has_arcane_comet: false,
+            has_summon_aery: false,
+            has_hail_of_blades: false,
+            has_dark_harvest: false,
+            has_triumph: false,
+            has_gathering_storm: false,
             owner_is_melee: false,
             attacks_landed: 0,
             lethal_tempo_stacks: 0,
+            hail_of_blades_remaining_attacks: 0,
             guinsoo_stacks: 0,
             conqueror_stacks: 0,
+            dark_harvest_souls: 0,
             grasp_cooldown_seconds: 4.0,
             heartsteel_cooldown_seconds: 0.0,
             luden_cooldown_seconds: 0.0,
@@ -91,8 +185,25 @@ impl Default for LoadoutRuntimeState {
             conqueror_expires_at: 0.0,
             fleet_ready_at: 0.0,
             aftershock_ready_at: 0.0,
-            pending_heal: 0.0,
+            aftershock_active_until: 0.0,
+            electrocute_ready_at: 0.0,
+            first_strike_ready_at: 0.0,
+            first_strike_window_until: 0.0,
+            phase_rush_ready_at: 0.0,
+            phase_rush_active_until: 0.0,
+            arcane_comet_ready_at: 0.0,
+            summon_aery_ready_at: 0.0,
+            hail_of_blades_ready_at: 0.0,
+            hail_of_blades_expires_at: 0.0,
+            dark_harvest_ready_at: 0.0,
+            pending_fleet_heal: 0.0,
             press_the_attack_targets: HashMap::new(),
+            electrocute_targets: HashMap::new(),
+            phase_rush_targets: HashMap::new(),
+            rune_proc_totals: HashMap::new(),
+            rune_proc_totals_by_source: HashMap::new(),
+            rune_proc_opportunities: HashMap::new(),
+            rune_proc_opportunities_by_source: HashMap::new(),
         }
     }
 }
@@ -101,6 +212,88 @@ fn level_scaled_value(level: usize, min: f64, max: f64) -> f64 {
     let clamped_level = level.clamp(1, 18);
     let t = (clamped_level as f64 - 1.0) / 17.0;
     min + (max - min) * t
+}
+
+fn level_scaled_range_value(level: usize, range: LevelScalingRange) -> f64 {
+    level_scaled_value(level, range.min, range.max)
+}
+
+fn title_case_rune_name(normalized_rune_key: &str) -> String {
+    match normalized_rune_key {
+        "graspoftheundying" => "Grasp of the Undying".to_string(),
+        "lethaltempo" => "Lethal Tempo".to_string(),
+        "presstheattack" => "Press the Attack".to_string(),
+        "fleetfootwork" => "Fleet Footwork".to_string(),
+        "conqueror" => "Conqueror".to_string(),
+        "aftershock" => "Aftershock".to_string(),
+        "electrocute" => "Electrocute".to_string(),
+        "firststrike" => "First Strike".to_string(),
+        "phaserush" => "Phase Rush".to_string(),
+        "arcanecomet" => "Arcane Comet".to_string(),
+        "summonaery" => "Summon Aery".to_string(),
+        "hailofblades" => "Hail of Blades".to_string(),
+        "darkharvest" => "Dark Harvest".to_string(),
+        "triumph" => "Triumph".to_string(),
+        "gatheringstorm" => "Gathering Storm".to_string(),
+        _ => normalized_rune_key.to_string(),
+    }
+}
+
+fn record_rune_proc(
+    runtime: &mut LoadoutRuntimeState,
+    rune_key: &str,
+    source: RuneProcTriggerSource,
+    damage: f64,
+    healing: f64,
+) {
+    let entry = runtime
+        .rune_proc_totals
+        .entry(rune_key.to_string())
+        .or_default();
+    entry.proc_count += 1;
+    entry.bonus_damage += damage.max(0.0);
+    entry.bonus_healing += healing.max(0.0);
+    let by_source = runtime
+        .rune_proc_totals_by_source
+        .entry(rune_key.to_string())
+        .or_default();
+    let source_entry = by_source.entry(source).or_default();
+    source_entry.proc_count += 1;
+    source_entry.bonus_damage += damage.max(0.0);
+    source_entry.bonus_healing += healing.max(0.0);
+}
+
+fn record_rune_proc_opportunity(
+    runtime: &mut LoadoutRuntimeState,
+    rune_key: &str,
+    source: RuneProcTriggerSource,
+) {
+    *runtime
+        .rune_proc_opportunities
+        .entry(rune_key.to_string())
+        .or_insert(0) += 1;
+    *runtime
+        .rune_proc_opportunities_by_source
+        .entry(rune_key.to_string())
+        .or_default()
+        .entry(source)
+        .or_insert(0) += 1;
+}
+
+fn accumulate_window_stacks(
+    stacks_by_target: &mut HashMap<usize, HitWindowTargetState>,
+    target_idx: usize,
+    now: f64,
+    window_seconds: f64,
+    max_stacks: usize,
+) -> usize {
+    let state = stacks_by_target.entry(target_idx).or_default();
+    if now > state.expires_at {
+        state.stacks = 0;
+    }
+    state.stacks = (state.stacks + 1).min(max_stacks);
+    state.expires_at = now + window_seconds.max(0.0);
+    state.stacks
 }
 
 fn decay_expired_conqueror_stacks(runtime: &mut LoadoutRuntimeState, now: f64) {
@@ -113,9 +306,249 @@ fn add_conqueror_stacks(runtime: &mut LoadoutRuntimeState, stacks: usize, now: f
     if !runtime.has_conqueror || stacks == 0 {
         return;
     }
+    let defaults = &rune_runtime_defaults().conqueror;
     decay_expired_conqueror_stacks(runtime, now);
-    runtime.conqueror_stacks = (runtime.conqueror_stacks + stacks).min(12);
-    runtime.conqueror_expires_at = now + 5.0;
+    runtime.conqueror_stacks = (runtime.conqueror_stacks + stacks).min(defaults.max_stacks.max(1));
+    runtime.conqueror_expires_at = now + defaults.stack_duration_seconds.max(0.0);
+}
+
+fn maybe_apply_first_strike(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    raw_damage: f64,
+    attacker_level: usize,
+    source: RuneProcTriggerSource,
+) -> f64 {
+    let defaults = &rune_runtime_defaults().first_strike;
+    if !runtime.has_first_strike {
+        return 0.0;
+    }
+    record_rune_proc_opportunity(runtime, "firststrike", source);
+    if now >= runtime.first_strike_ready_at && now > runtime.first_strike_window_until {
+        runtime.first_strike_window_until = now + defaults.window_duration_seconds.max(0.0);
+        runtime.first_strike_ready_at =
+            now + level_scaled_range_value(attacker_level, defaults.cooldown_by_level).max(0.0);
+    }
+    if now > runtime.first_strike_window_until {
+        return 0.0;
+    }
+    let bonus_true = defaults.bonus_true_damage_ratio.max(0.0) * raw_damage.max(0.0);
+    if bonus_true > 0.0 {
+        record_rune_proc(runtime, "firststrike", source, bonus_true, 0.0);
+    }
+    bonus_true
+}
+
+fn maybe_apply_electrocute(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    target_id: Option<usize>,
+    attacker_level: usize,
+    source: RuneProcTriggerSource,
+) -> f64 {
+    let defaults = &rune_runtime_defaults().electrocute;
+    if !runtime.has_electrocute {
+        return 0.0;
+    }
+    record_rune_proc_opportunity(runtime, "electrocute", source);
+    if now < runtime.electrocute_ready_at {
+        return 0.0;
+    }
+    let Some(target_idx) = target_id else {
+        return 0.0;
+    };
+    let stacks = accumulate_window_stacks(
+        &mut runtime.electrocute_targets,
+        target_idx,
+        now,
+        defaults.hit_window_seconds,
+        defaults.hits_to_proc.max(1),
+    );
+    if stacks < defaults.hits_to_proc.max(1) {
+        return 0.0;
+    }
+    runtime.electrocute_ready_at =
+        now + level_scaled_range_value(attacker_level, defaults.cooldown_by_level).max(0.0);
+    if let Some(state) = runtime.electrocute_targets.get_mut(&target_idx) {
+        state.stacks = 0;
+        state.expires_at = now;
+    }
+    let damage = level_scaled_range_value(attacker_level, defaults.proc_magic_damage_by_level);
+    record_rune_proc(runtime, "electrocute", source, damage, 0.0);
+    damage
+}
+
+fn maybe_apply_phase_rush(runtime: &mut LoadoutRuntimeState, now: f64, target_id: Option<usize>) {
+    let defaults = &rune_runtime_defaults().phase_rush;
+    if !runtime.has_phase_rush {
+        return;
+    }
+    record_rune_proc_opportunity(
+        runtime,
+        "phaserush",
+        RuneProcTriggerSource::RuntimeActivation,
+    );
+    if now < runtime.phase_rush_ready_at {
+        return;
+    }
+    let Some(target_idx) = target_id else {
+        return;
+    };
+    let stacks = accumulate_window_stacks(
+        &mut runtime.phase_rush_targets,
+        target_idx,
+        now,
+        defaults.hit_window_seconds,
+        defaults.hits_to_proc.max(1),
+    );
+    if stacks < defaults.hits_to_proc.max(1) {
+        return;
+    }
+    runtime.phase_rush_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    runtime.phase_rush_active_until = now + defaults.active_duration_seconds.max(0.0);
+    if let Some(state) = runtime.phase_rush_targets.get_mut(&target_idx) {
+        state.stacks = 0;
+        state.expires_at = now;
+    }
+    record_rune_proc(
+        runtime,
+        "phaserush",
+        RuneProcTriggerSource::RuntimeActivation,
+        0.0,
+        0.0,
+    );
+}
+
+fn gathering_storm_bonus_ability_power(runtime: &LoadoutRuntimeState, now: f64) -> f64 {
+    if !runtime.has_gathering_storm {
+        return 0.0;
+    }
+    let defaults = &rune_runtime_defaults().gathering_storm;
+    let interval = defaults.interval_seconds.max(1.0);
+    let intervals_completed = (now / interval).floor().max(0.0) as usize;
+    if intervals_completed == 0 {
+        return 0.0;
+    }
+    defaults
+        .ability_power_by_interval
+        .get(intervals_completed - 1)
+        .copied()
+        .or_else(|| defaults.ability_power_by_interval.last().copied())
+        .unwrap_or(0.0)
+}
+
+fn update_hail_of_blades_state(runtime: &mut LoadoutRuntimeState, now: f64) {
+    if !runtime.has_hail_of_blades {
+        return;
+    }
+    let defaults = &rune_runtime_defaults().hail_of_blades;
+    if runtime.hail_of_blades_remaining_attacks > 0 && now > runtime.hail_of_blades_expires_at {
+        runtime.hail_of_blades_remaining_attacks = 0;
+        runtime.hail_of_blades_expires_at = 0.0;
+        runtime.hail_of_blades_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    }
+    if runtime.hail_of_blades_remaining_attacks == 0 && now >= runtime.hail_of_blades_ready_at {
+        runtime.hail_of_blades_remaining_attacks = defaults.empowered_attack_count.max(1);
+        runtime.hail_of_blades_expires_at = now + defaults.active_duration_seconds.max(0.0);
+    }
+    if runtime.hail_of_blades_remaining_attacks > 0 {
+        runtime.hail_of_blades_remaining_attacks -= 1;
+        runtime.hail_of_blades_expires_at = now + defaults.active_duration_seconds.max(0.0);
+        if runtime.hail_of_blades_remaining_attacks == 0 {
+            runtime.hail_of_blades_ready_at = now + defaults.cooldown_seconds.max(0.0);
+        }
+    }
+}
+
+fn maybe_apply_arcane_comet(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    attacker_level: usize,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+) -> f64 {
+    let defaults = &rune_runtime_defaults().arcane_comet;
+    if !runtime.has_arcane_comet {
+        return 0.0;
+    }
+    record_rune_proc_opportunity(runtime, "arcanecomet", RuneProcTriggerSource::Ability);
+    if now < runtime.arcane_comet_ready_at {
+        return 0.0;
+    }
+    runtime.arcane_comet_ready_at =
+        now + level_scaled_range_value(attacker_level, defaults.cooldown_by_level).max(0.0);
+    let damage = level_scaled_range_value(attacker_level, defaults.proc_magic_damage_by_level)
+        + defaults.ability_power_ratio.max(0.0) * attacker_ability_power.max(0.0)
+        + defaults.bonus_attack_damage_ratio.max(0.0) * attacker_bonus_attack_damage.max(0.0);
+    if damage > 0.0 {
+        record_rune_proc(
+            runtime,
+            "arcanecomet",
+            RuneProcTriggerSource::Ability,
+            damage,
+            0.0,
+        );
+    }
+    damage
+}
+
+fn maybe_apply_summon_aery(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    attacker_level: usize,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+    source: RuneProcTriggerSource,
+) -> f64 {
+    let defaults = &rune_runtime_defaults().summon_aery;
+    if !runtime.has_summon_aery {
+        return 0.0;
+    }
+    record_rune_proc_opportunity(runtime, "summonaery", source);
+    if now < runtime.summon_aery_ready_at {
+        return 0.0;
+    }
+    runtime.summon_aery_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    let damage = level_scaled_range_value(attacker_level, defaults.proc_magic_damage_by_level)
+        + defaults.ability_power_ratio.max(0.0) * attacker_ability_power.max(0.0)
+        + defaults.bonus_attack_damage_ratio.max(0.0) * attacker_bonus_attack_damage.max(0.0);
+    if damage > 0.0 {
+        record_rune_proc(runtime, "summonaery", source, damage, 0.0);
+    }
+    damage
+}
+
+fn maybe_apply_dark_harvest(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    target_current_health: f64,
+    target_max_health: f64,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+    source: RuneProcTriggerSource,
+) -> f64 {
+    let defaults = &rune_runtime_defaults().dark_harvest;
+    if !runtime.has_dark_harvest {
+        return 0.0;
+    }
+    record_rune_proc_opportunity(runtime, "darkharvest", source);
+    if now < runtime.dark_harvest_ready_at || target_max_health <= 0.0 {
+        return 0.0;
+    }
+    let health_ratio = (target_current_health / target_max_health).clamp(0.0, 1.0);
+    if health_ratio > defaults.trigger_health_ratio {
+        return 0.0;
+    }
+    runtime.dark_harvest_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    let damage = defaults.base_magic_damage.max(0.0)
+        + defaults.soul_magic_damage.max(0.0) * runtime.dark_harvest_souls as f64
+        + defaults.ability_power_ratio.max(0.0) * attacker_ability_power.max(0.0)
+        + defaults.bonus_attack_damage_ratio.max(0.0) * attacker_bonus_attack_damage.max(0.0);
+    runtime.dark_harvest_souls = runtime.dark_harvest_souls.saturating_add(1);
+    if damage > 0.0 {
+        record_rune_proc(runtime, "darkharvest", source, damage, 0.0);
+    }
+    damage
 }
 
 fn press_the_attack_damage_multiplier(
@@ -123,13 +556,14 @@ fn press_the_attack_damage_multiplier(
     target_id: Option<usize>,
     now: f64,
 ) -> f64 {
+    let defaults = &rune_runtime_defaults().press_the_attack;
     if !runtime.has_press_the_attack {
         return 0.0;
     }
     target_id
         .and_then(|idx| runtime.press_the_attack_targets.get(&idx))
         .filter(|state| now <= state.vulnerable_until)
-        .map(|_| 0.08)
+        .map(|_| defaults.vulnerability_true_damage_ratio.max(0.0))
         .unwrap_or(0.0)
 }
 
@@ -139,6 +573,7 @@ pub(crate) fn build_loadout_runtime_state(
     item_haste: f64,
     owner_is_melee: bool,
 ) -> LoadoutRuntimeState {
+    let rune_defaults = rune_runtime_defaults();
     let mut runtime = LoadoutRuntimeState {
         owner_is_melee,
         ..LoadoutRuntimeState::default()
@@ -164,7 +599,7 @@ pub(crate) fn build_loadout_runtime_state(
     );
     runtime.grasp_cooldown_seconds = resolve_stat(
         StatQuery::CooldownSeconds {
-            base_seconds: 4.0,
+            base_seconds: rune_defaults.grasp_of_the_undying.cooldown_seconds,
             source: CooldownMetricSource::Neutral,
         },
         RuntimeBuffState::default(),
@@ -191,6 +626,15 @@ pub(crate) fn build_loadout_runtime_state(
             "fleetfootwork" => runtime.has_fleet_footwork = true,
             "conqueror" => runtime.has_conqueror = true,
             "aftershock" => runtime.has_aftershock = true,
+            "electrocute" => runtime.has_electrocute = true,
+            "firststrike" => runtime.has_first_strike = true,
+            "phaserush" => runtime.has_phase_rush = true,
+            "arcanecomet" => runtime.has_arcane_comet = true,
+            "summonaery" => runtime.has_summon_aery = true,
+            "hailofblades" => runtime.has_hail_of_blades = true,
+            "darkharvest" => runtime.has_dark_harvest = true,
+            "triumph" => runtime.has_triumph = true,
+            "gatheringstorm" => runtime.has_gathering_storm = true,
             _ => {}
         }
     }
@@ -198,9 +642,11 @@ pub(crate) fn build_loadout_runtime_state(
     runtime
 }
 
-pub(crate) fn loadout_attack_speed_multiplier(runtime: &LoadoutRuntimeState) -> f64 {
+pub(crate) fn loadout_attack_speed_multiplier(runtime: &LoadoutRuntimeState, now: f64) -> f64 {
+    let rune_defaults = rune_runtime_defaults();
     let lethal_tempo_bonus = if runtime.has_lethal_tempo {
-        0.04 * runtime.lethal_tempo_stacks as f64
+        rune_defaults.lethal_tempo.attack_speed_per_stack.max(0.0)
+            * runtime.lethal_tempo_stacks as f64
     } else {
         0.0
     };
@@ -209,17 +655,45 @@ pub(crate) fn loadout_attack_speed_multiplier(runtime: &LoadoutRuntimeState) -> 
     } else {
         0.0
     };
-    1.0 + lethal_tempo_bonus + guinsoo_bonus
+    let hail_of_blades_bonus = if runtime.has_hail_of_blades
+        && runtime.hail_of_blades_remaining_attacks > 0
+        && now <= runtime.hail_of_blades_expires_at
+    {
+        if runtime.owner_is_melee {
+            rune_defaults
+                .hail_of_blades
+                .bonus_attack_speed_ratio_melee
+                .max(0.0)
+        } else {
+            rune_defaults
+                .hail_of_blades
+                .bonus_attack_speed_ratio_ranged
+                .max(0.0)
+        }
+    } else {
+        0.0
+    };
+    1.0 + lethal_tempo_bonus + guinsoo_bonus + hail_of_blades_bonus
 }
 
 pub(crate) fn reset_transient_loadout_state(runtime: &mut LoadoutRuntimeState) {
     runtime.attacks_landed = 0;
     runtime.lethal_tempo_stacks = 0;
+    runtime.hail_of_blades_remaining_attacks = 0;
+    runtime.hail_of_blades_expires_at = 0.0;
     runtime.guinsoo_stacks = 0;
     runtime.conqueror_stacks = 0;
     runtime.conqueror_expires_at = 0.0;
-    runtime.pending_heal = 0.0;
+    runtime.pending_fleet_heal = 0.0;
     runtime.press_the_attack_targets.clear();
+    runtime.electrocute_targets.clear();
+    runtime.phase_rush_targets.clear();
+    runtime.rune_proc_totals.clear();
+    runtime.rune_proc_totals_by_source.clear();
+    runtime.rune_proc_opportunities.clear();
+    runtime.rune_proc_opportunities_by_source.clear();
+    runtime.aftershock_active_until = 0.0;
+    runtime.first_strike_window_until = 0.0;
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -227,6 +701,8 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     profile: OnHitEffectProfile,
     runtime: &mut LoadoutRuntimeState,
     attack_damage: f64,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
     target_current_health: f64,
     target_max_health: f64,
     attacker_max_health: f64,
@@ -234,21 +710,47 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     target_id: Option<usize>,
     attacker_level: usize,
 ) -> (f64, f64, f64) {
+    let defaults = rune_runtime_defaults();
+    decay_expired_conqueror_stacks(runtime, now);
     runtime.attacks_landed += 1;
     if runtime.has_lethal_tempo {
-        runtime.lethal_tempo_stacks = (runtime.lethal_tempo_stacks + 1).min(6);
+        runtime.lethal_tempo_stacks =
+            (runtime.lethal_tempo_stacks + 1).min(defaults.lethal_tempo.max_stacks.max(1));
     }
     if runtime.has_guinsoo {
         runtime.guinsoo_stacks = (runtime.guinsoo_stacks + 1).min(8);
     }
+    update_hail_of_blades_state(runtime, now);
 
     let magic = profile.on_hit_magic_flat + profile.on_hit_magic_ad_ratio * attack_damage;
     let mut extra_physical = 0.0;
     let mut extra_magic = magic.max(0.0);
     let mut extra_true = 0.0;
+
+    maybe_apply_phase_rush(runtime, now, target_id);
+    extra_true += maybe_apply_first_strike(
+        runtime,
+        now,
+        attack_damage,
+        attacker_level,
+        RuneProcTriggerSource::OnHit,
+    );
+    if runtime.has_press_the_attack {
+        record_rune_proc_opportunity(runtime, "presstheattack", RuneProcTriggerSource::OnHit);
+    }
     let pta_multiplier = press_the_attack_damage_multiplier(runtime, target_id, now);
     if pta_multiplier > 0.0 {
-        extra_true += pta_multiplier * attack_damage.max(0.0);
+        let pta_bonus_true = pta_multiplier * attack_damage.max(0.0);
+        extra_true += pta_bonus_true;
+        if pta_bonus_true > 0.0 {
+            record_rune_proc(
+                runtime,
+                "presstheattack",
+                RuneProcTriggerSource::OnHit,
+                pta_bonus_true,
+                0.0,
+            );
+        }
     }
 
     if profile.periodic_true_hit_every > 0
@@ -269,19 +771,39 @@ pub(crate) fn calculate_on_hit_bonus_damage(
         extra_true += 65.0 + 0.45 * attack_damage;
     }
 
+    if runtime.has_grasp {
+        record_rune_proc_opportunity(runtime, "graspoftheundying", RuneProcTriggerSource::OnHit);
+    }
     if runtime.has_grasp && now >= runtime.grasp_ready_at {
-        extra_magic += 8.0 + 0.035 * target_max_health.max(0.0);
+        let grasp_damage = defaults.grasp_of_the_undying.base_magic_damage.max(0.0)
+            + defaults
+                .grasp_of_the_undying
+                .target_max_health_ratio
+                .max(0.0)
+                * target_max_health.max(0.0);
+        extra_magic += grasp_damage;
         runtime.grasp_ready_at = now + runtime.grasp_cooldown_seconds;
+        record_rune_proc(
+            runtime,
+            "graspoftheundying",
+            RuneProcTriggerSource::OnHit,
+            grasp_damage,
+            0.0,
+        );
     }
 
     if runtime.has_heartsteel && now >= runtime.heartsteel_ready_at {
         extra_physical += 70.0 + 0.06 * attacker_max_health.max(0.0);
         runtime.heartsteel_ready_at = now + runtime.heartsteel_cooldown_seconds;
     }
+    if runtime.has_fleet_footwork {
+        record_rune_proc_opportunity(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
+    }
     if runtime.has_fleet_footwork && now >= runtime.fleet_ready_at {
-        runtime.pending_heal +=
-            level_scaled_value(attacker_level, 10.0, 148.0) + 0.10 * attack_damage.max(0.0);
-        runtime.fleet_ready_at = now + 6.0;
+        runtime.pending_fleet_heal +=
+            level_scaled_range_value(attacker_level, defaults.fleet_footwork.heal_by_level)
+                + defaults.fleet_footwork.attack_damage_ratio.max(0.0) * attack_damage.max(0.0);
+        runtime.fleet_ready_at = now + defaults.fleet_footwork.cooldown_seconds.max(0.0);
     }
     if runtime.has_press_the_attack
         && let Some(target_idx) = target_id
@@ -294,17 +816,61 @@ pub(crate) fn calculate_on_hit_bonus_damage(
             state.stacks = 0;
         }
         state.stacks = (state.stacks + 1).min(3);
-        state.stack_expires_at = now + 4.0;
+        state.stack_expires_at = now + defaults.press_the_attack.stack_window_seconds.max(0.0);
         if state.stacks >= 3 {
-            extra_magic += level_scaled_value(attacker_level, 40.0, 174.0);
+            let pta_burst_damage = level_scaled_range_value(
+                attacker_level,
+                defaults.press_the_attack.burst_magic_damage_by_level,
+            );
+            extra_magic += pta_burst_damage;
             state.stacks = 0;
-            state.vulnerable_until = now + 5.0;
+            state.vulnerable_until = now
+                + defaults
+                    .press_the_attack
+                    .vulnerability_duration_seconds
+                    .max(0.0);
+            record_rune_proc(
+                runtime,
+                "presstheattack",
+                RuneProcTriggerSource::OnHit,
+                pta_burst_damage,
+                0.0,
+            );
         }
     }
     if runtime.has_conqueror {
-        let basic_attack_stacks = if runtime.owner_is_melee { 2 } else { 1 };
+        let basic_attack_stacks = if runtime.owner_is_melee {
+            defaults.conqueror.melee_basic_attack_stacks
+        } else {
+            defaults.conqueror.ranged_basic_attack_stacks
+        };
         add_conqueror_stacks(runtime, basic_attack_stacks, now);
     }
+    let electrocute_damage = maybe_apply_electrocute(
+        runtime,
+        now,
+        target_id,
+        attacker_level,
+        RuneProcTriggerSource::OnHit,
+    );
+    extra_magic += electrocute_damage;
+    extra_magic += maybe_apply_summon_aery(
+        runtime,
+        now,
+        attacker_level,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        RuneProcTriggerSource::OnHit,
+    );
+    extra_magic += maybe_apply_dark_harvest(
+        runtime,
+        now,
+        target_current_health,
+        target_max_health,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        RuneProcTriggerSource::OnHit,
+    );
 
     (
         resolve_stat(
@@ -334,28 +900,68 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn calculate_ability_bonus_damage(
     runtime: &mut LoadoutRuntimeState,
     ability_raw_damage: f64,
     ability_ap_ratio: f64,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+    target_current_health: f64,
     target_max_health: f64,
     now: f64,
     target_id: Option<usize>,
     attacker_level: usize,
 ) -> (f64, f64) {
+    let defaults = rune_runtime_defaults();
     decay_expired_conqueror_stacks(runtime, now);
     let mut extra_magic = 0.0;
     let mut extra_true = 0.0_f64;
+    maybe_apply_phase_rush(runtime, now, target_id);
+    extra_true += maybe_apply_first_strike(
+        runtime,
+        now,
+        ability_raw_damage,
+        attacker_level,
+        RuneProcTriggerSource::Ability,
+    );
+    if runtime.has_press_the_attack {
+        record_rune_proc_opportunity(runtime, "presstheattack", RuneProcTriggerSource::Ability);
+    }
     let pta_multiplier = press_the_attack_damage_multiplier(runtime, target_id, now);
     if pta_multiplier > 0.0 {
-        extra_true += pta_multiplier * ability_raw_damage.max(0.0);
+        let pta_bonus_true = pta_multiplier * ability_raw_damage.max(0.0);
+        extra_true += pta_bonus_true;
+        if pta_bonus_true > 0.0 {
+            record_rune_proc(
+                runtime,
+                "presstheattack",
+                RuneProcTriggerSource::Ability,
+                pta_bonus_true,
+                0.0,
+            );
+        }
     }
     if runtime.has_conqueror {
-        add_conqueror_stacks(runtime, 2, now);
-        let adaptive_ability_power =
-            level_scaled_value(attacker_level, 1.8, 4.26) * runtime.conqueror_stacks as f64;
-        extra_magic += adaptive_ability_power * ability_ap_ratio.max(0.0);
+        record_rune_proc_opportunity(runtime, "conqueror", RuneProcTriggerSource::Ability);
+        add_conqueror_stacks(runtime, defaults.conqueror.ability_hit_stacks, now);
+        let adaptive_ability_power = level_scaled_range_value(
+            attacker_level,
+            defaults.conqueror.adaptive_ability_power_per_stack_by_level,
+        ) * runtime.conqueror_stacks as f64;
+        let conqueror_damage = adaptive_ability_power * ability_ap_ratio.max(0.0);
+        extra_magic += conqueror_damage;
+        if conqueror_damage > 0.0 {
+            record_rune_proc(
+                runtime,
+                "conqueror",
+                RuneProcTriggerSource::Ability,
+                conqueror_damage,
+                0.0,
+            );
+        }
     }
+    extra_magic += ability_ap_ratio.max(0.0) * gathering_storm_bonus_ability_power(runtime, now);
 
     if runtime.has_liandry {
         extra_magic += 0.04 * target_max_health.max(0.0);
@@ -365,6 +971,38 @@ pub(crate) fn calculate_ability_bonus_damage(
         extra_magic += 90.0 + 0.10 * ability_raw_damage.max(0.0);
         runtime.luden_ready_at = now + runtime.luden_cooldown_seconds;
     }
+    let electrocute_damage = maybe_apply_electrocute(
+        runtime,
+        now,
+        target_id,
+        attacker_level,
+        RuneProcTriggerSource::Ability,
+    );
+    extra_magic += electrocute_damage;
+    extra_magic += maybe_apply_arcane_comet(
+        runtime,
+        now,
+        attacker_level,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+    );
+    extra_magic += maybe_apply_summon_aery(
+        runtime,
+        now,
+        attacker_level,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        RuneProcTriggerSource::Ability,
+    );
+    extra_magic += maybe_apply_dark_harvest(
+        runtime,
+        now,
+        target_current_health,
+        target_max_health,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        RuneProcTriggerSource::Ability,
+    );
 
     (
         resolve_stat(
@@ -391,17 +1029,74 @@ pub(crate) fn on_outgoing_damage_heal(
     damage_dealt: f64,
     now: f64,
 ) -> f64 {
+    let defaults = rune_runtime_defaults();
     decay_expired_conqueror_stacks(runtime, now);
-    let mut heal = runtime.pending_heal.max(0.0);
-    runtime.pending_heal = 0.0;
+    if runtime.has_fleet_footwork {
+        record_rune_proc_opportunity(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
+    }
+    if runtime.has_conqueror {
+        record_rune_proc_opportunity(runtime, "conqueror", RuneProcTriggerSource::OnHit);
+    }
+    let mut heal = runtime.pending_fleet_heal.max(0.0);
+    runtime.pending_fleet_heal = 0.0;
+    if heal > 0.0 {
+        record_rune_proc(
+            runtime,
+            "fleetfootwork",
+            RuneProcTriggerSource::OnHit,
+            0.0,
+            heal,
+        );
+    }
     if runtime.has_conqueror
-        && runtime.conqueror_stacks >= 12
+        && runtime.conqueror_stacks >= defaults.conqueror.max_stacks.max(1)
         && now <= runtime.conqueror_expires_at
         && damage_dealt > 0.0
     {
-        let conqueror_heal_ratio = if runtime.owner_is_melee { 0.08 } else { 0.05 };
-        heal += damage_dealt.max(0.0) * conqueror_heal_ratio;
+        let conqueror_heal_ratio = if runtime.owner_is_melee {
+            defaults.conqueror.melee_heal_ratio.max(0.0)
+        } else {
+            defaults.conqueror.ranged_heal_ratio.max(0.0)
+        };
+        let conqueror_heal = damage_dealt.max(0.0) * conqueror_heal_ratio;
+        heal += conqueror_heal;
+        if conqueror_heal > 0.0 {
+            record_rune_proc(
+                runtime,
+                "conqueror",
+                RuneProcTriggerSource::OnHit,
+                0.0,
+                conqueror_heal,
+            );
+        }
     }
+    resolve_stat(
+        StatQuery::ScalarAmount {
+            base_amount: heal,
+            source: ScalarMetricSource::Healing,
+            clamp_min_zero: true,
+        },
+        RuntimeBuffState::default(),
+    )
+}
+
+pub(crate) fn on_enemy_kill_heal(runtime: &mut LoadoutRuntimeState, max_health: f64) -> f64 {
+    let defaults = rune_runtime_defaults();
+    if !runtime.has_triumph || max_health <= 0.0 {
+        return 0.0;
+    }
+    record_rune_proc_opportunity(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
+    let heal = defaults.triumph.heal_max_health_ratio.max(0.0) * max_health.max(0.0);
+    if heal <= 0.0 {
+        return 0.0;
+    }
+    record_rune_proc(
+        runtime,
+        "triumph",
+        RuneProcTriggerSource::EnemyKill,
+        0.0,
+        heal,
+    );
     resolve_stat(
         StatQuery::ScalarAmount {
             base_amount: heal,
@@ -418,12 +1113,26 @@ pub(crate) fn trigger_immobilize_rune_damage(
     actor_level: usize,
     actor_bonus_health: f64,
 ) -> f64 {
-    if !runtime.has_aftershock || now < runtime.aftershock_ready_at {
+    let defaults = &rune_runtime_defaults().aftershock;
+    if !runtime.has_aftershock {
         return 0.0;
     }
-    runtime.aftershock_ready_at = now + 20.0;
+    record_rune_proc_opportunity(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
+    if now < runtime.aftershock_ready_at {
+        return 0.0;
+    }
+    runtime.aftershock_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    runtime.aftershock_active_until = now + defaults.active_duration_seconds.max(0.0);
     let shockwave_magic =
-        level_scaled_value(actor_level, 25.0, 120.0) + 0.08 * actor_bonus_health.max(0.0);
+        level_scaled_range_value(actor_level, defaults.shockwave_magic_damage_by_level)
+            + defaults.shockwave_bonus_health_ratio.max(0.0) * actor_bonus_health.max(0.0);
+    record_rune_proc(
+        runtime,
+        "aftershock",
+        RuneProcTriggerSource::Immobilize,
+        shockwave_magic,
+        0.0,
+    );
     resolve_stat(
         StatQuery::ScalarAmount {
             base_amount: shockwave_magic,
@@ -434,19 +1143,153 @@ pub(crate) fn trigger_immobilize_rune_damage(
     )
 }
 
+pub(crate) fn loadout_incoming_damage_multipliers(
+    runtime: &LoadoutRuntimeState,
+    now: f64,
+    actor_level: usize,
+    current_armor: f64,
+    current_magic_resist: f64,
+    bonus_armor: f64,
+    bonus_magic_resist: f64,
+) -> (f64, f64) {
+    let defaults = &rune_runtime_defaults().aftershock;
+    if !runtime.has_aftershock || now > runtime.aftershock_active_until {
+        return (1.0, 1.0);
+    }
+    let cap = level_scaled_range_value(actor_level, defaults.resist_cap_by_level);
+    let bonus_armor_gain =
+        (defaults.resist_base + defaults.resist_bonus_ratio * bonus_armor.max(0.0)).min(cap);
+    let bonus_magic_resist_gain =
+        (defaults.resist_base + defaults.resist_bonus_ratio * bonus_magic_resist.max(0.0)).min(cap);
+
+    let armor = current_armor.max(0.0);
+    let magic_resist = current_magic_resist.max(0.0);
+    let physical_multiplier_before = 100.0 / (100.0 + armor);
+    let magic_multiplier_before = 100.0 / (100.0 + magic_resist);
+    let physical_multiplier_after = 100.0 / (100.0 + armor + bonus_armor_gain.max(0.0));
+    let magic_multiplier_after = 100.0 / (100.0 + magic_resist + bonus_magic_resist_gain.max(0.0));
+
+    (
+        (physical_multiplier_after / physical_multiplier_before).clamp(0.0, 1.0),
+        (magic_multiplier_after / magic_multiplier_before).clamp(0.0, 1.0),
+    )
+}
+
+pub(crate) fn loadout_movement_speed_multiplier(
+    runtime: &LoadoutRuntimeState,
+    now: f64,
+    actor_level: usize,
+) -> f64 {
+    if !runtime.has_phase_rush || now > runtime.phase_rush_active_until {
+        return 1.0;
+    }
+    1.0 + level_scaled_range_value(
+        actor_level,
+        rune_runtime_defaults()
+            .phase_rush
+            .movement_speed_bonus_ratio_by_level,
+    )
+}
+
+pub(crate) fn rune_proc_telemetry(runtime: &LoadoutRuntimeState) -> Vec<RuneProcTelemetryEntry> {
+    let rune_keys = runtime
+        .rune_proc_totals
+        .keys()
+        .chain(runtime.rune_proc_opportunities.keys())
+        .cloned()
+        .collect::<HashSet<_>>();
+    let mut entries = rune_keys
+        .into_iter()
+        .map(|rune_key| {
+            let totals = runtime
+                .rune_proc_totals
+                .get(&rune_key)
+                .copied()
+                .unwrap_or_default();
+            let mut source_keys = runtime
+                .rune_proc_totals_by_source
+                .get(&rune_key)
+                .map(|by_source| by_source.keys().copied().collect::<HashSet<_>>())
+                .unwrap_or_default();
+            if let Some(by_source) = runtime.rune_proc_opportunities_by_source.get(&rune_key) {
+                source_keys.extend(by_source.keys().copied());
+            }
+            let mut source_breakdown = source_keys
+                .into_iter()
+                .map(|source| {
+                    let source_totals = runtime
+                        .rune_proc_totals_by_source
+                        .get(&rune_key)
+                        .and_then(|by_source| by_source.get(&source))
+                        .copied()
+                        .unwrap_or_default();
+                    let opportunity_count = runtime
+                        .rune_proc_opportunities_by_source
+                        .get(&rune_key)
+                        .and_then(|by_source| by_source.get(&source))
+                        .copied()
+                        .unwrap_or(source_totals.proc_count)
+                        .max(source_totals.proc_count);
+                    let proc_opportunity_rate = if opportunity_count > 0 {
+                        source_totals.proc_count as f64 / opportunity_count as f64
+                    } else {
+                        0.0
+                    };
+                    RuneProcTelemetrySourceEntry {
+                        source: source.label().to_string(),
+                        proc_count: source_totals.proc_count,
+                        opportunity_count,
+                        proc_opportunity_rate,
+                        bonus_damage: source_totals.bonus_damage,
+                        bonus_healing: source_totals.bonus_healing,
+                    }
+                })
+                .collect::<Vec<_>>();
+            source_breakdown.sort_by(|a, b| a.source.cmp(&b.source));
+            let opportunity_count = runtime
+                .rune_proc_opportunities
+                .get(&rune_key)
+                .copied()
+                .unwrap_or(totals.proc_count)
+                .max(totals.proc_count);
+            let proc_opportunity_rate = if opportunity_count > 0 {
+                totals.proc_count as f64 / opportunity_count as f64
+            } else {
+                0.0
+            };
+            RuneProcTelemetryEntry {
+                rune_name: title_case_rune_name(&rune_key),
+                proc_count: totals.proc_count,
+                opportunity_count,
+                proc_opportunity_rate,
+                bonus_damage: totals.bonus_damage,
+                bonus_healing: totals.bonus_healing,
+                source_breakdown,
+            }
+        })
+        .collect::<Vec<_>>();
+    entries.sort_by(|a, b| a.rune_name.cmp(&b.rune_name));
+    entries
+}
+
 pub(crate) fn tick_loadout_regeneration(
     runtime: &LoadoutRuntimeState,
     current_health: f64,
     max_health: f64,
     dt: f64,
 ) -> f64 {
+    let defaults = &rune_runtime_defaults().second_wind;
     if !runtime.has_second_wind || max_health <= 0.0 || dt <= 0.0 {
         return 0.0;
     }
     let health_ratio = (current_health / max_health).clamp(0.0, 1.0);
-    let base_regen = 0.0015 * max_health * dt;
-    let bonus = if health_ratio <= 0.35 {
-        0.0030 * max_health * dt
+    let base_regen = defaults.base_regen_max_health_ratio_per_second.max(0.0) * max_health * dt;
+    let bonus = if health_ratio <= defaults.low_health_threshold_ratio {
+        defaults
+            .low_health_bonus_regen_max_health_ratio_per_second
+            .max(0.0)
+            * max_health
+            * dt
     } else {
         0.0
     };
@@ -501,8 +1344,66 @@ pub(crate) fn describe_runtime_cooldowns(runtime: &LoadoutRuntimeState, now: f64
     }
     if runtime.has_aftershock {
         lines.push(format!(
-            "Aftershock: {}",
-            cooldown_status(now, runtime.aftershock_ready_at)
+            "Aftershock: {} (active {})",
+            cooldown_status(now, runtime.aftershock_ready_at),
+            if now <= runtime.aftershock_active_until {
+                "yes"
+            } else {
+                "no"
+            }
+        ));
+    }
+    if runtime.has_electrocute {
+        lines.push(format!(
+            "Electrocute: {}",
+            cooldown_status(now, runtime.electrocute_ready_at)
+        ));
+    }
+    if runtime.has_first_strike {
+        lines.push(format!(
+            "First Strike: {} (window active {})",
+            cooldown_status(now, runtime.first_strike_ready_at),
+            if now <= runtime.first_strike_window_until {
+                "yes"
+            } else {
+                "no"
+            }
+        ));
+    }
+    if runtime.has_phase_rush {
+        lines.push(format!(
+            "Phase Rush: {} (active {})",
+            cooldown_status(now, runtime.phase_rush_ready_at),
+            if now <= runtime.phase_rush_active_until {
+                "yes"
+            } else {
+                "no"
+            }
+        ));
+    }
+    if runtime.has_arcane_comet {
+        lines.push(format!(
+            "Arcane Comet: {}",
+            cooldown_status(now, runtime.arcane_comet_ready_at)
+        ));
+    }
+    if runtime.has_summon_aery {
+        lines.push(format!(
+            "Summon Aery: {}",
+            cooldown_status(now, runtime.summon_aery_ready_at)
+        ));
+    }
+    if runtime.has_hail_of_blades {
+        lines.push(format!(
+            "Hail of Blades: {} (remaining attacks {})",
+            cooldown_status(now, runtime.hail_of_blades_ready_at),
+            runtime.hail_of_blades_remaining_attacks
+        ));
+    }
+    if runtime.has_dark_harvest {
+        lines.push(format!(
+            "Dark Harvest: {}",
+            cooldown_status(now, runtime.dark_harvest_ready_at)
         ));
     }
 
@@ -513,18 +1414,36 @@ pub(crate) fn describe_runtime_cooldowns(runtime: &LoadoutRuntimeState, now: f64
 }
 
 pub(crate) fn describe_runtime_stacks(runtime: &LoadoutRuntimeState) -> Vec<String> {
+    let defaults = rune_runtime_defaults();
     let mut lines = Vec::new();
     if runtime.has_lethal_tempo {
         lines.push(format!(
-            "Lethal Tempo stacks: {}/6",
-            runtime.lethal_tempo_stacks
+            "Lethal Tempo stacks: {}/{}",
+            runtime.lethal_tempo_stacks,
+            defaults.lethal_tempo.max_stacks.max(1)
         ));
     }
     if runtime.has_guinsoo {
         lines.push(format!("Guinsoo stacks: {}/8", runtime.guinsoo_stacks));
     }
     if runtime.has_conqueror {
-        lines.push(format!("Conqueror stacks: {}/12", runtime.conqueror_stacks));
+        lines.push(format!(
+            "Conqueror stacks: {}/{}",
+            runtime.conqueror_stacks,
+            defaults.conqueror.max_stacks.max(1)
+        ));
+    }
+    if runtime.has_hail_of_blades {
+        lines.push(format!(
+            "Hail of Blades empowered attacks remaining: {}",
+            runtime.hail_of_blades_remaining_attacks
+        ));
+    }
+    if runtime.has_dark_harvest {
+        lines.push(format!(
+            "Dark Harvest souls: {}",
+            runtime.dark_harvest_souls
+        ));
     }
     if runtime.has_press_the_attack {
         let vulnerable_targets = runtime
@@ -536,6 +1455,22 @@ pub(crate) fn describe_runtime_stacks(runtime: &LoadoutRuntimeState) -> Vec<Stri
             "Press the Attack tracked targets: {}",
             vulnerable_targets
         ));
+    }
+    if runtime.has_electrocute {
+        let primed_targets = runtime
+            .electrocute_targets
+            .values()
+            .filter(|state| state.stacks > 0)
+            .count();
+        lines.push(format!("Electrocute primed targets: {}", primed_targets));
+    }
+    if runtime.has_phase_rush {
+        let tracked_targets = runtime
+            .phase_rush_targets
+            .values()
+            .filter(|state| state.stacks > 0)
+            .count();
+        lines.push(format!("Phase Rush tracked targets: {}", tracked_targets));
     }
     if runtime.has_kraken || runtime.has_blade_of_the_ruined_king {
         lines.push(format!("Attacks landed: {}", runtime.attacks_landed));

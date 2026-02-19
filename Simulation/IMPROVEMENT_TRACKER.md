@@ -1,6 +1,32 @@
 # Improvement Tracker
 
 ## Done
+- Completed shared-rune-runtime parity and output hardening pass:
+  - moved Arcane Comet, Summon Aery, Triumph, Gathering Storm, and Second Wind combat behavior fully into shared loadout runtime paths used by both controlled champion and enemies
+  - added Hail of Blades and Dark Harvest runtime behavior in shared loadout runtime
+  - moved rune runtime tuning ownership to `Simulation/data/simulator_defaults.json` (`rune_runtime_defaults`) with typed loading in `src/defaults.rs`
+  - fixed-loadout rune sweep now evaluates keystones in parallel and supports repeat aggregation via `--fixed-sweep-seed-repeats`, with deterministic per-repeat combat seed variation
+  - report generation now hard-enforces complete controlled champion rune/shard labels (no fallback “none selected” section)
+  - rune proc telemetry now includes source-attribution breakdowns plus proc opportunity/rate and damage/healing share metrics in markdown and JSON outputs
+- Hardened controlled champion runtime/engine boundaries:
+  - removed thin `ControlledChampionLoadoutRuntime` holder from engine state; retained stateless defensive policy APIs in `src/scripts/runtime/controlled_champion_loadout.rs`
+  - added optional scenario `simulation.combat_seed` for deterministic combat-variation runs (enemy init ordering + initial auto-attack jitter)
+- Added regression coverage for realism and calibration:
+  - added rune formula breakpoint tests for Electrocute, Arcane Comet, First Strike cooldown/window behavior, and Aftershock resist-cap behavior
+  - added engine regression test ensuring pool ticks hit all in-range enemies with expected tick count and mitigated total damage
+- Expanded modeled combat-time rune coverage and telemetry:
+  - added Electrocute, First Strike, and Phase Rush runtime behaviors
+  - Aftershock now applies active-window resist mitigation in incoming-damage resolution
+  - reports and trace JSON outputs now include rune proc telemetry totals (proc count, bonus damage, bonus healing)
+- Added fixed-loadout keystone sweep mode:
+  - `controlled_champion_fixed_loadout_rune_sweep` compares one fixed item build across all legal keystones in the baseline primary rune path
+  - outputs include ranked markdown + structured JSON sweep summaries
+- Added profile-aware unmodeled-rune quality gate policy:
+  - `maximum_quality` now hard-rejects candidates with unmodeled runes
+  - `fast`/`balanced` retain per-rune penalty mode
+- Added CI guardrails for modeled rune behavior coverage:
+  - runtime tests now assert observable effects for all modeled dynamic rune keys
+  - dynamic-rune key list and modeled coverage expectations are kept in lockstep by test
 - Added generic combat-time rune trigger runtime layer and modeled additional keystones:
   - runtime now has explicit trigger hooks for on-hit, ability-hit, outgoing-damage healing, and immobilize-triggered effects
   - modeled keystones now include Press the Attack, Fleet Footwork, Conqueror, and Aftershock

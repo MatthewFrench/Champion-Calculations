@@ -176,6 +176,15 @@ fn apply_structured_effect_ignores_cooldown_seconds_for_static_stats() {
 }
 
 #[test]
+fn parse_simulation_config_supports_optional_combat_seed() {
+    let simulation = serde_json::json!({
+        "combat_seed": 13371337
+    });
+    let parsed = parse_simulation_config(&simulation).expect("simulation config should parse");
+    assert_eq!(parsed.combat_seed, Some(13371337));
+}
+
+#[test]
 fn apply_structured_effect_maps_percent_cooldown_to_ability_haste() {
     let mut stats = Stats::default();
     let effect = serde_json::json!({
@@ -297,6 +306,49 @@ fn ensure_complete_loadout_selection_fills_missing_selection() {
     assert_eq!(filled.shard_stats.len(), 3, "expected three shard stats");
     validate_rune_page_selection(&filled, &domain)
         .expect("auto-filled selection should validate as legal");
+}
+
+#[test]
+fn search_quality_profiles_apply_unmodeled_rune_gate_policy() {
+    let mut base = parse_build_search(&serde_json::json!({
+        "strategy": "portfolio"
+    }))
+    .expect("default search config should parse");
+    base.unmodeled_rune_hard_gate = true;
+    base.unmodeled_rune_penalty_per_rune = -0.5;
+
+    let mut fast = base.clone();
+    apply_search_quality_profile(&mut fast, SearchQualityProfile::Fast);
+    assert!(
+        !fast.unmodeled_rune_hard_gate,
+        "fast profile should not hard-reject unmodeled rune candidates"
+    );
+    assert!(
+        fast.unmodeled_rune_penalty_per_rune >= 0.0,
+        "fast profile should clamp negative rune penalties"
+    );
+
+    let mut balanced = base.clone();
+    apply_search_quality_profile(&mut balanced, SearchQualityProfile::Balanced);
+    assert!(
+        !balanced.unmodeled_rune_hard_gate,
+        "balanced profile should not hard-reject unmodeled rune candidates"
+    );
+    assert!(
+        balanced.unmodeled_rune_penalty_per_rune >= 0.0,
+        "balanced profile should clamp negative rune penalties"
+    );
+
+    let mut maximum_quality = base;
+    apply_search_quality_profile(&mut maximum_quality, SearchQualityProfile::MaximumQuality);
+    assert!(
+        maximum_quality.unmodeled_rune_hard_gate,
+        "maximum quality profile should hard-reject unmodeled rune candidates"
+    );
+    assert!(
+        maximum_quality.unmodeled_rune_penalty_per_rune.abs() < f64::EPSILON,
+        "maximum quality profile should not apply rune penalties when hard gating"
+    );
 }
 
 #[test]

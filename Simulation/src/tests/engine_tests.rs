@@ -138,6 +138,7 @@ fn test_simulation(
         server_tick_rate_hz: 30.0,
         champion_level: 20,
         max_time_seconds,
+        combat_seed: None,
         controlled_champion_script: if controlled_champion_script_enabled {
             crate::scripts::champions::resolve_controlled_champion_script("Vladimir")
         } else {
@@ -172,6 +173,17 @@ fn test_urf() -> UrfBuffs {
         bonus_attack_speed_multiplier_ranged: 1.0,
         allowed_item_keys: Default::default(),
     }
+}
+
+fn scheduled_enemy_attack_time(runner: &ControlledChampionCombatSimulation, idx: usize) -> f64 {
+    runner
+        .event_queue
+        .iter()
+        .find_map(|event| match event.kind {
+            EventType::Attack(event_idx) if event_idx == idx => Some(event.time),
+            _ => None,
+        })
+        .expect("enemy auto attack should be scheduled")
 }
 
 #[test]
@@ -212,6 +224,56 @@ fn controlled_champion_loadout_runtime_increases_spell_damage_when_selected() {
         &urf,
     );
     assert!(outcome_with_runtime.damage_dealt > outcome_without_runtime.damage_dealt);
+}
+
+#[test]
+fn combat_seed_changes_enemy_attack_jitter_deterministically() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let urf = test_urf();
+
+    let mut sim_a = test_simulation(2.0, false);
+    sim_a.combat_seed = Some(7);
+    let runner_a = ControlledChampionCombatSimulation::new(
+        controlled_champion.clone(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim_a.clone(),
+        urf.clone(),
+    );
+    let attack_time_a = scheduled_enemy_attack_time(&runner_a, 0);
+
+    let mut sim_b = test_simulation(2.0, false);
+    sim_b.combat_seed = Some(11);
+    let runner_b = ControlledChampionCombatSimulation::new(
+        controlled_champion.clone(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim_b,
+        urf.clone(),
+    );
+    let attack_time_b = scheduled_enemy_attack_time(&runner_b, 0);
+
+    let runner_a_repeat = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim_a,
+        urf,
+    );
+    let attack_time_a_repeat = scheduled_enemy_attack_time(&runner_a_repeat, 0);
+
+    assert_ne!(attack_time_a, attack_time_b);
+    assert!((attack_time_a - attack_time_a_repeat).abs() < 1e-12);
 }
 
 #[test]
@@ -660,6 +722,57 @@ fn conqueror_runtime_increases_damage_and_healing_over_extended_fight() {
     );
     assert!(with_conqueror.damage_dealt > baseline.damage_dealt);
     assert!(with_conqueror.healing_done >= baseline.healing_done);
+}
+
+#[test]
+fn pool_ticks_hit_all_enemies_in_range_with_expected_total_damage() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemies = Vec::new();
+    for idx in 0..5 {
+        let mut enemy = test_enemy(&format!("Target {}", idx + 1));
+        enemy.spawn_position_xy = Some((120.0 + idx as f64 * 20.0, 0.0));
+        enemy.movement_mode = OpponentMovementMode::HoldPosition;
+        enemies.push((enemy, Vec::new(), Stats::default()));
+    }
+    let simulation = test_simulation(3.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.enable_trace();
+    runner.controlled_champion_defensive_ability_two_damage_per_tick = 100.0;
+    runner.controlled_champion_defensive_ability_two_heal_ratio_of_damage = 0.0;
+    runner.pool_effect_range = 500.0;
+    runner.pool_damage_tick_interval_seconds = 0.5;
+    runner.pool_damage_until = 1.5;
+    runner.pool_next_damage_tick_at = 0.5;
+    runner.apply_hot_effects(1.6);
+
+    let tick_hit_count = runner
+        .trace_events()
+        .iter()
+        .filter(|entry| entry.contains("[controlled_champion_pool_tick]"))
+        .filter(|entry| entry.contains("to 5 enemies in range"))
+        .count();
+    assert_eq!(tick_hit_count, 3);
+
+    let enemy_magic_multiplier = runner.enemy_state[0].magic_multiplier;
+    let expected_damage = 3.0 * 5.0 * 100.0 * enemy_magic_multiplier;
+    assert!((runner.damage_dealt_total - expected_damage).abs() < 1e-6);
+
+    let expected_enemy_health =
+        runner.enemy_state[0].max_health - (3.0 * 100.0 * enemy_magic_multiplier);
+    for enemy in &runner.enemy_state {
+        assert!((enemy.health - expected_enemy_health).abs() < 1e-6);
+    }
 }
 
 #[test]

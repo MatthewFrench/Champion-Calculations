@@ -107,5 +107,139 @@
     "ranged_spawn_radius_min": 360.0,
     "ranged_spawn_radius_max": 520.0,
     "minimum_attack_speed": 0.25
+  },
+  "rune_runtime_defaults": {
+    "lethal_tempo": {
+      "max_stacks": 6,
+      "attack_speed_per_stack": 0.04
+    },
+    "grasp_of_the_undying": {
+      "cooldown_seconds": 4.0,
+      "base_magic_damage": 8.0,
+      "target_max_health_ratio": 0.035
+    },
+    "second_wind": {
+      "base_regen_max_health_ratio_per_second": 0.0015,
+      "low_health_bonus_regen_max_health_ratio_per_second": 0.003,
+      "low_health_threshold_ratio": 0.35
+    },
+    "press_the_attack": {
+      "vulnerability_true_damage_ratio": 0.08,
+      "burst_magic_damage_by_level": {
+        "min": 40.0,
+        "max": 174.0
+      },
+      "stack_window_seconds": 4.0,
+      "vulnerability_duration_seconds": 5.0
+    },
+    "fleet_footwork": {
+      "heal_by_level": {
+        "min": 10.0,
+        "max": 148.0
+      },
+      "attack_damage_ratio": 0.1,
+      "cooldown_seconds": 6.0
+    },
+    "conqueror": {
+      "max_stacks": 12,
+      "stack_duration_seconds": 5.0,
+      "melee_basic_attack_stacks": 2,
+      "ranged_basic_attack_stacks": 1,
+      "ability_hit_stacks": 2,
+      "adaptive_ability_power_per_stack_by_level": {
+        "min": 1.8,
+        "max": 4.26
+      },
+      "melee_heal_ratio": 0.08,
+      "ranged_heal_ratio": 0.05
+    },
+    "aftershock": {
+      "cooldown_seconds": 20.0,
+      "active_duration_seconds": 2.5,
+      "shockwave_magic_damage_by_level": {
+        "min": 25.0,
+        "max": 120.0
+      },
+      "shockwave_bonus_health_ratio": 0.08,
+      "resist_base": 35.0,
+      "resist_bonus_ratio": 0.8,
+      "resist_cap_by_level": {
+        "min": 80.0,
+        "max": 150.0
+      }
+    },
+    "electrocute": {
+      "hits_to_proc": 3,
+      "hit_window_seconds": 3.0,
+      "cooldown_by_level": {
+        "min": 20.0,
+        "max": 10.0
+      },
+      "proc_magic_damage_by_level": {
+        "min": 70.0,
+        "max": 240.0
+      }
+    },
+    "first_strike": {
+      "bonus_true_damage_ratio": 0.07,
+      "window_duration_seconds": 3.0,
+      "cooldown_by_level": {
+        "min": 25.0,
+        "max": 15.0
+      }
+    },
+    "phase_rush": {
+      "hits_to_proc": 3,
+      "hit_window_seconds": 4.0,
+      "cooldown_seconds": 10.0,
+      "active_duration_seconds": 3.0,
+      "movement_speed_bonus_ratio_by_level": {
+        "min": 0.25,
+        "max": 0.5
+      }
+    },
+    "arcane_comet": {
+      "proc_magic_damage_by_level": {
+        "min": 30.0,
+        "max": 130.0
+      },
+      "ability_power_ratio": 0.05,
+      "bonus_attack_damage_ratio": 0.1,
+      "cooldown_by_level": {
+        "min": 20.0,
+        "max": 8.0
+      }
+    },
+    "summon_aery": {
+      "proc_magic_damage_by_level": {
+        "min": 10.0,
+        "max": 50.0
+      },
+      "ability_power_ratio": 0.1,
+      "bonus_attack_damage_ratio": 0.15,
+      "cooldown_seconds": 2.0
+    },
+    "hail_of_blades": {
+      "bonus_attack_speed_ratio_melee": 1.6,
+      "bonus_attack_speed_ratio_ranged": 0.8,
+      "empowered_attack_count": 3,
+      "active_duration_seconds": 3.0,
+      "cooldown_seconds": 12.0
+    },
+    "dark_harvest": {
+      "trigger_health_ratio": 0.5,
+      "cooldown_seconds": 35.0,
+      "base_magic_damage": 30.0,
+      "soul_magic_damage": 11.0,
+      "ability_power_ratio": 0.05,
+      "bonus_attack_damage_ratio": 0.1
+    },
+    "triumph": {
+      "heal_max_health_ratio": 0.08
+    },
+    "gathering_storm": {
+      "interval_seconds": 600.0,
+      "ability_power_by_interval": [8.0, 24.0, 48.0, 80.0, 120.0, 168.0]
+    }
   }
 }

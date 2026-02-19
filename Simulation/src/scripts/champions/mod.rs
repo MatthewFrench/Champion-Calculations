@@ -7,8 +7,10 @@ use crate::to_norm_key;
 use crate::scripts::runtime::loadout_runtime::{
     LoadoutRuntimeState, OnHitEffectProfile, build_loadout_runtime_state,
     calculate_ability_bonus_damage, calculate_on_hit_bonus_damage, describe_runtime_cooldowns,
-    describe_runtime_stacks, loadout_attack_speed_multiplier, on_outgoing_damage_heal,
-    reset_transient_loadout_state, tick_loadout_regeneration, trigger_immobilize_rune_damage,
+    describe_runtime_stacks, loadout_attack_speed_multiplier, loadout_incoming_damage_multipliers,
+    loadout_movement_speed_multiplier, on_enemy_kill_heal, on_outgoing_damage_heal,
+    reset_transient_loadout_state, rune_proc_telemetry, tick_loadout_regeneration,
+    trigger_immobilize_rune_damage,
 };
 
 mod controlled_champion;
@@ -21,6 +23,8 @@ mod vayne;
 mod warwick;
 
 pub(crate) type ChampionLoadoutRuntime = LoadoutRuntimeState;
+pub(crate) type ChampionRuneProcTelemetryEntry =
+    crate::scripts::runtime::loadout_runtime::RuneProcTelemetryEntry;
 pub(crate) use controlled_champion::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -233,6 +237,7 @@ pub(crate) struct ChampionScriptExecutionInput {
     pub distance_to_target: f64,
     pub physical_hit_damage: f64,
     pub actor_ability_power: f64,
+    pub actor_bonus_attack_damage: f64,
     pub target_current_health: f64,
     pub target_max_health: f64,
     pub now: f64,
@@ -288,8 +293,8 @@ pub(crate) fn build_champion_loadout_runtime(
     build_loadout_runtime_state(item_names, rune_names, item_haste, owner_is_melee)
 }
 
-pub(crate) fn attack_speed_multiplier(runtime: &ChampionLoadoutRuntime) -> f64 {
-    loadout_attack_speed_multiplier(runtime)
+pub(crate) fn attack_speed_multiplier(runtime: &ChampionLoadoutRuntime, now: f64) -> f64 {
+    loadout_attack_speed_multiplier(runtime, now)
 }
 
 pub(crate) fn clear_transient_combat_state(runtime: &mut ChampionLoadoutRuntime) {
@@ -313,6 +318,8 @@ pub(crate) fn on_hit_bonus_damage(
     profile: ChampionBehaviorProfile,
     runtime: &mut ChampionLoadoutRuntime,
     attack_damage: f64,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
     target_current_health: f64,
     target_max_health: f64,
     attacker_max_health: f64,
@@ -324,6 +331,8 @@ pub(crate) fn on_hit_bonus_damage(
         on_hit_effect_profile(profile),
         runtime,
         attack_damage,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
         target_current_health,
         target_max_health,
         attacker_max_health,
@@ -333,10 +342,14 @@ pub(crate) fn on_hit_bonus_damage(
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn on_ability_bonus_damage(
     runtime: &mut ChampionLoadoutRuntime,
     ability_raw_damage: f64,
     ability_ap_ratio: f64,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+    target_current_health: f64,
     target_max_health: f64,
     now: f64,
     target_id: Option<usize>,
@@ -346,6 +359,9 @@ pub(crate) fn on_ability_bonus_damage(
         runtime,
         ability_raw_damage,
         ability_ap_ratio,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        target_current_health,
         target_max_health,
         now,
         target_id,
@@ -370,6 +386,10 @@ pub(crate) fn outgoing_damage_heal(
     on_outgoing_damage_heal(runtime, damage_dealt, now)
 }
 
+pub(crate) fn enemy_kill_heal(runtime: &mut ChampionLoadoutRuntime, max_health: f64) -> f64 {
+    on_enemy_kill_heal(runtime, max_health)
+}
+
 pub(crate) fn tick_regen_heal(
     runtime: &ChampionLoadoutRuntime,
     current_health: f64,
@@ -388,6 +408,41 @@ pub(crate) fn describe_runtime_effect_cooldowns(
 
 pub(crate) fn describe_runtime_effect_stacks(runtime: &ChampionLoadoutRuntime) -> Vec<String> {
     describe_runtime_stacks(runtime)
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn incoming_damage_multipliers(
+    runtime: &ChampionLoadoutRuntime,
+    now: f64,
+    actor_level: usize,
+    current_armor: f64,
+    current_magic_resist: f64,
+    bonus_armor: f64,
+    bonus_magic_resist: f64,
+) -> (f64, f64) {
+    loadout_incoming_damage_multipliers(
+        runtime,
+        now,
+        actor_level,
+        current_armor,
+        current_magic_resist,
+        bonus_armor,
+        bonus_magic_resist,
+    )
+}
+
+pub(crate) fn movement_speed_multiplier(
+    runtime: &ChampionLoadoutRuntime,
+    now: f64,
+    actor_level: usize,
+) -> f64 {
+    loadout_movement_speed_multiplier(runtime, now, actor_level)
+}
+
+pub(crate) fn describe_rune_proc_telemetry(
+    runtime: &ChampionLoadoutRuntime,
+) -> Vec<ChampionRuneProcTelemetryEntry> {
+    rune_proc_telemetry(runtime)
 }
 
 #[cfg(test)]

@@ -115,6 +115,50 @@ fn cli_mode_parsing_accepts_generic_names_and_legacy_aliases() {
     ])
     .expect("legacy vladimir_step alias should parse");
     assert!(matches!(step_alias.mode, Mode::ControlledChampionStep));
+
+    let fixed_sweep = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "controlled_champion_fixed_loadout_rune_sweep",
+        "--fixed-item-names",
+        "Rabadon's Deathcap",
+    ])
+    .expect("controlled_champion_fixed_loadout_rune_sweep mode should parse");
+    assert!(matches!(
+        fixed_sweep.mode,
+        Mode::ControlledChampionFixedLoadoutRuneSweep
+    ));
+}
+
+#[test]
+fn cli_fixed_sweep_seed_repeats_defaults_and_overrides() {
+    let defaults = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "controlled_champion_fixed_loadout_rune_sweep",
+        "--fixed-item-names",
+        "Rabadon's Deathcap",
+    ])
+    .expect("fixed sweep mode should parse with default repeat count");
+    assert_eq!(defaults.fixed_sweep_seed_repeats, 1);
+
+    let override_value = Cli::try_parse_from([
+        "urf_sim",
+        "--scenario",
+        "vladimir_urf_teamfight",
+        "--mode",
+        "controlled_champion_fixed_loadout_rune_sweep",
+        "--fixed-item-names",
+        "Rabadon's Deathcap",
+        "--fixed-sweep-seed-repeats",
+        "4",
+    ])
+    .expect("fixed sweep mode should parse custom repeat count");
+    assert_eq!(override_value.fixed_sweep_seed_repeats, 4);
 }
 
 #[test]

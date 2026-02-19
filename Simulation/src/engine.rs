@@ -6,36 +6,35 @@ use crate::defaults::{
     simulator_defaults,
 };
 use crate::scripts::champions::{
-    ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
-    ChampionScriptExecutionInput, ChampionScriptPoint, ControlledChampionAbilityCooldowns,
-    ControlledChampionCastProfile, ControlledChampionDefensiveAbilityDecisionInput,
-    ControlledChampionDefensiveAbilityTwoConfig, ControlledChampionOffensiveAbility,
-    ControlledChampionOffensiveDecisionInput, ControlledChampionScriptHandle,
-    ControlledChampionTargetSnapshot, attack_speed_multiplier, behavior_profile,
-    build_champion_loadout_runtime, champion_script_event_cooldown_seconds,
+    ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionRuneProcTelemetryEntry,
+    ChampionScriptAction, ChampionScriptEvent, ChampionScriptExecutionInput, ChampionScriptPoint,
+    ControlledChampionAbilityCooldowns, ControlledChampionCastProfile,
+    ControlledChampionDefensiveAbilityDecisionInput, ControlledChampionDefensiveAbilityTwoConfig,
+    ControlledChampionOffensiveAbility, ControlledChampionOffensiveDecisionInput,
+    ControlledChampionScriptHandle, ControlledChampionTargetSnapshot, attack_speed_multiplier,
+    behavior_profile, build_champion_loadout_runtime, champion_script_event_cooldown_seconds,
     champion_script_event_label, clear_transient_combat_state,
     controlled_champion_default_cast_profile, controlled_champion_defensive_ability_two_config,
     controlled_champion_defensive_ability_two_raw_damage, controlled_champion_offensive_ap_ratio,
     controlled_champion_offensive_cooldowns_after_haste,
     controlled_champion_offensive_primary_heal_ratio, controlled_champion_offensive_raw_damage,
     controlled_champion_script_enabled, decide_controlled_champion_defensive_ability_activations,
-    decide_controlled_champion_offensive_casts, describe_runtime_effect_cooldowns,
-    describe_runtime_effect_stacks, execute_champion_script_event,
-    initialize_controlled_champion_ability_slots, on_ability_bonus_damage, on_hit_bonus_damage,
-    on_immobilize_rune_damage, outgoing_damage_heal, scripted_champion_events, tick_regen_heal,
+    decide_controlled_champion_offensive_casts, describe_rune_proc_telemetry,
+    describe_runtime_effect_cooldowns, describe_runtime_effect_stacks, enemy_kill_heal,
+    execute_champion_script_event, incoming_damage_multipliers,
+    initialize_controlled_champion_ability_slots, movement_speed_multiplier,
+    on_ability_bonus_damage, on_hit_bonus_damage, on_immobilize_rune_damage, outgoing_damage_heal,
+    scripted_champion_events, tick_regen_heal,
 };
 use crate::scripts::items::hooks::controlled_champion_defensive_item_capabilities;
 use crate::scripts::runtime::ability_slots::{
     ActorAbilityLoadout, default_champion_ability_loadout,
 };
 use crate::scripts::runtime::controlled_champion_loadout::{
-    ControlledChampionAbilityRuntimeInput, ControlledChampionLoadoutRuntime,
     DefensiveItemActivationInput, ReviveEffectDecisionInput,
-    build_controlled_champion_loadout_runtime, controlled_champion_damage_taken_multiplier,
-    controlled_champion_heal_multiplier, decide_defensive_item_activations,
-    describe_controlled_champion_runtime_cooldowns, on_controlled_champion_ability_bonus,
-    on_controlled_champion_enemy_kill, should_trigger_revive_effect,
-    tick_controlled_champion_regen_heal,
+    controlled_champion_damage_taken_multiplier, controlled_champion_heal_multiplier,
+    decide_defensive_item_activations, describe_controlled_champion_runtime_cooldowns,
+    should_trigger_revive_effect,
 };
 use crate::scripts::runtime::stat_resolution::{
     CooldownMetricSource, RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
@@ -408,7 +407,6 @@ pub(super) struct ControlledChampionCombatSimulation {
 
     controlled_champion_stats: Stats,
     controlled_champion_buffs: RuntimeBuffState,
-    controlled_champion_runtime: ControlledChampionLoadoutRuntime,
     controlled_champion_combat_runtime: ChampionLoadoutRuntime,
     controlled_champion_behavior: ChampionBehaviorProfile,
     controlled_champion_base_attack_speed: f64,
@@ -538,9 +536,6 @@ impl ControlledChampionCombatSimulation {
             &controlled_champion_base,
             &controlled_champion_item_stats,
         );
-        let controlled_champion_runtime = controlled_champion_loadout_selection
-            .map(build_controlled_champion_loadout_runtime)
-            .unwrap_or_default();
         let controlled_champion_combat_runtime = build_champion_loadout_runtime(
             &controlled_champion_item_names,
             &controlled_champion_rune_names,
@@ -633,6 +628,7 @@ impl ControlledChampionCombatSimulation {
         } else {
             sim.dt
         };
+        let mut seeded_combat_rng = sim.combat_seed.map(|seed| seed ^ 0xC0B4_7EAF_D15C_A11E);
 
         let mut runner = Self {
             controlled_champion_base,
@@ -650,7 +646,6 @@ impl ControlledChampionCombatSimulation {
             event_counter: 0,
             controlled_champion_stats,
             controlled_champion_buffs: runtime_buffs,
-            controlled_champion_runtime,
             controlled_champion_combat_runtime,
             controlled_champion_behavior,
             controlled_champion_base_attack_speed,
@@ -710,8 +705,18 @@ impl ControlledChampionCombatSimulation {
             trace_next_snapshot_at: 0.0,
         };
 
-        let enemy_count = enemies.len();
-        for (idx, (enemy, build, enemy_bonus)) in enemies.iter().cloned().enumerate() {
+        let mut enemy_entries = enemies.to_vec();
+        if let Some(seed) = seeded_combat_rng.as_mut() {
+            let mut order = (0..enemy_entries.len()).collect::<Vec<_>>();
+            shuffle_usize(&mut order, seed);
+            enemy_entries = order
+                .into_iter()
+                .map(|original_idx| enemy_entries[original_idx].clone())
+                .collect::<Vec<_>>();
+        }
+
+        let enemy_count = enemy_entries.len();
+        for (idx, (enemy, build, enemy_bonus)) in enemy_entries.into_iter().enumerate() {
             let model = derive_enemy_model(&enemy, &build, &enemy_bonus, &runner.sim, &runner.urf);
             let position = enemy
                 .spawn_position_xy
@@ -755,7 +760,16 @@ impl ControlledChampionCombatSimulation {
                 hitbox_radius: champion_hitbox_radius(&enemy.base.name),
             });
 
-            runner.schedule_event(model.attack_interval, 30, EventType::Attack(idx), None);
+            let attack_delay_jitter = seeded_combat_rng
+                .as_mut()
+                .map(|seed| rand_f64(seed) * runner.tick_seconds)
+                .unwrap_or(0.0);
+            runner.schedule_event(
+                model.attack_interval + attack_delay_jitter,
+                30,
+                EventType::Attack(idx),
+                None,
+            );
             for event in scripted_champion_events(&enemy.name) {
                 runner.schedule_event(
                     0.0,
@@ -1081,10 +1095,8 @@ impl ControlledChampionCombatSimulation {
                 Self::trace_cooldown_status(self.time, self.emergency_shield_item_ready_at)
             ));
         }
-        let runtime_controlled_champion_cooldowns = describe_controlled_champion_runtime_cooldowns(
-            &self.controlled_champion_runtime,
-            self.time,
-        );
+        let runtime_controlled_champion_cooldowns =
+            describe_controlled_champion_runtime_cooldowns(self.time);
         let runtime_cooldowns_are_none = runtime_controlled_champion_cooldowns.len() == 1
             && runtime_controlled_champion_cooldowns[0] == "none";
         if !runtime_cooldowns_are_none {
@@ -1187,7 +1199,7 @@ impl ControlledChampionCombatSimulation {
             lines.push("enemies:".to_string());
             for (idx, state) in self.enemy_state.iter().enumerate() {
                 let attack_speed =
-                    state.base_attack_speed * attack_speed_multiplier(&state.runtime);
+                    state.base_attack_speed * attack_speed_multiplier(&state.runtime, self.time);
                 let attack_interval = 1.0 / attack_speed.max(0.001);
 
                 let mut enemy_abilities = Vec::new();
@@ -1563,24 +1575,9 @@ impl ControlledChampionCombatSimulation {
         max_distance
     }
 
-    fn active_enemy_count_in_controlled_champion_range(
-        &self,
-        range: f64,
-        effect_hitbox_radius: f64,
-    ) -> usize {
-        self.enemy_state
-            .iter()
-            .enumerate()
-            .filter(|(idx, _)| {
-                self.enemy_is_active(*idx)
-                    && self.enemy_in_controlled_champion_range(*idx, range, effect_hitbox_radius)
-            })
-            .count()
-    }
-
     fn controlled_champion_attack_speed(&self) -> f64 {
         self.controlled_champion_base_attack_speed
-            * attack_speed_multiplier(&self.controlled_champion_combat_runtime)
+            * attack_speed_multiplier(&self.controlled_champion_combat_runtime, self.time)
     }
 
     fn controlled_champion_attack_interval_seconds(&self) -> f64 {
@@ -1632,7 +1629,8 @@ impl ControlledChampionCombatSimulation {
             return;
         }
         let state = &self.enemy_state[idx];
-        let attack_speed = state.base_attack_speed * attack_speed_multiplier(&state.runtime);
+        let attack_speed =
+            state.base_attack_speed * attack_speed_multiplier(&state.runtime, self.time);
         let interval =
             1.0 / attack_speed.max(simulator_defaults().engine_defaults.minimum_attack_speed);
         self.schedule_event(interval, 30, EventType::Attack(idx), None);
@@ -1854,9 +1852,24 @@ impl ControlledChampionCombatSimulation {
         }
         let (mitigated_physical, mitigated_magic, mitigated_true, enemy_level) = {
             let state = &self.enemy_state[idx];
+            let bonus_armor = (state.armor - state.enemy.base.base_armor).max(0.0);
+            let bonus_magic_resist =
+                (state.magic_resist - state.enemy.base.base_magic_resist).max(0.0);
+            let (aftershock_physical_multiplier, aftershock_magic_multiplier) =
+                incoming_damage_multipliers(
+                    &state.runtime,
+                    self.time,
+                    state.enemy.level,
+                    state.armor,
+                    state.magic_resist,
+                    bonus_armor,
+                    bonus_magic_resist,
+                );
             (
-                raw_physical_damage.max(0.0) * state.physical_multiplier,
-                raw_magic_damage.max(0.0) * state.magic_multiplier,
+                raw_physical_damage.max(0.0)
+                    * state.physical_multiplier
+                    * aftershock_physical_multiplier,
+                raw_magic_damage.max(0.0) * state.magic_multiplier * aftershock_magic_multiplier,
                 raw_true_damage.max(0.0),
                 state.enemy.level,
             )
@@ -1891,13 +1904,12 @@ impl ControlledChampionCombatSimulation {
         };
         if let Some(name) = killed_name {
             self.enemy_kills_total += 1;
-            let runtime_kill_heal = on_controlled_champion_enemy_kill(
-                &mut self.controlled_champion_runtime,
+            let runtime_kill_heal = enemy_kill_heal(
+                &mut self.controlled_champion_combat_runtime,
                 self.max_health,
             );
             if runtime_kill_heal > 0.0 {
-                let script_heal_multiplier =
-                    controlled_champion_heal_multiplier(&self.controlled_champion_runtime);
+                let script_heal_multiplier = controlled_champion_heal_multiplier();
                 let resolved_heal = resolve_stat(
                     StatQuery::ScalarAmount {
                         base_amount: runtime_kill_heal * script_heal_multiplier,
@@ -1932,11 +1944,15 @@ impl ControlledChampionCombatSimulation {
         if !self.enemy_is_active(idx) {
             return 0.0;
         }
+        let target_current_health = self.enemy_state[idx].health.max(0.0);
         let target_max_health = self.enemy_state[idx].max_health.max(1.0);
         let (bonus_magic, bonus_true) = on_ability_bonus_damage(
             &mut self.controlled_champion_combat_runtime,
             ability_raw_damage,
             ability_ap_ratio,
+            self.controlled_champion_stats.ability_power,
+            self.controlled_champion_stats.attack_damage.max(0.0),
+            target_current_health,
             target_max_health,
             self.time,
             Some(idx),
@@ -1982,8 +1998,7 @@ impl ControlledChampionCombatSimulation {
         if runtime_heal <= 0.0 {
             return;
         }
-        let script_heal_multiplier =
-            controlled_champion_heal_multiplier(&self.controlled_champion_runtime);
+        let script_heal_multiplier = controlled_champion_heal_multiplier();
         let resolved_heal = resolve_stat(
             StatQuery::ScalarAmount {
                 base_amount: runtime_heal * script_heal_multiplier,
@@ -2090,8 +2105,8 @@ impl ControlledChampionCombatSimulation {
             self.health = self.max_health.min(self.health + resolved_heal);
             self.healing_done_total += (self.health - before).max(0.0);
         }
-        let runtime_regen = tick_controlled_champion_regen_heal(
-            &self.controlled_champion_runtime,
+        let runtime_regen = tick_regen_heal(
+            &self.controlled_champion_combat_runtime,
             self.health,
             self.max_health,
             delta,
@@ -2141,13 +2156,18 @@ impl ControlledChampionCombatSimulation {
             if state.movement_mode == OpponentMovementMode::HoldPosition {
                 continue;
             }
+            let runtime_movement_speed_multiplier =
+                movement_speed_multiplier(&state.runtime, self.time, state.enemy.level);
             let speed = resolve_stat(
                 StatQuery::ScalarAmount {
                     base_amount: state.move_speed * state.behavior.movement_speed_scale,
                     source: ScalarMetricSource::MovementSpeed,
                     clamp_min_zero: true,
                 },
-                RuntimeBuffState::default(),
+                RuntimeBuffState {
+                    movement_speed_multiplier: runtime_movement_speed_multiplier,
+                    ..RuntimeBuffState::default()
+                },
             );
             let step = speed * delta;
             let mut radial = Vec2 {
@@ -2194,17 +2214,32 @@ impl ControlledChampionCombatSimulation {
         if !self.is_targetable() {
             return DamageApplicationOutcome::NullifiedUntargetable;
         }
-        let mut damage =
-            physical * self.physical_multiplier + magic * self.magic_multiplier + true_damage;
+        let bonus_armor = (self.controlled_champion_stats.armor
+            - self.controlled_champion_base.base_armor)
+            .max(0.0);
+        let bonus_magic_resist = (self.controlled_champion_stats.magic_resist
+            - self.controlled_champion_base.base_magic_resist)
+            .max(0.0);
+        let (aftershock_physical_multiplier, aftershock_magic_multiplier) =
+            incoming_damage_multipliers(
+                &self.controlled_champion_combat_runtime,
+                self.time,
+                self.sim.champion_level,
+                self.controlled_champion_stats.armor,
+                self.controlled_champion_stats.magic_resist,
+                bonus_armor,
+                bonus_magic_resist,
+            );
+        let mut damage = physical * self.physical_multiplier * aftershock_physical_multiplier
+            + magic * self.magic_multiplier * aftershock_magic_multiplier
+            + true_damage;
         let active_enemy_count = self
             .enemy_state
             .iter()
             .filter(|state| state.respawn_at.is_none() && state.health > 0.0)
             .count();
-        let script_damage_taken_multiplier = controlled_champion_damage_taken_multiplier(
-            &self.controlled_champion_runtime,
-            active_enemy_count,
-        );
+        let script_damage_taken_multiplier =
+            controlled_champion_damage_taken_multiplier(active_enemy_count);
         damage = resolve_stat(
             StatQuery::ScalarAmount {
                 base_amount: damage * script_damage_taken_multiplier,
@@ -2681,10 +2716,14 @@ impl ControlledChampionCombatSimulation {
                     let state = &mut self.enemy_state[idx];
                     let attack_damage =
                         state.physical_hit_damage + state.next_attack_bonus_physical;
+                    let bonus_attack_damage =
+                        (state.physical_hit_damage - state.enemy.base.base_attack_damage).max(0.0);
                     let (extra_physical, extra_magic, extra_true) = on_hit_bonus_damage(
                         state.behavior,
                         &mut state.runtime,
                         attack_damage,
+                        state.ability_power,
+                        bonus_attack_damage,
                         target_current,
                         target_max,
                         state.max_health,
@@ -2971,6 +3010,8 @@ impl ControlledChampionCombatSimulation {
                     self.controlled_champion_behavior,
                     &mut self.controlled_champion_combat_runtime,
                     attack_damage,
+                    self.controlled_champion_stats.ability_power,
+                    self.controlled_champion_stats.attack_damage.max(0.0),
                     target_current_health,
                     target_max_health,
                     self.max_health,
@@ -3076,36 +3117,18 @@ impl ControlledChampionCombatSimulation {
                     self.controlled_champion_script.as_ref(),
                     ControlledChampionOffensiveAbility::Primary,
                 );
-                let runtime_bonus = on_controlled_champion_ability_bonus(
-                    &mut self.controlled_champion_runtime,
-                    ControlledChampionAbilityRuntimeInput {
-                        ability_power: self.controlled_champion_stats.ability_power,
-                        ability_ap_ratio: q_ap_ratio,
-                        now_seconds: self.time,
-                    },
-                );
-                let runtime_bonus_magic = resolve_stat(
-                    StatQuery::ScalarAmount {
-                        base_amount: runtime_bonus.extra_magic_damage,
-                        source: ScalarMetricSource::OutgoingAbilityDamage,
-                        clamp_min_zero: true,
-                    },
-                    self.controlled_champion_buffs,
-                );
                 let generic_runtime_bonus = self.apply_ability_bonus_damage_to_enemy(
                     idx,
                     q_raw_damage,
                     q_ap_ratio,
                     self.sim.champion_level,
                 );
-                let dealt = self.apply_magic_damage_to_enemy(idx, q_raw_damage)
-                    + self.apply_magic_damage_to_enemy(idx, runtime_bonus_magic)
-                    + generic_runtime_bonus;
+                let dealt =
+                    self.apply_magic_damage_to_enemy(idx, q_raw_damage) + generic_runtime_bonus;
                 self.damage_dealt_total += dealt.max(0.0);
                 self.apply_controlled_champion_runtime_heal(dealt);
                 if dealt > 0.0 {
-                    let script_heal_multiplier =
-                        controlled_champion_heal_multiplier(&self.controlled_champion_runtime);
+                    let script_heal_multiplier = controlled_champion_heal_multiplier();
                     let resolved_heal = resolve_stat(
                         StatQuery::ScalarAmount {
                             base_amount: dealt
@@ -3146,39 +3169,9 @@ impl ControlledChampionCombatSimulation {
                     self.controlled_champion_script.as_ref(),
                     ControlledChampionOffensiveAbility::Secondary,
                 );
-                let target_count = self.active_enemy_count_in_controlled_champion_range(
-                    self.cast_profile.offensive_secondary_range,
-                    self.cast_profile.offensive_secondary_effect_hitbox_radius,
-                );
-                let runtime_bonus = on_controlled_champion_ability_bonus(
-                    &mut self.controlled_champion_runtime,
-                    ControlledChampionAbilityRuntimeInput {
-                        ability_power: self.controlled_champion_stats.ability_power,
-                        ability_ap_ratio: e_ap_ratio,
-                        now_seconds: self.time,
-                    },
-                );
-                let runtime_bonus_per_target = if target_count > 0 {
-                    resolve_stat(
-                        StatQuery::ScalarAmount {
-                            base_amount: runtime_bonus.extra_magic_damage / target_count as f64,
-                            source: ScalarMetricSource::OutgoingAbilityDamage,
-                            clamp_min_zero: true,
-                        },
-                        self.controlled_champion_buffs,
-                    )
-                } else {
-                    0.0
-                };
                 let (base_dealt, hit_count) = self
                     .apply_magic_damage_to_enemies_in_controlled_champion_range(
                         e_raw_damage,
-                        self.cast_profile.offensive_secondary_range,
-                        self.cast_profile.offensive_secondary_effect_hitbox_radius,
-                    );
-                let (bonus_dealt, _) = self
-                    .apply_magic_damage_to_enemies_in_controlled_champion_range(
-                        runtime_bonus_per_target,
                         self.cast_profile.offensive_secondary_range,
                         self.cast_profile.offensive_secondary_effect_hitbox_radius,
                     );
@@ -3190,7 +3183,7 @@ impl ControlledChampionCombatSimulation {
                         self.cast_profile.offensive_secondary_range,
                         self.cast_profile.offensive_secondary_effect_hitbox_radius,
                     );
-                let dealt = base_dealt + bonus_dealt + generic_runtime_bonus;
+                let dealt = base_dealt + generic_runtime_bonus;
                 self.damage_dealt_total += dealt.max(0.0);
                 self.apply_controlled_champion_runtime_heal(dealt);
                 self.trace_event(
@@ -3217,39 +3210,9 @@ impl ControlledChampionCombatSimulation {
                     self.controlled_champion_script.as_ref(),
                     ControlledChampionOffensiveAbility::Ultimate,
                 );
-                let target_count = self.active_enemy_count_in_controlled_champion_range(
-                    self.cast_profile.offensive_ultimate_range,
-                    self.cast_profile.offensive_ultimate_effect_hitbox_radius,
-                );
-                let runtime_bonus = on_controlled_champion_ability_bonus(
-                    &mut self.controlled_champion_runtime,
-                    ControlledChampionAbilityRuntimeInput {
-                        ability_power: self.controlled_champion_stats.ability_power,
-                        ability_ap_ratio: r_ap_ratio,
-                        now_seconds: self.time,
-                    },
-                );
-                let runtime_bonus_per_target = if target_count > 0 {
-                    resolve_stat(
-                        StatQuery::ScalarAmount {
-                            base_amount: runtime_bonus.extra_magic_damage / target_count as f64,
-                            source: ScalarMetricSource::OutgoingAbilityDamage,
-                            clamp_min_zero: true,
-                        },
-                        self.controlled_champion_buffs,
-                    )
-                } else {
-                    0.0
-                };
                 let (base_dealt, hit_count) = self
                     .apply_magic_damage_to_enemies_in_controlled_champion_range(
                         r_raw_damage,
-                        self.cast_profile.offensive_ultimate_range,
-                        self.cast_profile.offensive_ultimate_effect_hitbox_radius,
-                    );
-                let (bonus_dealt, _) = self
-                    .apply_magic_damage_to_enemies_in_controlled_champion_range(
-                        runtime_bonus_per_target,
                         self.cast_profile.offensive_ultimate_range,
                         self.cast_profile.offensive_ultimate_effect_hitbox_radius,
                     );
@@ -3261,7 +3224,7 @@ impl ControlledChampionCombatSimulation {
                         self.cast_profile.offensive_ultimate_range,
                         self.cast_profile.offensive_ultimate_effect_hitbox_radius,
                     );
-                let dealt = base_dealt + bonus_dealt + generic_runtime_bonus;
+                let dealt = base_dealt + generic_runtime_bonus;
                 self.damage_dealt_total += dealt.max(0.0);
                 self.apply_controlled_champion_runtime_heal(dealt);
                 self.trace_event(
@@ -3304,6 +3267,9 @@ impl ControlledChampionCombatSimulation {
                         distance_to_target,
                         physical_hit_damage: state.physical_hit_damage,
                         actor_ability_power: state.ability_power,
+                        actor_bonus_attack_damage: (state.physical_hit_damage
+                            - state.enemy.base.base_attack_damage)
+                            .max(0.0),
                         target_current_health,
                         target_max_health,
                         now,
@@ -3446,6 +3412,12 @@ impl ControlledChampionCombatSimulation {
     pub(super) fn trace_events(&self) -> &[String] {
         &self.trace_events
     }
+
+    pub(super) fn controlled_champion_rune_proc_telemetry(
+        &self,
+    ) -> Vec<ChampionRuneProcTelemetryEntry> {
+        describe_rune_proc_telemetry(&self.controlled_champion_combat_runtime)
+    }
 }
 
 fn derive_enemy_model(
@@ -3517,7 +3489,7 @@ fn derive_enemy_model(
         urf.item_haste,
         enemy.base.is_melee,
     );
-    attack_speed = base_attack_speed * attack_speed_multiplier(&runtime);
+    attack_speed = base_attack_speed * attack_speed_multiplier(&runtime, 0.0);
 
     let attack_interval = 1.0 / attack_speed.max(0.001);
     let behavior = behavior_profile(

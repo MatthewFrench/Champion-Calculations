@@ -14,8 +14,10 @@ This file is a concise handoff for developers and AI agents.
 - Engine-facing controlled champion script facade under `src/scripts/champions/controlled_champion.rs`.
 - Controlled champion basic attacks now execute through recurring start/windup/hit events (hitbox/projectile-aware), using shared runtime attack-speed/on-hit effect paths.
 - Shared loadout runtime now includes generic combat-time rune trigger hooks (on-hit, ability-hit, outgoing-damage healing, immobilize-triggered effects).
-- Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, and Aftershock.
-- CLI primary modes are `controlled_champion`, `controlled_champion_fixed_loadout`, and `controlled_champion_step` (`vladimir`/`vladimir_step` aliases still accepted).
+- Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, Aftershock, Electrocute, First Strike, and Phase Rush.
+- Shared runtime rune coverage also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
+- Controlled champion and enemy actors now run rune combat logic through the same shared runtime interfaces.
+- CLI primary modes are `controlled_champion`, `controlled_champion_fixed_loadout`, `controlled_champion_fixed_loadout_rune_sweep`, and `controlled_champion_step` (`vladimir`/`vladimir_step` aliases still accepted).
 - Item and runtime loadout script hooks under `src/scripts/items/` and `src/scripts/runtime/`.
 - Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
@@ -24,6 +26,9 @@ This file is a concise handoff for developers and AI agents.
 - Top-level search orchestration is parallelized for ensemble seeds and portfolio strategies, and strategy-elite/adaptive generation is parallelized with deterministic merge ordering.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
+- Report and trace outputs now include rune proc telemetry totals plus source-attribution breakdown (`source_breakdown`), proc opportunity/rate metrics, and damage/healing share metrics.
+- Optional `simulation.combat_seed` now enables deterministic combat-variation simulation runs (enemy initialization ordering + initial auto-attack jitter).
+- Controlled champion runtime helper module is now stateless (defensive item/revive policy only); no dedicated controlled runtime holder is stored in engine state.
 
 ## Search Behavior (Important)
 - Seed behavior:
@@ -51,6 +56,9 @@ This file is a concise handoff for developers and AI agents.
     - optional hard gate (`unmodeled_rune_hard_gate`)
     - optional per-rune score penalty (`unmodeled_rune_penalty_per_rune`)
     - diagnostics include rejected/penalized candidate counts.
+    - quality profiles now apply policy defaults:
+      - `maximum_quality`: hard gate enabled
+      - `fast`/`balanced`: penalty mode
   - diagnostics now report effective thread count and parallel-mode flags for orchestration phases.
 
 ## Data/Runtime Correctness Updates
@@ -71,7 +79,12 @@ This file is a concise handoff for developers and AI agents.
 - Controlled champion cast gating now enforces cast-lock state (windup/channel/lockout), preventing same-tick spell stacking from engine scheduling.
 - Controlled champion offensive-ultimate-before-defensive-ability-two policy now loads from `Characters/Vladimir.json` simulation policy data (script-owned; not engine hardcoded).
 - Reports now explicitly list controlled champion runes that currently have no modeled deterministic or combat-time runtime effect.
-- Shared runtime rune effects now apply combat-time behavior for Press the Attack, Fleet Footwork, Conqueror, and Aftershock rather than leaving them as unmodeled placeholders.
+- Shared runtime rune effects now apply combat-time behavior for Press the Attack, Fleet Footwork, Conqueror, Aftershock, Electrocute, First Strike, and Phase Rush rather than leaving them as unmodeled placeholders.
+- Shared runtime rune effects now also cover Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
+- Aftershock resist-window mitigation now affects incoming physical and magic damage during the active window for both controlled champion and enemies.
+- Report generation now hard-fails when controlled champion rune/shard labels are incomplete.
+- Fixed-loadout rune sweep repeat aggregation now varies deterministic combat seeds per repeat rather than re-running identical combat realizations.
+- Added calibration regressions for Electrocute, Arcane Comet, First Strike, and Aftershock level-scaling formulas plus a pool multi-target tick-hit/damage regression.
 
 ## Recent Observed Runtime Characteristic
 - Coverage stage is currently the dominant fixed cost in short runs.

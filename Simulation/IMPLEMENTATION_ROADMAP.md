@@ -184,6 +184,20 @@ This file tracks all high-value follow-up work requested for simulator realism, 
     - Fleet Footwork (combat-time heal proc)
     - Conqueror (stacking adaptive spell bonus + max-stack damage-heal conversion)
     - Aftershock (immobilize-triggered shockwave damage)
+    - Electrocute (3-hit window proc damage)
+    - First Strike (windowed bonus true-damage conversion)
+    - Phase Rush (3-hit window movement-speed burst)
+    - Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest
+    - Triumph, Gathering Storm, and Second Wind
+  - controlled champion and enemy actors now execute rune combat effects through the same shared loadout runtime API.
+  - global rune runtime tuning moved to `Simulation/data/simulator_defaults.json` under `rune_runtime_defaults` and loaded via `src/defaults.rs`.
+  - Aftershock resist-window mitigation now applies during the active window for both controlled champion and enemy actors.
+  - reports and trace JSON now include rune proc telemetry with per-trigger source attribution (`source_breakdown`).
+  - added fixed-loadout rune sweep mode to compare keystones directly on one fixed build/loadout baseline.
+  - fixed-loadout rune sweep now evaluates keystones in parallel and supports optional repeated-evaluation aggregation (`--fixed-sweep-seed-repeats`) with distinct deterministic combat seeds per repeat.
+  - rune telemetry now includes proc opportunity counters/rates and damage/healing share metrics in markdown/json outputs.
+  - added explicit rune level-calibration regression tests for Electrocute, Arcane Comet, First Strike, and Aftershock formulas/caps.
+  - report generation now hard-fails if controlled champion rune/shard selection labels are incomplete (no degraded “none selected” output).
   - search scoring now supports explicit unmodeled-rune quality-gate policy (hard gate or per-rune penalty) with diagnostics counters.
 - Success criteria:
   - selected runes contribute in real time when conditions trigger.

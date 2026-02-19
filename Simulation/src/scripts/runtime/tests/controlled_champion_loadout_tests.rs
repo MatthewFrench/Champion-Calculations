@@ -1,58 +1,10 @@
 use super::*;
-
-fn selection_with(rune_names: &[&str]) -> LoadoutSelection {
-    LoadoutSelection {
-        rune_names: rune_names.iter().map(|s| (*s).to_string()).collect(),
-        shard_stats: Vec::new(),
-    }
-}
+use crate::scripts::runes::effects::DYNAMIC_RUNE_KEYS;
 
 #[test]
-fn controlled_champion_runtime_parses_dynamic_runes() {
-    let runtime = build_controlled_champion_loadout_runtime(&selection_with(&[
-        "Arcane Comet",
-        "Summon Aery",
-        "Triumph",
-        "Second Wind",
-    ]));
-    assert!(runtime.has_arcane_comet);
-    assert!(runtime.has_summon_aery);
-    assert!(runtime.has_triumph);
-    assert!(runtime.has_second_wind);
-}
-
-#[test]
-fn arcane_comet_and_aery_respect_runtime_cooldowns() {
-    let mut runtime = build_controlled_champion_loadout_runtime(&selection_with(&[
-        "Arcane Comet",
-        "Summon Aery",
-    ]));
-
-    let first = on_controlled_champion_ability_bonus(
-        &mut runtime,
-        ControlledChampionAbilityRuntimeInput {
-            ability_power: 300.0,
-            ability_ap_ratio: 0.6,
-            now_seconds: 1.0,
-        },
-    );
-    let second = on_controlled_champion_ability_bonus(
-        &mut runtime,
-        ControlledChampionAbilityRuntimeInput {
-            ability_power: 300.0,
-            ability_ap_ratio: 0.6,
-            now_seconds: 1.5,
-        },
-    );
-    assert!(first.extra_magic_damage > second.extra_magic_damage);
-}
-
-#[test]
-fn second_wind_regen_gives_more_heal_at_low_health() {
-    let runtime = build_controlled_champion_loadout_runtime(&selection_with(&["Second Wind"]));
-    let high = tick_controlled_champion_regen_heal(&runtime, 1800.0, 2000.0, 1.0);
-    let low = tick_controlled_champion_regen_heal(&runtime, 500.0, 2000.0, 1.0);
-    assert!(low > high);
+fn controlled_runtime_is_stateless_and_reports_no_cooldowns() {
+    let lines = describe_controlled_champion_runtime_cooldowns(5.0);
+    assert_eq!(lines, vec!["none".to_string()]);
 }
 
 #[test]
@@ -127,4 +79,35 @@ fn revive_effect_trigger_checks_cooldown_and_availability() {
         now_seconds: 120.0,
         ready_at: 0.0,
     }));
+}
+
+#[test]
+fn dynamic_rune_key_list_matches_modeled_coverage_expectations() {
+    let mut expected = vec![
+        "aftershock",
+        "arcanecomet",
+        "conqueror",
+        "darkharvest",
+        "electrocute",
+        "firststrike",
+        "fleetfootwork",
+        "gatheringstorm",
+        "graspoftheundying",
+        "hailofblades",
+        "lethaltempo",
+        "phaserush",
+        "presstheattack",
+        "secondwind",
+        "summonaery",
+        "triumph",
+    ];
+    expected.sort_unstable();
+
+    let mut actual = DYNAMIC_RUNE_KEYS.to_vec();
+    actual.sort_unstable();
+
+    assert_eq!(
+        actual, expected,
+        "When adding a dynamic rune key, add an observable-effect coverage assertion too."
+    );
 }

@@ -1,9 +1,7 @@
 use anyhow::Result;
 
-use crate::LoadoutSelection;
-
 use crate::scripts::registry::hooks::{LoadoutHookContext, ScriptHook};
-use crate::scripts::runes::effects::{apply_rune_runtime_flag, has_dynamic_rune_effect};
+use crate::scripts::runes::effects::has_dynamic_rune_effect;
 use crate::scripts::runtime::stat_resolution::{
     RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
 };
@@ -12,18 +10,6 @@ pub(crate) struct ControlledChampionLoadoutHook;
 
 pub(crate) const CONTROLLED_CHAMPION_LOADOUT_HOOK: ControlledChampionLoadoutHook =
     ControlledChampionLoadoutHook;
-
-#[derive(Debug, Clone, Copy)]
-pub(crate) struct ControlledChampionAbilityRuntimeInput {
-    pub ability_power: f64,
-    pub ability_ap_ratio: f64,
-    pub now_seconds: f64,
-}
-
-#[derive(Debug, Clone, Copy, Default)]
-pub(crate) struct ControlledChampionAbilityRuntimeBonus {
-    pub extra_magic_damage: f64,
-}
 
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct DefensiveItemActivationInput {
@@ -54,105 +40,8 @@ pub(crate) struct ReviveEffectDecisionInput {
     pub ready_at: f64,
 }
 
-#[derive(Debug, Clone, Copy, Default)]
-pub(crate) struct ControlledChampionLoadoutRuntime {
-    pub(crate) has_arcane_comet: bool,
-    pub(crate) has_summon_aery: bool,
-    pub(crate) has_triumph: bool,
-    pub(crate) has_gathering_storm: bool,
-    pub(crate) has_second_wind: bool,
-
-    pub arcane_comet_ready_at: f64,
-    pub aery_ready_at: f64,
-}
-
-pub(crate) fn build_controlled_champion_loadout_runtime(
-    selection: &LoadoutSelection,
-) -> ControlledChampionLoadoutRuntime {
-    let mut runtime = ControlledChampionLoadoutRuntime::default();
-    for rune_name in &selection.rune_names {
-        apply_rune_runtime_flag(&mut runtime, rune_name);
-    }
-    runtime
-}
-
-fn cooldown_status(now: f64, ready_at: f64) -> String {
-    let remaining = (ready_at - now).max(0.0);
-    if remaining <= 1e-9 {
-        "ready".to_string()
-    } else {
-        format!("{remaining:.2}s")
-    }
-}
-
-pub(crate) fn describe_controlled_champion_runtime_cooldowns(
-    runtime: &ControlledChampionLoadoutRuntime,
-    now: f64,
-) -> Vec<String> {
-    let mut lines = Vec::new();
-
-    if runtime.has_arcane_comet {
-        lines.push(format!(
-            "Arcane Comet: {}",
-            cooldown_status(now, runtime.arcane_comet_ready_at)
-        ));
-    }
-    if runtime.has_summon_aery {
-        lines.push(format!(
-            "Summon Aery: {}",
-            cooldown_status(now, runtime.aery_ready_at)
-        ));
-    }
-
-    if lines.is_empty() {
-        lines.push("none".to_string());
-    }
-    lines
-}
-
-pub(crate) fn on_controlled_champion_ability_bonus(
-    runtime: &mut ControlledChampionLoadoutRuntime,
-    input: ControlledChampionAbilityRuntimeInput,
-) -> ControlledChampionAbilityRuntimeBonus {
-    let mut extra_magic_damage = 0.0;
-
-    if runtime.has_arcane_comet && input.now_seconds >= runtime.arcane_comet_ready_at {
-        extra_magic_damage += 30.0 + 0.20 * input.ability_power.max(0.0);
-        runtime.arcane_comet_ready_at = input.now_seconds + 9.0;
-    }
-
-    if runtime.has_summon_aery && input.now_seconds >= runtime.aery_ready_at {
-        extra_magic_damage += 12.0 + 0.10 * input.ability_power.max(0.0);
-        runtime.aery_ready_at = input.now_seconds + 2.0;
-    }
-
-    if runtime.has_gathering_storm {
-        // Approximate Gathering Storm as deterministic AP growth every 10 minutes.
-        let steps = (input.now_seconds / 600.0).floor().max(0.0);
-        let bonus_ability_power = 8.0 * steps;
-        extra_magic_damage += input.ability_ap_ratio.max(0.0) * bonus_ability_power;
-    }
-
-    ControlledChampionAbilityRuntimeBonus {
-        extra_magic_damage: resolve_stat(
-            StatQuery::ScalarAmount {
-                base_amount: extra_magic_damage,
-                source: ScalarMetricSource::OutgoingAbilityDamage,
-                clamp_min_zero: true,
-            },
-            RuntimeBuffState::default(),
-        ),
-    }
-}
-
-pub(crate) fn on_controlled_champion_enemy_kill(
-    runtime: &mut ControlledChampionLoadoutRuntime,
-    max_health: f64,
-) -> f64 {
-    if !runtime.has_triumph || max_health <= 0.0 {
-        return 0.0;
-    }
-    0.08 * max_health
+pub(crate) fn describe_controlled_champion_runtime_cooldowns(_now: f64) -> Vec<String> {
+    vec!["none".to_string()]
 }
 
 pub(crate) fn decide_defensive_item_activations(
@@ -175,35 +64,7 @@ pub(crate) fn should_trigger_revive_effect(input: ReviveEffectDecisionInput) -> 
     input.available && input.now_seconds >= input.ready_at
 }
 
-pub(crate) fn tick_controlled_champion_regen_heal(
-    runtime: &ControlledChampionLoadoutRuntime,
-    current_health: f64,
-    max_health: f64,
-    dt: f64,
-) -> f64 {
-    if !runtime.has_second_wind || max_health <= 0.0 || dt <= 0.0 {
-        return 0.0;
-    }
-    let health_ratio = (current_health / max_health).clamp(0.0, 1.0);
-    let base_regen = 0.0012 * max_health * dt;
-    let missing_health_bonus = if health_ratio <= 0.35 {
-        0.0026 * max_health * dt
-    } else {
-        0.0
-    };
-    resolve_stat(
-        StatQuery::ScalarAmount {
-            base_amount: base_regen + missing_health_bonus,
-            source: ScalarMetricSource::Healing,
-            clamp_min_zero: true,
-        },
-        RuntimeBuffState::default(),
-    )
-}
-
-pub(crate) fn controlled_champion_heal_multiplier(
-    _runtime: &ControlledChampionLoadoutRuntime,
-) -> f64 {
+pub(crate) fn controlled_champion_heal_multiplier() -> f64 {
     resolve_stat(
         StatQuery::ScalarAmount {
             base_amount: 1.0,
@@ -214,10 +75,7 @@ pub(crate) fn controlled_champion_heal_multiplier(
     )
 }
 
-pub(crate) fn controlled_champion_damage_taken_multiplier(
-    _runtime: &ControlledChampionLoadoutRuntime,
-    _nearby_enemies: usize,
-) -> f64 {
+pub(crate) fn controlled_champion_damage_taken_multiplier(_nearby_enemies: usize) -> f64 {
     resolve_stat(
         StatQuery::ScalarAmount {
             base_amount: 1.0,

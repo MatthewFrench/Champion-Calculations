@@ -18,9 +18,21 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Controlled champion cast-lock state now gates cast permission, preventing same-tick spell stacking.
 - Controlled champion reports and trace outputs focus on the optimized build outcome (no baseline comparison workflow).
 - Reports explicitly flag controlled champion rune selections that are currently unmodeled in deterministic/runtime combat logic.
-- Shared combat-time rune triggers now model additional keystones in runtime simulation paths (Press the Attack, Fleet Footwork, Conqueror, and Aftershock).
+- Shared combat-time rune triggers now model runtime effects for:
+  - Press the Attack, Fleet Footwork, Conqueror, Aftershock
+  - Electrocute, First Strike, Phase Rush
+  - Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest
+  - Triumph, Gathering Storm, Second Wind
+- Controlled champion and enemy actors now execute rune combat logic through the same shared runtime path.
+- Aftershock resist-window mitigation is now applied during the active window for both controlled champion and enemy actors.
 - Search scoring now supports an explicit unmodeled-rune quality gate policy (hard gate or per-rune score penalty) to avoid rewarding placeholder loadouts.
+- Search quality profiles now enforce profile-aware unmodeled-rune policy:
+  - `maximum_quality` uses hard rejection for unmodeled rune candidates
+  - `fast`/`balanced` keep penalty mode
 - Added a direct fixed-loadout evaluation mode for controlled champion A/B comparisons without search (`controlled_champion_fixed_loadout`).
+- Added a fixed-loadout keystone comparison mode (`controlled_champion_fixed_loadout_rune_sweep`) for direct one-build rune sweeps.
+- Reports and traces now include rune proc telemetry with trigger-source attribution and calibration metrics (opportunity counts, proc-opportunity rates, and damage/healing share).
+- Optional `simulation.combat_seed` enables deterministic combat-variation runs (enemy init order + initial attack jitter); fixed-loadout rune sweep repeats now use distinct combat seeds per repeat.
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`
   - `Items/`

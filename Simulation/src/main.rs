@@ -31,9 +31,11 @@ pub(crate) use crate::data::{
 };
 use crate::engine::EnemyDerivedCombatStats;
 use crate::scenario_runner::{
-    run_controlled_champion_fixed_loadout_evaluation, run_controlled_champion_scenario,
+    run_controlled_champion_fixed_loadout_evaluation,
+    run_controlled_champion_fixed_loadout_rune_sweep, run_controlled_champion_scenario,
     run_controlled_champion_stepper, run_stat_optimization,
 };
+use crate::scripts::champions::ChampionRuneProcTelemetryEntry;
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 const LEGENDARY_RANK: &str = "LEGENDARY";
@@ -144,6 +146,7 @@ struct SimulationConfig {
     server_tick_rate_hz: f64,
     champion_level: usize,
     max_time_seconds: f64,
+    combat_seed: Option<u64>,
     controlled_champion_script: Option<crate::scripts::champions::ControlledChampionScriptHandle>,
     zhonya_duration_seconds: f64,
     zhonya_cooldown_seconds: f64,
@@ -426,6 +429,7 @@ struct ControlledChampionReportData<'a> {
     best_build: &'a [Item],
     best_score: f64,
     best_outcome: &'a CombatOutcome,
+    best_rune_proc_telemetry: &'a [ChampionRuneProcTelemetryEntry],
     best_score_breakdown: ObjectiveScoreBreakdown,
     enemy_builds: &'a [EnemyBuildEntry],
     enemy_derived_combat_stats: &'a [EnemyDerivedCombatStats],
@@ -500,6 +504,12 @@ struct Cli {
         help = "Optional report folder label for controlled_champion_fixed_loadout mode"
     )]
     fixed_eval_label: Option<String>,
+    #[arg(
+        long,
+        default_value_t = 1,
+        help = "Optional repeat count per keystone for controlled_champion_fixed_loadout_rune_sweep (enables multi-seed-ready aggregation)"
+    )]
+    fixed_sweep_seed_repeats: usize,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
@@ -508,6 +518,8 @@ enum Mode {
     ControlledChampion,
     #[value(name = "controlled_champion_fixed_loadout")]
     ControlledChampionFixedLoadout,
+    #[value(name = "controlled_champion_fixed_loadout_rune_sweep")]
+    ControlledChampionFixedLoadoutRuneSweep,
     #[value(name = "controlled_champion_step", alias = "vladimir_step")]
     ControlledChampionStep,
     #[value(name = "taric_as")]
@@ -548,6 +560,7 @@ struct ControlledChampionFixedLoadoutOptions<'a> {
     fixed_rune_names: Option<Vec<String>>,
     fixed_shard_stats: Option<Vec<String>>,
     fixed_eval_label: Option<String>,
+    fixed_sweep_seed_repeats: usize,
 }
 
 fn main() -> Result<()> {
@@ -593,6 +606,27 @@ fn main() -> Result<()> {
                     fixed_rune_names,
                     fixed_shard_stats,
                     fixed_eval_label: cli.fixed_eval_label,
+                    fixed_sweep_seed_repeats: cli.fixed_sweep_seed_repeats.max(1),
+                },
+            )
+        }
+        Mode::ControlledChampionFixedLoadoutRuneSweep => {
+            let fixed_item_names = parse_csv_arg(
+                cli.fixed_item_names.as_deref(),
+                "--fixed-item-names is required for --mode controlled_champion_fixed_loadout_rune_sweep",
+            )?;
+            let fixed_rune_names = parse_optional_csv_arg(cli.fixed_rune_names.as_deref());
+            let fixed_shard_stats = parse_optional_csv_arg(cli.fixed_shard_stats.as_deref());
+            run_controlled_champion_fixed_loadout_rune_sweep(
+                &scenario_path,
+                &ControlledChampionFixedLoadoutOptions {
+                    report_path_override: cli.report_path.as_deref(),
+                    search_quality_profile: cli.search_quality_profile,
+                    fixed_item_names,
+                    fixed_rune_names,
+                    fixed_shard_stats,
+                    fixed_eval_label: cli.fixed_eval_label,
+                    fixed_sweep_seed_repeats: cli.fixed_sweep_seed_repeats.max(1),
                 },
             )
         }
