@@ -15,46 +15,46 @@
   "objective_breakdown": {
     "components": {
       "damage": {
-        "contribution": 0.08397257943667973,
-        "impact_percent": 28.82752969819833,
-        "normalized_ratio": 0.6549861196061018,
+        "contribution": 0.08552644359212755,
+        "impact_percent": 28.604165458214986,
+        "normalized_ratio": 0.6671062600185947,
         "weight": 0.12820512820512822
       },
       "enemy_kills": {
         "contribution": 0.10256410256410259,
-        "impact_percent": 35.209942727378404,
+        "impact_percent": 34.30237990261723,
         "normalized_ratio": 0.2,
         "weight": 0.5128205128205129
       },
       "healing": {
-        "contribution": 0.10142474708925159,
-        "impact_percent": 34.818805477476026,
-        "normalized_ratio": 1.3185217121602706,
+        "contribution": 0.10757783239968549,
+        "impact_percent": 35.97921284172243,
+        "normalized_ratio": 1.3985118211959113,
         "weight": 0.07692307692307693
       },
       "invulnerable_seconds": {
         "contribution": 0.0002243589743589744,
-        "impact_percent": 0.07702174971614027,
+        "impact_percent": 0.07503645603697519,
         "normalized_ratio": 0.00875,
         "weight": 0.025641025641025644
       },
       "survival": {
         "contribution": 0.0031072235665269288,
-        "impact_percent": 1.0667003472310925,
+        "impact_percent": 1.0392053414083762,
         "normalized_ratio": 0.01211817190945502,
         "weight": 0.25641025641025644
       }
     },
-    "final_score": 0.2912930116309198,
-    "weighted_mean_score": 0.2912930116309198,
-    "worst_case_score": 0.2912930116309198,
+    "final_score": 0.29899996109680155,
+    "weighted_mean_score": 0.29899996109680155,
+    "worst_case_score": 0.29899996109680155,
     "worst_case_weight": 0.35
   },
-  "objective_score": 0.2912930116309198,
+  "objective_score": 0.29899996109680155,
   "outcome": {
-    "damage_dealt": 12101.696287484885,
+    "damage_dealt": 12325.63119823058,
     "enemy_kills": 1,
-    "healing_done": 3546.8234057111285,
+    "healing_done": 3761.9967990170016,
     "invulnerable_seconds": 10.5,
     "time_alive_seconds": 14.541806291346024
   },
@@ -65,6 +65,76 @@
     "invulnerable_seconds": 1200.0,
     "time_alive_seconds": 1200.0
   },
+  "rune_proc_telemetry": [
+    {
+      "attempt_count": 21,
+      "bonus_damage": 425.148,
+      "bonus_damage_share": 0.03449300024983975,
+      "bonus_healing": 145.08280324117644,
+      "bonus_healing_share": 0.03856537126216751,
+      "eligible_count": 19,
+      "opportunity_count": 19,
+      "proc_attempt_rate": 0.9047619047619048,
+      "proc_count": 19,
+      "proc_eligible_rate": 1.0,
+      "proc_opportunity_rate": 1.0,
+      "rune_name": "Conqueror",
+      "source_breakdown": [
+        {
+          "attempt_count": 16,
+          "bonus_damage": 425.148,
+          "bonus_healing": 0.0,
+          "eligible_count": 16,
+          "opportunity_count": 16,
+          "proc_attempt_rate": 1.0,
+          "proc_count": 16,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "ability"
+        },
+        {
+          "attempt_count": 5,
+          "bonus_damage": 0.0,
+          "bonus_healing": 145.08280324117644,
+          "eligible_count": 3,
+          "opportunity_count": 3,
+          "proc_attempt_rate": 0.6,
+          "proc_count": 3,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "on_hit"
+        }
+      ]
+    },
+    {
+      "attempt_count": 1,
+      "bonus_damage": 0.0,
+      "bonus_damage_share": 0.0,
+      "bonus_healing": 535.1269279262624,
+      "bonus_healing_share": 0.14224545009344225,
+      "eligible_count": 1,
+      "opportunity_count": 1,
+      "proc_attempt_rate": 1.0,
+      "proc_count": 1,
+      "proc_eligible_rate": 1.0,
+      "proc_opportunity_rate": 1.0,
+      "rune_name": "Triumph",
+      "source_breakdown": [
+        {
+          "attempt_count": 1,
+          "bonus_damage": 0.0,
+          "bonus_healing": 535.1269279262624,
+          "eligible_count": 1,
+          "opportunity_count": 1,
+          "proc_attempt_rate": 1.0,
+          "proc_count": 1,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "enemy_kill"
+        }
+      ]
+    }
+  ],
   "runes": [
     "Conqueror",
     "Triumph",
@@ -74,6 +144,7 @@
     "Unflinching"
   ],
   "scenario_path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenarios/vladimir_urf_teamfight.json",
+  "schema_version": 2,
   "search_quality_profile": "maximum_quality",
   "shards": [
     "ability_haste",

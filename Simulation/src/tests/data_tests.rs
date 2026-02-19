@@ -319,6 +319,51 @@ fn ensure_complete_loadout_selection_fills_missing_selection() {
 }
 
 #[test]
+fn resolve_loadout_applies_tenacity_shard_and_preserves_shard_labels() {
+    let domain = build_loadout_domain();
+    let selection = LoadoutSelection {
+        rune_names: vec![
+            "Summon Aery".to_string(),
+            "Nimbus Cloak".to_string(),
+            "Celerity".to_string(),
+            "Gathering Storm".to_string(),
+            "Magical Footwear".to_string(),
+            "Jack Of All Trades".to_string(),
+        ],
+        shard_stats: vec![
+            "attack_speed".to_string(),
+            "movement_speed".to_string(),
+            "tenacity".to_string(),
+        ],
+    };
+    validate_rune_page_selection(&selection, &domain)
+        .expect("tenacity is a legal slot-3 shard and should validate");
+
+    let resolved =
+        resolve_loadout(&selection, 20, true).expect("loadout with tenacity shard should resolve");
+    let shard_label_count = resolved
+        .selection_labels
+        .iter()
+        .filter(|label| label.starts_with("Shard "))
+        .count();
+    assert_eq!(
+        shard_label_count, 3,
+        "resolved loadout should include labels for all three selected shards"
+    );
+    assert!(
+        resolved
+            .selection_labels
+            .iter()
+            .any(|label| label == "Shard 3: tenacity"),
+        "resolved loadout should include tenacity shard label"
+    );
+    assert!(
+        resolved.bonus_stats.tenacity_percent >= 15.0,
+        "tenacity shard should contribute deterministic tenacity stat"
+    );
+}
+
+#[test]
 fn search_quality_profiles_apply_unmodeled_quality_gate_policy() {
     let mut base = parse_build_search(&serde_json::json!({
         "strategy": "portfolio"

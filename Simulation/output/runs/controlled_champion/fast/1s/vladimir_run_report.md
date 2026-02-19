@@ -1,27 +1,30 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-18 19:29:54 -06:00`
-- Generated (UTC): `2026-02-19T01:29:54.011931+00:00`
+- Generated (local): `2026-02-19 13:50:12 -06:00`
+- Generated (UTC): `2026-02-19T19:50:12.934568+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
-- Best objective score: **0.0124**
-- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **1.55s / 1,743.0 / 0.0 / 0 / 0.00s**
+- Best objective score: **-0.1672**
+- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **1.55s / 1,802.8 / 0.0 / 0 / 0.00s**
 - Best cap survivor: **false**
 
 - Champion level assumption: **20**
 
 ## Objective Score Breakdown
 ### Best Build
-- Weighted-mean score: `0.0124`
-- Worst-case scenario score: `0.0124`
+- Weighted-mean score: `0.0128`
+- Worst-case scenario score: `0.0128`
 - Worst-case blend weight: `0.35`
-- Final blended objective score: `0.0124`
-- survival: weight `0.26` | normalized `0.0013` | contribution `0.0003` | impact `2.66%` | delta vs weight `-22.98pp`
-- damage: weight `0.13` | normalized `0.0943` | contribution `0.0121` | impact `97.34%` | delta vs weight `+84.52pp`
+- Final blended objective score: `0.0128`
+- survival: weight `0.26` | normalized `0.0013` | contribution `0.0003` | impact `2.58%` | delta vs weight `-23.06pp`
+- damage: weight `0.13` | normalized `0.0976` | contribution `0.0125` | impact `97.42%` | delta vs weight `+84.60pp`
 - healing: weight `0.08` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-7.69pp`
 - enemy_kills: weight `0.51` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-51.28pp`
 - invulnerable_seconds: weight `0.03` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-2.56pp`
+
+## Rune Proc Telemetry (Best Trace)
+- No rune procs were recorded during the best-trace replay.
 
 ## Search Diagnostics
 - Strategy: `portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)`
@@ -31,11 +34,11 @@
 - Ensemble seeds: `1`
 - Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `9` / `false` / `true` / `true`
 - Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
-- Simulations executed (new full combat runs): `902`
-- Unique scored candidates (all search stages): `902`
-- Total score requests (all search stages): `31,957`
-- Full evaluations cache hits/misses/waits: `37/1,276/0`
-- Full persistent cache hits/entries: `308/902`
+- Simulations executed (new full combat runs): `1,160`
+- Unique scored candidates (all search stages): `1,160`
+- Total score requests (all search stages): `35,830`
+- Full evaluations cache hits/misses/waits: `80/4,520/0`
+- Full persistent cache hits/entries: `21/2,026`
 - Candidate keys generated / duplicate-pruned / unique: `128/0/128`
 - Strict candidates seed-scored / remaining / processed: `0/128/0`
 - Strict non-finite / timeout-skipped: `0/128`
@@ -44,19 +47,21 @@
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `2.36s`
-- Total run time (end-to-end): `2.67s`
+- Search elapsed time: `1.60s`
+- Total run time (end-to-end): `1.60s`
 
-- Effective seed: `5537833927140705212`
+- Effective seed: `12899664607836502628`
+- Unmodeled rune gate (hard_gate / penalty_per_rune / rejected / penalized): `false` / `0.0200` / `0` / `4,461`
+- Unmodeled item-effect gate (hard_gate / penalty_per_item / rejected / penalized): `false` / `0.0200` / `0` / `4,373`
 - Time budget: `1.0s`; timed_out: `true`; progress: `0/128` (0.0%)
 
 - Estimated total legal candidate space: `995,424,835,958,784`
-- Estimated legal-space coverage (this run): `9.061e-11%`
-- Estimated legal-space coverage (persistent cache): `9.061e-11%`
+- Estimated legal-space coverage (this run): `1.165e-10%`
+- Estimated legal-space coverage (persistent cache): `2.035e-10%`
 - Estimated closeness probability (top 0.000001% heuristic): `0.00%`
-- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 902 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
+- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 1160 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
 - Search-type simulation breakdown:
-  - seed_search:portfolio: requests `31,957`, new simulations `1,276`, persistent cache hits `308`
+  - seed_search:portfolio: requests `35,830`, new simulations `4,520`, persistent cache hits `21`
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
@@ -64,41 +69,49 @@
 ## Selected Rune Page And Shards
 - Vladimir:
   - Rune: Aftershock
-  - Rune: Demolish
+  - Rune: Font of Life
   - Rune: Bone Plating
   - Rune: Overgrowth
-  - Rune: Triumph
-  - Rune: Legend: Haste
-  - Shard 1: ability_haste
-  - Shard 2: movement_speed
-  - Shard 3: health
+  - Rune: Axiom Arcanist
+  - Rune: Celerity
+  - Shard 1: attack_speed
+  - Shard 2: health
+  - Shard 3: tenacity
 - Opponents: champion-specific preset rune pages are listed in Enemy Builds.
 
 - Applied deterministic loadout effects:
-  - Vladimir: Applied rune stat effect from Legend: Haste.
-  - Vladimir: Applied shard 'ability_haste' in slot 1.
-  - Vladimir: Applied shard 'movement_speed' in slot 2.
-  - Vladimir: Applied shard 'health' in slot 3.
+  - Vladimir: Applied rune stat effect from Celerity.
+  - Vladimir: Applied rune stat effect from Celerity.
+  - Vladimir: Applied shard 'attack_speed' in slot 1.
+  - Vladimir: Applied shard 'health' in slot 2.
+  - Vladimir: Applied shard 'tenacity' in slot 3.
 - Skipped unsupported/non-deterministic effects:
-  - Vladimir: Rune 'Aftershock' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
-  - Vladimir: Rune 'Demolish' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
+  - Vladimir: Rune 'Font of Life' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
   - Vladimir: Rune 'Bone Plating' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
   - Vladimir: Rune 'Overgrowth' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
-  - Vladimir: Rune 'Triumph' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
+  - Vladimir: Rune 'Axiom Arcanist' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
+  - Vladimir: Rune 'Aftershock' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
 - Controlled champion runes with no modeled deterministic/runtime combat effect:
-  - Aftershock
-  - Demolish
+  - Font of Life
   - Bone Plating
   - Overgrowth
+  - Axiom Arcanist
+- Controlled champion items with unmodeled passive/active/structured runtime effects:
+  - Abyssal Mask
+  - Actualizer
+  - Bloodletter's Curse
+  - Bloodsong
+  - Bloodthirster
 
 ## Best Build
-- Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Zhonya's Hourglass
+- Abyssal Mask, Actualizer, Bloodletter's Curse, Bloodsong, Bloodthirster, Luden's Echo
 
 ## Vladimir End Stats (Best Build)
-- HP: 4,390.5, Armor: 209.5, MR: 54.7, AP: 302.4, AD: 60.0, Ability Haste: 79.0, Move Speed (flat bonus): 0.0, Move Speed (% bonus): 2.0
+- HP: 4,182.5, Armor: 109.5, MR: 54.7, AP: 290.8, AD: 80.0, Ability Haste: 50.0, Move Speed (flat bonus): 0.0, Move Speed (% bonus): 8.0
 
 ## Stack Overrides
 - Bloodletter's Curse has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
+- Luden's Echo has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
 
 ## Enemy Builds (URF Presets)
 - Warwick: Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail
@@ -130,19 +143,10 @@
 - Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 125, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 0.0, burst phys/magic/true 0.0/0.0/0.0
 
 ## Diverse Top Builds
-1. `score 0.0124` (+0.0000 vs top): Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Zhonya's Hourglass | seed hits: 1/1 (100%) robust | Pareto-front
-   - metrics: EHP~10,190.3, AP~302.4, timing score -8538.33, total cost 17,200
+- No diverse builds found under current thresholds.
 
 ## Build Order Optimization
-1. Cumulative score: `2.17` | Order: Bloodletter's Curse, Unending Despair, Zhonya's Hourglass, Actualizer, Abyssal Mask, Umbral Glaive
-   - Stage 1 (level 5): objective `0.000`, time alive `0.00s`, damage `0.0`, healing `0.0`
-   - Stage 2 (level 8): objective `0.434`, time alive `0.69s`, damage `1,472.0`, healing `0.0`
-   - Stage 3 (level 11): objective `0.416`, time alive `1.11s`, damage `1,673.7`, healing `0.0`
-   - Stage 4 (level 14): objective `0.529`, time alive `1.61s`, damage `1,827.9`, healing `0.0`
-   - Stage 5 (level 17): objective `0.404`, time alive `1.58s`, damage `1,797.0`, healing `0.0`
-   - Stage 6 (level 20): objective `0.385`, time alive `1.55s`, damage `1,743.0`, healing `0.0`
+- No build-order optimization results available.
 
 ## Deeper Insights
-- Common core across all selected top builds: Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Zhonya's Hourglass.
-- Most frequent items in selected top set: Abyssal Mask (1/1), Actualizer (1/1), Bloodletter's Curse (1/1), Umbral Glaive (1/1), Unending Despair (1/1), Zhonya's Hourglass (1/1).
-- Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.
+- Broaden thresholds (`--max-relative-gap-percent`) or lower diversity constraint (`--min-item-diff`) to surface more alternatives.

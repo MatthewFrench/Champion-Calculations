@@ -1,6 +1,11 @@
 # Improvement Tracker
 
 ## Done
+- Hardened strict-ranking/report validity for missing-candidate and shard-label edge cases:
+  - deterministic shard parsing now supports `tenacity` in loadout stat resolution
+  - resolved loadout labeling now preserves all selected shard labels even when a shard has no deterministic stat impact
+  - controlled champion scenario execution now fails fast with an explicit error when strict ranking produces no valid full-build candidates, instead of falling back to an empty `items [none]` best-build output
+  - added regression coverage for tenacity shard resolution and shard-label completeness in `src/tests/data_tests.rs`
 - Added explicit data-authoring workflow and coverage checklist docs:
   - added `Simulation/DATA_AUTHORING_GUIDE.md` covering canonical ownership boundaries, best complete examples, and the repository flow from source data to runtime modeling
   - added `Simulation/COVERAGE_CHECKLIST.md` with actionable champion/item/rune/shard coverage gates and required validation/docs updates

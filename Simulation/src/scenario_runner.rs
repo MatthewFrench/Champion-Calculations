@@ -3224,13 +3224,19 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
-    let controlled_champion_best_candidate = controlled_champion_ranked
-        .first()
-        .map(|(candidate, _)| candidate.clone())
-        .unwrap_or_else(|| BuildKey {
-            item_indices: Vec::new(),
-            loadout_selection: controlled_champion_loadout_selection.clone(),
-        });
+    if controlled_champion_ranked.is_empty() {
+        return Err(anyhow!(
+            "No valid full-build candidate remained after strict ranking. candidate_keys_generated={} unique_candidates={} strict_non_finite={} unmodeled_rune_rejected={} unmodeled_item_effect_rejected={} coverage_assets={}/{}. This run cannot produce a valid best build; adjust quality gates or increase modeled coverage.",
+            candidate_keys_generated,
+            total_candidates,
+            strict_non_finite_candidates,
+            unmodeled_rune_candidates_rejected.load(AtomicOrdering::Relaxed),
+            unmodeled_item_effect_candidates_rejected.load(AtomicOrdering::Relaxed),
+            coverage_stage_diagnostics.assets_covered,
+            coverage_stage_diagnostics.assets_total
+        ));
+    }
+    let controlled_champion_best_candidate = controlled_champion_ranked[0].0.clone();
     let controlled_champion_best_build =
         build_from_indices(&item_pool, &controlled_champion_best_candidate.item_indices);
     let controlled_champion_runtime_loadout_selection =

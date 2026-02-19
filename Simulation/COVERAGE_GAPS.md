@@ -14,7 +14,6 @@ This file tracks known fidelity and coverage gaps against game-accurate behavior
 - Dynamic combat-time rune effects modeled: `16`
 - Deterministic static rune effects modeled: `6`
 - Runes with no modeled deterministic effect and no modeled combat-time effect: `39`
-- Stat shard stat keys unsupported by deterministic stat parser: `tenacity`
 
 ## Champion And Ability Gaps
 - Controlled champion generic script support:
@@ -225,7 +224,7 @@ Mastery system coverage:
 - Legacy `Season2016` masteries are intentionally retired and unsupported by simulator runtime.
 
 ## Stat And Shard Gaps
-- Shard stat key `tenacity` is legal in rune data but has no deterministic stat application path.
+- Tenacity shard stat now parses into deterministic stats, but runtime crowd-control duration reduction from tenacity is not yet modeled.
 - `crit_chance_percent` is loaded into stats but has no combat-time critical-strike behavior model.
 
 ## Engine And Physics Fidelity Gaps

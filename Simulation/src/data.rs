@@ -151,6 +151,10 @@ pub(crate) fn apply_stat_bonus(
             }
             true
         }
+        "tenacity" => {
+            stats.tenacity_percent += value;
+            true
+        }
         "adaptive" => {
             if for_controlled_champion {
                 stats.ability_power += value;
@@ -286,6 +290,8 @@ pub(crate) fn resolve_loadout(
 
     if let Some(shards) = runes_data.get("stat_shards").and_then(Value::as_array) {
         for (idx, shard_key) in selection.shard_stats.iter().enumerate() {
+            out.selection_labels
+                .push(format!("Shard {}: {}", idx + 1, shard_key));
             let Some(slot) = shards.get(idx) else {
                 out.skipped_notes.push(format!(
                     "Shard '{}' ignored: slot {} does not exist.",
@@ -334,8 +340,6 @@ pub(crate) fn resolve_loadout(
                     is_percent,
                     for_controlled_champion,
                 ) {
-                    out.selection_labels
-                        .push(format!("Shard {}: {}", idx + 1, shard_key));
                     out.applied_notes.push(format!(
                         "Applied shard '{}' in slot {}.",
                         shard_key,

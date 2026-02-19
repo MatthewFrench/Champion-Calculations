@@ -95,6 +95,8 @@ This file is a concise handoff for developers and AI agents.
 - Reports and report JSON now also expose controlled champion best-build items with unmodeled passive/active/structured runtime effects.
 - Fixed-loadout rune sweep repeat aggregation now varies deterministic combat seeds per repeat rather than re-running identical combat realizations.
 - Added calibration regressions for Electrocute, Arcane Comet, First Strike, and Aftershock level-scaling formulas plus a pool multi-target tick-hit/damage regression.
+- Deterministic loadout stat parsing now supports shard stat `tenacity`.
+- Controlled champion search now fails fast when strict ranking produces no valid full-build candidates, preventing invalid empty-build report/trace outputs.
 
 ## Recent Observed Runtime Characteristic
 - Coverage stage is currently the dominant fixed cost in short runs.

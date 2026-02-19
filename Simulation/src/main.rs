@@ -56,6 +56,7 @@ struct Stats {
     move_speed_flat: f64,
     move_speed_percent: f64,
     crit_chance_percent: f64,
+    tenacity_percent: f64,
 }
 
 impl Stats {
@@ -70,6 +71,7 @@ impl Stats {
         self.move_speed_flat += other.move_speed_flat;
         self.move_speed_percent += other.move_speed_percent;
         self.crit_chance_percent += other.crit_chance_percent;
+        self.tenacity_percent += other.tenacity_percent;
     }
 
     fn get_stat(&self, key: &str) -> f64 {
@@ -84,6 +86,7 @@ impl Stats {
             "move_speed_flat" => self.move_speed_flat,
             "move_speed_percent" => self.move_speed_percent,
             "crit_chance_percent" => self.crit_chance_percent,
+            "tenacity_percent" => self.tenacity_percent,
             _ => 0.0,
         }
     }
