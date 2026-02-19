@@ -18,6 +18,8 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Controlled champion cast-lock state now gates cast permission, preventing same-tick spell stacking.
 - Controlled champion reports and trace outputs focus on the optimized build outcome (no baseline comparison workflow).
 - Reports explicitly flag controlled champion rune selections that are currently unmodeled in deterministic/runtime combat logic.
+- Shared combat-time rune triggers now model additional keystones in runtime simulation paths (Press the Attack, Fleet Footwork, Conqueror, and Aftershock).
+- Search scoring now supports an explicit unmodeled-rune quality gate policy (hard gate or per-rune score penalty) to avoid rewarding placeholder loadouts.
 - Added a direct fixed-loadout evaluation mode for controlled champion A/B comparisons without search (`controlled_champion_fixed_loadout`).
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`

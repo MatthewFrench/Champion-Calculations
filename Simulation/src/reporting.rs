@@ -284,6 +284,13 @@ pub(super) fn write_controlled_champion_report_markdown(
         "- Effective seed: `{}`\n",
         diagnostics.effective_seed
     ));
+    content.push_str(&format!(
+        "- Unmodeled rune gate (hard_gate / penalty_per_rune / rejected / penalized): `{}` / `{:.4}` / `{}` / `{}`\n",
+        diagnostics.unmodeled_rune_hard_gate,
+        diagnostics.unmodeled_rune_penalty_per_rune,
+        format_usize_with_commas(diagnostics.unmodeled_rune_candidates_rejected),
+        format_usize_with_commas(diagnostics.unmodeled_rune_candidates_penalized)
+    ));
     if diagnostics.coverage_stage_enabled {
         content.push_str(&format!(
             "- Coverage stage (pre-budget): `{:.2}s`; assets covered `{}/{}`; seeded candidates unique/raw `{}/{}`\n",
@@ -839,6 +846,10 @@ pub(super) fn write_controlled_champion_report_json(
             "strict_ranking_rune_signal_weight": diagnostics.strict_ranking_rune_signal_weight,
             "strict_ranking_shard_signal_weight": diagnostics.strict_ranking_shard_signal_weight,
             "strict_random_promotions_done": diagnostics.strict_random_promotions_done,
+            "unmodeled_rune_hard_gate": diagnostics.unmodeled_rune_hard_gate,
+            "unmodeled_rune_penalty_per_rune": diagnostics.unmodeled_rune_penalty_per_rune,
+            "unmodeled_rune_candidates_rejected": diagnostics.unmodeled_rune_candidates_rejected,
+            "unmodeled_rune_candidates_penalized": diagnostics.unmodeled_rune_candidates_penalized,
             "unique_scored_candidates": diagnostics.unique_scored_candidates,
             "time_budget_seconds": diagnostics.time_budget_seconds,
             "popcorn_window_seconds": diagnostics.popcorn_window_seconds,

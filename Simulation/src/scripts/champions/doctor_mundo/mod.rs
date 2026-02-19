@@ -27,8 +27,15 @@ pub(crate) fn execute_infected_bonesaw(
     }
     let raw_magic = (ability_defaults.current_health_ratio * input.target_current_health.max(0.0))
         .max(ability_defaults.minimum_magic_damage);
-    let (extra_magic, extra_true) =
-        on_ability_bonus_damage(runtime, raw_magic, input.target_max_health, input.now);
+    let (extra_magic, extra_true) = on_ability_bonus_damage(
+        runtime,
+        raw_magic,
+        0.0,
+        input.target_max_health,
+        input.now,
+        Some(0),
+        input.actor_level,
+    );
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: ability_defaults.infected_bonesaw_execution.projectile_speed,

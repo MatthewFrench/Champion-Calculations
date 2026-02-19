@@ -7,8 +7,8 @@ use crate::to_norm_key;
 use crate::scripts::runtime::loadout_runtime::{
     LoadoutRuntimeState, OnHitEffectProfile, build_loadout_runtime_state,
     calculate_ability_bonus_damage, calculate_on_hit_bonus_damage, describe_runtime_cooldowns,
-    describe_runtime_stacks, loadout_attack_speed_multiplier, reset_transient_loadout_state,
-    tick_loadout_regeneration,
+    describe_runtime_stacks, loadout_attack_speed_multiplier, on_outgoing_damage_heal,
+    reset_transient_loadout_state, tick_loadout_regeneration, trigger_immobilize_rune_damage,
 };
 
 mod controlled_champion;
@@ -229,6 +229,7 @@ impl ScriptedEffectHitbox {
 pub(crate) struct ChampionScriptExecutionInput {
     pub event: ChampionScriptEvent,
     pub actor_position: ChampionScriptPoint,
+    pub actor_level: usize,
     pub distance_to_target: f64,
     pub physical_hit_damage: f64,
     pub actor_ability_power: f64,
@@ -282,8 +283,9 @@ pub(crate) fn build_champion_loadout_runtime(
     item_names: &[String],
     rune_names: &[String],
     item_haste: f64,
+    owner_is_melee: bool,
 ) -> ChampionLoadoutRuntime {
-    build_loadout_runtime_state(item_names, rune_names, item_haste)
+    build_loadout_runtime_state(item_names, rune_names, item_haste, owner_is_melee)
 }
 
 pub(crate) fn attack_speed_multiplier(runtime: &ChampionLoadoutRuntime) -> f64 {
@@ -306,6 +308,7 @@ fn on_hit_effect_profile(profile: ChampionBehaviorProfile) -> OnHitEffectProfile
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn on_hit_bonus_damage(
     profile: ChampionBehaviorProfile,
     runtime: &mut ChampionLoadoutRuntime,
@@ -314,6 +317,8 @@ pub(crate) fn on_hit_bonus_damage(
     target_max_health: f64,
     attacker_max_health: f64,
     now: f64,
+    target_id: Option<usize>,
+    attacker_level: usize,
 ) -> (f64, f64, f64) {
     calculate_on_hit_bonus_damage(
         on_hit_effect_profile(profile),
@@ -323,16 +328,46 @@ pub(crate) fn on_hit_bonus_damage(
         target_max_health,
         attacker_max_health,
         now,
+        target_id,
+        attacker_level,
     )
 }
 
 pub(crate) fn on_ability_bonus_damage(
     runtime: &mut ChampionLoadoutRuntime,
     ability_raw_damage: f64,
+    ability_ap_ratio: f64,
     target_max_health: f64,
     now: f64,
+    target_id: Option<usize>,
+    attacker_level: usize,
 ) -> (f64, f64) {
-    calculate_ability_bonus_damage(runtime, ability_raw_damage, target_max_health, now)
+    calculate_ability_bonus_damage(
+        runtime,
+        ability_raw_damage,
+        ability_ap_ratio,
+        target_max_health,
+        now,
+        target_id,
+        attacker_level,
+    )
+}
+
+pub(crate) fn on_immobilize_rune_damage(
+    runtime: &mut ChampionLoadoutRuntime,
+    now: f64,
+    actor_level: usize,
+    actor_bonus_health: f64,
+) -> f64 {
+    trigger_immobilize_rune_damage(runtime, now, actor_level, actor_bonus_health)
+}
+
+pub(crate) fn outgoing_damage_heal(
+    runtime: &mut ChampionLoadoutRuntime,
+    damage_dealt: f64,
+    now: f64,
+) -> f64 {
+    on_outgoing_damage_heal(runtime, damage_dealt, now)
 }
 
 pub(crate) fn tick_regen_heal(

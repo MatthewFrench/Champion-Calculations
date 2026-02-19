@@ -1743,6 +1743,8 @@ pub(super) fn run_controlled_champion_scenario(
     };
 
     let full_eval_count = AtomicUsize::new(0);
+    let unmodeled_rune_candidates_rejected = AtomicUsize::new(0);
+    let unmodeled_rune_candidates_penalized = AtomicUsize::new(0);
     let full_cache = Arc::new(BlockingScoreCache::new());
     let unique_scored_candidate_keys = Arc::new(ShardedStringSet::new());
     let search_type_counters =
@@ -1751,7 +1753,14 @@ pub(super) fn run_controlled_champion_scenario(
     scenario.to_string().hash(&mut scenario_hasher);
     search_strategy_summary(&search_cfg).hash(&mut scenario_hasher);
     persistent_cache_seed_partition.hash(&mut scenario_hasher);
-    "full_loadout_candidate_v1".hash(&mut scenario_hasher);
+    search_cfg
+        .unmodeled_rune_hard_gate
+        .hash(&mut scenario_hasher);
+    search_cfg
+        .unmodeled_rune_penalty_per_rune
+        .to_bits()
+        .hash(&mut scenario_hasher);
+    "full_loadout_candidate_v2".hash(&mut scenario_hasher);
     let persistent_full_cache_path = simulation_dir().join("output").join("cache").join(format!(
         "{}_full_scores_{:016x}.json",
         to_norm_key(&controlled_champion_name),
@@ -1808,6 +1817,11 @@ pub(super) fn run_controlled_champion_scenario(
             else {
                 return f64::NEG_INFINITY;
             };
+            let unmodeled_rune_count = resolved_loadout.unmodeled_rune_names.len();
+            if unmodeled_rune_count > 0 && search_cfg.unmodeled_rune_hard_gate {
+                unmodeled_rune_candidates_rejected.fetch_add(1, AtomicOrdering::Relaxed);
+                return f64::NEG_INFINITY;
+            }
             arm_time_budget_deadline_if_unset(
                 &hard_deadline_state,
                 time_budget,
@@ -1830,6 +1844,12 @@ pub(super) fn run_controlled_champion_scenario(
                 &resolved_loadout.bonus_stats,
                 Some(&key.loadout_selection),
             );
+            let mut score = score;
+            if unmodeled_rune_count > 0 {
+                unmodeled_rune_candidates_penalized.fetch_add(1, AtomicOrdering::Relaxed);
+                score -= search_cfg.unmodeled_rune_penalty_per_rune.max(0.0)
+                    * unmodeled_rune_count as f64;
+            }
             if is_full_candidate {
                 if let Ok(mut map) = best_loadout_by_candidate.lock() {
                     map.insert(key.clone(), resolved_loadout);
@@ -1850,6 +1870,10 @@ pub(super) fn run_controlled_champion_scenario(
     let evaluate_candidate_direct = |candidate: &BuildKey| {
         let key = canonical_build_candidate(candidate.clone());
         let resolved_loadout = resolve_loadout_for_selection(&key.loadout_selection)?;
+        let unmodeled_rune_count = resolved_loadout.unmodeled_rune_names.len();
+        if unmodeled_rune_count > 0 && search_cfg.unmodeled_rune_hard_gate {
+            return None;
+        }
         arm_time_budget_deadline_if_unset(
             &hard_deadline_state,
             time_budget,
@@ -1862,6 +1886,8 @@ pub(super) fn run_controlled_champion_scenario(
             &resolved_loadout.bonus_stats,
             Some(&key.loadout_selection),
         );
+        let score = score
+            - search_cfg.unmodeled_rune_penalty_per_rune.max(0.0) * unmodeled_rune_count as f64;
         Some((key, score, outcome, resolved_loadout))
     };
 
@@ -2569,6 +2595,13 @@ pub(super) fn run_controlled_champion_scenario(
         strict_random_promotions_done
     );
     println!(
+        "- Unmodeled rune gate: hard gate {} | penalty per rune {:.4} | rejected {} | penalized {}",
+        search_cfg.unmodeled_rune_hard_gate,
+        search_cfg.unmodeled_rune_penalty_per_rune,
+        unmodeled_rune_candidates_rejected.load(AtomicOrdering::Relaxed),
+        unmodeled_rune_candidates_penalized.load(AtomicOrdering::Relaxed)
+    );
+    println!(
         "- Candidate keys generated / duplicates pruned: {}/{}",
         candidate_keys_generated, candidate_duplicates_pruned
     );
@@ -2754,6 +2787,12 @@ pub(super) fn run_controlled_champion_scenario(
         strict_ranking_rune_signal_weight: search_cfg.strict_ranking_rune_signal_weight,
         strict_ranking_shard_signal_weight: search_cfg.strict_ranking_shard_signal_weight,
         strict_random_promotions_done,
+        unmodeled_rune_hard_gate: search_cfg.unmodeled_rune_hard_gate,
+        unmodeled_rune_penalty_per_rune: search_cfg.unmodeled_rune_penalty_per_rune,
+        unmodeled_rune_candidates_rejected: unmodeled_rune_candidates_rejected
+            .load(AtomicOrdering::Relaxed),
+        unmodeled_rune_candidates_penalized: unmodeled_rune_candidates_penalized
+            .load(AtomicOrdering::Relaxed),
         unique_scored_candidates,
         time_budget_seconds: time_budget.map(|d| d.as_secs_f64()),
         popcorn_window_seconds,

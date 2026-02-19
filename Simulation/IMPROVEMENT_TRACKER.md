@@ -1,6 +1,19 @@
 # Improvement Tracker
 
 ## Done
+- Added generic combat-time rune trigger runtime layer and modeled additional keystones:
+  - runtime now has explicit trigger hooks for on-hit, ability-hit, outgoing-damage healing, and immobilize-triggered effects
+  - modeled keystones now include Press the Attack, Fleet Footwork, Conqueror, and Aftershock
+  - controlled champion and enemy script paths now call the same shared runtime hooks where applicable
+- Added explicit unmodeled-rune quality gating for search scoring:
+  - new search defaults/config:
+    - `unmodeled_rune_hard_gate`
+    - `unmodeled_rune_penalty_per_rune`
+  - candidate scoring now either rejects or penalizes loadouts that include unmodeled runes, based on policy
+  - diagnostics/report JSON now include gate configuration and rejected/penalized candidate counters
+- Added keystone regression coverage:
+  - engine tests now validate combat deltas for Press the Attack, Fleet Footwork, Conqueror, and Aftershock trigger behavior
+  - runtime unit tests validate stack/proc/cooldown semantics for the same keystones
 - Moved remaining controlled champion offensive-vs-defensive ordering policy out of engine into script/data ownership:
   - offensive-ultimate-before-defensive-ability-two decision is now resolved in Vladimir script logic
   - policy default now loads from `Characters/Vladimir.json` under `simulation.controlled_champion.defensive_ability_two`

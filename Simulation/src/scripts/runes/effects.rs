@@ -5,6 +5,10 @@ use crate::scripts::runtime::controlled_champion_loadout::ControlledChampionLoad
 pub(crate) const DYNAMIC_RUNE_KEYS: &[&str] = &[
     "graspoftheundying",
     "lethaltempo",
+    "presstheattack",
+    "fleetfootwork",
+    "conqueror",
+    "aftershock",
     "arcanecomet",
     "summonaery",
     "secondwind",

@@ -179,6 +179,12 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - controlled champion now executes full basic-attack start/windup/hit events, so on-hit runtime effects (for example Lethal Tempo and Grasp paths) can affect outcomes in controlled simulations.
   - controlled champion spell hits now consume shared runtime ability-bonus effects (for example Luden/Liandry-style ability runtime procs) through generic runtime interfaces.
   - report diagnostics now explicitly list controlled champion runes that currently have no modeled deterministic or combat-time runtime effect.
+  - shared runtime rune trigger hooks now support:
+    - Press the Attack (third-hit proc + vulnerability window)
+    - Fleet Footwork (combat-time heal proc)
+    - Conqueror (stacking adaptive spell bonus + max-stack damage-heal conversion)
+    - Aftershock (immobilize-triggered shockwave damage)
+  - search scoring now supports explicit unmodeled-rune quality-gate policy (hard gate or per-rune penalty) with diagnostics counters.
 - Success criteria:
   - selected runes contribute in real time when conditions trigger.
 

@@ -34,8 +34,15 @@ pub(crate) fn execute_dark_binding(
     let raw_magic = ability_defaults.dark_binding_magic_base_damage
         + ability_defaults.dark_binding_magic_ability_power_ratio
             * input.actor_ability_power.max(0.0);
-    let (extra_magic, extra_true) =
-        on_ability_bonus_damage(runtime, raw_magic, input.target_max_health, input.now);
+    let (extra_magic, extra_true) = on_ability_bonus_damage(
+        runtime,
+        raw_magic,
+        ability_defaults.dark_binding_magic_ability_power_ratio,
+        input.target_max_health,
+        input.now,
+        Some(0),
+        input.actor_level,
+    );
     vec![ChampionScriptAction::ApplyDamage {
         source: input.actor_position,
         projectile_speed: ability_defaults.dark_binding_execution.projectile_speed,

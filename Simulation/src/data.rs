@@ -815,6 +815,14 @@ pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .and_then(Value::as_u64)
             .unwrap_or(search_defaults.strict_ranking_exploration_promotions as u64)
             as usize,
+        unmodeled_rune_hard_gate: data
+            .get("unmodeled_rune_hard_gate")
+            .and_then(Value::as_bool)
+            .unwrap_or(search_defaults.unmodeled_rune_hard_gate),
+        unmodeled_rune_penalty_per_rune: data
+            .get("unmodeled_rune_penalty_per_rune")
+            .and_then(Value::as_f64)
+            .unwrap_or(search_defaults.unmodeled_rune_penalty_per_rune),
         seed: data
             .get("seed")
             .and_then(Value::as_u64)

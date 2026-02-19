@@ -49,6 +49,8 @@ pub(crate) struct SearchDefaults {
     pub strict_ranking_rune_signal_weight: f64,
     pub strict_ranking_shard_signal_weight: f64,
     pub strict_ranking_exploration_promotions: usize,
+    pub unmodeled_rune_hard_gate: bool,
+    pub unmodeled_rune_penalty_per_rune: f64,
     pub seed: u64,
 }
 

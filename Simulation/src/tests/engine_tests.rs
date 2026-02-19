@@ -539,3 +539,188 @@ fn enemy_cannot_auto_attack_while_invulnerable() {
             .any(|entry| entry.contains("[attack_hit]"))
     );
 }
+
+#[test]
+fn press_the_attack_runtime_increases_auto_attack_damage() {
+    let base = test_controlled_champion_base();
+    let mut enemy = test_enemy("Target Dummy");
+    enemy.spawn_position_xy = Some((250.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let sim = test_simulation(8.0, false);
+    let urf = test_urf();
+
+    let baseline = simulate_controlled_champion_combat(
+        &base,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        None,
+        &enemies,
+        &sim,
+        &urf,
+    );
+    let press_the_attack = LoadoutSelection {
+        rune_names: vec!["Press the Attack".to_string()],
+        shard_stats: Vec::new(),
+    };
+    let with_press_the_attack = simulate_controlled_champion_combat(
+        &base,
+        &[],
+        &Stats::default(),
+        Some(&press_the_attack),
+        None,
+        None,
+        &enemies,
+        &sim,
+        &urf,
+    );
+    assert!(with_press_the_attack.damage_dealt > baseline.damage_dealt);
+}
+
+#[test]
+fn fleet_footwork_runtime_adds_healing_in_combat() {
+    let base = test_controlled_champion_base();
+    let mut enemy = test_enemy("Target Dummy");
+    enemy.spawn_position_xy = Some((250.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let sim = test_simulation(12.0, false);
+    let urf = test_urf();
+
+    let baseline = simulate_controlled_champion_combat(
+        &base,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        None,
+        &enemies,
+        &sim,
+        &urf,
+    );
+    let fleet_footwork = LoadoutSelection {
+        rune_names: vec!["Fleet Footwork".to_string()],
+        shard_stats: Vec::new(),
+    };
+    let with_fleet = simulate_controlled_champion_combat(
+        &base,
+        &[],
+        &Stats::default(),
+        Some(&fleet_footwork),
+        None,
+        None,
+        &enemies,
+        &sim,
+        &urf,
+    );
+    assert!(with_fleet.healing_done > baseline.healing_done);
+}
+
+#[test]
+fn conqueror_runtime_increases_damage_and_healing_over_extended_fight() {
+    let base = test_controlled_champion_base();
+    let mut enemy = test_enemy("Target Dummy");
+    enemy.spawn_position_xy = Some((250.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let sim = test_simulation(12.0, true);
+    let urf = test_urf();
+    let bonus_stats = Stats {
+        ability_power: 280.0,
+        ..Stats::default()
+    };
+
+    let baseline = simulate_controlled_champion_combat(
+        &base,
+        &[],
+        &bonus_stats,
+        None,
+        None,
+        None,
+        &enemies,
+        &sim,
+        &urf,
+    );
+    let conqueror = LoadoutSelection {
+        rune_names: vec!["Conqueror".to_string()],
+        shard_stats: Vec::new(),
+    };
+    let with_conqueror = simulate_controlled_champion_combat(
+        &base,
+        &[],
+        &bonus_stats,
+        Some(&conqueror),
+        None,
+        None,
+        &enemies,
+        &sim,
+        &urf,
+    );
+    assert!(with_conqueror.damage_dealt > baseline.damage_dealt);
+    assert!(with_conqueror.healing_done >= baseline.healing_done);
+}
+
+#[test]
+fn aftershock_runtime_triggers_from_enemy_immobilize_script() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Sona");
+    enemy.spawn_position_xy = Some((200.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let baseline_enemies = vec![(enemy.clone(), Vec::new(), Stats::default())];
+    enemy.loadout_rune_names = vec!["Aftershock".to_string()];
+    let aftershock_enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(3.0, false);
+    let urf = test_urf();
+
+    let mut baseline_runner = ControlledChampionCombatSimulation::new(
+        controlled_champion.clone(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &baseline_enemies,
+        simulation.clone(),
+        urf.clone(),
+    );
+    let baseline_epoch = baseline_runner.enemy_state[0].script_epoch;
+    baseline_runner.schedule_event(
+        0.0,
+        12,
+        EventType::ChampionScript(0, ChampionScriptEvent::SonaCrescendo, baseline_epoch),
+        None,
+    );
+    while baseline_runner.step(1) {}
+    let baseline_health = baseline_runner.current_health();
+
+    let mut aftershock_runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &aftershock_enemies,
+        simulation,
+        urf,
+    );
+    aftershock_runner.enable_trace();
+    let aftershock_epoch = aftershock_runner.enemy_state[0].script_epoch;
+    aftershock_runner.schedule_event(
+        0.0,
+        12,
+        EventType::ChampionScript(0, ChampionScriptEvent::SonaCrescendo, aftershock_epoch),
+        None,
+    );
+    while aftershock_runner.step(1) {}
+    let aftershock_health = aftershock_runner.current_health();
+
+    assert!(aftershock_health < baseline_health);
+    assert!(
+        aftershock_runner
+            .trace_events()
+            .iter()
+            .any(|entry| entry.contains("[aftershock_hit]")),
+        "expected aftershock trace event when immobilize lands"
+    );
+}

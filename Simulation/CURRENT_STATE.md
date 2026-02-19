@@ -13,6 +13,8 @@ This file is a concise handoff for developers and AI agents.
 - Champion script dispatch under `src/scripts/champions/`.
 - Engine-facing controlled champion script facade under `src/scripts/champions/controlled_champion.rs`.
 - Controlled champion basic attacks now execute through recurring start/windup/hit events (hitbox/projectile-aware), using shared runtime attack-speed/on-hit effect paths.
+- Shared loadout runtime now includes generic combat-time rune trigger hooks (on-hit, ability-hit, outgoing-damage healing, immobilize-triggered effects).
+- Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, and Aftershock.
 - CLI primary modes are `controlled_champion`, `controlled_champion_fixed_loadout`, and `controlled_champion_step` (`vladimir`/`vladimir_step` aliases still accepted).
 - Item and runtime loadout script hooks under `src/scripts/items/` and `src/scripts/runtime/`.
 - Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
@@ -45,6 +47,10 @@ This file is a concise handoff for developers and AI agents.
   - full-loadout `beam` and `greedy` now co-optimize loadout selection (runes/shards) during item search.
   - adaptive/bleed strategy-key ordering is normalized before index-based seed math for fixed-seed reproducibility.
   - strict ranking can heuristic-order remaining candidates using strict-stage item/rune/shard signals, with configurable random exploration promotions.
+  - unmodeled-rune quality gating is explicit and configurable:
+    - optional hard gate (`unmodeled_rune_hard_gate`)
+    - optional per-rune score penalty (`unmodeled_rune_penalty_per_rune`)
+    - diagnostics include rejected/penalized candidate counts.
   - diagnostics now report effective thread count and parallel-mode flags for orchestration phases.
 
 ## Data/Runtime Correctness Updates
@@ -65,6 +71,7 @@ This file is a concise handoff for developers and AI agents.
 - Controlled champion cast gating now enforces cast-lock state (windup/channel/lockout), preventing same-tick spell stacking from engine scheduling.
 - Controlled champion offensive-ultimate-before-defensive-ability-two policy now loads from `Characters/Vladimir.json` simulation policy data (script-owned; not engine hardcoded).
 - Reports now explicitly list controlled champion runes that currently have no modeled deterministic or combat-time runtime effect.
+- Shared runtime rune effects now apply combat-time behavior for Press the Attack, Fleet Footwork, Conqueror, and Aftershock rather than leaving them as unmodeled placeholders.
 
 ## Recent Observed Runtime Characteristic
 - Coverage stage is currently the dominant fixed cost in short runs.

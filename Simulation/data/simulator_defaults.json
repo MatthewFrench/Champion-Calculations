@@ -41,6 +41,8 @@
     "strict_ranking_rune_signal_weight": 0.3,
     "strict_ranking_shard_signal_weight": 0.2,
     "strict_ranking_exploration_promotions": 1,
+    "unmodeled_rune_hard_gate": false,
+    "unmodeled_rune_penalty_per_rune": 0.02,
     "seed": 0
   },
   "search_quality_profile_defaults": {

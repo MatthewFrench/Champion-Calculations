@@ -4,6 +4,7 @@ fn base_script_input(event: ChampionScriptEvent) -> ChampionScriptExecutionInput
     ChampionScriptExecutionInput {
         event,
         actor_position: ChampionScriptPoint { x: 100.0, y: 0.0 },
+        actor_level: 18,
         distance_to_target: 100.0,
         physical_hit_damage: 200.0,
         actor_ability_power: 300.0,
@@ -17,12 +18,39 @@ fn base_script_input(event: ChampionScriptEvent) -> ChampionScriptExecutionInput
 fn vayne_every_third_hit_adds_true_damage() {
     let profile = behavior_profile("Vayne", false, 550.0, 2000.0);
     let mut runtime = ChampionLoadoutRuntime::default();
-    let (_, _, true_a) =
-        on_hit_bonus_damage(profile, &mut runtime, 200.0, 2200.0, 3000.0, 1800.0, 1.0);
-    let (_, _, true_b) =
-        on_hit_bonus_damage(profile, &mut runtime, 200.0, 2200.0, 3000.0, 1800.0, 2.0);
-    let (_, _, true_c) =
-        on_hit_bonus_damage(profile, &mut runtime, 200.0, 2200.0, 3000.0, 1800.0, 3.0);
+    let (_, _, true_a) = on_hit_bonus_damage(
+        profile,
+        &mut runtime,
+        200.0,
+        2200.0,
+        3000.0,
+        1800.0,
+        1.0,
+        Some(0),
+        18,
+    );
+    let (_, _, true_b) = on_hit_bonus_damage(
+        profile,
+        &mut runtime,
+        200.0,
+        2200.0,
+        3000.0,
+        1800.0,
+        2.0,
+        Some(0),
+        18,
+    );
+    let (_, _, true_c) = on_hit_bonus_damage(
+        profile,
+        &mut runtime,
+        200.0,
+        2200.0,
+        3000.0,
+        1800.0,
+        3.0,
+        Some(0),
+        18,
+    );
     assert_eq!(true_a, 0.0);
     assert_eq!(true_b, 0.0);
     assert!(true_c > 0.0);

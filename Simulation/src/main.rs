@@ -213,6 +213,8 @@ struct BuildSearchConfig {
     strict_ranking_rune_signal_weight: f64,
     strict_ranking_shard_signal_weight: f64,
     strict_ranking_exploration_promotions: usize,
+    unmodeled_rune_hard_gate: bool,
+    unmodeled_rune_penalty_per_rune: f64,
     seed: u64,
 }
 
@@ -318,6 +320,10 @@ struct SearchDiagnostics {
     strict_ranking_rune_signal_weight: f64,
     strict_ranking_shard_signal_weight: f64,
     strict_random_promotions_done: usize,
+    unmodeled_rune_hard_gate: bool,
+    unmodeled_rune_penalty_per_rune: f64,
+    unmodeled_rune_candidates_rejected: usize,
+    unmodeled_rune_candidates_penalized: usize,
     unique_scored_candidates: usize,
     time_budget_seconds: Option<f64>,
     popcorn_window_seconds: Option<f64>,

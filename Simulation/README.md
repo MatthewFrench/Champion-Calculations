@@ -31,6 +31,12 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
 - Controlled champion loadout runtime scripts are now applied during combat-time auto attacks, spell hits, kill events, and regeneration ticks.
+- Shared loadout runtime now exposes generic rune trigger hooks for:
+  - on-hit events
+  - ability-hit events
+  - outgoing-damage healing resolution
+  - immobilize-triggered effects
+- Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, and Aftershock in addition to previously modeled runtime runes.
 - Defensive item activation and revive triggers are modeled through generic controlled champion runtime/item script capabilities (not champion-specific decision structs).
 - Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).
 - Runtime stat resolution is buff-aware and starts from canonical base data before applying state transforms:
@@ -154,6 +160,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
     - per-search-type breakdown (requests/new simulations/persistent cache hits)
     - generated/unique/pruned candidate counts
     - strict-stage completion percentage and timeout-skipped candidate count
+    - unmodeled-rune gate policy/counters (hard gate flag, per-rune penalty, rejected/penalized candidates)
     - estimated legal candidate-space size and coverage percentages
     - heuristic closeness-to-optimal probability estimate with explicit assumptions
   - If run with a time budget, report includes timeout and completion metadata
