@@ -65,8 +65,10 @@ impl RuneProcTriggerSource {
 pub(crate) struct RuneProcTelemetrySourceEntry {
     pub source: String,
     pub proc_count: usize,
-    pub opportunity_count: usize,
-    pub proc_opportunity_rate: f64,
+    pub attempt_count: usize,
+    pub eligible_count: usize,
+    pub proc_attempt_rate: f64,
+    pub proc_eligible_rate: f64,
     pub bonus_damage: f64,
     pub bonus_healing: f64,
 }
@@ -75,8 +77,10 @@ pub(crate) struct RuneProcTelemetrySourceEntry {
 pub(crate) struct RuneProcTelemetryEntry {
     pub rune_name: String,
     pub proc_count: usize,
-    pub opportunity_count: usize,
-    pub proc_opportunity_rate: f64,
+    pub attempt_count: usize,
+    pub eligible_count: usize,
+    pub proc_attempt_rate: f64,
+    pub proc_eligible_rate: f64,
     pub bonus_damage: f64,
     pub bonus_healing: f64,
     pub source_breakdown: Vec<RuneProcTelemetrySourceEntry>,
@@ -107,6 +111,7 @@ pub(crate) struct LoadoutRuntimeState {
     has_triumph: bool,
     has_gathering_storm: bool,
     owner_is_melee: bool,
+    rune_proc_telemetry_enabled: bool,
 
     pub attacks_landed: usize,
     pub lethal_tempo_stacks: usize,
@@ -138,10 +143,13 @@ pub(crate) struct LoadoutRuntimeState {
     press_the_attack_targets: HashMap<usize, PressTheAttackTargetState>,
     electrocute_targets: HashMap<usize, HitWindowTargetState>,
     phase_rush_targets: HashMap<usize, HitWindowTargetState>,
-    rune_proc_totals: HashMap<String, RuneProcTotals>,
-    rune_proc_totals_by_source: HashMap<String, HashMap<RuneProcTriggerSource, RuneProcTotals>>,
-    rune_proc_opportunities: HashMap<String, usize>,
-    rune_proc_opportunities_by_source: HashMap<String, HashMap<RuneProcTriggerSource, usize>>,
+    rune_proc_totals: HashMap<&'static str, RuneProcTotals>,
+    rune_proc_totals_by_source:
+        HashMap<&'static str, HashMap<RuneProcTriggerSource, RuneProcTotals>>,
+    rune_proc_attempts: HashMap<&'static str, usize>,
+    rune_proc_attempts_by_source: HashMap<&'static str, HashMap<RuneProcTriggerSource, usize>>,
+    rune_proc_eligibilities: HashMap<&'static str, usize>,
+    rune_proc_eligibilities_by_source: HashMap<&'static str, HashMap<RuneProcTriggerSource, usize>>,
 }
 
 impl Default for LoadoutRuntimeState {
@@ -170,6 +178,7 @@ impl Default for LoadoutRuntimeState {
             has_triumph: false,
             has_gathering_storm: false,
             owner_is_melee: false,
+            rune_proc_telemetry_enabled: true,
             attacks_landed: 0,
             lethal_tempo_stacks: 0,
             hail_of_blades_remaining_attacks: 0,
@@ -202,8 +211,10 @@ impl Default for LoadoutRuntimeState {
             phase_rush_targets: HashMap::new(),
             rune_proc_totals: HashMap::new(),
             rune_proc_totals_by_source: HashMap::new(),
-            rune_proc_opportunities: HashMap::new(),
-            rune_proc_opportunities_by_source: HashMap::new(),
+            rune_proc_attempts: HashMap::new(),
+            rune_proc_attempts_by_source: HashMap::new(),
+            rune_proc_eligibilities: HashMap::new(),
+            rune_proc_eligibilities_by_source: HashMap::new(),
         }
     }
 }
@@ -241,21 +252,21 @@ fn title_case_rune_name(normalized_rune_key: &str) -> String {
 
 fn record_rune_proc(
     runtime: &mut LoadoutRuntimeState,
-    rune_key: &str,
+    rune_key: &'static str,
     source: RuneProcTriggerSource,
     damage: f64,
     healing: f64,
 ) {
-    let entry = runtime
-        .rune_proc_totals
-        .entry(rune_key.to_string())
-        .or_default();
+    if !runtime.rune_proc_telemetry_enabled {
+        return;
+    }
+    let entry = runtime.rune_proc_totals.entry(rune_key).or_default();
     entry.proc_count += 1;
     entry.bonus_damage += damage.max(0.0);
     entry.bonus_healing += healing.max(0.0);
     let by_source = runtime
         .rune_proc_totals_by_source
-        .entry(rune_key.to_string())
+        .entry(rune_key)
         .or_default();
     let source_entry = by_source.entry(source).or_default();
     source_entry.proc_count += 1;
@@ -263,21 +274,50 @@ fn record_rune_proc(
     source_entry.bonus_healing += healing.max(0.0);
 }
 
-fn record_rune_proc_opportunity(
-    runtime: &mut LoadoutRuntimeState,
-    rune_key: &str,
+fn increment_rune_counter(
+    runtime_totals: &mut HashMap<&'static str, usize>,
+    runtime_by_source: &mut HashMap<&'static str, HashMap<RuneProcTriggerSource, usize>>,
+    rune_key: &'static str,
     source: RuneProcTriggerSource,
 ) {
-    *runtime
-        .rune_proc_opportunities
-        .entry(rune_key.to_string())
-        .or_insert(0) += 1;
-    *runtime
-        .rune_proc_opportunities_by_source
-        .entry(rune_key.to_string())
+    *runtime_totals.entry(rune_key).or_insert(0) += 1;
+    *runtime_by_source
+        .entry(rune_key)
         .or_default()
         .entry(source)
         .or_insert(0) += 1;
+}
+
+fn record_rune_proc_attempt(
+    runtime: &mut LoadoutRuntimeState,
+    rune_key: &'static str,
+    source: RuneProcTriggerSource,
+) {
+    if !runtime.rune_proc_telemetry_enabled {
+        return;
+    }
+    increment_rune_counter(
+        &mut runtime.rune_proc_attempts,
+        &mut runtime.rune_proc_attempts_by_source,
+        rune_key,
+        source,
+    );
+}
+
+fn record_rune_proc_eligibility(
+    runtime: &mut LoadoutRuntimeState,
+    rune_key: &'static str,
+    source: RuneProcTriggerSource,
+) {
+    if !runtime.rune_proc_telemetry_enabled {
+        return;
+    }
+    increment_rune_counter(
+        &mut runtime.rune_proc_eligibilities,
+        &mut runtime.rune_proc_eligibilities_by_source,
+        rune_key,
+        source,
+    );
 }
 
 fn accumulate_window_stacks(
@@ -323,7 +363,7 @@ fn maybe_apply_first_strike(
     if !runtime.has_first_strike {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "firststrike", source);
+    record_rune_proc_attempt(runtime, "firststrike", source);
     if now >= runtime.first_strike_ready_at && now > runtime.first_strike_window_until {
         runtime.first_strike_window_until = now + defaults.window_duration_seconds.max(0.0);
         runtime.first_strike_ready_at =
@@ -332,6 +372,7 @@ fn maybe_apply_first_strike(
     if now > runtime.first_strike_window_until {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "firststrike", source);
     let bonus_true = defaults.bonus_true_damage_ratio.max(0.0) * raw_damage.max(0.0);
     if bonus_true > 0.0 {
         record_rune_proc(runtime, "firststrike", source, bonus_true, 0.0);
@@ -350,7 +391,7 @@ fn maybe_apply_electrocute(
     if !runtime.has_electrocute {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "electrocute", source);
+    record_rune_proc_attempt(runtime, "electrocute", source);
     if now < runtime.electrocute_ready_at {
         return 0.0;
     }
@@ -367,6 +408,7 @@ fn maybe_apply_electrocute(
     if stacks < defaults.hits_to_proc.max(1) {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "electrocute", source);
     runtime.electrocute_ready_at =
         now + level_scaled_range_value(attacker_level, defaults.cooldown_by_level).max(0.0);
     if let Some(state) = runtime.electrocute_targets.get_mut(&target_idx) {
@@ -383,7 +425,7 @@ fn maybe_apply_phase_rush(runtime: &mut LoadoutRuntimeState, now: f64, target_id
     if !runtime.has_phase_rush {
         return;
     }
-    record_rune_proc_opportunity(
+    record_rune_proc_attempt(
         runtime,
         "phaserush",
         RuneProcTriggerSource::RuntimeActivation,
@@ -404,6 +446,11 @@ fn maybe_apply_phase_rush(runtime: &mut LoadoutRuntimeState, now: f64, target_id
     if stacks < defaults.hits_to_proc.max(1) {
         return;
     }
+    record_rune_proc_eligibility(
+        runtime,
+        "phaserush",
+        RuneProcTriggerSource::RuntimeActivation,
+    );
     runtime.phase_rush_ready_at = now + defaults.cooldown_seconds.max(0.0);
     runtime.phase_rush_active_until = now + defaults.active_duration_seconds.max(0.0);
     if let Some(state) = runtime.phase_rush_targets.get_mut(&target_idx) {
@@ -471,10 +518,11 @@ fn maybe_apply_arcane_comet(
     if !runtime.has_arcane_comet {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "arcanecomet", RuneProcTriggerSource::Ability);
+    record_rune_proc_attempt(runtime, "arcanecomet", RuneProcTriggerSource::Ability);
     if now < runtime.arcane_comet_ready_at {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "arcanecomet", RuneProcTriggerSource::Ability);
     runtime.arcane_comet_ready_at =
         now + level_scaled_range_value(attacker_level, defaults.cooldown_by_level).max(0.0);
     let damage = level_scaled_range_value(attacker_level, defaults.proc_magic_damage_by_level)
@@ -504,10 +552,11 @@ fn maybe_apply_summon_aery(
     if !runtime.has_summon_aery {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "summonaery", source);
+    record_rune_proc_attempt(runtime, "summonaery", source);
     if now < runtime.summon_aery_ready_at {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "summonaery", source);
     runtime.summon_aery_ready_at = now + defaults.cooldown_seconds.max(0.0);
     let damage = level_scaled_range_value(attacker_level, defaults.proc_magic_damage_by_level)
         + defaults.ability_power_ratio.max(0.0) * attacker_ability_power.max(0.0)
@@ -531,7 +580,7 @@ fn maybe_apply_dark_harvest(
     if !runtime.has_dark_harvest {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "darkharvest", source);
+    record_rune_proc_attempt(runtime, "darkharvest", source);
     if now < runtime.dark_harvest_ready_at || target_max_health <= 0.0 {
         return 0.0;
     }
@@ -539,6 +588,7 @@ fn maybe_apply_dark_harvest(
     if health_ratio > defaults.trigger_health_ratio {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "darkharvest", source);
     runtime.dark_harvest_ready_at = now + defaults.cooldown_seconds.max(0.0);
     let damage = defaults.base_magic_damage.max(0.0)
         + defaults.soul_magic_damage.max(0.0) * runtime.dark_harvest_souls as f64
@@ -690,8 +740,10 @@ pub(crate) fn reset_transient_loadout_state(runtime: &mut LoadoutRuntimeState) {
     runtime.phase_rush_targets.clear();
     runtime.rune_proc_totals.clear();
     runtime.rune_proc_totals_by_source.clear();
-    runtime.rune_proc_opportunities.clear();
-    runtime.rune_proc_opportunities_by_source.clear();
+    runtime.rune_proc_attempts.clear();
+    runtime.rune_proc_attempts_by_source.clear();
+    runtime.rune_proc_eligibilities.clear();
+    runtime.rune_proc_eligibilities_by_source.clear();
     runtime.aftershock_active_until = 0.0;
     runtime.first_strike_window_until = 0.0;
 }
@@ -736,10 +788,11 @@ pub(crate) fn calculate_on_hit_bonus_damage(
         RuneProcTriggerSource::OnHit,
     );
     if runtime.has_press_the_attack {
-        record_rune_proc_opportunity(runtime, "presstheattack", RuneProcTriggerSource::OnHit);
+        record_rune_proc_attempt(runtime, "presstheattack", RuneProcTriggerSource::OnHit);
     }
     let pta_multiplier = press_the_attack_damage_multiplier(runtime, target_id, now);
     if pta_multiplier > 0.0 {
+        record_rune_proc_eligibility(runtime, "presstheattack", RuneProcTriggerSource::OnHit);
         let pta_bonus_true = pta_multiplier * attack_damage.max(0.0);
         extra_true += pta_bonus_true;
         if pta_bonus_true > 0.0 {
@@ -772,9 +825,10 @@ pub(crate) fn calculate_on_hit_bonus_damage(
     }
 
     if runtime.has_grasp {
-        record_rune_proc_opportunity(runtime, "graspoftheundying", RuneProcTriggerSource::OnHit);
+        record_rune_proc_attempt(runtime, "graspoftheundying", RuneProcTriggerSource::OnHit);
     }
     if runtime.has_grasp && now >= runtime.grasp_ready_at {
+        record_rune_proc_eligibility(runtime, "graspoftheundying", RuneProcTriggerSource::OnHit);
         let grasp_damage = defaults.grasp_of_the_undying.base_magic_damage.max(0.0)
             + defaults
                 .grasp_of_the_undying
@@ -797,9 +851,10 @@ pub(crate) fn calculate_on_hit_bonus_damage(
         runtime.heartsteel_ready_at = now + runtime.heartsteel_cooldown_seconds;
     }
     if runtime.has_fleet_footwork {
-        record_rune_proc_opportunity(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
+        record_rune_proc_attempt(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
     }
     if runtime.has_fleet_footwork && now >= runtime.fleet_ready_at {
+        record_rune_proc_eligibility(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
         runtime.pending_fleet_heal +=
             level_scaled_range_value(attacker_level, defaults.fleet_footwork.heal_by_level)
                 + defaults.fleet_footwork.attack_damage_ratio.max(0.0) * attack_damage.max(0.0);
@@ -829,6 +884,7 @@ pub(crate) fn calculate_on_hit_bonus_damage(
                     .press_the_attack
                     .vulnerability_duration_seconds
                     .max(0.0);
+            record_rune_proc_eligibility(runtime, "presstheattack", RuneProcTriggerSource::OnHit);
             record_rune_proc(
                 runtime,
                 "presstheattack",
@@ -926,10 +982,11 @@ pub(crate) fn calculate_ability_bonus_damage(
         RuneProcTriggerSource::Ability,
     );
     if runtime.has_press_the_attack {
-        record_rune_proc_opportunity(runtime, "presstheattack", RuneProcTriggerSource::Ability);
+        record_rune_proc_attempt(runtime, "presstheattack", RuneProcTriggerSource::Ability);
     }
     let pta_multiplier = press_the_attack_damage_multiplier(runtime, target_id, now);
     if pta_multiplier > 0.0 {
+        record_rune_proc_eligibility(runtime, "presstheattack", RuneProcTriggerSource::Ability);
         let pta_bonus_true = pta_multiplier * ability_raw_damage.max(0.0);
         extra_true += pta_bonus_true;
         if pta_bonus_true > 0.0 {
@@ -943,8 +1000,9 @@ pub(crate) fn calculate_ability_bonus_damage(
         }
     }
     if runtime.has_conqueror {
-        record_rune_proc_opportunity(runtime, "conqueror", RuneProcTriggerSource::Ability);
+        record_rune_proc_attempt(runtime, "conqueror", RuneProcTriggerSource::Ability);
         add_conqueror_stacks(runtime, defaults.conqueror.ability_hit_stacks, now);
+        record_rune_proc_eligibility(runtime, "conqueror", RuneProcTriggerSource::Ability);
         let adaptive_ability_power = level_scaled_range_value(
             attacker_level,
             defaults.conqueror.adaptive_ability_power_per_stack_by_level,
@@ -1032,14 +1090,15 @@ pub(crate) fn on_outgoing_damage_heal(
     let defaults = rune_runtime_defaults();
     decay_expired_conqueror_stacks(runtime, now);
     if runtime.has_fleet_footwork {
-        record_rune_proc_opportunity(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
+        record_rune_proc_attempt(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
     }
     if runtime.has_conqueror {
-        record_rune_proc_opportunity(runtime, "conqueror", RuneProcTriggerSource::OnHit);
+        record_rune_proc_attempt(runtime, "conqueror", RuneProcTriggerSource::OnHit);
     }
     let mut heal = runtime.pending_fleet_heal.max(0.0);
     runtime.pending_fleet_heal = 0.0;
     if heal > 0.0 {
+        record_rune_proc_eligibility(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
         record_rune_proc(
             runtime,
             "fleetfootwork",
@@ -1053,6 +1112,7 @@ pub(crate) fn on_outgoing_damage_heal(
         && now <= runtime.conqueror_expires_at
         && damage_dealt > 0.0
     {
+        record_rune_proc_eligibility(runtime, "conqueror", RuneProcTriggerSource::OnHit);
         let conqueror_heal_ratio = if runtime.owner_is_melee {
             defaults.conqueror.melee_heal_ratio.max(0.0)
         } else {
@@ -1085,11 +1145,12 @@ pub(crate) fn on_enemy_kill_heal(runtime: &mut LoadoutRuntimeState, max_health: 
     if !runtime.has_triumph || max_health <= 0.0 {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
+    record_rune_proc_attempt(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
     let heal = defaults.triumph.heal_max_health_ratio.max(0.0) * max_health.max(0.0);
     if heal <= 0.0 {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
     record_rune_proc(
         runtime,
         "triumph",
@@ -1117,10 +1178,11 @@ pub(crate) fn trigger_immobilize_rune_damage(
     if !runtime.has_aftershock {
         return 0.0;
     }
-    record_rune_proc_opportunity(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
+    record_rune_proc_attempt(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
     if now < runtime.aftershock_ready_at {
         return 0.0;
     }
+    record_rune_proc_eligibility(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
     runtime.aftershock_ready_at = now + defaults.cooldown_seconds.max(0.0);
     runtime.aftershock_active_until = now + defaults.active_duration_seconds.max(0.0);
     let shockwave_magic =
@@ -1195,7 +1257,8 @@ pub(crate) fn rune_proc_telemetry(runtime: &LoadoutRuntimeState) -> Vec<RuneProc
     let rune_keys = runtime
         .rune_proc_totals
         .keys()
-        .chain(runtime.rune_proc_opportunities.keys())
+        .chain(runtime.rune_proc_attempts.keys())
+        .chain(runtime.rune_proc_eligibilities.keys())
         .cloned()
         .collect::<HashSet<_>>();
     let mut entries = rune_keys
@@ -1211,7 +1274,10 @@ pub(crate) fn rune_proc_telemetry(runtime: &LoadoutRuntimeState) -> Vec<RuneProc
                 .get(&rune_key)
                 .map(|by_source| by_source.keys().copied().collect::<HashSet<_>>())
                 .unwrap_or_default();
-            if let Some(by_source) = runtime.rune_proc_opportunities_by_source.get(&rune_key) {
+            if let Some(by_source) = runtime.rune_proc_attempts_by_source.get(&rune_key) {
+                source_keys.extend(by_source.keys().copied());
+            }
+            if let Some(by_source) = runtime.rune_proc_eligibilities_by_source.get(&rune_key) {
                 source_keys.extend(by_source.keys().copied());
             }
             let mut source_breakdown = source_keys
@@ -1223,45 +1289,76 @@ pub(crate) fn rune_proc_telemetry(runtime: &LoadoutRuntimeState) -> Vec<RuneProc
                         .and_then(|by_source| by_source.get(&source))
                         .copied()
                         .unwrap_or_default();
-                    let opportunity_count = runtime
-                        .rune_proc_opportunities_by_source
+                    let mut attempt_count = runtime
+                        .rune_proc_attempts_by_source
                         .get(&rune_key)
                         .and_then(|by_source| by_source.get(&source))
                         .copied()
                         .unwrap_or(source_totals.proc_count)
                         .max(source_totals.proc_count);
-                    let proc_opportunity_rate = if opportunity_count > 0 {
-                        source_totals.proc_count as f64 / opportunity_count as f64
+                    let mut eligible_count = runtime
+                        .rune_proc_eligibilities_by_source
+                        .get(&rune_key)
+                        .and_then(|by_source| by_source.get(&source))
+                        .copied()
+                        .unwrap_or(source_totals.proc_count)
+                        .max(source_totals.proc_count);
+                    attempt_count = attempt_count.max(eligible_count);
+                    eligible_count = eligible_count.min(attempt_count);
+                    let proc_attempt_rate = if attempt_count > 0 {
+                        source_totals.proc_count as f64 / attempt_count as f64
+                    } else {
+                        0.0
+                    };
+                    let proc_eligible_rate = if eligible_count > 0 {
+                        source_totals.proc_count as f64 / eligible_count as f64
                     } else {
                         0.0
                     };
                     RuneProcTelemetrySourceEntry {
                         source: source.label().to_string(),
                         proc_count: source_totals.proc_count,
-                        opportunity_count,
-                        proc_opportunity_rate,
+                        attempt_count,
+                        eligible_count,
+                        proc_attempt_rate,
+                        proc_eligible_rate,
                         bonus_damage: source_totals.bonus_damage,
                         bonus_healing: source_totals.bonus_healing,
                     }
                 })
                 .collect::<Vec<_>>();
             source_breakdown.sort_by(|a, b| a.source.cmp(&b.source));
-            let opportunity_count = runtime
-                .rune_proc_opportunities
+            let mut attempt_count = runtime
+                .rune_proc_attempts
                 .get(&rune_key)
                 .copied()
                 .unwrap_or(totals.proc_count)
                 .max(totals.proc_count);
-            let proc_opportunity_rate = if opportunity_count > 0 {
-                totals.proc_count as f64 / opportunity_count as f64
+            let mut eligible_count = runtime
+                .rune_proc_eligibilities
+                .get(&rune_key)
+                .copied()
+                .unwrap_or(totals.proc_count)
+                .max(totals.proc_count);
+            attempt_count = attempt_count.max(eligible_count);
+            eligible_count = eligible_count.min(attempt_count);
+            let proc_attempt_rate = if attempt_count > 0 {
+                totals.proc_count as f64 / attempt_count as f64
+            } else {
+                0.0
+            };
+            let proc_eligible_rate = if eligible_count > 0 {
+                totals.proc_count as f64 / eligible_count as f64
             } else {
                 0.0
             };
             RuneProcTelemetryEntry {
-                rune_name: title_case_rune_name(&rune_key),
+                rune_name: title_case_rune_name(rune_key),
                 proc_count: totals.proc_count,
-                opportunity_count,
-                proc_opportunity_rate,
+                attempt_count,
+                eligible_count,
+                proc_attempt_rate,
+                proc_eligible_rate,
                 bonus_damage: totals.bonus_damage,
                 bonus_healing: totals.bonus_healing,
                 source_breakdown,

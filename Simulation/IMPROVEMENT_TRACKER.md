@@ -7,7 +7,7 @@
   - moved rune runtime tuning ownership to `Simulation/data/simulator_defaults.json` (`rune_runtime_defaults`) with typed loading in `src/defaults.rs`
   - fixed-loadout rune sweep now evaluates keystones in parallel and supports repeat aggregation via `--fixed-sweep-seed-repeats`, with deterministic per-repeat combat seed variation
   - report generation now hard-enforces complete controlled champion rune/shard labels (no fallback “none selected” section)
-  - rune proc telemetry now includes source-attribution breakdowns plus proc opportunity/rate and damage/healing share metrics in markdown and JSON outputs
+  - rune proc telemetry now includes source-attribution breakdowns plus proc attempt/eligible counts, proc rates, and damage/healing share metrics in markdown and JSON outputs
 - Hardened controlled champion runtime/engine boundaries:
   - removed thin `ControlledChampionLoadoutRuntime` holder from engine state; retained stateless defensive policy APIs in `src/scripts/runtime/controlled_champion_loadout.rs`
   - added optional scenario `simulation.combat_seed` for deterministic combat-variation runs (enemy init ordering + initial auto-attack jitter)

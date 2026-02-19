@@ -148,6 +148,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - `<seconds>s` when only fixed budget is used (for example `300s`).
   - `<budget>__popcorn_<window>__min_improvement_<relative_percent>pct` when popcorn mode is enabled and `window != budget`.
   - `<budget>__popcorn__min_improvement_<relative_percent>pct` when popcorn mode is enabled and `window == budget`.
+- All generated JSON artifacts (run reports, fixed-loadout reports, rune sweep reports, and traces) include a top-level `schema_version`.
 - Report includes:
   - Human-readable generation timestamps (local and UTC)
   - Vladimir base stats at configured level (`controlled_champion.level` override, fallback `simulation.champion_level`, default `20`)
@@ -176,7 +177,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 	  - Trace JSON schema:
 	    - `schema_version`: integer schema version for trace consumers
 	    - `event_encoding`: currently `structured`
-	    - `rune_proc_telemetry[]`: rune proc totals plus calibration metrics (`proc_count`, `opportunity_count`, `proc_opportunity_rate`, `bonus_damage`, `bonus_damage_share`, `bonus_healing`, `bonus_healing_share`) plus `source_breakdown[]`
+	    - `rune_proc_telemetry[]`: rune proc totals plus calibration metrics (`proc_count`, `attempt_count`, `eligible_count`, `proc_attempt_rate`, `proc_eligible_rate`, `bonus_damage`, `bonus_damage_share`, `bonus_healing`, `bonus_healing_share`) plus `source_breakdown[]` (compatibility aliases `opportunity_count`/`proc_opportunity_rate` remain mapped to eligible metrics)
 	    - `events[]`: objects with `timestamp_seconds`, `event_type`, `details`, and `raw`
   - trace includes explicit impact outcome events such as `projectile_blocked`, `impact_nullified`, `attack_missed`, and `ability_missed`.
 - Compatibility aliases:

@@ -41,6 +41,23 @@ struct ControlledChampionScenarioConfig {
     stack_overrides: HashMap<String, f64>,
 }
 
+const FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION: u32 = 3;
+const FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION: u32 = 2;
+const FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION: u32 = 2;
+const CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION: u32 = 2;
+const FIXED_SWEEP_REPEAT_SEED_STRIDE: u64 = 0x9E37_79B9_7F4A_7C15;
+
+fn fixed_sweep_keystone_seed_base(seed_base: u64, keystone: &str) -> u64 {
+    let mut keystone_seed_hasher = DefaultHasher::new();
+    to_norm_key(keystone).hash(&mut keystone_seed_hasher);
+    seed_base.wrapping_add(keystone_seed_hasher.finish())
+}
+
+fn fixed_sweep_repeat_seed(keystone_seed_base: u64, repeat_idx: usize) -> u64 {
+    keystone_seed_base
+        .wrapping_add((repeat_idx as u64).wrapping_mul(FIXED_SWEEP_REPEAT_SEED_STRIDE))
+}
+
 fn append_rune_proc_telemetry_markdown_entries(
     content: &mut String,
     entry_prefix: &str,
@@ -65,11 +82,13 @@ fn append_rune_proc_telemetry_markdown_entries(
         let damage_share_percent = share_percent(entry.bonus_damage, total_damage);
         let healing_share_percent = share_percent(entry.bonus_healing, total_healing);
         content.push_str(&format!(
-            "{entry_prefix}{}: procs `{}` / opportunities `{}` ({:.1}% rate), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
+            "{entry_prefix}{}: procs `{}` / attempts `{}` / eligible `{}` (proc/attempt {:.1}%, proc/eligible {:.1}%), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
             entry.rune_name,
             entry.proc_count,
-            entry.opportunity_count,
-            entry.proc_opportunity_rate * 100.0,
+            entry.attempt_count,
+            entry.eligible_count,
+            entry.proc_attempt_rate * 100.0,
+            entry.proc_eligible_rate * 100.0,
             entry.bonus_damage,
             damage_share_percent,
             entry.bonus_healing,
@@ -81,11 +100,13 @@ fn append_rune_proc_telemetry_markdown_entries(
                 .iter()
                 .map(|source| {
                     format!(
-                        "{} (procs {}, opportunities {}, rate {:.1}%, damage {:.2}, healing {:.2})",
+                        "{} (procs {}, attempts {}, eligible {}, proc/attempt {:.1}%, proc/eligible {:.1}%, damage {:.2}, healing {:.2})",
                         source.source,
                         source.proc_count,
-                        source.opportunity_count,
-                        source.proc_opportunity_rate * 100.0,
+                        source.attempt_count,
+                        source.eligible_count,
+                        source.proc_attempt_rate * 100.0,
+                        source.proc_eligible_rate * 100.0,
                         source.bonus_damage,
                         source.bonus_healing
                     )
@@ -118,8 +139,12 @@ fn rune_proc_telemetry_json(
             json!({
                 "rune_name": entry.rune_name,
                 "proc_count": entry.proc_count,
-                "opportunity_count": entry.opportunity_count,
-                "proc_opportunity_rate": entry.proc_opportunity_rate,
+                "attempt_count": entry.attempt_count,
+                "eligible_count": entry.eligible_count,
+                "proc_attempt_rate": entry.proc_attempt_rate,
+                "proc_eligible_rate": entry.proc_eligible_rate,
+                "opportunity_count": entry.eligible_count,
+                "proc_opportunity_rate": entry.proc_eligible_rate,
                 "bonus_damage": entry.bonus_damage,
                 "bonus_damage_share": damage_share,
                 "bonus_healing": entry.bonus_healing,
@@ -128,8 +153,12 @@ fn rune_proc_telemetry_json(
                     json!({
                         "source": source.source,
                         "proc_count": source.proc_count,
-                        "opportunity_count": source.opportunity_count,
-                        "proc_opportunity_rate": source.proc_opportunity_rate,
+                        "attempt_count": source.attempt_count,
+                        "eligible_count": source.eligible_count,
+                        "proc_attempt_rate": source.proc_attempt_rate,
+                        "proc_eligible_rate": source.proc_eligible_rate,
+                        "opportunity_count": source.eligible_count,
+                        "proc_opportunity_rate": source.proc_eligible_rate,
                         "bonus_damage": source.bonus_damage,
                         "bonus_healing": source.bonus_healing
                     })
@@ -1372,7 +1401,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
     }
     fs::write(&trace_markdown_path, trace_markdown)?;
     let trace_json = json!({
-        "schema_version": 2,
+        "schema_version": FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION,
         "event_encoding": "structured",
         "rune_proc_telemetry": rune_proc_telemetry_json(
             &rune_proc_telemetry,
@@ -1448,6 +1477,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
     fs::write(&report_path, markdown_report)?;
 
     let structured_report = json!({
+        "schema_version": FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION,
         "scenario_path": scenario_path.display().to_string(),
         "search_quality_profile": search_quality_profile_key(options.search_quality_profile),
         "controlled_champion_name": controlled_champion_name,
@@ -1884,17 +1914,14 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
             loadout_selection =
                 ensure_complete_loadout_selection(&loadout_selection, &loadout_domain)?;
             let resolved_loadout = resolve_loadout(&loadout_selection, sim.champion_level, true)?;
-            let mut keystone_seed_hasher = DefaultHasher::new();
-            to_norm_key(keystone).hash(&mut keystone_seed_hasher);
-            let keystone_seed_base = search_cfg.seed.wrapping_add(keystone_seed_hasher.finish());
+            let keystone_seed_base = fixed_sweep_keystone_seed_base(search_cfg.seed, keystone);
 
             let mut seed_repeat_scores = Vec::with_capacity(sweep_seed_repeats);
             let mut repeated_outcomes = Vec::with_capacity(sweep_seed_repeats);
             let mut repeated_breakdowns = Vec::with_capacity(sweep_seed_repeats);
             let mut seed_repeat_values = Vec::with_capacity(sweep_seed_repeats);
             for repeat_idx in 0..sweep_seed_repeats {
-                let repeat_seed = keystone_seed_base
-                    .wrapping_add((repeat_idx as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15));
+                let repeat_seed = fixed_sweep_repeat_seed(keystone_seed_base, repeat_idx);
                 seed_repeat_values.push(repeat_seed);
                 let mut repeat_sim = sim.clone();
                 repeat_sim.combat_seed = Some(repeat_seed);
@@ -2080,6 +2107,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
     fs::write(&report_path, markdown)?;
 
     let json_report = json!({
+        "schema_version": FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION,
         "scenario_path": scenario_path.display().to_string(),
         "search_quality_profile": search_quality_profile_key(options.search_quality_profile),
         "controlled_champion_name": controlled_champion_name,
@@ -3790,7 +3818,7 @@ pub(super) fn run_controlled_champion_scenario(
     fs::write(&trace_markdown_path, trace_md)?;
 
     let trace_json = json!({
-        "schema_version": 1,
+        "schema_version": CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION,
         "event_encoding": "structured",
         "rune_proc_telemetry": rune_proc_telemetry_json(
             &best_rune_proc_telemetry,

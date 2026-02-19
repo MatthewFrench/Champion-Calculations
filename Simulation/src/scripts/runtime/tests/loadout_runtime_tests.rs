@@ -1,5 +1,6 @@
 use super::*;
 use crate::defaults::rune_runtime_defaults;
+use std::time::Instant;
 
 fn default_on_hit_profile() -> OnHitEffectProfile {
     OnHitEffectProfile {
@@ -441,9 +442,12 @@ fn rune_proc_telemetry_includes_source_breakdown() {
         .collect::<Vec<_>>();
     assert!(sources.contains(&"on_hit"));
     assert!(sources.contains(&"ability"));
-    assert!(aery.opportunity_count >= aery.proc_count);
-    assert!(aery.proc_opportunity_rate > 0.0);
-    assert!(aery.proc_opportunity_rate <= 1.0);
+    assert!(aery.attempt_count >= aery.eligible_count);
+    assert!(aery.eligible_count >= aery.proc_count);
+    assert!(aery.proc_attempt_rate > 0.0);
+    assert!(aery.proc_attempt_rate <= 1.0);
+    assert!(aery.proc_eligible_rate > 0.0);
+    assert!(aery.proc_eligible_rate <= 1.0);
 }
 
 #[test]
@@ -631,4 +635,59 @@ fn modeled_loadout_runes_have_observable_effects() {
         600.0,
     );
     assert!(gathering_storm_magic > 0.0);
+}
+
+#[test]
+#[ignore = "manual performance check"]
+fn rune_proc_telemetry_overhead_smoke_benchmark() {
+    fn run_workload(telemetry_enabled: bool) -> f64 {
+        let mut runtime = build_loadout_runtime_state(
+            &["Luden's Echo".to_string()],
+            &[
+                "Press the Attack".to_string(),
+                "Fleet Footwork".to_string(),
+                "Conqueror".to_string(),
+                "Electrocute".to_string(),
+                "First Strike".to_string(),
+                "Arcane Comet".to_string(),
+                "Summon Aery".to_string(),
+                "Dark Harvest".to_string(),
+                "Triumph".to_string(),
+                "Aftershock".to_string(),
+            ],
+            0.0,
+            false,
+        );
+        runtime.rune_proc_telemetry_enabled = telemetry_enabled;
+        let start = Instant::now();
+        for step in 0..30_000 {
+            let now = 1.0 + step as f64 * 0.01;
+            let _ = on_hit(&mut runtime, 145.0, now, 1800.0, 2500.0);
+            let _ = ability_hit(
+                &mut runtime,
+                260.0,
+                0.7,
+                300.0,
+                0.0,
+                1200.0,
+                2500.0,
+                now + 0.005,
+            );
+            let _ = on_outgoing_damage_heal(&mut runtime, 220.0, now + 0.006);
+            if step % 2000 == 0 {
+                let _ = on_enemy_kill_heal(&mut runtime, 2500.0);
+            }
+        }
+        start.elapsed().as_secs_f64()
+    }
+
+    let disabled_seconds = run_workload(false);
+    let enabled_seconds = run_workload(true);
+    let ratio = enabled_seconds / disabled_seconds.max(1e-9);
+    eprintln!(
+        "rune telemetry overhead benchmark: disabled={:.4}s enabled={:.4}s ratio={:.3}",
+        disabled_seconds, enabled_seconds, ratio
+    );
+    assert!(enabled_seconds > 0.0);
+    assert!(disabled_seconds > 0.0);
 }

@@ -26,7 +26,7 @@ This file is a concise handoff for developers and AI agents.
 - Top-level search orchestration is parallelized for ensemble seeds and portfolio strategies, and strategy-elite/adaptive generation is parallelized with deterministic merge ordering.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
-- Report and trace outputs now include rune proc telemetry totals plus source-attribution breakdown (`source_breakdown`), proc opportunity/rate metrics, and damage/healing share metrics.
+- Report and trace outputs now include rune proc telemetry totals plus source-attribution breakdown (`source_breakdown`), proc attempt/eligible metrics and rates, and damage/healing share metrics.
 - Optional `simulation.combat_seed` now enables deterministic combat-variation simulation runs (enemy initialization ordering + initial auto-attack jitter).
 - Controlled champion runtime helper module is now stateless (defensive item/revive policy only); no dedicated controlled runtime holder is stored in engine state.
 

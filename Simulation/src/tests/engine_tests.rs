@@ -776,6 +776,100 @@ fn pool_ticks_hit_all_enemies_in_range_with_expected_total_damage() {
 }
 
 #[test]
+fn pool_tick_hits_enemy_exactly_on_range_boundary() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Boundary Target");
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.enable_trace();
+    runner.controlled_champion_defensive_ability_two_damage_per_tick = 75.0;
+    runner.controlled_champion_defensive_ability_two_heal_ratio_of_damage = 0.0;
+    runner.pool_effect_range = 200.0;
+    runner.pool_damage_tick_interval_seconds = 0.5;
+    runner.pool_damage_until = 0.5;
+    runner.pool_next_damage_tick_at = 0.5;
+    let boundary_distance = runner.pool_effect_range
+        + runner.controlled_champion_hitbox_radius
+        + runner.enemy_state[0].hitbox_radius;
+    runner.target_position = Vec2 { x: 0.0, y: 0.0 };
+    runner.enemy_state[0].position = Vec2 {
+        x: boundary_distance,
+        y: 0.0,
+    };
+
+    runner.apply_hot_effects(0.6);
+
+    assert!(runner.damage_dealt_total > 0.0);
+    assert!(
+        runner
+            .trace_events()
+            .iter()
+            .any(|entry| entry.contains("[controlled_champion_pool_tick]")
+                && entry.contains("to 1 enemies in range"))
+    );
+}
+
+#[test]
+fn pool_tick_misses_enemy_just_outside_range_boundary() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Boundary Miss");
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.enable_trace();
+    runner.controlled_champion_defensive_ability_two_damage_per_tick = 75.0;
+    runner.controlled_champion_defensive_ability_two_heal_ratio_of_damage = 0.0;
+    runner.pool_effect_range = 200.0;
+    runner.pool_damage_tick_interval_seconds = 0.5;
+    runner.pool_damage_until = 0.5;
+    runner.pool_next_damage_tick_at = 0.5;
+    let boundary_distance = runner.pool_effect_range
+        + runner.controlled_champion_hitbox_radius
+        + runner.enemy_state[0].hitbox_radius;
+    runner.target_position = Vec2 { x: 0.0, y: 0.0 };
+    runner.enemy_state[0].position = Vec2 {
+        x: boundary_distance + 1e-3,
+        y: 0.0,
+    };
+
+    runner.apply_hot_effects(0.6);
+
+    assert_eq!(runner.damage_dealt_total, 0.0);
+    assert!(
+        runner
+            .trace_events()
+            .iter()
+            .any(|entry| entry.contains("[controlled_champion_pool_tick]")
+                && entry.contains("to 0 enemies in range"))
+    );
+}
+
+#[test]
 fn aftershock_runtime_triggers_from_enemy_immobilize_script() {
     let controlled_champion = test_controlled_champion_base();
     let mut enemy = test_enemy("Sona");

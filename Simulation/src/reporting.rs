@@ -14,6 +14,8 @@ use super::{
     ControlledChampionReportData, ObjectiveScoreBreakdown, mean_std, simulation_dir, to_norm_key,
 };
 
+const CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION: u32 = 2;
+
 #[cfg(test)]
 pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
     simulation_dir()
@@ -269,11 +271,13 @@ pub(super) fn write_controlled_champion_report_markdown(
                 0.0
             };
             content.push_str(&format!(
-                "- {}: procs `{}` / opportunities `{}` ({:.1}% rate), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
+                "- {}: procs `{}` / attempts `{}` / eligible `{}` (proc/attempt {:.1}%, proc/eligible {:.1}%), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
                 entry.rune_name,
                 entry.proc_count,
-                entry.opportunity_count,
-                entry.proc_opportunity_rate * 100.0,
+                entry.attempt_count,
+                entry.eligible_count,
+                entry.proc_attempt_rate * 100.0,
+                entry.proc_eligible_rate * 100.0,
                 entry.bonus_damage,
                 damage_share_percent,
                 entry.bonus_healing,
@@ -285,11 +289,13 @@ pub(super) fn write_controlled_champion_report_markdown(
                     .iter()
                     .map(|source| {
                         format!(
-                            "{} (procs {}, opportunities {}, rate {:.1}%, damage {:.2}, healing {:.2})",
+                            "{} (procs {}, attempts {}, eligible {}, proc/attempt {:.1}%, proc/eligible {:.1}%, damage {:.2}, healing {:.2})",
                             source.source,
                             source.proc_count,
-                            source.opportunity_count,
-                            source.proc_opportunity_rate * 100.0,
+                            source.attempt_count,
+                            source.eligible_count,
+                            source.proc_attempt_rate * 100.0,
+                            source.proc_eligible_rate * 100.0,
                             source.bonus_damage,
                             source.bonus_healing
                         )
@@ -817,6 +823,7 @@ pub(super) fn write_controlled_champion_report_json(
         .map(|breakdown| breakdown.score_requests)
         .sum::<usize>();
     let json_value = json!({
+        "schema_version": CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION,
         "generated_utc": generated_utc.to_rfc3339(),
         "generated_local": generated_local.format("%Y-%m-%d %H:%M:%S %Z").to_string(),
         "scenario_path": scenario_path_display,
@@ -848,8 +855,12 @@ pub(super) fn write_controlled_champion_report_json(
             json!({
                 "rune_name": entry.rune_name,
                 "proc_count": entry.proc_count,
-                "opportunity_count": entry.opportunity_count,
-                "proc_opportunity_rate": entry.proc_opportunity_rate,
+                "attempt_count": entry.attempt_count,
+                "eligible_count": entry.eligible_count,
+                "proc_attempt_rate": entry.proc_attempt_rate,
+                "proc_eligible_rate": entry.proc_eligible_rate,
+                "opportunity_count": entry.eligible_count,
+                "proc_opportunity_rate": entry.proc_eligible_rate,
                 "bonus_damage": entry.bonus_damage,
                 "bonus_damage_share": damage_share,
                 "bonus_healing": entry.bonus_healing,
@@ -858,8 +869,12 @@ pub(super) fn write_controlled_champion_report_json(
                     json!({
                         "source": source.source,
                         "proc_count": source.proc_count,
-                        "opportunity_count": source.opportunity_count,
-                        "proc_opportunity_rate": source.proc_opportunity_rate,
+                        "attempt_count": source.attempt_count,
+                        "eligible_count": source.eligible_count,
+                        "proc_attempt_rate": source.proc_attempt_rate,
+                        "proc_eligible_rate": source.proc_eligible_rate,
+                        "opportunity_count": source.eligible_count,
+                        "proc_opportunity_rate": source.proc_eligible_rate,
                         "bonus_damage": source.bonus_damage,
                         "bonus_healing": source.bonus_healing
                     })
