@@ -10,6 +10,7 @@ use crate::defaults::{
     urf_respawn_defaults, zhonya_time_stop_defaults,
 };
 use crate::scripts::registry::hooks::{LoadoutHookContext, resolve_loadout_with_hooks};
+use crate::scripts::runes::effects::has_dynamic_rune_effect;
 
 use super::{
     BuildSearchConfig, ChampionBase, EXCLUDED_RANKS, EnemyConfig, ITEM_EVOLUTION_REPLACEMENTS,
@@ -248,6 +249,7 @@ pub(crate) fn resolve_loadout(
         if let Some(rune) = runes_by_name.get(&key) {
             let real_name = rune.get("name").and_then(Value::as_str).unwrap_or(name);
             out.selection_labels.push(format!("Rune: {}", real_name));
+            let mut static_effect_applied = false;
             for effect in rune
                 .get("effects_structured")
                 .and_then(Value::as_array)
@@ -261,9 +263,20 @@ pub(crate) fn resolve_loadout(
                     for_controlled_champion,
                     &mut out.bonus_stats,
                 )? {
+                    static_effect_applied = true;
                     out.applied_notes
                         .push(format!("Applied rune stat effect from {}.", real_name));
                 }
+            }
+            if for_controlled_champion
+                && !static_effect_applied
+                && !has_dynamic_rune_effect(real_name)
+            {
+                out.unmodeled_rune_names.push(real_name.to_string());
+                out.skipped_notes.push(format!(
+                    "Rune '{}' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.",
+                    real_name
+                ));
             }
         } else {
             out.skipped_notes
@@ -785,6 +798,23 @@ pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("multi_scenario_worst_weight")
             .and_then(Value::as_f64)
             .unwrap_or(search_defaults.multi_scenario_worst_weight),
+        strict_ranking_enable_heuristic_ordering: data
+            .get("strict_ranking_enable_heuristic_ordering")
+            .and_then(Value::as_bool)
+            .unwrap_or(search_defaults.strict_ranking_enable_heuristic_ordering),
+        strict_ranking_rune_signal_weight: data
+            .get("strict_ranking_rune_signal_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(search_defaults.strict_ranking_rune_signal_weight),
+        strict_ranking_shard_signal_weight: data
+            .get("strict_ranking_shard_signal_weight")
+            .and_then(Value::as_f64)
+            .unwrap_or(search_defaults.strict_ranking_shard_signal_weight),
+        strict_ranking_exploration_promotions: data
+            .get("strict_ranking_exploration_promotions")
+            .and_then(Value::as_u64)
+            .unwrap_or(search_defaults.strict_ranking_exploration_promotions as u64)
+            as usize,
         seed: data
             .get("seed")
             .and_then(Value::as_u64)

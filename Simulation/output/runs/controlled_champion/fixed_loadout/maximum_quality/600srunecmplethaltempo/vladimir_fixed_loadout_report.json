@@ -1,0 +1,83 @@
+{
+  "controlled_champion_name": "Vladimir",
+  "items": [
+    "Bloodletter's Curse",
+    "Guardian Angel",
+    "Heartsteel",
+    "Protoplasm Harness",
+    "Warmog's Armor",
+    "Zhonya's Hourglass"
+  ],
+  "notes": [
+    "No search stage is run in controlled_champion_fixed_loadout mode.",
+    "This report is intended for direct loadout-to-loadout comparisons."
+  ],
+  "objective_breakdown": {
+    "components": {
+      "damage": {
+        "contribution": 0.08397257943667973,
+        "impact_percent": 28.82752969819833,
+        "normalized_ratio": 0.6549861196061018,
+        "weight": 0.12820512820512822
+      },
+      "enemy_kills": {
+        "contribution": 0.10256410256410259,
+        "impact_percent": 35.209942727378404,
+        "normalized_ratio": 0.2,
+        "weight": 0.5128205128205129
+      },
+      "healing": {
+        "contribution": 0.10142474708925159,
+        "impact_percent": 34.818805477476026,
+        "normalized_ratio": 1.3185217121602706,
+        "weight": 0.07692307692307693
+      },
+      "invulnerable_seconds": {
+        "contribution": 0.0002243589743589744,
+        "impact_percent": 0.07702174971614027,
+        "normalized_ratio": 0.00875,
+        "weight": 0.025641025641025644
+      },
+      "survival": {
+        "contribution": 0.0031072235665269288,
+        "impact_percent": 1.0667003472310925,
+        "normalized_ratio": 0.01211817190945502,
+        "weight": 0.25641025641025644
+      }
+    },
+    "final_score": 0.2912930116309198,
+    "weighted_mean_score": 0.2912930116309198,
+    "worst_case_score": 0.2912930116309198,
+    "worst_case_weight": 0.35
+  },
+  "objective_score": 0.2912930116309198,
+  "outcome": {
+    "damage_dealt": 12101.696287484885,
+    "enemy_kills": 1,
+    "healing_done": 3546.8234057111285,
+    "invulnerable_seconds": 10.5,
+    "time_alive_seconds": 14.541806291346024
+  },
+  "reference_outcome": {
+    "damage_dealt": 18476.263733287436,
+    "enemy_kills": 5,
+    "healing_done": 2690.0,
+    "invulnerable_seconds": 1200.0,
+    "time_alive_seconds": 1200.0
+  },
+  "runes": [
+    "Lethal Tempo",
+    "Triumph",
+    "Legend: Alacrity",
+    "Last Stand",
+    "Second Wind",
+    "Unflinching"
+  ],
+  "scenario_path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenarios/vladimir_urf_teamfight.json",
+  "search_quality_profile": "maximum_quality",
+  "shards": [
+    "ability_haste",
+    "movement_speed",
+    "health"
+  ]
+}

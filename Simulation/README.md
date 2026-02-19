@@ -22,6 +22,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - applied normally
 - Melee auto-attacks are interrupted and cancelled if the attacker is stunned during windup (projectiles already released continue to resolve).
 - Enemy auto-attacks are modeled as recurring timed events.
+- Controlled champion auto-attacks are modeled as recurring start/windup/hit events with hitbox-aware impact checks.
 - Enemy champion abilities and crowd control come from champion scripts and canonical champion data (no scenario combat proxies).
 - Enemy units can die and respawn on URF-scaled timers (using each enemy actor's own level).
 - Enemy transient stack/buff counters are cleared on death and respawn, and enemies respawn at their original spawn positions.
@@ -29,7 +30,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Opponent encounter parsing requires at least one positive scenario weight (all-zero-weight encounter sets are rejected).
 - Guardian Angel, Zhonya's Hourglass, and Protoplasm Harness are modeled as survivability events.
 - Champion/item/loadout mechanics can be extended through script hooks in `src/scripts/`.
-- Controlled champion loadout runtime scripts are now applied during combat-time spell hits, kill events, and regeneration ticks.
+- Controlled champion loadout runtime scripts are now applied during combat-time auto attacks, spell hits, kill events, and regeneration ticks.
 - Defensive item activation and revive triggers are modeled through generic controlled champion runtime/item script capabilities (not champion-specific decision structs).
 - Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).
 - Runtime stat resolution is buff-aware and starts from canonical base data before applying state transforms:
@@ -41,6 +42,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Foundational combat primitives are present for future fidelity work:
   - generic status effects (duration/stacks/persistence)
   - generic cast-lock windows (windup/channel/lockout)
+- Controlled champion cast availability now respects active cast-lock windows, preventing same-tick multi-cast stacking from engine-side scheduling.
 - Scripted enemy behavior profiles are included for:
   - Warwick
   - Vayne
@@ -166,11 +168,21 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 - Compatibility aliases:
   - `--mode vladimir` maps to `--mode controlled_champion`.
   - `--mode vladimir_step` maps to `--mode controlled_champion_step`.
+- `controlled_champion_fixed_loadout` mode:
+  - evaluates one explicit controlled champion item/rune/shard loadout directly (no candidate search/mutation).
+  - required: `--fixed-item-names "<comma-separated six items>"`.
+  - optional overrides: `--fixed-rune-names`, `--fixed-shard-stats`, `--fixed-eval-label`.
+  - writes outputs to:
+    - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_report.md`
+    - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_report.json`
+    - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_trace.md`
+    - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_trace.json`
 
 ## Runtime Controls
 - `--max-runtime-seconds N`:
-  - Stops search after `N` seconds and reports best-so-far findings.
-  - In `maximum_quality`, the timer starts after the pre-budget coverage stage completes.
+  - Stops timed search after `N` seconds of simulation-budgeted search work and reports best-so-far findings.
+  - Budget clock arms on the first timed-phase simulation evaluation (not during setup/report generation).
+  - In `maximum_quality`, coverage stage remains pre-budget and the timer can only arm after coverage when timed-phase simulations begin.
 - `--popcorn-window-seconds W`:
   - Enables progress-window stopping ("microwave popcorn mode").
   - Search continues while significant improvements keep happening; run stops when no significant improvement is observed for `W` seconds.
@@ -370,6 +382,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `robust_min_seed_hit_rate`
   - `bleed_enabled`, `bleed_budget`, `bleed_mutation_rate`
   - `multi_scenario_worst_weight` (aggregation between weighted-mean and worst-case when using multiple enemy scenarios)
+  - `strict_ranking_enable_heuristic_ordering`, `strict_ranking_rune_signal_weight`, `strict_ranking_shard_signal_weight`, `strict_ranking_exploration_promotions`
   - `ranked_limit`
   - `seed` (optional; if omitted or `0`, runtime random seed is used)
 - Loadout search legality:
@@ -402,7 +415,8 @@ This migration is active and tracked in the roadmap and improvement tracker for 
     - `simulation.protoplasm_trigger_health_percent`
 - Fallback ownership by domain:
   - URF respawn defaults load from `../Game Mode/URF.json` `respawn`.
-  - Vladimir Sanguine Pool defaults load from `../Characters/Vladimir.json` `abilities.basic_ability_2`.
+  - Vladimir Sanguine Pool defaults load from `../Characters/Vladimir.json` `abilities.basic_ability_2` (`range`, `effects[id=damage_per_tick]`, `tick_interval_seconds`).
+  - Vladimir defensive-ability-two script policy defaults load from `../Characters/Vladimir.json` `simulation.controlled_champion.defensive_ability_two`.
   - Zhonya's Hourglass defaults load from `../Items/Zhonyas Hourglass.json` (`effects_structured[id=zhonyas_time_stop]`).
   - Guardian Angel defaults load from `../Items/Guardian Angel.json` (`effects_structured[id=rebirth_resurrection_with_post_revive_health_and_mana_restore]`).
   - Protoplasm Harness defaults load from `../Items/Protoplasm Harness.json` (lifeline effects).
@@ -454,3 +468,4 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - `season2016_masteries`
 - Current implementation applies deterministic stat bonuses from direct passive/stat effects and reports selections/skips in output.
 - Conditional or highly dynamic rune effects that cannot be represented deterministically are skipped and documented in the report.
+- Runes with no modeled deterministic stat effect and no modeled combat-time runtime effect are explicitly listed in report warnings as unmodeled.

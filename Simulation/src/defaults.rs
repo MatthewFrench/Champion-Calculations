@@ -45,6 +45,10 @@ pub(crate) struct SearchDefaults {
     pub bleed_budget: usize,
     pub bleed_mutation_rate: f64,
     pub multi_scenario_worst_weight: f64,
+    pub strict_ranking_enable_heuristic_ordering: bool,
+    pub strict_ranking_rune_signal_weight: f64,
+    pub strict_ranking_shard_signal_weight: f64,
+    pub strict_ranking_exploration_promotions: usize,
     pub seed: u64,
 }
 
@@ -162,11 +166,18 @@ pub(crate) struct VladimirOffensiveAbilityDefaults {
 pub(crate) struct VladimirSanguinePoolDefaults {
     pub base_cooldown_seconds_by_rank: Vec<f64>,
     pub default_rank: usize,
+    pub effect_range: f64,
     pub untargetable_seconds: f64,
+    pub damage_tick_interval_seconds: f64,
     pub cost_percent_current_health: f64,
     pub heal_ratio_of_damage: f64,
-    pub base_damage_by_rank: Vec<f64>,
-    pub bonus_health_ratio: f64,
+    pub damage_per_tick_by_rank: Vec<f64>,
+    pub damage_per_tick_bonus_health_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct VladimirDefensiveAbilityTwoPolicyDefaults {
+    pub prioritize_offensive_ultimate_before_defensive_ability_two: bool,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -483,6 +494,9 @@ static HEARTSTEEL_COLOSSAL_CONSUMPTION_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> =
 static LUDEN_ECHO_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> = OnceLock::new();
 static PROTOPLASM_LIFELINE_COOLDOWN_SECONDS_DEFAULT: OnceLock<f64> = OnceLock::new();
 static VLADIMIR_SANGUINE_POOL_DEFAULTS: OnceLock<VladimirSanguinePoolDefaults> = OnceLock::new();
+static VLADIMIR_DEFENSIVE_ABILITY_TWO_POLICY_DEFAULTS: OnceLock<
+    VladimirDefensiveAbilityTwoPolicyDefaults,
+> = OnceLock::new();
 static ZHONYA_TIME_STOP_DEFAULTS: OnceLock<ZhonyaTimeStopDefaults> = OnceLock::new();
 static GUARDIAN_ANGEL_REBIRTH_DEFAULTS: OnceLock<GuardianAngelRebirthDefaults> = OnceLock::new();
 static PROTOPLASM_LIFELINE_DEFAULTS: OnceLock<ProtoplasmLifelineDefaults> = OnceLock::new();
@@ -1274,10 +1288,20 @@ fn load_vladimir_sanguine_pool_defaults() -> Result<VladimirSanguinePoolDefaults
     let base_cooldown_seconds_by_rank =
         champion_ability_cooldown_seconds_by_rank(pool_ability, "basic_ability_2", &champion_path)?;
     let default_rank = base_cooldown_seconds_by_rank.len().max(1);
+    let effect_range = champion_ability_range(pool_ability, "basic_ability_2", &champion_path)?;
     let untargetable_seconds = effect_duration_seconds_by_id(pool_effects, "untargetable")
         .ok_or_else(|| {
             anyhow!(
                 "Missing abilities.basic_ability_2.effects[id=untargetable] duration in {}",
+                champion_path.display()
+            )
+        })?;
+    let damage_tick_interval_seconds = ability_effect_by_id(pool_effects, "damage_per_tick")
+        .and_then(|effect| effect.get("tick_interval_seconds"))
+        .and_then(Value::as_f64)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_2.effects[id=damage_per_tick].tick_interval_seconds in {}",
                 champion_path.display()
             )
         })?;
@@ -1302,18 +1326,18 @@ fn load_vladimir_sanguine_pool_defaults() -> Result<VladimirSanguinePoolDefaults
                 champion_path.display()
             )
         })?;
-    let base_damage_by_rank =
-        effect_base_by_rank_values(pool_effects, "total_damage").ok_or_else(|| {
+    let damage_per_tick_by_rank = effect_base_by_rank_values(pool_effects, "damage_per_tick")
+        .ok_or_else(|| {
             anyhow!(
-                "Missing abilities.basic_ability_2.effects[id=total_damage].base_by_rank in {}",
+                "Missing abilities.basic_ability_2.effects[id=damage_per_tick].base_by_rank in {}",
                 champion_path.display()
             )
         })?;
-    let bonus_health_ratio =
-        effect_formula_coefficient_by_id(pool_effects, "total_damage", "bonus_health")
+    let damage_per_tick_bonus_health_ratio =
+        effect_formula_coefficient_by_id(pool_effects, "damage_per_tick", "bonus_health")
             .ok_or_else(|| {
                 anyhow!(
-                    "Missing abilities.basic_ability_2.effects[id=total_damage] bonus_health coefficient in {}",
+                    "Missing abilities.basic_ability_2.effects[id=damage_per_tick] bonus_health coefficient in {}",
                     champion_path.display()
                 )
             })?;
@@ -1321,11 +1345,30 @@ fn load_vladimir_sanguine_pool_defaults() -> Result<VladimirSanguinePoolDefaults
     Ok(VladimirSanguinePoolDefaults {
         base_cooldown_seconds_by_rank,
         default_rank,
+        effect_range,
         untargetable_seconds,
+        damage_tick_interval_seconds,
         cost_percent_current_health,
         heal_ratio_of_damage,
-        base_damage_by_rank,
-        bonus_health_ratio,
+        damage_per_tick_by_rank,
+        damage_per_tick_bonus_health_ratio,
+    })
+}
+
+fn load_vladimir_defensive_ability_two_policy_defaults()
+-> Result<VladimirDefensiveAbilityTwoPolicyDefaults> {
+    let (champion_path, champion_data) = read_champion_file("Vladimir.json")?;
+    let prioritize_offensive_ultimate_before_defensive_ability_two = champion_data
+        .pointer("/simulation/controlled_champion/defensive_ability_two/prioritize_offensive_ultimate_before_defensive_ability_two_when_ready_and_targets_in_range")
+        .and_then(Value::as_bool)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing simulation.controlled_champion.defensive_ability_two.prioritize_offensive_ultimate_before_defensive_ability_two_when_ready_and_targets_in_range in {}",
+                champion_path.display()
+            )
+        })?;
+    Ok(VladimirDefensiveAbilityTwoPolicyDefaults {
+        prioritize_offensive_ultimate_before_defensive_ability_two,
     })
 }
 
@@ -2027,6 +2070,20 @@ pub(crate) fn vladimir_sanguine_pool_defaults(
                 load_vladimir_sanguine_pool_defaults().unwrap_or_else(|err| panic!("{}", err))
             })
             .clone(),
+    )
+}
+
+pub(crate) fn vladimir_defensive_ability_two_policy_defaults(
+    champion_name: &str,
+) -> Option<VladimirDefensiveAbilityTwoPolicyDefaults> {
+    if normalize_key(champion_name) != "vladimir" {
+        return None;
+    }
+    Some(
+        *VLADIMIR_DEFENSIVE_ABILITY_TWO_POLICY_DEFAULTS.get_or_init(|| {
+            load_vladimir_defensive_ability_two_policy_defaults()
+                .unwrap_or_else(|err| panic!("{}", err))
+        }),
     )
 }
 

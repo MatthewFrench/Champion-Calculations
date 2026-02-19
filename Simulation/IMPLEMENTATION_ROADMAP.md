@@ -106,6 +106,10 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Scope:
   - windup, backswing, channel, cancel rules
   - cast lock and interrupt windows
+- Recent progress:
+  - controlled champion cast gating now enforces active cast-lock state (windup/channel/lockout), preventing same-tick multi-cast stacking in engine scheduling.
+  - Vladimir offensive script decisions now emit one cast per decision tick with script-owned priority (`R` before `Q` before `E`) to align with cast-lock sequencing.
+  - offensive-ultimate-before-defensive-ability-two policy is now script-owned and loaded from champion simulation data, not hardcoded in engine.
 - Success criteria:
   - all spells and attack phases use a single cast-state model.
 
@@ -171,6 +175,10 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 13. `IN_PROGRESS` Full combat-time rune system.
 - Scope:
   - move dynamic rune behavior from notes/simplifications into scripts
+- Recent progress:
+  - controlled champion now executes full basic-attack start/windup/hit events, so on-hit runtime effects (for example Lethal Tempo and Grasp paths) can affect outcomes in controlled simulations.
+  - controlled champion spell hits now consume shared runtime ability-bonus effects (for example Luden/Liandry-style ability runtime procs) through generic runtime interfaces.
+  - report diagnostics now explicitly list controlled champion runes that currently have no modeled deterministic or combat-time runtime effect.
 - Success criteria:
   - selected runes contribute in real time when conditions trigger.
 
@@ -305,6 +313,25 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - keep report/build-order metrics loadout-accurate on persistent-cache hits
 - Success criteria:
   - fixed-seed reruns are reproducible, short-budget runs do not random-fallback when partial progress exists, and diagnostics reflect each candidate's own loadout stats.
+
+23g. `DONE` Arm timed-search budget on first timed-phase simulation evaluation.
+- Scope:
+  - avoid consuming `--max-runtime-seconds` during setup/reporting
+  - preserve `maximum_quality` coverage as pre-budget
+  - allow in-flight simulation calls to complete naturally before wrap-up
+- Success criteria:
+  - short timed runs execute scored simulation work before timeout handling, while finalization is not truncated by deadline checks.
+
+23h. `DONE` Add strict-stage heuristic ordering controls and direct fixed-loadout evaluator.
+- Scope:
+  - add strict full-ranking ordering controls for remaining candidates:
+    - item/rune/shard signal weighting
+    - random exploration promotions at the front of queue
+    - zero-variance guard to avoid introducing fake ranking signal when strict seed scores are flat
+  - add direct `controlled_champion_fixed_loadout` mode for one-loadout reports/traces to support controlled A/B comparisons
+  - make strict-score ties deterministic with objective-side tiebreaks and stable key fallback
+- Success criteria:
+  - strict-stage ordering is explainable and tunable, flat-score phases avoid noisy heuristic bias, and users can run direct loadout comparisons without full search overhead.
 
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:

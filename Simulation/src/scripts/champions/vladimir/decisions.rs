@@ -67,6 +67,9 @@ pub(crate) struct VladimirDefensiveAbilityDecisionInput {
     pub now_seconds: f64,
     pub can_cast: bool,
     pub pool_ready_at: f64,
+    pub prioritize_offensive_ultimate_before_pool: bool,
+    pub offensive_ultimate_ready_at: f64,
+    pub offensive_ultimate_has_viable_targets: bool,
 }
 
 #[derive(Debug, Clone, Copy, Default)]
@@ -90,6 +93,18 @@ pub(crate) fn decide_offensive_casts(
         return decisions;
     }
 
+    if input.now_seconds >= input.r_ready_at
+        && let Some(max_distance) = input.r_max_distance
+    {
+        let travel = projectile_travel_seconds(max_distance, input.cast_profile.r_projectile_speed);
+        decisions.r = Some(VladimirAreaCastDecision {
+            ability_id: input.cast_profile.r_ability_id.clone(),
+            impact_delay_seconds: input.cast_profile.r_windup_seconds + travel,
+            next_ready_at: input.now_seconds + input.cooldowns.r_seconds,
+        });
+        return decisions;
+    }
+
     if input.now_seconds >= input.q_ready_at
         && let Some(target) = input.q_target
     {
@@ -101,6 +116,7 @@ pub(crate) fn decide_offensive_casts(
             impact_delay_seconds: input.cast_profile.q_windup_seconds + travel,
             next_ready_at: input.now_seconds + input.cooldowns.q_seconds,
         });
+        return decisions;
     }
 
     if input.now_seconds >= input.e_ready_at
@@ -114,24 +130,19 @@ pub(crate) fn decide_offensive_casts(
         });
     }
 
-    if input.now_seconds >= input.r_ready_at
-        && let Some(max_distance) = input.r_max_distance
-    {
-        let travel = projectile_travel_seconds(max_distance, input.cast_profile.r_projectile_speed);
-        decisions.r = Some(VladimirAreaCastDecision {
-            ability_id: input.cast_profile.r_ability_id.clone(),
-            impact_delay_seconds: input.cast_profile.r_windup_seconds + travel,
-            next_ready_at: input.now_seconds + input.cooldowns.r_seconds,
-        });
-    }
-
     decisions
 }
 
 pub(crate) fn decide_defensive_ability_activations(
     input: VladimirDefensiveAbilityDecisionInput,
 ) -> VladimirDefensiveAbilityDecisions {
+    let should_defer_pool_for_offensive_ultimate = input.prioritize_offensive_ultimate_before_pool
+        && input.can_cast
+        && input.now_seconds >= input.offensive_ultimate_ready_at
+        && input.offensive_ultimate_has_viable_targets;
     VladimirDefensiveAbilityDecisions {
-        cast_pool: input.can_cast && input.now_seconds >= input.pool_ready_at,
+        cast_pool: input.can_cast
+            && input.now_seconds >= input.pool_ready_at
+            && !should_defer_pool_for_offensive_ultimate,
     }
 }

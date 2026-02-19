@@ -1,6 +1,8 @@
 use super::*;
 use serde_json::json;
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
 
 #[test]
 fn cache_seed_partition_uses_shared_bucket_for_runtime_random_seed() {
@@ -111,4 +113,54 @@ fn level_scaled_defaults_do_not_override_explicit_simulation_values() {
     );
     assert!((sim.protoplasm_bonus_health - 777.0).abs() < f64::EPSILON);
     assert!((sim.protoplasm_heal_total - 444.0).abs() < f64::EPSILON);
+}
+
+#[test]
+fn time_budget_deadline_arms_only_after_non_coverage_simulation_in_maximum_quality() {
+    let hard_deadline_state = Arc::new(Mutex::new(None));
+    arm_time_budget_deadline_if_unset(
+        &hard_deadline_state,
+        Some(Duration::from_secs(1)),
+        true,
+        "coverage_stage",
+    );
+    assert!(
+        hard_deadline_state
+            .lock()
+            .ok()
+            .and_then(|state| *state)
+            .is_none()
+    );
+
+    arm_time_budget_deadline_if_unset(
+        &hard_deadline_state,
+        Some(Duration::from_secs(1)),
+        true,
+        "seed_search:portfolio",
+    );
+    assert!(
+        hard_deadline_state
+            .lock()
+            .ok()
+            .and_then(|state| *state)
+            .is_some()
+    );
+}
+
+#[test]
+fn time_budget_deadline_arms_on_coverage_simulation_when_not_deferred() {
+    let hard_deadline_state = Arc::new(Mutex::new(None));
+    arm_time_budget_deadline_if_unset(
+        &hard_deadline_state,
+        Some(Duration::from_secs(1)),
+        false,
+        "coverage_stage",
+    );
+    assert!(
+        hard_deadline_state
+            .lock()
+            .ok()
+            .and_then(|state| *state)
+            .is_some()
+    );
 }

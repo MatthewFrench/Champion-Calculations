@@ -1,6 +1,28 @@
 # Improvement Tracker
 
 ## Done
+- Moved remaining controlled champion offensive-vs-defensive ordering policy out of engine into script/data ownership:
+  - offensive-ultimate-before-defensive-ability-two decision is now resolved in Vladimir script logic
+  - policy default now loads from `Characters/Vladimir.json` under `simulation.controlled_champion.defensive_ability_two`
+- Added controlled champion basic-attack event pipeline and runtime integration:
+  - controlled champion now runs recurring auto-attack start/windup/hit events with hitbox/projectile checks
+  - controlled champion attack cadence uses shared runtime attack-speed multipliers and cast-lock/untargetable guards
+  - controlled champion spell hits now also consume shared runtime ability-bonus effects
+- Added explicit controlled-champion unmodeled-rune diagnostics:
+  - loadout resolution now records rune selections that have neither deterministic stat effects nor modeled combat-time runtime effects
+  - reports and JSON output now surface these unmodeled runes explicitly
+- Improved controlled-champion comparison and strict-stage search behavior:
+  - added `controlled_champion_fixed_loadout` mode for direct item/rune/shard A/B evaluations with dedicated report/trace outputs
+  - added strict-stage heuristic ordering knobs (`strict_ranking_enable_heuristic_ordering`, rune/shard signal weights, exploration promotions)
+  - added a zero-variance guard so strict-stage heuristic ordering does not fabricate signal when strict seed scores are flat
+  - made strict-score tie resolution deterministic with objective-side tiebreaks plus stable build-key fallback
+- Improved Vladimir Sanguine Pool modeling and trace observability:
+  - pool damage now executes as per-tick area damage-over-time with range checks per tick (using canonical `damage_per_tick` + `tick_interval_seconds` + `range`)
+  - area-hit trace events now include enemy-hit counts for pool/area casts, improving validation/debugging of in-range assumptions
+- Updated timed-budget semantics to measure timed search simulation work instead of setup time:
+  - runtime budget deadline is now armed lazily on first timed-phase simulation evaluation
+  - `maximum_quality` coverage remains pre-budget and does not arm timed deadline
+  - very short budgets no longer expire before opponent scenario setup can enter simulation scoring
 - Closed high-impact search and reporting correctness gaps from PR review:
   - full-loadout `beam` and `greedy` now co-optimize loadout selection while expanding item candidates
   - adaptive/bleed strategy ordering is now deterministic before index-based seed math (fixed-seed reruns stay reproducible)

@@ -37,6 +37,10 @@
     "bleed_budget": 300,
     "bleed_mutation_rate": 0.35,
     "multi_scenario_worst_weight": 0.35,
+    "strict_ranking_enable_heuristic_ordering": true,
+    "strict_ranking_rune_signal_weight": 0.3,
+    "strict_ranking_shard_signal_weight": 0.2,
+    "strict_ranking_exploration_promotions": 1,
     "seed": 0
   },
   "search_quality_profile_defaults": {

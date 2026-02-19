@@ -50,12 +50,39 @@ fn offensive_decisions_schedule_ready_spells() {
     assert!((q.impact_delay_seconds - 0.70).abs() < 1e-9);
     assert!((q.next_ready_at - 13.50).abs() < 1e-9);
 
-    let e = decisions.e.expect("e cast should be scheduled");
-    assert_eq!(e.ability_id, "vladimir_tides_of_blood");
-    assert!((e.impact_delay_seconds - 0.80).abs() < 1e-9);
-    assert!((e.next_ready_at - 15.00).abs() < 1e-9);
-
+    assert!(decisions.e.is_none());
     assert!(decisions.r.is_none());
+}
+
+#[test]
+fn offensive_decisions_prioritize_ultimate_when_available() {
+    let profile = test_profile();
+    let decisions = decide_offensive_casts(VladimirOffensiveDecisionInput {
+        now_seconds: 10.0,
+        can_cast: true,
+        q_ready_at: 0.0,
+        e_ready_at: 0.0,
+        r_ready_at: 0.0,
+        cooldowns: VladimirAbilityCooldowns {
+            q_seconds: 3.5,
+            e_seconds: 5.0,
+            r_seconds: 60.0,
+        },
+        cast_profile: profile,
+        q_target: Some(VladimirTargetSnapshot {
+            target_index: 2,
+            distance: 600.0,
+        }),
+        e_max_distance: Some(500.0),
+        r_max_distance: Some(650.0),
+    });
+
+    let r = decisions.r.expect("r cast should be scheduled");
+    assert_eq!(r.ability_id, "vladimir_hemoplague");
+    assert!((r.impact_delay_seconds - 0.575).abs() < 1e-9);
+    assert!((r.next_ready_at - 70.0).abs() < 1e-9);
+    assert!(decisions.q.is_none());
+    assert!(decisions.e.is_none());
 }
 
 #[test]
@@ -90,6 +117,9 @@ fn defensive_ability_decisions_match_trigger_conditions() {
         now_seconds: 10.0,
         can_cast: true,
         pool_ready_at: 8.0,
+        prioritize_offensive_ultimate_before_pool: false,
+        offensive_ultimate_ready_at: f64::INFINITY,
+        offensive_ultimate_has_viable_targets: false,
     });
     assert!(decisions.cast_pool);
 }
@@ -100,6 +130,9 @@ fn defensive_ability_decisions_require_readiness_and_cast_permission() {
         now_seconds: 10.0,
         can_cast: true,
         pool_ready_at: 11.0,
+        prioritize_offensive_ultimate_before_pool: false,
+        offensive_ultimate_ready_at: f64::INFINITY,
+        offensive_ultimate_has_viable_targets: false,
     });
     assert!(!not_ready.cast_pool);
 
@@ -107,6 +140,32 @@ fn defensive_ability_decisions_require_readiness_and_cast_permission() {
         now_seconds: 10.0,
         can_cast: false,
         pool_ready_at: 0.0,
+        prioritize_offensive_ultimate_before_pool: false,
+        offensive_ultimate_ready_at: f64::INFINITY,
+        offensive_ultimate_has_viable_targets: false,
     });
     assert!(!cannot_cast.cast_pool);
+}
+
+#[test]
+fn defensive_ability_decisions_defer_pool_for_ready_ultimate_when_enabled() {
+    let defer = decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
+        now_seconds: 10.0,
+        can_cast: true,
+        pool_ready_at: 0.0,
+        prioritize_offensive_ultimate_before_pool: true,
+        offensive_ultimate_ready_at: 9.0,
+        offensive_ultimate_has_viable_targets: true,
+    });
+    assert!(!defer.cast_pool);
+
+    let no_targets = decide_defensive_ability_activations(VladimirDefensiveAbilityDecisionInput {
+        now_seconds: 10.0,
+        can_cast: true,
+        pool_ready_at: 0.0,
+        prioritize_offensive_ultimate_before_pool: true,
+        offensive_ultimate_ready_at: 9.0,
+        offensive_ultimate_has_viable_targets: false,
+    });
+    assert!(no_targets.cast_pool);
 }

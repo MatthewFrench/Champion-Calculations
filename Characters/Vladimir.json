@@ -606,6 +606,13 @@
     "Mage",
     "Fighter"
   ],
+  "simulation": {
+    "controlled_champion": {
+      "defensive_ability_two": {
+        "prioritize_offensive_ultimate_before_defensive_ability_two_when_ready_and_targets_in_range": true
+      }
+    }
+  },
   "schema_notes": {
     "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).",
     "value_percent": "A fixed percentage value (stored as percent, not decimal).",
@@ -639,7 +646,14 @@
       "op": "Operation applied to all terms. Common: add, multiply."
     },
     "base_by_rank": "Array of base values by ability rank (1-5).",
-    "basic_attack_raw_timing_stats": "Raw timing values from generated data (attackCastTime, attackDelayOffset, attackTotalTime, attackSpeedRatio, acquisitionRadius, gameplayRadius)."
+    "basic_attack_raw_timing_stats": "Raw timing values from generated data (attackCastTime, attackDelayOffset, attackTotalTime, attackSpeedRatio, acquisitionRadius, gameplayRadius).",
+    "simulation": {
+      "controlled_champion": {
+        "defensive_ability_two": {
+          "prioritize_offensive_ultimate_before_defensive_ability_two_when_ready_and_targets_in_range": "If true, defer defensive ability two when offensive ultimate is ready and has viable targets."
+        }
+      }
+    }
   },
   "base_stats": {
     "attack_speed": {

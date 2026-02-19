@@ -14,7 +14,11 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Runtime metrics are resolved from canonical base data plus active buff state through shared stat queries:
   - cooldown metrics (ability/item/neutral)
   - scalar combat metrics (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
+- Controlled champion now runs explicit basic-attack start/windup/hit events (hitbox/projectile-aware) and uses shared runtime attack-speed/on-hit effect paths.
+- Controlled champion cast-lock state now gates cast permission, preventing same-tick spell stacking.
 - Controlled champion reports and trace outputs focus on the optimized build outcome (no baseline comparison workflow).
+- Reports explicitly flag controlled champion rune selections that are currently unmodeled in deterministic/runtime combat logic.
+- Added a direct fixed-loadout evaluation mode for controlled champion A/B comparisons without search (`controlled_champion_fixed_loadout`).
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`
   - `Items/`
@@ -35,12 +39,14 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - runtime budget starts after coverage stage completes
   - popcorn progress-window timeout is applied after coverage (coverage itself is protected from popcorn early-stop checks)
   - if coverage is incomplete (timeout boundary or non-finite candidate gaps), search continues in explicit degraded mode and reports a coverage warning flag
+- Runtime budget for timed search now arms on first timed-phase simulation evaluation (not during setup/wrap-up).
 - Persistent full-score cache partitioning now ignores runtime-random default seed values:
   - deterministic seeds still partition cache explicitly
   - default random-seed runs reuse a shared cache partition
 - Full-loadout `beam` and `greedy` now co-optimize loadout selection with item expansion.
 - Adaptive/bleed strategy-key ordering is normalized before seed-index derivation for fixed-seed reproducibility.
 - Seed-stage partial candidates are deterministically completed before strict full-ranking fallback in short-budget runs.
+- Strict full-ranking can heuristic-order remaining candidates (item/rune/shard signals) with configurable random exploration promotions.
 
 ## Directory Overview
 - `Simulation/`: Rust simulator, scenarios, reports, docs, and search pipeline.

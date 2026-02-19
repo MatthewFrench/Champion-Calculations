@@ -236,7 +236,7 @@ pub(super) fn write_controlled_champion_report_markdown(
         .sum::<usize>();
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `{}` / `{}` / `{}` / `{}`\n- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `{:.2}/{:.2}/{:.2}/{:.2}/{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- Full evaluations cache hits/misses/waits: `{}/{}/{}`\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `{}` / `{}` / `{}` / `{}`\n- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `{:.2}/{:.2}/{:.2}/{:.2}/{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- Full evaluations cache hits/misses/waits: `{}/{}/{}`\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Strict ordering heuristic (enabled / rune_weight / shard_weight / exploration_promotions): `{}` / `{:.2}` / `{:.2}` / `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
         format_usize_with_commas(diagnostics.scenario_count),
@@ -269,6 +269,10 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_usize_with_commas(diagnostics.strict_non_finite_candidates),
         format_usize_with_commas(diagnostics.strict_candidates_skipped_timeout),
         diagnostics.strict_completion_percent,
+        diagnostics.strict_heuristic_ordering_enabled,
+        diagnostics.strict_ranking_rune_signal_weight,
+        diagnostics.strict_ranking_shard_signal_weight,
+        format_usize_with_commas(diagnostics.strict_random_promotions_done),
         format_usize_with_commas(diagnostics.bleed_candidates_injected),
         format_usize_with_commas(diagnostics.adaptive_candidates_injected),
         format_f64_with_commas(seed_mean, 2),
@@ -431,6 +435,14 @@ pub(super) fn write_controlled_champion_report_markdown(
         }
         for note in &enemy_loadout.skipped_notes {
             content.push_str(&format!("  - Enemies: {}\n", note));
+        }
+    }
+    if !controlled_champion_loadout.unmodeled_rune_names.is_empty() {
+        content.push_str(
+            "- Controlled champion runes with no modeled deterministic/runtime combat effect:\n",
+        );
+        for rune_name in &controlled_champion_loadout.unmodeled_rune_names {
+            content.push_str(&format!("  - {}\n", rune_name));
         }
     }
     content.push('\n');
@@ -739,6 +751,7 @@ pub(super) fn write_controlled_champion_report_json(
         },
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
+        "controlled_champion_unmodeled_runes": controlled_champion_loadout.unmodeled_rune_names,
         "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {
             let key = to_norm_key(&enemy.name);
             let preset = enemy_presets_used.get(&key);
@@ -822,6 +835,10 @@ pub(super) fn write_controlled_champion_report_json(
             "strict_non_finite_candidates": diagnostics.strict_non_finite_candidates,
             "strict_candidates_skipped_timeout": diagnostics.strict_candidates_skipped_timeout,
             "strict_completion_percent": diagnostics.strict_completion_percent,
+            "strict_heuristic_ordering_enabled": diagnostics.strict_heuristic_ordering_enabled,
+            "strict_ranking_rune_signal_weight": diagnostics.strict_ranking_rune_signal_weight,
+            "strict_ranking_shard_signal_weight": diagnostics.strict_ranking_shard_signal_weight,
+            "strict_random_promotions_done": diagnostics.strict_random_promotions_done,
             "unique_scored_candidates": diagnostics.unique_scored_candidates,
             "time_budget_seconds": diagnostics.time_budget_seconds,
             "popcorn_window_seconds": diagnostics.popcorn_window_seconds,

@@ -263,6 +263,25 @@ fn complete_partial_candidate_to_full(
     canonical_build_candidate(candidate)
 }
 
+fn arm_time_budget_deadline_if_unset(
+    hard_deadline_state: &Arc<Mutex<Option<Instant>>>,
+    time_budget: Option<Duration>,
+    defer_hard_budget_until_coverage: bool,
+    search_type: &str,
+) {
+    let Some(duration) = time_budget else {
+        return;
+    };
+    if defer_hard_budget_until_coverage && search_type == "coverage_stage" {
+        return;
+    }
+    if let Ok(mut state) = hard_deadline_state.lock()
+        && state.is_none()
+    {
+        *state = Some(Instant::now() + duration);
+    }
+}
+
 fn candidate_matches_locked_asset(candidate: &BuildKey, asset: &CoverageLockedAsset) -> bool {
     match asset {
         CoverageLockedAsset::Item(item_idx) => candidate.item_indices.contains(item_idx),
@@ -567,6 +586,117 @@ fn estimated_legal_loadout_count(loadout_domain: &crate::data::LoadoutDomain) ->
         }
     }
     rune_pages.saturating_mul(shard_count) as f64
+}
+
+fn heuristic_sort_remaining_candidates_for_strict_ranking(
+    mut remaining_keys: Vec<BuildKey>,
+    strict_scores: &HashMap<BuildKey, f64>,
+    item_pool_len: usize,
+    rune_signal_weight: f64,
+    shard_signal_weight: f64,
+    seed: u64,
+    exploration_promotions: usize,
+) -> (Vec<BuildKey>, usize) {
+    if remaining_keys.len() <= 1 {
+        return (remaining_keys, 0);
+    }
+
+    let finite_scores = strict_scores
+        .values()
+        .copied()
+        .filter(|score| score.is_finite())
+        .collect::<Vec<_>>();
+    if finite_scores.len() > 1 {
+        let min_score = finite_scores.iter().copied().fold(f64::INFINITY, f64::min);
+        let max_score = finite_scores
+            .iter()
+            .copied()
+            .fold(f64::NEG_INFINITY, f64::max);
+        let span = max_score - min_score;
+        if span > 1e-9 {
+            let mut item_signals = vec![0.0_f64; item_pool_len];
+            let mut rune_signals = HashMap::<String, f64>::new();
+            let mut shard_signals = HashMap::<String, f64>::new();
+            for (candidate, score) in strict_scores {
+                if !score.is_finite() {
+                    continue;
+                }
+                let centered = ((*score - min_score) / span) - 0.5;
+                for &item_idx in &candidate.item_indices {
+                    if let Some(signal) = item_signals.get_mut(item_idx) {
+                        *signal += centered;
+                    }
+                }
+                for rune_name in &candidate.loadout_selection.rune_names {
+                    *rune_signals.entry(to_norm_key(rune_name)).or_insert(0.0) += centered;
+                }
+                for (slot_idx, shard_stat) in
+                    candidate.loadout_selection.shard_stats.iter().enumerate()
+                {
+                    let shard_key = format!("{}:{}", slot_idx, to_norm_key(shard_stat));
+                    *shard_signals.entry(shard_key).or_insert(0.0) += centered;
+                }
+            }
+
+            let mut ranked = remaining_keys
+                .into_iter()
+                .map(|candidate| {
+                    let item_score = candidate
+                        .item_indices
+                        .iter()
+                        .filter_map(|idx| item_signals.get(*idx).copied())
+                        .sum::<f64>();
+                    let rune_score = candidate
+                        .loadout_selection
+                        .rune_names
+                        .iter()
+                        .map(|rune_name| {
+                            rune_signals
+                                .get(&to_norm_key(rune_name))
+                                .copied()
+                                .unwrap_or(0.0)
+                        })
+                        .sum::<f64>();
+                    let shard_score = candidate
+                        .loadout_selection
+                        .shard_stats
+                        .iter()
+                        .enumerate()
+                        .map(|(slot_idx, shard_stat)| {
+                            let shard_key = format!("{}:{}", slot_idx, to_norm_key(shard_stat));
+                            shard_signals.get(&shard_key).copied().unwrap_or(0.0)
+                        })
+                        .sum::<f64>();
+                    let heuristic_score = item_score
+                        + rune_signal_weight * rune_score
+                        + shard_signal_weight * shard_score;
+                    (candidate, heuristic_score)
+                })
+                .collect::<Vec<_>>();
+            ranked.sort_by(|(a_key, a_score), (b_key, b_score)| {
+                b_score
+                    .partial_cmp(a_score)
+                    .unwrap_or(Ordering::Equal)
+                    .then_with(|| build_key_cache_string(a_key).cmp(&build_key_cache_string(b_key)))
+            });
+            remaining_keys = ranked.into_iter().map(|(candidate, _)| candidate).collect();
+        }
+    }
+
+    let mut promotions_done = 0usize;
+    let mut promotion_seed = seed ^ 0x4f6d_13aa_a31b_2f17;
+    for _ in 0..exploration_promotions {
+        if remaining_keys.len() <= 1 {
+            break;
+        }
+        let idx = rand_index(&mut promotion_seed, remaining_keys.len());
+        if idx > 0 {
+            remaining_keys.swap(0, idx);
+            promotions_done += 1;
+        }
+    }
+
+    (remaining_keys, promotions_done)
 }
 
 fn estimate_close_to_optimal_probability(
@@ -903,6 +1033,383 @@ fn default_run_output_directory(
         ))
 }
 
+fn default_fixed_loadout_output_directory(
+    search_quality_profile: SearchQualityProfile,
+    run_label: &str,
+) -> PathBuf {
+    simulation_dir()
+        .join("output")
+        .join("runs")
+        .join("controlled_champion")
+        .join("fixed_loadout")
+        .join(search_quality_profile_key(search_quality_profile))
+        .join(to_norm_key(run_label))
+}
+
+pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
+    scenario_path: &Path,
+    options: &ControlledChampionFixedLoadoutOptions<'_>,
+) -> Result<()> {
+    let items = load_items()?;
+    let urf = load_urf_buffs()?;
+    let champion_bases = load_champion_bases()?;
+    let scenario = load_json(scenario_path)?;
+
+    let simulation_config = scenario
+        .get("simulation")
+        .ok_or_else(|| anyhow!("Missing simulation"))?;
+    let mut sim = parse_simulation_config(simulation_config)?;
+    let controlled_champion_config = parse_controlled_champion_config(
+        &scenario,
+        &champion_bases,
+        sim.champion_level,
+        &sim.stack_overrides,
+    )?;
+    let simulation_level_before_controlled_override = sim.champion_level;
+    sim.champion_level = controlled_champion_config.level;
+    apply_level_scaled_sim_defaults_after_controlled_level_override(
+        &mut sim,
+        simulation_config,
+        simulation_level_before_controlled_override,
+    );
+
+    let mut controlled_champion_loadout_selection = controlled_champion_config.loadout_selection;
+    let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
+    let controlled_champion_base =
+        champion_at_level(&controlled_champion_config.base, sim.champion_level);
+    let controlled_champion_name = controlled_champion_base.name.clone();
+    sim.controlled_champion_script = resolve_controlled_champion_script(&controlled_champion_name);
+
+    let loadout_domain = build_loadout_domain();
+    controlled_champion_loadout_selection =
+        ensure_complete_loadout_selection(&controlled_champion_loadout_selection, &loadout_domain)?;
+    if let Some(runes) = &options.fixed_rune_names {
+        controlled_champion_loadout_selection.rune_names = runes.clone();
+    }
+    if let Some(shards) = &options.fixed_shard_stats {
+        controlled_champion_loadout_selection.shard_stats = shards.clone();
+    }
+    controlled_champion_loadout_selection =
+        ensure_complete_loadout_selection(&controlled_champion_loadout_selection, &loadout_domain)?;
+    let controlled_champion_loadout = resolve_loadout(
+        &controlled_champion_loadout_selection,
+        sim.champion_level,
+        true,
+    )?;
+    let fixed_build_items = item_pool_from_names(&items, &options.fixed_item_names)?;
+
+    let enemy_scenarios_raw = parse_opponent_encounters(
+        &scenario,
+        &champion_bases,
+        sim.champion_level,
+        &sim.stack_overrides,
+    )?;
+    let enemy_scenarios = enemy_scenarios_raw
+        .iter()
+        .map(|(name, weight, enemies)| {
+            let scaled = enemies
+                .iter()
+                .cloned()
+                .map(|mut enemy| {
+                    enemy.base = champion_at_level(&enemy.base, enemy.level);
+                    enemy
+                })
+                .collect::<Vec<_>>();
+            (name.clone(), *weight, scaled)
+        })
+        .collect::<Vec<_>>();
+
+    let enemy_presets = load_enemy_urf_presets()?;
+    validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
+    let mut enemy_build_scenarios = Vec::new();
+    for (name, weight, enemies) in &enemy_scenarios {
+        let mut builds = Vec::new();
+        for enemy in enemies {
+            let preset_key = to_norm_key(&enemy.name);
+            let preset = enemy_presets.get(&preset_key).ok_or_else(|| {
+                anyhow!(
+                    "Missing URF preset for enemy champion '{}'. Add it to {}.",
+                    enemy.name,
+                    enemy_preset_data_path().display()
+                )
+            })?;
+            let build_items = item_pool_from_names(&items, &preset.item_names)?;
+            let preset_enemy_loadout =
+                resolve_loadout(&enemy_loadout_from_preset(preset), enemy.level, false)?;
+            let enemy_bonus_stats = preset_enemy_loadout.bonus_stats;
+            let mut enemy_with_loadout = enemy.clone();
+            enemy_with_loadout.loadout_item_names = preset.item_names.clone();
+            enemy_with_loadout.loadout_rune_names = preset.runes.clone();
+            enemy_with_loadout.loadout_shards = preset.shards.clone();
+            builds.push((enemy_with_loadout, build_items, enemy_bonus_stats));
+        }
+        enemy_build_scenarios.push((name.clone(), *weight, builds));
+    }
+    let enemy_builds = enemy_build_scenarios
+        .first()
+        .map(|(_, _, builds)| builds.clone())
+        .unwrap_or_default();
+
+    let mut search_cfg = parse_build_search(
+        scenario
+            .get("search")
+            .ok_or_else(|| anyhow!("Missing search"))?,
+    )?;
+    apply_search_quality_profile(&mut search_cfg, options.search_quality_profile);
+    let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
+    let objective_component_weights = normalized_objective_weights(
+        search_cfg.objective_survival_weight,
+        search_cfg.objective_damage_weight,
+        search_cfg.objective_healing_weight,
+        search_cfg.objective_enemy_kills_weight,
+        search_cfg.objective_invulnerable_seconds_weight,
+    );
+    let scenario_reference_outcomes = enemy_build_scenarios
+        .iter()
+        .map(|(_, _, enemy_builds_s)| {
+            let damage_reference = enemy_builds_s
+                .iter()
+                .map(|(enemy, build, bonus_stats)| {
+                    derive_enemy_combat_stats(enemy, build, bonus_stats, &sim, &urf).max_health
+                })
+                .sum::<f64>()
+                .max(1.0);
+            CombatOutcome {
+                time_alive_seconds: sim.max_time_seconds.max(1.0),
+                damage_dealt: damage_reference,
+                healing_done: controlled_champion_base.base_health.max(1.0),
+                enemy_kills: enemy_builds_s.len().max(1),
+                invulnerable_seconds: sim.max_time_seconds.max(1.0),
+            }
+        })
+        .collect::<Vec<_>>();
+    let objective_eval_ctx = ObjectiveEvalContext {
+        controlled_champion_base: &controlled_champion_base,
+        controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
+        enemy_build_scenarios: &enemy_build_scenarios,
+        sim: &sim,
+        urf: &urf,
+        scenario_reference_outcomes: &scenario_reference_outcomes,
+        weights: objective_component_weights,
+        worst_case_weight: objective_worst_case_weight,
+    };
+    let (fixed_score, fixed_outcome, fixed_breakdown) =
+        aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
+            &objective_eval_ctx,
+            &fixed_build_items,
+            &controlled_champion_loadout.bonus_stats,
+            Some(&controlled_champion_loadout_selection),
+        );
+
+    let run_label = options
+        .fixed_eval_label
+        .as_deref()
+        .unwrap_or("fixed_loadout");
+    let default_output_dir =
+        default_fixed_loadout_output_directory(options.search_quality_profile, run_label);
+    fs::create_dir_all(&default_output_dir)?;
+    let controlled_champion_key = to_norm_key(&controlled_champion_name);
+    let report_path = options
+        .report_path_override
+        .map(PathBuf::from)
+        .unwrap_or_else(|| {
+            default_output_dir.join(format!("{controlled_champion_key}_fixed_loadout_report.md"))
+        });
+    if let Some(parent) = report_path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    let json_report_path = report_path.with_extension("json");
+    let trace_markdown_path =
+        default_output_dir.join(format!("{controlled_champion_key}_fixed_loadout_trace.md"));
+    let trace_json_path = default_output_dir.join(format!(
+        "{controlled_champion_key}_fixed_loadout_trace.json"
+    ));
+
+    let mut trace_sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+        controlled_champion_base.clone(),
+        &fixed_build_items,
+        &controlled_champion_loadout.bonus_stats,
+        Some(&controlled_champion_loadout_selection),
+        None,
+        Some(&controlled_champion_stack_overrides),
+        &enemy_builds,
+        sim.clone(),
+        urf.clone(),
+    );
+    trace_sim.enable_trace();
+    while trace_sim.step(1) {}
+    let trace_events = trace_sim.trace_events();
+    fs::write(
+        &trace_markdown_path,
+        trace_events
+            .iter()
+            .map(|entry| format!("- {entry}"))
+            .collect::<Vec<_>>()
+            .join("\n"),
+    )?;
+    let trace_json = json!({
+        "schema_version": 2,
+        "event_encoding": "structured",
+        "events": trace_events
+            .iter()
+            .map(|entry| structured_trace_event(entry))
+            .collect::<Vec<_>>(),
+    });
+    fs::write(&trace_json_path, serde_json::to_string_pretty(&trace_json)?)?;
+
+    let markdown_report = format!(
+        "# Controlled Champion Fixed Loadout Evaluation\n\n- Scenario: `{}`\n- Search quality profile: `{}`\n- Controlled champion: `{}`\n- Build items: `{}`\n- Runes: `{}`\n- Shards: `{}`\n\n## Headline\n- Objective score: **{:.4}**\n- Outcome (time_alive / damage / healing / enemy_kills / invulnerable_seconds): **{:.2}s / {:.1} / {:.1} / {} / {:.2}s**\n\n## Objective Score Breakdown\n- Weighted-mean score: `{:.4}`\n- Worst-case scenario score: `{:.4}`\n- Worst-case blend weight: `{:.2}`\n- Final blended objective score: `{:.4}`\n- survival: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- damage: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- healing: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- enemy_kills: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- invulnerable_seconds: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n\n## Notes\n- This mode evaluates one fixed build and loadout directly; no candidate search or mutation is performed.\n- Trace markdown: `{}`\n- Trace json: `{}`\n",
+        scenario_path.display(),
+        search_quality_profile_key(options.search_quality_profile),
+        controlled_champion_name,
+        fixed_build_items
+            .iter()
+            .map(|item| item.name.clone())
+            .collect::<Vec<_>>()
+            .join(", "),
+        controlled_champion_loadout_selection.rune_names.join(", "),
+        controlled_champion_loadout_selection.shard_stats.join(", "),
+        fixed_score,
+        fixed_outcome.time_alive_seconds,
+        fixed_outcome.damage_dealt,
+        fixed_outcome.healing_done,
+        fixed_outcome.enemy_kills,
+        fixed_outcome.invulnerable_seconds,
+        fixed_breakdown.weighted_mean_score,
+        fixed_breakdown.worst_case_score,
+        fixed_breakdown.worst_case_weight,
+        fixed_breakdown.final_score,
+        fixed_breakdown.survival.weight,
+        fixed_breakdown.survival.normalized_ratio,
+        fixed_breakdown.survival.contribution,
+        fixed_breakdown.survival.impact_percent,
+        fixed_breakdown.damage.weight,
+        fixed_breakdown.damage.normalized_ratio,
+        fixed_breakdown.damage.contribution,
+        fixed_breakdown.damage.impact_percent,
+        fixed_breakdown.healing.weight,
+        fixed_breakdown.healing.normalized_ratio,
+        fixed_breakdown.healing.contribution,
+        fixed_breakdown.healing.impact_percent,
+        fixed_breakdown.enemy_kills.weight,
+        fixed_breakdown.enemy_kills.normalized_ratio,
+        fixed_breakdown.enemy_kills.contribution,
+        fixed_breakdown.enemy_kills.impact_percent,
+        fixed_breakdown.invulnerable_seconds.weight,
+        fixed_breakdown.invulnerable_seconds.normalized_ratio,
+        fixed_breakdown.invulnerable_seconds.contribution,
+        fixed_breakdown.invulnerable_seconds.impact_percent,
+        format_repo_relative_path(&trace_markdown_path),
+        format_repo_relative_path(&trace_json_path),
+    );
+    fs::write(&report_path, markdown_report)?;
+
+    let structured_report = json!({
+        "scenario_path": scenario_path.display().to_string(),
+        "search_quality_profile": search_quality_profile_key(options.search_quality_profile),
+        "controlled_champion_name": controlled_champion_name,
+        "items": fixed_build_items.iter().map(|item| item.name.clone()).collect::<Vec<_>>(),
+        "runes": controlled_champion_loadout_selection.rune_names,
+        "shards": controlled_champion_loadout_selection.shard_stats,
+        "objective_score": fixed_score,
+        "outcome": {
+            "time_alive_seconds": fixed_outcome.time_alive_seconds,
+            "damage_dealt": fixed_outcome.damage_dealt,
+            "healing_done": fixed_outcome.healing_done,
+            "enemy_kills": fixed_outcome.enemy_kills,
+            "invulnerable_seconds": fixed_outcome.invulnerable_seconds
+        },
+        "objective_breakdown": {
+            "weighted_mean_score": fixed_breakdown.weighted_mean_score,
+            "worst_case_score": fixed_breakdown.worst_case_score,
+            "worst_case_weight": fixed_breakdown.worst_case_weight,
+            "final_score": fixed_breakdown.final_score,
+            "components": {
+                "survival": {
+                    "weight": fixed_breakdown.survival.weight,
+                    "normalized_ratio": fixed_breakdown.survival.normalized_ratio,
+                    "contribution": fixed_breakdown.survival.contribution,
+                    "impact_percent": fixed_breakdown.survival.impact_percent
+                },
+                "damage": {
+                    "weight": fixed_breakdown.damage.weight,
+                    "normalized_ratio": fixed_breakdown.damage.normalized_ratio,
+                    "contribution": fixed_breakdown.damage.contribution,
+                    "impact_percent": fixed_breakdown.damage.impact_percent
+                },
+                "healing": {
+                    "weight": fixed_breakdown.healing.weight,
+                    "normalized_ratio": fixed_breakdown.healing.normalized_ratio,
+                    "contribution": fixed_breakdown.healing.contribution,
+                    "impact_percent": fixed_breakdown.healing.impact_percent
+                },
+                "enemy_kills": {
+                    "weight": fixed_breakdown.enemy_kills.weight,
+                    "normalized_ratio": fixed_breakdown.enemy_kills.normalized_ratio,
+                    "contribution": fixed_breakdown.enemy_kills.contribution,
+                    "impact_percent": fixed_breakdown.enemy_kills.impact_percent
+                },
+                "invulnerable_seconds": {
+                    "weight": fixed_breakdown.invulnerable_seconds.weight,
+                    "normalized_ratio": fixed_breakdown.invulnerable_seconds.normalized_ratio,
+                    "contribution": fixed_breakdown.invulnerable_seconds.contribution,
+                    "impact_percent": fixed_breakdown.invulnerable_seconds.impact_percent
+                }
+            }
+        },
+        "reference_outcome": {
+            "time_alive_seconds": scenario_reference_outcomes
+                .iter()
+                .map(|outcome| outcome.time_alive_seconds)
+                .sum::<f64>()
+                / (scenario_reference_outcomes.len().max(1) as f64),
+            "damage_dealt": scenario_reference_outcomes
+                .iter()
+                .map(|outcome| outcome.damage_dealt)
+                .sum::<f64>()
+                / (scenario_reference_outcomes.len().max(1) as f64),
+            "healing_done": scenario_reference_outcomes
+                .iter()
+                .map(|outcome| outcome.healing_done)
+                .sum::<f64>()
+                / (scenario_reference_outcomes.len().max(1) as f64),
+            "enemy_kills": scenario_reference_outcomes
+                .iter()
+                .map(|outcome| outcome.enemy_kills)
+                .sum::<usize>()
+                / scenario_reference_outcomes.len().max(1),
+            "invulnerable_seconds": scenario_reference_outcomes
+                .iter()
+                .map(|outcome| outcome.invulnerable_seconds)
+                .sum::<f64>()
+                / (scenario_reference_outcomes.len().max(1) as f64)
+        },
+        "notes": [
+            "No search stage is run in controlled_champion_fixed_loadout mode.",
+            "This report is intended for direct loadout-to-loadout comparisons."
+        ]
+    });
+    fs::write(
+        &json_report_path,
+        serde_json::to_string_pretty(&structured_report)?,
+    )?;
+
+    println!(
+        "Fixed-loadout report written: {}",
+        format_repo_relative_path(&report_path)
+    );
+    println!(
+        "Fixed-loadout JSON written: {}",
+        format_repo_relative_path(&json_report_path)
+    );
+    println!(
+        "Fixed-loadout trace written: {}",
+        format_repo_relative_path(&trace_markdown_path)
+    );
+
+    Ok(())
+}
+
 pub(super) fn run_controlled_champion_scenario(
     scenario_path: &Path,
     options: &ControlledChampionRunOptions<'_>,
@@ -931,11 +1438,7 @@ pub(super) fn run_controlled_champion_scenario(
         .map(Duration::from_secs_f64);
     let defer_hard_budget_until_coverage =
         matches!(search_quality_profile, SearchQualityProfile::MaximumQuality);
-    let hard_deadline_state = Arc::new(Mutex::new(if defer_hard_budget_until_coverage {
-        None
-    } else {
-        time_budget.map(|duration| run_start + duration)
-    }));
+    let hard_deadline_state = Arc::new(Mutex::new(None::<Instant>));
     let progress_state = Arc::new(Mutex::new(SignificantProgressState {
         best_overall_score: f64::NEG_INFINITY,
         best_significant_score: f64::NEG_INFINITY,
@@ -1305,6 +1808,12 @@ pub(super) fn run_controlled_champion_scenario(
             else {
                 return f64::NEG_INFINITY;
             };
+            arm_time_budget_deadline_if_unset(
+                &hard_deadline_state,
+                time_budget,
+                defer_hard_budget_until_coverage,
+                &search_type_owned,
+            );
             if is_full_candidate {
                 full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             }
@@ -1341,6 +1850,12 @@ pub(super) fn run_controlled_champion_scenario(
     let evaluate_candidate_direct = |candidate: &BuildKey| {
         let key = canonical_build_candidate(candidate.clone());
         let resolved_loadout = resolve_loadout_for_selection(&key.loadout_selection)?;
+        arm_time_budget_deadline_if_unset(
+            &hard_deadline_state,
+            time_budget,
+            defer_hard_budget_until_coverage,
+            "strict_fallback",
+        );
         let build_items = build_from_indices(&item_pool, &key.item_indices);
         let (score, outcome) = evaluate_build_with_bonus(
             &build_items,
@@ -1487,13 +2002,6 @@ pub(super) fn run_controlled_champion_scenario(
                 reason
             );
         }
-    }
-
-    if defer_hard_budget_until_coverage
-        && let Some(duration) = time_budget
-        && let Ok(mut state) = hard_deadline_state.lock()
-    {
-        *state = Some(Instant::now() + duration);
     }
 
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
@@ -1697,6 +2205,20 @@ pub(super) fn run_controlled_champion_scenario(
         .cloned()
         .collect::<Vec<_>>();
     let strict_remaining_candidates = remaining_keys.len();
+    let (remaining_keys, strict_random_promotions_done) =
+        if search_cfg.strict_ranking_enable_heuristic_ordering {
+            heuristic_sort_remaining_candidates_for_strict_ranking(
+                remaining_keys,
+                &strict_scores,
+                item_pool.len(),
+                search_cfg.strict_ranking_rune_signal_weight,
+                search_cfg.strict_ranking_shard_signal_weight,
+                search_cfg.seed,
+                search_cfg.strict_ranking_exploration_promotions,
+            )
+        } else {
+            (remaining_keys, 0)
+        };
     let mut strict_non_finite_candidates = 0usize;
     let batch_size = 128usize;
     for batch in remaining_keys.chunks(batch_size) {
@@ -1775,26 +2297,30 @@ pub(super) fn run_controlled_champion_scenario(
         let cap_b = out_b
             .map(|o| o.time_alive_seconds >= sim.max_time_seconds - 1e-6)
             .unwrap_or(false);
-        if cap_a && cap_b {
-            let combo_a = out_a
-                .map(|o| {
-                    objective_component_weights.damage * o.damage_dealt
-                        + objective_component_weights.healing * o.healing_done
-                        + objective_component_weights.enemy_kills * o.enemy_kills as f64
-                        + objective_component_weights.invulnerable_seconds * o.invulnerable_seconds
-                })
-                .unwrap_or(0.0);
-            let combo_b = out_b
-                .map(|o| {
-                    objective_component_weights.damage * o.damage_dealt
-                        + objective_component_weights.healing * o.healing_done
-                        + objective_component_weights.enemy_kills * o.enemy_kills as f64
-                        + objective_component_weights.invulnerable_seconds * o.invulnerable_seconds
-                })
-                .unwrap_or(0.0);
-            return combo_b.partial_cmp(&combo_a).unwrap_or(Ordering::Equal);
+        if cap_a != cap_b {
+            return cap_b.cmp(&cap_a);
         }
-        Ordering::Equal
+        let combo_a = out_a
+            .map(|o| {
+                objective_component_weights.damage * o.damage_dealt
+                    + objective_component_weights.healing * o.healing_done
+                    + objective_component_weights.enemy_kills * o.enemy_kills as f64
+                    + objective_component_weights.invulnerable_seconds * o.invulnerable_seconds
+            })
+            .unwrap_or(0.0);
+        let combo_b = out_b
+            .map(|o| {
+                objective_component_weights.damage * o.damage_dealt
+                    + objective_component_weights.healing * o.healing_done
+                    + objective_component_weights.enemy_kills * o.enemy_kills as f64
+                    + objective_component_weights.invulnerable_seconds * o.invulnerable_seconds
+            })
+            .unwrap_or(0.0);
+        let by_combo = combo_b.partial_cmp(&combo_a).unwrap_or(Ordering::Equal);
+        if by_combo != Ordering::Equal {
+            return by_combo;
+        }
+        build_key_cache_string(&a.0).cmp(&build_key_cache_string(&b.0))
     });
 
     let mut seed_best_scores = Vec::new();
@@ -2036,6 +2562,13 @@ pub(super) fn run_controlled_champion_scenario(
         unique_candidate_keys.len()
     );
     println!(
+        "- Strict candidate ordering: heuristic {} (rune/shard weights {:.2}/{:.2}), exploration promotions {}",
+        search_cfg.strict_ranking_enable_heuristic_ordering,
+        search_cfg.strict_ranking_rune_signal_weight,
+        search_cfg.strict_ranking_shard_signal_weight,
+        strict_random_promotions_done
+    );
+    println!(
         "- Candidate keys generated / duplicates pruned: {}/{}",
         candidate_keys_generated, candidate_duplicates_pruned
     );
@@ -2217,6 +2750,10 @@ pub(super) fn run_controlled_champion_scenario(
         strict_non_finite_candidates,
         strict_candidates_skipped_timeout,
         strict_completion_percent,
+        strict_heuristic_ordering_enabled: search_cfg.strict_ranking_enable_heuristic_ordering,
+        strict_ranking_rune_signal_weight: search_cfg.strict_ranking_rune_signal_weight,
+        strict_ranking_shard_signal_weight: search_cfg.strict_ranking_shard_signal_weight,
+        strict_random_promotions_done,
         unique_scored_candidates,
         time_budget_seconds: time_budget.map(|d| d.as_secs_f64()),
         popcorn_window_seconds,

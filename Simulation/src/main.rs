@@ -31,7 +31,8 @@ pub(crate) use crate::data::{
 };
 use crate::engine::EnemyDerivedCombatStats;
 use crate::scenario_runner::{
-    run_controlled_champion_scenario, run_controlled_champion_stepper, run_stat_optimization,
+    run_controlled_champion_fixed_loadout_evaluation, run_controlled_champion_scenario,
+    run_controlled_champion_stepper, run_stat_optimization,
 };
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
@@ -208,6 +209,10 @@ struct BuildSearchConfig {
     bleed_budget: usize,
     bleed_mutation_rate: f64,
     multi_scenario_worst_weight: f64,
+    strict_ranking_enable_heuristic_ordering: bool,
+    strict_ranking_rune_signal_weight: f64,
+    strict_ranking_shard_signal_weight: f64,
+    strict_ranking_exploration_promotions: usize,
     seed: u64,
 }
 
@@ -309,6 +314,10 @@ struct SearchDiagnostics {
     strict_non_finite_candidates: usize,
     strict_candidates_skipped_timeout: usize,
     strict_completion_percent: f64,
+    strict_heuristic_ordering_enabled: bool,
+    strict_ranking_rune_signal_weight: f64,
+    strict_ranking_shard_signal_weight: f64,
+    strict_random_promotions_done: usize,
     unique_scored_candidates: usize,
     time_budget_seconds: Option<f64>,
     popcorn_window_seconds: Option<f64>,
@@ -350,6 +359,7 @@ struct ResolvedLoadout {
     bonus_stats: Stats,
     applied_notes: Vec<String>,
     skipped_notes: Vec<String>,
+    unmodeled_rune_names: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -464,12 +474,34 @@ struct Cli {
         help = "Deterministic search seed override (default behavior is random)"
     )]
     seed: Option<u64>,
+    #[arg(
+        long,
+        help = "Comma-separated fixed item names for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_item_names: Option<String>,
+    #[arg(
+        long,
+        help = "Optional comma-separated rune names override (six runes) for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_rune_names: Option<String>,
+    #[arg(
+        long,
+        help = "Optional comma-separated shard stat override (three shards) for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_shard_stats: Option<String>,
+    #[arg(
+        long,
+        help = "Optional report folder label for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_eval_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum Mode {
     #[value(name = "controlled_champion", alias = "vladimir")]
     ControlledChampion,
+    #[value(name = "controlled_champion_fixed_loadout")]
+    ControlledChampionFixedLoadout,
     #[value(name = "controlled_champion_step", alias = "vladimir_step")]
     ControlledChampionStep,
     #[value(name = "taric_as")]
@@ -502,6 +534,16 @@ struct ControlledChampionRunOptions<'a> {
     seed_override: Option<u64>,
 }
 
+#[derive(Debug, Clone)]
+struct ControlledChampionFixedLoadoutOptions<'a> {
+    report_path_override: Option<&'a str>,
+    search_quality_profile: SearchQualityProfile,
+    fixed_item_names: Vec<String>,
+    fixed_rune_names: Option<Vec<String>>,
+    fixed_shard_stats: Option<Vec<String>>,
+    fixed_eval_label: Option<String>,
+}
+
 fn main() -> Result<()> {
     let cli = Cli::parse();
     let available = std::thread::available_parallelism()
@@ -529,12 +571,57 @@ fn main() -> Result<()> {
                 seed_override: cli.seed,
             },
         ),
+        Mode::ControlledChampionFixedLoadout => {
+            let fixed_item_names = parse_csv_arg(
+                cli.fixed_item_names.as_deref(),
+                "--fixed-item-names is required for --mode controlled_champion_fixed_loadout",
+            )?;
+            let fixed_rune_names = parse_optional_csv_arg(cli.fixed_rune_names.as_deref());
+            let fixed_shard_stats = parse_optional_csv_arg(cli.fixed_shard_stats.as_deref());
+            run_controlled_champion_fixed_loadout_evaluation(
+                &scenario_path,
+                &ControlledChampionFixedLoadoutOptions {
+                    report_path_override: cli.report_path.as_deref(),
+                    search_quality_profile: cli.search_quality_profile,
+                    fixed_item_names,
+                    fixed_rune_names,
+                    fixed_shard_stats,
+                    fixed_eval_label: cli.fixed_eval_label,
+                },
+            )
+        }
         Mode::ControlledChampionStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
         }
         Mode::HecarimMs => run_stat_optimization("move_speed_flat", &scenario_path, "move speed"),
     }
+}
+
+fn parse_csv_arg(value: Option<&str>, missing_message: &str) -> Result<Vec<String>> {
+    let raw = value.ok_or_else(|| anyhow::anyhow!(missing_message.to_string()))?;
+    let values = raw
+        .split(',')
+        .map(str::trim)
+        .filter(|entry| !entry.is_empty())
+        .map(ToString::to_string)
+        .collect::<Vec<_>>();
+    if values.is_empty() {
+        return Err(anyhow::anyhow!(missing_message.to_string()));
+    }
+    Ok(values)
+}
+
+fn parse_optional_csv_arg(value: Option<&str>) -> Option<Vec<String>> {
+    value.and_then(|raw| {
+        let values = raw
+            .split(',')
+            .map(str::trim)
+            .filter(|entry| !entry.is_empty())
+            .map(ToString::to_string)
+            .collect::<Vec<_>>();
+        (!values.is_empty()).then_some(values)
+    })
 }
 
 #[cfg(test)]

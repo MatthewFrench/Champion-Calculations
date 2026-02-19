@@ -2,8 +2,8 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use crate::defaults::{
-    vladimir_cast_profile_defaults, vladimir_offensive_ability_defaults,
-    vladimir_sanguine_pool_defaults,
+    vladimir_cast_profile_defaults, vladimir_defensive_ability_two_policy_defaults,
+    vladimir_offensive_ability_defaults, vladimir_sanguine_pool_defaults,
 };
 use crate::scripts::runtime::ability_slots::{AbilitySlotKey, ActorAbilityLoadout};
 use crate::scripts::runtime::stat_resolution::{
@@ -131,6 +131,8 @@ pub(crate) struct ControlledChampionDefensiveAbilityDecisionInput {
     pub now_seconds: f64,
     pub can_cast: bool,
     pub defensive_ability_two_ready_at: f64,
+    pub offensive_ultimate_ready_at: f64,
+    pub offensive_ultimate_has_viable_targets: bool,
 }
 
 #[derive(Debug, Clone, Copy, Default)]
@@ -142,9 +144,11 @@ pub(crate) struct ControlledChampionDefensiveAbilityDecisions {
 pub(crate) struct ControlledChampionDefensiveAbilityTwoConfig {
     pub cooldown_seconds: f64,
     pub duration_seconds: f64,
+    pub effect_range: f64,
+    pub damage_tick_interval_seconds: f64,
     pub cost_percent_current_health: f64,
-    pub base_damage: f64,
-    pub bonus_health_ratio: f64,
+    pub damage_per_tick: f64,
+    pub damage_per_tick_bonus_health_ratio: f64,
     pub heal_ratio_of_damage: f64,
 }
 
@@ -189,11 +193,14 @@ struct VladimirControlledChampionScript {
     offensive_tuning: ControlledChampionAbilityTuning,
     defensive_ability_two_rank: usize,
     defensive_ability_two_duration_seconds: f64,
+    defensive_ability_two_effect_range: f64,
+    defensive_ability_two_damage_tick_interval_seconds: f64,
     defensive_ability_two_cost_percent_current_health: f64,
     defensive_ability_two_heal_ratio_of_damage: f64,
-    defensive_ability_two_base_damage_by_rank: Vec<f64>,
+    defensive_ability_two_damage_per_tick_by_rank: Vec<f64>,
     defensive_ability_two_base_cooldown_seconds_by_rank: Vec<f64>,
-    defensive_ability_two_bonus_health_ratio: f64,
+    defensive_ability_two_damage_per_tick_bonus_health_ratio: f64,
+    prioritize_offensive_ultimate_before_defensive_ability_two: bool,
 }
 
 fn to_vladimir_tuning(tuning: ControlledChampionAbilityTuning) -> vladimir::VladimirAbilityTuning {
@@ -304,7 +311,7 @@ impl ControlledChampionScriptCapability for VladimirControlledChampionScript {
             },
         );
         let base_damage = resolve_ranked_value(
-            &self.defensive_ability_two_base_damage_by_rank,
+            &self.defensive_ability_two_damage_per_tick_by_rank,
             self.defensive_ability_two_rank,
             0.0,
         );
@@ -312,9 +319,12 @@ impl ControlledChampionScriptCapability for VladimirControlledChampionScript {
         ControlledChampionDefensiveAbilityTwoConfig {
             cooldown_seconds,
             duration_seconds: self.defensive_ability_two_duration_seconds,
+            effect_range: self.defensive_ability_two_effect_range,
+            damage_tick_interval_seconds: self.defensive_ability_two_damage_tick_interval_seconds,
             cost_percent_current_health: self.defensive_ability_two_cost_percent_current_health,
-            base_damage,
-            bonus_health_ratio: self.defensive_ability_two_bonus_health_ratio,
+            damage_per_tick: base_damage,
+            damage_per_tick_bonus_health_ratio: self
+                .defensive_ability_two_damage_per_tick_bonus_health_ratio,
             heal_ratio_of_damage: self.defensive_ability_two_heal_ratio_of_damage,
         }
     }
@@ -328,6 +338,10 @@ impl ControlledChampionScriptCapability for VladimirControlledChampionScript {
                 now_seconds: input.now_seconds,
                 can_cast: input.can_cast,
                 pool_ready_at: input.defensive_ability_two_ready_at,
+                prioritize_offensive_ultimate_before_pool: self
+                    .prioritize_offensive_ultimate_before_defensive_ability_two,
+                offensive_ultimate_ready_at: input.offensive_ultimate_ready_at,
+                offensive_ultimate_has_viable_targets: input.offensive_ultimate_has_viable_targets,
             },
         );
         ControlledChampionDefensiveAbilityDecisions {
@@ -428,8 +442,8 @@ impl ControlledChampionScriptCapability for VladimirControlledChampionScript {
         controlled_champion_stats: &Stats,
         controlled_champion_base: &ChampionBase,
     ) -> f64 {
-        config.base_damage
-            + config.bonus_health_ratio
+        config.damage_per_tick
+            + config.damage_per_tick_bonus_health_ratio
                 * (controlled_champion_stats.health - controlled_champion_base.base_health)
     }
 }
@@ -474,19 +488,32 @@ fn build_vladimir_script() -> ControlledChampionScriptHandle {
     let pool_defaults = vladimir_sanguine_pool_defaults("vladimir").unwrap_or_else(|| {
         panic!("missing Vladimir Sanguine Pool defaults in canonical champion data")
     });
+    let defensive_ability_two_policy_defaults =
+        vladimir_defensive_ability_two_policy_defaults("vladimir").unwrap_or_else(|| {
+            panic!(
+                "missing Vladimir defensive ability two policy defaults in champion simulation data"
+            )
+        });
 
     Arc::new(VladimirControlledChampionScript {
         cast_profile,
         offensive_tuning,
         defensive_ability_two_rank: pool_defaults.default_rank,
         defensive_ability_two_duration_seconds: pool_defaults.untargetable_seconds,
+        defensive_ability_two_effect_range: pool_defaults.effect_range,
+        defensive_ability_two_damage_tick_interval_seconds: pool_defaults
+            .damage_tick_interval_seconds,
         defensive_ability_two_cost_percent_current_health: pool_defaults
             .cost_percent_current_health,
         defensive_ability_two_heal_ratio_of_damage: pool_defaults.heal_ratio_of_damage,
-        defensive_ability_two_base_damage_by_rank: pool_defaults.base_damage_by_rank,
+        defensive_ability_two_damage_per_tick_by_rank: pool_defaults.damage_per_tick_by_rank,
         defensive_ability_two_base_cooldown_seconds_by_rank: pool_defaults
             .base_cooldown_seconds_by_rank,
-        defensive_ability_two_bonus_health_ratio: pool_defaults.bonus_health_ratio,
+        defensive_ability_two_damage_per_tick_bonus_health_ratio: pool_defaults
+            .damage_per_tick_bonus_health_ratio,
+        prioritize_offensive_ultimate_before_defensive_ability_two:
+            defensive_ability_two_policy_defaults
+                .prioritize_offensive_ultimate_before_defensive_ability_two,
     })
 }
 
