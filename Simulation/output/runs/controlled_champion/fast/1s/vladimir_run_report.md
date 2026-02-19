@@ -1,24 +1,24 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-19 13:50:12 -06:00`
-- Generated (UTC): `2026-02-19T19:50:12.934568+00:00`
+- Generated (local): `2026-02-19 14:42:18 -06:00`
+- Generated (UTC): `2026-02-19T20:42:18.813626+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
-- Best objective score: **-0.1672**
-- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **1.55s / 1,802.8 / 0.0 / 0 / 0.00s**
+- Best objective score: **-0.1677**
+- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **1.55s / 1,721.3 / 0.0 / 0 / 0.00s**
 - Best cap survivor: **false**
 
 - Champion level assumption: **20**
 
 ## Objective Score Breakdown
 ### Best Build
-- Weighted-mean score: `0.0128`
-- Worst-case scenario score: `0.0128`
+- Weighted-mean score: `0.0123`
+- Worst-case scenario score: `0.0123`
 - Worst-case blend weight: `0.35`
-- Final blended objective score: `0.0128`
-- survival: weight `0.26` | normalized `0.0013` | contribution `0.0003` | impact `2.58%` | delta vs weight `-23.06pp`
-- damage: weight `0.13` | normalized `0.0976` | contribution `0.0125` | impact `97.42%` | delta vs weight `+84.60pp`
+- Final blended objective score: `0.0123`
+- survival: weight `0.26` | normalized `0.0013` | contribution `0.0003` | impact `2.70%` | delta vs weight `-22.95pp`
+- damage: weight `0.13` | normalized `0.0932` | contribution `0.0119` | impact `97.30%` | delta vs weight `+84.48pp`
 - healing: weight `0.08` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-7.69pp`
 - enemy_kills: weight `0.51` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-51.28pp`
 - invulnerable_seconds: weight `0.03` | normalized `0.0000` | contribution `0.0000` | impact `0.00%` | delta vs weight `-2.56pp`
@@ -34,11 +34,10 @@
 - Ensemble seeds: `1`
 - Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `9` / `false` / `true` / `true`
 - Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
-- Simulations executed (new full combat runs): `1,160`
-- Unique scored candidates (all search stages): `1,160`
-- Total score requests (all search stages): `35,830`
-- Full evaluations cache hits/misses/waits: `80/4,520/0`
-- Full persistent cache hits/entries: `21/2,026`
+- Simulations executed (new full combat runs): `1,752`
+- Unique scored candidates (all search stages): `1,752`
+- Total score requests (all search stages): `34,219`
+- In-memory full-evaluation cache hits/misses/waits: `468/2,400/0`
 - Candidate keys generated / duplicate-pruned / unique: `128/0/128`
 - Strict candidates seed-scored / remaining / processed: `0/128/0`
 - Strict non-finite / timeout-skipped: `0/128`
@@ -47,21 +46,20 @@
 - Bleed candidates injected: `0`
 - Adaptive candidates injected: `0`
 - Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `1.60s`
-- Total run time (end-to-end): `1.60s`
+- Search elapsed time: `1.61s`
+- Total run time (end-to-end): `1.61s`
 
-- Effective seed: `12899664607836502628`
-- Unmodeled rune gate (hard_gate / penalty_per_rune / rejected / penalized): `false` / `0.0200` / `0` / `4,461`
-- Unmodeled item-effect gate (hard_gate / penalty_per_item / rejected / penalized): `false` / `0.0200` / `0` / `4,373`
+- Effective seed: `330752026848107508`
+- Unmodeled rune gate (hard_gate / penalty_per_rune / rejected / penalized): `false` / `0.0200` / `0` / `2,398`
+- Unmodeled item-effect gate (hard_gate / penalty_per_item / rejected / penalized): `false` / `0.0200` / `0` / `2,338`
 - Time budget: `1.0s`; timed_out: `true`; progress: `0/128` (0.0%)
 
 - Estimated total legal candidate space: `995,424,835,958,784`
-- Estimated legal-space coverage (this run): `1.165e-10%`
-- Estimated legal-space coverage (persistent cache): `2.035e-10%`
+- Estimated legal-space coverage (this run): `1.760e-10%`
 - Estimated closeness probability (top 0.000001% heuristic): `0.00%`
-- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 1160 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
+- Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 1752 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
 - Search-type simulation breakdown:
-  - seed_search:portfolio: requests `35,830`, new simulations `4,520`, persistent cache hits `21`
+  - seed_search:portfolio: requests `34,219`, new simulations `2,400`
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
@@ -69,49 +67,47 @@
 ## Selected Rune Page And Shards
 - Vladimir:
   - Rune: Aftershock
-  - Rune: Font of Life
+  - Rune: Demolish
   - Rune: Bone Plating
-  - Rune: Overgrowth
-  - Rune: Axiom Arcanist
-  - Rune: Celerity
+  - Rune: Revitalize
+  - Rune: Magical Footwear
+  - Rune: Time Warp Tonic
   - Shard 1: attack_speed
   - Shard 2: health
   - Shard 3: tenacity
 - Opponents: champion-specific preset rune pages are listed in Enemy Builds.
 
 - Applied deterministic loadout effects:
-  - Vladimir: Applied rune stat effect from Celerity.
-  - Vladimir: Applied rune stat effect from Celerity.
+  - Vladimir: Applied rune stat effect from Magical Footwear.
   - Vladimir: Applied shard 'attack_speed' in slot 1.
   - Vladimir: Applied shard 'health' in slot 2.
   - Vladimir: Applied shard 'tenacity' in slot 3.
 - Skipped unsupported/non-deterministic effects:
-  - Vladimir: Rune 'Font of Life' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
+  - Vladimir: Rune 'Demolish' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
   - Vladimir: Rune 'Bone Plating' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
-  - Vladimir: Rune 'Overgrowth' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
-  - Vladimir: Rune 'Axiom Arcanist' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
+  - Vladimir: Rune 'Revitalize' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
+  - Vladimir: Rune 'Time Warp Tonic' currently has no implemented deterministic stat effect or combat-time runtime effect in controlled champion simulation.
   - Vladimir: Rune 'Aftershock' has a combat-time script effect and is not fully represented as static pre-fight stats at level 20.
 - Controlled champion runes with no modeled deterministic/runtime combat effect:
-  - Font of Life
+  - Demolish
   - Bone Plating
-  - Overgrowth
-  - Axiom Arcanist
+  - Revitalize
+  - Time Warp Tonic
 - Controlled champion items with unmodeled passive/active/structured runtime effects:
   - Abyssal Mask
   - Actualizer
   - Bloodletter's Curse
-  - Bloodsong
-  - Bloodthirster
+  - Umbral Glaive
+  - Unending Despair
 
 ## Best Build
-- Abyssal Mask, Actualizer, Bloodletter's Curse, Bloodsong, Bloodthirster, Luden's Echo
+- Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Void Staff
 
 ## Vladimir End Stats (Best Build)
-- HP: 4,182.5, Armor: 109.5, MR: 54.7, AP: 290.8, AD: 80.0, Ability Haste: 50.0, Move Speed (flat bonus): 0.0, Move Speed (% bonus): 8.0
+- HP: 4,374.5, Armor: 159.5, MR: 54.7, AP: 292.4, AD: 60.0, Ability Haste: 70.0, Move Speed (flat bonus): 10.0, Move Speed (% bonus): 0.0
 
 ## Stack Overrides
 - Bloodletter's Curse has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
-- Luden's Echo has stack-based passive text in item data; currently treated as default/implicit unless explicitly modeled.
 
 ## Enemy Builds (URF Presets)
 - Warwick: Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail

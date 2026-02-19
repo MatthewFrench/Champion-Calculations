@@ -69,7 +69,6 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Ensemble seed orchestration, portfolio strategy execution, and strategy-elite generation are also parallelized across CPU cores with deterministic merge ordering.
 - Search uses simulation scoring during candidate generation (including partial candidates for strategy ranking) and strict full-simulation scoring for final candidate ranking.
 - Full simulation scoring is memoized by canonical build key.
-- Full simulation scores are persisted across runs under `Simulation/output/cache/`.
 - In-flight dedupe cache avoids duplicate parallel re-simulation of the same canonical build.
 - Ensemble seed runs are supported for confidence/robustness labeling.
 - Cross-algorithm bleed round recombines elite candidates across strategies before final full ranking.
@@ -78,7 +77,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Fixed-seed reproducibility is preserved in adaptive/bleed candidate generation by sorting strategy keys before index-based seed derivation.
 - Timed-out seed-stage partial candidates are deterministically completed to full candidates before strict full ranking, avoiding random fallback winners in short-budget runs.
 - Strict final candidate ranking evaluates remaining candidates in parallel batches.
-- Report metrics and build-order diagnostics resolve candidate loadout bonus stats even when candidate objective scores are served from persistent cache.
+- Report metrics and build-order diagnostics resolve candidate loadout bonus stats from in-run simulation results and fallback recomputation as needed.
 - Build scoring uses a composite objective over:
   - time alive
   - damage dealt to enemies
@@ -124,7 +123,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
 - `src/reporting.rs`: Markdown/JSON report generation.
 - `src/scenario_runner.rs`: Scenario mode execution orchestration (`controlled_champion`, `controlled_champion_step`, stat modes).
-- `src/cache.rs`: In-memory and persisted score cache implementations.
+- `src/cache.rs`: In-memory score cache implementation (per-run only).
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
 - `src/scripts/champions/mod.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types (including script effect hitbox descriptors).
@@ -169,9 +168,9 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
     - explicit degraded-coverage warning/flag when coverage stage is incomplete
     - explicit simulation counts (new full simulations, unique scored candidates, total score requests)
     - search elapsed time and total run time (end-to-end)
-    - cache hits/misses
+    - in-memory cache hits/misses/waits
     - unique scored candidates across all search stages
-    - per-search-type breakdown (requests/new simulations/persistent cache hits)
+    - per-search-type breakdown (requests/new simulations)
     - generated/unique/pruned candidate counts
     - strict-stage completion percentage and timeout-skipped candidate count
     - unmodeled-rune gate policy/counters (hard gate flag, per-rune penalty, rejected/penalized candidates)

@@ -333,7 +333,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - co-optimize loadout selection during `beam` and `greedy` full-loadout item search
   - normalize adaptive/bleed strategy-key ordering before index-based seed derivation
   - recover and complete timed-out seed-stage partial candidates before strict full ranking fallback
-  - keep report/build-order metrics loadout-accurate on persistent-cache hits
+  - keep report/build-order metrics loadout-accurate on in-run cache hits
 - Success criteria:
   - fixed-seed reruns are reproducible, short-budget runs do not random-fallback when partial progress exists, and diagnostics reflect each candidate's own loadout stats.
 

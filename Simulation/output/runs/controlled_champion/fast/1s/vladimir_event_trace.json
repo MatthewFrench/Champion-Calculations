@@ -2,9 +2,9 @@
   "event_encoding": "structured",
   "events": [
     {
-      "details": "checkpoint 0.0s (captured_at 0.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=4182.5/4182.5 (100.0%) armor=109.5 mr=54.7\n  offense: ap=290.8 ah=350.0\n  loadout: items [Abyssal Mask, Actualizer, Bloodletter's Curse, Bloodsong, Bloodthirster, Luden's Echo] | runes [Aftershock, Font of Life, Bone Plating, Overgrowth, Axiom Arcanist, Celerity] | shards [attack_speed, health, tenacity]\n  cooldowns: none\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.50s\n  runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Aftershock: ready (active yes)] | stacks [none]\n  buffs: none\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=3501.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=2.681 (interval 0.373s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.37s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Attacks landed: 0]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2641.5/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=6.274 (interval 0.159s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.16s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Guinsoo stacks: 0/8; Attacks landed: 0]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=3440.5/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack 0.62s; Dark Binding ready; Soul Shackles ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Arcane Comet: ready] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=2413.5/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.54s; Crescendo ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=6479.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack 0.61s; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: ready (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
+      "details": "checkpoint 0.0s (captured_at 0.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=4374.5/4374.5 (100.0%) armor=159.5 mr=54.7\n  offense: ap=292.4 ah=370.0\n  loadout: items [Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Void Staff] | runes [Aftershock, Demolish, Bone Plating, Revitalize, Magical Footwear, Time Warp Tonic] | shards [attack_speed, health, tenacity]\n  cooldowns: none\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.50s\n  runtime: cooldowns [Aftershock: ready (active yes)] | stacks [none]\n  buffs: none\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=3501.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=2.681 (interval 0.373s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.37s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Attacks landed: 0]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2641.5/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=6.274 (interval 0.159s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.16s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Guinsoo stacks: 0/8; Attacks landed: 0]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=3440.5/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack 0.62s; Dark Binding ready; Soul Shackles ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Arcane Comet: ready] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=2413.5/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.54s; Crescendo ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=6479.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack 0.61s; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: ready (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
       "event_type": "state_snapshot",
-      "raw": "0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=4182.5/4182.5 (100.0%) armor=109.5 mr=54.7\n  offense: ap=290.8 ah=350.0\n  loadout: items [Abyssal Mask, Actualizer, Bloodletter's Curse, Bloodsong, Bloodthirster, Luden's Echo] | runes [Aftershock, Font of Life, Bone Plating, Overgrowth, Axiom Arcanist, Celerity] | shards [attack_speed, health, tenacity]\n  cooldowns: none\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.50s\n  runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Aftershock: ready (active yes)] | stacks [none]\n  buffs: none\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=3501.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=2.681 (interval 0.373s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.37s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Attacks landed: 0]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2641.5/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=6.274 (interval 0.159s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.16s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Guinsoo stacks: 0/8; Attacks landed: 0]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=3440.5/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack 0.62s; Dark Binding ready; Soul Shackles ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Arcane Comet: ready] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=2413.5/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.54s; Crescendo ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=6479.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack 0.61s; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: ready (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
+      "raw": "0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=4374.5/4374.5 (100.0%) armor=159.5 mr=54.7\n  offense: ap=292.4 ah=370.0\n  loadout: items [Abyssal Mask, Actualizer, Bloodletter's Curse, Umbral Glaive, Unending Despair, Void Staff] | runes [Aftershock, Demolish, Bone Plating, Revitalize, Magical Footwear, Time Warp Tonic] | shards [attack_speed, health, tenacity]\n  cooldowns: none\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.50s\n  runtime: cooldowns [Aftershock: ready (active yes)] | stacks [none]\n  buffs: none\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=3501.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=2.681 (interval 0.373s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.37s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Attacks landed: 0]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2641.5/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=6.274 (interval 0.159s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.16s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Guinsoo stacks: 0/8; Attacks landed: 0]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=3440.5/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack 0.62s; Dark Binding ready; Soul Shackles ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Arcane Comet: ready] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=2413.5/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.54s; Crescendo ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=6479.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack 0.61s; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: ready (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
       "timestamp_seconds": 0.0
     },
     {
@@ -32,9 +32,9 @@
       "timestamp_seconds": 0.0
     },
     {
-      "details": "Morgana Dark Binding -> Vladimir | physical 0.0, magic 1143.7, true 0.0, total 602.9",
+      "details": "Morgana Dark Binding -> Vladimir | physical 0.0, magic 1151.4, true 0.0, total 606.9",
       "event_type": "damage_in",
-      "raw": "0.000s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1143.7, true 0.0, total 602.9",
+      "raw": "0.000s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1151.4, true 0.0, total 606.9",
       "timestamp_seconds": 0.0
     },
     {
@@ -68,9 +68,9 @@
       "timestamp_seconds": 0.0
     },
     {
-      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 829.1, true 0.0, total 437.1",
+      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 885.5, true 0.0, total 466.8",
       "event_type": "damage_in",
-      "raw": "0.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 829.1, true 0.0, total 437.1",
+      "raw": "0.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 885.5, true 0.0, total 466.8",
       "timestamp_seconds": 0.0
     },
     {
@@ -80,9 +80,9 @@
       "timestamp_seconds": 0.159
     },
     {
-      "details": "Vladimir vladimir_hemoplague dealt 1802.8 to 5 enemies in range",
+      "details": "Vladimir vladimir_hemoplague dealt 1721.3 to 5 enemies in range",
       "event_type": "controlled_champion_ultimate_hit",
-      "raw": "0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 1802.8 to 5 enemies in range",
+      "raw": "0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 1721.3 to 5 enemies in range",
       "timestamp_seconds": 0.25
     },
     {
@@ -104,15 +104,15 @@
       "timestamp_seconds": 0.5
     },
     {
-      "details": "Vayne Auto Attack -> Vladimir | physical 1141.9, magic 0.0, true 0.0, total 545.1",
+      "details": "Vayne Auto Attack -> Vladimir | physical 1151.4, magic 0.0, true 0.0, total 443.7",
       "event_type": "damage_in",
-      "raw": "0.525s [damage_in] Vayne Auto Attack -> Vladimir | physical 1141.9, magic 0.0, true 0.0, total 545.1",
+      "raw": "0.525s [damage_in] Vayne Auto Attack -> Vladimir | physical 1151.4, magic 0.0, true 0.0, total 443.7",
       "timestamp_seconds": 0.525
     },
     {
-      "details": "Vayne hit Vladimir (phys 1141.9, magic 0.0, true 0.0)",
+      "details": "Vayne hit Vladimir (phys 1151.4, magic 0.0, true 0.0)",
       "event_type": "attack_hit",
-      "raw": "0.525s [attack_hit] Vayne hit Vladimir (phys 1141.9, magic 0.0, true 0.0)",
+      "raw": "0.525s [attack_hit] Vayne hit Vladimir (phys 1151.4, magic 0.0, true 0.0)",
       "timestamp_seconds": 0.525
     },
     {
@@ -128,15 +128,15 @@
       "timestamp_seconds": 0.612
     },
     {
-      "details": "Warwick Auto Attack -> Vladimir | physical 344.4, magic 81.6, true 0.0, total 217.2",
+      "details": "Warwick Auto Attack -> Vladimir | physical 360.0, magic 81.6, true 0.0, total 191.5",
       "event_type": "damage_in",
-      "raw": "0.613s [damage_in] Warwick Auto Attack -> Vladimir | physical 344.4, magic 81.6, true 0.0, total 217.2",
+      "raw": "0.613s [damage_in] Warwick Auto Attack -> Vladimir | physical 360.0, magic 81.6, true 0.0, total 191.5",
       "timestamp_seconds": 0.613
     },
     {
-      "details": "Warwick hit Vladimir (phys 344.4, magic 81.6, true 0.0)",
+      "details": "Warwick hit Vladimir (phys 360.0, magic 81.6, true 0.0)",
       "event_type": "attack_hit",
-      "raw": "0.613s [attack_hit] Warwick hit Vladimir (phys 344.4, magic 81.6, true 0.0)",
+      "raw": "0.613s [attack_hit] Warwick hit Vladimir (phys 360.0, magic 81.6, true 0.0)",
       "timestamp_seconds": 0.613
     },
     {
@@ -158,9 +158,9 @@
       "timestamp_seconds": 0.852
     },
     {
-      "details": "Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 50.6",
+      "details": "Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 40.8",
       "event_type": "damage_in",
-      "raw": "0.934s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 50.6",
+      "raw": "0.934s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 40.8",
       "timestamp_seconds": 0.934
     },
     {
@@ -194,15 +194,15 @@
       "timestamp_seconds": 1.0
     },
     {
-      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 454.2, true 0.0, total 293.6",
+      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 542.7, true 0.0, total 350.8",
       "event_type": "damage_in",
-      "raw": "1.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 454.2, true 0.0, total 293.6",
+      "raw": "1.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 542.7, true 0.0, total 350.8",
       "timestamp_seconds": 1.0
     },
     {
-      "details": "Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 58.5",
+      "details": "Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 47.2",
       "event_type": "damage_in",
-      "raw": "1.022s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 58.5",
+      "raw": "1.022s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 47.2",
       "timestamp_seconds": 1.022
     },
     {
@@ -212,15 +212,15 @@
       "timestamp_seconds": 1.022
     },
     {
-      "details": "Vayne Auto Attack -> Vladimir | physical 718.2, magic 0.0, true 0.0, total 342.8",
+      "details": "Vayne Auto Attack -> Vladimir | physical 733.2, magic 0.0, true 0.0, total 282.5",
       "event_type": "damage_in",
-      "raw": "1.041s [damage_in] Vayne Auto Attack -> Vladimir | physical 718.2, magic 0.0, true 0.0, total 342.8",
+      "raw": "1.041s [damage_in] Vayne Auto Attack -> Vladimir | physical 733.2, magic 0.0, true 0.0, total 282.5",
       "timestamp_seconds": 1.041
     },
     {
-      "details": "Vayne hit Vladimir (phys 718.2, magic 0.0, true 0.0)",
+      "details": "Vayne hit Vladimir (phys 733.2, magic 0.0, true 0.0)",
       "event_type": "attack_hit",
-      "raw": "1.041s [attack_hit] Vayne hit Vladimir (phys 718.2, magic 0.0, true 0.0)",
+      "raw": "1.041s [attack_hit] Vayne hit Vladimir (phys 733.2, magic 0.0, true 0.0)",
       "timestamp_seconds": 1.041
     },
     {
@@ -230,15 +230,15 @@
       "timestamp_seconds": 1.183
     },
     {
-      "details": "Warwick Auto Attack -> Vladimir | physical 286.6, magic 81.6, true 0.0, total 189.6",
+      "details": "Warwick Auto Attack -> Vladimir | physical 305.2, magic 81.6, true 0.0, total 170.4",
       "event_type": "damage_in",
-      "raw": "1.212s [damage_in] Warwick Auto Attack -> Vladimir | physical 286.6, magic 81.6, true 0.0, total 189.6",
+      "raw": "1.212s [damage_in] Warwick Auto Attack -> Vladimir | physical 305.2, magic 81.6, true 0.0, total 170.4",
       "timestamp_seconds": 1.212
     },
     {
-      "details": "Warwick hit Vladimir (phys 286.6, magic 81.6, true 0.0)",
+      "details": "Warwick hit Vladimir (phys 305.2, magic 81.6, true 0.0)",
       "event_type": "attack_hit",
-      "raw": "1.212s [attack_hit] Warwick hit Vladimir (phys 286.6, magic 81.6, true 0.0)",
+      "raw": "1.212s [attack_hit] Warwick hit Vladimir (phys 305.2, magic 81.6, true 0.0)",
       "timestamp_seconds": 1.212
     },
     {
@@ -266,9 +266,9 @@
       "timestamp_seconds": 1.5
     },
     {
-      "details": "Vayne Auto Attack -> Vladimir | physical 686.3, magic 0.0, true 885.1, total 1212.6",
+      "details": "Vayne Auto Attack -> Vladimir | physical 706.0, magic 0.0, true 904.3, total 1176.3",
       "event_type": "damage_in",
-      "raw": "1.549s [damage_in] Vayne Auto Attack -> Vladimir | physical 686.3, magic 0.0, true 885.1, total 1212.6",
+      "raw": "1.549s [damage_in] Vayne Auto Attack -> Vladimir | physical 706.0, magic 0.0, true 904.3, total 1176.3",
       "timestamp_seconds": 1.549
     },
     {
@@ -278,9 +278,9 @@
       "timestamp_seconds": 1.549
     },
     {
-      "details": "Vayne hit Vladimir (phys 686.3, magic 0.0, true 885.1)",
+      "details": "Vayne hit Vladimir (phys 706.0, magic 0.0, true 904.3)",
       "event_type": "attack_hit",
-      "raw": "1.549s [attack_hit] Vayne hit Vladimir (phys 686.3, magic 0.0, true 885.1)",
+      "raw": "1.549s [attack_hit] Vayne hit Vladimir (phys 706.0, magic 0.0, true 904.3)",
       "timestamp_seconds": 1.549
     }
   ],

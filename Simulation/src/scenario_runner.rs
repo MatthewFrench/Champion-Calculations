@@ -11,7 +11,7 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use crate::build_order::{acquisition_level_map, optimize_build_order};
-use crate::cache::{BlockingScoreCache, PersistentScoreCache};
+use crate::cache::BlockingScoreCache;
 use crate::data::{
     ensure_complete_loadout_selection, filter_loadout_domain_to_modeled_runes,
     is_legal_rune_page_selection, parse_stack_overrides_map,
@@ -184,31 +184,26 @@ struct SignificantProgressState {
 struct SearchTypeRuntimeCounter {
     score_requests: usize,
     new_simulations: usize,
-    persistent_cache_hits: usize,
 }
 
 #[derive(Debug, Default)]
 struct AtomicSearchTypeRuntimeCounter {
     score_requests: AtomicUsize,
     new_simulations: AtomicUsize,
-    persistent_cache_hits: AtomicUsize,
 }
 
 impl AtomicSearchTypeRuntimeCounter {
-    fn add(&self, score_requests: usize, new_simulations: usize, persistent_cache_hits: usize) {
+    fn add(&self, score_requests: usize, new_simulations: usize) {
         self.score_requests
             .fetch_add(score_requests, AtomicOrdering::Relaxed);
         self.new_simulations
             .fetch_add(new_simulations, AtomicOrdering::Relaxed);
-        self.persistent_cache_hits
-            .fetch_add(persistent_cache_hits, AtomicOrdering::Relaxed);
     }
 
     fn snapshot(&self) -> SearchTypeRuntimeCounter {
         SearchTypeRuntimeCounter {
             score_requests: self.score_requests.load(AtomicOrdering::Relaxed),
             new_simulations: self.new_simulations.load(AtomicOrdering::Relaxed),
-            persistent_cache_hits: self.persistent_cache_hits.load(AtomicOrdering::Relaxed),
         }
     }
 }
@@ -388,18 +383,6 @@ fn select_search_base_loadout_selection(
         return Ok(configured.clone());
     }
     ensure_complete_loadout_selection(&LoadoutSelection::default(), search_domain)
-}
-
-fn persistent_cache_seed_partition(
-    configured_seed: u64,
-    seed_override: Option<u64>,
-    effective_seed: u64,
-) -> u64 {
-    if seed_override.is_none() && configured_seed == 0 {
-        0
-    } else {
-        effective_seed
-    }
 }
 
 fn apply_level_scaled_sim_defaults_after_controlled_level_override(
@@ -687,10 +670,9 @@ fn increment_search_type_counter(
     search_type: &str,
     score_requests: usize,
     new_simulations: usize,
-    persistent_cache_hits: usize,
 ) {
     if let Some(counter) = counters.get(search_type) {
-        counter.add(score_requests, new_simulations, persistent_cache_hits);
+        counter.add(score_requests, new_simulations);
     }
 }
 
@@ -701,14 +683,11 @@ fn snapshot_search_type_counters(
         .iter()
         .filter_map(|(name, counter)| {
             let snapshot = counter.snapshot();
-            let touched = snapshot.score_requests > 0
-                || snapshot.new_simulations > 0
-                || snapshot.persistent_cache_hits > 0;
+            let touched = snapshot.score_requests > 0 || snapshot.new_simulations > 0;
             touched.then(|| SearchTypeBreakdown {
                 name: name.clone(),
                 score_requests: snapshot.score_requests,
                 new_simulations: snapshot.new_simulations,
-                persistent_cache_hits: snapshot.persistent_cache_hits,
             })
         })
         .collect::<Vec<_>>()
@@ -2463,7 +2442,6 @@ pub(super) fn run_controlled_champion_scenario(
             .ok_or_else(|| anyhow!("Missing search"))?,
     )?;
     apply_search_quality_profile(&mut search_cfg, search_quality_profile);
-    let configured_search_seed = search_cfg.seed;
     if let Some(seed) = seed_override {
         search_cfg.seed = seed.max(1);
     }
@@ -2471,8 +2449,6 @@ pub(super) fn run_controlled_champion_scenario(
         search_cfg.seed = runtime_random_seed();
     }
     let active_strategies = portfolio_strategy_list(&search_cfg);
-    let persistent_cache_seed_partition =
-        persistent_cache_seed_partition(configured_search_seed, seed_override, search_cfg.seed);
     let full_loadout_domain = Arc::new(build_loadout_domain());
     let controlled_champion_loadout_selection = ensure_complete_loadout_selection(
         &controlled_champion_loadout_selection,
@@ -2676,33 +2652,8 @@ pub(super) fn run_controlled_champion_scenario(
     let unique_scored_candidate_keys = Arc::new(ShardedStringSet::new());
     let search_type_counters =
         initialize_search_type_counters(&active_strategies, &search_cfg.strategy);
-    let mut scenario_hasher = DefaultHasher::new();
-    scenario.to_string().hash(&mut scenario_hasher);
-    search_strategy_summary(&search_cfg).hash(&mut scenario_hasher);
-    persistent_cache_seed_partition.hash(&mut scenario_hasher);
-    search_cfg
-        .unmodeled_rune_hard_gate
-        .hash(&mut scenario_hasher);
-    search_cfg
-        .unmodeled_rune_penalty_per_rune
-        .to_bits()
-        .hash(&mut scenario_hasher);
-    search_cfg
-        .unmodeled_item_effect_hard_gate
-        .hash(&mut scenario_hasher);
-    search_cfg
-        .unmodeled_item_effect_penalty_per_item
-        .to_bits()
-        .hash(&mut scenario_hasher);
-    "full_loadout_candidate_v2".hash(&mut scenario_hasher);
-    let persistent_full_cache_path = simulation_dir().join("output").join("cache").join(format!(
-        "{}_full_scores_{:016x}.json",
-        to_norm_key(&controlled_champion_name),
-        scenario_hasher.finish()
-    ));
-    let persistent_full_cache = Arc::new(PersistentScoreCache::load(persistent_full_cache_path));
     let full_score_for_search_type = |search_type: &str, candidate: &BuildKey| {
-        increment_search_type_counter(search_type_counters.as_ref(), search_type, 1, 0, 0);
+        increment_search_type_counter(search_type_counters.as_ref(), search_type, 1, 0);
         if deadline_reached(deadline_for_search_type(search_type)) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);
             return f64::NEG_INFINITY;
@@ -2713,39 +2664,12 @@ pub(super) fn run_controlled_champion_scenario(
         if is_full_candidate {
             unique_scored_candidate_keys.insert(cache_key.clone());
         }
-        if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
-            if let Some(resolved_loadout) = resolve_loadout_for_selection(&key.loadout_selection)
-                && let Ok(mut map) = best_loadout_by_candidate.lock()
-            {
-                map.entry(key.clone()).or_insert(resolved_loadout);
-            }
-            increment_search_type_counter(search_type_counters.as_ref(), search_type, 0, 0, 1);
-            record_score_progress(score);
-            return score;
-        }
         let cache = Arc::clone(&full_cache);
         let search_type_owned = search_type.to_string();
         cache.get_or_compute(cache_key.clone(), || {
             if deadline_reached(deadline_for_search_type(&search_type_owned)) {
                 timeout_flag.store(1, AtomicOrdering::Relaxed);
                 return f64::NEG_INFINITY;
-            }
-            if is_full_candidate && let Some(score) = persistent_full_cache.get(&cache_key) {
-                if let Some(resolved_loadout) =
-                    resolve_loadout_for_selection(&key.loadout_selection)
-                    && let Ok(mut map) = best_loadout_by_candidate.lock()
-                {
-                    map.entry(key.clone()).or_insert(resolved_loadout);
-                }
-                increment_search_type_counter(
-                    search_type_counters.as_ref(),
-                    &search_type_owned,
-                    0,
-                    0,
-                    1,
-                );
-                record_score_progress(score);
-                return score;
             }
             let Some(resolved_loadout) = resolve_loadout_for_selection(&key.loadout_selection)
             else {
@@ -2779,13 +2703,7 @@ pub(super) fn run_controlled_champion_scenario(
             if is_full_candidate {
                 full_eval_count.fetch_add(1, AtomicOrdering::Relaxed);
             }
-            increment_search_type_counter(
-                search_type_counters.as_ref(),
-                &search_type_owned,
-                0,
-                1,
-                0,
-            );
+            increment_search_type_counter(search_type_counters.as_ref(), &search_type_owned, 0, 1);
             let build_items = build_from_indices(&item_pool, &key.item_indices);
             let (score, outcome) = evaluate_build_with_bonus(
                 &build_items,
@@ -2810,9 +2728,6 @@ pub(super) fn run_controlled_champion_scenario(
                 if let Ok(mut map) = best_outcome_by_candidate.lock() {
                     map.insert(key.clone(), outcome);
                 }
-            }
-            if is_full_candidate && score.is_finite() {
-                persistent_full_cache.insert(&cache_key, score);
             }
             if is_full_candidate {
                 record_score_progress(score);
@@ -3426,8 +3341,6 @@ pub(super) fn run_controlled_champion_scenario(
     let unique_scored_candidates = unique_scored_candidate_keys.len();
     let estimated_run_space_coverage_percent = estimated_total_candidate_space
         .map(|total| ((unique_scored_candidates as f64) / total * 100.0).clamp(0.0, 100.0));
-    let estimated_cache_space_coverage_percent = estimated_total_candidate_space
-        .map(|total| ((persistent_full_cache.len() as f64) / total * 100.0).clamp(0.0, 100.0));
     let (estimated_close_to_optimal_probability, estimated_close_to_optimal_probability_note) =
         estimate_close_to_optimal_probability(
             unique_scored_candidates,
@@ -3511,13 +3424,12 @@ pub(super) fn run_controlled_champion_scenario(
         "- Candidate evaluations (full): {}",
         full_eval_count.load(AtomicOrdering::Relaxed)
     );
-    println!("- Cache hits (full): {}", full_cache.hits());
     println!(
-        "- Persistent full cache hits/entries: {}/{}",
-        persistent_full_cache.hits(),
-        persistent_full_cache.len()
+        "- In-memory full-evaluation cache (hits/misses/waits): {}/{}/{}",
+        full_cache.hits(),
+        full_cache.misses(),
+        full_cache.waits()
     );
-    println!("- Cache waits (full): {}", full_cache.waits());
     println!("- Ensemble seeds: {}", ensemble_seeds);
     println!(
         "- Parallelism: threads {} | seed orchestration parallel {} | portfolio strategy parallel {} | strategy-elites parallel {}",
@@ -3607,12 +3519,6 @@ pub(super) fn run_controlled_champion_scenario(
             format_percent_display(run_coverage)
         );
     }
-    if let Some(cache_coverage) = estimated_cache_space_coverage_percent {
-        println!(
-            "- Estimated legal-space coverage (persistent cache): {}",
-            format_percent_display(cache_coverage)
-        );
-    }
     if let Some(probability) = estimated_close_to_optimal_probability {
         println!(
             "- Estimated closeness probability (top 0.000001% heuristic): {:.2}% | {}",
@@ -3629,11 +3535,8 @@ pub(super) fn run_controlled_champion_scenario(
         println!("- Search-type simulation breakdown:");
         for entry in &search_type_breakdown {
             println!(
-                "  - {} => score requests {}, new simulations {}, persistent cache hits {}",
-                entry.name,
-                entry.score_requests,
-                entry.new_simulations,
-                entry.persistent_cache_hits
+                "  - {} => score requests {}, new simulations {}",
+                entry.name, entry.score_requests, entry.new_simulations
             );
         }
     }
@@ -3749,8 +3652,6 @@ pub(super) fn run_controlled_champion_scenario(
         full_cache_hits: full_cache.hits(),
         full_cache_misses: full_cache.misses(),
         full_cache_waits: full_cache.waits(),
-        full_persistent_cache_hits: persistent_full_cache.hits(),
-        full_persistent_cache_entries: persistent_full_cache.len(),
         candidate_keys_generated,
         candidate_duplicates_pruned,
         unique_candidate_builds: unique_candidate_keys.len(),
@@ -3795,7 +3696,6 @@ pub(super) fn run_controlled_champion_scenario(
         search_type_breakdown,
         estimated_total_candidate_space,
         estimated_run_space_coverage_percent,
-        estimated_cache_space_coverage_percent,
         estimated_close_to_optimal_probability,
         estimated_close_to_optimal_probability_note,
         coverage_stage_enabled: coverage_stage_diagnostics.enabled,
@@ -4066,12 +3966,11 @@ pub(super) fn run_controlled_champion_scenario(
     let json_report_path = report_path.with_extension("json");
     write_controlled_champion_report_json(&json_report_path, &report_data)?;
 
-    persistent_full_cache.flush()?;
     status.emit(
         "finalization",
         Some((processed_candidates, total_candidates)),
         Some(controlled_champion_best_score),
-        Some("reports, trace outputs, and persistent cache written"),
+        Some("reports and trace outputs written"),
         true,
     );
     println!(

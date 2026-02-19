@@ -1,6 +1,10 @@
 # Improvement Tracker
 
 ## Done
+- Removed disk-backed cross-run score caching from controlled champion search:
+  - removed persistent full-score cache read/write path under `Simulation/output/cache/`
+  - kept in-memory full-evaluation dedupe cache for the duration of a run to avoid duplicate simulations across algorithms/search stages
+  - diagnostics/report outputs now report in-memory cache behavior only (no persistent-cache counters/coverage)
 - Aligned hard-gated search with generation-time legality (no post-generation invalid-candidate churn):
   - when `unmodeled_rune_hard_gate` is enabled, controlled-champion search now uses a modeled-rune-filtered loadout domain instead of generating unmodeled rune pages and rejecting them at score time
   - when `unmodeled_item_effect_hard_gate` is enabled, controlled-champion search now uses a modeled-runtime-item pool instead of generating unmodeled runtime-effect items and rejecting them at score time
@@ -91,7 +95,7 @@
   - full-loadout `beam` and `greedy` now co-optimize loadout selection while expanding item candidates
   - adaptive/bleed strategy ordering is now deterministic before index-based seed math (fixed-seed reruns stay reproducible)
   - seed-stage partial candidates are now deterministically completed before strict full-ranking fallback under timeouts
-  - persistent-cache candidate scores now re-resolve candidate loadouts for metrics and build-order diagnostics
+  - cached candidate scores now re-resolve candidate loadouts for metrics and build-order diagnostics
   - build-order optimization now evaluates each top candidate with that candidate's own loadout bonus stats
   - `controlled_champion_step` now recomputes level-scaled simulation defaults after controlled-level override
   - opponent encounter parsing now rejects all-zero-weight scenario sets
@@ -111,8 +115,8 @@
   - removed Vladimir ability-name hardcoding from shared engine trace/event paths; labels now come from controlled champion ability identifiers
 - Improved maximum-quality coverage semantics and diagnostics:
   - incomplete coverage no longer implies hard failure and now emits explicit degraded-mode warning text/flags in console/report/JSON diagnostics
-- Prevented persistent cache fragmentation for default random-seed runs:
-  - persistent full-score cache partitioning now uses deterministic configured seed ownership; runtime-random default seeds share a stable cache partition
+- Prevented persistent cache fragmentation for default random-seed runs (historical; superseded by later persistent-cache removal):
+  - persistent full-score cache partitioning used deterministic configured seed ownership while it existed
 - Hardened search/runtime correctness and schema fail-fast behavior:
   - cooldown effects expressed in seconds are no longer converted into ability haste during deterministic loadout stat parsing
   - invulnerable-seconds objective normalization now references scenario horizon instead of a fixed one-second baseline
@@ -279,7 +283,7 @@
   - healing done
   - per-stage objective components are emitted in reports/JSON output.
 - Added regression tests for legality and key rules.
-- Added persistent full-score cache across runs under:
+- Added persistent full-score cache across runs under (historical; later removed):
   - `Simulation/output/cache/`
 - Added first-pass module split for simulation extensions:
   - `src/respawn.rs`

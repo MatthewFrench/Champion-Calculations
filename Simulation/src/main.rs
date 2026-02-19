@@ -290,7 +290,6 @@ struct SearchTypeBreakdown {
     name: String,
     score_requests: usize,
     new_simulations: usize,
-    persistent_cache_hits: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -312,8 +311,6 @@ struct SearchDiagnostics {
     full_cache_hits: usize,
     full_cache_misses: usize,
     full_cache_waits: usize,
-    full_persistent_cache_hits: usize,
-    full_persistent_cache_entries: usize,
     candidate_keys_generated: usize,
     candidate_duplicates_pruned: usize,
     unique_candidate_builds: usize,
@@ -349,7 +346,6 @@ struct SearchDiagnostics {
     search_type_breakdown: Vec<SearchTypeBreakdown>,
     estimated_total_candidate_space: Option<f64>,
     estimated_run_space_coverage_percent: Option<f64>,
-    estimated_cache_space_coverage_percent: Option<f64>,
     estimated_close_to_optimal_probability: Option<f64>,
     estimated_close_to_optimal_probability_note: String,
     coverage_stage_enabled: bool,

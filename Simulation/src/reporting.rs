@@ -372,7 +372,7 @@ pub(super) fn write_controlled_champion_report_markdown(
         .sum::<usize>();
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `{}` / `{}` / `{}` / `{}`\n- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `{:.2}/{:.2}/{:.2}/{:.2}/{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- Full evaluations cache hits/misses/waits: `{}/{}/{}`\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Strict ordering heuristic (enabled / rune_weight / shard_weight / exploration_promotions): `{}` / `{:.2}` / `{:.2}` / `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `{}` / `{}` / `{}` / `{}`\n- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `{:.2}/{:.2}/{:.2}/{:.2}/{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- In-memory full-evaluation cache hits/misses/waits: `{}/{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Strict ordering heuristic (enabled / rune_weight / shard_weight / exploration_promotions): `{}` / `{:.2}` / `{:.2}` / `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
         format_usize_with_commas(diagnostics.scenario_count),
@@ -394,8 +394,6 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_usize_with_commas(diagnostics.full_cache_hits),
         format_usize_with_commas(diagnostics.full_cache_misses),
         format_usize_with_commas(diagnostics.full_cache_waits),
-        format_usize_with_commas(diagnostics.full_persistent_cache_hits),
-        format_usize_with_commas(diagnostics.full_persistent_cache_entries),
         format_usize_with_commas(diagnostics.candidate_keys_generated),
         format_usize_with_commas(diagnostics.candidate_duplicates_pruned),
         format_usize_with_commas(diagnostics.unique_candidate_builds),
@@ -496,12 +494,6 @@ pub(super) fn write_controlled_champion_report_markdown(
             format_percent_display(run_coverage)
         ));
     }
-    if let Some(cache_coverage) = diagnostics.estimated_cache_space_coverage_percent {
-        content.push_str(&format!(
-            "- Estimated legal-space coverage (persistent cache): `{}`\n",
-            format_percent_display(cache_coverage)
-        ));
-    }
     if let Some(probability) = diagnostics.estimated_close_to_optimal_probability {
         content.push_str(&format!(
             "- Estimated closeness probability (top 0.000001% heuristic): `{:.2}%`\n",
@@ -521,11 +513,10 @@ pub(super) fn write_controlled_champion_report_markdown(
         content.push_str("- Search-type simulation breakdown:\n");
         for breakdown in &diagnostics.search_type_breakdown {
             content.push_str(&format!(
-                "  - {}: requests `{}`, new simulations `{}`, persistent cache hits `{}`\n",
+                "  - {}: requests `{}`, new simulations `{}`\n",
                 breakdown.name,
                 format_usize_with_commas(breakdown.score_requests),
-                format_usize_with_commas(breakdown.new_simulations),
-                format_usize_with_commas(breakdown.persistent_cache_hits)
+                format_usize_with_commas(breakdown.new_simulations)
             ));
         }
     }
@@ -988,8 +979,6 @@ pub(super) fn write_controlled_champion_report_json(
             "full_cache_hits": diagnostics.full_cache_hits,
             "full_cache_misses": diagnostics.full_cache_misses,
             "full_cache_waits": diagnostics.full_cache_waits,
-            "full_persistent_cache_hits": diagnostics.full_persistent_cache_hits,
-            "full_persistent_cache_entries": diagnostics.full_persistent_cache_entries,
             "candidate_keys_generated": diagnostics.candidate_keys_generated,
             "candidate_duplicates_pruned": diagnostics.candidate_duplicates_pruned,
             "unique_candidate_builds": diagnostics.unique_candidate_builds,
@@ -1026,13 +1015,11 @@ pub(super) fn write_controlled_champion_report_json(
                 json!({
                     "name": breakdown.name.clone(),
                     "score_requests": breakdown.score_requests,
-                    "new_simulations": breakdown.new_simulations,
-                    "persistent_cache_hits": breakdown.persistent_cache_hits
+                    "new_simulations": breakdown.new_simulations
                 })
             }).collect::<Vec<_>>(),
             "estimated_total_candidate_space": diagnostics.estimated_total_candidate_space,
             "estimated_run_space_coverage_percent": diagnostics.estimated_run_space_coverage_percent,
-            "estimated_cache_space_coverage_percent": diagnostics.estimated_cache_space_coverage_percent,
             "estimated_close_to_optimal_probability": diagnostics.estimated_close_to_optimal_probability,
             "estimated_close_to_optimal_probability_note": diagnostics.estimated_close_to_optimal_probability_note,
             "coverage_stage_enabled": diagnostics.coverage_stage_enabled,

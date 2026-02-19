@@ -56,9 +56,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - popcorn progress-window timeout is applied after coverage (coverage itself is protected from popcorn early-stop checks)
   - if coverage is incomplete (timeout boundary or non-finite candidate gaps), search continues in explicit degraded mode and reports a coverage warning flag
 - Runtime budget for timed search now arms on first timed-phase simulation evaluation (not during setup/wrap-up).
-- Persistent full-score cache partitioning now ignores runtime-random default seed values:
-  - deterministic seeds still partition cache explicitly
-  - default random-seed runs reuse a shared cache partition
+- Full-candidate objective scoring uses in-memory per-run dedupe cache only (no disk-backed cross-run score cache).
 - Full-loadout `beam` and `greedy` now co-optimize loadout selection with item expansion.
 - Adaptive/bleed strategy-key ordering is normalized before seed-index derivation for fixed-seed reproducibility.
 - Seed-stage partial candidates are deterministically completed before strict full-ranking fallback in short-budget runs.

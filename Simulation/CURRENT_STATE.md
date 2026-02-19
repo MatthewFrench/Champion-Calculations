@@ -23,7 +23,7 @@ This file is a concise handoff for developers and AI agents.
 - Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
 - URF item allow-list restrictions and enemy URF preset loadouts.
-- Parallelized search/ranking with persistent score cache.
+- Parallelized search/ranking with per-run in-memory score dedupe cache.
 - Top-level search orchestration is parallelized for ensemble seeds and portfolio strategies, and strategy-elite/adaptive generation is parallelized with deterministic merge ordering.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
@@ -37,7 +37,6 @@ This file is a concise handoff for developers and AI agents.
   - default is runtime-random seed (`search.seed: 0`).
   - deterministic reproducibility is explicit (`--seed <u64>` or scenario `search.seed`).
   - reports include the effective seed.
-  - persistent full-score cache partitioning ignores runtime-random default seeds to preserve cache reuse across default runs.
 - `maximum_quality` behavior:
   - runs a pre-budget coverage stage that explicitly touches each legal item/rune/shard asset.
   - retains top diverse candidates per locked asset and injects them into main search.
@@ -84,7 +83,7 @@ This file is a concise handoff for developers and AI agents.
 - Scenario objective invulnerable-seconds normalization now references scenario horizon (instead of a fixed one-second baseline).
 - Enemy respawn delay now uses each enemy actor's own level.
 - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions.
-- Report metrics/build-order diagnostics re-resolve candidate loadout stats on persistent-cache hits (avoids base-loadout fallback skew).
+- Report metrics/build-order diagnostics re-resolve candidate loadout stats from in-run evaluation data and fallback recomputation paths.
 - Opponent encounters now require at least one positive encounter weight; all-zero-weight scenario sets are rejected.
 - Vladimir Sanguine Pool is modeled as per-tick area damage-over-time with range checks on each tick; trace events now include enemy-hit counts for area spells and pool ticks.
 - Controlled champion cast gating now enforces cast-lock state (windup/channel/lockout), preventing same-tick spell stacking from engine scheduling.
