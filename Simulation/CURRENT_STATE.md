@@ -27,6 +27,7 @@ This file is a concise handoff for developers and AI agents.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
 - Report and trace outputs now include rune proc telemetry totals plus source-attribution breakdown (`source_breakdown`), proc attempt/eligible metrics and rates, and damage/healing share metrics.
+- Search-time scoring simulations now run with full rune-proc telemetry collection disabled; dedicated trace/report replay simulations explicitly enable it.
 - Optional `simulation.combat_seed` now enables deterministic combat-variation simulation runs (enemy initialization ordering + initial auto-attack jitter).
 - Controlled champion runtime helper module is now stateless (defensive item/revive policy only); no dedicated controlled runtime holder is stored in engine state.
 

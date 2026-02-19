@@ -5,7 +5,7 @@ use crate::defaults::{
 use crate::to_norm_key;
 
 use crate::scripts::runtime::loadout_runtime::{
-    LoadoutRuntimeState, OnHitEffectProfile, build_loadout_runtime_state,
+    LoadoutRuntimeState, OnHitEffectProfile, build_loadout_runtime_state_with_telemetry,
     calculate_ability_bonus_damage, calculate_on_hit_bonus_damage, describe_runtime_cooldowns,
     describe_runtime_stacks, loadout_attack_speed_multiplier, loadout_incoming_damage_multipliers,
     loadout_movement_speed_multiplier, on_enemy_kill_heal, on_outgoing_damage_heal,
@@ -289,8 +289,15 @@ pub(crate) fn build_champion_loadout_runtime(
     rune_names: &[String],
     item_haste: f64,
     owner_is_melee: bool,
+    rune_proc_telemetry_enabled: bool,
 ) -> ChampionLoadoutRuntime {
-    build_loadout_runtime_state(item_names, rune_names, item_haste, owner_is_melee)
+    build_loadout_runtime_state_with_telemetry(
+        item_names,
+        rune_names,
+        item_haste,
+        owner_is_melee,
+        rune_proc_telemetry_enabled,
+    )
 }
 
 pub(crate) fn attack_speed_multiplier(runtime: &ChampionLoadoutRuntime, now: f64) -> f64 {

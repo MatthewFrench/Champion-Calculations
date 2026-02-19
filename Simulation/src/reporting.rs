@@ -176,6 +176,56 @@ fn append_objective_score_breakdown_block(
     content.push('\n');
 }
 
+fn report_rune_proc_telemetry_json(
+    entries: &[crate::scripts::champions::ChampionRuneProcTelemetryEntry],
+    total_damage: f64,
+    total_healing: f64,
+) -> Vec<Value> {
+    entries
+        .iter()
+        .map(|entry| {
+            let damage_share = if total_damage > 0.0 {
+                entry.bonus_damage.max(0.0) / total_damage
+            } else {
+                0.0
+            };
+            let healing_share = if total_healing > 0.0 {
+                entry.bonus_healing.max(0.0) / total_healing
+            } else {
+                0.0
+            };
+            json!({
+                "rune_name": entry.rune_name,
+                "proc_count": entry.proc_count,
+                "attempt_count": entry.attempt_count,
+                "eligible_count": entry.eligible_count,
+                "proc_attempt_rate": entry.proc_attempt_rate,
+                "proc_eligible_rate": entry.proc_eligible_rate,
+                "opportunity_count": entry.eligible_count,
+                "proc_opportunity_rate": entry.proc_eligible_rate,
+                "bonus_damage": entry.bonus_damage,
+                "bonus_damage_share": damage_share,
+                "bonus_healing": entry.bonus_healing,
+                "bonus_healing_share": healing_share,
+                "source_breakdown": entry.source_breakdown.iter().map(|source| {
+                    json!({
+                        "source": source.source,
+                        "proc_count": source.proc_count,
+                        "attempt_count": source.attempt_count,
+                        "eligible_count": source.eligible_count,
+                        "proc_attempt_rate": source.proc_attempt_rate,
+                        "proc_eligible_rate": source.proc_eligible_rate,
+                        "opportunity_count": source.eligible_count,
+                        "proc_opportunity_rate": source.proc_eligible_rate,
+                        "bonus_damage": source.bonus_damage,
+                        "bonus_healing": source.bonus_healing
+                    })
+                }).collect::<Vec<_>>()
+            })
+        })
+        .collect::<Vec<_>>()
+}
+
 pub(super) fn write_controlled_champion_report_markdown(
     report_path: &Path,
     data: &ControlledChampionReportData<'_>,
@@ -841,46 +891,11 @@ pub(super) fn write_controlled_champion_report_json(
             },
             "best_objective_breakdown": objective_breakdown_json(best_score_breakdown),
         },
-        "best_rune_proc_telemetry": best_rune_proc_telemetry.iter().map(|entry| {
-            let damage_share = if best_outcome.damage_dealt > 0.0 {
-                entry.bonus_damage.max(0.0) / best_outcome.damage_dealt
-            } else {
-                0.0
-            };
-            let healing_share = if best_outcome.healing_done > 0.0 {
-                entry.bonus_healing.max(0.0) / best_outcome.healing_done
-            } else {
-                0.0
-            };
-            json!({
-                "rune_name": entry.rune_name,
-                "proc_count": entry.proc_count,
-                "attempt_count": entry.attempt_count,
-                "eligible_count": entry.eligible_count,
-                "proc_attempt_rate": entry.proc_attempt_rate,
-                "proc_eligible_rate": entry.proc_eligible_rate,
-                "opportunity_count": entry.eligible_count,
-                "proc_opportunity_rate": entry.proc_eligible_rate,
-                "bonus_damage": entry.bonus_damage,
-                "bonus_damage_share": damage_share,
-                "bonus_healing": entry.bonus_healing,
-                "bonus_healing_share": healing_share,
-                "source_breakdown": entry.source_breakdown.iter().map(|source| {
-                    json!({
-                        "source": source.source,
-                        "proc_count": source.proc_count,
-                        "attempt_count": source.attempt_count,
-                        "eligible_count": source.eligible_count,
-                        "proc_attempt_rate": source.proc_attempt_rate,
-                        "proc_eligible_rate": source.proc_eligible_rate,
-                        "opportunity_count": source.eligible_count,
-                        "proc_opportunity_rate": source.proc_eligible_rate,
-                        "bonus_damage": source.bonus_damage,
-                        "bonus_healing": source.bonus_healing
-                    })
-                }).collect::<Vec<_>>()
-            })
-        }).collect::<Vec<_>>(),
+        "best_rune_proc_telemetry": report_rune_proc_telemetry_json(
+            best_rune_proc_telemetry,
+            best_outcome.damage_dealt,
+            best_outcome.healing_done,
+        ),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
         "controlled_champion_unmodeled_runes": controlled_champion_loadout.unmodeled_rune_names,

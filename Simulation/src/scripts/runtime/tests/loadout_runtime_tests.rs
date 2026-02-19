@@ -104,6 +104,13 @@ fn ability_hit_at_level(
 }
 
 #[test]
+fn modeled_rune_telemetry_index_mapping_matches_key_table_order() {
+    for (idx, rune_key) in MODELED_RUNE_TELEMETRY_KEYS.iter().enumerate() {
+        assert_eq!(rune_telemetry_index(rune_key), Some(idx));
+    }
+}
+
+#[test]
 fn builder_marks_item_and_rune_runtime_flags() {
     let runtime = build_loadout_runtime_state(
         &[

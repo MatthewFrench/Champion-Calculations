@@ -1201,6 +1201,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
         .get("simulation")
         .ok_or_else(|| anyhow!("Missing simulation"))?;
     let mut sim = parse_simulation_config(simulation_config)?;
+    sim.collect_rune_proc_telemetry = false;
     let controlled_champion_config = parse_controlled_champion_config(
         &scenario,
         &champion_bases,
@@ -1367,6 +1368,8 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
         "{controlled_champion_key}_fixed_loadout_trace.json"
     ));
 
+    let mut trace_sim_cfg = sim.clone();
+    trace_sim_cfg.collect_rune_proc_telemetry = true;
     let mut trace_sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
         controlled_champion_base.clone(),
         &fixed_build_items,
@@ -1375,7 +1378,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
         None,
         Some(&controlled_champion_stack_overrides),
         &enemy_builds,
-        sim.clone(),
+        trace_sim_cfg,
         urf.clone(),
     );
     trace_sim.enable_trace();
@@ -1735,6 +1738,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
         .get("simulation")
         .ok_or_else(|| anyhow!("Missing simulation"))?;
     let mut sim = parse_simulation_config(simulation_config)?;
+    sim.collect_rune_proc_telemetry = false;
     let controlled_champion_config = parse_controlled_champion_config(
         &scenario,
         &champion_bases,
@@ -1915,44 +1919,57 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
                 ensure_complete_loadout_selection(&loadout_selection, &loadout_domain)?;
             let resolved_loadout = resolve_loadout(&loadout_selection, sim.champion_level, true)?;
             let keystone_seed_base = fixed_sweep_keystone_seed_base(search_cfg.seed, keystone);
-
-            let mut seed_repeat_scores = Vec::with_capacity(sweep_seed_repeats);
-            let mut repeated_outcomes = Vec::with_capacity(sweep_seed_repeats);
-            let mut repeated_breakdowns = Vec::with_capacity(sweep_seed_repeats);
-            let mut seed_repeat_values = Vec::with_capacity(sweep_seed_repeats);
-            for repeat_idx in 0..sweep_seed_repeats {
-                let repeat_seed = fixed_sweep_repeat_seed(keystone_seed_base, repeat_idx);
-                seed_repeat_values.push(repeat_seed);
-                let mut repeat_sim = sim.clone();
-                repeat_sim.combat_seed = Some(repeat_seed);
-                let repeat_objective_eval_ctx = ObjectiveEvalContext {
-                    controlled_champion_base: objective_eval_ctx.controlled_champion_base,
-                    controlled_champion_stack_overrides: objective_eval_ctx
-                        .controlled_champion_stack_overrides,
-                    enemy_build_scenarios: objective_eval_ctx.enemy_build_scenarios,
-                    sim: &repeat_sim,
-                    urf: objective_eval_ctx.urf,
-                    scenario_reference_outcomes: objective_eval_ctx.scenario_reference_outcomes,
-                    weights: objective_eval_ctx.weights,
-                    worst_case_weight: objective_eval_ctx.worst_case_weight,
-                };
-                let (score, outcome, breakdown) =
-                    aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
-                        &repeat_objective_eval_ctx,
-                        &fixed_build_items,
-                        &resolved_loadout.bonus_stats,
-                        Some(&loadout_selection),
-                    );
-                seed_repeat_scores.push(score);
-                repeated_outcomes.push(outcome);
-                repeated_breakdowns.push(breakdown);
-            }
+            let mut repeat_results = (0..sweep_seed_repeats)
+                .into_par_iter()
+                .map(|repeat_idx| {
+                    let repeat_seed = fixed_sweep_repeat_seed(keystone_seed_base, repeat_idx);
+                    let mut repeat_sim = sim.clone();
+                    repeat_sim.combat_seed = Some(repeat_seed);
+                    let repeat_objective_eval_ctx = ObjectiveEvalContext {
+                        controlled_champion_base: objective_eval_ctx.controlled_champion_base,
+                        controlled_champion_stack_overrides: objective_eval_ctx
+                            .controlled_champion_stack_overrides,
+                        enemy_build_scenarios: objective_eval_ctx.enemy_build_scenarios,
+                        sim: &repeat_sim,
+                        urf: objective_eval_ctx.urf,
+                        scenario_reference_outcomes: objective_eval_ctx.scenario_reference_outcomes,
+                        weights: objective_eval_ctx.weights,
+                        worst_case_weight: objective_eval_ctx.worst_case_weight,
+                    };
+                    let (score, outcome, breakdown) =
+                        aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
+                            &repeat_objective_eval_ctx,
+                            &fixed_build_items,
+                            &resolved_loadout.bonus_stats,
+                            Some(&loadout_selection),
+                        );
+                    (repeat_idx, repeat_seed, score, outcome, breakdown)
+                })
+                .collect::<Vec<_>>();
+            repeat_results.sort_by_key(|entry| entry.0);
+            let seed_repeat_values = repeat_results
+                .iter()
+                .map(|entry| entry.1)
+                .collect::<Vec<_>>();
+            let seed_repeat_scores = repeat_results
+                .iter()
+                .map(|entry| entry.2)
+                .collect::<Vec<_>>();
+            let repeated_outcomes = repeat_results
+                .iter()
+                .map(|entry| entry.3)
+                .collect::<Vec<_>>();
+            let repeated_breakdowns = repeat_results
+                .iter()
+                .map(|entry| entry.4)
+                .collect::<Vec<_>>();
 
             let objective_score =
                 seed_repeat_scores.iter().sum::<f64>() / seed_repeat_scores.len().max(1) as f64;
             let outcome = average_combat_outcomes(&repeated_outcomes);
             let objective_breakdown = average_objective_breakdowns(&repeated_breakdowns);
             let mut trace_sim_cfg = sim.clone();
+            trace_sim_cfg.collect_rune_proc_telemetry = true;
             if let Some(seed) = seed_repeat_values.first().copied() {
                 trace_sim_cfg.combat_seed = Some(seed);
             }
@@ -2308,6 +2325,7 @@ pub(super) fn run_controlled_champion_scenario(
         .get("simulation")
         .ok_or_else(|| anyhow!("Missing simulation"))?;
     let mut sim = parse_simulation_config(simulation_config)?;
+    sim.collect_rune_proc_telemetry = false;
     if deadline_reached(current_deadline()) {
         timeout_flag.store(1, AtomicOrdering::Relaxed);
     }
@@ -3764,6 +3782,8 @@ pub(super) fn run_controlled_champion_scenario(
             to_norm_key(&controlled_champion_name)
         ));
     let trace_json_path = trace_markdown_path.with_extension("json");
+    let mut best_trace_sim_cfg = sim.clone();
+    best_trace_sim_cfg.collect_rune_proc_telemetry = true;
     let mut best_trace_sim =
         ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
             controlled_champion_base.clone(),
@@ -3773,7 +3793,7 @@ pub(super) fn run_controlled_champion_scenario(
             best_order_acquired_map.as_ref(),
             Some(&controlled_champion_stack_overrides),
             &enemy_builds,
-            sim.clone(),
+            best_trace_sim_cfg,
             urf.clone(),
         );
     best_trace_sim.enable_trace();
@@ -3901,6 +3921,7 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
         .get("simulation")
         .ok_or_else(|| anyhow!("Missing simulation"))?;
     let mut sim_cfg = parse_simulation_config(simulation_config)?;
+    sim_cfg.collect_rune_proc_telemetry = false;
     let controlled_champion_config = parse_controlled_champion_config(
         &scenario,
         &champion_bases,

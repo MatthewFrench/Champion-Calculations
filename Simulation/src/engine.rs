@@ -541,6 +541,7 @@ impl ControlledChampionCombatSimulation {
             &controlled_champion_rune_names,
             urf.item_haste,
             controlled_champion_base.is_melee,
+            sim.collect_rune_proc_telemetry,
         );
         let controlled_champion_behavior = behavior_profile(
             &controlled_champion_name,
@@ -3488,6 +3489,7 @@ fn derive_enemy_model(
         &runtime_rune_names,
         urf.item_haste,
         enemy.base.is_melee,
+        sim.collect_rune_proc_telemetry,
     );
     attack_speed = base_attack_speed * attack_speed_multiplier(&runtime, 0.0);
 

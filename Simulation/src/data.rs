@@ -489,6 +489,10 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
 
     let stack_overrides = parse_stack_overrides_map(data.get("stack_overrides"))?;
     let combat_seed = data.get("combat_seed").and_then(Value::as_u64);
+    let collect_rune_proc_telemetry = data
+        .get("collect_rune_proc_telemetry")
+        .and_then(Value::as_bool)
+        .unwrap_or(false);
 
     Ok(SimulationConfig {
         dt,
@@ -496,6 +500,7 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         champion_level,
         max_time_seconds,
         combat_seed,
+        collect_rune_proc_telemetry,
         controlled_champion_script: None,
         zhonya_duration_seconds: data
             .get("zhonya_duration_seconds")

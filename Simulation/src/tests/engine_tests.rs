@@ -139,6 +139,7 @@ fn test_simulation(
         champion_level: 20,
         max_time_seconds,
         combat_seed: None,
+        collect_rune_proc_telemetry: true,
         controlled_champion_script: if controlled_champion_script_enabled {
             crate::scripts::champions::resolve_controlled_champion_script("Vladimir")
         } else {
@@ -224,6 +225,69 @@ fn controlled_champion_loadout_runtime_increases_spell_damage_when_selected() {
         &urf,
     );
     assert!(outcome_with_runtime.damage_dealt > outcome_without_runtime.damage_dealt);
+}
+
+#[test]
+fn rune_proc_telemetry_can_be_disabled_for_search_time_simulations() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Telemetry Target");
+    enemy.spawn_position_xy = Some((250.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let bonus_stats = Stats {
+        ability_power: 300.0,
+        ..Stats::default()
+    };
+    let loadout_selection = LoadoutSelection {
+        rune_names: vec!["Summon Aery".to_string()],
+        shard_stats: Vec::new(),
+    };
+    let urf = test_urf();
+
+    let mut sim_with_telemetry = test_simulation(4.0, true);
+    sim_with_telemetry.collect_rune_proc_telemetry = true;
+    let mut runner_with_telemetry =
+        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+            controlled_champion.clone(),
+            &[],
+            &bonus_stats,
+            Some(&loadout_selection),
+            None,
+            None,
+            &enemies,
+            sim_with_telemetry,
+            urf.clone(),
+        );
+    while runner_with_telemetry.step(1) {}
+    let with_telemetry = runner_with_telemetry.controlled_champion_rune_proc_telemetry();
+    assert!(
+        with_telemetry
+            .iter()
+            .any(|entry| entry.rune_name == "Summon Aery"),
+        "expected summon aery telemetry when collection is enabled"
+    );
+
+    let mut sim_without_telemetry = test_simulation(4.0, true);
+    sim_without_telemetry.collect_rune_proc_telemetry = false;
+    let mut runner_without_telemetry =
+        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+            controlled_champion,
+            &[],
+            &bonus_stats,
+            Some(&loadout_selection),
+            None,
+            None,
+            &enemies,
+            sim_without_telemetry,
+            urf,
+        );
+    while runner_without_telemetry.step(1) {}
+    assert!(
+        runner_without_telemetry
+            .controlled_champion_rune_proc_telemetry()
+            .is_empty(),
+        "search-time runs should skip full rune telemetry collection"
+    );
 }
 
 #[test]
@@ -867,6 +931,143 @@ fn pool_tick_misses_enemy_just_outside_range_boundary() {
             .any(|entry| entry.contains("[controlled_champion_pool_tick]")
                 && entry.contains("to 0 enemies in range"))
     );
+}
+
+#[test]
+fn pool_tick_moving_ranged_target_can_exit_range_before_tick() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemy = test_enemy("Moving Boundary");
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.enable_trace();
+    runner.controlled_champion_defensive_ability_two_damage_per_tick = 90.0;
+    runner.controlled_champion_defensive_ability_two_heal_ratio_of_damage = 0.0;
+    runner.pool_effect_range = 200.0;
+    runner.pool_damage_tick_interval_seconds = 0.5;
+    runner.pool_damage_until = 0.5;
+    runner.pool_next_damage_tick_at = 0.5;
+    let boundary_distance = runner.pool_effect_range
+        + runner.controlled_champion_hitbox_radius
+        + runner.enemy_state[0].hitbox_radius;
+    runner.target_position = Vec2 { x: 0.0, y: 0.0 };
+    runner.enemy_state[0].position = Vec2 {
+        x: boundary_distance - 1.0,
+        y: 0.0,
+    };
+
+    runner.update_actor_positions(0.5);
+    assert!(
+        runner.distance_to_target(0) > boundary_distance,
+        "target should have moved outside pool range before tick"
+    );
+    runner.apply_hot_effects(0.6);
+
+    assert_eq!(runner.damage_dealt_total, 0.0);
+    assert!(
+        runner
+            .trace_events()
+            .iter()
+            .any(|entry| entry.contains("[controlled_champion_pool_tick]")
+                && entry.contains("to 0 enemies in range"))
+    );
+}
+
+#[test]
+fn pool_tick_hits_enemy_on_diagonal_range_boundary() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Diagonal Boundary");
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.enable_trace();
+    runner.controlled_champion_defensive_ability_two_damage_per_tick = 75.0;
+    runner.controlled_champion_defensive_ability_two_heal_ratio_of_damage = 0.0;
+    runner.pool_effect_range = 200.0;
+    runner.pool_damage_tick_interval_seconds = 0.5;
+    runner.pool_damage_until = 0.5;
+    runner.pool_next_damage_tick_at = 0.5;
+    let boundary_distance = runner.pool_effect_range
+        + runner.controlled_champion_hitbox_radius
+        + runner.enemy_state[0].hitbox_radius;
+    let diagonal_component = boundary_distance / 2.0_f64.sqrt();
+    runner.target_position = Vec2 { x: 0.0, y: 0.0 };
+    runner.enemy_state[0].position = Vec2 {
+        x: diagonal_component,
+        y: diagonal_component,
+    };
+
+    runner.apply_hot_effects(0.6);
+
+    assert!(runner.damage_dealt_total > 0.0);
+    assert!(
+        runner
+            .trace_events()
+            .iter()
+            .any(|entry| entry.contains("[controlled_champion_pool_tick]")
+                && entry.contains("to 1 enemies in range"))
+    );
+}
+
+#[test]
+fn controlled_champion_range_checks_respect_effect_hitbox_radius() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Hitbox Radius");
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.pool_effect_range = 200.0;
+    let boundary_distance = runner.pool_effect_range
+        + runner.controlled_champion_hitbox_radius
+        + runner.enemy_state[0].hitbox_radius;
+    runner.target_position = Vec2 { x: 0.0, y: 0.0 };
+    runner.enemy_state[0].position = Vec2 {
+        x: boundary_distance + 8.0,
+        y: 0.0,
+    };
+
+    let (_, without_effect_hitbox_hits) =
+        runner.apply_magic_damage_to_enemies_in_controlled_champion_range(40.0, 200.0, 0.0);
+    let (_, with_effect_hitbox_hits) =
+        runner.apply_magic_damage_to_enemies_in_controlled_champion_range(40.0, 200.0, 10.0);
+
+    assert_eq!(without_effect_hitbox_hits, 0);
+    assert_eq!(with_effect_hitbox_hits, 1);
 }
 
 #[test]

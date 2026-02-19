@@ -41,6 +41,8 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Combat-time rune coverage now also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
 - Controlled champion and enemy actors consume the same shared rune-combat runtime interfaces; controlled-champion runtime module now only owns defensive item/revive policy helpers.
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
+- Full rune-proc telemetry collection is disabled for search-time scoring simulations and enabled explicitly for trace/report replay simulations.
+- Rune telemetry runtime bookkeeping uses fixed-index counter arrays (no per-event hashmap lookup/allocation in hot paths).
 - Aftershock now models an active resist window that reduces incoming physical and magic damage while active.
 - Defensive item activation and revive triggers are modeled through generic controlled champion runtime/item script capabilities (not champion-specific decision structs).
 - Shared hook and enemy-script interfaces now use controlled champion terminology (no Vladimir-only cross-module field names).

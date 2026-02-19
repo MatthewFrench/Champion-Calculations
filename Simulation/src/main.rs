@@ -147,6 +147,7 @@ struct SimulationConfig {
     champion_level: usize,
     max_time_seconds: f64,
     combat_seed: Option<u64>,
+    collect_rune_proc_telemetry: bool,
     controlled_champion_script: Option<crate::scripts::champions::ControlledChampionScriptHandle>,
     zhonya_duration_seconds: f64,
     zhonya_cooldown_seconds: f64,

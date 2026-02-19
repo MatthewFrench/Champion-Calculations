@@ -182,6 +182,16 @@ fn parse_simulation_config_supports_optional_combat_seed() {
     });
     let parsed = parse_simulation_config(&simulation).expect("simulation config should parse");
     assert_eq!(parsed.combat_seed, Some(13371337));
+    assert!(!parsed.collect_rune_proc_telemetry);
+}
+
+#[test]
+fn parse_simulation_config_supports_collect_rune_proc_telemetry_flag() {
+    let simulation = serde_json::json!({
+        "collect_rune_proc_telemetry": true
+    });
+    let parsed = parse_simulation_config(&simulation).expect("simulation config should parse");
+    assert!(parsed.collect_rune_proc_telemetry);
 }
 
 #[test]
