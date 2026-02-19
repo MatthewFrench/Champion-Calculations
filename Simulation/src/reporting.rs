@@ -8,6 +8,7 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::time::SystemTime;
 
+use crate::scripts::coverage::unmodeled_runtime_item_effect_names;
 use crate::search::item_names;
 
 use super::{
@@ -247,6 +248,8 @@ pub(super) fn write_controlled_champion_report_markdown(
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
     let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
+    let controlled_champion_unmodeled_item_effect_names =
+        unmodeled_runtime_item_effect_names(best_build);
     let best_score_breakdown = data.best_score_breakdown;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
@@ -424,6 +427,13 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_usize_with_commas(diagnostics.unmodeled_rune_candidates_rejected),
         format_usize_with_commas(diagnostics.unmodeled_rune_candidates_penalized)
     ));
+    content.push_str(&format!(
+        "- Unmodeled item-effect gate (hard_gate / penalty_per_item / rejected / penalized): `{}` / `{:.4}` / `{}` / `{}`\n",
+        diagnostics.unmodeled_item_effect_hard_gate,
+        diagnostics.unmodeled_item_effect_penalty_per_item,
+        format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_rejected),
+        format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_penalized)
+    ));
     if diagnostics.coverage_stage_enabled {
         content.push_str(&format!(
             "- Coverage stage (pre-budget): `{:.2}s`; assets covered `{}/{}`; seeded candidates unique/raw `{}/{}`\n",
@@ -579,6 +589,14 @@ pub(super) fn write_controlled_champion_report_markdown(
         );
         for rune_name in &controlled_champion_loadout.unmodeled_rune_names {
             content.push_str(&format!("  - {}\n", rune_name));
+        }
+    }
+    if !controlled_champion_unmodeled_item_effect_names.is_empty() {
+        content.push_str(
+            "- Controlled champion items with unmodeled passive/active/structured runtime effects:\n",
+        );
+        for item_name in &controlled_champion_unmodeled_item_effect_names {
+            content.push_str(&format!("  - {}\n", item_name));
         }
     }
     content.push('\n');
@@ -855,6 +873,8 @@ pub(super) fn write_controlled_champion_report_json(
     let best_outcome = data.best_outcome;
     let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
     let best_score_breakdown = data.best_score_breakdown;
+    let controlled_champion_unmodeled_item_effect_names =
+        unmodeled_runtime_item_effect_names(best_build);
     let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
@@ -899,6 +919,7 @@ pub(super) fn write_controlled_champion_report_json(
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
         "controlled_champion_unmodeled_runes": controlled_champion_loadout.unmodeled_rune_names,
+        "controlled_champion_unmodeled_item_effects": controlled_champion_unmodeled_item_effect_names,
         "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {
             let key = to_norm_key(&enemy.name);
             let preset = enemy_presets_used.get(&key);
@@ -990,6 +1011,10 @@ pub(super) fn write_controlled_champion_report_json(
             "unmodeled_rune_penalty_per_rune": diagnostics.unmodeled_rune_penalty_per_rune,
             "unmodeled_rune_candidates_rejected": diagnostics.unmodeled_rune_candidates_rejected,
             "unmodeled_rune_candidates_penalized": diagnostics.unmodeled_rune_candidates_penalized,
+            "unmodeled_item_effect_hard_gate": diagnostics.unmodeled_item_effect_hard_gate,
+            "unmodeled_item_effect_penalty_per_item": diagnostics.unmodeled_item_effect_penalty_per_item,
+            "unmodeled_item_effect_candidates_rejected": diagnostics.unmodeled_item_effect_candidates_rejected,
+            "unmodeled_item_effect_candidates_penalized": diagnostics.unmodeled_item_effect_candidates_penalized,
             "unique_scored_candidates": diagnostics.unique_scored_candidates,
             "time_budget_seconds": diagnostics.time_budget_seconds,
             "popcorn_window_seconds": diagnostics.popcorn_window_seconds,

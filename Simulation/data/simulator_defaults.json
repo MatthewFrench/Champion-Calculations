@@ -43,6 +43,8 @@
     "strict_ranking_exploration_promotions": 1,
     "unmodeled_rune_hard_gate": false,
     "unmodeled_rune_penalty_per_rune": 0.02,
+    "unmodeled_item_effect_hard_gate": false,
+    "unmodeled_item_effect_penalty_per_item": 0.02,
     "seed": 0
   },
   "search_quality_profile_defaults": {

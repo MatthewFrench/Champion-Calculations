@@ -17,6 +17,7 @@ This file is a concise handoff for developers and AI agents.
 - Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, Aftershock, Electrocute, First Strike, and Phase Rush.
 - Shared runtime rune coverage also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
 - Controlled champion and enemy actors now run rune combat logic through the same shared runtime interfaces.
+- Search now also applies explicit unmodeled-item-effect quality gates (hard-gate or per-item penalty) alongside unmodeled-rune policy.
 - CLI primary modes are `controlled_champion`, `controlled_champion_fixed_loadout`, `controlled_champion_fixed_loadout_rune_sweep`, and `controlled_champion_step` (`vladimir`/`vladimir_step` aliases still accepted).
 - Item and runtime loadout script hooks under `src/scripts/items/` and `src/scripts/runtime/`.
 - Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
@@ -60,6 +61,13 @@ This file is a concise handoff for developers and AI agents.
     - quality profiles now apply policy defaults:
       - `maximum_quality`: hard gate enabled
       - `fast`/`balanced`: penalty mode
+  - unmodeled-item-effect quality gating is explicit and configurable:
+    - optional hard gate (`unmodeled_item_effect_hard_gate`)
+    - optional per-item score penalty (`unmodeled_item_effect_penalty_per_item`)
+    - diagnostics include rejected/penalized candidate counts.
+    - quality profiles now apply policy defaults:
+      - `maximum_quality`: hard gate enabled
+      - `fast`/`balanced`: penalty mode
   - diagnostics now report effective thread count and parallel-mode flags for orchestration phases.
 
 ## Data/Runtime Correctness Updates
@@ -84,6 +92,7 @@ This file is a concise handoff for developers and AI agents.
 - Shared runtime rune effects now also cover Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
 - Aftershock resist-window mitigation now affects incoming physical and magic damage during the active window for both controlled champion and enemies.
 - Report generation now hard-fails when controlled champion rune/shard labels are incomplete.
+- Reports and report JSON now also expose controlled champion best-build items with unmodeled passive/active/structured runtime effects.
 - Fixed-loadout rune sweep repeat aggregation now varies deterministic combat seeds per repeat rather than re-running identical combat realizations.
 - Added calibration regressions for Electrocute, Arcane Comet, First Strike, and Aftershock level-scaling formulas plus a pool multi-target tick-hit/damage regression.
 
@@ -111,5 +120,10 @@ This file is a concise handoff for developers and AI agents.
   - `src/data.rs`
 - Reports:
   - `src/reporting.rs`
+- Coverage tracking:
+  - `COVERAGE_GAPS.md`
+- Data authoring workflow:
+  - `DATA_AUTHORING_GUIDE.md`
+  - `COVERAGE_CHECKLIST.md`
 - Contributor rules:
   - repository root `AGENTS.md`

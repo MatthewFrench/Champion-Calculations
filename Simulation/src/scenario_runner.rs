@@ -23,6 +23,7 @@ use crate::reporting::{
 use crate::scripts::champions::{
     ChampionRuneProcTelemetryEntry, resolve_controlled_champion_script,
 };
+use crate::scripts::coverage::is_item_effect_unmodeled;
 use crate::search::{
     FullLoadoutSearchParams, adaptive_strategy_candidates_full_loadout,
     build_search_ranked_full_loadout, candidate_pareto_front_keys, choose_best_build_by_stat,
@@ -2545,10 +2546,16 @@ pub(super) fn run_controlled_champion_scenario(
         }
         Some(resolved)
     };
+    let item_has_unmodeled_effect_by_index = item_pool
+        .iter()
+        .map(is_item_effect_unmodeled)
+        .collect::<Vec<_>>();
 
     let full_eval_count = AtomicUsize::new(0);
     let unmodeled_rune_candidates_rejected = AtomicUsize::new(0);
     let unmodeled_rune_candidates_penalized = AtomicUsize::new(0);
+    let unmodeled_item_effect_candidates_rejected = AtomicUsize::new(0);
+    let unmodeled_item_effect_candidates_penalized = AtomicUsize::new(0);
     let full_cache = Arc::new(BlockingScoreCache::new());
     let unique_scored_candidate_keys = Arc::new(ShardedStringSet::new());
     let search_type_counters =
@@ -2562,6 +2569,13 @@ pub(super) fn run_controlled_champion_scenario(
         .hash(&mut scenario_hasher);
     search_cfg
         .unmodeled_rune_penalty_per_rune
+        .to_bits()
+        .hash(&mut scenario_hasher);
+    search_cfg
+        .unmodeled_item_effect_hard_gate
+        .hash(&mut scenario_hasher);
+    search_cfg
+        .unmodeled_item_effect_penalty_per_item
         .to_bits()
         .hash(&mut scenario_hasher);
     "full_loadout_candidate_v2".hash(&mut scenario_hasher);
@@ -2622,8 +2636,22 @@ pub(super) fn run_controlled_champion_scenario(
                 return f64::NEG_INFINITY;
             };
             let unmodeled_rune_count = resolved_loadout.unmodeled_rune_names.len();
+            let unmodeled_item_effect_count = key
+                .item_indices
+                .iter()
+                .filter(|item_idx| {
+                    item_has_unmodeled_effect_by_index
+                        .get(**item_idx)
+                        .copied()
+                        .unwrap_or(false)
+                })
+                .count();
             if unmodeled_rune_count > 0 && search_cfg.unmodeled_rune_hard_gate {
                 unmodeled_rune_candidates_rejected.fetch_add(1, AtomicOrdering::Relaxed);
+                return f64::NEG_INFINITY;
+            }
+            if unmodeled_item_effect_count > 0 && search_cfg.unmodeled_item_effect_hard_gate {
+                unmodeled_item_effect_candidates_rejected.fetch_add(1, AtomicOrdering::Relaxed);
                 return f64::NEG_INFINITY;
             }
             arm_time_budget_deadline_if_unset(
@@ -2654,6 +2682,11 @@ pub(super) fn run_controlled_champion_scenario(
                 score -= search_cfg.unmodeled_rune_penalty_per_rune.max(0.0)
                     * unmodeled_rune_count as f64;
             }
+            if unmodeled_item_effect_count > 0 {
+                unmodeled_item_effect_candidates_penalized.fetch_add(1, AtomicOrdering::Relaxed);
+                score -= search_cfg.unmodeled_item_effect_penalty_per_item.max(0.0)
+                    * unmodeled_item_effect_count as f64;
+            }
             if is_full_candidate {
                 if let Ok(mut map) = best_loadout_by_candidate.lock() {
                     map.insert(key.clone(), resolved_loadout);
@@ -2675,7 +2708,20 @@ pub(super) fn run_controlled_champion_scenario(
         let key = canonical_build_candidate(candidate.clone());
         let resolved_loadout = resolve_loadout_for_selection(&key.loadout_selection)?;
         let unmodeled_rune_count = resolved_loadout.unmodeled_rune_names.len();
+        let unmodeled_item_effect_count = key
+            .item_indices
+            .iter()
+            .filter(|item_idx| {
+                item_has_unmodeled_effect_by_index
+                    .get(**item_idx)
+                    .copied()
+                    .unwrap_or(false)
+            })
+            .count();
         if unmodeled_rune_count > 0 && search_cfg.unmodeled_rune_hard_gate {
+            return None;
+        }
+        if unmodeled_item_effect_count > 0 && search_cfg.unmodeled_item_effect_hard_gate {
             return None;
         }
         arm_time_budget_deadline_if_unset(
@@ -2691,7 +2737,9 @@ pub(super) fn run_controlled_champion_scenario(
             Some(&key.loadout_selection),
         );
         let score = score
-            - search_cfg.unmodeled_rune_penalty_per_rune.max(0.0) * unmodeled_rune_count as f64;
+            - search_cfg.unmodeled_rune_penalty_per_rune.max(0.0) * unmodeled_rune_count as f64
+            - search_cfg.unmodeled_item_effect_penalty_per_item.max(0.0)
+                * unmodeled_item_effect_count as f64;
         Some((key, score, outcome, resolved_loadout))
     };
 
@@ -3406,6 +3454,13 @@ pub(super) fn run_controlled_champion_scenario(
         unmodeled_rune_candidates_penalized.load(AtomicOrdering::Relaxed)
     );
     println!(
+        "- Unmodeled item-effect gate: hard gate {} | penalty per item {:.4} | rejected {} | penalized {}",
+        search_cfg.unmodeled_item_effect_hard_gate,
+        search_cfg.unmodeled_item_effect_penalty_per_item,
+        unmodeled_item_effect_candidates_rejected.load(AtomicOrdering::Relaxed),
+        unmodeled_item_effect_candidates_penalized.load(AtomicOrdering::Relaxed)
+    );
+    println!(
         "- Candidate keys generated / duplicates pruned: {}/{}",
         candidate_keys_generated, candidate_duplicates_pruned
     );
@@ -3596,6 +3651,12 @@ pub(super) fn run_controlled_champion_scenario(
         unmodeled_rune_candidates_rejected: unmodeled_rune_candidates_rejected
             .load(AtomicOrdering::Relaxed),
         unmodeled_rune_candidates_penalized: unmodeled_rune_candidates_penalized
+            .load(AtomicOrdering::Relaxed),
+        unmodeled_item_effect_hard_gate: search_cfg.unmodeled_item_effect_hard_gate,
+        unmodeled_item_effect_penalty_per_item: search_cfg.unmodeled_item_effect_penalty_per_item,
+        unmodeled_item_effect_candidates_rejected: unmodeled_item_effect_candidates_rejected
+            .load(AtomicOrdering::Relaxed),
+        unmodeled_item_effect_candidates_penalized: unmodeled_item_effect_candidates_penalized
             .load(AtomicOrdering::Relaxed),
         unique_scored_candidates,
         time_budget_seconds: time_budget.map(|d| d.as_secs_f64()),

@@ -830,6 +830,14 @@ pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
             .get("unmodeled_rune_penalty_per_rune")
             .and_then(Value::as_f64)
             .unwrap_or(search_defaults.unmodeled_rune_penalty_per_rune),
+        unmodeled_item_effect_hard_gate: data
+            .get("unmodeled_item_effect_hard_gate")
+            .and_then(Value::as_bool)
+            .unwrap_or(search_defaults.unmodeled_item_effect_hard_gate),
+        unmodeled_item_effect_penalty_per_item: data
+            .get("unmodeled_item_effect_penalty_per_item")
+            .and_then(Value::as_f64)
+            .unwrap_or(search_defaults.unmodeled_item_effect_penalty_per_item),
         seed: data
             .get("seed")
             .and_then(Value::as_u64)
@@ -890,17 +898,25 @@ pub(crate) fn apply_search_quality_profile(
             search.unmodeled_rune_hard_gate = false;
             search.unmodeled_rune_penalty_per_rune =
                 search.unmodeled_rune_penalty_per_rune.max(0.0);
+            search.unmodeled_item_effect_hard_gate = false;
+            search.unmodeled_item_effect_penalty_per_item =
+                search.unmodeled_item_effect_penalty_per_item.max(0.0);
         }
         SearchQualityProfile::Balanced => {
             apply_profile_overrides(search, profile_defaults.balanced);
             search.unmodeled_rune_hard_gate = false;
             search.unmodeled_rune_penalty_per_rune =
                 search.unmodeled_rune_penalty_per_rune.max(0.0);
+            search.unmodeled_item_effect_hard_gate = false;
+            search.unmodeled_item_effect_penalty_per_item =
+                search.unmodeled_item_effect_penalty_per_item.max(0.0);
         }
         SearchQualityProfile::MaximumQuality => {
             apply_profile_minimums(search, profile_defaults.maximum_quality_minimums);
             search.unmodeled_rune_hard_gate = true;
             search.unmodeled_rune_penalty_per_rune = 0.0;
+            search.unmodeled_item_effect_hard_gate = true;
+            search.unmodeled_item_effect_penalty_per_item = 0.0;
         }
     }
 }
@@ -1521,6 +1537,29 @@ pub(crate) fn load_items() -> Result<HashMap<String, Item>> {
                     .collect::<Vec<_>>()
             })
             .unwrap_or_default();
+        let has_active_effect = data
+            .get("active")
+            .and_then(Value::as_object)
+            .map(|active| {
+                active
+                    .get("name")
+                    .and_then(Value::as_str)
+                    .is_some_and(|name| !name.trim().is_empty())
+                    || active
+                        .get("effects")
+                        .and_then(Value::as_str)
+                        .is_some_and(|text| !text.trim().is_empty())
+                    || active
+                        .get("effects_structured")
+                        .and_then(Value::as_array)
+                        .is_some_and(|effects| !effects.is_empty())
+            })
+            .unwrap_or(false);
+        let structured_effect_count = data
+            .get("effects_structured")
+            .and_then(Value::as_array)
+            .map(Vec::len)
+            .unwrap_or(0);
 
         let Some(name) = data
             .get("name")
@@ -1538,6 +1577,8 @@ pub(crate) fn load_items() -> Result<HashMap<String, Item>> {
                 shop_purchasable: purchasable,
                 total_cost,
                 passive_effects_text,
+                has_active_effect,
+                structured_effect_count,
             },
         );
     }

@@ -9,6 +9,8 @@ fn test_item(name: &str) -> Item {
         shop_purchasable: true,
         total_cost: 3000.0,
         passive_effects_text: Vec::new(),
+        has_active_effect: false,
+        structured_effect_count: 0,
     }
 }
 

@@ -199,6 +199,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - added explicit rune level-calibration regression tests for Electrocute, Arcane Comet, First Strike, and Aftershock formulas/caps.
   - report generation now hard-fails if controlled champion rune/shard selection labels are incomplete (no degraded “none selected” output).
   - search scoring now supports explicit unmodeled-rune quality-gate policy (hard gate or per-rune penalty) with diagnostics counters.
+  - added explicit unmodeled-item-effect quality-gate policy in search scoring (hard gate or per-item penalty) with diagnostics counters.
+  - added script-level coverage registry helpers for modeled item effects and report surfacing of best-build unmodeled item effects.
+  - added `Simulation/COVERAGE_GAPS.md` to track cross-domain fidelity/coverage gaps with concrete modeled/unmodeled inventories.
 - Success criteria:
   - selected runes contribute in real time when conditions trigger.
 

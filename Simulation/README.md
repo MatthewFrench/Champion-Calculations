@@ -40,6 +40,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Combat-time keystone coverage also includes Electrocute, First Strike, and Phase Rush.
 - Combat-time rune coverage now also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
 - Controlled champion and enemy actors consume the same shared rune-combat runtime interfaces; controlled-champion runtime module now only owns defensive item/revive policy helpers.
+- Search scoring now also supports explicit unmodeled-item-effect quality gating (hard gate or per-item penalty) to reduce ranking bias from unimplemented item effects.
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
 - Full rune-proc telemetry collection is disabled for search-time scoring simulations and enabled explicitly for trace/report replay simulations.
 - Rune telemetry runtime bookkeeping uses fixed-index counter arrays (no per-event hashmap lookup/allocation in hot paths).
@@ -107,6 +108,9 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `../Characters/<Champion>.json`: Champion canonical gameplay data, including per-ability execution fields (`abilities.<ability_key>.execution`) and ability/passive effect data used by scripts.
 - `../Characters/ChampionDefaults.json`: Champion-style nested role defaults (`base_stats`, `basic_attack`, `abilities.execution_defaults`) used as fallback when champion files omit those canonical fields.
 - `CURRENT_STATE.md`: concise current-state handoff for developers and AI agents.
+- `COVERAGE_GAPS.md`: tracked list of known game-fidelity and implementation-coverage gaps.
+- `COVERAGE_CHECKLIST.md`: contributor checklist for champion/item/rune/shard coverage work.
+- `DATA_AUTHORING_GUIDE.md`: canonical workflow for authoring champion/item/rune data and wiring runtime behavior.
 - `IMPROVEMENT_TRACKER.md`: Done and pending improvements.
 - `IMPLEMENTATION_ROADMAP.md`: roadmap status and planned phases.
 - `Cargo.toml`: Rust package manifest.
@@ -170,6 +174,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
     - generated/unique/pruned candidate counts
     - strict-stage completion percentage and timeout-skipped candidate count
     - unmodeled-rune gate policy/counters (hard gate flag, per-rune penalty, rejected/penalized candidates)
+    - unmodeled-item-effect gate policy/counters (hard gate flag, per-item penalty, rejected/penalized candidates)
     - estimated legal candidate-space size and coverage percentages
     - heuristic closeness-to-optimal probability estimate with explicit assumptions
   - If run with a time budget, report includes timeout and completion metadata
@@ -221,9 +226,10 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
   - Prints periodic status lines (phase, elapsed, progress, best score) while searching.
 - `--search-quality-profile {fast|balanced|maximum_quality}`:
   - Applies opinionated search settings. Default is `maximum_quality`.
-  - Also applies unmodeled-rune policy:
+  - Also applies unmodeled coverage policy:
     - `maximum_quality`: hard gate (reject candidates with unmodeled runes)
-    - `fast`/`balanced`: score-penalty mode
+    - `maximum_quality`: hard gate (reject candidates with unmodeled item effects)
+    - `fast`/`balanced`: per-rune and per-item score-penalty mode
 - `--seed N`:
   - Overrides runtime seed with deterministic value `N`.
   - If not provided, runtime seed is random unless the scenario explicitly sets `search.seed`.
@@ -316,6 +322,9 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 - Scenario JSON should stay minimal and reference canonical data from `Characters`, `Items`, and `Game Mode`.
 - Opponent actors no longer accept `combat` proxy blocks; use champion scripts/data only.
 - Opponent groups no longer accept `opponents.uptime_windows_enabled`; combat windows are script/runtime driven.
+- For contributor workflow and completion criteria:
+  - data authoring workflow: `DATA_AUTHORING_GUIDE.md`
+  - coverage done criteria: `COVERAGE_CHECKLIST.md`
 - Architecture direction:
   - shared simulation/core/search/reporting modules should remain champion-agnostic.
   - champion and loadout specifics should be delegated through script interfaces.
@@ -499,3 +508,4 @@ This migration is active and tracked in the roadmap and improvement tracker for 
 - Current implementation applies deterministic stat bonuses from direct passive/stat effects and reports selections/skips in output.
 - Conditional or highly dynamic rune effects that cannot be represented deterministically are skipped and documented in the report.
 - Runes with no modeled deterministic stat effect and no modeled combat-time runtime effect are explicitly listed in report warnings as unmodeled.
+- Best-build report output also lists controlled champion items that still have unmodeled passive/active/structured runtime effects.

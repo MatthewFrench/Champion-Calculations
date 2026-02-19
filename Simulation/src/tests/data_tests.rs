@@ -319,13 +319,15 @@ fn ensure_complete_loadout_selection_fills_missing_selection() {
 }
 
 #[test]
-fn search_quality_profiles_apply_unmodeled_rune_gate_policy() {
+fn search_quality_profiles_apply_unmodeled_quality_gate_policy() {
     let mut base = parse_build_search(&serde_json::json!({
         "strategy": "portfolio"
     }))
     .expect("default search config should parse");
     base.unmodeled_rune_hard_gate = true;
     base.unmodeled_rune_penalty_per_rune = -0.5;
+    base.unmodeled_item_effect_hard_gate = true;
+    base.unmodeled_item_effect_penalty_per_item = -0.5;
 
     let mut fast = base.clone();
     apply_search_quality_profile(&mut fast, SearchQualityProfile::Fast);
@@ -336,6 +338,14 @@ fn search_quality_profiles_apply_unmodeled_rune_gate_policy() {
     assert!(
         fast.unmodeled_rune_penalty_per_rune >= 0.0,
         "fast profile should clamp negative rune penalties"
+    );
+    assert!(
+        !fast.unmodeled_item_effect_hard_gate,
+        "fast profile should not hard-reject unmodeled item-effect candidates"
+    );
+    assert!(
+        fast.unmodeled_item_effect_penalty_per_item >= 0.0,
+        "fast profile should clamp negative item-effect penalties"
     );
 
     let mut balanced = base.clone();
@@ -348,6 +358,14 @@ fn search_quality_profiles_apply_unmodeled_rune_gate_policy() {
         balanced.unmodeled_rune_penalty_per_rune >= 0.0,
         "balanced profile should clamp negative rune penalties"
     );
+    assert!(
+        !balanced.unmodeled_item_effect_hard_gate,
+        "balanced profile should not hard-reject unmodeled item-effect candidates"
+    );
+    assert!(
+        balanced.unmodeled_item_effect_penalty_per_item >= 0.0,
+        "balanced profile should clamp negative item-effect penalties"
+    );
 
     let mut maximum_quality = base;
     apply_search_quality_profile(&mut maximum_quality, SearchQualityProfile::MaximumQuality);
@@ -358,6 +376,14 @@ fn search_quality_profiles_apply_unmodeled_rune_gate_policy() {
     assert!(
         maximum_quality.unmodeled_rune_penalty_per_rune.abs() < f64::EPSILON,
         "maximum quality profile should not apply rune penalties when hard gating"
+    );
+    assert!(
+        maximum_quality.unmodeled_item_effect_hard_gate,
+        "maximum quality profile should hard-reject unmodeled item-effect candidates"
+    );
+    assert!(
+        maximum_quality.unmodeled_item_effect_penalty_per_item.abs() < f64::EPSILON,
+        "maximum quality profile should not apply item-effect penalties when hard gating"
     );
 }
 

@@ -1,6 +1,16 @@
 # Improvement Tracker
 
 ## Done
+- Added explicit data-authoring workflow and coverage checklist docs:
+  - added `Simulation/DATA_AUTHORING_GUIDE.md` covering canonical ownership boundaries, best complete examples, and the repository flow from source data to runtime modeling
+  - added `Simulation/COVERAGE_CHECKLIST.md` with actionable champion/item/rune/shard coverage gates and required validation/docs updates
+  - linked the new docs from `README.md` and `Simulation/README.md`
+- Added cross-domain coverage tracking and item-effect quality gates:
+  - added `src/scripts/coverage.rs` as shared coverage-registry helpers for modeled runtime item effects
+  - added search-quality config/policy for unmodeled item effects (`unmodeled_item_effect_hard_gate`, `unmodeled_item_effect_penalty_per_item`)
+  - search diagnostics/report markdown/report JSON now include unmodeled item-effect gate policy and rejected/penalized candidate counters
+  - best-build report outputs now explicitly list controlled champion items with unmodeled passive/active/structured runtime effects
+  - added `Simulation/COVERAGE_GAPS.md` with a comprehensive tracked inventory of known game-fidelity gaps (champions/items/runes/shards/engine systems)
 - Completed shared-rune-runtime parity and output hardening pass:
   - moved Arcane Comet, Summon Aery, Triumph, Gathering Storm, and Second Wind combat behavior fully into shared loadout runtime paths used by both controlled champion and enemies
   - added Hail of Blades and Dark Harvest runtime behavior in shared loadout runtime

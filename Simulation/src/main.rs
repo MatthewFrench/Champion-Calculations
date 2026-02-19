@@ -97,6 +97,8 @@ struct Item {
     shop_purchasable: bool,
     total_cost: f64,
     passive_effects_text: Vec<String>,
+    has_active_effect: bool,
+    structured_effect_count: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -219,6 +221,8 @@ struct BuildSearchConfig {
     strict_ranking_exploration_promotions: usize,
     unmodeled_rune_hard_gate: bool,
     unmodeled_rune_penalty_per_rune: f64,
+    unmodeled_item_effect_hard_gate: bool,
+    unmodeled_item_effect_penalty_per_item: f64,
     seed: u64,
 }
 
@@ -328,6 +332,10 @@ struct SearchDiagnostics {
     unmodeled_rune_penalty_per_rune: f64,
     unmodeled_rune_candidates_rejected: usize,
     unmodeled_rune_candidates_penalized: usize,
+    unmodeled_item_effect_hard_gate: bool,
+    unmodeled_item_effect_penalty_per_item: f64,
+    unmodeled_item_effect_candidates_rejected: usize,
+    unmodeled_item_effect_candidates_penalized: usize,
     unique_scored_candidates: usize,
     time_budget_seconds: Option<f64>,
     popcorn_window_seconds: Option<f64>,

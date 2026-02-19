@@ -29,6 +29,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Search quality profiles now enforce profile-aware unmodeled-rune policy:
   - `maximum_quality` uses hard rejection for unmodeled rune candidates
   - `fast`/`balanced` keep penalty mode
+- Search scoring now also supports explicit unmodeled-item-effect quality gating (hard gate or per-item penalty), with profile-aware defaults.
 - Added a direct fixed-loadout evaluation mode for controlled champion A/B comparisons without search (`controlled_champion_fixed_loadout`).
 - Added a fixed-loadout keystone comparison mode (`controlled_champion_fixed_loadout_rune_sweep`) for direct one-build rune sweeps.
 - Reports and traces now include rune proc telemetry with trigger-source attribution and calibration metrics (opportunity counts, proc-opportunity rates, and damage/healing share).
@@ -78,6 +79,10 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - `Simulation/IMPROVEMENT_TRACKER.md`
 - Current implementation snapshot:
   - `Simulation/CURRENT_STATE.md`
+  - `Simulation/COVERAGE_GAPS.md`
+- Data authoring and coverage workflow:
+  - `Simulation/DATA_AUTHORING_GUIDE.md`
+  - `Simulation/COVERAGE_CHECKLIST.md`
 - Contributor/agent rules:
   - `AGENTS.md`
 
