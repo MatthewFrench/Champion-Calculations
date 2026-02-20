@@ -41,15 +41,28 @@ fn level_scaled_enemy_builds(
     enemy_builds
         .iter()
         .map(|(enemy_cfg, build, bonus_stats)| {
-            let raw_base = raw_enemy_bases
-                .get(&enemy_cfg.id)
-                .cloned()
-                .unwrap_or_else(|| enemy_cfg.base.clone());
             let mut scaled_cfg = enemy_cfg.clone();
-            scaled_cfg.base = champion_at_level(&raw_base, enemy_cfg.level);
+            scaled_cfg.base = raw_enemy_bases
+                .get(&enemy_cfg.id)
+                .map(|raw_base| champion_at_level(raw_base, enemy_cfg.level))
+                .unwrap_or_else(|| enemy_cfg.base.clone());
             (scaled_cfg, build.clone(), bonus_stats.clone())
         })
         .collect()
+}
+
+fn blended_stage_score(
+    weighted_mean_score: f64,
+    worst_case_score: Option<f64>,
+    positive_weight_scenarios: usize,
+    worst_case_weight: f64,
+) -> f64 {
+    if positive_weight_scenarios > 1 {
+        let worst = worst_case_score.unwrap_or(weighted_mean_score);
+        weighted_mean_score * (1.0 - worst_case_weight) + worst * worst_case_weight
+    } else {
+        weighted_mean_score
+    }
 }
 
 fn normalized_encounter_weights(ctx: &BuildOrderEvalContext<'_>) -> Vec<f64> {
@@ -123,6 +136,10 @@ fn score_build_order(
         })
         .collect::<Vec<_>>();
     let scenario_count = stage_outcomes_by_scenario.len();
+    let positive_weight_scenarios = encounter_weights
+        .iter()
+        .filter(|weight| **weight > 0.0)
+        .count();
 
     let mut stage_survival = Vec::new();
     let mut stage_damage = Vec::new();
@@ -143,7 +160,7 @@ fn score_build_order(
         let mut weighted_outcome = CombatOutcome::default();
         let mut weighted_enemy_kills = 0.0;
         let mut weighted_mean_score = 0.0;
-        let mut worst_case_score = f64::INFINITY;
+        let mut worst_case_score = None::<f64>;
 
         for scenario_idx in 0..scenario_count {
             let weight = encounter_weights.get(scenario_idx).copied().unwrap_or(0.0);
@@ -160,7 +177,12 @@ fn score_build_order(
             let stage_score =
                 objective_score_from_outcome(outcome, reference, ctx.objective_weights);
             weighted_mean_score += stage_score * weight;
-            worst_case_score = worst_case_score.min(stage_score);
+            if weight > 0.0 {
+                worst_case_score = Some(match worst_case_score {
+                    Some(current) => current.min(stage_score),
+                    None => stage_score,
+                });
+            }
             weighted_outcome.time_alive_seconds += outcome.time_alive_seconds * weight;
             weighted_outcome.damage_dealt += outcome.damage_dealt * weight;
             weighted_outcome.healing_done += outcome.healing_done * weight;
@@ -168,12 +190,12 @@ fn score_build_order(
             weighted_enemy_kills += outcome.enemy_kills as f64 * weight;
         }
         weighted_outcome.enemy_kills = weighted_enemy_kills.round().max(0.0) as usize;
-        let stage_score = if scenario_count > 1 {
-            weighted_mean_score * (1.0 - ctx.multi_scenario_worst_weight)
-                + worst_case_score * ctx.multi_scenario_worst_weight
-        } else {
-            weighted_mean_score
-        };
+        let stage_score = blended_stage_score(
+            weighted_mean_score,
+            worst_case_score,
+            positive_weight_scenarios,
+            ctx.multi_scenario_worst_weight,
+        );
         stage_survival.push(weighted_outcome.time_alive_seconds);
         stage_damage.push(weighted_outcome.damage_dealt);
         stage_healing.push(weighted_outcome.healing_done);

@@ -2433,14 +2433,14 @@ pub(super) fn run_controlled_champion_scenario(
         sim.champion_level,
         &sim.stack_overrides,
     )?;
-    let primary_enemy_raw = enemy_scenarios_raw
-        .first()
-        .map(|(_, _, v)| v.clone())
-        .unwrap_or_default();
-    let raw_enemy_bases = primary_enemy_raw
+    let raw_enemy_bases = enemy_scenarios_raw
         .iter()
-        .map(|e| (e.id.clone(), e.base.clone()))
-        .collect::<HashMap<_, _>>();
+        .flat_map(|(_, _, enemies)| enemies.iter())
+        .fold(HashMap::new(), |mut map, enemy| {
+            map.entry(enemy.id.clone())
+                .or_insert_with(|| enemy.base.clone());
+            map
+        });
     let enemy_scenarios = enemy_scenarios_raw
         .iter()
         .map(|(name, weight, enemies)| {
