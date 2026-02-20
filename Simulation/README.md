@@ -474,6 +474,7 @@ This migration is active and tracked in the roadmap and improvement tracker for 
   - controlled champion offensive/defensive ability tuning must come from canonical champion data and script capabilities.
 - Enemy actor policy is scenario-minimal and data-driven:
   - `opponents.encounters[].actors[]` config only actor identity, level, placement, and optional stack overrides.
+  - actor `id` values may repeat across encounters only when they refer to the same champion identity; conflicting champion reuse for one `id` is rejected.
   - Champion damage/crowd-control behavior comes from canonical champion data plus champion scripts.
   - Placement/movement policy: `opponents.encounters[].actors[].placement.position` plus `placement.movement` (`hold_position` or `maintain_combat_range`).
 - Report now includes:

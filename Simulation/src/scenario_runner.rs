@@ -1054,6 +1054,7 @@ fn parse_opponent_encounters(
     let mut parsed = Vec::with_capacity(encounters.len());
     let mut total_weight = 0.0;
     let mut positive_weight_count = 0usize;
+    let mut seen_actor_ids = HashMap::<String, String>::new();
     for (index, encounter) in encounters.iter().enumerate() {
         let name = encounter
             .get("name")
@@ -1092,6 +1093,19 @@ fn parse_opponent_encounters(
                 )
             })
             .collect::<Result<Vec<_>>>()?;
+        for actor in &parsed_actors {
+            let actor_champion_key = to_norm_key(&actor.name);
+            if let Some(previous_champion_key) = seen_actor_ids.get(&actor.id)
+                && previous_champion_key != &actor_champion_key
+            {
+                return Err(anyhow!(
+                    "opponents.encounters actor IDs must map to a single champion identity across encounters. Duplicate actor id '{}' is assigned to multiple champions (encounter '{}').",
+                    actor.id,
+                    name
+                ));
+            }
+            seen_actor_ids.insert(actor.id.clone(), actor_champion_key);
+        }
         parsed.push((name.to_string(), weight, parsed_actors));
     }
     if positive_weight_count == 0 || total_weight <= 0.0 {

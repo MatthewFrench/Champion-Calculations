@@ -4,6 +4,7 @@
 - Addressed latest PR review findings in build-order encounter handling:
   - raw enemy base lookup for build-order stage scaling now seeds from all configured encounters (not only the primary encounter), preventing fallback double-scaling for secondary-only actors
   - build-order worst-case stage blending now ignores zero-weight encounters, so explicitly disabled encounters do not penalize stage scores
+  - opponent actor ID validation now rejects cross-encounter ID collisions that map one `id` to different champions, preventing actor-ID keyed raw-base lookups from binding the wrong champion base
 - Closed remaining PR review correctness gaps around build-order encounter scope and report invariants:
   - build-order optimization now evaluates across all configured encounters (weighted + worst-case blend), rather than only the first encounter
   - report selection-label validation now keys legality off selected runes/shards and tolerates unmodeled shard labels while still enforcing legal loadout shape

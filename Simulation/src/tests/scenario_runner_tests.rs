@@ -160,6 +160,43 @@ fn parse_opponent_encounters_accepts_positive_weight_mix() {
 }
 
 #[test]
+fn parse_opponent_encounters_rejects_duplicate_actor_ids_across_encounters() {
+    let champion_bases = load_champion_bases().expect("champion data should load");
+    let champion_names = champion_bases
+        .values()
+        .map(|champion| champion.name.clone())
+        .collect::<Vec<_>>();
+    assert!(
+        champion_names.len() >= 2,
+        "need at least two champions to validate duplicate-id collision handling"
+    );
+    let scenario = json!({
+        "opponents": {
+            "encounters": [
+                {
+                    "name": "encounter_a",
+                    "weight": 1.0,
+                    "actors": [{ "id": "frontline", "champion": champion_names[0] }]
+                },
+                {
+                    "name": "encounter_b",
+                    "weight": 1.0,
+                    "actors": [{ "id": "frontline", "champion": champion_names[1] }]
+                }
+            ]
+        }
+    });
+    let err = parse_opponent_encounters(&scenario, &champion_bases, 18, &HashMap::new())
+        .expect_err("duplicate actor IDs should be rejected to keep actor-ID keyed caches safe");
+    assert!(
+        err.to_string()
+            .contains("actor IDs must map to a single champion identity"),
+        "unexpected error: {}",
+        err
+    );
+}
+
+#[test]
 fn parse_scenario_search_or_default_uses_portfolio_when_missing() {
     let scenario = json!({});
     let parsed = parse_scenario_search_or_default(&scenario)
