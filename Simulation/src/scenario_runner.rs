@@ -65,7 +65,7 @@ fn fixed_sweep_repeat_seed(keystone_seed_base: u64, repeat_idx: usize) -> u64 {
 fn append_rune_proc_telemetry_markdown_entries(
     content: &mut String,
     entry_prefix: &str,
-    source_prefix: &str,
+    detail_prefix: &str,
     entries: &[ChampionRuneProcTelemetryEntry],
     total_damage: f64,
     total_healing: f64,
@@ -86,7 +86,7 @@ fn append_rune_proc_telemetry_markdown_entries(
         let damage_share_percent = share_percent(entry.bonus_damage, total_damage);
         let healing_share_percent = share_percent(entry.bonus_healing, total_healing);
         content.push_str(&format!(
-            "{entry_prefix}{}: procs `{}` / attempts `{}` / eligible `{}` (proc/attempt {:.1}%, proc/eligible {:.1}%), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
+            "{entry_prefix}{}:\n{detail_prefix}- Procs: `{}`\n{detail_prefix}- Attempts: `{}`\n{detail_prefix}- Eligible: `{}`\n{detail_prefix}- Proc rate (vs attempts): `{:.1}%`\n{detail_prefix}- Proc rate (vs eligible): `{:.1}%`\n{detail_prefix}- Bonus damage: `{:.2}` ({:.2}% share)\n{detail_prefix}- Bonus healing: `{:.2}` ({:.2}% share)\n",
             entry.rune_name,
             entry.proc_count,
             entry.attempt_count,
@@ -99,25 +99,30 @@ fn append_rune_proc_telemetry_markdown_entries(
             healing_share_percent
         ));
         if !entry.source_breakdown.is_empty() {
-            let sources = entry
-                .source_breakdown
-                .iter()
-                .map(|source| {
-                    format!(
-                        "{} (procs {}, attempts {}, eligible {}, proc/attempt {:.1}%, proc/eligible {:.1}%, damage {:.2}, healing {:.2})",
-                        source.source,
-                        source.proc_count,
-                        source.attempt_count,
-                        source.eligible_count,
-                        source.proc_attempt_rate * 100.0,
-                        source.proc_eligible_rate * 100.0,
-                        source.bonus_damage,
-                        source.bonus_healing
-                    )
-                })
-                .collect::<Vec<_>>()
-                .join("; ");
-            content.push_str(&format!("{source_prefix}sources: {sources}\n"));
+            content.push_str(&format!("{detail_prefix}- Sources:\n"));
+            let source_prefix = format!("{detail_prefix}  ");
+            let source_detail_prefix = format!("{source_prefix}  ");
+            for source in &entry.source_breakdown {
+                content.push_str(&format!(
+                    "{}- {}:\n{}- Procs: `{}`\n{}- Attempts: `{}`\n{}- Eligible: `{}`\n{}- Proc rate (vs attempts): `{:.1}%`\n{}- Proc rate (vs eligible): `{:.1}%`\n{}- Bonus damage: `{:.2}`\n{}- Bonus healing: `{:.2}`\n",
+                    source_prefix,
+                    source.source,
+                    source_detail_prefix,
+                    source.proc_count,
+                    source_detail_prefix,
+                    source.attempt_count,
+                    source_detail_prefix,
+                    source.eligible_count,
+                    source_detail_prefix,
+                    source.proc_attempt_rate * 100.0,
+                    source_detail_prefix,
+                    source.proc_eligible_rate * 100.0,
+                    source_detail_prefix,
+                    source.bonus_damage,
+                    source_detail_prefix,
+                    source.bonus_healing
+                ));
+            }
         }
     }
 }
@@ -1105,6 +1110,29 @@ fn search_quality_profile_key(search_quality_profile: SearchQualityProfile) -> &
     }
 }
 
+fn parse_scenario_search_or_default(scenario: &Value) -> Result<BuildSearchConfig> {
+    if let Some(search) = scenario.get("search") {
+        return parse_build_search(search);
+    }
+    parse_build_search(&json!({ "strategy": "portfolio" }))
+}
+
+fn unique_loadout_selection_count(candidates: &[BuildKey]) -> usize {
+    candidates
+        .iter()
+        .map(|candidate| loadout_selection_key(&candidate.loadout_selection))
+        .collect::<HashSet<_>>()
+        .len()
+}
+
+fn unique_loadout_selection_count_from_ranked(ranked: &[(BuildKey, f64)]) -> usize {
+    ranked
+        .iter()
+        .map(|(candidate, _)| loadout_selection_key(&candidate.loadout_selection))
+        .collect::<HashSet<_>>()
+        .len()
+}
+
 fn runtime_budget_key(max_runtime_seconds: Option<f64>) -> String {
     match max_runtime_seconds {
         Some(seconds) if seconds > 0.0 => {
@@ -1349,11 +1377,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
         .map(|(_, _, builds)| builds.clone())
         .unwrap_or_default();
 
-    let mut search_cfg = parse_build_search(
-        scenario
-            .get("search")
-            .ok_or_else(|| anyhow!("Missing search"))?,
-    )?;
+    let mut search_cfg = parse_scenario_search_or_default(&scenario)?;
     apply_search_quality_profile(&mut search_cfg, options.search_quality_profile);
     let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
     let objective_component_weights = normalized_objective_weights(
@@ -1447,7 +1471,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
     append_rune_proc_telemetry_markdown_entries(
         &mut trace_markdown,
         "- ",
-        "  - ",
+        "  ",
         &rune_proc_telemetry,
         fixed_outcome.damage_dealt,
         fixed_outcome.healing_done,
@@ -1475,7 +1499,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
     fs::write(&trace_json_path, serde_json::to_string_pretty(&trace_json)?)?;
 
     let mut markdown_report = format!(
-        "# Controlled Champion Fixed Loadout Evaluation\n\n- Scenario: `{}`\n- Search quality profile: `{}`\n- Controlled champion: `{}`\n- Build items: `{}`\n- Runes: `{}`\n- Shards: `{}`\n\n## Headline\n- Objective score: **{:.4}**\n- Outcome (time_alive / damage / healing / enemy_kills / invulnerable_seconds): **{:.2}s / {:.1} / {:.1} / {} / {:.2}s**\n\n## Objective Score Breakdown\n- Weighted-mean score: `{:.4}`\n- Worst-case scenario score: `{:.4}`\n- Worst-case blend weight: `{:.2}`\n- Final blended objective score: `{:.4}`\n- survival: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- damage: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- healing: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- enemy_kills: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- invulnerable_seconds: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n\n## Notes\n- This mode evaluates one fixed build and loadout directly; no candidate search or mutation is performed.\n- Trace markdown: `{}`\n- Trace json: `{}`\n",
+        "# Controlled Champion Fixed Loadout Evaluation\n\n- Scenario: `{}`\n- Search quality profile: `{}`\n- Controlled champion: `{}`\n- Build items: `{}`\n- Runes: `{}`\n- Shards: `{}`\n\n## Headline\n- Objective score: **{:.4}**\n- Outcome:\n  - Time alive: **{:.2}s**\n  - Damage dealt: **{:.1}**\n  - Healing done: **{:.1}**\n  - Enemy kills: **{}**\n  - Invulnerable seconds: **{:.2}s**\n\n## Objective Score Breakdown\n- Weighted-mean score: `{:.4}`\n- Worst-case scenario score: `{:.4}`\n- Worst-case blend weight: `{:.2}`\n- Final blended objective score: `{:.4}`\n- survival: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- damage: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- healing: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- enemy_kills: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n- invulnerable_seconds: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%`\n\n## Notes\n- This mode evaluates one fixed build and loadout directly; no candidate search or mutation is performed.\n- Trace markdown: `{}`\n- Trace json: `{}`\n",
         scenario_path.display(),
         search_quality_profile_key(options.search_quality_profile),
         controlled_champion_name,
@@ -1526,7 +1550,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
         append_rune_proc_telemetry_markdown_entries(
             &mut markdown_report,
             "- ",
-            "  - ",
+            "  ",
             &rune_proc_telemetry,
             fixed_outcome.damage_dealt,
             fixed_outcome.healing_done,
@@ -1920,11 +1944,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
         .map(|(_, _, builds)| builds.clone())
         .unwrap_or_default();
 
-    let mut search_cfg = parse_build_search(
-        scenario
-            .get("search")
-            .ok_or_else(|| anyhow!("Missing search"))?,
-    )?;
+    let mut search_cfg = parse_scenario_search_or_default(&scenario)?;
     apply_search_quality_profile(&mut search_cfg, options.search_quality_profile);
     let objective_worst_case_weight = search_cfg.multi_scenario_worst_weight.clamp(0.0, 1.0);
     let objective_component_weights = normalized_objective_weights(
@@ -2136,7 +2156,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
                 .collect::<Vec<_>>()
                 .join(", ");
             markdown.push_str(&format!(
-                "{}. `{}` -> score `{:.4}` (delta `{:+.4}`, seed stddev `{:.4}`) | outcome `{:.2}s / {:.1} / {:.1} / {} / {:.2}s` | seeds `[{}]`\n",
+                "{}. `{}`\n  - Score: `{:.4}`\n  - Delta: `{:+.4}`\n  - Seed stddev: `{:.4}`\n  - Outcome:\n    - Time alive: `{:.2}s`\n    - Damage dealt: `{:.1}`\n    - Healing done: `{:.1}`\n    - Enemy kills: `{}`\n    - Invulnerable seconds: `{:.2}s`\n  - Seeds: `[{}]`\n",
                 idx + 1,
                 result.keystone_name,
                 result.objective_score,
@@ -2151,7 +2171,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
             ));
         } else {
             markdown.push_str(&format!(
-                "{}. `{}` -> score `{:.4}` (delta `{:+.4}`) | outcome `{:.2}s / {:.1} / {:.1} / {} / {:.2}s`\n",
+                "{}. `{}`\n  - Score: `{:.4}`\n  - Delta: `{:+.4}`\n  - Outcome:\n    - Time alive: `{:.2}s`\n    - Damage dealt: `{:.1}`\n    - Healing done: `{:.1}`\n    - Enemy kills: `{}`\n    - Invulnerable seconds: `{:.2}s`\n",
                 idx + 1,
                 result.keystone_name,
                 result.objective_score,
@@ -2171,7 +2191,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep(
         append_rune_proc_telemetry_markdown_entries(
             &mut markdown,
             "  - ",
-            "    - ",
+            "    ",
             &result.rune_proc_telemetry,
             result.outcome.damage_dealt,
             result.outcome.healing_done,
@@ -2623,8 +2643,6 @@ pub(super) fn run_controlled_champion_scenario(
             )
         };
 
-    let loadout_candidates_count = 1usize;
-    let loadout_finalists_count = 1usize;
     let resolve_loadout_for_selection = |selection: &LoadoutSelection| -> Option<ResolvedLoadout> {
         let key = loadout_selection_key(selection);
         if let Ok(map) = resolve_cache.lock()
@@ -2661,9 +2679,6 @@ pub(super) fn run_controlled_champion_scenario(
         let key = canonical_build_candidate(candidate.clone());
         let is_full_candidate = key.item_indices.len() == max_items;
         let cache_key = build_key_cache_string(&key);
-        if is_full_candidate {
-            unique_scored_candidate_keys.insert(cache_key.clone());
-        }
         let cache = Arc::clone(&full_cache);
         let search_type_owned = search_type.to_string();
         cache.get_or_compute(cache_key.clone(), || {
@@ -2721,6 +2736,9 @@ pub(super) fn run_controlled_champion_scenario(
                 score -= search_cfg.unmodeled_item_effect_penalty_per_item.max(0.0)
                     * unmodeled_item_effect_count as f64;
             }
+            if is_full_candidate && score.is_finite() {
+                unique_scored_candidate_keys.insert(cache_key.clone());
+            }
             if is_full_candidate {
                 if let Ok(mut map) = best_loadout_by_candidate.lock() {
                     map.insert(key.clone(), resolved_loadout);
@@ -2771,6 +2789,9 @@ pub(super) fn run_controlled_champion_scenario(
             - search_cfg.unmodeled_rune_penalty_per_rune.max(0.0) * unmodeled_rune_count as f64
             - search_cfg.unmodeled_item_effect_penalty_per_item.max(0.0)
                 * unmodeled_item_effect_count as f64;
+        if key.item_indices.len() == max_items && score.is_finite() {
+            unique_scored_candidate_keys.insert(build_key_cache_string(&key));
+        }
         Some((key, score, outcome, resolved_loadout))
     };
 
@@ -2913,6 +2934,25 @@ pub(super) fn run_controlled_champion_scenario(
         }
     }
 
+    if time_budget.is_some() && hard_deadline_value().is_none() {
+        // Bootstrap one timed-phase simulation so staged search loops get a live deadline value.
+        let mut bootstrap_seed = search_cfg.seed ^ 0xC0DE_DA7A_u64;
+        let bootstrap_candidate = canonical_build_candidate(BuildKey {
+            item_indices: random_valid_build(&item_pool, max_items, &mut bootstrap_seed),
+            loadout_selection: controlled_champion_search_base_loadout_selection.clone(),
+        });
+        let bootstrap_search_type = format!("seed_search:{}", search_cfg.strategy);
+        let _ = full_score_for_search_type(bootstrap_search_type.as_str(), &bootstrap_candidate);
+        if hard_deadline_value().is_none() {
+            arm_time_budget_deadline_if_unset(
+                &hard_deadline_state,
+                time_budget,
+                defer_hard_budget_until_coverage,
+                "seed_search:bootstrap",
+            );
+        }
+    }
+
     let ensemble_seeds = search_cfg.ensemble_seeds.max(1);
     status.emit(
         "seed_search",
@@ -3014,10 +3054,26 @@ pub(super) fn run_controlled_champion_scenario(
     let adaptive_candidate_count = adaptive_candidates.len();
 
     let mut candidate_keys = Vec::new();
+    let mut best_seeded_candidate: Option<(BuildKey, f64)> = None;
     let mut seed_top_sets = Vec::new();
     for (seed_idx, ranked) in seed_ranked.iter().enumerate() {
         let mut seed_top = HashSet::new();
         for (ranked_idx, (candidate, score)) in ranked.iter().enumerate() {
+            if score.is_finite() {
+                let candidate_key = canonical_build_candidate(candidate.clone());
+                let replace = best_seeded_candidate
+                    .as_ref()
+                    .map(|(best_key, best_score)| {
+                        *score > *best_score
+                            || ((*score - *best_score).abs() <= f64::EPSILON
+                                && build_key_cache_string(&candidate_key)
+                                    < build_key_cache_string(best_key))
+                    })
+                    .unwrap_or(true);
+                if replace {
+                    best_seeded_candidate = Some((candidate_key, *score));
+                }
+            }
             if candidate.item_indices.len() == max_items {
                 candidate_keys.push(candidate.clone());
                 if ranked_idx < search_cfg.ensemble_seed_top_k.max(1) {
@@ -3167,7 +3223,22 @@ pub(super) fn run_controlled_champion_scenario(
     }
 
     if strict_scores.is_empty()
-        && let Some(fallback_key) = unique_candidate_keys.first().cloned()
+        && let Some(fallback_key) = best_seeded_candidate
+            .as_ref()
+            .map(|(candidate, _)| {
+                if candidate.item_indices.len() == max_items {
+                    return candidate.clone();
+                }
+                let mut completion_seed =
+                    partial_candidate_completion_seed(search_cfg.seed, 0, 0, candidate);
+                complete_partial_candidate_to_full(
+                    candidate,
+                    &item_pool,
+                    max_items,
+                    &mut completion_seed,
+                )
+            })
+            .or_else(|| unique_candidate_keys.first().cloned())
         && let Some((key, fallback_score, fallback_outcome, fallback_loadout)) =
             evaluate_candidate_direct(&fallback_key)
     {
@@ -3339,6 +3410,9 @@ pub(super) fn run_controlled_champion_scenario(
         (total.is_finite() && total > 0.0).then_some(total)
     };
     let unique_scored_candidates = unique_scored_candidate_keys.len();
+    let loadout_candidates_count = unique_loadout_selection_count(&unique_candidate_keys);
+    let loadout_finalists_count =
+        unique_loadout_selection_count_from_ranked(&controlled_champion_ranked);
     let estimated_run_space_coverage_percent = estimated_total_candidate_space
         .map(|total| ((unique_scored_candidates as f64) / total * 100.0).clamp(0.0, 100.0));
     let (estimated_close_to_optimal_probability, estimated_close_to_optimal_probability_note) =
@@ -3762,11 +3836,12 @@ pub(super) fn run_controlled_champion_scenario(
                 controlled_champion_base_raw: &controlled_champion_base_raw,
                 controlled_champion_bonus_stats: &candidate_bonus_stats,
                 controlled_champion_stack_overrides: &controlled_champion_stack_overrides,
-                enemy_builds: &enemy_builds,
+                enemy_build_scenarios: &enemy_build_scenarios,
                 raw_enemy_bases: &raw_enemy_bases,
                 sim: &sim,
                 urf: &urf,
                 objective_weights: objective_component_weights,
+                multi_scenario_worst_weight: objective_worst_case_weight,
             };
             optimize_build_order(build, &build_order_ctx)
         })
@@ -3893,7 +3968,7 @@ pub(super) fn run_controlled_champion_scenario(
         append_rune_proc_telemetry_markdown_entries(
             &mut trace_md,
             "- ",
-            "  - ",
+            "  ",
             &best_rune_proc_telemetry,
             controlled_champion_best_outcome.damage_dealt,
             controlled_champion_best_outcome.healing_done,
@@ -3944,6 +4019,7 @@ pub(super) fn run_controlled_champion_scenario(
         controlled_champion_end_stats: &controlled_champion_end_stats,
         stack_notes: &stack_notes,
         controlled_champion_loadout: &controlled_champion_loadout,
+        controlled_champion_loadout_selection: &controlled_champion_runtime_loadout_selection,
         enemy_loadout: &enemy_loadout,
         best_build: &controlled_champion_best_build,
         best_score: controlled_champion_best_score,

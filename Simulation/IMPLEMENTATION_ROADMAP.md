@@ -87,6 +87,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - add `controlled_champion.level`, `opponents.default_level`, and `opponents.encounters[].actors[].level`
   - add generic stack override maps: `simulation.stack_overrides`, `controlled_champion.stack_overrides`, `opponents.stack_overrides`, and actor-level overrides
   - add `simulation.time_limit_seconds` parsing and enforce 20-minute hard cap
+- Recent progress:
+  - global fallback stack assumptions now load from `Simulation/data/simulator_defaults.json` (`simulation_defaults.stack_overrides`) and are overridden by scenario/actor maps.
 - Success criteria:
   - scenario can independently set controlled and opponent levels, stack overrides are generic/per-actor, runtime horizon is bounded by validated time limit, and legacy keys are rejected.
   - opponent actors are minimal setup objects and do not carry proxy combat cadence fields.
@@ -355,6 +357,13 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - make strict-score ties deterministic with objective-side tiebreaks and stable key fallback
 - Success criteria:
   - strict-stage ordering is explainable and tunable, flat-score phases avoid noisy heuristic bias, and users can run direct loadout comparisons without full search overhead.
+
+23i. `DONE` Align build-order/report diagnostics with legal encounter/loadout semantics.
+- Scope:
+  - evaluate build-order stages across all configured opponent encounters using encounter weights plus worst-case blend
+  - make report loadout-label validation rely on selected loadout legality and tolerate unmodeled shard labels
+- Success criteria:
+  - build-order recommendations are optimized against the same multi-encounter objective framing as candidate scoring, and legal loadouts no longer fail report generation due to missing unmodeled shard labels.
 
 24. `PLANNED` Performance profiling workflow and flamegraphs.
 - Scope:

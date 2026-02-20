@@ -244,6 +244,18 @@ fn urf_respawn_timer_increases_with_game_time_after_scaling_start() {
 }
 
 #[test]
+fn champion_ai_script_priority_override_normalizes_event_key_format() {
+    assert_eq!(
+        crate::defaults::champion_ai_script_priority_override("Morgana", "soul_shackles_detonate",),
+        Some(11)
+    );
+    assert_eq!(
+        crate::defaults::champion_ai_script_priority_override("Morgana", "Soul Shackles Detonate",),
+        Some(11)
+    );
+}
+
+#[test]
 fn shared_core_modules_do_not_include_vladimir_shortcuts() {
     let src_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
     for module_path in ["engine.rs", "core.rs", "search.rs", "reporting.rs"] {

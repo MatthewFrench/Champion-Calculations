@@ -1,8 +1,23 @@
 # Vladimir Event Trace
 
 ## Rune Proc Telemetry
-- Arcane Comet: procs `2` / attempts `12` / eligible `2` (proc/attempt 16.7%, proc/eligible 100.0%), bonus damage `317.74` (4.18% share), bonus healing `0.00` (0.00% share)
-  - sources: ability (procs 2, attempts 12, eligible 2, proc/attempt 16.7%, proc/eligible 100.0%, damage 317.74, healing 0.00)
+- Phase Rush:
+  - Procs: `1`
+  - Attempts: `13`
+  - Eligible: `1`
+  - Proc rate (vs attempts): `7.7%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `0.00` (0.00% share)
+  - Sources:
+    - runtime_activation:
+      - Procs: `1`
+      - Attempts: `13`
+      - Eligible: `1`
+      - Proc rate (vs attempts): `7.7%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `0.00`
 
 ## Optimized Build Trace
 - 0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)
@@ -11,10 +26,10 @@ controlled_champion:
   identity: Vladimir
   core: pos=(0.0, 0.0) hp=4134.7/4134.7 (100.0%) armor=204.5 mr=54.7
   offense: ap=177.4 ah=308.0
-  loadout: items [Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass] | runes [Arcane Comet, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
+  loadout: items [Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass] | runes [Phase Rush, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
   cooldowns: Stasis item ready; Revive item ready
   abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.37s
-  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Arcane Comet: ready] | stacks [Guinsoo stacks: 0/8; Attacks landed: 0]
+  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Phase Rush: ready (active yes)] | stacks [Guinsoo stacks: 0/8; Phase Rush tracked targets: 0; Attacks landed: 0]
   buffs: none
 enemies:
   Warwick:
@@ -68,7 +83,7 @@ field:
 - 0.000s [champion_script] Dr. Mundo executed Infected Bonesaw
 - 0.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 718.9, true 0.0, total 464.7
 - 0.159s [attack_start] Vayne begins auto attack
-- 0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 1564.5 to 5 enemies in range
+- 0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 1471.6 to 5 enemies in range
 - 0.373s [attack_start] Warwick begins auto attack
 - 0.500s [champion_script] Vayne executed Tumble Empower
 - 0.500s [enemy_buff] Vayne empowered next attack
@@ -181,14 +196,14 @@ controlled_champion:
   identity: Vladimir
   core: pos=(0.0, 0.0) hp=1345.0/4134.7 (32.5%) armor=204.5 mr=54.7
   offense: ap=177.4 ah=308.0
-  loadout: items [Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass] | runes [Arcane Comet, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
+  loadout: items [Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass] | runes [Phase Rush, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
   cooldowns: Stasis item ready; Revive item 71.55s
   abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 24.41s; Auto Attack 0.14s
-  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Arcane Comet: 3.25s] | stacks [Guinsoo stacks: 0/8; Attacks landed: 0]
+  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Phase Rush: ready (active no)] | stacks [Guinsoo stacks: 0/8; Phase Rush tracked targets: 5; Attacks landed: 0]
   buffs: Revive lockout 0.55s
 enemies:
   Warwick:
-    core: pos=(140.0, 0.0) hp=3130.7/3501.0 armor=191.6 mr=70.9
+    core: pos=(140.0, 0.0) hp=3223.6/3501.0 armor=191.6 mr=70.9
     combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0
     loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]
     abilities: Auto Attack unavailable; Infinite Duress ready
@@ -316,7 +331,7 @@ field:
 - 8.350s [damage_in] Warwick Auto Attack -> Vladimir | physical 286.6, magic 81.6, true 171.9, total 318.7
 - 8.350s [attack_hit] Warwick hit Vladimir (phys 286.6, magic 81.6, true 171.9)
 - 8.350s [controlled_champion_item_active] Vladimir activated stasis item for 2.50s
-- 8.364s [controlled_champion_attack_hit] Vladimir auto attacked Warwick (phys 779.1, magic 0.0, true 0.0, dealt 267.2)
+- 8.364s [controlled_champion_attack_hit] Vladimir auto attacked Warwick (phys 784.7, magic 0.0, true 0.0, dealt 269.1)
 - 8.407s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state
 - 8.424s [attack_start] Vayne begins auto attack
 - 8.500s [champion_script] Vayne executed Tumble Empower
@@ -357,14 +372,14 @@ controlled_champion:
   identity: Vladimir
   core: pos=(0.0, 0.0) hp=498.9/4134.7 (12.1%) armor=204.5 mr=54.7
   offense: ap=177.4 ah=308.0
-  loadout: items [Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass] | runes [Arcane Comet, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
+  loadout: items [Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass] | runes [Phase Rush, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
   cooldowns: Stasis item 28.35s; Revive item 66.55s
   abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 19.41s; Auto Attack 0.16s
-  runtime: cooldowns [Heartsteel Colossal Consumption: 5.86s (cooldown 7.50s); Arcane Comet: ready] | stacks [Guinsoo stacks: 1/8; Attacks landed: 1]
+  runtime: cooldowns [Heartsteel Colossal Consumption: 5.86s (cooldown 7.50s); Phase Rush: 8.36s (active yes)] | stacks [Guinsoo stacks: 1/8; Phase Rush tracked targets: 4; Attacks landed: 1]
   buffs: Stasis 0.85s; Stasis x1 (0.85s)
 enemies:
   Warwick:
-    core: pos=(140.0, 0.0) hp=2217.0/3501.0 armor=191.6 mr=70.9
+    core: pos=(140.0, 0.0) hp=2308.0/3501.0 armor=191.6 mr=70.9
     combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0
     loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]
     abilities: Auto Attack 0.27s; Infinite Duress ready
@@ -476,8 +491,8 @@ field:
 - 13.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 343.3, true 0.0, total 221.9
 - 13.077s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 34.8
 - 13.077s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
-- 13.081s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 248.8
+- 13.081s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 155.9
 - 13.100s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)
-- 13.104s [damage_in] Vayne Auto Attack -> Vladimir | physical 705.5, magic 0.0, true 880.3, total 1112.0
+- 13.104s [damage_in] Vayne Auto Attack -> Vladimir | physical 704.1, magic 0.0, true 880.3, total 1111.5
 - 13.104s [controlled_champion_death] Vladimir died
-- 13.104s [attack_hit] Vayne hit Vladimir (phys 705.5, magic 0.0, true 880.3)
+- 13.104s [attack_hit] Vayne hit Vladimir (phys 704.1, magic 0.0, true 880.3)

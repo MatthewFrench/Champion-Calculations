@@ -159,6 +159,68 @@ fn parse_opponent_encounters_accepts_positive_weight_mix() {
     assert_eq!(encounters.len(), 2);
 }
 
+#[test]
+fn parse_scenario_search_or_default_uses_portfolio_when_missing() {
+    let scenario = json!({});
+    let parsed = parse_scenario_search_or_default(&scenario)
+        .expect("missing scenario.search should fall back to default search config");
+    assert_eq!(parsed.strategy, "portfolio");
+}
+
+#[test]
+fn parse_scenario_search_or_default_preserves_explicit_search() {
+    let scenario = json!({
+        "search": {
+            "strategy": "beam",
+            "beam_width": 7
+        }
+    });
+    let parsed =
+        parse_scenario_search_or_default(&scenario).expect("explicit scenario.search should parse");
+    assert_eq!(parsed.strategy, "beam");
+    assert_eq!(parsed.beam_width, 7);
+}
+
+#[test]
+fn unique_loadout_selection_count_helpers_track_distinct_loadouts() {
+    let base = BuildKey {
+        item_indices: vec![1, 2, 3, 4, 5, 6],
+        loadout_selection: LoadoutSelection {
+            rune_names: vec![
+                "Conqueror".to_string(),
+                "Triumph".to_string(),
+                "Legend: Alacrity".to_string(),
+                "Last Stand".to_string(),
+                "Second Wind".to_string(),
+                "Unflinching".to_string(),
+            ],
+            shard_stats: vec![
+                "ability_haste".to_string(),
+                "movement_speed".to_string(),
+                "health".to_string(),
+            ],
+        },
+    };
+    let mut other = base.clone();
+    other.loadout_selection.rune_names[0] = "Press the Attack".to_string();
+    let mut duplicate = base.clone();
+    duplicate.item_indices = vec![6, 5, 4, 3, 2, 1];
+
+    let candidates = vec![base.clone(), other.clone(), duplicate.clone()];
+    assert_eq!(
+        unique_loadout_selection_count(&candidates),
+        2,
+        "duplicate item permutations should not inflate loadout candidate count"
+    );
+
+    let ranked = vec![(base, 1.0), (other, 0.9), (duplicate, 0.8)];
+    assert_eq!(
+        unique_loadout_selection_count_from_ranked(&ranked),
+        2,
+        "ranked entries should count unique loadout pages"
+    );
+}
+
 fn test_item(name: &str, boots: bool) -> Item {
     Item {
         name: name.to_string(),

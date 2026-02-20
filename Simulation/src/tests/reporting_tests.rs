@@ -8,9 +8,27 @@ fn report_path_uses_normalized_champion_key() {
 }
 
 #[test]
-fn controlled_champion_loadout_labels_require_full_rune_page_and_shards() {
+fn controlled_champion_loadout_labels_tolerate_unmodeled_entries() {
+    let selection = LoadoutSelection {
+        rune_names: vec![
+            "Arcane Comet".to_string(),
+            "Manaflow Band".to_string(),
+            "Transcendence".to_string(),
+            "Gathering Storm".to_string(),
+            "Cheap Shot".to_string(),
+            "Ultimate Hunter".to_string(),
+        ],
+        shard_stats: vec![
+            "adaptive".to_string(),
+            "movement_speed".to_string(),
+            "tenacity".to_string(),
+        ],
+    };
     let missing = vec!["Rune: Arcane Comet".to_string()];
-    assert!(validate_controlled_champion_selection_labels("Vladimir", &missing).is_err());
+    assert!(
+        validate_controlled_champion_selection_labels("Vladimir", &selection, &missing, &[])
+            .is_err()
+    );
 
     let mut complete = vec![
         "Rune: Arcane Comet".to_string(),
@@ -23,10 +41,31 @@ fn controlled_champion_loadout_labels_require_full_rune_page_and_shards() {
         "Shard 2: movement_speed".to_string(),
         "Shard 3: health".to_string(),
     ];
-    assert!(validate_controlled_champion_selection_labels("Vladimir", &complete).is_ok());
+    assert!(
+        validate_controlled_champion_selection_labels("Vladimir", &selection, &complete, &[])
+            .is_ok()
+    );
 
     complete.pop();
-    assert!(validate_controlled_champion_selection_labels("Vladimir", &complete).is_err());
+    assert!(
+        validate_controlled_champion_selection_labels("Vladimir", &selection, &complete, &[])
+            .is_ok()
+    );
+
+    complete.retain(|label| !label.contains("Ultimate Hunter"));
+    assert!(
+        validate_controlled_champion_selection_labels(
+            "Vladimir",
+            &selection,
+            &complete,
+            &["Ultimate Hunter".to_string()]
+        )
+        .is_ok()
+    );
+    assert!(
+        validate_controlled_champion_selection_labels("Vladimir", &selection, &complete, &[])
+            .is_err()
+    );
 }
 
 #[test]

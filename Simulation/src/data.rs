@@ -491,7 +491,8 @@ pub(crate) fn parse_simulation_config(data: &Value) -> Result<SimulationConfig> 
         );
     }
 
-    let stack_overrides = parse_stack_overrides_map(data.get("stack_overrides"))?;
+    let mut stack_overrides = sim_defaults.stack_overrides.clone();
+    stack_overrides.extend(parse_stack_overrides_map(data.get("stack_overrides"))?);
     let combat_seed = data.get("combat_seed").and_then(Value::as_u64);
     let collect_rune_proc_telemetry = data
         .get("collect_rune_proc_telemetry")

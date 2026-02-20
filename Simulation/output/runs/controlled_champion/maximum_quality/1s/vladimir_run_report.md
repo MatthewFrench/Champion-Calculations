@@ -1,12 +1,17 @@
 # Vladimir URF Run Report
 
-- Generated (local): `2026-02-19 14:20:55 -06:00`
-- Generated (UTC): `2026-02-19T20:20:55.503621+00:00`
+- Generated (local): `2026-02-19 15:15:46 -06:00`
+- Generated (UTC): `2026-02-19T21:15:46.102624+00:00`
 - Scenario: `Simulation/scenarios/vladimir_urf_teamfight.json`
 
 ## Headline
 - Best objective score: **0.0955**
-- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **13.10s / 7,593.7 / 1,392.7 / 0 / 10.50s**
+- Best outcome:
+  - Time alive: **13.10s**
+  - Damage dealt: **7,593.7**
+  - Healing done: **1,392.7**
+  - Enemy kills: **0**
+  - Invulnerable seconds: **10.50s**
 - Best cap survivor: **false**
 
 - Champion level assumption: **20**
@@ -24,48 +29,103 @@
 - invulnerable_seconds: weight `0.03` | normalized `0.0088` | contribution `0.0002` | impact `0.23%` | delta vs weight `-2.33pp`
 
 ## Rune Proc Telemetry (Best Trace)
-- Arcane Comet: procs `2` / attempts `12` / eligible `2` (proc/attempt 16.7%, proc/eligible 100.0%), bonus damage `317.74` (4.18% share), bonus healing `0.00` (0.00% share)
-  - sources: ability (procs 2, attempts 12, eligible 2, proc/attempt 16.7%, proc/eligible 100.0%, damage 317.74, healing 0.00)
+- Arcane Comet:
+  - Procs: `2`
+  - Attempts: `12`
+  - Eligible: `2`
+  - Proc rate (vs attempts): `16.7%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `317.74` (4.18% share)
+  - Bonus healing: `0.00` (0.00% share)
+  - Sources:
+    - ability:
+      - Procs: `2`
+      - Attempts: `12`
+      - Eligible: `2`
+      - Proc rate (vs attempts): `16.7%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `317.74`
+      - Bonus healing: `0.00`
 
 ## Search Diagnostics
 - Strategy: `portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)`
 - Search quality profile: `maximum_quality`
 - Enemy scenarios: `1`
-- Loadout candidates/finalists: `1/1`
+- Loadout:
+  - Candidates: `1`
+  - Finalists: `1`
 - Ensemble seeds: `8`
-- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `9` / `true` / `true` / `true`
-- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `0.26/0.13/0.08/0.51/0.03`
+- Parallelism:
+  - Threads: `9`
+  - Seed orchestration parallel: `true`
+  - Portfolio parallel: `true`
+  - Strategy-elites parallel: `true`
+- Objective weights:
+  - survival: `0.26`
+  - damage: `0.13`
+  - healing: `0.08`
+  - enemy_kills: `0.51`
+  - invulnerable_seconds: `0.03`
 - Simulations executed (new full combat runs): `2,821`
 - Unique scored candidates (all search stages): `2,821`
-- Total score requests (all search stages): `728,299`
-- Full evaluations cache hits/misses/waits: `4,765/3,909/120`
-- Full persistent cache hits/entries: `119,849/2,821`
-- Candidate keys generated / duplicate-pruned / unique: `9,148/7,061/2,087`
-- Strict candidates seed-scored / remaining / processed: `0/2,087/0`
-- Strict non-finite / timeout-skipped: `0/2,087`
-- Strict completion: `0.0%`
-- Strict ordering heuristic (enabled / rune_weight / shard_weight / exploration_promotions): `true` / `0.30` / `0.20` / `1`
-- Bleed candidates injected: `721`
+- Total score requests (all search stages): `725,740`
+- In-memory full-evaluation cache:
+  - Hits: `455,525`
+  - Misses: `3,875`
+  - Waits: `151`
+- Candidate key generation:
+  - Generated: `12,033`
+  - Duplicate-pruned: `9,779`
+  - Unique: `2,254`
+- Strict candidate progression:
+  - Seed-scored: `0`
+  - Remaining: `2,254`
+  - Processed: `0`
+- Strict stage:
+  - Non-finite: `0`
+  - Timeout-skipped: `2,254`
+  - Completion: `0.0%`
+- Strict ordering heuristic:
+  - Enabled: `true`
+  - Rune signal weight: `0.30`
+  - Shard signal weight: `0.20`
+  - Exploration promotions: `1`
+- Bleed candidates injected: `773`
 - Adaptive candidates injected: `0`
-- Seed-best mean/stddev: `0.00` / `0.000`
-- Search elapsed time: `6.06s`
-- Total run time (end-to-end): `6.92s`
+- Seed-best stats:
+  - Mean: `0.00`
+  - Stddev: `0.000`
+- Search elapsed time: `3.56s`
+- Total run time (end-to-end): `4.42s`
 
-- Effective seed: `17481730509162292401`
-- Unmodeled rune gate (hard_gate / penalty_per_rune / rejected / penalized): `true` / `0.0000` / `0` / `0`
-- Unmodeled item-effect gate (hard_gate / penalty_per_item / rejected / penalized): `true` / `0.0000` / `0` / `0`
-- Coverage stage (pre-budget): `4.18s`; assets covered `22/33`; seeded candidates unique/raw `57/66`
-- Coverage warning: Coverage incomplete: touched 22/33 assets; coverage stage could not produce finite candidates for at least one locked asset. Continuing search in degraded coverage mode.
-- Time budget: `1.0s`; timed_out: `true`; progress: `0/2,087` (0.0%) (budget starts after pre-budget coverage stage)
+- Effective seed: `7926496061142975775`
+- Unmodeled rune gate:
+  - Hard gate: `true`
+  - Penalty per rune: `0.0000`
+  - Rejected: `0`
+  - Penalized: `0`
+- Unmodeled item-effect gate:
+  - Hard gate: `true`
+  - Penalty per item: `0.0000`
+  - Rejected: `0`
+  - Penalized: `0`
+- Coverage stage (pre-budget):
+  - Elapsed: `2.03s`
+  - Assets covered: `22/28`
+  - Seeded candidates (unique/raw): `60/66`
+- Coverage warning: Coverage incomplete: touched 22/28 assets; coverage stage could not produce finite candidates for at least one locked asset. Continuing search in degraded coverage mode.
+- Time budget:
+  - Budget: `1.0s`
+  - Timed out: `true`
+  - Progress: `0/2,254` (0.0%) (budget starts after pre-budget coverage stage)
 
 - Estimated total legal candidate space: `33,264`
 - Estimated legal-space coverage (this run): `8.480640%`
-- Estimated legal-space coverage (persistent cache): `8.480640%`
 - Estimated closeness probability (top 0.000001% heuristic): `8.13%`
 - Closeness probability note: Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.003006253% (about top 1 candidates in the legal space) and n = 2821 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.
 - Search-type simulation breakdown:
-  - seed_search:portfolio: requests `727,123`, new simulations `3,069`, persistent cache hits `119,513`
-  - coverage_stage: requests `1,176`, new simulations `840`, persistent cache hits `336`
+  - seed_search:portfolio: requests `724,563`, new simulations `3,011`
+  - coverage_stage: requests `1,177`, new simulations `864`
 
 ## Vladimir Base Stats At Level
 - HP: 2,690.0, Armor: 109.5, MR: 54.7, AD: 112.0, AS: 0.908, MS: 330.0
@@ -138,7 +198,7 @@
 - Dr. Mundo: HP 6479.8, Armor 192.5, MR 72.7, AD 148.5, AS 1.635 (interval 0.612s), range 125, projectile speed 0, move speed 400.0, desired combat range 140, hit physical 148.5, hit ability 0.0, burst phys/magic/true 0.0/0.0/0.0
 
 ## Diverse Top Builds
-1. `score 0.0955` (+0.0000 vs top): Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass | seed hits: 5/8 (62%) robust | Pareto-front
+1. `score 0.0955` (+0.0000 vs top): Blade of the Ruined King, Guardian Angel, Guinsoo's Rageblade, Heartsteel, Infinity Edge, Zhonya's Hourglass | seed hits: 7/8 (88%) robust | Pareto-front
    - metrics: EHP~10,183.4, AP~187.4, timing score -9706.67, total cost 19,150
 
 ## Build Order Optimization

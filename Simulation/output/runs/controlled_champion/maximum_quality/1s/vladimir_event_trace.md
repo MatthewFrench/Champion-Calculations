@@ -1,8 +1,23 @@
 # Vladimir Event Trace
 
 ## Rune Proc Telemetry
-- Arcane Comet: procs `2` / attempts `12` / eligible `2` (proc/attempt 16.7%, proc/eligible 100.0%), bonus damage `317.74` (4.18% share), bonus healing `0.00` (0.00% share)
-  - sources: ability (procs 2, attempts 12, eligible 2, proc/attempt 16.7%, proc/eligible 100.0%, damage 317.74, healing 0.00)
+- Arcane Comet:
+  - Procs: `2`
+  - Attempts: `12`
+  - Eligible: `2`
+  - Proc rate (vs attempts): `16.7%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `317.74` (4.18% share)
+  - Bonus healing: `0.00` (0.00% share)
+  - Sources:
+    - ability:
+      - Procs: `2`
+      - Attempts: `12`
+      - Eligible: `2`
+      - Proc rate (vs attempts): `16.7%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `317.74`
+      - Bonus healing: `0.00`
 
 ## Optimized Build Trace
 - 0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)

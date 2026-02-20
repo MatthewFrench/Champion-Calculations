@@ -556,6 +556,22 @@ fn parse_simulation_config_accepts_stack_overrides_by_identifier() {
 }
 
 #[test]
+fn parse_simulation_config_uses_default_stack_overrides_when_missing() {
+    let simulation = serde_json::json!({});
+    let parsed = parse_simulation_config(&simulation)
+        .expect("simulation config without explicit stack_overrides should parse");
+    let stacks = parsed
+        .stack_overrides
+        .get("heartsteel")
+        .copied()
+        .unwrap_or_default();
+    assert!(
+        (stacks - 20.0).abs() < 1e-9,
+        "expected default heartsteel stack override from simulator defaults, got {stacks}"
+    );
+}
+
+#[test]
 fn parse_simulation_config_reads_protoplasm_trigger_override() {
     let simulation = serde_json::json!({
         "protoplasm_trigger_health_percent": 0.42

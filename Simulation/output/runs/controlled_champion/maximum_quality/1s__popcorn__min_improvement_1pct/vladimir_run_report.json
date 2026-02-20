@@ -9,30 +9,30 @@
   ],
   "best_rune_proc_telemetry": [
     {
-      "attempt_count": 12,
-      "bonus_damage": 317.74411287153566,
-      "bonus_damage_share": 0.041842891637275254,
+      "attempt_count": 13,
+      "bonus_damage": 0.0,
+      "bonus_damage_share": 0.0,
       "bonus_healing": 0.0,
       "bonus_healing_share": 0.0,
-      "eligible_count": 2,
-      "opportunity_count": 2,
-      "proc_attempt_rate": 0.16666666666666666,
-      "proc_count": 2,
+      "eligible_count": 1,
+      "opportunity_count": 1,
+      "proc_attempt_rate": 0.07692307692307693,
+      "proc_count": 1,
       "proc_eligible_rate": 1.0,
       "proc_opportunity_rate": 1.0,
-      "rune_name": "Arcane Comet",
+      "rune_name": "Phase Rush",
       "source_breakdown": [
         {
-          "attempt_count": 12,
-          "bonus_damage": 317.74411287153566,
+          "attempt_count": 13,
+          "bonus_damage": 0.0,
           "bonus_healing": 0.0,
-          "eligible_count": 2,
-          "opportunity_count": 2,
-          "proc_attempt_rate": 0.16666666666666666,
-          "proc_count": 2,
+          "eligible_count": 1,
+          "opportunity_count": 1,
+          "proc_attempt_rate": 0.07692307692307693,
+          "proc_count": 1,
           "proc_eligible_rate": 1.0,
           "proc_opportunity_rate": 1.0,
-          "source": "ability"
+          "source": "runtime_activation"
         }
       ]
     }
@@ -92,7 +92,7 @@
   ],
   "champion_level": 20,
   "controlled_champion_loadout_labels": [
-    "Rune: Arcane Comet",
+    "Rune: Phase Rush",
     "Rune: Nimbus Cloak",
     "Rune: Celerity",
     "Rune: Gathering Storm",
@@ -107,33 +107,30 @@
   "controlled_champion_unmodeled_runes": [],
   "diagnostics": {
     "adaptive_candidates_injected": 0,
-    "best_significant_score": 0.16020260297428315,
-    "bleed_candidates_injected": 763,
-    "candidate_duplicates_pruned": 60,
-    "candidate_keys_generated": 823,
+    "best_significant_score": 0.1603945531058038,
+    "bleed_candidates_injected": 737,
+    "candidate_duplicates_pruned": 58,
+    "candidate_keys_generated": 795,
     "coverage_stage_assets_covered": 22,
     "coverage_stage_assets_total": 28,
-    "coverage_stage_elapsed_seconds": 2.000228459,
+    "coverage_stage_elapsed_seconds": 1.983944167,
     "coverage_stage_enabled": true,
     "coverage_stage_incomplete": true,
     "coverage_stage_seed_candidates": 66,
-    "coverage_stage_seed_candidates_unique": 60,
+    "coverage_stage_seed_candidates_unique": 58,
     "coverage_stage_warning": "Coverage incomplete: touched 22/28 assets; coverage stage could not produce finite candidates for at least one locked asset. Continuing search in degraded coverage mode.",
-    "effective_seed": 424242,
+    "effective_seed": 1872540140347676576,
     "effective_threads": 9,
-    "elapsed_seconds": 2.055830208,
+    "elapsed_seconds": 2.043023458,
     "ensemble_seeds": 8,
-    "estimated_cache_space_coverage_percent": 2.5943963443963445,
-    "estimated_close_to_optimal_probability": 0.025610690469500375,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.003006253% (about top 1 candidates in the legal space) and n = 863 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 2.5943963443963445,
+    "estimated_close_to_optimal_probability": 0.024848773483007736,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.003006253% (about top 1 candidates in the legal space) and n = 837 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 2.5162337662337664,
     "estimated_total_candidate_space": 33264.0,
-    "full_cache_hits": 0,
-    "full_cache_misses": 863,
+    "full_cache_hits": 324,
+    "full_cache_misses": 837,
     "full_cache_waits": 0,
-    "full_evaluations": 863,
-    "full_persistent_cache_entries": 863,
-    "full_persistent_cache_hits": 301,
+    "full_evaluations": 837,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -150,36 +147,35 @@
     "search_type_breakdown": [
       {
         "name": "coverage_stage",
-        "new_simulations": 863,
-        "persistent_cache_hits": 301,
-        "score_requests": 1164
+        "new_simulations": 837,
+        "score_requests": 1161
       }
     ],
-    "seconds_since_last_significant_improvement": 1.983482333,
+    "seconds_since_last_significant_improvement": 1.9524932499999998,
     "seed_orchestration_parallel": true,
-    "significant_improvement_events": 10,
+    "significant_improvement_events": 12,
     "simulation_counts": {
-      "new_full_simulations": 863,
-      "total_score_requests": 1164,
-      "unique_scored_candidates": 863
+      "new_full_simulations": 837,
+      "total_score_requests": 1161,
+      "unique_scored_candidates": 837
     },
     "strategy_elites_parallel": true,
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
-    "strict_candidates_skipped_timeout": 763,
+    "strict_candidates_skipped_timeout": 737,
     "strict_completion_percent": 0.0,
     "strict_heuristic_ordering_enabled": true,
     "strict_non_finite_candidates": 0,
     "strict_random_promotions_done": 1,
     "strict_ranking_rune_signal_weight": 0.3,
     "strict_ranking_shard_signal_weight": 0.2,
-    "strict_remaining_candidates": 763,
+    "strict_remaining_candidates": 737,
     "strict_seed_scored_candidates": 0,
     "time_budget_seconds": 1.0,
     "timed_out": true,
-    "total_candidates": 763,
-    "total_run_seconds": 2.931995792,
-    "unique_candidate_builds": 763,
-    "unique_scored_candidates": 863,
+    "total_candidates": 737,
+    "total_run_seconds": 2.9082945000000002,
+    "unique_candidate_builds": 737,
+    "unique_scored_candidates": 837,
     "unmodeled_item_effect_candidates_penalized": 0,
     "unmodeled_item_effect_candidates_rejected": 0,
     "unmodeled_item_effect_hard_gate": true,
@@ -199,7 +195,7 @@
         "Infinity Edge",
         "Zhonya's Hourglass"
       ],
-      "objective_score": 0.09554294285251543
+      "objective_score": 0.0935960306956057
     }
   ],
   "enemy_derived_combat_stats": [
@@ -427,16 +423,16 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-19 14:24:30 -06:00",
-  "generated_utc": "2026-02-19T20:24:30.472276+00:00",
+  "generated_local": "2026-02-19 15:15:49 -06:00",
+  "generated_utc": "2026-02-19T21:15:49.351345+00:00",
   "headline": {
     "best_objective_breakdown": {
       "components": {
         "damage": {
-          "contribution": 0.052692289294237096,
-          "delta_vs_weight_percent_points": 42.32986011239483,
-          "impact_percent": 55.15037293290766,
-          "normalized_ratio": 0.4109998564950493,
+          "contribution": 0.05141184076700628,
+          "delta_vs_weight_percent_points": 42.108996887231704,
+          "impact_percent": 54.92950970774453,
+          "normalized_ratio": 0.4010123579826489,
           "weight": 0.12820512820512822
         },
         "enemy_kills": {
@@ -447,38 +443,38 @@
           "weight": 0.5128205128205129
         },
         "healing": {
-          "contribution": 0.039826370221924326,
-          "delta_vs_weight_percent_points": 33.99195388983991,
-          "impact_percent": 41.684261582147606,
-          "normalized_ratio": 0.5177428128850162,
+          "contribution": 0.03915990659224539,
+          "delta_vs_weight_percent_points": 34.146973633202556,
+          "impact_percent": 41.83928132551025,
+          "normalized_ratio": 0.5090787856991901,
           "weight": 0.07692307692307693
         },
         "invulnerable_seconds": {
           "contribution": 0.0002243589743589744,
-          "delta_vs_weight_percent_points": -2.3292772932237873,
-          "impact_percent": 0.23482527087877697,
+          "delta_vs_weight_percent_points": -2.3243926397697283,
+          "impact_percent": 0.23970992433283606,
           "normalized_ratio": 0.00875,
           "weight": 0.025641025641025644
         },
         "survival": {
           "contribution": 0.0027999243619950304,
-          "delta_vs_weight_percent_points": -22.71048542695968,
-          "impact_percent": 2.9305402140659673,
+          "delta_vs_weight_percent_points": -22.649526598613278,
+          "impact_percent": 2.991499042412368,
           "normalized_ratio": 0.010919705011780616,
           "weight": 0.25641025641025644
         }
       },
-      "final_score": 0.09554294285251543,
-      "weighted_mean_score": 0.09554294285251543,
-      "worst_case_score": 0.09554294285251543,
+      "final_score": 0.0935960306956057,
+      "weighted_mean_score": 0.0935960306956057,
+      "worst_case_score": 0.0935960306956057,
       "worst_case_weight": 0.35
     },
-    "best_objective_score": 0.09554294285251543,
+    "best_objective_score": 0.0935960306956057,
     "best_outcome": {
       "cap_survivor": false,
-      "damage_dealt": 7593.74174294582,
+      "damage_dealt": 7409.210086394895,
       "enemy_kills": 0,
-      "healing_done": 1392.7281666606937,
+      "healing_done": 1369.4219335308212,
       "invulnerable_seconds": 10.5,
       "time_alive_seconds": 13.10364601413674
     }

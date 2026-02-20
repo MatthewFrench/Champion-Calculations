@@ -9,7 +9,12 @@
 
 ## Headline
 - Objective score: **0.2931**
-- Outcome (time_alive / damage / healing / enemy_kills / invulnerable_seconds): **14.54s / 12101.7 / 3611.7 / 1 / 10.50s**
+- Outcome:
+  - Time alive: **14.54s**
+  - Damage dealt: **12101.7**
+  - Healing done: **3611.7**
+  - Enemy kills: **1**
+  - Invulnerable seconds: **10.50s**
 
 ## Objective Score Breakdown
 - Weighted-mean score: `0.2931`
@@ -28,8 +33,38 @@
 - Trace json: `Simulation/output/runs/controlled_champion/fixed_loadout/maximum_quality/600srunecmpfleetfootwork/vladimir_fixed_loadout_trace.json`
 
 ## Rune Proc Telemetry
-- Fleet Footwork: procs `0` / attempts `5` / eligible `0` (proc/attempt 0.0%, proc/eligible 0.0%), bonus damage `0.00` (0.00% share), bonus healing `0.00` (0.00% share)
-  - sources: on_hit (procs 0, attempts 5, eligible 0, proc/attempt 0.0%, proc/eligible 0.0%, damage 0.00, healing 0.00)
-- Triumph: procs `1` / attempts `1` / eligible `1` (proc/attempt 100.0%, proc/eligible 100.0%), bonus damage `0.00` (0.00% share), bonus healing `535.13` (14.82% share)
-  - sources: enemy_kill (procs 1, attempts 1, eligible 1, proc/attempt 100.0%, proc/eligible 100.0%, damage 0.00, healing 535.13)
+- Fleet Footwork:
+  - Procs: `0`
+  - Attempts: `5`
+  - Eligible: `0`
+  - Proc rate (vs attempts): `0.0%`
+  - Proc rate (vs eligible): `0.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `0.00` (0.00% share)
+  - Sources:
+    - on_hit:
+      - Procs: `0`
+      - Attempts: `5`
+      - Eligible: `0`
+      - Proc rate (vs attempts): `0.0%`
+      - Proc rate (vs eligible): `0.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `0.00`
+- Triumph:
+  - Procs: `1`
+  - Attempts: `1`
+  - Eligible: `1`
+  - Proc rate (vs attempts): `100.0%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `535.13` (14.82% share)
+  - Sources:
+    - enemy_kill:
+      - Procs: `1`
+      - Attempts: `1`
+      - Eligible: `1`
+      - Proc rate (vs attempts): `100.0%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `535.13`
 

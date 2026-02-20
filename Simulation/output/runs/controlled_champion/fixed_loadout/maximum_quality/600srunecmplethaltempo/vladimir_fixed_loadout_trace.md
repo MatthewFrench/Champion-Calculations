@@ -1,8 +1,23 @@
 # Controlled Champion Fixed Loadout Trace
 
 ## Rune Proc Telemetry
-- Triumph: procs `1` / attempts `1` / eligible `1` (proc/attempt 100.0%, proc/eligible 100.0%), bonus damage `0.00` (0.00% share), bonus healing `535.13` (14.82% share)
-  - sources: enemy_kill (procs 1, attempts 1, eligible 1, proc/attempt 100.0%, proc/eligible 100.0%, damage 0.00, healing 535.13)
+- Triumph:
+  - Procs: `1`
+  - Attempts: `1`
+  - Eligible: `1`
+  - Proc rate (vs attempts): `100.0%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `535.13` (14.82% share)
+  - Sources:
+    - enemy_kill:
+      - Procs: `1`
+      - Attempts: `1`
+      - Eligible: `1`
+      - Proc rate (vs attempts): `100.0%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `535.13`
 
 ## Events
 - 0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)

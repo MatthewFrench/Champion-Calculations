@@ -418,11 +418,12 @@ struct BuildOrderEvalContext<'a> {
     controlled_champion_base_raw: &'a ChampionBase,
     controlled_champion_bonus_stats: &'a Stats,
     controlled_champion_stack_overrides: &'a HashMap<String, f64>,
-    enemy_builds: &'a [EnemyBuildEntry],
+    enemy_build_scenarios: &'a [EnemyBuildScenario],
     raw_enemy_bases: &'a HashMap<String, ChampionBase>,
     sim: &'a SimulationConfig,
     urf: &'a UrfBuffs,
     objective_weights: ObjectiveComponentWeights,
+    multi_scenario_worst_weight: f64,
 }
 
 struct ControlledChampionReportData<'a> {
@@ -433,6 +434,7 @@ struct ControlledChampionReportData<'a> {
     controlled_champion_end_stats: &'a Stats,
     stack_notes: &'a [String],
     controlled_champion_loadout: &'a ResolvedLoadout,
+    controlled_champion_loadout_selection: &'a LoadoutSelection,
     enemy_loadout: &'a ResolvedLoadout,
     best_build: &'a [Item],
     best_score: f64,

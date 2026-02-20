@@ -1,6 +1,18 @@
 # Improvement Tracker
 
 ## Done
+- Closed remaining PR review correctness gaps around build-order encounter scope and report invariants:
+  - build-order optimization now evaluates across all configured encounters (weighted + worst-case blend), rather than only the first encounter
+  - report selection-label validation now keys legality off selected runes/shards and tolerates unmodeled shard labels while still enforcing legal loadout shape
+- Closed remaining PR review correctness gaps around diagnostics, fallback selection, and defaults:
+  - controlled-champion diagnostics now derive loadout candidate/finalist counts from actual generated/final-ranked candidate sets (no hardcoded `1/1`)
+  - strict-ranking empty-result fallback now prefers the best seeded candidate (including deterministic completion of partial seeded candidates) before any lexical fallback
+  - unique-scored-candidate diagnostics now count only successfully scored finite full-build candidates
+  - timed-phase search now bootstraps a live runtime deadline before seeded-stage orchestration to keep staged search loops budget-aware
+  - fixed-loadout and fixed-loadout-rune-sweep modes now run without requiring a scenario `search` block (defaults are used when omitted)
+  - build-order enemy stage simulation now respects each enemy actor’s configured level instead of controlled-champion stage level
+  - champion AI script-priority override keys are normalized on load, so configured overrides such as `soul_shackles_detonate` resolve correctly
+  - simulation global stack override defaults now load from `Simulation/data/simulator_defaults.json` (`simulation_defaults.stack_overrides`), with scenario/actor overrides still taking precedence
 - Removed disk-backed cross-run score caching from controlled champion search:
   - removed persistent full-score cache read/write path under `Simulation/output/cache/`
   - kept in-memory full-evaluation dedupe cache for the duration of a run to avoid duplicate simulations across algorithms/search stages

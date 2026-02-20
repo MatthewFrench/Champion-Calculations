@@ -1,10 +1,48 @@
 # Controlled Champion Fixed Loadout Trace
 
 ## Rune Proc Telemetry
-- Conqueror: procs `19` / attempts `21` / eligible `19` (proc/attempt 90.5%, proc/eligible 100.0%), bonus damage `425.15` (3.45% share), bonus healing `145.08` (3.86% share)
-  - sources: ability (procs 16, attempts 16, eligible 16, proc/attempt 100.0%, proc/eligible 100.0%, damage 425.15, healing 0.00); on_hit (procs 3, attempts 5, eligible 3, proc/attempt 60.0%, proc/eligible 100.0%, damage 0.00, healing 145.08)
-- Triumph: procs `1` / attempts `1` / eligible `1` (proc/attempt 100.0%, proc/eligible 100.0%), bonus damage `0.00` (0.00% share), bonus healing `535.13` (14.22% share)
-  - sources: enemy_kill (procs 1, attempts 1, eligible 1, proc/attempt 100.0%, proc/eligible 100.0%, damage 0.00, healing 535.13)
+- Conqueror:
+  - Procs: `19`
+  - Attempts: `21`
+  - Eligible: `19`
+  - Proc rate (vs attempts): `90.5%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `425.15` (3.45% share)
+  - Bonus healing: `145.08` (3.86% share)
+  - Sources:
+    - ability:
+      - Procs: `16`
+      - Attempts: `16`
+      - Eligible: `16`
+      - Proc rate (vs attempts): `100.0%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `425.15`
+      - Bonus healing: `0.00`
+    - on_hit:
+      - Procs: `3`
+      - Attempts: `5`
+      - Eligible: `3`
+      - Proc rate (vs attempts): `60.0%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `145.08`
+- Triumph:
+  - Procs: `1`
+  - Attempts: `1`
+  - Eligible: `1`
+  - Proc rate (vs attempts): `100.0%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `535.13` (14.22% share)
+  - Sources:
+    - enemy_kill:
+      - Procs: `1`
+      - Attempts: `1`
+      - Eligible: `1`
+      - Proc rate (vs attempts): `100.0%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `535.13`
 
 ## Events
 - 0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)

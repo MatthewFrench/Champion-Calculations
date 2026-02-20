@@ -12,7 +12,8 @@ use crate::scripts::coverage::unmodeled_runtime_item_effect_names;
 use crate::search::item_names;
 
 use super::{
-    ControlledChampionReportData, ObjectiveScoreBreakdown, mean_std, simulation_dir, to_norm_key,
+    ControlledChampionReportData, LoadoutSelection, ObjectiveScoreBreakdown, mean_std,
+    simulation_dir, to_norm_key,
 };
 
 const CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION: u32 = 2;
@@ -82,8 +83,20 @@ fn format_percent_display(percent: f64) -> String {
 
 pub(super) fn validate_controlled_champion_selection_labels(
     controlled_champion_name: &str,
+    selected_loadout: &LoadoutSelection,
     selection_labels: &[String],
+    unmodeled_rune_names: &[String],
 ) -> Result<()> {
+    let expected_runes = selected_loadout.rune_names.len();
+    let expected_shards = selected_loadout.shard_stats.len();
+    if expected_runes < 6 || expected_shards < 3 {
+        bail!(
+            "Controlled champion '{}' report invariant violation: expected legal loadout shape with >=6 runes and >=3 shards, got runes={} shards={}.",
+            controlled_champion_name,
+            expected_runes,
+            expected_shards
+        );
+    }
     let rune_count = selection_labels
         .iter()
         .filter(|label| label.starts_with("Rune: "))
@@ -92,12 +105,23 @@ pub(super) fn validate_controlled_champion_selection_labels(
         .iter()
         .filter(|label| label.starts_with("Shard "))
         .count();
-    if rune_count < 6 || shard_count < 3 {
+    let accounted_runes = rune_count + unmodeled_rune_names.len();
+    if accounted_runes < expected_runes {
         bail!(
-            "Controlled champion '{}' report invariant violation: expected >=6 rune labels and >=3 shard labels, got runes={} shards={}.",
+            "Controlled champion '{}' report invariant violation: expected {} runes accounted between labels and unmodeled list, got labels={} unmodeled={} (selection labels {}).",
             controlled_champion_name,
+            expected_runes,
             rune_count,
-            shard_count
+            unmodeled_rune_names.len(),
+            selection_labels.len()
+        );
+    }
+    if shard_count > expected_shards {
+        bail!(
+            "Controlled champion '{}' report invariant violation: shard labels exceed selected shards (labels={} selected={}).",
+            controlled_champion_name,
+            shard_count,
+            expected_shards
         );
     }
     Ok(())
@@ -265,7 +289,9 @@ pub(super) fn write_controlled_champion_report_markdown(
 
     validate_controlled_champion_selection_labels(
         controlled_champion_name,
+        data.controlled_champion_loadout_selection,
         &controlled_champion_loadout.selection_labels,
+        &controlled_champion_loadout.unmodeled_rune_names,
     )?;
 
     let now = SystemTime::now();
@@ -292,7 +318,7 @@ pub(super) fn write_controlled_champion_report_markdown(
     let best_healing = format_f64_with_commas(best_outcome.healing_done, 1);
     let best_invulnerable_seconds = format_f64_with_commas(best_outcome.invulnerable_seconds, 2);
     content.push_str(&format!(
-        "- Best objective score: **{:.4}**\n- Best time alive / damage dealt / healing done / enemy kills / invulnerable seconds: **{:.2}s / {} / {} / {} / {}s**\n- Best cap survivor: **{}**\n\n",
+        "- Best objective score: **{:.4}**\n- Best outcome:\n  - Time alive: **{:.2}s**\n  - Damage dealt: **{}**\n  - Healing done: **{}**\n  - Enemy kills: **{}**\n  - Invulnerable seconds: **{}s**\n- Best cap survivor: **{}**\n\n",
         best_score,
         best_outcome.time_alive_seconds,
         best_damage,
@@ -324,7 +350,7 @@ pub(super) fn write_controlled_champion_report_markdown(
                 0.0
             };
             content.push_str(&format!(
-                "- {}: procs `{}` / attempts `{}` / eligible `{}` (proc/attempt {:.1}%, proc/eligible {:.1}%), bonus damage `{:.2}` ({:.2}% share), bonus healing `{:.2}` ({:.2}% share)\n",
+                "- {}:\n  - Procs: `{}`\n  - Attempts: `{}`\n  - Eligible: `{}`\n  - Proc rate (vs attempts): `{:.1}%`\n  - Proc rate (vs eligible): `{:.1}%`\n  - Bonus damage: `{:.2}` ({:.2}% share)\n  - Bonus healing: `{:.2}` ({:.2}% share)\n",
                 entry.rune_name,
                 entry.proc_count,
                 entry.attempt_count,
@@ -337,25 +363,20 @@ pub(super) fn write_controlled_champion_report_markdown(
                 healing_share_percent
             ));
             if !entry.source_breakdown.is_empty() {
-                let sources = entry
-                    .source_breakdown
-                    .iter()
-                    .map(|source| {
-                        format!(
-                            "{} (procs {}, attempts {}, eligible {}, proc/attempt {:.1}%, proc/eligible {:.1}%, damage {:.2}, healing {:.2})",
-                            source.source,
-                            source.proc_count,
-                            source.attempt_count,
-                            source.eligible_count,
-                            source.proc_attempt_rate * 100.0,
-                            source.proc_eligible_rate * 100.0,
-                            source.bonus_damage,
-                            source.bonus_healing
-                        )
-                    })
-                    .collect::<Vec<_>>()
-                    .join("; ");
-                content.push_str(&format!("  - sources: {}\n", sources));
+                content.push_str("  - Sources:\n");
+                for source in &entry.source_breakdown {
+                    content.push_str(&format!(
+                        "    - {}:\n      - Procs: `{}`\n      - Attempts: `{}`\n      - Eligible: `{}`\n      - Proc rate (vs attempts): `{:.1}%`\n      - Proc rate (vs eligible): `{:.1}%`\n      - Bonus damage: `{:.2}`\n      - Bonus healing: `{:.2}`\n",
+                        source.source,
+                        source.proc_count,
+                        source.attempt_count,
+                        source.eligible_count,
+                        source.proc_attempt_rate * 100.0,
+                        source.proc_eligible_rate * 100.0,
+                        source.bonus_damage,
+                        source.bonus_healing
+                    ));
+                }
             }
         }
         content.push('\n');
@@ -372,7 +393,7 @@ pub(super) fn write_controlled_champion_report_markdown(
         .sum::<usize>();
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Parallelism (threads / seed-orchestration / portfolio / strategy-elites): `{}` / `{}` / `{}` / `{}`\n- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): `{:.2}/{:.2}/{:.2}/{:.2}/{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- In-memory full-evaluation cache hits/misses/waits: `{}/{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Strict ordering heuristic (enabled / rune_weight / shard_weight / exploration_promotions): `{}` / `{:.2}` / `{:.2}` / `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout:\n  - Candidates: `{}`\n  - Finalists: `{}`\n- Ensemble seeds: `{}`\n- Parallelism:\n  - Threads: `{}`\n  - Seed orchestration parallel: `{}`\n  - Portfolio parallel: `{}`\n  - Strategy-elites parallel: `{}`\n- Objective weights:\n  - survival: `{:.2}`\n  - damage: `{:.2}`\n  - healing: `{:.2}`\n  - enemy_kills: `{:.2}`\n  - invulnerable_seconds: `{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- In-memory full-evaluation cache:\n  - Hits: `{}`\n  - Misses: `{}`\n  - Waits: `{}`\n- Candidate key generation:\n  - Generated: `{}`\n  - Duplicate-pruned: `{}`\n  - Unique: `{}`\n- Strict candidate progression:\n  - Seed-scored: `{}`\n  - Remaining: `{}`\n  - Processed: `{}`\n- Strict stage:\n  - Non-finite: `{}`\n  - Timeout-skipped: `{}`\n  - Completion: `{:.1}%`\n- Strict ordering heuristic:\n  - Enabled: `{}`\n  - Rune signal weight: `{:.2}`\n  - Shard signal weight: `{:.2}`\n  - Exploration promotions: `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best stats:\n  - Mean: `{}`\n  - Stddev: `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
         format_usize_with_commas(diagnostics.scenario_count),
@@ -419,14 +440,14 @@ pub(super) fn write_controlled_champion_report_markdown(
         diagnostics.effective_seed
     ));
     content.push_str(&format!(
-        "- Unmodeled rune gate (hard_gate / penalty_per_rune / rejected / penalized): `{}` / `{:.4}` / `{}` / `{}`\n",
+        "- Unmodeled rune gate:\n  - Hard gate: `{}`\n  - Penalty per rune: `{:.4}`\n  - Rejected: `{}`\n  - Penalized: `{}`\n",
         diagnostics.unmodeled_rune_hard_gate,
         diagnostics.unmodeled_rune_penalty_per_rune,
         format_usize_with_commas(diagnostics.unmodeled_rune_candidates_rejected),
         format_usize_with_commas(diagnostics.unmodeled_rune_candidates_penalized)
     ));
     content.push_str(&format!(
-        "- Unmodeled item-effect gate (hard_gate / penalty_per_item / rejected / penalized): `{}` / `{:.4}` / `{}` / `{}`\n",
+        "- Unmodeled item-effect gate:\n  - Hard gate: `{}`\n  - Penalty per item: `{:.4}`\n  - Rejected: `{}`\n  - Penalized: `{}`\n",
         diagnostics.unmodeled_item_effect_hard_gate,
         diagnostics.unmodeled_item_effect_penalty_per_item,
         format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_rejected),
@@ -434,7 +455,7 @@ pub(super) fn write_controlled_champion_report_markdown(
     ));
     if diagnostics.coverage_stage_enabled {
         content.push_str(&format!(
-            "- Coverage stage (pre-budget): `{:.2}s`; assets covered `{}/{}`; seeded candidates unique/raw `{}/{}`\n",
+            "- Coverage stage (pre-budget):\n  - Elapsed: `{:.2}s`\n  - Assets covered: `{}/{}`\n  - Seeded candidates (unique/raw): `{}/{}`\n",
             diagnostics.coverage_stage_elapsed_seconds,
             format_usize_with_commas(diagnostics.coverage_stage_assets_covered),
             format_usize_with_commas(diagnostics.coverage_stage_assets_total),
@@ -455,7 +476,7 @@ pub(super) fn write_controlled_champion_report_markdown(
             ""
         };
         content.push_str(&format!(
-            "- Time budget: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%){}\n\n",
+            "- Time budget:\n  - Budget: `{:.1}s`\n  - Timed out: `{}`\n  - Progress: `{}/{}` ({:.1}%){}\n\n",
             budget,
             diagnostics.timed_out,
             format_usize_with_commas(processed_candidates),
@@ -473,7 +494,7 @@ pub(super) fn write_controlled_champion_report_markdown(
     }
     if let Some(window) = diagnostics.popcorn_window_seconds {
         content.push_str(&format!(
-            "- Popcorn mode: window `{:.1}s`; significant threshold `{:.2}% of last best score`; significant events `{}`; seconds since last significant improvement `{:.1}`\n\n",
+            "- Popcorn mode:\n  - Window: `{:.1}s`\n  - Significant threshold: `{:.2}% of last best score`\n  - Significant events: `{}`\n  - Seconds since last significant improvement: `{:.1}`\n\n",
             window,
             diagnostics.popcorn_min_relative_improvement_percent,
             format_usize_with_commas(diagnostics.significant_improvement_events),
@@ -876,7 +897,9 @@ pub(super) fn write_controlled_champion_report_json(
     let build_orders = data.build_orders;
     validate_controlled_champion_selection_labels(
         controlled_champion_name,
+        data.controlled_champion_loadout_selection,
         &controlled_champion_loadout.selection_labels,
+        &controlled_champion_loadout.unmodeled_rune_names,
     )?;
     let total_score_requests = diagnostics
         .search_type_breakdown

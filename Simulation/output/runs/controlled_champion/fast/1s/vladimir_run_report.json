@@ -3,41 +3,70 @@
     "Abyssal Mask",
     "Actualizer",
     "Bloodletter's Curse",
-    "Umbral Glaive",
-    "Unending Despair",
-    "Void Staff"
+    "Bloodsong",
+    "Bloodthirster",
+    "Guardian Angel"
   ],
-  "best_rune_proc_telemetry": [],
+  "best_rune_proc_telemetry": [
+    {
+      "attempt_count": 11,
+      "bonus_damage": 153.03939655172414,
+      "bonus_damage_share": 0.03463353738124998,
+      "bonus_healing": 0.0,
+      "bonus_healing_share": 0.0,
+      "eligible_count": 1,
+      "opportunity_count": 1,
+      "proc_attempt_rate": 0.09090909090909091,
+      "proc_count": 1,
+      "proc_eligible_rate": 1.0,
+      "proc_opportunity_rate": 1.0,
+      "rune_name": "Arcane Comet",
+      "source_breakdown": [
+        {
+          "attempt_count": 11,
+          "bonus_damage": 153.03939655172414,
+          "bonus_healing": 0.0,
+          "eligible_count": 1,
+          "opportunity_count": 1,
+          "proc_attempt_rate": 0.09090909090909091,
+          "proc_count": 1,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "ability"
+        }
+      ]
+    }
+  ],
   "build_orders": [],
   "champion_level": 20,
   "controlled_champion_loadout_labels": [
-    "Rune: Aftershock",
-    "Rune: Demolish",
-    "Rune: Bone Plating",
-    "Rune: Revitalize",
-    "Rune: Magical Footwear",
-    "Rune: Time Warp Tonic",
-    "Shard 1: attack_speed",
-    "Shard 2: health",
-    "Shard 3: tenacity"
+    "Rune: Arcane Comet",
+    "Rune: Manaflow Band",
+    "Rune: Absolute Focus",
+    "Rune: Gathering Storm",
+    "Rune: Cheap Shot",
+    "Rune: Relentless Hunter",
+    "Shard 1: ability_haste",
+    "Shard 2: movement_speed",
+    "Shard 3: health"
   ],
   "controlled_champion_name": "Vladimir",
   "controlled_champion_unmodeled_item_effects": [
     "Abyssal Mask",
     "Actualizer",
     "Bloodletter's Curse",
-    "Umbral Glaive",
-    "Unending Despair"
+    "Bloodsong",
+    "Bloodthirster"
   ],
   "controlled_champion_unmodeled_runes": [
-    "Demolish",
-    "Bone Plating",
-    "Revitalize",
-    "Time Warp Tonic"
+    "Manaflow Band",
+    "Absolute Focus",
+    "Cheap Shot",
+    "Relentless Hunter"
   ],
   "diagnostics": {
     "adaptive_candidates_injected": 0,
-    "best_significant_score": 0.2082616593103777,
+    "best_significant_score": -0.06671967304441967,
     "bleed_candidates_injected": 0,
     "candidate_duplicates_pruned": 0,
     "candidate_keys_generated": 128,
@@ -49,18 +78,18 @@
     "coverage_stage_seed_candidates": 0,
     "coverage_stage_seed_candidates_unique": 0,
     "coverage_stage_warning": "",
-    "effective_seed": 330752026848107508,
+    "effective_seed": 8672920028738828121,
     "effective_threads": 9,
-    "elapsed_seconds": 1.613032541,
+    "elapsed_seconds": 1.58676825,
     "ensemble_seeds": 1,
-    "estimated_close_to_optimal_probability": 0.000017519846701286035,
-    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 1752 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
-    "estimated_run_space_coverage_percent": 1.7600525290415222e-10,
+    "estimated_close_to_optimal_probability": 8.5699633635139e-6,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.000001000% (about top 9954248 candidates in the legal space) and n = 857 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 8.609389368656304e-11,
     "estimated_total_candidate_space": 995424835958784.0,
-    "full_cache_hits": 468,
-    "full_cache_misses": 2400,
+    "full_cache_hits": 88,
+    "full_cache_misses": 4965,
     "full_cache_waits": 0,
-    "full_evaluations": 1752,
+    "full_evaluations": 857,
     "loadout_candidates": 1,
     "loadout_finalists": 1,
     "objective_damage_weight": 0.12820512820512822,
@@ -77,17 +106,17 @@
     "search_type_breakdown": [
       {
         "name": "seed_search:portfolio",
-        "new_simulations": 2400,
-        "score_requests": 34219
+        "new_simulations": 4965,
+        "score_requests": 35422
       }
     ],
-    "seconds_since_last_significant_improvement": 1.271870917,
+    "seconds_since_last_significant_improvement": 1.4091159580000001,
     "seed_orchestration_parallel": false,
-    "significant_improvement_events": 9,
+    "significant_improvement_events": 6,
     "simulation_counts": {
-      "new_full_simulations": 1752,
-      "total_score_requests": 34219,
-      "unique_scored_candidates": 1752
+      "new_full_simulations": 857,
+      "total_score_requests": 35422,
+      "unique_scored_candidates": 857
     },
     "strategy_elites_parallel": true,
     "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
@@ -103,14 +132,14 @@
     "time_budget_seconds": 1.0,
     "timed_out": true,
     "total_candidates": 128,
-    "total_run_seconds": 1.614051625,
+    "total_run_seconds": 1.588354583,
     "unique_candidate_builds": 128,
-    "unique_scored_candidates": 1752,
-    "unmodeled_item_effect_candidates_penalized": 2338,
+    "unique_scored_candidates": 857,
+    "unmodeled_item_effect_candidates_penalized": 4803,
     "unmodeled_item_effect_candidates_rejected": 0,
     "unmodeled_item_effect_hard_gate": false,
     "unmodeled_item_effect_penalty_per_item": 0.02,
-    "unmodeled_rune_candidates_penalized": 2398,
+    "unmodeled_rune_candidates_penalized": 4964,
     "unmodeled_rune_candidates_rejected": 0,
     "unmodeled_rune_hard_gate": false,
     "unmodeled_rune_penalty_per_rune": 0.02
@@ -341,16 +370,16 @@
     }
   ],
   "enemy_similarity_notes": [],
-  "generated_local": "2026-02-19 14:42:18 -06:00",
-  "generated_utc": "2026-02-19T20:42:18.813983+00:00",
+  "generated_local": "2026-02-19 15:15:41 -06:00",
+  "generated_utc": "2026-02-19T21:15:41.341243+00:00",
   "headline": {
     "best_objective_breakdown": {
       "components": {
         "damage": {
-          "contribution": 0.011943808626807969,
-          "delta_vs_weight_percent_points": 84.48357179231232,
-          "impact_percent": 97.30408461282514,
-          "normalized_ratio": 0.09316170728910214,
+          "contribution": 0.03066179936467846,
+          "delta_vs_weight_percent_points": 52.24641727768137,
+          "impact_percent": 65.06693009819419,
+          "normalized_ratio": 0.23916203504449196,
           "weight": 0.12820512820512822
         },
         "enemy_kills": {
@@ -361,40 +390,40 @@
           "weight": 0.5128205128205129
         },
         "healing": {
-          "contribution": 0.0,
-          "delta_vs_weight_percent_points": -7.6923076923076925,
-          "impact_percent": 0.0,
-          "normalized_ratio": 0.0,
+          "contribution": 0.014455445029083518,
+          "delta_vs_weight_percent_points": 22.983368580271996,
+          "impact_percent": 30.67567627257969,
+          "normalized_ratio": 0.1879207853780857,
           "weight": 0.07692307692307693
         },
         "invulnerable_seconds": {
-          "contribution": 0.0,
-          "delta_vs_weight_percent_points": -2.5641025641025643,
-          "impact_percent": 0.0,
-          "normalized_ratio": 0.0,
+          "contribution": 0.00012820512820512823,
+          "delta_vs_weight_percent_points": -2.292040444853204,
+          "impact_percent": 0.27206211924936,
+          "normalized_ratio": 0.005000000000000001,
           "weight": 0.025641025641025644
         },
         "survival": {
-          "contribution": 0.0003309161952101598,
-          "delta_vs_weight_percent_points": -22.94511025385078,
-          "impact_percent": 2.695915387174869,
-          "normalized_ratio": 0.001290573161319623,
+          "contribution": 0.0018780267483993348,
+          "delta_vs_weight_percent_points": -21.655694131048886,
+          "impact_percent": 3.985331509976759,
+          "normalized_ratio": 0.007324304318757404,
           "weight": 0.25641025641025644
         }
       },
-      "final_score": 0.012274724822018128,
-      "weighted_mean_score": 0.012274724822018128,
-      "worst_case_score": 0.012274724822018128,
+      "final_score": 0.04712347627036644,
+      "weighted_mean_score": 0.04712347627036644,
+      "worst_case_score": 0.04712347627036644,
       "worst_case_weight": 0.35
     },
-    "best_objective_score": -0.1677252751779819,
+    "best_objective_score": -0.13287652372963357,
     "best_outcome": {
       "cap_survivor": false,
-      "damage_dealt": 1721.2802737167776,
+      "damage_dealt": 4418.820834471766,
       "enemy_kills": 0,
-      "healing_done": 0.0,
-      "invulnerable_seconds": 0.0,
-      "time_alive_seconds": 1.5486877935835475
+      "healing_done": 505.5069126670505,
+      "invulnerable_seconds": 6.0,
+      "time_alive_seconds": 8.789165182508885
     }
   },
   "scenario_path": "Simulation/scenarios/vladimir_urf_teamfight.json",

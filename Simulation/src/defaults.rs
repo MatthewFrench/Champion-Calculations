@@ -10,6 +10,8 @@ pub(crate) struct SimulationDefaults {
     pub dt_fallback_seconds: f64,
     pub champion_level: usize,
     pub time_limit_seconds: f64,
+    #[serde(default)]
+    pub stack_overrides: HashMap<String, f64>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -907,8 +909,19 @@ fn load_champion_ai_profiles() -> Result<ChampionAiProfilesFile> {
         .join("champion_ai_profiles.json");
     let text = std::fs::read_to_string(&path)
         .with_context(|| format!("Failed reading champion AI profiles: {}", path.display()))?;
-    serde_json::from_str(&text)
-        .with_context(|| format!("Failed parsing champion AI profiles: {}", path.display()))
+    let mut profiles: ChampionAiProfilesFile = serde_json::from_str(&text)
+        .with_context(|| format!("Failed parsing champion AI profiles: {}", path.display()))?;
+    let mut normalized = HashMap::new();
+    for (champion_key, mut entry) in profiles.champions {
+        let mut normalized_script_priority_overrides = HashMap::new();
+        for (event_key, priority) in entry.script_priority_overrides {
+            normalized_script_priority_overrides.insert(normalize_key(&event_key), priority);
+        }
+        entry.script_priority_overrides = normalized_script_priority_overrides;
+        normalized.insert(normalize_key(&champion_key), entry);
+    }
+    profiles.champions = normalized;
+    Ok(profiles)
 }
 
 #[allow(dead_code)]

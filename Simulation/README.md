@@ -78,6 +78,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Timed-out seed-stage partial candidates are deterministically completed to full candidates before strict full ranking, avoiding random fallback winners in short-budget runs.
 - Strict final candidate ranking evaluates remaining candidates in parallel batches.
 - Report metrics and build-order diagnostics resolve candidate loadout bonus stats from in-run simulation results and fallback recomputation as needed.
+- Build-order optimization now evaluates stage outcomes across all configured opponent encounters using encounter weights and the same worst-case blend policy as objective scoring, instead of optimizing only against the first encounter.
 - Build scoring uses a composite objective over:
   - time alive
   - damage dealt to enemies
@@ -193,6 +194,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 - `controlled_champion_fixed_loadout` mode:
   - evaluates one explicit controlled champion item/rune/shard loadout directly (no candidate search/mutation).
   - required: `--fixed-item-names "<comma-separated six items>"`.
+  - `search` block in scenario is optional for this mode; when omitted, search defaults are used only for objective weighting/seed defaults.
   - optional overrides: `--fixed-rune-names`, `--fixed-shard-stats`, `--fixed-eval-label`.
   - writes outputs to:
     - `Simulation/output/runs/controlled_champion/fixed_loadout/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_report.md`
@@ -202,6 +204,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 - `controlled_champion_fixed_loadout_rune_sweep` mode:
   - evaluates one fixed item build while sweeping all legal keystones in the same primary rune path as the baseline keystone.
   - required: `--fixed-item-names "<comma-separated six items>"`.
+  - `search` block in scenario is optional for this mode; when omitted, search defaults are used only for objective weighting/seed defaults.
   - optional overrides: `--fixed-rune-names`, `--fixed-shard-stats`, `--fixed-eval-label`, `--fixed-sweep-seed-repeats`.
   - writes outputs to:
     - `Simulation/output/runs/controlled_champion/fixed_loadout_rune_sweep/<search_quality_profile>/<fixed_eval_label_key>/vladimir_fixed_loadout_rune_sweep_report.md`
@@ -435,6 +438,8 @@ This migration is active and tracked in the roadmap and improvement tracker for 
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - `maximum_quality` runs a pre-budget coverage stage that locks each item/rune/shard at least once, keeps top diverse candidates per locked asset, and injects those seeds into the main search.
 - Stack overrides (generic, keyed by stack identifier):
+  - global defaults are loaded from `Simulation/data/simulator_defaults.json` (`simulation_defaults.stack_overrides`).
+  - current default baseline includes `heartsteel: 20.0` unless overridden below.
   - `simulation.stack_overrides` sets global stack overrides by stack identifier (example: `{ "heartsteel": 20.0 }`).
   - `controlled_champion.stack_overrides` overrides global stack overrides for the controlled champion.
   - `opponents.stack_overrides` sets default opponent overrides, and each actor can further override with `opponents.encounters[].actors[].stack_overrides`.

@@ -1,10 +1,40 @@
 # Controlled Champion Fixed Loadout Trace
 
 ## Rune Proc Telemetry
-- Press the Attack: procs `0` / attempts `16` / eligible `0` (proc/attempt 0.0%, proc/eligible 0.0%), bonus damage `0.00` (0.00% share), bonus healing `0.00` (0.00% share)
-  - sources: ability (procs 0, attempts 16, eligible 0, proc/attempt 0.0%, proc/eligible 0.0%, damage 0.00, healing 0.00)
-- Triumph: procs `1` / attempts `1` / eligible `1` (proc/attempt 100.0%, proc/eligible 100.0%), bonus damage `0.00` (0.00% share), bonus healing `535.13` (14.82% share)
-  - sources: enemy_kill (procs 1, attempts 1, eligible 1, proc/attempt 100.0%, proc/eligible 100.0%, damage 0.00, healing 535.13)
+- Press the Attack:
+  - Procs: `0`
+  - Attempts: `16`
+  - Eligible: `0`
+  - Proc rate (vs attempts): `0.0%`
+  - Proc rate (vs eligible): `0.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `0.00` (0.00% share)
+  - Sources:
+    - ability:
+      - Procs: `0`
+      - Attempts: `16`
+      - Eligible: `0`
+      - Proc rate (vs attempts): `0.0%`
+      - Proc rate (vs eligible): `0.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `0.00`
+- Triumph:
+  - Procs: `1`
+  - Attempts: `1`
+  - Eligible: `1`
+  - Proc rate (vs attempts): `100.0%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `0.00` (0.00% share)
+  - Bonus healing: `535.13` (14.82% share)
+  - Sources:
+    - enemy_kill:
+      - Procs: `1`
+      - Attempts: `1`
+      - Eligible: `1`
+      - Proc rate (vs attempts): `100.0%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `0.00`
+      - Bonus healing: `535.13`
 
 ## Events
 - 0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)

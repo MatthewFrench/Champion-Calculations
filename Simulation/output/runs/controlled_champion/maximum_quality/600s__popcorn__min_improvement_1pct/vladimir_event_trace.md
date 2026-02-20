@@ -1,20 +1,35 @@
 # Vladimir Event Trace
 
 ## Rune Proc Telemetry
-- Summon Aery: procs `3` / attempts `17` / eligible `3` (proc/attempt 17.6%, proc/eligible 100.0%), bonus damage `277.07` (2.18% share), bonus healing `0.00` (0.00% share)
-  - sources: ability (procs 3, attempts 17, eligible 3, proc/attempt 17.6%, proc/eligible 100.0%, damage 277.07, healing 0.00)
+- Summon Aery:
+  - Procs: `3`
+  - Attempts: `17`
+  - Eligible: `3`
+  - Proc rate (vs attempts): `17.6%`
+  - Proc rate (vs eligible): `100.0%`
+  - Bonus damage: `278.57` (2.14% share)
+  - Bonus healing: `0.00` (0.00% share)
+  - Sources:
+    - ability:
+      - Procs: `3`
+      - Attempts: `17`
+      - Eligible: `3`
+      - Proc rate (vs attempts): `17.6%`
+      - Proc rate (vs eligible): `100.0%`
+      - Bonus damage: `278.57`
+      - Bonus healing: `0.00`
 
 ## Optimized Build Trace
 - 0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)
   ```text
 controlled_champion:
   identity: Vladimir
-  core: pos=(0.0, 0.0) hp=5504.8/5504.8 (100.0%) armor=204.5 mr=54.7
-  offense: ap=341.1 ah=320.0
-  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Protoplasm Harness, Void Staff, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [attack_speed, health, tenacity]
+  core: pos=(0.0, 0.0) hp=5512.8/5512.8 (100.0%) armor=204.5 mr=54.7
+  offense: ap=346.1 ah=338.0
+  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
   cooldowns: Stasis item ready; Revive item ready; Emergency shield item ready
-  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.50s
-  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Summon Aery: ready] | stacks [none]
+  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.55s
+  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]
   buffs: none
 enemies:
   Warwick:
@@ -60,24 +75,24 @@ field:
 - 0.000s [champion_script] Vayne executed Tumble Empower
 - 0.000s [enemy_buff] Vayne empowered next attack
 - 0.000s [champion_script] Morgana executed Dark Binding
-- 0.000s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1196.6, true 0.0, total 773.5
+- 0.000s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1196.9, true 0.0, total 773.7
 - 0.000s [champion_script] Morgana executed Soul Shackles
 - 0.000s [damage_in] Morgana Soul Shackles -> Vladimir | physical 0.0, magic 678.0, true 0.0, total 438.3
 - 0.000s [champion_script] Sona executed Crescendo
 - 0.000s [damage_in] Sona Crescendo -> Vladimir | physical 0.0, magic 869.5, true 0.0, total 562.1
 - 0.000s [champion_script] Dr. Mundo executed Infected Bonesaw
-- 0.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 1119.3, true 0.0, total 723.5
+- 0.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 1121.6, true 0.0, total 725.0
 - 0.159s [attack_start] Vayne begins auto attack
-- 0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 2332.7 to 5 enemies in range
+- 0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 2431.1 to 5 enemies in range
 - 0.373s [attack_start] Warwick begins auto attack
 - 0.500s [champion_script] Vayne executed Tumble Empower
 - 0.500s [enemy_buff] Vayne empowered next attack
-- 0.525s [damage_in] Vayne Auto Attack -> Vladimir | physical 1182.8, magic 0.0, true 0.0, total 388.4
-- 0.525s [attack_hit] Vayne hit Vladimir (phys 1182.8, magic 0.0, true 0.0)
+- 0.525s [damage_in] Vayne Auto Attack -> Vladimir | physical 1183.2, magic 0.0, true 0.0, total 388.6
+- 0.525s [attack_hit] Vayne hit Vladimir (phys 1183.2, magic 0.0, true 0.0)
 - 0.540s [attack_start] Sona begins auto attack
 - 0.612s [attack_start] Dr. Mundo begins auto attack
-- 0.613s [damage_in] Warwick Auto Attack -> Vladimir | physical 394.6, magic 81.6, true 0.0, total 182.4
-- 0.613s [attack_hit] Warwick hit Vladimir (phys 394.6, magic 81.6, true 0.0)
+- 0.613s [damage_in] Warwick Auto Attack -> Vladimir | physical 395.0, magic 81.6, true 0.0, total 182.5
+- 0.613s [attack_hit] Warwick hit Vladimir (phys 395.0, magic 81.6, true 0.0)
 - 0.620s [attack_start] Morgana begins auto attack
 - 0.675s [attack_start] Vayne begins auto attack
 - 0.852s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
@@ -87,27 +102,27 @@ field:
 - 1.000s [champion_script] Vayne executed Tumble Empower
 - 1.000s [enemy_buff] Vayne empowered next attack
 - 1.000s [champion_script] Dr. Mundo executed Infected Bonesaw
-- 1.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 720.6, true 0.0, total 465.8
+- 1.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 722.4, true 0.0, total 466.9
 - 1.022s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2
 - 1.022s [attack_hit] Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)
-- 1.041s [damage_in] Vayne Auto Attack -> Vladimir | physical 762.2, magic 0.0, true 0.0, total 250.3
-- 1.041s [attack_hit] Vayne hit Vladimir (phys 762.2, magic 0.0, true 0.0)
+- 1.041s [damage_in] Vayne Auto Attack -> Vladimir | physical 762.5, magic 0.0, true 0.0, total 250.4
+- 1.041s [attack_hit] Vayne hit Vladimir (phys 762.5, magic 0.0, true 0.0)
 - 1.041s [controlled_champion_item_active] Vladimir activated emergency shield (265.5 shield, 5.0s heal window)
 - 1.183s [attack_start] Vayne begins auto attack
-- 1.212s [damage_in] Warwick Auto Attack -> Vladimir | physical 336.9, magic 81.6, true 0.0, total 0.0
-- 1.212s [attack_hit] Warwick hit Vladimir (phys 336.9, magic 81.6, true 0.0)
+- 1.212s [damage_in] Warwick Auto Attack -> Vladimir | physical 337.2, magic 81.6, true 0.0, total 0.0
+- 1.212s [attack_hit] Warwick hit Vladimir (phys 337.2, magic 81.6, true 0.0)
 - 1.463s [attack_start] Dr. Mundo begins auto attack
 - 1.474s [attack_start] Sona begins auto attack
 - 1.500s [champion_script] Vayne executed Tumble Empower
 - 1.500s [enemy_buff] Vayne empowered next attack
-- 1.549s [damage_in] Vayne Auto Attack -> Vladimir | physical 749.2, magic 0.0, true 1017.3, total 1161.3
-- 1.549s [attack_hit] Vayne hit Vladimir (phys 749.2, magic 0.0, true 1017.3)
+- 1.549s [damage_in] Vayne Auto Attack -> Vladimir | physical 749.5, magic 0.0, true 1018.1, total 1162.2
+- 1.549s [attack_hit] Vayne hit Vladimir (phys 749.5, magic 0.0, true 1018.1)
 - 1.557s [attack_start] Warwick begins auto attack
 - 1.642s [attack_start] Morgana begins auto attack
 - 1.684s [attack_start] Vayne begins auto attack
 - 1.703s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
-- 1.797s [damage_in] Warwick Auto Attack -> Vladimir | physical 269.6, magic 81.6, true 171.9, total 313.2
-- 1.797s [attack_hit] Warwick hit Vladimir (phys 269.6, magic 81.6, true 171.9)
+- 1.797s [damage_in] Warwick Auto Attack -> Vladimir | physical 269.8, magic 81.6, true 171.9, total 313.2
+- 1.797s [attack_hit] Warwick hit Vladimir (phys 269.8, magic 81.6, true 171.9)
 - 1.868s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 34.8
 - 1.868s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)
 - 2.000s [champion_script] Vayne executed Tumble Empower
@@ -183,44 +198,44 @@ field:
   ```text
 controlled_champion:
   identity: Vladimir
-  core: pos=(0.0, 0.0) hp=1540.7/5504.8 (28.0%) armor=204.5 mr=54.7
-  offense: ap=341.1 ah=320.0
-  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Protoplasm Harness, Void Staff, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [attack_speed, health, tenacity]
+  core: pos=(0.0, 0.0) hp=1540.7/5512.8 (27.9%) armor=204.5 mr=54.7
+  offense: ap=346.1 ah=338.0
+  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
   cooldowns: Stasis item ready; Revive item 72.04s; Emergency shield item 26.04s
-  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 23.57s; Auto Attack 0.01s
-  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Summon Aery: ready] | stacks [none]
+  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 22.40s; Auto Attack 0.51s
+  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]
   buffs: Revive lockout 1.04s; Emergency heal-over-time 1.04s
 enemies:
   Warwick:
-    core: pos=(140.0, 0.0) hp=3020.7/3501.0 armor=191.6 mr=70.9
+    core: pos=(140.0, 0.0) hp=2931.0/3501.0 armor=191.6 mr=70.9
     combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0
     loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]
     abilities: Auto Attack unavailable; Infinite Duress ready
     runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Attacks landed: 8]
     buffs: none
   Vayne:
-    core: pos=(300.0, 140.0) hp=2192.6/2641.5 armor=110.4 mr=54.7
+    core: pos=(300.0, 140.0) hp=2190.4/2641.5 armor=110.4 mr=54.7
     combat: ad=294.6 ap=30.0 as=8.783 (interval 0.114s) ah=300.0
     loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]
     abilities: Auto Attack 0.07s; Tumble Empower ready
     runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Guinsoo stacks: 8/8; Attacks landed: 10]
     buffs: none
   Morgana:
-    core: pos=(-300.0, 120.0) hp=2971.0/3440.5 armor=154.8 mr=54.7
+    core: pos=(-300.0, 120.0) hp=2968.7/3440.5 armor=154.8 mr=54.7
     combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0
     loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]
     abilities: Auto Attack in-flight (0.11s to impact); Dark Binding 1.88s; Soul Shackles 17.83s
     runtime: cooldowns [Luden's Echo: 2.60s (cooldown 3.00s); Arcane Comet: 3.00s] | stacks [none]
     buffs: none
   Sona:
-    core: pos=(-260.0, -130.0) hp=1970.5/2413.5 armor=105.8 mr=54.7
+    core: pos=(-260.0, -130.0) hp=1968.2/2413.5 armor=105.8 mr=54.7
     combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0
     loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]
     abilities: Auto Attack 0.21s; Crescendo 18.36s
     runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]
     buffs: none
   Dr. Mundo:
-    core: pos=(180.0, -120.0) hp=5988.8/6479.8 armor=192.5 mr=72.7
+    core: pos=(180.0, -120.0) hp=5986.8/6479.8 armor=192.5 mr=72.7
     combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0
     loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]
     abilities: Auto Attack unavailable; Infected Bonesaw ready
@@ -257,17 +272,19 @@ field:
 - 6.000s [champion_script] Dr. Mundo executed Infected Bonesaw
 - 6.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state
 - 6.027s [attack_start] Vayne begins auto attack
-- 6.067s [controlled_champion_cast] Vladimir cast vladimir_sanguine_pool (untargetable 2.00s, damage tick 0.50s)
+- 6.057s [controlled_champion_attack_start] Vladimir begins auto attack on Warwick
+- 6.057s [controlled_champion_cast] Vladimir cast vladimir_sanguine_pool (untargetable 2.00s, damage tick 0.50s)
 - 6.131s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state
 - 6.145s [attack_start] Sona begins auto attack
 - 6.187s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state
+- 6.257s [controlled_champion_attack_cancelled] Vladimir auto attack cancelled during windup by crowd control, cast lock, or invulnerability
 - 6.392s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state
 - 6.487s [attack_start] Warwick begins auto attack
 - 6.500s [champion_script] Vayne executed Tumble Empower
 - 6.500s [enemy_buff] Vayne empowered next attack
 - 6.506s [attack_start] Vayne begins auto attack
 - 6.539s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state
-- 6.539s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 560.3 to 5 enemies in range
+- 6.539s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range
 - 6.573s [attack_start] Dr. Mundo begins auto attack
 - 6.727s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state
 - 6.750s [attack_start] Morgana begins auto attack
@@ -281,7 +298,7 @@ field:
 - 7.000s [champion_script] Dr. Mundo executed Infected Bonesaw
 - 7.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state
 - 7.028s [attack_start] Warwick begins auto attack
-- 7.033s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 560.3 to 5 enemies in range
+- 7.033s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range
 - 7.079s [attack_start] Sona begins auto attack
 - 7.152s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state
 - 7.268s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state
@@ -291,7 +308,7 @@ field:
 - 7.473s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state
 - 7.500s [champion_script] Vayne executed Tumble Empower
 - 7.500s [enemy_buff] Vayne empowered next attack
-- 7.533s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 560.3 to 5 enemies in range
+- 7.533s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range
 - 7.569s [attack_start] Warwick begins auto attack
 - 7.664s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
 - 7.772s [attack_start] Morgana begins auto attack
@@ -303,28 +320,28 @@ field:
 - 8.000s [champion_script] Dr. Mundo executed Infected Bonesaw
 - 8.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state
 - 8.013s [attack_start] Sona begins auto attack
-- 8.033s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 560.3 to 5 enemies in range
-- 8.100s [controlled_champion_cast] Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)
+- 8.033s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range
+- 8.067s [controlled_champion_cast] Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)
 - 8.110s [attack_start] Warwick begins auto attack
 - 8.174s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2
 - 8.174s [attack_hit] Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)
+- 8.267s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 425.4
 - 8.276s [attack_start] Dr. Mundo begins auto attack
-- 8.300s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 349.2
-- 8.300s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)
-- 8.310s [damage_in] Vayne Auto Attack -> Vladimir | physical 781.0, magic 0.0, true 0.0, total 256.5
-- 8.310s [attack_hit] Vayne hit Vladimir (phys 781.0, magic 0.0, true 0.0)
-- 8.350s [damage_in] Warwick Auto Attack -> Vladimir | physical 354.6, magic 81.6, true 171.9, total 341.1
-- 8.350s [attack_hit] Warwick hit Vladimir (phys 354.6, magic 81.6, true 171.9)
+- 8.276s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)
+- 8.310s [damage_in] Vayne Auto Attack -> Vladimir | physical 782.2, magic 0.0, true 0.0, total 256.9
+- 8.310s [attack_hit] Vayne hit Vladimir (phys 782.2, magic 0.0, true 0.0)
+- 8.350s [damage_in] Warwick Auto Attack -> Vladimir | physical 355.8, magic 81.6, true 171.9, total 341.5
+- 8.350s [attack_hit] Warwick hit Vladimir (phys 355.8, magic 81.6, true 171.9)
 - 8.407s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 103.0, true 0.0, total 101.4
 - 8.407s [attack_hit] Sona hit Vladimir (phys 106.0, magic 103.0, true 0.0)
 - 8.424s [attack_start] Vayne begins auto attack
 - 8.500s [champion_script] Vayne executed Tumble Empower
 - 8.500s [enemy_buff] Vayne empowered next attack
 - 8.516s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
-- 8.600s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 1856.9 to 5 enemies in range
+- 8.576s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 1869.4 to 5 enemies in range
 - 8.651s [attack_start] Warwick begins auto attack
-- 8.789s [damage_in] Vayne Auto Attack -> Vladimir | physical 739.1, magic 0.0, true 1017.3, total 1260.0
-- 8.789s [attack_hit] Vayne hit Vladimir (phys 739.1, magic 0.0, true 1017.3)
+- 8.789s [damage_in] Vayne Auto Attack -> Vladimir | physical 740.2, magic 0.0, true 1018.1, total 1261.2
+- 8.789s [attack_hit] Vayne hit Vladimir (phys 740.2, magic 0.0, true 1018.1)
 - 8.789s [controlled_champion_item_active] Vladimir activated stasis item for 2.50s
 - 8.794s [attack_start] Morgana begins auto attack
 - 8.891s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state
@@ -357,44 +374,44 @@ field:
   ```text
 controlled_champion:
   identity: Vladimir
-  core: pos=(0.0, 0.0) hp=249.4/5504.8 (4.5%) armor=204.5 mr=54.7
-  offense: ap=341.1 ah=320.0
-  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Protoplasm Harness, Void Staff, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [attack_speed, health, tenacity]
+  core: pos=(0.0, 0.0) hp=267.6/5512.8 (4.9%) armor=204.5 mr=54.7
+  offense: ap=346.1 ah=338.0
+  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]
   cooldowns: Stasis item 28.79s; Revive item 67.04s; Emergency shield item 21.04s
-  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 18.57s; Auto Attack 0.01s
-  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Summon Aery: 0.30s] | stacks [none]
+  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 17.40s; Auto Attack 0.11s
+  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: 1.27s (cooldown 3.00s); Summon Aery: 0.27s] | stacks [none]
   buffs: Stasis 1.29s; Stasis x1 (1.29s)
 enemies:
   Warwick:
-    core: pos=(140.0, 0.0) hp=1902.1/3501.0 armor=191.6 mr=70.9
+    core: pos=(140.0, 0.0) hp=1733.3/3501.0 armor=191.6 mr=70.9
     combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0
     loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]
     abilities: Auto Attack 0.27s; Infinite Duress ready
     runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Attacks landed: 18]
     buffs: none
   Vayne:
-    core: pos=(300.0, 140.0) hp=1364.7/2641.5 armor=110.4 mr=54.7
+    core: pos=(300.0, 140.0) hp=1359.1/2641.5 armor=110.4 mr=54.7
     combat: ad=294.6 ap=30.0 as=8.783 (interval 0.114s) ah=300.0
     loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]
     abilities: Auto Attack unavailable; Tumble Empower ready
     runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Guinsoo stacks: 8/8; Attacks landed: 20]
     buffs: none
   Morgana:
-    core: pos=(-300.0, 120.0) hp=2122.4/3440.5 armor=154.8 mr=54.7
+    core: pos=(-300.0, 120.0) hp=2116.8/3440.5 armor=154.8 mr=54.7
     combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0
     loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]
     abilities: Auto Attack unavailable; Dark Binding 1.48s; Soul Shackles 12.83s
     runtime: cooldowns [Luden's Echo: 2.20s (cooldown 3.00s); Arcane Comet: 7.20s] | stacks [none]
     buffs: none
   Sona:
-    core: pos=(-260.0, -130.0) hp=1148.5/2413.5 armor=105.8 mr=54.7
+    core: pos=(-260.0, -130.0) hp=1142.9/2413.5 armor=105.8 mr=54.7
     combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0
     loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]
     abilities: Auto Attack unavailable; Crescendo 13.36s
     runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: 0.41s] | stacks [none]
     buffs: none
   Dr. Mundo:
-    core: pos=(180.0, -120.0) hp=5158.3/6479.8 armor=192.5 mr=72.7
+    core: pos=(180.0, -120.0) hp=5153.3/6479.8 armor=192.5 mr=72.7
     combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0
     loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]
     abilities: Auto Attack unavailable; Infected Bonesaw ready
@@ -444,7 +461,7 @@ field:
 - 11.682s [attack_start] Dr. Mundo begins auto attack
 - 11.749s [attack_start] Sona begins auto attack
 - 11.779s [attack_start] Vayne begins auto attack
-- 11.779s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 887.9 to 5 enemies in range
+- 11.779s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range
 - 11.859s [attack_start] Morgana begins auto attack
 - 11.895s [attack_start] Warwick begins auto attack
 - 11.922s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
@@ -457,7 +474,7 @@ field:
 - 12.145s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state
 - 12.259s [attack_start] Vayne begins auto attack
 - 12.261s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state
-- 12.267s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 887.9 to 5 enemies in range
+- 12.267s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range
 - 12.436s [attack_start] Warwick begins auto attack
 - 12.500s [champion_script] Vayne executed Tumble Empower
 - 12.500s [enemy_buff] Vayne empowered next attack
@@ -467,7 +484,7 @@ field:
 - 12.683s [attack_start] Sona begins auto attack
 - 12.738s [attack_start] Vayne begins auto attack
 - 12.774s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
-- 12.774s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 887.9 to 5 enemies in range
+- 12.774s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range
 - 12.881s [attack_start] Morgana begins auto attack
 - 12.977s [attack_start] Warwick begins auto attack
 - 13.000s [champion_script] Vayne executed Tumble Empower
@@ -479,24 +496,24 @@ field:
 - 13.217s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state
 - 13.218s [attack_start] Vayne begins auto attack
 - 13.283s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state
-- 13.283s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 887.9 to 5 enemies in range
+- 13.283s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range
 - 13.300s [controlled_champion_cast] Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)
 - 13.385s [attack_start] Dr. Mundo begins auto attack
-- 13.500s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 349.2
+- 13.500s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 425.4
 - 13.500s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)
 - 13.500s [champion_script] Vayne executed Tumble Empower
 - 13.500s [enemy_buff] Vayne empowered next attack
 - 13.518s [attack_start] Warwick begins auto attack
-- 13.583s [damage_in] Vayne Auto Attack -> Vladimir | physical 731.5, magic 0.0, true 0.0, total 240.2
-- 13.583s [attack_hit] Vayne hit Vladimir (phys 731.5, magic 0.0, true 0.0)
+- 13.583s [damage_in] Vayne Auto Attack -> Vladimir | physical 733.8, magic 0.0, true 0.0, total 241.0
+- 13.583s [attack_hit] Vayne hit Vladimir (phys 733.8, magic 0.0, true 0.0)
 - 13.617s [attack_start] Sona begins auto attack
 - 13.625s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))
 - 13.697s [attack_start] Vayne begins auto attack
-- 13.758s [damage_in] Warwick Auto Attack -> Vladimir | physical 306.1, magic 81.6, true 0.0, total 153.3
-- 13.758s [attack_hit] Warwick hit Vladimir (phys 306.1, magic 81.6, true 0.0)
+- 13.758s [damage_in] Warwick Auto Attack -> Vladimir | physical 308.3, magic 81.6, true 0.0, total 154.0
+- 13.758s [attack_hit] Warwick hit Vladimir (phys 308.3, magic 81.6, true 0.0)
 - 13.800s [champion_script] Morgana executed Dark Binding
-- 13.800s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1046.1, true 0.0, total 676.2
-- 13.800s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 1856.9 to 5 enemies in range
+- 13.800s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1046.4, true 0.0, total 676.4
+- 13.800s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 1869.4 to 5 enemies in range
 - 13.903s [attack_start] Morgana begins auto attack
 - 14.000s [champion_script] Vayne executed Tumble Empower
 - 14.000s [enemy_buff] Vayne empowered next attack
@@ -505,6 +522,6 @@ field:
 - 14.011s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 103.0, true 0.0, total 101.4
 - 14.011s [attack_hit] Sona hit Vladimir (phys 106.0, magic 103.0, true 0.0)
 - 14.059s [attack_start] Warwick begins auto attack
-- 14.062s [damage_in] Vayne Auto Attack -> Vladimir | physical 650.4, magic 0.0, true 0.0, total 213.6
+- 14.062s [damage_in] Vayne Auto Attack -> Vladimir | physical 652.6, magic 0.0, true 0.0, total 214.3
 - 14.062s [controlled_champion_death] Vladimir died
-- 14.062s [attack_hit] Vayne hit Vladimir (phys 650.4, magic 0.0, true 0.0)
+- 14.062s [attack_hit] Vayne hit Vladimir (phys 652.6, magic 0.0, true 0.0)
