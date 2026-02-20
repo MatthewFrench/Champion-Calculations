@@ -25,20 +25,10 @@ impl ScriptHook for VladimirHook {
     fn resolve_loadout(
         &self,
         ctx: &LoadoutHookContext<'_>,
-        resolved: &mut ResolvedLoadout,
+        _resolved: &mut ResolvedLoadout,
     ) -> Result<()> {
         if !ctx.for_controlled_champion {
             return Ok(());
-        }
-
-        for rune_name in &ctx.selection.rune_names {
-            let rune_key = to_norm_key(rune_name);
-            if rune_key == "phase rush" || rune_key == "phaserush" {
-                resolved.skipped_notes.push(
-                    "Phase Rush movement scripting is not yet modeled in combat-time movement."
-                        .to_string(),
-                );
-            }
         }
 
         Ok(())

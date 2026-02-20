@@ -1,4 +1,9 @@
-# Assistant Notes (Decision Log)
+# Assistant Notes (Historical Decision Log)
+
+## Archive Notice
+- This file contains early-phase historical notes and includes outdated assumptions.
+- Use `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/CURRENT_STATE.md` for current architecture/search behavior.
+- Use `/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/README.md` for current run semantics and schema details.
 
 Date: 2026-02-10
 

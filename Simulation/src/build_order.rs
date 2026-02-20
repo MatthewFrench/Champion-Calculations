@@ -35,27 +35,59 @@ pub(super) fn acquisition_level_map(items: &[Item], levels: &[usize]) -> HashMap
 }
 
 fn level_scaled_enemy_builds(
-    level: usize,
     enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     raw_enemy_bases: &HashMap<String, ChampionBase>,
 ) -> Vec<(EnemyConfig, Vec<Item>, Stats)> {
     enemy_builds
         .iter()
         .map(|(enemy_cfg, build, bonus_stats)| {
-            let raw_base = raw_enemy_bases
-                .get(&enemy_cfg.name)
-                .cloned()
-                .unwrap_or_else(|| enemy_cfg.base.clone());
             let mut scaled_cfg = enemy_cfg.clone();
-            scaled_cfg.base = champion_at_level(&raw_base, level);
+            scaled_cfg.base = raw_enemy_bases
+                .get(&enemy_cfg.id)
+                .map(|raw_base| champion_at_level(raw_base, enemy_cfg.level))
+                .unwrap_or_else(|| enemy_cfg.base.clone());
             (scaled_cfg, build.clone(), bonus_stats.clone())
         })
         .collect()
 }
 
-fn simulate_build_order_stage_outcomes(
+fn blended_stage_score(
+    weighted_mean_score: f64,
+    worst_case_score: Option<f64>,
+    positive_weight_scenarios: usize,
+    worst_case_weight: f64,
+) -> f64 {
+    if positive_weight_scenarios > 1 {
+        let worst = worst_case_score.unwrap_or(weighted_mean_score);
+        weighted_mean_score * (1.0 - worst_case_weight) + worst * worst_case_weight
+    } else {
+        weighted_mean_score
+    }
+}
+
+fn normalized_encounter_weights(ctx: &BuildOrderEvalContext<'_>) -> Vec<f64> {
+    let raw = ctx
+        .enemy_build_scenarios
+        .iter()
+        .map(|(_, weight, _)| (*weight).max(0.0))
+        .collect::<Vec<_>>();
+    let sum = raw.iter().sum::<f64>();
+    if sum > 0.0 {
+        raw.into_iter()
+            .map(|weight| weight / sum)
+            .collect::<Vec<_>>()
+    } else if !raw.is_empty() {
+        let uniform = 1.0 / raw.len() as f64;
+        raw.into_iter().map(|_| uniform).collect::<Vec<_>>()
+    } else {
+        Vec::new()
+    }
+}
+
+fn simulate_build_order_stage_outcomes_for_scenario(
     ordered_items: &[Item],
     levels: &[usize],
+    enemy_builds: &[(EnemyConfig, Vec<Item>, Stats)],
     ctx: &BuildOrderEvalContext<'_>,
 ) -> Vec<CombatOutcome> {
     let mut stage_outcomes = Vec::with_capacity(levels.len());
@@ -65,8 +97,7 @@ fn simulate_build_order_stage_outcomes(
         let acquired_map = acquisition_level_map(prefix, prefix_levels);
         let controlled_champion_base_level =
             champion_at_level(ctx.controlled_champion_base_raw, *level);
-        let enemy_level_builds =
-            level_scaled_enemy_builds(*level, ctx.enemy_builds, ctx.raw_enemy_bases);
+        let enemy_level_builds = level_scaled_enemy_builds(enemy_builds, ctx.raw_enemy_bases);
         let mut sim_at_level = ctx.sim.clone();
         sim_at_level.champion_level = *level;
         let outcome = simulate_controlled_champion_combat(
@@ -75,6 +106,7 @@ fn simulate_build_order_stage_outcomes(
             ctx.controlled_champion_bonus_stats,
             None,
             Some(&acquired_map),
+            Some(ctx.controlled_champion_stack_overrides),
             &enemy_level_builds,
             &sim_at_level,
             ctx.urf,
@@ -87,32 +119,86 @@ fn simulate_build_order_stage_outcomes(
 fn score_build_order(
     ordered_items: &[Item],
     levels: &[usize],
-    reference_outcomes: &[CombatOutcome],
+    reference_outcomes_by_scenario: &[Vec<CombatOutcome>],
     ctx: &BuildOrderEvalContext<'_>,
 ) -> BuildOrderResult {
-    let stage_outcomes = simulate_build_order_stage_outcomes(ordered_items, levels, ctx);
+    let encounter_weights = normalized_encounter_weights(ctx);
+    let stage_outcomes_by_scenario = ctx
+        .enemy_build_scenarios
+        .iter()
+        .map(|(_, _, enemy_builds)| {
+            simulate_build_order_stage_outcomes_for_scenario(
+                ordered_items,
+                levels,
+                enemy_builds,
+                ctx,
+            )
+        })
+        .collect::<Vec<_>>();
+    let scenario_count = stage_outcomes_by_scenario.len();
+    let positive_weight_scenarios = encounter_weights
+        .iter()
+        .filter(|weight| **weight > 0.0)
+        .count();
+
     let mut stage_survival = Vec::new();
     let mut stage_damage = Vec::new();
     let mut stage_healing = Vec::new();
     let mut stage_objective_scores = Vec::new();
     let mut cumulative_score = 0.0;
-    for (idx, outcome) in stage_outcomes.iter().enumerate() {
+    for idx in 0..levels.len() {
         let stage_level = levels.get(idx).copied().unwrap_or(ctx.sim.champion_level);
         let mut sim_at_level = ctx.sim.clone();
         sim_at_level.champion_level = stage_level;
-        let reference = reference_outcomes
-            .get(idx)
-            .copied()
-            .unwrap_or(CombatOutcome {
-                time_alive_seconds: sim_at_level.max_time_seconds.max(1.0),
-                damage_dealt: 1.0,
-                healing_done: 1.0,
-                enemy_kills: 0,
-            });
-        let stage_score = objective_score_from_outcome(*outcome, reference, ctx.objective_weights);
-        stage_survival.push(outcome.time_alive_seconds);
-        stage_damage.push(outcome.damage_dealt);
-        stage_healing.push(outcome.healing_done);
+        let default_reference = CombatOutcome {
+            time_alive_seconds: sim_at_level.max_time_seconds.max(1.0),
+            damage_dealt: 1.0,
+            healing_done: 1.0,
+            enemy_kills: 0,
+            invulnerable_seconds: 0.0,
+        };
+        let mut weighted_outcome = CombatOutcome::default();
+        let mut weighted_enemy_kills = 0.0;
+        let mut weighted_mean_score = 0.0;
+        let mut worst_case_score = None::<f64>;
+
+        for scenario_idx in 0..scenario_count {
+            let weight = encounter_weights.get(scenario_idx).copied().unwrap_or(0.0);
+            let outcome = stage_outcomes_by_scenario
+                .get(scenario_idx)
+                .and_then(|stages| stages.get(idx))
+                .copied()
+                .unwrap_or_default();
+            let reference = reference_outcomes_by_scenario
+                .get(scenario_idx)
+                .and_then(|stages| stages.get(idx))
+                .copied()
+                .unwrap_or(default_reference);
+            let stage_score =
+                objective_score_from_outcome(outcome, reference, ctx.objective_weights);
+            weighted_mean_score += stage_score * weight;
+            if weight > 0.0 {
+                worst_case_score = Some(match worst_case_score {
+                    Some(current) => current.min(stage_score),
+                    None => stage_score,
+                });
+            }
+            weighted_outcome.time_alive_seconds += outcome.time_alive_seconds * weight;
+            weighted_outcome.damage_dealt += outcome.damage_dealt * weight;
+            weighted_outcome.healing_done += outcome.healing_done * weight;
+            weighted_outcome.invulnerable_seconds += outcome.invulnerable_seconds * weight;
+            weighted_enemy_kills += outcome.enemy_kills as f64 * weight;
+        }
+        weighted_outcome.enemy_kills = weighted_enemy_kills.round().max(0.0) as usize;
+        let stage_score = blended_stage_score(
+            weighted_mean_score,
+            worst_case_score,
+            positive_weight_scenarios,
+            ctx.multi_scenario_worst_weight,
+        );
+        stage_survival.push(weighted_outcome.time_alive_seconds);
+        stage_damage.push(weighted_outcome.damage_dealt);
+        stage_healing.push(weighted_outcome.healing_done);
         stage_objective_scores.push(stage_score);
         cumulative_score += stage_score;
     }
@@ -133,8 +219,19 @@ pub(super) fn optimize_build_order(
     ctx: &BuildOrderEvalContext<'_>,
 ) -> BuildOrderResult {
     let levels = build_level_milestones(build_items.len(), 5, 20);
-    let reference_outcomes = simulate_build_order_stage_outcomes(build_items, &levels, ctx);
-    let mut best = score_build_order(build_items, &levels, &reference_outcomes, ctx);
+    let reference_outcomes_by_scenario = ctx
+        .enemy_build_scenarios
+        .iter()
+        .map(|(_, _, enemy_builds)| {
+            simulate_build_order_stage_outcomes_for_scenario(
+                build_items,
+                &levels,
+                enemy_builds,
+                ctx,
+            )
+        })
+        .collect::<Vec<_>>();
+    let mut best = score_build_order(build_items, &levels, &reference_outcomes_by_scenario, ctx);
     if build_items.len() <= 1 {
         return best;
     }
@@ -157,8 +254,12 @@ pub(super) fn optimize_build_order(
                     .map(|i| build_items[*i].clone())
                     .collect::<Vec<_>>();
                 let partial_levels = levels[..candidate.len()].to_vec();
-                let reference_partial = &reference_outcomes[..candidate.len()];
-                let current = score_build_order(&ordered, &partial_levels, reference_partial, ctx);
+                let current = score_build_order(
+                    &ordered,
+                    &partial_levels,
+                    &reference_outcomes_by_scenario,
+                    ctx,
+                );
                 let optimistic_upper_bound = current.cumulative_score
                     + (build_items.len() - candidate.len()) as f64 * ctx.sim.max_time_seconds;
                 expanded.push((candidate, optimistic_upper_bound));
@@ -179,7 +280,8 @@ pub(super) fn optimize_build_order(
                     .iter()
                     .map(|i| build_items[*i].clone())
                     .collect::<Vec<_>>();
-                let scored = score_build_order(&ordered, &levels, &reference_outcomes, ctx);
+                let scored =
+                    score_build_order(&ordered, &levels, &reference_outcomes_by_scenario, ctx);
                 if scored.cumulative_score > best.cumulative_score {
                     best = scored;
                 }
@@ -189,3 +291,7 @@ pub(super) fn optimize_build_order(
 
     best
 }
+
+#[cfg(test)]
+#[path = "tests/build_order_tests.rs"]
+mod tests;

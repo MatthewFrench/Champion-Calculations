@@ -319,7 +319,10 @@
         }
       ],
       "type": "Active",
-      "description": "Bite a target to deal magic damage based on target max health plus AD/AP scaling and heal for a percent of damage dealt; has a monster damage cap."
+      "description": "Bite a target to deal magic damage based on target max health plus AD/AP scaling and heal for a percent of damage dealt; has a monster damage cap.",
+      "execution": {
+        "cast_windup_seconds": 0.08
+      }
     },
     "ultimate": {
       "slot": "R",
@@ -387,10 +390,18 @@
           "id": "on_hit_applications",
           "value": 3,
           "description": "On-hit and on-attack applications"
+        },
+        {
+          "id": "physical_attack_damage_ratio_per_hit",
+          "value_ratio": 0.6,
+          "description": "Physical attack damage ratio per on-hit application during channel"
         }
       ],
       "type": "Active",
-      "description": "Leap to suppress a target for 1.5s, applying on-hit effects three times, dealing total magic damage scaling with bonus AD, and healing for damage dealt."
+      "description": "Leap to suppress a target for 1.5s, applying on-hit effects three times, dealing total magic damage scaling with bonus AD, and healing for damage dealt.",
+      "execution": {
+        "effect_hitbox_radius": 80.0
+      }
     }
   },
   "name": "Warwick",
@@ -427,12 +438,6 @@
   ],
   "sources": [
     {
-      "path": "/Users/matthewfrench/Downloads/Warwick.json",
-      "type": "Riot Data Dragon (local)",
-      "accessed": "2026-02-09",
-      "used_for": "base stats, base ability values, cooldowns, costs"
-    },
-    {
       "url": "https://leagueoflegends.fandom.com/wiki/Warwick/LoL",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (Fandom)",
@@ -452,7 +457,7 @@
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Warwick.json",
+      "path": "From Online/champions/Warwick.json",
       "used_for": "raw basic attack timing stats and radii"
     }
   ],

@@ -13,7 +13,10 @@
   - periodic on-hit counters (for example Vayne-style third-hit tracking)
 - Enemy respawn now also resets position to original spawn position.
 - Reports now include per-enemy derived combat profiles and similarity warnings for suspiciously close auto-attack profiles.
-- Core simulation/search/champion-script defaults are now centralized in `Simulation/data/simulator_defaults.json` and loaded via typed schema in `Simulation/src/defaults.rs`.
+- Default ownership is now domain-based and loaded via `Simulation/src/defaults.rs`:
+  - global simulator/search/engine defaults from `Simulation/data/simulator_defaults.json`
+  - mode defaults from `Game Mode/URF.json`
+  - champion defaults from `Characters/*.json`
 - Controlled champion spell readiness now tracks by ability identity through runtime slot mapping primitives.
 
 ## Medium Confidence (Likely Correct But Approximate)

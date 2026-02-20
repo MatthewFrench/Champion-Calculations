@@ -27,16 +27,6 @@
         "attack_speed",
         "movement_speed",
         "tenacity"
-      ],
-      "masteries": [
-        {
-          "name": "Fervor of Battle",
-          "rank": 1
-        },
-        {
-          "name": "Legendary Guardian",
-          "rank": 1
-        }
       ]
     },
     {
@@ -46,7 +36,7 @@
         "Berserker's Greaves",
         "Kraken Slayer",
         "Guinsoo's Rageblade",
-        "Fiendhunter Bolts",
+        "Phantom Dancer",
         "Blade of the Ruined King",
         "Infinity Edge"
       ],
@@ -62,16 +52,6 @@
         "attack_speed",
         "movement_speed",
         "health"
-      ],
-      "masteries": [
-        {
-          "name": "Fervor of Battle",
-          "rank": 1
-        },
-        {
-          "name": "Battering Blows",
-          "rank": 1
-        }
       ]
     },
     {
@@ -97,16 +77,6 @@
         "ability_haste",
         "movement_speed",
         "health"
-      ],
-      "masteries": [
-        {
-          "name": "Thunderlord's Decree",
-          "rank": 1
-        },
-        {
-          "name": "Piercing Thoughts",
-          "rank": 1
-        }
       ]
     },
     {
@@ -132,16 +102,6 @@
         "ability_haste",
         "movement_speed",
         "health"
-      ],
-      "masteries": [
-        {
-          "name": "Windspeaker's Blessing",
-          "rank": 1
-        },
-        {
-          "name": "Intelligence",
-          "rank": 1
-        }
       ]
     },
     {
@@ -167,16 +127,6 @@
         "ability_haste",
         "health",
         "tenacity"
-      ],
-      "masteries": [
-        {
-          "name": "Grasp of the Undying",
-          "rank": 1
-        },
-        {
-          "name": "Perseverance",
-          "rank": 1
-        }
       ]
     }
   ]

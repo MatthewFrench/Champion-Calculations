@@ -1,0 +1,2160 @@
+{
+  "event_encoding": "structured",
+  "events": [
+    {
+      "details": "checkpoint 0.0s (captured_at 0.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=5512.8/5512.8 (100.0%) armor=204.5 mr=54.7\n  offense: ap=346.1 ah=338.0\n  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]\n  cooldowns: Stasis item ready; Revive item ready; Emergency shield item ready\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.55s\n  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n  buffs: none\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=3501.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=2.681 (interval 0.373s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.37s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Attacks landed: 0]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2641.5/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=6.274 (interval 0.159s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.16s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Guinsoo stacks: 0/8; Attacks landed: 0]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=3440.5/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack 0.62s; Dark Binding ready; Soul Shackles ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Arcane Comet: ready] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=2413.5/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.54s; Crescendo ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=6479.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack 0.61s; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: ready (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
+      "event_type": "state_snapshot",
+      "raw": "0.000s [state_snapshot] checkpoint 0.0s (captured_at 0.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=5512.8/5512.8 (100.0%) armor=204.5 mr=54.7\n  offense: ap=346.1 ah=338.0\n  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]\n  cooldowns: Stasis item ready; Revive item ready; Emergency shield item ready\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague ready; Auto Attack 0.55s\n  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n  buffs: none\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=3501.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=2.681 (interval 0.373s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.37s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Attacks landed: 0]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2641.5/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=6.274 (interval 0.159s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.16s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 0/6; Guinsoo stacks: 0/8; Attacks landed: 0]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=3440.5/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack 0.62s; Dark Binding ready; Soul Shackles ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Arcane Comet: ready] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=2413.5/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.54s; Crescendo ready\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=6479.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack 0.61s; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: ready (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Vladimir cast vladimir_hemoplague (impact in 0.25s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "0.000s [controlled_champion_cast] Vladimir cast vladimir_hemoplague (impact in 0.25s)",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "0.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "0.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "0.000s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Morgana Dark Binding -> Vladimir | physical 0.0, magic 1196.9, true 0.0, total 773.7",
+      "event_type": "damage_in",
+      "raw": "0.000s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1196.9, true 0.0, total 773.7",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Morgana executed Soul Shackles",
+      "event_type": "champion_script",
+      "raw": "0.000s [champion_script] Morgana executed Soul Shackles",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Morgana Soul Shackles -> Vladimir | physical 0.0, magic 678.0, true 0.0, total 438.3",
+      "event_type": "damage_in",
+      "raw": "0.000s [damage_in] Morgana Soul Shackles -> Vladimir | physical 0.0, magic 678.0, true 0.0, total 438.3",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Sona executed Crescendo",
+      "event_type": "champion_script",
+      "raw": "0.000s [champion_script] Sona executed Crescendo",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Sona Crescendo -> Vladimir | physical 0.0, magic 869.5, true 0.0, total 562.1",
+      "event_type": "damage_in",
+      "raw": "0.000s [damage_in] Sona Crescendo -> Vladimir | physical 0.0, magic 869.5, true 0.0, total 562.1",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "0.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 1121.6, true 0.0, total 725.0",
+      "event_type": "damage_in",
+      "raw": "0.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 1121.6, true 0.0, total 725.0",
+      "timestamp_seconds": 0.0
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.159s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 0.159
+    },
+    {
+      "details": "Vladimir vladimir_hemoplague dealt 2431.1 to 5 enemies in range",
+      "event_type": "controlled_champion_ultimate_hit",
+      "raw": "0.250s [controlled_champion_ultimate_hit] Vladimir vladimir_hemoplague dealt 2431.1 to 5 enemies in range",
+      "timestamp_seconds": 0.25
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.373s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 0.373
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "0.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 0.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "0.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 0.5
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 1183.2, magic 0.0, true 0.0, total 388.6",
+      "event_type": "damage_in",
+      "raw": "0.525s [damage_in] Vayne Auto Attack -> Vladimir | physical 1183.2, magic 0.0, true 0.0, total 388.6",
+      "timestamp_seconds": 0.525
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 1183.2, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "0.525s [attack_hit] Vayne hit Vladimir (phys 1183.2, magic 0.0, true 0.0)",
+      "timestamp_seconds": 0.525
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.540s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 0.54
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.612s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 0.612
+    },
+    {
+      "details": "Warwick Auto Attack -> Vladimir | physical 395.0, magic 81.6, true 0.0, total 182.5",
+      "event_type": "damage_in",
+      "raw": "0.613s [damage_in] Warwick Auto Attack -> Vladimir | physical 395.0, magic 81.6, true 0.0, total 182.5",
+      "timestamp_seconds": 0.613
+    },
+    {
+      "details": "Warwick hit Vladimir (phys 395.0, magic 81.6, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "0.613s [attack_hit] Warwick hit Vladimir (phys 395.0, magic 81.6, true 0.0)",
+      "timestamp_seconds": 0.613
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.620s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 0.62
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.675s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 0.675
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "0.852s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 0.852
+    },
+    {
+      "details": "Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 34.8",
+      "event_type": "damage_in",
+      "raw": "0.934s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 34.8",
+      "timestamp_seconds": 0.934
+    },
+    {
+      "details": "Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "0.934s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)",
+      "timestamp_seconds": 0.934
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "0.972s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 0.972
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "1.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 1.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "1.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 1.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "1.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 1.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 722.4, true 0.0, total 466.9",
+      "event_type": "damage_in",
+      "raw": "1.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 722.4, true 0.0, total 466.9",
+      "timestamp_seconds": 1.0
+    },
+    {
+      "details": "Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2",
+      "event_type": "damage_in",
+      "raw": "1.022s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2",
+      "timestamp_seconds": 1.022
+    },
+    {
+      "details": "Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "1.022s [attack_hit] Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)",
+      "timestamp_seconds": 1.022
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 762.5, magic 0.0, true 0.0, total 250.4",
+      "event_type": "damage_in",
+      "raw": "1.041s [damage_in] Vayne Auto Attack -> Vladimir | physical 762.5, magic 0.0, true 0.0, total 250.4",
+      "timestamp_seconds": 1.041
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 762.5, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "1.041s [attack_hit] Vayne hit Vladimir (phys 762.5, magic 0.0, true 0.0)",
+      "timestamp_seconds": 1.041
+    },
+    {
+      "details": "Vladimir activated emergency shield (265.5 shield, 5.0s heal window)",
+      "event_type": "controlled_champion_item_active",
+      "raw": "1.041s [controlled_champion_item_active] Vladimir activated emergency shield (265.5 shield, 5.0s heal window)",
+      "timestamp_seconds": 1.041
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "1.183s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 1.183
+    },
+    {
+      "details": "Warwick Auto Attack -> Vladimir | physical 337.2, magic 81.6, true 0.0, total 0.0",
+      "event_type": "damage_in",
+      "raw": "1.212s [damage_in] Warwick Auto Attack -> Vladimir | physical 337.2, magic 81.6, true 0.0, total 0.0",
+      "timestamp_seconds": 1.212
+    },
+    {
+      "details": "Warwick hit Vladimir (phys 337.2, magic 81.6, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "1.212s [attack_hit] Warwick hit Vladimir (phys 337.2, magic 81.6, true 0.0)",
+      "timestamp_seconds": 1.212
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "1.463s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 1.463
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "1.474s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 1.474
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "1.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 1.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "1.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 1.5
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 749.5, magic 0.0, true 1018.1, total 1162.2",
+      "event_type": "damage_in",
+      "raw": "1.549s [damage_in] Vayne Auto Attack -> Vladimir | physical 749.5, magic 0.0, true 1018.1, total 1162.2",
+      "timestamp_seconds": 1.549
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 749.5, magic 0.0, true 1018.1)",
+      "event_type": "attack_hit",
+      "raw": "1.549s [attack_hit] Vayne hit Vladimir (phys 749.5, magic 0.0, true 1018.1)",
+      "timestamp_seconds": 1.549
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "1.557s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 1.557
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "1.642s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 1.642
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "1.684s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 1.684
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "1.703s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 1.703
+    },
+    {
+      "details": "Warwick Auto Attack -> Vladimir | physical 269.8, magic 81.6, true 171.9, total 313.2",
+      "event_type": "damage_in",
+      "raw": "1.797s [damage_in] Warwick Auto Attack -> Vladimir | physical 269.8, magic 81.6, true 171.9, total 313.2",
+      "timestamp_seconds": 1.797
+    },
+    {
+      "details": "Warwick hit Vladimir (phys 269.8, magic 81.6, true 171.9)",
+      "event_type": "attack_hit",
+      "raw": "1.797s [attack_hit] Warwick hit Vladimir (phys 269.8, magic 81.6, true 171.9)",
+      "timestamp_seconds": 1.797
+    },
+    {
+      "details": "Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 34.8",
+      "event_type": "damage_in",
+      "raw": "1.868s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 0.0, true 0.0, total 34.8",
+      "timestamp_seconds": 1.868
+    },
+    {
+      "details": "Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "1.868s [attack_hit] Sona hit Vladimir (phys 106.0, magic 0.0, true 0.0)",
+      "timestamp_seconds": 1.868
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "2.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 2.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "2.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 2.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "2.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 2.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 280.0, true 0.0, total 181.0",
+      "event_type": "damage_in",
+      "raw": "2.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 280.0, true 0.0, total 181.0",
+      "timestamp_seconds": 2.0
+    },
+    {
+      "details": "Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2",
+      "event_type": "damage_in",
+      "raw": "2.044s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2",
+      "timestamp_seconds": 2.044
+    },
+    {
+      "details": "Revive item restored Vladimir",
+      "event_type": "revive_effect",
+      "raw": "2.044s [revive_effect] Revive item restored Vladimir",
+      "timestamp_seconds": 2.044
+    },
+    {
+      "details": "Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "2.044s [attack_hit] Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)",
+      "timestamp_seconds": 2.044
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "2.049s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 2.049
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.130s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 2.13
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.178s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 2.178
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "2.300s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 2.3
+    },
+    {
+      "details": "Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "2.300s [impact_nullified] Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 2.3
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.315s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 2.315
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "2.370s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 2.37
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.408s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 2.408
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "2.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 2.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "2.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 2.5
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "2.543s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 2.543
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "2.555s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 2.555
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.663s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 2.663
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.666s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 2.666
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "2.692s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 2.692
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "2.802s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 2.802
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "2.932s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 2.932
+    },
+    {
+      "details": "Morgana executed Soul Shackles Detonate",
+      "event_type": "champion_script",
+      "raw": "3.000s [champion_script] Morgana executed Soul Shackles Detonate",
+      "timestamp_seconds": 3.0
+    },
+    {
+      "details": "Morgana Soul Shackles Detonate on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.000s [impact_nullified] Morgana Soul Shackles Detonate on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.0
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "3.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 3.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "3.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 3.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "3.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 3.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.0
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.032s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.032
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.065s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.065
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.149s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 3.149
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.166s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 3.166
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.242s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 3.242
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.343s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 3.343
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "3.406s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 3.406
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.482s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.482
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "3.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 3.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "3.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 3.5
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.514s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.514
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.630s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 3.63
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.685s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 3.685
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.736s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.736
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "3.783s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 3.783
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "3.995s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 3.995
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "4.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 4.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "4.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 4.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "4.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 4.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.0
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.018s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 4.018
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.023s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.023
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.087s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.087
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.109s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 4.109
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "4.258s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 4.258
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.277s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 4.277
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.324s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 4.324
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.475s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.475
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "4.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 4.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "4.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 4.5
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.564s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.564
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.589s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 4.589
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "4.600s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 4.6
+    },
+    {
+      "details": "Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.600s [impact_nullified] Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.6
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.670s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.67
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.707s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 4.707
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.865s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 4.865
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "4.869s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 4.869
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "4.954s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 4.954
+    },
+    {
+      "details": "checkpoint 5.0s (captured_at 5.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=1540.7/5512.8 (27.9%) armor=204.5 mr=54.7\n  offense: ap=346.1 ah=338.0\n  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]\n  cooldowns: Stasis item ready; Revive item 72.04s; Emergency shield item 26.04s\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 22.40s; Auto Attack 0.51s\n  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n  buffs: Revive lockout 1.04s; Emergency heal-over-time 1.04s\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=2931.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack unavailable; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Attacks landed: 8]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2190.4/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=8.783 (interval 0.114s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.07s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Guinsoo stacks: 8/8; Attacks landed: 10]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=2968.7/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack in-flight (0.11s to impact); Dark Binding 1.88s; Soul Shackles 17.83s\n    runtime: cooldowns [Luden's Echo: 2.60s (cooldown 3.00s); Arcane Comet: 3.00s] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=1968.2/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.21s; Crescendo 18.36s\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=5986.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack unavailable; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: 3.35s (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles:\n    - Morgana Auto Attack -> Vladimir (impact in 0.11s)\n  projectile_block_zones: none",
+      "event_type": "state_snapshot",
+      "raw": "5.000s [state_snapshot] checkpoint 5.0s (captured_at 5.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=1540.7/5512.8 (27.9%) armor=204.5 mr=54.7\n  offense: ap=346.1 ah=338.0\n  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]\n  cooldowns: Stasis item ready; Revive item 72.04s; Emergency shield item 26.04s\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 22.40s; Auto Attack 0.51s\n  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n  buffs: Revive lockout 1.04s; Emergency heal-over-time 1.04s\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=2931.0/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack unavailable; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Attacks landed: 8]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=2190.4/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=8.783 (interval 0.114s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack 0.07s; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Guinsoo stacks: 8/8; Attacks landed: 10]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=2968.7/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack in-flight (0.11s to impact); Dark Binding 1.88s; Soul Shackles 17.83s\n    runtime: cooldowns [Luden's Echo: 2.60s (cooldown 3.00s); Arcane Comet: 3.00s] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=1968.2/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack 0.21s; Crescendo 18.36s\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: ready] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=5986.8/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack unavailable; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: ready (cooldown 4.00s); Heartsteel Colossal Consumption: 3.35s (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles:\n    - Morgana Auto Attack -> Vladimir (impact in 0.11s)\n  projectile_block_zones: none",
+      "timestamp_seconds": 5.0
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "5.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 5.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "5.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 5.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "5.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 5.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.0
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.068s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 5.068
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.105s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.105
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.109s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.109
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "5.109s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 5.109
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.211s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 5.211
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.406s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 5.406
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.433s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.433
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "5.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 5.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "5.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 5.5
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.547s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 5.547
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.604s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.604
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.646s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.646
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.721s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 5.721
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.729s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 5.729
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "5.913s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 5.913
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "5.947s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 5.947
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "5.961s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 5.961
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "6.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 6.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "6.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 6.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "6.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 6.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.0
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.027s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 6.027
+    },
+    {
+      "details": "Vladimir begins auto attack on Warwick",
+      "event_type": "controlled_champion_attack_start",
+      "raw": "6.057s [controlled_champion_attack_start] Vladimir begins auto attack on Warwick",
+      "timestamp_seconds": 6.057
+    },
+    {
+      "details": "Vladimir cast vladimir_sanguine_pool (untargetable 2.00s, damage tick 0.50s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "6.057s [controlled_champion_cast] Vladimir cast vladimir_sanguine_pool (untargetable 2.00s, damage tick 0.50s)",
+      "timestamp_seconds": 6.057
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.131s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.131
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.145s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 6.145
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.187s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.187
+    },
+    {
+      "details": "Vladimir auto attack cancelled during windup by crowd control, cast lock, or invulnerability",
+      "event_type": "controlled_champion_attack_cancelled",
+      "raw": "6.257s [controlled_champion_attack_cancelled] Vladimir auto attack cancelled during windup by crowd control, cast lock, or invulnerability",
+      "timestamp_seconds": 6.257
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.392s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.392
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.487s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 6.487
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "6.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 6.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "6.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 6.5
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.506s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 6.506
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.539s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.539
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "6.539s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "timestamp_seconds": 6.539
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.573s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 6.573
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.727s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.727
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.750s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 6.75
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "6.813s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 6.813
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.872s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.872
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "6.900s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 6.9
+    },
+    {
+      "details": "Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "6.900s [impact_nullified] Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 6.9
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "6.985s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 6.985
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "7.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 7.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "7.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 7.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "7.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 7.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.0
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.028s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 7.028
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "7.033s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "timestamp_seconds": 7.033
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.079s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 7.079
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.152s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.152
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.268s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.268
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.351s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.351
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.424s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 7.424
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.465s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 7.465
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.473s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.473
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "7.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 7.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "7.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 7.5
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "7.533s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "timestamp_seconds": 7.533
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.569s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 7.569
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "7.664s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 7.664
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.772s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 7.772
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.809s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.809
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "7.830s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 7.83
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "7.944s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 7.944
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "8.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 8.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "8.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 8.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "8.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 8.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "8.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 8.0
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.013s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 8.013
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "8.033s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 561.2 to 5 enemies in range",
+      "timestamp_seconds": 8.033
+    },
+    {
+      "details": "Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "8.067s [controlled_champion_cast] Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)",
+      "timestamp_seconds": 8.067
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.110s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 8.11
+    },
+    {
+      "details": "Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2",
+      "event_type": "damage_in",
+      "raw": "8.174s [damage_in] Morgana Auto Attack -> Vladimir | physical 122.5, magic 0.0, true 0.0, total 40.2",
+      "timestamp_seconds": 8.174
+    },
+    {
+      "details": "Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "8.174s [attack_hit] Morgana hit Vladimir (phys 122.5, magic 0.0, true 0.0)",
+      "timestamp_seconds": 8.174
+    },
+    {
+      "details": "Vladimir vladimir_transfusion hit Warwick for 425.4",
+      "event_type": "controlled_champion_primary_hit",
+      "raw": "8.267s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 425.4",
+      "timestamp_seconds": 8.267
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.276s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 8.276
+    },
+    {
+      "details": "Vladimir cast vladimir_tides_of_blood (impact in 0.30s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "8.276s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)",
+      "timestamp_seconds": 8.276
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 782.2, magic 0.0, true 0.0, total 256.9",
+      "event_type": "damage_in",
+      "raw": "8.310s [damage_in] Vayne Auto Attack -> Vladimir | physical 782.2, magic 0.0, true 0.0, total 256.9",
+      "timestamp_seconds": 8.31
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 782.2, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "8.310s [attack_hit] Vayne hit Vladimir (phys 782.2, magic 0.0, true 0.0)",
+      "timestamp_seconds": 8.31
+    },
+    {
+      "details": "Warwick Auto Attack -> Vladimir | physical 355.8, magic 81.6, true 171.9, total 341.5",
+      "event_type": "damage_in",
+      "raw": "8.350s [damage_in] Warwick Auto Attack -> Vladimir | physical 355.8, magic 81.6, true 171.9, total 341.5",
+      "timestamp_seconds": 8.35
+    },
+    {
+      "details": "Warwick hit Vladimir (phys 355.8, magic 81.6, true 171.9)",
+      "event_type": "attack_hit",
+      "raw": "8.350s [attack_hit] Warwick hit Vladimir (phys 355.8, magic 81.6, true 171.9)",
+      "timestamp_seconds": 8.35
+    },
+    {
+      "details": "Sona Auto Attack -> Vladimir | physical 106.0, magic 103.0, true 0.0, total 101.4",
+      "event_type": "damage_in",
+      "raw": "8.407s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 103.0, true 0.0, total 101.4",
+      "timestamp_seconds": 8.407
+    },
+    {
+      "details": "Sona hit Vladimir (phys 106.0, magic 103.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "8.407s [attack_hit] Sona hit Vladimir (phys 106.0, magic 103.0, true 0.0)",
+      "timestamp_seconds": 8.407
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.424s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 8.424
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "8.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 8.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "8.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 8.5
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "8.516s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 8.516
+    },
+    {
+      "details": "Vladimir vladimir_tides_of_blood dealt 1869.4 to 5 enemies in range",
+      "event_type": "controlled_champion_secondary_hit",
+      "raw": "8.576s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 1869.4 to 5 enemies in range",
+      "timestamp_seconds": 8.576
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.651s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 8.651
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 740.2, magic 0.0, true 1018.1, total 1261.2",
+      "event_type": "damage_in",
+      "raw": "8.789s [damage_in] Vayne Auto Attack -> Vladimir | physical 740.2, magic 0.0, true 1018.1, total 1261.2",
+      "timestamp_seconds": 8.789
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 740.2, magic 0.0, true 1018.1)",
+      "event_type": "attack_hit",
+      "raw": "8.789s [attack_hit] Vayne hit Vladimir (phys 740.2, magic 0.0, true 1018.1)",
+      "timestamp_seconds": 8.789
+    },
+    {
+      "details": "Vladimir activated stasis item for 2.50s",
+      "event_type": "controlled_champion_item_active",
+      "raw": "8.789s [controlled_champion_item_active] Vladimir activated stasis item for 2.50s",
+      "timestamp_seconds": 8.789
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.794s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 8.794
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "8.891s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 8.891
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.903s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 8.903
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "8.947s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 8.947
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "9.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 9.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "9.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 9.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "9.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 9.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.0
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.127s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 9.127
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.191s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 9.191
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.196s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.196
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "9.200s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 9.2
+    },
+    {
+      "details": "Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.200s [impact_nullified] Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.2
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.269s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.269
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.341s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.341
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "9.367s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 9.367
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.382s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 9.382
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.431s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.431
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "9.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 9.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "9.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 9.5
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.732s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 9.732
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.748s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.748
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.816s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 9.816
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.862s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 9.862
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.881s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 9.881
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "9.972s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 9.972
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "9.979s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 9.979
+    },
+    {
+      "details": "checkpoint 10.0s (captured_at 10.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=267.6/5512.8 (4.9%) armor=204.5 mr=54.7\n  offense: ap=346.1 ah=338.0\n  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]\n  cooldowns: Stasis item 28.79s; Revive item 67.04s; Emergency shield item 21.04s\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 17.40s; Auto Attack 0.11s\n  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: 1.27s (cooldown 3.00s); Summon Aery: 0.27s] | stacks [none]\n  buffs: Stasis 1.29s; Stasis x1 (1.29s)\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=1733.3/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.27s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Attacks landed: 18]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=1359.1/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=8.783 (interval 0.114s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack unavailable; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Guinsoo stacks: 8/8; Attacks landed: 20]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=2116.8/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack unavailable; Dark Binding 1.48s; Soul Shackles 12.83s\n    runtime: cooldowns [Luden's Echo: 2.20s (cooldown 3.00s); Arcane Comet: 7.20s] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=1142.9/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack unavailable; Crescendo 13.36s\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: 0.41s] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=5153.3/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack unavailable; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: 3.37s (cooldown 4.00s); Heartsteel Colossal Consumption: 6.02s (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
+      "event_type": "state_snapshot",
+      "raw": "10.000s [state_snapshot] checkpoint 10.0s (captured_at 10.000s)\ncontrolled_champion:\n  identity: Vladimir\n  core: pos=(0.0, 0.0) hp=267.6/5512.8 (4.9%) armor=204.5 mr=54.7\n  offense: ap=346.1 ah=338.0\n  loadout: items [Guardian Angel, Heartsteel, Liandry's Torment, Luden's Echo, Protoplasm Harness, Zhonya's Hourglass] | runes [Summon Aery, Nimbus Cloak, Celerity, Gathering Storm, Magical Footwear, Jack Of All Trades] | shards [ability_haste, movement_speed, health]\n  cooldowns: Stasis item 28.79s; Revive item 67.04s; Emergency shield item 21.04s\n  abilities: Q:vladimir_transfusion ready; W:vladimir_sanguine_pool ready; E:vladimir_tides_of_blood ready; R:vladimir_hemoplague 17.40s; Auto Attack 0.11s\n  runtime: cooldowns [Heartsteel Colossal Consumption: ready (cooldown 7.50s); Luden's Echo: 1.27s (cooldown 3.00s); Summon Aery: 0.27s] | stacks [none]\n  buffs: Stasis 1.29s; Stasis x1 (1.29s)\nenemies:\n  Warwick:\n    core: pos=(140.0, 0.0) hp=1733.3/3501.0 armor=191.6 mr=70.9\n    combat: ad=237.5 ap=0.0 as=3.324 (interval 0.301s) ah=310.0\n    loadout: items [Stridebreaker, Mercury's Treads, Blade of the Ruined King, Kraken Slayer, Spirit Visage, Thornmail] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Last Stand, Celerity, Waterwalking]\n    abilities: Auto Attack 0.27s; Infinite Duress ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Attacks landed: 18]\n    buffs: none\n  Vayne:\n    core: pos=(300.0, 140.0) hp=1359.1/2641.5 armor=110.4 mr=54.7\n    combat: ad=294.6 ap=30.0 as=8.783 (interval 0.114s) ah=300.0\n    loadout: items [Berserker's Greaves, Kraken Slayer, Guinsoo's Rageblade, Phantom Dancer, Blade of the Ruined King, Infinity Edge] | runes [Lethal Tempo, Triumph, Legend: Alacrity, Coup de Grace, Conditioning, Overgrowth]\n    abilities: Auto Attack unavailable; Tumble Empower ready\n    runtime: cooldowns [none] | stacks [Lethal Tempo stacks: 6/6; Guinsoo stacks: 8/8; Attacks landed: 20]\n    buffs: none\n  Morgana:\n    core: pos=(-300.0, 120.0) hp=2116.8/3440.5 armor=154.8 mr=54.7\n    combat: ad=122.5 ap=410.0 as=1.613 (interval 0.620s) ah=338.0\n    loadout: items [Sorcerer's Shoes, Liandry's Torment, Blackfire Torch, Rylai's Crystal Scepter, Zhonya's Hourglass, Luden's Echo] | runes [Arcane Comet, Manaflow Band, Transcendence, Gathering Storm, Cheap Shot, Ultimate Hunter]\n    abilities: Auto Attack unavailable; Dark Binding 1.48s; Soul Shackles 12.83s\n    runtime: cooldowns [Luden's Echo: 2.20s (cooldown 3.00s); Arcane Comet: 7.20s] | stacks [none]\n    buffs: none\n  Sona:\n    core: pos=(-260.0, -130.0) hp=1142.9/2413.5 armor=105.8 mr=54.7\n    combat: ad=106.0 ap=530.0 as=1.851 (interval 0.540s) ah=328.0\n    loadout: items [Sorcerer's Shoes, Luden's Echo, Lich Bane, Stormsurge, Shadowflame, Rabadon's Deathcap] | runes [Summon Aery, Manaflow Band, Transcendence, Gathering Storm, Conditioning, Revitalize]\n    abilities: Auto Attack unavailable; Crescendo 13.36s\n    runtime: cooldowns [Luden's Echo: ready (cooldown 3.00s); Summon Aery: 0.41s] | stacks [none]\n    buffs: none\n  Dr. Mundo:\n    core: pos=(180.0, -120.0) hp=5153.3/6479.8 armor=192.5 mr=72.7\n    combat: ad=148.5 ap=0.0 as=1.635 (interval 0.612s) ah=318.0\n    loadout: items [Mercury's Treads, Heartsteel, Warmog's Armor, Spirit Visage, Thornmail, Titanic Hydra] | runes [Grasp of the Undying, Demolish, Conditioning, Overgrowth, Magical Footwear, Cosmic Insight]\n    abilities: Auto Attack unavailable; Infected Bonesaw ready\n    runtime: cooldowns [Grasp of the Undying: 3.37s (cooldown 4.00s); Heartsteel Colossal Consumption: 6.02s (cooldown 7.50s)] | stacks [none]\n    buffs: none\nfield:\n  projectiles: none\n  projectile_block_zones: none",
+      "timestamp_seconds": 10.0
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "10.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 10.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "10.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 10.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "10.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 10.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "10.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 10.0
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "10.218s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 10.218
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "10.219s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 10.219
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "10.227s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 10.227
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.273s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 10.273
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "10.275s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 10.275
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.341s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 10.341
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "10.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 10.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "10.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 10.5
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "10.513s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 10.513
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "10.707s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 10.707
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.814s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 10.814
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.815s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 10.815
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.821s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 10.821
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.830s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 10.83
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "10.837s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 10.837
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "11.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 11.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "11.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 11.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "11.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 11.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.0
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.054s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.054
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "11.070s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 11.07
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.186s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.186
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.209s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.209
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.239s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.239
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.300s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 11.3
+    },
+    {
+      "details": "Vladimir cast vladimir_sanguine_pool (untargetable 2.00s, damage tick 0.50s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "11.300s [controlled_champion_cast] Vladimir cast vladimir_sanguine_pool (untargetable 2.00s, damage tick 0.50s)",
+      "timestamp_seconds": 11.3
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.355s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 11.355
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "11.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 11.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "11.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 11.5
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "11.500s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 11.5
+    },
+    {
+      "details": "Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.500s [impact_nullified] Morgana Dark Binding on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.5
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.595s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.595
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "11.665s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 11.665
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.682s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 11.682
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.749s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 11.749
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.779s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 11.779
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "11.779s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "timestamp_seconds": 11.779
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.859s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 11.859
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "11.895s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 11.895
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "11.922s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 11.922
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "12.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 12.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "12.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 12.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "12.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 12.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.0
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.135s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.135
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.143s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.143
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.145s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.145
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.259s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 12.259
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.261s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.261
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "12.267s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "timestamp_seconds": 12.267
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.436s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 12.436
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "12.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 12.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "12.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 12.5
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.534s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 12.534
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.624s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.624
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "12.676s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 12.676
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.683s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 12.683
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.738s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 12.738
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "12.774s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 12.774
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "12.774s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "timestamp_seconds": 12.774
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.881s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 12.881
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "12.977s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 12.977
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "13.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 13.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "13.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 13.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "13.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 13.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "13.000s [impact_nullified] Dr. Mundo Infected Bonesaw on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 13.0
+    },
+    {
+      "details": "Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "13.077s [impact_nullified] Sona auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 13.077
+    },
+    {
+      "details": "Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "13.104s [impact_nullified] Vayne auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 13.104
+    },
+    {
+      "details": "Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "13.217s [impact_nullified] Warwick auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 13.217
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "13.218s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 13.218
+    },
+    {
+      "details": "Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "event_type": "impact_nullified",
+      "raw": "13.283s [impact_nullified] Morgana auto attack on Vladimir was nullified by untargetable or stasis state",
+      "timestamp_seconds": 13.283
+    },
+    {
+      "details": "Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "event_type": "controlled_champion_pool_tick",
+      "raw": "13.283s [controlled_champion_pool_tick] Vladimir vladimir_sanguine_pool tick dealt 889.7 to 5 enemies in range",
+      "timestamp_seconds": 13.283
+    },
+    {
+      "details": "Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "13.300s [controlled_champion_cast] Vladimir cast vladimir_transfusion on Warwick (impact in 0.20s)",
+      "timestamp_seconds": 13.3
+    },
+    {
+      "details": "Dr. Mundo begins auto attack",
+      "event_type": "attack_start",
+      "raw": "13.385s [attack_start] Dr. Mundo begins auto attack",
+      "timestamp_seconds": 13.385
+    },
+    {
+      "details": "Vladimir vladimir_transfusion hit Warwick for 425.4",
+      "event_type": "controlled_champion_primary_hit",
+      "raw": "13.500s [controlled_champion_primary_hit] Vladimir vladimir_transfusion hit Warwick for 425.4",
+      "timestamp_seconds": 13.5
+    },
+    {
+      "details": "Vladimir cast vladimir_tides_of_blood (impact in 0.30s)",
+      "event_type": "controlled_champion_cast",
+      "raw": "13.500s [controlled_champion_cast] Vladimir cast vladimir_tides_of_blood (impact in 0.30s)",
+      "timestamp_seconds": 13.5
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "13.500s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 13.5
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "13.500s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 13.5
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "13.518s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 13.518
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 733.8, magic 0.0, true 0.0, total 241.0",
+      "event_type": "damage_in",
+      "raw": "13.583s [damage_in] Vayne Auto Attack -> Vladimir | physical 733.8, magic 0.0, true 0.0, total 241.0",
+      "timestamp_seconds": 13.583
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 733.8, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "13.583s [attack_hit] Vayne hit Vladimir (phys 733.8, magic 0.0, true 0.0)",
+      "timestamp_seconds": 13.583
+    },
+    {
+      "details": "Sona begins auto attack",
+      "event_type": "attack_start",
+      "raw": "13.617s [attack_start] Sona begins auto attack",
+      "timestamp_seconds": 13.617
+    },
+    {
+      "details": "Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "event_type": "attack_missed",
+      "raw": "13.625s [attack_missed] Dr. Mundo auto attack missed Vladimir (target outside hitbox path (distance 216.3 > reach 145.0))",
+      "timestamp_seconds": 13.625
+    },
+    {
+      "details": "Vayne begins auto attack",
+      "event_type": "attack_start",
+      "raw": "13.697s [attack_start] Vayne begins auto attack",
+      "timestamp_seconds": 13.697
+    },
+    {
+      "details": "Warwick Auto Attack -> Vladimir | physical 308.3, magic 81.6, true 0.0, total 154.0",
+      "event_type": "damage_in",
+      "raw": "13.758s [damage_in] Warwick Auto Attack -> Vladimir | physical 308.3, magic 81.6, true 0.0, total 154.0",
+      "timestamp_seconds": 13.758
+    },
+    {
+      "details": "Warwick hit Vladimir (phys 308.3, magic 81.6, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "13.758s [attack_hit] Warwick hit Vladimir (phys 308.3, magic 81.6, true 0.0)",
+      "timestamp_seconds": 13.758
+    },
+    {
+      "details": "Morgana executed Dark Binding",
+      "event_type": "champion_script",
+      "raw": "13.800s [champion_script] Morgana executed Dark Binding",
+      "timestamp_seconds": 13.8
+    },
+    {
+      "details": "Morgana Dark Binding -> Vladimir | physical 0.0, magic 1046.4, true 0.0, total 676.4",
+      "event_type": "damage_in",
+      "raw": "13.800s [damage_in] Morgana Dark Binding -> Vladimir | physical 0.0, magic 1046.4, true 0.0, total 676.4",
+      "timestamp_seconds": 13.8
+    },
+    {
+      "details": "Vladimir vladimir_tides_of_blood dealt 1869.4 to 5 enemies in range",
+      "event_type": "controlled_champion_secondary_hit",
+      "raw": "13.800s [controlled_champion_secondary_hit] Vladimir vladimir_tides_of_blood dealt 1869.4 to 5 enemies in range",
+      "timestamp_seconds": 13.8
+    },
+    {
+      "details": "Morgana begins auto attack",
+      "event_type": "attack_start",
+      "raw": "13.903s [attack_start] Morgana begins auto attack",
+      "timestamp_seconds": 13.903
+    },
+    {
+      "details": "Vayne executed Tumble Empower",
+      "event_type": "champion_script",
+      "raw": "14.000s [champion_script] Vayne executed Tumble Empower",
+      "timestamp_seconds": 14.0
+    },
+    {
+      "details": "Vayne empowered next attack",
+      "event_type": "enemy_buff",
+      "raw": "14.000s [enemy_buff] Vayne empowered next attack",
+      "timestamp_seconds": 14.0
+    },
+    {
+      "details": "Dr. Mundo executed Infected Bonesaw",
+      "event_type": "champion_script",
+      "raw": "14.000s [champion_script] Dr. Mundo executed Infected Bonesaw",
+      "timestamp_seconds": 14.0
+    },
+    {
+      "details": "Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 280.0, true 0.0, total 181.0",
+      "event_type": "damage_in",
+      "raw": "14.000s [damage_in] Dr. Mundo Infected Bonesaw -> Vladimir | physical 0.0, magic 280.0, true 0.0, total 181.0",
+      "timestamp_seconds": 14.0
+    },
+    {
+      "details": "Sona Auto Attack -> Vladimir | physical 106.0, magic 103.0, true 0.0, total 101.4",
+      "event_type": "damage_in",
+      "raw": "14.011s [damage_in] Sona Auto Attack -> Vladimir | physical 106.0, magic 103.0, true 0.0, total 101.4",
+      "timestamp_seconds": 14.011
+    },
+    {
+      "details": "Sona hit Vladimir (phys 106.0, magic 103.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "14.011s [attack_hit] Sona hit Vladimir (phys 106.0, magic 103.0, true 0.0)",
+      "timestamp_seconds": 14.011
+    },
+    {
+      "details": "Warwick begins auto attack",
+      "event_type": "attack_start",
+      "raw": "14.059s [attack_start] Warwick begins auto attack",
+      "timestamp_seconds": 14.059
+    },
+    {
+      "details": "Vayne Auto Attack -> Vladimir | physical 652.6, magic 0.0, true 0.0, total 214.3",
+      "event_type": "damage_in",
+      "raw": "14.062s [damage_in] Vayne Auto Attack -> Vladimir | physical 652.6, magic 0.0, true 0.0, total 214.3",
+      "timestamp_seconds": 14.062
+    },
+    {
+      "details": "Vladimir died",
+      "event_type": "controlled_champion_death",
+      "raw": "14.062s [controlled_champion_death] Vladimir died",
+      "timestamp_seconds": 14.062
+    },
+    {
+      "details": "Vayne hit Vladimir (phys 652.6, magic 0.0, true 0.0)",
+      "event_type": "attack_hit",
+      "raw": "14.062s [attack_hit] Vayne hit Vladimir (phys 652.6, magic 0.0, true 0.0)",
+      "timestamp_seconds": 14.062
+    }
+  ],
+  "rune_proc_telemetry": [
+    {
+      "attempt_count": 17,
+      "bonus_damage": 278.5666253194763,
+      "bonus_damage_share": 0.021385583073570583,
+      "bonus_healing": 0.0,
+      "bonus_healing_share": 0.0,
+      "eligible_count": 3,
+      "opportunity_count": 3,
+      "proc_attempt_rate": 0.17647058823529413,
+      "proc_count": 3,
+      "proc_eligible_rate": 1.0,
+      "proc_opportunity_rate": 1.0,
+      "rune_name": "Summon Aery",
+      "source_breakdown": [
+        {
+          "attempt_count": 17,
+          "bonus_damage": 278.5666253194763,
+          "bonus_healing": 0.0,
+          "eligible_count": 3,
+          "opportunity_count": 3,
+          "proc_attempt_rate": 0.17647058823529413,
+          "proc_count": 3,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "ability"
+        }
+      ]
+    }
+  ],
+  "schema_version": 2
+}

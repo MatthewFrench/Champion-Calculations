@@ -1,0 +1,566 @@
+{
+  "best_build": [
+    "Guardian Angel",
+    "Heartsteel",
+    "Liandry's Torment",
+    "Luden's Echo",
+    "Protoplasm Harness",
+    "Zhonya's Hourglass"
+  ],
+  "best_rune_proc_telemetry": [
+    {
+      "attempt_count": 17,
+      "bonus_damage": 278.5666253194763,
+      "bonus_damage_share": 0.021385583073570583,
+      "bonus_healing": 0.0,
+      "bonus_healing_share": 0.0,
+      "eligible_count": 3,
+      "opportunity_count": 3,
+      "proc_attempt_rate": 0.17647058823529413,
+      "proc_count": 3,
+      "proc_eligible_rate": 1.0,
+      "proc_opportunity_rate": 1.0,
+      "rune_name": "Summon Aery",
+      "source_breakdown": [
+        {
+          "attempt_count": 17,
+          "bonus_damage": 278.5666253194763,
+          "bonus_healing": 0.0,
+          "eligible_count": 3,
+          "opportunity_count": 3,
+          "proc_attempt_rate": 0.17647058823529413,
+          "proc_count": 3,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "ability"
+        }
+      ]
+    }
+  ],
+  "build_orders": [
+    {
+      "cumulative_score": 4.166810000015309,
+      "levels": [
+        5,
+        8,
+        11,
+        14,
+        17,
+        20
+      ],
+      "ordered_items": [
+        "Guardian Angel",
+        "Heartsteel",
+        "Protoplasm Harness",
+        "Zhonya's Hourglass",
+        "Liandry's Torment",
+        "Luden's Echo"
+      ],
+      "stage_damage": [
+        3261.9886131245007,
+        3056.723688597978,
+        4143.177024087841,
+        8886.314567100655,
+        11390.782718724646,
+        12661.684659300843
+      ],
+      "stage_healing": [
+        380.89089603022296,
+        513.4615452329358,
+        934.8655090289099,
+        1896.3821836397321,
+        2128.73391794479,
+        2257.765389086024
+      ],
+      "stage_objective_scores": [
+        0.4871794871794873,
+        0.4871794871794873,
+        0.5210127751030255,
+        0.862013457407957,
+        1.3222453059658654,
+        0.4871794871794873
+      ],
+      "stage_survival_seconds": [
+        6.58034739901278,
+        6.999999999999991,
+        8.200080402793027,
+        13.799999999999967,
+        13.799965102555019,
+        14.062419532276262
+      ]
+    },
+    {
+      "cumulative_score": 4.109471283113436,
+      "levels": [
+        5,
+        8,
+        11,
+        14,
+        17,
+        20
+      ],
+      "ordered_items": [
+        "Heartsteel",
+        "Guardian Angel",
+        "Liandry's Torment",
+        "Zhonya's Hourglass",
+        "Protoplasm Harness",
+        "Void Staff"
+      ],
+      "stage_damage": [
+        0.0,
+        3099.84785206768,
+        5186.2429983291095,
+        10399.845693537265,
+        11542.664727822603,
+        12575.847360968426
+      ],
+      "stage_healing": [
+        0.0,
+        524.6630218972612,
+        606.6288987668734,
+        1556.3928436524823,
+        2177.718237730566,
+        2267.814676793172
+      ],
+      "stage_objective_scores": [
+        0.0,
+        0.4906663249945681,
+        0.49029756859250073,
+        1.2801128694674684,
+        1.3573595632522972,
+        0.4910349568066022
+      ],
+      "stage_survival_seconds": [
+        0.0,
+        6.999999999999991,
+        7.768158846057961,
+        13.551792586565472,
+        13.799965102555019,
+        14.062419532276262
+      ]
+    }
+  ],
+  "champion_level": 20,
+  "controlled_champion_loadout_labels": [
+    "Rune: Summon Aery",
+    "Rune: Nimbus Cloak",
+    "Rune: Celerity",
+    "Rune: Gathering Storm",
+    "Rune: Magical Footwear",
+    "Rune: Jack Of All Trades",
+    "Shard 1: ability_haste",
+    "Shard 2: movement_speed",
+    "Shard 3: health"
+  ],
+  "controlled_champion_name": "Vladimir",
+  "controlled_champion_unmodeled_item_effects": [],
+  "controlled_champion_unmodeled_runes": [],
+  "diagnostics": {
+    "adaptive_candidates_injected": 1282,
+    "best_significant_score": 0.16020260297428315,
+    "bleed_candidates_injected": 872,
+    "candidate_duplicates_pruned": 12831,
+    "candidate_keys_generated": 15010,
+    "coverage_stage_assets_covered": 22,
+    "coverage_stage_assets_total": 28,
+    "coverage_stage_elapsed_seconds": 2.019371917,
+    "coverage_stage_enabled": true,
+    "coverage_stage_incomplete": true,
+    "coverage_stage_seed_candidates": 66,
+    "coverage_stage_seed_candidates_unique": 56,
+    "coverage_stage_warning": "Coverage incomplete: touched 22/28 assets; coverage stage could not produce finite candidates for at least one locked asset. Continuing search in degraded coverage mode.",
+    "effective_seed": 7733817158969335486,
+    "effective_threads": 9,
+    "elapsed_seconds": 8.162234042,
+    "ensemble_seeds": 8,
+    "estimated_close_to_optimal_probability": 0.08147673928463772,
+    "estimated_close_to_optimal_probability_note": "Estimated as P(hit top 0.000001% candidate set) = 1 - (1 - q)^n, with q = 0.003006253% (about top 1 candidates in the legal space) and n = 2827 unique scored candidates. This is a conservative random-sampling approximation, not a guarantee.",
+    "estimated_run_space_coverage_percent": 8.498677248677248,
+    "estimated_total_candidate_space": 33264.0,
+    "full_cache_hits": 4571776,
+    "full_cache_misses": 3919,
+    "full_cache_waits": 142,
+    "full_evaluations": 2827,
+    "loadout_candidates": 1,
+    "loadout_finalists": 1,
+    "objective_damage_weight": 0.12820512820512822,
+    "objective_enemy_kills_weight": 0.5128205128205129,
+    "objective_healing_weight": 0.07692307692307693,
+    "objective_invulnerable_seconds_weight": 0.025641025641025644,
+    "objective_survival_weight": 0.25641025641025644,
+    "popcorn_min_relative_improvement_percent": 1.0,
+    "popcorn_window_seconds": 600.0,
+    "portfolio_strategy_parallel": true,
+    "processed_candidates": 2179,
+    "scenario_count": 1,
+    "search_quality_profile": "maximum_quality",
+    "search_type_breakdown": [
+      {
+        "name": "seed_search:portfolio",
+        "new_simulations": 3021,
+        "score_requests": 1151850
+      },
+      {
+        "name": "coverage_stage",
+        "new_simulations": 855,
+        "score_requests": 1170
+      },
+      {
+        "name": "adaptive_search",
+        "new_simulations": 35,
+        "score_requests": 2286243
+      },
+      {
+        "name": "strict_full_ranking",
+        "new_simulations": 6,
+        "score_requests": 576
+      },
+      {
+        "name": "strategy_elites",
+        "new_simulations": 2,
+        "score_requests": 1135856
+      }
+    ],
+    "seconds_since_last_significant_improvement": 8.037008291,
+    "seed_orchestration_parallel": true,
+    "significant_improvement_events": 5,
+    "simulation_counts": {
+      "new_full_simulations": 2827,
+      "total_score_requests": 4575695,
+      "unique_scored_candidates": 2827
+    },
+    "strategy_elites_parallel": true,
+    "strategy_summary": "portfolio(beam, hill_climb, genetic, simulated_annealing, mcts, random, greedy)",
+    "strict_candidates_skipped_timeout": 0,
+    "strict_completion_percent": 100.0,
+    "strict_heuristic_ordering_enabled": true,
+    "strict_non_finite_candidates": 0,
+    "strict_random_promotions_done": 1,
+    "strict_ranking_rune_signal_weight": 0.3,
+    "strict_ranking_shard_signal_weight": 0.2,
+    "strict_remaining_candidates": 576,
+    "strict_seed_scored_candidates": 1603,
+    "time_budget_seconds": 600.0,
+    "timed_out": false,
+    "total_candidates": 2179,
+    "total_run_seconds": 9.95218425,
+    "unique_candidate_builds": 2179,
+    "unique_scored_candidates": 2827,
+    "unmodeled_item_effect_candidates_penalized": 0,
+    "unmodeled_item_effect_candidates_rejected": 0,
+    "unmodeled_item_effect_hard_gate": true,
+    "unmodeled_item_effect_penalty_per_item": 0.0,
+    "unmodeled_rune_candidates_penalized": 0,
+    "unmodeled_rune_candidates_rejected": 0,
+    "unmodeled_rune_hard_gate": true,
+    "unmodeled_rune_penalty_per_rune": 0.0
+  },
+  "diverse_top_builds": [
+    {
+      "items": [
+        "Guardian Angel",
+        "Heartsteel",
+        "Liandry's Torment",
+        "Luden's Echo",
+        "Protoplasm Harness",
+        "Zhonya's Hourglass"
+      ],
+      "objective_score": 0.1604281632225757
+    },
+    {
+      "items": [
+        "Guardian Angel",
+        "Heartsteel",
+        "Liandry's Torment",
+        "Protoplasm Harness",
+        "Void Staff",
+        "Zhonya's Hourglass"
+      ],
+      "objective_score": 0.15724737503066824
+    }
+  ],
+  "enemy_derived_combat_stats": [
+    {
+      "ability_hit_damage": 0.0,
+      "armor": 191.60000000000002,
+      "attack_damage": 237.5,
+      "attack_interval_seconds": 0.3730035265991426,
+      "attack_projectile_speed": 0.0,
+      "attack_range": 125.0,
+      "attack_speed": 2.6809398,
+      "burst_magic_damage": 0.0,
+      "burst_physical_damage": 0.0,
+      "burst_true_damage": 0.0,
+      "champion": "Warwick",
+      "desired_combat_range": 130.0,
+      "magic_resist": 70.94999999999999,
+      "max_health": 3501.0,
+      "move_speed": 422.40000000000003,
+      "physical_hit_damage": 237.5
+    },
+    {
+      "ability_hit_damage": 0.0,
+      "armor": 110.39999999999999,
+      "attack_damage": 294.65,
+      "attack_interval_seconds": 0.15940022769621165,
+      "attack_projectile_speed": 2000.0,
+      "attack_range": 550.0,
+      "attack_speed": 6.273516760000001,
+      "burst_magic_damage": 0.0,
+      "burst_physical_damage": 0.0,
+      "burst_true_damage": 0.0,
+      "champion": "Vayne",
+      "desired_combat_range": 520.0,
+      "magic_resist": 54.7,
+      "max_health": 2641.4827586206898,
+      "move_speed": 396.78000000000003,
+      "physical_hit_damage": 294.65
+    },
+    {
+      "ability_hit_damage": 0.0,
+      "armor": 154.8,
+      "attack_damage": 122.5,
+      "attack_interval_seconds": 0.6198187030293639,
+      "attack_projectile_speed": 1600.0,
+      "attack_range": 450.0,
+      "attack_speed": 1.613375,
+      "burst_magic_damage": 0.0,
+      "burst_physical_damage": 0.0,
+      "burst_true_damage": 0.0,
+      "champion": "Morgana",
+      "desired_combat_range": 450.0,
+      "magic_resist": 54.7,
+      "max_health": 3440.4827586206898,
+      "move_speed": 387.6,
+      "physical_hit_damage": 122.5
+    },
+    {
+      "ability_hit_damage": 0.0,
+      "armor": 105.8,
+      "attack_damage": 106.0,
+      "attack_interval_seconds": 0.5402905466443635,
+      "attack_projectile_speed": 1500.0,
+      "attack_range": 550.0,
+      "attack_speed": 1.850856,
+      "burst_magic_damage": 0.0,
+      "burst_physical_damage": 0.0,
+      "burst_true_damage": 0.0,
+      "champion": "Sona",
+      "desired_combat_range": 520.0,
+      "magic_resist": 54.7,
+      "max_health": 2413.4827586206898,
+      "move_speed": 387.6,
+      "physical_hit_damage": 106.0
+    },
+    {
+      "ability_hit_damage": 0.0,
+      "armor": 192.5,
+      "attack_damage": 148.5,
+      "attack_interval_seconds": 0.6115702984768842,
+      "attack_projectile_speed": 0.0,
+      "attack_range": 125.0,
+      "attack_speed": 1.635135,
+      "burst_magic_damage": 0.0,
+      "burst_physical_damage": 0.0,
+      "burst_true_damage": 0.0,
+      "champion": "Dr. Mundo",
+      "desired_combat_range": 140.0,
+      "magic_resist": 72.69999999999999,
+      "max_health": 6479.815457425368,
+      "move_speed": 400.0,
+      "physical_hit_damage": 148.5
+    }
+  ],
+  "enemy_presets": [
+    {
+      "champion": "Warwick",
+      "items": [
+        "Stridebreaker",
+        "Mercury's Treads",
+        "Blade of the Ruined King",
+        "Kraken Slayer",
+        "Spirit Visage",
+        "Thornmail"
+      ],
+      "last_checked": "2026-02-15",
+      "runes": [
+        "Lethal Tempo",
+        "Triumph",
+        "Legend: Alacrity",
+        "Last Stand",
+        "Celerity",
+        "Waterwalking"
+      ],
+      "shards": [
+        "attack_speed",
+        "movement_speed",
+        "tenacity"
+      ],
+      "source_url": "https://www.metasrc.com/lol/urf/build/warwick"
+    },
+    {
+      "champion": "Vayne",
+      "items": [
+        "Berserker's Greaves",
+        "Kraken Slayer",
+        "Guinsoo's Rageblade",
+        "Phantom Dancer",
+        "Blade of the Ruined King",
+        "Infinity Edge"
+      ],
+      "last_checked": "2026-02-15",
+      "runes": [
+        "Lethal Tempo",
+        "Triumph",
+        "Legend: Alacrity",
+        "Coup de Grace",
+        "Conditioning",
+        "Overgrowth"
+      ],
+      "shards": [
+        "attack_speed",
+        "movement_speed",
+        "health"
+      ],
+      "source_url": "https://www.metasrc.com/lol/urf/build/vayne"
+    },
+    {
+      "champion": "Morgana",
+      "items": [
+        "Sorcerer's Shoes",
+        "Liandry's Torment",
+        "Blackfire Torch",
+        "Rylai's Crystal Scepter",
+        "Zhonya's Hourglass",
+        "Luden's Echo"
+      ],
+      "last_checked": "2026-02-15",
+      "runes": [
+        "Arcane Comet",
+        "Manaflow Band",
+        "Transcendence",
+        "Gathering Storm",
+        "Cheap Shot",
+        "Ultimate Hunter"
+      ],
+      "shards": [
+        "ability_haste",
+        "movement_speed",
+        "health"
+      ],
+      "source_url": "https://www.metasrc.com/lol/urf/build/morgana"
+    },
+    {
+      "champion": "Sona",
+      "items": [
+        "Sorcerer's Shoes",
+        "Luden's Echo",
+        "Lich Bane",
+        "Stormsurge",
+        "Shadowflame",
+        "Rabadon's Deathcap"
+      ],
+      "last_checked": "2026-02-15",
+      "runes": [
+        "Summon Aery",
+        "Manaflow Band",
+        "Transcendence",
+        "Gathering Storm",
+        "Conditioning",
+        "Revitalize"
+      ],
+      "shards": [
+        "ability_haste",
+        "movement_speed",
+        "health"
+      ],
+      "source_url": "https://www.metasrc.com/lol/urf/build/sona"
+    },
+    {
+      "champion": "Dr. Mundo",
+      "items": [
+        "Mercury's Treads",
+        "Heartsteel",
+        "Warmog's Armor",
+        "Spirit Visage",
+        "Thornmail",
+        "Titanic Hydra"
+      ],
+      "last_checked": "2026-02-15",
+      "runes": [
+        "Grasp of the Undying",
+        "Demolish",
+        "Conditioning",
+        "Overgrowth",
+        "Magical Footwear",
+        "Cosmic Insight"
+      ],
+      "shards": [
+        "ability_haste",
+        "health",
+        "tenacity"
+      ],
+      "source_url": "https://www.metasrc.com/lol/urf/build/drmundo"
+    }
+  ],
+  "enemy_similarity_notes": [],
+  "generated_local": "2026-02-19 15:15:59 -06:00",
+  "generated_utc": "2026-02-19T21:15:59.640202+00:00",
+  "headline": {
+    "best_objective_breakdown": {
+      "components": {
+        "damage": {
+          "contribution": 0.09038559718341103,
+          "delta_vs_weight_percent_points": 43.51971782715181,
+          "impact_percent": 56.34023064766463,
+          "normalized_ratio": 0.7050076580306059,
+          "weight": 0.12820512820512822
+        },
+        "enemy_kills": {
+          "contribution": 0.0,
+          "delta_vs_weight_percent_points": -51.28205128205129,
+          "impact_percent": 0.0,
+          "normalized_ratio": 0.0,
+          "weight": 0.5128205128205129
+        },
+        "healing": {
+          "contribution": 0.06681341656645605,
+          "delta_vs_weight_percent_points": 33.95462961866812,
+          "impact_percent": 41.646937310975815,
+          "normalized_ratio": 0.8685744153639285,
+          "weight": 0.07692307692307693
+        },
+        "invulnerable_seconds": {
+          "contribution": 0.0002243589743589744,
+          "delta_vs_weight_percent_points": -2.424252446858685,
+          "impact_percent": 0.13985011724387944,
+          "normalized_ratio": 0.00875,
+          "weight": 0.025641025641025644
+        },
+        "survival": {
+          "contribution": 0.0030047904983496287,
+          "delta_vs_weight_percent_points": -23.768043716909975,
+          "impact_percent": 1.8729819241156718,
+          "normalized_ratio": 0.011718682943563551,
+          "weight": 0.25641025641025644
+        }
+      },
+      "final_score": 0.1604281632225757,
+      "weighted_mean_score": 0.1604281632225757,
+      "worst_case_score": 0.1604281632225757,
+      "worst_case_weight": 0.35
+    },
+    "best_objective_score": 0.1604281632225757,
+    "best_outcome": {
+      "cap_survivor": false,
+      "damage_dealt": 13025.907423760797,
+      "enemy_kills": 0,
+      "healing_done": 2336.465177328968,
+      "invulnerable_seconds": 10.5,
+      "time_alive_seconds": 14.062419532276262
+    }
+  },
+  "scenario_path": "Simulation/scenarios/vladimir_urf_teamfight.json",
+  "schema_version": 2
+}

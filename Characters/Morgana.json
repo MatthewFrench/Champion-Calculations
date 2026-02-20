@@ -309,7 +309,12 @@
         }
       ],
       "type": "Active",
-      "description": "Deal magic damage and root for a duration."
+      "description": "Deal magic damage and root for a duration.",
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 80.0
+      }
     },
     "ultimate": {
       "slot": "R",
@@ -405,7 +410,12 @@
         }
       ],
       "type": "Active",
-      "description": "Tether nearby enemy champions, slowing them and granting bonus move speed; after 3s, deal additional magic damage and stun them if they remain tethered."
+      "description": "Tether nearby enemy champions, slowing them and granting bonus move speed; after 3s, deal additional magic damage and stun them if they remain tethered.",
+      "execution": {
+        "cast_windup_seconds": 0.2,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 340.0
+      }
     }
   },
   "name": "Morgana",
@@ -441,12 +451,6 @@
   },
   "data_version": "16.3.1",
   "sources": [
-    {
-      "path": "/Users/matthewfrench/Downloads/Morgana.json",
-      "type": "Riot Data Dragon (local)",
-      "accessed": "2026-02-09",
-      "used_for": "base stats, base ability values, cooldowns, costs"
-    },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Morgana/Soul_Siphon",
       "accessed": "2026-02-09",
@@ -491,7 +495,7 @@
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Morgana.json",
+      "path": "From Online/champions/Morgana.json",
       "used_for": "raw basic attack timing stats and radii"
     }
   ],

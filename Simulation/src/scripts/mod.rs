@@ -1,6 +1,6 @@
 pub(crate) mod champions;
+pub(crate) mod coverage;
 pub(crate) mod items;
-pub(crate) mod masteries;
 pub(crate) mod registry;
 pub(crate) mod runes;
 pub(crate) mod runtime;

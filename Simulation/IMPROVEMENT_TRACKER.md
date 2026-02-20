@@ -1,15 +1,244 @@
 # Improvement Tracker
 
 ## Done
-- Added centralized simulator defaults dataset and typed loader:
-  - `Simulation/data/simulator_defaults.json`
-  - `Simulation/src/defaults.rs`
-  - shared modules now consume `simulator_defaults()` for tunable defaults
-- Moved search quality profile presets and loadout-generation fallback constants out of code and into defaults data:
+- Addressed latest PR review findings in build-order encounter handling:
+  - raw enemy base lookup for build-order stage scaling now seeds from all configured encounters (not only the primary encounter), preventing fallback double-scaling for secondary-only actors
+  - build-order worst-case stage blending now ignores zero-weight encounters, so explicitly disabled encounters do not penalize stage scores
+  - opponent actor ID validation now rejects cross-encounter ID collisions that map one `id` to different champions, preventing actor-ID keyed raw-base lookups from binding the wrong champion base
+- Closed remaining PR review correctness gaps around build-order encounter scope and report invariants:
+  - build-order optimization now evaluates across all configured encounters (weighted + worst-case blend), rather than only the first encounter
+  - report selection-label validation now keys legality off selected runes/shards and tolerates unmodeled shard labels while still enforcing legal loadout shape
+- Closed remaining PR review correctness gaps around diagnostics, fallback selection, and defaults:
+  - controlled-champion diagnostics now derive loadout candidate/finalist counts from actual generated/final-ranked candidate sets (no hardcoded `1/1`)
+  - strict-ranking empty-result fallback now prefers the best seeded candidate (including deterministic completion of partial seeded candidates) before any lexical fallback
+  - unique-scored-candidate diagnostics now count only successfully scored finite full-build candidates
+  - timed-phase search now bootstraps a live runtime deadline before seeded-stage orchestration to keep staged search loops budget-aware
+  - fixed-loadout and fixed-loadout-rune-sweep modes now run without requiring a scenario `search` block (defaults are used when omitted)
+  - build-order enemy stage simulation now respects each enemy actor’s configured level instead of controlled-champion stage level
+  - champion AI script-priority override keys are normalized on load, so configured overrides such as `soul_shackles_detonate` resolve correctly
+  - simulation global stack override defaults now load from `Simulation/data/simulator_defaults.json` (`simulation_defaults.stack_overrides`), with scenario/actor overrides still taking precedence
+- Removed disk-backed cross-run score caching from controlled champion search:
+  - removed persistent full-score cache read/write path under `Simulation/output/cache/`
+  - kept in-memory full-evaluation dedupe cache for the duration of a run to avoid duplicate simulations across algorithms/search stages
+  - diagnostics/report outputs now report in-memory cache behavior only (no persistent-cache counters/coverage)
+- Aligned hard-gated search with generation-time legality (no post-generation invalid-candidate churn):
+  - when `unmodeled_rune_hard_gate` is enabled, controlled-champion search now uses a modeled-rune-filtered loadout domain instead of generating unmodeled rune pages and rejecting them at score time
+  - when `unmodeled_item_effect_hard_gate` is enabled, controlled-champion search now uses a modeled-runtime-item pool instead of generating unmodeled runtime-effect items and rejecting them at score time
+  - controlled-champion search now validates that the constrained item pool can still form a legal full build before search starts and fails fast with a clear error otherwise
+  - random loadout generation now samples from legal primary/secondary path sets directly, avoiding dead-end path picks
+  - added regression coverage for modeled-rune domain filtering and hard-gated modeled-item search pool filtering
+- Hardened strict-ranking/report validity for missing-candidate and shard-label edge cases:
+  - deterministic shard parsing now supports `tenacity` in loadout stat resolution
+  - resolved loadout labeling now preserves all selected shard labels even when a shard has no deterministic stat impact
+  - controlled champion scenario execution now fails fast with an explicit error when strict ranking produces no valid full-build candidates, instead of falling back to an empty `items [none]` best-build output
+  - added regression coverage for tenacity shard resolution and shard-label completeness in `src/tests/data_tests.rs`
+- Added explicit data-authoring workflow and coverage checklist docs:
+  - added `Simulation/DATA_AUTHORING_GUIDE.md` covering canonical ownership boundaries, best complete examples, and the repository flow from source data to runtime modeling
+  - added `Simulation/COVERAGE_CHECKLIST.md` with actionable champion/item/rune/shard coverage gates and required validation/docs updates
+  - linked the new docs from `README.md` and `Simulation/README.md`
+- Added cross-domain coverage tracking and item-effect quality gates:
+  - added `src/scripts/coverage.rs` as shared coverage-registry helpers for modeled runtime item effects
+  - added search-quality config/policy for unmodeled item effects (`unmodeled_item_effect_hard_gate`, `unmodeled_item_effect_penalty_per_item`)
+  - search diagnostics/report markdown/report JSON now include unmodeled item-effect gate policy and rejected/penalized candidate counters
+  - best-build report outputs now explicitly list controlled champion items with unmodeled passive/active/structured runtime effects
+  - added `Simulation/COVERAGE_GAPS.md` with a comprehensive tracked inventory of known game-fidelity gaps (champions/items/runes/shards/engine systems)
+- Completed shared-rune-runtime parity and output hardening pass:
+  - moved Arcane Comet, Summon Aery, Triumph, Gathering Storm, and Second Wind combat behavior fully into shared loadout runtime paths used by both controlled champion and enemies
+  - added Hail of Blades and Dark Harvest runtime behavior in shared loadout runtime
+  - moved rune runtime tuning ownership to `Simulation/data/simulator_defaults.json` (`rune_runtime_defaults`) with typed loading in `src/defaults.rs`
+  - fixed-loadout rune sweep now evaluates keystones in parallel and supports repeat aggregation via `--fixed-sweep-seed-repeats`, with deterministic per-repeat combat seed variation
+  - report generation now hard-enforces complete controlled champion rune/shard labels (no fallback “none selected” section)
+  - rune proc telemetry now includes source-attribution breakdowns plus proc attempt/eligible counts, proc rates, and damage/healing share metrics in markdown and JSON outputs
+  - rune proc telemetry runtime bookkeeping was refactored to fixed-index counters (array-backed) to remove hot-path hashmap allocation/lookup overhead
+  - search-time simulations now disable full rune-proc telemetry collection by default; trace/report replay simulations explicitly enable it
+  - added JSON contract coverage for run report, fixed-loadout report, fixed-loadout rune sweep report, and trace outputs (schema version + rune telemetry field shape)
+  - added additional pool geometry regressions for moving targets, diagonal boundary checks, and non-zero effect-hitbox-radius range behavior
+- Hardened controlled champion runtime/engine boundaries:
+  - removed thin `ControlledChampionLoadoutRuntime` holder from engine state; retained stateless defensive policy APIs in `src/scripts/runtime/controlled_champion_loadout.rs`
+  - added optional scenario `simulation.combat_seed` for deterministic combat-variation runs (enemy init ordering + initial auto-attack jitter)
+- Added regression coverage for realism and calibration:
+  - added rune formula breakpoint tests for Electrocute, Arcane Comet, First Strike cooldown/window behavior, and Aftershock resist-cap behavior
+  - added engine regression test ensuring pool ticks hit all in-range enemies with expected tick count and mitigated total damage
+- Expanded modeled combat-time rune coverage and telemetry:
+  - added Electrocute, First Strike, and Phase Rush runtime behaviors
+  - Aftershock now applies active-window resist mitigation in incoming-damage resolution
+  - reports and trace JSON outputs now include rune proc telemetry totals (proc count, bonus damage, bonus healing)
+- Added fixed-loadout keystone sweep mode:
+  - `controlled_champion_fixed_loadout_rune_sweep` compares one fixed item build across all legal keystones in the baseline primary rune path
+  - outputs include ranked markdown + structured JSON sweep summaries
+- Added profile-aware unmodeled-rune quality gate policy:
+  - `maximum_quality` now hard-rejects candidates with unmodeled runes
+  - `fast`/`balanced` retain per-rune penalty mode
+- Added CI guardrails for modeled rune behavior coverage:
+  - runtime tests now assert observable effects for all modeled dynamic rune keys
+  - dynamic-rune key list and modeled coverage expectations are kept in lockstep by test
+- Added generic combat-time rune trigger runtime layer and modeled additional keystones:
+  - runtime now has explicit trigger hooks for on-hit, ability-hit, outgoing-damage healing, and immobilize-triggered effects
+  - modeled keystones now include Press the Attack, Fleet Footwork, Conqueror, and Aftershock
+  - controlled champion and enemy script paths now call the same shared runtime hooks where applicable
+- Added explicit unmodeled-rune quality gating for search scoring:
+  - new search defaults/config:
+    - `unmodeled_rune_hard_gate`
+    - `unmodeled_rune_penalty_per_rune`
+  - candidate scoring now either rejects or penalizes loadouts that include unmodeled runes, based on policy
+  - diagnostics/report JSON now include gate configuration and rejected/penalized candidate counters
+- Added keystone regression coverage:
+  - engine tests now validate combat deltas for Press the Attack, Fleet Footwork, Conqueror, and Aftershock trigger behavior
+  - runtime unit tests validate stack/proc/cooldown semantics for the same keystones
+- Moved remaining controlled champion offensive-vs-defensive ordering policy out of engine into script/data ownership:
+  - offensive-ultimate-before-defensive-ability-two decision is now resolved in Vladimir script logic
+  - policy default now loads from `Characters/Vladimir.json` under `simulation.controlled_champion.defensive_ability_two`
+- Added controlled champion basic-attack event pipeline and runtime integration:
+  - controlled champion now runs recurring auto-attack start/windup/hit events with hitbox/projectile checks
+  - controlled champion attack cadence uses shared runtime attack-speed multipliers and cast-lock/untargetable guards
+  - controlled champion spell hits now also consume shared runtime ability-bonus effects
+- Added explicit controlled-champion unmodeled-rune diagnostics:
+  - loadout resolution now records rune selections that have neither deterministic stat effects nor modeled combat-time runtime effects
+  - reports and JSON output now surface these unmodeled runes explicitly
+- Improved controlled-champion comparison and strict-stage search behavior:
+  - added `controlled_champion_fixed_loadout` mode for direct item/rune/shard A/B evaluations with dedicated report/trace outputs
+  - added strict-stage heuristic ordering knobs (`strict_ranking_enable_heuristic_ordering`, rune/shard signal weights, exploration promotions)
+  - added a zero-variance guard so strict-stage heuristic ordering does not fabricate signal when strict seed scores are flat
+  - made strict-score tie resolution deterministic with objective-side tiebreaks plus stable build-key fallback
+- Improved Vladimir Sanguine Pool modeling and trace observability:
+  - pool damage now executes as per-tick area damage-over-time with range checks per tick (using canonical `damage_per_tick` + `tick_interval_seconds` + `range`)
+  - area-hit trace events now include enemy-hit counts for pool/area casts, improving validation/debugging of in-range assumptions
+- Updated timed-budget semantics to measure timed search simulation work instead of setup time:
+  - runtime budget deadline is now armed lazily on first timed-phase simulation evaluation
+  - `maximum_quality` coverage remains pre-budget and does not arm timed deadline
+  - very short budgets no longer expire before opponent scenario setup can enter simulation scoring
+- Closed high-impact search and reporting correctness gaps from PR review:
+  - full-loadout `beam` and `greedy` now co-optimize loadout selection while expanding item candidates
+  - adaptive/bleed strategy ordering is now deterministic before index-based seed math (fixed-seed reruns stay reproducible)
+  - seed-stage partial candidates are now deterministically completed before strict full-ranking fallback under timeouts
+  - cached candidate scores now re-resolve candidate loadouts for metrics and build-order diagnostics
+  - build-order optimization now evaluates each top candidate with that candidate's own loadout bonus stats
+  - `controlled_champion_step` now recomputes level-scaled simulation defaults after controlled-level override
+  - opponent encounter parsing now rejects all-zero-weight scenario sets
+- Expanded parallel search orchestration and reduced scoring-path contention:
+  - ensemble seed orchestration now runs in parallel
+  - portfolio strategy execution now runs in parallel
+  - strategy-elite and adaptive strategy candidate generation now run in parallel
+  - search-type runtime counters now use atomic per-type counters (removed hot global mutex path)
+  - unique scored-candidate key tracking now uses a sharded concurrent set (removed hot global mutex path)
+  - report/JSON diagnostics now include explicit parallelism fields (effective threads + parallel mode flags)
+- Continued generic controlled-champion decoupling in shared runtime paths:
+  - added `src/scripts/champions/controlled_champion.rs` as the engine-facing controlled-champion script facade
+  - removed remaining legacy Vladimir-named compatibility aliases in shared modules (`compute_vlad_stats`, `simulate_vlad_combat`, `VladCombatSimulation`)
+  - normalized orchestration locals in `src/scenario_runner.rs` away from `vlad_*` naming
+  - removed legacy `simulation.vlad_*` tuning overrides from shared parser; those keys now fail fast
+  - primary CLI modes are now `controlled_champion` and `controlled_champion_step` (with Vladimir aliases retained for compatibility)
+  - removed Vladimir ability-name hardcoding from shared engine trace/event paths; labels now come from controlled champion ability identifiers
+- Improved maximum-quality coverage semantics and diagnostics:
+  - incomplete coverage no longer implies hard failure and now emits explicit degraded-mode warning text/flags in console/report/JSON diagnostics
+- Prevented persistent cache fragmentation for default random-seed runs (historical; superseded by later persistent-cache removal):
+  - persistent full-score cache partitioning used deterministic configured seed ownership while it existed
+- Hardened search/runtime correctness and schema fail-fast behavior:
+  - cooldown effects expressed in seconds are no longer converted into ability haste during deterministic loadout stat parsing
+  - invulnerable-seconds objective normalization now references scenario horizon instead of a fixed one-second baseline
+  - candidate generation can now score partial builds during strategy branching (improves greedy/beam pruning quality), while strict final ranking remains full-candidate only
+  - `maximum_quality` coverage stage no longer uses popcorn progress-window timeout checks, preserving coverage guarantees before timed search
+  - Pareto/EHP/AP metric diagnostics now apply controlled champion stack overrides, matching objective simulation assumptions
+  - `simulation.protoplasm_trigger_health_percent` is now honored when provided
+  - when `controlled_champion.level` overrides simulation fallback level, Protoplasm level-scaled defaults are recomputed to the effective controlled level unless explicitly overridden
+  - loadout parsing now fails fast on deprecated keys instead of silently ignoring them:
+    - `loadout.runes_reforged.rune_ids`
+    - `loadout.season2016_masteries`
+  - enemy respawn delay now uses each enemy actor's own level in mixed-level scenarios
+- Added buff-aware runtime stat resolution for cooldown metrics:
+  - introduced shared runtime stat resolver (`src/scripts/runtime/stat_resolution.rs`) that starts from base metric data and applies runtime buff state before use
+  - item cooldowns for modeled runtime effects now load from canonical item data and resolve through buff state:
+    - Heartsteel cooldown from `Items/Heartsteel.json` (`effects_structured[id=colossal_consumption_empowered_hit_damage_and_permanent_bonus_health]`)
+    - Luden's Echo cooldown from `Items/Ludens Echo.json` (`effects_structured[id=echo_consume_stacks_for_primary_and_secondary_magic_damage]`)
+    - Guardian Angel / Zhonya's Hourglass / Protoplasm Harness cooldowns resolve through the same runtime stat resolver path
+  - enemy champion script ability cooldown scheduling now resolves from base cooldown plus runtime ability haste instead of using raw cooldown values directly
+- Removed baseline reference-build workflow from controlled champion scenario outputs:
+  - removed baseline parsing/evaluation (`controlled_champion.baseline_items` is now rejected)
+  - report headline and objective-breakdown sections are now optimized-build only
+  - event trace output now contains a single optimized-build timeline (no baseline vs best split)
+- Improved run artifact naming and trace JSON structure:
+  - popcorn run directory key now uses explicit labels and avoids duplicated `60s` segments when window equals hard budget
+  - fixed historical `minumum` typo in runtime-stop key naming
+  - trace JSON now emits versioned structured events (`schema_version`, `event_encoding`, `events[]`) with parsed timestamp/type/details fields
+- Expanded runtime stat resolution to scalar combat metrics:
+  - added resolver query paths for incoming damage taken, healing amounts, movement speed, and outgoing bonus-ability damage
+  - controlled champion damage intake and healing application now resolve through shared stat queries instead of direct raw multipliers
+  - enemy movement speed derivation now resolves from base move speed + flat/% bonuses through shared stat queries
+  - controlled champion and loadout runtime bonus-damage/regen outputs now resolve through shared stat queries
+- Added random-by-default search seed policy with explicit deterministic override:
+  - `search.seed: 0` now means runtime-random seed
+  - CLI now supports `--seed <u64>` to force deterministic reproducibility
+  - reports now include the effective seed used by the run
+- Added maximum-quality pre-budget coverage stage for breadth guarantees:
+  - coverage now locks each legal item/rune/shard asset at least once
+  - per-asset top diverse candidates are injected into main search as additional seeds
+  - timed search budgets now start after coverage stage completion in `maximum_quality`
+  - reports now include coverage-stage elapsed time, assets covered, and seeded-candidate counts
+- Removed opponent scenario combat proxy fields and uptime-window toggle:
+  - deleted `opponents.uptime_windows_enabled` support
+  - deleted per-actor `combat` proxy support (`ability_dps_*`, `burst_*`, `stun_*`, `uptime_*`)
+  - enemy runtime now uses only auto-attacks plus champion scripts sourced from canonical champion data
+  - parser now fails fast if deprecated actor `combat` or opponent uptime-window fields are present
+- Prevented controlled-champion cross-contamination from Vladimir script logic:
+  - Vladimir offensive/defensive ability logic now executes only when the controlled champion is Vladimir
+  - non-Vladimir controlled champions no longer inherit Vladimir pool/cast behavior implicitly
+- Reduced scenario simulation block to scenario-owned knobs and moved gameplay defaults to canonical owners:
+  - Vladimir Sanguine Pool defaults now load from `Characters/Vladimir.json` (`abilities.basic_ability_2`)
+  - Zhonya, Guardian Angel, and Protoplasm defaults now load from item data files
+  - controlled champion stasis activation default now loads from `Simulation/data/champion_ai_profiles.json`
+  - Protoplasm passive trigger threshold now loads from `Items/Protoplasm Harness.json` only
+  - URF respawn tuning remains owned by `Game Mode/URF.json` and is now treated as scenario override-only
+  - removed duplicated simulation constants from the default scenario file
+- Added dedicated scenario catalog and scenario-name resolution:
+  - moved default scenario into `Simulation/scenarios/vladimir_urf_teamfight.json`
+  - `--scenario` now accepts either a direct file path or a catalog name resolved to `Simulation/scenarios/<name>.json`
+- Replaced legacy scenario schema compatibility with strict canonical scenario shape:
+  - removed legacy parsing aliases (`vladimir_*`, top-level `enemies`, `enemy_scenarios`, and top-level `enemy_loadout`) from scenario execution paths
+  - required canonical structure:
+    - `controlled_champion.{champion, loadout}`
+    - `opponents.{shared_loadout, encounters[].{name, weight, actors[]}}`
+  - actor placement now supports explicit `placement.position` and strict `placement.movement` parsing (`hold_position`, `maintain_combat_range`)
+  - build-order enemy level scaling now keys raw bases by stable actor `id`, not champion name display keys
+- Removed duplicated top-level champion slot mapping data:
+  - default slot bindings are now derived from canonical champion ability fields (`abilities.<ability>.slot` / `default_keybinding`)
+  - removed `ability_slot_bindings` from `Characters/Vladimir.json`
+  - updated defaults loader to derive stable runtime ability identifiers from champion + ability names when explicit ability identifiers are not present
+- Completed roster-wide champion data cleanup aligned to canonical ownership:
+  - removed remaining `behavior` and `scripts` gameplay constants from `Characters/Vayne.json` and `Characters/Warwick.json`
+  - migrated Vayne Silver Bolts periodic true-hit defaults and Warwick Eternal Hunger/Infinite Duress scaling to typed loaders that read canonical ability/passive effects
+  - removed Yasuo from champion script dispatch and deleted the Yasuo champion script module from `Simulation/src/scripts/champions/`
+- Tightened data ownership and removed misplaced defaults from global simulator defaults:
+  - Item stack assumptions are scenario-owned (`simulation.item_stacks_at_level_20` with controlled/opponent override maps) and no longer stored in `Items/Heartsteel.json`
+  - Protoplasm Harness lifeline cooldown now comes from canonical item effects data in `Items/Protoplasm Harness.json` `effects_structured[id=lifeline_gain_bonus_health_below_health_threshold].cooldown_seconds`
+  - removed item-specific defaults from `Simulation/data/simulator_defaults.json`
+- Normalized champion simulation script config shape:
+  - replaced champion-specific `simulation.<champion>_script_defaults` keys with `scripts.<script_key>`
+  - updated typed loaders and champion script modules to read from the generic `scripts` container
+- Normalized URF mode simulation key naming:
+  - `Game Mode/URF.json` now uses `respawn` instead of `simulation_defaults.respawn`
+
+- Added typed defaults loader layer with domain ownership:
+  - global simulator/search/engine defaults: `Simulation/data/simulator_defaults.json`
+  - mode defaults (URF respawn tuning): `Game Mode/URF.json`
+  - champion simulation defaults: `Characters/*.json`
+  - loader and accessors: `Simulation/src/defaults.rs`
+- Moved search quality profile presets out of code and into defaults data:
   - `fast`, `balanced`, and `maximum_quality` profile numbers now come from defaults file
-  - mastery fallback selection rules and random tree-attempt budget now come from defaults file
-- Moved champion script numeric assumptions out of champion modules and into defaults data:
-  - Warwick, Vayne, Morgana, Sona, Doctor Mundo, and Yasuo scripted schedules/effect constants now load from defaults
+- Split champion execution data ownership between champion data and AI controller policy:
+  - per-ability execution geometry/routing overrides are now canonical under `Characters/*.json` `abilities.<ability_key>.execution`
+  - controller policy (combat spacing, movement scaling, script polling, and non-canonical cooldown overrides) now loads from `Simulation/data/champion_ai_profiles.json`
+  - removed script schedule constants from champion files and switched script casting to cooldown-ready polling (`cast when ready`)
+- Completed ability-execution schema migration from behavior/scripts to canonical ability data:
+  - removed generic ability/burst execution keys from `behavior` in champion data and defaults
+  - reworked `Characters/ChampionDefaults.json` into champion-style nested schema (`base_stats`, `basic_attack`, `abilities.execution_defaults`) and removed explicit zero-value entries
+  - moved champion-specific execution settings to `abilities.<ability_key>.execution`
+  - updated engine and champion scripts to consume ability execution profiles from ability data with defaults fallback
+- Removed duplicated Morgana script timing field and promoted canonical ability ownership:
+  - `scripts.dark_binding_and_soul_shackles.soul_shackles_detonate_delay_seconds` was removed from `Characters/Morgana.json`
+  - Soul Shackles detonation delay now loads from `abilities.ultimate.effects[id=tether_duration]` in `Simulation/src/defaults.rs`
+- Moved Morgana script followup priority policy to AI ownership:
+  - removed `scripts.dark_binding_and_soul_shackles.soul_shackles_detonate_priority` from `Characters/Morgana.json`
+  - added `script_priority_overrides.soul_shackles_detonate` under `Simulation/data/champion_ai_profiles.json` for Morgana
 - Added runtime ability-slot mapping foundation for slot-agnostic casting:
   - introduced `ActorAbilityLoadout` with runtime slot-to-ability mapping in `src/scripts/runtime/ability_slots.rs`
   - controlled champion cooldown tracking now keys by ability identity rather than fixed slot cooldown fields
@@ -20,9 +249,9 @@
   - impact outcomes are explicit (`applied`, `projectile_blocked`, `impact_nullified`, `*_missed`)
   - melee auto-attacks cancel when attacker is stunned during windup
 - Improved report readability and diagnostics detail:
-  - added human-readable timestamps (local + UTC) and unix timestamp
+  - added human-readable timestamps (local + UTC)
   - added comma-separated large-number formatting for major diagnostics values
-  - unix timestamp now renders as raw digits (no separators)
+  - removed unix timestamp output from generated reports
   - added explicit generated/duplicate-pruned/unique candidate counts
   - added strict-stage completion percentage and timeout-skipped/non-finite candidate counts
 - Standardized champion script layout to a uniform per-champion folder structure:
@@ -56,7 +285,7 @@
 - Moved enemy URF presets into a data file:
   - `Simulation/data/enemy_urf_presets.json`
   - Includes source links and last checked date.
-- Added strict startup validation for enemy preset items, runes, shards, and masteries.
+- Added strict startup validation for enemy preset items, runes, and shards.
 - Added structured run output JSON:
   - default path mirrors markdown report with `.json` extension.
 - Added search quality profiles:
@@ -70,7 +299,7 @@
   - healing done
   - per-stage objective components are emitted in reports/JSON output.
 - Added regression tests for legality and key rules.
-- Added persistent full-score cache across runs under:
+- Added persistent full-score cache across runs under (historical; later removed):
   - `Simulation/output/cache/`
 - Added first-pass module split for simulation extensions:
   - `src/respawn.rs`
@@ -99,10 +328,10 @@
   - `src/scripts/hooks.rs` dispatches item/champion/loadout hooks
   - `src/scripts/item_hooks.rs` now owns Heartsteel stack assumptions
   - `src/scripts/champions/vladimir/mod.rs` now owns Crimson Pact stat conversion logic
-  - `src/scripts/loadout_hooks.rs` now annotates dynamic rune/mastery effects
+  - `src/scripts/loadout_hooks.rs` now annotates dynamic rune effects
 - Added controlled-champion loadout runtime integration across simulation and objective scoring:
   - new generic engine API (`ControlledChampionCombatSimulation`, `simulate_controlled_champion_combat`)
-  - compatibility wrappers retained for legacy Vladimir names
+  - transitional compatibility wrappers for legacy Vladimir names were retained at that stage (later removed)
   - combat-time loadout runtime effects now apply on controlled champion spell hits, kill events, and regeneration ticks
   - objective evaluation now threads loadout selection into combat simulation for candidate loadout scoring
 - Removed remaining legacy hook and enemy-script interface hardcoding:
@@ -111,7 +340,7 @@
   - engine event and helper names now prefer controlled champion terminology across shared combat flow
 - Added generic champion end-stat helper and migrated internal use:
   - `compute_champion_final_stats` is now the primary helper
-  - compatibility wrapper retained for `compute_vlad_stats`
+  - transitional compatibility wrapper for `compute_vlad_stats` was retained at that stage (later removed)
 - Migrated script architecture from flat files to domain-oriented hierarchy:
   - champions:
     - `src/scripts/champions/mod.rs`
@@ -121,13 +350,10 @@
     - `src/scripts/champions/morgana/mod.rs`
     - `src/scripts/champions/sona/mod.rs`
     - `src/scripts/champions/doctor_mundo/mod.rs`
-    - `src/scripts/champions/yasuo/mod.rs`
   - items:
     - `src/scripts/items/hooks.rs`
   - runes:
     - `src/scripts/runes/effects.rs`
-  - masteries:
-    - `src/scripts/masteries/effects.rs`
   - runtime:
     - `src/scripts/runtime/controlled_champion_loadout.rs`
     - `src/scripts/runtime/loadout_runtime.rs`
@@ -164,7 +390,7 @@
   - transient stack counters clear on enemy death and respawn
   - enemies respawn at their original spawn position
 - Improved scripted event lifecycle correctness:
-  - scripted champion events are epoch-gated across death/respawn and uptime-window transitions
+  - scripted champion events are epoch-gated across death/respawn transitions
   - stale queued script events are invalidated instead of leaking across lifecycle transitions
 - Fixed projectile-blocking segment intersection edge cases:
   - colinear-but-disjoint projectile paths no longer register as blocked
@@ -191,6 +417,66 @@
   - Success criteria:
     - the same ability script can be attached to different actors and different keybind slots at runtime.
     - no shared engine conditionals are needed for champion-specific stolen-ability routing.
+
+- [P1] Add a second controlled champion script end-to-end (non-Vladimir)
+  - Goal: validate that the controlled-champion architecture is truly multi-champion in production paths.
+  - Scope:
+    - add one non-Vladimir controlled champion script implementation with canonical data loaders.
+    - add/update one scenario that runs `--mode controlled_champion` using the new champion.
+    - keep engine/shared modules unchanged except for generic extension points.
+  - Success criteria:
+    - controlled-champion scenario runs successfully for at least one non-Vladimir champion.
+    - no champion-specific hardcoding is added to shared core modules.
+
+- [P1] Optional strict maximum-quality coverage gate
+  - Goal: support reproducibility/CI runs that require complete pre-budget coverage.
+  - Scope:
+    - add an explicit opt-in flag (for example `--require-full-coverage`) that fails the run when coverage is incomplete.
+    - preserve current default behavior: degraded mode with warning and output flag.
+    - document the semantics in CLI/docs/report diagnostics.
+  - Success criteria:
+    - default runs keep warning-mode behavior.
+    - strict mode deterministically fails with actionable diagnostics when coverage is incomplete.
+
+- [P1] Data-driven controlled champion script registry
+  - Goal: remove static registry coupling in `src/scripts/champions/controlled_champion.rs`.
+  - Scope:
+    - introduce a cleaner registration pattern for controlled champion script capabilities.
+    - keep interface role-neutral and preserve current script resolution semantics.
+    - ensure new champions can be added with minimal registry boilerplate.
+  - Success criteria:
+    - adding a new controlled champion script is a small, localized change.
+    - no engine changes required for registry growth.
+
+- [P1] Controlled champion non-Vladimir integration guardrail
+  - Goal: prevent regressions where generic mode silently drifts back to Vladimir-only assumptions.
+  - Scope:
+    - add an integration test that runs `--mode controlled_champion` with a non-Vladimir scenario.
+    - assert stable run/report contract behavior for that scenario.
+    - keep assertions deterministic and CI-friendly.
+  - Success criteria:
+    - CI includes at least one passing non-Vladimir controlled-champion integration path.
+    - regressions in generic controlled-champion orchestration are caught early.
+
+- [P1] Controlled champion defensive ability risk-gate policy (discussion needed)
+  - Goal: avoid unconditional defensive-ability spam while preserving intended “pool in multi-enemy windows” behavior.
+  - Scope:
+    - design a reusable risk gate for defensive ability two (for example low-health threshold and/or imminent-burst/projectile window).
+    - keep defensive ability damage identity in scripts, but gate activation based on risk-aware policy.
+    - ensure offensive weaving opportunities (for example ultimate priority) remain possible when risk is low.
+  - Success criteria:
+    - defensive ability casts are no longer purely cooldown-driven.
+    - behavior remains deterministic and data/script-driven.
+
+- [P1] Objective invulnerability contribution guardrail cap/curve (discussion needed)
+  - Goal: prevent objective exploitation from excessive invulnerable/untargetable uptime under future tuning drift.
+  - Scope:
+    - evaluate soft cap and/or diminishing-return curve for invulnerability objective contribution.
+    - preserve invulnerability as a meaningful metric without allowing it to dominate mixed objectives.
+    - document selected approach and rationale in simulator docs/report diagnostics.
+  - Success criteria:
+    - invulnerability contribution cannot overwhelm objective ranking.
+    - scoring remains interpretable and stable across search profiles.
 
 - [P2] Vertical `z` dimension modeling decision
   - Goal: explicitly track and validate whether vertical `z` index impacts gameplay outcomes in simulator scope.
@@ -249,10 +535,10 @@
     - Reports clearly explain why a build scored highly.
 
 - [P2] Expand script hooks to full mechanic coverage
-  - Goal: extend hook coverage for all non-generic item/champion/rune/mastery behavior.
+  - Goal: extend hook coverage for all non-generic item/champion/rune behavior.
   - Scope:
     - Add script implementations for additional stack items and champion passives.
-    - Add hook-driven combat-time rune/mastery behavior (not only notes).
+    - Add hook-driven combat-time rune behavior (not only notes).
     - Keep hooks deterministic and compatible with search parallelism.
   - Success criteria:
     - Multiple complex mechanics implemented entirely through hooks.
@@ -266,6 +552,78 @@
   - Success criteria:
     - Report explicitly identifies high-confidence stable loadouts.
     - Repeat runs show reduced variance in recommended top builds.
+
+- [P1] Scenario preflight validator command
+  - Goal: fail fast on bad scenario/preset input before expensive search begins.
+  - Scope:
+    - add a `--mode validate_scenario` (or equivalent) command path.
+    - validate scenario schema, rune-page legality, shard-slot legality, and opponent preset availability.
+    - return actionable error messages with exact failing path/field.
+  - Success criteria:
+    - invalid scenarios/presets fail in seconds with clear messages.
+    - valid scenarios pass without running search.
+
+- [P1] Score cache versioning and invalidation policy
+  - Goal: prevent stale full-score cache reuse after schema/engine/scoring changes.
+  - Scope:
+    - add cache version stamp components (engine version, scoring config version, scenario schema version) to cache keys or cache metadata.
+    - invalidate or bypass incompatible cache entries automatically.
+  - Success criteria:
+    - no cross-version cache contamination after scoring/model changes.
+    - cache hit behavior is deterministic and auditable.
+
+- [P1] Explicit rune-page structure input model
+  - Goal: remove ambiguity from rune-page input by representing selection structurally.
+  - Scope:
+    - add optional structured fields for primary path, secondary path, and per-slot rune picks.
+    - derive ordered `rune_names` from structural input in one canonical path.
+    - preserve strict legality checks and deterministic serialization.
+  - Success criteria:
+    - scenario/preset authors cannot accidentally provide ambiguous rune ordering.
+    - generated and parsed rune pages round-trip without information loss.
+
+- [P1] Legal rune-page domain table/export
+  - Goal: make the constrained rune-page search space explicit and auditable.
+  - Scope:
+    - enumerate all legal rune pages from `RunesReforged.json` constraints.
+    - emit a deterministic table/report with:
+      - total legal pages
+      - grouped counts by primary path and secondary path pair
+      - optional shard-combination expansion counts
+    - provide a command/output artifact so results can be regenerated after data updates.
+  - Success criteria:
+    - total legal rune-page domain size is visible and reproducible.
+    - changes in rune data produce clear before/after domain diffs.
+
+- [P1] Ability-driven opponent scripts to replace DPS proxy fields
+  - Goal: increase realism by modeling opponent combat timelines through scripted abilities/events.
+  - Priority:
+    - highest immediate realism impact among remaining simulator upgrades.
+  - Scope:
+    - migrate high-impact opponents from flat `ability_dps_*` proxies to ability/event casts.
+    - keep shared engine role-neutral while champion-specific behavior stays in scripts/data.
+    - maintain deterministic tick/event outcomes.
+  - Success criteria:
+    - reduced reliance on proxy DPS fields in primary scenarios.
+    - opponent output timelines are ability/state driven.
+
+- [P2] Combat-time rune coverage expansion plan
+  - Goal: broaden dynamic rune behavior coverage in runtime scripts.
+  - Scope:
+    - prioritize high-impact runes appearing in top builds and opponent presets.
+    - add script behavior tests for trigger timing, cooldown, and stacking semantics.
+  - Success criteria:
+    - runtime rune coverage materially increases for commonly selected pages.
+    - report skipped-dynamic-rune notes decrease for top results.
+
+- [P2] Opponent preset refresh workflow and staleness checks
+  - Goal: keep `enemy_urf_presets.json` maintainable and easy to refresh when desired.
+  - Scope:
+    - add a small utility/workflow to review and update preset metadata (`source_url`, `last_checked`).
+    - add optional warning/report line when preset age exceeds a configured threshold.
+  - Success criteria:
+    - preset refresh process is scripted and repeatable.
+    - stale preset metadata is visible in run output.
 
 
 - [P0] Action timeline realism follow-up (blocking, collision, movement)
@@ -292,7 +650,7 @@
   - Goal: explain and fix cases where enemy champions appear to use overly similar auto-attack behavior/build outcomes.
   - Scope:
     - Audit enemy preset ingestion and per-champion stat application.
-    - Verify item/rune/mastery effects are applied distinctly per champion.
+    - Verify item/rune effects are applied distinctly per champion.
     - Add validation/report checks to flag suspiciously similar enemy profiles.
   - Success criteria:
     - Per-enemy derived combat stats are printed in diagnostics.
@@ -302,7 +660,7 @@
   - Goal: eliminate single-file bottleneck and keep champion/item logic out of `main.rs`.
   - Scope:
     - Split core into modules (engine, search, reporting, data loading, scripts, CLI).
-    - Move item/champion/mastery special cases into dedicated script modules/hooks.
+    - Move item/champion/rune special cases into dedicated script modules/hooks.
     - Define clear interfaces for extending champion/item behavior.
   - Success criteria:
     - `main.rs` becomes a thin CLI orchestration entrypoint.

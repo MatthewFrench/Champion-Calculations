@@ -1,10 +1,6 @@
-use anyhow::{Context, Result};
-use serde_json::Value;
 use std::collections::HashMap;
 use std::collections::hash_map::DefaultHasher;
-use std::fs;
 use std::hash::{Hash, Hasher};
-use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 use std::sync::{Condvar, Mutex};
 
@@ -24,7 +20,7 @@ pub(crate) struct BlockingScoreCache {
 
 #[derive(Debug)]
 struct CacheShard {
-    states: Mutex<HashMap<Vec<usize>, CacheState>>,
+    states: Mutex<HashMap<String, CacheState>>,
     cv: Condvar,
 }
 
@@ -49,13 +45,13 @@ impl BlockingScoreCache {
         }
     }
 
-    fn shard_idx(&self, key: &[usize]) -> usize {
+    fn shard_idx(&self, key: &str) -> usize {
         let mut hasher = DefaultHasher::new();
         key.hash(&mut hasher);
         (hasher.finish() as usize) & (self.shards.len() - 1)
     }
 
-    pub(crate) fn get_or_compute<F>(&self, key: Vec<usize>, compute: F) -> f64
+    pub(crate) fn get_or_compute<F>(&self, key: String, compute: F) -> f64
     where
         F: FnOnce() -> f64,
     {
@@ -99,86 +95,4 @@ impl BlockingScoreCache {
     pub(crate) fn waits(&self) -> usize {
         self.waits.load(AtomicOrdering::Relaxed)
     }
-}
-
-#[derive(Debug)]
-pub(crate) struct PersistentScoreCache {
-    path: PathBuf,
-    values: Mutex<HashMap<String, f64>>,
-    hits: AtomicUsize,
-}
-
-impl PersistentScoreCache {
-    pub(crate) fn load(path: PathBuf) -> Self {
-        let values = load_json(&path)
-            .ok()
-            .and_then(|v| v.as_object().cloned())
-            .map(|obj| {
-                obj.into_iter()
-                    .filter_map(|(k, v)| v.as_f64().map(|s| (k, s)))
-                    .collect::<HashMap<_, _>>()
-            })
-            .unwrap_or_default();
-        Self {
-            path,
-            values: Mutex::new(values),
-            hits: AtomicUsize::new(0),
-        }
-    }
-
-    fn key(build: &[usize]) -> String {
-        build
-            .iter()
-            .map(|idx| idx.to_string())
-            .collect::<Vec<_>>()
-            .join(",")
-    }
-
-    pub(crate) fn get(&self, build: &[usize]) -> Option<f64> {
-        let key = Self::key(build);
-        let value = self
-            .values
-            .lock()
-            .ok()
-            .and_then(|map| map.get(&key).copied());
-        if value.is_some() {
-            self.hits.fetch_add(1, AtomicOrdering::Relaxed);
-        }
-        value
-    }
-
-    pub(crate) fn insert(&self, build: &[usize], score: f64) {
-        if let Ok(mut map) = self.values.lock() {
-            map.insert(Self::key(build), score);
-        }
-    }
-
-    pub(crate) fn len(&self) -> usize {
-        self.values.lock().map(|m| m.len()).unwrap_or(0)
-    }
-
-    pub(crate) fn hits(&self) -> usize {
-        self.hits.load(AtomicOrdering::Relaxed)
-    }
-
-    pub(crate) fn flush(&self) -> Result<()> {
-        if let Some(parent) = self.path.parent() {
-            fs::create_dir_all(parent)
-                .with_context(|| format!("Failed creating {}", parent.display()))?;
-        }
-        let text = if let Ok(map) = self.values.lock() {
-            serde_json::to_string_pretty(&*map)?
-        } else {
-            "{}".to_string()
-        };
-        fs::write(&self.path, text)
-            .with_context(|| format!("Failed writing {}", self.path.display()))?;
-        Ok(())
-    }
-}
-
-fn load_json(path: &Path) -> Result<Value> {
-    let text =
-        fs::read_to_string(path).with_context(|| format!("Failed reading {}", path.display()))?;
-    serde_json::from_str(&text).with_context(|| format!("Failed parsing {}", path.display()))
 }

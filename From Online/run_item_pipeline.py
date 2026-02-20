@@ -1,14 +1,15 @@
 import subprocess
 import sys
+from pathlib import Path
 
-BASE = "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online"
-NORMALIZE = f"{BASE}/normalize_items.py"
-SAMPLE = f"{BASE}/make_sample_set.py"
+BASE = Path(__file__).resolve().parent
+NORMALIZE = BASE / "normalize_items.py"
+SAMPLE = BASE / "make_sample_set.py"
 
 
 def run(cmd):
     print(f"Running: {cmd}")
-    subprocess.check_call([sys.executable, cmd])
+    subprocess.check_call([sys.executable, str(cmd)])
 
 
 def main():

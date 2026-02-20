@@ -12,6 +12,7 @@ pub(crate) struct ItemAssumptionContext<'a> {
     pub sim: &'a SimulationConfig,
     pub current_level: usize,
     pub acquired_levels: Option<&'a HashMap<String, usize>>,
+    pub stack_overrides: Option<&'a HashMap<String, f64>>,
 }
 
 pub(crate) struct StackNoteContext<'a> {
@@ -21,6 +22,7 @@ pub(crate) struct StackNoteContext<'a> {
     pub sim: &'a SimulationConfig,
     pub current_level: usize,
     pub acquired_levels: Option<&'a HashMap<String, usize>>,
+    pub stack_overrides: Option<&'a HashMap<String, f64>>,
 }
 
 pub(crate) struct ChampionStatContext<'a> {

@@ -1,0 +1,142 @@
+{
+  "controlled_champion_name": "Vladimir",
+  "items": [
+    "Bloodletter's Curse",
+    "Guardian Angel",
+    "Heartsteel",
+    "Protoplasm Harness",
+    "Warmog's Armor",
+    "Zhonya's Hourglass"
+  ],
+  "notes": [
+    "No search stage is run in controlled_champion_fixed_loadout mode.",
+    "This report is intended for direct loadout-to-loadout comparisons."
+  ],
+  "objective_breakdown": {
+    "components": {
+      "damage": {
+        "contribution": 0.08397257943667973,
+        "impact_percent": 28.645146249799154,
+        "normalized_ratio": 0.6549861196061018,
+        "weight": 0.12820512820512822
+      },
+      "enemy_kills": {
+        "contribution": 0.10256410256410259,
+        "impact_percent": 34.9871795964481,
+        "normalized_ratio": 0.2,
+        "weight": 0.5128205128205129
+      },
+      "healing": {
+        "contribution": 0.1032794076831455,
+        "impact_percent": 35.23118805594368,
+        "normalized_ratio": 1.3426322998808915,
+        "weight": 0.07692307692307693
+      },
+      "invulnerable_seconds": {
+        "contribution": 0.0002243589743589744,
+        "impact_percent": 0.07653445536723023,
+        "normalized_ratio": 0.00875,
+        "weight": 0.025641025641025644
+      },
+      "survival": {
+        "contribution": 0.0031072235665269288,
+        "impact_percent": 1.059951642441838,
+        "normalized_ratio": 0.01211817190945502,
+        "weight": 0.25641025641025644
+      }
+    },
+    "final_score": 0.2931476722248137,
+    "weighted_mean_score": 0.2931476722248137,
+    "worst_case_score": 0.2931476722248137,
+    "worst_case_weight": 0.35
+  },
+  "objective_score": 0.2931476722248137,
+  "outcome": {
+    "damage_dealt": 12101.696287484885,
+    "enemy_kills": 1,
+    "healing_done": 3611.680886679598,
+    "invulnerable_seconds": 10.5,
+    "time_alive_seconds": 14.541806291346024
+  },
+  "reference_outcome": {
+    "damage_dealt": 18476.263733287436,
+    "enemy_kills": 5,
+    "healing_done": 2690.0,
+    "invulnerable_seconds": 1200.0,
+    "time_alive_seconds": 1200.0
+  },
+  "rune_proc_telemetry": [
+    {
+      "attempt_count": 16,
+      "bonus_damage": 0.0,
+      "bonus_damage_share": 0.0,
+      "bonus_healing": 0.0,
+      "bonus_healing_share": 0.0,
+      "eligible_count": 0,
+      "opportunity_count": 0,
+      "proc_attempt_rate": 0.0,
+      "proc_count": 0,
+      "proc_eligible_rate": 0.0,
+      "proc_opportunity_rate": 0.0,
+      "rune_name": "Press the Attack",
+      "source_breakdown": [
+        {
+          "attempt_count": 16,
+          "bonus_damage": 0.0,
+          "bonus_healing": 0.0,
+          "eligible_count": 0,
+          "opportunity_count": 0,
+          "proc_attempt_rate": 0.0,
+          "proc_count": 0,
+          "proc_eligible_rate": 0.0,
+          "proc_opportunity_rate": 0.0,
+          "source": "ability"
+        }
+      ]
+    },
+    {
+      "attempt_count": 1,
+      "bonus_damage": 0.0,
+      "bonus_damage_share": 0.0,
+      "bonus_healing": 535.1269279262624,
+      "bonus_healing_share": 0.14816561726144964,
+      "eligible_count": 1,
+      "opportunity_count": 1,
+      "proc_attempt_rate": 1.0,
+      "proc_count": 1,
+      "proc_eligible_rate": 1.0,
+      "proc_opportunity_rate": 1.0,
+      "rune_name": "Triumph",
+      "source_breakdown": [
+        {
+          "attempt_count": 1,
+          "bonus_damage": 0.0,
+          "bonus_healing": 535.1269279262624,
+          "eligible_count": 1,
+          "opportunity_count": 1,
+          "proc_attempt_rate": 1.0,
+          "proc_count": 1,
+          "proc_eligible_rate": 1.0,
+          "proc_opportunity_rate": 1.0,
+          "source": "enemy_kill"
+        }
+      ]
+    }
+  ],
+  "runes": [
+    "Press the Attack",
+    "Triumph",
+    "Legend: Alacrity",
+    "Last Stand",
+    "Second Wind",
+    "Unflinching"
+  ],
+  "scenario_path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/Simulation/scenarios/vladimir_urf_teamfight.json",
+  "schema_version": 2,
+  "search_quality_profile": "maximum_quality",
+  "shards": [
+    "ability_haste",
+    "movement_speed",
+    "health"
+  ]
+}

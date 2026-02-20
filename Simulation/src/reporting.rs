@@ -1,24 +1,41 @@
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, bail};
 use chrono::{DateTime, Local, Utc};
-use serde_json::json;
+use serde_json::{Value, json};
 use std::collections::HashMap;
 use std::fs;
-use std::path::{Path, PathBuf};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::path::Path;
+#[cfg(test)]
+use std::path::PathBuf;
+use std::time::SystemTime;
 
+use crate::scripts::coverage::unmodeled_runtime_item_effect_names;
 use crate::search::item_names;
 
-use super::{ControlledChampionReportData, mean_std, simulation_dir, to_norm_key};
+use super::{
+    ControlledChampionReportData, LoadoutSelection, ObjectiveScoreBreakdown, mean_std,
+    simulation_dir, to_norm_key,
+};
 
+const CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION: u32 = 2;
+
+#[cfg(test)]
 pub(super) fn default_report_path_for_champion(champion_name: &str) -> PathBuf {
     simulation_dir()
         .join("output")
         .join(format!("{}_run_report.md", to_norm_key(champion_name)))
 }
 
-#[allow(dead_code)]
-pub(super) fn default_report_path() -> PathBuf {
-    default_report_path_for_champion("Vladimir")
+fn format_repo_relative_path(path: &Path) -> String {
+    if !path.is_absolute() {
+        return path.display().to_string();
+    }
+    let repository_root = simulation_dir()
+        .parent()
+        .map(Path::to_path_buf)
+        .unwrap_or_else(simulation_dir);
+    path.strip_prefix(&repository_root)
+        .map(|p| p.display().to_string())
+        .unwrap_or_else(|_| path.display().to_string())
 }
 
 fn comma_separated_digits(digits: &str) -> String {
@@ -53,6 +70,187 @@ fn format_f64_with_commas(value: f64, decimals: usize) -> String {
     }
 }
 
+fn format_percent_display(percent: f64) -> String {
+    if !percent.is_finite() {
+        return percent.to_string();
+    }
+    if percent > 0.0 && percent < 0.000001 {
+        format!("{percent:.3e}%")
+    } else {
+        format!("{percent:.6}%")
+    }
+}
+
+pub(super) fn validate_controlled_champion_selection_labels(
+    controlled_champion_name: &str,
+    selected_loadout: &LoadoutSelection,
+    selection_labels: &[String],
+    unmodeled_rune_names: &[String],
+) -> Result<()> {
+    let expected_runes = selected_loadout.rune_names.len();
+    let expected_shards = selected_loadout.shard_stats.len();
+    if expected_runes < 6 || expected_shards < 3 {
+        bail!(
+            "Controlled champion '{}' report invariant violation: expected legal loadout shape with >=6 runes and >=3 shards, got runes={} shards={}.",
+            controlled_champion_name,
+            expected_runes,
+            expected_shards
+        );
+    }
+    let rune_count = selection_labels
+        .iter()
+        .filter(|label| label.starts_with("Rune: "))
+        .count();
+    let shard_count = selection_labels
+        .iter()
+        .filter(|label| label.starts_with("Shard "))
+        .count();
+    let accounted_runes = rune_count + unmodeled_rune_names.len();
+    if accounted_runes < expected_runes {
+        bail!(
+            "Controlled champion '{}' report invariant violation: expected {} runes accounted between labels and unmodeled list, got labels={} unmodeled={} (selection labels {}).",
+            controlled_champion_name,
+            expected_runes,
+            rune_count,
+            unmodeled_rune_names.len(),
+            selection_labels.len()
+        );
+    }
+    if shard_count > expected_shards {
+        bail!(
+            "Controlled champion '{}' report invariant violation: shard labels exceed selected shards (labels={} selected={}).",
+            controlled_champion_name,
+            shard_count,
+            expected_shards
+        );
+    }
+    Ok(())
+}
+
+fn append_objective_score_breakdown_block(
+    content: &mut String,
+    title: &str,
+    breakdown: ObjectiveScoreBreakdown,
+) {
+    let push_component = |content: &mut String,
+                          label: &str,
+                          weight: f64,
+                          normalized_ratio: f64,
+                          contribution: f64,
+                          impact_percent: f64| {
+        let delta_vs_weight = impact_percent - weight * 100.0;
+        content.push_str(&format!(
+            "- {}: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%` | delta vs weight `{:+.2}pp`\n",
+            label,
+            weight,
+            normalized_ratio,
+            contribution,
+            impact_percent,
+            delta_vs_weight
+        ));
+    };
+
+    content.push_str(&format!("### {}\n", title));
+    content.push_str(&format!(
+        "- Weighted-mean score: `{:.4}`\n- Worst-case scenario score: `{:.4}`\n- Worst-case blend weight: `{:.2}`\n- Final blended objective score: `{:.4}`\n",
+        breakdown.weighted_mean_score,
+        breakdown.worst_case_score,
+        breakdown.worst_case_weight,
+        breakdown.final_score
+    ));
+    push_component(
+        content,
+        "survival",
+        breakdown.survival.weight,
+        breakdown.survival.normalized_ratio,
+        breakdown.survival.contribution,
+        breakdown.survival.impact_percent,
+    );
+    push_component(
+        content,
+        "damage",
+        breakdown.damage.weight,
+        breakdown.damage.normalized_ratio,
+        breakdown.damage.contribution,
+        breakdown.damage.impact_percent,
+    );
+    push_component(
+        content,
+        "healing",
+        breakdown.healing.weight,
+        breakdown.healing.normalized_ratio,
+        breakdown.healing.contribution,
+        breakdown.healing.impact_percent,
+    );
+    push_component(
+        content,
+        "enemy_kills",
+        breakdown.enemy_kills.weight,
+        breakdown.enemy_kills.normalized_ratio,
+        breakdown.enemy_kills.contribution,
+        breakdown.enemy_kills.impact_percent,
+    );
+    push_component(
+        content,
+        "invulnerable_seconds",
+        breakdown.invulnerable_seconds.weight,
+        breakdown.invulnerable_seconds.normalized_ratio,
+        breakdown.invulnerable_seconds.contribution,
+        breakdown.invulnerable_seconds.impact_percent,
+    );
+    content.push('\n');
+}
+
+fn report_rune_proc_telemetry_json(
+    entries: &[crate::scripts::champions::ChampionRuneProcTelemetryEntry],
+    total_damage: f64,
+    total_healing: f64,
+) -> Vec<Value> {
+    entries
+        .iter()
+        .map(|entry| {
+            let damage_share = if total_damage > 0.0 {
+                entry.bonus_damage.max(0.0) / total_damage
+            } else {
+                0.0
+            };
+            let healing_share = if total_healing > 0.0 {
+                entry.bonus_healing.max(0.0) / total_healing
+            } else {
+                0.0
+            };
+            json!({
+                "rune_name": entry.rune_name,
+                "proc_count": entry.proc_count,
+                "attempt_count": entry.attempt_count,
+                "eligible_count": entry.eligible_count,
+                "proc_attempt_rate": entry.proc_attempt_rate,
+                "proc_eligible_rate": entry.proc_eligible_rate,
+                "opportunity_count": entry.eligible_count,
+                "proc_opportunity_rate": entry.proc_eligible_rate,
+                "bonus_damage": entry.bonus_damage,
+                "bonus_damage_share": damage_share,
+                "bonus_healing": entry.bonus_healing,
+                "bonus_healing_share": healing_share,
+                "source_breakdown": entry.source_breakdown.iter().map(|source| {
+                    json!({
+                        "source": source.source,
+                        "proc_count": source.proc_count,
+                        "attempt_count": source.attempt_count,
+                        "eligible_count": source.eligible_count,
+                        "proc_attempt_rate": source.proc_attempt_rate,
+                        "proc_eligible_rate": source.proc_eligible_rate,
+                        "opportunity_count": source.eligible_count,
+                        "proc_opportunity_rate": source.proc_eligible_rate,
+                        "bonus_damage": source.bonus_damage,
+                        "bonus_healing": source.bonus_healing
+                    })
+                }).collect::<Vec<_>>()
+            })
+        })
+        .collect::<Vec<_>>()
+}
+
 pub(super) fn write_controlled_champion_report_markdown(
     report_path: &Path,
     data: &ControlledChampionReportData<'_>,
@@ -62,6 +260,7 @@ pub(super) fn write_controlled_champion_report_markdown(
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
     let scenario_path = data.scenario_path;
+    let scenario_path_display = format_repo_relative_path(scenario_path);
     let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
     let controlled_champion_base_level = data.controlled_champion_base_level;
@@ -69,12 +268,13 @@ pub(super) fn write_controlled_champion_report_markdown(
     let stack_notes = data.stack_notes;
     let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_loadout = data.enemy_loadout;
-    let baseline_build = data.baseline_build;
-    let baseline_score = data.baseline_score;
-    let baseline_outcome = data.baseline_outcome;
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
+    let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
+    let controlled_champion_unmodeled_item_effect_names =
+        unmodeled_runtime_item_effect_names(best_build);
+    let best_score_breakdown = data.best_score_breakdown;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
     let enemy_similarity_notes = data.enemy_similarity_notes;
@@ -87,15 +287,16 @@ pub(super) fn write_controlled_champion_report_markdown(
     let diagnostics = data.diagnostics;
     let build_orders = data.build_orders;
 
+    validate_controlled_champion_selection_labels(
+        controlled_champion_name,
+        data.controlled_champion_loadout_selection,
+        &controlled_champion_loadout.selection_labels,
+        &controlled_champion_loadout.unmodeled_rune_names,
+    )?;
+
     let now = SystemTime::now();
-    let now_unix = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
     let generated_utc: DateTime<Utc> = now.into();
     let generated_local: DateTime<Local> = DateTime::from(now);
-    let improvement = if baseline_score.abs() > f64::EPSILON {
-        ((best_score - baseline_score) / baseline_score) * 100.0
-    } else {
-        0.0
-    };
 
     let mut content = String::new();
     content.push_str(&format!(
@@ -110,28 +311,20 @@ pub(super) fn write_controlled_champion_report_markdown(
         "- Generated (UTC): `{}`\n",
         generated_utc.to_rfc3339()
     ));
-    content.push_str(&format!("- Generated (unix): `{}`\n", now_unix));
-    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path.display()));
+    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path_display));
 
     content.push_str("## Headline\n");
-    let baseline_damage = format_f64_with_commas(baseline_outcome.damage_dealt, 1);
-    let baseline_healing = format_f64_with_commas(baseline_outcome.healing_done, 1);
     let best_damage = format_f64_with_commas(best_outcome.damage_dealt, 1);
     let best_healing = format_f64_with_commas(best_outcome.healing_done, 1);
+    let best_invulnerable_seconds = format_f64_with_commas(best_outcome.invulnerable_seconds, 2);
     content.push_str(&format!(
-        "- Baseline objective score: **{:.4}**\n- Best objective score: **{:.4}**\n- Improvement: **{:+.2}%**\n- Baseline time alive / damage dealt / healing done / enemy kills: **{:.2}s / {} / {} / {}**\n- Best time alive / damage dealt / healing done / enemy kills: **{:.2}s / {} / {} / {}**\n- Baseline cap survivor: **{}**\n- Best cap survivor: **{}**\n\n",
-        baseline_score,
+        "- Best objective score: **{:.4}**\n- Best outcome:\n  - Time alive: **{:.2}s**\n  - Damage dealt: **{}**\n  - Healing done: **{}**\n  - Enemy kills: **{}**\n  - Invulnerable seconds: **{}s**\n- Best cap survivor: **{}**\n\n",
         best_score,
-        improvement,
-        baseline_outcome.time_alive_seconds,
-        baseline_damage,
-        baseline_healing,
-        baseline_outcome.enemy_kills,
         best_outcome.time_alive_seconds,
         best_damage,
         best_healing,
         best_outcome.enemy_kills,
-        baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
+        best_invulnerable_seconds,
         best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
     ));
 
@@ -139,29 +332,89 @@ pub(super) fn write_controlled_champion_report_markdown(
         "- Champion level assumption: **{}**\n\n",
         sim.champion_level
     ));
+    content.push_str("## Objective Score Breakdown\n");
+    append_objective_score_breakdown_block(&mut content, "Best Build", best_score_breakdown);
+    content.push_str("## Rune Proc Telemetry (Best Trace)\n");
+    if best_rune_proc_telemetry.is_empty() {
+        content.push_str("- No rune procs were recorded during the best-trace replay.\n\n");
+    } else {
+        for entry in best_rune_proc_telemetry {
+            let damage_share_percent = if best_outcome.damage_dealt > 0.0 {
+                (entry.bonus_damage.max(0.0) / best_outcome.damage_dealt) * 100.0
+            } else {
+                0.0
+            };
+            let healing_share_percent = if best_outcome.healing_done > 0.0 {
+                (entry.bonus_healing.max(0.0) / best_outcome.healing_done) * 100.0
+            } else {
+                0.0
+            };
+            content.push_str(&format!(
+                "- {}:\n  - Procs: `{}`\n  - Attempts: `{}`\n  - Eligible: `{}`\n  - Proc rate (vs attempts): `{:.1}%`\n  - Proc rate (vs eligible): `{:.1}%`\n  - Bonus damage: `{:.2}` ({:.2}% share)\n  - Bonus healing: `{:.2}` ({:.2}% share)\n",
+                entry.rune_name,
+                entry.proc_count,
+                entry.attempt_count,
+                entry.eligible_count,
+                entry.proc_attempt_rate * 100.0,
+                entry.proc_eligible_rate * 100.0,
+                entry.bonus_damage,
+                damage_share_percent,
+                entry.bonus_healing,
+                healing_share_percent
+            ));
+            if !entry.source_breakdown.is_empty() {
+                content.push_str("  - Sources:\n");
+                for source in &entry.source_breakdown {
+                    content.push_str(&format!(
+                        "    - {}:\n      - Procs: `{}`\n      - Attempts: `{}`\n      - Eligible: `{}`\n      - Proc rate (vs attempts): `{:.1}%`\n      - Proc rate (vs eligible): `{:.1}%`\n      - Bonus damage: `{:.2}`\n      - Bonus healing: `{:.2}`\n",
+                        source.source,
+                        source.proc_count,
+                        source.attempt_count,
+                        source.eligible_count,
+                        source.proc_attempt_rate * 100.0,
+                        source.proc_eligible_rate * 100.0,
+                        source.bonus_damage,
+                        source.bonus_healing
+                    ));
+                }
+            }
+        }
+        content.push('\n');
+    }
 
     let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
     let processed_candidates = diagnostics
         .processed_candidates
         .min(diagnostics.total_candidates);
+    let total_score_requests = diagnostics
+        .search_type_breakdown
+        .iter()
+        .map(|breakdown| breakdown.score_requests)
+        .sum::<usize>();
     content.push_str("## Search Diagnostics\n");
     content.push_str(&format!(
-        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout candidates/finalists: `{}/{}`\n- Ensemble seeds: `{}`\n- Objective weights (survival/damage/healing): `{:.2}/{:.2}/{:.2}`\n- Full evaluations: `{}` (cache hits/misses/waits: `{}/{}/{}`)\n- Full persistent cache hits/entries: `{}/{}`\n- Candidate keys generated / duplicate-pruned / unique: `{}/{}/{}`\n- Strict candidates seed-scored / remaining / processed: `{}/{}/{}`\n- Strict non-finite / timeout-skipped: `{}/{}`\n- Strict completion: `{:.1}%`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best mean/stddev: `{}` / `{}`\n\n",
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout:\n  - Candidates: `{}`\n  - Finalists: `{}`\n- Ensemble seeds: `{}`\n- Parallelism:\n  - Threads: `{}`\n  - Seed orchestration parallel: `{}`\n  - Portfolio parallel: `{}`\n  - Strategy-elites parallel: `{}`\n- Objective weights:\n  - survival: `{:.2}`\n  - damage: `{:.2}`\n  - healing: `{:.2}`\n  - enemy_kills: `{:.2}`\n  - invulnerable_seconds: `{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- In-memory full-evaluation cache:\n  - Hits: `{}`\n  - Misses: `{}`\n  - Waits: `{}`\n- Candidate key generation:\n  - Generated: `{}`\n  - Duplicate-pruned: `{}`\n  - Unique: `{}`\n- Strict candidate progression:\n  - Seed-scored: `{}`\n  - Remaining: `{}`\n  - Processed: `{}`\n- Strict stage:\n  - Non-finite: `{}`\n  - Timeout-skipped: `{}`\n  - Completion: `{:.1}%`\n- Strict ordering heuristic:\n  - Enabled: `{}`\n  - Rune signal weight: `{:.2}`\n  - Shard signal weight: `{:.2}`\n  - Exploration promotions: `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best stats:\n  - Mean: `{}`\n  - Stddev: `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
         diagnostics.strategy_summary,
         diagnostics.search_quality_profile,
         format_usize_with_commas(diagnostics.scenario_count),
         format_usize_with_commas(diagnostics.loadout_candidates),
         format_usize_with_commas(diagnostics.loadout_finalists),
         format_usize_with_commas(diagnostics.ensemble_seeds),
+        format_usize_with_commas(diagnostics.effective_threads),
+        diagnostics.seed_orchestration_parallel,
+        diagnostics.portfolio_strategy_parallel,
+        diagnostics.strategy_elites_parallel,
         diagnostics.objective_survival_weight,
         diagnostics.objective_damage_weight,
         diagnostics.objective_healing_weight,
+        diagnostics.objective_enemy_kills_weight,
+        diagnostics.objective_invulnerable_seconds_weight,
         format_usize_with_commas(diagnostics.full_evaluations),
+        format_usize_with_commas(diagnostics.unique_scored_candidates),
+        format_usize_with_commas(total_score_requests),
         format_usize_with_commas(diagnostics.full_cache_hits),
         format_usize_with_commas(diagnostics.full_cache_misses),
         format_usize_with_commas(diagnostics.full_cache_waits),
-        format_usize_with_commas(diagnostics.full_persistent_cache_hits),
-        format_usize_with_commas(diagnostics.full_persistent_cache_entries),
         format_usize_with_commas(diagnostics.candidate_keys_generated),
         format_usize_with_commas(diagnostics.candidate_duplicates_pruned),
         format_usize_with_commas(diagnostics.unique_candidate_builds),
@@ -171,30 +424,124 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_usize_with_commas(diagnostics.strict_non_finite_candidates),
         format_usize_with_commas(diagnostics.strict_candidates_skipped_timeout),
         diagnostics.strict_completion_percent,
+        diagnostics.strict_heuristic_ordering_enabled,
+        diagnostics.strict_ranking_rune_signal_weight,
+        diagnostics.strict_ranking_shard_signal_weight,
+        format_usize_with_commas(diagnostics.strict_random_promotions_done),
         format_usize_with_commas(diagnostics.bleed_candidates_injected),
         format_usize_with_commas(diagnostics.adaptive_candidates_injected),
         format_f64_with_commas(seed_mean, 2),
-        format_f64_with_commas(seed_std, 3)
+        format_f64_with_commas(seed_std, 3),
+        diagnostics.elapsed_seconds,
+        diagnostics.total_run_seconds
     ));
-    if let Some(budget) = diagnostics.time_budget_seconds {
+    content.push_str(&format!(
+        "- Effective seed: `{}`\n",
+        diagnostics.effective_seed
+    ));
+    content.push_str(&format!(
+        "- Unmodeled rune gate:\n  - Hard gate: `{}`\n  - Penalty per rune: `{:.4}`\n  - Rejected: `{}`\n  - Penalized: `{}`\n",
+        diagnostics.unmodeled_rune_hard_gate,
+        diagnostics.unmodeled_rune_penalty_per_rune,
+        format_usize_with_commas(diagnostics.unmodeled_rune_candidates_rejected),
+        format_usize_with_commas(diagnostics.unmodeled_rune_candidates_penalized)
+    ));
+    content.push_str(&format!(
+        "- Unmodeled item-effect gate:\n  - Hard gate: `{}`\n  - Penalty per item: `{:.4}`\n  - Rejected: `{}`\n  - Penalized: `{}`\n",
+        diagnostics.unmodeled_item_effect_hard_gate,
+        diagnostics.unmodeled_item_effect_penalty_per_item,
+        format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_rejected),
+        format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_penalized)
+    ));
+    if diagnostics.coverage_stage_enabled {
         content.push_str(&format!(
-            "- Time budget: `{:.1}s`; elapsed: `{:.1}s`; timed_out: `{}`; progress: `{}/{}` ({:.1}%)\n\n",
+            "- Coverage stage (pre-budget):\n  - Elapsed: `{:.2}s`\n  - Assets covered: `{}/{}`\n  - Seeded candidates (unique/raw): `{}/{}`\n",
+            diagnostics.coverage_stage_elapsed_seconds,
+            format_usize_with_commas(diagnostics.coverage_stage_assets_covered),
+            format_usize_with_commas(diagnostics.coverage_stage_assets_total),
+            format_usize_with_commas(diagnostics.coverage_stage_seed_candidates_unique),
+            format_usize_with_commas(diagnostics.coverage_stage_seed_candidates)
+        ));
+        if diagnostics.coverage_stage_incomplete && !diagnostics.coverage_stage_warning.is_empty() {
+            content.push_str(&format!(
+                "- Coverage warning: {}\n",
+                diagnostics.coverage_stage_warning
+            ));
+        }
+    }
+    if let Some(budget) = diagnostics.time_budget_seconds {
+        let coverage_note = if diagnostics.coverage_stage_enabled {
+            " (budget starts after pre-budget coverage stage)"
+        } else {
+            ""
+        };
+        content.push_str(&format!(
+            "- Time budget:\n  - Budget: `{:.1}s`\n  - Timed out: `{}`\n  - Progress: `{}/{}` ({:.1}%){}\n\n",
             budget,
-            diagnostics.elapsed_seconds,
             diagnostics.timed_out,
             format_usize_with_commas(processed_candidates),
             format_usize_with_commas(diagnostics.total_candidates),
-            diagnostics.strict_completion_percent
+            diagnostics.strict_completion_percent,
+            coverage_note
         ));
     } else {
         content.push_str(&format!(
-            "- Elapsed: `{:.1}s`; progress: `{}/{}` ({:.1}%)\n\n",
-            diagnostics.elapsed_seconds,
+            "- Progress: `{}/{}` ({:.1}%)\n\n",
             format_usize_with_commas(processed_candidates),
             format_usize_with_commas(diagnostics.total_candidates),
             diagnostics.strict_completion_percent
         ));
     }
+    if let Some(window) = diagnostics.popcorn_window_seconds {
+        content.push_str(&format!(
+            "- Popcorn mode:\n  - Window: `{:.1}s`\n  - Significant threshold: `{:.2}% of last best score`\n  - Significant events: `{}`\n  - Seconds since last significant improvement: `{:.1}`\n\n",
+            window,
+            diagnostics.popcorn_min_relative_improvement_percent,
+            format_usize_with_commas(diagnostics.significant_improvement_events),
+            diagnostics
+                .seconds_since_last_significant_improvement
+                .unwrap_or(0.0)
+        ));
+    }
+    if let Some(total) = diagnostics.estimated_total_candidate_space {
+        content.push_str(&format!(
+            "- Estimated total legal candidate space: `{}`\n",
+            format_f64_with_commas(total, 0)
+        ));
+    }
+    if let Some(run_coverage) = diagnostics.estimated_run_space_coverage_percent {
+        content.push_str(&format!(
+            "- Estimated legal-space coverage (this run): `{}`\n",
+            format_percent_display(run_coverage)
+        ));
+    }
+    if let Some(probability) = diagnostics.estimated_close_to_optimal_probability {
+        content.push_str(&format!(
+            "- Estimated closeness probability (top 0.000001% heuristic): `{:.2}%`\n",
+            probability * 100.0
+        ));
+    }
+    if !diagnostics
+        .estimated_close_to_optimal_probability_note
+        .is_empty()
+    {
+        content.push_str(&format!(
+            "- Closeness probability note: {}\n",
+            diagnostics.estimated_close_to_optimal_probability_note
+        ));
+    }
+    if !diagnostics.search_type_breakdown.is_empty() {
+        content.push_str("- Search-type simulation breakdown:\n");
+        for breakdown in &diagnostics.search_type_breakdown {
+            content.push_str(&format!(
+                "  - {}: requests `{}`, new simulations `{}`\n",
+                breakdown.name,
+                format_usize_with_commas(breakdown.score_requests),
+                format_usize_with_commas(breakdown.new_simulations)
+            ));
+        }
+    }
+    content.push('\n');
 
     content.push_str(&format!(
         "## {} Base Stats At Level\n",
@@ -210,19 +557,17 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_f64_with_commas(controlled_champion_base_level.base_move_speed, 1)
     ));
 
-    content.push_str("## Selected Runes/Masteries\n");
-    if controlled_champion_loadout.selection_labels.is_empty() {
-        content.push_str(&format!("- {}: none selected.\n", controlled_champion_name));
-    } else {
-        content.push_str(&format!("- {}:\n", controlled_champion_name));
-        for s in &controlled_champion_loadout.selection_labels {
-            content.push_str(&format!("  - {}\n", s));
-        }
+    content.push_str("## Selected Rune Page And Shards\n");
+    content.push_str(&format!("- {}:\n", controlled_champion_name));
+    for s in &controlled_champion_loadout.selection_labels {
+        content.push_str(&format!("  - {}\n", s));
     }
     if enemy_loadout.selection_labels.is_empty() {
-        content.push_str("- Enemies: none selected.\n\n");
+        content.push_str(
+            "- Opponents: champion-specific preset rune pages are listed in Enemy Builds.\n\n",
+        );
     } else {
-        content.push_str("- Enemies (applied to all):\n");
+        content.push_str("- Opponents (shared):\n");
         for s in &enemy_loadout.selection_labels {
             content.push_str(&format!("  - {}\n", s));
         }
@@ -250,10 +595,23 @@ pub(super) fn write_controlled_champion_report_markdown(
             content.push_str(&format!("  - Enemies: {}\n", note));
         }
     }
+    if !controlled_champion_loadout.unmodeled_rune_names.is_empty() {
+        content.push_str(
+            "- Controlled champion runes with no modeled deterministic/runtime combat effect:\n",
+        );
+        for rune_name in &controlled_champion_loadout.unmodeled_rune_names {
+            content.push_str(&format!("  - {}\n", rune_name));
+        }
+    }
+    if !controlled_champion_unmodeled_item_effect_names.is_empty() {
+        content.push_str(
+            "- Controlled champion items with unmodeled passive/active/structured runtime effects:\n",
+        );
+        for item_name in &controlled_champion_unmodeled_item_effect_names {
+            content.push_str(&format!("  - {}\n", item_name));
+        }
+    }
     content.push('\n');
-
-    content.push_str("## Baseline Build\n");
-    content.push_str(&format!("- {}\n\n", item_names(baseline_build)));
 
     content.push_str("## Best Build\n");
     content.push_str(&format!("- {}\n\n", item_names(best_build)));
@@ -274,11 +632,10 @@ pub(super) fn write_controlled_champion_report_markdown(
         format_f64_with_commas(controlled_champion_end_stats.move_speed_percent, 1)
     ));
 
-    content.push_str("## Stack Assumptions\n");
+    content.push_str("## Stack Overrides\n");
     if stack_notes.is_empty() {
-        content.push_str(
-            "- No explicit stack assumptions triggered for selected best build items.\n\n",
-        );
+        content
+            .push_str("- No explicit stack overrides triggered for selected best build items.\n\n");
     } else {
         for note in stack_notes {
             content.push_str(&format!("- {}\n", note));
@@ -295,15 +652,7 @@ pub(super) fn write_controlled_champion_report_markdown(
                 preset.source_url, preset.last_checked
             ));
             content.push_str(&format!("  - Runes: {}\n", preset.runes.join(", ")));
-            content.push_str(&format!(
-                "  - Masteries: {}\n",
-                preset
-                    .masteries
-                    .iter()
-                    .map(|m| format!("{} ({})", m.name, m.rank))
-                    .collect::<Vec<_>>()
-                    .join(", ")
-            ));
+            content.push_str(&format!("  - Shards: {}\n", preset.shards.join(", ")));
         }
     }
     content.push('\n');
@@ -465,23 +814,79 @@ pub(super) fn write_controlled_champion_report_json(
     report_path: &Path,
     data: &ControlledChampionReportData<'_>,
 ) -> Result<()> {
+    fn component_json(
+        weight: f64,
+        normalized_ratio: f64,
+        contribution: f64,
+        impact_percent: f64,
+    ) -> Value {
+        json!({
+            "weight": weight,
+            "normalized_ratio": normalized_ratio,
+            "contribution": contribution,
+            "impact_percent": impact_percent,
+            "delta_vs_weight_percent_points": impact_percent - weight * 100.0
+        })
+    }
+    fn objective_breakdown_json(breakdown: ObjectiveScoreBreakdown) -> Value {
+        json!({
+            "weighted_mean_score": breakdown.weighted_mean_score,
+            "worst_case_score": breakdown.worst_case_score,
+            "worst_case_weight": breakdown.worst_case_weight,
+            "final_score": breakdown.final_score,
+            "components": {
+                "survival": component_json(
+                    breakdown.survival.weight,
+                    breakdown.survival.normalized_ratio,
+                    breakdown.survival.contribution,
+                    breakdown.survival.impact_percent
+                ),
+                "damage": component_json(
+                    breakdown.damage.weight,
+                    breakdown.damage.normalized_ratio,
+                    breakdown.damage.contribution,
+                    breakdown.damage.impact_percent
+                ),
+                "healing": component_json(
+                    breakdown.healing.weight,
+                    breakdown.healing.normalized_ratio,
+                    breakdown.healing.contribution,
+                    breakdown.healing.impact_percent
+                ),
+                "enemy_kills": component_json(
+                    breakdown.enemy_kills.weight,
+                    breakdown.enemy_kills.normalized_ratio,
+                    breakdown.enemy_kills.contribution,
+                    breakdown.enemy_kills.impact_percent
+                ),
+                "invulnerable_seconds": component_json(
+                    breakdown.invulnerable_seconds.weight,
+                    breakdown.invulnerable_seconds.normalized_ratio,
+                    breakdown.invulnerable_seconds.contribution,
+                    breakdown.invulnerable_seconds.impact_percent
+                )
+            }
+        })
+    }
+
     if let Some(parent) = report_path.parent() {
         fs::create_dir_all(parent)
             .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
     }
     let now = SystemTime::now();
-    let now_unix = now.duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
     let generated_utc: DateTime<Utc> = now.into();
     let generated_local: DateTime<Local> = DateTime::from(now);
     let scenario_path = data.scenario_path;
+    let scenario_path_display = format_repo_relative_path(scenario_path);
     let controlled_champion_name = data.controlled_champion_name;
     let sim = data.sim;
-    let baseline_build = data.baseline_build;
-    let baseline_score = data.baseline_score;
-    let baseline_outcome = data.baseline_outcome;
     let best_build = data.best_build;
     let best_score = data.best_score;
     let best_outcome = data.best_outcome;
+    let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
+    let best_score_breakdown = data.best_score_breakdown;
+    let controlled_champion_unmodeled_item_effect_names =
+        unmodeled_runtime_item_effect_names(best_build);
     let controlled_champion_loadout = data.controlled_champion_loadout;
     let enemy_builds = data.enemy_builds;
     let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
@@ -490,41 +895,45 @@ pub(super) fn write_controlled_champion_report_json(
     let diverse_top_builds = data.diverse_top_builds;
     let diagnostics = data.diagnostics;
     let build_orders = data.build_orders;
-
-    let improvement_percent = if baseline_score.abs() > f64::EPSILON {
-        ((best_score - baseline_score) / baseline_score) * 100.0
-    } else {
-        0.0
-    };
+    validate_controlled_champion_selection_labels(
+        controlled_champion_name,
+        data.controlled_champion_loadout_selection,
+        &controlled_champion_loadout.selection_labels,
+        &controlled_champion_loadout.unmodeled_rune_names,
+    )?;
+    let total_score_requests = diagnostics
+        .search_type_breakdown
+        .iter()
+        .map(|breakdown| breakdown.score_requests)
+        .sum::<usize>();
     let json_value = json!({
-        "generated_unix_seconds": now_unix,
+        "schema_version": CONTROLLED_CHAMPION_RUN_REPORT_JSON_SCHEMA_VERSION,
         "generated_utc": generated_utc.to_rfc3339(),
         "generated_local": generated_local.format("%Y-%m-%d %H:%M:%S %Z").to_string(),
-        "scenario_path": scenario_path.display().to_string(),
+        "scenario_path": scenario_path_display,
         "controlled_champion_name": controlled_champion_name,
         "champion_level": sim.champion_level,
         "headline": {
-            "baseline_objective_score": baseline_score,
             "best_objective_score": best_score,
-            "improvement_percent": improvement_percent,
-            "baseline_outcome": {
-                "time_alive_seconds": baseline_outcome.time_alive_seconds,
-                "damage_dealt": baseline_outcome.damage_dealt,
-                "healing_done": baseline_outcome.healing_done,
-                "enemy_kills": baseline_outcome.enemy_kills,
-                "cap_survivor": baseline_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
-            },
             "best_outcome": {
                 "time_alive_seconds": best_outcome.time_alive_seconds,
                 "damage_dealt": best_outcome.damage_dealt,
                 "healing_done": best_outcome.healing_done,
                 "enemy_kills": best_outcome.enemy_kills,
+                "invulnerable_seconds": best_outcome.invulnerable_seconds,
                 "cap_survivor": best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
             },
+            "best_objective_breakdown": objective_breakdown_json(best_score_breakdown),
         },
-        "baseline_build": baseline_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
+        "best_rune_proc_telemetry": report_rune_proc_telemetry_json(
+            best_rune_proc_telemetry,
+            best_outcome.damage_dealt,
+            best_outcome.healing_done,
+        ),
         "best_build": best_build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
         "controlled_champion_loadout_labels": controlled_champion_loadout.selection_labels,
+        "controlled_champion_unmodeled_runes": controlled_champion_loadout.unmodeled_rune_names,
+        "controlled_champion_unmodeled_item_effects": controlled_champion_unmodeled_item_effect_names,
         "enemy_presets": enemy_builds.iter().map(|(enemy, build, _)| {
             let key = to_norm_key(&enemy.name);
             let preset = enemy_presets_used.get(&key);
@@ -533,7 +942,6 @@ pub(super) fn write_controlled_champion_report_json(
                 "items": build.iter().map(|i| i.name.clone()).collect::<Vec<_>>(),
                 "runes": preset.map(|p| p.runes.clone()).unwrap_or_default(),
                 "shards": preset.map(|p| p.shards.clone()).unwrap_or_default(),
-                "masteries": preset.map(|p| p.masteries.iter().map(|m| json!({"name": m.name, "rank": m.rank})).collect::<Vec<_>>()).unwrap_or_default(),
                 "source_url": preset.map(|p| p.source_url.clone()).unwrap_or_default(),
                 "last_checked": preset.map(|p| p.last_checked.clone()).unwrap_or_default(),
             })
@@ -579,16 +987,21 @@ pub(super) fn write_controlled_champion_report_json(
         "diagnostics": {
             "strategy_summary": diagnostics.strategy_summary,
             "search_quality_profile": diagnostics.search_quality_profile,
+            "effective_seed": diagnostics.effective_seed,
             "ensemble_seeds": diagnostics.ensemble_seeds,
+            "effective_threads": diagnostics.effective_threads,
+            "seed_orchestration_parallel": diagnostics.seed_orchestration_parallel,
+            "portfolio_strategy_parallel": diagnostics.portfolio_strategy_parallel,
+            "strategy_elites_parallel": diagnostics.strategy_elites_parallel,
             "objective_survival_weight": diagnostics.objective_survival_weight,
             "objective_damage_weight": diagnostics.objective_damage_weight,
             "objective_healing_weight": diagnostics.objective_healing_weight,
+            "objective_enemy_kills_weight": diagnostics.objective_enemy_kills_weight,
+            "objective_invulnerable_seconds_weight": diagnostics.objective_invulnerable_seconds_weight,
             "full_evaluations": diagnostics.full_evaluations,
             "full_cache_hits": diagnostics.full_cache_hits,
             "full_cache_misses": diagnostics.full_cache_misses,
             "full_cache_waits": diagnostics.full_cache_waits,
-            "full_persistent_cache_hits": diagnostics.full_persistent_cache_hits,
-            "full_persistent_cache_entries": diagnostics.full_persistent_cache_entries,
             "candidate_keys_generated": diagnostics.candidate_keys_generated,
             "candidate_duplicates_pruned": diagnostics.candidate_duplicates_pruned,
             "unique_candidate_builds": diagnostics.unique_candidate_builds,
@@ -602,11 +1015,54 @@ pub(super) fn write_controlled_champion_report_json(
             "strict_non_finite_candidates": diagnostics.strict_non_finite_candidates,
             "strict_candidates_skipped_timeout": diagnostics.strict_candidates_skipped_timeout,
             "strict_completion_percent": diagnostics.strict_completion_percent,
+            "strict_heuristic_ordering_enabled": diagnostics.strict_heuristic_ordering_enabled,
+            "strict_ranking_rune_signal_weight": diagnostics.strict_ranking_rune_signal_weight,
+            "strict_ranking_shard_signal_weight": diagnostics.strict_ranking_shard_signal_weight,
+            "strict_random_promotions_done": diagnostics.strict_random_promotions_done,
+            "unmodeled_rune_hard_gate": diagnostics.unmodeled_rune_hard_gate,
+            "unmodeled_rune_penalty_per_rune": diagnostics.unmodeled_rune_penalty_per_rune,
+            "unmodeled_rune_candidates_rejected": diagnostics.unmodeled_rune_candidates_rejected,
+            "unmodeled_rune_candidates_penalized": diagnostics.unmodeled_rune_candidates_penalized,
+            "unmodeled_item_effect_hard_gate": diagnostics.unmodeled_item_effect_hard_gate,
+            "unmodeled_item_effect_penalty_per_item": diagnostics.unmodeled_item_effect_penalty_per_item,
+            "unmodeled_item_effect_candidates_rejected": diagnostics.unmodeled_item_effect_candidates_rejected,
+            "unmodeled_item_effect_candidates_penalized": diagnostics.unmodeled_item_effect_candidates_penalized,
+            "unique_scored_candidates": diagnostics.unique_scored_candidates,
             "time_budget_seconds": diagnostics.time_budget_seconds,
+            "popcorn_window_seconds": diagnostics.popcorn_window_seconds,
+            "popcorn_min_relative_improvement_percent": diagnostics.popcorn_min_relative_improvement_percent,
+            "significant_improvement_events": diagnostics.significant_improvement_events,
+            "best_significant_score": diagnostics.best_significant_score,
+            "seconds_since_last_significant_improvement": diagnostics.seconds_since_last_significant_improvement,
+            "search_type_breakdown": diagnostics.search_type_breakdown.iter().map(|breakdown| {
+                json!({
+                    "name": breakdown.name.clone(),
+                    "score_requests": breakdown.score_requests,
+                    "new_simulations": breakdown.new_simulations
+                })
+            }).collect::<Vec<_>>(),
+            "estimated_total_candidate_space": diagnostics.estimated_total_candidate_space,
+            "estimated_run_space_coverage_percent": diagnostics.estimated_run_space_coverage_percent,
+            "estimated_close_to_optimal_probability": diagnostics.estimated_close_to_optimal_probability,
+            "estimated_close_to_optimal_probability_note": diagnostics.estimated_close_to_optimal_probability_note,
+            "coverage_stage_enabled": diagnostics.coverage_stage_enabled,
+            "coverage_stage_elapsed_seconds": diagnostics.coverage_stage_elapsed_seconds,
+            "coverage_stage_assets_total": diagnostics.coverage_stage_assets_total,
+            "coverage_stage_assets_covered": diagnostics.coverage_stage_assets_covered,
+            "coverage_stage_seed_candidates": diagnostics.coverage_stage_seed_candidates,
+            "coverage_stage_seed_candidates_unique": diagnostics.coverage_stage_seed_candidates_unique,
+            "coverage_stage_incomplete": diagnostics.coverage_stage_incomplete,
+            "coverage_stage_warning": diagnostics.coverage_stage_warning,
             "elapsed_seconds": diagnostics.elapsed_seconds,
+            "total_run_seconds": diagnostics.total_run_seconds,
             "timed_out": diagnostics.timed_out,
             "processed_candidates": diagnostics.processed_candidates,
-            "total_candidates": diagnostics.total_candidates
+            "total_candidates": diagnostics.total_candidates,
+            "simulation_counts": {
+                "new_full_simulations": diagnostics.full_evaluations,
+                "unique_scored_candidates": diagnostics.unique_scored_candidates,
+                "total_score_requests": total_score_requests
+            }
         }
     });
     fs::write(report_path, serde_json::to_string_pretty(&json_value)?)
@@ -615,13 +1071,5 @@ pub(super) fn write_controlled_champion_report_json(
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn report_path_uses_normalized_champion_key() {
-        let path = default_report_path_for_champion("Dr. Mundo");
-        let path_text = path.to_string_lossy();
-        assert!(path_text.ends_with("output/drmundo_run_report.md"));
-    }
-}
+#[path = "tests/reporting_tests.rs"]
+mod tests;

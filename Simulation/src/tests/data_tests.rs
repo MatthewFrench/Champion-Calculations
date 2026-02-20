@@ -1,0 +1,652 @@
+use super::*;
+
+fn assert_close(actual: f64, expected: f64, field: &str) {
+    let epsilon = 1e-9;
+    assert!(
+        (actual - expected).abs() <= epsilon,
+        "{field} mismatch: actual={actual}, expected={expected}"
+    );
+}
+
+#[test]
+fn scenario_controlled_champion_script_uses_canonical_ability_defaults() {
+    let scenario_path = scenarios_dir().join("vladimir_urf_teamfight.json");
+    let scenario =
+        load_json(&scenario_path).expect("scenarios/vladimir_urf_teamfight.json should parse");
+    let simulation = scenario
+        .get("simulation")
+        .expect("scenarios/vladimir_urf_teamfight.json should include simulation");
+
+    for key in [
+        "vlad_pool_rank",
+        "vlad_pool_untargetable_seconds",
+        "vlad_pool_cost_percent_current_health",
+        "vlad_pool_heal_ratio_of_damage",
+        "vlad_pool_base_damage_by_rank",
+        "vlad_pool_bonus_health_ratio",
+        "zhonya_duration_seconds",
+        "zhonya_cooldown_seconds",
+        "zhonya_trigger_health_percent",
+        "ga_cooldown_seconds",
+        "ga_revive_duration_seconds",
+        "ga_revive_base_health_ratio",
+        "protoplasm_trigger_health_percent",
+        "protoplasm_bonus_health",
+        "protoplasm_heal_total",
+        "protoplasm_duration_seconds",
+        "urf_respawn_flat_reduction_seconds",
+        "urf_respawn_extrapolation_per_level",
+        "urf_respawn_time_scaling_enabled",
+        "urf_respawn_time_scaling_start_seconds",
+        "urf_respawn_time_scaling_per_minute_seconds",
+        "urf_respawn_time_scaling_cap_seconds",
+        "vlad_q_base_damage",
+        "vlad_q_ap_ratio",
+        "vlad_q_heal_ratio_of_damage",
+        "vlad_q_base_cooldown_seconds",
+        "vlad_e_base_damage",
+        "vlad_e_ap_ratio",
+        "vlad_e_base_cooldown_seconds",
+        "vlad_r_base_damage",
+        "vlad_r_ap_ratio",
+        "vlad_r_base_cooldown_seconds",
+    ] {
+        assert!(
+            simulation.get(key).is_none(),
+            "Scenario should not duplicate canonical Vladimir offensive constant '{key}'"
+        );
+    }
+
+    let parsed = parse_simulation_config(simulation).expect("simulation config should parse");
+    assert!(
+        parsed.controlled_champion_script.is_none(),
+        "simulation parser should not inject champion-specific script config"
+    );
+
+    let script = crate::scripts::champions::resolve_controlled_champion_script("Vladimir");
+    assert!(
+        script.is_some(),
+        "Vladimir script capability should resolve"
+    );
+    let canonical = crate::defaults::vladimir_offensive_ability_defaults("vladimir")
+        .expect("canonical Vladimir offensive defaults should load");
+    let cooldowns = crate::scripts::champions::controlled_champion_offensive_cooldowns_after_haste(
+        script.as_ref(),
+        0.0,
+    );
+
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_raw_damage(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Primary,
+            0.0,
+        ),
+        canonical.q_base_damage,
+        "offensive_primary_base_damage",
+    );
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_ap_ratio(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Primary,
+        ),
+        canonical.q_ap_ratio,
+        "offensive_primary_ap_ratio",
+    );
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_primary_heal_ratio(
+            script.as_ref(),
+        ),
+        canonical.q_heal_ratio_of_damage,
+        "offensive_primary_heal_ratio_of_damage",
+    );
+    assert_close(
+        cooldowns.offensive_primary_seconds,
+        canonical.q_base_cooldown_seconds,
+        "offensive_primary_base_cooldown_seconds",
+    );
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_raw_damage(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Secondary,
+            0.0,
+        ),
+        canonical.e_base_damage,
+        "offensive_secondary_base_damage",
+    );
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_ap_ratio(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Secondary,
+        ),
+        canonical.e_ap_ratio,
+        "offensive_secondary_ap_ratio",
+    );
+    assert_close(
+        cooldowns.offensive_secondary_seconds,
+        canonical.e_base_cooldown_seconds,
+        "offensive_secondary_base_cooldown_seconds",
+    );
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_raw_damage(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Ultimate,
+            0.0,
+        ),
+        canonical.r_base_damage,
+        "offensive_ultimate_base_damage",
+    );
+    assert_close(
+        crate::scripts::champions::controlled_champion_offensive_ap_ratio(
+            script.as_ref(),
+            crate::scripts::champions::ControlledChampionOffensiveAbility::Ultimate,
+        ),
+        canonical.r_ap_ratio,
+        "offensive_ultimate_ap_ratio",
+    );
+    assert_close(
+        cooldowns.offensive_ultimate_seconds,
+        canonical.r_base_cooldown_seconds,
+        "offensive_ultimate_base_cooldown_seconds",
+    );
+}
+
+#[test]
+fn apply_structured_effect_ignores_cooldown_seconds_for_static_stats() {
+    let mut stats = Stats::default();
+    let effect = serde_json::json!({
+        "effect_type": "cooldown",
+        "stat": "cooldown",
+        "unit": "seconds",
+        "formula": {
+            "type": "flat",
+            "value": 6.0
+        }
+    });
+    let applied = apply_structured_effect(&effect, 1, 20, true, &mut stats)
+        .expect("seconds-based cooldown effect should parse");
+    assert!(
+        !applied,
+        "seconds-based cooldown effects should not be converted into ability haste"
+    );
+    assert_close(
+        stats.ability_haste,
+        0.0,
+        "seconds-based cooldown effect must not change ability_haste",
+    );
+}
+
+#[test]
+fn parse_simulation_config_supports_optional_combat_seed() {
+    let simulation = serde_json::json!({
+        "combat_seed": 13371337
+    });
+    let parsed = parse_simulation_config(&simulation).expect("simulation config should parse");
+    assert_eq!(parsed.combat_seed, Some(13371337));
+    assert!(!parsed.collect_rune_proc_telemetry);
+}
+
+#[test]
+fn parse_simulation_config_supports_collect_rune_proc_telemetry_flag() {
+    let simulation = serde_json::json!({
+        "collect_rune_proc_telemetry": true
+    });
+    let parsed = parse_simulation_config(&simulation).expect("simulation config should parse");
+    assert!(parsed.collect_rune_proc_telemetry);
+}
+
+#[test]
+fn apply_structured_effect_maps_percent_cooldown_to_ability_haste() {
+    let mut stats = Stats::default();
+    let effect = serde_json::json!({
+        "effect_type": "cooldown",
+        "stat": "cooldown",
+        "unit": "percent",
+        "formula": {
+            "type": "flat",
+            "value": 10.0
+        }
+    });
+    let applied = apply_structured_effect(&effect, 1, 20, true, &mut stats)
+        .expect("percent cooldown effect should parse");
+    assert!(
+        applied,
+        "percent cooldown effect should map to ability haste"
+    );
+    assert_close(
+        stats.ability_haste,
+        100.0 * 0.10 / (1.0 - 0.10),
+        "10% cooldown should map to deterministic ability haste",
+    );
+}
+
+#[test]
+fn load_champion_bases_skips_support_defaults_file() {
+    let bases = load_champion_bases().expect("champion bases should load");
+    assert!(
+        !bases.contains_key(&normalize_name("ChampionDefaults")),
+        "support defaults file should not be treated as a champion base"
+    );
+    assert!(
+        bases.contains_key(&normalize_name("Vladimir")),
+        "known champion base should still be present"
+    );
+}
+
+#[test]
+fn validate_rune_page_selection_rejects_secondary_slot_order_violation() {
+    let domain = build_loadout_domain();
+    let valid = LoadoutSelection {
+        rune_names: vec![
+            "Arcane Comet".to_string(),
+            "Manaflow Band".to_string(),
+            "Transcendence".to_string(),
+            "Gathering Storm".to_string(),
+            "Cheap Shot".to_string(),
+            "Ultimate Hunter".to_string(),
+        ],
+        shard_stats: vec![
+            "ability_haste".to_string(),
+            "movement_speed".to_string(),
+            "health".to_string(),
+        ],
+    };
+    validate_rune_page_selection(&valid, &domain)
+        .expect("known rune page should pass legality validation");
+
+    let invalid_secondary_order = LoadoutSelection {
+        rune_names: vec![
+            "Arcane Comet".to_string(),
+            "Manaflow Band".to_string(),
+            "Transcendence".to_string(),
+            "Gathering Storm".to_string(),
+            "Ultimate Hunter".to_string(),
+            "Cheap Shot".to_string(),
+        ],
+        shard_stats: vec![
+            "ability_haste".to_string(),
+            "movement_speed".to_string(),
+            "health".to_string(),
+        ],
+    };
+    assert!(
+        validate_rune_page_selection(&invalid_secondary_order, &domain).is_err(),
+        "secondary runes out of slot order should fail validation"
+    );
+}
+
+#[test]
+fn validate_rune_page_selection_rejects_invalid_shard_slot() {
+    let domain = build_loadout_domain();
+    let invalid_shard_slot = LoadoutSelection {
+        rune_names: vec![
+            "Lethal Tempo".to_string(),
+            "Triumph".to_string(),
+            "Legend: Alacrity".to_string(),
+            "Last Stand".to_string(),
+            "Conditioning".to_string(),
+            "Overgrowth".to_string(),
+        ],
+        shard_stats: vec![
+            "health".to_string(),
+            "movement_speed".to_string(),
+            "tenacity".to_string(),
+        ],
+    };
+    assert!(
+        validate_rune_page_selection(&invalid_shard_slot, &domain).is_err(),
+        "slot 1 shard should reject unsupported stat keys"
+    );
+}
+
+#[test]
+fn validate_rune_page_selection_rejects_empty_selection() {
+    let domain = build_loadout_domain();
+    assert!(
+        validate_rune_page_selection(&LoadoutSelection::default(), &domain).is_err(),
+        "empty rune page and shard selection should be invalid"
+    );
+}
+
+#[test]
+fn ensure_complete_loadout_selection_fills_missing_selection() {
+    let domain = build_loadout_domain();
+    let filled = ensure_complete_loadout_selection(&LoadoutSelection::default(), &domain)
+        .expect("missing selection should be auto-filled with a legal default");
+    assert_eq!(filled.rune_names.len(), 6, "expected six rune names");
+    assert_eq!(filled.shard_stats.len(), 3, "expected three shard stats");
+    validate_rune_page_selection(&filled, &domain)
+        .expect("auto-filled selection should validate as legal");
+}
+
+#[test]
+fn filter_loadout_domain_to_modeled_runes_prunes_unmodeled_entries() {
+    let domain = build_loadout_domain();
+    let filtered = filter_loadout_domain_to_modeled_runes(&domain, 18, true)
+        .expect("modeled rune filtering should succeed");
+
+    let has_rune = |target: &str, candidate_domain: &LoadoutDomain| {
+        candidate_domain
+            .rune_paths
+            .iter()
+            .flat_map(|path| path.slot_runes.iter())
+            .flat_map(|slot| slot.iter())
+            .any(|rune| rune == target)
+    };
+
+    assert!(
+        filtered.rune_paths.len() >= 2,
+        "modeled rune domain should preserve at least two legal rune paths"
+    );
+    assert!(
+        has_rune("Axiom Arcanist", &domain),
+        "fixture assumption changed: Axiom Arcanist missing from source rune domain"
+    );
+    assert!(
+        !has_rune("Axiom Arcanist", &filtered),
+        "Axiom Arcanist should be filtered out until modeled"
+    );
+    assert!(
+        has_rune("Lethal Tempo", &filtered),
+        "known modeled runtime rune should remain in filtered domain"
+    );
+
+    let generated = ensure_complete_loadout_selection(&LoadoutSelection::default(), &filtered)
+        .expect("filtered domain should still support a generated legal loadout");
+    validate_rune_page_selection(&generated, &filtered)
+        .expect("generated loadout from filtered domain should be legal");
+}
+
+#[test]
+fn resolve_loadout_applies_tenacity_shard_and_preserves_shard_labels() {
+    let domain = build_loadout_domain();
+    let selection = LoadoutSelection {
+        rune_names: vec![
+            "Summon Aery".to_string(),
+            "Nimbus Cloak".to_string(),
+            "Celerity".to_string(),
+            "Gathering Storm".to_string(),
+            "Magical Footwear".to_string(),
+            "Jack Of All Trades".to_string(),
+        ],
+        shard_stats: vec![
+            "attack_speed".to_string(),
+            "movement_speed".to_string(),
+            "tenacity".to_string(),
+        ],
+    };
+    validate_rune_page_selection(&selection, &domain)
+        .expect("tenacity is a legal slot-3 shard and should validate");
+
+    let resolved =
+        resolve_loadout(&selection, 20, true).expect("loadout with tenacity shard should resolve");
+    let shard_label_count = resolved
+        .selection_labels
+        .iter()
+        .filter(|label| label.starts_with("Shard "))
+        .count();
+    assert_eq!(
+        shard_label_count, 3,
+        "resolved loadout should include labels for all three selected shards"
+    );
+    assert!(
+        resolved
+            .selection_labels
+            .iter()
+            .any(|label| label == "Shard 3: tenacity"),
+        "resolved loadout should include tenacity shard label"
+    );
+    assert!(
+        resolved.bonus_stats.tenacity_percent >= 15.0,
+        "tenacity shard should contribute deterministic tenacity stat"
+    );
+}
+
+#[test]
+fn search_quality_profiles_apply_unmodeled_quality_gate_policy() {
+    let mut base = parse_build_search(&serde_json::json!({
+        "strategy": "portfolio"
+    }))
+    .expect("default search config should parse");
+    base.unmodeled_rune_hard_gate = true;
+    base.unmodeled_rune_penalty_per_rune = -0.5;
+    base.unmodeled_item_effect_hard_gate = true;
+    base.unmodeled_item_effect_penalty_per_item = -0.5;
+
+    let mut fast = base.clone();
+    apply_search_quality_profile(&mut fast, SearchQualityProfile::Fast);
+    assert!(
+        !fast.unmodeled_rune_hard_gate,
+        "fast profile should not hard-reject unmodeled rune candidates"
+    );
+    assert!(
+        fast.unmodeled_rune_penalty_per_rune >= 0.0,
+        "fast profile should clamp negative rune penalties"
+    );
+    assert!(
+        !fast.unmodeled_item_effect_hard_gate,
+        "fast profile should not hard-reject unmodeled item-effect candidates"
+    );
+    assert!(
+        fast.unmodeled_item_effect_penalty_per_item >= 0.0,
+        "fast profile should clamp negative item-effect penalties"
+    );
+
+    let mut balanced = base.clone();
+    apply_search_quality_profile(&mut balanced, SearchQualityProfile::Balanced);
+    assert!(
+        !balanced.unmodeled_rune_hard_gate,
+        "balanced profile should not hard-reject unmodeled rune candidates"
+    );
+    assert!(
+        balanced.unmodeled_rune_penalty_per_rune >= 0.0,
+        "balanced profile should clamp negative rune penalties"
+    );
+    assert!(
+        !balanced.unmodeled_item_effect_hard_gate,
+        "balanced profile should not hard-reject unmodeled item-effect candidates"
+    );
+    assert!(
+        balanced.unmodeled_item_effect_penalty_per_item >= 0.0,
+        "balanced profile should clamp negative item-effect penalties"
+    );
+
+    let mut maximum_quality = base;
+    apply_search_quality_profile(&mut maximum_quality, SearchQualityProfile::MaximumQuality);
+    assert!(
+        maximum_quality.unmodeled_rune_hard_gate,
+        "maximum quality profile should hard-reject unmodeled rune candidates"
+    );
+    assert!(
+        maximum_quality.unmodeled_rune_penalty_per_rune.abs() < f64::EPSILON,
+        "maximum quality profile should not apply rune penalties when hard gating"
+    );
+    assert!(
+        maximum_quality.unmodeled_item_effect_hard_gate,
+        "maximum quality profile should hard-reject unmodeled item-effect candidates"
+    );
+    assert!(
+        maximum_quality.unmodeled_item_effect_penalty_per_item.abs() < f64::EPSILON,
+        "maximum quality profile should not apply item-effect penalties when hard gating"
+    );
+}
+
+#[test]
+fn parse_simulation_config_rejects_legacy_max_time_field() {
+    let simulation = serde_json::json!({
+        "time_limit_seconds": 60.0,
+        "max_time_seconds": 60.0
+    });
+    let error = parse_simulation_config(&simulation)
+        .expect_err("legacy simulation.max_time_seconds should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("simulation.max_time_seconds is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_rejects_legacy_heartsteel_stack_field() {
+    let simulation = serde_json::json!({
+        "time_limit_seconds": 60.0,
+        "heartsteel_assumed_stacks_at_8m": 20.0
+    });
+    let error = parse_simulation_config(&simulation)
+        .expect_err("legacy simulation.heartsteel_assumed_stacks_at_8m should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("simulation.heartsteel_assumed_stacks_at_8m is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_rejects_legacy_item_stacks_map() {
+    let simulation = serde_json::json!({
+        "time_limit_seconds": 60.0,
+        "item_stacks_at_level_20": {
+            "Heartsteel": 20.0
+        }
+    });
+    let error = parse_simulation_config(&simulation)
+        .expect_err("legacy simulation.item_stacks_at_level_20 should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("simulation.item_stacks_at_level_20 is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_rejects_legacy_vladimir_tuning_keys() {
+    let simulation = serde_json::json!({
+        "vlad_q_base_damage": 200.0
+    });
+    let error = parse_simulation_config(&simulation)
+        .expect_err("legacy simulation.vlad_q_base_damage should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("simulation.vlad_q_base_damage is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_accepts_stack_overrides_by_identifier() {
+    let simulation = serde_json::json!({
+        "stack_overrides": {
+            "heartsteel": 20.0
+        }
+    });
+    let parsed =
+        parse_simulation_config(&simulation).expect("simulation.stack_overrides should parse");
+    let stacks = parsed
+        .stack_overrides
+        .get("heartsteel")
+        .copied()
+        .unwrap_or_default();
+    assert!(
+        (stacks - 20.0).abs() < 1e-9,
+        "unexpected stack value: {stacks}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_uses_default_stack_overrides_when_missing() {
+    let simulation = serde_json::json!({});
+    let parsed = parse_simulation_config(&simulation)
+        .expect("simulation config without explicit stack_overrides should parse");
+    let stacks = parsed
+        .stack_overrides
+        .get("heartsteel")
+        .copied()
+        .unwrap_or_default();
+    assert!(
+        (stacks - 20.0).abs() < 1e-9,
+        "expected default heartsteel stack override from simulator defaults, got {stacks}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_reads_protoplasm_trigger_override() {
+    let simulation = serde_json::json!({
+        "protoplasm_trigger_health_percent": 0.42
+    });
+    let parsed = parse_simulation_config(&simulation)
+        .expect("simulation config with protoplasm trigger override should parse");
+    assert!(
+        (parsed.protoplasm_trigger_health_percent - 0.42).abs() < 1e-9,
+        "unexpected protoplasm trigger health percent: {}",
+        parsed.protoplasm_trigger_health_percent
+    );
+}
+
+#[test]
+fn parse_loadout_selection_rejects_legacy_rune_ids() {
+    let loadout = serde_json::json!({
+        "runes_reforged": {
+            "rune_ids": [8229, 8226, 8210, 8237, 8345, 8347]
+        }
+    });
+    let error = parse_loadout_selection(Some(&loadout))
+        .expect_err("legacy loadout.runes_reforged.rune_ids should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("loadout.runes_reforged.rune_ids is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_loadout_selection_rejects_legacy_season2016_masteries() {
+    let loadout = serde_json::json!({
+        "season2016_masteries": {
+            "Ferocity": []
+        }
+    });
+    let error = parse_loadout_selection(Some(&loadout))
+        .expect_err("legacy loadout.season2016_masteries should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("loadout.season2016_masteries is no longer supported"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_simulation_config_uses_default_time_limit_when_missing() {
+    let simulation = serde_json::json!({});
+    let parsed = parse_simulation_config(&simulation)
+        .expect("simulation config should parse with default time limit");
+    assert!(
+        (parsed.max_time_seconds - 1200.0).abs() < 1e-9,
+        "expected default time_limit_seconds of 1200.0, got {}",
+        parsed.max_time_seconds
+    );
+}
+
+#[test]
+fn parse_enemy_config_rejects_deprecated_combat_proxy() {
+    let champion_bases = load_champion_bases().expect("champion bases should load");
+    let enemy = serde_json::json!({
+        "id": "test_enemy",
+        "champion": "Warwick",
+        "combat": {
+            "ability_dps_flat": 30.0
+        }
+    });
+    let error = parse_enemy_config(&enemy, &champion_bases, 20, &HashMap::new())
+        .expect_err("opponent combat proxy should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("deprecated combat proxy settings"),
+        "unexpected error: {error}"
+    );
+}

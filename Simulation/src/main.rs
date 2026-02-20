@@ -5,7 +5,7 @@ use clap::{Parser, ValueEnum};
 use rayon::ThreadPoolBuilder;
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 mod build_order;
 mod cache;
@@ -24,19 +24,18 @@ pub(crate) use crate::core::*;
 pub(crate) use crate::data::{
     EnemyUrfPreset, apply_search_quality_profile, build_loadout_domain, default_item_pool,
     enemy_loadout_from_preset, enemy_preset_data_path, item_pool_from_names, load_champion_bases,
-    load_enemy_urf_presets, load_items, load_json, load_urf_buffs, loadout_eval_budget,
-    loadout_selection_key, lookup_champion_base, parse_build_search, parse_champion_base,
-    parse_enemy_config, parse_loadout_selection, parse_simulation_config, random_loadout_selection,
-    resolve_loadout, simulation_dir, to_norm_key, validate_enemy_urf_presets,
+    load_enemy_urf_presets, load_items, load_json, load_urf_buffs, loadout_selection_key,
+    lookup_champion_base, parse_build_search, parse_enemy_config, parse_loadout_selection,
+    parse_simulation_config, random_loadout_selection, resolve_loadout, resolve_scenario_path,
+    simulation_dir, to_norm_key, validate_enemy_urf_presets,
 };
 use crate::engine::EnemyDerivedCombatStats;
 use crate::scenario_runner::{
-    run_controlled_champion_scenario, run_controlled_champion_stepper, run_stat_optimization,
+    run_controlled_champion_fixed_loadout_evaluation,
+    run_controlled_champion_fixed_loadout_rune_sweep, run_controlled_champion_scenario,
+    run_controlled_champion_stepper, run_stat_optimization,
 };
-use crate::scripts::champions::vladimir::{
-    VladimirAbilityCooldowns, VladimirAbilityTuning, e_damage_raw, offensive_cooldowns_after_haste,
-    q_damage_raw, r_damage_raw,
-};
+use crate::scripts::champions::ChampionRuneProcTelemetryEntry;
 
 const EXCLUDED_RANKS: &[&str] = &["CONSUMABLE", "TRINKET"];
 const LEGENDARY_RANK: &str = "LEGENDARY";
@@ -57,6 +56,7 @@ struct Stats {
     move_speed_flat: f64,
     move_speed_percent: f64,
     crit_chance_percent: f64,
+    tenacity_percent: f64,
 }
 
 impl Stats {
@@ -71,6 +71,7 @@ impl Stats {
         self.move_speed_flat += other.move_speed_flat;
         self.move_speed_percent += other.move_speed_percent;
         self.crit_chance_percent += other.crit_chance_percent;
+        self.tenacity_percent += other.tenacity_percent;
     }
 
     fn get_stat(&self, key: &str) -> f64 {
@@ -85,6 +86,7 @@ impl Stats {
             "move_speed_flat" => self.move_speed_flat,
             "move_speed_percent" => self.move_speed_percent,
             "crit_chance_percent" => self.crit_chance_percent,
+            "tenacity_percent" => self.tenacity_percent,
             _ => 0.0,
         }
     }
@@ -98,6 +100,8 @@ struct Item {
     shop_purchasable: bool,
     total_cost: f64,
     passive_effects_text: Vec<String>,
+    has_active_effect: bool,
+    structured_effect_count: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -114,34 +118,31 @@ struct ChampionBase {
     attack_damage_per_level: f64,
     base_attack_speed: f64,
     attack_speed_per_level_percent: f64,
+    base_attack_range: f64,
+    base_attack_projectile_speed: f64,
     base_move_speed: f64,
     is_melee: bool,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+enum OpponentMovementMode {
+    HoldPosition,
+    #[default]
+    MaintainCombatRange,
+}
+
 #[derive(Debug, Clone)]
 struct EnemyConfig {
+    id: String,
     name: String,
+    level: usize,
     base: ChampionBase,
-    ability_dps_flat: f64,
-    ability_dps_ad_ratio: f64,
-    ability_dps_ap_ratio: f64,
-    ability_tick_interval_seconds: f64,
-    stun_interval_seconds: f64,
-    stun_duration_seconds: f64,
-    burst_interval_seconds: f64,
-    burst_start_offset_seconds: f64,
-    burst_magic_flat: f64,
-    burst_physical_flat: f64,
-    burst_true_flat: f64,
-    burst_ad_ratio: f64,
-    burst_ap_ratio: f64,
-    uptime_cycle_seconds: f64,
-    uptime_active_seconds: f64,
-    uptime_phase_seconds: f64,
+    spawn_position_xy: Option<(f64, f64)>,
+    movement_mode: OpponentMovementMode,
     loadout_item_names: Vec<String>,
     loadout_rune_names: Vec<String>,
     loadout_shards: Vec<String>,
-    loadout_masteries: Vec<MasterySelection>,
+    stack_overrides: HashMap<String, f64>,
 }
 
 #[derive(Debug, Clone)]
@@ -150,12 +151,9 @@ struct SimulationConfig {
     server_tick_rate_hz: f64,
     champion_level: usize,
     max_time_seconds: f64,
-    vlad_pool_rank: usize,
-    vlad_pool_untargetable_seconds: f64,
-    vlad_pool_cost_percent_current_health: f64,
-    vlad_pool_heal_ratio_of_damage: f64,
-    vlad_pool_base_damage_by_rank: Vec<f64>,
-    vlad_pool_bonus_health_ratio: f64,
+    combat_seed: Option<u64>,
+    collect_rune_proc_telemetry: bool,
+    controlled_champion_script: Option<crate::scripts::champions::ControlledChampionScriptHandle>,
     zhonya_duration_seconds: f64,
     zhonya_cooldown_seconds: f64,
     zhonya_trigger_health_percent: f64,
@@ -166,24 +164,13 @@ struct SimulationConfig {
     protoplasm_bonus_health: f64,
     protoplasm_heal_total: f64,
     protoplasm_duration_seconds: f64,
-    heartsteel_assumed_stacks_at_8m: f64,
-    enemy_uptime_model_enabled: bool,
+    stack_overrides: HashMap<String, f64>,
     urf_respawn_flat_reduction_seconds: f64,
     urf_respawn_extrapolation_per_level: f64,
     urf_respawn_time_scaling_enabled: bool,
     urf_respawn_time_scaling_start_seconds: f64,
     urf_respawn_time_scaling_per_minute_seconds: f64,
     urf_respawn_time_scaling_cap_seconds: f64,
-    vlad_q_base_damage: f64,
-    vlad_q_ap_ratio: f64,
-    vlad_q_heal_ratio_of_damage: f64,
-    vlad_q_base_cooldown_seconds: f64,
-    vlad_e_base_damage: f64,
-    vlad_e_ap_ratio: f64,
-    vlad_e_base_cooldown_seconds: f64,
-    vlad_r_base_damage: f64,
-    vlad_r_ap_ratio: f64,
-    vlad_r_base_cooldown_seconds: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -193,6 +180,7 @@ struct UrfBuffs {
     health_cost_multiplier: f64,
     bonus_attack_speed_multiplier_melee: f64,
     bonus_attack_speed_multiplier_ranged: f64,
+    allowed_item_keys: HashSet<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -223,11 +211,21 @@ struct BuildSearchConfig {
     objective_survival_weight: f64,
     objective_damage_weight: f64,
     objective_healing_weight: f64,
+    objective_enemy_kills_weight: f64,
+    objective_invulnerable_seconds_weight: f64,
     robust_min_seed_hit_rate: f64,
     bleed_enabled: bool,
     bleed_budget: usize,
     bleed_mutation_rate: f64,
     multi_scenario_worst_weight: f64,
+    strict_ranking_enable_heuristic_ordering: bool,
+    strict_ranking_rune_signal_weight: f64,
+    strict_ranking_shard_signal_weight: f64,
+    strict_ranking_exploration_promotions: usize,
+    unmodeled_rune_hard_gate: bool,
+    unmodeled_rune_penalty_per_rune: f64,
+    unmodeled_item_effect_hard_gate: bool,
+    unmodeled_item_effect_penalty_per_item: f64,
     seed: u64,
 }
 
@@ -246,6 +244,7 @@ struct CombatOutcome {
     damage_dealt: f64,
     healing_done: f64,
     enemy_kills: usize,
+    invulnerable_seconds: f64,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -253,30 +252,65 @@ struct ObjectiveComponentWeights {
     survival: f64,
     damage: f64,
     healing: f64,
+    enemy_kills: f64,
+    invulnerable_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+struct ObjectiveComponentImpact {
+    weight: f64,
+    normalized_ratio: f64,
+    contribution: f64,
+    impact_percent: f64,
+}
+
+#[derive(Debug, Clone, Copy, Default)]
+struct ObjectiveScoreBreakdown {
+    weighted_mean_score: f64,
+    worst_case_score: f64,
+    worst_case_weight: f64,
+    final_score: f64,
+    survival: ObjectiveComponentImpact,
+    damage: ObjectiveComponentImpact,
+    healing: ObjectiveComponentImpact,
+    enemy_kills: ObjectiveComponentImpact,
+    invulnerable_seconds: ObjectiveComponentImpact,
 }
 
 #[derive(Debug, Clone)]
 struct BuildConfidence {
-    key: Vec<usize>,
+    key: BuildKey,
     seed_hits: usize,
     seed_hit_rate: f64,
     robustness: String,
 }
 
 #[derive(Debug, Clone)]
+struct SearchTypeBreakdown {
+    name: String,
+    score_requests: usize,
+    new_simulations: usize,
+}
+
+#[derive(Debug, Clone)]
 struct SearchDiagnostics {
     strategy_summary: String,
     search_quality_profile: String,
+    effective_seed: u64,
     ensemble_seeds: usize,
+    effective_threads: usize,
+    seed_orchestration_parallel: bool,
+    portfolio_strategy_parallel: bool,
+    strategy_elites_parallel: bool,
     objective_survival_weight: f64,
     objective_damage_weight: f64,
     objective_healing_weight: f64,
+    objective_enemy_kills_weight: f64,
+    objective_invulnerable_seconds_weight: f64,
     full_evaluations: usize,
     full_cache_hits: usize,
     full_cache_misses: usize,
     full_cache_waits: usize,
-    full_persistent_cache_hits: usize,
-    full_persistent_cache_entries: usize,
     candidate_keys_generated: usize,
     candidate_duplicates_pruned: usize,
     unique_candidate_builds: usize,
@@ -290,26 +324,50 @@ struct SearchDiagnostics {
     strict_non_finite_candidates: usize,
     strict_candidates_skipped_timeout: usize,
     strict_completion_percent: f64,
+    strict_heuristic_ordering_enabled: bool,
+    strict_ranking_rune_signal_weight: f64,
+    strict_ranking_shard_signal_weight: f64,
+    strict_random_promotions_done: usize,
+    unmodeled_rune_hard_gate: bool,
+    unmodeled_rune_penalty_per_rune: f64,
+    unmodeled_rune_candidates_rejected: usize,
+    unmodeled_rune_candidates_penalized: usize,
+    unmodeled_item_effect_hard_gate: bool,
+    unmodeled_item_effect_penalty_per_item: f64,
+    unmodeled_item_effect_candidates_rejected: usize,
+    unmodeled_item_effect_candidates_penalized: usize,
+    unique_scored_candidates: usize,
     time_budget_seconds: Option<f64>,
+    popcorn_window_seconds: Option<f64>,
+    popcorn_min_relative_improvement_percent: f64,
+    significant_improvement_events: usize,
+    best_significant_score: Option<f64>,
+    seconds_since_last_significant_improvement: Option<f64>,
+    search_type_breakdown: Vec<SearchTypeBreakdown>,
+    estimated_total_candidate_space: Option<f64>,
+    estimated_run_space_coverage_percent: Option<f64>,
+    estimated_close_to_optimal_probability: Option<f64>,
+    estimated_close_to_optimal_probability_note: String,
+    coverage_stage_enabled: bool,
+    coverage_stage_elapsed_seconds: f64,
+    coverage_stage_assets_total: usize,
+    coverage_stage_assets_covered: usize,
+    coverage_stage_seed_candidates: usize,
+    coverage_stage_seed_candidates_unique: usize,
+    coverage_stage_incomplete: bool,
+    coverage_stage_warning: String,
     elapsed_seconds: f64,
+    total_run_seconds: f64,
     timed_out: bool,
     processed_candidates: usize,
     total_candidates: usize,
     seed_best_scores: Vec<f64>,
 }
 
-#[derive(Debug, Clone, Default)]
-struct MasterySelection {
-    name: String,
-    rank: usize,
-}
-
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 struct LoadoutSelection {
-    rune_ids: Vec<i64>,
     rune_names: Vec<String>,
     shard_stats: Vec<String>,
-    masteries: Vec<MasterySelection>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -318,6 +376,7 @@ struct ResolvedLoadout {
     bonus_stats: Stats,
     applied_notes: Vec<String>,
     skipped_notes: Vec<String>,
+    unmodeled_rune_names: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -332,14 +391,21 @@ struct BuildOrderResult {
     cumulative_score: f64,
 }
 
-type BuildKey = Vec<usize>;
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct BuildCandidateKey {
+    item_indices: Vec<usize>,
+    loadout_selection: LoadoutSelection,
+}
+
+type BuildKey = BuildCandidateKey;
 type EnemyBuildEntry = (EnemyConfig, Vec<Item>, Stats);
 type EnemyBuildScenario = (String, f64, Vec<EnemyBuildEntry>);
-type BestLoadoutMap = HashMap<BuildKey, (LoadoutSelection, ResolvedLoadout)>;
-type BestOutcomeMap = HashMap<BuildKey, CombatOutcome>;
+type ResolvedByCandidateMap = HashMap<BuildKey, ResolvedLoadout>;
+type OutcomeByCandidateMap = HashMap<BuildKey, CombatOutcome>;
 
 struct ObjectiveEvalContext<'a> {
     controlled_champion_base: &'a ChampionBase,
+    controlled_champion_stack_overrides: &'a HashMap<String, f64>,
     enemy_build_scenarios: &'a [EnemyBuildScenario],
     sim: &'a SimulationConfig,
     urf: &'a UrfBuffs,
@@ -351,11 +417,13 @@ struct ObjectiveEvalContext<'a> {
 struct BuildOrderEvalContext<'a> {
     controlled_champion_base_raw: &'a ChampionBase,
     controlled_champion_bonus_stats: &'a Stats,
-    enemy_builds: &'a [EnemyBuildEntry],
+    controlled_champion_stack_overrides: &'a HashMap<String, f64>,
+    enemy_build_scenarios: &'a [EnemyBuildScenario],
     raw_enemy_bases: &'a HashMap<String, ChampionBase>,
     sim: &'a SimulationConfig,
     urf: &'a UrfBuffs,
     objective_weights: ObjectiveComponentWeights,
+    multi_scenario_worst_weight: f64,
 }
 
 struct ControlledChampionReportData<'a> {
@@ -366,13 +434,13 @@ struct ControlledChampionReportData<'a> {
     controlled_champion_end_stats: &'a Stats,
     stack_notes: &'a [String],
     controlled_champion_loadout: &'a ResolvedLoadout,
+    controlled_champion_loadout_selection: &'a LoadoutSelection,
     enemy_loadout: &'a ResolvedLoadout,
-    baseline_build: &'a [Item],
-    baseline_score: f64,
-    baseline_outcome: &'a CombatOutcome,
     best_build: &'a [Item],
     best_score: f64,
     best_outcome: &'a CombatOutcome,
+    best_rune_proc_telemetry: &'a [ChampionRuneProcTelemetryEntry],
+    best_score_breakdown: ObjectiveScoreBreakdown,
     enemy_builds: &'a [EnemyBuildEntry],
     enemy_derived_combat_stats: &'a [EnemyDerivedCombatStats],
     enemy_similarity_notes: &'a [String],
@@ -387,11 +455,14 @@ struct ControlledChampionReportData<'a> {
 }
 
 #[derive(Debug, Clone, Parser)]
-#[command(about = "URF Vladimir objective simulator")]
+#[command(about = "URF controlled champion objective simulator")]
 struct Cli {
-    #[arg(long)]
+    #[arg(
+        long,
+        help = "Scenario path or scenario name (resolved as Simulation/scenarios/<name>.json)"
+    )]
     scenario: String,
-    #[arg(long, value_enum, default_value_t = Mode::Vladimir)]
+    #[arg(long, value_enum, default_value_t = Mode::ControlledChampion)]
     mode: Mode,
     #[arg(long, default_value_t = 30)]
     ticks: usize,
@@ -407,18 +478,60 @@ struct Cli {
     threads: Option<usize>,
     #[arg(long)]
     max_runtime_seconds: Option<f64>,
+    #[arg(
+        long,
+        help = "Popcorn mode: continue running while significant objective improvements keep occurring within this window"
+    )]
+    popcorn_window_seconds: Option<f64>,
+    #[arg(long, default_value_t = 1.0)]
+    popcorn_min_relative_improvement_percent: f64,
     #[arg(long, default_value_t = 10.0)]
     status_every_seconds: f64,
     #[arg(long, value_enum, default_value_t = SearchQualityProfile::MaximumQuality)]
     search_quality_profile: SearchQualityProfile,
+    #[arg(
+        long,
+        help = "Deterministic search seed override (default behavior is random)"
+    )]
+    seed: Option<u64>,
+    #[arg(
+        long,
+        help = "Comma-separated fixed item names for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_item_names: Option<String>,
+    #[arg(
+        long,
+        help = "Optional comma-separated rune names override (six runes) for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_rune_names: Option<String>,
+    #[arg(
+        long,
+        help = "Optional comma-separated shard stat override (three shards) for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_shard_stats: Option<String>,
+    #[arg(
+        long,
+        help = "Optional report folder label for controlled_champion_fixed_loadout mode"
+    )]
+    fixed_eval_label: Option<String>,
+    #[arg(
+        long,
+        default_value_t = 1,
+        help = "Optional repeat count per keystone for controlled_champion_fixed_loadout_rune_sweep (enables multi-seed-ready aggregation)"
+    )]
+    fixed_sweep_seed_repeats: usize,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum Mode {
-    #[value(name = "vladimir")]
-    Vladimir,
-    #[value(name = "vladimir_step")]
-    VladimirStep,
+    #[value(name = "controlled_champion", alias = "vladimir")]
+    ControlledChampion,
+    #[value(name = "controlled_champion_fixed_loadout")]
+    ControlledChampionFixedLoadout,
+    #[value(name = "controlled_champion_fixed_loadout_rune_sweep")]
+    ControlledChampionFixedLoadoutRuneSweep,
+    #[value(name = "controlled_champion_step", alias = "vladimir_step")]
+    ControlledChampionStep,
     #[value(name = "taric_as")]
     TaricAs,
     #[value(name = "hecarim_ms")]
@@ -442,8 +555,22 @@ struct ControlledChampionRunOptions<'a> {
     max_relative_gap_percent: f64,
     report_path_override: Option<&'a str>,
     max_runtime_seconds: Option<f64>,
+    popcorn_window_seconds: Option<f64>,
+    popcorn_min_relative_improvement_percent: f64,
     status_every_seconds: f64,
     search_quality_profile: SearchQualityProfile,
+    seed_override: Option<u64>,
+}
+
+#[derive(Debug, Clone)]
+struct ControlledChampionFixedLoadoutOptions<'a> {
+    report_path_override: Option<&'a str>,
+    search_quality_profile: SearchQualityProfile,
+    fixed_item_names: Vec<String>,
+    fixed_rune_names: Option<Vec<String>>,
+    fixed_shard_stats: Option<Vec<String>>,
+    fixed_eval_label: Option<String>,
+    fixed_sweep_seed_repeats: usize,
 }
 
 fn main() -> Result<()> {
@@ -455,9 +582,9 @@ fn main() -> Result<()> {
     let threads = cli.threads.unwrap_or(default_threads).max(1);
     let _ = ThreadPoolBuilder::new().num_threads(threads).build_global();
 
-    let scenario_path = PathBuf::from(cli.scenario);
+    let scenario_path = resolve_scenario_path(&cli.scenario);
     match cli.mode {
-        Mode::Vladimir => run_controlled_champion_scenario(
+        Mode::ControlledChampion => run_controlled_champion_scenario(
             &scenario_path,
             &ControlledChampionRunOptions {
                 top_x: cli.top_x,
@@ -465,11 +592,55 @@ fn main() -> Result<()> {
                 max_relative_gap_percent: cli.max_relative_gap_percent,
                 report_path_override: cli.report_path.as_deref(),
                 max_runtime_seconds: cli.max_runtime_seconds,
+                popcorn_window_seconds: cli.popcorn_window_seconds,
+                popcorn_min_relative_improvement_percent: cli
+                    .popcorn_min_relative_improvement_percent,
                 status_every_seconds: cli.status_every_seconds,
                 search_quality_profile: cli.search_quality_profile,
+                seed_override: cli.seed,
             },
         ),
-        Mode::VladimirStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),
+        Mode::ControlledChampionFixedLoadout => {
+            let fixed_item_names = parse_csv_arg(
+                cli.fixed_item_names.as_deref(),
+                "--fixed-item-names is required for --mode controlled_champion_fixed_loadout",
+            )?;
+            let fixed_rune_names = parse_optional_csv_arg(cli.fixed_rune_names.as_deref());
+            let fixed_shard_stats = parse_optional_csv_arg(cli.fixed_shard_stats.as_deref());
+            run_controlled_champion_fixed_loadout_evaluation(
+                &scenario_path,
+                &ControlledChampionFixedLoadoutOptions {
+                    report_path_override: cli.report_path.as_deref(),
+                    search_quality_profile: cli.search_quality_profile,
+                    fixed_item_names,
+                    fixed_rune_names,
+                    fixed_shard_stats,
+                    fixed_eval_label: cli.fixed_eval_label,
+                    fixed_sweep_seed_repeats: cli.fixed_sweep_seed_repeats.max(1),
+                },
+            )
+        }
+        Mode::ControlledChampionFixedLoadoutRuneSweep => {
+            let fixed_item_names = parse_csv_arg(
+                cli.fixed_item_names.as_deref(),
+                "--fixed-item-names is required for --mode controlled_champion_fixed_loadout_rune_sweep",
+            )?;
+            let fixed_rune_names = parse_optional_csv_arg(cli.fixed_rune_names.as_deref());
+            let fixed_shard_stats = parse_optional_csv_arg(cli.fixed_shard_stats.as_deref());
+            run_controlled_champion_fixed_loadout_rune_sweep(
+                &scenario_path,
+                &ControlledChampionFixedLoadoutOptions {
+                    report_path_override: cli.report_path.as_deref(),
+                    search_quality_profile: cli.search_quality_profile,
+                    fixed_item_names,
+                    fixed_rune_names,
+                    fixed_shard_stats,
+                    fixed_eval_label: cli.fixed_eval_label,
+                    fixed_sweep_seed_repeats: cli.fixed_sweep_seed_repeats.max(1),
+                },
+            )
+        }
+        Mode::ControlledChampionStep => run_controlled_champion_stepper(&scenario_path, cli.ticks),
         Mode::TaricAs => {
             run_stat_optimization("attack_speed_percent", &scenario_path, "attack speed")
         }
@@ -477,170 +648,32 @@ fn main() -> Result<()> {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn loadout_selection_key_is_order_independent() {
-        let a = LoadoutSelection {
-            rune_ids: vec![],
-            rune_names: vec!["Triumph".to_string(), "Lethal Tempo".to_string()],
-            shard_stats: vec!["adaptive".to_string(), "health".to_string()],
-            masteries: vec![
-                MasterySelection {
-                    name: "Fervor of Battle".to_string(),
-                    rank: 1,
-                },
-                MasterySelection {
-                    name: "Perseverance".to_string(),
-                    rank: 2,
-                },
-            ],
-        };
-        let b = LoadoutSelection {
-            rune_ids: vec![],
-            rune_names: vec!["Lethal Tempo".to_string(), "Triumph".to_string()],
-            shard_stats: vec!["health".to_string(), "adaptive".to_string()],
-            masteries: vec![
-                MasterySelection {
-                    name: "Perseverance".to_string(),
-                    rank: 2,
-                },
-                MasterySelection {
-                    name: "Fervor of Battle".to_string(),
-                    rank: 1,
-                },
-            ],
-        };
-        assert_eq!(loadout_selection_key(&a), loadout_selection_key(&b));
+fn parse_csv_arg(value: Option<&str>, missing_message: &str) -> Result<Vec<String>> {
+    let raw = value.ok_or_else(|| anyhow::anyhow!(missing_message.to_string()))?;
+    let values = raw
+        .split(',')
+        .map(str::trim)
+        .filter(|entry| !entry.is_empty())
+        .map(ToString::to_string)
+        .collect::<Vec<_>>();
+    if values.is_empty() {
+        return Err(anyhow::anyhow!(missing_message.to_string()));
     }
-
-    #[test]
-    fn compute_vladimir_stats_does_not_recursively_reapply_conversions() {
-        let base = ChampionBase {
-            name: "Vladimir".to_string(),
-            base_health: 1000.0,
-            health_per_level: 0.0,
-            base_armor: 30.0,
-            armor_per_level: 0.0,
-            base_magic_resist: 30.0,
-            magic_resist_per_level: 0.0,
-            base_attack_damage: 60.0,
-            attack_damage_per_level: 0.0,
-            base_attack_speed: 0.658,
-            attack_speed_per_level_percent: 0.0,
-            base_move_speed: 340.0,
-            is_melee: false,
-        };
-        let item_stats = Stats {
-            ability_power: 100.0,
-            health: 200.0,
-            ..Stats::default()
-        };
-        let out = compute_champion_final_stats(&base, &item_stats);
-        let expected_ap = 100.0 + 0.033 * 200.0;
-        let expected_health = 1000.0 + 200.0 + 1.6 * 100.0;
-        assert!((out.ability_power - expected_ap).abs() < 1e-9);
-        assert!((out.health - expected_health).abs() < 1e-9);
-    }
-
-    #[test]
-    fn enemy_preset_data_validates_against_local_data() {
-        let presets = load_enemy_urf_presets().expect("enemy presets should load");
-        let items = load_items().expect("items should load");
-        let domain = build_loadout_domain();
-        validate_enemy_urf_presets(&presets, &items, &domain)
-            .expect("enemy preset validation should pass");
-    }
-
-    #[test]
-    fn random_loadout_generation_produces_legal_shapes() {
-        let domain = build_loadout_domain();
-        assert!(domain.rune_paths.len() >= 2);
-        assert!(domain.shard_slots.iter().all(|s| !s.is_empty()));
-        assert!(domain.mastery_trees.len() >= 2);
-
-        let base = LoadoutSelection::default();
-        let mut seed = 1337u64;
-        let mut produced_mastery_page = false;
-        for _ in 0..64 {
-            let sample = random_loadout_selection(&base, &domain, &mut seed);
-            assert_eq!(sample.rune_names.len(), 6);
-            assert_eq!(sample.shard_stats.len(), 3);
-            if !sample.masteries.is_empty() {
-                let points = sample.masteries.iter().map(|m| m.rank).sum::<usize>();
-                assert_eq!(points, 30);
-                produced_mastery_page = true;
-                break;
-            }
-        }
-        assert!(
-            produced_mastery_page,
-            "expected to produce at least one legal mastery page"
-        );
-    }
-
-    #[test]
-    fn objective_weights_and_scoring_are_normalized() {
-        let w = normalized_objective_weights(0.55, 0.30, 0.15);
-        assert!((w.survival + w.damage + w.healing - 1.0).abs() < 1e-9);
-
-        let reference = CombatOutcome {
-            time_alive_seconds: 20.0,
-            damage_dealt: 8000.0,
-            healing_done: 2000.0,
-            enemy_kills: 0,
-        };
-        let baseline_score = objective_score_from_outcome(reference, reference, w);
-        assert!((baseline_score - 1.0).abs() < 1e-9);
-
-        let better = CombatOutcome {
-            time_alive_seconds: 22.0,
-            damage_dealt: 8800.0,
-            healing_done: 2400.0,
-            enemy_kills: 0,
-        };
-        assert!(objective_score_from_outcome(better, reference, w) > baseline_score);
-    }
-
-    #[test]
-    fn urf_respawn_timer_scales_with_level() {
-        let tuning = respawn::UrfRespawnTuning {
-            urf_flat_reduction_seconds: 3.0,
-            extrapolation_per_level: 2.5,
-            time_scaling_enabled: true,
-            time_scaling_start_seconds: 300.0,
-            time_scaling_per_minute_seconds: 0.4,
-            time_scaling_cap_seconds: 20.0,
-        };
-        let mut prev = 0.0;
-        for lvl in 1..=30 {
-            let t = respawn::urf_respawn_delay_seconds(lvl, 600.0, tuning);
-            assert!(t >= 1.0);
-            assert!(t >= prev);
-            prev = t;
-        }
-        let no_scale_tuning = respawn::UrfRespawnTuning {
-            time_scaling_enabled: false,
-            ..tuning
-        };
-        assert!((respawn::urf_respawn_delay_seconds(1, 0.0, no_scale_tuning) - 7.0).abs() < 1e-9);
-    }
-
-    #[test]
-    fn urf_respawn_timer_increases_with_game_time_after_scaling_start() {
-        let tuning = respawn::UrfRespawnTuning {
-            urf_flat_reduction_seconds: 3.0,
-            extrapolation_per_level: 2.5,
-            time_scaling_enabled: true,
-            time_scaling_start_seconds: 300.0,
-            time_scaling_per_minute_seconds: 0.4,
-            time_scaling_cap_seconds: 20.0,
-        };
-        let level = 16;
-        let before = respawn::urf_respawn_delay_seconds(level, 240.0, tuning);
-        let after = respawn::urf_respawn_delay_seconds(level, 1200.0, tuning);
-        assert!(after > before);
-    }
+    Ok(values)
 }
+
+fn parse_optional_csv_arg(value: Option<&str>) -> Option<Vec<String>> {
+    value.and_then(|raw| {
+        let values = raw
+            .split(',')
+            .map(str::trim)
+            .filter(|entry| !entry.is_empty())
+            .map(ToString::to_string)
+            .collect::<Vec<_>>();
+        (!values.is_empty()).then_some(values)
+    })
+}
+
+#[cfg(test)]
+#[path = "tests/main_tests.rs"]
+mod tests;

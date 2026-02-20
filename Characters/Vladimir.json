@@ -146,7 +146,12 @@
         }
       ],
       "default_keybinding": "E",
-      "description": "Charge and release an area attack that deals magic damage scaling with max health and ability power; slows if charged at least 1s. Costs 2-8% max health based on charge."
+      "description": "Charge and release an area attack that deals magic damage scaling with max health and ability power; slows if charged at least 1s. Costs 2-8% max health based on charge.",
+      "execution": {
+        "cast_windup_seconds": 0.3,
+        "projectile_speed": 0.0,
+        "effect_hitbox_radius": 275.0
+      }
     },
     "basic_ability_2": {
       "slot": "W",
@@ -387,7 +392,12 @@
         }
       ],
       "default_keybinding": "Q",
-      "description": "Deal magic damage and heal. During Crimson Rush, damage is increased and you gain additional healing based on missing health (reduced vs minions)."
+      "description": "Deal magic damage and heal. During Crimson Rush, damage is increased and you gain additional healing based on missing health (reduced vs minions).",
+      "execution": {
+        "cast_windup_seconds": 0.2,
+        "projectile_speed": 0.0,
+        "effect_hitbox_radius": 80.0
+      }
     },
     "ultimate": {
       "slot": "R",
@@ -509,17 +519,16 @@
         }
       ],
       "default_keybinding": "R",
-      "description": "Infect enemies for 4s, causing them to take 10% increased damage. On detonation, deal magic damage and heal per champion hit (reduced for additional champions)."
+      "description": "Infect enemies for 4s, causing them to take 10% increased damage. On detonation, deal magic damage and heal per champion hit (reduced for additional champions).",
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 0.0,
+        "effect_hitbox_radius": 375.0
+      }
     }
   },
   "name": "Vladimir",
   "sources": [
-    {
-      "path": "/Users/matthewfrench/Downloads/Vladimir.json",
-      "used_for": "base stats, base ability values, cooldowns, costs",
-      "type": "Riot Data Dragon (local)",
-      "accessed": "2026-02-09"
-    },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Crimson_Pact",
       "accessed": "2026-02-09",
@@ -558,12 +567,12 @@
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Vladimir.json",
+      "path": "From Online/champions/Vladimir.json",
       "used_for": "raw basic attack timing stats and radii"
     },
     {
       "type": "Generated champion data",
-      "path": "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online/champions/Vladimir.json",
+      "path": "From Online/champions/Vladimir.json",
       "used_for": "raw basic attack timing stats and radii"
     }
   ],
@@ -597,6 +606,13 @@
     "Mage",
     "Fighter"
   ],
+  "simulation": {
+    "controlled_champion": {
+      "defensive_ability_two": {
+        "prioritize_offensive_ultimate_before_defensive_ability_two_when_ready_and_targets_in_range": true
+      }
+    }
+  },
   "schema_notes": {
     "base_by_champion_level": "Array of base values by champion level tiers (as defined by the game).",
     "value_percent": "A fixed percentage value (stored as percent, not decimal).",
@@ -630,7 +646,14 @@
       "op": "Operation applied to all terms. Common: add, multiply."
     },
     "base_by_rank": "Array of base values by ability rank (1-5).",
-    "basic_attack_raw_timing_stats": "Raw timing values from generated data (attackCastTime, attackDelayOffset, attackTotalTime, attackSpeedRatio, acquisitionRadius, gameplayRadius)."
+    "basic_attack_raw_timing_stats": "Raw timing values from generated data (attackCastTime, attackDelayOffset, attackTotalTime, attackSpeedRatio, acquisitionRadius, gameplayRadius).",
+    "simulation": {
+      "controlled_champion": {
+        "defensive_ability_two": {
+          "prioritize_offensive_ultimate_before_defensive_ability_two_when_ready_and_targets_in_range": "If true, defer defensive ability two when offensive ultimate is ready and has viable targets."
+        }
+      }
+    }
   },
   "base_stats": {
     "attack_speed": {

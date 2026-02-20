@@ -1,0 +1,59 @@
+{
+  "name": "Champion Defaults",
+  "data_version": "1.0.0",
+  "notes": [
+    "Role-based fallback values used when champion files do not provide explicit simulation behavior values.",
+    "Fields omitted in this defaults file are treated as zero-value defaults by the loader."
+  ],
+  "base_stats": {
+    "melee": {
+      "attack_range": 125.0
+    },
+    "ranged": {
+      "attack_range": 550.0
+    }
+  },
+  "basic_attack": {
+    "melee": {
+      "base_windup_seconds": 0.24,
+      "raw_timing_stats": {
+        "gameplay_radius": 80.0
+      }
+    },
+    "ranged": {
+      "base_windup_seconds": 0.2,
+      "missile_speed": 2000.0,
+      "raw_timing_stats": {
+        "gameplay_radius": 45.0
+      }
+    }
+  },
+  "abilities": {
+    "execution_defaults": {
+      "melee": {
+        "cast_windup_seconds": 0.1,
+        "effect_hitbox_radius": 90.0
+      },
+      "ranged": {
+        "cast_windup_seconds": 0.1,
+        "projectile_speed": 1800.0,
+        "effect_hitbox_radius": 70.0
+      }
+    }
+  },
+  "schema_notes": {
+    "base_stats": {
+      "attack_range": "Mirrors Characters/<Champion>.json base_stats.attack_range for role-level fallback."
+    },
+    "basic_attack": {
+      "base_windup_seconds": "Mirrors Characters/<Champion>.json basic_attack.base_windup_seconds fallback.",
+      "missile_speed": "Mirrors Characters/<Champion>.json basic_attack.missile_speed fallback.",
+      "raw_timing_stats": {
+        "gameplay_radius": "Mirrors Characters/<Champion>.json basic_attack.raw_timing_stats.gameplay_radius fallback."
+      }
+    },
+    "abilities": {
+      "execution_defaults": "Role-based fallback used when abilities.<ability_key>.execution is not present on champion data."
+    }
+  }
+}

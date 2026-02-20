@@ -1,7 +1,7 @@
 import json
 import os
 
-BASE_DIR = "/Users/matthewfrench/Documents/League of Legends/Vladimir/From Online"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ITEMS_DIR = os.path.join(BASE_DIR, "items")
 REPORT_PATH = os.path.join(BASE_DIR, "items_normalized_report.json")
 SAMPLE_PATH = os.path.join(BASE_DIR, "items_sample_set.json")

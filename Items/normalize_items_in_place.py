@@ -3,7 +3,7 @@ import os
 import re
 from datetime import datetime, timezone
 
-ITEMS_DIR = "/Users/matthewfrench/Documents/League of Legends/Vladimir/Items"
+ITEMS_DIR = os.path.dirname(os.path.abspath(__file__))
 REPORT_PATH = os.path.join(ITEMS_DIR, "items_quality_report.json")
 
 NUMBER_RE = re.compile(r"-?\d+\.?\d*")
