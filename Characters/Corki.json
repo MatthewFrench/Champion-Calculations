@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Corki",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MAGE",
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 350.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.4,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 27.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 52.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 325.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Hextech Munitions",
+      "type": "Passive",
+      "description": "Innate:  Corki's  basic attacks deal bonus true damage.",
+      "description_source": "The mixed damage is dealt in two simultaneous instances of damage, but will pretend to be a single instance for most effects (such as  Conqueror's stacks).\nThe true damage is dealt in an instance before the physical damage.\nBoth instances deal  basic damage and thus natively apply  life steal.\nThe attack applies  on-hit effects only once, right at the start.\nEven if the target dies from the true damage, the physical damage will still be applied to it.\nIf the target dies from  on-hit damage, the true damage portion will be skipped and only the physical damage applied.(bug)\n Runaan's Hurricane's Wind's Fury and  Spellblade effects have both been special cased to benefit from Hextech Munitions, causing them to deal bonus true damage equal to 20% of the pre-mitigation damage dealt.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Phosphorus Bomb",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Corki fires a flash bomb at the target location, dealing magic damage to enemies hit and  revealing enemy  champions hit.",
+      "description_source": "The missile has a minimum travel time of 0.227 seconds.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Valkyrie",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Corki  flies a short distance to the target location, dropping bombs that create a trail of fire that deals magic damage continually to enemies within.",
+      "description_source": "No additional information.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Gatling Gun",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Corki's gatling gun rapidly fires in a frontal cone, continually dealing physical damage and applying  stacks of Gatling Gun to enemies hit.",
+      "description_source": "The maximum resistances reduction is applied after 4 ticks (1 second).\nThe direction of the gun firing changes depending on where Corki is facing.\nCorki will turn to face in the direction of the cursor upon casting Gatling Gun. He will also instantly turn when issuing an Attack order on enemies while Gatling Gun is active.\nIssuing an Attack Move order at a location will not cause Corki to instantly turn.(note)\nGatling Gun's area of effect can hit close by enemies next to and behind him, due to registering  enemies' edge.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Missile Barrage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Corki fires a missile in the target direction that explodes upon the first enemy hit, dealing physical damage to enemies in an area.",
+      "description_source": "Once Corki has learned the ability:\nHe receives a  buff that counts a cycle of the number of times Missile Barrage has been used since the last Big One.\nAn indicator becomes visible below his health bar that tracks the number of missiles in reserve and whether a Big One is available. They are spent from left to right.\nCorki retains progress towards a Big One when he  dies.\nThis ability will cast from wherever the caster is at the start of the cast time.\nMissile Barrage's effect radius is centered around the location of the missile as it collides.\n Malignance's damage from Missile Barrage does not count toward  Eclipse's passive.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "other",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

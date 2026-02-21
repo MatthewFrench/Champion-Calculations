@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Ivern",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "CATCHER",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 70.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 450.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 27.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 50.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 475.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Friend of the Forest",
+      "type": "Passive",
+      "description": "Freeing the  Krug camp will only grant the  gold and  experience of 1  Ancient Krug, 2  Krugs, and 3  Mini Krugs.\nIvern must be within  275 units of the large monster of the targeted camp to start channeling or collect a grove. The large monsters also must be  visible.\nIf Ivern cannot afford the cost to place a grove, Friend of the Forest is placed on a cooldown equal to the number of seconds it takes for his  health regeneration and/or  mana regeneration to restore him to the amount of health and/or mana needed to afford the cost.\nThe cooldown will update based on Ivern's current health and mana regeneration, as well as his current health and mana.\nFriend of the Forest can be used while Ivern or the camp is in combat and, once the grove is placed,  Smite can be used to instantly claim the camp.  Interrupting Ivern's channel is the only way to contest jungle camps, short of killing the camp during the channel time.\nFreeing a grove causes the monsters within the camp to be dealt 5000 true damage in the  internalraw damage source type by Ivern, despite his inability to damage them.\nFriend of the Forest will leave Ivern at 1 health if cast with exactly the required amount. Friend of the Forest cannot be cast with less, unlike other abilities with health costs.\nNon-epic monsters can attack Ivern if his allies enter combat with the monster and he manages to recieve aggro.(bug)\nIvern can be attacked by  Voidmites without being able to damage them back.(note)\nThe following table refers for interactions while Ivern is  channeling:\nIvern is unable to act during the first 0.15 and last 0.5 seconds of the channel.\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nDamaging effectsDeath Cast-inhibiting effects",
+      "description_source": "Freeing the  Krug camp will only grant the  gold and  experience of 1  Ancient Krug, 2  Krugs, and 3  Mini Krugs.\nIvern must be within  275 units of the large monster of the targeted camp to start channeling or collect a grove. The large monsters also must be  visible.\nIf Ivern cannot afford the cost to place a grove, Friend of the Forest is placed on a cooldown equal to the number of seconds it takes for his  health regeneration and/or  mana regeneration to restore him to the amount of health and/or mana needed to afford the cost.\nThe cooldown will update based on Ivern's current health and mana regeneration, as well as his current health and mana.\nFriend of the Forest can be used while Ivern or the camp is in combat and, once the grove is placed,  Smite can be used to instantly claim the camp.  Interrupting Ivern's channel is the only way to contest jungle camps, short of killing the camp during the channel time.\nFreeing a grove causes the monsters within the camp to be dealt 5000 true damage in the  internalraw damage source type by Ivern, despite his inability to damage them.\nFriend of the Forest will leave Ivern at 1 health if cast with exactly the required amount. Friend of the Forest cannot be cast with less, unlike other abilities with health costs.\nNon-epic monsters can attack Ivern if his allies enter combat with the monster and he manages to recieve aggro.(bug)\nIvern can be attacked by  Voidmites without being able to damage them back.(note)\nThe following table refers for interactions while Ivern is  channeling:\nIvern is unable to act during the first 0.15 and last 0.5 seconds of the channel.\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nDamaging effectsDeath Cast-inhibiting effects",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Rootcaller",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Ivern throws a vine in the target direction that deals magic damage and  roots the first enemy hit.",
+      "description_source": "This ability will cast from wherever the caster is at the start of the cast time.\n Daisy dashes to rooted  monsters, and enemy champions if within 1200 units when Rootcaller hits.\nShe does not dash to enemy minions.(note)\n Daisy can not dash if she's more than 1200 units from the target hit. She will not dash even if she later walks in range.(bug)\nRegardless of  Daisy's and Ivern's distance from the target hit, Ivern dashing does not affect  Daisy in any way.(bug)\nRootcaller will hit  monsters but does not deal damage to it unless the target is an epic monster.\nIvern's pull/attack range is determined when he dashes to the target - not from when he initially casts Rootcaller and throws the vine.\nIvern can rightclick on the target hit to dash to it, stopping at his attack range.\nRightclicking while closer than attack range to the target makes Ivern dash to 425 units away from it.\nThis interacts like expected with attack range increases, increasing the dash distance away from the target 1:1.\nIvern will never dash closer than his current distance from the target when rightclicking within attack range.\nRecasting dashes Ivern to on top of the enemy instead of at attack range.\nIvern and his allies are not able to dash to the target unless they are within 1200 units.\nRootcaller cannot be used to  dash while  grounded or  rooted. This applies to Ivern and his allies.\nRootcaller's dash does not follow targets, their position at the time of starting the dash is the location Ivern and his allies will stop from.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Brushmaker",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive: While  Ivern is in  brush, his basic attacks deal bonus magic damage.",
+      "description_source": "A  brush will be immediately  exposed if grown within the  sight of an enemy  turret.\nThe bonus damage does not apply to structures.\nThe bonus damage won't trigger through  block,  dodge, or  blinding effects.\nThe empowerment given to allies respects  enchantment redirection.\nEpic monsters can not be concealed within, or behind a  brush.\nBoth  Voidgrubs and  Atakhan can be concealed within, and behind a  brush(bug).\n Brushmaker locks on allies when hovered.\nThe indicator for Brushmaker's cast range has a radius of 1150, which is significantly higher than its actual cast range.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Triggerseed",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Ivern can target an ally champion,  Daisy, or himself to  shield them for a short time.",
+      "description_source": "The explosion occurs regardless of whether the shield is maintained.\nThe damage of Triggerseed is attributed to the champion the shield was cast on.\nIf cast on  Daisy, the damage is attributed to Ivern.\nThe  slow debuff is always attributed to Ivern.\nTherefore, placing Triggerseed on allied champions:\ngrants them credit for all kills on enemy units that it causes.\ntriggers turret aggro on them if it deals damage to an enemy champion.\ntriggers their spell effects instead of Ivern's.\nbenefits from their  magic penetration stat.\nIvern's player can appreciate the damage Triggerseed from an ally deals via a yellow damage number intended to reflect the damage dealt.\nThis yellow damage number uses Ivern's  magic penetration stat to calculate the expected damage dealt, instead of reflecting the actual damage dealt.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Daisy!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Ivern summons his Sentinel friend  Daisy to fight with him.",
+      "description_source": "Only the initial cast counts as an ability activation for the purposes of on-cast effects such as  Spellblade.\nRecasting the ability does, however, count as casting an ultimate ability for the purposes of  Experimental Hexplate's Overdrive and similar effects.(bug)\nPENDING FOR TEST: What about  Force Pulse's?\nDaisy, when the ability is initially cast, is  untargetable until she lands.\nRecasting Daisy! does not interrupt  Recall's channel.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

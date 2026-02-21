@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Fiddlesticks",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MAGE",
+    "SPECIALIST",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 500.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 34.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 480.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "A Harmless Scarecrow",
+      "type": "Passive",
+      "description": "Innate:  Fiddlesticks has a  Scarecrow Effigy in place of a trinket, which will imitate Fiddlesticks. Fiddlesticks can impersonate an effigy by remaining idle out of combat.",
+      "description_source": "Scarecrow Effigies are unavailable on  Howling Abyss until Fiddlesticks uses or sells its  Poro-Snax.\nThe process of or the act of pretending to be an Effigy will be interrupted if Fiddlesticks:\nMoves.\nTakes damage.\nDeclares an attack.\nCasts any ability or spell.\nStarts  channeling.\nIs hit by an ability.\nIs affected by a  crowd control effect.\nEffigies will mimic Fiddlesticks'  idle animations and their health bars are hidden until they fake an action.\nWhen pretending to be an effigy while on top of a faelight, Fiddlesticks imitates faelight ward visual effects for 39 seconds or until interrupted.\nEffigies are considered  clones.\nThey are not valid targets to  direction,  ground, and  auto-targeted effects for first 1.5 seconds of their lifespan.\nThe trinket slot can still be temporarily replaced by  Eye of the Herald.\nFiddlesticks can still purchase Support Quest items, as they do not affect the trinket slot.\n -  Surprise Party Fiddlesticks has a special icon for this ability.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Terrify",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive: While  Fiddlesticks is unseen or impersonating an  effigy, its next damaging ability will briefly  fear targets hit.",
+      "description_source": "The fear-immunity timer is not refreshed by subsequent attempts to fear the target.\nThe  fear is applied at the end of the cast time, regardless of the target's distance.\nThe missile cannot be destroyed except by  projectile-interception effects.\nFiddlesticks is considered \"seen\" if it is visible and is inside an enemy champion's sight radius. Vision from  minions,  wards, and  turrets will not prevent Fiddlesticks from  fearing if there are no nearby enemy champions.\nThere is a very brief grace period after being seen or when entering combat. This can allow for multiple spells to inflict  fear.\n Monsters are feared by Fiddlesticks's abilities when Fiddlesticks is out of combat, with some exceptions.\nIf Fiddlesticks has recently damaged a monster from a camp with a basic attack or abilities (including  Smite but not item active abilities), monsters in that camp will not be feared by his other abilities.\n Bountiful Harvest will not fear monsters unless Fiddlesticks is pretending to be an  Effigy or is not visible to them.\n Minions are always feared if Fiddlesticks is not attacking them and there is no enemy champion in its view.\nThe passive portion does not currently communicate any information to Fiddlesticks, its allies nor its enemies. There is no indicator to say that Fiddlesticks is out of combat; and no indicator or debuff icon on affected enemies.\nA visual indicator will circle around all enemy champions while Fiddlesticks is channeling  Crowstorm if it is unseen. This is only visible to Fiddlesticks.\nThe fear immunity applies even if the target is  crowd control immune. It is not applied if it is blocked by  spell shield.\nTerrify will still cast and affect the target even if Fiddlesticks dies or loses  sight of them during the cast time.\nTerrify will still cast but not affect the target if they die or become  untargetable during the cast time. There is no compensation.\nThe player's screen will have a visual effect when successfully  feared by Terrify.\n -  Surprise Party Fiddlesticks has a special icon for this ability.\n Crowstorm will not fear enemy champions if cast while they have vision of Fiddlesticks, even if Fiddlesticks is pretending to be an  Effigy.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Bountiful Harvest",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Spell shield will block the tether's application but not the damage of one already applied.\n -  Surprise Party Fiddlesticks has a special icon for this ability.\nThe following table refers for interactions while Fiddlesticks is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall  Hexflash  Mark  Dash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "Spell shield will block the tether's application but not the damage of one already applied.\n -  Surprise Party Fiddlesticks has a special icon for this ability.\nThe following table refers for interactions while Fiddlesticks is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall  Hexflash  Mark  Dash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Reap",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Fiddlesticks slashes the target area, dealing magic damage and  slowing enemies hit.",
+      "description_source": "-  Surprise Party Fiddlesticks has a special icon for this ability.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Crowstorm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Roots do not  interrupt the ability despite being a movement channel.\nFiddlesticks will always  blink to its intended location even if its position changes during the  channel without being interrupted (e.g. by  Realm Warp).\n -  Surprise Party Fiddlesticks has a special icon for this ability.\nThe following table refers for interactions while Fiddlesticks is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Grounding effects Cast-inhibiting effects",
+      "description_source": "Roots do not  interrupt the ability despite being a movement channel.\nFiddlesticks will always  blink to its intended location even if its position changes during the  channel without being interrupted (e.g. by  Realm Warp).\n -  Surprise Party Fiddlesticks has a special icon for this ability.\nThe following table refers for interactions while Fiddlesticks is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Grounding effects Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

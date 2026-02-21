@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Nilah",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 570.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 350.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 27.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.697,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 225.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Joy Unending",
+      "type": "Passive",
+      "description": "Innate: Whenever  Nilah kills a  minion, she and the nearest allied champion gain an additional portion of the  experience they would have lost from sharing.",
+      "description_source": "Nilah will gain a portion of all healing and all shielding from nearby allies that activate either of the effects on themselves while she is within range of them.\nThe same applies to allies that grant Nilah a heal or shield; they gain a portion of the heal or shield given to her by them, even if the heal or shield affects both units.\nHeal and shields granted by items, runes, and summoner spells will not trigger the increased amount.\nThe heal and shield increases do not trigger from their own heal or shield.\nNilah may still gain a shield from her allies' shields even if they are longer than 4 seconds, but the buff of the shield will only last for up to 4 seconds.\nNilah can receive a normal shield from nearby allies that gain physical or magic shields.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Formless Blade",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive:  Nilah gains  armor penetration based on her  critical strike chance. Also, her basic attacks and Formless Blade against  champions  heal her based on her  critical strike chance; overhealing becomes a  shield that lasts a few seconds.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nFormless Blade's active cast triggers call for help for dealing damage despite not being a targeted spell.(bug)\nApplies  area damage on the empowered attacks.\n Spell shield will not block Formless Blade's empowered basic attacks.\nParrying effects ( dodge,  block,  blind) will negate Formless Blade's empowered attacks only as the primary target.\nFormless Blade's damage to the primary target of the enhanced attacks is affected by  Infinity Edge and classified as  basic damage.\nThe target to which Nilah applies life steal to is unpredictable.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Jubilant Veil",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Nilah briefly envelops herself in mist, during which she gains  ghosting,  move speed and magic damage reduction, and  dodges all non-turret basic attacks.",
+      "description_source": "Allies may only be affected by Jubilant Veil once every 6 seconds.\nJubilant Veil's cooldown is not affected by  Spear of Shojin Dragonforce.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Slipstream",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Nilah  dashes in the target enemy's direction, dealing physical damage to enemies she passes through.",
+      "description_source": "Formless Blade used during Slipstream might not register, rendering it on cooldown without being casted.(bug)\nSlipstream has a chance of visually not using charge, causing it to showing one available charge without possibility of using it.(bug)\nDashing to target through a wall within casting range will cancel the dash if wall is longer than dash range.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Apotheosis",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Nilah whirls her whip-blade for a brief moment, continually dealing physical damage to nearby enemies. She then bursts to deal physical damage and  pull in nearby enemies. Each hit will also  slow enemies for a short time.",
+      "description_source": "Apotheosis can pull enemies through walls and can knock them across Nilah's location.\n Spell shield will only block the burst damage.\nApotheosis shielding reuses indicators from  Joy Unending.\nThe following table refers for interactions while Nilah is performing Apotheosis:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\n\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash  Teleport  Hexflash\n\n\nDisabled\n\n Recall\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -82,6 +82,8 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Data authoring and coverage workflow:
   - `Simulation/DATA_AUTHORING_GUIDE.md`
   - `Simulation/COVERAGE_CHECKLIST.md`
+  - `Simulation/CHAMPION_ROSTER_TRACKER.md`
+  - `Simulation/COVERAGE_EXECUTION_TRACKER.md`
 - Contributor/agent rules:
   - `AGENTS.md`
 
@@ -102,3 +104,7 @@ cargo run --release --manifest-path "Simulation/Cargo.toml" -- \
 ## Disclaimer
 - This project is not affiliated with or endorsed by Riot Games.
 - League of Legends and Riot Games names, marks, and game IP belong to Riot Games, Inc.
+
+
+## Data Coverage Note
+- Canonical champion baseline files are generated from `From Online/champions` into `Characters/` via `Characters/import_from_online.py` to keep repository-local ownership of champion data while script/runtime fidelity is expanded incrementally.

@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Nautilus",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "SUPPORT",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 646.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 400.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.65,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 39.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.706,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 325.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Staggering Blow",
+      "type": "Passive",
+      "description": "Innate:  Nautilus' basic attacks deal bonus physical damage and briefly  root the target.",
+      "description_source": "Spell shield will block the  root but not the bonus damage.\nStaggering Blow's enhanced attack can be  blocked and  dodged (the on-target cooldown will still be applied).\nIt will fail to trigger while he is  blinded.\nThe empowered attack will not trigger against  structures.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Dredge Line",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Dredge Line has two hitboxes. The outer hitbox, shown by a visual effect on the ground, will hit champions edge-to-edge. The inner hitbox, shown by the anchor, can hit terrain. Near thinner walls, this can cause the ability to hit a champion on the other side.\nDredge Line turns Nautilus' facing direction accordingly upon hitting a valid target.\nDredge Line can interact with player-generated terrain.\nNautilus will  dash all the way to the target's location if Dredge Line executed them or they negated the  displacement.\nDredge Line will not interrupt any movement commands Nautilus was issued pre-cast so long as their directions somewhat correlate (this is intentional to smooth out traveling/escaping).\n Spell shield will block the ability but Nautilus will still dash partway to the target.\nThe anchor projectile will stop if Nautilus dies while the projectile is traveling. Enemies hit will still be dealt damage. The  drag and  root are not applied if Nautilus did not initiate the dash.\n Displacement immunity will not resist the application of the  stun.\nThis ability will cast from wherever the caster is at the start of the cast time.\nThe following table refers for interactions during Dredge Line's cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Dredge Line has two hitboxes. The outer hitbox, shown by a visual effect on the ground, will hit champions edge-to-edge. The inner hitbox, shown by the anchor, can hit terrain. Near thinner walls, this can cause the ability to hit a champion on the other side.\nDredge Line turns Nautilus' facing direction accordingly upon hitting a valid target.\nDredge Line can interact with player-generated terrain.\nNautilus will  dash all the way to the target's location if Dredge Line executed them or they negated the  displacement.\nDredge Line will not interrupt any movement commands Nautilus was issued pre-cast so long as their directions somewhat correlate (this is intentional to smooth out traveling/escaping).\n Spell shield will block the ability but Nautilus will still dash partway to the target.\nThe anchor projectile will stop if Nautilus dies while the projectile is traveling. Enemies hit will still be dealt damage. The  drag and  root are not applied if Nautilus did not initiate the dash.\n Displacement immunity will not resist the application of the  stun.\nThis ability will cast from wherever the caster is at the start of the cast time.\nThe following table refers for interactions during Dredge Line's cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Titan's Wrath",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Nautilus  shields himself for a few seconds. While the shield holds, his  basic attacks apply Pain of Wrath to the target and surrounding enemies.",
+      "description_source": "Pain of Wrath's first damage instance is tagged as  spell damage, while the second damage instance is tagged as  persistent damage.\nPain of Wrath damage over time debuff gains another stack when reapplied to the target, but doesn't restart its tick timer. Additional stacks of Pain of Wrath expire when the original debuff does and do not deal any additional damage.\nPain of Wrath's debuff can last up to 0.25 seconds after dealing the second instance of damage.(bug)\nPain of Wrath will be applied by Nautilus's basic attack if he is affected by Titan's Wrath at the start of the attack windup, even if Titan's Wrath expires during the windup.\nPain of Wrath will not be applied if the basic attack is  dodged or  blocked, but will be applied if it is  missed.\n Spell shield will block the ability (but only a single application).\nThe empowered attack does not apply Pain of Wrath to  structures.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Riptide",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Nautilus sends three waves of explosions that radiate from him, each dealing magic damage and briefly  slowing enemies hit.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nThe first wave is centered around Nautilus, while the second and third wave are centered at an offset of 25 units in front of Nautilus at the original cast location.\nBecause of this, there is a zone each in which you can be hit by only 1 wave, or all 3 waves, respectively, without moving.\nThe first wave happens at 0 seconds after the cast time ends, the second wave at 0.297 seconds and the third wave at 0.561 seconds.\nThe intended timing may be 0.25 seconds for each delay, however these are the measured, effective times.\nThe explosions are only a visual effect. The first wave has 8, the seconds has 9, and the third wave has 10 explosions, equally distributed around the rings, starting with one explosion directly in Nautilus' facing direction on each.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Depth Charge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Nautilus sends a Depth Charge that chases the target enemy champion. It creates eruptions in its wake that deal magic damage to enemies hit, as well as briefly  knocking up and  stunning them.",
+      "description_source": "Depth Charge starts in an offset from whichever direction Nautilus is facing at the end of the cast time.\nSince  Dredge Line's causes Nautilus to change his facing direction upon hitting a valid target, Depth Charge's starting point can be changed with a quick  Dredge Line + Depth Charge combo.\nEnemies a certain distance away from the charge / eruption are instead  knocked back.\nDepth Charge's final eruption will occur prematurely if the primary target moves more than 3000 units away from it.\nDepth Charge will not stop chasing if the target dies or becomes untargetable.\n Dredge Line will not override Depth Charge's  knock up.\n Displacement immunity will not resist the application of the  stun.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

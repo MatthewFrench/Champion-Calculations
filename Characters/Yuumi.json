@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Yuumi",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ENCHANTER",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.25,
+      "total_attack_time_seconds": 1.60000002384185,
+      "gameplay_radius": 55.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 500.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 440.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 10.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 25.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 25.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 49.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 425.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Feline Friendship",
+      "type": "Passive",
+      "description": "Innate: Periodically,  Yuumi's next  basic attack or  ability hit against enemy champions will  heal her. If she is  attached to an ally within a short time, they are healed as well.",
+      "description_source": "Feline Friendship will not be consumed if Yuumi isn't missing health, except when triggered by a basic attack. While  attached, it won't be consumed if both Yuumi and her anchor aren't missing health.\nEnemy hits with  Final Chapter won't trigger Feline Friendship.(note)\nAbility hit against enemy champions while detached can only heal Yuumi.(note)\nFeline Friendship will apply to a basic attack already in flight.\nIf there are multiple allies who have equal Friendship stacks, the one Yuumi is currently attached to becomes her Best Friend.\nPENDING FOR TEST: Empowered attack interaction with parrying effects ( dodge,  block).\nIf Yuumi is  blinded, Feline Friendship won't be consumed.\nPENDING FOR TEST: does Yuumi generate more friendship stacks from champion kills?",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Prowling Projectile",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Prowling Projectile is able to turn clockwise or counter-clockwise at a rate of 90\u00b0 per 0.5 seconds. The missile can turn a maximum of 243\u00b0 in both directions combined before accelerating.\nProwling Projectile can be buffered 0.5 seconds before it comes off cooldown.\nThe  Best Friend's empowerment respects  enchantment redirection.\nThe following table refers for interactions while Yuumi is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nN/A\n\n\nAbilities\n\n Detaching and  Final Chapter interrupt.  Zoomies is usable.\n\n\nMovement\n\nN/A\n\n\nItems\n\nUsable\n\nAll items are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\nAll summoner spells are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "Prowling Projectile is able to turn clockwise or counter-clockwise at a rate of 90\u00b0 per 0.5 seconds. The missile can turn a maximum of 243\u00b0 in both directions combined before accelerating.\nProwling Projectile can be buffered 0.5 seconds before it comes off cooldown.\nThe  Best Friend's empowerment respects  enchantment redirection.\nThe following table refers for interactions while Yuumi is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nN/A\n\n\nAbilities\n\n Detaching and  Final Chapter interrupt.  Zoomies is usable.\n\n\nMovement\n\nN/A\n\n\nItems\n\nUsable\n\nAll items are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\nAll summoner spells are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "You and Me!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "The Best Friend's healing on-hit is affected by Yuumi's heal and shield power.\nYuumi will track the target if they change locations.\nShe will not stop tracking the target until she reaches them, as there is no maximum tracking distance.\nIf the target moves 2000 or more units away from Yuumi during the dash, it will be interrupted and You and Me! will be placed on full cooldown.\nThe 0.5-second cooldown will be incurred whenever Yuumi attaches to an Anchor, whether by the active or the recast.\nAttempting to recast You and Me! on an ally that is out of range will briefly glow a range indicator of the ability and indicate that the target is \"Out of Range!\".\nYou and Me! does not count as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nYou and Me! does not count as a buff for  Summon Aery.\nThe initial cast and recast of You and Me! have a  forgiveness radius of 175 units.\nThis behavior can override her direction-targeted  dash to discard any target.\nYuumi can channel the  Eye of the Herald while attached.\nYuumi will automatically detach in the following circumstances:\nWhen her Anchor starts a  Teleport channel.\nAfter the Anchor completes a  Recall channel.\nHer Anchor is sent to the  Realm of Death.\nShe is pulled by  Fate's Call.\nWhen she or her Anchor enters  resurrection.\nIf Yuumi is channeling You and Me! or already dashing towards an ally who enters  resurrection, then she will successfully attach to the resurrecting ally, and she will be able to heal/shield them during it.\nYuumi doesn't detach instantly when her Anchor dies. There's a small grace period in which she can recast You and Me! to attach to another champion without the  channel or dash in the target direction.\nYuumi can dash to targetable  zombie state allies (currently only  Sion's  Glory in Death), but she cannot attach when she reaches them.\nThe same goes for allies channeling  Teleport.\nWhile attached to the Anchor, Yuumi is considered in being at her Anchor's position, regardless of where she is visually placed near them. For example,  turret shots will appear as if they were hitting the Anchor, but in reality they're actually hitting Yuumi.\nHowever, for the purposes of You and Me!, such as casting it or being unattached for other reasons, Yuumi will be in the position where she visually is. For example, when she is in the blue team, dashing to a north-east ally is considerably slower than dashing to a south-west ally.\nHer  monster aggression transfers to the Anchor.\nEnemies are credited an assist on Yuumi if they damaged the Anchor at any point and she dies within the standard credit timer.\nYuumi will always be  visible if her Anchor can be seen, and she will always not be visible if her Anchor cannot be seen. These rules apply regardless of  reveal effects and  stealth.\nYuumi will not  vanish if her Anchor does.\nIf Yuumi is on the blue team, she will remain attached on the southwest side; if Yuumi is on the red team, she will remain on the northeast. While channeling  Final Chapter, she will be behind her Anchor.\nThe player's screen will briefly flash red if Yuumi is affected by a  immobilizing or  grounding effect, or if she forcibly detaches from her Anchor.\n Sleep does not count for knocking the dash down.(bug)\nThe Anchor's health bar will have a different frame to indicate the attached status:\n\nThe following table refers for interactions while Yuumi is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects\n\nThe following table refers for interactions while Yuumi is  attached:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nAllowed\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath\n\nBuffering Interactions\nAll of Yuumi's abilities can be buffered while channeling and dashing.\n Summon Aery would not trigger from the heal or shield when buffered.(bug)",
+      "description_source": "The Best Friend's healing on-hit is affected by Yuumi's heal and shield power.\nYuumi will track the target if they change locations.\nShe will not stop tracking the target until she reaches them, as there is no maximum tracking distance.\nIf the target moves 2000 or more units away from Yuumi during the dash, it will be interrupted and You and Me! will be placed on full cooldown.\nThe 0.5-second cooldown will be incurred whenever Yuumi attaches to an Anchor, whether by the active or the recast.\nAttempting to recast You and Me! on an ally that is out of range will briefly glow a range indicator of the ability and indicate that the target is \"Out of Range!\".\nYou and Me! does not count as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nYou and Me! does not count as a buff for  Summon Aery.\nThe initial cast and recast of You and Me! have a  forgiveness radius of 175 units.\nThis behavior can override her direction-targeted  dash to discard any target.\nYuumi can channel the  Eye of the Herald while attached.\nYuumi will automatically detach in the following circumstances:\nWhen her Anchor starts a  Teleport channel.\nAfter the Anchor completes a  Recall channel.\nHer Anchor is sent to the  Realm of Death.\nShe is pulled by  Fate's Call.\nWhen she or her Anchor enters  resurrection.\nIf Yuumi is channeling You and Me! or already dashing towards an ally who enters  resurrection, then she will successfully attach to the resurrecting ally, and she will be able to heal/shield them during it.\nYuumi doesn't detach instantly when her Anchor dies. There's a small grace period in which she can recast You and Me! to attach to another champion without the  channel or dash in the target direction.\nYuumi can dash to targetable  zombie state allies (currently only  Sion's  Glory in Death), but she cannot attach when she reaches them.\nThe same goes for allies channeling  Teleport.\nWhile attached to the Anchor, Yuumi is considered in being at her Anchor's position, regardless of where she is visually placed near them. For example,  turret shots will appear as if they were hitting the Anchor, but in reality they're actually hitting Yuumi.\nHowever, for the purposes of You and Me!, such as casting it or being unattached for other reasons, Yuumi will be in the position where she visually is. For example, when she is in the blue team, dashing to a north-east ally is considerably slower than dashing to a south-west ally.\nHer  monster aggression transfers to the Anchor.\nEnemies are credited an assist on Yuumi if they damaged the Anchor at any point and she dies within the standard credit timer.\nYuumi will always be  visible if her Anchor can be seen, and she will always not be visible if her Anchor cannot be seen. These rules apply regardless of  reveal effects and  stealth.\nYuumi will not  vanish if her Anchor does.\nIf Yuumi is on the blue team, she will remain attached on the southwest side; if Yuumi is on the red team, she will remain on the northeast. While channeling  Final Chapter, she will be behind her Anchor.\nThe player's screen will briefly flash red if Yuumi is affected by a  immobilizing or  grounding effect, or if she forcibly detaches from her Anchor.\n Sleep does not count for knocking the dash down.(bug)\nThe Anchor's health bar will have a different frame to indicate the attached status:\n\nThe following table refers for interactions while Yuumi is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects\n\nThe following table refers for interactions while Yuumi is  attached:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nAllowed\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath\n\nBuffering Interactions\nAll of Yuumi's abilities can be buffered while channeling and dashing.\n Summon Aery would not trigger from the heal or shield when buffered.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Zoomies",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Yuumi  shields herself and gains  bonus movement speed and  bonus attack speed for a short time.",
+      "description_source": "The Anchor's mana bar will briefly become a light blue upon restoring the mana.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Final Chapter",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "While Yuumi's anchor is not at full health, the  heal on the anchor is reapplied each time you hit another ally.(bug)\nYuumi becomes  ghosted for the channel and, if not presently attached with  You and Me!, will remain ghosted until she attaches and detaches again.(bug)\nWhile  attached,  Cloud Dragon Soul will not activate until Yuumi detaches.\n Spell shield will only block a single instance of damage.\nYuumi's facing direction during the channel is considered to be in Final Chapter's target direction.\nUsing  Hexflash during the channel will always cause Yuumi to  blink in the target direction of Final Chapter.(bug)\n Feline Friendship will not be triggered if Yuumi and her anchor aren't missing health after the wave hit.\nThe VFX will follow Yummi's location, but the actual hitbox of each wave won't.\nThe following table refers for interactions while Yuumi is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Prowling Projectile is disabled.  You and Me! and  Zoomies are usable.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash  Teleport  Hexflash  Mark  Dash\n\n\nDisabled\n\n Recall\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "While Yuumi's anchor is not at full health, the  heal on the anchor is reapplied each time you hit another ally.(bug)\nYuumi becomes  ghosted for the channel and, if not presently attached with  You and Me!, will remain ghosted until she attaches and detaches again.(bug)\nWhile  attached,  Cloud Dragon Soul will not activate until Yuumi detaches.\n Spell shield will only block a single instance of damage.\nYuumi's facing direction during the channel is considered to be in Final Chapter's target direction.\nUsing  Hexflash during the channel will always cause Yuumi to  blink in the target direction of Final Chapter.(bug)\n Feline Friendship will not be triggered if Yuumi and her anchor aren't missing health after the wave hit.\nThe VFX will follow Yummi's location, but the actual hitbox of each wave won't.\nThe following table refers for interactions while Yuumi is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Prowling Projectile is disabled.  You and Me! and  Zoomies are usable.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash  Teleport  Hexflash  Mark  Dash\n\n\nDisabled\n\n Recall\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

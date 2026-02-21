@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Diana",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "DIVER",
+    "FIGHTER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 375.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 31.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 150.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Moonsilver Blade",
+      "type": "Passive",
+      "description": "Innate:  Diana gains  attack speed, increased shortly after casting an ability.",
+      "description_source": "Moonsilver Blade will affect  structures.\nEach attack has a distinct animation and she will glow when the empowered attack is ready.\nSometimes, the empowered basic attack will not consume the stacks.(bug)\nIn this case, the attack will also not deal its damage.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Crescent Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Diana unleashes a bolt of lunar energy that deals magic damage to enemies hit in an arc before exploding at the target location.",
+      "description_source": "Even if the target  spell shields the bolt, they may still be damaged by the explosion. Moonlight is not applied to the protected target if blocked.\nThe bolt consists of two  projectiles with slightly different trajectories.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Pale Cascade",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Diana  shields herself, creating three orbiting spheres that detonate on contact with enemies to deal magic damage in an area.",
+      "description_source": "On the second application of Pale Cascade's shield,  Shield Power will apply to both the new shield amount and the shield amount remaining from the first shield, which has already benefited from shield power.\nBecause of this, shield power effectively applies to the second shield twice, but with reduced efficiency, for up to an increase of 50% of shield power (maximum benefit if no damage was mitigated by the first shield). With 10% shield power, the second shield's total amount will be increased by up to an additional 5%, for a total of 15.5% bonus shield.\nThe formula for the total amount of shield Diana will receive from both shield applications is:\nTotal Shield = (((Shield Amount \u00d7 (1 + Shield Power)) - Damage Blocked by Shield) + Shield Amount) \u00d7 (1 + Shield Power)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Lunar Rush",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Diana  dashes to an enemy and deals magic damage.",
+      "description_source": "Diana will attempt to basic attack the target.\nLunar Rush's cooldown will also be reset if the target dies during the dash while being affected by Moonlight.\nLunar Rush consumes Moonlight upon ending the dash (even if  interrupted).\nLunar Rush will still deal damage even if the target is  untargetable by the end of the dash.\nIf Lunar Rush is blocked by  spell shield the Moonlight debuff is still consumed but Lunar Rush's cooldown is not reset.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Moonfall",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Diana  draws in and  slows nearby enemies.",
+      "description_source": "Enemies stay in the area for a maximum of approximately 0.5 seconds while being pulled.\n Crowd control immunity and  displacement immunity still count as being \"pulled in\" by the ability.\n Clones count as champions for increasing this ability's damage.\nMoonfall's additional damage is not capped at 4 champions.\nThe beam of moonlight does not crash down if champions hit blocked the initial effect with  spell shield.\nEnemy champions protected by spell shield do not count towards the damage increase.\nThis ability will cast from wherever the caster is at the end of the cast time.\nA lunar phase of the moon will appear above Diana while she is casting Moonfall, each phase is based on the number of enemy  champions pulled:\n\n\n\nNew Moon: 1 Enemy Champion Pulled\n\n\n\nWaning Crescent: 2 Enemy Champions Pulled\n\n\n\nThird Quarter: 3 Enemy Champions Pulled\n\n\n\nWaning Gibbous: 4 Enemy Champions Pulled\n\n\n\nFull Moon: 5 Enemy Champions Pulled",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

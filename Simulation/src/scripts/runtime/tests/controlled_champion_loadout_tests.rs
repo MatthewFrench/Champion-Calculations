@@ -84,9 +84,13 @@ fn revive_effect_trigger_checks_cooldown_and_availability() {
 #[test]
 fn dynamic_rune_key_list_matches_modeled_coverage_expectations() {
     let mut expected = vec![
+        "absorblife",
         "aftershock",
         "arcanecomet",
         "conqueror",
+        "scorch",
+        "cheapshot",
+        "coupdegrace",
         "darkharvest",
         "electrocute",
         "firststrike",
@@ -100,6 +104,7 @@ fn dynamic_rune_key_list_matches_modeled_coverage_expectations() {
         "secondwind",
         "summonaery",
         "triumph",
+        "tasteofblood",
     ];
     expected.sort_unstable();
 

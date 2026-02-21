@@ -1132,3 +1132,28 @@ fn aftershock_runtime_triggers_from_enemy_immobilize_script() {
         "expected aftershock trace event when immobilize lands"
     );
 }
+
+#[test]
+fn simulation_smoke_runs_for_all_champion_bases() {
+    let champion_bases = crate::data::load_champion_bases().expect("champion bases should load");
+    let enemy = test_enemy("Training Dummy");
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let sim = test_simulation(0.5, false);
+    let urf = test_urf();
+
+    for champion_base in champion_bases.values() {
+        let outcome = simulate_controlled_champion_combat(
+            champion_base,
+            &[],
+            &Stats::default(),
+            None,
+            None,
+            None,
+            &enemies,
+            &sim,
+            &urf,
+        );
+        assert!(outcome.time_alive_seconds.is_finite());
+        assert!(outcome.time_alive_seconds >= 0.0);
+    }
+}

@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Zyra",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "CATCHER",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 574.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 418.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 29.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 53.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.681,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 575.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Garden of Thorns",
+      "type": "Passive",
+      "description": "Innate:  Zyra's Seeds can be turned into plants by hitting them with her basic abilities. Enemy  champions can step over a Seed to destroy it.",
+      "description_source": "PENDING FOR TEST:: The pattern/probability of Garden of Thorns spawning one seed or two.\nZyra tries to plant Seeds in brush and not on top of walls.\nZyra tries not to plant Seeds too close together and at different angles.\nZyra does not plant any Seeds if she is concealed within a brush (unless there is an enemy ward in it, in which case it takes her a little longer to plant the Seed) or when there is no room for additional ones.\nZyra does not plant any Seeds if she is within  1400 units of the coordinate points (400, 400) or (14000, 14000), which are roughly at the center of the fountains on  Summoner's Rift.\nThese same coordinates may not hold as fountain positions on other maps (e.g. on the  Arena map, the Magma Chamber area overlaps with the second exclusion radius) and may prompt the implementation of this behaviour to be changed in the future.(bug)\nZyra tries to plant Seeds close to an enemy near her.\nPENDING FOR TEST:: Zyra tries to plant Seeds under enemy structures only if she is in basic attack range of them.\nPENDING FOR TEST:: Zyra tries to plant Seeds on the other side of the wall she is facing and/or standing right next to.\nPENDING FOR TEST:: Zyra tries to plant Seeds in the direction she is facing and/or moving.\nZyra tries to plant Seeds near jungle path entrances.\nPENDING FOR TEST:: Zyra tries to plant Seeds behind herself when she is walking through the river and there are no jungle path entrances near her.\nZyra tries to plant Seeds between herself and the enemy champion she has vision of (or is heading towards her) in a 45\u00b0 angle to the left or to the right depending on where on lane she is standing.\nZyra tries to plant Seeds against the inner walls of epic monster pits ( Dragon,  Rift Herald,  Baron Nashor)\nZyra has a hidden passive that grants her 10% increased  size for 33 seconds after having  Leona's  Sunlight applied to her.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Deadly Spines",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Zyra sprouts a field of thorny vines at the target location that deals magic damage to enemies hit.",
+      "description_source": "Each  Thorn Spitter will generate 2 stacks of  Conqueror and 1 stack of each of  Phase Rush and  Electrocute.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Rampant Growth",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Zyra plants a Seed at the target location that remains for a while. Enemy  champions can step on the seed to destroy it and become briefly  revealed.",
+      "description_source": "This ability always employs Quick cast.\nUpon first rank up, Rampant Growth gains 2 charges.\nSeeds are  untargetable.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "other",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Grasping Roots",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Zyra shoots a surge of vines in the target direction that deals magic damage to enemies hit and briefly  roots them.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nZyra will be locked out of actions for 0.15 seconds after casting Grasping Roots.\nEach  Vine Lasher will generate 2 stacks of  Conqueror and 1 stack of each of  Phase Rush and  Electrocute.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Stranglethorns",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Zyra summons a monstrous thicket at the target location that deals magic damage to enemies hit as it expands.",
+      "description_source": "Plants grown during the 2 seconds prior to the displacement will also be enraged.\n Plants already grown before Stranglethorns is cast will have their duration refreshed if they are inside the area of effect.\nStranglethorns' buff on  Plants lasts 10 seconds, however the Plants normally die naturally after 8 seconds.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

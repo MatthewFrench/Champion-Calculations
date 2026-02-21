@@ -2,7 +2,10 @@ use super::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionScriptAction, ChampionScriptEvent,
     ChampionScriptExecutionInput, ScriptedEffectHitbox, on_ability_bonus_damage,
 };
-use crate::defaults::doctor_mundo_infected_bonesaw_ability_defaults;
+use crate::defaults::{
+    doctor_mundo_blunt_force_trauma_ability_defaults,
+    doctor_mundo_infected_bonesaw_ability_defaults,
+};
 
 pub(crate) const CHAMPION_KEY: &str = "drmundo";
 
@@ -11,10 +14,15 @@ pub(crate) fn apply_behavior(profile: &mut ChampionBehaviorProfile) {
 }
 
 pub(crate) fn event_cooldown_seconds(event: ChampionScriptEvent) -> Option<f64> {
-    if event != ChampionScriptEvent::DoctorMundoInfectedBonesaw {
-        return None;
+    match event {
+        ChampionScriptEvent::DoctorMundoInfectedBonesaw => {
+            Some(doctor_mundo_infected_bonesaw_ability_defaults().cooldown_seconds)
+        }
+        ChampionScriptEvent::DoctorMundoBluntForceTrauma => Some(
+            doctor_mundo_blunt_force_trauma_ability_defaults().blunt_force_trauma_cooldown_seconds,
+        ),
+        _ => None,
     }
-    Some(doctor_mundo_infected_bonesaw_ability_defaults().cooldown_seconds)
 }
 
 pub(crate) fn execute_infected_bonesaw(
@@ -51,5 +59,18 @@ pub(crate) fn execute_infected_bonesaw(
         magic: raw_magic + extra_magic,
         true_damage: extra_true,
         stun_duration: 0.0,
+    }]
+}
+
+pub(crate) fn execute_blunt_force_trauma(
+    input: ChampionScriptExecutionInput,
+) -> Vec<ChampionScriptAction> {
+    let ability_defaults = doctor_mundo_blunt_force_trauma_ability_defaults();
+    if input.distance_to_target > ability_defaults.blunt_force_trauma_cast_range {
+        return Vec::new();
+    }
+    vec![ChampionScriptAction::AddNextAttackBonusPhysical {
+        amount: ability_defaults.blunt_force_trauma_bonus_physical_min_base_damage,
+        trace_message: "Blunt Force Trauma empowered next attack",
     }]
 }

@@ -3,9 +3,9 @@
 This file tracks known fidelity and coverage gaps against game-accurate behavior.
 
 ## Coverage Snapshot
-- Champion data files in repo: `6` (`DrMundo`, `Morgana`, `Sona`, `Vayne`, `Vladimir`, `Warwick`)
-- Controlled champion script coverage: `1/6` (`Vladimir` only)
-- Enemy scripted-event champion coverage: `5/6` (`Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`; `Vladimir` missing as enemy script actor)
+- Champion data files in repo: `172` (canonical roster imported from `From Online/champions`, with script-depth currently focused on six modeled champions)
+- Controlled champion script coverage: `1/172` (`Vladimir` only)
+- Enemy scripted-event champion coverage: `6/172` (`Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Vladimir`, `Warwick`)
 - Legal URF legendary item pool used by search: `114`
 - Legal pool items with passive/active/structured effect payload: `112`
 - Legal pool item effect scripts modeled in runtime: `9`
@@ -20,12 +20,12 @@ This file tracks known fidelity and coverage gaps against game-accurate behavior
   - Only `Vladimir` has a controlled champion script implementation.
   - Missing controlled champion scripts: `DrMundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`.
 - Enemy scripted ability depth:
-  - `Warwick`: only passive profile + `Infinite Duress` script event.
-  - `Vayne`: only `Tumble` and `Silver Bolts`-style periodic true-hit behavior.
-  - `Morgana`: only `Dark Binding` and `Soul Shackles` (including detonation follow-up).
-  - `Sona`: only `Crescendo`.
-  - `Doctor Mundo`: only `Infected Bonesaw`.
-  - `Vladimir`: no enemy-scripted spell events.
+  - `Warwick`: passive profile + enemy-scripted `Jaws of the Beast` and `Infinite Duress`.
+  - `Vayne`: enemy-scripted `Tumble`, `Condemn`, and `Silver Bolts`-style periodic true-hit behavior.
+  - `Morgana`: enemy-scripted `Dark Binding`, `Tormented Shadow`, and `Soul Shackles` (including detonation follow-up).
+  - `Sona`: enemy-scripted `Hymn of Valor` and `Crescendo`.
+  - `Doctor Mundo`: enemy-scripted `Infected Bonesaw` and `Blunt Force Trauma` next-attack empowerment.
+  - `Vladimir`: enemy script support now includes Transfusion, Tides of Blood, and Hemoplague first-pass offensive events.
 - Vladimir fidelity is first-pass:
   - Scripted `Q/E/R/W` loop exists, but not every live conditional nuance is modeled.
 - Slot/remap architecture:
@@ -153,7 +153,7 @@ Known deterministic stat-model gaps:
 - Example impact class: ratio/stat-scaling passives (for example AP amplification) are not generally represented unless explicitly scripted.
 
 ## Rune And Mastery Gaps
-Dynamic combat-time runes modeled (`16`):
+Dynamic combat-time runes modeled (`21`):
 - `Aftershock`
 - `Arcane Comet`
 - `Conqueror`
@@ -179,18 +179,15 @@ Deterministic static runes modeled (`6`):
 - `Magical Footwear`
 - `Nimbus Cloak`
 
-Runes currently unmodeled (`39`):
+Runes currently unmodeled (`34`):
 - `Absolute Focus`
-- `Absorb Life`
 - `Approach Velocity`
 - `Axiom Arcanist`
 - `Biscuit Delivery`
 - `Bone Plating`
 - `Cash Back`
-- `Cheap Shot`
 - `Conditioning`
 - `Cosmic Insight`
-- `Coup de Grace`
 - `Cut Down`
 - `Deep Ward`
 - `Demolish`
@@ -206,11 +203,9 @@ Runes currently unmodeled (`39`):
 - `Presence of Mind`
 - `Relentless Hunter`
 - `Revitalize`
-- `Scorch`
 - `Shield Bash`
 - `Sixth Sense`
 - `Sudden Impact`
-- `Taste of Blood`
 - `Time Warp Tonic`
 - `Transcendence`
 - `Treasure Hunter`

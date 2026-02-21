@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Lissandra",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BURST",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 475.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 22.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.656,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 325.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Iceborn Subjugation",
+      "type": "Passive",
+      "description": "Innate: Whenever an enemy champion dies while  Lissandra is nearby, she spawns a Frozen Thrall from their corpse.",
+      "description_source": "Thralls are units that are considered champions (they are  clones) and they take the form of the champion they arise from.\nAdditionally, near the end of their life span, they will cue that champion's basic attack animation.\nThey cannot be teleported by an allied  Realm Warp.\nThralls are  untargetable and  invulnerable.\nThralls are revealed to enemies through the fog of war.\nThralls will continue to chase their target even if they enter a  brush.\nIceborn Subjugation will not summon a Thrall against enemy champions that enter a  zombie state, and will instead summon one after they've left the state.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Ice Shard",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Lissandra throws a spear of ice in the target direction that  slows the first target hit and deals magic damage to all enemies it passes through.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nIce Shard picks a location 950 units away in the direction of the cast for the shattered missile to end up at.\nThe initial Ice Shard missile has a range of 700 units which it arrives at after 0.33 seconds. If it hasn't collided with an enemy in this path when it does, it checks for enemies in a  100 radius around the point 25 units in front of it.\nColliding or hitting an enemy in either fashion creates a new \"shattered\" missile with the same speed but greater width that continues to travel along the same line to the designated point 950 units from the cast's original position, originating at the location at which the initial missile collided at.\n Spell shield will block the damage and the slow but will not stop the projectile from shattering.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Ring of Frost",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Lissandra freezes nearby enemies, dealing magic damage and briefly  rooting them.",
+      "description_source": "No additional information.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Glacial Path",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Lissandra sends a claw of ice in the target direction that deals magic damage to enemies it passes through. Glacial Path can be recast while the claw is active.",
+      "description_source": "Both casts count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nLissandra can reactivate Glacial Path for the duration (plus another 0.2-0.3 seconds after the claw 'sinks' into the ground).\nThe Claw can also hit enemies near the end point at this time, shortly after the missile has reached its maximum range.\nGlacial Path allows Lissandra to surpass through every single wall in all maps, so long as the claw is at least halfway through them.\nGlacial Path cannot be recast while  grounded or  rooted.\nGlacial Path's endpoint shows through terrain, fog of war and  brush to enemies within 600 range of it.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Frozen Tomb",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Lissandra can cast Frozen Tomb on herself or an enemy champion.",
+      "description_source": "Enemies can only be damaged by the field of ice once every 4 seconds.\nUnder normal circumstances, this means once per cast of Frozen Tomb.\nEnemies who come in contact with Frozen Tomb's slow field will be damaged and a small visual and sound effect will play.\n Spell shield will block the single-targeted portion and the radiating ice damage, but will not stop it from spreading.\nIf the target becomes  untargetable,  dies, or is too far away during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost.\nThe ability is not cancelled by loss of  sight of the target.\nThis only applies to the enemy cast.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

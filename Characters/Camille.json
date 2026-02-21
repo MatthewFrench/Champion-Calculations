@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Camille",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "DIVER",
+    "FIGHTER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.300000011920928,
+      "total_attack_time_seconds": 1.55200004577636,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 339.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.15,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 35.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Adaptive Defenses",
+      "type": "Passive",
+      "description": "Innate: Periodically,  Camille's next basic attack against a champion will  on-hit grant her a  shield against their damage type (physical or magical) for a short time.",
+      "description_source": "Adaptive Defenses goes on cooldown after the shield expires or is destroyed.\nThe shield-typing is determined based on the total damage the target has dealt to champions that game (as a percentage) versus Camille's current  armor and  magic resistance.\nFor example, with little bonus resistances Camille would likely gain the most obvious shield-typing - i.e. physical shield versus champions primarily dealing physical damage and magic shield versus champions primarily dealing magic damage. However, if she has a sufficient amount of armor against a champion dealing both alternates of physical damage and magic damage, she will receive a magic shield as the physical damage threat is already being mitigated by her armor, and vice versa.\nThe type of shield that will be granted to Camille when she attacks any one enemy champion is shown as an icon beneath their health bar: orange for physical shield and blue for magic shield.\nAdaptive Defenses takes priority over all other  shields except  Black Shield.\nAdaptive Defenses Will not grant Camille the shield if the attack is  dodged,  blocked, or if she is  blinded\nThe effect will also not go on cooldown.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Precision Protocol",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Camille's next basic attack deals bonus physical damage and grants her  bonus movement speed.",
+      "description_source": "Both casts count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nBoth enhanced attacks cannot  critically strike.\nThe 1.5-second delay is \"fuzzy\", meaning it may take up to another 0.25 seconds to ready the window for the empowered attack.\nThis syncs up perfectly with  Sheen's cooldown between casts at 0 item haste, which is also \"fuzzy\".\nThe second attack will also become empowered if it simply starts after the 1.5-second delay, even if the recast was consumed earlier.\nThe empowered recast's  true damage:\nHas a special case to factor  Spellblade into the true damage conversion of part of her attack's damage.\nOther on-hit effects do not interact with the true damage conversion.\nRandomly dependent on buff order, if (e.g.  Plated Steelcaps' Plating,  Path Maker) applies first before the conversion, then the resulting damage will be reduced, otherwise if the conversion happens first, then the damage will not be successfully reduced (both effects are pre-mitigation on-take-damage events).(bug)\nIs dealt just prior to the physical damage portion of the attack.\nPrecision Protocol applies to structures but the recast does not convert to true damage.\nThe enhanced attack will still complete and hit the target even if they become  untargetable during the attack's windup.\n Warden's Mail's flat damage reduction is reduced on the second cast, reducing the physical damage but not the true damage.(note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Tactical Sweep",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Camille briefly becomes  ghosted and sweeps her leg after a delay, dealing physical damage to enemies hit in a cone. Enemies in the outer half are slowed and take increased damage, while also  healing her.",
+      "description_source": "Camille can move during the delay, but the hitbox and Camille's visuals are fixed to the initial target direction.\nCamille's facing-direction, for effects such as  Petrifying Gaze, is the direction she is moving, and not the direction the model is facing.\nThe damage modifier against non-epic monsters applies after the cap.\nBecause the increased damage in the outer range of the cone is dealt as an additional instance of damage (as opposed to bonus damage to the original instance), it will trigger effects twice such as being reduced by  Bone Plating an extra time.(note)\nIt still belongs to the same cast instance, therefore it does not trigger additional stacks of  Conqueror or  Electrocute.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Hookshot",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Camille fires a grapple,  dashing onto any terrain she hits and briefly perching onto it.",
+      "description_source": "Camille may move while the grapple is in flight.\nHookshot can be cast while  rooted but not while  grounded.\nCamille will grapple to terrain even if she is  immobilized.\nHookshot can interact with player-generated terrain.\n Sleep does not count for knocking the dash down.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "The Hextech Ultimatum",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Camille  dives onto an enemy champion, creating a zone around the target and  knocking away all other enemies.",
+      "description_source": "Camille will attempt to basic attack the target upon landing.\nCamille will track the target if they change locations.\nShe will always land and create the zone after 0.5 seconds.\nIf the target becomes  untargetable,  dies, or moves 2000 or more units away during the dash, it will be interrupted and the ability's  cooldown and  mana cost will not be refunded.\n Knockaway speed is 1000.\nIf the target manages to be outside of the boundaries, they will immediately be pulled back towards the center of the hexagon.\nThe boundaries are not considered terrain ( Unstoppable Onslaught exception), and enemies that try to move out of the area will be displaced back inside.\n Dashes,  blinks,  displacements, and other forms of movement will cap their effect range to the boundary. Targets will stop at the boundary even after it expired.\n Ekko's  Chronobreak will still deal damage at the hologram's location.\nAn active  Cease and Desist on a target outside the perimeter will cause  Vi to continue her charge until The Hextech Ultimatum ends. She can knockback and damage secondary targets multiple times.\nIf the target  attaches to a unit, they will only be displaced back inside once they detach. The Hextech Ultimatum does not end nor break the bind to the victim.\n Kayn's  Umbral Trespass allows him to cast it even if his target is outside the area, dashing through the borders and attaching despite being unable to escape.\n Yuumi's  You and Me! allows her to bypass the borders if the unit she attaches to leaves the area.\n Tristana's  Rocket Jump does not allow her to escape, but she applies the magic damage and  slow.\n Sett's  The Show Stopper does not allow him to pass through the borders and the dash will end prematurely when he encounters them.\nIf the target of  The Show Stopper is also the target of The Hextech Ultimatum, they can go through the borders while attached to him.\nIf Camille enters  resurrection during the initial cast, the  dash is stopped and the zone is formed immediately.\nThe Hextech Ultimatum ends if the target enters resurrection, but not if Camille does.\nThe Hextech Ultimatum ends immediately if the target is dragged by  Fear Beyond Death.\nThe  disrupt is 'wrapped' into a status effect that causes the affected champion to display the \" Silenced\" UI on their health bar for 0.25 seconds, without actually applying the disabling effects of the  silence crowd control type (functions as an indicator of the target becoming disrupted). This however ensures that the disrupt is also prevented by effects that would negate  silences (such as  crowd control immunity).\nThe following table refers for interactions while Camille is dashing.\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll summoner spells are disabled\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

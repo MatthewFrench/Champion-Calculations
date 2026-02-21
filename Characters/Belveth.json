@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Bel'Veth",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.85,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 150.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Death in Lavender",
+      "type": "Passive",
+      "description": "Innate:  Bel'Veth's attack speed cap is greatly increased, but her  attack speed does not grow by  leveling up. The damage dealt by her  basic attacks (including  on-hit effects) is reduced.",
+      "description_source": "Bel'Veth's attack speed cap is increased to 9999.0, however this value is already way beyond the technical limit for attack speed.\nDeath in Lavender's  takedown effect will not trigger against monsters if they were slain by an enemy.\nDeath in Lavender stacks are indicated under Bel'Veth's health bar.\nBel'Veth's on-hit damage modifier will reduce the damage dealt by on-hit effects even if they aren't meant to be affected by on-hit modifiers (eg.  Statikk Shiv).(bug)",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Void Surge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Bel'Veth  dashes in the target direction, though not through terrain, dealing physical damage to enemies she passes through.",
+      "description_source": "Void Surge applies  basic damage, additionally tagged as  spell damage to the first (closest) enemy hit and  area damage to secondary enemies:\nVoid Surge will apply  spell effects to all targets hit.\n Spell vamp will grant  healing from the damage dealt to all targets, but healing from damage to secondary targets is reduced to 33% effectiveness.\n Life steal will heal based on the damage dealt to the first target hit.\nVoid Surge's on-hit damage modifier will reduce the damage dealt by on-hit effects even if they aren't meant to be affected by on-hit modifiers (eg.  Statikk Shiv).(bug)\nThe icon partially darkens based on the combination of dashes available. When all dashes are expended, the cooldown indicates the next available dash.\nWhile in  True Form, Void Surge's dash distance is extended up to 225 units when targeted across terrain.\nThe basic attack reset is not considered one for  Hail of Blades.\nVoid Surge can be  dodged and  blocked only as the first enemy hit.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Above and Below",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Bel'Veth slams her tail in the target direction that deals magic damage to enemies hit, briefly  knocking up and  slowing them.",
+      "description_source": "This ability will cast from wherever the caster is at the start of the cast time.\nAbove and Below can reset the cooldown of each dash from  Void Surge.\nMore than one cooldown can be reset if enemy champions were hit within multiple directions.\nThe cooldowns that get reset are based on the relative direction to Bel'Veth at the end of the cast\nIf  Void Surge's dash comes off cooldown during Above and Below's cast time, Bel'Veth will be able to dash twice in the same direction.(bug)\nAbove and Below's cooldown refund is applied before the  knockup is applied.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Royal Maelstrom",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Bel'Veth enters a brief defensive stance, gaining  life steal and damage reduction.\nDuring this time, Bel'Veth rapidly slashes at the most wounded enemy, with the max number of slashes increased based on her bonus attack speed. Each slash deals physical damage, and applies  life steal,  on-hit and  spell effects based on the target's missing health.",
+      "description_source": "Applies  spell damage and procs  basic damage required effects.\nRoyal Maelstrom does not prioritize champions over other units.\nBel'Veth cannot attack  structures,  wards, nor jungle plants with Royal Maelstrom.\nIf Bel'Veth is  berserked or  taunted, she will slash at the unit she is forced to attack.\nBel'Veth will perform the slashes even if she is affected by  flee.(bug)\nEach slash's damage triggers a stack of  Conqueror.\nDespite this ability's cooldown starts on cast, it cannot be reduced by  Navori Flickerblade's Transcendence during the effect of this ability.(bug) Cooldowns of the other basic abilities can be normally reduced during this ability, though.\nRoyal Maelstrom is special cased to end early if she is hit by  Kassadin's  Null Sphere.\nRoyal Maelstrom will not deal any damage if Bel'Veth has impossibily high attack speed values (such as her cap). This is intended to prevent server crashes and long lags.\nThe following table refers for interactions while Bel'Veth is performing Royal Maelstrom:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nAll items interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Hexflash\n\n\nDisabled\n\n Teleport  Recall\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Endless Banquet",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive: Every second basic attack on the same target deals bonus true damage and generates a stack that increases the damage. This can stack infinitely, and expires after a short time or upon switching targets.",
+      "description_source": "Applies  proc damage on the bonus true damage and deals  area damage on the explosion.\nEndless Banquet's  takedown effect will not trigger against monsters if they were slain by an enemy.\nEndless Banquet's true damage based on the target's missing health is calculated before the base damage is dealt.\nTrue Form's duration is displayed in Bel'Veth's resource bar, in seconds.\nTrue Form's duration is refreshed based on the type of Void Coral that Bel'Veth consumes.\nConsuming a normal Void Coral in a normal True Form state refreshes the duration to 60 seconds.\nConsuming an enhanced Void Coral refreshes the duration to 180 seconds and grants the enhanced effects regardless of current True Form state.\nIf she consumes a normal Void Coral while in an enhanced True Form state, the current duration is extended by 60 seconds.\nThe enhanced effects are not lost in this case.\nBel'Veth will consume all existing Void Corals at once, therefore she is able to acquire the enhanced effects of True Form even if she does not physically consume an enhanced Void Coral.\nThe Void Coral that Bel'Veth consumes herself will not expire in the process of her doing so.\nBel'Veth will consume all other Void Corals upon consumption regardless of range.\nRanking up Endless Banquet will update the bonuses dynamically; if Bel'Veth has True Form upon the level-up, she will receive the upgraded stats.\nBel'Veth gains the bonus health and heal from Endless Banquet at the start of the cast time.\nBel'Veth will be able to consume the target Void Coral even if her dash is interrupted.\nShe dashes at the start of the cast time.\nA Void Coral will not spawn when scoring a  takedown against a summoned  Rift Herald.\nThis ability will cast from wherever the caster is at the start of the cast time.\nThe following table refers for interactions while Bel'Veth is in cast time:\nMovement summoner spells can be buffered to cast after the cast time completes if permitted.\nShe is locked out of movement and attack actions for 0.5 seconds after the cast time completes and no buffering of them is permitted for the entirety of her lockout.\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Mark\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash  Dash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

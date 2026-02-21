@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Rell",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "SUPPORT",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.42,
+      "total_attack_time_seconds": 2.0,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 320.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 315.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Break the Mold",
+      "type": "Passive",
+      "description": "Innate:  Rell's  basic attacks deal bonus magic damage  on-hit equal to a percentage of her total armor and total magic resistance.",
+      "description_source": "The attacks do not affect structures.\nThe first stack of Break the Mold that is applied to a target will snapshot the targets current  armor and  magic resistance. All subsequent stacks will reduce the targets resistances based on the snapshotted amount, even if the target's total resistances change. This snapshot lasts until the debuff expires.\nFor example, applying a stack of Break the Mold to a champion with 100  armor and  magic resistance will reduce their resistance by 3 and grant Rell the lost stats. If their resistances are then boosted to 500 before another stack is applied, the subsequent stack will only reduce their resistance by a further 3 despite 3% of 500 being 15.\nAnother example, when a target has temporarily gained increased resistances before Rell applies the first stack of Break the Mold then the snapshot of the target's stats will be of the increased amount. This can result in targets losing significantly more resistances after the duration of the increase ends, for as long as the stacks don't fall off.\nIf a target has 100 base resistances, and they are increased to 500 temporarily before Break the Mold is applied, then the target will lose a total of 15 resistances, up to a total of 75 resistances at 5 stacks, and when the target's resistance buff ends they would only have 25 remaining.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Shattering Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Rell thrusts her lance in the target direction that destroys damage  shields of enemies hit before dealing magic damage and  stunning.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nRell is  locked out of moving, attacking, and casting any other ability for 0.35 seconds after Shattering Strike is cast.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Ferromancy: Crash Down",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive - Mounted Alacrity: While  Rell is Mounted, she gains bonus movement speed.",
+      "description_source": "Mounted Alacrity grants 15 bonus movement speed if the ability has not been learned (rank 0).\nRell  slides between 250 and 350 units in testing, depending on how far the spell was targeted. It is not known where this is intended.\nIf Rell dashes before a wall on the map, the slide will cover a shorter distance to the terrain over the same time, moving slower.\nPENDING FOR TEST: Interaction with player-made walls.\nThe following table refers for interactions while Rell is dashing/in cast time:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Shattering Strike is disabled.  Full Tilt and  Magnet Storm are usable.\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Full Tilt",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Rell empowers herself and an allied  champion with bonus movement speed for a few seconds, which is increased when moving towards the empowered ally or an enemy champion.",
+      "description_source": "If  Shattering Strike hits more than one enemy, the Full Tilt explosion will be centered around the unit with the lowest Spawn ID.\n\"Spawn ID\" is an unofficial abbreviation to describe the spawn order for all units at the beginning of games.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Magnet Storm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Rell erupts in magnetic fury,  pulling nearby enemies inward. She then emits a  Kinematic field that continually deals magic damage over a short time.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nMagnet Storm will not drag units that are:\n Dashing.\nBeing displaced (e.g. by  airborne effects)\n Attached.\n Displacement immune.\n Immune to crowd control.\n Spell shield will block the initial  pull but not the dragging effect.\nMagnet Storm cannot be cast again while it is active.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

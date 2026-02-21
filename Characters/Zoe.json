@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Zoe",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BURST",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 55.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 425.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 21.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "More Sparkles!",
+      "type": "Passive",
+      "description": "Innate: After casting an ability,  Zoe's next basic attack or  Spell Thief bolt within a few seconds will deal bonus magic damage.",
+      "description_source": "The empowered attack will trigger but not be consumed against  wards.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Paddle Star!",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Zoe shoots a star in the target direction that explodes upon hitting an enemy, dealing magic damage to nearby enemies hit based on the distance travelled.",
+      "description_source": "Both casts count as ability activations for the purposes of on-cast effects such as  More Sparkles!,  Spellblade and triggering  Force Pulse's passive.\nThe recast radius matches the initial cast radius of the ability, but Zoe can move any amount of distance away from the projectile before reactivating.\nPaddle Star!'s effect radius is centered around the location of the missile as it collides.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Spell Thief",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "The in-game tooltip for Spell Thief while Zoe has a Spell Shard uses the tooltip of the mimicked spell or item active.\nZoe will cast Spell Thief in place of her own summoner spells if she has either of them as a collected Spell Shard, even if she tries to cast the summoner spell while it is on cooldown.\nMinions that can drop Spell Shards are marked with a tied cosmic balloon that floats above them.\nZoe utilizes an attack-like animation whenever one of the bubbles hurls itself at an enemy, making it look as if she can attack while moving.\nMinions holding a Spell Shard can drop one of the following summoner spells or item actives:\nApplicable summoner spells:  Barrier,  Cleanse,  Exhaust,  Ghost,  Heal,  Ignite, and  Unleashed Smite.\nAll other summoner spells are not applicable for minions to drop, which includes  Clarity,  Hexflash,  Mark /  Dash,  Smite,  Teleport /  Unleashed Teleport, and  Primal Smite.\nApplicable item actives:  Hextech Rocketbelt,  Locket of the Iron Solari,  Profane Hydra,  Randuin's Omen,  Ravenous Hydra,  Shurelya's Battlesong,  Stridebreaker,  Titanic Hydra, and  Youmuu's Ghostblade.\nAll summoner spells except  Dash and  Hexflash are applicable to drop as a Spell Shard when an enemy champion uses them.\nThe recast duration of a mimicked  Mark cast lasts longer than the mark duration.(bug)\nThis allows her to cast  Dash while the mark is expired, though the spell will fail to trigger its effects with an attempted cast. Spell Thief's passive effect is still triggered, however.\nSpell Shards may be collected while Zoe can cast  Dash from a mimicked  Mark cast. The new shard will replace the ability slot once  Dash is used or expires.\nThe following table lists item actives that can drop as a Spell Shard, as well as those that explicitly do not or are not applicable to drop, when an enemy champion activates them:\nConsumable and trinket items are excluded automatically.\n\n\nItem\n\nStealable\n\n\n Black Spear\n\n\n\n Bloodsong\n\n\n\n Bounty of Worlds\n\n\n\n Celestial Opposition\n\n\n\n Dream Maker\n\n\n\n Farsight Alteration\n\n\n\n Hextech Rocketbelt\n\n\n\n Knight's Vow\n\n\n\n Locket of the Iron Solari\n\n\n\n Mercurial Scimitar\n\n\n\n Mikael's Blessing\n\n\n\n Oracle Lens\n\n\n\n Profane Hydra\n\n\n\n Quicksilver Sash\n\n\n\n Randuin's Omen\n\n\n\n Ravenous Hydra\n\n\n\n Redemption\n\n\n\n Runic Compass\n\n\n\n Scarecrow Effigy\n\n\n\n Seeker's Armguard\n *\n\n\n Shurelya's Battlesong\n\n\n\n Solstice Sleigh\n\n\n\n Stridebreaker\n\n\n\n Tiamat\n\n\n\n Titanic Hydra\n\n\n\n Warding Totem\n\n\n\n Watchful Wardstone\n\n\n\n Vigilant Wardstone\n\n\n\n Youmuu's Ghostblade\n\n\n\n Zaz'Zak's Realmspike\n\n\n\n Zhonya's Hourglass\n\n\n\n\nKey\n\n\n\n\nCan be stolen.\n\n\n\n\nCannot be stolen.\n\n\n\n\nNot applicable to be stolen.\n\n\n\n\nUntested",
+      "description_source": "The in-game tooltip for Spell Thief while Zoe has a Spell Shard uses the tooltip of the mimicked spell or item active.\nZoe will cast Spell Thief in place of her own summoner spells if she has either of them as a collected Spell Shard, even if she tries to cast the summoner spell while it is on cooldown.\nMinions that can drop Spell Shards are marked with a tied cosmic balloon that floats above them.\nZoe utilizes an attack-like animation whenever one of the bubbles hurls itself at an enemy, making it look as if she can attack while moving.\nMinions holding a Spell Shard can drop one of the following summoner spells or item actives:\nApplicable summoner spells:  Barrier,  Cleanse,  Exhaust,  Ghost,  Heal,  Ignite, and  Unleashed Smite.\nAll other summoner spells are not applicable for minions to drop, which includes  Clarity,  Hexflash,  Mark /  Dash,  Smite,  Teleport /  Unleashed Teleport, and  Primal Smite.\nApplicable item actives:  Hextech Rocketbelt,  Locket of the Iron Solari,  Profane Hydra,  Randuin's Omen,  Ravenous Hydra,  Shurelya's Battlesong,  Stridebreaker,  Titanic Hydra, and  Youmuu's Ghostblade.\nAll summoner spells except  Dash and  Hexflash are applicable to drop as a Spell Shard when an enemy champion uses them.\nThe recast duration of a mimicked  Mark cast lasts longer than the mark duration.(bug)\nThis allows her to cast  Dash while the mark is expired, though the spell will fail to trigger its effects with an attempted cast. Spell Thief's passive effect is still triggered, however.\nSpell Shards may be collected while Zoe can cast  Dash from a mimicked  Mark cast. The new shard will replace the ability slot once  Dash is used or expires.\nThe following table lists item actives that can drop as a Spell Shard, as well as those that explicitly do not or are not applicable to drop, when an enemy champion activates them:\nConsumable and trinket items are excluded automatically.\n\n\nItem\n\nStealable\n\n\n Black Spear\n\n\n\n Bloodsong\n\n\n\n Bounty of Worlds\n\n\n\n Celestial Opposition\n\n\n\n Dream Maker\n\n\n\n Farsight Alteration\n\n\n\n Hextech Rocketbelt\n\n\n\n Knight's Vow\n\n\n\n Locket of the Iron Solari\n\n\n\n Mercurial Scimitar\n\n\n\n Mikael's Blessing\n\n\n\n Oracle Lens\n\n\n\n Profane Hydra\n\n\n\n Quicksilver Sash\n\n\n\n Randuin's Omen\n\n\n\n Ravenous Hydra\n\n\n\n Redemption\n\n\n\n Runic Compass\n\n\n\n Scarecrow Effigy\n\n\n\n Seeker's Armguard\n *\n\n\n Shurelya's Battlesong\n\n\n\n Solstice Sleigh\n\n\n\n Stridebreaker\n\n\n\n Tiamat\n\n\n\n Titanic Hydra\n\n\n\n Warding Totem\n\n\n\n Watchful Wardstone\n\n\n\n Vigilant Wardstone\n\n\n\n Youmuu's Ghostblade\n\n\n\n Zaz'Zak's Realmspike\n\n\n\n Zhonya's Hourglass\n\n\n\n\nKey\n\n\n\n\nCan be stolen.\n\n\n\n\nCannot be stolen.\n\n\n\n\nNot applicable to be stolen.\n\n\n\n\nUntested",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "other",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Sleepy Trouble Bubble",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Applies  spell damage for the bubble and  default damage for the wake-up damage.\nThe wake-up damage is similar to a damage modifier in that it cannot be redirected (i.e  Illaoi's  Test of Spirit,  Zac's  Cell Division,  Knight's Vow).\n Spell shield will not prevent falling  asleep nor block the wake-up damage.\nThe bubble's damage and  drowsy application will be blocked.\nThe bonus damage from Sleepy Trouble Bubble is dealt before any triggering damage from Zoe or her allies, and is attributed to Zoe at all times.\nIf an ally expunges the  sleep and the bonus damage from Sleepy Trouble Bubble is enough to kill the target, Zoe will be credited the kill.\nAdditionally in this case, the allied champion will not be credited an assist at all.(bug)\nZoe will gain  obscured vision of the target while they're  asleep if they are not  visible.\nIf exceptionally close to terrain, the bubble will pass through without detection and will still be able to pass through a second piece of terrain - although it sacrifices any range its already used going through the first piece.\nSleepy Trouble Bubble can interact with player-generated terrain.\nAt the end of the path of the initial missile, before continuing with the short bounce, Sleepy Trouble Bubble checks for targets in a  100 radius to immediately collide with.\nThis \"lollipop\" is one of only a few that is larger than the ability's missile width.\nSleepy Trouble Bubble can still be collided with during the short bounce between end of initial missile and the trap being formed.\nThis seems to use a  very small or negative collision radius, rather than normal missile collision.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThe missile's maximum range location, or end position, is determined at the start of the cast and as such will always be fired to the same spot regardless of where Zoe is at the end of the cast time.\nAn applicable example of this can be seen in an interaction with her  Portal Jump. If Sleepy Trouble Bubble is cast right before she blinks back to Portal Jump's original cast position, the range of the missile will be extended for it to fire to the same end position as if she had not blinked back. This interaction occurs in this manner due to the missile's behavior as explained prior and the fact that Zoe blinks back with Portal Jump before the cast time of Sleepy Trouble Bubble finishes, causing the cast time to finish from Portal Jump's original cast position.\nThis will still count as damage dealt by Zoe in the damage recap.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Applies  spell damage for the bubble and  default damage for the wake-up damage.\nThe wake-up damage is similar to a damage modifier in that it cannot be redirected (i.e  Illaoi's  Test of Spirit,  Zac's  Cell Division,  Knight's Vow).\n Spell shield will not prevent falling  asleep nor block the wake-up damage.\nThe bubble's damage and  drowsy application will be blocked.\nThe bonus damage from Sleepy Trouble Bubble is dealt before any triggering damage from Zoe or her allies, and is attributed to Zoe at all times.\nIf an ally expunges the  sleep and the bonus damage from Sleepy Trouble Bubble is enough to kill the target, Zoe will be credited the kill.\nAdditionally in this case, the allied champion will not be credited an assist at all.(bug)\nZoe will gain  obscured vision of the target while they're  asleep if they are not  visible.\nIf exceptionally close to terrain, the bubble will pass through without detection and will still be able to pass through a second piece of terrain - although it sacrifices any range its already used going through the first piece.\nSleepy Trouble Bubble can interact with player-generated terrain.\nAt the end of the path of the initial missile, before continuing with the short bounce, Sleepy Trouble Bubble checks for targets in a  100 radius to immediately collide with.\nThis \"lollipop\" is one of only a few that is larger than the ability's missile width.\nSleepy Trouble Bubble can still be collided with during the short bounce between end of initial missile and the trap being formed.\nThis seems to use a  very small or negative collision radius, rather than normal missile collision.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThe missile's maximum range location, or end position, is determined at the start of the cast and as such will always be fired to the same spot regardless of where Zoe is at the end of the cast time.\nAn applicable example of this can be seen in an interaction with her  Portal Jump. If Sleepy Trouble Bubble is cast right before she blinks back to Portal Jump's original cast position, the range of the missile will be extended for it to fire to the same end position as if she had not blinked back. This interaction occurs in this manner due to the missile's behavior as explained prior and the fact that Zoe blinks back with Portal Jump before the cast time of Sleepy Trouble Bubble finishes, causing the cast time to finish from Portal Jump's original cast position.\nThis will still count as damage dealt by Zoe in the damage recap.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Portal Jump",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Zoe  blinks in the target direction, after which she cannot move for a brief moment.",
+      "description_source": "Zoe will remain at the blink destination for an inconsistent period of time.(bug)\nPortal Jump causes Zoe to become unable to perform any actions for a varied ~0.55-0.75 seconds(bug) from the start of the cast time and another time for a varied ~0.3-0.5 seconds(bug) starting from right before she blinks back.\nZoe is able to perform any action while at the blink destination, except practically being unable to move through normal movement due to having 0 movement speed.\nPortal Jump's maximum range location, or end position, is determined at the start of the cast time and as such Zoe will always blink to the determined destination regardless of where she is at the end of the ability's cast time.\nPortal Jump will always cause Zoe to  blink back to her casting position regardless of where she is moved to while at the destination.\nShe will still be considered to blink even if she fails to move her intended location while  attached (e.g. if she were affected by  The Show Stopper).\nUpon reaching her destination, Zoe will either raspberry at the nearest enemy champion, or lick an ice cream cone when there are no enemy champions in  sight.\nZoe's return position is shifted by 25 units in the target direction from her cast location.\nThe following table refers for interactions while Zoe is locked out during the cast time and for certain periods of time during the ability:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

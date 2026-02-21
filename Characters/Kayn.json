@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Kayn",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.280000001192092,
+      "total_attack_time_seconds": 1.49500000476837,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 410.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 11.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 38.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.669,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "The Darkin Scythe",
+      "type": "Passive",
+      "description": "Innate: Whenever  Kayn scores champion  takedowns or deals damage against champions, he earns orbs that unlocks his  Darkin Slayer and  Shadow Assassin forms. Kayn can return to the summoning platform to transform, permanently empowering his abilities.",
+      "description_source": "The Shadow Assassin Bonus will not be triggered nor have its out-of-combat timer be refreshed if Kayn deals  true damage.\nIf the Shadow Assassin Bonus is granted by Kayn dealing damage, the triggering instance of damage will benefit from the bonus.\nEntering transformation will not  destroy in-flight  projectiles.\nThe Orb System\nThe experience is depicted as orbs that drop upon the ground.  Melee champions drop red orbs that grant progress towards  Darkin Slayer, while  ranged champions drop blue orbs that grant progress for  Shadow Assassin. Orbs will remain on the ground until automatically collected by Kayn regardless of range once he leaves combat. The orbs will be collected even if Kayn  dies.\nThe experience bar above his portrait gauges his current progression, the color reflects the form with greater progress. Kayn can transform by interacting with his portrait, and can wait 4 minutes until the other form becomes available, reduced by 5 seconds for each collected orb of their type after that.\n\nMelee orbs grant 2 points per hit and 6 points per takedown.\nRanged orbs grant 3 points per hit and 7 points per takedown.\nThe amount of points received per orb is multiplied by 3 : 10.39 (based on minutes).\nThe bar gets filled up completely at 500 points.\nIf the two forms are within 8% of each other, the last champion range type hit will determine the winner. If both types are hit at the same time, the transformation will default to  Darkin Slayer.\nEach side's bar has a bucket system, starting at 60 points.\nEach time an orb is taken the system checks if there's an amount of points in the bucket equal to or higher than the amount received from the orb.If there is, Kayn is given an additional orb of the same type he received, while also subtracting that amount of points from the bucket.\nThe bucket fills by 0.8 points per second if out of champion combat for 70 seconds.\nDamage dealt by  damage over time effects and specifically  First Strike and  Summon Aery will not grant orbs.\nThe following table refers for interactions while Kayn is transforming:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll summoner spells are disabled\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nN/A",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Reaping Slash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Kayn  dashes in the target direction, dealing physical damage to enemies he passes through. He then swings his scythe, dealing the same damage to surrounding enemies.",
+      "description_source": "Spell shields will block only a single instance of damage - either the dash or the slash.\nIf the  dash is  interrupted, Kayn will not swing his scythe.\nReaping Slash's swing can be performed quicker if the dash stops prematurely upon colliding with terrain.\nAs the  Shadow Assassin, an  alternate icon for Reaping Slash is used but has no modified effect.\nOther abilities can be queued while casting Reaping Slash.\nItem actives are locked out while casting.\nThe swing's animation has a 0.25-second  lockout time.\nKayn will only be able to move after 0.416 seconds.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Blade's Reach",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "The shadow is considered an allied champion and can interact with effects such as  World Atlas' and  Runic Compass' Quest and local reward from structures.(bug)\nBlade's Reach's indicator is visible to enemies while cast inside terrain and towards enemy champions.\nThis ability will cast from wherever the caster is at the start of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "The shadow is considered an allied champion and can interact with effects such as  World Atlas' and  Runic Compass' Quest and local reward from structures.(bug)\nBlade's Reach's indicator is visible to enemies while cast inside terrain and towards enemy champions.\nThis ability will cast from wherever the caster is at the start of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Shadow Step",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Kayn gains  bonus movement speed,  ghosting and the ability to enter terrain for a duration. If he has recently been in combat with enemy champions, the duration is dramatically reduced.",
+      "description_source": "As  Rhaast, an  alternate icon for Shadow Step is used but has no modified effect.\nThe bonus movement speed  stacks multiplicatively with other sources of movement speed boosts.\nSelf  immobilizations such as  Zhonya's Hourglass also count for interrupting Shadow Step.\n Recall is disabled while Kayn is inside terrain.\nEnemies cannot see Kayn while he is inside of terrain unless they have terrain-piercing vision, such as  Heightened Senses,  Hawkshot or  unobstructed vision.\nHowever, enemies and allies (including Kayn) will be notified when nearby terrain is infested if Kayn is within 1000 units of an enemy champion - with an indicator being placed on the terrain with a direct line between Kayn and the enemy champion. Slightly less than standard sight radius, but more than the  camouflage detection radius.\nKayn can move up to 550 units beyond the outer-edge of the battlefield.\nShadow Step can interact with player-generated terrain.\nIf Kayn is inside terrain when the effect ends, he will be placed correspondingly to the nearest valid space.\n Sleep will not interrupt Shadow Step.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Umbral Trespass",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Kayn marks enemy champions he has damaged for a few seconds.",
+      "description_source": "Umbral Trespass'  recast delay lasts for an inconsistent period of time.(bug)\nThe initial cast counts as an ability activation for the purposes of on-cast effects such as  Spellblade.\nThe recast (both manual and automatic) does not.\nThe ability activation happens when Kayn is attached to his target and the channel starts.\n Kassadin cannot reduce  Force Pulse's cooldown because Kayn is untargetable during the activation.\nThe ability will recast if Kayn is ordered a movement command.\nKayn will reappear from being  vanished as soon as the recast is cast, while remaining untargetable.\nUpon recast, Kayn will always damage his target from the east, regardless of the direction he chooses to dash in.\nKayn will arrive to the target after 0.25 seconds regardless of how far they move away from him during the dash.\nIf Umbral Trespass is targeted on an enemy with a  spell shield or a  Fiora with her  Riposte active, the ability will fail to cast entirely, being placed on full cooldown without triggering the active's effects (as well as on-cast effects).\nSpell shield will not block the damage from the recast.\nIf the target  dies, enters  resurrection, or is sent to the  Death Realm while Kayn is  attached, the channel will be cancelled and he will instantly detach and reappear on top of the target's location. This does not occur if Kayn is in the process of emerging from the target.\nIf those same conditions occur before the attachment, Kayn will reappear at the target's location at the end of his dash.\nUmbral Trespass'  cooldown will sometimes be refunded at the end of the  channel if any of these conditions occur during it.(bug)\nIf the target is a  clone that expires while Kayn is attached, Umbral Trespass will recast automatically.\nIf Kayn dies while  attached and the recast is available, Umbral Trespass'  damage is dealt immediately. If the recast is not available, Umbral Trespass'  damage is not dealt at all.\nEntering  resurrection while  attached does not deal Umbral Trespass'  damage regardless of if the recast is available or not.\nKayn will detach immediately in both cases.\nUmbral Trespass'  interactions with  crowd control:\nAll forms of  cast-inhibiting crowd control will interrupt the channel.\nUpon being cast, Kayn is  cleansed of  drowsiness effects.\nDuring Umbral Trespass, Kayn is immune to  fear.\nDespite being a movement channel, Umbral Trespass is not interrupted by  root.\n Root will not disable Umbral Trespass'  recast, despite it being a dash.\nAs  Rhaast, Umbral Trespass will grant the  heal automatically if the target dies during the channel.\nThe heal is not granted if the target dies before the channel starts.\nKayn will draw  turret aggro after the recast's dash, despite the damage being dealt to the enemy while he was untargetable.\nUntil the recast or after the duration, the ability will have had no effect on the target for the purposes of  Electrocute or the 'in-combat' status.\nThe damage is not blocked if the target is  untargetable at the time of the recast.\nWhile  dismounting,  Kled blocks the damage of Umbral Trespass.(bug)\nUmbral Trespass cannot be cast on  Sion during  Glory in Death.\nDuring Umbral Trespass, Kayn will not take the self-inflicted damage from  Death's Dance's Ignore Pain if the damage was sourced from a  turret.\nKayn will copy his target's total size for Umbral Trespass'  duration, even if their size is smaller than his.\nThe player's screen will direct to the target's position upon attaching.\nAs  Rhaast, an  alternate icon is used for the initial activation of Umbral Trespass.\nThe following table refers for interactions while Kayn is  channeling and dashing out of the victim:\nThe dash out is not interrupted by  cast-inhibiting crowd control.\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall\n\n\nInterrupted by\n\n Hexflash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

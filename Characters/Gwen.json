@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Gwen",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.300000012,
+      "total_attack_time_seconds": 1.52499998,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 330.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 39.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.69,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 150.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "A Thousand Cuts",
+      "type": "Passive",
+      "description": "Innate:  Gwen's  basic attacks  on-hit and damaging abilities deal bonus magic damage equal to a portion of the target's maximum health and  heal her for a portion of this damage dealt against  champions.",
+      "description_source": "The attacks do not deal the bonus damage against  structures.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Snip Snip!",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive:  Gwen's  basic attacks  on-hit generate  stacks of Snippy, up to a cap.",
+      "description_source": "Snip Snip!'s total hitbox uses the intersection of a trapezoid and a circle. Enemies are hit by Snip Snip! only when their hitbox overlaps with both of those areas, or with Gwen's  gameplay radius.\nSubsequent basic attacks on-hit also refresh the duration of Snippy stacks.\nThe amount of Snippy stacks Gwen has is indicated below her health bar.\n Spell shield blocks only one snip.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThe first snip happens at 0.13 seconds, the last one at the end of the cast time.\nBonus snips from Snippy stacks each happen at 0.45, 0.4, 0.35 and 0.23 seconds into the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Hallowed Mist",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Gwen summons the Hallowed Mist upon her current location for a few seconds. Hallowed Mist can be recast within this time, and does so automatically if she attempts to leave the area.",
+      "description_source": "Hallowed Mist's  untargetability does not apply to  monsters nor  turrets, meaning they are allowed to gain aggro against Gwen and attack her regardless of being in the mist or not.\nHowever, Gwen will not take damage from monsters that hit her and are outside of the mist.\nHallowed Mist does not grant untargetability against enemy  pets inside the zone if their source is outside, but does grant untargetability against enemy pets outside the zone even if their source is inside.\nAll  projectiles targeted at Gwen by enemy champions outside the mist are  destroyed upon attempting to pass through the mist or being inside the mist.\nTargeted projectiles sourced by minions or monsters will not be destroyed and can still hit Gwen even if they are outside of the zone.\nIf Gwen  dashes out of the area, the mist will automatically move to the dash's destination instead of Gwen's location.\nThe mist will stop moving immediately if the dash is interrupted.\nThe recast will move the mist's center 75 units through Gwen's location at the time.\nIf she is  dashing, the mist will move 75 units through her dash destination instead.\nThe mist will teleport to Gwen's location if she  blinks a far distance.\nEnemy champions outside the mist are indicated with a broken sword.\nHallowed Mist will indicate that Gwen is Immune whenever an effect attempts to hit Gwen.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Skip 'n Slash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Gwen  dashes to the target location, and afterwards empowers her  basic attacks for a duration, gaining  bonus attack speed, magic damage, and  range.",
+      "description_source": "Skip 'n Slash has no minimum dash range.\nThe basic attack reset is not considered one for  Hail of Blades.(note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Needlework",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "First Cast:  Gwen launches a needle in the target direction that deals magic damage and  slows enemies hit. Needlework can be recast up to two more times.",
+      "description_source": "Dying during the cast time will prevent the remaining needles of the cast from being launched.\nThe first cast's cast time is 0.25 seconds, and the second and third's cast times are each 0.5 seconds. Gwen launches the needles during the cast times.\nFor the second cast, the first needle launches 0.264 seconds after the start of the cast, the second needle launches after 0.132 seconds, and the third needle launches 0.231 seconds after the first.\nFor the third cast, the first needle launches 0.264 seconds after the start of the cast. Each additional needle launches 0.066 seconds seconds after the previous one.\nThe needles of each cast will fire based on Gwen's location at 0.264 seconds into each cast time (in case of the first cast, this is at the end of the cast time).\nThe needles fire from 100 units behind the cast location.\nThe width of all needle missiles decreases with their distance travelled, forming an approximately triangular missile hitbox.\nNeedles of the same cast all travel the same line at a slight delay after one another. The visual origins are offset (by 70 and 110 units to either side from the center missile spawn location), but the actual hitting missiles all follow the central line.\n Spell shield blocks only one needle.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

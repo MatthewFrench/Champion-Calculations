@@ -1,0 +1,157 @@
+{
+  "data_version": "1.0.0",
+  "name": "Zed",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 654.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 200.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 50.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 29.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.651,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Contempt for the Weak",
+      "type": "Passive",
+      "description": "Innate:  Zed's basic attacks against targets below half health will deal bonus magic damage equal to a portion of their maximum health.",
+      "description_source": "The enhanced attack applies other  on-hit effects and can  critically strike as normal (the bonus damage cannot).\nContempt for the Weak is not consumed when  dodged or  missed, but it is consumed when  blocked.\nContempt for the Weak considers the target's health upon landing the attack, not when it's declared.\nIf the target falls below the threshold while Zed is winding up the attack, Contempt for the Weak applies, and vice versa.\nThe empowered attack will not trigger against  structures.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Razor Shuriken",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Zed throws a shuriken in the target direction that deals physical damage to enemies hit.",
+      "description_source": "Shurikens blocked by  spell shield still count as being hit for the reduced pass-through damage.\nIf Zed buffers an attack command during Razor Shuriken's cast time the attack will perform slower than if Zed had attacked after the cast time.\nThe same does not happen if Zed recasts  Living Shadow during Razor Shuriken's cast time.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "energy",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Living Shadow",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive: Whenever  Zed and his  Shadows hit an ability on the same target, he restores  energy.",
+      "description_source": "Zed gains a buff for 5.25 seconds that indicates and determines the duration in which he may recast Living Shadow.\nThe buff is granted briefly after Living Shadow is cast.\nIf cast at minimum distance, the buff and the Shadow's individual durations will effectively start at the same time.\nIf cast at greater than the minimum distance, then the buff's duration will start before the Shadow's duration.\nThe passive is available while the ability has not been learned. It will grant the  energy refund strength at rank 1.\nThe  energy refund is not granted if the mimicked ability is blocked by a  spell shield.\nLiving Shadow's recast can be queued to cast while the Shadow is dashing; the recast will occur once it has been placed.\nLiving Shadow cannot be recast while  grounded or  rooted.\nIf Living Shadow is recast during  Razor Shuriken's cast, Zed will instantly release the shuriken from the cast location of  Razor Shuriken while still remaining in cast time. Once he has swapped places, he will then throw the shuriken that the  Shadow would have thrown instead.\nZed will cast  Razor Shuriken as he normally would from the new location, but over the remaining cast time and towards the same point of cast.\nThe  Shadow will not throw a shuriken from its new location, but will continue to play the cast animation for  Razor Shuriken.\nThis special interaction does not occur with the swap recast of  Death Mark; the recast will be buffered if used during  Razor Shuriken's cast.\nZed will swap places with the  Shadow by all means if he buffers Living Shadow's recast during its dash.(note)\nLiving Shadow cannot be recast while Zed is marking his target with  Death Mark, but may still be recast if it was buffered.(bug)\nIf Zed casts Living Shadow while a non- Death Mark Shadow is already present, the previous Shadow will instantly disappear.\nIf a  Shadow expires while in the cast time of  Razor Shuriken, the mimicked cast will be cancelled.\n Shadows will cast  Shadow Slash independently of being in  Razor Shuriken's cast time or not.(note)\n Shadows spawned from Living Shadow may sometimes last for up to an additional 0.25 seconds.(bug)\n Shadows will not disappear when Zed dies.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "energy",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Shadow Slash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Zed slashes to deal physical damage to nearby enemies hit. Enemies hit by a  Shadow's slash are also briefly  slowed.",
+      "description_source": "An enemy counts as being hit by multiple slashes at once when they are hit by a Shadow Slash from Zed and at least one of his Shadows, or two of his Shadows. In any case, a target can only be damaged by one slash per cast of Shadow Slash.\nThe enhanced slow strength is applied as long as the enemy is hit by at least two slashes, even if Zed's slash is one of them despite him not being able to apply the base slow himself.\nSlashes beyond the second have no additional effect on the target; a third slash against an enemy does not deal damage nor increase the slow's strength (slow effectiveness is capped at 150% of the base strength).\n Spell shield will only block one Shadow Slash even if multiple of them hit at the same time, prioritizing blocking the slash from Zed's  Shadow.\nThe damage from at least one slash will always be blocked but still counts for preventing other slashes from applying the damage (other slashes are considered to be additional slashes which are not eligible for dealing the damage).\nThe slow will be blocked if hit by Zed's slash and a Shadow's slash, due to the latter slash being blocked.\nThe slow will be applied at base strength if hit by the slashes of two Shadows, due to at least one slash from a Shadow successfully hitting the target with the other slash being blocked (thus preventing the slow from being enhanced).\nThe slow will be applied at enhanced strength if hit by the slashes of Zed and two of his Shadows, due at least two of the slashes successfully hitting the target (in this case, the slashes from Zed and one of the  Shadows).\nShadow Slash does not interrupt attack, movement, or cast commands.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "energy",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Death Mark",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Zed becomes  untargetable while  dashing to the target enemy champion, then renders them Marked for Death for a short time, during which he is  ghosted. He leaves behind a  Shadow that will remain for a period and mimic  Razor Shuriken and  Shadow Slash.",
+      "description_source": "Zed gains a buff for 7.5 seconds that indicates and determines the duration in which he may recast Death Mark.\nThe buff is granted on-cast and lingers for 0.25 seconds after it expires.\nThe  Shadow is spawned the moment Death Mark is cast.\nZed will track the target if they change locations.\nHe will dash through the target's previous location while still applying the mark if they are 2200 or more units away.\nZed will become targetable, apply the mark, and gain the  ghosting as soon as his dash ends.\nThe mark will not be applied to the target if they are  untargetable by the time Zed's dash ends.\nZed will be ordered to basic attack his target after reappearing.\nDeath Mark's stored damage derives from all basic attacks, abilities, items, runes and buffs.\nDeath Mark's  Shadow is functionally the same as a regular one, but it lasts longer and can be swapped to regardless of range.\nThe range at which it mimics Zed's abilities does not change.\n Spell shield will only block the mark's application. They will not prevent Zed from initiating Death Mark against the target nor block the detonation from a mark that is already applied.\nIf Zed dies during Death Mark, the ability will cancel instantly and he will reappear at his current location. The cooldown is not refunded.\nIf he enters  resurrection before the dash, Death Mark does not cancel. If he enters it while dashing, the dash is interrupted.\nIf the  dash is interrupted, Zed stops, places himself to the ground (ends all displacements affecting him, but does not remove  airborne effects), and reappears prematurely at his current location. The mark will still be applied regardless.\nZed will remove  airborne effects from himself immediately upon starting the dash.\nOnce Zed begins the  dash, two  Shadows will also appear to be dashing through his target, each one spawning a certain distance behind the target (from the right and left). These shadows do not mimic abilities and disappear immediately after they stop dashing but they grant  sight of their surroundings.\nThese shadows have a tracking distance of 2200 and a dash speed of 1750.\nDeath Mark does not cancel if the target enters a  zombie state before the dash begins.\nIf the mark's post-mitigation damage is higher than the target's current health, a spinning shuriken will appear above the victim. This does not necessarily mean the target will die, as it does not consider  shields or forms of damage modifiers that are not respected by this predictive calculation.\n\nThe indicator shown in-game (base skin).\n\nThe following table refers for interactions while Zed is performing Death Mark:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash  Mark  Dash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

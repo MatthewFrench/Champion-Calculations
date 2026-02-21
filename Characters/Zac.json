@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Zac",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.363000005483627,
+      "total_attack_time_seconds": 1.567999958992,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 685.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.736,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Cell Division",
+      "type": "Passive",
+      "description": "Innate - Goo:  Zac's abilities have a  health cost. Whenever Zac's abilities damage an enemy, he sheds a number of chunks on the ground that remain for a few seconds. Zac and enemy champions can collect the chunks; an enemy will destroy it, while Zac will  heal a portion of his maximum health.",
+      "description_source": "The damage directed to Zac is  internal raw damage.\nZac's health when the bloblets are sent out is set to what it would be if all bloblets recombined, and is actively updated when the bloblets take damage.\nZac's increased size does not consider his base stats.\nCell Division's chunks spawn in two versions:\nContestable: They will fall to the ground at a point which is roughly equidistant from Zac and the nearest  visible enemy champion within 1000 range of him (dropping slightly in Zac's favor). The location at which they fall to the ground is influenced by the direction in which Zac is currently facing. Cannot be interacted with for the first 0.25 seconds (except during  Let's Bounce!).\nUncontestable: They will fall to the ground near Zac and can be picked up immediately (version used by default).\nZac's  untargetability upon triggering Cell Division does not  destroy in-flight  projectiles.\n Chronoshift and  Guardian Angel will take priority over Cell Division.\n Spirit Visage and  Heal Power increases the healing of both chunks and bloblets.\n Ryze's  Realm Warp is able to individually teleport Zac or his bloblets during Cell Division.\nIf Zac is transported to a new location before the bloblets landed, they will travel to form at his new position, adjusting their speed accordingly. If Cell Division's duration permits during this time, Zac will be revived even if the bloblets fail to physically recombine.\nCell Division's bloblets can be targeted by  Teleport and  Syndra's  Force of Will.\nOther bloblets are not interrupted by the conditions above and will continue to recombine instinctively.\nIf Zac's health is higher than it is supposed to be when the bloblets converge on him, his health will be set to the correct value.\nThe following table refers for interactions while Zac is in resurrection:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll summoner spells are disabled\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Stretching Strikes",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "If both Stretching Strikes affect the same target, the target will be dealt the damage and applied the slow for both hits.\nThe following features were added in patch V7.10 to increase Stretching Strikes' reliability and usability:\nIf the second attack's target would die from the damage, it won't be dealt until they are slammed to the first target.\nIf the first target is standing on top of other enemies, the second hit will reliably choose a different target from the first.\nNon-champion units that are affected by Stretching Strikes' displacement are prevented from taking any damage until they are slammed together. Note that this often confuses players who are trying to secure  monsters via  Smite while Zac is slamming the wanted target, resulting in Smite dealing no damage to it. It is currently unknown whatever the side effects of this feature are intentional or not.\n Spell shield's interactions with Stretching Strikes:\nThe first Stretching Strike will have its damage, slow, and tether application all blocked.\nIf as the primary target and affected by the tether already from the first Stretching Strike:\nThe damage and slow from the empowered attack if targeted again by the second Stretching Strike will be blocked.\nThe damage, slow, stun, and knock up from the impact of the second Stretching Strike hitting a different target will all be blocked, but not the root and the displacement.\nIf as the primary target of the second Stretching Strike, the root will be blocked, but the displacement, damage, slow, stun, and knock up afterwards will not.(note)\nIf as the secondary target of the impact, the damage and slow will be blocked.\nIf the tethered target is  untargetable during the second Stretching Strike via basic attack, they are completely unaffected by the ability.\n Displacement immunity will also resist the application of the  stun.\nThis ability will cast from wherever the caster is at the end of the cast time.\nIf the target becomes  untargetable,  dies, or is too far away during the empowered attack's cast time, it is cancelled but not consumed.\nIf either target dies while being displaced towards the other, no slam occurs.(note)\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "If both Stretching Strikes affect the same target, the target will be dealt the damage and applied the slow for both hits.\nThe following features were added in patch V7.10 to increase Stretching Strikes' reliability and usability:\nIf the second attack's target would die from the damage, it won't be dealt until they are slammed to the first target.\nIf the first target is standing on top of other enemies, the second hit will reliably choose a different target from the first.\nNon-champion units that are affected by Stretching Strikes' displacement are prevented from taking any damage until they are slammed together. Note that this often confuses players who are trying to secure  monsters via  Smite while Zac is slamming the wanted target, resulting in Smite dealing no damage to it. It is currently unknown whatever the side effects of this feature are intentional or not.\n Spell shield's interactions with Stretching Strikes:\nThe first Stretching Strike will have its damage, slow, and tether application all blocked.\nIf as the primary target and affected by the tether already from the first Stretching Strike:\nThe damage and slow from the empowered attack if targeted again by the second Stretching Strike will be blocked.\nThe damage, slow, stun, and knock up from the impact of the second Stretching Strike hitting a different target will all be blocked, but not the root and the displacement.\nIf as the primary target of the second Stretching Strike, the root will be blocked, but the displacement, damage, slow, stun, and knock up afterwards will not.(note)\nIf as the secondary target of the impact, the damage and slow will be blocked.\nIf the tethered target is  untargetable during the second Stretching Strike via basic attack, they are completely unaffected by the ability.\n Displacement immunity will also resist the application of the  stun.\nThis ability will cast from wherever the caster is at the end of the cast time.\nIf the target becomes  untargetable,  dies, or is too far away during the empowered attack's cast time, it is cancelled but not consumed.\nIf either target dies while being displaced towards the other, no slam occurs.(note)\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "current_health",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Unstable Matter",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Zac explodes to deal magic damage to nearby enemies hit based on their maximum health.",
+      "description_source": "If Unstable Matter is the cause of monster aggro, the monsters will not receive  ghosting.\nSubsequent uses of Unstable Matter within 5 seconds after the previous will not grant  ghosting either.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "current_health",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Elastic Slingshot",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Quick casting: Elastic Slingshot's channel begins when the key is pressed and held, launching Zac towards the cursor when released.\nElastic Slingshot will not  knock up if the targeted location was directly on top of Zac (in which case he will not  dash at all).(note)\nThe  knock up will occasionally end early if the targeted location was slightly away from Zac.(note)\n Displacement immunity will also resist the application of the  stun.\nElastic Slingshot may sometimes fail to indicate Zac's target location.(bug)\nElastic Slingshot may sometimes go on cooldown while not being shown as on cooldown.(bug)\nThe following table refers for interactions while Zac is  channeling:\n Recall is disabled for the first 0.9 seconds and otherwise interrupts the channel if used.\n\n\nType\n\nCharge channel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Stretching Strikes and  Unstable Matter interrupt.  Let's Bounce! initiates the recast and is buffered to cast itself at the end of the dash.\n\n\nMovement\n\nDisabled for the first 0.9 seconds, otherwise, interrupts.\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport\n\n\nInterrupted by\n\n Recall  Hexflash (Recasts)\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "description_source": "Quick casting: Elastic Slingshot's channel begins when the key is pressed and held, launching Zac towards the cursor when released.\nElastic Slingshot will not  knock up if the targeted location was directly on top of Zac (in which case he will not  dash at all).(note)\nThe  knock up will occasionally end early if the targeted location was slightly away from Zac.(note)\n Displacement immunity will also resist the application of the  stun.\nElastic Slingshot may sometimes fail to indicate Zac's target location.(bug)\nElastic Slingshot may sometimes go on cooldown while not being shown as on cooldown.(bug)\nThe following table refers for interactions while Zac is  channeling:\n Recall is disabled for the first 0.9 seconds and otherwise interrupts the channel if used.\n\n\nType\n\nCharge channel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Stretching Strikes and  Unstable Matter interrupt.  Let's Bounce! initiates the recast and is buffered to cast itself at the end of the dash.\n\n\nMovement\n\nDisabled for the first 0.9 seconds, otherwise, interrupts.\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport\n\n\nInterrupted by\n\n Recall  Hexflash (Recasts)\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "current_health",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Let's Bounce!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Zac bounces four times. Each impact deals magic damage to enemies hit and briefly  knocks back and  slows them.",
+      "description_source": "Spell shield only blocks a single instance of damage.\nEntering  stasis will end Let's Bounce! prematurely.\nCasting Let's Bounce may cause  chunks that are further away to disappear.(bug)\nPENDING FOR TEST: how much farther exactly?\nCasting Let's Bounce just before dying may put it on cooldown while not displaying it as on cooldown.(bug)\nThe following table refers for interactions while Zac is performing Let's Bounce!:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Stretching Strikes and  Elastic Slingshot are disabled.  Unstable Matter is usable.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll items are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash  Teleport  Hexflash\n\n\nDisabled\n\n Recall\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

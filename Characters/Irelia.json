@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Irelia",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "DIVER",
+    "FIGHTER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.300000011920928,
+      "total_attack_time_seconds": 1.52499997615814,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 3.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 350.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 36.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.656,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 200.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Ionian Fervor",
+      "type": "Passive",
+      "description": "Innate:  Irelia's  abilities generate a  stack of Ionian Fervor for each enemy champion hit, as well as one stack if she hits at least one non-champion.  Basic attacks against enemy  champions and large  monsters will also refresh the duration.",
+      "description_source": "PENDING FOR TEST:: Parry interactions ( block and  dodge).\nIonian Fervor will not deal damage if the attack misses due to  blind, but its duration will be refreshed.\n Blade Surge cannot be missed while Irelia is  blinded, applying Ionian Fervor from the ability will not be prevented from that parry effect.\nIonian Fervor stacks are represented by a counter under Irelia's health bar. It is highlighted while the ability is at its maximum effect.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Bladesurge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Irelia  dashes through the target enemy, dealing physical damage, applying  on-hit effects, and  healing herself.",
+      "description_source": "Bladesurge will be buffered and cast when the cooldown ends or is reset if the player attempts to cast it within 0.5 seconds of the cooldown ending/resetting.\nBladesurge deals  basic damage, but also triggers spell effects by also being tagged as  spell damage.\nIf the target dies during Bladesurge's dash, the cooldown is fully refunded and Irelia may also cast her other abilities during the dash.\nIf the target dies to Bladesurge and was also marked, the cooldown is still fully refunded.\nBladesurge will only allow Irelia to dash through walls if there is enough space for her on the other side.\nBladesurge deals its damage and consumes marks when Irelia collides with the target, or at the end of the dash if the target moves away.\nBladesurge will not deal damage if the  dash is  interrupted beforehand.\nThe damage will be dealt if the target is in collision range when the dash is interrupted however.\n Flash will interrupt the  dash but Irelia will still collide with and deal damage to her target if the blink leaves her in contact with it at the new location.\nIrelia will complete her remaining dash distance even if the damage is dealt earlier.\nIf the target is  untargetable, Bladesurge will instead deals its damage at the end of the dash, rather than on collision.\nIrelia will automatically be ordered to acquire and attack Bladesurge's target as soon as the dash completes.\nIf a different target than Bladesurge's is selected during the dash, she will acquire that different target instead.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Defiant Dance",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Enemies around Irelia will be dealt the damage once the recast's cast time ends, while enemies within the line are dealt the damage via a missile that reaches the furthest targets after a 0.066 seconds delay after the recast's cast time.\nQuick Casting utilizes hold-and-release for the two casts.\nDefiant Dance reaches 100% physical damage reduction at 857.14 : 428.57 (based on level) AP.\nDefiant Dance reaches 100% magic damage reduction at 2285.71 : 1857.14 (based on level) AP.\nDefiant Dance will also recast automatically upon entering  resurrection.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThis refers to the recast.\nThe following table refers for interactions while Irelia is  channeling:\n\n\nType\n\nCharge channel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled, but can still use trinkets\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall\n\n\nInterrupted by\n\n Hexflash (Recasts)\n\n\nInterrupted by\n\nDeath",
+      "description_source": "Enemies around Irelia will be dealt the damage once the recast's cast time ends, while enemies within the line are dealt the damage via a missile that reaches the furthest targets after a 0.066 seconds delay after the recast's cast time.\nQuick Casting utilizes hold-and-release for the two casts.\nDefiant Dance reaches 100% physical damage reduction at 857.14 : 428.57 (based on level) AP.\nDefiant Dance reaches 100% magic damage reduction at 2285.71 : 1857.14 (based on level) AP.\nDefiant Dance will also recast automatically upon entering  resurrection.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThis refers to the recast.\nThe following table refers for interactions while Irelia is  channeling:\n\n\nType\n\nCharge channel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled, but can still use trinkets\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall\n\n\nInterrupted by\n\n Hexflash (Recasts)\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Flawless Duet",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Irelia sends a blade to the target location for a short time.\nFlawless Duet can be recast within the duration, and does so automatically after the duration. The recast cannot be  interrupted.",
+      "description_source": "Both casts count as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nIf the ability is not manually recasted, the secondary effect will trigger and it will be considered as an ability activation. This is the only ability with this interaction in the game.\nFlawless Duet will recast automatically at its end during  Defiant Dance despite being disabled.\nFlawless Duet will also recast automatically upon entering  resurrection.\nThe outgoing blades will stop flight upon touching  projectile blocking effects. The converging blades will instead be destroyed upon contact with such effects.\nThe blades will not stun nor deal damage if they fail to converge (i.e  Yasuo's  Wind Wall).\nBoth of Flawless Duet's casts will be buffered and cast when their cooldowns end if the player attempts to cast each within 0.3 seconds of their cooldown ending.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Vanguard's Edge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Irelia launches a barrage of blades in the target direction that expand outward upon hitting an enemy champion, dealing magic damage to enemies hit.",
+      "description_source": "Enemies that cross the perimeter are not marked Unsteady.\nThis ability will cast from wherever the caster is at the end of the cast time.\nIn addition to its  projectile, Vanguard's Edge will check for enemy champions within a  90-unit radius area from the projectile's origin point.\nThe projectile interacts with projectile-blocking effects but the area check doesn't.\nThe blades will still expand if the champion hit by the blades is protected by a  spell shield.\nThe  sight is granted in a 1350 unit radius at the location of the enemy champion at the time of being hit and can be blocked by terrain.\nIf this spell is casted while there are blades from a previous Vanguard's Edge still active, the previous blades will disappear.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

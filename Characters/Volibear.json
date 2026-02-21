@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Volibear",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "JUGGERNAUT",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 350.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.25,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 35.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 150.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "The Relentless Storm",
+      "type": "Passive",
+      "description": "Innate:  Volibear's  basic attacks and  ability hits generate a  stack of The Relentless Storm, which stacks up to 5 times. At 5 stacks, he gains Lightning Claws.",
+      "description_source": "Volibear's spikes visually grow as The Relentless Storm stacks.\nStacks of The Relentless Storm are also granted  on-hit, but will specifically not be if the target is  invulnerable.\nWhile at four stacks, the next attack or ability on-hit reaching the fifth stack will be empowered by Lightning Claws.\nA stack of The Relentless Storm is not gained if the attack is  dodged and/or missed if Volibear is  blinded. A stack is granted even if the attack is  blocked. In all cases, Lightning Claws will not apply (on-hit damage is parried and the bounce is prevented).\nSince  Frenzied Maul cannot be missed while Volibear is  blinded, gaining stacks from The Relentless Storm and applying Lighting Claws from the ability will not be prevented from that parry effect.\nThe empowered attacks do not affect  structures nor  wards.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Thundering Smash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Volibear becomes  ghosted and gains  bonus movement speed for a few seconds, increased while facing an enemy champion.",
+      "description_source": "Thundering Smash's bonus damage cannot  critically strike; the base damage of the attack can, however.\nDespite this,  Randuin's Omen's Resilience reduces Thundering Smash's total damage.(bug)\nThundering Smash deals  basic damage, but also triggers spell effects by also being tagged as  spell damage.\nThundering Smash will still apply its effects to the target even if the  dash is  interrupted, but not if he goes into  resurrection.\nThundering Smash's attack triggers against  structures and  wards, consuming the effect but dealing its bonus damage, if applicable.\nThe windup for the attack completes even if the target becomes  untargetable but the  stun and damage do not apply.\nThe player's screen will flash red briefly and cue a sound effect when Volibear becomes  immobilized while Thundering Smash is active.\nThundering Smash's attack does not put Volibear's basic attack on cooldown.\nThis results in the same functionality as  Leona's  Shield of Daybreak, effectively being a double attack reset.\nIf Thundering Smash's buff appears as the first on the buff bar, the empowered attack will fail against  structures.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Frenzied Maul",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Volibear strikes the target enemy to deal physical damage based on his bonus health, apply  on-hit and  on-attack effects, and mark them Wounded for a period.",
+      "description_source": "Volibear will be ordered to basic attack the target after casting Frenzied Maul.\nFrenzied Maul deals  basic damage, but also triggers spell effects by also being tagged as  spell damage.\nFrenzied Maul's bite  heals even if it is blocked by  spell shield.\nFrenzied Maul's strike can be  dodged and  blocked, but it cannot miss if Volibear is  blinded. The Wound mark does not apply if  dodged, but will otherwise do so regardless.\nThe bite can be  blocked but Volibear still heals. It does not heal nor deal damage if the bite is  dodged. The bite cannot miss if Volibear is  blinded.\nFrenzied Maul deals bonus damage and heals if the target is still Wounded after the cast time. If the mark wears off before the cast time completes, the ability's animation will appear as if the bite was applied but there is no bonus damage or heal.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Sky Splitter",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Volibear conjures a lightning bolt to strike the target location, dealing magic damage to enemies hit based on their maximum health and  slowing them for a short time.",
+      "description_source": "Enemies cannot see the location of the cast for the first second, but they can already tell that the spell is underway by noticing Volibear's cast animation.\nVolibear can cast Sky Splitter during the movement speed boost from Thundering Smash to prevent the animation from playing.\nVolibear will receive the  shield even if he is  untargetable.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Stormbringer",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Volibear gains Stormbringer and  leaps with  Cc-immunity to the target location. The impact deals physical damage to enemies hit in the epicenter, and briefly  slows nearby enemies.",
+      "description_source": "Stormbringer will disable any turret that is not the  Nexus Obelisk, even if it is  untargetable.\nStormbringer will not deal damage to untargetable turrets.\nVolibear grows to his new size over 1.25 seconds, starting 0.25 seconds after landing, and shrinks back to his normal size over 0.5 seconds after Stormbinger's status ends, respectively.\nVolibear  leaps over 1 second regardless of distance or  movement speed.\nVolibear impacts immediately at his current location if Stormbringer is cast over terrain he cannot pass through (due to not being able to cover the distance required).(bug)\nThe additional bonuses are granted on-cast.\nThe turret disable debuff is named Ohmwrecker.\nDisabling a  turret does not prevent aggro of the current target it is locked onto. The increased turret shot damage from  Ohmwrecker is also reset.\nTurrets maintain the same targeting behavior even when disabled; damaging an enemy champion will still draw turret aggro. However, if the turret's desired target leaves range or has become an invalid target, it will lock onto the most previous target it was going to attack prior to becoming disabled, or instead, find a new one if that condition is not applicable.\nThe following table refers for interactions while Volibear is dashing:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

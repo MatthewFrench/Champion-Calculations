@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Annie",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BURST",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 55.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 560.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 418.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 23.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 50.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.61,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 625.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Pyromania",
+      "type": "Passive",
+      "description": "Innate:  Annie's spell-casts generate stacks. At maximum stacks, her next offensive spell will consume them to  stun the target.",
+      "description_source": "Annie does not lose any stacks upon entering or exiting  resurrection.\nStacks are gained even if the ability is blocked by  spell shield.\nPyromania's current stacks are represented by a counter under Annie's health bar, visible to all players. It lights up when the empowered effect is available.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Disintegrate",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Annie hurls a fireball at the target enemy that deals magic damage.",
+      "description_source": "Disintegrate will also grant the cooldown reduction and mana cost refund if the target is dead upon the missile's arrival.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Incinerate",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Annie casts a blazing cone of fire, dealing magic damage to enemies hit.",
+      "description_source": "Incinerate can hit targets behind Annie, provided their radius intersects with the cone hitbox.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Molten Shield",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Annie grants herself or an allied champion\u2014and  Tibbers\u2014a  shield with a burst of  move speed.",
+      "description_source": "Molten Shield casts on ally if targeted or if very close to targeting them (within a range of 225); otherwise self casts.\nMolten Shield does not deal damage to  turrets when attacked by them.\nMolten Shield has a  forgiveness radius of 175 units.\nAttacks that are  dodged or  miss against the shielded target will not cause the shield to deal damage, while  blocked attacks still deal damage to the attacker.\nThe reaction damage does not trigger from  Teemo's  Noxious Trap and  Shaco's  Jack in the Box.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Summon: Tibbers",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Annie summons her bear  Tibbers, dealing magic damage to enemies in the area.",
+      "description_source": "Only the initial cast counts as an ability activation for the purposes of on-cast effects such as  Spellblade.\nRecasting the ability does, however, count as casting an ultimate ability for the purposes of  Experimental Hexplate's Overdrive and similar effects.(bug)\nPENDING FOR TEST: What about  Force Pulse's?\nThe active deals  area damage.\nTibbers will  blink back next to Annie if he gets too far away.\nRecasting Summon: Tibbers does not interrupt  Recall's channel.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

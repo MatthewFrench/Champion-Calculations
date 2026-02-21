@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Thresh",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "CATCHER",
+    "SUPPORT",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 274.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 56.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 450.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Damnation",
+      "type": "Passive",
+      "description": "Innate:  Thresh's  armor does not increase by  leveling up.",
+      "description_source": "Souls grant a small area of  sight.\nSouls are visible to allies and only become visible to enemies if their team has  sight of Thresh.\nThe probability for souls dropping from small minions and monster on  Summoner's Rift starts at 33% but adjusts dynamically to match the expected quota of souls dropped (lowers if above, rises if below, remains if even). Souls collected are not considered when adjusting the probability.\n Nunu & Willump drop a soul each.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Death Sentence",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Thresh will track the target if they change locations.\nHe will dash to the target's previous location if the target is too far away or moves beyond 2000 units.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThe pull that occurs with each of Thresh's tugs is a non- airborne displacement that displaces the target toward him. Thresh will only tug if the target remains  stunned and he has not casted Deathly Leap.\nThresh will not tug his hook at all if the stun was not applied to the target.\nThese displacements will not be resisted by  displacement immunity or  crowd control immunity.(note)\nThe first tug occurs after the 0.1-second delay, while the second tug occurs after 0.7 seconds of the target being stunned (or 0.6 seconds from the end of the initial delay).\nThe initial  airborne debuff that is applied to the target upon hitting them is removed if the displacement from the first pull is interrupted.\nThe target will not be pulled with the tugs if they are too close to Thresh.\nDeath Sentence cannot be recast while  grounded or  rooted.\nDeath Sentence can be recast even while the target is  untargetable.\nDeath Sentence will not  stun enemies that are  displacement immune or  immune to crowd control but the target will still be marked and Thresh is still granted the ability to recast for his dash.\n Spell shield will block all of Death Sentence's effects, including the mark as well as prevent the cooldown reduction.\nDeath Sentence's  stun duration is affected by  tenacity but the mark will always persist for 1.5 seconds, unless the target uses a  cleansing effect, in which case the mark is removed.\nDeath Sentence's  stun will persist even if Thresh dies before the duration ends. The tugs will not occur as Thresh is not alive.\nThe reveal lingers for 0.05 seconds after it ends.\nDeathly Leap has a maximum cast range of ~3000 units. If Thresh or the target move a greater distance than this away from one another while the target is marked, Deathly Leap can still be cast but will fail to trigger the dash.(bug)\nThresh will turn his facing direction towards the cast direction only after Death Sentence's cast is complete.\nIf Thresh is facing more than 90\u00b0 away from the cast direction in either direction, he will turn to face exactly 90\u00b0 away from the cast direction over the cast time, then turn towards the cast direction when the missile is fired.\nIf Thresh is facing less than 90\u00b0 away from the cast direction, he will keep his facing direction until the missile is fired.\nThis prevents the enemy from knowing where exactly Thresh is aiming at before the cast animation is complete.\nDeath Sentence triggers on-cast effects (such as  Spellblade and triggering  Force Pulse's passive) once at the start of the cast, and once at the end of the cast. It may trigger on-cast effects a third time when casting Deathly Leap.\nThis is because a separate spell is cast to prevent Thresh from facing towards the target direction immediately, which is (incorrectly) flagged to trigger on-cast effects.(bug)\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Thresh will track the target if they change locations.\nHe will dash to the target's previous location if the target is too far away or moves beyond 2000 units.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThe pull that occurs with each of Thresh's tugs is a non- airborne displacement that displaces the target toward him. Thresh will only tug if the target remains  stunned and he has not casted Deathly Leap.\nThresh will not tug his hook at all if the stun was not applied to the target.\nThese displacements will not be resisted by  displacement immunity or  crowd control immunity.(note)\nThe first tug occurs after the 0.1-second delay, while the second tug occurs after 0.7 seconds of the target being stunned (or 0.6 seconds from the end of the initial delay).\nThe initial  airborne debuff that is applied to the target upon hitting them is removed if the displacement from the first pull is interrupted.\nThe target will not be pulled with the tugs if they are too close to Thresh.\nDeath Sentence cannot be recast while  grounded or  rooted.\nDeath Sentence can be recast even while the target is  untargetable.\nDeath Sentence will not  stun enemies that are  displacement immune or  immune to crowd control but the target will still be marked and Thresh is still granted the ability to recast for his dash.\n Spell shield will block all of Death Sentence's effects, including the mark as well as prevent the cooldown reduction.\nDeath Sentence's  stun duration is affected by  tenacity but the mark will always persist for 1.5 seconds, unless the target uses a  cleansing effect, in which case the mark is removed.\nDeath Sentence's  stun will persist even if Thresh dies before the duration ends. The tugs will not occur as Thresh is not alive.\nThe reveal lingers for 0.05 seconds after it ends.\nDeathly Leap has a maximum cast range of ~3000 units. If Thresh or the target move a greater distance than this away from one another while the target is marked, Deathly Leap can still be cast but will fail to trigger the dash.(bug)\nThresh will turn his facing direction towards the cast direction only after Death Sentence's cast is complete.\nIf Thresh is facing more than 90\u00b0 away from the cast direction in either direction, he will turn to face exactly 90\u00b0 away from the cast direction over the cast time, then turn towards the cast direction when the missile is fired.\nIf Thresh is facing less than 90\u00b0 away from the cast direction, he will keep his facing direction until the missile is fired.\nThis prevents the enemy from knowing where exactly Thresh is aiming at before the cast animation is complete.\nDeath Sentence triggers on-cast effects (such as  Spellblade and triggering  Force Pulse's passive) once at the start of the cast, and once at the end of the cast. It may trigger on-cast effects a third time when casting Deathly Leap.\nThis is because a separate spell is cast to prevent Thresh from facing towards the target direction immediately, which is (incorrectly) flagged to trigger on-cast effects.(bug)\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Dark Passage",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Thresh throws his lantern to the target location that remains for a few seconds while he remains nearby. He and the first allied champion to come near the lantern are granted a  shield for a few seconds, with the amount based on  Souls.",
+      "description_source": "The dashing ally will track Thresh if he changes locations.\nThey will dash to Thresh's previous location if he is too far away or moves beyond 2200 units.\nThe lantern is considered a unit and can be targeted by an allied  Teleport,  Leap Strike,  Shunpo, and  Safeguard.\nIt is  untargetable to enemies.\nThe lantern's duration and maximum leash range are each displayed as a circle on the ground.\nThresh will gain Dark Passage's shield from moving out of leash range of the lantern.\nDark Passage is special cased to trigger  Guardian.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Flay",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Flay's effects start at the start of the cast time. Thresh can cast other spells once the cast time completes, but remains unable to attack and move and use mobility spells (such as  Flash) until the chain completed its way entirely.\nApplies  area damage on the ability and deals  proc damage on the enhanced basic attack.\nThe knockback's  airborne debuff is set to last longer than the forced movement, but gets removed as soon as the forced movement from Flay ends or is overridden by another.\nFlay's passive's buff icon changes colors depending on charge level. At 100%, Thresh's scythe will glow green and a sound effect will play.\n\n\n\n0 - 50%\n\n\n\n50 - 75%\n\n\n\n75% - 100%\n\n\n\n100%\n\n\n Runaan's Hurricane's Wind's Fury will apply Flay's passive to each enemy hit, with the secondary targets taking minimum damage (charge resets upon hitting the primary target).\nThe enhanced attack applies other on-hit effects and can  critically strike as normal (the bonus damage cannot).\nFlay's passive enhanced attack can be  dodged (the enhanced attack is not consumed and the charge is not reset) and  blocked (the enhanced attack is consumed and the charge is reset).\nThe empowered attack will not trigger against structures nor wards.\nPENDING FOR TEST:: Enhanced attack's interactions with  blinding effects (regarding both bonus damage and charge reset).\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Flay's effects start at the start of the cast time. Thresh can cast other spells once the cast time completes, but remains unable to attack and move and use mobility spells (such as  Flash) until the chain completed its way entirely.\nApplies  area damage on the ability and deals  proc damage on the enhanced basic attack.\nThe knockback's  airborne debuff is set to last longer than the forced movement, but gets removed as soon as the forced movement from Flay ends or is overridden by another.\nFlay's passive's buff icon changes colors depending on charge level. At 100%, Thresh's scythe will glow green and a sound effect will play.\n\n\n\n0 - 50%\n\n\n\n50 - 75%\n\n\n\n75% - 100%\n\n\n\n100%\n\n\n Runaan's Hurricane's Wind's Fury will apply Flay's passive to each enemy hit, with the secondary targets taking minimum damage (charge resets upon hitting the primary target).\nThe enhanced attack applies other on-hit effects and can  critically strike as normal (the bonus damage cannot).\nFlay's passive enhanced attack can be  dodged (the enhanced attack is not consumed and the charge is not reset) and  blocked (the enhanced attack is consumed and the charge is reset).\nThe empowered attack will not trigger against structures nor wards.\nPENDING FOR TEST:: Enhanced attack's interactions with  blinding effects (regarding both bonus damage and charge reset).\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "The Box",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Thresh erects a pentagon of spectral walls around him that each last a few seconds. A wall will break upon enemy champion contact, dealing magic damage and  slowing them for a short time. Subsequent wall breaks will not deal damage but still  slow enemies briefly.",
+      "description_source": "This ability will cast from wherever the caster is at the start of the cast time.\nThe Box does not fail to cast if Thresh  dies during its cast time.(note)\nThe Box always faces the same direction Thresh is facing on cast, placing a corner directly in front of him.\nThe cast indicator displays the opposite of the true behavior.(bug)\nIf The Box hits multiple champions with different walls on cast, only one of the walls will deal damage and apply the extended slow duration. This wall is chosen by starting at the wall in front of and to the right of Thresh's facing direction on cast, and progressing clockwise.\nThe corners of The Box are placed 400 units around Thresh.\nEach wall is 470.228 units long.\nEach wall passes 323.607 units from the center of The Box at the closest approach (ignoring its width).\nAs a regular pentagon, The Box has an angle of 72\u00b0 between each corner.\nThresh can see if the walls of The Box are broken even if they are not within  sight.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -10,6 +10,37 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 
 ## P0 Realism And Architecture
 
+0. `DONE` Import canonical champion baseline roster data from `From Online/champions` into `Characters/` without core-module hardcoding.
+- Scope:
+  - generate missing champion files with canonical base stats/basic attack metadata and baseline ability shells
+  - preserve existing modeled champion files without overwrite
+  - keep runtime script behavior ownership in `Simulation/src/scripts/`
+- Success criteria:
+  - all available champions in source dataset exist as canonical local `Characters/*.json` inputs for future scripted-depth expansion.
+
+0.1 `DONE` Add roster-wide simulation smoke validation and execution trackers.
+- Scope:
+  - add unit test that simulates every loaded champion base once
+  - add explicit execution trackers for champion/item/rune/mastery backlog
+- Success criteria:
+  - coverage expansion work has concrete tracked checklists and baseline simulation regression coverage across roster data.
+
+0.2 `DONE` Add roster-wide canonical champion shape validation test.
+- Scope:
+  - validate all champion files expose required canonical top-level and `base_stats`/`abilities` structure
+  - validate QWER slot-binding derivation succeeds for every champion
+  - guard against accidental roster shrinkage with minimum roster-size assertion
+- Success criteria:
+  - malformed champion-file imports fail fast in tests before runtime use.
+
+0.3 `DONE` Publish comprehensive coverage implementation standards and workflow.
+- Scope:
+  - define cross-domain Definition of Done for champion/item/rune/mastery coverage
+  - document batch execution workflow and PR acceptance template
+  - align checklist/guide with tracker regeneration and modeled-only-after-runtime+tests policy
+- Success criteria:
+  - contributors can execute full-coverage expansion with consistent quality and clear stop/go gates.
+
 1. `DONE` Move all Vladimir combat behavior out of engine into script modules.
 - Scope:
   - offensive rotation ownership in scripts
@@ -200,6 +231,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - rune telemetry now includes proc opportunity counters/rates and damage/healing share metrics in markdown/json outputs.
   - added explicit rune level-calibration regression tests for Electrocute, Arcane Comet, First Strike, and Aftershock formulas/caps.
   - report generation now hard-fails if controlled champion rune/shard selection labels are incomplete (no degraded “none selected” output).
+  - dynamic rune runtime coverage now includes Scorch (ability-hit damage), Cheap Shot (immobilize-trigger bonus true damage), Taste of Blood (ability-hit gated sustain heal), Absorb Life (on-kill sustain heal), and Coup de Grace (low-health execution bonus damage) with tuned defaults and regression tests.
   - search scoring now supports explicit unmodeled-rune quality-gate policy (hard gate or per-rune penalty) with diagnostics counters.
   - added explicit unmodeled-item-effect quality-gate policy in search scoring (hard gate or per-item penalty) with diagnostics counters.
   - added script-level coverage registry helpers for modeled item effects and report surfacing of best-build unmodeled item effects.

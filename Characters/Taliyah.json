@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Taliyah",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BATTLEMAGE",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 550.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 470.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 18.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 525.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Rock Surfing",
+      "type": "Passive",
+      "description": "Innate:  Taliyah gains  bonus movement speed while near terrain. This effect will be put on  cooldown while in combat or casting an ability.",
+      "description_source": "The movement speed builds up and decays linearly (by the same amount in the same interval), 25% of the maximum value every 0.25 seconds.\nRock Surfing can interact with player-generated terrain.\nDealing  default or  proc damage does not put Rock Surfing on cooldown.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Threaded Volley",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Taliyah barrages out 5 Stone Shards that each explode upon the first enemy hit, dealing magic damage to nearby enemies. This also creates an area of Worked Ground under Taliyah's location that lasts for a while.",
+      "description_source": "Threaded Volley will continue casting while in  stasis.\nThe first Stone Shard hit on each target is considered  area damage, while additional ones of the same cast are considered  persistent area damage.\nThe Boulder applies  area damage.\nThe first Stone Shard is launched instantly after the cast time ends, then the second and third Stone Shards are both launched over 1 second, and finally the fourth and fifth Stone Shards are both launched over 0.5 seconds.\n Spell shield only prevents one instance of damage.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Seismic Shove",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Taliyah creates a ledge at the target location that erects after a brief delay, briefly  knocking enemies hit in the target direction.",
+      "description_source": "The delay is measured from the start of the cast, before the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Unraveled Earth",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Taliyah scatters a field of stones in the target direction that deals magic damage to enemies hit. The stones remain for a few seconds and  slow enemies within.",
+      "description_source": "Unraveled Earth fires 6 rows of stones: the first row has 2 stones, and the rest have 4 each.\nThe stones spawn in rows that cascade in 0.17 second intervals.\nUnraveled Earth will not detonate if the target dashes over the stones while being untargetable.\nUnraveled Earth will not detonate against enemies that blink onto the stones.\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Weaver's Wall",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Taliyah summons a torrent of spiraling rocks that cascades in the target direction, which  knocks aside champions hit and erects a wall of terrain in its wake. The wall lasts a few seconds before slowly disintegrating from the starting end.",
+      "description_source": "If a champion is standing next to a portion of the generated terrain and that portion expires by any means, enemies'  spell shield will be consumed.(bug)\nThe initial cast counts as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nHowever neither recasts do.\nTaliyah can recast to destroy the wall even if she did not surf it or it is in the process of disintegrating.\nTaliyah almost always jumps off of the wall to her left from when it reaches maximum range. If she is forced to jump off of the wall, she will do so towards the source that dealt damage or applied the crowd control to her.\nWeaver's Wall, while  channeling, can be recast while  grounded but not while  rooted.\nThe channel cannot be started while affected by either crowd control effects.\n Wind Wall and  Blade Whirl will prevent Weaver's Wall from summoning any further but does not destroy any initial terrain it spawned. If Taliyah is surfing during the collision, she immediately becomes  stunned for 0.25 seconds, interrupting the surf.\nIf Taliyah would enter terrain and the wall reaches maximum range inside, she is preemptively forced off the wall before entering.\nThe wall can surpass the edges of the map, but Taliyah cannot.\nThe following table refers for interactions while Taliyah is  channeling:\nThe channel is not  interrupted by  ground despite being a movement channel.\nThis lockout persists for another 0.65 seconds during the surf after the channel is completed.\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Immobilizing effects Cast-inhibiting effects\n\nThe following table refers for interactions while Taliyah is  surfing after the first 0.65 seconds.\nOnce 0.35 seconds have elapsed afterwards, her lockout is modified for the rest of the surf.\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nInterrupted by\n\nDeath Immobilizing effects Cast-inhibiting effects\n\nThe following table refers for interactions while Taliyah is  surfing after 1 second from the channel's completion.\nInterrupting the surf by casting a non-auto targeted ability, spell, or item active causes her to jump off the wall to the location of where the spell was targeted. She will dash to maximum range if the spell was cast outside of it.\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nAll items interrupt\n\n\nConsumables\n\nInterrupts\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nAll summoner spells interrupt\n\n\nInterrupted by\n\nDeath Immobilizing effects Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

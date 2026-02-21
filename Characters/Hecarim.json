@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Hecarim",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "DIVER",
+    "FIGHTER",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 625.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 280.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.67,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Warpath",
+      "type": "Passive",
+      "description": "Innate:  Hecarim gains  bonus attack damage equal to a portion of his  bonus movement speed.",
+      "description_source": "Warpath's bonus attack damage will adjust itself to any temporary movement speed  buffs and  debuffs Hecarim is affected by.\nSince this only affects bonus values Hecarim will not dip below his regular attack damage if he is  slowed below his base movement speed.\nThe amount of movement speed scaling to bonus attack damage is refreshed every 0.25 seconds.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Rampage",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Hecarim cleaves his glaive to deal physical damage to nearby enemies.",
+      "description_source": "Active:  Hecarim cleaves his glaive to deal physical damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Spirit of Dread",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Hecarim continually deals magic damage to nearby enemies for a short time.",
+      "description_source": "The healing cap against minions accounts for every single one regardless of how many are present and/or affected by Spirit of Dread at the time of cast.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Devastating Charge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Hecarim becomes  ghosted and builds up  bonus movement speed over a short time.",
+      "description_source": "Hecarim can cast any of his abilities while  dashing.\n Onslaught of Shadows will interrupt the dash.\nIf the target does not remain nearby during the dash, Devastating Charge's effect will not be consumed.\nThe bonus movement speed  stacks multiplicatively with other sources of movement speed boosts.\nThe bonus attack range stacks additively with  Rapid Firecannon.\nDevastating Charge will still apply its effects to the target even if the  dash is  interrupted, but not if he goes into  resurrection.\nDevastating Charge's damage will apply  life steal and will affect structures.\n\"Distance traveled\" can be simple movement as well as  dashing and  blinking.\nDevastating Charge's damage will not bypass  block or  dodge but the  knock back will still be applied.\nDevastating Charge will still deal damage while  blinded.\nWhile  grounded or  rooted, Hecarim loses the  bonus attack range from Devastating Charge.\nHecarim will not use the empowered attack while  rooted.\nThe  dash does not follow targets. The target's position at the time of the enhanced attack is the direction Hecarim will leap to.\n Displacement immunity will not resist the application of the  stun.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Onslaught of Shadows",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Hecarim summons spectral riders and  charges in the target direction, dealing magic damage to enemies they pass through.",
+      "description_source": "The spectral rider missiles originate at Hecarim's location, 145 units behind and 100 units to either side of him, and 290 units behind and 200 units to either side. They travel 1510 units forward parallel to Hecarim from their origin each.\nOnly the spectral riders deal damage to enemies they pierce, Hecarim only dashes and fears enemies at the end of it.\nThe slow improperly counts as an additive percent movement speed modifier rather than a multiplicative one.(bug)\nThe strength is unaffected by  slow resist as a result of this behavior.\nThis means it can unintentionally stack with the effects of other slows.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

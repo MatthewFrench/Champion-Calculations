@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Elise",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "DIVER",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 324.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Spider Queen",
+      "type": "Passive",
+      "description": "Innate: The rank of  Spider Form / Human Form affects the power of Spider Queen.",
+      "description_source": "Spider Form's effects do not apply to  structures.\nIf an ability hits while Elise is already in Spider Form, a Spiderling will spawn near her rather than being stored.\nThe Spiderlings have a leash range.\nSpider Form's basic attacks will apply other  on-hit effects and can  critically strike as normal (the bonus damage does not).\nSpider Form's bonus damage and healing can be  blocked,  dodge and are not applied if Elise is  blind.\nApplies  proc damage on the bonus magic damage on-hit in Spider Form.\nThe Spiderlings apply  area damage.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Neurotoxin",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Elise fires a toxin at the target enemy that deals magic damage based on the target's current health.",
+      "description_source": "If the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).\nWith the exceptions of Elise's Death Blossom, Victorious, Blood Moon, and Super Galaxy skins; Neurotoxin's VFX size will scale uncapped based off the total damage it does. (note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Volatile Spiderling",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Elise sends a Volatile Spiderling to the target location that chases down nearby enemies and explodes upon coming into contact with one or when it expires, dealing magic damage to nearby enemies.",
+      "description_source": "If Volatile Spiderling dashes to a target due to  Venomous Bite, it will not expire before finishing its jump.\nIt can still collide with enemies while dashing, but since this proximity check is repeated only every so often, it might phase through an enemy on its way without detecting the collision if dashing quickly enough.\nThe spiderling checks for nearby targets every 0.264 seconds, both for potential enemies to chase down and to explode 'on-contact'. Because of this, it may walk closer to an enemy than its \"collision radius\" before exploding.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Cocoon",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Elise fires a web in the target direction that  stuns the first enemy hit.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nCocoon deals no damage and thus does not trigger  turret aggro, or effects such as  Elixir of Sorcery and  Sudden Impact's activation.\nCocoon will activate combat status despite not dealing any damage.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Spider Form / Human Form",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Spider Queen's effects are increased.",
+      "description_source": "Transformations do not count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nIf Spider Form is cast during a basic attack windup, Elise will perform a Spider Form basic attack that benefits from the bonus damage and healing from  Spider Queen, but remain at Human Form basic attack range, despite not using a projectile. This basic attack is considered a melee attack and thus will not trigger  Runaan's Hurricane's Wind's Fury bolts.\nSpider Form and Human Form have separate cooldowns.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

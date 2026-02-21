@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Tahm Kench",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "SUPPORT",
+    "TANK",
+    "WARDEN"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.379999995231628,
+      "total_attack_time_seconds": 1.51900005340576,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 325.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 39.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 56.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "An Acquired Taste",
+      "type": "Passive",
+      "description": "Innate:  Tahm Kench's  basic attacks and  Tongue Lash deal bonus magic damage based on his bonus health, and apply a  stack of An Acquired Taste against  champions that stacks up to a cap.",
+      "description_source": "The passive bonus damage applies to turrets.\nWhen An Acquired Taste is applied by  Tongue Lash, the damage is dealt as an additional instance of damage (as opposed to bonus damage when applied by basic attacks).\nThis causes effects like  Bone Plating and  Bloodletter's Curse's Vile Decay to be applied twice.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Tongue Lash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Tongue Lash's range and speed scale 1:1 alongside any  size modifiers to Tahm Kench, but will not be reduced below their base values if his overall size modifier is smaller than 100%.\nAs the missile range and speed scale simultaneously, Tongue Lash will always take 0.33 seconds to reach its maximum range (no matter the cast range).\nBecause of this, increasing Tahm Kench's size with items such as  Elixir of Iron allows him to hit targets at even the same distance more quickly and giving them less time to dodge.\n Devour can be 'queued' at any point during Tongue Lash (including the wind-up animation) and will not go on cooldown if Tahm Kench fails to hit a valid target with Tongue Lash.\nAll three  An Acquired Taste stacks will be consumed even if Tongue Lash's  stun is negated.\nThis ability will cast from wherever the caster is at the start of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Tongue Lash's range and speed scale 1:1 alongside any  size modifiers to Tahm Kench, but will not be reduced below their base values if his overall size modifier is smaller than 100%.\nAs the missile range and speed scale simultaneously, Tongue Lash will always take 0.33 seconds to reach its maximum range (no matter the cast range).\nBecause of this, increasing Tahm Kench's size with items such as  Elixir of Iron allows him to hit targets at even the same distance more quickly and giving them less time to dodge.\n Devour can be 'queued' at any point during Tongue Lash (including the wind-up animation) and will not go on cooldown if Tahm Kench fails to hit a valid target with Tongue Lash.\nAll three  An Acquired Taste stacks will be consumed even if Tongue Lash's  stun is negated.\nThis ability will cast from wherever the caster is at the start of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Abyssal Dive",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Tahm Kench is  vanished (but does not become untargetable) during the 0.15 seconds delay.\nThe following table refers for interactions while Tahm Kench is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects\n\nThe following table refers for interactions while Tahm Kench is unable to act:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "description_source": "Tahm Kench is  vanished (but does not become untargetable) during the 0.15 seconds delay.\nThe following table refers for interactions while Tahm Kench is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects\n\nThe following table refers for interactions while Tahm Kench is unable to act:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Thick Skin",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Passive:  Tahm Kench stores grey health equal to a portion of damage taken, increased while he is near at least 2 enemy champions.",
+      "description_source": "Thick Skin shield value and grey health percentage heal are both boosted by effects that increase heal and shield power. This means Tahm Kench can technically heal more than the normal amount of grey health and get a shield bigger than his maximum health.\nAt level 18 Tahm Kench would need 53.8%  heal power to heal for 100% of the damage he takes, reduced to 34.9% with  Revitalize, 23.1% with  Spirit Visage, and 6.9% with both.\nGrey health converts all post-mitigation damage, Thick Skin effectively grants Tahm Kench a form of true damage mitigation.\nGrey health can temporarily exceed 100% of his missing health when Tahm Kench heals through other means with a grey health bar at 100%. In that case he will keep the higher grey health value for a few moments until it updates and removes the amount that he healed.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Devour",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Devour's initial pull is a non- airborne displacement that displaces the target toward Tahm Kench over the ability's cast time.\nThis is also the same displacement that is used for when Devour is cast with  Tongue Lash, though with a greater pull distance as well as faster pull speed to account for Devour's short cast time.\nThe target will  blink to Tahm Kench's location at the end of this displacement, including if it is interrupted.\nAgainst enemies, Devour's pull from abducting the target depends on the application of the  suppression; if the suppression is not applied, neither is the pull. Similarly, if the suppression is removed, the displacement from the pull is stopped.\nThe attachment also depends upon the occurrence of the pull; if the target is not pulled, they are not attached to Tahm Kench and the swallow fails, cancelling the ability entirely.\nIf the target resists the suppression by being  immune to crowd control,  displacement immune, or having a  spell shield, Tahm Kench will not pull the target towards him.\nIf the target removes the suppression by any means, including with an applicable  cleanse effect or  dispel, one of two of the following interactions will occur based on the timing of the removal:\nIf the suppression was removed during Devour's cast time, the target will stop the displacement from the pull instantly and prevent themselves from being attached to Tahm Kench after the cast time.\nIf the suppression was removed while the target is attached to Tahm Kench (in other words, inside of his belly), the target will detach themselves from him instantly without Tahm Kench performing  Regurgitate.\nThe  untargetability and  displacement immunity is granted to the target during Devour's cast time as well. Enemies are granted these effects while they are suppressed; they are removed when the suppression is.\nDevour's suppression against enemies is removed if Tahm Kench dies, enters  resurrection, or transitions in or out of the  Death Realm.\nEnemies will be dealt  Regurgitate's damage regardless of Tahm Kench casting the ability if Devour's suppression ends by any means other than  dismounting(bug) (including during Devour's cast time).\nIf the target transitions into the  Death Realm or enters  resurrection, Tahm Kench will  Regurgitate them automatically.\nThis only occurs for the former if Tahm Kench is in a different dimension from the target.\nDevour cannot be used on allies that are  channeling or using an ability that preloads UnstoppableForceMarker.\nThe  self-slow is affected by  slow resist.\nTahm Kench cannot use  gates during Devour.\nAllies can see if this spell is ready next to Tahm Kench's health bar.\nThe swallowed target is not considered to be  vanished. They are instead hidden below the visible map plane, to maintain ongoing effects such as  Senna's  Curse of the Black Mist.\nDuring Devour's attachment and  Regurgitate's displacement, the swallowed target's camera is locked and centered on their champion.\nThis does not affect Tahm Kench.\nThe following table refers for interactions while the target is unable to act:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nIf an ally, forces Tahm Kench to use  Regurgitate unless movement commands are otherwise restricted. If an enemy, movement commands are disabled.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll summoner spells are disabled\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath\n\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Devour's initial pull is a non- airborne displacement that displaces the target toward Tahm Kench over the ability's cast time.\nThis is also the same displacement that is used for when Devour is cast with  Tongue Lash, though with a greater pull distance as well as faster pull speed to account for Devour's short cast time.\nThe target will  blink to Tahm Kench's location at the end of this displacement, including if it is interrupted.\nAgainst enemies, Devour's pull from abducting the target depends on the application of the  suppression; if the suppression is not applied, neither is the pull. Similarly, if the suppression is removed, the displacement from the pull is stopped.\nThe attachment also depends upon the occurrence of the pull; if the target is not pulled, they are not attached to Tahm Kench and the swallow fails, cancelling the ability entirely.\nIf the target resists the suppression by being  immune to crowd control,  displacement immune, or having a  spell shield, Tahm Kench will not pull the target towards him.\nIf the target removes the suppression by any means, including with an applicable  cleanse effect or  dispel, one of two of the following interactions will occur based on the timing of the removal:\nIf the suppression was removed during Devour's cast time, the target will stop the displacement from the pull instantly and prevent themselves from being attached to Tahm Kench after the cast time.\nIf the suppression was removed while the target is attached to Tahm Kench (in other words, inside of his belly), the target will detach themselves from him instantly without Tahm Kench performing  Regurgitate.\nThe  untargetability and  displacement immunity is granted to the target during Devour's cast time as well. Enemies are granted these effects while they are suppressed; they are removed when the suppression is.\nDevour's suppression against enemies is removed if Tahm Kench dies, enters  resurrection, or transitions in or out of the  Death Realm.\nEnemies will be dealt  Regurgitate's damage regardless of Tahm Kench casting the ability if Devour's suppression ends by any means other than  dismounting(bug) (including during Devour's cast time).\nIf the target transitions into the  Death Realm or enters  resurrection, Tahm Kench will  Regurgitate them automatically.\nThis only occurs for the former if Tahm Kench is in a different dimension from the target.\nDevour cannot be used on allies that are  channeling or using an ability that preloads UnstoppableForceMarker.\nThe  self-slow is affected by  slow resist.\nTahm Kench cannot use  gates during Devour.\nAllies can see if this spell is ready next to Tahm Kench's health bar.\nThe swallowed target is not considered to be  vanished. They are instead hidden below the visible map plane, to maintain ongoing effects such as  Senna's  Curse of the Black Mist.\nDuring Devour's attachment and  Regurgitate's displacement, the swallowed target's camera is locked and centered on their champion.\nThis does not affect Tahm Kench.\nThe following table refers for interactions while the target is unable to act:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nIf an ally, forces Tahm Kench to use  Regurgitate unless movement commands are otherwise restricted. If an enemy, movement commands are disabled.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll summoner spells are disabled\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath\n\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

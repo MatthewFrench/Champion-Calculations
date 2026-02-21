@@ -1,0 +1,160 @@
+{
+  "data_version": "1.0.0",
+  "name": "Taric",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ENCHANTER",
+    "SUPPORT",
+    "TANK",
+    "WARDEN"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 645.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 300.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 40.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 150.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Bravado",
+      "type": "Passive",
+      "description": "Innate: After casting an ability,  Taric empowers his next two basic attacks to gain tremendous  total attack speed, deal bonus magic damage based on his bonus armor, and  reduce the cooldowns of his basic abilities.",
+      "description_source": "The first attack refreshes Bravado's duration.\nSubsequent ability casts will refresh the duration and grant another empowered attack if Taric has one attack remaining.\nBravado may only grant up to two empowered attacks.\nThe bonus damage will not apply against  structures.\nBravado can be  dodged and  blocked but it cannot miss if Taric is  blinded. The cooldown reduction still applies when  blinded, however it does not apply on  dodged or  blocked Bravado attacks.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Starlight's Touch",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Taric  heals himself and nearby allied champions based on his maximum health per charge of Starlight's Touch that he periodically stocks, up to a cap.  Bravado-empowered attacks each grant one charge.",
+      "description_source": "The healing will apply heal effects (such as  Summon Aery) prioritizing targets in Taric's circle, based on proximity to him, then in the  Bastioned ally's circle, based on proximity to that ally (including it).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Bastion",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive:  Taric gains  bonus armor and forms a  tether to the ally bound by Bastion. While the tether persists, the ally gains the bonus armor and Taric's abilities are mimicked to them.",
+      "description_source": "The mimicked abilities will still complete even if Taric dies or leaves range.\nAbilities are not mimicked to the bound ally if they are  vanished via  Alpha Strike,  Hallucinate,  Rappel, or  Void Rush.\nMimicked abilities will also cancel if they vanish as above.\nBastion effects will be temporarily disabled while the bound ally is in a different realm than Taric ( Death Realm). The tether will not break.\nBastion has a  forgiveness radius of 175 units.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Dazzle",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Taric winds up over a brief moment, then projects a beam of starlight in the target direction that briefly  stuns enemies hit, dealing magic damage based on his bonus armor.",
+      "description_source": "Dazzle will aim towards the target direction on-cast when firing from both his and his  Bastion's positions.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Cosmic Radiance",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Taric calls down a star that descends to him over a short time. Afterwards, he and nearby allied champions become  invulnerable for a short time.",
+      "description_source": "Cosmic Radiance has no effect on  untargetable allies.\nIt will affect the primary unit (the one the star is falling down on) even if they are untargetable.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

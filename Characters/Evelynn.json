@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Evelynn",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.230000004172325,
+      "total_attack_time_seconds": 1.5,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 642.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 315.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.11,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 37.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.667,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Demon Shade",
+      "type": "Passive",
+      "description": "Innate: While out of combat,  Evelynn gains Demon Shade.",
+      "description_source": "Demon Shade is also placed on a 1.5 second cooldown upon  respawning.\nDemon Shade's cooldown incurs upon starting the attack windup of the basic attack and upon the cast time of the ability.\nDemon Shade activates even if Evelynn is  Recalling.\nUpon Evelynn's transition into the stealth, Demon Shade will interrupt her in-progress cast commands for  unit-targeted spells, excluding  Whiplash and its  empowered cast.\nIf Evelynn's last issued order was to cast  Whiplash, her transition into the stealth will be followed by an automatic command for casting the ability (if no other orders were issued in the meantime).\nWhenever Demon Shade activates, a puff of purple smoke will briefly appear around her.\nUsing a basic attack breaks the stealth at the start of the attack windup.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Hate Spike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Evelynn fires her Lasher, dealing magic damage to the first enemy hit and marking them. Evelynn's next few attacks against the marked target will deal bonus magic damage.",
+      "description_source": "Each cast counts as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nHate Spike prioritizes:\nThe last champion Evelynn hit\nThe last non-champion Evelynn hit\nThe lowest-health champion\nThe lowest-health non-champion\nThe dart applies  spell damage and the spikes deal  area damage.\nThis ability will cast from wherever the caster is at the start of the cast time.\nRecasts can be buffered up to 0.5 seconds before becoming castable at a maximum range of approximately 500 units.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Allure",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Evelynn curses the target enemy, causing her next  basic attack or  ability against the target to expunge the curse,  slowing the target and refunding the  mana cost.",
+      "description_source": "The mark fully forming signifies the 2.5 seconds have elapsed, meaning the  charm will be applied on the triggering attack or ability.\nAn enemy champion cursed by Allure is alarmed of her presence and after the mark has fully formed, an arrow will appear next to them pointing towards Evelynn's direction. This is visible to both teams.\nThe  magic resistance reduction will be applied to the attack or ability that triggers it.\nAllure's mark application on a target cannot be blocked by  spell shield.\nThe expunge will not occur if the ability is blocked by a spell shield. The mark does not trigger and will remain on the target in this case.\nThe  magic resistance reduction debuff is applied independently of the  Charm debuff when the matured mark is expunged, meaning a target can still have their magic resistance reduced while they are resisting applications of CC debuffs (e.g.  Morgana's  Black Shield).\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but still go on  cooldown and pay its cost.(bug)\nAllure will restart its cooldown whenever the mark debuff is removed.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Whiplash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Evelynn whips the target enemy, dealing magic damage based on the target's maximum health and applying  on-hit effects. She then gains  bonus movement speed for a short time.",
+      "description_source": "Whiplash can be  dodged and  blocked but may not miss if Evelynn is  blinded.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Last Caress",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Last Caress can be buffered during  Empowered Whiplash.\nThe casting input controls the direction Last Caress'  damage is dealt from, with the movement automatically happening in the reverse direction.\nEnemy  champions below the health threshold are marked for Evelynn, indicating the target will receive Last Caress'  increased damage.\nThe screen will direct to Evelynn's position after she  blinks.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Last Caress can be buffered during  Empowered Whiplash.\nThe casting input controls the direction Last Caress'  damage is dealt from, with the movement automatically happening in the reverse direction.\nEnemy  champions below the health threshold are marked for Evelynn, indicating the target will receive Last Caress'  increased damage.\nThe screen will direct to Evelynn's position after she  blinks.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -135,6 +135,11 @@ fn builder_marks_item_and_rune_runtime_flags() {
             "Dark Harvest".to_string(),
             "Triumph".to_string(),
             "Gathering Storm".to_string(),
+            "Scorch".to_string(),
+            "Cheap Shot".to_string(),
+            "Taste of Blood".to_string(),
+            "Absorb Life".to_string(),
+            "Coup de Grace".to_string(),
         ],
         0.0,
         false,
@@ -159,6 +164,11 @@ fn builder_marks_item_and_rune_runtime_flags() {
     assert!(runtime.has_dark_harvest);
     assert!(runtime.has_triumph);
     assert!(runtime.has_gathering_storm);
+    assert!(runtime.has_scorch);
+    assert!(runtime.has_cheap_shot);
+    assert!(runtime.has_taste_of_blood);
+    assert!(runtime.has_absorb_life);
+    assert!(runtime.has_coup_de_grace);
 }
 
 #[test]
@@ -432,6 +442,154 @@ fn aftershock_resist_cap_matches_level_caps() {
 }
 
 #[test]
+fn scorch_damage_and_cooldown_follow_defaults() {
+    let defaults = rune_runtime_defaults();
+    let mut runtime = build_loadout_runtime_state(&[], &["Scorch".to_string()], 0.0, false);
+    let attacker_ability_power = 200.0;
+    let attacker_bonus_attack_damage = 80.0;
+
+    let (first_magic, _) = ability_hit_at_level(
+        &mut runtime,
+        220.0,
+        0.0,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        2200.0,
+        2500.0,
+        1.0,
+        18,
+    );
+    let (blocked_magic, _) = ability_hit_at_level(
+        &mut runtime,
+        220.0,
+        0.0,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        2200.0,
+        2500.0,
+        2.0,
+        18,
+    );
+    let (post_cooldown_magic, _) = ability_hit_at_level(
+        &mut runtime,
+        220.0,
+        0.0,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        2200.0,
+        2500.0,
+        11.2,
+        18,
+    );
+
+    let expected = level_scaled_range_value(18, defaults.scorch.proc_magic_damage_by_level)
+        + defaults.scorch.ability_power_ratio * attacker_ability_power
+        + defaults.scorch.bonus_attack_damage_ratio * attacker_bonus_attack_damage;
+
+    assert!((first_magic - expected).abs() < 1e-6);
+    assert_eq!(blocked_magic, 0.0);
+    assert!((post_cooldown_magic - expected).abs() < 1e-6);
+}
+
+#[test]
+fn cheap_shot_triggers_on_immobilize_and_respects_cooldown() {
+    let defaults = rune_runtime_defaults();
+    let mut runtime = build_loadout_runtime_state(&[], &["Cheap Shot".to_string()], 0.0, false);
+
+    let first = trigger_immobilize_rune_damage(&mut runtime, 1.0, 18, 0.0);
+    let blocked = trigger_immobilize_rune_damage(&mut runtime, 2.0, 18, 0.0);
+    let second = trigger_immobilize_rune_damage(&mut runtime, 5.2, 18, 0.0);
+    let expected = level_scaled_range_value(18, defaults.cheap_shot.proc_true_damage_by_level);
+
+    assert!((first - expected).abs() < 1e-6);
+    assert_eq!(blocked, 0.0);
+    assert!((second - expected).abs() < 1e-6);
+}
+
+#[test]
+fn taste_of_blood_heal_and_cooldown_follow_defaults() {
+    let defaults = rune_runtime_defaults();
+    let mut runtime = build_loadout_runtime_state(&[], &["Taste of Blood".to_string()], 0.0, false);
+    let attacker_ability_power = 200.0;
+    let attacker_bonus_attack_damage = 100.0;
+
+    let _ = ability_hit_at_level(
+        &mut runtime,
+        220.0,
+        0.0,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        2200.0,
+        2500.0,
+        1.0,
+        18,
+    );
+    let first_heal = on_outgoing_damage_heal(&mut runtime, 0.0, 1.01);
+
+    let _ = ability_hit_at_level(
+        &mut runtime,
+        220.0,
+        0.0,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        2200.0,
+        2500.0,
+        2.0,
+        18,
+    );
+    let blocked_heal = on_outgoing_damage_heal(&mut runtime, 0.0, 2.01);
+
+    let _ = ability_hit_at_level(
+        &mut runtime,
+        220.0,
+        0.0,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+        2200.0,
+        2500.0,
+        21.2,
+        18,
+    );
+    let second_heal = on_outgoing_damage_heal(&mut runtime, 0.0, 21.21);
+
+    let expected = level_scaled_range_value(18, defaults.taste_of_blood.heal_by_level)
+        + defaults.taste_of_blood.ability_power_ratio * attacker_ability_power
+        + defaults.taste_of_blood.bonus_attack_damage_ratio * attacker_bonus_attack_damage;
+
+    assert!((first_heal - expected).abs() < 1e-6);
+    assert_eq!(blocked_heal, 0.0);
+    assert!((second_heal - expected).abs() < 1e-6);
+}
+
+#[test]
+fn absorb_life_on_enemy_kill_heals_by_level() {
+    let defaults = rune_runtime_defaults();
+    let mut runtime = build_loadout_runtime_state(&[], &["Absorb Life".to_string()], 0.0, false);
+
+    let level_one_heal = on_enemy_kill_heal(&mut runtime, 0.0, 1);
+    let level_eighteen_heal = on_enemy_kill_heal(&mut runtime, 0.0, 18);
+
+    let expected_level_one = level_scaled_range_value(1, defaults.absorb_life.heal_by_level);
+    let expected_level_eighteen = level_scaled_range_value(18, defaults.absorb_life.heal_by_level);
+
+    assert!((level_one_heal - expected_level_one).abs() < 1e-6);
+    assert!((level_eighteen_heal - expected_level_eighteen).abs() < 1e-6);
+    assert!(level_eighteen_heal > level_one_heal);
+}
+
+#[test]
+fn coup_de_grace_bonus_applies_only_to_low_health_targets() {
+    let mut runtime = build_loadout_runtime_state(&[], &["Coup de Grace".to_string()], 0.0, false);
+
+    let (_, high_health_true) =
+        ability_hit(&mut runtime, 300.0, 0.0, 0.0, 0.0, 1800.0, 2500.0, 1.0);
+    let (_, low_health_true) = ability_hit(&mut runtime, 300.0, 0.0, 0.0, 0.0, 900.0, 2500.0, 2.0);
+
+    assert_eq!(high_health_true, 0.0);
+    assert!(low_health_true > 0.0);
+}
+
+#[test]
 fn rune_proc_telemetry_includes_source_breakdown() {
     let mut runtime = build_loadout_runtime_state(&[], &["Summon Aery".to_string()], 0.0, false);
     let _ = on_hit(&mut runtime, 120.0, 1.0, 1500.0, 2500.0);
@@ -627,7 +785,7 @@ fn modeled_loadout_runes_have_observable_effects() {
 
     let mut triumph_runtime =
         build_loadout_runtime_state(&[], &["Triumph".to_string()], 0.0, false);
-    assert!(on_enemy_kill_heal(&mut triumph_runtime, 2000.0) > 0.0);
+    assert!(on_enemy_kill_heal(&mut triumph_runtime, 2000.0, 18) > 0.0);
 
     let mut gathering_storm_runtime =
         build_loadout_runtime_state(&[], &["Gathering Storm".to_string()], 0.0, false);
@@ -642,6 +800,55 @@ fn modeled_loadout_runes_have_observable_effects() {
         600.0,
     );
     assert!(gathering_storm_magic > 0.0);
+
+    let mut scorch_runtime = build_loadout_runtime_state(&[], &["Scorch".to_string()], 0.0, false);
+    let (scorch_magic, _) = ability_hit(
+        &mut scorch_runtime,
+        220.0,
+        0.6,
+        200.0,
+        100.0,
+        2200.0,
+        2500.0,
+        1.0,
+    );
+    assert!(scorch_magic > 0.0);
+
+    let mut cheap_shot_runtime =
+        build_loadout_runtime_state(&[], &["Cheap Shot".to_string()], 0.0, false);
+    assert!(trigger_immobilize_rune_damage(&mut cheap_shot_runtime, 1.0, 18, 0.0) > 0.0);
+
+    let mut taste_of_blood_runtime =
+        build_loadout_runtime_state(&[], &["Taste of Blood".to_string()], 0.0, false);
+    let _ = ability_hit(
+        &mut taste_of_blood_runtime,
+        220.0,
+        0.6,
+        200.0,
+        80.0,
+        2200.0,
+        2500.0,
+        1.0,
+    );
+    assert!(on_outgoing_damage_heal(&mut taste_of_blood_runtime, 0.0, 1.01) > 0.0);
+
+    let mut absorb_life_runtime =
+        build_loadout_runtime_state(&[], &["Absorb Life".to_string()], 0.0, false);
+    assert!(on_enemy_kill_heal(&mut absorb_life_runtime, 0.0, 18) > 0.0);
+
+    let mut coup_de_grace_runtime =
+        build_loadout_runtime_state(&[], &["Coup de Grace".to_string()], 0.0, false);
+    let (_, coup_de_grace_true) = ability_hit(
+        &mut coup_de_grace_runtime,
+        220.0,
+        0.0,
+        0.0,
+        0.0,
+        900.0,
+        2500.0,
+        1.0,
+    );
+    assert!(coup_de_grace_true > 0.0);
 }
 
 #[test]
@@ -682,7 +889,7 @@ fn rune_proc_telemetry_overhead_smoke_benchmark() {
             );
             let _ = on_outgoing_damage_heal(&mut runtime, 220.0, now + 0.006);
             if step % 2000 == 0 {
-                let _ = on_enemy_kill_heal(&mut runtime, 2500.0);
+                let _ = on_enemy_kill_heal(&mut runtime, 2500.0, 18);
             }
         }
         start.elapsed().as_secs_f64()

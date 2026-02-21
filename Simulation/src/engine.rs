@@ -1908,6 +1908,7 @@ impl ControlledChampionCombatSimulation {
             let runtime_kill_heal = enemy_kill_heal(
                 &mut self.controlled_champion_combat_runtime,
                 self.max_health,
+                self.sim.champion_level,
             );
             if runtime_kill_heal > 0.0 {
                 let script_heal_multiplier = controlled_champion_heal_multiplier();

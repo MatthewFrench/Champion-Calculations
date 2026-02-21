@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Cassiopeia",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BATTLEMAGE",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 450.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 18.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 53.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.647,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Serpentine Grace",
+      "type": "Passive",
+      "description": "Innate:  Cassiopeia increases the effectiveness of all  Movement Speed bonuses by a percentage.",
+      "description_source": "Innate:  Cassiopeia increases the effectiveness of all  Movement Speed bonuses by a percentage.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Noxious Blast",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Cassiopeia blasts an area with  Poison after a brief delay, dealing magic damage over time to enemies hit. She gains  bonus movement speed if she hits an enemy  champion.",
+      "description_source": "Noxious Blast always uses quick cast, regardless of player settings.\nThe damage inflicted by Noxious Blast is calculated as follows: damage / 7 ticks rounded down to the nearest integer.\nFor example: with 0 bonus AP Noxious Blast inflicts 75 damages over 7 ticks of damage, so 75/7 (\u224810.71) deals first of all 10 damage, then (2 \u00d7 75/7)  \u2212  10 (\u224811.43) deals in a second time 11 damages, then (3 \u00d7 75/7)  \u2212  10  \u2212  11 (\u224811.14) deals in a third time 11 damages, and so on.\nThe damage displayed for Noxious Blast DOT (Damage_over_time) always remains constant and corresponds to the previously mentioned formula: damage / 7 ticks rounded down to the nearest integer. It's important not to confuse the consistent displayed damage with the actual damage, which is updated with each tick, see tick and updates.\nWith the same example as above, the damage displayed is always 10.\nOccasionally, Noxious Blast may not deal the displayed damage. This discrepancy occurs when the calculated damage falls between 0.5 and 1. In such cases, rounding to the nearest integer, specifically rounding up, creates a 1-point difference. It's important to note that the damage is rounded down to the nearest integer.\nFor example: with a  Blasting Wand's, Noxious Blast shows  so rounded to the nearest integer 116 magic damage, but really deals using the formula above 115 magic damage.\n(bug) When Cassiopeia has precisely 20 bonus AP or 40 bonus AP. In this scenario, Noxious Blast may inflict 1 less damage than intended. Importantly, this bug occurs independently of rounding considerations.\nPENDING FOR TEST: Enemies within the blast of Noxious Blast are  poisoned for something between 3.2 and 3.3 seconds.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Miasma",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Cassiopeia spews several clouds of  Poison that linger, continually dealing magic damage to enemies within. They are also  slowed and  grounded.",
+      "description_source": "Miasma's  slow and  ground debuffs are each marked as non-dispellable, so they are not removed by most  cleanses. Each is however allowed to be removed by cleanses that also grant immunity to the debuff type, such as  Olaf's  Ragnarok.\nIf a target becomes  untargetable while affected by the  ground, the debuff will refresh to 0.25 seconds.\n Wind Wall will block the portion of Miasma it destroys.\nMiasma inflicts 5 / 6.25 / 7.5 / 8.75 / 10 (+ 2.5% AP) magic damage per tick, and in fact because there is 19 ticks and not 20 ticks, the total magic damage is currently not 100 / 125 / 150 / 175 / 200 (+ 50% AP) but 95 / 118.75 / 142.5 / 166.25 / 190 (+ 47.5% AP).\nSometimes Miasma randomly inflicts only 18 ticks of damage.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Twin Fang",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Cassiopeia launches an attack at the target enemy that deals magic damage. If this attack kills the target, the  mana cost is refunded.",
+      "description_source": "Upon reaching the target, Twin Fang will wait for an ongoing  Noxious Blast to explode before dealing its damage.\nTwin Fang's damage against poisoned targets:\nWhen maxed first: 72 : 228 (based on level) (+ 65% AP).\nWhen maxed second: 72 : 228 (based on level) (+ 65% AP).\nWhen maxed last: 72 : 228 (based on level) (+ 65% AP).\nTwin Fang's cast indicator is incorrectly adding her own radius to the range like an  edge range ability, and is therefore slightly larger than the actual cast range Twin Fang can cast at.\nUsing Twin Fang on an out-of-range target after completing a movement order causes Cassiopeia to move back to her original location after casting, if no other order is issued during the entire process.(note)\nThis may be a consequence of Twing Fang being a \"Walk in range of the target\" ability that does not interrupt movement commands.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Petrifying Gaze",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Cassiopeia blasts in a cone, dealing magic damage to enemies hit and  stunning any that are facing her, while  slowing any others with their back turned.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nCassiopeia will turn to face the target direction over the cast time.\nPetrifying Gaze's target direction will change if Cassiopeia's facing direction changes during the cast time (i.e. through  knockbacks).\nThe visual effect will not follow changes in Cassiopeia's facing direction and may not portray Petrifying Gaze's target direction accurately.(bug)\nThe facing direction of champions whose abilities/animations cause them to lock their facing or spin is always the direction they are moving in. For abilities that cause the champion to spin in place (e.g.  Death Lotus,  Judgment) it will factor the direction they were facing on cast.\n Lucian's  The Culling is an exception and his facing direction is actually considered to be the direction he is facing.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Samira",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 3.25,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 349.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 26.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 500.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Daredevil Impulse",
+      "type": "Passive",
+      "description": "Innate:  Samira's  basic attacks and damaging  abilities against enemy  champions that are unique from the previous hit generate a Style  stack, up to 6.",
+      "description_source": "The Style stack count is represented by the grades       to the left of Samira's health bar, visible to the player only, as well as a stack counter under the health bar, visible to all players.\nAbilities blocked by  spell shields will still grant Samira Style stacks.\nStyle stacks can be generated via  clones.\nGun and blade attacks do not count as different for the purposes of stacking Style.\nBasic attacks using the blade are still classified as  ranged.\nThe blade attack's range condition is unaffected by  attack range modifiers (e.g.  Rapid Firecannon).\nIts attack range is calculated edge-to-edge, as normal (i.e.,  size modifiers on Samira or her target can still increase the effective distance as basic attack range is added onto unit size).\nThe blade attack bonus deals  default damage.\nThe blade attack bonus does not apply against  structures.\nThe blade attack bonus applies after the primary damage of the attack and is not an  on-hit effect.\nThe empowered attack's bolts deal:\n Basic damage for the first bolt, as a basic attack would.\n Default damage for all subsequent bolts.\nEach bolt from the empowered attack rolls for a  critical strike separately.\nThe empowered attack will trigger on  immobilizes from any source.\nIt specifically cannot trigger against enemies affected by  Blast Cone's displacement triggered by anyone.(note)\nThe empowered attack will not trigger against  crowd control immune and  displacement immune targets.\n Fiora's  Riposte can resist the knock up from Daredevil Impulse, but the ability will not trigger its on- immobilization empowerment condition from the attack alone.(note)\nSamira may dash and have her dash to an  immobilized target canceled an indefinite number of times, so long as the empowered attack has not triggered. When the empowered attack begins, Daredevil Impulse's cooldown is applied on the target which also prevents her from initiating the dash and the attack again on them for the duration.\nThe on-target cooldown will start even if the empowered attack is parried.\nWhile  grounded or  rooted, Samira cannot  dash into range to use the empowered attack. She can only use it if her target is within her  attack range while under this condition.\nThe empowered attack will not apply the knock up against  suspended enemies.\nThe empowered attack will only apply the knock up if the target is still  immobilized or  airborne upon being hit. It will not apply if they are no longer disabled when hit.\nThe empowered attack cannot be used against a target with a  spell shield.\nThe application of the  knock up effect can occur on any of the bolts of the empowered attack if it had not already occurred on the first.\nA missile that is parried by  Riposte or is  dodged,  blocked, or misses while Samira is  blinded cannot apply the knock up in any way.\nThe empowered attack's speed is unaffected by  attack speed modifiers.\nIf Samira is outside maximum initiation range for the dash when targeting an immobilized target, the player must input a new Attack order on the target upon entering initiation range in order to actually initiate the dash.\nHowever if Samira enters the bolts' cast range via her movement while the target is still immobilized without issuing any other commands, the empowered attack will cast without requiring a new order (without the dash).\nThe empowered attack removes any forced movement affecting the target once its knock up ends.(note)\nPENDING FOR TEST: Does this also happen if it's  cleansed.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Flair",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Samira fires a shot in the target direction that deals physical damage to the first enemy hit.",
+      "description_source": "Applies  spell damage on the shot and  area damage on the slash and explosives.\nFlair's shot against an enemy champion will aggro nearby enemy minions.\nFlair can be cast during  Wild Rush even if  Blade Whirl or  Inferno Trigger are active.\nThe slash and explosives roll their  critical strike against each target individually.\nThe shot and the slash do not count as different abilities for stacking  Style.\nSamira's next attack after using Flair will occasionally come out faster.(note)\nSamira can use  Wild Rush during Flair's cast time.\nThis ability will cast from wherever the caster is at the end of the cast time.\nFlair will fire or slash from wherever Samira is at the end of the cast time.\nSamira will always slash in her facing direction, and she will turn to face the target direction only once at the start of the cast time.\nOnly the shot will be destroyed by  projectile-intercepting effects.\nThe explosive placement is illustrated in  Wild Rush regardless of whether Flair is available.\nThe VFX always covers the the full dash's distance even if  Wild Rush is interrupted mid-dash.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Blade Whirl",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Samira briefly spins her blade twice, dealing physical damage to nearby enemies each time. During this time, she destroys all incoming enemy  projectiles.",
+      "description_source": "Spell shield will block the damage from one slash.\nWhile the ability has a cast time - the cast time has no effect on the ability's usability. All effects begin immediately and Samira can move throughout.\nBoth slashes count as the same ability for stacking  Style.\nThe effect ending early includes the second slash not being performed, if applicable.\nEntering  stasis will also end Blade Whirl early.\nOther item actives and channeling  Teleport or  Recall will not end the effect early.\nSamira can ignore the lockout for  Flair and basic attacks if she uses  Wild Rush and queues up  Flair and/or a basic attack at the start of it.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Wild Rush",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Samira  dashes at the target enemy or enemy structure, dealing magic damage to enemies she passes through. She also gains  bonus attack speed for a short time.",
+      "description_source": "Samira gains the attack speed buff at the start of the dash.\nWild Rush does not deal its damage to turrets.\nWild Rush prioritizes targeting champions over turrets.\n Inferno Trigger will be buffered to cast at the end of the dash if  Flair was cast during the dash.\nCasting  Flash during Wild Rush will interrupt the dash but deal damage to nearby enemies at the location.\nIf  Flair was cast during this time, an explosive will also be placed at that location.\nWild Rush will also reset if Samira kills or gets assist credit on a  clone that dies (to hostiles).(note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Inferno Trigger",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Samira unleashes a torrent of shots, reducing her  movement speed and rapidly firing shots that deal physical damage to nearby enemies.",
+      "description_source": "Samira's facing direction remains as it had been or, if she is moving, towards that direction during Inferno Trigger.\nThe  movement speed reduction stacks additively with other movement speed bonuses.\nIt is a negative bonus, not a  slow, and is thus not reduced by  slow resist.\nInferno Trigger's area of effect is fixed around Samira.\n Spell shield will block the damage of one shot.\nInferno Trigger will not end if there are no enemies that remain in range.\nThe bottom of the player's screen will have a fiery visual effect while Samira is at S rank and Inferno Trigger has at least one rank.\nSince  Inferno Trigger's cooldown is static,  Ultimate Hunter will be swapped with  Treasure Hunter for Samira at the start of the game.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

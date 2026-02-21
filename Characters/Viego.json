@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Viego",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 34.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 200.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Sovereign's Domination",
+      "type": "Passive",
+      "description": "Innate: Scoring an enemy champion  takedown will spawn a Mist Wraith for a period.  Viego can consume the Mist Wraith to briefly become  untargetable and  blink to it, which  heals him for a portion of the target's maximum health and grants Possession.",
+      "description_source": "Viego will copy the possessed champion's ability ranks.\nViego cannot level up their abilities with his available skill points.\nMist Wraiths will expire when Viego dies, and they will not expire while he is winding up on them.\nViego gains the bonus movement speed during possession even while moving towards nearby enemy champions that are  untargetable.\nFinishing the possessing attack against a Mist Wraith kills it, rewarding Viego an extra  3 as he becomes the target champion.\nThe wind up's  untargetability does not  destroy in-flight  projectiles from  turrets.\nThe possessed champion's abilities do not cost any  mana or  energy even if that specific champion normally uses either as a casting resource.\nAlternative resources, such as  Fury,  Flow, or  Health, will still be utilized.\nWhen possessing  Akali, Viego is given 10,000 energy. This causes his secondary resource bar to render incorrectly.(bug)\nThe current cooldowns of Viego's abilities will not be reset between transformations.\nThose of the possessed champion's abilities will be reset between transformations.\nThis does not apply to the following long-cooldown abilities. Viego specifically tracks their proper cooldowns which can be seen via a buff in his hotbar for each when applicable.\n Anivia's  Rebirth\n Azir's  Shurima's Legacy\n Zac's  Cell Division\nViego will not track  Zaahen's  Cultivation of War's cooldown.(bug)\nThe passive cooldowns of items are shared between Viego's and the possessed champion's.\nThis does not apply to Lifeline items.(note)\nOnce possession ends, Viego returns to his normal state and certain effects gained from the possessed champion's abilities will be immediately removed.\nSome buffs will be kept and some buffs will be lost.\nViego will almost always keep  shields and  spell shields.\nPassive effects will be lost by default, as Viego no longer has their abilities.\n Channeled and charged abilities maintained will be interrupted, and without granting any cancelation refunds to the respective slot (if applicable).\nToggled abilities will be automatically toggled off.\nWhen taking possession of  Kled, Viego's current health percentage will become Kled's health percentage, while  Skaarl's health will be low.\nIf Viego's current health is under health, he will dismount twice(bug) upon taking possession of Kled and receive  Frayed Nerves.\nOnce possession ends, Viego only keeps  Kled's health percentage as his current.\nPENDING FOR TEST: What determines Skaarl's health if Viego is at health?\nViego retains his own summoner spells, trinket item, and runes during possession.\nMist Wraiths will still spawn while Viego is in a zombie state.\nSovereign's Domination will not summon a Mist Wraith from  clones.\nThe possession will not expire while Viego is in a  zombie state.\nWhile in a zombie state,  Heartbreaker is disabled.\nIf Viego enters a zombie state while winding up on a Mist Wraith, the possession will still last its normal duration.(note)\nThe possession will not end prematurely if Viego enters  resurrection.\nThe possession will end if it expires while Viego is under  Zaahen's  Cultivation of War's  resurrection; he will lose all its effects instantly and be revived without restoring the complete amount of health.(bug)\nThe possession will acquire the basic abilities of shapeshifting champions (e.g.  Elise's  Spider Form / Human Form,  Jayce's  Transform Mercury Cannon /  Transform Mercury Hammer, and  Nidalee's  Aspect of the Cougar) based on which form they died as.\nMist Wraiths are considered  clones and can only be targeted by Viego.\nIf Viego possesses an enemy champion who owns  Dark Seal or  Mejai's Soulstealer, he will gain their Glory stacks during the possession.\nAs  Cull tracks its progress for each player even if they do not possess the item at the time, Viego may discharge stacks for the benefit of  1 each per  minion kill, and if Viego killed 100 minions possessing  Cull, no matter whether bought himself or acquired via a possessed champion's inventory, he receives the  350 payout and can no longer discharge stacks.\nThis entire interaction does not interact with the state of the  Cull stacks of the enemy.\nThe stacks shown on the item in the inventory and scoreboard may not update properly, however.\nIf Viego possesses an enemy champion who owns  Tear of the Goddess, the stacks it has will be transferred to his  Tear of the Goddess if he owns one.\nIf Viego possesses an enemy  Bel'Veth, his attack speed cap will be modified to 90 permanently.(bug)\nIf Viego posesses an enemy  Evelynn, he will never activate the healing from  Demon Shade.(bug)\nIf Viego possesses an enemy  K/DA Evelynn, he will still hear  Demon Shade's music upon discarding the possession if he does it while active.(bug)\nIf Viego targets a Mist Wraith while already  untargetable he will become targetable once again during the cast time.(bug)\nIf Viego possesses an enemy on  Howling Abyss, he will be able to use the shop upon returning to the fountain and discarding the possession.(bug)\nIf Viego posesses an enemy  Naafiri, he will keep her  Packmates upon discarding the possession.(bug)\nThe following table refers for interactions while Viego is winding up on a Mist Wraith:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Blade of the Ruined King",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive:  Viego's basic attacks deal bonus physical damage based on the target's current health. Additionally, Viego's damaging abilities apply a mark to enemies hit. His next basic attack will consume the mark to strike twice, dealing additional modified physical damage and  healing him.",
+      "description_source": "The mark will not be applied to the primary target struck by  Heartbreaker, but it can triggered from it.\nThe second strike rolls  critical strikes independently from the primary attack.\nThe ability's cast time respects the attack speed floor and cap.\nApplies  area damage for the thrust,  basic damage for the second strike, and  proc damage for the bonus damage on-hit.\nThis ability will cast from wherever the caster is at the end of the cast time.\nViego will not perform the second strike if the first attack was  dodged,  blocked, and  missed.\nIf the second strike hits a dead unit, Viego will still  heal based on the post-mitigation damage that he would deal with it.\nThe attacks do not deal the bonus damage against  structures.\nThe mark does not cause Viego to attack twice. Effects that trigger  on-attack or interact with the attack windup will only trigger once and thus do not interact with Blade of the Ruined King. (e.g.  Lethal Tempo,  Hail of Blades).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Spectral Maw",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "The reduced cooldown from the charge will not occur if Spectral Maw's cooldown is already below 3 seconds.\nThe following table refers for interactions while Viego is  channeling:\n\n\nType\n\nCharge channel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Harrowed Path is usable.  Blade of the Ruined King and  Heartbreaker are disabled.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled, but can still use trinkets.\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall\n\n\nInterrupted by\n\n Hexflash (Recasts)\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "description_source": "The reduced cooldown from the charge will not occur if Spectral Maw's cooldown is already below 3 seconds.\nThe following table refers for interactions while Viego is  channeling:\n\n\nType\n\nCharge channel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Harrowed Path is usable.  Blade of the Ruined King and  Heartbreaker are disabled.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled, but can still use trinkets.\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall\n\n\nInterrupted by\n\n Hexflash (Recasts)\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Harrowed Path",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Viego sends a spectre in the target direction that creates a trail of mist in its wake for a period. If it hits terrain, the mist is spread further around either side.",
+      "description_source": "Spectral Maw's recast does not incur the 1 second cooldown for regaining the stealth and instead prevents the stealth from being gained until the dash ends, resetting the cooldown if it is active.\nThe cooldown is not reset if it was incurred by basic attacking a large monster, but is however reset from it being incurred by  Spectral Maw's channel.\nThe bonus movement speed and camouflage are granted by the same buff.\nViego will enter camouflage even while  Recalling.\nViego can cast Harrowed Path during the cast time of any ability or spell.\nHarrowed Path will follow Viego into  Mordekaiser's  Death Realm\nRanking up Harrowed Path while the effect is already active will still immediately improve the bonuses it grants.\nHarrowed Path can interact with player-generated terrain.\nUsing a basic attack breaks the stealth at the start of the attack windup.\nThe stealth regain timer is refreshed from basic attacks at the start of their attack windup.\nViego can benefit from an enemy's Harrowed Path.\nPENDING FOR TEST:: Enemy's Harrowed Path grant Viego his ability's bonus or the enemy's.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Heartbreaker",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Viego  blinks with  displacement immunity to the target location and attacks the most wounded enemy champion nearby, which briefly  slows them, applies  on-hit effects, and deals bonus physical damage by a portion of their missing health.",
+      "description_source": "Heartbreaker will cast at the edge of its range if the target location is further beyond.\nHeartbreaker will cast at maximum range from the end of  Spectral Maw's dash if it is cast during the dash.\nThe knockback speed is 1000 units per second. The airborne is removed as soon as the displacement ends.\nThe maximum airborne duration is therefore 0.4 seconds. The minimum is 0.1 seconds.\nTo the struck champion deals  basic damage, but also triggers spell effects by also being tagged as  spell damage; to all other enemies, deals  area damage.\nViego will enter a 0.25-second cast time if he strikes an enemy champion.\nAfter this cast time, he will automatically receive an attack command against that enemy. Previous movement inputs from the player are ignored.(bug)\nHeartbreaker's strike to the champion can be  dodged and  blocked, but not  missed.\nViego will be ordered to basic attack the primary target afterwards.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

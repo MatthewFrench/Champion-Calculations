@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Karthus",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BATTLEMAGE",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 467.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 21.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 46.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 450.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Death Defied",
+      "type": "Passive",
+      "description": "Innate: Upon  dying,  Karthus enters an  untargetable  spirit form for a few seconds that allows him to continue casting spells at no cost but without being able to move.",
+      "description_source": "Death Defied's  untargetability does not  destroy in-flight  projectiles.\nKarthus cannot be  executed by the  Aspect of the Dragon during Death Defied.\nAt the start of Death Defied, Karthus is set to  1 health.\nKarthus can still regenerate his health over the duration, but he will always die at the end of it.\nAfter Death Defied ends, the corpse of Karthus will retain unit collision despite being dead on the ground.\nKarthus'  mana bar drains over the duration of Death Defied as an indicator of his time remaining in this state.\nZombie states trigger upon taking  lethal damage.\n Raw damage effects will not prevent zombie states from triggering.\nAll  resurrection effects will take precedence over effects that reanimate as a zombie.\nA champion that enters a zombie state will start their death timer upon triggering the effect.\nMost buffs and debuffs will be lost upon transitioning into a zombie state.\nThose that persist through death, such as  Brand's  Blaze, will remain.\nUndisplayed marker buffs, such as those imposed by  Veigar's  Event Horizon and  Viktor's  Gravity Field to prevent being affected multiple times by the same effect, will be lost.(bug)\nThis does not apply when transitioning from one zombie state to another zombie state.(bug)\nUnits within a zombie state cannot:\nUse  Recall or  Refillable Potion.\nActivate  resurrection effects.\nTake  Dark Passage, Catapult, or  gates.\nInitate the  Rift Herald Rodeo.\nPick up the  Eye of the Herald.\nBe targeted by the following:\n Bailout\n Chronoshift\n Umbral Trespass.\nBe affected by the following:\n Curse of the Black Mist\n Fear Beyond Death's chain missile\n Test of Spirit's initial missile\n Lamb's Respite\n Realm of Death\nFountain health restore",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Lay Waste",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Karthus conjures a delayed blast at the target location that deals magic damage to all enemies within,  doubled when only one target is struck.",
+      "description_source": "This ability always employs Quick cast.\nThe delay between the cast and the detonation is inconsistent, but always matches up with the VFX.(bug)\n Defile's ticks beyond the first has a similar issue.\nApplies  spell damage if it hits a single target and  area damage if it hits multiple targets.\nLay Waste also plays a different sound effect when it only hits one target.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Wall of Pain",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Karthus erects a wall of pain at the target location that lasts a few seconds, enemies that touch it suffer reduced  magic resistance and become  slowed for a few seconds.",
+      "description_source": "Active:  Karthus erects a wall of pain at the target location that lasts a few seconds, enemies that touch it suffer reduced  magic resistance and become  slowed for a few seconds.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Defile",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Passive:  Karthus restores  mana whenever he kills an enemy.",
+      "description_source": "Toggle abilities do not count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nDefile will restore  mana if Karthus destroys an enemy structure.\nDefile re-calculates its damage with each tick based on changes in Karthus's ability power or an increase in the rank of Defile without the need to toggle it off and on again.\nDefile will toggle off automatically if Karthus enters  resurrection.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana_per_second",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Requiem",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Requiem's channel is telegraphed to all enemy champions by a beam of light that descends on all targets, including if they are  untargetable or even  dead.\nRequiem will affect  clones.\nThe damage will apply spell effects to targets in order of being spawned. Single target spell effects (such as  Luden's Companion) are thus triggered on the leftmost champion on the loading screen.\nRequiem will not affect  Neeko if she's  disguised as a non-champion if Karthus is affected by  Death Defied.(bug)\nThe following table refers for interactions while Karthus is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "Requiem's channel is telegraphed to all enemy champions by a beam of light that descends on all targets, including if they are  untargetable or even  dead.\nRequiem will affect  clones.\nThe damage will apply spell effects to targets in order of being spawned. Single target spell effects (such as  Luden's Companion) are thus triggered on the leftmost champion on the loading screen.\nRequiem will not affect  Neeko if she's  disguised as a non-champion if Karthus is affected by  Death Defied.(bug)\nThe following table refers for interactions while Karthus is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Nocturne",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 275.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 38.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.721,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Umbra Blades",
+      "type": "Passive",
+      "description": "Innate: Periodically,  Nocturne's next basic attack causes him to slash in a circle that deals increased physical damage to the target and nearby enemies,  healing him for each enemy hit.",
+      "description_source": "The primary target of the enhanced attack is dealt  basic damage while the secondary targets of the slash are dealt  proc damage.\nThe empowered attack will not trigger against  structures nor  wards.\nBasic attacks against them will still grant the cooldown reduction.\nParry effects will only block the damage dealt to the primary target.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Duskbringer",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Nocturne casts out a shadow blade in the target direction that leaves a Dusk Trail in its wake, dealing physical damage to enemies hit. Enemy  champions hit will leave a Dusk Trail in their wake for a few seconds.",
+      "description_source": "Duskbringer checks for and hits targets 25 units outside of the missile's maximum range.\nDuskbringer's damage is not increased by the bonus AD gained from its trail, meaning that casting it again while on the trail from the last cast will not result in higher damage.\nIt is observed from seasons ago that this is intentionally hard-coded into the ability to avoid the projectile increasing its own damage. This feature is somewhat deprecated as it also limits chain-casting Duskbringer.\nDuskbringer's Dusk Trail will expose the path of affected units until its duration ends. It is a form of  obscured vision; the trail indirectly reveals the location of enemy units even in the fog of war, including those shrouded by  stealth.\n Spell shield will block the damage and also prevents the Dusk Trail from following the target.\nThe formed Dusk Trail does not disappear if Duskbringer is intercepted by  Wind Wall or  Unbreakable.\nThis ability will cast from wherever the caster is at the start of the cast time.\nThe bonus movement speed  stacks multiplicatively with other sources of movement speed boosts.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Shroud of Darkness",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive:  Nocturne gains  bonus attack speed.",
+      "description_source": "If Shroud of Darkness is active when Nocturne re-casts  Paranoia to dash to a target, its duration is refreshed every 0.25 seconds during the dash.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Unspeakable Horror",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Passive:  Nocturne gains  bonus movement speed while moving towards  feared targets.",
+      "description_source": "Feared enemies in a  180\u00b0 total angle within Nocturne's facing direction will trigger Unspeakable Horror's passive.\nCasting Unspeakable Horror may grant Nocturne permanent  ghosting until he has died.(bug)\n Spell shield will block the tether's application but not the damage and aftereffects of one already applied.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Paranoia",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Nocturne terrorizes all enemy champions,  nearsighting them for a few seconds. He can recast Paranoia during this time.",
+      "description_source": "Nocturne will track the target if they change locations.\nHe will not stop tracking the target until he reaches them, as there is no maximum tracking distance.\nEnemy players affected by Paranoia's  nearsight cannot interact with the allied portrait icons on the HUD.\nParanoia's  nearsight will apply to enemy champions that are  untargetable or are dead, and will persist through  death.\nNocturne can cast any of his abilities, summoner spells (excluding  Hexflash), or item actives during flight.\nUsing a  dash or  blink ability will interrupt the flight.\nThe flight will also be interrupted if Nocturne is affected by a  Blast Cone triggered by an allied champion.(bug)\nParanoia cannot be recast while  grounded or  rooted.\nParanoia's  nearsight does not apply to  clones.\nPlayers' screens will turn a different color when Paranoia is cast, based on their perspective: blue for allies and red for enemies.\nA spell indicator telegraphed to Nocturne and his allies will be placed on all enemy  champions within range of Paranoia's recast while the ability is active. The following images display the indicator for the default skin:\nA glowing red silhouette of Nocturne's blades indicates an enemy champion can be targeted by Paranoia's recast.\nA glowing green silhouette of Nocturne's blades signifies an enemy champion has been targeted by Paranoia's recast.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}
