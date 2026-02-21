@@ -1,0 +1,157 @@
+{
+  "data_version": "1.0.0",
+  "name": "Aphelios",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.23000000417232513,
+      "total_attack_time_seconds": 1.5,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 3.25,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 348.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 26.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.665,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 325.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "The Hitman and the Seer",
+      "type": "Passive",
+      "description": "Innate:  Aphelios wields 5 Lunari Weapons made by his sister Alune. He has access to two at a time: main weapon and off-hand weapon. Each weapon grants him a unique basic attack and a  primary ability.",
+      "description_source": "The attack damage, attack speed and lethality within Aphelios' unique rank-up menu in the HUD correspond to the Q, W, E ability rank-up hotkeys, respectively, for the purposes of assigning skill points via keyboard.\nDue to Aphelios lacking a fourth rankup option (R), his point assigment does not follow the same rules as other champions.\nFor example, the earliest level that an individual statistic can attain rank 6 is level 9, by assigning points at levels 1 / 2 / 3 / 5 / 7 / 9.\nAn ammunition counter will appear to the right side of the screen when Aphelios' main weapon has 10 or less Moonlight.\nWhile at lower than 10 Moonlight, casting his  primary abilities will not spend additional Moonlight but instead consume all the remaining points.\n Runaan's Hurricane's Wind's Fury will not consume additional Moonlight when firing its bolts.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Weapons of the Faithful",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "The active effect of  Aphelios'  ability varies based on his current main weapon.\n Calibrum -  Moonshot: Long range shot that marks its target for a long-range follow-up attack.\n Severum -  Onslaught: Gain bonus  movement speed while attacking a single enemy with both weapons.\n Gravitum -  Binding Eclipse:  Root enemies who are  slowed by this weapon.\n Infernum -  Duskwave: Blast enemies in a cone and attack them with your off-hand weapon.\n Crescendum -  Sentry: Deploy a sentry with your off-hand weapon that attacks nearby enemies.",
+      "description_source": "The active effect of  Aphelios'  ability varies based on his current main weapon.\n Calibrum -  Moonshot: Long range shot that marks its target for a long-range follow-up attack.\n Severum -  Onslaught: Gain bonus  movement speed while attacking a single enemy with both weapons.\n Gravitum -  Binding Eclipse:  Root enemies who are  slowed by this weapon.\n Infernum -  Duskwave: Blast enemies in a cone and attack them with your off-hand weapon.\n Crescendum -  Sentry: Deploy a sentry with your off-hand weapon that attacks nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Phase",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Aphelios switches between his main weapon and off-hand weapon.",
+      "description_source": "Toggled abilities do not count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nSwitching does not interrupt any commands Aphelios was issued before or during Phase.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Weapon Queue System",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "The icon of this ability reflects the next weapon that is the next in  Aphelios' weapon queue.",
+      "description_source": "This ability also includes the icon of the off-hand.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Moonlight Vigil",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Aphelios fires a concentrated blast of moonlight that explodes upon hitting an enemy champion, dealing physical damage to enemy champions in the area.",
+      "description_source": "When critically striking, the attacks on locked-on targets when using  Severum and  Crescendum deal slightly more than 120% damage.(bug) It is currently unknown where this damage originates from.\nFor example, at level 6 with no  attack damage bonuses, Aphelios will deal 80.7471 damage (approximated) from those attacks, whereas they are normally expected to deal 76.902. This discrepancy increases with higher attack damage.\nPENDING FOR TEST: It is also unknown whether this is just a Practice Tool bug.\nAttacks do not apply on-attack effects.\nThe attacks always count as  projectiles unless  Severum is being used. The lunar spotlight, however, may always be intercepted regardless of which weapon is in play as the main weapon.\nDue to this fact, non- Severum attacks will hit targets that are farther away from the center of the blast at a slightly longer delay.\n Spell shield will block Moonlight Vigil's initial detonation damage but does not prevent the attacks from locking-on.\nAll attacks from Moonlight Vigil  critically strike independently from each other.\nThis includes  Infernum's bolts, which also critically strike independently from the primary attack's damage.\nChanging weapons while Moonlight Vigil is in flight does not change the effect it has when it hits.\nThis ability will cast from wherever the caster is at the start of the cast time.\nMoonlight Vigil's effect radius is centered around the location of the missile as it collides.\nWith  Severum, the extra flat heal is given only once, not per target. However, all damage done by Moonlight Vigil with it also heals him from Severum's  own passive effect.\nWith  Infernum, 14 fire bolts splash from each target hit (18 for  critical strikes). Bolts do not activate if Moonlight Vigil's initial damage kills the target.\nWith  Crescendum, 1 spectral chakram is generated for every target hit, meaning it is possible to generate up to 10 spectral chakrams with one cast of Moonlight Vigil if it hits 5 enemy champions.\nThe locked-on attacks' can be  dodged and  blocked, but won't be prevented if Aphelios is  blinded.\nPreventing the attack also prevents the additional effect (e.g. marking them with  Gravitum or granting  spectral chakrams).\nMoonlight Vigil has different visual effects changed accordingly to each weapon. This may vary depending on the skin, this showcases the default:\n\n\n\n Calibrum\n\n\n\n Severum\n\n\n\n Gravitum\n\n\n\n Infernum\n\n\n\n Crescendum",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Cho'Gath",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MAGE",
+    "SPECIALIST",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 644.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 270.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.2,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 38.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 69.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Carnivore",
+      "type": "Passive",
+      "description": "Innate: Whenever  Cho'Gath kills an enemy, it  heals and restores  mana.",
+      "description_source": "Carnivore will also trigger when Cho'Gath destroys a  turret, but not from other structures.\nCarnivore does not trigger upon destroying  wards and possibly other similar units.\nIt does trigger upon killing one of  Illaoi's  Tentacles. [2]",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Rupture",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Cho'Gath ruptures the target location, dealing magic damage and  knocking up enemies within,  slowing them upon landing.",
+      "description_source": "The delay before the rupture does not include the cast time.\nThe animation is visible in  brush and in fog of war.\n Cleansing the  airborne will not prevent the  slow.\nThe slow itself can also not be blocked by  spell shield, but will always be prevented if the airborne was.\nThe area will still rupture even if Cho'Gath dies during the delay.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Feral Scream",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Cho'Gath roars in a cone, dealing magic damage and  silencing enemies hit.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nFeral Scream uses  edge range for enemy targets only; Its range is center-to-edge.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Vorpal Spikes",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Cho'Gath's next few basic attacks launch forth deadly spikes, dealing magic damage to enemies hit based on  Feast stacks and each target's maximum health, and  slowing them.",
+      "description_source": "The missiles are launched from an offset 25 units in front of Cho'Gath and towards the target's location on-attack-complete.\nWhen attacking enemies within 25 units center-to-center of Cho'Gath, the missile will fire in the opposite direction.\nCho'Gath's size factors into the wideness of the hitbox Vorpal Spikes has. External size modifiers ( Wild Growth) contribute to this.\nAt certain size thresholds, the missile gets replaced by a different one with a different width. At each step, the width grows by 30, except for the 3rd missile, where it only grows by 10.(note)\nSome of the size thresholds are placed very weird.(note)\nThe missile range is unchanged.\nThe empowered attack will trigger but not apply its effects against structures.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Feast",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Cho'Gath devours an enemy, dealing true damage based on Cho'Gath's bonus health. If this attack kills the target, Cho'Gath gains a permanent Feast  stack that infinitely stacks.",
+      "description_source": "The increased size stacks additively with other size increases.\nThe name of the bonus health buff is \"Feast\".\nThe bonus attack range and increase size cap at respectively 16.25 / 13.93 / 12.19 / 10.83 / 9.75 and 16.67 / 14.29 / 12.5 / 11.11 / 10 stacks, with the last stack being effective as the decimal part of the value (no decimal meaning 100% as effective).\nEach stack of Feast increases the damage by 8 / 12 / 16.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).\nIf an enemy  champion has health below the amount of true damage Feast deals, they will be marked for execution. This indicator does not consider  shields or  invulnerability.\nConsuming any additional  Voidgrubs from the same spawn group will be tracked as a \"monster eaten\" for Feast's buff, but will neither grant any bonuses nor count towards the 6-stack limit.(bug)\nWhile not on  cooldown, Feast's ability icon on the HUD can be pinged to announce its damage to  monsters in the ally chat.\nThis indicator is only visible to Cho'Gath.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

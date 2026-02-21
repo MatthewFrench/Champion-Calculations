@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Jayce",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ARTILLERY",
+    "FIGHTER",
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 375.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 22.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Hextech Capacitor",
+      "type": "Passive",
+      "description": "Innate: Whenever  Jayce switches between  Hammer Stance and  Cannon Stance, he briefly gains  bonus movement speed and  ignores unit collision.",
+      "description_source": "No additional details.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "To the Skies!",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Jayce leaps to the target enemy's location and smashes his hammer to the ground, dealing physical damage and  slowing nearby enemies.",
+      "description_source": "To The Skies! will always direct Jayce linearly to his target's location.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Lightning Field",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive:  Jayce's  basic attacks restore  mana  on-hit.",
+      "description_source": "The  mana restore triggers on  structures.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Thundering Blow",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Jayce swings his hammer at the target enemy, briefly  rooting them and dealing magic damage based on the target's maximum health, then  knocks them back.",
+      "description_source": "If the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Transform Mercury Cannon",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Jayce transforms into  Cannon Stance, becoming  ranged with greater  attack range and gaining new  abilities.",
+      "description_source": "Transformations do not count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nThe resistance reduction does not apply to structures.\nBoth Transform on-hit effects have no set duration and will only be consumed when Jayce either lands a basic attack or switches stances.\nThe enhanced attack will not be consumed if it is parried ( dodge,  block,  blind, and  Riposte).\nThe empowered attack will not trigger against  structures nor  wards.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

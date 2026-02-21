@@ -163,23 +163,49 @@ pub(crate) fn behavior_profile(
 pub(crate) enum ChampionScriptEvent {
     WarwickInfiniteDuress,
     VayneTumbleEmpower,
+    VayneCondemn,
     MorganaDarkBinding,
+    MorganaTormentedShadow,
     MorganaSoulShackles,
     MorganaSoulShacklesDetonate,
     SonaCrescendo,
+    SonaHymnOfValor,
     DoctorMundoInfectedBonesaw,
+    DoctorMundoBluntForceTrauma,
+    WarwickJawsOfTheBeast,
+    VladimirTransfusion,
+    VladimirTidesOfBlood,
+    VladimirHemoplague,
 }
 
 pub(crate) fn scripted_champion_events(champion_name: &str) -> Vec<ChampionScriptEvent> {
     match to_norm_key(champion_name).as_str() {
-        warwick::CHAMPION_KEY => vec![ChampionScriptEvent::WarwickInfiniteDuress],
-        vayne::CHAMPION_KEY => vec![ChampionScriptEvent::VayneTumbleEmpower],
+        warwick::CHAMPION_KEY => vec![
+            ChampionScriptEvent::WarwickInfiniteDuress,
+            ChampionScriptEvent::WarwickJawsOfTheBeast,
+        ],
+        vayne::CHAMPION_KEY => vec![
+            ChampionScriptEvent::VayneTumbleEmpower,
+            ChampionScriptEvent::VayneCondemn,
+        ],
         morgana::CHAMPION_KEY => vec![
             ChampionScriptEvent::MorganaDarkBinding,
+            ChampionScriptEvent::MorganaTormentedShadow,
             ChampionScriptEvent::MorganaSoulShackles,
         ],
-        sona::CHAMPION_KEY => vec![ChampionScriptEvent::SonaCrescendo],
-        doctor_mundo::CHAMPION_KEY => vec![ChampionScriptEvent::DoctorMundoInfectedBonesaw],
+        sona::CHAMPION_KEY => vec![
+            ChampionScriptEvent::SonaCrescendo,
+            ChampionScriptEvent::SonaHymnOfValor,
+        ],
+        doctor_mundo::CHAMPION_KEY => vec![
+            ChampionScriptEvent::DoctorMundoInfectedBonesaw,
+            ChampionScriptEvent::DoctorMundoBluntForceTrauma,
+        ],
+        vladimir::enemy::CHAMPION_KEY => vec![
+            ChampionScriptEvent::VladimirTransfusion,
+            ChampionScriptEvent::VladimirTidesOfBlood,
+            ChampionScriptEvent::VladimirHemoplague,
+        ],
         _ => Vec::new(),
     }
 }
@@ -194,6 +220,7 @@ pub(crate) fn champion_script_event_cooldown_seconds(
         morgana::CHAMPION_KEY => morgana::event_cooldown_seconds(event),
         sona::CHAMPION_KEY => sona::event_cooldown_seconds(event),
         doctor_mundo::CHAMPION_KEY => doctor_mundo::event_cooldown_seconds(event),
+        vladimir::enemy::CHAMPION_KEY => vladimir::enemy::event_cooldown_seconds(event),
         _ => None,
     }
 }
@@ -202,11 +229,19 @@ pub(crate) fn champion_script_event_label(event: ChampionScriptEvent) -> &'stati
     match event {
         ChampionScriptEvent::WarwickInfiniteDuress => "Infinite Duress",
         ChampionScriptEvent::VayneTumbleEmpower => "Tumble Empower",
+        ChampionScriptEvent::VayneCondemn => "Condemn",
         ChampionScriptEvent::MorganaDarkBinding => "Dark Binding",
+        ChampionScriptEvent::MorganaTormentedShadow => "Tormented Shadow",
         ChampionScriptEvent::MorganaSoulShackles => "Soul Shackles",
         ChampionScriptEvent::MorganaSoulShacklesDetonate => "Soul Shackles Detonate",
         ChampionScriptEvent::SonaCrescendo => "Crescendo",
+        ChampionScriptEvent::SonaHymnOfValor => "Hymn of Valor",
         ChampionScriptEvent::DoctorMundoInfectedBonesaw => "Infected Bonesaw",
+        ChampionScriptEvent::DoctorMundoBluntForceTrauma => "Blunt Force Trauma",
+        ChampionScriptEvent::WarwickJawsOfTheBeast => "Jaws of the Beast",
+        ChampionScriptEvent::VladimirTransfusion => "Transfusion",
+        ChampionScriptEvent::VladimirTidesOfBlood => "Tides of Blood",
+        ChampionScriptEvent::VladimirHemoplague => "Hemoplague",
     }
 }
 
@@ -272,14 +307,34 @@ pub(crate) fn execute_champion_script_event(
     match input.event {
         ChampionScriptEvent::WarwickInfiniteDuress => warwick::execute_infinite_duress(input),
         ChampionScriptEvent::VayneTumbleEmpower => vayne::execute_tumble_empower(input),
+        ChampionScriptEvent::VayneCondemn => vayne::execute_condemn(input),
         ChampionScriptEvent::MorganaDarkBinding => morgana::execute_dark_binding(input, runtime),
+        ChampionScriptEvent::MorganaTormentedShadow => {
+            morgana::execute_tormented_shadow(input, runtime)
+        }
         ChampionScriptEvent::MorganaSoulShackles => morgana::execute_soul_shackles(input),
         ChampionScriptEvent::MorganaSoulShacklesDetonate => {
             morgana::execute_soul_shackles_detonate(input)
         }
         ChampionScriptEvent::SonaCrescendo => sona::execute_crescendo(input, runtime),
+        ChampionScriptEvent::SonaHymnOfValor => sona::execute_hymn_of_valor(input, runtime),
         ChampionScriptEvent::DoctorMundoInfectedBonesaw => {
             doctor_mundo::execute_infected_bonesaw(input, runtime)
+        }
+        ChampionScriptEvent::DoctorMundoBluntForceTrauma => {
+            doctor_mundo::execute_blunt_force_trauma(input)
+        }
+        ChampionScriptEvent::WarwickJawsOfTheBeast => {
+            warwick::execute_jaws_of_the_beast(input, runtime)
+        }
+        ChampionScriptEvent::VladimirTransfusion => {
+            vladimir::enemy::execute_transfusion(input, runtime)
+        }
+        ChampionScriptEvent::VladimirTidesOfBlood => {
+            vladimir::enemy::execute_tides_of_blood(input, runtime)
+        }
+        ChampionScriptEvent::VladimirHemoplague => {
+            vladimir::enemy::execute_hemoplague(input, runtime)
         }
     }
 }
@@ -393,8 +448,12 @@ pub(crate) fn outgoing_damage_heal(
     on_outgoing_damage_heal(runtime, damage_dealt, now)
 }
 
-pub(crate) fn enemy_kill_heal(runtime: &mut ChampionLoadoutRuntime, max_health: f64) -> f64 {
-    on_enemy_kill_heal(runtime, max_health)
+pub(crate) fn enemy_kill_heal(
+    runtime: &mut ChampionLoadoutRuntime,
+    max_health: f64,
+    actor_level: usize,
+) -> f64 {
+    on_enemy_kill_heal(runtime, max_health, actor_level)
 }
 
 pub(crate) fn tick_regen_heal(

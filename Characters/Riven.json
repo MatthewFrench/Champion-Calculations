@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Riven",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Runic Blade",
+      "type": "Passive",
+      "description": "Innate:  Riven's  ability casts generate  stacks of Charge, which stacks up to a cap. Riven's  basic attacks consume a stack to deal bonus physical damage.",
+      "description_source": "Runic Blade's duration also refreshes when Riven consumes a stack.\nThe empowered attack will not trigger against  wards.\nThe number of empowered attacks available is represented by a counter under her health bar, only visible to the player.\nThe bonus damage to monsters also benefits from critical strike modifiers. The full formula is shown below.\n(1.0 AD \u00d7 (1 + AD ratio) + monster damage) \u00d7 (100% \u00d7 critical damage)",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Broken Wings",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Riven can cast this ability up to three times in quick succession, dealing physical damage to enemies hit.\nFirst Cast: Riven  dashes forward and slashes her sword in a circle.\nSecond Cast: Riven mimics the first cast.\nThird Cast: Riven mimics the first cast's dash, but now slams her sword in a larger circle, briefly  knocking back enemies hit as well.",
+      "description_source": "This ability always employs Quick cast.\nEach cast counts as a single ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nThe basic attack reset is not considered one for  Hail of Blades.\nMoving after using Broken Wings allows Riven to do other actions faster.\nThe Third Cast prevents Riven from using basic attacks and abilities for longer than the other 2 casts.\nThe Third Cast may have an extended dash range when crossing terrain.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Ki Burst",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Riven emits a flash of runic energy, dealing physical damage and briefly  stunning nearby enemies.",
+      "description_source": "Riven is briefly unable to basic attack after the cast time.\n Broken Wings may be cast while  basic attacking briefly after casting Ki Burst.(bug)\nKi Burst's effects occur before the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Valor",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Riven  dashes in the target direction and gains a brief  shield.",
+      "description_source": "This ability always employs Quick cast.\n Broken Wings may be cast during  Ki Burst or  Blade of the Exile cast times if they're used at the end or briefly after the dash.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Blade of the Exile",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Riven empowers her blade for some time, gaining  bonus attack damage and increased  range on her  basic attacks,  Broken Wings and  Ki Burst.",
+      "description_source": "All bonuses are gained after 0.5 seconds of the ability starting its cast.\nThe bonus attack damage amount is factored upon cast, and does not change.\nIf Riven has a basic attack buffered before the end of Blade of the Exile's cast time, the buffered basic attack will start 0.33 seconds after the end of the cast time.\nThe delay will not apply to basic attack commands input after Blade of the Exile's cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

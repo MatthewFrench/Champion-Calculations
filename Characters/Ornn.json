@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Ornn",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.349999994039535,
+      "total_attack_time_seconds": 1.60000002384185,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 660.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 341.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 69.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Living Forge",
+      "type": "Passive",
+      "description": "Ornn's Forge Menu is a special menu in the HUD which has 5 slots. The player can quickly forge one of the recommended items by  clicking on its portrait or via the Champion Specific Interaction hotkeys (default: Shift+F1:F5).\nMasterwork items inherit all properties of their pre-upgrade version, including the cooldowns of their effects. Internally, they are handled through an item modifier. An upgraded item gains the (Masterwork) descriptor next to its name in tooltips as well as a special Masterwork frame overlay on the item's icon itself, both indicating the application of Living Forge's modifier.\nStatistics' gold value for Masterwork item purposes is shown in the following table. The table also indicates all upgradeable stats.\n 31.25 per 1 point of ability haste.\n 20 per 1 point of ability power.\n 35 per 1 point of attack damage.\n 30 per 1% of attack speed.\n 20 per 1 point of armor.\n 18 per 1 point of magic resistance.\n1 point of health has a variable  gold value, based on the number of upgradeable stats that exist on the item:\nIf health is the item's only upgradeable stat, it receives +375 health and health is valued at  2.6 per point.\nIf the item has health and only one other upgradeable stat, it receives +185 health and health is valued at  2.702 per point.\nIf the item has health and two other upgradeable stats, it receives +125 health and health is valued at  2.6 per point.\nIf the item has health and three other upgradeable stats, it receives +90 health and health is valued at  2.7 per point.\nWhile not currently possible, if an item has no upgradeable stats,  1000 worth of health (valued at  2.6 per point) is added to the item.[2]\nDecimal values are not displayed for stats in Masterwork items' tooltips, but they are still granted as normal.\nHealth and mana items built on the field will retain Ornn's previous health and mana percentage. Returning to base still brings health and mana back to full.\nIf Ornn starts upgrading an ally's item and said ally enters Herald's charge, the ally will not receive a masterwork item, Ornn cannot upgrade an item for the ally again and Ornn will still receive the 4% unique ally upgrade bonus for his passive.\nOrnn's basic attacks against  Brittle enemies will end the duration of the debuff  on-hit prematurely even if the  knock back is not applied.\nHis basic attacks against  Brittle epic  monsters will still render the debuff without the  knock back being applied against them.\n Brittle's  Tenacity reduction will benefit all applicable types of  crowd control, not just  immobilizes. The following do not consume Brittle but benefit from the reduction:  blinds,  cripples,  disarms,  grounding,  silences, and  slows.\n Spell shield will block both the knock back and the bonus damage from Ornn's empowered  brittle attack.\nThe bonus magic damage inflicted by Brittle is credited to Ornn, and benefits from his  magic penetration.\nThe following table refers for interactions while Ornn is  channeling:\nAll of Ornn's actions are disabled during the first 0.5 seconds of the channel.\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nInterrupts\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nAll summoner spells interrupt\n\n\nInterrupted by\n\nDamaging effectsDeath Cast-inhibiting effects",
+      "description_source": "Ornn's Forge Menu is a special menu in the HUD which has 5 slots. The player can quickly forge one of the recommended items by  clicking on its portrait or via the Champion Specific Interaction hotkeys (default: Shift+F1:F5).\nMasterwork items inherit all properties of their pre-upgrade version, including the cooldowns of their effects. Internally, they are handled through an item modifier. An upgraded item gains the (Masterwork) descriptor next to its name in tooltips as well as a special Masterwork frame overlay on the item's icon itself, both indicating the application of Living Forge's modifier.\nStatistics' gold value for Masterwork item purposes is shown in the following table. The table also indicates all upgradeable stats.\n 31.25 per 1 point of ability haste.\n 20 per 1 point of ability power.\n 35 per 1 point of attack damage.\n 30 per 1% of attack speed.\n 20 per 1 point of armor.\n 18 per 1 point of magic resistance.\n1 point of health has a variable  gold value, based on the number of upgradeable stats that exist on the item:\nIf health is the item's only upgradeable stat, it receives +375 health and health is valued at  2.6 per point.\nIf the item has health and only one other upgradeable stat, it receives +185 health and health is valued at  2.702 per point.\nIf the item has health and two other upgradeable stats, it receives +125 health and health is valued at  2.6 per point.\nIf the item has health and three other upgradeable stats, it receives +90 health and health is valued at  2.7 per point.\nWhile not currently possible, if an item has no upgradeable stats,  1000 worth of health (valued at  2.6 per point) is added to the item.[2]\nDecimal values are not displayed for stats in Masterwork items' tooltips, but they are still granted as normal.\nHealth and mana items built on the field will retain Ornn's previous health and mana percentage. Returning to base still brings health and mana back to full.\nIf Ornn starts upgrading an ally's item and said ally enters Herald's charge, the ally will not receive a masterwork item, Ornn cannot upgrade an item for the ally again and Ornn will still receive the 4% unique ally upgrade bonus for his passive.\nOrnn's basic attacks against  Brittle enemies will end the duration of the debuff  on-hit prematurely even if the  knock back is not applied.\nHis basic attacks against  Brittle epic  monsters will still render the debuff without the  knock back being applied against them.\n Brittle's  Tenacity reduction will benefit all applicable types of  crowd control, not just  immobilizes. The following do not consume Brittle but benefit from the reduction:  blinds,  cripples,  disarms,  grounding,  silences, and  slows.\n Spell shield will block both the knock back and the bonus damage from Ornn's empowered  brittle attack.\nThe bonus magic damage inflicted by Brittle is credited to Ornn, and benefits from his  magic penetration.\nThe following table refers for interactions while Ornn is  channeling:\nAll of Ornn's actions are disabled during the first 0.5 seconds of the channel.\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nInterrupts\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nAll summoner spells interrupt\n\n\nInterrupted by\n\nDamaging effectsDeath Cast-inhibiting effects",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Volcanic Rupture",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Ornn sends a fissure in the target direction that deals physical damage and  slows enemies hit for a short time.",
+      "description_source": "The fissure will move an 200 units beyond the first champion it hits, not exceeding the maximum range of the ability. It can still damage additional targets.\nIf launched in a wall, pillar will try to appear on the other side of the wall, if it cannot the pillar will be destroyed.\n Spell shield will not prevent the  knock aside from the magma pillar forming.\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Bellows Breath",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Ornn marches in the target direction with  displacement immunity, belching fire in a cone that continually deals magic damage for a brief time. The final gout of flame will apply  Brittle for a short time.",
+      "description_source": "Ornn's lunge distance is based on the distance he would travel in the target direction by standard movement over a time period of 0.75 seconds with 35% of his total movement speed.\nHis movement speed during the lunge does not actually change in this case and is only used as a scaling.\nThe scaling is based on the total movement speed Ornn had at the time of casting Bellows Breath.\nIf his total movement speed was less than or equal to an estimated value of 190, then Ornn will not lunge at all.\nWhile lunging, special VFX will be played when Ornn is first affected by  crowd control, even if that crowd control is not resisted by  displacement immunity.\n Spell shield will negate the final instance of damage and prevents  Brittle from being applied.\nOrnn can see the on-target VFX on targets that are being struck even while they are in the fog of war.\nThe following table refers for interactions while Ornn is performing Bellows Breath:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Searing Charge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Spell shields may only block one instance of damage.\nThe area in which enemies will be knocked up is indicated at Ornn's impact location.\nThe indicator is not shown for player-generated terrain.\n Brittle enemies without  Tenacity of their own will be  stunned for a total of 1.625 seconds.\nSearing Charge can interact with player-generated terrain.\nOrnn will not  dash after the cast time if he is  airborne or  resurrecting.\n Displacement immunity will also resist the application of the  stun.\nThe following table refers for interactions while Ornn is in cast time:\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Spell shields may only block one instance of damage.\nThe area in which enemies will be knocked up is indicated at Ornn's impact location.\nThe indicator is not shown for player-generated terrain.\n Brittle enemies without  Tenacity of their own will be  stunned for a total of 1.625 seconds.\nSearing Charge can interact with player-generated terrain.\nOrnn will not  dash after the cast time if he is  airborne or  resurrecting.\n Displacement immunity will also resist the application of the  stun.\nThe following table refers for interactions while Ornn is in cast time:\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Call of the Forge God",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Both casts count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nDespite this, the effects of both casts count as the same cast instance.\nCall of the Forge God cannot be recast while  grounded or  rooted.\n Brittle enemies without  Tenacity of their own will be  stunned for a total of 1.3 seconds.\n Spell shields may only block one pass.\nOrnn becomes locked out of all actions during the recast's dash and for 0.5 seconds afterwards.\nThis ability will cast from wherever the caster is at the start of the cast time.\n Displacement immunity will also resist the application of the  stun.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Both casts count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nDespite this, the effects of both casts count as the same cast instance.\nCall of the Forge God cannot be recast while  grounded or  rooted.\n Brittle enemies without  Tenacity of their own will be  stunned for a total of 1.3 seconds.\n Spell shields may only block one pass.\nOrnn becomes locked out of all actions during the recast's dash and for 0.5 seconds afterwards.\nThis ability will cast from wherever the caster is at the start of the cast time.\n Displacement immunity will also resist the application of the  stun.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

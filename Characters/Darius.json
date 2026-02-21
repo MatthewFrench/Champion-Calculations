@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Darius",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "JUGGERNAUT",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 652.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 10.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 263.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.6,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 37.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Hemorrhage",
+      "type": "Passive",
+      "description": "Innate:  Darius'  basic attacks and damaging  abilities apply a  stack of Hemorrhage, stacking up to a cap.",
+      "description_source": "If Hemorrhage's total post-mitigation damage is higher than the target's current health, a small area of  sight is granted around the target for the duration of Hemorrhage and for another 2 seconds after it ends.\nHemorrhage does not apply to  structures nor  wards.\nDarius' attacks and abilities have to deal damage to apply Hemorrhage.\nHemorrhage cannot be applied to/refreshed against  invulnerable targets.\nHemorrhage can be applied to and refreshed against  shielded targets.\nHemorrhage can also be applied  on-hit, but will specifically not do so if the target is invulnerable.\n Spell shield prevents Hemorrhage's application from abilities only.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Decimate",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Darius briefly winds up to spin his axe in a circle while  ghosted, dealing physical damage to enemies hit.",
+      "description_source": "Decimate will cancel if Darius enters  stasis or uses  Dash during the delay.\nAfter the delay, Decimate will be placed on a 1-second cooldown.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Crippling Strike",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Darius' next  basic attack within a few seconds deals increased physical damage and  slows the target.",
+      "description_source": "Crippling Strike deals  basic damage but will also trigger  spell effects by also being tagged as  spell damage.\nThis includes the  basic attack itself.\n Spell shield will not block the damage.\nThe attack's animation can be cancelled by casting  Decimate, but the attack will still land.\nThe cooldown reduction and mana refund will not trigger when killing jungle plants.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Apprehend",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Enemies hit by Apprehend will quickly be dragged to Darius before rebounding over a longer period.\nThe  slow duration starts as soon as the target rebounds off of Darius.\nPENDING FOR TEST:: The rebound location is determined when the target reaches Darius' location.\nThe rebound's forced movement's duration is roughly 0.5 seconds, finishing before the  airborne duration ends.\nPENDING FOR TEST:: There is no  stun applied for the same duration of the  airborne, meaning  brittle cannot extend the disable duration. It will not increase the  slow duration in most situations because of the negative tenacity falling off before the slow is applied.\nAfter the pull, Darius will attempt to basic attack the closest pulled target, prioritizing enemy champions.\nThe armor penetration  stacks multiplicatively with other forms of percentage armor penetration.\nThis ability will cast from wherever the caster is at the end of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Enemies hit by Apprehend will quickly be dragged to Darius before rebounding over a longer period.\nThe  slow duration starts as soon as the target rebounds off of Darius.\nPENDING FOR TEST:: The rebound location is determined when the target reaches Darius' location.\nThe rebound's forced movement's duration is roughly 0.5 seconds, finishing before the  airborne duration ends.\nPENDING FOR TEST:: There is no  stun applied for the same duration of the  airborne, meaning  brittle cannot extend the disable duration. It will not increase the  slow duration in most situations because of the negative tenacity falling off before the slow is applied.\nAfter the pull, Darius will attempt to basic attack the closest pulled target, prioritizing enemy champions.\nThe armor penetration  stacks multiplicatively with other forms of percentage armor penetration.\nThis ability will cast from wherever the caster is at the end of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Noxian Guillotine",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Darius  leaps to an enemy champion and strikes a lethal blow, dealing true damage based on the target's current  Hemorrhage stacks.",
+      "description_source": "Noxian Guillotine's cooldown after the recast or recast window is calculated by taking the values at the end, and using this formula: (Noxian Guillotine's Cooldown - time since first cast) \u00d7 100 \u00f7 (100 +  AH).\nNoxian Guillotine applies  Hemorrhage after the damage.\nDarius will only leap towards the target if it is at range, or leap backwards if it is very close.\nThis leap can pass very thin terrain and will otherwise not be able to. In any case, Darius will still hit the target.\nThe ability is disabled while  grounded or  rooted even if Darius is in the range in which he does not leap.\nNoxian Guillotine will not reset nor trigger  Noxian Might if used to kill a  clone or a target protected by  resurrection.\nNoxian Guillotine will reset but not trigger  Noxian Might if it finishes off a target that is in a  zombie state.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

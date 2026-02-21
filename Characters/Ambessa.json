@@ -1,0 +1,160 @@
+{
+  "data_version": "1.0.0",
+  "name": "Ambessa",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "DIVER",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.25,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 200.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 50.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 35.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Drakehound's Step",
+      "type": "Passive",
+      "description": "Innate: During any of  Ambessa's  ability  lockouts, the player may right-click to select a location or target to  dash toward after the lockout ends. An indicator appears on the ground denoting the direction and destination location.",
+      "description_source": "Stacks of Medarda Maxim are consumed  on-hit, so means of applying on-hit effects without attacking (eg.  Guinsoo's Rageblade) will consume them without dealing bonus physical damage or restoring energy.(bug)\nMedarda Maxim stacks are granted the moment Ambessa is able to start her dash upon casting her abilities.\nIf an Attack command has been queued during an ability lockout and both:\nthe player issues a Hold (default J) or Stop (default S) command, and\nthe acquired target is within Ambessa's  attack range after the end of the lockout\nthen Ambessa's dash will cancel.\nIf Ambessa is  immobilized or  grounded during an ability's lockout, any attack or movement commands inputted during the lockout will not be buffered to cast at the end of the lockout, even if the crowd control has worn off by the time she is able to move (and thus dash).\nThis also applies vice versa where she has successfully buffered an inputted attack or movement command but is afterwards affected with the aforementioned crowd control types during the remaining lockout time. This causes the buffer to be cancelled and the dash to fail to trigger as a consequence.\nAttack commands will not be buffered to cast at the end of the lockout even while  grounded.\nIf multiple attack and movement commands are inputted during the lockout of an ability, the most recent one is used for the dash's targeting.\nIf the most recent input is not an attack or movement command, the dash will not trigger.\nIn this case, the buffer for the previous attack/movement command was cancelled by a new non-attack/movement command such as an input for an ability cast.\nDuring Drakehound's Step, a visual indicator is visible to Ambessa displaying the eventual dash's direction and destination location.\nThe number of available attacks empowered by Medarda Maxim are visible as pips under Ambessa's health bar, only visible to the player.\nThe following table refers for interactions while Ambessa is  dashing:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Hextech Rocketbelt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Teleport  Recall\n\n\nDisabled\n\n Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Cunning Sweep",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Ambessa slashes with her twin drakehounds in the target direction, dealing physical damage to enemies hit. The damage is  increased against enemies hit by the outer edge.",
+      "description_source": "Cunning Sweep will slash from wherever Ambessa is at the end of the lockout.\nIf her facing direction changes before the lockout completes, the slash will be performed towards the new direction.\nThe following table refers for interactions while Ambessa is locked out:\n\n\nAttacking\n\nRegisters input for  Drakehound's Step.\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nRegisters input for  Drakehound's Step.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "energy",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Repudiation",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Ambessa briefly braces herself, then smashes the ground beneath her. If she performs  Drakehound's Step's  dash during Repudiation, she will smash the ground at her destination instead.",
+      "description_source": "Repudiation's bracing time is unaffected by the initiation of  Drakehound's Step dash.\nAmbessa will smash the ground from wherever she is at the end of the bracing time even if the dash ends or completes its travel before the brace is finished.\nShe will remain in place until the brace is finished in this case.\nIf the brace would however finish during the dash, due to the specific timing of the dash's initiation, Ambessa will smash the ground at the end of the dash instead.\nThis would apply in cases where the dash is initiated right before or shortly before the bracing is finished.\nRepudiation's shield buff and shield health on the health bar UI are not granted to and displayed on the caster on-cast, but rather only after a very short, inconsistent delay from the time of cast.(bug)\nThe following table refers for interactions while Ambessa is locked out:\nAmbessa will smash the ground instantly upon entering  resurrection.\n\n\nAttacking\n\nRegisters input for  Drakehound's Step.\n\n\nAbilities\n\nOther abilities may be cast in the last 0.275 seconds of the brace after the lockout and are otherwise disabled in the first 0.225 seconds. If  Drakehound's Step's dash was buffered during the lockout, casting other abilities overrides the buffer with the new cast input.\n\n\nMovement\n\nRegisters input for  Drakehound's Step.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "energy",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Lacerate",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Ambessa spins her twin drakehounds around her, dealing physical damage to enemies hit and  slowing them briefly.",
+      "description_source": "Ambessa will cast the second spin of Lacerate from wherever she is at the end of the dash.\nShe will spin a second time even if the dash is interrupted.\nThe following table refers for interactions while Ambessa is locked out:\n\n\nAttacking\n\nRegisters input for  Drakehound's Step.\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nRegisters input for  Drakehound's Step.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nN/A",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "energy",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Public Execution",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Ambessa gains  armor penetration and  heals for a percentage of the damage dealt by her active abilities.",
+      "description_source": "Public Execution's attachment depends on the application of the  suppression; if the suppression is not applied, neither is the attachment. Similarly, if the suppression is removed, so is the attachment.\nIf the target resists the suppression by being  immune to crowd control,  displacement immune, or having a  spell shield, Ambessa will not attach them to herself.\nShe will be unable to apply the damage and stun in this case since the suppression was not applied in the first place.\nShe will still  blink to the target in this case.\nIf the target removes the suppression by any means, including with an applicable  cleanse effect or  dispel, they will instantly detach themselves from Ambessa, which causes the ability to cancel immediately.\nShe will fail to apply the damage and stun to the target since the suppression was removed from them early in this case.\nHer lockout and displacement immunity also ends prematurely in this case.\nIf Ambessa would blink inside the  attack range of an enemy  turret, including the Nexus Obelisk, Public Execution will instead attempt to position her outside of it.\nAmbessa will  reveal herself during the cast time if there is an enemy champion nearby.\nAmbessa will search for enemies in the direction she is facing at the end of cast time.\nThis direction can be changed by  Seraphine's  Encore.(bug)\nIf Ambessa successfully seizes a target, any regular movement commands issued before doing so are discarded upon the lockout ending.\nThis does not affect movement orders issued during the lockout.\nPublic Execution will trigger a stack of  Electrocute,  Phase Rush, and  Eclipse's Ever Rising Moon for the suppression application and the damage dealt.\nPublic Execution will not queue  Flash if Ambessa attempts to use the summoner spell during the cast time.(note)\nThe following table refers for interactions while Ambessa is in cast time and during the lockout:\n\n\nAttacking\n\nRegisters input for  Drakehound's Step.\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nRegisters input for  Drakehound's Step.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

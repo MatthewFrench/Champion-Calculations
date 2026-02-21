@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Leona",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "SUPPORT",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 646.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 302.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 43.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Sunlight",
+      "type": "Passive",
+      "description": "Innate:  Leona's abilities briefly mark enemies hit.",
+      "description_source": "Sunlight's damage respects  enchantment redirection.\n Zyra has a hidden passive that grants her 10% increased size for 33 seconds after having Sunlight applied to her.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Shield of Daybreak",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Leona illuminates her shield, causing her next  basic attack within a few seconds to deal bonus magic damage and briefly  stun the target.",
+      "description_source": "The enhanced attack will apply other  on-hit effects and can  critically strike as normal.\n Critical strikes do not interact with Shield of Daybreak's bonus damage.\nPENDING FOR TEST:: Shield of Daybreak's interactions with  dodging,  blocking.\nShield of Daybreak's attack can  miss, nullifying its effects entirely.\nShield of Daybreak's attack does not put Leona's basic attack on cooldown.\nThis effectively performs a second  attack reset.\nThis is unlike other empowered attacks (including those which, similar to Shield of Daybreak, use a more unconventional spell cast rather than an attack override).\nLeona will wait out Shield of Daybreak's wind-down before automatically attacking, anyway. The player must issue the next attack themselves to gain the full benefit of the second reset.\nThe empowered attack can trigger against  turrets exclusively.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Eclipse",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Leona raises her guard for a short time, gaining flat damage reduction,  bonus armor and  bonus magic resistance.",
+      "description_source": "Neither the cast nor detonation of Eclipse interrupts any of Leona's previous orders or ongoing attack windups.\nThe resistance scaling will factor from all other sources, excluding Eclipse's flat bonus. This will recalculate over the duration.\n Spell shield will block the damage but Eclipse's extended duration will not be prevented.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Zenith Blade",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Leona projects her sword in the target direction that deals magic damage to enemies hit.",
+      "description_source": "Leona will be ordered to basic attack the target.\n Spell shield will block Zenith Blade's effects, and prevent Leona from dashing to the target.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Solar Flare",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Leona calls down a solar flare that strikes upon the target location, dealing magic damage to enemies hit.",
+      "description_source": "Solar Flare's visual effects are only visible to enemies if they have  sight of the area it was cast upon.\nThe cast indicator shows 300 radius for the area of effect and 120 radius for the epicenter, however the actual hitbox radii are larger than those values.\nThe revealed radius is not obstructed by terrain or  brush.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

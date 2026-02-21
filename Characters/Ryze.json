@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Ryze",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BATTLEMAGE",
+    "FIGHTER",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 645.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 300.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 22.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Arcane Mastery",
+      "type": "Passive",
+      "description": "Innate:  Ryze gains  maximum mana based on his  ability power.",
+      "description_source": "The increase in maximum mana differentiates between base and bonus mana, similar to  Overgrowth. The product based off of base mana does not count as bonus mana.\nWith  Rabadon's Deathcap, a total of (30% AP) ability power and (13% AP)% maximum mana is gained.\nArcane Mastery together with  Archangel's Staff or  Seraph's Embrace creates a recursive stat loop:  ability power giving  mana and so on.\nAnother way to create a recursive stat loop, is to have any converter of  mana to  health ( Winter's Approach,  Fimbulwinter or the U.R.F. buff) and  Riftmaker. The first converter giving  mana to  health,  Riftmaker giving  health to  ability power and Arcane Mastery giving  ability power to  mana.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Overload",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive:  Ryze's other  basic ability casts  reset Overload's cooldown and generate a  Rune stack, stacking up to 2 times.",
+      "description_source": "Overload can be buffered 0.5 seconds before it comes off cooldown.\nOverload can be buffered while casting either  Spell Flux or  Rune Prison to cast immediately after the previous spell's cast time.\nApplies  spell damage to the primary target and  area damage to secondary targets affected by  Flux.\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Rune Prison",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Ryze seizes the target enemy, dealing magic damage and briefly  slowing them.",
+      "description_source": "Rune Prison can be buffered 0.5 seconds before it comes off cooldown.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Spell Flux",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Ryze projects an orb upon the target enemy that deals magic damage.",
+      "description_source": "Spell Flux's second cast on a target will apply a new Flux debuff as well as triggering the previous one (effectively refreshing the duration).\nThe \"main\" missile of Spell Flux is blocked by  projectile-intercepting effects, while the spreading bounce missiles are not.\nPENDING FOR TEST: bounce range  to-edge or  to-center?\nGame data notes additional range checks of 400 (bounce range) and 500 (Q damage bounce range) against 'large' enemies.\nSpell Flux can be buffered 0.5 seconds before it comes off cooldown.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Realm Warp",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Realm Warp's portal may try to predict allied players' intention via their movement. For this purpose, it uses three different radiuses around its center for registering units: a definitive radius of 250 units, an inner radius of 365 units and an outer radius of 465 units.\nRyze himself will always be teleported so long as he is within the inner radius, regardless of movement.\nNon-champion units within the outer radius will always be teleported, regardless of movement.\nChampions within the definitive radius will always be teleported, regardless of movement.\nChampions within the inner radius but outside of the definitive radius must not be currently moving in order to be teleported.\nChampions within the inner radius but outside of the definitive radius that are currently moving will not be teleported if their destination is outside the inner radius.\nChampions within the outer radius but outside of the inner radius that are currently moving will only be teleported if their destination is within the inner radius or their movement pathing otherwise intersects the inner radius' circle at two points.\nThis detection may occasionally fail when pathing around terrain.(bug)\nBlinked units retain the same relative positions to one another upon arrival.\nRealm Warp will teleport allies even if they are in a  zombie state, are  untargetable, or are affected by  crowd control.\nRealm Warp will not teleport allies that are using an ability that preloads UnstoppableForceMarker or are being affected by another ally's Realm Warp first.\nRealm Warp will still teleport an allied  Rift Herald that is winding up its leap.\nRealm Warp has various interactions with  channeled abilities that are being performed by an ally. Some channels will prevent their caster from being teleported and others will not.\nFor channels that do not prevent the teleport, Realm Warp will specifically not apply its  silence to the caster.\nCast times will not prevent the teleport.\nThe following channels will prevent the teleport:\n Caitlyn's  Ace in the Hole\n Galio's  Hero's Entrance\n Kayn's  Umbral Trespass\n Jhin's  Curtain Call\n Warwick's  Jaws of the Beast\n Xerath's  Rite of the Arcane\n Recall /  Empowered Recall\n Teleport /  Unleashed Teleport\nThe following table refers for interactions while Ryze is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nAllowed\n\n\nAbilities\n\nAllowed\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Zhonya's Hourglass\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\nAll summoner spells are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "description_source": "Realm Warp's portal may try to predict allied players' intention via their movement. For this purpose, it uses three different radiuses around its center for registering units: a definitive radius of 250 units, an inner radius of 365 units and an outer radius of 465 units.\nRyze himself will always be teleported so long as he is within the inner radius, regardless of movement.\nNon-champion units within the outer radius will always be teleported, regardless of movement.\nChampions within the definitive radius will always be teleported, regardless of movement.\nChampions within the inner radius but outside of the definitive radius must not be currently moving in order to be teleported.\nChampions within the inner radius but outside of the definitive radius that are currently moving will not be teleported if their destination is outside the inner radius.\nChampions within the outer radius but outside of the inner radius that are currently moving will only be teleported if their destination is within the inner radius or their movement pathing otherwise intersects the inner radius' circle at two points.\nThis detection may occasionally fail when pathing around terrain.(bug)\nBlinked units retain the same relative positions to one another upon arrival.\nRealm Warp will teleport allies even if they are in a  zombie state, are  untargetable, or are affected by  crowd control.\nRealm Warp will not teleport allies that are using an ability that preloads UnstoppableForceMarker or are being affected by another ally's Realm Warp first.\nRealm Warp will still teleport an allied  Rift Herald that is winding up its leap.\nRealm Warp has various interactions with  channeled abilities that are being performed by an ally. Some channels will prevent their caster from being teleported and others will not.\nFor channels that do not prevent the teleport, Realm Warp will specifically not apply its  silence to the caster.\nCast times will not prevent the teleport.\nThe following channels will prevent the teleport:\n Caitlyn's  Ace in the Hole\n Galio's  Hero's Entrance\n Kayn's  Umbral Trespass\n Jhin's  Curtain Call\n Warwick's  Jaws of the Beast\n Xerath's  Rite of the Arcane\n Recall /  Empowered Recall\n Teleport /  Unleashed Teleport\nThe following table refers for interactions while Ryze is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nAllowed\n\n\nAbilities\n\nAllowed\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Zhonya's Hourglass\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\nAll summoner spells are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -62,7 +62,7 @@ const RUNE_PROC_TRIGGER_SOURCES: [RuneProcTriggerSource; 5] = [
     RuneProcTriggerSource::RuntimeActivation,
 ];
 
-const MODELED_RUNE_TELEMETRY_KEYS: [&str; 12] = [
+const MODELED_RUNE_TELEMETRY_KEYS: [&str; 17] = [
     "aftershock",
     "arcanecomet",
     "conqueror",
@@ -75,6 +75,11 @@ const MODELED_RUNE_TELEMETRY_KEYS: [&str; 12] = [
     "presstheattack",
     "summonaery",
     "triumph",
+    "scorch",
+    "cheapshot",
+    "tasteofblood",
+    "absorblife",
+    "coupdegrace",
 ];
 
 const MODELED_RUNE_TELEMETRY_KEY_COUNT: usize = MODELED_RUNE_TELEMETRY_KEYS.len();
@@ -158,6 +163,11 @@ pub(crate) struct LoadoutRuntimeState {
     has_dark_harvest: bool,
     has_triumph: bool,
     has_gathering_storm: bool,
+    has_scorch: bool,
+    has_cheap_shot: bool,
+    has_taste_of_blood: bool,
+    has_absorb_life: bool,
+    has_coup_de_grace: bool,
     owner_is_melee: bool,
     rune_proc_telemetry_enabled: bool,
 
@@ -187,7 +197,11 @@ pub(crate) struct LoadoutRuntimeState {
     pub hail_of_blades_ready_at: f64,
     pub hail_of_blades_expires_at: f64,
     pub dark_harvest_ready_at: f64,
+    pub scorch_ready_at: f64,
+    pub cheap_shot_ready_at: f64,
+    pub taste_of_blood_ready_at: f64,
     pub pending_fleet_heal: f64,
+    pub pending_taste_of_blood_heal: f64,
     press_the_attack_targets: HashMap<usize, PressTheAttackTargetState>,
     electrocute_targets: HashMap<usize, HitWindowTargetState>,
     phase_rush_targets: HashMap<usize, HitWindowTargetState>,
@@ -219,6 +233,11 @@ impl Default for LoadoutRuntimeState {
             has_dark_harvest: false,
             has_triumph: false,
             has_gathering_storm: false,
+            has_scorch: false,
+            has_cheap_shot: false,
+            has_taste_of_blood: false,
+            has_absorb_life: false,
+            has_coup_de_grace: false,
             owner_is_melee: false,
             rune_proc_telemetry_enabled: true,
             attacks_landed: 0,
@@ -247,7 +266,11 @@ impl Default for LoadoutRuntimeState {
             hail_of_blades_ready_at: 0.0,
             hail_of_blades_expires_at: 0.0,
             dark_harvest_ready_at: 0.0,
+            scorch_ready_at: 0.0,
+            cheap_shot_ready_at: 0.0,
+            taste_of_blood_ready_at: 0.0,
             pending_fleet_heal: 0.0,
+            pending_taste_of_blood_heal: 0.0,
             press_the_attack_targets: HashMap::new(),
             electrocute_targets: HashMap::new(),
             phase_rush_targets: HashMap::new(),
@@ -284,6 +307,11 @@ fn title_case_rune_name(normalized_rune_key: &str) -> String {
         "darkharvest" => "Dark Harvest".to_string(),
         "triumph" => "Triumph".to_string(),
         "gatheringstorm" => "Gathering Storm".to_string(),
+        "scorch" => "Scorch".to_string(),
+        "cheapshot" => "Cheap Shot".to_string(),
+        "tasteofblood" => "Taste of Blood".to_string(),
+        "absorblife" => "Absorb Life".to_string(),
+        "coupdegrace" => "Coup de Grace".to_string(),
         _ => normalized_rune_key.to_string(),
     }
 }
@@ -334,6 +362,11 @@ fn rune_telemetry_index(rune_key: &str) -> Option<usize> {
         "presstheattack" => Some(9),
         "summonaery" => Some(10),
         "triumph" => Some(11),
+        "scorch" => Some(12),
+        "cheapshot" => Some(13),
+        "tasteofblood" => Some(14),
+        "absorblife" => Some(15),
+        "coupdegrace" => Some(16),
         _ => None,
     }
 }
@@ -774,6 +807,11 @@ pub(crate) fn build_loadout_runtime_state_with_telemetry(
             "darkharvest" => runtime.has_dark_harvest = true,
             "triumph" => runtime.has_triumph = true,
             "gatheringstorm" => runtime.has_gathering_storm = true,
+            "scorch" => runtime.has_scorch = true,
+            "cheapshot" => runtime.has_cheap_shot = true,
+            "tasteofblood" => runtime.has_taste_of_blood = true,
+            "absorblife" => runtime.has_absorb_life = true,
+            "coupdegrace" => runtime.has_coup_de_grace = true,
             _ => {}
         }
     }
@@ -831,6 +869,10 @@ pub(crate) fn reset_transient_loadout_state(runtime: &mut LoadoutRuntimeState) {
         [RuneProcTelemetryTotals::default(); MODELED_RUNE_TELEMETRY_KEY_COUNT];
     runtime.aftershock_active_until = 0.0;
     runtime.first_strike_window_until = 0.0;
+    runtime.scorch_ready_at = 0.0;
+    runtime.cheap_shot_ready_at = 0.0;
+    runtime.taste_of_blood_ready_at = 0.0;
+    runtime.pending_taste_of_blood_heal = 0.0;
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1013,6 +1055,14 @@ pub(crate) fn calculate_on_hit_bonus_damage(
         RuneProcTriggerSource::OnHit,
     );
 
+    extra_true += maybe_apply_coup_de_grace_bonus(
+        runtime,
+        target_current_health,
+        target_max_health,
+        attack_damage,
+        RuneProcTriggerSource::OnHit,
+    );
+
     (
         resolve_stat(
             StatQuery::ScalarAmount {
@@ -1039,6 +1089,95 @@ pub(crate) fn calculate_on_hit_bonus_damage(
             RuntimeBuffState::default(),
         ),
     )
+}
+
+fn maybe_apply_coup_de_grace_bonus(
+    runtime: &mut LoadoutRuntimeState,
+    target_current_health: f64,
+    target_max_health: f64,
+    source_damage: f64,
+    source: RuneProcTriggerSource,
+) -> f64 {
+    if !runtime.has_coup_de_grace {
+        return 0.0;
+    }
+    record_rune_proc_attempt(runtime, "coupdegrace", source);
+    if target_max_health <= 0.0 {
+        return 0.0;
+    }
+    let defaults = &rune_runtime_defaults().coup_de_grace;
+    if target_current_health > defaults.trigger_health_ratio.max(0.0) * target_max_health {
+        return 0.0;
+    }
+    record_rune_proc_eligibility(runtime, "coupdegrace", source);
+    let bonus = defaults.bonus_damage_ratio.max(0.0) * source_damage.max(0.0);
+    if bonus > 0.0 {
+        record_rune_proc(runtime, "coupdegrace", source, bonus, 0.0);
+    }
+    bonus
+}
+
+fn maybe_apply_scorch(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    attacker_level: usize,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+) -> f64 {
+    if !runtime.has_scorch {
+        return 0.0;
+    }
+    record_rune_proc_attempt(runtime, "scorch", RuneProcTriggerSource::Ability);
+    if now < runtime.scorch_ready_at {
+        return 0.0;
+    }
+    record_rune_proc_eligibility(runtime, "scorch", RuneProcTriggerSource::Ability);
+    let defaults = &rune_runtime_defaults().scorch;
+    runtime.scorch_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    let damage = level_scaled_range_value(attacker_level, defaults.proc_magic_damage_by_level)
+        + defaults.ability_power_ratio.max(0.0) * attacker_ability_power.max(0.0)
+        + defaults.bonus_attack_damage_ratio.max(0.0) * attacker_bonus_attack_damage.max(0.0);
+    if damage > 0.0 {
+        record_rune_proc(
+            runtime,
+            "scorch",
+            RuneProcTriggerSource::Ability,
+            damage,
+            0.0,
+        );
+    }
+    damage.max(0.0)
+}
+
+fn maybe_trigger_taste_of_blood(
+    runtime: &mut LoadoutRuntimeState,
+    now: f64,
+    attacker_level: usize,
+    attacker_ability_power: f64,
+    attacker_bonus_attack_damage: f64,
+) {
+    if !runtime.has_taste_of_blood {
+        return;
+    }
+    record_rune_proc_attempt(
+        runtime,
+        "tasteofblood",
+        RuneProcTriggerSource::RuntimeActivation,
+    );
+    if now < runtime.taste_of_blood_ready_at {
+        return;
+    }
+    record_rune_proc_eligibility(
+        runtime,
+        "tasteofblood",
+        RuneProcTriggerSource::RuntimeActivation,
+    );
+    let defaults = &rune_runtime_defaults().taste_of_blood;
+    runtime.taste_of_blood_ready_at = now + defaults.cooldown_seconds.max(0.0);
+    let heal = level_scaled_range_value(attacker_level, defaults.heal_by_level)
+        + defaults.ability_power_ratio.max(0.0) * attacker_ability_power.max(0.0)
+        + defaults.bonus_attack_damage_ratio.max(0.0) * attacker_bonus_attack_damage.max(0.0);
+    runtime.pending_taste_of_blood_heal += heal.max(0.0);
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1147,6 +1286,30 @@ pub(crate) fn calculate_ability_bonus_damage(
         RuneProcTriggerSource::Ability,
     );
 
+    extra_magic += maybe_apply_scorch(
+        runtime,
+        now,
+        attacker_level,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+    );
+
+    maybe_trigger_taste_of_blood(
+        runtime,
+        now,
+        attacker_level,
+        attacker_ability_power,
+        attacker_bonus_attack_damage,
+    );
+
+    extra_true += maybe_apply_coup_de_grace_bonus(
+        runtime,
+        target_current_health,
+        target_max_health,
+        ability_raw_damage,
+        RuneProcTriggerSource::Ability,
+    );
+
     (
         resolve_stat(
             StatQuery::ScalarAmount {
@@ -1180,16 +1343,28 @@ pub(crate) fn on_outgoing_damage_heal(
     if runtime.has_conqueror {
         record_rune_proc_attempt(runtime, "conqueror", RuneProcTriggerSource::OnHit);
     }
-    let mut heal = runtime.pending_fleet_heal.max(0.0);
+    let fleet_heal = runtime.pending_fleet_heal.max(0.0);
     runtime.pending_fleet_heal = 0.0;
-    if heal > 0.0 {
+    let taste_of_blood_heal = runtime.pending_taste_of_blood_heal.max(0.0);
+    runtime.pending_taste_of_blood_heal = 0.0;
+    let mut heal = fleet_heal + taste_of_blood_heal;
+    if fleet_heal > 0.0 {
         record_rune_proc_eligibility(runtime, "fleetfootwork", RuneProcTriggerSource::OnHit);
         record_rune_proc(
             runtime,
             "fleetfootwork",
             RuneProcTriggerSource::OnHit,
             0.0,
-            heal,
+            fleet_heal,
+        );
+    }
+    if taste_of_blood_heal > 0.0 {
+        record_rune_proc(
+            runtime,
+            "tasteofblood",
+            RuneProcTriggerSource::RuntimeActivation,
+            0.0,
+            taste_of_blood_heal,
         );
     }
     if runtime.has_conqueror
@@ -1225,24 +1400,51 @@ pub(crate) fn on_outgoing_damage_heal(
     )
 }
 
-pub(crate) fn on_enemy_kill_heal(runtime: &mut LoadoutRuntimeState, max_health: f64) -> f64 {
+pub(crate) fn on_enemy_kill_heal(
+    runtime: &mut LoadoutRuntimeState,
+    max_health: f64,
+    actor_level: usize,
+) -> f64 {
     let defaults = rune_runtime_defaults();
-    if !runtime.has_triumph || max_health <= 0.0 {
-        return 0.0;
+    let mut heal = 0.0;
+
+    if runtime.has_triumph && max_health > 0.0 {
+        record_rune_proc_attempt(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
+        let triumph_heal = defaults.triumph.heal_max_health_ratio.max(0.0) * max_health.max(0.0);
+        if triumph_heal > 0.0 {
+            heal += triumph_heal;
+            record_rune_proc_eligibility(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
+            record_rune_proc(
+                runtime,
+                "triumph",
+                RuneProcTriggerSource::EnemyKill,
+                0.0,
+                triumph_heal,
+            );
+        }
     }
-    record_rune_proc_attempt(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
-    let heal = defaults.triumph.heal_max_health_ratio.max(0.0) * max_health.max(0.0);
+
+    if runtime.has_absorb_life {
+        record_rune_proc_attempt(runtime, "absorblife", RuneProcTriggerSource::EnemyKill);
+        let absorb_life_heal =
+            level_scaled_range_value(actor_level, defaults.absorb_life.heal_by_level).max(0.0);
+        if absorb_life_heal > 0.0 {
+            heal += absorb_life_heal;
+            record_rune_proc_eligibility(runtime, "absorblife", RuneProcTriggerSource::EnemyKill);
+            record_rune_proc(
+                runtime,
+                "absorblife",
+                RuneProcTriggerSource::EnemyKill,
+                0.0,
+                absorb_life_heal,
+            );
+        }
+    }
+
     if heal <= 0.0 {
         return 0.0;
     }
-    record_rune_proc_eligibility(runtime, "triumph", RuneProcTriggerSource::EnemyKill);
-    record_rune_proc(
-        runtime,
-        "triumph",
-        RuneProcTriggerSource::EnemyKill,
-        0.0,
-        heal,
-    );
+
     resolve_stat(
         StatQuery::ScalarAmount {
             base_amount: heal,
@@ -1259,30 +1461,60 @@ pub(crate) fn trigger_immobilize_rune_damage(
     actor_level: usize,
     actor_bonus_health: f64,
 ) -> f64 {
-    let defaults = &rune_runtime_defaults().aftershock;
-    if !runtime.has_aftershock {
-        return 0.0;
+    let aftershock_defaults = &rune_runtime_defaults().aftershock;
+    let cheap_shot_defaults = &rune_runtime_defaults().cheap_shot;
+    let mut bonus_damage = 0.0;
+
+    if runtime.has_aftershock {
+        record_rune_proc_attempt(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
+        if now >= runtime.aftershock_ready_at {
+            record_rune_proc_eligibility(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
+            runtime.aftershock_ready_at = now + aftershock_defaults.cooldown_seconds.max(0.0);
+            runtime.aftershock_active_until =
+                now + aftershock_defaults.active_duration_seconds.max(0.0);
+            let shockwave_magic = level_scaled_range_value(
+                actor_level,
+                aftershock_defaults.shockwave_magic_damage_by_level,
+            ) + aftershock_defaults.shockwave_bonus_health_ratio.max(0.0)
+                * actor_bonus_health.max(0.0);
+            if shockwave_magic > 0.0 {
+                bonus_damage += shockwave_magic;
+                record_rune_proc(
+                    runtime,
+                    "aftershock",
+                    RuneProcTriggerSource::Immobilize,
+                    shockwave_magic,
+                    0.0,
+                );
+            }
+        }
     }
-    record_rune_proc_attempt(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
-    if now < runtime.aftershock_ready_at {
-        return 0.0;
+
+    if runtime.has_cheap_shot {
+        record_rune_proc_attempt(runtime, "cheapshot", RuneProcTriggerSource::Immobilize);
+        if now >= runtime.cheap_shot_ready_at {
+            record_rune_proc_eligibility(runtime, "cheapshot", RuneProcTriggerSource::Immobilize);
+            runtime.cheap_shot_ready_at = now + cheap_shot_defaults.cooldown_seconds.max(0.0);
+            let cheap_shot_true = level_scaled_range_value(
+                actor_level,
+                cheap_shot_defaults.proc_true_damage_by_level,
+            );
+            if cheap_shot_true > 0.0 {
+                bonus_damage += cheap_shot_true;
+                record_rune_proc(
+                    runtime,
+                    "cheapshot",
+                    RuneProcTriggerSource::Immobilize,
+                    cheap_shot_true,
+                    0.0,
+                );
+            }
+        }
     }
-    record_rune_proc_eligibility(runtime, "aftershock", RuneProcTriggerSource::Immobilize);
-    runtime.aftershock_ready_at = now + defaults.cooldown_seconds.max(0.0);
-    runtime.aftershock_active_until = now + defaults.active_duration_seconds.max(0.0);
-    let shockwave_magic =
-        level_scaled_range_value(actor_level, defaults.shockwave_magic_damage_by_level)
-            + defaults.shockwave_bonus_health_ratio.max(0.0) * actor_bonus_health.max(0.0);
-    record_rune_proc(
-        runtime,
-        "aftershock",
-        RuneProcTriggerSource::Immobilize,
-        shockwave_magic,
-        0.0,
-    );
+
     resolve_stat(
         StatQuery::ScalarAmount {
-            base_amount: shockwave_magic,
+            base_amount: bonus_damage,
             source: ScalarMetricSource::OutgoingAbilityDamage,
             clamp_min_zero: true,
         },

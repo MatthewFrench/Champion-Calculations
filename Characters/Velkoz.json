@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Vel'Koz",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ARTILLERY",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 469.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 22.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.643,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 525.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Organic Deconstruction",
+      "type": "Passive",
+      "description": "Innate:  Vel'Koz's  abilities apply a stack of Deconstruction to enemies hit for a few seconds.",
+      "description_source": "The stack duration will not be refreshed if the attack misses due to  blind.\nPENDING FOR TEST: Interaction between duration refresh on basic attacks and parry effects ( dodge and  block).",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Plasma Fission",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Vel'Koz fires a plasma bolt that deals magic damage to the first enemy hit,  slowing them for a short time.\nPlasma Fission can be recast while the bolt is in flight, and does so automatically upon hitting an enemy or reaching max range.",
+      "description_source": "The initial cast counts as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nDetonating the ability manually does not.\nPlasma Fission's damage applies before  Organic Deconstruction's.\nThis also ensures Vel'Koz does not lose Plasma Fission's restoration effect.\nAn enemy cannot be hit by multiple bolts even when having blocked one with a  spell shield.\nThe split occurs at a location 55 units in front of the primary bolt's final location.\nPlasma Fission can reach a maximum 1595 units diagonally (ignoring the split missile's width and enemy hitbox radius), reaching this distance after a total of about ~1.65 seconds.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Void Rift",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Vel'Koz cracks a rift in the target direction that opens after a brief delay, cascading through the area to deal magic damage to enemies within.",
+      "description_source": "Unbreakable and  Wind Wall will block the ripple and prevent the rift from forming further, but they will not destroy the section that was created already.\n Spell shield only blocks one instance of damage.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Tectonic Disruption",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Vel'Koz hurls a disruptive anomaly at the target location that deals magic damage to enemies hit, briefly  knocks them up and  stuns them.",
+      "description_source": "The required proximity for the  knock back is relative to Vel'Koz's position when casting and not his current one.\nWhile the effect is fully prevented by blocking the missile (e.g. with  Unbreakable and  Wind Wall), the missile may not be destroyed visually.(bug)\nThe area of effect indicator appears at the end of the cast time.\nIt will persist even if the cast cancels (e.g. Vel'Koz dies before cast time completes) despite the projectile not firing.\n Displacement immunity will also resist the application of the  stun.\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Life Form Disintegration Ray",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Life Form Disintegration Ray's direction updates gradually (moving the cursor from one side of Vel'Koz to the other will not make him rotate instantly).\nVel'Koz will  reveal himself if the ray is near an enemy champion.\nThe beam hits in a rectangular shape, intersecting with the edge of an enemy  gameplay radius.\nBecause of this, the effect will hit enemies whose center location is to the sides and/or slightly behind Vel'Koz, as long as their radius intersects with the area.\nThe following table refers for interactions while Vel'Koz is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Hexflash\n\n\nInterrupted by\n\n Teleport  Recall\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "Life Form Disintegration Ray's direction updates gradually (moving the cursor from one side of Vel'Koz to the other will not make him rotate instantly).\nVel'Koz will  reveal himself if the ray is near an enemy champion.\nThe beam hits in a rectangular shape, intersecting with the edge of an enemy  gameplay radius.\nBecause of this, the effect will hit enemies whose center location is to the sides and/or slightly behind Vel'Koz, as long as their radius intersects with the area.\nThe following table refers for interactions while Vel'Koz is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Hexflash\n\n\nInterrupted by\n\n Teleport  Recall\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

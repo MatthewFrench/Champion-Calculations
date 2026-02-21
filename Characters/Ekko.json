@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Ekko",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.259999990463256,
+      "total_attack_time_seconds": 1.60000002384185,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 280.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.688,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Z-Drive Resonance",
+      "type": "Passive",
+      "description": "Innate:  Ekko's  basic attacks  on-hit and damaging  abilities apply  stacks, the third stack deals bonus magic damage. If the target was a  champion, this grants  bonus movement speed to Ekko.",
+      "description_source": "Ekko's basic attacks have different animations based on how many stacks his target has. His attack pattern is as follows:\nDownwards \u2192 Upwards \u2192 Sideways\nIf the target has already been affected by Resonance, Ekko's basic attack animations will kick or attack the target sideways.\nResonance stacks will not be applied nor consumed if the basic attack is  dodged or  blocked or if the attack  misses.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Timewinder",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Ekko throws a temporal grenade that deals magic damage to enemies hit. It expands at max range or upon hitting an enemy  champion,  slowing nearby enemies.",
+      "description_source": "Spell shield will block only a single instance of damage.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Parallel Convergence",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive:  Ekko's basic attacks deal bonus magic damage against a low-health target, increased based on their missing health.",
+      "description_source": "The passive will proc with the attack that triggers the final stack of  Resonance if it reduces a target's health below the 30% threshold.\nEkko can detonate the expansion even while  untargetable (i.e.  Chronobreak's dash), but not if he is  resurrecting.\nParallel Convergence will continue to  slow enemies even if its expansion is detonated.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Phase Dive",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Ekko  rolls in the target direction, gaining  bonus attack range.",
+      "description_source": "The  dash distance can be extended to up-to 550 units when targeting across terrain. It will only extend for the distance needed to cross the wall.\nWhile  grounded or  rooted, Ekko loses the  bonus attack range from Phase Dive.\nPhase Drive's attack can  miss and be  blocked and  dodged, consuming the basic attack without dealing any damage.\nIf the target becomes  untargetable,  dies, or is too far away during the empowered attack's cast time, it is cancelled but not consumed.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Chronobreak",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Ekko reveals a time-delayed afterimage of himself that tracks where he was 4 seconds ago.",
+      "description_source": "Ekko will attempt to basic attack the closest target after appearing at the cast location, but can do so quicker if he manually attack commands after the dash, except if  Phase Dive is primed.\nThe afterimage's location will explode even if Ekko's  dash is interrupted.\nA link can also be seen between the afterimage and Ekko that traces along his path.\nThe link follows the same visibility rules as the afterimage.\nUpon activation, Ekko travels full distance through the link, and thus will detonate  Parallel Convergence that the link passes through.\n Quicksilver incurs a 1-second  cooldown upon casting Chronobreak.\nEkko's dash cannot be interrupted by forced movement displacements since he is immune to them.\nThis is not to be confused with  displacement immunity, which resists  airborne displacements plus a number of other cases. Chronobreak provides immunity only to displacements that apply  airborne.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

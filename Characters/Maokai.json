@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Maokai",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "SUPPORT",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 665.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 375.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 35.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.8,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Sap Magic",
+      "type": "Passive",
+      "description": "Innate: Periodically,  Maokai's next basic attack will  heal him for a portion of his maximum health.",
+      "description_source": "Sap Magic does not occur if Maokai begins his attack windup before its cooldown has elapsed.(note)\nSap Magic does not occur if the attack is  dodged and/or missed if Maokai is  blinded. It will occur if it is  blocked.\nThe striking ability has to trigger  spell effects such as  spell damage or  area damage for the cooldown to be reduced.\nPENDING FOR TEST: Does it trigger only from ability spell effects or any spell effects (such as  Hextech Rocketbelt's Super Sonic or  Redemption's Intervention)?\nIf Maokai possesses a  spell shield and it consumes an enemy ability, he will still receive the cooldown reduction.\nThe empowered attack will not trigger against  structures nor  wards.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Bramble Smash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Maokai sends a shockwave in the target direction that deals magic damage and briefly  slows enemies hit.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nBramble Smash's damage based on the target's health ratio is capped at 9999 against non-champions.\n Displacement immunity will also resist the application of the  stun.\nMaokai remains locked out from the cast time for another 0.075 seconds after it.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Twisted Advance",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Maokai  dashes to the target enemy while being  untargetable, dealing magic damage and briefly  rooting them upon arrival.",
+      "description_source": "Maokai will track the target if they change locations.\nHe will dash to the target's previous location without applying Twisted Advance's effects if the target is too far away or moves beyond 2000 units.\nHe will stop dashing if the target is too far away the moment the dash begins.\nTwisted Advance will fail to deal damage and apply the  root if the target is  untargetable upon arrival.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Sapling Toss",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Maokai flings a Sapling to the target location, where it remains for some time. A Sapling will chase nearby enemies for a short time, expiring afterward or upon contact.",
+      "description_source": "Applies  area damage from a normal Sapling and deals  persistent damage to enemies hit by an empowered Sapling.\nSapling Toss grants  sight of the target location even while the Sapling is in flight.\nThe Saplings will continue to chase their target even if they lose  sight of them (but they do not prioritize champions so they will chase the first target they encounter).\nSaplings cannot stack on top of each other (they will move a short distance away from one another if they are aimed at the same location).\nThe Sapling will stop its movement upon colliding with  Unbreakable.\nSaplings attack  Baron Nashor always at the same two points, no matter where they were placed.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Nature's Grasp",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Maokai summons a colossal wall of five thorny brambles that slowly advances in the target direction, each stopping when they collide with an enemy  champion.",
+      "description_source": "The brambles are made up of 4  missiles each which trail 100 units behind one another. The front missile carries the visual effect. When colliding with a champion, all missiles of one bramble are destroyed simultaneously.\nMissiles destroyed by other means such as  Samira's  Blade Whirl may not destroy their fellows from the same branch, resulting in one or more invisible missiles that may still collide.(bug)\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

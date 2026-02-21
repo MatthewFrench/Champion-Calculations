@@ -17,6 +17,11 @@ pub(crate) const DYNAMIC_RUNE_KEYS: &[&str] = &[
     "secondwind",
     "triumph",
     "gatheringstorm",
+    "cheapshot",
+    "scorch",
+    "tasteofblood",
+    "absorblife",
+    "coupdegrace",
 ];
 
 pub(crate) fn has_dynamic_rune_effect(rune_name: &str) -> bool {

@@ -650,3 +650,101 @@ fn parse_enemy_config_rejects_deprecated_combat_proxy() {
         "unexpected error: {error}"
     );
 }
+
+#[test]
+fn champion_files_follow_minimum_canonical_shape_and_slot_mapping() {
+    let characters_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("Characters");
+    let mut champion_count = 0usize;
+
+    for entry in std::fs::read_dir(&characters_dir).expect("Characters directory should exist") {
+        let entry = entry.expect("directory entry should read");
+        let path = entry.path();
+        if path.extension().and_then(|ext| ext.to_str()) != Some("json") {
+            continue;
+        }
+        let file_name = path
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or_default();
+        if matches!(
+            file_name,
+            "ChampionDefaults.json" | "SupportChampionDefaults.json"
+        ) {
+            continue;
+        }
+
+        champion_count += 1;
+        let raw = std::fs::read_to_string(&path)
+            .unwrap_or_else(|err| panic!("failed reading {}: {err}", path.display()));
+        let champion: serde_json::Value = serde_json::from_str(&raw)
+            .unwrap_or_else(|err| panic!("failed parsing {}: {err}", path.display()));
+
+        for required_top_level_key in ["name", "base_stats", "basic_attack", "abilities"] {
+            assert!(
+                champion.get(required_top_level_key).is_some(),
+                "{} missing top-level key '{}'",
+                path.display(),
+                required_top_level_key
+            );
+        }
+
+        let base_stats = champion
+            .get("base_stats")
+            .expect("validated base_stats presence");
+        for required_base_stat_key in [
+            "health",
+            "armor",
+            "magic_resist",
+            "attack_damage",
+            "attack_speed",
+            "attack_range",
+            "move_speed",
+        ] {
+            assert!(
+                base_stats.get(required_base_stat_key).is_some(),
+                "{} missing base_stats.{}",
+                path.display(),
+                required_base_stat_key
+            );
+        }
+
+        let abilities = champion
+            .get("abilities")
+            .expect("validated abilities presence");
+        for required_ability_key in [
+            "passive",
+            "basic_ability_1",
+            "basic_ability_2",
+            "basic_ability_3",
+            "ultimate",
+        ] {
+            assert!(
+                abilities.get(required_ability_key).is_some(),
+                "{} missing abilities.{}",
+                path.display(),
+                required_ability_key
+            );
+        }
+
+        let champion_name = champion
+            .get("name")
+            .and_then(serde_json::Value::as_str)
+            .expect("champion name should be present");
+        let slot_bindings = crate::defaults::champion_slot_bindings(champion_name);
+        for slot in ["Q", "W", "E", "R"] {
+            assert!(
+                slot_bindings.contains_key(slot),
+                "{} missing derived slot binding for {}",
+                path.display(),
+                slot
+            );
+        }
+    }
+
+    assert!(
+        champion_count >= 100,
+        "expected large imported roster; found {champion_count} champion files"
+    );
+}

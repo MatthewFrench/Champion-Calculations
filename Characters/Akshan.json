@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Akshan",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 350.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 26.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 52.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 500.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Dirty Fighting",
+      "type": "Passive",
+      "description": "Innate:  Akshan's  basic attack causes him to fire a second attack that deals reduced physical damage. If Akshan cancels the second attack, he gains a brief burst of  move speed, increased based on his  attack speed.",
+      "description_source": "If the first shot has killed its target, Akshan will automatically acquire another enemy within 200 units beyond his  basic attack range, else he can do so by issuing an attack order to a different target.\nApplies  basic damage for the second shot and  proc damage for the bonus damage.\nThe second shot:\nIs treated as a basic attack.\nCritically strikes independently from the first shot.\nCan be cancelled by inputting a different command right after using the first shot.\nCounts as a separate hit for effects such as  Electrocute,  Muramana's Shock, and  Eclipse's Ever Rising Moon.\nStarts the attack windup's cooldown after it is used, rather than when the first shot is.\nThe attack speed scaling on the movement speed buff includes the bonus attack speed gained from Akshan's innate attack speed growth.\nAt level 20, at minimum it grants 145.56 decaying movement speed.\nChanging targets for the second shot will also  acquire the new target.\nThe second shot, if the first shot's target was killed, will prioritize  visible enemy champions, then  minions on  low health.\nThis ability's damage is calculated based on the caster's current stats and changes dynamically.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Avengerang",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Akshan throws a boomerang that deals physical damage to enemies hit, extending the boomerang range and briefly  revealing them. If this hits an enemy  champion, Akshan gains a brief burst of  move speed.",
+      "description_source": "Spell shield will only block a single hit. They do not prevent the initial throw from extending its range.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThis ability's damage is calculated based on the caster's current stats and changes dynamically.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Going Rogue",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive: Enemy  champions that kill allied champions are marked as a Scoundrel for a long time. When  Akshan scores a  takedown on a Scoundrel, he gains  bonus gold, all allies killed by the Scoundrel are resurrected, and Scoundrel status is removed from all other enemies.",
+      "description_source": "The mark displays the duration and slay count.\nEnemy champions that kill Akshan will not be marked as Scoundrels nor increase their slay count.\n Clones do not count for triggering Going Rogue's passive.\nGoing Rogue's buff refreshes to last indefinitely upon moving near terrain or into brush, and will refresh to 2 seconds after leaving near terrain or brush.\nAllied champions within a  zombie state are resurrected only after the state ends.\nAkshan can still trigger Going Rogue's passive while he is within a  zombie state.\nUsing a basic attack breaks the stealth at the start of the attack windup.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Heroic Swing",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "First Cast:  Akshan prepares to swing by firing a hook that embeds in the first terrain hit. Heroic Swing's second cast can be used while the hook is attached.",
+      "description_source": "The second cast's dash will displace Akshan around the terrain in either a clockwise or counterclockwise direction, with the specific direction being determined by the position of the player's cursor relative to his facing direction.\nThe dash will move clockwise if the player's cursor is anywhere to the left of Akshan from his facing direction (or perspective), and counterclockwise if the cursor is anywhere to his right.\nAkshan will not stop swinging until his dash is stopped.\nThe swing will end prematurely if the terrain the hook was attached to no longer exists, such as player-generated terrain.\nAkshan will prioritize firing at enemies he damaged with any unit-targeted ability or spell within the last 4 seconds, such as  Comeuppance or  Ignite.\nHeroic Swing grants a buff to Akshan for 2 seconds that indicates and determines the first cast's duration.\nThis buff starts as soon as the ability is cast, and lingers for 0.125 seconds after it expires.\nThis means the hook can be attached to terrain for longer if it hits it earlier in the duration, and vice versa.\nIf Akshan  dashes (excluding second cast's dash) or  blinks or becomes affected by  immobilization,  ground, or  polymorph in the duration, the buff is removed immediately, causing the first cast to be lost and cancelling Heroic Swing entirely.\nAkshan immediately fires one shot at the beginning of his swing and a final shot while dismounting from the swing.\nAkshan can fire at any targetable enemy unit excluding  structures and jungle plants.\nOnly Heroic Swing's first cast is disabled while  grounded or  rooted. The third cast is still usable during those effects.\nHeroic Swing's second and third cast can both be used while  silenced.\n Takedowns against  clones do not count for resetting Heroic Swing's cooldown.\nIf a  takedown is scored while Heroic Swing is active, the cooldown afterwards will be 0.5 seconds.\nAkshan will attempt to basic attack the target he fired at with the last shot after the third cast's dash ends, if there is no other input given.\nEach shot generates a stack of  Conqueror.\n Spell shield will only block a single shot.\nThe attack speed scaling on the damage of the attacks includes the bonus attack speed gained from Akshan's innate attack speed growth.\nAt level 18, each shot at minimum deals 108.36 (+ 18.06% AD) physical damage.\nDespite this ability not applying  on-attack effects, it does apply  Navori Flickerblade's Transcendence.(bug)\nUnder certain circumstances, upon attaching the hook to terrain, Akshan will create a particle on the location permanently.(bug)\nThis particle can be attacked by minions.\nThis ability's damage is calculated based on the caster's current stats and changes dynamically.\nPENDING FOR TEST: Hook range including lollipop against walls, automated attacks range while swinging, final dash distance and speed.\nThe following table refers for interactions while the hook is attached or in flight:\n\n\nAttacking\n\nAutomatically initiates the second cast.\n\n\nAbilities\n\n Avengerang and  Going Rogue are disabled.  Comeuppance is usable.\n\n\nMovement\n\nAutomatically initiates the second cast.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\nN/A\n\n\nDisabled\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects\n\nThe following table refers for interactions while Akshan is swinging:\n\n\nAttacking\n\nAutomatically initiates the third cast.\n\n\nAbilities\n\n Avengerang and  Going Rogue are disabled.  Comeuppance is usable.\n\n\nMovement\n\nAutomatically initiates the third cast.\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Zhonya's Hourglass  Hextech Rocketbelt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Hexflash\n\n\nDisabled\n\n Teleport  Recall\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Immobilizing effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Comeuppance",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Akshan locks onto the target enemy champion and begins  channeling power into his gun to store bullets,  revealing them as well as  revealing himself. Comeuppance will recast after the channel, or can recast early.",
+      "description_source": "Comeuppance refreshes the duration of  Dirty Fighting stacks on the target every 0.25 seconds.\nA kill threshold will appear on the health bar of the target locked onto during the channel, which increases each time Akshan stores a bullet. If the target's current health falls below the threshold, their health bar will be framed in red.\nThe indicator factors the bonus damage applied by  Dirty Fighting as well as damage modifiers and the target's resistances.\nIt also factors the projected increase in the target's missing health, from which each consecutive bullet scales more.\nIt updates dynamically over the channel's duration, reacting to fluctuations of the target's health and damage mitigations.\nThe  reveal will linger for 2 seconds after the channel has ended.\n Spell shield will not prevent the lock-on and will only block a single bullet.\nComeuppance will not go on a reduced cooldown if Akshan  dies during the channel.\nComeuppance will cancel if the target becomes  untargetable or  dies during the channel.\nDamage to structures does scale with their missing health.\nThis ability's damage is calculated based on the caster's current stats and changes dynamically.\nComeuppance is special cased to put  Neeko's  Inherent Glamour on cooldown when targeting Neeko and to break the disguise before damaging her.\nThe following table refers for interactions while Akshan is  channeling:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\n Avengerang and  Going Rogue are disabled.  Heroic Swing is usable.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Flash\n\n\nDisabled\n\n Teleport  Recall\n\n\nInterrupted by\n\n Hexflash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

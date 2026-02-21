@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Heimerdinger",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MAGE",
+    "SPECIALIST",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 55.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 558.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 385.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 19.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 56.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Hextech Affinity",
+      "type": "Passive",
+      "description": "Innate:  Heimerdinger gains  bonus movement speed while near allied  towers and  turrets he deploys.",
+      "description_source": "No additional details.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "H-28G Evolution Turret",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Heimerdinger deploys a rapid-fire turret that deals magic damage to his target, or a nearby enemy. The turret will become dormant while he leaves it alone.",
+      "description_source": "Deals  spell damage on basic attacks and  area damage on the beam.\nThe H-28G Evolution Turret's stats update every second to reflect rank ups, level ups, and changes in Heimerdinger's ability power.\nThe Turret Kit buff will visually represent the recharge rate cooldown, and how many H-28G Evolution Turret's that Heimerdinger has stored. This is visible to both allies and enemies.\nThe recharge rate of H-28G Evolution Turret is affected by ability haste.\nThe H-28G Evolution Turret has a  sight radius of 585 while active and 227.5 while dormant.\nThe amount of Turret Kit charges Heimerdinger has is indicated by small nuts orbiting him.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Hextech Micro-Rockets",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Heimerdinger fires a wave of rockets that converge to the target location and fan beyond it to max range, each dealing magic damage to the first enemy hit. Enemies take less damage from subsequent rockets that hit them.",
+      "description_source": "If casting beyond 1000 units based off current Heimerdinger's position, every rockets aim towards Heimerdinger's position extended towards cast position by 1100 units\nHextech Micro-Rockets'  direction-targeting allows for custom spread.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "CH-2 Electron Storm Grenade",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Heimerdinger lobs a grenade to the target location that deals magic damage and  slows nearby enemies. Enemies hit at the epicenter are also  stunned.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "UPGRADE!!!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Heimerdinger can empower his next ability to apply an additional effect. These empowered abilities have the same  cooldowns as their basic forms, deal modified damage, and do not cost mana.",
+      "description_source": "Toggle abilities do not count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nConsuming the buff for an empowered basic ability does.\nNo compensations for  mana are made if UPGRADE!!! is recast.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

@@ -1,5 +1,6 @@
 pub(crate) mod abilities;
 pub(crate) mod decisions;
+pub(crate) mod enemy;
 pub(crate) mod hook;
 
 pub(crate) use abilities::{

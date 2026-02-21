@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Gangplank",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "SPECIALIST"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.25,
+      "total_attack_time_seconds": 1.51999998092651,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 280.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 31.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Trial by Fire",
+      "type": "Passive",
+      "description": "Innate: Every few seconds,  Gangplank's next basic attack  on-hit will burn the target, continually dealing bonus true damage and granting him  bonus movement speed.",
+      "description_source": "Reapplying Trial by Fire before a previous application has run out will stack the full damage, instead of refreshing the duration.\nIf the attack is  dodged or if Gangplank is  blinded, the effect is not applied nor does Trial by Fire go on cooldown. If the attack is  blocked, the effect is not applied, but Trial by Fire will go on cooldown.(note)\nThe empowered attack will not trigger against non- turret structures nor  wards.\nTrial by Fire also cannot be applied by  Guinsoo's Rageblade's Seething Strike.\nBut it can be applied by  Dusk and Dawn's Spellblade.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Parrrley",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Gangplank shoots the target enemy with his pistol, dealing physical damage and applying  on-hit and  on-attack effects.",
+      "description_source": "Parrrley deals  basic damage, but also triggers spell effects by also being tagged as  spell damage.\n Fleet Footwork will always trigger its melee effect, even when it is triggered by Parrrley.\n On-hit effects that deal damage to secondary targets will allow Parrrley to plunder from enemies killed that way, much like with  Powder Kegs.\n Ravenous Hydra and  Titanic Hydra work like this and will grant additional plunder from enemies they kill when triggered by Parrrley as their cast instance.\nEven spell effects such as  Luden's Companion will work with this when triggered by Parrrley as their cast instance. Spell effects that do not belong to their triggering cast instance, such as  Liandry's Torment's damage debuff, do not grant plunder for enemies they kill.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Remove Scurvy",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Gangplank eats citrus to  cleanse  crowd control effects and  heal based on his missing health.",
+      "description_source": "Remove Scury does not remove debuffs other than  crowd control, even if both occur from the same effect. For example, Remove Scurvy will dispel the  slow from  Exhaust, but not its damage reduction.\nRemove Scurvy can remove the underlying  stun from  airborne, but a  blink or  dash ability is required to override the displacement.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Powder Keg",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Gangplank places a Powder Keg at the target location, which can be  attacked or  shot to damage it. If an enemy destroys a Powder Keg, it is safely dismantled.",
+      "description_source": "The  slow, bonus physical damage to champions, and keg health decay speed are determined when the keg is placed.\nThe triggering attack's damage can include  Parrrley's base damage and  Spellblade.\nThe percentage armor penetration stacks multiplicatively with other sources of percentage armor penetration.\nWhen triggered with critical strike, Spellblade and the bonus damage to champions are added after the calculations.\nDamage modifiers (eg.  Riftmaker's Void Corruption, mode-specific modifiers), with the exception of  Spear of Shojin's Focused Will, are applied to both the damage dealt to and by each keg.(bug)\nFor example, if Gangplank  attacks a chain of kegs with 100 AD and a 10% damage increase, the first keg in the chain will deal 110 damage, the second will deal 121 damage, the third will deal 133 damage, and so on.\nThe total damage can be calculated with this formula:{aDMG * [2 ( + 0.30)]} + sDMG + cDMGWhere:\naDMG = Triggering attack's damage\nsDMG = Spellblade's damage\ncDMG = Bonus damage to champions\nKegs have special interactions with  Spellblade:\nIf the keg destroying attack was empowered with Spellblade, its damage will be added to the explosions' damage.\nIf the keg was not destroyed, it will consume the effect and the keg will store the damage it would have dealt. If the storing keg is the initial detonation of the chain, it will add its damage to the explosions' damage as if it was triggered with Spellblade.\nIf the storing keg was attacked with a new instance of Spellblade, it will override the previously stored damage (if different).\nDamage can only be stored if Spellblade was consumed by Gangplank.\nThe stored damage is static and will not change if Gangplank's base attack damage or ability power (see below) changes.\nSpecific  Spellblade item interactions:\n Bloodsong: Dealing damage with kegs to champions won't apply Expose Weakness to them.\n Iceborn Gauntlet: The frost field will be created on the location of the keg that is attacked.\n Lich Bane: The magic damage will be added to the explosions' damage, but will be dealt as physical damage.\n Trinity Force: Attacking kegs grants the movespeed from Quicken; dealing damage with the explosion does not since it does not trigger  on-hit effects.\nKegs triggering a chain reaction will show a lit fuse traveling toward other kegs.\nThe lit fuse is only visual and does not affect the time it takes for kegs to explode.\nPlaced kegs do not grant  vision until they explode, but they are revealed to Gangplank.\nIf Gangplank loses allied vision, for instance due to  nearsight, he will also lose vision on his kegs temporarily.\nKegs prematurely grant  sight of their explosion radius (including across terrain and into bushes) if  Parrrley or a lit fuse is traveling towards them.\nThis area reveal happens even if  Parrrley is not going to make it explode.\nAn exploding Powder Keg will splash  Parrrley's bonus damage, and will also be modified if the attack  critically strikes.\nAttacks against Powder Kegs will apply  on-hit effects (such as  Tiamat's Cleave), but  proc damage against the keg itself is reduced to 0.\nDamage from on-hit effects will therefore not increase the damage of the explosion.\n Spellblade is a special-cased exception.\nPowder Kegs will take damage from effects that apply on-hit effects (eg.  Guinsoo's Rageblade's Seething Strike ), but will remain at 1 health if they would be killed by them.\n Dead Man's Plate's Crushing Blow will not trigger from Powder Kegs destroyed from Gangplank, even with  Parrrley.\nThe number of Powder Kegs in stock is visible under Gangplank's health bar for all players.\nGangplank stocks Powder Kegs even if the ability hasn't been learned yet.\nThis is due to the recharge rate at level 1 being set the same as level 0.\nWhile at maximum charges, ranking up the ability to rank 3 or 5 grants the remaining charge immediately regardless of the recharge timer.\nIf a keg is destroyed during the 0.33 seconds-delay between explosions, Gangplank will plunder  gold and  Silver Serpents upon killing enemies as if he had done so using  Parrrley.(bug)\nThis effect persists through  death and will only end upon killing an enemy with  Parrrley.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "charge",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Cannon Barrage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Gangplank orders a cannon bombardment to the target location, each blast deals magic damage and  slows enemies within.",
+      "description_source": "Gangplank's upgrades for Cannon Barrage are offered through a special menu in the HUD which is only visible while inside the area eligible for accessing the shop. Within the special menu, the player can purchase an upgrade by  clicking on its portrait or via the Champion Specific Interaction hotkeys (default: Shift+F1:F3).\nPurchased upgrades have a trim around their portrait. Upgrades that he does not have enough currency to purchase are greyed out.\nCannon Barrage's slow lingers for 0.25 seconds after affected enemies leave the target area.\nIf an Attack order is issued and is being cycled through casting Cannon Barrage, and no other order is issued after casting it, Gangplank's next basic attack is delayed by 1 second.\nUpgrade menu HUD. Located above the inventory.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

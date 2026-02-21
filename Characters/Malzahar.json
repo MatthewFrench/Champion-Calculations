@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Malzahar",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "BATTLEMAGE",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 580.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 375.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 18.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 500.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Void Shift",
+      "type": "Passive",
+      "description": "Innate: Periodically,  Malzahar gains Void Shift until he takes non- minion damage or negates a  crowd control effect, to which it then lingers for a brief time before expiring.",
+      "description_source": "Void Shift will not resist allied  crowd control nor will it be deactivated by them.\nVoid Shift will not mitigate  true damage but the buff will still be consumed.\nIt does not deactivate against the  Nexus Obelisk.\n Shields will take priority over Void Shift, but the buff is always consumed, even if the shield fully mitigates the damage. (bug)\nHowever, if Malzahar has a  spell shield and is hit by an effect that isn't negated by the spell shield, then if the  shield fully mitigates the damage, Void Shift will not be consumed.\n Spell shields take priority over Void Shift for abilities that contain a  crowd control effect.\nIf the hostile ability does not contain a  crowd control effect, then both Void Shift and the spell shield break simultaneously. (bug)\nVoid Shift will specifically not deactivate if Malzahar eats  Honeyfruit or is within a hostile  Frozen Heart passive aura.\nVoid Shift will prevent  Chum the Waters from attaching to him.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Call of the Void",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Malzahar opens two portals to the void at the target location that last a brief time, which then deal magic damage to enemies between and briefly  silence them.",
+      "description_source": "Spell shield will prevent Call of the Void's refresh on  Malefic Visions.\n Malefic Visions' debuff will also be removed.(note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Void Swarm",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive:  Malzahar generates a stack of Zz'Rot Swarm when he casts another  ability, up to a maximum.",
+      "description_source": "Malzahar loses all  stacks upon  death.\nZz'Rot Swarm stacks are gained per cast and not per ability activation. For example, if  Malefic Visions is cast and the ability cancels under certain circumstances, a Zz'Rot Swarm stack will still be granted despite the ability's failure to complete.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Malefic Visions",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Malzahar infects the target enemy's mind, continually dealing magic damage over a few seconds, which refreshes upon damaging them with  Call of the Void or  Nether Grasp.",
+      "description_source": "Malefic Vision's cast is special cased to not be cancelled if the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time.\nThe debuff is not applied if the target is untargetable by the time the cast completes.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Nether Grasp",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Applies  persistent damage for the  tether and  persistent area damage to enemies within the Null Zone.\n Spell shield prevents both the tether and the Null Zone from appearing, however Malzahar will continue to channel. [2]\nThe tether will not break if the target enters a  zombie state or enters  resurrection.\nAs long as the target is within the tether radius, they will take the full tether damage over 2.5 seconds even if they are not tethered due to the tether being broken early into the channel.(bug)\nThis occurs regardless of how the tether was broken.\nIf the target exits tether range they will stop taking damage, but can be damaged again by the remaining ticks if they re-enter the tether range within the duration.\nRemoving the  suppression will also remove the  reveal.\nMalzahar places himself onto the ground and interrupts  displacements affecting him upon starting the channel.\nIf a target is currently being affected by  Malefic Visions, casting Nether Grasp on them will grant 2 stacks toward effects such as  Electrocute or  Phase Rush.(bug)\nThis is, correctly, not the case if Nether Grasp is cast before Malefic Visions.\nThe following table refers for interactions while Malzahar is  channeling:\nThe channel will be interrupted if the tether is broken.\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled if attacking Nether Grasp target. Otherwise interrupts after 0.5 seconds of channeling.\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nDisabled for the first 0.5 seconds. Interrupts afterwards.\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "Applies  persistent damage for the  tether and  persistent area damage to enemies within the Null Zone.\n Spell shield prevents both the tether and the Null Zone from appearing, however Malzahar will continue to channel. [2]\nThe tether will not break if the target enters a  zombie state or enters  resurrection.\nAs long as the target is within the tether radius, they will take the full tether damage over 2.5 seconds even if they are not tethered due to the tether being broken early into the channel.(bug)\nThis occurs regardless of how the tether was broken.\nIf the target exits tether range they will stop taking damage, but can be damaged again by the remaining ticks if they re-enter the tether range within the duration.\nRemoving the  suppression will also remove the  reveal.\nMalzahar places himself onto the ground and interrupts  displacements affecting him upon starting the channel.\nIf a target is currently being affected by  Malefic Visions, casting Nether Grasp on them will grant 2 stacks toward effects such as  Electrocute or  Phase Rush.(bug)\nThis is, correctly, not the case if Nether Grasp is cast before Malefic Visions.\nThe following table refers for interactions while Malzahar is  channeling:\nThe channel will be interrupted if the tether is broken.\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled if attacking Nether Grasp target. Otherwise interrupts after 0.5 seconds of channeling.\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nDisabled for the first 0.5 seconds. Interrupts afterwards.\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

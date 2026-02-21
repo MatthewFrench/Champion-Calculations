@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Fiora",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.200000002980232,
+      "total_attack_time_seconds": 1.45000004768371,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 300.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.69,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 150.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Duelist's Dance",
+      "type": "Passive",
+      "description": "Innate:  Fiora challenges nearby enemy champions, calling out a direction from which she will try to strike their Vitals. A new Vital is called out after some time or if one is struck.",
+      "description_source": "Vitals can be triggered by any source of damage Fiora deals, except those with  default damage and  reactive damage types.\nThe Vitals are visible to all units.\nA Vital's angle is fixed to the champion's model and doesn't interact with its orientation.\nVitals spawn directions alternate in a Northeast-Southwest pattern. Other than that, they have a 50% chance to spawn North or East, or South or West, respectively.\nPENDING FOR TEST: The direction of the first Vital upon Fiora and her enemy encountering one another in the game for the first time is always South- or Westward. This is regardless of whether Fiora is in the Blue or Red team.\nVitals will not trigger if the attack is  dodged or missed while Fiora is  blinded.\n Block will not prevent a trigger.\nIf the Vital is triggered by  Lunge, it can be  dodged, but it can't be  blocked and will trigger even if Fiora is  blinded.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Lunge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Fiora  dashes in the target direction and then stabs a nearby enemy, dealing physical damage and applying  on-hit effects.",
+      "description_source": "Lunge deals  basic damage, but also triggers spell effects by also being tagged as  spell damage.\nLunge's dash speed is modified by her bonus movement speed at the time of cast:\n1100 + 350% bonus movement speed, capped at 1600 maximum dash speed if bonus movement speed is positive.\n1100 + 300% bonus movement speed, capped at 850 minimum dash speed if bonus movement speed is negative.\nThe stab searches for targets in its radius and prioritizes in order of:\nNearest enemy champion affected by  Grand Challenge with a Vital facing Fiora.\nNearest enemy champion with their Vital facing Fiora.\nNearest enemy champion affected by  Grand Challenge.\nEnemy champion with the lowest health percent out of all champions <20% remaining health.\nNearest enemy champion, minion, or monster within 60% of the radius ( 252) with current health below Lunge's pre-mitigation damage.\nNearest enemy champion in the radius check.\nNearest champion in a  rectangular check with 160 width and 450 units length backwards from Fiora's current facing direction, ignoring the normal radius check.\nTurning Fiora's facing direction during the dash (e.g. by casting  Riposte) can create some very long range hits opposite to her new facing direction, especially against targets with a large gameplay radius.(bug)\nNearest enemy minion with current health below Lunge's pre-mitigation damage.\nAny nearest enemy minion or monster.\nStructures.\nVisible wards.\nLunge cannot target jungle plants.\nFiora does not stab if the  dash is  interrupted.\n Flash is disabled during the dash.\nLunge can be  dodged or  blocked, negating its damage.\nLunge does not apply  on-attack effects but is special cased to stack  Energized upon hitting an enemy.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Riposte",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Fiora briefly parries all incoming damage and  debuffs, then stabs in a direction, dealing magic damage to enemies hit.",
+      "description_source": "Riposte is not  invulnerability but instead reduces any damage to her by 100% late into the damage event. Because of this, it interacts differently with effects triggered from damage:\n Life steal and  Healing based on damage dealt (Vamp) will still have effect even if the damage is ultimately ignored by Riposte.\n Shields will absorb damage before Riposte takes effect.\nFiora cannot be  executed by  Pyke's  Death from Below during Riposte, but she may by  Aspect of the Dragon.\nRiposte prevents  Azir's  Shurima's Legacy's  Sun Disc damage. (note)\nThe debuff immunity encompasses:\n Crowd control.\nNote this isn't  cc-immune, and effects that look specifically for that will not consider Riposte (i.e  Yasuo's  Last Breath may not be cast on cc-immune targets but it can be cast while Fiora is in Riposte [3]).\nDebuffs from summoner spells such as  Exhaust's damage reduction and all of  Ignite's effects.\n Persistent damage application.\n Tether application (i.e  Camille's  The Hextech Ultimatum,  Illaoi's  Test of Spirit), with the exception of  Malzahar's  Nether Grasp [4].\nSome mark application (i.e  Fiora's  Duelist's Dance,  Zilean's  Time Bomb), but not some other (i.e  Braum's  Concussive Blows and  Winter's Bite,  Caitlyn's  Ace in the Hole,  Kennen's  Electrical Surge on-hit,  Fiora's  Grand Challenge,  Tahm Kench's  Tongue Lash,  Vi's  lock-on).\nRiposte will not negate  nearsight.\n Immobilizing effects include those from  Blast Cone (only if triggered by an enemy) and  epic monsters.\nThe ability does not count  K'Sante's  All Out as an immobilizing effect. (bug)\nIn the last 0.25 seconds of Riposte's duration, Fiora cannot be selected. This is distinct from  untargetability and there are no known interactions beyond this.\nRiposte's effect prioritization is as follows:\nRiposte will negate effects before  spell shields.\n Black Shield will negate  crowd control before Riposte.\nBeing hit by a crowd control while affected by Black Shield means Riposte will not trigger its  stun empowerment condition, as it itself must negate the  immobilize and not any other external source.\n Spell shield will also prevent Vitals from being triggered by Riposte's shock.\nThe shock missile will be fired from wherever Fiora is after the first 0.5 seconds of Riposte.\nThe following table refers for interactions while Fiora is performing Riposte:\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Bladework",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Fiora gains  bonus range and  bonus attack speed for the next two attacks.",
+      "description_source": "Spell shield will only block the slow from the first hit.\n Sundered Sky's Lightshield Strike's critical damage will override Bladework's if the resulting damage would be higher.\nThis does not account for any critical damage bonuses that may affect Lightshield Strike.\nBladework's first basic attack will slow even if it is  dodged,  blocked or  missed.\nNeither Bladework attack will deal damage if it is  dodged,  blocked or  missed.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Grand Challenge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Duelist's Dance's  bonus movement speed is increased.",
+      "description_source": "Grand Challenge is dispelled instantly if targeting a decoy.\nGrand Challenge cannot be cast on  Sion's  Glory in Death.\nThe damage of this ability scales with  Duelist's Dance.\nEven if Fiora dies, the  Victory Zone will trigger so long as she hit at least one Vital and they die before the Vitals wear off.\n Resurrection effects will not prevent the activation of the  Victory Zone.\nThe  Victory Zone will not heal  untargetable units.\nFiora will automatically attack the target upon casting if the target was selected while they were not in range of the ability.\nAttempting to cast Grand Challenge on a target already affected by it will incur a 1-second cooldown and a text saying that the ability cannot be stacked will pop out of the target.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

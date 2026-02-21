@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Lillia",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "MAGE",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 605.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 2.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 410.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 11.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 22.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 325.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Dream-Laden Bough",
+      "type": "Passive",
+      "description": "Innate:  Lillia's abilities apply Dream Dust to enemies hit, which continually deals magic damage based on the target's maximum health over a short time, and  heals her for the same duration.",
+      "description_source": "Lilting Lullaby's application does not apply Dream Dust, but its triggering damage does.\nDream Dust is applied even if the target takes no damage from an ability, e.g. by being  shielded or  invulnerable, but not when the ability hit is prevented in the first place (e.g.  spell shield).",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Blooming Blows",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive: Whenever  Lillia's  abilities hit at least one enemy, she generates a  stack of Prance, up to a cap.",
+      "description_source": "Spell shield will not prevent Lillia from gaining a Prance stack.\nFor the purpose of aim-assist, Lillia's  attack range is reduced[ to 275 ][ by 50 ]during Blooming Blows's cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Watch Out! Eep!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Lillia  dashes toward the target area and smashes her censer, dealing magic damage to enemies hit. Enemies hit within the epicenter are dealt  increased damage.",
+      "description_source": "Lillia dashes to her target location over 0.6 to 0.767 seconds, but cannot move before the strike goes off at 0.767 seconds, regardless.\nLillia can hop over the edges of certain walls despite the ability being unable to traverse terrain.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Swirlseed",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Lillia lobs a seed at the target area that rolls forward indefinitely. The seed detonates upon hitting an enemy or terrain, dealing magic damage to enemies in a cone,  slowing and  revealing them for a short time.",
+      "description_source": "Swirlseed's origin is determined from Lillia's position at the start of cast, the rolling direction is determined from Lillia's position at the end of cast (when the projectile is created, not when the seed starts rolling).\n Spell shield does not prevent the seed from detonating thus striking nearby targets.\n Projectile destroying effects will still make the rolling seed detonate upon colliding with them, but not when the initial arcing missile is destroyed.\nIf  Braum's  Unbreakable blocks the initial projectile, it is destroyed and deals 0 damage to him, as well as not triggering the cone-shaped area of effect.\nThe spot at which the seed will collide with terrain is highlighted while it is rolling.\nCollision indicator",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Lilting Lullaby",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Lillia casts a magical lullaby over all enemy  champions affected by  Dream Dust, making them  drowsy before falling  asleep for a few seconds.",
+      "description_source": "Spell shield will not prevent falling  asleep nor block the wake-up damage.\nThe lullaby's  drowsy application will be blocked.\nThe additional magic damage dealt is accredited to Lillia and benefits from her  magic penetration.\nLilting Lullaby's missile will not hit a target that becomes  untargetable during the cast time or while it is travelling, or is in another realm.\nLilting Lullaby's application does not trigger aggro from  turrets, only its triggering damage does.\n Dream Dust's persistent damage will still cause Lillia to trigger turret aggro, unless she casts Lilting Lullaby right before it runs out.\n Dream Dust will mark targets if Lilting Lullaby is learned.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

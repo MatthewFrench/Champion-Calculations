@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Jax",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ASSASSIN",
+    "FIGHTER",
+    "SKIRMISHER"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 339.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 36.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 350.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Relentless Assault",
+      "type": "Passive",
+      "description": "Innate:  Jax's  basic attacks generate  stacks, up to a cap. Stacks expire one at a time.",
+      "description_source": "Jax will start fishing while idle in the river if he is in-combat with only monsters (e.g. any of the three Epic monsters).(bug)\nJax catching a fish is a random event and will play a special animation.\nThe total number of fish caught during the game is displayed when fishing as  Grandmaster at Angling passive.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Leap Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Jax  dashes to the target unit. If they are an enemy, he deals physical damage.",
+      "description_source": "Leap Strike cannot be cast on  structures.\nIf the target is an enemy champion, Jax will be ordered to  basic attack them after the dash ends.\n Spell shield will block the damage, including when  empowered.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Empower",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Jax empowers his next basic attack or  Leap Strike against an enemy to deal additional magic damage.",
+      "description_source": "Empower is applied in a separate damage instance from Jax's basic attacks.\nThis causes effects like  Bone Plating to be applied twice.(note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Counter Strike",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Jax enters Evasion for a short time: a defensive stance that causes him to  dodge all incoming non- turret basic attacks and take reduced damage from all  area of effect abilities from  champions.",
+      "description_source": "The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nCounter Strike will also dodge abilities that can trigger  on-hit effects ( Parrrley,  Mystic Shot) which will count towards Counter Strike's increased damage. There are exceptions of abilities that Counter Strike will not dodge but will dodge the damage from  on-hit effects that they trigger ( Alpha Strike,  Piercing Darkness).\nThe damage based on the target's maximum health is capped at 9000 against  monsters. This is a placeholder value and impossible to reach because it requires a monster to have over 128571 health.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Grandmaster-at-Arms",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Jax's  basic attacks generate  stacks. At max stacks, he consumes them to deal additional magic damage.",
+      "description_source": "The on-hit deals  proc damage. The swing deals  area damage.\nThe bonus resistances are represented by a glowing aura around Jax that grows with each enemy champion hit beyond the first.\nThe additional magic damage can be  dodged and  blocked but it cannot  miss.\n Spell shield will only block the additional damage from the third attack if it is  empowered.\nThe empowered attack will trigger but not be consumed nor apply its effects against  wards.\nStacks will still be generated when attacking them.\nThe empowered attack is applied in a separate damage instance from Jax's basic attacks.\nThis causes effects like  Bone Plating to be applied twice.(note)\n\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

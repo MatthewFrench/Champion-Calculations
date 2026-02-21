@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Trundle",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "JUGGERNAUT",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 340.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 37.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.67,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 175.0,
+    "move_speed": 350.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "King's Tribute",
+      "type": "Passive",
+      "description": "Innate: Enemies that die near  Trundle cause him to  heal based on their maximum health.",
+      "description_source": "King's Tribute does not trigger when an enemy structure is destroyed.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Chomp",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Trundle's next  basic attack within a few seconds will deal bonus physical damage and briefly  slow the target.",
+      "description_source": "Chomp will still incur the  attack damage increase for Trundle even if the attack is  dodged,  blocked, missed while he is  blinded, or it is blocked by  spell shield.\n Spell shield will only block the attack damage reduction and  slow.\nIf the attack damage reduction would reduce the target's bonus attack damage below 0, the target's base attack damage value is unaffected, but their total attack damage will still be reduced. The target will however retain a bonus attack damage value of 0.\nEffects that scale with total attack damage, such as basic attacks, will take the attack damage reduction into account for their calculations.\nThose that have a ratio for base attack damage or bonus attack damage do not take the reduction into account.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Frozen Domain",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Trundle coats the target location in ice for a period. While he is within the area, he gains  bonus attack speed,  bonus movement speed, and increased  healing from all sources.",
+      "description_source": "No additional details.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Pillar of Ice",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Trundle erects an ice pillar at the target location that remains for a few seconds, which  knocks back units hit. The pillar acts as terrain and  slows nearby enemies.",
+      "description_source": "Pillar of Ice displaces allied units away from the area but does not render them  airborne.\nAllied  channels (e.g.  Recall,  Teleport) will be  interrupted however.\nPillar of Ice cannot be placed inside impassable terrain. Attempting to do so will cause the pillar to spawn in the nearest available spot of accessible terrain.\nPillar Of Ice triggers effects such as drawing turret aggro,  Sudden Impact and applying  Elixir of Sorcery by dealing 0  proc  true damage.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Subjugate",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Trundle drains the life force of the target enemy champion, dealing magic damage based on their maximum health and  healing for the same amount. He also steals a portion of their  armor and  magic resist, and increases in  size while reducing their  size.",
+      "description_source": "Subjugate will snapshot the values of the target's current maximum health, total armor, and total magic resistance as soon as it completes its cast. The drain debuff will calculate the remaining half of the damage, healing, and resistances reduction based on these snapshotted values, even if the target's health or resistances change. The snapshot lasts until the debuff expires.\nThe target's resistances will be further reduced by 5% per drain tick, up to 20% by the end of the drain (totaling to 40% reduction from the initial 20% reduction on-cast).\nTrundle will gain the reduced resistances of the target for himself for as long as they remain reduced, including while they are lingering after the drain.\nThe resistances gained is based on the current reduced resistances of the target; the total amount that would be reduced is not granted to Trundle all at once. In other words, he will initially gain 20% of the target's resistances, then the remaining 20% over the 4 seconds, gaining additional bonus resistances equal to the resistances reduced per drain tick.\nTrundle gains 11.7 extra  range on his  basic attacks (relative to his and enemy center) as a consequence of his increased  size.\nSo do his enemies.\nHe gains 3.78 to 6.255 range against the target he subjugated, depending on their base size, and so does the target against him.\nThe debuff on the target also persists through death.\nTrundle will lose the buff if the target loses the debuff, for example if it enters  resurrection.(note)\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

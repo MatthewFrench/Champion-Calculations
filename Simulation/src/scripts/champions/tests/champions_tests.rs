@@ -112,3 +112,129 @@ fn morgana_soul_shackles_emits_damage_and_followup() {
         _ => panic!("expected followup action"),
     }
 }
+
+#[test]
+fn vladimir_enemy_script_registers_three_offensive_events() {
+    let events = scripted_champion_events("Vladimir");
+    assert_eq!(
+        events,
+        vec![
+            ChampionScriptEvent::VladimirTransfusion,
+            ChampionScriptEvent::VladimirTidesOfBlood,
+            ChampionScriptEvent::VladimirHemoplague,
+        ]
+    );
+}
+
+#[test]
+fn vladimir_transfusion_applies_magic_damage_in_range() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let actions = execute_champion_script_event(
+        base_script_input(ChampionScriptEvent::VladimirTransfusion),
+        &mut runtime,
+    );
+    assert_eq!(actions.len(), 1);
+    match actions[0] {
+        ChampionScriptAction::ApplyDamage {
+            magic,
+            stun_duration,
+            ..
+        } => {
+            assert!((magic - 340.0).abs() < 1e-9);
+            assert_eq!(stun_duration, 0.0);
+        }
+        _ => panic!("expected damage action"),
+    }
+}
+
+#[test]
+fn vladimir_hemoplague_is_skipped_out_of_range() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let mut input = base_script_input(ChampionScriptEvent::VladimirHemoplague);
+    input.distance_to_target = 10_000.0;
+    let actions = execute_champion_script_event(input, &mut runtime);
+    assert!(actions.is_empty());
+}
+
+#[test]
+fn vayne_condemn_applies_physical_damage_in_range() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let actions = execute_champion_script_event(
+        base_script_input(ChampionScriptEvent::VayneCondemn),
+        &mut runtime,
+    );
+    assert_eq!(actions.len(), 1);
+    match actions[0] {
+        ChampionScriptAction::ApplyDamage {
+            physical, magic, ..
+        } => {
+            assert!((physical - 215.0).abs() < 1e-9);
+            assert_eq!(magic, 0.0);
+        }
+        _ => panic!("expected damage action"),
+    }
+}
+
+#[test]
+fn warwick_jaws_of_the_beast_applies_magic_damage() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let actions = execute_champion_script_event(
+        base_script_input(ChampionScriptEvent::WarwickJawsOfTheBeast),
+        &mut runtime,
+    );
+    assert_eq!(actions.len(), 1);
+    match actions[0] {
+        ChampionScriptAction::ApplyDamage { magic, .. } => {
+            assert!((magic - 790.0).abs() < 1e-9);
+        }
+        _ => panic!("expected damage action"),
+    }
+}
+
+#[test]
+fn sona_hymn_of_valor_applies_magic_damage_in_range() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let actions = execute_champion_script_event(
+        base_script_input(ChampionScriptEvent::SonaHymnOfValor),
+        &mut runtime,
+    );
+    assert_eq!(actions.len(), 1);
+    match actions[0] {
+        ChampionScriptAction::ApplyDamage { magic, .. } => {
+            assert!((magic - 290.0).abs() < 1e-9);
+        }
+        _ => panic!("expected damage action"),
+    }
+}
+
+#[test]
+fn morgana_tormented_shadow_applies_magic_damage_in_range() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let actions = execute_champion_script_event(
+        base_script_input(ChampionScriptEvent::MorganaTormentedShadow),
+        &mut runtime,
+    );
+    assert_eq!(actions.len(), 1);
+    match actions[0] {
+        ChampionScriptAction::ApplyDamage { magic, .. } => {
+            assert!((magic - 535.0).abs() < 1e-9);
+        }
+        _ => panic!("expected damage action"),
+    }
+}
+
+#[test]
+fn doctor_mundo_blunt_force_trauma_empowers_next_attack() {
+    let mut runtime = ChampionLoadoutRuntime::default();
+    let actions = execute_champion_script_event(
+        base_script_input(ChampionScriptEvent::DoctorMundoBluntForceTrauma),
+        &mut runtime,
+    );
+    assert_eq!(actions.len(), 1);
+    match actions[0] {
+        ChampionScriptAction::AddNextAttackBonusPhysical { amount, .. } => {
+            assert!((amount - 45.0).abs() < 1e-9);
+        }
+        _ => panic!("expected add-next-attack action"),
+    }
+}

@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Renata Glasc",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "ENCHANTER",
+    "MAGE",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 545.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 350.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 11.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 27.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 49.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Leverage",
+      "type": "Passive",
+      "description": "Innate:  Renata's basic attacks apply a mark that lasts a few seconds and expires when attacking a new enemy. If the enemy was unmarked, this also deals bonus magic damage based on the target's maximum health.",
+      "description_source": "Spell shield will not block the mark's application.\nPENDING FOR TEST:: Interaction with mark consumption\nThe mark's consumption by an ally respects  enchantment redirection.\nLeverage's mark will be applied even if the attack misses due to  blind.\nPENDING FOR TEST: Interaction between mark application and consumption and parry effects ( block,  dodge,  blind*).",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Handshake",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Renata fires a hook in the target direction that deals magic damage to the first enemy hit and briefly  roots them. She can recast the ability while the target is rooted.",
+      "description_source": "Applies  spell damage to the primary target and  area damage to secondary targets.\nHandshake's interaction between its tether and root:\nIf the root is not applied, neither is the tether.\nThe tether's duration lasts the same as the root duration, even if it is modified by  tenacity.\nIf the root is removed, the tether is as well, but not vice versa.\n Spell shield will block the hook but not the recast's effects as the primary target.\nAs a secondary target, the recast's effects will be blocked.\nRenata may still move while the hook is in flight.\nHer facing direction is locked towards the target direction of the hook.\nWhile the target is hooked, Renata's facing direction is considered to be in their direction and not in the one she is moving.\nThe  movement speed reduction stacks additively with other  movement speed bonuses.\nIt is a negative bonus, not a  slow, and is thus not reduced by  slow resist.\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Bailout",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Renata grants herself or the target allied champion ramping  bonus attack speed in addition to  bonus movement speed toward enemies. Bailout's duration resets whenever the target scores a  takedown against an enemy champion.",
+      "description_source": "Damage taken in excess of the fatal damage taken does not apply to the target's health after it was restored.\nThe self-damage taken is considered  raw damage and is calculated based on the target's maximum health at the time of taking lethal damage.\nBailout's bonuses will not reset in effectiveness if its duration is refreshed.\nBailout takes priority over all  resurrection and  zombie state effects.\nBailout will stop refreshing its duration while the target is burning after 250 seconds have elapsed.\nBailout cannot be used on  clones nor  zombie state units.\nIf Bailout is cast on a target that is already burning from a previous Bailout cast, they can trigger a subsequent health restore as well as be inflicted with another burn. This may occur an infinite number of times as long as the target stays burning and does not reach 0 health.\nCasting Bailout on a target that already has the buff will only refresh the duration (without resetting the bonuses).\nIf the target takes fatal damage during Bailout, upon destroying a turret while being targeted by it, they will receive their own Shut-Down gold (specifically ignoring the base bounty) instead of being executed.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Loyalty Program",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Renata sends out two chemtech rockets that strike targets around her, then converge into a single missile that explodes at the target location.",
+      "description_source": "Spell shield will block either the rockets while they are in-flight or their explosion.\nThis ability will cast from wherever the caster is at the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Hostile Takeover",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Renata launches a cloud of potent chemicals that travels in the target direction. Enemy champions and minions hit briefly become  berserk, gaining  bonus attack speed.",
+      "description_source": "See Types of Crowd Control#Berserk for specific details on Berserk.\nThis ability will cast from wherever the caster is at the end of the cast time.\nTypically, any enemies killed that directly result from Berserk are credited to Renata Glasc.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

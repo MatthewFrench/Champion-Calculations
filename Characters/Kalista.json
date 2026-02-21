@@ -1,0 +1,157 @@
+{
+  "data_version": "1.0.0",
+  "name": "Kalista",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 560.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 300.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.3,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 24.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.694,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 525.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Martial Poise",
+      "type": "Passive",
+      "description": "Innate: During each  basic attack or casting of  Pierce,  Kalista can optionally choose a target direction to quickly  dash to. The range is based on dash angle and Kalista's Boots tier. The dash speed scales with bonus attack speed and certain movement speed effects.",
+      "description_source": "Basic attacks and  Pierce cannot be cast while dashing.\nMove commands inputted during an attack windup or the cast time of  Pierce while Kalista is  immobilized or  grounded will fail to cast and thus prevent the dash from triggering.\nIf multiple move commands are inputted during the attack windup, the most recent one is used for the dash's targeting.\nIf the most recent input is not a move command, the dash will not trigger.\nIn this case, the buffer for the previous move command was cancelled by a new non-move command such as an input for an attack or ability cast.\nThe move command will still be buffered to the end of the immobilization or the end of the attack windup or cast time of  Pierce while grounded if it has not been overridden by other inputs.\nKalista's facing direction will change immediately on move command even among multiple inputs, but will not visually update until the dash.\nThe facing direction when dashing is considered to be in the direction of the dash, not her apparent facing direction based on her model's animation state.\nDash distance decreases as the dash direction becomes closer to the minimum direction. This defines a forward distance for basic attacks and a backwards distance for  Pierce. Empirical testing has given the following values below.\nBasic attack dash range given the angle \u03b8:\n{(175+(125\u00d7sin\u2061(\u03b8)))\u00d7T\nWhere T=0.800,0.875,0.950,1.000 depending on the tier of Boots (T0, T1, T2, T3)\nMinimum dash range of 225 units when dashing backwards\n Pierce's dash range given the angle \u03b8:\n{150+(150\u00d7sin\u2061(\u03b8))Backwards300Otherwise\nThere is a very brief grace period after completing a basic attack windup wherein  Kalista can still input a movement command to trigger the dash.\nThe dash speed is unaffected by additive movement speed modifiers.\nThere are a total of 24 different dash ranges based on direction with Boots and  Pierce being cast.\nKalista will automatically be issued an attack command on her attack target at the end of the dash, as long as they remain in her attack range by then.\nThe attack move (default A + MB1) click feature checks for targets in brief intervals only if Kalista is not dashing.\n Sleep does not count for knocking the dash down.(bug)",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Pierce",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Kalista throws a spear in the target direction that deals physical damage to the first enemy hit.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Sentinel",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive - Soul-Marked: While  Kalista and her  Oathsworn are  tethered, their basic attacks and  Pierce apply a Soul-Mark to their targets for a few seconds. If both Soul-Marks are applied to the same target, they take bonus magic damage.",
+      "description_source": "The damage is dealt  on-attack of Kalista's basic attack if she applies the second mark. If the Oathsworn does so instead, the damage is dealt on-hit of their basic attack.\nSoul-Marked's bonus damage is credited to Kalista and will benefit from both her  magic penetration and spell effects.\nIf her  Oathsworn ally scores a kill using Soul-Marked's bonus damage they will get a message stating 'Kill Secured' in place of the usual gold pop-up (the gold itself is credited to Kalista).\nThe Sentinel's  sight reveal on enemy  champions is accredited for assists and potentially kills (if they die shortly after being spotted).\nIt does not reveal  stealthed targets.\nSentinel will cast from wherever Kalista is at the end of the cast time.\nPENDING FOR TEST: Soul Mark's interaction with parrying effects ( dodge,  block,  blind).\nPENDING FOR TEST: If Pierce kills the target by Soul-Mark's additional damage, it will/will not continue.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Rend",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Passive:  Kalista's  basic attacks  on-hit and  Pierce lodge a spear into their target, applying a  stack of Rend for a few seconds.",
+      "description_source": "Rend cannot activate on  untargetable enemies.\nRend applies its effects instantly on cast.\nThe cooldown will not reset if the target is protected by  resurrection effects.\nIf Rend is used against  Sion under the effects of  Glory in Death, the cooldown will reset even if it does not kill him.(bug)\nA stack is not applied if the attack is  dodged,  blocked or missed while Kalista is  blinded.\n Pierce does not apply a stack of Rend if blocked by  spell shield.\nWhile  berserk, Kalista's attacks will also apply Rend stacks on allies.\nKalista will be unable to cast Rend if there are no stacks on an enemy in range.\nRend cannot cast on allies, even if a valid enemy target exists. As such, any spears on allied units are purely cosmetic.\nRend has a lower cast range than effect range.\nRend at maximum stacks will deal a total of 1776 / 3557 / 5338 / 7119 / 8900 (+ 5130 / 6395 / 7660 / 8925 / 10190% AD) (+ 12715% AP) physical damage.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Fate's Call",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Kalista invokes her  tether to retrieve her Oathsworn,  vanishing and  cleansing them from all  crowd control, and hold them for a few seconds.",
+      "description_source": "The Oathsworn's landing location of the lunge is precisely to their base attack range from the closest target they hit and relative to where this target would be displaced to from the knock back.\nIn other words, the Oathsworn will land to a location where they are within their exact base attack range of the target by the end of the target's displacement.\nThe calculated landing spot does not evaluate if the target was successfully displaced or not, meaning that the Oathsworn will end up closer than their base attack range if the closest target hit was not knocked back.\nIf the Oathsworn does not hit any targets with the knock up effect, the dash will simply end and they will reappear at the target location.\nThe following will defer Fate's Call's effects at the time of cast to the end of their duration if the Oathsworn is:\nIn a cast time.\n Channeling.\nFate's Call will not defer by the following channels:  Recall,  Defiant Dance,  Realm Warp, and  The Culling.\nFate's Call cannot be cast during the following channels:  Teleport,  Gate,  Grand Starfall,  Hero's Entrance and  Stand United.\nUsing an ability that preloads UnstoppableForceMarker.\nIf the Oathsworn is still occupied after 6 seconds of being deferred from this time, Fate's Call will cancel.\nFate's Call will not pull the Oathsworn if they are  dashing but they will be retrieved after 1 second regardless.\nFate's Call can be cast even if the Oathsworn is  untargetable.\nFate's Call is disabled if the Oathsworn is  resurrecting or is being affected by another Fate's Call.\nFate's Call can be used even if the Oathsworn is in a  zombie state.\nFate's Call does not render the target  vanished while being held if they are creating  Curse of the Black Mist's aura.\nThe Oathsworn being held is represented by a light over Kalista's head.\nKalista's death does not cancel Fate's Call.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

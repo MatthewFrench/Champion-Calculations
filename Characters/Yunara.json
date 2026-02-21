@@ -1,0 +1,157 @@
+{
+  "data_version": "1.0.0",
+  "name": "Yunara",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.25,
+      "total_attack_time_seconds": 1.538,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 275.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 25.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.65,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 575.0,
+    "move_speed": 325.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Vow of the First Lands",
+      "type": "Passive",
+      "description": "Innate:  Yunara's  critical strikes deal bonus magic damage.",
+      "description_source": "PENDING FOR TEST: Interaction with parry effects ( dodge,  block and  blind.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Cultivation of Spirit",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Passive:  Yunara's  basic attacks deal bonus magic damage  on-hit and generate  stacks of Unleash  on-attack, stacking up to a cap upon which she can cast Cultivation of Spirit.",
+      "description_source": "Cultivation of Spirit's damage classifications:\n Proc damage for the passive and active on-hit damage.\n Basic damage for the spread attack damage.\nSpread attacks will still deal damage even if Yunara misses her basic attack due to  blind.\nPENDING FOR TEST: Spread attack interaction with parrying effects ( dodge,  block)\nThere is no limit to the number of enemies the empowered attacks can spread to.\nYunara's secondary resource bar gives various context for Cultivation of Spirit. It is visible to the player only.\nWhile Cultivation of Spirit is not active, the bar shows her current Unleash stacks. It is colored white while below maximum stacks and yellow while at maximum stacks.\nAfter Cultivation of Spirit is cast, the bar counts down the buff's duration.\nThis is also true during  Transcend One's Self, which means that the bar effectively also counts down the duration of her Transcendent State.\nIf Yunara begins an attack windup toward the end of the active effects' duration and its launch would take place after it, the effects' duration is extended equal to the attack's windup time, once at most.\nSince the buff ends right after launching Cultivation of Spirit's attack and its effects have already been determined, this allows it to both spread to nearby enemies and generate a stack of Unleash.\nEach bolt from  Runaan's Hurricane's Wind's Fury may trigger its own spread attack (despite the spread attacks not being an on-hit effect).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "other",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Arc of Judgment",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Yunara launches a spinning prayer bead that briefly slows down upon hitting an enemy. The initial hit against each enemy deals magic damage and  slows the target, and the bead continually deals magic damage to nearby enemies.",
+      "description_source": "Applies  area damage for the initial hit and  persistent area damage for the lingering effect.\n Spell shield can block either the initial hit or one damage tick of the lingering effect.\nThis ability will cast from wherever the caster is at the end of the cast time.\nArc of Judgment can hit an enemy more than once with the initial damage as well with the lingering effect (both while not expanded and while expanded).\nThe bead can hit an enemy multiple times if they collide with it again while it is in flight.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Kanmei's Steps",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Yunara briefly becomes  ghosted and gains  bonus move speed, increased while facing an enemy  champion.",
+      "description_source": "Active:  Yunara briefly becomes  ghosted and gains  bonus move speed, increased while facing an enemy  champion.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Transcend One's Self",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Passive:  Arc of Ruin's damage and  Untouchable Shadow's dash speed are increased.",
+      "description_source": "An ongoing  Kanmei's Steps' effect is not lost when quickly replaced by  Untouchable Shadow.\n Cultivation of Spirit is cast alongside Transcend One's Self. If the former was not already active, this will also grant its  attack reset.\nThe attack reset does not originate from Transcend One's Self nor is Transcend One's Self tagged as granting one itself (e.g. for the purposes of  Hail of Blades).\nTranscend One's Self cannot be cast again while active.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

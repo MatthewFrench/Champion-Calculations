@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Aurelion Sol",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BATTLEMAGE",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 80.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 530.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 22.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Cosmic Creator",
+      "type": "Passive",
+      "description": "Innate:  Aurelion Sol's damaging abilities against enemies generate him permanent stacks of Stardust, which gradually augments his abilities.\n Breath of Light's bursts deal bonus magic damage based on the target's maximum health.\n Astral Flight's distance is increased.\n Singularity's area and execute threshold are increased.\n Falling Star/ The Skies Descend has increased impact area.",
+      "description_source": "Singularity's relative size and ratio stays the same when affected by Cosmic Creator's size modifier.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Breath of Light",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "This ability always employs Quick cast.\nApplies  spell damage on the burst and  persistent area damage on the beam.\nBreath of Light's bursts against an enemy champion will aggro nearby enemy minions.\nBreath of Light's burn places a timer on the primary target, which ticks in 0.2 second intervals. Thus, at[ 5 completed intervals ][ 1 full second ], the burst damage is triggered.\nThe timer's visuals themselves otherwise serve no other purpose than gameplay clarity.\nThe timer is placed on the initial primary target and any new primary targets that are acquired during the channel.\nIt falls off and resets to zero if a target is not hit within 1 second of no longer being afflicted by the burn.\n Spell shield will only block the burst damage.\nThe following table refers to interactions while Aurelion Sol is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport\n\n\nInterrupted by\n\n Flash  Recall  Hexflash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "This ability always employs Quick cast.\nApplies  spell damage on the burst and  persistent area damage on the beam.\nBreath of Light's bursts against an enemy champion will aggro nearby enemy minions.\nBreath of Light's burn places a timer on the primary target, which ticks in 0.2 second intervals. Thus, at[ 5 completed intervals ][ 1 full second ], the burst damage is triggered.\nThe timer's visuals themselves otherwise serve no other purpose than gameplay clarity.\nThe timer is placed on the initial primary target and any new primary targets that are acquired during the channel.\nIt falls off and resets to zero if a target is not hit within 1 second of no longer being afflicted by the burn.\n Spell shield will only block the burst damage.\nThe following table refers to interactions while Aurelion Sol is  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Teleport\n\n\nInterrupted by\n\n Flash  Recall  Hexflash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "other",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Astral Flight",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Aurelion Sol  flies in the target direction. During flight, he can cast any of his abilities, and  Breath of Light has no  cooldown, no maximum channel duration, and its flat damage is increased.  Aurelion Sol flies at a reduced speed while channeling  Breath of Light.",
+      "description_source": "If a  takedown is scored while Astral Flight is active, the cooldown will be reduced after it ends.\nAstral Flight cannot be used in the first 15 seconds of the game.\nThe following table refers for interactions while Aurelion Sol is  dashing:\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nAllowed\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Zhonya's Hourglass  Hextech Rocketbelt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Hexflash\n\n\nDisabled\n\n Teleport  Recall\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath Immobilizing effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Singularity",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Aurelion Sol conjures a black hole at the target location for a few seconds that continually deals magic damage to enemies within. Enemies in the black hole are  dragged toward the center. Enemies within the center are  executed at low health.",
+      "description_source": "Clones are counted as champions for all of this ability's effects and grant stacks of Stardust if they are killed in the area.\nThe damage area hits targets by their  edge, while the  kinematics area hits targets by their  center. This makes a slight fringe where targets may be damaged without displacing them.\n Spell shield will block a single instance of damage.\nSingularity's execute against an enemy champion will aggro nearby enemy minions.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Falling Star",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Aurelion Sol calls down a star that strikes the target location, dealing magic damage and briefly  stunning enemies hit. This generates Stardust for each enemy champion hit.",
+      "description_source": "Aurelion Sol will transform Falling Star into  The Skies Descend each time he gathers 75 Stardust from the last time he used the empowered cast, or once he has gathered that amount after learning the ability.\nStardust required for transformation is denoted by a progress bar over Falling Star in the HUD.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

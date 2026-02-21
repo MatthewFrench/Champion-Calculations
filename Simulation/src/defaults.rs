@@ -181,6 +181,28 @@ pub(crate) struct ArcaneCometRuneDefaults {
 }
 
 #[derive(Debug, Clone, Copy, Deserialize)]
+pub(crate) struct ScorchRuneDefaults {
+    pub proc_magic_damage_by_level: LevelScalingRange,
+    pub ability_power_ratio: f64,
+    pub bonus_attack_damage_ratio: f64,
+    pub cooldown_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub(crate) struct CheapShotRuneDefaults {
+    pub proc_true_damage_by_level: LevelScalingRange,
+    pub cooldown_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub(crate) struct TasteOfBloodRuneDefaults {
+    pub heal_by_level: LevelScalingRange,
+    pub ability_power_ratio: f64,
+    pub bonus_attack_damage_ratio: f64,
+    pub cooldown_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
 pub(crate) struct SummonAeryRuneDefaults {
     pub proc_magic_damage_by_level: LevelScalingRange,
     pub ability_power_ratio: f64,
@@ -205,6 +227,17 @@ pub(crate) struct DarkHarvestRuneDefaults {
     pub soul_magic_damage: f64,
     pub ability_power_ratio: f64,
     pub bonus_attack_damage_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub(crate) struct CoupDeGraceRuneDefaults {
+    pub trigger_health_ratio: f64,
+    pub bonus_damage_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub(crate) struct AbsorbLifeRuneDefaults {
+    pub heal_by_level: LevelScalingRange,
 }
 
 #[derive(Debug, Clone, Copy, Deserialize)]
@@ -234,8 +267,13 @@ pub(crate) struct RuneRuntimeDefaults {
     pub summon_aery: SummonAeryRuneDefaults,
     pub hail_of_blades: HailOfBladesRuneDefaults,
     pub dark_harvest: DarkHarvestRuneDefaults,
+    pub coup_de_grace: CoupDeGraceRuneDefaults,
+    pub absorb_life: AbsorbLifeRuneDefaults,
     pub triumph: TriumphRuneDefaults,
     pub gathering_storm: GatheringStormRuneDefaults,
+    pub scorch: ScorchRuneDefaults,
+    pub cheap_shot: CheapShotRuneDefaults,
+    pub taste_of_blood: TasteOfBloodRuneDefaults,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -459,6 +497,16 @@ pub(crate) struct WarwickEternalHungerPassiveDefaults {
 }
 
 #[derive(Debug, Clone, Copy)]
+pub(crate) struct WarwickJawsOfTheBeastAbilityDefaults {
+    pub jaws_of_the_beast_cast_range: f64,
+    pub jaws_of_the_beast_cooldown_seconds: f64,
+    pub jaws_of_the_beast_execution: AbilityExecutionProfile,
+    pub jaws_of_the_beast_target_max_health_ratio: f64,
+    pub jaws_of_the_beast_attack_damage_ratio: f64,
+    pub jaws_of_the_beast_ability_power_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
 pub(crate) struct VayneTumbleAbilityDefaults {
     pub tumble_cooldown_seconds: f64,
     pub tumble_bonus_physical_attack_damage_ratio: f64,
@@ -470,6 +518,15 @@ pub(crate) struct VayneSilverBoltsAbilityDefaults {
     pub periodic_true_hit_every: usize,
     pub periodic_true_hit_base: f64,
     pub periodic_true_hit_target_max_health_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct VayneCondemnAbilityDefaults {
+    pub condemn_cast_range: f64,
+    pub condemn_cooldown_seconds: f64,
+    pub condemn_execution: AbilityExecutionProfile,
+    pub condemn_physical_base_damage: f64,
+    pub condemn_bonus_attack_damage_ratio: f64,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -499,6 +556,31 @@ pub(crate) struct SonaCrescendoAbilityDefaults {
     pub crescendo_magic_base_damage: f64,
     pub crescendo_magic_ability_power_ratio: f64,
     pub crescendo_stun_duration_seconds: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct SonaHymnOfValorAbilityDefaults {
+    pub hymn_of_valor_cast_range: f64,
+    pub hymn_of_valor_cooldown_seconds: f64,
+    pub hymn_of_valor_execution: AbilityExecutionProfile,
+    pub hymn_of_valor_magic_base_damage: f64,
+    pub hymn_of_valor_magic_ability_power_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct MorganaTormentedShadowAbilityDefaults {
+    pub tormented_shadow_cast_range: f64,
+    pub tormented_shadow_cooldown_seconds: f64,
+    pub tormented_shadow_execution: AbilityExecutionProfile,
+    pub tormented_shadow_total_magic_base_damage: f64,
+    pub tormented_shadow_total_magic_ability_power_ratio: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct DoctorMundoBluntForceTraumaAbilityDefaults {
+    pub blunt_force_trauma_cast_range: f64,
+    pub blunt_force_trauma_cooldown_seconds: f64,
+    pub blunt_force_trauma_bonus_physical_min_base_damage: f64,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -671,13 +753,23 @@ static WARWICK_INFINITE_DURESS_ABILITY_DEFAULTS: OnceLock<WarwickInfiniteDuressA
     OnceLock::new();
 static WARWICK_ETERNAL_HUNGER_PASSIVE_DEFAULTS: OnceLock<WarwickEternalHungerPassiveDefaults> =
     OnceLock::new();
+static WARWICK_JAWS_OF_THE_BEAST_ABILITY_DEFAULTS: OnceLock<WarwickJawsOfTheBeastAbilityDefaults> =
+    OnceLock::new();
 static VAYNE_TUMBLE_ABILITY_DEFAULTS: OnceLock<VayneTumbleAbilityDefaults> = OnceLock::new();
 static VAYNE_SILVER_BOLTS_ABILITY_DEFAULTS: OnceLock<VayneSilverBoltsAbilityDefaults> =
     OnceLock::new();
+static VAYNE_CONDEMN_ABILITY_DEFAULTS: OnceLock<VayneCondemnAbilityDefaults> = OnceLock::new();
 static MORGANA_BINDING_AND_SOUL_SHACKLES_ABILITY_DEFAULTS: OnceLock<
     MorganaBindingAndSoulShacklesAbilityDefaults,
 > = OnceLock::new();
+static MORGANA_TORMENTED_SHADOW_ABILITY_DEFAULTS: OnceLock<MorganaTormentedShadowAbilityDefaults> =
+    OnceLock::new();
 static SONA_CRESCENDO_ABILITY_DEFAULTS: OnceLock<SonaCrescendoAbilityDefaults> = OnceLock::new();
+static SONA_HYMN_OF_VALOR_ABILITY_DEFAULTS: OnceLock<SonaHymnOfValorAbilityDefaults> =
+    OnceLock::new();
+static DOCTOR_MUNDO_BLUNT_FORCE_TRAUMA_ABILITY_DEFAULTS: OnceLock<
+    DoctorMundoBluntForceTraumaAbilityDefaults,
+> = OnceLock::new();
 
 fn normalize_key(input: &str) -> String {
     input
@@ -1775,6 +1867,65 @@ fn load_warwick_infinite_duress_ability_defaults() -> Result<WarwickInfiniteDure
     })
 }
 
+fn load_warwick_jaws_of_the_beast_ability_defaults() -> Result<WarwickJawsOfTheBeastAbilityDefaults>
+{
+    let (champion_path, champion_data) = read_champion_file("Warwick.json")?;
+    let ability = champion_ability(&champion_data, "basic_ability_1", &champion_path)?;
+    let effects = champion_ability_effects(ability, "basic_ability_1", &champion_path)?;
+    let execution = champion_ability_execution_profile_from_ability(
+        ability,
+        champion_is_melee_from_data(&champion_data),
+    );
+
+    let target_max_health_ratio = ability_effect_by_id(effects, "magic_damage_percent_target_max_health")
+        .and_then(effect_contextual_multiplier_by_rank)
+        .ok_or_else(|| {
+        anyhow!(
+            "Missing abilities.basic_ability_1.effects[id=magic_damage_percent_target_max_health].formula.contextual_multipliers.by_rank in {}",
+            champion_path.display()
+        )
+    })?;
+    let attack_damage_ratio = effect_formula_coefficient_by_id(
+        effects,
+        "magic_damage_bonus_ad_ap",
+        "attack_damage",
+    )
+    .ok_or_else(|| {
+        anyhow!(
+            "Missing abilities.basic_ability_1.effects[id=magic_damage_bonus_ad_ap] attack_damage coefficient in {}",
+            champion_path.display()
+        )
+    })?;
+    let ability_power_ratio = effect_formula_coefficient_by_id(
+        effects,
+        "magic_damage_bonus_ad_ap",
+        "ability_power",
+    )
+    .ok_or_else(|| {
+        anyhow!(
+            "Missing abilities.basic_ability_1.effects[id=magic_damage_bonus_ad_ap] ability_power coefficient in {}",
+            champion_path.display()
+        )
+    })?;
+
+    Ok(WarwickJawsOfTheBeastAbilityDefaults {
+        jaws_of_the_beast_cast_range: champion_ability_range(
+            ability,
+            "basic_ability_1",
+            &champion_path,
+        )?,
+        jaws_of_the_beast_cooldown_seconds: champion_ability_cooldown_seconds(
+            ability,
+            "basic_ability_1",
+            &champion_path,
+        )?,
+        jaws_of_the_beast_execution: execution,
+        jaws_of_the_beast_target_max_health_ratio: target_max_health_ratio,
+        jaws_of_the_beast_attack_damage_ratio: attack_damage_ratio,
+        jaws_of_the_beast_ability_power_ratio: ability_power_ratio,
+    })
+}
+
 fn load_warwick_eternal_hunger_passive_defaults() -> Result<WarwickEternalHungerPassiveDefaults> {
     let (champion_path, champion_data) = read_champion_file("Warwick.json")?;
     let passive = champion_ability(&champion_data, "passive", &champion_path)?;
@@ -1883,6 +2034,42 @@ fn load_vayne_silver_bolts_ability_defaults() -> Result<VayneSilverBoltsAbilityD
         periodic_true_hit_every,
         periodic_true_hit_base,
         periodic_true_hit_target_max_health_ratio,
+    })
+}
+
+fn load_vayne_condemn_ability_defaults() -> Result<VayneCondemnAbilityDefaults> {
+    let (champion_path, champion_data) = read_champion_file("Vayne.json")?;
+    let ability = champion_ability(&champion_data, "basic_ability_3", &champion_path)?;
+    let effects = champion_ability_effects(ability, "basic_ability_3", &champion_path)?;
+    let execution = champion_ability_execution_profile_from_ability(
+        ability,
+        champion_is_melee_from_data(&champion_data),
+    );
+    let base_damage = effect_base_by_rank(effects, "physical_damage").ok_or_else(|| {
+        anyhow!(
+            "Missing abilities.basic_ability_3.effects[id=physical_damage].base_by_rank in {}",
+            champion_path.display()
+        )
+    })?;
+    let bonus_attack_damage_ratio =
+        effect_formula_coefficient_by_id(effects, "physical_damage", "bonus_attack_damage")
+            .ok_or_else(|| {
+                anyhow!(
+                    "Missing abilities.basic_ability_3.effects[id=physical_damage] bonus_attack_damage coefficient in {}",
+                    champion_path.display()
+                )
+            })?;
+
+    Ok(VayneCondemnAbilityDefaults {
+        condemn_cast_range: champion_ability_range(ability, "basic_ability_3", &champion_path)?,
+        condemn_cooldown_seconds: champion_ability_cooldown_seconds(
+            ability,
+            "basic_ability_3",
+            &champion_path,
+        )?,
+        condemn_execution: execution,
+        condemn_physical_base_damage: base_damage,
+        condemn_bonus_attack_damage_ratio: bonus_attack_damage_ratio,
     })
 }
 
@@ -2023,6 +2210,86 @@ fn load_morgana_binding_and_soul_shackles_ability_defaults()
     })
 }
 
+fn load_sona_hymn_of_valor_ability_defaults() -> Result<SonaHymnOfValorAbilityDefaults> {
+    let (champion_path, champion_data) = read_champion_file("Sona.json")?;
+    let ability = champion_ability(&champion_data, "basic_ability_1", &champion_path)?;
+    let effects = champion_ability_effects(ability, "basic_ability_1", &champion_path)?;
+    let execution = champion_ability_execution_profile_from_ability(
+        ability,
+        champion_is_melee_from_data(&champion_data),
+    );
+    let base_damage = effect_base_by_rank(effects, "magic_damage").ok_or_else(|| {
+        anyhow!(
+            "Missing abilities.basic_ability_1.effects[id=magic_damage].base_by_rank in {}",
+            champion_path.display()
+        )
+    })?;
+    let ability_power_ratio =
+        effect_formula_coefficient_by_id(effects, "magic_damage", "ability_power").ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_1.effects[id=magic_damage] ability_power coefficient in {}",
+                champion_path.display()
+            )
+        })?;
+
+    Ok(SonaHymnOfValorAbilityDefaults {
+        hymn_of_valor_cast_range: champion_ability_range(
+            ability,
+            "basic_ability_1",
+            &champion_path,
+        )?,
+        hymn_of_valor_cooldown_seconds: champion_ability_cooldown_seconds(
+            ability,
+            "basic_ability_1",
+            &champion_path,
+        )?,
+        hymn_of_valor_execution: execution,
+        hymn_of_valor_magic_base_damage: base_damage,
+        hymn_of_valor_magic_ability_power_ratio: ability_power_ratio,
+    })
+}
+
+fn load_morgana_tormented_shadow_ability_defaults() -> Result<MorganaTormentedShadowAbilityDefaults>
+{
+    let (champion_path, champion_data) = read_champion_file("Morgana.json")?;
+    let ability = champion_ability(&champion_data, "basic_ability_2", &champion_path)?;
+    let effects = champion_ability_effects(ability, "basic_ability_2", &champion_path)?;
+    let execution = champion_ability_execution_profile_from_ability(
+        ability,
+        champion_is_melee_from_data(&champion_data),
+    );
+    let base_damage = effect_base_by_rank(effects, "minimum_total_damage").ok_or_else(|| {
+        anyhow!(
+            "Missing abilities.basic_ability_2.effects[id=minimum_total_damage].base_by_rank in {}",
+            champion_path.display()
+        )
+    })?;
+    let ability_power_ratio =
+        effect_formula_coefficient_by_id(effects, "minimum_total_damage", "ability_power")
+            .ok_or_else(|| {
+                anyhow!(
+                    "Missing abilities.basic_ability_2.effects[id=minimum_total_damage] ability_power coefficient in {}",
+                    champion_path.display()
+                )
+            })?;
+
+    Ok(MorganaTormentedShadowAbilityDefaults {
+        tormented_shadow_cast_range: champion_ability_range(
+            ability,
+            "basic_ability_2",
+            &champion_path,
+        )?,
+        tormented_shadow_cooldown_seconds: champion_ability_cooldown_seconds(
+            ability,
+            "basic_ability_2",
+            &champion_path,
+        )?,
+        tormented_shadow_execution: execution,
+        tormented_shadow_total_magic_base_damage: base_damage,
+        tormented_shadow_total_magic_ability_power_ratio: ability_power_ratio,
+    })
+}
+
 fn load_sona_crescendo_ability_defaults() -> Result<SonaCrescendoAbilityDefaults> {
     let (champion_path, champion_data) = read_champion_file("Sona.json")?;
     let crescendo = champion_ability(&champion_data, "ultimate", &champion_path)?;
@@ -2069,6 +2336,66 @@ fn load_sona_crescendo_ability_defaults() -> Result<SonaCrescendoAbilityDefaults
         crescendo_magic_base_damage,
         crescendo_magic_ability_power_ratio,
         crescendo_stun_duration_seconds,
+    })
+}
+
+fn load_doctor_mundo_blunt_force_trauma_ability_defaults()
+-> Result<DoctorMundoBluntForceTraumaAbilityDefaults> {
+    let path = repository_root_dir()
+        .join("Characters")
+        .join("DrMundo.json");
+    let text = std::fs::read_to_string(&path)
+        .with_context(|| format!("Failed reading DrMundo champion file: {}", path.display()))?;
+    let data: Value = serde_json::from_str(&text)
+        .with_context(|| format!("Failed parsing DrMundo champion file: {}", path.display()))?;
+    let ability = data
+        .get("abilities")
+        .and_then(|abilities| abilities.get("basic_ability_3"))
+        .ok_or_else(|| anyhow!("Missing abilities.basic_ability_3 in {}", path.display()))?;
+    let effects = ability
+        .get("effects")
+        .and_then(Value::as_array)
+        .ok_or_else(|| {
+            anyhow!(
+                "Missing abilities.basic_ability_3.effects in {}",
+                path.display()
+            )
+        })?;
+
+    let blunt_force_trauma_bonus_physical_min_base_damage = ability_effect_by_id(effects, "bonus_physical_damage_min")
+        .and_then(|effect| effect.get("base_by_rank"))
+        .and_then(Value::as_array)
+        .and_then(|values| highest_rank_value(values))
+        .ok_or_else(|| anyhow!(
+            "Missing abilities.basic_ability_3.effects[id=bonus_physical_damage_min].base_by_rank in {}",
+            path.display()
+        ))?;
+
+    let _blunt_force_trauma_bonus_health_ratio = effect_formula_coefficient_by_id(
+        effects,
+        "bonus_physical_damage_min",
+        "bonus_health",
+    )
+    .ok_or_else(|| anyhow!(
+        "Missing abilities.basic_ability_3.effects[id=bonus_physical_damage_min] bonus_health coefficient in {}",
+        path.display()
+    ))?;
+
+    Ok(DoctorMundoBluntForceTraumaAbilityDefaults {
+        blunt_force_trauma_cast_range: ability.get("range").and_then(Value::as_f64).ok_or_else(
+            || {
+                anyhow!(
+                    "Missing abilities.basic_ability_3.range in {}",
+                    path.display()
+                )
+            },
+        )?,
+        blunt_force_trauma_cooldown_seconds: champion_ability_cooldown_seconds(
+            ability,
+            "basic_ability_3",
+            &path,
+        )?,
+        blunt_force_trauma_bonus_physical_min_base_damage,
     })
 }
 
@@ -2284,6 +2611,14 @@ pub(crate) fn controlled_champion_stasis_trigger_health_percent_default() -> f64
     defaults.stasis_trigger_health_percent
 }
 
+pub(crate) fn doctor_mundo_blunt_force_trauma_ability_defaults()
+-> &'static DoctorMundoBluntForceTraumaAbilityDefaults {
+    DOCTOR_MUNDO_BLUNT_FORCE_TRAUMA_ABILITY_DEFAULTS.get_or_init(|| {
+        load_doctor_mundo_blunt_force_trauma_ability_defaults()
+            .unwrap_or_else(|err| panic!("{}", err))
+    })
+}
+
 pub(crate) fn doctor_mundo_infected_bonesaw_ability_defaults()
 -> &'static DoctorMundoInfectedBonesawAbilityDefaults {
     DOCTOR_MUNDO_INFECTED_BONESAW_ABILITY_DEFAULTS.get_or_init(|| {
@@ -2385,6 +2720,17 @@ pub(crate) fn warwick_infinite_duress_ability_defaults(
     }))
 }
 
+pub(crate) fn warwick_jaws_of_the_beast_ability_defaults(
+    champion_name: &str,
+) -> Option<WarwickJawsOfTheBeastAbilityDefaults> {
+    if normalize_key(champion_name) != "warwick" {
+        return None;
+    }
+    Some(*WARWICK_JAWS_OF_THE_BEAST_ABILITY_DEFAULTS.get_or_init(|| {
+        load_warwick_jaws_of_the_beast_ability_defaults().unwrap_or_else(|err| panic!("{}", err))
+    }))
+}
+
 pub(crate) fn warwick_eternal_hunger_passive_defaults(
     champion_name: &str,
 ) -> Option<WarwickEternalHungerPassiveDefaults> {
@@ -2418,6 +2764,28 @@ pub(crate) fn vayne_silver_bolts_ability_defaults(
     }))
 }
 
+pub(crate) fn vayne_condemn_ability_defaults(
+    champion_name: &str,
+) -> Option<VayneCondemnAbilityDefaults> {
+    if normalize_key(champion_name) != "vayne" {
+        return None;
+    }
+    Some(*VAYNE_CONDEMN_ABILITY_DEFAULTS.get_or_init(|| {
+        load_vayne_condemn_ability_defaults().unwrap_or_else(|err| panic!("{}", err))
+    }))
+}
+
+pub(crate) fn morgana_tormented_shadow_ability_defaults(
+    champion_name: &str,
+) -> Option<MorganaTormentedShadowAbilityDefaults> {
+    if normalize_key(champion_name) != "morgana" {
+        return None;
+    }
+    Some(*MORGANA_TORMENTED_SHADOW_ABILITY_DEFAULTS.get_or_init(|| {
+        load_morgana_tormented_shadow_ability_defaults().unwrap_or_else(|err| panic!("{}", err))
+    }))
+}
+
 pub(crate) fn morgana_binding_and_soul_shackles_ability_defaults(
     champion_name: &str,
 ) -> Option<MorganaBindingAndSoulShacklesAbilityDefaults> {
@@ -2430,6 +2798,17 @@ pub(crate) fn morgana_binding_and_soul_shackles_ability_defaults(
                 .unwrap_or_else(|err| panic!("{}", err))
         }),
     )
+}
+
+pub(crate) fn sona_hymn_of_valor_ability_defaults(
+    champion_name: &str,
+) -> Option<SonaHymnOfValorAbilityDefaults> {
+    if normalize_key(champion_name) != "sona" {
+        return None;
+    }
+    Some(*SONA_HYMN_OF_VALOR_ABILITY_DEFAULTS.get_or_init(|| {
+        load_sona_hymn_of_valor_ability_defaults().unwrap_or_else(|err| panic!("{}", err))
+    }))
 }
 
 pub(crate) fn sona_crescendo_ability_defaults(

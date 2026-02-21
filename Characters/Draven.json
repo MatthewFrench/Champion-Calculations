@@ -1,0 +1,157 @@
+{
+  "data_version": "1.0.0",
+  "name": "Draven",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MARKSMAN"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.230000004172325,
+      "total_attack_time_seconds": 1.47300004959106,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 675.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 361.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.05,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 29.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.679,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 330.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "League of Draven",
+      "type": "Passive",
+      "description": "Innate:  Draven gains an Adoration  stack when he catches a  Spinning Axe or kills a  minion,  monster, or  turret. He loses Adoration stacks when he  dies.",
+      "description_source": "Upon reaching 150 Adoration stacks, and every 100 stacks thereafter, as well as when he cashes at least 150 stacks in, Draven automatically sends a chat message notifying all players.\nA chat message will display to all players whenever:\nLeague of Draven grants over  300 gold.\nLeague of Draven gets reduced.\nNone of the parts of League of Draven require actually using a  Spinning Axe for a kill to get Adoration stacks, as well as to cash Adoration stacks.\nLeague of Draven will trigger upon receiving an assist on an enemy  executed by  Pyke's  Death from Below.[2]\nWhen receiving  gold from an ally  executing a minion through Shared Riches ( World Atlas,  Runic Compass), Draven is also awarded a  Strike stack.(bug)\nA Strike stack lasts up to 10 seconds or until Draven fails to catch an  axe or a nearby  minion dies without him killing it. Upon reacing 6 stacks, Draven consumes the stacks to gain 2 stacks of Adoration.\nOther sources of gaining Strike stacks were removed in patch V25.06.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Spinning Axe",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Draven's next basic attack will throw an axe, dealing bonus physical damage.",
+      "description_source": "The landing location is determined by Draven's movement speed and direction at the time Spinning Axe hits the target. If Draven is actually moving, it will bounce directly into his path. Otherwise, it will bounce back towards his current location, either landing directly onto him or to his sides.\nSpinning Axe will place a visual cue on the ground where it will land. This visual cue is visible to both teams, although Draven himself will see a more prominent marker.\nRecasting Spinning Axe will refresh the  buff and add another axe if possible.\nThere is no limit to how many axes can be juggled at once, just the limit of 2 of them at a time in Draven's hands.\nDraven used to be able to catch (steal) an enemy Draven's axes. This event also prompted a few unique voice lines.\nSpinning Axes may optically bypass  Wind Wall and  Blade Whirl but they will be destroyed upon collision.  Unbreakable will not prevent the axe from bouncing off when  Braum is the target.\n Unbreakable will not prevent the axe from bouncing off when  Braum is not the target.\nThe axe will still bounce against parrying effects.\n Runaan's Hurricane's Wind's Fury does not interact with the effects of the axes.\nIf a Spinning Axe is readied during a basic attack wind-up, the effects will be applied to the fired attack.\nSpinning Axe attacks deal their total increased damage in a single instance of  basic damage.\nSpinning Axe may fail to properly bounce back if it hits  Zaahen during or shortly after  Cultivation of War's revive.(bug)\nThe empowered attack will not trigger against  structures.\nThe duration will refresh on-attack against them.\nSpinning Axe has an indicator that appears on the ground for Draven to stand on. Some skins have a unique indicator.\n\n\n\n Gladiator\n\n\n\n Soul Reaver\n\n\n\n Primetime\n\n\n\n Pool Party\n\n\n\n Beast Hunter\n\n\n\n Santa\n\n\n\n Mecha Kingdoms\n\n\n\n Ruined\n\n\n\n Debonair\n\n\n\n Fright Night\n\n\n\n La Ilusi\u00f3n",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Blood Rush",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Draven briefly gains  bonus attack speed and a burst of  movement speed, also becoming  ghosted. Whenever a  Spinning Axe is caught, Blood Rush's cooldown will  reset.",
+      "description_source": "Activating Blood Rush while the effect is already active will refresh the duration.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Stand Aside",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Draven throws a fan of axes in a line in the target direction that deal physical damage to enemies hit,  knocking them aside and  slowing them.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Whirling Death",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Draven hurls forth two massive axes that deal physical damage to enemies hit. This  executes enemy  champions with  health that would be left within the current number of  League of Draven stacks.",
+      "description_source": "Whirling Death's projectile has an  icon on the mini-map while it is in flight. It can be seen by only Draven and his allies.\n Spell shield will block one instance of damage.\nThis ability will cast from wherever the caster is at the end of the cast time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

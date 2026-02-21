@@ -1,6 +1,47 @@
 # Improvement Tracker
 
 ## Done
+- Maintenance validation sweep: reran formatter, clippy (warnings denied), and release tests to confirm the current branch remains green before handoff.
+- Expanded dynamic rune runtime coverage with additional combat effects:
+  - added `Scorch` ability-hit magic damage runtime with cooldown and level/AP/bonus-AD scaling defaults in `simulator_defaults.json`
+  - added `Cheap Shot` immobilize-trigger bonus true damage runtime with cooldown and level scaling defaults in `simulator_defaults.json`
+  - added `Taste of Blood` runtime heal trigger on ability hit with cooldown and level/AP/bonus-AD scaling defaults in `simulator_defaults.json`
+  - added `Absorb Life` on-kill healing runtime with level scaling defaults in `simulator_defaults.json`
+  - added `Coup de Grace` low-health bonus-damage runtime on hits/abilities with data-owned defaults in `simulator_defaults.json`
+  - updated rune coverage registries/tests/docs to reflect newly modeled runes and reduced unmodeled backlog
+- Added comprehensive coverage implementation playbook and tightened contributor instructions:
+  - added `Simulation/COVERAGE_IMPLEMENTATION_PLAYBOOK.md` with explicit Definition of Done for champion/item/rune/mastery lanes, batch-delivery workflow, and PR acceptance template
+  - expanded `Simulation/COVERAGE_CHECKLIST.md` with tracker-sync requirements and stronger modeled-only-after-runtime+tests gates
+  - expanded `Simulation/DATA_AUTHORING_GUIDE.md` with a complete end-to-end workflow and explicit unchanged-boundary policy
+  - updated `Simulation/README.md` links to surface the new comprehensive coverage guidance
+- Added generated cross-domain coverage tracker automation:
+  - added `Simulation/scripts/generate_coverage_trackers.py` to generate roster-wide champion script coverage and runtime item/rune/mastery execution trackers from canonical data + modeled runtime constants
+  - regenerated `Simulation/CHAMPION_ROSTER_TRACKER.md` with explicit controlled-champion and enemy-script coverage counts/checklists
+  - regenerated `Simulation/COVERAGE_EXECUTION_TRACKER.md` with computed champion/item/rune coverage counts and checklists (including currently modeled entries)
+- Added canonical champion-shape validation coverage for full roster files:
+  - added `champion_files_follow_minimum_canonical_shape_and_slot_mapping` unit test to assert required top-level/base-stats/ability keys and derived QWER slot bindings for every `Characters/*.json` champion file
+  - test also enforces large-roster expectation (`>=100` champion files) to prevent accidental data-regression shrinkage
+- Added execution trackers and roster-wide simulation smoke validation:
+  - added `Simulation/CHAMPION_ROSTER_TRACKER.md` with full champion roster checklist
+  - added `Simulation/COVERAGE_EXECUTION_TRACKER.md` with explicit item/rune/mastery runtime backlog checklists
+  - added unit test `simulation_smoke_runs_for_all_champion_bases` to execute combat simulation across all loaded champion bases
+- Imported baseline canonical champion roster from `From Online/champions` into `Characters/`:
+  - added `Characters/import_from_online.py` generator to build repo-owned champion JSON files with canonical base stats/basic attack metadata and baseline ability shells
+  - generated 166 new champion files (non-overwriting for already-modeled champions), raising canonical roster data from 6 to 172 champions
+  - intentionally left runtime script depth unchanged outside currently modeled champions; coverage tracker now reflects roster breadth vs script-depth gap
+- Expanded enemy scripted ability depth for Morgana and Doctor Mundo:
+  - added Morgana `Tormented Shadow` enemy event with canonical total damage/AP scaling and runtime bonus-damage integration
+  - added Doctor Mundo `Blunt Force Trauma` enemy event as empowered-next-attack scripting sourced from canonical ability defaults
+  - added typed defaults loaders and champion-script tests for both new events
+- Expanded enemy scripted ability depth for additional roster champions:
+  - added Warwick `Jaws of the Beast` enemy event with canonical max-health/AD/AP scaling and runtime bonus-damage integration
+  - added Vayne `Condemn` enemy event with canonical base + bonus-attack-damage scaling
+  - added Sona `Hymn of Valor` enemy event with canonical AP scaling and runtime bonus-damage integration
+  - added typed defaults loaders for the new ability defaults and champion-script tests for each event
+- Expanded enemy champion script coverage to include Vladimir offensive spell events:
+  - added enemy-scripted `Transfusion`, `Tides of Blood`, and `Hemoplague` actions with cast-range gating and runtime bonus-damage integration
+  - wired Vladimir scripted events into shared champion event registration/cooldown/labels/dispatch paths
+  - added champion script tests validating Vladimir event registration plus in-range/out-of-range behavior
 - Addressed latest PR review findings in build-order encounter handling:
   - raw enemy base lookup for build-order stage scaling now seeds from all configured encounters (not only the primary encounter), preventing fallback double-scaling for secondary-only actors
   - build-order worst-case stage blending now ignores zero-weight encounters, so explicitly disabled encounters do not penalize stage scores

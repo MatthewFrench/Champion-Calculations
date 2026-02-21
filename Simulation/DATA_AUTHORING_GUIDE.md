@@ -2,6 +2,8 @@
 
 This guide defines how to add or update champion, item, rune, and shard data so it stays aligned with the simulator architecture.
 
+For runtime-complete delivery standards and acceptance criteria, pair this guide with `Simulation/COVERAGE_IMPLEMENTATION_PLAYBOOK.md`.
+
 ## Current Data Reality
 - We already have broad source data in:
   - `From Online/champions/`
@@ -146,3 +148,34 @@ and required validation:
 - `cargo fmt --manifest-path Simulation/Cargo.toml`
 - `cargo clippy --all-targets --all-features --manifest-path Simulation/Cargo.toml -- -D warnings`
 - `cargo test --release --manifest-path Simulation/Cargo.toml`
+
+
+## Comprehensive Coverage Workflow (Champion / Item / Rune)
+Use this sequence to match quality of existing modeled assets:
+
+1. **Scope declaration**
+   - List exact champions/items/runes targeted in this batch.
+   - State what will remain unmodeled after the batch.
+2. **Canonical data audit first**
+   - Confirm canonical owner file already has required values.
+   - If data is missing or ambiguous, add schema notes and confidence notes before runtime coding.
+3. **Runtime implementation**
+   - Champion-specific kit behavior in champion script modules.
+   - Shared item/rune mechanics in runtime/item script modules.
+   - Avoid adding one-off branches in shared core simulation modules.
+4. **Coverage registration**
+   - Add modeled keys to coverage registries only after behavior is implemented and tested.
+5. **Regression tests**
+   - Add formula tests, trigger tests, cooldown tests, and at least one negative-path test.
+6. **Tracker + docs sync**
+   - Run `Simulation/scripts/generate_coverage_trackers.py`.
+   - Update `Simulation/COVERAGE_GAPS.md` and `Simulation/IMPROVEMENT_TRACKER.md` with modeled vs deferred scope.
+7. **Validation gates**
+   - `cargo fmt --manifest-path Simulation/Cargo.toml`
+   - `cargo clippy --all-targets --all-features --manifest-path Simulation/Cargo.toml -- -D warnings`
+   - `cargo test --release --manifest-path Simulation/Cargo.toml`
+
+## What Intentionally Stays Unchanged Unless Explicitly Requested
+- Legacy `Season2016` mastery runtime remains retired.
+- Shared engine/core/search/reporting modules remain generic and script-driven.
+- Scenario files remain minimal and should not duplicate canonical champion/item/rune data.

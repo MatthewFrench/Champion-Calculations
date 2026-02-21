@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Nunu & Willump",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "MAGE",
+    "TANK",
+    "VANGUARD"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 280.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 29.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 345.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Call of the Freljord",
+      "type": "Passive",
+      "description": "Innate: When  Nunu and  Willump deal damage against an enemy  champion, large  monster or  structure, they and a nearby allied champion gain Call of the Freljord for a few seconds, prioritizing the ally with  highest attack speed.",
+      "description_source": "The splash damage will critically strike when the basic attack does, but will not deal any bonus damage.\nCall of the Freljord range to be shared with allies is based on Nunu and Willump's location.\nIf no ally is prioritized based on their stats, it will be given to the one closest to them.\nEnemies that can trigger Call of the Freljord have a marker overhead.\nThis marker isn't present on inhibitors or the nexus (because they cannot hold buffs and debuffs including the one that hosts this VFX), but they still trigger Call of the Freljord when attacked.\nCall of the Freljord's maximum remaining duration is 44 seconds.\nThe buff has no cap for its maximum total duration.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Consume",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Willump takes a bite out of the target enemy, dealing damage and  healing himself. The heal is increased when he is below half health.",
+      "description_source": "Icon border glows when he is within the maximum healing threshold.\n Spell shields will block the damage and the heal.\nWhile not on  cooldown, Consume's ability icon on the HUD can be pinged to announce its damage to  monsters in the ally chat.\nIf the target becomes  untargetable,  dies, or is too far away or no longer in  sight during the cast time, this ability will cancel but does not go on  cooldown nor pay its cost (if applicable).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Biggest Snowball Ever!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as  Spellblade and  Force Pulse.\nThe movement speed reduction the duo receive from initially casting Biggest Snowball Ever! is not considered a  slow, thus it will not be resisted by their  slow immunity.\nThe time threshold to begin gaining bonus movement speed may be bugged, as Flat Bonus MS increases the time while % Bonus MS decreases the time.\nThe formula appears to be (X \u00f7 100) - Y, where:\nX = Total Flat MS after caps\nY = 0.1 per 1% %MS\nThe delay is not modified from its initially calculated value on-cast, even if additional movement speed is gained.\nNunu and Willump keep all increases in movement speed at time of cast for the duration of the charge.\nNunu and Willump's movement speed always increases in increments of ~14, reaching the greater value between [ Total MS + 85 : 255 (based on level) ][ Total Uncapped Flat MS + 85 : 255 (based on level) ]\nThis takes 6 increments to reach the Total MS + 85, but may take more to reach the Uncapped Flat + 85. Due to flat bonuses increasing the time threshold, it is possible for the ability's effects to end before reaching the total uncapped movement speed.\nThe bonus movement speed ignores the movement speed cap.\nIf Nunu turns continuously he will create a 600 unit circle, increased with bonus movement speed, striking the same point up to 3 times, for a maximum of 150 / 195 / 240 / 285 / 330 (+ 150% AP) magic damage. The damage can be further increased by detonating the snowball, for a total of 300 / 390 / 480 / 570 / 660 (+ 300% AP) magic damage.\n Ryze's  Realm Warp will only teleport Nunu and Willump, leaving the  snowball behind.\nHovering the cursor on the HUD (e.g mini map / champion portraits) does not affect the cast and steering of Biggest Snowball Ever!.\nNunu gains a slightly larger field of view during Biggest Snowball Ever!.\n Projectile-interception effects will destroy the snowball only after it has been released.\nBiggest Snowball Ever! is disabled for the first 15 seconds of the game.\n Displacement immunity will not resist the application of the  stun.\nThe following table refers for interactions while Nunu & Willump are  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nAllowed, but cannot input movement commands.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "description_source": "The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as  Spellblade and  Force Pulse.\nThe movement speed reduction the duo receive from initially casting Biggest Snowball Ever! is not considered a  slow, thus it will not be resisted by their  slow immunity.\nThe time threshold to begin gaining bonus movement speed may be bugged, as Flat Bonus MS increases the time while % Bonus MS decreases the time.\nThe formula appears to be (X \u00f7 100) - Y, where:\nX = Total Flat MS after caps\nY = 0.1 per 1% %MS\nThe delay is not modified from its initially calculated value on-cast, even if additional movement speed is gained.\nNunu and Willump keep all increases in movement speed at time of cast for the duration of the charge.\nNunu and Willump's movement speed always increases in increments of ~14, reaching the greater value between [ Total MS + 85 : 255 (based on level) ][ Total Uncapped Flat MS + 85 : 255 (based on level) ]\nThis takes 6 increments to reach the Total MS + 85, but may take more to reach the Uncapped Flat + 85. Due to flat bonuses increasing the time threshold, it is possible for the ability's effects to end before reaching the total uncapped movement speed.\nThe bonus movement speed ignores the movement speed cap.\nIf Nunu turns continuously he will create a 600 unit circle, increased with bonus movement speed, striking the same point up to 3 times, for a maximum of 150 / 195 / 240 / 285 / 330 (+ 150% AP) magic damage. The damage can be further increased by detonating the snowball, for a total of 300 / 390 / 480 / 570 / 660 (+ 300% AP) magic damage.\n Ryze's  Realm Warp will only teleport Nunu and Willump, leaving the  snowball behind.\nHovering the cursor on the HUD (e.g mini map / champion portraits) does not affect the cast and steering of Biggest Snowball Ever!.\nNunu gains a slightly larger field of view during Biggest Snowball Ever!.\n Projectile-interception effects will destroy the snowball only after it has been released.\nBiggest Snowball Ever! is disabled for the first 15 seconds of the game.\n Displacement immunity will not resist the application of the  stun.\nThe following table refers for interactions while Nunu & Willump are  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nAllowed, but cannot input movement commands.\n\n\nItems\n\nUsable\n\nN/A\n\n\nDisabled\n\nAll items are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nDisabled\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath Grounding effects Immobilizing effects Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Snowball Barrage",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Nunu throws a volley of 3 snowballs in the target direction that each shatter upon hitting an enemy, dealing magic damage to enemies in a cone. Enemies hit 3 times are briefly  slowed.  Champions and large  monsters hit once are marked Snowbound for a few seconds. Shortly after activating Snowball Barrage, Snowbound enemies near  Willump take magic damage and are briefly  rooted.",
+      "description_source": "Each cast volley of snowballs counts as an ability activation for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nEach volley of snowballs is also a separate cast instance, allowing Snowball Barrage to trigger  Phase Rush on its own or trigger 6 stacks of  Conqueror.\nSnowbound consumption does not trigger on-cast effects, neither does it count as a separate cast instance (e.g. for the purposes of  Conqueror).\nThe three snowballs are thrown independently from one another over the 0.4 seconds and their direction is determined from Nunu & Willump's position at any given moment.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Absolute Zero",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as  Spellblade and  Force Pulse.\nThe affected area is hidden if the duo is not  visible to the enemy team.\nWhile it's unlikely to happen normally, it is possible to deal zero damage with Absolute Zero if canceled as soon as it's started.\nThe following table refers for interactions while Nunu & Willump are  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "description_source": "The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as  Spellblade and  Force Pulse.\nThe affected area is hidden if the duo is not  visible to the enemy team.\nWhile it's unlikely to happen normally, it is possible to deal zero damage with Absolute Zero if canceled as soon as it's started.\nThe following table refers for interactions while Nunu & Willump are  channeling:\n\n\nType\n\nChannel\n\n\nAttacking\n\nInterrupts\n\n\nAbilities\n\nInterrupts\n\n\nMovement\n\nInterrupts\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\n Hextech Rocketbelt\n\n\nInterrupted by\n\nAll item-actives not specified above interrupt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nDeath Cast-inhibiting effects",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

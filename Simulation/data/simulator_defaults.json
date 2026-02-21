@@ -244,7 +244,49 @@
     },
     "gathering_storm": {
       "interval_seconds": 600.0,
-      "ability_power_by_interval": [8.0, 24.0, 48.0, 80.0, 120.0, 168.0]
+      "ability_power_by_interval": [
+        8.0,
+        24.0,
+        48.0,
+        80.0,
+        120.0,
+        168.0
+      ]
+    },
+    "scorch": {
+      "proc_magic_damage_by_level": {
+        "min": 20.0,
+        "max": 40.0
+      },
+      "ability_power_ratio": 0.2,
+      "bonus_attack_damage_ratio": 0.1,
+      "cooldown_seconds": 10.0
+    },
+    "cheap_shot": {
+      "proc_true_damage_by_level": {
+        "min": 10.0,
+        "max": 45.0
+      },
+      "cooldown_seconds": 4.0
+    },
+    "taste_of_blood": {
+      "heal_by_level": {
+        "min": 16.0,
+        "max": 30.0
+      },
+      "ability_power_ratio": 0.15,
+      "bonus_attack_damage_ratio": 0.08,
+      "cooldown_seconds": 20.0
+    },
+    "absorb_life": {
+      "heal_by_level": {
+        "min": 1.0,
+        "max": 27.0
+      }
+    },
+    "coup_de_grace": {
+      "trigger_health_ratio": 0.4,
+      "bonus_damage_ratio": 0.08
     }
   }
 }

@@ -1,0 +1,159 @@
+{
+  "data_version": "1.0.0",
+  "name": "Sett",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "FIGHTER",
+    "JUGGERNAUT",
+    "TANK"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 670.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 125.0,
+    "move_speed": 340.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Pit Grit",
+      "type": "Passive",
+      "description": "Innate - Heart of the Half-Beast:  Sett  regenerates additional health based on his missing health.",
+      "description_source": "Alternatively, Pit Grit grants Sett 0.75 / 2.5 / 5 / 10 (based on level) bonus health regeneration for every 5% missing health, up to 14.25 / 47.5 / 95 / 190 (based on level) at the cap of 95% missing health.\nThe Right Punch does not grant  bonus attack speed, rather its windup is sped up and fixed at [ 12.5% of a Left Punch's windup time. ][ 800% of a Left Punch's windup speed. ]\nThe windup is still affected by  cripples and attack speed buffs that were not already active for the previous Left Punch's.\nThe bonus physical damage from the Right Punch benefits from  life steal.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Knuckle Down",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Sett empowers his next two basic attacks within a few seconds to gain  bonus range and deal bonus physical damage based on the target's maximum health.",
+      "description_source": "The bonus movement speed buff is named Looking For a Fight.\nKnuckle Down can be  dodged,  blocked or missed while Sett is  blinded.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Haymaker",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Passive:  Sett stores Grit equal to damage taken, which gradually expires after a few seconds.",
+      "description_source": "Haymaker's total hitbox uses the intersection of a trapezoid and a circle. Enemies are hit by Haymaker only when their hitbox overlaps with both of those areas.\nPENDING FOR TEST: Where is the center of the circle?\nThe trapezoid and the rectangle both register the edge of enemies'  hitbox.\nThe shield is granted at the start of the cast time and will decay afterwards.\nSett does not store Grit from damage that was mitigated by  shields.\nThis ability will cast from wherever the caster is at the end of the cast time.\nSett will turn towards the target direction at the start of the cast time.\nSett will glow when attaining 90% Grit. Casting Haymaker at this amount has a different visual and audio effect.\nSett will turn golden (base skin).",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "grit",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Facebreaker",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Sett will afterwards attempt to basic attack the closest target picked up by Facebreaker, prioritising champions and prioritising those in front of him.\nIf Facebreaker does not hit an enemy,  Haymaker is also unable to be cast for 0.25 seconds after the cast time.\nTargets will be pulled towards Sett's location in a straight line and rebound to 150 units from him back in the same line.\nThe spell indicator is slightly shorter than the actual hitbox' rectangle length, and slightly wider than the width (note that the effects are edge-range from the hitbox rectangle).\nTargets protected by  spell shields don't count toward the requirement to  stun.\nThis ability will cast from wherever the caster is at the end of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "Sett will afterwards attempt to basic attack the closest target picked up by Facebreaker, prioritising champions and prioritising those in front of him.\nIf Facebreaker does not hit an enemy,  Haymaker is also unable to be cast for 0.25 seconds after the cast time.\nTargets will be pulled towards Sett's location in a straight line and rebound to 150 units from him back in the same line.\nThe spell indicator is slightly shorter than the actual hitbox' rectangle length, and slightly wider than the width (note that the effects are edge-range from the hitbox rectangle).\nTargets protected by  spell shields don't count toward the requirement to  stun.\nThis ability will cast from wherever the caster is at the end of the cast time.\n\n\nType\n\nCast time\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\n Shurelya's Battlesong  Youmuu's Ghostblade  Randuin's Omen\n\n\nDisabled\n\nAll the other item-actives are disabled\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite\n\n\nDisabled\n\n Flash  Teleport  Recall  Hexflash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "The Show Stopper",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Sett  carries the target enemy  champion and  dashes through the air with  displacement immunity, then slams them into the ground to deal physical damage to nearby enemies based on the target's bonus health. Enemies hit are also briefly  slowed.",
+      "description_source": "The Show Stopper's attachment depends on the  suppression; if the target does not remain suppressed by the end of the dash, they are not attached to Sett when he arrives to them. Similarly, if the suppression is removed, so is the attachment.\nSett will still dash to the target and leap forward from them to trigger the shockwave afterwards even if he fails to attach the target to him.\nIf the target resists the suppression by being  immune to crowd control,  displacement immune, or having a  spell shield, Sett will not attach them to himself.\nIf the target removes the suppression by any means, including with an applicable  cleanse effect or  dispel, they will instantly detach themselves from Sett.\nNeither his dash nor leap are interrupted in this case.\nSett's slide dash after completing the leap dash cannot pass through terrain.\nSett is  displacement immune during both the initial dash and the leap after that dash, as well as for a short duration during his slide beyond on the impact.\nThe target is  revealed specifically while they are suppressed.\nIf the target is  untargetable when Sett completes their dash to them, The Show Stopper will be cancelled immediately.\nIn this case, Sett will not leap forward nor attach to the target to himself and the suppression is removed from the target.\nIf the target moves 2000 units or more away from their location at the time of The Show Stopper's cast before Sett completes their dash to them, Sett will fail to attach the target to him.\nThe target will remain suppressed for 5 seconds if this occurs.(bug)\nThe Show Stopper will be cancelled if either Sett's dash or leap is cancelled during the ability by any means.\nThe former causes Sett to not leap forward nor attach to the target to himself and the suppression to be removed from the target.\nThe latter causes Sett to detach the target from himself instantly and the suppression to be removed from the target.\nThe Show Stopper will not be cancelled if the target dies or enters  resurrection during the effect.\nAt maximum cast range and if the dash is not shortened due to terrain in Sett's way, The Show Stopper's movement takes 1.5 seconds, causing the slam within 1.23 seconds.\nIf Sett enters  resurrection right before completing his initial dash, he will still leap forward from the target.(bug)\nThe \"crater\" VFX originates from the target's landing, which inaccurately illustrates the damage's area of effect (from Sett).(note)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "none",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

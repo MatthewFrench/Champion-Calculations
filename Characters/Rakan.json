@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Rakan",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "CATCHER",
+    "SUPPORT"
+  ],
+  "basic_attack": {
+    "attack_type": "melee",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.270000010728836,
+      "total_attack_time_seconds": 1.57500004768371,
+      "gameplay_radius": 65.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 315.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 8.75,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 30.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.635,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 300.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Fey Feathers",
+      "type": "Passive",
+      "description": "Innate: Periodically,  Rakan generates a  shield that regenerates out of combat if not broken.",
+      "description_source": "Revitalize will record bonus shielding when a new shield is created, but not when it regenerates. In either case, there is no bonus shielding received.\nThe cooldown reduction is granted even if the ability is blocked by a  spell shield.\nThe cooldown reduction is granted even if the attack misses due to  blind.\nPENDING FOR TEST: Cooldown reduction interaction with parries ( block and  dodge.",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Gleaming Quill",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Rakan slings an enchanted feather in the target direction that deals magic damage to the first enemy hit.",
+      "description_source": "The trigger radius is slightly smaller than the heal radius.\n Spell shield will not prevent the marked area from being formed.\nThe heal can activate immediately after the projectile hits the target, before the healing return animation completes.\nThis ability will cast from wherever the caster is at the end of the cast time.\nThe heal will trigger and affect Rakan even if he is  untargetable.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Grand Entrance",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Rakan  dashes to the target location.",
+      "description_source": "Sleep does not count for knocking the dash down.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Battle Dance",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Passive:  Rakan can cast or re-cast Battle Dance at an increased  range when targeting  Xayah.",
+      "description_source": "Both casts count as ability activations for the purposes of on-cast effects such as  Spellblade and triggering  Force Pulse's passive.\nThe shields do not stack if Battle Dance is cast on the same target twice. Only the duration and shield amount is refreshed.\nBattle Dance, its recast, and its empowered version on  Xayah all have a  forgiveness radius of 175 units.\n Sleep does not count for knocking the dash down.(bug)",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "The Quickness",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "The following table refers for interactions while Rakan is in cast time:\n\n\nType\n\nCast time\n\n\nAttacking\n\nAllowed\n\n\nAbilities\n\n Grand Entrance is disabled but can still be buffered.  Gleaming Quill and  Battle Dance are usable.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll items are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Teleport  Recall  Hexflash\n\n\nDisabled\n\n Flash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "description_source": "The following table refers for interactions while Rakan is in cast time:\n\n\nType\n\nCast time\n\n\nAttacking\n\nAllowed\n\n\nAbilities\n\n Grand Entrance is disabled but can still be buffered.  Gleaming Quill and  Battle Dance are usable.\n\n\nMovement\n\nAllowed\n\n\nItems\n\nUsable\n\nAll items are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\nN/A\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Teleport  Recall  Hexflash\n\n\nDisabled\n\n Flash\n\n\nInterrupted by\n\nN/A\n\n\nInterrupted by\n\nDeath, unless protected by  Resurrection",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}

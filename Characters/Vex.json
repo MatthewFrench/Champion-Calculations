@@ -1,0 +1,158 @@
+{
+  "data_version": "1.0.0",
+  "name": "Vex",
+  "sources": {
+    "canonical": "From Online/champions",
+    "import_notes": "Generated baseline canonical champion file from From Online dataset."
+  },
+  "notes": [
+    "Baseline imported champion data file.",
+    "Ability effects are intentionally minimal placeholders until scripted modeling is added."
+  ],
+  "schema_notes": {
+    "source_of_truth": "From Online/champions/<Champion>.json",
+    "generated_by": "Characters/import_from_online.py"
+  },
+  "role_tags": [
+    "BURST",
+    "MAGE"
+  ],
+  "basic_attack": {
+    "attack_type": "ranged",
+    "missile_speed": 0.0,
+    "raw_timing_stats": {
+      "base_windup_seconds": 0.3,
+      "total_attack_time_seconds": 1.6,
+      "gameplay_radius": 55.0
+    }
+  },
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 0.0
+    },
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.0
+    },
+    "resource": {
+      "base": 490.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.0
+    },
+    "armor": {
+      "base": 23.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 54.0,
+      "per_level": 0.0
+    },
+    "attack_speed": {
+      "base": 0.669,
+      "per_level_percent": 0.0
+    },
+    "attack_range": 550.0,
+    "move_speed": 335.0,
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    }
+  },
+  "abilities": {
+    "passive": {
+      "name": "Doom 'n Gloom",
+      "type": "Passive",
+      "description": "Passive - Doom: Periodically,  Vex empowers her next basic ability to  knock down and briefly  fear enemies hit.",
+      "description_source": "Gloom will mark  Rift Herald and  Rift Scuttler when they use their dashes.\nGloom can mark  clones, but not other  pets.\nGloom's mark has a very brief cooldown and refreshes on subsequent dashes or blinks nearby enemies use.\nGloom's mark duration will refresh to 0.5 seconds when Vex starts an attack windup against a target that has a mark which is about to expire.\nGloom will mark enemies even if they are  untargetable.\nGloom will mark enemies that are inside the detection radius when they blink, but will not mark those that blink inside from far away.(note)\nDoom's cooldown starts as soon as the basic ability is cast.\nDoom's  fear will not be removed when Vex dies, unlike any other  fear in the game.(bug)\nNon-champions (e.g.  Rift Scuttler) are not  knocked down by the fear-empowered ability.(note)\n Spell shield will block all of Doom's effects but not Gloom's empowered attack nor mark.\nNearby enemies that become displaced do not count for being marked by Gloom.\n Yone's  Soul Unbound's recast does not cause the caster to be marked by Gloom.(bug)\nVex's basic abilities use a different icon when Doom is ready:\n Mistral Bolt\n Personal Space\n Looming Darkness",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "name": "Mistral Bolt",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description": "Active:  Vex launches a wave of mist in the target direction that deals magic damage to enemies hit. After a short delay, the wave accelerates but also narrows.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nMistral Bolt will fire from wherever Vex is at the end of the cast time, towards the originally targeted location or 1200 units in the originally targeted direction if cast beyond that.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_2": {
+      "name": "Personal Space",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description": "Active:  Vex emits a deafening scream around her, dealing magic damage to nearby enemies and  shielding herself for a short time.",
+      "description_source": "Active:  Vex emits a deafening scream around her, dealing magic damage to nearby enemies and  shielding herself for a short time.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "basic_ability_3": {
+      "name": "Looming Darkness",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description": "Active:  Vex tosses her Shadow to explode at the target location, dealing magic damage and  slowing enemies hit for a short time. The explosion widens based on cast distance.",
+      "description_source": "No additional details.",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    },
+    "ultimate": {
+      "name": "Shadow Surge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description": "Active:  Vex sends her Shadow in the target direction, which deals magic damage to enemies hit. Shadow stops upon hitting an enemy  champion, marking and  revealing them for a few seconds.Shadow Surge can be recast while the target is marked.",
+      "description_source": "This ability will cast from wherever the caster is at the end of the cast time.\nVex's dash will track the target if they change locations.\nShe will not stop tracking the target until she reaches them, as there is no maximum tracking distance.\nShadow Surge grants sight of the area along its path for 0.4 seconds each.\nShadow Surge cannot be recast while  grounded or  rooted, or if the target is  untargetable.\nShadow Surge may also be recast if the target died to the ability.\nThe following table refers for interactions while Vex is dashing:\nAll movement spells are disabled during the first 0.25 seconds of the dash.\n\n\nAttacking\n\nDisabled\n\n\nAbilities\n\nDisabled\n\n\nMovement\n\nDisabled\n\n\nItems\n\nUsable\n\nAll the other item-actives are usable\n\n\nDisabled\n\nN/A\n\n\nInterrupted by\n\n Hextech Rocketbelt\n\n\nConsumables\n\nUsable\n\n\nSpells\n\nUsable\n\n Barrier  Clarity  Cleanse  Exhaust  Ghost  Heal  Ignite  Smite  Teleport  Recall\n\n\nDisabled\n\n Hexflash\n\n\nInterrupted by\n\n Flash\n\n\nInterrupted by\n\nDeath",
+      "cooldown_seconds_by_rank": [
+        0.0
+      ],
+      "range": 0.0,
+      "cost": {
+        "resource": "mana",
+        "value_type": "flat",
+        "value_by_rank": [
+          0.0
+        ]
+      },
+      "effects": []
+    }
+  }
+}
