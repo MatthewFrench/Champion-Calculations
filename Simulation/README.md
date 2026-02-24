@@ -27,7 +27,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Encounter world-state assembly now seeds baseline non-champion ecology anchors (`Structure`, `Monster`, `Minion`) with explicit allegiance ownership.
 - Runtime enemy movement and enemy respawn position updates now route through world ownership upsert/clamp channels (map-bounded actor position ownership).
 - Runtime world lifecycle channels now advance deterministic minion-wave spawn/despawn loops and neutral objective spawn/respawn timers through `src/world/world_actor_lifecycle_channels.rs`.
-- Champion controller harness phase-2 runtime ingress now routes deterministic controlled-champion command handling through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs` with sequence-ordered request execution and command-owned movement stepping.
+- Champion controller harness phase-2 runtime ingress now routes deterministic controlled-champion command handling through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs` with sequence-ordered request execution, fixed tick-delay command application, and command-owned movement stepping.
 - Combat runs with 2D positions (controlled champion fixed at origin; enemies maintain range with deterministic orbit/chase motion).
 - Simulation intentionally ignores vertical `z` index for now; combat checks use only 2D geometry (`x`,`y`) until a verified gameplay interaction requires `z`.
 - Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz`.
@@ -201,6 +201,9 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `scenarios/vladimir_urf_teamfight.json`: Default URF team-fight scenario setup.
 - `data/enemy_urf_presets.json`: Hardcoded URF enemy end-game presets with sources and check date.
 - `data/simulator_defaults.json`: Global simulator/search/engine defaults.
+  - controller ingress defaults include:
+    - `engine_defaults.controlled_champion_controller_vision_radius`
+    - `engine_defaults.controlled_champion_request_fixed_tick_delay`
 - `data/champion_ai_profiles.json`: Champion AI controller policy (combat spacing, movement scaling, script polling, script-event priority overrides, and non-canonical cooldown overrides when canonical data is missing).
 - `../Game Mode/URF.json`: URF mode data, including mode-specific simulation defaults (for example respawn tuning).
 - `../Characters/<Champion>.json`: Champion canonical gameplay data, including per-ability execution fields (`abilities.<ability_key>.execution`) and ability/passive effect data used by scripts.

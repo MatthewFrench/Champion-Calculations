@@ -25,7 +25,7 @@
           "short_desc": "Hitting a champion with 3 <b>separate</b> attacks or abilities in 3s deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword>.",
           "long_desc": "Hitting a champion with 3 <b>separate</b> attacks or abilities within 3s deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>adaptive damage</font></lol-uikit-tooltipped-keyword>.<br><br>Damage: 70 - 240 (+0.1 bonus AD, +0.05 AP) damage.<br>Cooldown: 20s<br><br><i>'We called them the Thunderlords, for to speak of their lightning was to invite disaster.'</i>",
           "wiki_descriptions": [
-            "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 3 second period causes them to be struck by lightning after a 0. 25 -second delay, dealing them 70 – 260 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage.",
+            "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 3 second period causes them to be struck by lightning after a 0.25 -second delay, dealing them 70 – 260 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage.",
             "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage ."
           ],
           "effects_structured": [
@@ -104,7 +104,7 @@
           "short_desc": "Damaging a low health champion inflicts <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword> and harvests a soul from the victim.",
           "long_desc": "Damaging a Champion below 50% health deals <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword> and harvests their soul, permanently increasing Dark Harvest's damage by 11.<br><br>Dark Harvest damage: 30 (+11 damage per soul) (+0.1 bonus AD) (+0.05 AP)<br>Cooldown: 35s (resets to 1.0s on takedown)",
           "wiki_descriptions": [
-            "Passive: Damaging basic attacks and ability damage against enemy champions below 50% of their maximum health deal 30 (+ 11 per Soul) (+ 10% bonus AD) (+ 5% AP) bonus adaptive damage and, after a 1. 75 -second delay, reap 1 Soul . This cannot occur again for 35 seconds, resetting to 1 second upon scoring a takedown against an enemy champion.",
+            "Passive: Damaging basic attacks and ability damage against enemy champions below 50% of their maximum health deal 30 (+ 11 per Soul) (+ 10% bonus AD) (+ 5% AP) bonus adaptive damage and, after a 1.75 -second delay, reap 1 Soul . This cannot occur again for 35 seconds, resetting to 1 second upon scoring a takedown against an enemy champion.",
             "While not on cooldown, also reap 1 Soul from receiving the kill credit of a champion killed by a minion , monster , or turret .",
             "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
           ],
@@ -254,7 +254,7 @@
           "short_desc": "Deal bonus true damage to enemy champions with <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairAct'>impaired movement or actions</lol-uikit-tooltipped-keyword>. ",
           "long_desc": "Damaging champions with <b>impaired movement or actions</b> deals 10 - 45 bonus true damage (based on level).<br><br>Cooldown: 4s<br><rules>Activates on damage occurring after the impairment.</rules>",
           "wiki_descriptions": [
-            "Passive: Damaging basic attacks and ability damage deal 10 – 49. 12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
+            "Passive: Damaging basic attacks and ability damage deal 10 – 49.12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
             "Valid Crowd Control: Immobilizes Blind Disarm Ground Nearsight Polymorph Silence Slow",
             "The target must already be impaired prior to the damaging attack or spell in order to trigger the bonus damage."
           ],
@@ -345,7 +345,7 @@
           "short_desc": "Heal when you damage an enemy champion.",
           "long_desc": "Heal when you damage an enemy champion.<br><br>Healing: 16-40 (+0.1 bonus AD, +0.05 AP) health (based on level)<br><br>Cooldown: 20s",
           "wiki_descriptions": [
-            "Passive: Damaging an enemy champion heals you for 16 – 42. 82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
+            "Passive: Damaging an enemy champion heals you for 16 – 42.82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
             "Does not trigger at full health."
           ],
           "effects_structured": [

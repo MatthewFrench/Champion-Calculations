@@ -39,10 +39,13 @@
   - Uncertainty 1 (deferred code follow-up): `Renekton` `Slice and Dice` uses formula-based dash velocity (`760 + 100% movement speed`), but runtime execution metadata currently consumes only base dash speed.
   - Uncertainty 2 (deferred code follow-up): `Sylas` slot-E behavior (`Abscond` -> `Abduct`) is a multi-stage same-slot flow; runtime still lacks first-class stage identity and recast-window event modeling.
   - Additional deferred code follow-up: `Vex` `Looming Darkness` uses cast-distance-scaled explosion radius (`200 : 300`), but runtime currently treats execution hitbox radius as a static value.
+  - Additional deferred code follow-up: champion data now carries execution-semantic keys for attack-cadence-coupled behavior (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`), but runtime loaders/scripts do not consume these keys yet.
 - Item data uncertainty follow-up:
   - No open item-structure uncertainty remains in the latest wave for `Dragonheart` or `Twilight's Edge`; keep periodic source-drift checks because page/module text can diverge on distributed Arena items.
+  - Active cooldown metadata was backfilled for `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`); runtime behavior remains deferred where item actives are not yet modeled.
 - Rune data quality follow-up:
   - Broad decimal-spacing cleanup is now complete for the previously tracked queue (`0` remaining `x. y` artifacts in `effects_structured.raw`).
+  - Rune narrative decimal-spacing cleanup is now complete for touched flat/split rune files (`88` `x. y` artifacts in rune narrative fields -> `0`).
   - Deferred runtime/code follow-up remains: add loader/lint enforcement for raw-to-metadata consistency checks (including guardrails against scripted placeholder artifacts like `\1.\2`) so this stays no-regression by construction.
   - Multi-branch rune `per_rank` effects are now explicitly decomposed via `semantic_components` (`14/14`), but runtime currently does not consume those components directly; this is tracked as deferred code follow-up for maintainability and future deterministic parsing paths.
 
@@ -109,6 +112,17 @@
   - Source: [Template:Data_Sylas/Chain_Lash](https://wiki.leagueoflegends.com/en-us/Template:Data_Sylas/Chain_Lash)
   - Source: [Template:Data_Sylas/Abscond](https://wiki.leagueoflegends.com/en-us/Template:Data_Sylas/Abscond)
   - Source: [Template:Data_Vex/Looming_Darkness](https://wiki.leagueoflegends.com/en-us/Template:Data_Vex/Looming_Darkness)
+- Champion execution-semantics wave (107-108):
+  - Re-verified `Olaf` `Reckless Swing` and `Fiora` `Bladework` and encoded explicit execution-semantic fields in champion ability `execution` objects for future runtime consumption.
+  - Source: [Template:Data_Olaf/Reckless_Swing](https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Reckless_Swing)
+  - Source: [Template:Data_Fiora/Bladework](https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Bladework)
+- Item active cooldown completeness wave (109):
+  - Re-verified and encoded explicit active cooldown metadata on `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`) across all active effect branches in structured data.
+  - Source: [Stridebreaker](https://wiki.leagueoflegends.com/en-us/Stridebreaker)
+  - Source: [Hextech Rocketbelt](https://wiki.leagueoflegends.com/en-us/Hextech_Rocketbelt)
+  - Source: [Redemption](https://wiki.leagueoflegends.com/en-us/Redemption)
+- Rune narrative decimal-normalization wave (110):
+  - Normalized decimal-spacing artifacts in rune narrative fields (`wiki_descriptions` and touched `long_desc`) across flat and split structures while preserving structured-value parity.
 
 ## Script-Extraction Backlog (From Audit)
 - Vladimir defensive/offensive decisions are script-owned, but the engine still executes some Vladimir effect applications directly after script decisions.

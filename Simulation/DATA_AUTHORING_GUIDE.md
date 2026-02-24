@@ -128,6 +128,7 @@ For each edited champion ability, item effect, or rune effect where behavior tim
 
 Example fidelity pattern:
 - Treat targeted empowered-hit casts as timed, gated actions rather than instant tooltip math; encode both cast eligibility and hit-resolution timing.
+- For attack-cadence-coupled abilities, prefer explicit execution semantic keys (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`) when source behavior is verified.
 
 Documentation and confidence rules for behavior fidelity:
 - Capture verified execution semantics in `schema_notes.context_notes` when semantics or confidence changed.
@@ -275,10 +276,28 @@ Priority C. Champion inventory and planning hygiene:
 - For movement abilities with formula-based velocity (for example `base + movement speed`), preserve formula semantics in notes and track runtime follow-up when `execution` stores only base speed.
 - For multi-stage same-slot abilities, document stage windows/recast gating and track runtime follow-up if stage identity is not first-class.
 - For cast-distance-scaled area-size abilities, document min/max radius behavior and track runtime follow-up if current runtime cannot interpolate dynamic radius.
+25. Champion attack-cadence semantic-key rollout:
+- For non-trivial cast-vs-hit abilities, encode source-verified execution semantics directly in `execution` using stable keys (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`) so downstream runtime logic can consume deterministic behavior metadata.
+26. Item active cooldown metadata completeness:
+- When active cooldown values are source-published, encode `cooldown_seconds` consistently across every structured branch tied to that active (damage, movement, cast-rule, and follow-up effects).
+27. Rune narrative decimal-format hygiene:
+- Keep rune narrative fields (`wiki_descriptions`, touched `long_desc`) free of generated decimal-spacing artifacts (`x. y`), and preserve flat/split parity after normalization.
 
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed champion execution-semantics wave 107 (`Olaf` `Reckless Swing`):
+    - encoded explicit execution-semantic keys for target-required cast completion, attack-speed-scaled windup, and pre-resolution cancellation behavior
+    - refreshed schema/context notes and tracker provenance with page-level template citation
+  - Completed champion execution-semantics wave 108 (`Fiora` `Bladework`):
+    - encoded explicit two-hit empowered basic-attack sequence semantics (`resolution_timing`, attack-reset arming, attack-window/max-hit metadata)
+    - added page-level template citation provenance and wave-level tracker scope for `Bladework`
+  - Completed item active-cooldown completeness wave 109:
+    - backfilled active cooldown metadata for `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`) across all active structured-effect branches
+    - refreshed context notes/sources to capture active-cooldown verification provenance
+  - Completed rune narrative decimal-format wave 110:
+    - normalized decimal-spacing artifacts in rune narrative fields across flat and split structures (`88` `x. y` artifacts -> `0`)
+    - preserved flat/split synchronization while keeping existing structured numeric metadata intact
   - Completed champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
     - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
     - expanded context-note execution semantics and schema notes with page-level template provenance

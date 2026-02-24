@@ -1168,6 +1168,25 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - deterministic request/fast-forward guidance is explicit and source-backed.
   - controller-harness architecture and full-game blueprint docs reference the shared model.
 
+57. `DONE` Data-owned controller vision + fixed tick-delay ingress semantics.
+- Scope:
+  - move controlled-champion controller perspective visibility radius ownership to global engine defaults:
+    - `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_controller_vision_radius`)
+    - typed schema in `src/defaults/simulator_defaults_schema_types/simulation_search_and_engine_defaults_schema.rs`
+  - add explicit global fixed request delay ownership for harness ingress:
+    - `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_request_fixed_tick_delay`)
+    - deterministic apply tick handling in `src/engine/controlled_champion_controller_channels.rs`
+  - wire runtime tick-index progression in `src/engine/event_resolution/combat_event_dispatch_resolution.rs` so accepted requests execute only when `execute_at_tick <= current_tick`.
+  - add regressions for:
+    - fixed-delay policy request execution
+    - data-owned controller vision radius usage
+    - manual-mode persistence after policy clear
+    (`src/tests/engine_tests.rs`)
+- Success criteria:
+  - controller visibility and command delay assumptions are fully data-owned.
+  - harness ingress no longer uses hardcoded controller delay/vision tuning literals.
+  - deterministic fixed-delay execution is validated by regression tests.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1197,6 +1216,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 54 (controller-harness contracts + phase-1 fairness/action-status scaffold landed)
 - `DONE` Item 55 (controller-harness runtime ingress integration with deterministic queueing + controlled movement stepping landed)
 - `DONE` Item 56 (research-backed deterministic request/fast-forward model documented and linked)
+- `DONE` Item 57 (data-owned controller vision + fixed tick-delay ingress semantics landed)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

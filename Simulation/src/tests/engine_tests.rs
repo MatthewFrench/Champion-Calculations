@@ -1,5 +1,27 @@
 use super::*;
 
+#[derive(Debug)]
+struct OneShotMoveControllerPolicy {
+    emitted: bool,
+}
+
+impl crate::champion_control_harness::ChampionActionDecisionPolicy for OneShotMoveControllerPolicy {
+    fn choose_action(
+        &mut self,
+        _view: &crate::champion_control_harness::ChampionPerspectiveView,
+    ) -> Option<crate::champion_control_harness::ChampionActionRequest> {
+        if self.emitted {
+            return None;
+        }
+        self.emitted = true;
+        Some(
+            crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+                target_position: crate::world::WorldActorPosition { x: 1500.0, y: 0.0 },
+            },
+        )
+    }
+}
+
 #[test]
 fn projectile_travel_time_handles_instant_and_ranged() {
     assert_eq!(projectile_travel_seconds(400.0, 0.0), 0.0);
@@ -240,6 +262,101 @@ fn unsupported_controller_cast_action_returns_explicit_rejection_status() {
             crate::champion_control_harness::ChampionActionStatus::RejectedUnsupportedAction { .. }
         ),
         "unsupported cast channel should reject with explicit status"
+    );
+}
+
+#[test]
+fn controller_policy_requests_respect_fixed_tick_delay_before_execution() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+
+    runner.set_controlled_champion_controller_policy(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "ai_controller_test".to_string(),
+            controller_kind:
+                crate::champion_control_harness::ChampionControllerKind::ArtificialIntelligence,
+        },
+        Box::new(OneShotMoveControllerPolicy { emitted: false }),
+    );
+
+    runner.step(1);
+    assert!(
+        runner
+            .controlled_champion_pending_move_target_position()
+            .is_none(),
+        "policy request should not execute in the same tick it is sampled"
+    );
+
+    runner.step(1);
+    assert!(
+        runner
+            .controlled_champion_pending_move_target_position()
+            .is_some(),
+        "policy request should execute after configured fixed tick delay"
+    );
+}
+
+#[test]
+fn controller_perspective_uses_data_owned_vision_radius_default() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+    assert_eq!(
+        runner.controlled_champion_controller_vision_radius,
+        crate::defaults::controlled_champion_controller_vision_radius_default(),
+    );
+}
+
+#[test]
+fn clearing_controller_policy_keeps_manual_control_mode_enabled() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+
+    runner.set_controlled_champion_controller_policy(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "policy_toggle_test".to_string(),
+            controller_kind:
+                crate::champion_control_harness::ChampionControllerKind::ArtificialIntelligence,
+        },
+        Box::new(OneShotMoveControllerPolicy { emitted: true }),
+    );
+    runner.clear_controlled_champion_controller_policy();
+
+    assert!(
+        runner.controlled_champion_manual_control_mode_enabled(),
+        "manual control mode should remain enabled once harness control has been activated"
     );
 }
 

@@ -2313,5 +2313,35 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_107": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Olaf",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Reckless Swing target-required cast completion semantics, attack-speed-scaled windup behavior, and explicit cancellation-before-resolution metadata",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Reckless_Swing"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_108": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Fiora",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Bladework two-hit empowered basic-attack sequence semantics, attack-reset arming model, and per-hit branch resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Bladework"
+        ]
+      }
+    ]
   }
 }

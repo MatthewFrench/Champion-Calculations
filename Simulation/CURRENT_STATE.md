@@ -114,18 +114,18 @@ This file is a concise handoff for developers and AI agents.
 - World encounter-state builder now includes baseline non-champion ecology anchors (structures, monsters, minion lane spawns) through explicit class/allegiance ownership.
 - Runtime enemy movement and respawn position updates now route through world ownership upsert/clamp channels, keeping enemy actor positions map-bounded each tick.
 - Runtime world lifecycle ownership now advances deterministic minion wave spawn/despawn loops and neutral objective spawn/respawn timers through `src/world/world_actor_lifecycle_channels.rs` and `src/engine/simulation_step/world_lifecycle_step.rs`.
-- Champion controller harness phase-2 integration now routes deterministic controlled-champion command ingress through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs`, including per-tick request sequencing, shared action execution channels, and command-owned controlled movement stepping.
+- Champion controller harness phase-2 integration now routes deterministic controlled-champion command ingress through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs`, including per-tick request sequencing, shared action execution channels, command-owned controlled movement stepping, and data-owned fixed tick-delay command execution.
 - Research-backed deterministic request/fast-forward guidance is now tracked in `DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`.
 
 ## Full-Game Transformation Status (Non-Data)
 - Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `100%` (`DONE`).
-- Weighted completion estimate: `54%` (`IN_PROGRESS`).
+- Weighted completion estimate: `56%` (`IN_PROGRESS`).
 - Bucket snapshot (complete / remaining):
-  - Runtime Systems Completeness (`30%` weight): `52% / 48%`
-  - Determinism And Replay Guarantees (`20%` weight): `69% / 31%`
-  - Calibration And Correctness (`20%` weight): `60% / 40%`
+  - Runtime Systems Completeness (`30%` weight): `53% / 47%`
+  - Determinism And Replay Guarantees (`20%` weight): `72% / 28%`
+  - Calibration And Correctness (`20%` weight): `62% / 38%`
   - Performance Envelope (`15%` weight): `47% / 53%`
-  - Renderer-Contract Readiness (`15%` weight): `38% / 62%`
+  - Renderer-Contract Readiness (`15%` weight): `39% / 61%`
 - Canonical status and gap detail:
   - `FULL_GAME_SIMULATION_BLUEPRINT.md` (`Current Status Snapshot` section)
 
@@ -137,7 +137,7 @@ This file is a concise handoff for developers and AI agents.
 - Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
 - Required defaults ownership is now strict and preflighted.
 - Remaining realism lift is now concentrated in command/path ownership and macro event coupling (objective/structure/economy/vision), not defaults or crash-surface channels.
-- Controller ingress is now harness-gated and deterministic, but full latency/buffering semantics and actor-symmetric command channels are still pending.
+- Controller ingress now includes deterministic fixed delay and data-owned vision radius, but actor-symmetric command channels and richer buffering/drop semantics are still pending.
 
 ## Highest-Value Next Work (Largest Impact First)
 1. Expand harness command channels from controlled champion to actor-symmetric ownership (all controllable actors through one legality/status ingress).

@@ -55,9 +55,12 @@ Use this runtime contract for both human-player and artificial-intelligence cont
 6. Fast-forward via repeated fixed ticks, not coarse time jumps.
 - Large time skips should be modeled as repeated deterministic ticks, preserving command/event ordering and legality outcomes.
 
-7. Optional latency model (future).
-- Add deterministic command-delay/buffering channels as explicit simulation settings.
-- Keep default zero-latency simulation for local deterministic calibration unless explicitly configured.
+7. Deterministic fixed-delay command execution.
+- Accepted controller requests execute after a fixed tick delay configured in global engine defaults.
+- Current owner keys:
+  - `engine_defaults.controlled_champion_request_fixed_tick_delay`
+  - `engine_defaults.controlled_champion_controller_vision_radius`
+- This models server-side command ingestion cadence while preserving deterministic replay/fast-forward behavior.
 
 ## Current Repository Status
 Implemented:
@@ -67,6 +70,9 @@ Implemented:
   - `src/champion_control_harness/*`
 - sequence-ordered accepted-request execution at tick boundaries:
   - `src/engine/event_resolution/combat_event_dispatch_resolution.rs`
+- fixed-tick-delay request execution and data-owned controller visibility defaults:
+  - `data/simulator_defaults.json`
+  - `src/defaults/simulator_defaults_schema_types/simulation_search_and_engine_defaults_schema.rs`
 - shared execution channels for script and harness action paths:
   - `src/engine/event_resolution/controlled_champion_action_execution_channels.rs`
 - command-owned controlled movement stepping:
@@ -75,7 +81,7 @@ Implemented:
 Remaining:
 - actor-symmetric ingress for all controllable actors (not only controlled champion)
 - fog/vision-aware legality
-- full latency/buffering overwrite model parity
+- full buffering overwrite/drop model parity beyond fixed-delay ingress
 - replay contract + checksum validation
 
 ## Sources

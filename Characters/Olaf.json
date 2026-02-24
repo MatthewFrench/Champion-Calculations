@@ -289,7 +289,11 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.25
+        "cast_windup_seconds": 0.25,
+        "resolution_timing": "on_cast_complete",
+        "target_required": true,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Unit.",
@@ -404,7 +408,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Wave 107 manual review: added explicit execution semantics for Reckless Swing target-required cast resolution and attack-speed-scaled windup cancellation behavior."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

@@ -34,7 +34,7 @@
       "value_range": null,
       "unit": "units",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 40.0,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self",
@@ -72,7 +72,7 @@
       "value_range": null,
       "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 40.0,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "enemy_units_hit",
@@ -118,10 +118,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.025008+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Hextech Rocketbelt is modeled as a short-range engage burst active with directional dash plus rocket arc.",
-      "Rocket explosion radius and dash hit radius are marked as estimated in source text."
+      "Rocket explosion radius and dash hit radius are marked as estimated in source text.",
+      "Wave 109 data-quality pass: Supersonic active cooldown metadata is explicitly encoded as 40 seconds across movement and damage branches."
     ]
   },
   "sources": [
@@ -146,8 +147,8 @@
     {
       "name": "League of Legends Wiki - Hextech Rocketbelt",
       "url": "https://wiki.leagueoflegends.com/en-us/Hextech_Rocketbelt",
-      "accessed": "2026-02-23",
-      "used_for": "page-level verification of Supersonic dash distance, rocket count, and estimated area geometry semantics"
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Supersonic dash distance, rocket count, estimated area geometry semantics, and 40-second active cooldown metadata"
     }
   ]
 }

@@ -266,6 +266,18 @@ fn required_defaults_channels_load_with_expected_shapes() {
             .default_champion_hitbox_radius
             > 0.0
     );
+    assert!(
+        simulator_defaults
+            .engine_defaults
+            .controlled_champion_controller_vision_radius
+            > 0.0
+    );
+    assert!(
+        simulator_defaults
+            .engine_defaults
+            .controlled_champion_request_fixed_tick_delay
+            >= 1
+    );
 
     let urf = crate::defaults::urf_respawn_defaults();
     assert!(urf.time_scaling_cap_seconds >= 0.0);

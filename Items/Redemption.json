@@ -38,7 +38,7 @@
       "value_range": null,
       "unit": "radius_units",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "target_location",
@@ -66,7 +66,7 @@
       },
       "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_beam_impact",
       "applies_to": "allies_in_radius",
@@ -101,7 +101,7 @@
       "value_range": null,
       "unit": "ratio_of_target_max_health",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_beam_impact",
       "applies_to": "enemy_champions_in_radius",
@@ -135,7 +135,7 @@
       "value_range": null,
       "unit": "boolean",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -165,9 +165,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.017544+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Redemption is modeled as long-range support intervention: delayed area beam grants vision, heals allies by level scaling, and damages enemy champions by target max-health true damage while remaining castable when dead."
+      "Redemption is modeled as long-range support intervention: delayed area beam grants vision, heals allies by level scaling, and damages enemy champions by target max-health true damage while remaining castable when dead.",
+      "Wave 109 data-quality pass: Intervention active cooldown metadata is explicitly encoded as 90 seconds across delayed impact, heal, damage, and cast-rule branches."
     ]
   },
   "sources": [
@@ -192,8 +193,8 @@
     {
       "name": "League of Legends Wiki - Redemption",
       "url": "https://wiki.leagueoflegends.com/en-us/Redemption",
-      "accessed": "2026-02-23",
-      "used_for": "page-level verification of Intervention ally-heal level scaling and enemy-champion max-health true-damage semantics"
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Intervention ally-heal level scaling, enemy-champion max-health true-damage semantics, and 90-second active cooldown metadata"
     }
   ]
 }

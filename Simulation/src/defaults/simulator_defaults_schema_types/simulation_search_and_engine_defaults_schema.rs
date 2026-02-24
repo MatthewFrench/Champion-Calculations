@@ -85,6 +85,8 @@ pub(crate) struct SearchQualityProfileDefaults {
 pub(crate) struct EngineDefaults {
     pub default_champion_hitbox_radius: f64,
     pub champion_hitbox_radius_overrides: HashMap<String, f64>,
+    pub controlled_champion_controller_vision_radius: f64,
+    pub controlled_champion_request_fixed_tick_delay: u64,
     pub melee_spawn_attack_range_threshold: f64,
     pub melee_spawn_radius: f64,
     pub ranged_spawn_radius_multiplier: f64,

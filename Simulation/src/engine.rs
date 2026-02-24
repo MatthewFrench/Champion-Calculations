@@ -5,8 +5,10 @@ use crate::champion_control_harness::{
     ChampionControllerKind,
 };
 use crate::defaults::{
-    champion_ai_profile, champion_hitbox_radius, protoplasm_lifeline_cooldown_seconds_default,
-    simulator_defaults, world_lifecycle_defaults,
+    champion_ai_profile, champion_hitbox_radius,
+    controlled_champion_controller_vision_radius_default,
+    controlled_champion_request_fixed_tick_delay_default,
+    protoplasm_lifeline_cooldown_seconds_default, simulator_defaults, world_lifecycle_defaults,
 };
 use crate::scripts::champions::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionRuneProcTelemetryEntry,
@@ -252,9 +254,12 @@ pub(super) struct ControlledChampionCombatSimulation {
     controlled_champion_controller_identity: ChampionControllerIdentity,
     controlled_champion_controller_policy: Option<Box<dyn ChampionActionDecisionPolicy>>,
     controlled_champion_manual_control_mode: bool,
+    controlled_champion_controller_vision_radius: f64,
+    controlled_champion_request_fixed_tick_delay: u64,
     controlled_champion_pending_action_requests:
         VecDeque<controlled_champion_controller_channels::QueuedControlledChampionActionRequest>,
     controlled_champion_next_action_request_sequence: u64,
+    controlled_champion_current_tick_index: u64,
     controlled_champion_recent_action_status_reports: VecDeque<ChampionActionStatusReport>,
     controlled_champion_pending_move_target_position: Option<Vec2>,
     controlled_champion_basic_attack_target_actor_id: Option<String>,
@@ -504,8 +509,13 @@ impl ControlledChampionCombatSimulation {
             },
             controlled_champion_controller_policy: None,
             controlled_champion_manual_control_mode: false,
+            controlled_champion_controller_vision_radius:
+                controlled_champion_controller_vision_radius_default(),
+            controlled_champion_request_fixed_tick_delay:
+                controlled_champion_request_fixed_tick_delay_default(),
             controlled_champion_pending_action_requests: VecDeque::new(),
             controlled_champion_next_action_request_sequence: 0,
+            controlled_champion_current_tick_index: 0,
             controlled_champion_recent_action_status_reports: VecDeque::new(),
             controlled_champion_pending_move_target_position: None,
             controlled_champion_basic_attack_target_actor_id: None,

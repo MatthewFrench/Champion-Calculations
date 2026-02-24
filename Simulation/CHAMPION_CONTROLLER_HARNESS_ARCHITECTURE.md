@@ -22,6 +22,8 @@ Both controller kinds must use the same capabilities, constraints, and visibilit
    visibility projection, action validation, and action status reporting are explicit owner channels.
 6. Tick-bound request ingestion:
    controller requests are sampled and processed in deterministic sequence at server-tick boundaries.
+7. Fixed command delay contract:
+   accepted controller requests execute on a data-owned fixed tick delay to model authoritative ingestion cadence.
 
 ## Controlled-Champion Perspective Contract
 The harness exposes `ChampionPerspectiveView` (authoritative control-surface snapshot) per tick.
@@ -96,6 +98,7 @@ Current scope:
 - typed action validation/status contract
 - generic baseline policy + layered champion-specific policy wrapper
 - deterministic per-tick request queueing and sequence-ordered request execution
+- data-owned controller visibility radius and fixed request-delay tuning via `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_controller_vision_radius`, `engine_defaults.controlled_champion_request_fixed_tick_delay`)
 - shared execution channels for controlled champion ability/item actions (script cadence and harness requests use the same execution paths)
 - command-owned controlled champion movement stepping with world-bound clamping
 - unit tests for visibility, fairness parity, legality responses, and policy ordering
@@ -126,7 +129,7 @@ Required coverage for harness evolution:
 - current visibility projection is radius-only and not fog-of-war complete
 - command/path ownership is integrated for deterministic move targets, but pathfinding/collision/terrain routing are not yet integrated
 - objective/structure/economy channels are not yet wired into perspective visibility and action legality
-- full latency/buffering overwrite semantics are still simplified versus live-game network behavior
+- only fixed delay ingestion is modeled; richer buffering/overwrite/packet-drop network semantics are still simplified versus live game
 
 ## Ownership Boundaries
 - Harness contract and legality channels:

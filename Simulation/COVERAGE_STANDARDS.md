@@ -94,6 +94,7 @@ Data metadata requirements:
 - For movement abilities with formula-based velocity (for example `base_speed + movement_speed`), preserve the published formula in notes and track deferred runtime follow-up if execution schema currently stores only base speed.
 - For effects with distance-scaled area size (for example `min_radius : max_radius based on cast distance`), document interpolation semantics and track deferred runtime follow-up if runtime cannot currently resolve dynamic radius.
 - For multi-stage same-slot abilities (for example stage-1 dash plus stage-2 recast skillshot), document stage windows and gating semantics explicitly and track deferred runtime follow-up when stage identity is not first-class in runtime execution.
+- For attack-cadence-coupled abilities, model execution semantics explicitly in `abilities.<ability_key>.execution` using stable keys when source-verified (for example `resolution_timing`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`, `target_required`) so future runtime consumption is deterministic.
 - For control-triggered effects, encode the full trigger set from source text (for example include both immobilize and ground triggers when both are listed).
 - If an item effect depends on a shared cross-item system rule (for example support-income diminishing-gold logic), preserve conservative confidence until that shared rule is encoded explicitly and track the dependency in `Simulation/COVERAGE_GAPS.md`.
 - If editing a shared-rule effect on one member of an item family (for example the support-quest upgrade line), review sibling items for rule-schema consistency and track deferred sibling harmonization in `Simulation/COVERAGE_GAPS.md`.
@@ -123,6 +124,7 @@ Data requirements:
 - Ability identities are stable and slot bindings are data-owned (no slot hardcoding in engine paths).
 - Ability geometry and cast data are in `abilities.<ability_key>.execution`.
 - Active abilities should have non-empty `execution` metadata; treat missing active-execution objects as a blocking coverage gap unless source data is unavailable and explicitly documented.
+- For non-trivial active abilities where cast and hit resolution differ, `execution` should encode explicit semantic timing keys (for example cast-complete vs empowered-basic-attack-hit resolution) when source behavior is verified.
 - Champion behavior-fidelity progress must be tracked in `Simulation/champion_behavior_verification_tracker.json` (manual verified vs source-extracted-only status).
 - Tracker totals must reconcile with tracked keys after each wave: `manual_behavior_verified_champion_keys` length equals `totals.manual_behavior_verified_champions`, and `source_extracted_only_champions` equals corpus-total minus verified-count.
 - Manual champion verification waves must include page-level champion ability citations for each touched champion (both in champion `sources` and in tracker wave metadata).
@@ -174,6 +176,7 @@ Data requirements:
 - Every runtime-modeled effect has a stable `effects_structured[].id`.
 - Structured effects include trigger/cooldown/duration/scaling metadata required by runtime loaders.
 - Active cast effects should explicitly encode cooldown and cast-range metadata when those values are available in source text.
+- If one active ability is represented by multiple `effects_structured` branches, shared active cooldown metadata should be encoded consistently across those branches.
 - Missing active cooldown/cast-range metadata (when source text provides those values) is a blocking data-quality failure.
 - Redirect-backed pseudo-items should include dual provenance in `sources` (redirect page + canonical parent gameplay/champion page) so behavior interpretation remains auditable.
 - Trinket/ward utility items should explicitly encode charge count, recharge scaling, placement limits, level requirements, and reveal/detection timing windows when source text or notes provide those values.
@@ -217,6 +220,7 @@ Data requirements:
 - Rune path slot ordering and shard slot options stay valid.
 - Deterministic stat effects are encoded in parseable structured-effect forms.
 - Multi-branch `per_rank` rune effects include `semantic_components` with explicit branch identities (for example melee/ranged or AD/AP) instead of relying only on positional arrays.
+- Rune narrative text fields (`wiki_descriptions`, touched `long_desc`) should keep decimal formatting normalized (`x.y`, not `x. y`) so authoring audits and reviewer interpretation remain reliable.
 - Mastery JSON files keep explicit `sources` provenance with complete `sources[].accessed` metadata on touched entries.
 - Avoid `effect_type = stat_modifier` entries with null/empty `stat` unless explicitly documented as narrative-only.
 - Prefer `effect_type = condition_note` for narrative constraints that are not direct stat modifiers.
@@ -246,6 +250,9 @@ These are quality improvements to already-covered assets.
 - Maintain manual behavior-verification tracker full-corpus coverage (`Simulation/champion_behavior_verification_tracker.json`, currently `172/172`) and run targeted re-verification waves when champion semantics change.
 - Maintain full provenance coverage for item files with `effects_structured` (all currently sourced) and keep this as a no-regression guardrail.
 - Maintain full parse-confidence completeness for structured item effects (`null`/missing queue at `0` after wave 87) and keep this as a no-regression guardrail.
+- Expand champion execution semantic-key coverage on attack-cadence-coupled abilities (`execution.resolution_timing` and related keys) as a data-first precursor to runtime consumption.
+- Continue active-item cooldown metadata completion on branch-structured actives until remaining no-structured-cooldown queue is cleared.
+- Keep rune narrative decimal-format queue (`x. y` artifacts) at `0` across flat + split rune structures.
 - Enforce `sources` de-duplication on champion/item files during future edits.
 - Raise precision of low-confidence modeled item parses (`parse_confidence` around `0.55` to `0.65`) with manual formula normalization notes.
 - Add/maintain a data audit for runtime-modeled item condition token compatibility to prevent loader/parser regressions.

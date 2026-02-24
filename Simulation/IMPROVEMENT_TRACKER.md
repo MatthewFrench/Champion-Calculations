@@ -1,6 +1,21 @@
 # Improvement Tracker
 
 ## Done
+- Landed data-owned controller vision and fixed tick-delay ingress semantics:
+  - moved controller visibility ownership to global engine defaults:
+    - `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_controller_vision_radius`)
+    - typed schema in `src/defaults/simulator_defaults_schema_types/simulation_search_and_engine_defaults_schema.rs`
+  - added deterministic fixed request-delay ownership:
+    - `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_request_fixed_tick_delay`)
+    - request queue execution gating in `src/engine/controlled_champion_controller_channels.rs` now waits for `execute_at_tick <= current_tick`
+  - wired explicit tick-index progression in `src/engine/event_resolution/combat_event_dispatch_resolution.rs`
+  - added regression coverage:
+    - `controller_policy_requests_respect_fixed_tick_delay_before_execution`
+    - `controller_perspective_uses_data_owned_vision_radius_default`
+    - `clearing_controller_policy_keeps_manual_control_mode_enabled`
+    (`src/tests/engine_tests.rs`)
+  - extended required-defaults shape checks for new engine defaults keys in `src/tests/main_tests.rs`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed champion controller harness phase-2 runtime ingress integration:
   - added deterministic controlled-champion ingress owner channels in `src/engine/controlled_champion_controller_channels.rs`:
     - per-tick perspective projection + legality validation via `src/champion_control_harness/*`
@@ -318,6 +333,19 @@
 - Completed data-first champion execution-semantics wave 106 (`Vex` `Looming Darkness`):
   - manually re-verified projectile-to-explosion timing, cast-distance-scaled radius behavior, and Doom flee-origin semantics
   - documented deferred runtime follow-up for dynamic radius interpolation (avoid flattening to single static hitbox radius)
+- Completed data-first champion execution-semantics wave 107 (`Olaf` `Reckless Swing`):
+  - encoded explicit execution semantic keys for target-required cast completion and attack-speed-scaled windup cancellation behavior (`resolution_timing`, `target_required`, `windup_scales_with_bonus_attack_speed`, `cancels_if_target_invalid_before_resolution`)
+  - refreshed schema context notes and tracker provenance with page-level ability citation
+- Completed data-first champion execution-semantics wave 108 (`Fiora` `Bladework`):
+  - encoded explicit empowered-hit sequence metadata in `execution` (`resolution_timing`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`)
+  - added page-level `Bladework` citation provenance and wave-level tracker scope
+- Completed data-first item active-cooldown completeness wave 109 (`Stridebreaker`, `Hextech Rocketbelt`, `Redemption`):
+  - backfilled source-verified active cooldown metadata across all active structured-effect branches (`15s`, `40s`, `90s`)
+  - refreshed context notes/sources to document active cooldown verification provenance
+- Completed data-first rune narrative decimal-normalization wave 110:
+  - normalized decimal-spacing artifacts in rune narrative fields across flat/split structures (`88` `x. y` artifacts -> `0`)
+  - validated post-edit flat/split parity and JSON integrity after normalization
+  - documented deferred code follow-up for optional lint/audit enforcement on rune narrative decimal artifacts
 - Completed data-first champion fidelity verification wave 75:
   - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
   - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`

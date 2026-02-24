@@ -25,7 +25,7 @@
           "short_desc": "Deal bonus true damage to enemy champions with <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairAct'>impaired movement or actions</lol-uikit-tooltipped-keyword>. ",
           "long_desc": "Damaging champions with <b>impaired movement or actions</b> deals 10 - 45 bonus true damage (based on level).<br><br>Cooldown: 4s<br><rules>Activates on damage occurring after the impairment.</rules>",
           "wiki_descriptions": [
-            "Passive: Damaging basic attacks and ability damage deal 10 – 49. 12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
+            "Passive: Damaging basic attacks and ability damage deal 10 – 49.12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
             "Valid Crowd Control: Immobilizes Blind Disarm Ground Nearsight Polymorph Silence Slow",
             "The target must already be impaired prior to the damaging attack or spell in order to trigger the bonus damage."
           ],
@@ -116,7 +116,7 @@
           "short_desc": "Heal when you damage an enemy champion.",
           "long_desc": "Heal when you damage an enemy champion.<br><br>Healing: 16-40 (+0.1 bonus AD, +0.05 AP) health (based on level)<br><br>Cooldown: 20s",
           "wiki_descriptions": [
-            "Passive: Damaging an enemy champion heals you for 16 – 42. 82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
+            "Passive: Damaging an enemy champion heals you for 16 – 42.82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
             "Does not trigger at full health."
           ],
           "effects_structured": [

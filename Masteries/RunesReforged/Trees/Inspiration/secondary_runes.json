@@ -26,8 +26,8 @@
           "long_desc": "While Flash is on cooldown it is replaced by <i>Hexflash</i>.<br><br><i>Hexflash</i>: Channel for 2s to blink to a new location.<br><br>Cooldown: 20s. Goes on a 10s cooldown when you enter champion combat.",
           "wiki_descriptions": [
             "Passive: While Flash has a remaining cooldown greater than 2 seconds, it is replaced by Hexflash .",
-            "Active: You begin charging for up to 2. 5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
-            "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0. 25 seconds.",
+            "Active: You begin charging for up to 2.5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
+            "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0.25 seconds.",
             "Uses Quick Casting by default, which requires the Active to be held and the Recast to occur on release."
           ],
           "effects_structured": [
@@ -207,7 +207,7 @@
           "short_desc": "Get some gold back when you purchase Legendary Items.",
           "long_desc": "Get 7.5% Gold back when you purchase Legendary Items.",
           "wiki_descriptions": [
-            "Passive: Upon purchasing a Legendary item , you are automatically refunded 7. 5 % of its total gold cost.",
+            "Passive: Upon purchasing a Legendary item , you are automatically refunded 7.5 % of its total gold cost.",
             "Selling or undoing the item's purchase will cancel the refund, reducing your current gold equal to the refunded amount."
           ],
           "effects_structured": [
@@ -530,7 +530,7 @@
           "short_desc": "Bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> towards nearby enemy champions that are <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>movement impaired</lol-uikit-tooltipped-keyword>, increased for enemy champions that you impair.",
           "long_desc": "Gain <speed>7.5% Move Speed</speed> towards nearby enemy champions that are movement impaired. This bonus is increased to <speed>15% Move Speed</speed> for any enemy champion that you impair. <br><br>Activation Range for CC from allies: 1000",
           "wiki_descriptions": [
-            "Passive: Gain 7. 5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
+            "Passive: Gain 7.5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
             "This bonus is doubled to 15% and does not have a range cap nor require vision toward enemy champions whose movement you impaired when they were visible . (note)"
           ],
           "effects_structured": [

@@ -14,12 +14,12 @@ use super::*;
 pub(in crate::engine) const STASIS_ITEM_ACTIVE_ID: &str = "stasis_item";
 pub(in crate::engine) const EMERGENCY_SHIELD_ITEM_ACTIVE_ID: &str = "emergency_shield_item";
 
-const CONTROLLED_CHAMPION_DEFAULT_VISION_RADIUS: f64 = 1350.0;
 const ACTION_STATUS_REPORT_BUFFER_LIMIT: usize = 512;
 
 #[derive(Debug, Clone)]
 pub(in crate::engine) struct QueuedControlledChampionActionRequest {
     pub sequence_id: u64,
+    pub execute_at_tick: u64,
     pub controller_identity: ChampionControllerIdentity,
     pub request: ChampionActionRequest,
 }
@@ -33,12 +33,14 @@ impl ControlledChampionCombatSimulation {
     ) {
         self.controlled_champion_controller_identity = controller_identity;
         self.controlled_champion_controller_policy = Some(policy);
+        // Once harness control is enabled, script auto-cast channels stay disabled.
         self.controlled_champion_manual_control_mode = true;
     }
 
     #[allow(dead_code)]
     pub(crate) fn clear_controlled_champion_controller_policy(&mut self) {
         self.controlled_champion_controller_policy = None;
+        // Manual-control mode remains enabled so script cadence cannot silently resume.
     }
 
     pub(crate) fn queue_controlled_champion_action_request(
@@ -55,9 +57,11 @@ impl ControlledChampionCombatSimulation {
 
         if matches!(status_report.status, ChampionActionStatus::AcceptedQueued) {
             let sequence_id = self.next_controlled_champion_action_request_sequence();
+            let execute_at_tick = self.next_controlled_champion_action_request_execute_tick();
             self.controlled_champion_pending_action_requests.push_back(
                 QueuedControlledChampionActionRequest {
                     sequence_id,
+                    execute_at_tick,
                     controller_identity,
                     request: status_report.request.clone(),
                 },
@@ -93,9 +97,19 @@ impl ControlledChampionCombatSimulation {
     }
 
     pub(in crate::engine) fn process_pending_controlled_champion_action_requests(&mut self) {
-        while let Some(queued_action_request) =
-            self.controlled_champion_pending_action_requests.pop_front()
+        while self
+            .controlled_champion_pending_action_requests
+            .front()
+            .map(|queued_action| queued_action.execute_at_tick)
+            .is_some_and(|execute_at_tick| {
+                execute_at_tick <= self.controlled_champion_current_tick_index
+            })
         {
+            let Some(queued_action_request) =
+                self.controlled_champion_pending_action_requests.pop_front()
+            else {
+                return;
+            };
             self.execute_controlled_champion_action_request(queued_action_request);
         }
     }
@@ -373,7 +387,7 @@ impl ControlledChampionCombatSimulation {
             } else {
                 0.0
             },
-            vision_radius: CONTROLLED_CHAMPION_DEFAULT_VISION_RADIUS,
+            vision_radius: self.controlled_champion_controller_vision_radius,
         }
     }
 
@@ -464,6 +478,13 @@ impl ControlledChampionCombatSimulation {
             .controlled_champion_next_action_request_sequence
             .wrapping_add(1);
         self.controlled_champion_next_action_request_sequence
+    }
+
+    // Controller requests are applied on a fixed deterministic tick delay so fast-forward and
+    // replay channels preserve authoritative command cadence.
+    fn next_controlled_champion_action_request_execute_tick(&self) -> u64 {
+        self.controlled_champion_current_tick_index
+            .saturating_add(self.controlled_champion_request_fixed_tick_delay)
     }
 
     fn record_controlled_champion_action_status_report(

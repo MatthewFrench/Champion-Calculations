@@ -573,6 +573,18 @@ pub(crate) fn champion_hitbox_radius(champion_name: &str) -> f64 {
         .unwrap_or(defaults.engine_defaults.default_champion_hitbox_radius)
 }
 
+pub(crate) fn controlled_champion_controller_vision_radius_default() -> f64 {
+    simulator_defaults()
+        .engine_defaults
+        .controlled_champion_controller_vision_radius
+}
+
+pub(crate) fn controlled_champion_request_fixed_tick_delay_default() -> u64 {
+    simulator_defaults()
+        .engine_defaults
+        .controlled_champion_request_fixed_tick_delay
+}
+
 pub(crate) fn world_lifecycle_defaults() -> WorldLifecycleDefaults {
     simulator_defaults().engine_defaults.world_lifecycle
 }

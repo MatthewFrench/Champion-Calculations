@@ -258,13 +258,18 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 2
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source notes (summary): Bladework is a two-hit empowered basic-attack sequence with attack-cadence-coupled timing; first hit applies slow branch and second hit carries critical-strike branch logic.",
-        "Source notes (summary): Source notes specify spell-shield interaction is limited to first-hit slow, and miss/dodge/block outcomes preserve branch behavior constraints for damage resolution."
+        "Source notes (summary): Source notes specify spell-shield interaction is limited to first-hit slow, and miss/dodge/block outcomes preserve branch behavior constraints for damage resolution.",
+        "Manual behavior verification (2026-02-24): Bladework cast only arms the two-hit sequence; slow/critical branches resolve on each empowered basic-attack hit event, not on cast."
       ]
     },
     "ultimate": {
@@ -358,6 +363,12 @@
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
     },
     {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Bladework",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Bladework empowered-hit cadence, two-hit branch sequencing, and attack-event resolution semantics"
+    },
+    {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Grand_Challenge",
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
@@ -376,7 +387,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Wave 108 manual review: Bladework execution metadata now encodes attack-reset/two-hit empowered sequence semantics for future runtime consumption."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

@@ -48,7 +48,7 @@ Implemented baseline highlights:
 - script-driven champion behavior channel for selected champions (`Simulation/src/scripts/champions/*`)
 - shared runtime stat/rune/item effect channels (`Simulation/src/scripts/runtime/*`)
 - search/orchestration/reporting pipeline for optimization (`Simulation/src/search.rs`, `Simulation/src/scenario_runner.rs`, `Simulation/src/reporting.rs`)
-- controller harness phase-1 scaffold with parity-focused perspective/action/status contracts (`Simulation/src/champion_control_harness/*`)
+- controller harness runtime ingress with parity-focused perspective/action/status contracts and fixed-delay deterministic request execution (`Simulation/src/champion_control_harness/*`, `Simulation/src/engine/controlled_champion_controller_channels.rs`)
 
 Current non-data scope limitations:
 - scenario modes are combat-centric, not full match simulation (`Simulation/src/scenario_runner/*`)
@@ -316,23 +316,23 @@ Status labels:
 - `BLOCKED`
 
 ## Current Status Snapshot (2026-02-24)
-Overall weighted completion estimate for this blueprint: `54%` (`IN_PROGRESS`).
+Overall weighted completion estimate for this blueprint: `56%` (`IN_PROGRESS`).
 
 Bucket status (complete / remaining):
-- Runtime Systems Completeness (`30%` weight): `52% / 48%`
-  - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress, and command-owned controlled champion movement stepping
+- Runtime Systems Completeness (`30%` weight): `53% / 47%`
+  - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress with fixed-delay execution, and command-owned controlled champion movement stepping
   - largest remaining gap: world ownership still lacks terrain-aware pathfinding/collision and combat-coupled macro lifecycle transitions (objective damage, structure destruction, economy/xp ownership)
-- Determinism And Replay Guarantees (`20%` weight): `69% / 31%`
-  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, and per-tick stable-sequence controller request execution
+- Determinism And Replay Guarantees (`20%` weight): `72% / 28%`
+  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, and data-owned fixed tick delay for controller command application
   - largest remaining gap: no replay checksum verifier and no full-match deterministic replay contract
-- Calibration And Correctness (`20%` weight): `60% / 40%`
-  - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, and deterministic ingress/movement command regressions
+- Calibration And Correctness (`20%` weight): `62% / 38%`
+  - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, deterministic ingress/movement command regressions, and fixed-delay/manual-mode harness regressions
   - largest remaining gap: no golden interaction harness/property-suite for full-system invariants
 - Performance Envelope (`15%` weight): `47% / 53%`
   - what is done: broad parallelization and improved runtime diagnostics
   - largest remaining gap: coverage-stage fixed-cost latency and no enforced CI performance budgets
-- Renderer-Contract Readiness (`15%` weight): `38% / 62%`
-  - what is done: schema-versioned trace/report artifacts with stable structured events for current combat scope plus normalized world-state ownership scaffolding, deterministic world-lifecycle event channels (minion/objective lifecycle traces), champion-controller perspective/status contract scaffolding, and deterministic command-ingress status buffering channels
+- Renderer-Contract Readiness (`15%` weight): `39% / 61%`
+  - what is done: schema-versioned trace/report artifacts with stable structured events for current combat scope plus normalized world-state ownership scaffolding, deterministic world-lifecycle event channels (minion/objective lifecycle traces), champion-controller perspective/status contract scaffolding, deterministic command-ingress status buffering channels, and fixed-delay command semantics suitable for future replay serialization
   - largest remaining gap: no full world snapshot contract and no replay-loader validation loop
 
 Phase-level status:
@@ -349,7 +349,7 @@ Phase-level status:
 - startup preflight now surfaces typed required-defaults failures before run dispatch, but the runtime still uses process-fatal accessors for strict invariants in binary mode
 - current scan: `0` non-test `expect(...)` and `0` non-test `panic!` callsites under `Simulation/src`
 - controlled-champion script registry is still static and low-coverage (`Vladimir`, `Sona`) relative to full roster requirements
-- controller ingress is now deterministic and harness-gated, but full latency model, actor-symmetric command channels, and fog-aware legality still remain
+- controller ingress now includes fixed-delay deterministic execution and data-owned vision radius, but actor-symmetric command channels, fog-aware legality, and richer buffering/drop semantics still remain
 
 ## Immediate Next Work (Execution-Ready)
 1. Expand harness ingress from controlled champion to actor-symmetric command channels (all controllable actors through one legality/status path).

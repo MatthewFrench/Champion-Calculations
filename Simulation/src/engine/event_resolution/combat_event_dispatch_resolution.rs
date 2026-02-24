@@ -75,6 +75,8 @@ impl ControlledChampionCombatSimulation {
                 return false;
             }
 
+            self.controlled_champion_current_tick_index =
+                self.controlled_champion_current_tick_index.wrapping_add(1);
             let target_time = self.sim.max_time_seconds.min(self.time + self.tick_seconds);
             self.enqueue_controller_policy_action_request_for_tick();
             self.process_pending_controlled_champion_action_requests();

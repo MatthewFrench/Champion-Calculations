@@ -123,7 +123,7 @@
           "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>Impairing</lol-uikit-tooltipped-keyword> the movement of an enemy champion heals nearby allied champions. ",
           "long_desc": "Impairing the movement of an enemy champion restores <healing>@BaseHeal@ Health</healing> to you and the lowest health nearby allied champion.<br><br>70% effect for Ranged Users.<br><br>Cooldown: 20s",
           "wiki_descriptions": [
-            "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54. 71 / 7 – 38. 29 ) (based on your level)."
+            "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54.71 / 7 – 38.29 ) (based on your level)."
           ],
           "effects_structured": [
             {
@@ -200,7 +200,7 @@
           "short_desc": "Whenever you gain a shield, your next basic attack against a champion deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> damage.",
           "long_desc": "Whenever you gain a new shield,  your next basic attack against a champion deals <scaleLevel>5 - 30</scaleLevel> <scaleHealth>(+2.5% Bonus Health)</scaleHealth> <scaleMana>(+15.0% New Shield Amount)</scaleMana> bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> damage.<br><br>You have up to 2s after the shield expires to use this effect.",
           "wiki_descriptions": [
-            "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
+            "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32.94 (based on level) (+ 2.5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
             "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
           ],
           "effects_structured": [
@@ -347,7 +347,7 @@
           "short_desc": "After taking damage from an enemy champion, the next 3 spells or attacks you receive from them deal 30-60 (based on level) less damage.<br><br>Duration: 1.5s<br>Cooldown: 55s",
           "long_desc": "After taking damage from an enemy champion, the next 3 spells or attacks you receive from them deal 30-60 (based on level) less damage.<br><br>Duration: 1.5s<br>Cooldown: 55s",
           "wiki_descriptions": [
-            "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63. 53 (based on level) less damage (including true damage )."
+            "Passive: After taking damage from an enemy champion , activate Bone Plating for 1.5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63.53 (based on level) less damage (including true damage )."
           ],
           "effects_structured": [
             {
@@ -404,7 +404,7 @@
           "long_desc": "Absorb life essence from monsters or enemy minions that die near you, permanently gaining 3 maximum health for every 8.<br><br>When you've absorbed 120 monsters or enemy minions, gain an additional 3.5% maximum health.",
           "wiki_descriptions": [
             "Passive: Every 8 monsters or enemy minions that die near you permanently generates a stack . Each stack grants 3 bonus health . This effect can stack indefinitely.",
-            "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3. 5 %."
+            "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3.5 %."
           ],
           "effects_structured": [
             {

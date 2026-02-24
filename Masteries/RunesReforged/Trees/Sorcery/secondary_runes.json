@@ -285,7 +285,7 @@
           "short_desc": "While above 70% health, gain extra <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword>.",
           "long_desc": "While above 70% health, gain an <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> bonus of up to 18 Attack Damage or 30 Ability Power (based on level). <br><br>Grants 1.8 Attack Damage or 3 Ability Power at level 1. ",
           "wiki_descriptions": [
-            "Passive: Gain 1. 8 – 19. 91 (based on level) bonus Attack Damage or 3 – 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
+            "Passive: Gain 1.8 – 19.91 (based on level) bonus Attack Damage or 3 – 33.18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
             "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
           ],
           "effects_structured": [
@@ -360,7 +360,7 @@
           "short_desc": "Your first damaging ability hit every 10s burns champions.",
           "long_desc": "Your next damaging ability hit sets champions on fire dealing 20 - 40 bonus magic damage based on level after 1s.<br><br>Cooldown: 10s",
           "wiki_descriptions": [
-            "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42. 35 (based on level) bonus magic damage after 1 second."
+            "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42.35 (based on level) bonus magic damage after 1 second."
           ],
           "effects_structured": [
             {
@@ -409,7 +409,7 @@
           "short_desc": "Gain <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> and AP or AD, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> in the river.",
           "long_desc": "Gain <speed>10 Move Speed</speed> and <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>13 - 30 Adaptive Force</font></lol-uikit-tooltipped-keyword> (based on level) when in the river.<br><br><i>May you be as swift as the rushing river and agile as a startled Rift Scuttler.</i>",
           "wiki_descriptions": [
-            "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 – 19. 2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
+            "Passive: While in the river , you gain 10 bonus movement speed and 7.8 – 19.2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
             "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
           ],
           "effects_structured": [
@@ -478,7 +478,7 @@
           "short_desc": "Gain increasing amounts of AD or AP, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> over the course of the game.",
           "long_desc": "Every 10 min gain AP or AD, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword>.<br><br><i>10 min</i>: + 8 AP or 5 AD <br><i>20 min</i>: + 24 AP or 14 AD<br><i>30 min</i>: + 48 AP or 29 AD<br><i>40 min</i>: + 80 AP or 48 AD<br><i>50 min</i>: + 120 AP or 72 AD<br><i>60 min</i>: + 168 AP or 101 AD<br>etc...",
           "wiki_descriptions": [
-            "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
+            "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4.8 / 14.4 / 28.8 / 48 / 72 / 100.8 / 134.4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
             "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
           ],
           "effects_structured": [

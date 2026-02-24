@@ -82,7 +82,7 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_radius",
@@ -122,7 +122,7 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "on_active_hit",
       "applies_to": "self",
@@ -149,7 +149,7 @@
       "value_range": null,
       "unit": "boolean",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -185,11 +185,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.018804+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
       "Stridebreaker is a fighter gap-closing and sticking tool: short-range area burst, slow, and temporary speed burst to continue melee pressure.",
-      "Movement-during-cast behavior is scoped to Breaking Shockwave activation for close-range engage and chase continuity."
+      "Movement-during-cast behavior is scoped to Breaking Shockwave activation for close-range engage and chase continuity.",
+      "Wave 109 data-quality pass: Breaking Shockwave active cooldown metadata is explicitly encoded as 15 seconds across all active branch effects."
     ]
   },
   "sources": [
@@ -214,8 +215,8 @@
     {
       "name": "League of Legends Wiki - Stridebreaker",
       "url": "https://wiki.leagueoflegends.com/en-us/Stridebreaker",
-      "accessed": "2026-02-23",
-      "used_for": "page-level verification of active and movement-during-cast semantics"
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of active and movement-during-cast semantics, including 15-second Breaking Shockwave cooldown metadata"
     }
   ]
 }

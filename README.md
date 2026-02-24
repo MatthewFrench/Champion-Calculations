@@ -15,7 +15,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - World ownership now includes explicit actor allegiance channels and baseline non-champion ecology anchors (structures, monsters, minion spawns) for encounter-state assembly.
 - Runtime enemy movement and respawn position updates now route through world ownership upsert/clamp channels, keeping runtime enemy positions map-bounded.
 - Runtime world lifecycle channels now advance deterministic minion-wave spawn/despawn loops and neutral objective spawn/respawn timers through `Simulation/src/world/world_actor_lifecycle_channels.rs`.
-- Champion controller harness phase-2 runtime ingress now routes deterministic controlled-champion command handling through `Simulation/src/champion_control_harness/*` + `Simulation/src/engine/controlled_champion_controller_channels.rs` with sequence-ordered request execution and command-owned movement stepping.
+- Champion controller harness phase-2 runtime ingress now routes deterministic controlled-champion command handling through `Simulation/src/champion_control_harness/*` + `Simulation/src/engine/controlled_champion_controller_channels.rs` with sequence-ordered request execution, fixed tick-delay command application, and command-owned movement stepping.
 - Controlled champion script coverage currently includes `Vladimir` and `Sona`.
 - Controlled-champion modes now fail fast when the selected champion has no registered controlled-champion script, preventing silent no-script degradations.
 - Engine event-resolution/trace channels now guard stale actor-index payloads.

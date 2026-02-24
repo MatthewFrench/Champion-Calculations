@@ -106,6 +106,8 @@
   "engine_defaults": {
     "default_champion_hitbox_radius": 65.0,
     "champion_hitbox_radius_overrides": {},
+    "controlled_champion_controller_vision_radius": 1350.0,
+    "controlled_champion_request_fixed_tick_delay": 1,
     "melee_spawn_attack_range_threshold": 200.0,
     "melee_spawn_radius": 160.0,
     "ranged_spawn_radius_multiplier": 0.8,

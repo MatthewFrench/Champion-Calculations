@@ -73,7 +73,7 @@
           "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> restore 5% of your missing health and grant an additional 20 gold. ",
           "long_desc": "Takedowns restore 5% of your missing health, 2.5% of your max health, and grant an additional 20 gold. <br><br><hr><br><i>'The most dangerous game brings the greatest glory.' <br>—Noxian Reckoner</i>",
           "wiki_descriptions": [
-            "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay."
+            "Passive: Scoring a takedown against an enemy champion heals you for 2.5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay."
           ],
           "effects_structured": [
             {
@@ -112,7 +112,7 @@
           "long_desc": "Damaging an enemy champion restores 6-50 (80% for ranged) mana or 6 energy.<br><br>Takedowns restore 15% of your maximum mana or energy. <br><br>Cooldown for damage restoration: 8s",
           "wiki_descriptions": [
             "Passive: Scoring a takedown against an enemy champion restores 15% of your maximum mana or 15% of your maximum energy after a 1-second delay.",
-            "Damaging an enemy champion restores ( 6 – 56 / 4. 8 – 44. 8 ) (based on level) mana or 6 energy (8 second cooldown)."
+            "Damaging an enemy champion restores ( 6 – 56 / 4.8 – 44.8 ) (based on level) mana or 6 energy (8 second cooldown)."
           ],
           "effects_structured": [
             {
@@ -232,7 +232,7 @@
           "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent <b>Attack Speed</b>. ",
           "long_desc": "Gain 3% attack speed plus an additional 1.5% for every <i>Legend</i> stack (<statGood>max 10 stacks</statGood>).<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
           "wiki_descriptions": [
-            "Passive: Gain 3% (+ 1. 5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
+            "Passive: Gain 3% (+ 1.5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
             "Legend: Gain Legend stacks for every 100 points earned, up to 10: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills"
           ],
           "effects_structured": [
@@ -301,7 +301,7 @@
           "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent Basic Ability <b>Haste</b>. ",
           "long_desc": "Gain 1.5 basic ability haste for every <i>Legend</i> stack (<statGood>max 10 stacks</statGood>).<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
           "wiki_descriptions": [
-            "Passive: Gain 1. 5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
+            "Passive: Gain 1.5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
             "Legend: Gain Legend stacks for every 100 points earned, up to 10: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills"
           ],
           "effects_structured": [
@@ -364,7 +364,7 @@
           "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent<b> Life Steal</b>, up to a cap. Once the cap is reached, increase your max health. Weaker earlier but stronger later game than other Legend Runes.",
           "long_desc": "Gain <scaleAD>0.45% Life Steal</scaleAD> for every <i>Legend</i> stack (<statGood>max 15 stacks</statGood>). At maximum <i>Legend</i> stacks, gain <scaleHealth>85 max health</scaleHealth>.<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
           "wiki_descriptions": [
-            "Passive: Gain 0. 45 % life steal per Legend stack , up to 6. 75 % at maximum stacks, at which you also gain 85 bonus health .",
+            "Passive: Gain 0.45 % life steal per Legend stack , up to 6.75 % at maximum stacks, at which you also gain 85 bonus health .",
             "Legend: Gain Legend stacks for every 100 points earned, up to 15: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills"
           ],
           "effects_structured": [
