@@ -1,0 +1,477 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-02-24",
+  "source_of_truth": {
+    "source_champion_corpus": "From Online/champions/*.json",
+    "canonical_characters_folder": "Characters/*.json",
+    "manual_verification_target": "In-game behavior fidelity review beyond source extraction"
+  },
+  "manual_behavior_verification_standard": {
+    "required_review_dimensions": [
+      "activation_model",
+      "timing_model",
+      "targeting_and_range_gating",
+      "player_visible_outcome",
+      "edge_conditions_and_exclusions"
+    ],
+    "citation_requirement": "page_level_champion_ability_source_required_for_each_manual_verification_wave",
+    "policy": {
+      "default_behavior_model": "intended_non_bug_behavior",
+      "bug_behavior_handling": "document_as_note_only_do_not_model_bug_behavior_in_canonical_data"
+    }
+  },
+  "totals": {
+    "champion_corpus_total": 172,
+    "manual_behavior_verified_champions": 53,
+    "source_extracted_only_champions": 119,
+    "manual_verification_percent": 30.81
+  },
+  "manual_behavior_verified_champion_keys": [
+    "Akshan",
+    "Aphelios",
+    "AurelionSol",
+    "Aurora",
+    "Briar",
+    "Camille",
+    "Corki",
+    "Darius",
+    "DrMundo",
+    "Ekko",
+    "Fiddlesticks",
+    "Fiora",
+    "Garen",
+    "Gnar",
+    "Irelia",
+    "Jax",
+    "Katarina",
+    "Leblanc",
+    "Lillia",
+    "Lissandra",
+    "Lux",
+    "Mel",
+    "MonkeyKing",
+    "Morgana",
+    "Naafiri",
+    "Nasus",
+    "Nautilus",
+    "Nocturne",
+    "Olaf",
+    "Riven",
+    "Rumble",
+    "Shaco",
+    "Singed",
+    "Sion",
+    "Sona",
+    "Swain",
+    "Taliyah",
+    "Trundle",
+    "Udyr",
+    "Urgot",
+    "Varus",
+    "Vayne",
+    "Velkoz",
+    "Vi",
+    "Vladimir",
+    "Volibear",
+    "Warwick",
+    "Xerath",
+    "XinZhao",
+    "Yorick",
+    "Yuumi",
+    "Zed",
+    "Ziggs"
+  ],
+  "manual_behavior_verification_wave_44": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Nasus",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Siphoning Strike empowered-hit cast-to-hit timing and stack-accrual/exclusion semantics"
+      },
+      {
+        "key": "Garen",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Decisive Strike cast-state vs empowered-hit resolution timing and edge-case shield/untargetable notes"
+      },
+      {
+        "key": "Darius",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Crippling Strike empowered-hit timing, damage-class interactions, and shield/refund edge behavior"
+      },
+      {
+        "key": "Fiora",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Bladework two-hit branch timing and miss/dodge/block outcome semantics"
+      },
+      {
+        "key": "XinZhao",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Three Talon Strike three-hit cadence, third-hit control branch, and shield interaction split"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_45": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Camille",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Precision Protocol two-step empowered-hit sequencing, recast delay threshold behavior, and attack-cadence-coupled resolution timing"
+      },
+      {
+        "key": "Ekko",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Phase Dive two-stage dash and empowered-hit blink timing, including target-required second-stage resolution"
+      },
+      {
+        "key": "Trundle",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Chomp attack-reset cast gating, hit-resolution timing, and intended miss/parry/blind/spell-shield edge semantics"
+      },
+      {
+        "key": "Volibear",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Frenzied Maul target-required strike timing and Wounded-state bite branch transition semantics"
+      },
+      {
+        "key": "Vi",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Relentless Force charge usage with primary-hit plus cone-secondary branch semantics and attack-reset timing"
+      },
+      {
+        "key": "Yorick",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Last Rites empowered-hit timing, heal-scope branching, and grave/Awakening interaction on kill-confirmed strikes"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_46": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Fiddlesticks",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Terrify fear-gating and fear-immunity branch handling, Bountiful Harvest channel/tether tick cadence, and Reap slow/silence timing normalization"
+      },
+      {
+        "key": "Rumble",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Flamespitter periodic cone tick cadence and The Equalizer deploy-plus-persistent-burn timing semantics"
+      },
+      {
+        "key": "Swain",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Death's Hand multi-bolt burst window timing and Demonic Ascension periodic drain cadence with energy-gated uptime behavior"
+      },
+      {
+        "key": "Nautilus",
+        "abilities_reviewed": [
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Riptide staged wave timing and Depth Charge wake-eruption cadence versus final-target branch timing"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_47": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Akshan",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Comeuppance channel timing and Dirty Fighting stack-refresh cadence normalization (0.25-second refresh interval)"
+      },
+      {
+        "key": "Aurora",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Twofold Hex mark/recast timing window normalization and Between Worlds leap travel timing normalization"
+      },
+      {
+        "key": "Briar",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Chilling Scream charge-heal tick cadence and recast slow-duration timing normalization"
+      },
+      {
+        "key": "Gnar",
+        "abilities_reviewed": [
+          "passive",
+          "ultimate"
+        ],
+        "focus": "Rage gain tick cadence and GNAR! post-cast movement-lock timing normalization"
+      },
+      {
+        "key": "Irelia",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Flawless Duet blade-convergence timing normalization"
+      },
+      {
+        "key": "Leblanc",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Sigil mark duration and Ethereal Chains tether/root timing normalization"
+      },
+      {
+        "key": "Lillia",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Watch Out! Eep! dash-and-impact timing normalization"
+      },
+      {
+        "key": "Lux",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Final Spark reveal duration and post-cast vision linger normalization"
+      },
+      {
+        "key": "MonkeyKing",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Nimbus Strike clone projectile-block window timing normalization"
+      },
+      {
+        "key": "Nocturne",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Shroud spell-shield uptime and Unspeakable Horror per-tick damage cadence normalization"
+      },
+      {
+        "key": "Riven",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Ki Burst stun duration, Valor shield duration, and Blade of the Exile bonus-activation timing normalization"
+      },
+      {
+        "key": "Shaco",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Deceive empowered-hit window, Jack in the Box attack cadence, and Hallucinate fear-duration bug-note timing normalization"
+      },
+      {
+        "key": "Taliyah",
+        "abilities_reviewed": [
+          "passive",
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Rock Surfing speed-ramp cadence and Threaded Volley/Unraveled Earth timing-duration normalization"
+      },
+      {
+        "key": "Urgot",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Corrosive Charge cast interaction with Purge firing pause timing normalization"
+      },
+      {
+        "key": "Varus",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Piercing Arrow charge range cadence, Blighted Quiver active window duration, and Hail of Arrows impact timing/slow linger normalization"
+      },
+      {
+        "key": "Xerath",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Arcanopulse self-lock window, Eye of Destruction delay, Shocking Orb stun range-duration expression, and ultimate recast gate timing normalization"
+      },
+      {
+        "key": "Yuumi",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Prowling Projectile steer duration plus Final Chapter shield/slow duration normalization"
+      },
+      {
+        "key": "Zed",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Living Shadow and Death Mark recast window durations plus Shadow Slash slow-duration normalization"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_48": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Udyr",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Iron Mantle awaken-heal tick cadence, Blazing Stampede movement-speed decay timing, and Wingborne Storm periodic damage cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Udyr"
+      },
+      {
+        "key": "Sion",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Decimating Smash charge-step timing and short-release slow duration plus Roar of the Slayer slow and armor-reduction window normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Sion"
+      },
+      {
+        "key": "Lissandra",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Ice Shard slow duration, Glacial Path travel-deceleration timing, and Frozen Tomb self-cast heal cadence plus field expansion/refresh timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Lissandra"
+      },
+      {
+        "key": "AurelionSol",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Breath of Light channel/tick cadence and Falling Star impact delay-stun timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Aurelion_Sol"
+      },
+      {
+        "key": "Naafiri",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Darkin Daggers bleed tick cadence and Hounds' Pursuit channel-to-dash timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Naafiri"
+      }
+    ]
+  },
+  "notes": [
+    "This tracker records manual verification progress beyond generated/source-extracted champion data.",
+    "Champion parity and source coverage are tracked separately in Simulation/champion_data_coverage_inventory.json.",
+    "Manual verification status should only be raised when non-trivial execution semantics were reviewed and documented in champion context notes."
+  ],
+  "manual_behavior_verification_wave_49": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Mel",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Radiant Volley channel cadence, Rebuttal barrier/decay window timing, and Solar Snare orb-scout tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Mel"
+      },
+      {
+        "key": "Katarina",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Preparation dagger-landing window timing and Death Lotus channel-plus-dagger cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Katarina"
+      },
+      {
+        "key": "Corki",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Valkyrie trail burn tick cadence and Gatling Gun tick-plus-stack cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Corki"
+      },
+      {
+        "key": "Velkoz",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Void Rift collapse delay, Tectonic Disruption distance-scaled travel timing, and ultimate beam tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Vel%27Koz"
+      },
+      {
+        "key": "Singed",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Poison Trail poison-tick cadence, Mega Adhesive landing delay, and Fling displacement-duration timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Singed"
+      },
+      {
+        "key": "Ziggs",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Satchel Charge knockback resolution timing and Hexplosive Minefield slow-duration timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Ziggs"
+      }
+    ]
+  }
+}

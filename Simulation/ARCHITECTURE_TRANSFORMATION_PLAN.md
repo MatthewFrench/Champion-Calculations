@@ -386,7 +386,7 @@ Track and update at each architecture milestone close:
 | Metric | Baseline | Current | Target |
 |---|---|---|---|
 | `engine.rs` line count | 3579 | 601 | <= 700 |
-| `scenario_runner.rs` line count | 4284 | 284 | <= 700 |
+| `scenario_runner.rs` line count | 4284 | 285 | <= 700 |
 | `search.rs` line count | 2244 | 569 | <= 700 |
 | `defaults.rs` line count | 2455 | 386 | <= 700 |
 | `data.rs` line count | 2008 | 116 | <= 700 |
@@ -1102,13 +1102,69 @@ Recent progress log:
   - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
 - 2026-02-24: Marked `ARCH-013` DONE after actor-state boundary audit confirmed no remaining facade-side mutable enemy-state write channels outside owner modules.
 - 2026-02-24: Marked `ARCH-070` DONE after compatibility-shim removal and doc reconciliation across roadmap/tracker/readmes.
+- 2026-02-24: Completed high-friction scenario-runner ownership follow-up by decomposing controlled-champion result analysis into explicit projection leaves under:
+  - `src/scenario_runner/controlled_champion_result_build_analysis/build_order_analysis.rs`
+  - `src/scenario_runner/controlled_champion_result_build_analysis/candidate_metrics_projection.rs`
+  - `src/scenario_runner/controlled_champion_result_build_analysis/search_diagnostics_projection.rs`
+  while preserving `analyze_controlled_champion_build_results(...)` as a stable facade API in `controlled_champion_result_build_analysis.rs` and reducing that facade from `410` to `288` lines.
+- 2026-02-24: Completed high-friction scenario execution ownership follow-up by decomposing controlled-champion execution internals under:
+  - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/deadline_and_progress.rs`
+  - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/runtime_setup.rs`
+  - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution/candidate_scoring_channels.rs`
+  while preserving `run_controlled_champion_scenario_impl(...)` as a stable facade API in `controlled_champion_scenario_execution.rs`, reducing:
+  - `controlled_champion_scenario_execution.rs` from `406` to `289` lines
+  - `controlled_champion_scenario_execution/search_execution.rs` from `353` to `264` lines.
+- 2026-02-24: Full validation rerun remained green after scenario-runner follow-up slices:
+  - `cargo fmt --manifest-path Simulation/Cargo.toml`
+  - `cargo clippy --all-targets --all-features --manifest-path Simulation/Cargo.toml -- -D warnings`
+  - `cargo test --release --manifest-path Simulation/Cargo.toml`
+- 2026-02-24: Completed high-friction dense-leaf decomposition follow-up outside scenario-runner by splitting:
+  - `src/search/strategy/item_candidate_search_strategies.rs` into:
+    - `src/search/strategy/item_candidate_search_strategies/beam_search_strategy.rs`
+    - `src/search/strategy/item_candidate_search_strategies/iterative_search_strategies.rs`
+    - `src/search/strategy/item_candidate_search_strategies/mcts_search_strategy.rs`
+  - `src/scripts/champions.rs` into:
+    - `src/scripts/champions/champion_behavior_profile_channels.rs`
+    - `src/scripts/champions/champion_script_effect_types.rs`
+    - `src/scripts/champions/champion_script_event_channels.rs`
+    - `src/scripts/champions/runtime_effect_channels.rs`
+  - `src/engine/trace_snapshot_reporting.rs` into:
+    - `src/engine/trace_snapshot_reporting/trace_lifecycle_channels.rs`
+    - `src/engine/trace_snapshot_reporting/trace_status_and_projectile_projections.rs`
+    - `src/engine/trace_snapshot_reporting/trace_snapshot_summary_projection.rs`
+  - `src/data/loadout_domain_modeling.rs` into:
+    - `src/data/loadout_domain_modeling/loadout_domain_schema.rs`
+    - `src/data/loadout_domain_modeling/modeled_rune_filtering.rs`
+    - `src/data/loadout_domain_modeling/rune_page_validation.rs`
+    - `src/data/loadout_domain_modeling/loadout_selection_generation.rs`
+  - `src/engine/actor_state/enemy_runtime_state.rs` into:
+    - `src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`
+    - `src/engine/actor_state/enemy_runtime_state/enemy_attack_and_script_channels.rs`
+    - `src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`
+  while preserving all existing facade entrypoints and reducing:
+  - `src/search/strategy/item_candidate_search_strategies.rs` from `458` to `110` lines
+  - `src/scripts/champions.rs` from `457` to `36` lines
+  - `src/engine/trace_snapshot_reporting.rs` from `440` to `3` lines
+  - `src/data/loadout_domain_modeling.rs` from `418` to `15` lines
+  - `src/engine/actor_state/enemy_runtime_state.rs` from `416` to `6` lines
+- 2026-02-24: Full validation rerun remained green after dense-leaf decomposition follow-up:
+  - `cargo fmt --manifest-path Simulation/Cargo.toml`
+  - `cargo clippy --all-targets --all-features --manifest-path Simulation/Cargo.toml -- -D warnings`
+  - `cargo test --release --manifest-path Simulation/Cargo.toml`
 
 ## 12) Immediate Next Batch
 
 1. Keep architecture milestones closed by enforcing standards in new feature work (no new oversized facades and no new cross-owner mutation channels).
-2. Optionally split `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (`574` lines) if execution orchestration ownership needs deeper granularity.
-3. Optionally split `src/scenario_runner/controlled_champion_result_reporting_projection.rs` (`310` lines) if reporting projection ownership needs finer owner channels.
-4. Continue periodic architecture metrics + validation checks to catch regressions early.
+2. Optionally split remaining dense search/runtime leaves:
+  - `src/search/strategy/full_loadout_search_strategies.rs` (`409` lines)
+  - `src/search/full_loadout_search_orchestration.rs` (`380` lines)
+  - `src/scripts/runtime/loadout_runtime.rs` (`363` lines)
+3. Optionally split remaining dense execution/runtime leaves:
+  - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` (`359` lines)
+  - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` (`357` lines)
+  - `src/scripts/champions/controlled_champion.rs` (`351` lines)
+  - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script.rs` (`350` lines)
+4. Continue periodic architecture metrics + validation checks and serialize validation runs when concurrent data-file edits are active.
 
 ## 13) Observed High-Value Improvements
 
@@ -1210,6 +1266,29 @@ These were identified while executing `ARCH-010`, `ARCH-011`, `ARCH-012`, `ARCH-
      - `crate::Ordering`
      - `crate::EnemyDerivedCombatStats`
    - updating downstream imports to explicit owners and keeping full validation green.
+73. Done: completed item-pool ownership follow-up by splitting `src/data/champion_item_preset_data_loading/item_pool_loading.rs` into explicit owner leaves:
+   - `src/data/champion_item_preset_data_loading/item_pool_loading/item_metadata_loading.rs`
+   - `src/data/champion_item_preset_data_loading/item_pool_loading/item_pool_selection_filters.rs`
+   while preserving `item_pool_loading.rs` as a thin facade (`8` lines).
+74. Done: completed build-search parse ownership follow-up by splitting `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs` into explicit owner leaves:
+   - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/build_search_config_value_mapping.rs`
+   - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/search_quality_profile_application.rs`
+   while preserving `build_search_config_parsing.rs` as a thin facade (`7` lines).
+75. Done: completed defaults schema ownership follow-up by splitting `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema.rs` into explicit owner leaves:
+   - `champion_behavior_baseline_defaults_schema.rs`
+   - `vladimir_ability_defaults_schema.rs`
+   - `champion_specific_ability_defaults_schema.rs`
+   - `item_survivability_defaults_schema.rs`
+   while preserving `champion_behavior_and_ability_defaults_schema.rs` as a thin facade (`9` lines).
+76. Done: completed fixed-loadout/rune-sweep shared projection extraction by introducing:
+   - `src/scenario_runner/controlled_champion_enemy_scenario_projection.rs`
+   and routing fixed/rune execution through explicit owner APIs (`parse_scaled_enemy_scenarios`, `build_enemy_build_projection`, `build_scenario_reference_outcomes`), reducing:
+   - `src/scenario_runner/fixed_loadout_runner.rs` from `406` to `358` lines
+   - `src/scenario_runner/rune_sweep_runner.rs` from `308` to `260` lines.
+77. Done: completed scenario-runner high-friction follow-up by extracting result-analysis projection ownership under `src/scenario_runner/controlled_champion_result_build_analysis/*` and reducing `src/scenario_runner/controlled_champion_result_build_analysis.rs` from `410` to `288` lines.
+78. Done: completed scenario-execution high-friction follow-up by extracting deadline/progress setup ownership and candidate-scoring channels under `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/*`, reducing:
+   - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` from `406` to `289` lines
+   - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution.rs` from `353` to `264` lines.
 
 ## 14) Update Rules
 
@@ -1228,7 +1307,7 @@ Status indicator:
 
 - Milestone completion: `18/18` (`100.0%`) complete, `0/18` in progress.
 - Over-budget-gap closure (tracked-facade progress): `100.00%` complete (`0` over-budget lines remain out of `11,678` baseline over-budget lines).
-- Raw line-budget helper output: `122.63%` (overshoots because multiple facades are now well below target budgets).
+- Raw line-budget helper output: `122.62%` (overshoots because multiple facades are now well below target budgets).
 - Overall architecture-program completion estimate (including non-line-budget milestones): `100.0%`.
 
 Remaining facade line-gap to target (`current - 700`):
@@ -1244,13 +1323,16 @@ Remaining facade line-gap to target (`current - 700`):
 Current unresolved blockers:
 
 - No hard technical blockers identified in this slice.
+- Validation sequencing friction exists when concurrent data-file edits are running in parallel; run-order serialization is required for deterministic green test runs.
 
 Current high-friction areas:
 
-- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (`574` lines) is under budget but remains the largest single orchestration leaf; any further split should preserve setup/search/report sequencing boundaries.
-- `src/scenario_runner/controlled_champion_result_reporting_projection.rs` (`310` lines) is explicit and under budget, but it still aggregates many projection channels and may be the next best optional split for finer reporting ownership.
-- `src/data/champion_item_preset_data_loading/item_pool_loading.rs` (`236` lines) is under budget but still owns multiple item-loading + filtering channels; future follow-up can split pure loading from filtering/projection if deeper decomposition is desired.
-- `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs` (`266` lines) is under budget but still combines parse mapping and profile-tuning helpers; optional follow-up can split parse mapping from profile application if ownership granularity needs to be tightened.
-- Root-level compatibility shims removed (`crate::Ordering`, `crate::EnemyDerivedCombatStats`); downstream code now imports explicit owner modules directly.
-- `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema.rs` (`191` lines) is now explicit and under budget; remaining defaults friction is now primarily cross-module call-site churn rather than file size.
-- Workspace concurrency risk remains high due broad parallel data-file edits outside architecture slices; architecture extractions must stay tightly scoped to avoid merge churn.
+- Previous dense-leaf friction set (`item_candidate_search_strategies.rs`, `scripts/champions.rs`, `trace_snapshot_reporting.rs`, `loadout_domain_modeling.rs`, `enemy_runtime_state.rs`) is now resolved via explicit owner sub-leaf splits.
+- Scenario-runner high-friction leaves remain moderate (`fixed_loadout_runner/report_writing.rs` at `295` lines), with larger remaining density now concentrated in runtime/search leaves:
+  - `src/search/strategy/full_loadout_search_strategies.rs` (`409` lines)
+  - `src/search/full_loadout_search_orchestration.rs` (`380` lines)
+  - `src/scripts/runtime/loadout_runtime.rs` (`363` lines)
+  - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` (`359` lines)
+  - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` (`357` lines)
+- Root-level compatibility shims remain removed (`crate::Ordering`, `crate::EnemyDerivedCombatStats`); downstream code imports explicit owner modules directly.
+- Workspace concurrency risk remains high due broad parallel data-file edits outside architecture slices; architecture extractions should stay tightly scoped to avoid merge churn.

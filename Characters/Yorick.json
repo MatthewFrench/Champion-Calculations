@@ -197,7 +197,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): No additional notes."
+        "Source notes (summary): No additional notes.",
+        "Manual review (2026-02-24): Last Rites is cast-gated and attack-cadence-coupled with attack-reset behavior; damage/heal resolve on empowered-hit contact rather than instant cast.",
+        "Manual review (2026-02-24): The empowered hit's heal branch remains champion-vs-non-champion scoped, and kill-confirm behavior ties into grave generation/Awakening flow."
       ]
     },
     "basic_ability_2": {
@@ -409,6 +411,12 @@
       "path": "From Online/champions/Yorick.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yorick/Last_Rites",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Last Rites empowered-hit timing, heal scope, and grave-interaction semantics"
     }
   ],
   "notes": [

@@ -241,7 +241,7 @@
             160.0,
             195.0
           ],
-          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0.561 seconds."
         },
         {
           "id": "reduced_damage",
@@ -253,7 +253,7 @@
             80.0,
             97.5
           ],
-          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0.561 seconds."
         },
         {
           "id": "maximum_total_damage",
@@ -265,7 +265,7 @@
             320.0,
             390.0
           ],
-          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0.561 seconds."
         },
         {
           "id": "slow",
@@ -277,7 +277,7 @@
             45.0,
             50.0
           ],
-          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0.561 seconds."
         },
         {
           "id": "monster_bonus_damage",
@@ -319,7 +319,9 @@
         "Source targeting: Auto.",
         "Source castTime: 0.25.",
         "Source effectRadius: 0 - 350 / 215 - 465 / 350 - 590.",
-        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time.",
+        "Manual review (2026-02-24): Riptide is a staged wave sequence over 0.561 seconds, with first-hit full damage and reduced damage on subsequent wave contacts.",
+        "Manual review (2026-02-24): Player-visible behavior is radial multi-wave zoning with decaying slow and per-wave hit opportunities."
       ]
     },
     "ultimate": {
@@ -337,7 +339,7 @@
             175.0,
             225.0
           ],
-          "context_notes": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0."
+          "context_notes": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0.264 seconds."
         },
         {
           "id": "stun_duration",
@@ -347,7 +349,7 @@
             1.5,
             2.0
           ],
-          "context_notes": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0."
+          "context_notes": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0.264 seconds."
         },
         {
           "id": "increased_damage",
@@ -395,7 +397,9 @@
         "Source castTime: 0.46.",
         "Source speed: 275 + 466.67 per second.",
         "Source effectRadius: 225 / 300 / 750.",
-        "Source notes (summary): Depth Charge starts in an offset from whichever direction Nautilus is facing at the end of the cast time."
+        "Source notes (summary): Depth Charge starts in an offset from whichever direction Nautilus is facing at the end of the cast time.",
+        "Manual review (2026-02-24): Depth Charge is a tracking projectile with periodic wake eruptions (0.264-second cadence) before a final target eruption branch.",
+        "Manual review (2026-02-24): Primary-target outcome and secondary wake-hit outcomes are distinct timing branches and should remain separated in simulation semantics."
       ]
     }
   },
@@ -405,6 +409,18 @@
       "path": "From Online/champions/Nautilus.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nautilus/Riptide",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Riptide multi-wave timing and first-hit-versus-subsequent-wave damage semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nautilus/Depth_Charge",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Depth Charge tracking cadence, wake eruptions, and final-target branch behavior"
     }
   ],
   "notes": [

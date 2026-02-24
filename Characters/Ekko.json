@@ -259,7 +259,7 @@
             125.0,
             150.0
           ],
-          "context_notes": "Active: Ekko dashes in the target direction, then empowers his next basic attack within 3 seconds to have a 0."
+          "context_notes": "Active: Ekko dashes in the target direction, then empowers his next basic attack within 3 seconds to have a 0.25-second cast time, gain 300 bonus range, blink within 125 range of the target, and deal bonus magic damage on hit."
         },
         {
           "id": "ekko_e_effect_2",
@@ -291,7 +291,9 @@
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: none.",
-        "Source notes (summary): The dash distance can be extended to up-to 550 units when targeting across terrain."
+        "Source notes (summary): The dash distance can be extended to up-to 550 units when targeting across terrain.",
+        "Manual review (2026-02-24): Phase Dive is a two-stage action (dash then empowered strike); the first cast only repositions and the second stage resolves damage on attack contact.",
+        "Manual review (2026-02-24): The empowered strike is target-required and attack-cadence-coupled with a short cast-time blink, so simulation should model it as a timed empowered basic attack rather than instant cast damage."
       ]
     },
     "ultimate": {
@@ -363,6 +365,12 @@
       "path": "From Online/champions/Ekko.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Ekko/Phase_Dive",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Phase Dive two-stage cast and empowered-hit timing semantics"
     }
   ],
   "notes": [

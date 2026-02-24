@@ -90,7 +90,7 @@
       "description": "Innate - Rage Gene: Mini Gnar generates 4 / 7 / 11 (based on level) Rage over 2 seconds upon dealing or receiving damage, up to 100. Against non-champions, basic attacks and Boomerang Throw instantly generate[ 0.5 / 0.875 / 1.375 (based on level) Rage. ][ 12.5% of the amount. ] Against champions, Boomerang Throw instantly generates[ 1 / 1.75 / 2.75 (based on level) Rage, ][ 25% of the amount, ]and basic attacks instantly generate[ 2 / 3.5 / 5.5 (based on level). ][ 50% of the amount. ] Boomerang Throw can only generate Rage once per cast, and grants Rage based on the first enemy hit. Gnar's Rage decays after being out of combat for 13 seconds.",
       "context_notes": [
         "Source targeting: Passive.",
-        "Source notes (summary): The Rage generated upon dealing or receiving damage occurs over 2 seconds with 4 ticks every 0."
+        "Source notes (summary): The Rage generated upon dealing or receiving damage occurs over 2 seconds with 4 ticks every 0.5 seconds."
       ]
     },
     "basic_ability_1": {
@@ -321,7 +321,7 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source effectRadius: 475.",
-        "Source notes (summary): Gnar is locked out of moving and casting movement abilities for 0."
+        "Source notes (summary): Gnar is locked out of moving and casting movement abilities for 0.175 seconds after the cast time."
       ]
     }
   },

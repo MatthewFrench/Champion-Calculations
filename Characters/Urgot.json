@@ -145,7 +145,7 @@
         "Source targeting: Location.",
         "Source castTime: 0.25.",
         "Source effectRadius: 210.",
-        "Source notes (summary): Corrosive Charge prevents Purge from firing for 0."
+        "Source notes (summary): Corrosive Charge prevents Purge from firing for 0.05 seconds after cast time."
       ]
     },
     "basic_ability_2": {

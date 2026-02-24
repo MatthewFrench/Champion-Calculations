@@ -170,7 +170,7 @@
             155.0,
             185.0
           ],
-          "context_notes": "Active: Riven emits a flash of runic energy, dealing physical damage to nearby enemies and stunning them for 0."
+          "context_notes": "Active: Riven emits a flash of runic energy, dealing physical damage to nearby enemies and stunning them for 0.75 seconds."
         }
       ],
       "description": "Active: Riven emits a flash of runic energy, dealing physical damage to nearby enemies and stunning them for 0.75 seconds.",
@@ -209,7 +209,7 @@
             145.0,
             170.0
           ],
-          "context_notes": "Active: Riven dashes in the target direction, though not through terrain, while granting herself a shield for 1."
+          "context_notes": "Active: Riven dashes in the target direction, though not through terrain, while granting herself a shield for 1.5 seconds."
         },
         {
           "id": "riven_e_effect_2",
@@ -257,7 +257,7 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: 0.25.",
-        "Source notes (summary): All bonuses are gained after 0."
+        "Source notes (summary): All bonuses are gained after 0.5 seconds from the start of cast."
       ]
     }
   },

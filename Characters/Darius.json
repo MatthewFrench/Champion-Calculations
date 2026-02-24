@@ -216,7 +216,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Crippling Strike deals basic damage but will also trigger spell effects by also being tagged as spell damage."
+        "Source notes (summary): Crippling Strike is a next-basic-attack empower with uncancellable empowered-hit windup and basic-attack-timer reset, so damage/slow resolve on the attack event rather than at cast time.",
+        "Source notes (summary): Damage is basic-damage-class while also triggering spell-effect hooks; source notes specify spell-shield does not block damage and kill-triggered cooldown/mana refunds have explicit target exclusions."
       ]
     },
     "basic_ability_3": {

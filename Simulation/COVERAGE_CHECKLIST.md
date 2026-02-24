@@ -26,6 +26,11 @@ Read first:
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
 - [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
 - [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.
+- [ ] Touched champion/effect `context_notes` strings were checked for truncation artifacts (for example `for 0.` / `within 4.`) and normalized to complete timing/unit semantics.
+- [ ] Truncation audits used strict fragment criteria (integer-dot tokens) so valid decimal timing values (for example `0.25`) were not misclassified.
+- [ ] Truncation audits handled both `context_notes` string and `context_notes` array shapes so queue counts were not underreported.
+- [ ] `Simulation/champion_behavior_verification_tracker.json` was updated to reflect manual verified champion/ability scope for this wave (or explicitly marked unchanged with reason).
+- [ ] Each manually verified champion in this wave includes at least one page-level champion ability source in `sources`, and the wave entry in `Simulation/champion_behavior_verification_tracker.json` records that page-level citation.
 - [ ] `sources` and `schema_notes` are updated.
 - [ ] Champion `sources` entries include complete provenance metadata (`url`/`path`, `accessed`, `used_for`), and missing `sources[].accessed` values were backfilled on touched files.
 - [ ] If champion behavior changed at runtime, script logic is implemented in `Simulation/src/scripts/champions/<champion>/`.
@@ -72,7 +77,8 @@ Read first:
 - [ ] Existing distributed/prismatic `shop.prices` fields were preserved during edits (or any intentional removal/policy shift is explicitly documented in `Simulation/COVERAGE_GAPS.md`).
 - [ ] For round/phase progression effects, acquisition-timing backfill behavior was verified; if not encoded, the gap is explicitly documented in `schema_notes.context_notes` and tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Any dataset-vs-page-level discrepancy discovered during review (for example sell-state or restriction behavior) is documented in `schema_notes.context_notes` and tracked in `Simulation/COVERAGE_GAPS.md`.
-- [ ] If sources include known bug-specific behavior, the structured data still models intended behavior by default and any bug-emulation need is logged as deferred runtime follow-up in `Simulation/COVERAGE_GAPS.md`.
+- [ ] If sources include known bug-specific behavior, structured data still models intended behavior by default and bug divergence is documented as a note only.
+- [ ] Intended non-bug behavior remains the default canonical data model for all touched entities (bug behavior is never promoted to canonical data).
 - [ ] Cleanse-style actives include source-verified activation constraints and scope nuances when available (for example airborne lockout, suppression/nearsight handling, cast-time behavior).
 - [ ] If item economy fields were edited (for example `shop.prices.sell`), values were cross-checked against Tier-1 dataset values and intentional overrides were documented.
 - [ ] If item economy fields were edited (for example `shop.prices.total` / `shop.prices.sell`), Tier-1 ID/name drift was checked (legacy file identity vs current dataset identity), and any exception was tracked in `Simulation/COVERAGE_GAPS.md`.
@@ -103,6 +109,7 @@ Read first:
 - [ ] `Simulation/COVERAGE_GAPS.md` snapshot counts are updated when modeled sets or legal pools change.
 - [ ] `Simulation/COVERAGE_GAPS.md` lists reflect the current champion, item, rune, and shard runtime state.
 - [ ] `Simulation/champion_data_coverage_inventory.json` is refreshed when champion corpus parity counts change.
+- [ ] `Simulation/champion_behavior_verification_tracker.json` is refreshed when manual champion verification scope changes.
 - [ ] Data coverage and runtime coverage are distinguished explicitly (do not mark data-only completion as runtime completion).
 - [ ] Compatibility aliases are documented when they affect coverage interpretation.
 - [ ] Intentional unchanged gaps are explicitly recorded as unchanged.

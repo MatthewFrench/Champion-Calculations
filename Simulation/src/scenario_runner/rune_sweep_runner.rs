@@ -3,6 +3,10 @@ use rayon::prelude::*;
 use std::cmp::Ordering;
 use std::path::Path;
 
+use super::controlled_champion_enemy_scenario_projection::{
+    ControlledChampionEnemyBuildProjection, build_enemy_build_projection,
+    build_scenario_reference_outcomes, parse_scaled_enemy_scenarios,
+};
 use super::*;
 mod report_writing;
 mod result_aggregation;
@@ -99,58 +103,19 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
         ));
     }
 
-    let enemy_scenarios_raw: Vec<ParsedOpponentEncounter> = parse_opponent_encounters(
+    let enemy_scenarios = parse_scaled_enemy_scenarios(
         &scenario,
         &champion_bases,
         sim.champion_level,
         &sim.stack_overrides,
     )?;
-    let enemy_scenarios = enemy_scenarios_raw
-        .iter()
-        .map(|encounter| {
-            let scaled = encounter
-                .actors
-                .iter()
-                .cloned()
-                .map(|mut enemy| {
-                    enemy.base = champion_at_level(&enemy.base, enemy.level);
-                    enemy
-                })
-                .collect::<Vec<_>>();
-            (encounter.name.clone(), encounter.weight, scaled)
-        })
-        .collect::<Vec<_>>();
 
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;
-    let mut enemy_build_scenarios = Vec::new();
-    for (name, weight, enemies) in &enemy_scenarios {
-        let mut builds = Vec::new();
-        for enemy in enemies {
-            let preset_key = to_norm_key(&enemy.name);
-            let preset = enemy_presets.get(&preset_key).ok_or_else(|| {
-                anyhow!(
-                    "Missing URF preset for enemy champion '{}'. Add it to {}.",
-                    enemy.name,
-                    enemy_preset_data_path().display()
-                )
-            })?;
-            let build_items = item_pool_from_names(&items, &preset.item_names)?;
-            let preset_enemy_loadout =
-                resolve_loadout(&enemy_loadout_from_preset(preset), enemy.level, false)?;
-            let enemy_bonus_stats = preset_enemy_loadout.bonus_stats;
-            let mut enemy_with_loadout = enemy.clone();
-            enemy_with_loadout.loadout_item_names = preset.item_names.clone();
-            enemy_with_loadout.loadout_rune_names = preset.runes.clone();
-            enemy_with_loadout.loadout_shards = preset.shards.clone();
-            builds.push((enemy_with_loadout, build_items, enemy_bonus_stats));
-        }
-        enemy_build_scenarios.push((name.clone(), *weight, builds));
-    }
-    let enemy_builds = enemy_build_scenarios
-        .first()
-        .map(|(_, _, builds)| builds.clone())
-        .unwrap_or_default();
+    let ControlledChampionEnemyBuildProjection {
+        enemy_build_scenarios,
+        enemy_builds,
+    } = build_enemy_build_projection(&enemy_scenarios, &enemy_presets, &items)?;
 
     let mut search_cfg = parse_scenario_search_or_default(&scenario)?;
     apply_search_quality_profile(&mut search_cfg, options.search_quality_profile);
@@ -162,25 +127,12 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
         search_cfg.objective_enemy_kills_weight,
         search_cfg.objective_invulnerable_seconds_weight,
     );
-    let scenario_reference_outcomes = enemy_build_scenarios
-        .iter()
-        .map(|(_, _, enemy_builds_s)| {
-            let damage_reference = enemy_builds_s
-                .iter()
-                .map(|(enemy, build, bonus_stats)| {
-                    derive_enemy_combat_stats(enemy, build, bonus_stats, &sim, &urf).max_health
-                })
-                .sum::<f64>()
-                .max(1.0);
-            CombatOutcome {
-                time_alive_seconds: sim.max_time_seconds.max(1.0),
-                damage_dealt: damage_reference,
-                healing_done: controlled_champion_base.base_health.max(1.0),
-                enemy_kills: enemy_builds_s.len().max(1),
-                invulnerable_seconds: sim.max_time_seconds.max(1.0),
-            }
-        })
-        .collect::<Vec<_>>();
+    let scenario_reference_outcomes = build_scenario_reference_outcomes(
+        &enemy_build_scenarios,
+        &sim,
+        &urf,
+        &controlled_champion_base,
+    );
     let objective_eval_ctx = ObjectiveEvalContext {
         controlled_champion_base: &controlled_champion_base,
         controlled_champion_stack_overrides: &controlled_champion_stack_overrides,

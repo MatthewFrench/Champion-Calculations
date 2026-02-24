@@ -196,7 +196,7 @@
             140.0,
             160.0
           ],
-          "context_notes": "Active: Lillia dashes to 150 units in front of the target location over 0."
+          "context_notes": "Active: Lillia dashes to 150 units in front of the target location over 0.759 seconds."
         },
         {
           "id": "increased_damage",
@@ -208,7 +208,7 @@
             420.0,
             480.0
           ],
-          "context_notes": "Active: Lillia dashes to 150 units in front of the target location over 0."
+          "context_notes": "Active: Lillia dashes to 150 units in front of the target location over 0.759 seconds."
         },
         {
           "id": "minion_damage",
@@ -262,7 +262,7 @@
         "Source targeting: Location.",
         "Source castTime: None.",
         "Source effectRadius: 65 /  250.",
-        "Source notes (summary): Lillia dashes to her target location over 0."
+        "Source notes (summary): Lillia dashes to her target location over 0.6 to 0.767 seconds, then resolves impact at 0.767 seconds."
       ]
     },
     "basic_ability_3": {

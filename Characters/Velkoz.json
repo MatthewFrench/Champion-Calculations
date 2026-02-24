@@ -204,7 +204,7 @@
             135.0,
             165.0
           ],
-          "context_notes": "After 0."
+          "context_notes": "After 0.75 seconds, the rift violently collapses to deal a second instance of magic damage in the same area."
         },
         {
           "id": "total_magic_damage",
@@ -216,7 +216,7 @@
             225.0,
             275.0
           ],
-          "context_notes": "After 0."
+          "context_notes": "After 0.75 seconds, the rift violently collapses to deal a second instance of magic damage in the same area."
         },
         {
           "id": "velkoz_w_effect_3",
@@ -270,7 +270,7 @@
             160.0,
             190.0
           ],
-          "context_notes": "Active: Vel'Koz hurls a disruptive anomaly that lands to the target location after 0."
+          "context_notes": "Active: Vel'Koz hurls a disruptive anomaly that lands at the target location after 0.25 to 0.55 seconds based on cast distance, dealing magic damage and briefly knocking up and stunning enemies hit."
         },
         {
           "id": "velkoz_e_effect_2",
@@ -329,7 +329,7 @@
             53.85,
             71.15
           ],
-          "context_notes": "The beam deals magic damage to enemies hit every 0."
+          "context_notes": "The beam deals magic damage to enemies hit every 0.2 seconds, and applies Deconstruction every 0.7 seconds while the channel continues."
         },
         {
           "id": "maximum_damage",
@@ -339,7 +339,7 @@
             700.0,
             925.0
           ],
-          "context_notes": "The beam deals magic damage to enemies hit every 0."
+          "context_notes": "The beam deals magic damage to enemies hit every 0.2 seconds, and applies Deconstruction every 0.7 seconds while the channel continues."
         },
         {
           "id": "velkoz_r_effect_4",
@@ -377,6 +377,12 @@
       "path": "From Online/champions/Velkoz.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Vel%27Koz",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

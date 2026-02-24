@@ -291,7 +291,7 @@
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source effectRadius: 187.5.",
-        "Source notes (summary): The clones can block non-targeted attacks or abilities for 0."
+        "Source notes (summary): The clones can block non-targeted attacks or abilities for 0.25 seconds after hitting their targets."
       ]
     },
     "ultimate": {

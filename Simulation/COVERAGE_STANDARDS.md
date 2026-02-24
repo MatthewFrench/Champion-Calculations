@@ -52,11 +52,13 @@ Research requirements for data updates:
 - Perform an entity-intent review before raising confidence: confirm the entity's gameplay role, intended combat pattern, and whether the structured effects reflect that behavior.
 - Perform an in-game execution-semantics review for non-trivial effects before raising confidence: confirm activation requirements, target/range gating, and timing behavior.
 - Execution-semantics review must cover player-visible behavior where relevant: when the effect starts, when it resolves, and what opponents/allies can observe.
+- For manual champion verification waves, include at least one page-level champion ability source in each touched champion file (`sources`) and track that citation in `Simulation/champion_behavior_verification_tracker.json`.
 - If behavior mixes spell casting with basic-attack cadence (for example reset or empowered-hit patterns), document both cast and hit timing semantics explicitly.
 - If an effect has separate basic-attack-hit and ability-damage branches, encode each branch as separate structured effects with explicit trigger and gating semantics.
 - If source notes include trigger exclusions or interaction edge rules (for example dodged/blocked/blinded misses, spell-shield handling, proc-damage classification, zero-damage proc eligibility, below-threshold retrigger clauses), encode them explicitly in structured `conditions`/`modifiers` and summarize the execution impact in `schema_notes.context_notes`.
 - If sources present both per-tick and total values for one timed effect, ensure structured values are cadence-consistent (per-tick value matches interval) and capture total-over-duration for auditability.
-- If sources describe known in-game bugs, capture them as notes for follow-up, but model intended behavior by default unless an explicit bug-emulation policy is approved.
+- If sources describe known in-game bugs, capture them as notes for follow-up, but keep intended behavior as canonical in data.
+- Project policy lock: data coverage must default to intended non-bug behavior; bug behavior is documented only as follow-up notes and is not part of canonical simulation data.
 
 Data metadata requirements:
 - `schema_notes.effects_structured_reviewed` should use ISO date format `YYYY-MM-DD`.
@@ -70,6 +72,9 @@ Data metadata requirements:
 - When editing Runes Reforged data, keep flat and split datasets synchronized (`Masteries/RunesReforged.json` plus `Masteries/RunesReforged/` tree/stat-shard files) and treat split-vs-flat drift as blocking.
 - When editing existing non-trivial champion/item/rune data, explicitly sanity-check the entity's gameplay purpose and behavior pattern, then record that intent in `schema_notes.context_notes` when confidence or semantics changed.
 - When semantics are updated, record the verified in-game execution model in `schema_notes.context_notes` (what the player does, when the effect resolves, and who is affected).
+- Do not keep fragmentary/truncated context-note strings in touched data (for example `for 0.` or `within 4.`); normalize to complete timing/unit semantics before marking the entry reviewed.
+- Use strict fragment detection for truncation audits (integer-dot tokens like `for 0.`), and do not classify valid decimals (for example `for 0.25 seconds`) as truncation defects.
+- Truncation audits must normalize `context_notes` shape before matching (support both string and array forms on ability/effect notes) so queue counts are complete and reproducible.
 - When data semantics exceed current runtime capability (for example visibility-state windows, on-attack trigger classes, charge-state transforms, mode-gated resource branches), document the deferred code follow-up explicitly in `Simulation/COVERAGE_GAPS.md` in the same change.
 - For control-triggered effects, encode the full trigger set from source text (for example include both immobilize and ground triggers when both are listed).
 - If an item effect depends on a shared cross-item system rule (for example support-income diminishing-gold logic), preserve conservative confidence until that shared rule is encoded explicitly and track the dependency in `Simulation/COVERAGE_GAPS.md`.
@@ -89,7 +94,7 @@ Data metadata requirements:
 - If Tier-1 and page-level sources disagree because one item ID is reused for different mode-scoped identities, do not silently collapse to one source; document reconciliation strategy in `schema_notes.context_notes` and track mode-aware identity follow-up in `Simulation/COVERAGE_GAPS.md`.
 - If an item is retained only as legacy/reference data (retired or replaced in current Tier-1 datasets), add explicit `lifecycle` metadata with `exclude_from_simulation = true` and a concrete replacement/reason note.
 - Lifecycle metadata on legacy/reference items should include at least `status`, `exclude_from_simulation`, `reason`, `replacement_item`, and `replacement_id` so ID/name drift remains auditable.
-- When a known bug diverges from intended gameplay behavior, keep intended behavior as the canonical simulation target and track bug-emulation requests as deferred runtime follow-up work.
+- When a known bug diverges from intended gameplay behavior, keep intended behavior as the canonical simulation target and document the divergence for awareness only.
 
 ## Standards By Coverage Category
 ### 1) Champion Coverage Standard (Data + Runtime)
@@ -99,6 +104,9 @@ Data requirements:
 - Ability identities are stable and slot bindings are data-owned (no slot hardcoding in engine paths).
 - Ability geometry and cast data are in `abilities.<ability_key>.execution`.
 - Active abilities should have non-empty `execution` metadata; treat missing active-execution objects as a blocking coverage gap unless source data is unavailable and explicitly documented.
+- Champion behavior-fidelity progress must be tracked in `Simulation/champion_behavior_verification_tracker.json` (manual verified vs source-extracted-only status).
+- Manual champion verification waves must include page-level champion ability citations for each touched champion (both in champion `sources` and in tracker wave metadata).
+- Touched champion ability/effect `context_notes` entries must not contain truncated timing fragments; resolve fragmentary notes to complete behavior descriptions in the same change.
 - Any simulator-only policy remains minimal and under `simulation`.
 - `sources` and `schema_notes` are present and current.
 
@@ -213,6 +221,7 @@ These are quality improvements to already-covered assets.
 
 ### Data Quality Improvements
 - Maintain champion corpus parity inventory (`Simulation/champion_data_coverage_inventory.json`) as a no-regression guardrail (`172/172` current file parity) and prioritize fidelity-normalization waves over generated champion data.
+- Maintain manual behavior-verification tracker coverage (`Simulation/champion_behavior_verification_tracker.json`) and increase manual verified champion count each wave.
 - Maintain full provenance coverage for item files with `effects_structured` (all currently sourced) and keep this as a no-regression guardrail.
 - Enforce `sources` de-duplication on champion/item files during future edits.
 - Raise precision of low-confidence modeled item parses (`parse_confidence` around `0.55` to `0.65`) with manual formula normalization notes.
@@ -237,7 +246,6 @@ These are intentionally deferred while data-first work is active:
 - Add full enemy-script event-path tests (cooldown, range gating, followup behavior).
 - Unify rune runtime key mapping and telemetry key mapping to a single canonical table.
 - Complete runtime tenacity behavior application for shard-supported tenacity stats.
-- Add explicit opt-in bug-emulation runtime pathways for known bug-divergence scenarios while keeping intended behavior as the default simulation target.
 - Add ally-state stat-link runtime support for teammate-transfer effects (for example `Twin Mask`) when Arena runtime modeling is expanded.
 - Add runtime loader migration for split rune authoring files (`Masteries/RunesReforged/RunesReforged.json` and tree/stat-shard files) before removing flat-file compatibility.
 

@@ -110,7 +110,7 @@
             12.5,
             15.0
           ],
-          "context_notes": "poison: The target takes magic damage every 0."
+          "context_notes": "poison: The target takes magic damage every 0.25 seconds over 2 seconds, and subsequent poison applications refresh the duration."
         },
         {
           "id": "magic_damage_per_second",
@@ -122,7 +122,7 @@
             50.0,
             60.0
           ],
-          "context_notes": "poison: The target takes magic damage every 0."
+          "context_notes": "poison: The target takes magic damage every 0.25 seconds over 2 seconds, and subsequent poison applications refresh the duration."
         },
         {
           "id": "minimum_magic_damage",
@@ -134,7 +134,7 @@
             100.0,
             120.0
           ],
-          "context_notes": "poison: The target takes magic damage every 0."
+          "context_notes": "poison: The target takes magic damage every 0.25 seconds over 2 seconds, and subsequent poison applications refresh the duration."
         },
         {
           "id": "singed_q_effect_3",
@@ -188,7 +188,7 @@
             65.0,
             70.0
           ],
-          "context_notes": "Active: Singed spills a potent adhesive that lands at the target location after 0."
+          "context_notes": "Active: Singed spills a potent adhesive that lands at the target location after 0.375 seconds, creating a field for 3 seconds that grounds and slows enemies within."
         }
       ],
       "description": "Active: Singed spills a potent adhesive that lands at the target location after 0.375 seconds, creating a field for 3 seconds that grounds enemies within and slows them.",
@@ -238,7 +238,7 @@
             80.0,
             90.0
           ],
-          "context_notes": "Active: Singed flings the target enemy 550 units over himself over 0."
+          "context_notes": "Active: Singed flings the target enemy 550 units over himself over 0.693 seconds, displacing the target behind Singed and dealing magic damage."
         },
         {
           "id": "root_duration",
@@ -354,6 +354,12 @@
       "path": "From Online/champions/Singed.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Singed",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

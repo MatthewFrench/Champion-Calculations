@@ -321,7 +321,7 @@
             6.0,
             7.0
           ],
-          "context_notes": "Active: Akshan locks onto the target enemy champion and begins channeling for 2."
+          "context_notes": "Active: Akshan locks onto the target enemy champion and begins channeling for 2.5 seconds."
         },
         {
           "id": "bullet_storing_interval_time",
@@ -331,7 +331,7 @@
             0.5208,
             0.4167
           ],
-          "context_notes": "Active: Akshan locks onto the target enemy champion and begins channeling for 2."
+          "context_notes": "Active: Akshan locks onto the target enemy champion and begins channeling for 2.5 seconds."
         },
         {
           "id": "akshan_r_effect_2",
@@ -409,7 +409,7 @@
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source speed: 3200.",
-        "Source notes (summary): Comeuppance refreshes the duration of Dirty Fighting stacks on the target every 0."
+        "Source notes (summary): Comeuppance refreshes the duration of Dirty Fighting stacks on the target every 0.25 seconds."
       ]
     }
   },

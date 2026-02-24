@@ -3,6 +3,17 @@ use super::controlled_champion_result_reporting::{
 };
 use super::*;
 
+mod best_candidate_projection;
+mod search_diagnostics_projection;
+
+use self::best_candidate_projection::{
+    ControlledChampionBestCandidateProjectionContext, project_controlled_champion_best_candidate,
+};
+use self::search_diagnostics_projection::{
+    ControlledChampionSearchDiagnosticsProjectionContext,
+    project_controlled_champion_search_diagnostics,
+};
+
 pub(super) struct ControlledChampionResultReportingProjectionContext<'a, 'ctx> {
     pub(super) scenario_path: &'a Path,
     pub(super) controlled_champion_name: &'a str,
@@ -147,85 +158,34 @@ pub(super) fn emit_controlled_champion_result_reporting_projection(
         status,
     } = context;
 
-    let controlled_champion_best_candidate = controlled_champion_ranked[0].0.clone();
-    let controlled_champion_best_build =
-        build_from_indices(item_pool, &controlled_champion_best_candidate.item_indices);
-    let controlled_champion_runtime_loadout_selection =
-        controlled_champion_best_candidate.loadout_selection.clone();
-    let controlled_champion_loadout = best_loadout_by_candidate
-        .lock()
-        .ok()
-        .and_then(|m| m.get(&controlled_champion_best_candidate).cloned())
-        .or_else(|| resolve_loadout_for_selection(&controlled_champion_runtime_loadout_selection))
-        .unwrap_or_else(|| controlled_champion_base_loadout.clone());
-
-    let controlled_champion_best_score = controlled_champion_ranked
-        .first()
-        .map(|(_, s)| *s)
-        .unwrap_or(0.0);
-    let controlled_champion_best_outcome = best_outcome_by_candidate
-        .lock()
-        .ok()
-        .and_then(|m| m.get(&controlled_champion_best_candidate).copied())
-        .unwrap_or_else(|| {
-            aggregate_objective_score_and_outcome_with_loadout_selection(
-                objective_eval_ctx,
-                &controlled_champion_best_build,
-                &controlled_champion_loadout.bonus_stats,
-                Some(&controlled_champion_runtime_loadout_selection),
-            )
-            .1
-        });
-    let (_, _, best_score_breakdown) =
-        aggregate_objective_score_and_outcome_with_breakdown_and_loadout_selection(
+    let best_candidate_projection = project_controlled_champion_best_candidate(
+        ControlledChampionBestCandidateProjectionContext {
+            controlled_champion_ranked,
+            item_pool,
+            best_loadout_by_candidate,
+            best_outcome_by_candidate,
+            resolve_loadout_for_selection,
+            controlled_champion_base_loadout,
             objective_eval_ctx,
-            &controlled_champion_best_build,
-            &controlled_champion_loadout.bonus_stats,
-            Some(&controlled_champion_runtime_loadout_selection),
-        );
-    let best_cap_survivor =
-        controlled_champion_best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6;
-    let timed_out = timed_out || timeout_flag.load(AtomicOrdering::Relaxed) > 0;
-    let progress_snapshot =
-        progress_state
-            .lock()
-            .ok()
-            .map(|state| *state)
-            .unwrap_or(SignificantProgressState {
-                best_overall_score: f64::NEG_INFINITY,
-                best_significant_score: f64::NEG_INFINITY,
-                significant_events: 0,
-                last_significant_at: run_start,
-            });
-    let seconds_since_last_significant_improvement = Instant::now()
-        .saturating_duration_since(progress_snapshot.last_significant_at)
-        .as_secs_f64();
-    let mut search_type_breakdown = snapshot_search_type_counters(search_type_counters);
-    search_type_breakdown.sort_by(|a, b| {
-        b.new_simulations
-            .cmp(&a.new_simulations)
-            .then_with(|| b.score_requests.cmp(&a.score_requests))
-            .then_with(|| a.name.cmp(&b.name))
-    });
-    let effective_threads = rayon::current_num_threads();
-    let seed_orchestration_parallel = ensemble_seeds > 1;
-    let portfolio_strategy_parallel =
-        search_cfg.strategy == "portfolio" && active_strategies.len() > 1;
-    let strategy_elites_parallel = active_strategies.len() > 1 || ensemble_seeds > 1;
-    let estimated_total_candidate_space = {
-        let item_space = estimated_legal_item_build_count(item_pool, max_items);
-        let loadout_space = estimated_legal_loadout_count(search_loadout_domain);
-        let total = item_space * loadout_space;
-        (total.is_finite() && total > 0.0).then_some(total)
-    };
-    let unique_scored_candidates = unique_scored_candidate_keys.len();
-    let estimated_run_space_coverage_percent = estimated_total_candidate_space
-        .map(|total| ((unique_scored_candidates as f64) / total * 100.0).clamp(0.0, 100.0));
-    let (estimated_close_to_optimal_probability, estimated_close_to_optimal_probability_note) =
-        estimate_close_to_optimal_probability(
-            unique_scored_candidates,
-            estimated_total_candidate_space,
-        );
+            sim,
+        },
+    );
+    let search_diagnostics_projection = project_controlled_champion_search_diagnostics(
+        ControlledChampionSearchDiagnosticsProjectionContext {
+            timed_out,
+            timeout_flag,
+            progress_state,
+            run_start,
+            search_type_counters,
+            ensemble_seeds,
+            search_cfg,
+            active_strategies,
+            item_pool,
+            max_items,
+            search_loadout_domain,
+            unique_scored_candidate_keys,
+        },
+    );
 
     emit_controlled_champion_result_reporting(ControlledChampionResultReportingContext {
         scenario_path,
@@ -246,10 +206,10 @@ pub(super) fn emit_controlled_champion_result_reporting_projection(
         full_eval_count,
         full_cache,
         ensemble_seeds,
-        effective_threads,
-        seed_orchestration_parallel,
-        portfolio_strategy_parallel,
-        strategy_elites_parallel,
+        effective_threads: search_diagnostics_projection.effective_threads,
+        seed_orchestration_parallel: search_diagnostics_projection.seed_orchestration_parallel,
+        portfolio_strategy_parallel: search_diagnostics_projection.portfolio_strategy_parallel,
+        strategy_elites_parallel: search_diagnostics_projection.strategy_elites_parallel,
         coverage_stage_diagnostics,
         candidate_keys_generated,
         candidate_duplicates_pruned,
@@ -260,10 +220,10 @@ pub(super) fn emit_controlled_champion_result_reporting_projection(
         strict_completion_percent,
         strict_random_promotions_done,
         unique_candidate_keys,
-        unique_scored_candidates,
+        unique_scored_candidates: search_diagnostics_projection.unique_scored_candidates,
         bleed_candidate_count,
         adaptive_candidate_count,
-        search_type_breakdown,
+        search_type_breakdown: search_diagnostics_projection.search_type_breakdown,
         seed_best_scores,
         seed_hits_by_key,
         objective_component_weights,
@@ -271,26 +231,32 @@ pub(super) fn emit_controlled_champion_result_reporting_projection(
         run_start,
         time_budget,
         popcorn_window,
-        progress_snapshot,
-        seconds_since_last_significant_improvement,
-        timed_out,
+        progress_snapshot: search_diagnostics_projection.progress_snapshot,
+        seconds_since_last_significant_improvement: search_diagnostics_projection
+            .seconds_since_last_significant_improvement,
+        timed_out: search_diagnostics_projection.timed_out,
         processed_candidates,
         total_candidates,
-        estimated_total_candidate_space,
-        estimated_run_space_coverage_percent,
-        estimated_close_to_optimal_probability,
-        estimated_close_to_optimal_probability_note,
+        estimated_total_candidate_space: search_diagnostics_projection
+            .estimated_total_candidate_space,
+        estimated_run_space_coverage_percent: search_diagnostics_projection
+            .estimated_run_space_coverage_percent,
+        estimated_close_to_optimal_probability: search_diagnostics_projection
+            .estimated_close_to_optimal_probability,
+        estimated_close_to_optimal_probability_note: search_diagnostics_projection
+            .estimated_close_to_optimal_probability_note,
         unmodeled_rune_candidates_rejected,
         unmodeled_rune_candidates_penalized,
         unmodeled_item_effect_candidates_rejected,
         unmodeled_item_effect_candidates_penalized,
-        controlled_champion_best_build: &controlled_champion_best_build,
-        controlled_champion_best_score,
-        controlled_champion_best_outcome,
-        best_cap_survivor,
-        controlled_champion_loadout: &controlled_champion_loadout,
-        controlled_champion_runtime_loadout_selection:
-            &controlled_champion_runtime_loadout_selection,
+        controlled_champion_best_build: &best_candidate_projection.controlled_champion_best_build,
+        controlled_champion_best_score: best_candidate_projection.controlled_champion_best_score,
+        controlled_champion_best_outcome: best_candidate_projection
+            .controlled_champion_best_outcome,
+        best_cap_survivor: best_candidate_projection.best_cap_survivor,
+        controlled_champion_loadout: &best_candidate_projection.controlled_champion_loadout,
+        controlled_champion_runtime_loadout_selection: &best_candidate_projection
+            .controlled_champion_runtime_loadout_selection,
         controlled_champion_ranked,
         top_x,
         min_item_diff,
@@ -304,7 +270,7 @@ pub(super) fn emit_controlled_champion_result_reporting_projection(
         controlled_champion_stack_overrides,
         sim,
         urf,
-        best_score_breakdown,
+        best_score_breakdown: best_candidate_projection.best_score_breakdown,
         status,
     })
 }

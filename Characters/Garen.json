@@ -115,7 +115,7 @@
             120.0,
             150.0
           ],
-          "context_notes": "Additionally, Garen empowers his next basic attack within 4."
+          "context_notes": "Additionally, Garen empowers his next basic attack within 4 seconds to have an uncancellable windup, gain bonus range, and apply bonus physical damage plus silence on hit."
         },
         {
           "id": "garen_q_effect_3",
@@ -136,7 +136,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The enhanced attack will apply other on-hit effects and can critically strike as normal (the bonus damage does not)."
+        "Source notes (summary): Decisive Strike applies immediate self-state changes (slow cleanse + movement speed), then waits for next basic-attack resolution for damage/silence (attack-cadence-coupled, not instant damage on cast).",
+        "Source notes (summary): The empowered hit keeps normal on-hit/critical interactions while bonus damage does not critically strike; source notes also specify that the hit can still complete on windup edge-cases (for example untargetable during windup) and spell-shield blocks only silence."
       ]
     },
     "basic_ability_2": {

@@ -34,6 +34,7 @@ use crate::search::{
 use crate::status::{StatusReporter, deadline_reached};
 
 mod controlled_champion_candidate_search;
+mod controlled_champion_enemy_scenario_projection;
 mod controlled_champion_result_artifact_writing;
 mod controlled_champion_result_build_analysis;
 mod controlled_champion_result_reporting;

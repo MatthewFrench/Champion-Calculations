@@ -100,7 +100,7 @@
             150.0,
             180.0
           ],
-          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0."
+          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0.264 seconds in a cone, dealing magic damage to enemies hit."
         },
         {
           "id": "bonus_damage_per_bolt",
@@ -112,7 +112,7 @@
             37.5,
             45.0
           ],
-          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0."
+          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0.264 seconds in a cone, dealing magic damage to enemies hit."
         },
         {
           "id": "total_damage",
@@ -124,7 +124,7 @@
             300.0,
             360.0
           ],
-          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0."
+          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0.264 seconds in a cone, dealing magic damage to enemies hit."
         },
         {
           "id": "swain_q_effect_2",
@@ -158,7 +158,9 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source effectRadius: 725.",
-        "Source notes (summary): Death's Hand will still cast and deal damage if Swain dies during the cast time."
+        "Source notes (summary): Death's Hand will still cast and deal damage if Swain dies during the cast time.",
+        "Manual review (2026-02-24): Death's Hand is a short multi-bolt burst window (0.264-second spread), not a single instant packet; damage outcome depends on bolt count connecting.",
+        "Manual review (2026-02-24): Player-visible behavior includes front-cone targeting and partial-hit outcomes when only a subset of bolts connect."
       ]
     },
     "basic_ability_2": {
@@ -318,7 +320,7 @@
             12.5,
             17.5
           ],
-          "context_notes": "Demonic Ascension: Swain is ghosted and drains the lifeforce of nearby enemies, both dealing magic damage and healing himself every 0."
+          "context_notes": "Demonic Ascension: Swain is ghosted and drains nearby enemies, dealing magic damage and healing himself every 0.5 seconds."
         },
         {
           "id": "heal_per_tick",
@@ -328,7 +330,7 @@
             15.0,
             22.5
           ],
-          "context_notes": "Demonic Ascension: Swain is ghosted and drains the lifeforce of nearby enemies, both dealing magic damage and healing himself every 0."
+          "context_notes": "Demonic Ascension: Swain is ghosted and drains nearby enemies, dealing magic damage and healing himself every 0.5 seconds."
         },
         {
           "id": "reduced_heal_per_tick",
@@ -338,7 +340,7 @@
             1.5,
             2.25
           ],
-          "context_notes": "Demonic Ascension: Swain is ghosted and drains the lifeforce of nearby enemies, both dealing magic damage and healing himself every 0."
+          "context_notes": "Demonic Ascension: Swain is ghosted and drains nearby enemies, dealing magic damage and healing himself every 0.5 seconds."
         },
         {
           "id": "swain_r_effect_3",
@@ -376,7 +378,9 @@
         "Source targeting: Auto.",
         "Source castTime: 0.5.",
         "Source effectRadius: 650.",
-        "Source notes (summary): Demonic Energy is displayed in a bar under Swain's health bar."
+        "Source notes (summary): Demonic Energy is displayed in a bar under Swain's health bar.",
+        "Manual review (2026-02-24): Demonic Ascension is a sustain-state drain with 0.5-second periodic damage/heal cadence gated by Demonic Energy decay/regeneration rules.",
+        "Manual review (2026-02-24): State persists while energy remains; takedowns and champion-drain interactions materially change uptime and player-visible sustain behavior."
       ]
     }
   },
@@ -386,6 +390,18 @@
       "path": "From Online/champions/Swain.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Swain/Death%27s_Hand",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Death's Hand bolt-window timing and partial-hit semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Swain/Demonic_Ascension",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Demonic Ascension periodic cadence and energy-gated sustain-state behavior"
     }
   ],
   "notes": [

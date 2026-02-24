@@ -96,7 +96,7 @@
             11.25,
             13.125
           ],
-          "context_notes": "Active: Aurelion Sol charges for up to 3."
+          "context_notes": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
         },
         {
           "id": "magic_damage_per_second",
@@ -108,7 +108,7 @@
             90.0,
             105.0
           ],
-          "context_notes": "Active: Aurelion Sol charges for up to 3."
+          "context_notes": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
         },
         {
           "id": "total_maximum_magic_damage",
@@ -119,7 +119,7 @@
             243.75,
             292.5
           ],
-          "context_notes": "Active: Aurelion Sol charges for up to 3."
+          "context_notes": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
         },
         {
           "id": "secondary_target_damage_per_tick",
@@ -131,7 +131,7 @@
             5.625,
             6.5625
           ],
-          "context_notes": "Active: Aurelion Sol charges for up to 3."
+          "context_notes": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
         },
         {
           "id": "secondary_magic_damage_per_second",
@@ -143,7 +143,7 @@
             45.0,
             52.5
           ],
-          "context_notes": "Active: Aurelion Sol charges for up to 3."
+          "context_notes": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
         },
         {
           "id": "secondary_target_total_maximum_damage",
@@ -154,7 +154,7 @@
             121.875,
             146.25
           ],
-          "context_notes": "Active: Aurelion Sol charges for up to 3."
+          "context_notes": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
         },
         {
           "id": "bonus_magic_damage",
@@ -368,7 +368,7 @@
             250.0,
             350.0
           ],
-          "context_notes": "Active: Aurelion Sol calls down a star that strikes the target location after 1."
+          "context_notes": "Active: Aurelion Sol calls down a star that strikes the target location after 1.25 seconds, dealing magic damage to enemies hit and stunning them for 1 second."
         },
         {
           "id": "aurelionsol_r_effect_2",
@@ -408,6 +408,12 @@
       "path": "From Online/champions/AurelionSol.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Aurelion_Sol",
+      "accessed": "2026-02-24",
+      "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
     }
   ],
   "notes": [

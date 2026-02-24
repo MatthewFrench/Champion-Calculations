@@ -263,7 +263,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Spell shield will only block the slow from the first hit."
+        "Source notes (summary): Bladework is a two-hit empowered basic-attack sequence with attack-cadence-coupled timing; first hit applies slow branch and second hit carries critical-strike branch logic.",
+        "Source notes (summary): Source notes specify spell-shield interaction is limited to first-hit slow, and miss/dodge/block outcomes preserve branch behavior constraints for damage resolution."
       ]
     },
     "ultimate": {

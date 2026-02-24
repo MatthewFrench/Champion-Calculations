@@ -99,7 +99,7 @@
             70.0,
             90.0
           ],
-          "context_notes": "Active: Trundle empowers his next basic attack within 7 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and slow the target by 75% for 0."
+          "context_notes": "Active: Trundle empowers his next basic attack within 7 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and slow the target by 75% for 0.1 seconds."
         },
         {
           "id": "bonus_attack_damage",
@@ -155,7 +155,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Chomp will still incur the attack damage increase for Trundle even if the attack is dodged, blocked, missed while he is blinded, or it is blocked by spell shield."
+        "Source notes (summary): Chomp will still incur the attack damage increase for Trundle even if the attack is dodged, blocked, missed while he is blinded, or it is blocked by spell shield.",
+        "Manual review (2026-02-24): Chomp is cast-gated and attack-cadence-coupled (auto reset plus empowered strike), so damage/slow resolve on attack contact rather than instantly on cast.",
+        "Manual review (2026-02-24): Intended behavior keeps the self attack-damage gain even if the empowered swing fails to deal hit damage due to miss/parry/blind/spell-shield edge cases."
       ]
     },
     "basic_ability_2": {
@@ -373,6 +375,12 @@
       "path": "From Online/champions/Trundle.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Trundle/Chomp",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Chomp attack-reset timing and hit/miss edge semantics"
     }
   ],
   "notes": [

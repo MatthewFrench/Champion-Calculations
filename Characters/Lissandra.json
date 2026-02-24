@@ -98,7 +98,7 @@
             185.0,
             220.0
           ],
-          "context_notes": "Active: Lissandra launches a shard of ice in the target direction that deals magic damage and slows enemies hit for 1."
+          "context_notes": "Active: Lissandra launches a shard of ice in the target direction that deals magic damage and slows enemies hit for 1.5 seconds."
         },
         {
           "id": "slow",
@@ -110,7 +110,7 @@
             32.0,
             36.0
           ],
-          "context_notes": "Active: Lissandra launches a shard of ice in the target direction that deals magic damage and slows enemies hit for 1."
+          "context_notes": "Active: Lissandra launches a shard of ice in the target direction that deals magic damage and slows enemies hit for 1.5 seconds."
         },
         {
           "id": "lissandra_q_effect_2",
@@ -226,7 +226,7 @@
             175.0,
             210.0
           ],
-          "context_notes": "Active: Lissandra sends a claw of ice in the target direction that deals magic damage to enemies it passes through, decelerating over 1."
+          "context_notes": "Active: Lissandra sends a claw of ice in the target direction that deals magic damage to enemies it passes through, decelerating over 1.25 seconds."
         },
         {
           "id": "lissandra_e_effect_2",
@@ -286,7 +286,7 @@
             15.0,
             20.0
           ],
-          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2."
+          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2.5 seconds and healing herself every 0.25 seconds over the duration."
         },
         {
           "id": "maximum_heal_per_tick",
@@ -296,7 +296,7 @@
             30.0,
             40.0
           ],
-          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2."
+          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2.5 seconds and healing herself every 0.25 seconds over the duration."
         },
         {
           "id": "minimum_total_heal",
@@ -306,7 +306,7 @@
             150.0,
             200.0
           ],
-          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2."
+          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2.5 seconds and healing herself every 0.25 seconds over the duration."
         },
         {
           "id": "maximum_total_heal",
@@ -316,7 +316,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2."
+          "context_notes": "Self Cast: Lissandra instantly entombs herself in ice, entering stasis for 2.5 seconds and healing herself every 0.25 seconds over the duration."
         },
         {
           "id": "magic_damage",
@@ -326,7 +326,7 @@
             250.0,
             350.0
           ],
-          "context_notes": "Frozen Tomb creates a field of ice that spreads out from the target over 1."
+          "context_notes": "Frozen Tomb creates a field of ice that spreads out from the target over 1.5 seconds and covers the surrounding area for 3 seconds, dealing magic damage to enemies and slowing them for 0.5 seconds, refreshing every 0.25 seconds while they remain within."
         },
         {
           "id": "slow",
@@ -336,7 +336,7 @@
             60.0,
             75.0
           ],
-          "context_notes": "Frozen Tomb creates a field of ice that spreads out from the target over 1."
+          "context_notes": "Frozen Tomb creates a field of ice that spreads out from the target over 1.5 seconds and covers the surrounding area for 3 seconds, dealing magic damage to enemies and slowing them for 0.5 seconds, refreshing every 0.25 seconds while they remain within."
         }
       ],
       "description": "Active: Lissandra can cast Frozen Tomb on herself or an enemy champion.",
@@ -372,6 +372,12 @@
       "path": "From Online/champions/Lissandra.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Lissandra",
+      "accessed": "2026-02-24",
+      "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
     }
   ],
   "notes": [

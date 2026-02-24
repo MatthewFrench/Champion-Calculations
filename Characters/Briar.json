@@ -255,7 +255,7 @@
             3.625,
             4.0
           ],
-          "context_notes": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0."
+          "context_notes": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0.25 seconds."
         },
         {
           "id": "maximum_heal",
@@ -267,7 +267,7 @@
             14.5,
             16.0
           ],
-          "context_notes": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0."
+          "context_notes": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0.25 seconds."
         },
         {
           "id": "briar_e_effect_2",
@@ -283,7 +283,7 @@
             185.0,
             220.0
           ],
-          "context_notes": "Recast: Briar unleashes the scream in the direction she targeted at the time of cast, dealing magic damage to enemies hit and slowing them by 80% for 0."
+          "context_notes": "Recast: Briar unleashes the scream in the direction she targeted at the time of cast, dealing magic damage to enemies hit and slowing them by 80% for 0.5 seconds."
         },
         {
           "id": "minimum_magic_damage",
@@ -295,7 +295,7 @@
             4.625,
             5.5
           ],
-          "context_notes": "Recast: Briar unleashes the scream in the direction she targeted at the time of cast, dealing magic damage to enemies hit and slowing them by 80% for 0."
+          "context_notes": "Recast: Briar unleashes the scream in the direction she targeted at the time of cast, dealing magic damage to enemies hit and slowing them by 80% for 0.5 seconds."
         },
         {
           "id": "bonus_magic_damage",
@@ -349,7 +349,7 @@
         "Source targeting: Direction / Auto.",
         "Source castTime: None / 0.15.",
         "Source speed: 1900 / 1800.",
-        "Source notes (summary): Chilling Scream increases its damage by its minimum every 0."
+        "Source notes (summary): Chilling Scream increases its damage by its minimum every 0.025 seconds over the charge duration."
       ]
     },
     "ultimate": {

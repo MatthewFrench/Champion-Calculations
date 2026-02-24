@@ -105,7 +105,7 @@
             185.0,
             191.67
           ],
-          "context_notes": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0."
+          "context_notes": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0.25 seconds."
         },
         {
           "id": "minimum_physical_damage",
@@ -117,7 +117,7 @@
             100.0,
             120.0
           ],
-          "context_notes": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0."
+          "context_notes": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0.25 seconds."
         },
         {
           "id": "maximum_physical_damage",
@@ -129,7 +129,7 @@
             285.0,
             350.0
           ],
-          "context_notes": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0."
+          "context_notes": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0.25 seconds."
         },
         {
           "id": "sion_q_effect_2",
@@ -145,7 +145,7 @@
             165.0,
             198.0
           ],
-          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0."
+          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0.25 seconds."
         },
         {
           "id": "maximum_monster_damage",
@@ -157,7 +157,7 @@
             470.25,
             577.5
           ],
-          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0."
+          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0.25 seconds."
         },
         {
           "id": "minimum_minion_damage",
@@ -169,7 +169,7 @@
             60.0,
             72.0
           ],
-          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0."
+          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0.25 seconds."
         },
         {
           "id": "maximum_minion_damage",
@@ -181,7 +181,7 @@
             171.0,
             210.0
           ],
-          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0."
+          "context_notes": "Recast: Sion flails his axe in the direction he targeted at the time of cast, dealing physical damage to enemies hit and slowing them by 50% for 0.25 seconds."
         },
         {
           "id": "sion_q_effect_4",
@@ -303,7 +303,7 @@
             170.0,
             205.0
           ],
-          "context_notes": "Active: Sion bellows a shockwave in the target direction that deals magic damage to the first enemy hit, slows them for 2."
+          "context_notes": "Active: Sion bellows a shockwave in the target direction that deals magic damage to the first enemy hit, slows them for 2.5 seconds and inflicts them with 25% armor reduction for 4 seconds."
         },
         {
           "id": "slow",
@@ -315,7 +315,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "Active: Sion bellows a shockwave in the target direction that deals magic damage to the first enemy hit, slows them for 2."
+          "context_notes": "Active: Sion bellows a shockwave in the target direction that deals magic damage to the first enemy hit, slows them for 2.5 seconds and inflicts them with 25% armor reduction for 4 seconds."
         },
         {
           "id": "sion_e_effect_2",
@@ -438,6 +438,12 @@
       "path": "From Online/champions/Sion.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sion",
+      "accessed": "2026-02-24",
+      "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
     }
   ],
   "notes": [

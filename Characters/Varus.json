@@ -175,7 +175,7 @@
         "Source targeting: Auto / Direction.",
         "Source castTime: none.",
         "Source speed: 1900.",
-        "Source notes (summary): The arrow missile range is 825 to 1525; The range increases by 140 per 0."
+        "Source notes (summary): The arrow missile range is 825 to 1525; the range increases by 140 per 0.25 seconds for the first 1.25 seconds."
       ]
     },
     "basic_ability_2": {
@@ -255,7 +255,7 @@
             12.0,
             14.0
           ],
-          "context_notes": "Active: Varus' next Piercing Arrow within 5."
+          "context_notes": "Active: Varus' next Piercing Arrow within 5.5 seconds."
         },
         {
           "id": "active_maximum_magic_damage",
@@ -267,7 +267,7 @@
             18.0,
             21.0
           ],
-          "context_notes": "Active: Varus' next Piercing Arrow within 5."
+          "context_notes": "Active: Varus' next Piercing Arrow within 5.5 seconds."
         },
         {
           "id": "varus_w_effect_4",
@@ -316,7 +316,7 @@
             150.0,
             180.0
           ],
-          "context_notes": "Active: Varus fires a hail of arrows at the target location that land after 0."
+          "context_notes": "Active: Varus fires a hail of arrows at the target location that land after 0.5 seconds."
         },
         {
           "id": "slow",
@@ -358,7 +358,7 @@
         "Source targeting: Location.",
         "Source castTime: 0.2419.",
         "Source effectRadius: 300.",
-        "Source notes (summary): Slow lingers for 0."
+        "Source notes (summary): Slow lingers for 0.25 seconds after leaving the marked area."
       ]
     },
     "ultimate": {

@@ -210,7 +210,7 @@
         "Source castTime: none.",
         "Source speed: 2500.",
         "Source effectRadius: 2000 / Global.",
-        "Source notes (summary): Zed gains a buff for 5."
+        "Source notes (summary): Zed gains a recast buff for 5.25 seconds that determines Living Shadow return availability."
       ]
     },
     "basic_ability_3": {
@@ -242,7 +242,7 @@
             35.0,
             40.0
           ],
-          "context_notes": "Enemies hit by a Shadow's slash are slowed for 1."
+          "context_notes": "Enemies hit by a Shadow's slash are slowed for 1.5 seconds."
         },
         {
           "id": "enhanced_slow",
@@ -254,7 +254,7 @@
             52.5,
             60.0
           ],
-          "context_notes": "Enemies hit by a Shadow's slash are slowed for 1."
+          "context_notes": "Enemies hit by a Shadow's slash are slowed for 1.5 seconds."
         },
         {
           "id": "zed_e_effect_3",
@@ -338,7 +338,7 @@
         "Source targeting: Unit / Auto.",
         "Source castTime: none.",
         "Source effectRadius: Global.",
-        "Source notes (summary): Zed gains a buff for 7."
+        "Source notes (summary): Zed gains a recast buff for 7.5 seconds that determines Death Mark return availability."
       ]
     }
   },

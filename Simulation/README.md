@@ -73,12 +73,12 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Controlled champion hot-effect tick lifecycle ownership now routes through `src/engine/simulation_step/hot_effects_step.rs` (`apply_hot_effects`).
 - Controlled champion status/cast/attack gating, enemy range/targeting/projectile-block helpers, and attack/event scheduling ownership now route through `src/engine/combat_timing_and_targeting.rs`.
 - Enemy derived combat-stat/loadout-runtime modeling ownership now routes through `src/engine/enemy_combat_stat_modeling.rs` (`derive_enemy_model`, `derive_enemy_combat_stats`).
-- Enemy respawn/regeneration lifecycle and active/alive runtime queries are routed through actor-state owner module `src/engine/actor_state/enemy_runtime_state.rs`.
-- Recurring script-event eligibility and script-cadence readiness updates are routed through actor-state owner APIs (`enemy_script_event_should_recur`, `set_enemy_script_event_ready_at`) in `src/engine/actor_state/enemy_runtime_state.rs`.
-- Champion-script epoch/readiness projections and script-runtime mutation are routed through actor-state owner APIs (`enemy_script_epoch_matches`, `enemy_script_event_ready_at_or_zero`, `execute_enemy_script_event_actions`, `enemy_aftershock_magic_damage_on_immobilize`) in `src/engine/actor_state/enemy_runtime_state.rs`.
-- High-traffic enemy read projections are routed through actor-state owner query APIs (`enemy_name`, `enemy_position`, `enemy_hitbox_radius`, `enemy_attack_*`, `enemy_target_health_snapshot_or_defaults`, `enemy_status_lines_at`, `enemy_is_*_at`) in `src/engine/actor_state/enemy_runtime_state.rs`.
-- Trace-snapshot enemy-section composition is routed through actor-state owner projection APIs (`enemy_count`, `enemy_trace_snapshot_at`) in `src/engine/actor_state/enemy_runtime_state.rs`.
-- Enemy auto-attack token lifecycle and next-hit bonus consume/reset are routed through actor-state owner APIs (`begin_enemy_attack_sequence`, `enemy_attack_sequence_matches`, `consume_enemy_attack_damage_with_on_hit`) in `src/engine/actor_state/enemy_runtime_state.rs`.
+- Enemy respawn/regeneration lifecycle and active/alive runtime queries are routed through actor-state owner facade `src/engine/actor_state/enemy_runtime_state.rs` plus explicit owner leaves under `src/engine/actor_state/enemy_runtime_state/`.
+- Recurring script-event eligibility and script-cadence readiness updates are routed through actor-state owner APIs (`enemy_script_event_should_recur`, `set_enemy_script_event_ready_at`) in `src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`.
+- Champion-script epoch/readiness projections and script-runtime mutation are routed through actor-state owner APIs (`enemy_script_epoch_matches`, `enemy_script_event_ready_at_or_zero`, `execute_enemy_script_event_actions`, `enemy_aftershock_magic_damage_on_immobilize`) in explicit owner leaves under `src/engine/actor_state/enemy_runtime_state/`.
+- High-traffic enemy read projections are routed through actor-state owner query APIs (`enemy_name`, `enemy_position`, `enemy_hitbox_radius`, `enemy_attack_*`, `enemy_target_health_snapshot_or_defaults`, `enemy_status_lines_at`, `enemy_is_*_at`) in `src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`.
+- Trace-snapshot enemy-section composition is routed through actor-state owner projection APIs (`enemy_count`, `enemy_trace_snapshot_at`) in `src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`.
+- Enemy auto-attack token lifecycle and next-hit bonus consume/reset are routed through actor-state owner APIs (`begin_enemy_attack_sequence`, `enemy_attack_sequence_matches`, `consume_enemy_attack_damage_with_on_hit`) in `src/engine/actor_state/enemy_runtime_state/enemy_attack_and_script_channels.rs`.
 - Search candidate-space extraction is complete under `src/search/candidate_space/*`:
   - full-loadout candidate mutation/canonicalization helper ownership now routes through `src/search/candidate_space/full_loadout_candidate_operations.rs`
   - full-loadout candidate scoring/ranking helper ownership now routes through `src/search/candidate_space/full_loadout_candidate_scoring.rs`
@@ -86,7 +86,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - item-only candidate scoring/dedupe helper ownership now routes through `src/search/candidate_space/item_candidate_scoring.rs`
 - Full-loadout search orchestration ownership now routes through `src/search/full_loadout_search_orchestration.rs` (`FullLoadoutSearchParams`, `build_search_ranked_full_loadout`, seed-elite aggregation, adaptive strategy expansion, bleed candidate generation).
 - Search strategy ownership now routes through `src/search/strategy/*`:
-  - item-only strategy and rollout/selection helper ownership routes through `src/search/strategy/item_candidate_search_strategies.rs`
+  - item-only strategy facade ownership routes through `src/search/strategy/item_candidate_search_strategies.rs` with explicit owner leaves under `src/search/strategy/item_candidate_search_strategies/`
   - full-loadout strategy helper ownership routes through `src/search/strategy/full_loadout_search_strategies.rs`
 - Search scoring/diversity ownership now routes through `src/search/scoring/*`:
   - item-build scoring/diversity helper ownership routes through `src/search/scoring/item_build_scoring_and_diversity.rs`
@@ -105,10 +105,10 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Scenario controlled-champion setup and enemy-build preparation ownership now routes through `src/scenario_runner/controlled_champion_scenario_setup.rs`.
 - Scenario controlled-champion strict-ranking fallback/tie-break/seed-diagnostics finalization ownership now routes through `src/scenario_runner/controlled_champion_strict_ranking_finalization.rs`.
 - Scenario controlled-champion post-search result-reporting orchestration now routes through `src/scenario_runner/controlled_champion_result_reporting.rs`.
-- Scenario controlled-champion ranked-build analysis and diagnostics assembly now route through `src/scenario_runner/controlled_champion_result_build_analysis.rs`.
+- Scenario controlled-champion ranked-build analysis and diagnostics assembly now route through `src/scenario_runner/controlled_champion_result_build_analysis.rs` plus explicit projection leaves under `src/scenario_runner/controlled_champion_result_build_analysis/`.
 - Scenario controlled-champion trace/report artifact writing now routes through `src/scenario_runner/controlled_champion_result_artifact_writing.rs`.
-- Scenario fixed-loadout and fixed-loadout-rune-sweep execution entrypoint implementation now routes through `src/scenario_runner/fixed_loadout_runner.rs` and `src/scenario_runner/rune_sweep_runner.rs`, with rune-sweep aggregation and report projection routed through explicit leaves under `src/scenario_runner/rune_sweep_runner/`.
-- Scenario controlled-champion execution entrypoint now routes through `src/scenario_runner/controlled_champion_scenario_runner.rs` facade and `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` owner leaf.
+- Scenario fixed-loadout and fixed-loadout-rune-sweep execution entrypoint implementation now routes through `src/scenario_runner/fixed_loadout_runner.rs` and `src/scenario_runner/rune_sweep_runner.rs`, with shared enemy-scenario projection ownership in `src/scenario_runner/controlled_champion_enemy_scenario_projection.rs` and rune-sweep aggregation/report projection routed through explicit leaves under `src/scenario_runner/rune_sweep_runner/`.
+- Scenario controlled-champion execution entrypoint now routes through `src/scenario_runner/controlled_champion_scenario_runner.rs` facade, `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` owner leaf, and explicit execution sub-leaves under `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/`.
 - Core combat-primitives/status/cast-lock ownership now routes through `src/core/combat_primitives_state.rs`.
 - Defaults champion/item simulation-default loading now routes through a thin defaults-loader facade plus explicit leaf owners:
   - `src/defaults/champion_item_simulation_defaults_loader.rs`
@@ -116,11 +116,11 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders/*.rs` (explicit champion-family leaves)
   - `src/defaults/champion_item_simulation_defaults_loader/item_simulation_defaults_loaders.rs`
   - `src/defaults/champion_item_simulation_defaults_loader/simulation_defaults_extraction_helpers.rs`
-- Defaults schema/type ownership now routes through `src/defaults/simulator_defaults_schema_types.rs` facade plus explicit schema owner leaves under `src/defaults/simulator_defaults_schema_types/`.
+- Defaults schema/type ownership now routes through `src/defaults/simulator_defaults_schema_types.rs` facade plus explicit schema owner leaves under `src/defaults/simulator_defaults_schema_types/`, including explicit sub-leaves under `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/`.
 - Defaults path/key normalization and shared champion/item JSON effect helper ownership now routes through `src/defaults/defaults_path_key_and_effect_helpers.rs`.
-- Data champion/item/preset loading and URF legality ownership now routes through `src/data/champion_item_preset_data_loading.rs`.
-- Data simulation/search configuration parsing ownership now routes through `src/data/simulation_search_configuration_parsing.rs` facade plus explicit parse owner leaves under `src/data/simulation_search_configuration_parsing/`.
-- Data loadout-domain modeling/legality/sampling ownership now routes through `src/data/loadout_domain_modeling.rs`.
+- Data champion/item/preset loading and URF legality ownership now routes through `src/data/champion_item_preset_data_loading.rs` facade plus explicit owner leaves (including item-pool sub-leaves under `src/data/champion_item_preset_data_loading/item_pool_loading/`).
+- Data simulation/search configuration parsing ownership now routes through `src/data/simulation_search_configuration_parsing.rs` facade plus explicit parse owner leaves under `src/data/simulation_search_configuration_parsing/`, including build-search parse/profile sub-leaves under `src/data/simulation_search_configuration_parsing/build_search_config_parsing/`.
+- Data loadout-domain modeling/legality/sampling ownership now routes through `src/data/loadout_domain_modeling.rs` facade plus explicit owner leaves under `src/data/loadout_domain_modeling/`.
 - Data loadout effect/stat resolution ownership now routes through `src/data/loadout_effect_resolution.rs`.
 - Reporting markdown run-report rendering ownership now routes through `src/reporting/controlled_champion_report_markdown_writer.rs` facade plus explicit section owners under `src/reporting/controlled_champion_report_markdown_writer/` and `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/`.
 - Reporting JSON run-report serialization ownership now routes through `src/reporting/controlled_champion_report_json_writer.rs`.
@@ -210,7 +210,14 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/engine.rs`: Fixed-tick combat engine and event-queue simulation loop.
 - `src/engine/combat_timing_and_targeting.rs`: Engine owner module for controlled champion action-gating/status windows, enemy range/targeting/projectile-block helpers, attack/event scheduling, and run-to-completion orchestration helpers.
 - `src/engine/enemy_combat_stat_modeling.rs`: Engine owner module for enemy derived combat-stat and runtime-loadout modeling helpers.
-- `src/engine/actor_state/enemy_runtime_state.rs`: Actor-state owner module for enemy lifecycle queries and respawn/regeneration mutation channels.
+- `src/engine/actor_state/enemy_runtime_state.rs`: Actor-state owner facade for enemy runtime channels.
+- `src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`: Actor-state owner leaf for enemy runtime query projections and trace snapshot composition.
+- `src/engine/actor_state/enemy_runtime_state/enemy_attack_and_script_channels.rs`: Actor-state owner leaf for enemy auto-attack token/bonus and script-action execution channels.
+- `src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`: Actor-state owner leaf for enemy respawn/regeneration and script-cadence lifecycle channels.
+- `src/engine/trace_snapshot_reporting.rs`: Engine trace/reporting facade for trace lifecycle and snapshot projection channels.
+- `src/engine/trace_snapshot_reporting/trace_lifecycle_channels.rs`: Engine trace owner leaf for trace-event lifecycle (`enable_trace`, `trace_event`, `emit_trace_snapshots_due`).
+- `src/engine/trace_snapshot_reporting/trace_status_and_projectile_projections.rs`: Engine trace owner leaf for status/cooldown/projectile read-only projections.
+- `src/engine/trace_snapshot_reporting/trace_snapshot_summary_projection.rs`: Engine trace owner leaf for controlled champion + enemy + field snapshot summary assembly.
 - `src/engine/event_queue/*`: Event queue owner modules for scheduling, ordering, and projection queries.
 - `src/engine/event_resolution/combat_event_dispatch_resolution.rs`: Event-resolution owner module for combat event dispatch and tick-step progression.
 - `src/engine/event_resolution/combat_event_enemy_auto_attack_resolution.rs`: Event-resolution owner module for enemy auto-attack start/windup/hit event handling.
@@ -225,6 +232,11 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/build_order.rs`: Build-order stage simulation and optimization.
 - `src/search.rs`: Build search algorithms, portfolio/ensemble orchestration, diversity selection, and metric helpers.
 - `src/search/full_loadout_search_orchestration.rs`: Search owner module for full-loadout strategy dispatch, ensemble-seed elite aggregation, adaptive strategy expansion, and bleed-candidate generation.
+- `src/search/strategy/item_candidate_search_strategies.rs`: Search strategy facade for item-only strategy dispatch.
+- `src/search/strategy/item_candidate_search_strategies/beam_search_strategy.rs`: Search strategy owner leaf for beam-search candidate expansion/ranking.
+- `src/search/strategy/item_candidate_search_strategies/iterative_search_strategies.rs`: Search strategy owner leaf for random/hill-climb/genetic/annealing item-only strategies.
+- `src/search/strategy/item_candidate_search_strategies/mcts_search_strategy.rs`: Search strategy owner leaf for item-only MCTS rollout/search channels.
+- `src/search/strategy/full_loadout_search_strategies.rs`: Search strategy owner module for full-loadout strategy implementations.
 - `src/reporting.rs`: Thin reporting facade with shared formatting/validation helpers and writer re-exports.
 - `src/scenario_runner.rs`: Scenario mode execution orchestration (`controlled_champion`, `controlled_champion_step`, stat modes).
 - `src/scenario_runner/scenario_parsing.rs`: Scenario parser-owner module for controlled champion/search-default parsing and legacy-key validation.
@@ -235,16 +247,24 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/scenario_runner/search_space_estimation.rs`: Scenario diagnostics owner module for legal candidate-space estimation and closeness-probability/percent formatting helpers.
 - `src/scenario_runner/fixed_loadout_runner.rs`: Scenario execution owner module for fixed-loadout run/report/trace flow.
 - `src/scenario_runner/rune_sweep_runner.rs`: Scenario execution owner module for fixed-loadout keystone sweep flow.
+- `src/scenario_runner/controlled_champion_enemy_scenario_projection.rs`: Shared scenario owner module for scaled enemy-scenario parsing, enemy-build projection, and reference-outcome projection reused by fixed-loadout and rune-sweep flows.
 - `src/scenario_runner/rune_sweep_runner/result_aggregation.rs`: Scenario execution owner leaf for read-only rune-sweep outcome/objective aggregation.
 - `src/scenario_runner/rune_sweep_runner/report_writing.rs`: Scenario execution owner leaf for fixed-loadout rune-sweep markdown/json report projection and artifact writing.
 - `src/scenario_runner/controlled_champion_candidate_search.rs`: Scenario execution owner module for controlled-champion candidate-search phase orchestration (coverage stage, seed ensembles, candidate merge/dedupe, strict ranking).
 - `src/scenario_runner/controlled_champion_scenario_setup.rs`: Scenario execution owner module for controlled-champion setup/search-configuration parsing and enemy-build preparation.
 - `src/scenario_runner/controlled_champion_strict_ranking_finalization.rs`: Scenario execution owner module for controlled-champion strict-ranking fallback insertion, tie-break sorting, and seed-hit diagnostics finalization.
 - `src/scenario_runner/controlled_champion_result_reporting.rs`: Scenario execution owner module for controlled-champion post-search result-reporting orchestration.
-- `src/scenario_runner/controlled_champion_result_build_analysis.rs`: Scenario execution owner module for controlled-champion ranked-build analysis, diagnostics assembly, and build-order analysis.
+- `src/scenario_runner/controlled_champion_result_build_analysis.rs`: Scenario execution owner facade module for controlled-champion ranked-build analysis, diagnostics assembly, and build-order analysis orchestration.
+- `src/scenario_runner/controlled_champion_result_build_analysis/build_order_analysis.rs`: Scenario execution owner leaf for build-order optimization and final controlled-champion end-state projection.
+- `src/scenario_runner/controlled_champion_result_build_analysis/candidate_metrics_projection.rs`: Scenario execution owner leaf for diverse-top projection, candidate metrics, pareto-front projection, and confidence/channel input selection.
+- `src/scenario_runner/controlled_champion_result_build_analysis/search_diagnostics_projection.rs`: Scenario execution owner leaf for search diagnostics payload projection.
 - `src/scenario_runner/controlled_champion_result_artifact_writing.rs`: Scenario execution owner module for controlled-champion trace/report artifact writing and final output emission.
 - `src/scenario_runner/controlled_champion_scenario_runner.rs`: Scenario execution facade for controlled-champion coverage/search/report entrypoint routing.
-- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs`: Scenario execution owner leaf for controlled-champion coverage/search/report orchestration flow.
+- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs`: Scenario execution owner facade leaf for controlled-champion coverage/search/report orchestration flow.
+- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/deadline_and_progress.rs`: Scenario execution owner leaf for time-budget deadline and significant-improvement progress-window ownership.
+- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/runtime_setup.rs`: Scenario execution owner leaf for controlled-champion scenario search/setup and enemy-build setup ownership.
+- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution.rs`: Scenario execution owner leaf for coverage/seed/strict execution orchestration.
+- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution/candidate_scoring_channels.rs`: Scenario execution owner leaf for candidate score/evaluation channels used by search execution.
 - `src/scenario_runner/controlled_champion_search_runtime_support.rs`: Scenario support owner module for controlled-champion coverage-asset locking, partial-candidate completion, telemetry formatting, and structured trace-event shaping.
 - `src/defaults/champion_item_simulation_defaults_loader.rs`: Thin defaults owner facade/re-export surface for champion/item simulation-default loaders.
 - `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`: Defaults owner leaf module for champion simulation-default loading.
@@ -270,7 +290,11 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/data/simulation_search_configuration_parsing/enemy_config_parsing.rs`: Data parse owner leaf for opponent actor parse/placement/stack-override normalization.
 - `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs`: Data parse owner leaf for build-search parse mapping and quality-profile application.
 - `src/data/simulation_search_configuration_parsing/loadout_selection_parsing.rs`: Data parse owner leaf for loadout rune/shard selection parsing and deterministic key projection.
-- `src/data/loadout_domain_modeling.rs`: Data owner module for rune-page domain generation, legality checks, and randomized selection.
+- `src/data/loadout_domain_modeling.rs`: Data owner facade for rune-page domain generation, legality checks, and randomized selection channels.
+- `src/data/loadout_domain_modeling/loadout_domain_schema.rs`: Data owner leaf for rune/shard domain schema construction.
+- `src/data/loadout_domain_modeling/modeled_rune_filtering.rs`: Data owner leaf for modeled-rune domain filtering.
+- `src/data/loadout_domain_modeling/rune_page_validation.rs`: Data owner leaf for rune-page legality validation.
+- `src/data/loadout_domain_modeling/loadout_selection_generation.rs`: Data owner leaf for deterministic/default/random loadout selection generation.
 - `src/data/loadout_effect_resolution.rs`: Data owner module for structured effect application and resolved loadout stat derivation.
 - `src/reporting/controlled_champion_report_markdown_writer.rs`: Reporting owner facade for controlled-champion markdown run-report assembly/writing.
 - `src/reporting/controlled_champion_report_markdown_writer/header_and_objective_sections.rs`: Reporting owner leaf for header/headline/objective-breakdown and rune telemetry markdown sections.
@@ -284,7 +308,11 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - `src/cache.rs`: In-memory score cache implementation (per-run only).
 - `src/status.rs`: Deadline and status progress reporting helpers.
 - `src/respawn.rs`: URF respawn timer model helpers.
-- `src/scripts/champions.rs`: Champion script dispatch, behavior profiles, runtime wrappers, and shared action/event types (including script effect hitbox descriptors).
+- `src/scripts/champions.rs`: Champion script facade/re-export surface for behavior, event/action types, and runtime effect channels.
+- `src/scripts/champions/champion_behavior_profile_channels.rs`: Champion behavior-profile owner leaf.
+- `src/scripts/champions/champion_script_effect_types.rs`: Champion script event/action/payload type owner leaf.
+- `src/scripts/champions/champion_script_event_channels.rs`: Champion script event registry/cooldown/dispatch owner leaf.
+- `src/scripts/champions/runtime_effect_channels.rs`: Champion runtime effect bridge owner leaf.
 - `src/scripts/champions/vladimir.rs`: Vladimir scripted formulas and combat decision APIs (offense and defensive ability decisions).
 - `src/scripts/champions/<champion>.rs`: Per-champion behavior/event logic modules.
 - `src/scripts/items/hooks.rs`: Item-specific simulation scripts (for example, Heartsteel stack override handling).
@@ -543,7 +571,7 @@ src/scripts/
   registry/
     hooks.rs
 ```
-Script-tree `mod.rs` cleanup and compatibility-shim removal are complete; architecture follow-up is now optional deeper leaf decomposition and regression-coverage hardening.
+Script-tree `mod.rs` cleanup and compatibility-shim removal are complete; architecture follow-up is now optional deeper leaf decomposition for remaining dense non-facade leaves and continued regression-coverage hardening.
 
 ## Minimal Scenario Shape
 - Use champion references instead of hardcoding base stats:

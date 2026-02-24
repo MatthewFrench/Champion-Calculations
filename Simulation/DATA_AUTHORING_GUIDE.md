@@ -36,6 +36,8 @@ Start here before implementation:
   - `Masteries/RunesReforged/StatShards/stat_shards.json`
 - Champion corpus parity tracking:
   - `Simulation/champion_data_coverage_inventory.json`
+- Champion manual behavior-fidelity tracking:
+  - `Simulation/champion_behavior_verification_tracker.json`
 - Mode defaults (for example URF respawn):
   - `Game Mode/<Mode>.json`
 - Global simulator/search/engine defaults:
@@ -86,7 +88,7 @@ Detailed acceptance criteria for these examples live in:
   - For CommunityDragon item-dataset citations, use `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json`.
   - For item `stats` keys, use loader-canonical key names (for example `magicResist`, `critChance`, not legacy variants like `magicResistance` or `criticalStrikeChance`) to avoid silent stat drops during ingestion.
   - If an item is retained only as legacy/reference data, add explicit `lifecycle` metadata with `status`, `exclude_from_simulation = true`, `reason`, `replacement_item`, and `replacement_id`.
-  - If research uncovers known bug-specific behavior, document it, but keep intended behavior as canonical for simulation data unless a bug-emulation policy is explicitly approved.
+  - If research uncovers known bug-specific behavior, document it, but keep intended behavior as canonical for simulation data and do not model bug behavior in canonical data.
   - For mode-variant item behavior, keep root fields as Tier-1 baseline semantics and encode only mode-specific divergence under `mode_overrides.<mode_key>` (for example `mode_overrides.URF`, `mode_overrides.ARENA`).
   - If `mode_overrides` branches are added before runtime mode-overlay consumption exists, add explicit mode-page citations and log deferred runtime follow-up in `Simulation/COVERAGE_GAPS.md` in the same change.
 
@@ -118,7 +120,8 @@ Documentation and confidence rules for behavior fidelity:
 - If execution semantics remain ambiguous after research, log the ambiguity in `Simulation/CONFIDENCE_REVIEW.md` and track follow-up in `Simulation/COVERAGE_GAPS.md`.
 - If semantics are clear in data but current runtime cannot express them yet, add explicit deferred runtime follow-up scope in `Simulation/COVERAGE_GAPS.md` in the same change.
 - Prefer explicit notes over silent assumptions when behavior is not obvious from tooltip formula text alone.
-- For known bug-vs-intended discrepancies, encode intended behavior in structured data by default and track any bug-emulation request as deferred runtime follow-up.
+- For known bug-vs-intended discrepancies, encode intended behavior in structured data by default and document bug-divergence observations as notes only.
+- Project policy lock: intended non-bug behavior is the default canonical simulation model; known bug behavior is not modeled in canonical data.
 
 ## Data-First Priority Queue (Current)
 This queue is ordered by impact and tracking value.
@@ -126,7 +129,12 @@ This queue is ordered by impact and tracking value.
 Priority A. Champion corpus fidelity normalization (highest impact):
 - Keep canonical champion file parity at `172/172` via `Simulation/champion_data_coverage_inventory.json`.
 - Run manual behavior-fidelity waves over generated champions so non-trivial abilities include execution-semantics notes that match in-game behavior.
+- Track manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` (manual verified vs source-extracted-only champions) and raise coverage each wave.
+- For each manually verified champion in a wave, record at least one page-level champion ability citation in the champion `sources` list and in the wave entry of `Simulation/champion_behavior_verification_tracker.json`.
 - Maintain full-corpus active-ability execution no-regression (`682/682`) and full ability context-note no-regression (`860/860`).
+- Run dedicated cleanup passes for generated/truncated context-note fragments (for example `for 0.` / `within 4.`) and pair each correction wave with tracker updates and provenance notes.
+- Use strict fragment detection in truncation audits (integer-dot token patterns) so valid decimal timings (for example `0.25 seconds`) are not tracked as truncation defects.
+- Normalize `context_notes` shape before truncation audits (support both string and array forms) so fragment queues are complete and reproducible.
 
 Priority B. Runes split-structure synchronization:
 - Keep split rune structure (`Masteries/RunesReforged/`) synchronized with flat compatibility file (`Masteries/RunesReforged.json`) on every rune/mastery edit.
@@ -232,6 +240,26 @@ Priority C. Champion inventory and planning hygiene:
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed champion fidelity normalization wave 48:
+    - manually reviewed and normalized timing-semantics notes across `5` champions (`Udyr`, `Sion`, `Lissandra`, `AurelionSol`, `Naafiri`) with page-level champion ability citation provenance
+    - normalized `29` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `42/172` to `47/172`
+    - reduced string+array-aware strict-fragment queue from `309/108` to `280/107`
+  - Completed champion fidelity normalization wave 47:
+    - manually reviewed and normalized timing-fragment execution semantics across `18` champions (`Akshan`, `Aurora`, `Briar`, `Gnar`, `Irelia`, `Leblanc`, `Lillia`, `Lux`, `MonkeyKing`, `Nocturne`, `Riven`, `Shaco`, `Taliyah`, `Urgot`, `Varus`, `Xerath`, `Yuumi`, `Zed`)
+    - normalized `51` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `25/172` to `42/172`
+    - corrected truncation-audit implementation to support both string and array `context_notes`, then re-baselined corrected-method queue from `360/123` to `309/108` after wave cleanup
+  - Completed champion fidelity normalization wave 46:
+    - manually reviewed execution-semantics behavior on `Fiddlesticks` (`Q`, `W`, `E`), `Rumble` (`Q`, `R`), `Swain` (`Q`, `R`), and `Nautilus` (`E`, `R`)
+    - normalized candidate truncated timing fragments on all touched abilities and added page-level ability verification sources for each touched champion
+    - raised manual verification tracker coverage from `21/172` to `25/172`
+    - tightened truncation-audit criteria to strict fragment detection (excluding valid decimals like `0.25`); superseded by string+array-aware audit baseline in wave 47
+  - Completed champion fidelity normalization wave 45:
+    - manually reviewed attack-cadence-coupled execution semantics for `Camille` (`Q`), `Ekko` (`E`), `Trundle` (`Q`), `Volibear` (`W`), `Vi` (`E`), and `Yorick` (`Q`)
+    - added page-level ability verification sources to each touched champion and raised manual verification tracker coverage from `15/172` to `21/172`
+    - fixed targeted truncated context-note fragments in touched abilities while preserving canonical execution metadata
+    - logged broader generated-context truncation backlog (`225` ability entries across `132` champion files) as an explicit tracked data-quality follow-up (superseded by strict-fragment rebaseline in wave 46)
   - Completed champion fidelity normalization wave 44:
     - closed full-corpus active-ability execution gaps (`682/682` with non-empty `execution`)
     - closed full-corpus champion ability context-note gaps (`860/860` with non-empty `context_notes`)
@@ -477,7 +505,7 @@ Priority C. Champion inventory and planning hygiene:
   - Resolve Lifeline special-case snapback interactions (displacement/channel/crowd-control edge cases) if simulation accuracy should include these interaction branches.
   - Continue Golden Spatula fidelity follow-up on mode-scoped stat/economy drift and non-modeled runtime handling assumptions (confidence floor work is complete).
   - Muramana Shock proc-damage exclusion is now documented in data, but runtime proc-damage classification for champion-ability branches is still a deferred code-layer follow-up.
-  - Maintain intended-behavior-first policy for known bug notes; defer any bug-emulation logic to explicit runtime follow-up with opt-in design discussion.
+  - Maintain intended-behavior-first policy for known bug notes; do not implement bug behavior in canonical data.
   - Run a broader targeted-active audit to confirm cooldown and cast-range metadata are consistently encoded when page/tooltips publish those values.
   - Reconcile `Gambler's Blade` stored-gold cap (`240` vs historical patch-note `245`) and document canonical source-of-truth decision.
   - Define canonical policy for champion-ability upgrade pseudo-items so upgrade entries are represented consistently across data and coverage tracking.
@@ -712,12 +740,14 @@ jq -r '
 - Update `Simulation/COVERAGE_GAPS.md`.
 - Update `Simulation/IMPROVEMENT_TRACKER.md`.
 - Update `Simulation/champion_data_coverage_inventory.json` whenever champion corpus parity counts change.
+- Update `Simulation/champion_behavior_verification_tracker.json` whenever manual behavior-verification scope changes.
 - Update docs if architecture/ownership changed.
 
 ## Champion Authoring Playbook
 ### Step 0: Confirm champion corpus parity target
 - Use `Simulation/champion_data_coverage_inventory.json` as a no-regression denominator check (`From Online/champions/*.json` vs `Characters/*.json`).
 - When parity is already complete, select the next fidelity wave (low-confidence mechanics, shallow context notes, or behavior-ambiguity champions) instead of file-creation waves.
+- Record the selected fidelity wave and its reviewed champion/ability scope in `Simulation/champion_behavior_verification_tracker.json` before marking coverage progress complete.
 
 ### Step 1: Author canonical champion file
 - Required base shape:

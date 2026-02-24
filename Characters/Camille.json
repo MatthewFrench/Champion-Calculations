@@ -163,7 +163,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual review (2026-02-24): Precision Protocol is cast-gated and attack-cadence-coupled; damage resolves on empowered basic-attack contact, not at cast press.",
+        "Manual review (2026-02-24): First cast resets basic attack timer and opens a recast window; second cast is a separate empowered-hit step and only converts its bonus damage to true damage when recast after the delay threshold."
       ]
     },
     "basic_ability_2": {
@@ -375,6 +377,12 @@
       "path": "From Online/champions/Camille.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Camille/Precision_Protocol",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Precision Protocol cast-to-hit timing and delayed second-hit semantics"
     }
   ],
   "notes": [

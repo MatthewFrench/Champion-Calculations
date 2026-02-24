@@ -25,6 +25,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Champion files (From Online parity) | `172/172` champions from `From Online/champions/*.json` have canonical `Characters/<Champion>.json` files | N/A | File-parity gap is closed; remaining champion gap is behavior-fidelity normalization across generated files |
 | Champion active-ability execution metadata (full corpus) | `682/682` active abilities across canonical champions include non-empty `execution` objects | N/A | No active-execution gap; keep as no-regression guardrail |
 | Champion ability context-note coverage | `860/860` champion abilities include `context_notes` execution semantics | N/A | No context-note completeness gap; keep as no-regression guardrail |
+| Champion manual behavior verification coverage | `47/172` champions are marked manual verified in `Simulation/champion_behavior_verification_tracker.json` | N/A | `125` champions remain source-extracted-only and need deeper manual behavior verification |
 | Controlled champion scripts (full corpus) | `172/172` canonical champions have ability data | `1/172` (`Vladimir`) | `171` champions remain data-complete but unscripted at runtime |
 | Enemy scripted-event champions (full corpus) | `172/172` canonical champions have ability data | `5/172` (`Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`) | Enemy scripted-event runtime coverage remains intentionally partial |
 | Item files | `320` canonical item JSON files (`295` loaded by runtime after excluded ranks), plus `2` non-canonical report artifacts under `Items/` | Runtime effect coverage is a subset of legal URF pool | Effect behavior not modeled for many items |
@@ -37,7 +38,6 @@ This file tracks what is complete and not complete for coverage across data and 
 - Add full enemy-script event-path tests (cooldown, range, and followup behavior per event).
 - Unify rune runtime key mapping and telemetry key mapping to one canonical table.
 - Complete runtime tenacity behavior application for shard-supported tenacity stats.
-- Add explicit opt-in bug-emulation runtime pathways (intended behavior remains default) for known bug-divergence scenarios tracked in coverage docs.
 - Add ally-target chain/fallback runtime resolution support for `Moonstone Renewer` Starlit Grace (nearest-other-ally within 800 units, else same-target fallback).
 - Add runtime support for charge-based Manaflow progression and transform thresholds (`Archangel's Staff`, `Whispering Circlet`, `Winter's Approach`) so stack/cap/transform behavior can be simulated directly.
 - Add runtime support for visibility-gated prep buffs and champion-only consume triggers (`Umbral Glaive` Nightstalker unseen/seen windows and empowered-hit consume branch).
@@ -49,6 +49,7 @@ This file tracks what is complete and not complete for coverage across data and 
 - Add runtime support for Quicksilver-group cooldown isolation and expanded cleanse subtype handling (`Quicksilver Sash` and `Mercurial Scimitar` airborne activation lockout plus suppression/nearsight scope).
 - Add runtime mode-overlay consumption for `mode_overrides` branches so mode-specific item semantics (for example `Overcharged` in Swiftplay/URF) are selected automatically at load/runtime.
 - Add runtime loader support for split rune authoring structure (`Masteries/RunesReforged/RunesReforged.json` + tree/stat-shard files) so flat compatibility file can be deprecated safely.
+- Keep runtime compile-integrity no-regression across ongoing schema/decomposition refactor slices so required validation gates (`cargo fmt`, `cargo clippy -D warnings`, `cargo test --release`) remain clean after data-only waves.
 
 ## Data Quality Gap Snapshot (2026-02-24 Audit, Updated)
 | Data Area | Current State | Gap |
@@ -90,7 +91,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Golden Spatula multi-effect fidelity | `The Golden Spatula` now has module/page-level cross-verification, expanded execution-semantics notes, and minimum parse confidence `0.65` | Keep follow-up on cross-mode stat-package drift (Arena vs Mayhem) and non-modeled runtime handling for death-persistence edge behavior |
 | Gambler's Blade stored-gold cap reconciliation | Current Tier-1/local tooltip data and structured effects use `30` to `240` stored-gold range | Verify wiki patch-history `245` cap note against current authoritative data and clarify whether this is a historical-only value or an unresolved data discrepancy |
 | Runtime-modeled condition-token compatibility | Protoplasm Lifeline threshold token restored to loader-compatible form (`health_below_30_percent`) | Add repeatable audits for compatibility-sensitive condition-token edits on modeled runtime items |
-| Known-bug behavior simulation policy | Coverage standards/checklist now require intended-behavior modeling by default, with bug-specific observations captured as notes | Treat bug-emulation behavior as deferred runtime follow-up and only implement with explicit approval |
+| Known-bug behavior simulation policy | Coverage standards/checklist require intended-behavior modeling by default, with bug-specific observations captured as notes only | Keep bug behavior out of canonical simulation data; document divergences for awareness and follow-up discussion only |
 | Active-cast execution metadata completeness | Targeted active metadata normalization now covers `Mikael's Blessing`, `Hextech Gunblade`, `Mercurial Scimitar`, `Profane Hydra`, `Randuin's Omen`, `Shurelya's Battlesong`, `Youmuu's Ghostblade`, and `Wordless Promise` with explicit cooldown/cast-range-or-radius semantics where source text provides values | Continue broader audit so targeted item actives consistently encode cooldown and cast-range metadata when sources publish them |
 | Quicksilver cleanse edge-semantics runtime follow-up | `Quicksilver Sash` and `Mercurial Scimitar` now encode page-verified cleanse/activation nuances in data (`90s` cooldown, airborne activation lockout, suppression/nearsight removal, no-cast-time/stealth-preserving activation, and item-group cooldown-transfer note) | Add runtime support for Quicksilver-group cooldown-isolation and extended cleanse subtype handling beyond generic cleanse semantics |
 | Black Spear bind-window runtime follow-up | `Black Spear` now captures page-verified cast/channel/incapacitation timing and champion-scope semantics in structured data/context notes | Add runtime handling for bind-window edge behavior (rebind/no-effect time windows and invalid-target cooldown branch behavior) while keeping intended behavior as default |
@@ -106,6 +107,9 @@ This file tracks what is complete and not complete for coverage across data and 
 | Non-structured item provenance (`Items/*.json` without `effects_structured`) | `0/77` canonical non-structured item files have null/empty `sources` | Queue is cleared for canonical item files; keep this as a no-regression guardrail |
 | Items-folder provenance completeness (`Items/*.json`, canonical + report artifacts) | `0/322` item JSON files have null/empty `sources`; `0/322` have source entries missing `accessed` | Folder-level provenance/accessed normalization is complete; keep this as a no-regression guardrail |
 | Champion corpus parity (`From Online/champions` -> `Characters`) | `172/172` champion keys have canonical `Characters/<Champion>.json` parity (`0` missing) | File-parity backlog is cleared; keep inventory as a no-regression guardrail and prioritize per-champion behavior-fidelity review waves |
+| Champion manual verification tracker coverage | `47/172` champions currently marked `manual_behavior_verified` (`27.33%`) in `Simulation/champion_behavior_verification_tracker.json` | Continue fidelity waves until high-impact champion roster is fully manual verified; treat source-extracted-only champions as pending quality work |
+| Champion manual-verification page-level citation depth | `5/5` champions in the latest fidelity wave include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
+| Champion context-note truncation audit | `280` ability entries across `107` champion files are currently flagged by strict regex audit as candidate truncated timing fragments in `context_notes` (for example `for 0.` or `within 4.`) | Queue remains tracked with string+array-aware strict auditing; continue cleanup waves to normalize fragments into complete timing/unit semantics |
 | Champion source metadata completeness (`Characters/*.json`) | `0/173` champion JSON files have null/empty `sources`; `0/173` have source entries missing `accessed` | Champion provenance/accessed normalization is complete; keep this as a no-regression guardrail |
 | Champion active-ability execution metadata completeness | `682/682` champion active abilities include non-empty `execution` objects | Active-ability execution metadata backlog is cleared; keep this as a no-regression guardrail |
 | Champion context-note coverage completeness | `860/860` champion abilities include `context_notes` | Context-note completeness backlog is cleared; keep this as a no-regression guardrail |
@@ -115,11 +119,31 @@ This file tracks what is complete and not complete for coverage across data and 
 ## Data Coverage Progress (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured at the time each wave landed; use "Coverage At A Glance" and "Champion Corpus Parity Snapshot" for current totals.
 - Completed:
+  - added `Simulation/champion_behavior_verification_tracker.json` to track deeper manual champion behavior verification beyond source extraction (current baseline: `47/172` manual verified, policy defaulting to intended non-bug behavior)
+  - completed champion fidelity normalization wave 48:
+    - manually reviewed and normalized timing-semantics notes across `5` champions (`Udyr`, `Sion`, `Lissandra`, `AurelionSol`, `Naafiri`) with page-level champion ability citation provenance
+    - normalized `29` strict fragment candidates in touched champion ability/effect `context_notes` to source-backed complete timing semantics
+    - raised manual verification tracker coverage from `42/172` to `47/172`
+    - reduced string+array-aware strict fragment queue from `309/108` to `280/107`
+  - completed champion fidelity normalization wave 47:
+    - manually reviewed and normalized timing-fragment execution notes across `18` champions (`Akshan`, `Aurora`, `Briar`, `Gnar`, `Irelia`, `Leblanc`, `Lillia`, `Lux`, `MonkeyKing`, `Nocturne`, `Riven`, `Shaco`, `Taliyah`, `Urgot`, `Varus`, `Xerath`, `Yuumi`, `Zed`)
+    - normalized `51` strict fragment candidates in touched champion ability/effect `context_notes` to source-backed complete timing semantics
+    - raised manual verification tracker coverage from `25/172` to `42/172`
+    - corrected truncation-audit implementation to handle both string and array `context_notes`, then re-baselined the corrected-method queue from `360/123` to `309/108` after wave cleanup
   - completed champion fidelity normalization wave 44:
     - fixed remaining active-ability execution gaps (`4` -> `0`) by adding source-backed execution metadata for `Jax` (`Q`), `Leblanc` (`R`), and `Aphelios` (`Q`, `E`)
     - added missing champion ability context notes for `Vladimir` (`Q`, `E`, `R`), `Sona` (`Q`), `DrMundo` (`Q`, `R`), and execution-semantics refinement for `Olaf` (`E`) with attack-cadence-coupled timing notes
     - closed passive context-note backlog on canonical authored champions (`DrMundo`, `Morgana`, `Sona`, `Vayne`, `Vladimir`, `Warwick`) and reached full-corpus context-note coverage (`860/860`)
     - validated full-corpus champion quality no-regression metrics: parity `172/172`, active execution `682/682`, champion sources/accessed completeness `0/173` gaps
+  - completed champion fidelity normalization wave 45:
+    - manually reviewed and refined attack-cadence-coupled execution semantics on `Camille` (`Q`), `Ekko` (`E`), `Trundle` (`Q`), `Volibear` (`W`), `Vi` (`E`), and `Yorick` (`Q`)
+    - fixed targeted truncated context-note fragments in touched abilities (for example `Trundle` `Q` and `Ekko` `E`) while preserving canonical execution metadata
+    - added page-level ability verification provenance on all six touched champions and raised manual verification tracker coverage from `15/172` to `21/172`
+  - completed champion fidelity normalization wave 46:
+    - manually reviewed and refined execution-semantics notes for `Fiddlesticks` (`Q`, `W`, `E`), `Rumble` (`Q`, `R`), `Swain` (`Q`, `R`), and `Nautilus` (`E`, `R`)
+    - normalized candidate truncated timing fragments on all touched abilities and added page-level ability provenance for each touched champion
+    - raised manual verification tracker coverage from `21/172` to `25/172`
+  - tightened truncation-audit criteria to strict fragment detection (requires trailing integer-dot tokens, avoids valid-decimal false positives); this baseline was later superseded by string+array-aware auditing in wave 47
   - backfilled `sources` and normalized review date to `2026-02-23` for all `9` modeled runtime item files
   - backfilled `sources` for `8` high-priority preset items (`Thornmail`, `Spirit Visage`, `Blackfire Torch`, `Stormsurge`, `Shadowflame`, `Rylai's Crystal Scepter`, `Lich Bane`, `Stridebreaker`)
   - backfilled `sources` for `23` additional A/B/C item files with `effects_structured`
@@ -258,7 +282,7 @@ This file tracks what is complete and not complete for coverage across data and 
   - added `Locket of the Iron Solari` Devotion cooldown-start semantics and refreshed `Rapid Firecannon` Energize generation/structure-interaction behavior notes
   - increased page-level item citation depth from `124/243` to `130/243`
   - reduced legal URF unmodeled no-page-citation queue from `47/103` to `41/103`
-  - documented intended-behavior-first policy for known bug notes, with bug-emulation explicitly deferred to later runtime work
+  - documented intended-behavior-first policy for known bug notes, with bug-divergence behavior kept out of canonical data
   - completed item execution-semantics and citation wave 24 (`Cryptbloom`, `Dusk and Dawn`, `Edge of Night`, `Hubris`, `Mikael's Blessing`, `Serpent's Fang`, `Spear of Shojin`) with manual behavior review and page-level verification
   - corrected `Mikael's Blessing` active structured metadata with page-verified cooldown (`120s`) and cast range (`650`) for both cleanse/heal branches
   - added `Spear of Shojin` Focused Will per-cast-instance stack-throttle metadata (one stack per second) and refreshed execution-model notes across all seven wave-24 items
@@ -362,6 +386,7 @@ This file tracks what is complete and not complete for coverage across data and 
 ## Data-First Coverage Priorities (Next)
 1. Execute champion behavior-fidelity waves across the full canonical corpus (`172/172` already present):
    - keep `Simulation/champion_data_coverage_inventory.json` as file-parity guardrail
+   - keep `Simulation/champion_behavior_verification_tracker.json` current for manual verified-vs-source-extracted coverage
    - prioritize manually reviewed execution semantics for high-impact champions/abilities
    - track unresolved behavior ambiguity in `Simulation/CONFIDENCE_REVIEW.md` and `Simulation/COVERAGE_GAPS.md`
 2. Keep champion-file quality bar strict during fidelity waves:
@@ -394,10 +419,12 @@ This file tracks what is complete and not complete for coverage across data and 
 21. Standardize lifecycle-marker policy for retired/replaced item identities (required fields: `status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) and enforce exclusion behavior guardrails.
 22. Resolve Dragonheart acquisition-round stack semantics (immediate soul backfill table and phase timing) as explicit structured behavior if simulation fidelity requires purchase-round sensitivity.
 23. Define canonical policy for champion-ability upgrade pseudo-items (for example `Fire at Will`) including source provenance shape and simulation-use expectations.
-24. Keep intended-behavior-first handling for known bug notes; treat any bug-emulation as explicit deferred runtime policy work, not implicit data defaults.
+24. Keep intended-behavior-first handling for known bug notes; keep bug behavior out of canonical simulation data and document divergences as notes only.
 25. Maintain champion provenance/accessed no-regression (`Characters`: `0/173` unsourced and `0/173` with missing `sources[].accessed`).
 26. Maintain mastery provenance/accessed no-regression (`Masteries`: `0/2` unsourced and `0/2` with missing `sources[].accessed`).
 27. Maintain champion active-ability execution metadata no-regression (`682/682` active abilities with non-empty `execution` objects).
+28. Maintain champion manual behavior-verification tracker and increase manual coverage each wave (`47/172` current baseline).
+29. Execute champion context-note truncation cleanup waves for the tracked backlog (`280` ability entries across `107` champion files, string+array-aware strict audit) and require complete timing/unit semantics before marking entries manually verified.
 
 ### Remaining Broader No-Page Queue (`0`)
 - None (queue cleared in wave 39; keep as a no-regression guardrail).
@@ -420,10 +447,15 @@ This file tracks what is complete and not complete for coverage across data and 
    - phase 2 (in progress): run manual execution-semantics review waves over generated champion files, prioritizing high-impact kits and attack-cadence-coupled abilities.
    - phase 3 (completed): standardized context-note depth for champion passives and closed passive-note backlog (`172/172` documented).
    - phase 4 (continuous): keep source denominator synchronized when new `From Online/champions` entries appear, then open targeted parity/fidelity deltas for new champions only.
+  - phase 5 (in progress): raise manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` (`47/172` -> target full-corpus long term) with wave-level reviewed champion/ability scope.
 5. Runes Reforged Split-Structure Plan:
    - phase 1 (completed): create split index/stat-shards/tree files (`Masteries/RunesReforged/RunesReforged.json`, `StatShards/stat_shards.json`, `Trees/*/{tree,primary_runes,secondary_runes}.json`).
    - phase 2 (in progress): keep split files and flat compatibility file synchronized on every rune/mastery edit, with explicit parity audits in authoring checks.
    - phase 3 (pending runtime follow-up): migrate runtime/data loaders to consume split structure directly, then deprecate flat-file compatibility path in a controlled code phase.
+6. Champion Context-Note Truncation Cleanup Plan:
+  - phase 1 (completed): inventory strict-regex-detected truncated timing fragments with string+array-aware context-note normalization (`280` ability entries across `107` champion files after wave-48 cleanup; corrected-method pre-cleanup baseline `360/123`) and track as explicit gap.
+   - phase 2 (in progress): prioritize high-impact combat kits/attack-cadence abilities and normalize truncated notes to full timing/unit semantics with page-level verification.
+   - phase 3 (pending): run full-corpus no-regression audit to keep truncation-fragment queue at `0` on future champion edits.
 
 ### Active Low-Confidence Item Queue (`0`)
 - None currently (`parse_confidence < 0.65` queue cleared).
@@ -434,6 +466,8 @@ This file tracks what is complete and not complete for coverage across data and 
   - `Simulation/src/scripts/champions/mod.rs`
 - Champion corpus parity inventory:
   - `Simulation/champion_data_coverage_inventory.json`
+- Champion manual behavior-verification tracker:
+  - `Simulation/champion_behavior_verification_tracker.json`
 - Champion source denominator:
   - `From Online/champions/*.json`
 - Runtime item/rune modeled sets:

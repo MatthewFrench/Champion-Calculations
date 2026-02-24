@@ -26,12 +26,13 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - controlled champion hot-effect tick lifecycle now routes through `Simulation/src/engine/simulation_step/hot_effects_step.rs` (`apply_hot_effects`)
   - controlled champion status/cast/attack gating, enemy range/targeting/projectile-block helpers, and attack/event scheduling now route through `Simulation/src/engine/combat_timing_and_targeting.rs`
   - enemy derived combat-stat/loadout-runtime modeling now routes through `Simulation/src/engine/enemy_combat_stat_modeling.rs` (`derive_enemy_model`, `derive_enemy_combat_stats`)
-  - enemy respawn/regeneration lifecycle and active/alive queries now route through `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
-  - recurring script-event eligibility and script-cadence readiness writes now route through actor-state owner APIs in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
-  - champion-script event epoch/readiness projections and script-runtime mutation now route through actor-state owner APIs in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
-  - high-traffic enemy read projections (name/position/hitbox/attack profile/health snapshots/status lines) now route through actor-state owner query APIs in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
-  - trace-snapshot enemy-section composition now routes through actor-state owner projection APIs (`enemy_count`, `enemy_trace_snapshot_at`) in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
-  - enemy auto-attack token lifecycle and next-hit bonus consume/reset now route through actor-state owner APIs in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
+  - enemy respawn/regeneration lifecycle and active/alive queries now route through `Simulation/src/engine/actor_state/enemy_runtime_state.rs` facade plus explicit owner leaves under `Simulation/src/engine/actor_state/enemy_runtime_state/`
+  - recurring script-event eligibility and script-cadence readiness writes now route through actor-state owner APIs in `Simulation/src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`
+  - champion-script event epoch/readiness projections and script-runtime mutation now route through actor-state owner APIs in explicit owner leaves under `Simulation/src/engine/actor_state/enemy_runtime_state/`
+  - high-traffic enemy read projections (name/position/hitbox/attack profile/health snapshots/status lines) now route through actor-state owner query APIs in `Simulation/src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`
+  - trace-snapshot enemy-section composition now routes through actor-state owner projection APIs (`enemy_count`, `enemy_trace_snapshot_at`) in `Simulation/src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`
+  - enemy auto-attack token lifecycle and next-hit bonus consume/reset now route through actor-state owner APIs in `Simulation/src/engine/actor_state/enemy_runtime_state/enemy_attack_and_script_channels.rs`
+  - trace lifecycle/status/summary composition now routes through `Simulation/src/engine/trace_snapshot_reporting.rs` facade plus explicit owner leaves under `Simulation/src/engine/trace_snapshot_reporting/`
 - Search ownership extraction is complete under `Simulation/src/search/candidate_space/*`:
   - full-loadout candidate mutation/canonicalization helper ownership now routes through `Simulation/src/search/candidate_space/full_loadout_candidate_operations.rs`
   - full-loadout candidate scoring/ranking helper ownership now routes through `Simulation/src/search/candidate_space/full_loadout_candidate_scoring.rs`
@@ -39,7 +40,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - item-only candidate scoring/dedupe helper ownership now routes through `Simulation/src/search/candidate_space/item_candidate_scoring.rs`
 - Full-loadout search orchestration ownership now routes through `Simulation/src/search/full_loadout_search_orchestration.rs` (`FullLoadoutSearchParams`, full-loadout strategy dispatch, ensemble-seed elites, adaptive strategy expansion, bleed candidate generation).
 - Search strategy ownership now routes through `Simulation/src/search/strategy/*`:
-  - item-only strategy and rollout/selection helper ownership routes through `Simulation/src/search/strategy/item_candidate_search_strategies.rs`
+  - item-only strategy facade ownership routes through `Simulation/src/search/strategy/item_candidate_search_strategies.rs` with explicit owner leaves under `Simulation/src/search/strategy/item_candidate_search_strategies/`
   - full-loadout strategy helper ownership routes through `Simulation/src/search/strategy/full_loadout_search_strategies.rs`
 - Search scoring/diversity ownership now routes through `Simulation/src/search/scoring/*`:
   - item-build scoring/diversity helper ownership routes through `Simulation/src/search/scoring/item_build_scoring_and_diversity.rs`
@@ -75,7 +76,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Defaults path/key normalization and shared JSON effect helper ownership now routes through `Simulation/src/defaults/defaults_path_key_and_effect_helpers.rs`.
 - Data champion/item/preset loading and URF legality ownership now routes through `Simulation/src/data/champion_item_preset_data_loading.rs` facade plus explicit leaves under `Simulation/src/data/champion_item_preset_data_loading/`.
 - Data simulation/search configuration parsing ownership now routes through `Simulation/src/data/simulation_search_configuration_parsing.rs` facade plus explicit parse owner leaves under `Simulation/src/data/simulation_search_configuration_parsing/`.
-- Data loadout-domain modeling/legality/sampling ownership now routes through `Simulation/src/data/loadout_domain_modeling.rs`.
+- Data loadout-domain modeling/legality/sampling ownership now routes through `Simulation/src/data/loadout_domain_modeling.rs` facade plus explicit owner leaves under `Simulation/src/data/loadout_domain_modeling/`.
 - Data loadout effect/stat resolution ownership now routes through `Simulation/src/data/loadout_effect_resolution.rs`.
 - Runtime combat bonus-resolution ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`.
 - Runtime rune-proc state mutation ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`.

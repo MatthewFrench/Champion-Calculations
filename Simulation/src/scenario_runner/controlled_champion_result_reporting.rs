@@ -1,3 +1,4 @@
+use self::console_summary_output::emit_controlled_champion_console_summary;
 use super::controlled_champion_result_artifact_writing::{
     ControlledChampionResultArtifactWritingContext, write_controlled_champion_result_artifacts,
 };
@@ -5,6 +6,8 @@ use super::controlled_champion_result_build_analysis::{
     ControlledChampionBuildAnalysisContext, analyze_controlled_champion_build_results,
 };
 use super::*;
+
+mod console_summary_output;
 
 pub(super) struct ControlledChampionResultReportingContext<'a> {
     pub(super) scenario_path: &'a Path,
@@ -90,6 +93,8 @@ pub(super) struct ControlledChampionResultReportingContext<'a> {
 pub(super) fn emit_controlled_champion_result_reporting(
     context: ControlledChampionResultReportingContext<'_>,
 ) -> Result<()> {
+    let (loadout_candidates_count, loadout_finalists_count) =
+        emit_controlled_champion_console_summary(&context);
     let ControlledChampionResultReportingContext {
         scenario_path,
         controlled_champion_name,
@@ -133,7 +138,7 @@ pub(super) fn emit_controlled_champion_result_reporting(
         objective_worst_case_weight,
         run_start,
         time_budget,
-        popcorn_window,
+        popcorn_window: _,
         progress_snapshot,
         seconds_since_last_significant_improvement,
         timed_out,
@@ -150,7 +155,7 @@ pub(super) fn emit_controlled_champion_result_reporting(
         controlled_champion_best_build,
         controlled_champion_best_score,
         controlled_champion_best_outcome,
-        best_cap_survivor,
+        best_cap_survivor: _,
         controlled_champion_loadout,
         controlled_champion_runtime_loadout_selection,
         controlled_champion_ranked,
@@ -169,224 +174,6 @@ pub(super) fn emit_controlled_champion_result_reporting(
         best_score_breakdown,
         status,
     } = context;
-
-    println!("Enemy builds (URF preset defaults):");
-    for (enemy, build, _) in enemy_builds {
-        println!(
-            "- {}: {}",
-            enemy.name,
-            build
-                .iter()
-                .map(|i| i.name.clone())
-                .collect::<Vec<_>>()
-                .join(", ")
-        );
-        if let Some(preset) = enemy_presets_used.get(&to_norm_key(&enemy.name)) {
-            println!(
-                "  source: {} (last checked {})",
-                preset.source_url, preset.last_checked
-            );
-        }
-    }
-    println!("\nEnemy derived combat profiles:");
-    for profile in enemy_derived_combat_stats {
-        println!(
-            "- {}: HP {:.1}, Armor {:.1}, MR {:.1}, AD {:.1}, AS {:.3} (interval {:.3}s), range {:.0}, move speed {:.1}, hit physical {:.1}, hit ability {:.1}, burst phys/magic/true {:.1}/{:.1}/{:.1}",
-            profile.champion,
-            profile.max_health,
-            profile.armor,
-            profile.magic_resist,
-            profile.attack_damage,
-            profile.attack_speed,
-            profile.attack_interval_seconds,
-            profile.attack_range,
-            profile.move_speed,
-            profile.physical_hit_damage,
-            profile.ability_hit_damage,
-            profile.burst_physical_damage,
-            profile.burst_magic_damage,
-            profile.burst_true_damage
-        );
-    }
-    for note in enemy_similarity_notes {
-        println!("- Warning: {}", note);
-    }
-
-    println!(
-        "\n{} best build (optimized for objective):",
-        controlled_champion_name
-    );
-    println!("- Search strategy: {}", search_strategy_summary(search_cfg));
-    let loadout_candidates_count = unique_loadout_selection_count(unique_candidate_keys);
-    let loadout_finalists_count =
-        unique_loadout_selection_count_from_ranked(controlled_champion_ranked);
-    println!(
-        "- Loadout candidates/finalists: {}/{}",
-        loadout_candidates_count, loadout_finalists_count
-    );
-    println!("- Effective search seed: {}", search_cfg.seed);
-    if coverage_stage_diagnostics.enabled {
-        println!(
-            "- Coverage stage (pre-budget): {:.2}s | assets covered {}/{} | seeded candidates {}/{}",
-            coverage_stage_diagnostics.elapsed_seconds,
-            coverage_stage_diagnostics.assets_covered,
-            coverage_stage_diagnostics.assets_total,
-            coverage_stage_diagnostics.seed_candidates_unique,
-            coverage_stage_diagnostics.seed_candidates
-        );
-        if coverage_stage_diagnostics.coverage_incomplete
-            && !coverage_stage_diagnostics.coverage_warning.is_empty()
-        {
-            println!(
-                "- Coverage warning: {}",
-                coverage_stage_diagnostics.coverage_warning
-            );
-        }
-    }
-    println!(
-        "- Candidate evaluations (full): {}",
-        full_eval_count.load(AtomicOrdering::Relaxed)
-    );
-    println!(
-        "- In-memory full-evaluation cache (hits/misses/waits): {}/{}/{}",
-        full_cache.hits(),
-        full_cache.misses(),
-        full_cache.waits()
-    );
-    println!("- Ensemble seeds: {}", ensemble_seeds);
-    println!(
-        "- Parallelism: threads {} | seed orchestration parallel {} | portfolio strategy parallel {} | strategy-elites parallel {}",
-        effective_threads,
-        seed_orchestration_parallel,
-        portfolio_strategy_parallel,
-        strategy_elites_parallel
-    );
-    println!(
-        "- Enemy scenarios in objective: {}",
-        enemy_build_scenarios.len()
-    );
-    println!(
-        "- Objective weights (survival/damage/healing/enemy_kills/invulnerable_seconds): {:.2}/{:.2}/{:.2}/{:.2}/{:.2}",
-        objective_component_weights.survival,
-        objective_component_weights.damage,
-        objective_component_weights.healing,
-        objective_component_weights.enemy_kills,
-        objective_component_weights.invulnerable_seconds
-    );
-    if let Some(budget) = time_budget {
-        println!(
-            "- Time budget: {:.1}s | elapsed: {:.1}s | timed_out: {} | progress: {}/{}",
-            budget.as_secs_f64(),
-            run_start.elapsed().as_secs_f64(),
-            timed_out,
-            processed_candidates,
-            total_candidates
-        );
-    }
-    if let Some(window) = popcorn_window {
-        println!(
-            "- Popcorn mode: window {:.1}s | significant threshold {:.2}% of last best score | significant events {} | seconds since last significant improvement {:.1}",
-            window.as_secs_f64(),
-            popcorn_min_relative_improvement_percent,
-            progress_snapshot.significant_events,
-            seconds_since_last_significant_improvement
-        );
-    }
-    println!(
-        "- Unique strict candidates: {}",
-        unique_candidate_keys.len()
-    );
-    println!(
-        "- Strict candidate ordering: heuristic {} (rune/shard weights {:.2}/{:.2}), exploration promotions {}",
-        search_cfg.strict_ranking_enable_heuristic_ordering,
-        search_cfg.strict_ranking_rune_signal_weight,
-        search_cfg.strict_ranking_shard_signal_weight,
-        strict_random_promotions_done
-    );
-    println!(
-        "- Unmodeled rune gate: hard gate {} | penalty per rune {:.4} | rejected {} | penalized {}",
-        search_cfg.unmodeled_rune_hard_gate,
-        search_cfg.unmodeled_rune_penalty_per_rune,
-        unmodeled_rune_candidates_rejected.load(AtomicOrdering::Relaxed),
-        unmodeled_rune_candidates_penalized.load(AtomicOrdering::Relaxed)
-    );
-    println!(
-        "- Unmodeled item-effect gate: hard gate {} | penalty per item {:.4} | rejected {} | penalized {}",
-        search_cfg.unmodeled_item_effect_hard_gate,
-        search_cfg.unmodeled_item_effect_penalty_per_item,
-        unmodeled_item_effect_candidates_rejected.load(AtomicOrdering::Relaxed),
-        unmodeled_item_effect_candidates_penalized.load(AtomicOrdering::Relaxed)
-    );
-    println!(
-        "- Candidate keys generated / duplicates pruned: {}/{}",
-        candidate_keys_generated, candidate_duplicates_pruned
-    );
-    println!(
-        "- Strict completion: {:.1}% (processed {}/{}, timeout-skipped {}, non-finite {})",
-        strict_completion_percent,
-        processed_candidates.min(total_candidates),
-        total_candidates,
-        strict_candidates_skipped_timeout,
-        strict_non_finite_candidates
-    );
-    println!(
-        "- Unique scored candidates (all search stages): {}",
-        unique_scored_candidates
-    );
-    if let Some(total) = estimated_total_candidate_space {
-        println!("- Estimated total legal candidate space: {:.0}", total);
-    }
-    if let Some(run_coverage) = estimated_run_space_coverage_percent {
-        println!(
-            "- Estimated legal-space coverage (this run): {}",
-            format_percent_display(run_coverage)
-        );
-    }
-    if let Some(probability) = estimated_close_to_optimal_probability {
-        println!(
-            "- Estimated closeness probability (top 0.000001% heuristic): {:.2}% | {}",
-            probability * 100.0,
-            estimated_close_to_optimal_probability_note
-        );
-    }
-    println!("- Bleed candidates injected: {}", bleed_candidate_count);
-    println!(
-        "- Adaptive candidates injected: {}",
-        adaptive_candidate_count
-    );
-    if !search_type_breakdown.is_empty() {
-        println!("- Search-type simulation breakdown:");
-        for entry in &search_type_breakdown {
-            println!(
-                "  - {} => score requests {}, new simulations {}",
-                entry.name, entry.score_requests, entry.new_simulations
-            );
-        }
-    }
-    println!(
-        "- Items: {}",
-        controlled_champion_best_build
-            .iter()
-            .map(|i| i.name.clone())
-            .collect::<Vec<_>>()
-            .join(", ")
-    );
-    println!("- Objective score: {:.4}", controlled_champion_best_score);
-    println!(
-        "- Time alive / damage dealt / healing done / enemy kills / invulnerable seconds: {:.2}s / {:.1} / {:.1} / {} / {:.2}",
-        controlled_champion_best_outcome.time_alive_seconds,
-        controlled_champion_best_outcome.damage_dealt,
-        controlled_champion_best_outcome.healing_done,
-        controlled_champion_best_outcome.enemy_kills,
-        controlled_champion_best_outcome.invulnerable_seconds
-    );
-    println!("- Cap survivor: {}", best_cap_survivor);
-    if !controlled_champion_loadout.selection_labels.is_empty() {
-        println!("\n{} rune page:", controlled_champion_name);
-        for s in &controlled_champion_loadout.selection_labels {
-            println!("- {}", s);
-        }
-    }
 
     let mut analysis =
         analyze_controlled_champion_build_results(ControlledChampionBuildAnalysisContext {

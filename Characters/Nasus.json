@@ -134,7 +134,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Both Siphoning Strike's base damage and damage from stacks are treated as basic damage but also trigger spell effects by also being tagged as spell damage."
+        "Source notes (summary): Siphoning Strike is a next-basic-attack empower with attack-cadence-coupled hit timing (not instant on cast), including an uncancellable windup and auto-attack-timer reset behavior.",
+        "Source notes (summary): Both base and stack bonus damage are treated as basic damage while also being tagged to trigger spell-effect hooks; stack gain applies on valid kill targets and excludes secondary-effect cleanups (for example Tiamat splash)."
       ]
     },
     "basic_ability_2": {

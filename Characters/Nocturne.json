@@ -199,7 +199,7 @@
             90.0,
             100.0
           ],
-          "context_notes": "Active: Nocturne gains a spell shield for 1."
+          "context_notes": "Active: Nocturne gains a spell shield for 1.5 seconds."
         }
       ],
       "description": "Passive: Nocturne gains bonus attack speed.",
@@ -227,7 +227,7 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): If Shroud of Darkness is active when Nocturne re-casts Paranoia to dash to a target, its duration is refreshed every 0."
+        "Source notes (summary): If Shroud of Darkness is active when Nocturne re-casts Paranoia to dash to a target, its duration is refreshed every 0.25 seconds during the dash."
       ]
     },
     "basic_ability_3": {
@@ -251,7 +251,7 @@
             215.0,
             260.0
           ],
-          "context_notes": "Active: Nocturne torments the target, forming a tether between himself and the target for 2 seconds, during which the target takes magic damage every 0."
+          "context_notes": "Active: Nocturne torments the target, forming a tether between himself and the target for 2 seconds, during which the target takes magic damage every 0.5 seconds over the duration."
         },
         {
           "id": "magic_damage_per_tick",
@@ -263,7 +263,7 @@
             53.75,
             65.0
           ],
-          "context_notes": "Active: Nocturne torments the target, forming a tether between himself and the target for 2 seconds, during which the target takes magic damage every 0."
+          "context_notes": "Active: Nocturne torments the target, forming a tether between himself and the target for 2 seconds, during which the target takes magic damage every 0.5 seconds over the duration."
         },
         {
           "id": "disable_duration",

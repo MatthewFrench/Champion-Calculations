@@ -275,7 +275,9 @@
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 600.",
-        "Source notes (summary): Applies spell damage to the primary target, applies basic damage required effects on the primary target, and applies area damage to secondary targets."
+        "Source notes (summary): Applies spell damage to the primary target, applies basic damage required effects on the primary target, and applies area damage to secondary targets.",
+        "Manual review (2026-02-24): Relentless Force is charge-based and cast-gated; cast primes the next basic attack and does not deal immediate point-and-click cast damage.",
+        "Manual review (2026-02-24): The empowered hit resets Vi's attack timer and resolves in two branches: primary target hit event (critical-strike-capable) and cone splash to secondary targets (same base damage packet without secondary crit event)."
       ]
     },
     "ultimate": {
@@ -333,6 +335,12 @@
       "path": "From Online/champions/Vi.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vi/Relentless_Force",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Relentless Force charge use, primary-hit branch, and cone secondary-hit semantics"
     }
   ],
   "notes": [

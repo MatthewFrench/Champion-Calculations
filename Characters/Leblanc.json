@@ -111,7 +111,7 @@
             140.0,
             165.0
           ],
-          "context_notes": "Active: LeBlanc projects an orb at the target enemy that deals magic damage and marks them for 3."
+          "context_notes": "Active: LeBlanc projects an orb at the target enemy that deals magic damage and marks them for 3.5 seconds."
         },
         {
           "id": "total_magic_damage",
@@ -213,7 +213,7 @@
         "Source castTime: none.",
         "Source speed: 1450.",
         "Source effectRadius: 240.",
-        "Source notes (summary): Distortion will be buffered and cast as soon as the cooldown ends if the player attempts to cast it within 0."
+        "Source notes (summary): Distortion will be buffered and cast as soon as the cooldown ends if the player attempts to cast it within 0.5 seconds."
       ]
     },
     "basic_ability_3": {
@@ -233,7 +233,7 @@
             110.0,
             130.0
           ],
-          "context_notes": "Active: LeBlanc flings an illusory chain in the target direction that deals magic damage to the first enemy it hits and forms a tether between LeBlanc and the target for 1."
+          "context_notes": "Active: LeBlanc flings an illusory chain in the target direction that deals magic damage to the first enemy it hits and forms a tether between LeBlanc and the target for 1.5 seconds."
         },
         {
           "id": "fracture_magic_damage",
@@ -245,7 +245,7 @@
             200.0,
             240.0
           ],
-          "context_notes": "If the tether is not broken by the end of its duration, it fractures to deal magic damage to the target and root them for 1."
+          "context_notes": "If the tether is not broken by the end of its duration, it fractures to deal magic damage to the target and root them for 1.5 seconds."
         },
         {
           "id": "total_damage",
@@ -257,7 +257,7 @@
             310.0,
             370.0
           ],
-          "context_notes": "If the tether is not broken by the end of its duration, it fractures to deal magic damage to the target and root them for 1."
+          "context_notes": "If the tether is not broken by the end of its duration, it fractures to deal magic damage to the target and root them for 1.5 seconds."
         }
       ],
       "description": "Active: LeBlanc flings an illusory chain in the target direction that deals magic damage to the first enemy it hits and forms a tether between LeBlanc and the target for 1.5 seconds, during which they are revealed.",

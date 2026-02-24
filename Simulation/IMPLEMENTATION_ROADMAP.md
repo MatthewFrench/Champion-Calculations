@@ -264,6 +264,22 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - enforce owner-channel mutation flows for runtime state, queues, caches, and data transforms
   - track rollout via `ARCHITECTURE_TRANSFORMATION_PLAN.md`
 - Recent progress:
+  - completed high-friction scenario result-analysis decomposition by splitting:
+    - `src/scenario_runner/controlled_champion_result_build_analysis/build_order_analysis.rs`
+    - `src/scenario_runner/controlled_champion_result_build_analysis/candidate_metrics_projection.rs`
+    - `src/scenario_runner/controlled_champion_result_build_analysis/search_diagnostics_projection.rs`
+    while preserving `analyze_controlled_champion_build_results(...)` as the stable facade entrypoint
+  - reduced `src/scenario_runner/controlled_champion_result_build_analysis.rs` from `410` to `288` lines
+  - completed high-friction controlled-champion execution decomposition by splitting:
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/deadline_and_progress.rs`
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/runtime_setup.rs`
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution/candidate_scoring_channels.rs`
+    while preserving `run_controlled_champion_scenario_impl(...)` as the stable execution facade entrypoint
+  - reduced:
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` from `406` to `289` lines
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution.rs` from `353` to `264` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - observed transient test failures during concurrent data-file edits (Akshan/Riven parse races); rerun after file-write stabilization was fully green
   - completed second-stage `ARCH-041` simulation/search config parsing decomposition by splitting `src/data/simulation_search_configuration_parsing.rs` ownership into explicit parse owner leaves under:
     - `src/data/simulation_search_configuration_parsing/shared_parsing_primitives.rs`
     - `src/data/simulation_search_configuration_parsing/simulation_config_parsing.rs`
@@ -704,10 +720,41 @@ This file tracks all high-value follow-up work requested for simulator realism, 
     - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/loadout_profile_sections.rs`
   - removed root compatibility shims (`crate::Ordering`, `crate::EnemyDerivedCombatStats`) and updated downstream modules to explicit owner imports
   - re-ran full correctness/quality validation after scenario/reporting split + shim cleanup (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - completed optional follow-up split for item-pool ownership by extracting:
+    - `src/data/champion_item_preset_data_loading/item_pool_loading/item_metadata_loading.rs`
+    - `src/data/champion_item_preset_data_loading/item_pool_loading/item_pool_selection_filters.rs`
+    while preserving `item_pool_loading.rs` as a thin facade (`8` lines)
+  - completed optional follow-up split for search-config parse ownership by extracting:
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/build_search_config_value_mapping.rs`
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/search_quality_profile_application.rs`
+    while preserving `build_search_config_parsing.rs` as a thin facade (`7` lines)
+  - completed optional follow-up split for defaults schema ownership by extracting:
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/champion_behavior_baseline_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/vladimir_ability_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/champion_specific_ability_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/item_survivability_defaults_schema.rs`
+    while preserving `champion_behavior_and_ability_defaults_schema.rs` as a thin facade (`9` lines)
+  - completed high-value shared projection extraction by adding:
+    - `src/scenario_runner/controlled_champion_enemy_scenario_projection.rs`
+    and reusing it from fixed-loadout and rune-sweep flows to reduce cross-runner duplication
+  - completed high-friction dense-leaf decomposition follow-up by splitting:
+    - `src/search/strategy/item_candidate_search_strategies.rs` into explicit owner leaves under `src/search/strategy/item_candidate_search_strategies/`
+    - `src/scripts/champions.rs` into explicit owner leaves under `src/scripts/champions/`
+    - `src/engine/trace_snapshot_reporting.rs` into explicit owner leaves under `src/engine/trace_snapshot_reporting/`
+    - `src/data/loadout_domain_modeling.rs` into explicit owner leaves under `src/data/loadout_domain_modeling/`
+    - `src/engine/actor_state/enemy_runtime_state.rs` into explicit owner leaves under `src/engine/actor_state/enemy_runtime_state/`
+  - reduced:
+    - `src/search/strategy/item_candidate_search_strategies.rs` from `458` to `110` lines
+    - `src/scripts/champions.rs` from `457` to `36` lines
+    - `src/engine/trace_snapshot_reporting.rs` from `440` to `3` lines
+    - `src/data/loadout_domain_modeling.rs` from `418` to `15` lines
+    - `src/engine/actor_state/enemy_runtime_state.rs` from `416` to `6` lines
+  - re-ran full correctness/quality validation after optional follow-up slices (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
 - Follow-up options:
-  - optionally split `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` for finer orchestration ownership
-  - optionally split `src/scenario_runner/controlled_champion_result_reporting_projection.rs` for finer reporting projection ownership
-  - continue focused regression coverage per future extraction slice
+  - split `src/search/strategy/full_loadout_search_strategies.rs` and `src/search/full_loadout_search_orchestration.rs` to further narrow search-strategy/orchestration ownership leaves
+  - split `src/scripts/runtime/loadout_runtime.rs` and `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` to reduce runtime hotspot density
+  - split `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` and `src/scripts/champions/controlled_champion.rs` for narrower execution/script ownership leaves
+  - continue focused regression coverage per future extraction slice and serialize validation runs during concurrent data-file edits
 - Success criteria:
   - met: large core facades are thin, responsibilities are split by concern, and cross-module direct state mutation paths are removed.
 

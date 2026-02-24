@@ -236,7 +236,7 @@ pub(super) fn prepare_controlled_champion_enemy_build_setup(
     } = context;
 
     let mut enemy_presets_used: HashMap<String, EnemyUrfPreset> = HashMap::new();
-    let mut enemy_build_scenarios = Vec::new();
+    let mut enemy_build_scenarios: Vec<EnemyBuildScenario> = Vec::new();
     for (name, weight, enemies) in enemy_scenarios {
         if deadline_reached(current_deadline()) {
             timeout_flag.store(1, AtomicOrdering::Relaxed);

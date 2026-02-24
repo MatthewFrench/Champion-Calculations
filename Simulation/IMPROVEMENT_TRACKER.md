@@ -1,6 +1,102 @@
 # Improvement Tracker
 
 ## Done
+- Completed data-first champion fidelity verification wave 48 + page-level citation enforcement:
+  - manually reviewed and normalized timing-fragment execution notes across `5` champions (`Udyr`, `Sion`, `Lissandra`, `AurelionSol`, `Naafiri`)
+  - normalized `29` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all five touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `42/172` to `47/172`
+  - reduced string+array-aware strict fragment queue from `309/108` to `280/107`
+- Completed architecture high-friction dense-leaf decomposition follow-up outside scenario-runner:
+  - split `src/search/strategy/item_candidate_search_strategies.rs` into explicit owner leaves:
+    - `src/search/strategy/item_candidate_search_strategies/beam_search_strategy.rs`
+    - `src/search/strategy/item_candidate_search_strategies/iterative_search_strategies.rs`
+    - `src/search/strategy/item_candidate_search_strategies/mcts_search_strategy.rs`
+  - split `src/scripts/champions.rs` into explicit owner leaves:
+    - `src/scripts/champions/champion_behavior_profile_channels.rs`
+    - `src/scripts/champions/champion_script_effect_types.rs`
+    - `src/scripts/champions/champion_script_event_channels.rs`
+    - `src/scripts/champions/runtime_effect_channels.rs`
+  - split `src/engine/trace_snapshot_reporting.rs` into explicit owner leaves:
+    - `src/engine/trace_snapshot_reporting/trace_lifecycle_channels.rs`
+    - `src/engine/trace_snapshot_reporting/trace_status_and_projectile_projections.rs`
+    - `src/engine/trace_snapshot_reporting/trace_snapshot_summary_projection.rs`
+  - split `src/data/loadout_domain_modeling.rs` into explicit owner leaves:
+    - `src/data/loadout_domain_modeling/loadout_domain_schema.rs`
+    - `src/data/loadout_domain_modeling/modeled_rune_filtering.rs`
+    - `src/data/loadout_domain_modeling/rune_page_validation.rs`
+    - `src/data/loadout_domain_modeling/loadout_selection_generation.rs`
+  - split `src/engine/actor_state/enemy_runtime_state.rs` into explicit owner leaves:
+    - `src/engine/actor_state/enemy_runtime_state/enemy_trace_snapshot_projections.rs`
+    - `src/engine/actor_state/enemy_runtime_state/enemy_attack_and_script_channels.rs`
+    - `src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`
+  - reduced:
+    - `src/search/strategy/item_candidate_search_strategies.rs` from `458` to `110` lines
+    - `src/scripts/champions.rs` from `457` to `36` lines
+    - `src/engine/trace_snapshot_reporting.rs` from `440` to `3` lines
+    - `src/data/loadout_domain_modeling.rs` from `418` to `15` lines
+    - `src/engine/actor_state/enemy_runtime_state.rs` from `416` to `6` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed data-first champion fidelity verification wave 47 + truncation-audit integrity fix:
+  - manually reviewed and normalized timing-fragment execution notes across `18` champions (`Akshan`, `Aurora`, `Briar`, `Gnar`, `Irelia`, `Leblanc`, `Lillia`, `Lux`, `MonkeyKing`, `Nocturne`, `Riven`, `Shaco`, `Taliyah`, `Urgot`, `Varus`, `Xerath`, `Yuumi`, `Zed`)
+  - normalized `51` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - raised manual behavior verification tracker coverage from `25/172` to `42/172`
+  - corrected strict truncation-audit implementation to normalize both string and array `context_notes`; corrected-method queue re-baselined from `360/123` to `309/108` after wave cleanup
+- Completed architecture high-friction follow-up slice for controlled-champion scenario execution and result analysis ownership:
+  - split controlled-champion result-analysis ownership under:
+    - `src/scenario_runner/controlled_champion_result_build_analysis/build_order_analysis.rs`
+    - `src/scenario_runner/controlled_champion_result_build_analysis/candidate_metrics_projection.rs`
+    - `src/scenario_runner/controlled_champion_result_build_analysis/search_diagnostics_projection.rs`
+  - rewired `src/scenario_runner/controlled_champion_result_build_analysis.rs` into a thinner facade while preserving `analyze_controlled_champion_build_results(...)`
+  - reduced `src/scenario_runner/controlled_champion_result_build_analysis.rs` from `410` to `288` lines
+  - split controlled-champion execution internals under:
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/deadline_and_progress.rs`
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/runtime_setup.rs`
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution/candidate_scoring_channels.rs`
+  - reduced:
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` from `406` to `289` lines
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/search_execution.rs` from `353` to `264` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - observed transient parse/test failures during concurrent external data-file writes; rerun after file-write stabilization was fully green
+- Completed architecture high-friction follow-up slice for scenario/data/default ownership:
+  - added shared fixed-loadout/rune-sweep enemy-scenario projection owner module:
+    - `src/scenario_runner/controlled_champion_enemy_scenario_projection.rs`
+  - rewired `src/scenario_runner/fixed_loadout_runner.rs` and `src/scenario_runner/rune_sweep_runner.rs` to reuse shared projection owner APIs (`parse_scaled_enemy_scenarios`, `build_enemy_build_projection`, `build_scenario_reference_outcomes`)
+  - split item-pool ownership into explicit leaves:
+    - `src/data/champion_item_preset_data_loading/item_pool_loading/item_metadata_loading.rs`
+    - `src/data/champion_item_preset_data_loading/item_pool_loading/item_pool_selection_filters.rs`
+    - with `src/data/champion_item_preset_data_loading/item_pool_loading.rs` preserved as a thin facade (`8` lines)
+  - split search-config parse ownership into explicit leaves:
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/build_search_config_value_mapping.rs`
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/search_quality_profile_application.rs`
+    - with `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs` preserved as a thin facade (`7` lines)
+  - split defaults behavior/ability schema ownership into explicit leaves:
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/champion_behavior_baseline_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/vladimir_ability_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/champion_specific_ability_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema/item_survivability_defaults_schema.rs`
+    - with `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema.rs` preserved as a thin facade (`9` lines)
+  - reduced:
+    - `src/scenario_runner/fixed_loadout_runner.rs` from `406` to `358` lines
+    - `src/scenario_runner/rune_sweep_runner.rs` from `308` to `260` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed data-first champion fidelity verification wave 46 + strict truncation-audit normalization:
+  - manually reviewed execution-semantics behavior for `Fiddlesticks` (`Terrify`, `Bountiful Harvest`, `Reap`), `Rumble` (`Flamespitter`, `The Equalizer`), `Swain` (`Death's Hand`, `Demonic Ascension`), and `Nautilus` (`Riptide`, `Depth Charge`)
+  - normalized candidate truncated timing fragments on all touched abilities and added page-level ability provenance for each touched champion
+  - raised manual behavior verification tracker coverage from `21/172` to `25/172`
+  - tightened truncation-queue detection from broad candidate regex to strict fragment regex (excludes valid decimals like `0.25`) and re-baselined tracked queue to `214` ability entries across `130` champion files (later superseded by the string+array-aware audit baseline in wave 47)
+  - documented compile-integrity no-regression expectation for ongoing runtime schema/decomposition slices and re-validated required gates after the data wave
+- Completed data-first champion fidelity verification wave 45 + truncation-gap tracking:
+  - manually reviewed attack-cadence-coupled ability behavior notes for `Camille` (`Precision Protocol`), `Ekko` (`Phase Dive`), `Trundle` (`Chomp`), `Volibear` (`Frenzied Maul`), `Vi` (`Relentless Force`), and `Yorick` (`Last Rites`)
+  - added page-level ability verification sources on all six touched champions and raised manual behavior verification tracker coverage from `15/172` to `21/172`
+  - fixed targeted truncated context-note fragments in touched abilities (for example `Ekko` `E` and `Trundle` `Q`) while preserving canonical execution data
+  - documented broader champion context-note truncation backlog (`225` ability entries across `132` champion files) in coverage docs as a dedicated data-quality follow-up (superseded by strict-fragment rebaseline in wave 46)
+- Completed data-first champion fidelity verification wave 44 + coverage-tracking alignment:
+  - manually reviewed and refined attack-cadence-coupled ability behavior notes for `Nasus` (`Siphoning Strike`), `Garen` (`Decisive Strike`), `Darius` (`Crippling Strike`), `Fiora` (`Bladework`), and `Xin Zhao` (`Three Talon Strike`)
+  - finalized previous manual-review normalization on `Aphelios`, `Jax`, `Leblanc`, `Olaf`, `Vladimir`, `Sona`, `DrMundo`, `Morgana`, `Vayne`, and `Warwick`
+  - closed champion ability execution/context completeness guardrails at full-corpus coverage (`682/682` active abilities with `execution`, `860/860` abilities with `context_notes`)
+  - added `Simulation/champion_behavior_verification_tracker.json` to track deeper manual behavior verification beyond source extraction (baseline superseded to `42/172` manual verified champions by wave 47)
+  - aligned data-first coverage docs (`COVERAGE_STANDARDS.md`, `COVERAGE_CHECKLIST.md`, `DATA_AUTHORING_GUIDE.md`, `COVERAGE_GAPS.md`) to explicit non-bug default policy and manual verification tracking workflow
 - Completed second-stage scenario/reporting split + shim stabilization slice:
   - split controlled champion scenario execution ownership into:
     - `src/scenario_runner/controlled_champion_scenario_runner.rs` (facade)
@@ -314,7 +410,7 @@
   - added `Locket of the Iron Solari` Devotion cooldown-start semantics and refined `Rapid Firecannon` energized stack-generation/structure-interaction semantics
   - increased page-level item citation depth from `124/243` to `130/243`
   - reduced legal URF unmodeled no-page-citation queue from `47/103` to `41/103`
-  - documented intended-behavior-first policy for known bug notes, with bug-emulation deferred to explicit runtime follow-up
+  - documented intended-behavior-first policy for known bug notes, with bug-divergence behavior kept out of canonical data
 - Continued data-first item execution-semantics and citation wave 24:
   - manually reviewed and refined structured item behavior for `Cryptbloom`, `Dusk and Dawn`, `Edge of Night`, `Hubris`, `Mikael's Blessing`, `Serpent's Fang`, and `Spear of Shojin`
   - added page-level League Wiki citations for all seven items with explicit execution-model context notes
@@ -334,7 +430,7 @@
   - split `Experimental Hexplate` Overdrive into explicit attack-speed and movement-speed branches with cooldown-start-on-cast timing semantics
   - increased page-level item citation depth from `137/243` to `143/243`
   - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `33/102` to `27/102`
-  - documented bug-emulation as deferred runtime follow-up with intended-behavior simulation remaining the canonical default
+  - documented bug-divergence notes as non-canonical behavior with intended-behavior simulation remaining the canonical default
 - Continued data-first item execution-semantics and citation wave 26:
   - manually reviewed and refined structured item behavior for `Axiom Arc`, `Banshee's Veil`, `Imperial Mandate`, `Randuin's Omen`, `Shurelya's Battlesong`, and `Youmuu's Ghostblade`
   - added page-level League Wiki citations for all six items with explicit execution-model context notes

@@ -116,7 +116,7 @@
             55.0,
             65.0
           ],
-          "context_notes": "After breaking the invisibility, Shaco empowers his next basic attack within 0."
+          "context_notes": "After breaking the invisibility, Shaco empowers his next basic attack within 0.25 seconds."
         },
         {
           "id": "shaco_q_effect_4",
@@ -208,7 +208,7 @@
             25.0,
             30.0
           ],
-          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0.5 seconds."
         },
         {
           "id": "increased_damage",
@@ -220,7 +220,7 @@
             70.0,
             85.0
           ],
-          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0.5 seconds."
         },
         {
           "id": "bonus_monster_damage",
@@ -232,7 +232,7 @@
             65.0,
             80.0
           ],
-          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0.5 seconds."
         },
         {
           "id": "total_monster_damage",
@@ -244,7 +244,7 @@
             90.0,
             110.0
           ],
-          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0.5 seconds."
         },
         {
           "id": "increased_monster_damage",
@@ -256,7 +256,7 @@
             135.0,
             165.0
           ],
-          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0.5 seconds."
         },
         {
           "id": "shaco_w_effect_4",
@@ -454,7 +454,7 @@
         "Source targeting: Direction / Location.",
         "Source castTime: 0.25.",
         "Source effectRadius: 250.",
-        "Source notes (summary): If the explosion hits at least one minion, the boxes will fear all enemies regardless of their unit type for 2."
+        "Source notes (summary): If the explosion hits at least one minion, the boxes will fear all enemies regardless of their unit type for 2.2 seconds."
       ]
     }
   },

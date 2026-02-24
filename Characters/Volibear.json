@@ -245,7 +245,9 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
-        "Source notes (summary): Volibear will be ordered to basic attack the target after casting Frenzied Maul."
+        "Source notes (summary): Volibear will be ordered to basic attack the target after casting Frenzied Maul.",
+        "Manual review (2026-02-24): Frenzied Maul is target-required and attack-cadence-coupled (0.25-second windup then strike), so damage applies when the empowered hit resolves.",
+        "Manual review (2026-02-24): First cast applies Wounded; recasting on an already Wounded target swaps to the bite branch with increased damage and self-heal."
       ]
     },
     "basic_ability_3": {
@@ -395,6 +397,12 @@
       "path": "From Online/champions/Volibear.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Volibear/Frenzied_Maul",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Frenzied Maul wound-state branch and strike-resolution timing"
     }
   ],
   "notes": [

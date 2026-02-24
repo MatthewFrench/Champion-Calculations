@@ -203,7 +203,7 @@
             19.0,
             20.0
           ],
-          "context_notes": "Active - Stance: Udyr enters Mantle Stance, empowering his next two basic attacks on-hit to gain life steal and heal him for 1."
+          "context_notes": "Active - Stance: Udyr enters Mantle Stance, empowering his next two basic attacks on-hit to gain life steal and heal him for 1.2% of his maximum health (+ 8% AP)."
         },
         {
           "id": "shield_strength",
@@ -241,7 +241,7 @@
             156.7435294117647,
             165.29000000000002
           ],
-          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0."
+          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0.25 seconds over the next 4 seconds, as well as causes the empowered attacks to instead gain increased life steal."
         },
         {
           "id": "total_healing",
@@ -266,7 +266,7 @@
             78.37647058823529,
             82.65
           ],
-          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0."
+          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0.25 seconds over the next 4 seconds, as well as causes the empowered attacks to instead gain increased life steal."
         },
         {
           "id": "heal_per_tick",
@@ -291,7 +291,7 @@
             4.902941176470589,
             5.170000000000001
           ],
-          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0."
+          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0.25 seconds over the next 4 seconds, as well as causes the empowered attacks to instead gain increased life steal."
         },
         {
           "id": "increased_life_steal",
@@ -304,7 +304,7 @@
             38.0,
             40.0
           ],
-          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0."
+          "context_notes": "Recast - Awaken: Udyr increases the shield's strength, stacking with the remaining shield from the first cast, and heals every 0.25 seconds over the next 4 seconds, as well as causes the empowered attacks to instead gain increased life steal."
         },
         {
           "id": "udyr_w_effect_4",
@@ -375,7 +375,7 @@
             49.0,
             55.0
           ],
-          "context_notes": "Additionally, Udyr becomes ghosted and gains bonus movement speed for 4 seconds, which decays to 30% effectiveness over 1."
+          "context_notes": "Additionally, Udyr becomes ghosted and gains bonus movement speed for 4 seconds, which decays to 30% effectiveness over 1.5 seconds."
         },
         {
           "id": "decayed_bonus_movement_speed",
@@ -388,7 +388,7 @@
             14.7,
             16.5
           ],
-          "context_notes": "Additionally, Udyr becomes ghosted and gains bonus movement speed for 4 seconds, which decays to 30% effectiveness over 1."
+          "context_notes": "Additionally, Udyr becomes ghosted and gains bonus movement speed for 4 seconds, which decays to 30% effectiveness over 1.5 seconds."
         },
         {
           "id": "udyr_e_effect_3",
@@ -459,7 +459,7 @@
             42.0,
             50.0
           ],
-          "context_notes": "Additionally, Udyr summons a blizzard around himself for 4 seconds that deals magic damage every 0."
+          "context_notes": "Additionally, Udyr summons a blizzard around himself for 4 seconds that deals magic damage every 0.5 seconds to nearby enemies and slows them while they remain within."
         },
         {
           "id": "total_magic_damage",
@@ -472,7 +472,7 @@
             336.0,
             400.0
           ],
-          "context_notes": "Additionally, Udyr summons a blizzard around himself for 4 seconds that deals magic damage every 0."
+          "context_notes": "Additionally, Udyr summons a blizzard around himself for 4 seconds that deals magic damage every 0.5 seconds to nearby enemies and slows them while they remain within."
         },
         {
           "id": "slow",
@@ -485,7 +485,7 @@
             27.0,
             30.0
           ],
-          "context_notes": "Additionally, Udyr summons a blizzard around himself for 4 seconds that deals magic damage every 0."
+          "context_notes": "Additionally, Udyr summons a blizzard around himself for 4 seconds that deals magic damage every 0.5 seconds to nearby enemies and slows them while they remain within."
         },
         {
           "id": "increased_slow",
@@ -558,6 +558,12 @@
       "path": "From Online/champions/Udyr.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Udyr",
+      "accessed": "2026-02-24",
+      "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
     }
   ],
   "notes": [

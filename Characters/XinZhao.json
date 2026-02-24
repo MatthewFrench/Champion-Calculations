@@ -154,7 +154,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Spell shield will only block the knock up."
+        "Source notes (summary): Three Talon Strike is a timed three-attack empower sequence with attack-cadence-coupled hit timing, including empowered-hit windups and a basic-attack-timer reset at cast.",
+        "Source notes (summary): Third-hit crowd-control branch is distinct from damage branches (spell-shield blocks knock-up branch only), while each empowered hit also advances other-ability cooldown reduction."
       ]
     },
     "basic_ability_2": {
