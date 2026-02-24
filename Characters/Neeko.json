@@ -127,7 +127,7 @@
             110.0,
             135.0
           ],
-          "context_notes": "If the burst kills an enemy or hits a champion or large monster, the seed blooms after 0."
+          "context_notes": "If the burst kills an enemy or hits a champion or large monster, the seed blooms again after 0.75 seconds, up to two additional blooms."
         },
         {
           "id": "total_maximum_magic_damage",
@@ -139,7 +139,7 @@
             430.0,
             530.0
           ],
-          "context_notes": "If the burst kills an enemy or hits a champion or large monster, the seed blooms after 0."
+          "context_notes": "If the burst kills an enemy or hits a champion or large monster, the seed blooms again after 0.75 seconds, up to two additional blooms."
         },
         {
           "id": "bonus_monster_damage",
@@ -227,7 +227,7 @@
             35.0,
             40.0
           ],
-          "context_notes": "Active: Neeko creates a clone of her current form, after which they both instantly become invisible for 0."
+          "context_notes": "Active: Neeko creates a clone of her current form, after which both become invisible for 0.5 seconds and gain movement speed."
         },
         {
           "id": "neeko_w_effect_3",
@@ -351,7 +351,7 @@
             350.0,
             550.0
           ],
-          "context_notes": "When the cast time ends, she lands to emit a burst of energy that deals magic damage to nearby enemies and stuns them for 0."
+          "context_notes": "When the cast time ends, she lands to emit a burst of energy that deals magic damage to nearby enemies and stuns them for 0.75 seconds."
         }
       ],
       "description": "Active: Neeko winds up spiritual essence over 1.25 seconds and highlights an area around herself, which is visible to enemies unless she is disguised. If Neeko is in a disguise, it will break after 0.5 seconds into the duration.",
@@ -378,7 +378,8 @@
         "Source castTime: 0.6.",
         "Source effectRadius: 590 /  600.",
         "Source notes (summary): Ability details: The wind up uses a special bar similar to cast bars to represent when Pop Blossom's cast time will start."
-      ]
+      ],
+      "description_source": "Active: Neeko winds up spiritual essence over 1.25 seconds and highlights an area around herself, which is visible to enemies unless she is disguised. If Neeko is in a disguise, it will break after 0.5 seconds into the duration."
     }
   },
   "sources": [
@@ -387,6 +388,12 @@
       "path": "From Online/champions/Neeko.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Neeko",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

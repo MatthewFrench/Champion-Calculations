@@ -299,7 +299,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Transformations do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): Transformations do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual verification (2026-02-24): Spider Form/Human Form is an instant transformation state swap with no cast windup, changing available spell kit and passive interactions without being treated as a direct damage action."
       ]
     }
   },
@@ -309,6 +310,12 @@
       "path": "From Online/champions/Elise.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Elise/Spider_Form_%2F_Human_Form",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Spider Form / Human Form execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

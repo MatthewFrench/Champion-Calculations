@@ -300,7 +300,7 @@
             25.0,
             31.25
           ],
-          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0."
+          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0.25 seconds."
         },
         {
           "id": "heal_per_second",
@@ -310,7 +310,7 @@
             100.0,
             125.0
           ],
-          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0."
+          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0.25 seconds."
         },
         {
           "id": "maximum_heal",
@@ -320,7 +320,7 @@
             500.0,
             625.0
           ],
-          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0."
+          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0.25 seconds."
         }
       ],
       "description": "Passive: Duelist's Dance's bonus movement speed is increased.",
@@ -356,6 +356,12 @@
       "path": "From Online/champions/Fiora.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Grand_Challenge",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Grand Challenge execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

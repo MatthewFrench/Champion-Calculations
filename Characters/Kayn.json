@@ -221,7 +221,7 @@
             220.0,
             265.0
           ],
-          "context_notes": "Active: Kayn swings his scythe in the target direction, dealing physical damage to enemies hit and slowing them by 90% decaying over 1."
+          "context_notes": "Active: Kayn swings his scythe in the target direction, dealing physical damage to enemies hit and slowing them by 90% decaying over 1.5 seconds."
         },
         {
           "id": "kayn_w_effect_2",
@@ -258,7 +258,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.55 / None.",
         "Source notes (summary): The shadow is considered an allied champion and can interact with effects such as World Atlas' and Runic Compass' Quest and local reward from structures."
-      ]
+      ],
+      "description_source": "Active: Kayn swings his scythe in the target direction, dealing physical damage to enemies hit and slowing them by 90% decaying over 1.5 seconds."
     },
     "basic_ability_3": {
       "name": "Shadow Step",
@@ -395,6 +396,12 @@
       "path": "From Online/champions/Kayn.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kayn",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

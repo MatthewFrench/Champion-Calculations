@@ -296,7 +296,8 @@
         "Source castTime: none.",
         "Source speed: 425 / 435 : 594 / 595.",
         "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and Force Pulse."
-      ]
+      ],
+      "description_source": "Active: Willump cleanses himself from all slows and channels for up to 10 seconds, becoming ghosted and slow-immune and creating a rolling snowball. Willump automatically navigates his movement in the direction of the cursor and can steer the snowball at an increasing speed over time, which resets upon changing direction. The duo have their movement speed reduced by 50% for the first 1 second, but after a delay they start gaining 14 movement speed every 0.25 seconds, up to a cap."
     },
     "basic_ability_3": {
       "name": "Snowball Barrage",
@@ -450,7 +451,8 @@
         "Source castTime: none.",
         "Source effectRadius: 650.",
         "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and Force Pulse."
-      ]
+      ],
+      "description_source": "Active: Nunu and Willump channel a blizzard for up to 3 seconds, granting themselves a shield and slowing nearby enemies by 0% : 95% (based on channel time)."
     }
   },
   "sources": [

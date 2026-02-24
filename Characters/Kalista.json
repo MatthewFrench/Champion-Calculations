@@ -297,7 +297,8 @@
         "Source targeting: Proximity.",
         "Source castTime: 0.25.",
         "Source effectRadius: 1100.",
-        "Source notes (summary): Rend cannot activate on untargetable enemies."
+        "Source notes (summary): Rend cannot activate on untargetable enemies.",
+        "Manual verification (2026-02-24): Rend is a recast stack-consume execute pattern on spear-marked targets, with cast-time target validation and cooldown reset branches tied to takedown/last-hit outcomes."
       ]
     },
     "ultimate": {
@@ -361,6 +362,12 @@
       "path": "From Online/champions/Kalista.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kalista/Rend",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Rend execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

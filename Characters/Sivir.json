@@ -282,7 +282,7 @@
             75.0,
             80.0
           ],
-          "context_notes": "Active: Sivir gains a spell shield for 1."
+          "context_notes": "Active: Sivir gains a spell shield for 1.5 seconds. Upon successfully blocking a hostile effect, she heals herself and activates Fleet of Foot after 0.25 seconds."
         }
       ],
       "description": "Active: Sivir gains a spell shield for 1.5 seconds. Upon successfully blocking a hostile effect, she heals herself and activates Fleet of Foot after 0.25 seconds.",
@@ -371,6 +371,12 @@
       "path": "From Online/champions/Sivir.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sivir",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

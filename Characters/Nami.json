@@ -98,7 +98,7 @@
             255.0,
             310.0
           ],
-          "context_notes": "Active: Nami launches a bubble at the target location that lands after 0."
+          "context_notes": "Active: Nami launches a bubble at the target location that lands after 0.726 seconds, dealing magic damage to enemies hit and suspending them for 1.5 seconds, during which they are revealed."
         },
         {
           "id": "nami_q_effect_2",
@@ -317,7 +317,7 @@
             250.0,
             350.0
           ],
-          "context_notes": "Active: Nami surges a tidal wave in the target direction, granting sight around its trajectory as it travels, dealing magic damage to enemies hit, knocking them up for 0."
+          "context_notes": "Active: Nami surges a tidal wave in the target direction, granting sight around its trajectory as it travels, dealing magic damage to enemies hit, knocking them up for 0.5 seconds, and slowing them by 70% for 2 : 4 (based on distance traveled) seconds."
         }
       ],
       "description": "Active: Nami surges a tidal wave in the target direction, granting sight around its trajectory as it travels, dealing magic damage to enemies hit, knocking them up for 0.5 seconds, and slowing them by 70% for 2 : 4 (based on distance traveled) seconds.",
@@ -346,7 +346,8 @@
         "Source speed: 850.",
         "Source effectRadius: 750.",
         "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
-      ]
+      ],
+      "description_source": "Active: Nami surges a tidal wave in the target direction, granting sight around its trajectory as it travels, dealing magic damage to enemies hit, knocking them up for 0.5 seconds, and slowing them by 70% for 2 : 4 (based on distance traveled) seconds."
     }
   },
   "sources": [
@@ -355,6 +356,12 @@
       "path": "From Online/champions/Nami.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Nami",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

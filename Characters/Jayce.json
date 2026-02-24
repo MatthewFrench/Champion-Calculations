@@ -99,7 +99,7 @@
             260.0,
             310.0
           ],
-          "context_notes": "Active: Jayce leaps to the target enemy's location over 0."
+          "context_notes": "Active: Jayce leaps to the target enemy's location over 0.5 seconds. Upon arrival, he smashes his hammer to the ground to deal physical damage to all enemies within an area and slow them for 2 seconds."
         },
         {
           "id": "slow",
@@ -112,7 +112,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "Active: Jayce leaps to the target enemy's location over 0."
+          "context_notes": "Active: Jayce leaps to the target enemy's location over 0.5 seconds. Upon arrival, he smashes his hammer to the ground to deal physical damage to all enemies within an area and slow them for 2 seconds."
         },
         {
           "id": "jayce_q_effect_2",
@@ -343,6 +343,12 @@
       "path": "From Online/champions/Jayce.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Jayce",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

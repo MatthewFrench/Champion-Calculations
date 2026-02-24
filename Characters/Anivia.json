@@ -360,7 +360,7 @@
             22.5,
             30.0
           ],
-          "context_notes": "Active: Anivia calls forth a driving rain of ice and hail at the target location, dealing magic damage every 0."
+          "context_notes": "Active: Anivia creates a blizzard at the target location, dealing magic damage every 0.5 seconds and refreshing its slow while enemies remain inside."
         },
         {
           "id": "slow",
@@ -370,7 +370,7 @@
             30.0,
             40.0
           ],
-          "context_notes": "Active: Anivia calls forth a driving rain of ice and hail at the target location, dealing magic damage every 0."
+          "context_notes": "Active: Anivia creates a blizzard at the target location, dealing magic damage every 0.5 seconds and refreshing its slow while enemies remain inside."
         },
         {
           "id": "empowered_damage_per_tick",
@@ -380,7 +380,7 @@
             67.5,
             90.0
           ],
-          "context_notes": "The blizzard increases in size over 1."
+          "context_notes": "The blizzard increases in size over 1.5 seconds, then becomes empowered with higher damage and stronger slow output."
         },
         {
           "id": "empowered_slow",
@@ -390,7 +390,7 @@
             45.0,
             60.0
           ],
-          "context_notes": "The blizzard increases in size over 1."
+          "context_notes": "The blizzard increases in size over 1.5 seconds, then becomes empowered with higher damage and stronger slow output."
         },
         {
           "id": "anivia_r_effect_4",
@@ -434,6 +434,12 @@
       "path": "From Online/champions/Anivia.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Anivia",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -1015,11 +1015,47 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - search pipeline can evaluate legal mixed-component compositions without champion-locked engine branching.
 
+44. `DONE` Full-game simulation blueprint document (non-data systems to renderer-ready parity).
+- Scope:
+  - compile one canonical target document for everything required to reach near-full game-like simulation fidelity.
+  - anchor the target state to current codebase module boundaries and known runtime limitations.
+  - define phased execution gates, completion criteria, and non-data high-friction areas.
+- Success criteria:
+  - a comprehensive implementation blueprint exists and is linked from root/simulator README docs.
+
+45. `DONE` Controlled-champion script coverage fail-fast guardrail.
+- Scope:
+  - fail fast in controlled-champion scenario, fixed-loadout, rune-sweep, and step modes when selected champion has no registered controlled-champion script.
+  - emit actionable supported-champion diagnostics instead of silently running without controlled-champion script abilities.
+  - add regression coverage for both registered and unregistered controlled-champion resolution behavior.
+- Success criteria:
+  - controlled modes cannot silently degrade to no-script behavior for unsupported champions.
+  - guardrail behavior is covered by deterministic tests.
+
+46. `DONE` World-state ownership skeleton and encounter placement guardrails.
+- Scope:
+  - add `src/world/*` subsystem ownership for map bounds, actor position registration, and deterministic distance queries.
+  - validate world-position ownership for controlled-champion scenario, fixed-loadout, rune-sweep, and step flows before runtime/search execution.
+  - add deterministic world regression tests for bounds validation, duplicate actor IDs, and distance projection.
+- Success criteria:
+  - encounter placement failures are caught early with actionable world-state error messages.
+  - world-state ownership is centralized and reusable for later pathing/collision expansion.
+
+47. `DONE` Non-Vladimir controlled-champion production path validation.
+- Scope:
+  - add a second controlled-champion script (`Sona`) wired through canonical defaults loaders.
+  - add a non-Vladimir scenario fixture and controlled-step regression path.
+  - convert controlled-champion script initialization to typed `Result` propagation for deterministic fail-fast behavior (no panic path).
+- Success criteria:
+  - at least one non-Vladimir controlled-champion run path is validated in tests.
+  - script initialization failures are surfaced as runtime errors with champion-specific context.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
 - `DONE` Item 3
 - `DONE` Item 7 (hitbox-aware impact outcomes and melee windup interruption on stun)
+- `IN_PROGRESS` Item 8 (world ownership scaffold landed; command/path movement model migration pending)
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
@@ -1029,6 +1065,10 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 36 (champion/item coupling reduced by moving defensive item and revive decisions into generic runtime/item capability scripts)
 - `DONE` Item 39 (domain-oriented script hierarchy is in place with explicit owner modules)
 - `DONE` Item 40 (descriptive naming and module sizing standards are documented and applied)
+- `DONE` Item 44 (full-game simulation blueprint document added and linked from primary docs)
+- `DONE` Item 45 (controlled-champion modes now fail fast when script coverage is missing)
+- `DONE` Item 46 (world-state ownership scaffold + encounter placement guardrails landed)
+- `DONE` Item 47 (non-Vladimir controlled-champion path validated with typed script-init errors)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

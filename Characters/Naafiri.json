@@ -454,7 +454,8 @@
         "Source speed: 1800.",
         "Source effectRadius: 2100.",
         "Source notes (summary): Hounds' Pursuit's theoretical total physical damage from Packmates only, assuming Naafiri has the maximum number of them active and Hounds' Pursuit is always ranked at the earliest levels permitted (ranks 1 / 2 / 3 at levels 6 / 11 / 16): Levels 6:8: 30 (+ 24% bonus AD) / 60 (+ 48% bonus AD)."
-      ]
+      ],
+      "description_source": "Active: Naafiri and her Packmates channel for 0.75 seconds to single out the target enemy champion, revealing them in the duration. Upon completion of the channel, they dash to the target; upon arrival Naafiri deals physical damage and slows the target by 99% for 0.25 seconds, whereas each Packmate deals 10% of that damage. Packmates become untargetable during their channel and dash."
     }
   },
   "sources": [

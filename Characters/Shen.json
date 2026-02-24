@@ -315,7 +315,7 @@
             135.0,
             160.0
           ],
-          "context_notes": "Active: Shen dashes to the target location, dealing physical damage to enemy champions and monsters he passes through and taunting them for 1."
+          "context_notes": "Active: Shen dashes to the target location, dealing physical damage to enemy champions and monsters he passes through and taunting them for 1.5 seconds."
         },
         {
           "id": "shen_e_effect_3",
@@ -396,7 +396,8 @@
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source notes (summary): Due to several character stats needing to be recalculated each time a character spawns, casting Stand United immediately upon respawning will cause its cooldown to be unaffected by ability haste, and the shielding will not be increased by Shen's ability power, but will be increased by his bonus maximum health."
-      ]
+      ],
+      "description_source": "Active: Shen focuses his will, channeling for 3 seconds and granting the target allied champion a shield for 5 seconds at the time of cast, increased by 0% : 60% (based on target's missing health)."
     }
   },
   "sources": [
@@ -405,6 +406,12 @@
       "path": "From Online/champions/Shen.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Shen/Shadow_Dash",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Shadow Dash execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

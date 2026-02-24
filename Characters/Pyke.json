@@ -91,7 +91,8 @@
         "Source targeting: Passive.",
         "Source effectRadius: 1500.",
         "Source notes (summary): Game elements that increase health based on the champion's health (e."
-      ]
+      ],
+      "description_source": "Innate: Pyke's maximum health cannot increase except through growth (per level), instead he gains[ 1 bonus attack damage per 14 bonus health. ][ bonus attack damage equal to 7.143% of bonus health. ]"
     },
     "basic_ability_1": {
       "name": "Bone Skewer",
@@ -152,7 +153,8 @@
         "Source castTime: 0.25.",
         "Source effectRadius: 550.",
         "Source notes (summary): This ability always employs Quick cast."
-      ]
+      ],
+      "description_source": "Active: Pyke charges while being slowed by 20% for up to 3 seconds to increase Bone Skewer's range over the first second of the channel. Bone Skewer can be recast within the duration."
     },
     "basic_ability_2": {
       "name": "Ghostwater Dive",
@@ -219,7 +221,7 @@
             250.0,
             300.0
           ],
-          "context_notes": "After 1 second, the Phantom homes back to Pyke to stun enemies around it and those it passes through along the way for 1."
+          "context_notes": "After 1 second, the Phantom homes back to Pyke to stun enemies around it and those it passes through along the way for 1.25 (+ 0.1 per 10 Lethality) seconds. Enemy champions hit also take physical damage."
         }
       ],
       "description": "Active: Pyke dashes in the target direction, leaving behind a Phantom. Pyke is ghosted while the Phantom is active.",
@@ -307,6 +309,12 @@
       "path": "From Online/champions/Pyke.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Pyke",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

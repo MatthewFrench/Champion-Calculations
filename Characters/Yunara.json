@@ -285,7 +285,7 @@
             45.0,
             50.0
           ],
-          "context_notes": "Active: Yunara becomes ghosted and gains bonus movement speed for 1."
+          "context_notes": "Active: Yunara becomes ghosted and gains bonus movement speed for 1.5 seconds. The movement speed is 50% more effective while facing a nearby visible enemy champion."
         },
         {
           "id": "increased_bonus_move_speed",
@@ -297,7 +297,7 @@
             67.5,
             75.0
           ],
-          "context_notes": "Active: Yunara becomes ghosted and gains bonus movement speed for 1."
+          "context_notes": "Active: Yunara becomes ghosted and gains bonus movement speed for 1.5 seconds. The movement speed is 50% more effective while facing a nearby visible enemy champion."
         }
       ],
       "description": "Active: Yunara becomes ghosted and gains bonus movement speed for 1.5 seconds. The movement speed is 50% more effective while facing a nearby visible enemy champion.",
@@ -392,6 +392,12 @@
       "path": "From Online/champions/Yunara.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Yunara",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

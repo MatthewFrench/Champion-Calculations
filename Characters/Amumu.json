@@ -160,7 +160,7 @@
             5.0,
             5.0
           ],
-          "context_notes": "Toggle: Amumu cries a continuous pool of tears, dealing magic damage every 0."
+          "context_notes": "Toggle: Amumu cries a continuous pool of tears, dealing magic damage every 0.5 seconds to nearby enemies."
         }
       ],
       "description": "Toggle: Amumu cries a continuous pool of tears, dealing magic damage every 0.5 seconds to nearby enemies.",
@@ -274,7 +274,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "Active: Amumu entangles nearby enemies in bandages, dealing magic damage as well as knocking them down and stunning them for 1."
+          "context_notes": "Active: Amumu entangles nearby enemies in bandages, dealing magic damage as well as knocking them down and stunning them for 1.5 seconds."
         }
       ],
       "description": "Active: Amumu entangles nearby enemies in bandages, dealing magic damage as well as knocking them down and stunning them for 1.5 seconds.",
@@ -310,6 +310,12 @@
       "path": "From Online/champions/Amumu.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Amumu",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

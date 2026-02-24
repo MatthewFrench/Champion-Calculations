@@ -185,7 +185,7 @@
             135.0,
             160.0
           ],
-          "context_notes": "Active: Camille sweeps her leg in a cone in the target direction over 1."
+          "context_notes": "Active: Camille sweeps her leg in a cone in the target direction over 1.1 seconds, during which she is ghosted and unable to declare basic attacks. Afterwards, she deals physical damage to all enemies within."
         },
         {
           "id": "outer_cone_additional_damage",
@@ -383,6 +383,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Precision Protocol cast-to-hit timing and delayed second-hit semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Camille/Tactical_Sweep",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Tactical Sweep execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

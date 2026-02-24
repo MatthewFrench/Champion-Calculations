@@ -316,7 +316,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.25 / None.",
         "Source effectRadius: 250 /  350.",
-        "Source notes (summary): Only the initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade."
+        "Source notes (summary): Only the initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade.",
+        "Manual verification (2026-02-24): Summon: Tibbers has a 0.25-second cast windup with immediate area impact on summon, then persists as a controllable pet for up to 45 seconds; recast only re-issues Tibbers movement and does not repeat the summon burst."
       ]
     }
   },
@@ -326,6 +327,12 @@
       "path": "From Online/champions/Annie.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Annie/Summon%3A_Tibbers",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Summon: Tibbers execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

@@ -217,7 +217,8 @@
         "Source castTime: none.",
         "Source speed: 1700.",
         "Source effectRadius: 275.",
-        "Source notes (summary): Sleep does not count for knocking the dash down."
+        "Source notes (summary): Sleep does not count for knocking the dash down.",
+        "Manual verification (2026-02-24): Grand Entrance is a dash-to-location action with 0.35-second delayed impact on arrival, then area knockup; immobilizing crowd control during the dash causes knockdown and cancels impact resolution."
       ]
     },
     "basic_ability_3": {
@@ -339,7 +340,8 @@
         "Source targeting: Auto.",
         "Source castTime: 0.5.",
         "Source notes (summary): The following table refers for interactions while Rakan is in cast time: Type Cast time Attacking Allowed Abilities Grand Entrance is disabled but can still be buffered."
-      ]
+      ],
+      "description_source": "Active: Rakan breaks into a captivating sprint for 4 seconds, gaining ghosting and 75% bonus movement speed for the duration. During this time, he deals magic damage to enemies he collides with and charms and slows them by 75% for a duration. This cannot affect the same enemy more than once."
     }
   },
   "sources": [
@@ -348,6 +350,12 @@
       "path": "From Online/champions/Rakan.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rakan/Grand_Entrance",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Grand Entrance execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

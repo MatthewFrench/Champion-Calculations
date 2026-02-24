@@ -212,7 +212,7 @@
             17.0,
             20.0
           ],
-          "context_notes": "Active: Alistar tramples the ground around him every 0."
+          "context_notes": "Active: Alistar tramples the ground around him every 0.5 seconds over 5 seconds, becoming ghosted and dealing magic damage to nearby enemies. Each time this damages at least one enemy champion, he generates a stack of Trample that lasts for the remaining duration, stacking up to 5 times."
         },
         {
           "id": "total_magic_damage",
@@ -224,7 +224,7 @@
             170.0,
             200.0
           ],
-          "context_notes": "Active: Alistar tramples the ground around him every 0."
+          "context_notes": "Active: Alistar tramples the ground around him every 0.5 seconds over 5 seconds, becoming ghosted and dealing magic damage to nearby enemies. Each time this damages at least one enemy champion, he generates a stack of Trample that lasts for the remaining duration, stacking up to 5 times."
         },
         {
           "id": "alistar_e_effect_2",
@@ -310,6 +310,12 @@
       "path": "From Online/champions/Alistar.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Alistar",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

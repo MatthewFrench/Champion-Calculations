@@ -350,7 +350,8 @@
         "Source castTime: None / 0.15.",
         "Source speed: 1900 / 1800.",
         "Source notes (summary): Chilling Scream increases its damage by its minimum every 0.025 seconds over the charge duration."
-      ]
+      ],
+      "description_source": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0.25 seconds."
     },
     "ultimate": {
       "name": "Certain Death",
@@ -427,7 +428,8 @@
         "Source speed: 2000 / 2500 : 5000.",
         "Source effectRadius: Global /  1500 /  575.",
         "Source notes (summary): Briar will track the target with the dash if they change locations."
-      ]
+      ],
+      "description_source": "Active: Briar kicks her pillory's hemolith in the target direction, briefly granting sight of its surroundings as it travels and marking the first enemy champion hit as her prey. The mark's application disrupts the target's ongoing channels. While the target is marked, they are revealed."
     }
   },
   "sources": [

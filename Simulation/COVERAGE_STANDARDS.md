@@ -73,9 +73,15 @@ Data metadata requirements:
 - When editing Runes Reforged data, keep flat and split datasets synchronized (`Masteries/RunesReforged.json` plus `Masteries/RunesReforged/` tree/stat-shard files) and treat split-vs-flat drift as blocking.
 - When editing existing non-trivial champion/item/rune data, explicitly sanity-check the entity's gameplay purpose and behavior pattern, then record that intent in `schema_notes.context_notes` when confidence or semantics changed.
 - When semantics are updated, record the verified in-game execution model in `schema_notes.context_notes` (what the player does, when the effect resolves, and who is affected).
+- Keep champion ability `description_source` populated on touched abilities; if missing, backfill from authoritative/source-corpus ability text in the same change.
+- If a temporary fallback-derived `description_source` value is used to close completeness, track a provenance-hardening follow-up in `Simulation/COVERAGE_GAPS.md` to replace it with direct source-corpus text.
 - Do not keep fragmentary/truncated context-note strings in touched data (for example `for 0.` or `within 4.`); normalize to complete timing/unit semantics before marking the entry reviewed.
 - Use strict fragment detection for truncation audits (integer-dot tokens like `for 0.`), and do not classify valid decimals (for example `for 0.25 seconds`) as truncation defects.
+- Run a secondary cadence-fragment sweep for phrases like `every 0.` so truncated periodic-tick notes are not missed by the strict primary pattern.
+- Run a tertiary article-token sweep for phrases like `during the 0.` so article-interposed truncation fragments are also detected.
 - Truncation audits must normalize `context_notes` shape before matching (support both string and array forms on ability/effect notes) so queue counts are complete and reproducible.
+- If truncation cleanup uses scripted/bulk edits, scope replacements to `context_notes` fields only and run a post-edit audit so canonical `description`/`description_source` text is unchanged unless intentionally edited.
+- When a note contains an integer quantity that is intentional (for example stack count), avoid terminal integer-dot phrasing (for example `up to 3.`) and include units/entity labels (for example `up to 3 stacks`) so truncation audits remain reliable.
 - When data semantics exceed current runtime capability (for example visibility-state windows, on-attack trigger classes, charge-state transforms, mode-gated resource branches), document the deferred code follow-up explicitly in `Simulation/COVERAGE_GAPS.md` in the same change.
 - For control-triggered effects, encode the full trigger set from source text (for example include both immobilize and ground triggers when both are listed).
 - If an item effect depends on a shared cross-item system rule (for example support-income diminishing-gold logic), preserve conservative confidence until that shared rule is encoded explicitly and track the dependency in `Simulation/COVERAGE_GAPS.md`.
@@ -223,7 +229,7 @@ These are quality improvements to already-covered assets.
 
 ### Data Quality Improvements
 - Maintain champion corpus parity inventory (`Simulation/champion_data_coverage_inventory.json`) as a no-regression guardrail (`172/172` current file parity) and prioritize fidelity-normalization waves over generated champion data.
-- Maintain manual behavior-verification tracker coverage (`Simulation/champion_behavior_verification_tracker.json`) and increase manual verified champion count each wave.
+- Maintain manual behavior-verification tracker full-corpus coverage (`Simulation/champion_behavior_verification_tracker.json`, currently `172/172`) and run targeted re-verification waves when champion semantics change.
 - Maintain full provenance coverage for item files with `effects_structured` (all currently sourced) and keep this as a no-regression guardrail.
 - Enforce `sources` de-duplication on champion/item files during future edits.
 - Raise precision of low-confidence modeled item parses (`parse_confidence` around `0.55` to `0.65`) with manual formula normalization notes.

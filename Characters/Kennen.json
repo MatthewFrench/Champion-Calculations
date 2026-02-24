@@ -312,7 +312,7 @@
             75.0,
             110.0
           ],
-          "context_notes": "The storm strikes lightning bolts down on nearby enemies every 0."
+          "context_notes": "The storm strikes lightning bolts down on nearby enemies every 0.5 seconds, each one dealing magic damage."
         },
         {
           "id": "total_single_target_damage",
@@ -352,6 +352,12 @@
       "path": "From Online/champions/Kennen.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kennen",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

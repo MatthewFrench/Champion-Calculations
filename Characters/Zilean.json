@@ -95,7 +95,8 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source notes (summary): Time in a Bottle marks allied champions with two circles beneath them; the inner one represents how close they are to leveling up, turning golden when able to activate Time in a Bottle on them."
-      ]
+      ],
+      "description_source": "Innate: Zilean generates 2 / 3.5 / 5 / 6 / 12 (based on level) experience (does not count towards his own level up) every 5 seconds. Time in a Bottle is on cooldown when the game starts and becomes disabled when everyone on Zilean's team including himself has reached level 18."
     },
     "basic_ability_1": {
       "name": "Time Bomb",
@@ -160,7 +161,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.25.",
         "Source effectRadius: 350 /  500.",
-        "Source notes (summary): Time Bombs landing directly on top of multiple units follow a priority order for whom to attach themselves to."
+        "Source notes (summary): Time Bombs landing directly on top of multiple units follow a priority order for whom to attach themselves to.",
+        "Manual verification (2026-02-24): Time Bomb is attach-or-ground timed explosive with 3-second fuse; attaching a second bomb to the same unit forces immediate detonation and area stun, with source-priority attachment rules on landing."
       ]
     },
     "basic_ability_2": {
@@ -312,6 +314,12 @@
       "path": "From Online/champions/Zilean.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Zilean/Time_Bomb",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Time Bomb execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

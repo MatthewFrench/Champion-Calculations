@@ -188,7 +188,7 @@
             190.0,
             230.0
           ],
-          "context_notes": "Active: Bel'Veth slams her tail down in the target direction that deals magic damage to enemies hit, knocks them up for 0."
+          "context_notes": "Active: Bel'Veth slams her tail in the target direction, dealing magic damage and knocking enemies hit up for 0.75 seconds."
         },
         {
           "id": "slow_duration",
@@ -200,7 +200,7 @@
             2.0,
             2.25
           ],
-          "context_notes": "Active: Bel'Veth slams her tail down in the target direction that deals magic damage to enemies hit, knocks them up for 0."
+          "context_notes": "Active: Bel'Veth slams her tail in the target direction, dealing magic damage and knocking enemies hit up for 0.75 seconds."
         },
         {
           "id": "belveth_w_effect_2",
@@ -241,7 +241,7 @@
             50.0,
             55.0
           ],
-          "context_notes": "Active: Bel'Veth enters a frenzy for 1."
+          "context_notes": "Active: Bel'Veth enters a frenzy for 1.5 seconds, gaining damage reduction and repeatedly striking nearby targets."
         },
         {
           "id": "minimum_physical_damage_per_hit",
@@ -433,6 +433,12 @@
       "path": "From Online/champions/Belveth.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bel%27Veth",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

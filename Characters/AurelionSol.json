@@ -211,7 +211,8 @@
         "Source targeting: Direction.",
         "Source castTime: none.",
         "Source notes (summary): This ability always employs Quick cast."
-      ]
+      ],
+      "description_source": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
     },
     "basic_ability_2": {
       "name": "Astral Flight",

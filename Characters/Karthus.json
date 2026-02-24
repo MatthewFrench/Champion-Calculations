@@ -101,7 +101,7 @@
             97.0,
             116.0
           ],
-          "context_notes": "Active: Karthus conjures a blast at the target location that detonates after 0."
+          "context_notes": "Active: Karthus conjures a blast at the target location that detonates after roughly 0.53 to 0.76 seconds, depending on travel timing."
         },
         {
           "id": "isolated_enhanced_damage",
@@ -113,7 +113,7 @@
             194.0,
             232.0
           ],
-          "context_notes": "Active: Karthus conjures a blast at the target location that detonates after 0."
+          "context_notes": "Active: Karthus conjures a blast at the target location that detonates after roughly 0.53 to 0.76 seconds, depending on travel timing."
         }
       ],
       "description": "Active: Karthus conjures a blast at the target location that detonates after 0.528 seconds to 0.759 seconds, granting sight of the area and dealing magic damage to all enemies within, doubled when only one target is struck.",
@@ -246,7 +246,7 @@
             22.5,
             27.5
           ],
-          "context_notes": "Toggle: Karthus surrounds himself in a necrotic aura that deals magic damage every 0."
+          "context_notes": "Toggle: Karthus surrounds himself in a necrotic aura that deals magic damage every 0.25 seconds to nearby enemies."
         },
         {
           "id": "damage_per_second",
@@ -258,7 +258,7 @@
             90.0,
             110.0
           ],
-          "context_notes": "Toggle: Karthus surrounds himself in a necrotic aura that deals magic damage every 0."
+          "context_notes": "Toggle: Karthus surrounds himself in a necrotic aura that deals magic damage every 0.25 seconds to nearby enemies."
         },
         {
           "id": "karthus_e_effect_3",
@@ -335,7 +335,8 @@
         "Source castTime: 0.25.",
         "Source effectRadius: Global.",
         "Source notes (summary): Requiem's channel is telegraphed to all enemy champions by a beam of light that descends on all targets, including if they are untargetable or even dead."
-      ]
+      ],
+      "description_source": "Active: Karthus channels for 3 seconds, then deals magic damage to all targetable enemy champions upon completion."
     }
   },
   "sources": [
@@ -344,6 +345,12 @@
       "path": "From Online/champions/Karthus.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Karthus",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -158,7 +158,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The flurries deal 1 instance of basic damage followed by 4 instances of a non-reactive type of damage (either default or proc)."
+        "Source notes (summary): The flurries deal 1 instance of basic damage followed by 4 instances of a non-reactive type of damage (either default or proc).",
+        "Manual verification (2026-02-24): Ranger's Focus consumes full Focus stacks into a 6-second flurry state; each attack becomes a five-arrow burst, applying on-hit once but Frost Shot and lifesteal per arrow, with attack-timer reset on activation."
       ]
     },
     "basic_ability_2": {
@@ -334,6 +335,12 @@
       "path": "From Online/champions/Ashe.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Ashe/Ranger%27s_Focus",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Ranger's Focus execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

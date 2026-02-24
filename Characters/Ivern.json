@@ -89,8 +89,10 @@
       "description": "Innate: Ivern cannot attack nor damage non-epic monsters. Instead, targeting a jungle camp initiates a 2.5 second channel that will plant a grove upon the camp. Placing a grove costs 94.5 : -45.3 (based on level) health and 90 : -37.9 (based on level) mana. The channel cannot be cancelled in the first 0.15 seconds and in the last 0.5 seconds.",
       "context_notes": [
         "Source targeting: Unit.",
-        "Source notes (summary): Freeing the Krug camp will only grant the gold and experience of 1 Ancient Krug, 2 Krugs, and 3 Mini Krugs."
-      ]
+        "Source notes (summary): Freeing the Krug camp will only grant the gold and experience of 1 Ancient Krug, 2 Krugs, and 3 Mini Krugs.",
+        "Manual verification (2026-02-24): Friend of the Forest is a two-phase camp interaction (plant then free) with explicit channel lock windows and level-scaling maturity delay; Smite can instantly free grove state. Simulation should model grove state transitions rather than instant passive camp clear."
+      ],
+      "description_source": "Innate: Ivern cannot attack nor damage non-epic monsters. Instead, he channels on jungle camps to plant and later free a grove for full rewards."
     },
     "basic_ability_1": {
       "name": "Rootcaller",
@@ -369,6 +371,12 @@
       "path": "From Online/champions/Ivern.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Ivern/Friend_of_the_Forest",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Friend of the Forest channel/maturity sequencing, activation gating, and player-visible state transitions"
     }
   ],
   "notes": [

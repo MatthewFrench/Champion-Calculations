@@ -345,7 +345,8 @@
         "Source notes (summary): Spell shield will block the tether's application but not the damage of one already applied.",
         "Manual review (2026-02-24): Bountiful Harvest is channel-gated and proximity-dependent; periodic drain ticks resolve during channel and end early if all tethers break.",
         "Manual review (2026-02-24): Tick cadence is quarter-second periodic damage/heal while tethered, with end-of-channel cooldown refund behavior only when the channel is not interrupted."
-      ]
+      ],
+      "description_source": "Active: Fiddlesticks forms a tether between itself and each nearby enemy over the cast time, then channels for up to 2 seconds to harvest their souls, revealing them in the process."
     },
     "basic_ability_3": {
       "name": "Reap",
@@ -426,7 +427,7 @@
             62.5,
             87.5
           ],
-          "context_notes": "Active: Fiddlesticks channels for 1."
+          "context_notes": "Active: Fiddlesticks channels for 1.5 seconds, then blinks to the target location upon completion with a murder of crows flying wildly around it for 5 seconds, dealing magic damage every 0.25 seconds to nearby enemies."
         },
         {
           "id": "total_magic_damage",
@@ -436,7 +437,7 @@
             1250.0,
             1750.0
           ],
-          "context_notes": "Active: Fiddlesticks channels for 1."
+          "context_notes": "Active: Fiddlesticks channels for 1.5 seconds, then blinks to the target location upon completion with a murder of crows flying wildly around it for 5 seconds, dealing magic damage every 0.25 seconds to nearby enemies."
         }
       ],
       "description": "Active: Fiddlesticks channels for 1.5 seconds, then blinks to the target location upon completion with a murder of crows flying wildly around it for 5 seconds, dealing magic damage every 0.25 seconds to nearby enemies.",
@@ -463,7 +464,8 @@
         "Source castTime: none.",
         "Source effectRadius: 600.",
         "Source notes (summary): Roots do not interrupt the ability despite being a movement channel."
-      ]
+      ],
+      "description_source": "Active: Fiddlesticks channels for 1.5 seconds, then blinks to the target location upon completion with a murder of crows flying wildly around it for 5 seconds, dealing magic damage every 0.25 seconds to nearby enemies."
     }
   },
   "sources": [
@@ -490,6 +492,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Reap cast timing, slow duration, and center-silence branch semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiddlesticks/Crowstorm",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Crowstorm execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

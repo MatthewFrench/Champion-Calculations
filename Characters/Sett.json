@@ -218,7 +218,7 @@
             110.0,
             130.0
           ],
-          "context_notes": "Active: Sett pulls in enemies at his front and back along the target direction, dealing physical damage and slowing them by 70% for 0."
+          "context_notes": "Active: Sett pulls in enemies at his front and back along the target direction, dealing physical damage and slowing them by 70% for 0.5 seconds. Facebreaker deals 125 : 250 (based on level) bonus physical damage to monsters."
         },
         {
           "id": "sett_e_effect_2",
@@ -244,7 +244,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source notes (summary): Sett will afterwards attempt to basic attack the closest target picked up by Facebreaker, prioritising champions and prioritising those in front of him."
-      ]
+      ],
+      "description_source": "Active: Sett pulls in enemies at his front and back along the target direction, dealing physical damage and slowing them by 70% for 0.5 seconds. Facebreaker deals 125 : 250 (based on level) bonus physical damage to monsters."
     },
     "ultimate": {
       "name": "The Show Stopper",
@@ -306,6 +307,12 @@
       "path": "From Online/champions/Sett.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sett",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

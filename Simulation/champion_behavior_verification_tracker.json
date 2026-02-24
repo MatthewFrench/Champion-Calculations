@@ -22,70 +22,183 @@
   },
   "totals": {
     "champion_corpus_total": 172,
-    "manual_behavior_verified_champions": 59,
-    "source_extracted_only_champions": 113,
-    "manual_verification_percent": 34.3
+    "manual_behavior_verified_champions": 172,
+    "source_extracted_only_champions": 0,
+    "manual_verification_percent": 100
   },
   "manual_behavior_verified_champion_keys": [
+    "Aatrox",
+    "Ahri",
+    "Akali",
     "Akshan",
+    "Alistar",
+    "Ambessa",
+    "Amumu",
+    "Anivia",
+    "Annie",
     "Aphelios",
+    "Ashe",
     "AurelionSol",
     "Aurora",
+    "Azir",
+    "Bard",
+    "Belveth",
+    "Blitzcrank",
+    "Brand",
+    "Braum",
     "Briar",
+    "Caitlyn",
     "Camille",
+    "Cassiopeia",
+    "Chogath",
     "Corki",
     "Darius",
+    "Diana",
     "DrMundo",
+    "Draven",
     "Ekko",
+    "Elise",
+    "Evelynn",
+    "Ezreal",
     "Fiddlesticks",
     "Fiora",
+    "Fizz",
+    "Galio",
+    "Gangplank",
     "Garen",
     "Gnar",
+    "Gragas",
+    "Graves",
+    "Gwen",
+    "Hecarim",
+    "Heimerdinger",
+    "Hwei",
+    "Illaoi",
     "Irelia",
+    "Ivern",
+    "Janna",
+    "JarvanIV",
     "Jax",
+    "Jayce",
+    "Jhin",
+    "Jinx",
+    "KSante",
+    "Kaisa",
+    "Kalista",
+    "Karma",
+    "Karthus",
+    "Kassadin",
     "Katarina",
+    "Kayle",
+    "Kayn",
+    "Kennen",
+    "Khazix",
+    "Kindred",
+    "Kled",
+    "KogMaw",
     "Leblanc",
+    "LeeSin",
+    "Leona",
     "Lillia",
     "Lissandra",
+    "Lucian",
+    "Lulu",
     "Lux",
+    "Malphite",
+    "Malzahar",
     "Maokai",
+    "MasterYi",
     "Mel",
+    "Milio",
+    "MissFortune",
     "MonkeyKing",
+    "Mordekaiser",
     "Morgana",
     "Naafiri",
+    "Nami",
     "Nasus",
     "Nautilus",
+    "Neeko",
+    "Nidalee",
     "Nilah",
     "Nocturne",
     "Nunu",
     "Olaf",
+    "Orianna",
+    "Ornn",
+    "Pantheon",
+    "Poppy",
+    "Pyke",
+    "Qiyana",
+    "Quinn",
+    "Rakan",
+    "Rammus",
+    "RekSai",
+    "Rell",
+    "Renata",
+    "Renekton",
+    "Rengar",
     "Riven",
     "Rumble",
+    "Ryze",
+    "Samira",
     "Sejuani",
+    "Senna",
+    "Seraphine",
+    "Sett",
     "Shaco",
+    "Shen",
+    "Shyvana",
     "Singed",
     "Sion",
+    "Sivir",
+    "Skarner",
     "Smolder",
     "Sona",
+    "Soraka",
     "Swain",
+    "Sylas",
+    "Syndra",
+    "TahmKench",
     "Taliyah",
     "Talon",
+    "Taric",
+    "Teemo",
+    "Thresh",
+    "Tristana",
     "Trundle",
+    "Tryndamere",
+    "TwistedFate",
+    "Twitch",
     "Udyr",
     "Urgot",
     "Varus",
     "Vayne",
+    "Veigar",
     "Velkoz",
+    "Vex",
     "Vi",
+    "Viego",
+    "Viktor",
     "Vladimir",
     "Volibear",
     "Warwick",
+    "Xayah",
     "Xerath",
     "XinZhao",
+    "Yasuo",
+    "Yone",
     "Yorick",
+    "Yunara",
     "Yuumi",
+    "Zaahen",
+    "Zac",
     "Zed",
-    "Ziggs"
+    "Zeri",
+    "Ziggs",
+    "Zilean",
+    "Zoe",
+    "Zyra"
   ],
   "manual_behavior_verification_wave_44": {
     "reviewed_at": "2026-02-24",
@@ -538,6 +651,1254 @@
         ],
         "focus": "Bramble Smash slow duration, Sapling Toss chase window timing, and Nature's Grasp root-duration scaling normalization",
         "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Maokai"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_51": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Galio",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Shield of Durand recast-taunt scaling, Justice Punch knockup timing, and Hero's Entrance channel-to-impact window normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Galio"
+      },
+      {
+        "key": "Kled",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Bear Trap tether-return delay and Chaaaaaaaarge!!! shield gain cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Kled"
+      },
+      {
+        "key": "Soraka",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Starcall impact-delay scaling and Rejuvenation tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Soraka"
+      },
+      {
+        "key": "Shyvana",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2"
+        ],
+        "focus": "Twin Bite second-hit delay and Burnout aura tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Shyvana"
+      },
+      {
+        "key": "Seraphine",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "High Note expansion timing, Surround Sound shield window duration, and Encore slow-ramp cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Seraphine"
+      },
+      {
+        "key": "Samira",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Inferno Trigger channel duration and shot cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Samira"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_52": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Neeko",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Blooming Burst rebloom delay, Shapesplitter stealth window, and Pop Blossom stun timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Neeko"
+      },
+      {
+        "key": "Milio",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Ultra Mega Fire Kick post-bounce slow duration and Warm Hugs shield-speed window normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Milio"
+      },
+      {
+        "key": "MasterYi",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Meditate heal tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Master_Yi"
+      },
+      {
+        "key": "Malzahar",
+        "abilities_reviewed": [
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Malefic Visions tick cadence and Nether Grasp Null Zone tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Malzahar"
+      },
+      {
+        "key": "Karthus",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Lay Waste detonation timing window and Defile aura tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Karthus"
+      },
+      {
+        "key": "KSante",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Ntofo Strikes slow duration, Path Maker recast stun timing, and All Out root pre-displacement timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/K%27Sante"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_53": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Jinx",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Pow-Pow Rev'd up stack duration and Flame Chompers landing timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Jinx"
+      },
+      {
+        "key": "Anivia",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Glacial Storm base tick cadence and empowerment growth window normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Anivia"
+      },
+      {
+        "key": "Aatrox",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Infernal Chains slow duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Aatrox"
+      },
+      {
+        "key": "Fizz",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Seastone Trident bleed tick cadence and Playful/Trickster hop-off timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Fizz"
+      },
+      {
+        "key": "Ahri",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Fox-Fire post-cast flame release delay normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Ahri"
+      },
+      {
+        "key": "Bard",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Caretaker's Shrine movement-speed decay duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Bard"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_54": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Belveth",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Above and Below knockup duration and Royal Maelstrom frenzy duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Bel%27Veth"
+      },
+      {
+        "key": "Cassiopeia",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Miasma poison tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Cassiopeia"
+      },
+      {
+        "key": "Draven",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2"
+        ],
+        "focus": "Spinning Axe empowerment window and Blood Rush ghosting duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Draven"
+      },
+      {
+        "key": "Gwen",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Needlework slow duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Gwen"
+      },
+      {
+        "key": "Kayle",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Radiant Blast launch delay and Divine Judgment damage-drop timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Kayle"
+      },
+      {
+        "key": "KogMaw",
+        "abilities_reviewed": [
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Void Ooze slow-refresh cadence and Living Artillery impact-delay normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Kog%27Maw"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_55": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Zac",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Stretching Strikes slow+tether timing and Elastic Slingshot charge window normalization to complete in-game cast/channel semantics"
+      },
+      {
+        "key": "Viktor",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Gravity Field activation-delay cadence and Arcane Storm persistent-duration tick semantics"
+      },
+      {
+        "key": "Skarner",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Seismic Bastion shield duration, Ixtal's Impact terrain-collision stun branch, and Impale suppression window normalization"
+      },
+      {
+        "key": "Rell",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Shattering Strike stun duration and Magnet Storm periodic pull/tick cadence"
+      },
+      {
+        "key": "Orianna",
+        "abilities_reviewed": [
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Command: Protect shield-duration timing and Shockwave stun+pull resolve window"
+      },
+      {
+        "key": "Zoe",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Sleepy Trouble Bubble drowsy-to-sleep timing pipeline and player-visible debuff transition"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_56": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Vex",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Personal Space shield-duration timing normalization"
+      },
+      {
+        "key": "Taric",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Bastion shield-bind timing and Dazzle windup-to-stun duration semantics"
+      },
+      {
+        "key": "Sylas",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Chain Lash slow-duration timing and cast-to-hit behavior description quality"
+      },
+      {
+        "key": "Rengar",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Bola Strike slow/reveal duration semantics and player-visible tracking behavior"
+      },
+      {
+        "key": "Renekton",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Dominus periodic damage tick cadence and Fury generation timing"
+      },
+      {
+        "key": "Qiyana",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Supreme Display of Talent proximity-scaled stun duration and shockwave visibility semantics"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_57": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Pantheon",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Comet Spear quick-release threshold timing and cooldown-refund branch behavior"
+      },
+      {
+        "key": "Ornn",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Bellows Breath tick cadence and final-gout Brittle application timing"
+      },
+      {
+        "key": "Nidalee",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Bushwhack arm-time, stealth timing, and over-time damage cadence"
+      },
+      {
+        "key": "Nami",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Aqua Prison landing delay and Tidal Wave knock-up/slow timing by travel distance"
+      },
+      {
+        "key": "MissFortune",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Make It Rain periodic tick cadence and slow application timing"
+      },
+      {
+        "key": "Karma",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Inner Flame slow duration and Inspire shield-plus-move-speed timing semantics"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_58": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Jayce",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "To the Skies leap-travel timing and arrival-hit slow behavior"
+      },
+      {
+        "key": "Janna",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Monsoon channel healing tick cadence during displacement reset window"
+      },
+      {
+        "key": "Gragas",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Drunken Rage channel duration and Explosive Cask travel-time impact semantics"
+      },
+      {
+        "key": "Gangplank",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Cannon Barrage Fire at Will wave-cluster cadence normalization"
+      },
+      {
+        "key": "Blitzcrank",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Rocket Grab stun duration and Static Field silence window with shield-break ordering"
+      },
+      {
+        "key": "Azir",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Shifting Sands shield duration and dash-hit timing semantics"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_59": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Akali",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Twilight Shroud cast-time resource restoration and shroud-formation timing semantics"
+      },
+      {
+        "key": "Alistar",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Trample periodic tick cadence and stack-generation timing"
+      },
+      {
+        "key": "Amumu",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Despair aura tick cadence and Curse of the Sad Mummy crowd-control duration normalization"
+      },
+      {
+        "key": "Yunara",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Transcend One movement-speed window and facing-condition timing semantics"
+      },
+      {
+        "key": "Kaisa",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Icathian Rain missile-hit delay timing and minion-damage branch semantics"
+      },
+      {
+        "key": "Kayn",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Blade Reach decaying-slow duration normalization"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_60": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "LeeSin",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Dragon Rage knockback travel duration and airborne timing"
+      },
+      {
+        "key": "Leona",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Solar Flare impact delay and vision-before-impact timing"
+      },
+      {
+        "key": "Lulu",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Help Pix ally-transfer duration and shield timing normalization"
+      },
+      {
+        "key": "Brand",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Pillar of Flame Ablaze-bonus slow duration and repeat-affect semantics"
+      },
+      {
+        "key": "Braum",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Glacial Fissure field slow refresh cadence and decay sequencing"
+      },
+      {
+        "key": "Diana",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Crescent Strike sight window and Moonlight application timing"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_61": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Graves",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Smoke Screen impact slow duration normalization"
+      },
+      {
+        "key": "Hecarim",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Onslaught of Shadows reveal duration and rider-path resolve timing"
+      },
+      {
+        "key": "JarvanIV",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Cataclysm leap-travel duration and arrival-hit timing"
+      },
+      {
+        "key": "Kassadin",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Null Sphere magic-shield duration normalization"
+      },
+      {
+        "key": "Kennen",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Slicing Maelstrom lightning tick cadence"
+      },
+      {
+        "key": "Pyke",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Phantom Undertow return-stun duration scaling with Lethality"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_62": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Ryze",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Rune Prison slow-duration normalization"
+      },
+      {
+        "key": "Sett",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Facebreaker slow window and monster-bonus-damage behavior note"
+      },
+      {
+        "key": "Sivir",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Spell Shield duration and post-block trigger timing"
+      },
+      {
+        "key": "TahmKench",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Devour ally-shield decay tick cadence and movement-state constraints"
+      },
+      {
+        "key": "Thresh",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Death Sentence stun/reveal duration and followup status effects"
+      },
+      {
+        "key": "Xayah",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Featherstorm untargetability window and delayed-feather release timing"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_63": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Caitlyn",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Yordle Snap Trap arming/root reveal timing and anti-chain-trigger immunity window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Caitlyn/Yordle_Snap_Trap"
+        ]
+      },
+      {
+        "key": "Poppy",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Steadfast Presence anti-dash aura timing and knockup displacement duration semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Poppy/Steadfast_Presence"
+        ]
+      },
+      {
+        "key": "Quinn",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Vault target-locked dash/backstep timing and short displacement resolve semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Quinn/Vault"
+        ]
+      },
+      {
+        "key": "Shen",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Shadow Dash taunt duration and dash-through hit resolution timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Shen/Shadow_Dash"
+        ]
+      },
+      {
+        "key": "Tryndamere",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Mocking Shout curse duration and facing-dependent slow gating semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Tryndamere/Mocking_Shout"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_64": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Zaahen",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "The Darkin Glaive recast empowered-hit knockup duration and attack-reset cadence semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zaahen/The_Darkin_Glaive"
+        ]
+      },
+      {
+        "key": "Jhin",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Curtain Call recast lockout, shot cadence, and vision/slow timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jhin/Curtain_Call"
+        ]
+      },
+      {
+        "key": "Yone",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Fate Sealed post-mark gust delay, pull timing, and knockup resolve window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Fate_Sealed"
+        ]
+      },
+      {
+        "key": "Darius",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "ultimate"
+        ],
+        "focus": "Decimate windup timing and Noxian Guillotine execution-sight/recast sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Decimate",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Noxian_Guillotine"
+        ]
+      },
+      {
+        "key": "Ekko",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Timewinder slowdown window, Parallel Convergence stun/shield duration, and Chronobreak dash duration semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ekko/Timewinder",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ekko/Parallel_Convergence",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ekko/Chronobreak"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_65": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Nautilus",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2"
+        ],
+        "focus": "Dredge Line reveal+stun timing and Titan's Wrath delayed split-hit cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nautilus/Dredge_Line",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nautilus/Titan%27s_Wrath"
+        ]
+      },
+      {
+        "key": "Olaf",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2"
+        ],
+        "focus": "Undertow distance-scaled slow duration and Tough It Out shield window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Undertow",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Tough_It_Out"
+        ]
+      },
+      {
+        "key": "Swain",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Vision of Empire reveal/explosion delay and Nevermove root duration semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Swain/Vision_of_Empire",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Swain/Nevermove"
+        ]
+      },
+      {
+        "key": "XinZhao",
+        "abilities_reviewed": [
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Audacious Charge slow duration and Crescent Guard knockback travel-time/stun coupling semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Audacious_Charge",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Crescent_Guard"
+        ]
+      },
+      {
+        "key": "Nasus",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Spirit Fire sight window and delayed field ignition timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Spirit_Fire"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_66": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Camille",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Tactical Sweep sweep duration and outer-cone slow/heal resolve semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Camille/Tactical_Sweep"
+        ]
+      },
+      {
+        "key": "Fiddlesticks",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Crowstorm channel duration and blink-on-completion timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiddlesticks/Crowstorm"
+        ]
+      },
+      {
+        "key": "Jax",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Grandmaster-at-Arms stack duration and empowered third-hit cadence semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Grandmaster-at-Arms"
+        ]
+      },
+      {
+        "key": "Rumble",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Scrap Shield shield-duration and movement-speed window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rumble/Scrap_Shield"
+        ]
+      },
+      {
+        "key": "Yorick",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Eulogy of the Isles summon channel duration and maiden-release gating semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yorick/Eulogy_of_the_Isles"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_67": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Nasus",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Fury of the Sands periodic damage cadence truncation cleanup (`every 0.5 seconds`) and sustained aura tick semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Fury_of_the_Sands"
+        ]
+      },
+      {
+        "key": "Fiora",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Grand Challenge Victory Zone heal cadence truncation cleanup (`every 0.25 seconds`) and player-visible zone timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Grand_Challenge"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_68": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Ambessa",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Repudiation brace-lockout timing, buffered dash interaction, and shield-to-smash damage branch semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ambessa/Repudiation"
+        ]
+      },
+      {
+        "key": "Annie",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Summon Tibbers cast-impact timing, pet persistence/recast control split, and summon-only activation semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Annie/Summon%3A_Tibbers"
+        ]
+      },
+      {
+        "key": "Ashe",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Ranger's Focus stack-to-flurry activation, five-arrow cadence, and on-hit application partitioning",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ashe/Ranger%27s_Focus"
+        ]
+      },
+      {
+        "key": "Ezreal",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Mystic Shot projectile hit timing, on-hit/on-attack classification, and cooldown-refund-on-hit sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Mystic_Shot"
+        ]
+      },
+      {
+        "key": "Lucian",
+        "abilities_reviewed": [
+          "passive"
+        ],
+        "focus": "Lightslinger two-shot cadence timing, retarget fallback behavior, and Vigilance empowered-shot trigger windows",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Lucian/Lightslinger"
+        ]
+      },
+      {
+        "key": "Yasuo",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Steel Tempest attack-speed-scaled cast timing, stack-to-whirlwind conversion, and sweep-combo resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yasuo/Steel_Tempest"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_69": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Zeri",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Burst Fire attack-replacement burst cadence, projectile behavior class, and per-cast on-hit trigger semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zeri/Burst_Fire"
+        ]
+      },
+      {
+        "key": "Tristana",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Explosive Charge attach window, stack-driven detonation timing, and turret-target radius branch semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Tristana/Explosive_Charge"
+        ]
+      },
+      {
+        "key": "Twitch",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Ambush stealth delay timing, camouflage break conditions, and post-break attack-speed window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Twitch/Ambush"
+        ]
+      },
+      {
+        "key": "Syndra",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Scatter the Weak cone displacement timing, sphere collision stun branch, and split-hit damage sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Syndra/Scatter_the_Weak"
+        ]
+      },
+      {
+        "key": "Veigar",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Event Horizon delayed cage activation and edge-contact crowd-control timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Veigar/Event_Horizon"
+        ]
+      },
+      {
+        "key": "Senna",
+        "abilities_reviewed": [
+          "passive"
+        ],
+        "focus": "Absolution mark-consume cadence, Mist stack-economy behavior, and follow-up-hit movement burst timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Senna/Absolution"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_70": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Elise",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Spider/Human transformation timing and form-state spell-kit routing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Elise/Spider_Form_%2F_Human_Form"
+        ]
+      },
+      {
+        "key": "Evelynn",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Allure curse maturity threshold timing, charm/slow split, and champion-vs-monster expunge branches",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Evelynn/Allure"
+        ]
+      },
+      {
+        "key": "Kalista",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Rend recast consume timing, spear-stack resolution rules, and cooldown-reset branch conditions",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kalista/Rend"
+        ]
+      },
+      {
+        "key": "Khazix",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Taste Their Fear target-required cast timing with isolation-gated damage/cooldown branches",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kha%27Zix/Taste_Their_Fear"
+        ]
+      },
+      {
+        "key": "Kindred",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Mounting Dread stack-to-third-hit execute sequencing and missing-health detonation semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kindred/Mounting_Dread"
+        ]
+      },
+      {
+        "key": "Mordekaiser",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Realm of Death cast-to-realm transition timing, stat-steal entry behavior, and realm-exit placement semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Mordekaiser/Realm_of_Death"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_71": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Rakan",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Grand Entrance dash travel timing, delayed arrival impact, and knockdown cancellation branch",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rakan/Grand_Entrance"
+        ]
+      },
+      {
+        "key": "Rammus",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Powerball acceleration channel timing, collision impact resolve, and manual recast termination semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rammus/Powerball"
+        ]
+      },
+      {
+        "key": "RekSai",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Burrow persistent form-state transition semantics and Tremor Sense pulse-gating behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rek%27Sai/Burrow"
+        ]
+      },
+      {
+        "key": "Renata",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Bailout ramping buff timing, fatal-damage burn state, and takedown reset/stop conditions",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Renata_Glasc/Bailout"
+        ]
+      },
+      {
+        "key": "TwistedFate",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Pick a Card cycle cadence, card lock timing, and empowered auto branch resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Twisted_Fate/Pick_a_Card"
+        ]
+      },
+      {
+        "key": "Zilean",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Time Bomb attach priority, fuse timing, and double-bomb immediate detonation/stun sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zilean/Time_Bomb"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_72": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Chogath",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Feast cast windup timing, kill-confirm stack branch rules, and player-visible size/range growth semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Cho%27Gath/Feast"
+        ]
+      },
+      {
+        "key": "Heimerdinger",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "UPGRADE!!! two-step empowerment sequencing, recast-cancel branch timing, and empowered-cast resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Heimerdinger/UPGRADE%21%21%21"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_73": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Hwei",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Subject: Disaster mood-entry gating, second-input commit sequencing, and player-visible cast-state transitions",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Hwei/Subject%3A_Disaster"
+        ]
+      },
+      {
+        "key": "Illaoi",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Test of Spirit projectile-hit pull timing, tether-to-vessel transition, and persistent tentacle follow-up cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Illaoi/Test_of_Spirit"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_74": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Ivern",
+        "abilities_reviewed": [
+          "passive"
+        ],
+        "focus": "Friend of the Forest plant/free two-phase sequencing, maturation timing, and Smite instant-free branch semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ivern/Friend_of_the_Forest"
+        ]
+      },
+      {
+        "key": "Malphite",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Unstoppable Force dash travel timing, arrival impact radius resolution, and player-visible knockup sequencing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Malphite/Unstoppable_Force"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_75": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Teemo",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Noxious Trap charge cadence, arming-to-stealth timing, and trigger/bounce resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Teemo/Noxious_Trap"
+        ]
+      },
+      {
+        "key": "Viego",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Spectral Maw charge-release timing, full-timeout vs interruption cooldown branches, and dash-hit resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Viego/Spectral_Maw"
+        ]
+      },
+      {
+        "key": "Zyra",
+        "abilities_reviewed": [
+          "passive"
+        ],
+        "focus": "Garden of Thorns seed lifecycle timing, stomp-deny gating, and spell-conversion state transitions",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zyra/Garden_of_Thorns"
+        ]
       }
     ]
   }

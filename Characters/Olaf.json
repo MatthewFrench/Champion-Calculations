@@ -98,7 +98,7 @@
             210.0,
             260.0
           ],
-          "context_notes": "Active: Olaf throws an axe to the target location that deals physical damage to enemies it passes through and slows them for 1."
+          "context_notes": "Active: Olaf throws an axe to the target location that deals physical damage to enemies it passes through and slows them for 1.5 : 2.5 (based on distance traveled) seconds. Enemy champions hit are also inflicted with 20% armor reduction for 4 seconds."
         },
         {
           "id": "slow",
@@ -110,7 +110,7 @@
             40.0,
             45.0
           ],
-          "context_notes": "Active: Olaf throws an axe to the target location that deals physical damage to enemies it passes through and slows them for 1."
+          "context_notes": "Active: Olaf throws an axe to the target location that deals physical damage to enemies it passes through and slows them for 1.5 : 2.5 (based on distance traveled) seconds. Enemy champions hit are also inflicted with 20% armor reduction for 4 seconds."
         },
         {
           "id": "monster_bonus_physical_damage",
@@ -206,7 +206,7 @@
             100.0,
             130.0
           ],
-          "context_notes": "He also grants himself a shield for 2."
+          "context_notes": "He also grants himself a shield for 2.5 seconds for an amount that is capped at 70% missing health."
         },
         {
           "id": "olaf_w_effect_3",
@@ -371,6 +371,18 @@
       "path": "From Online/champions/Olaf.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Undertow",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Undertow execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Tough_It_Out",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Tough It Out execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

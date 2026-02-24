@@ -218,7 +218,7 @@
             115.0,
             140.0
           ],
-          "context_notes": "Active: Quinn dashes to the target enemy, marking them as Vulnerable, dealing physical damage, knocking them back a very short distance over 0."
+          "context_notes": "Active: Quinn dashes to the target enemy, marking them as Vulnerable, dealing physical damage, knocking them back a very short distance over 0.5 seconds, and slowing them by 50% decaying over 1.5 seconds. She then leaps back 525 units away from them."
         },
         {
           "id": "quinn_e_effect_2",
@@ -305,7 +305,8 @@
         "Source targeting: Auto.",
         "Source castTime: 0.25.",
         "Source notes (summary): Taking damage from non- minions removes the bonus movement speed buff temporarily by suppressing it with the status effect of a slow."
-      ]
+      ],
+      "description_source": "Active: Quinn channels for 2 seconds, signaling Valor to pair up. Upon completion, he picks her up and they unite, increasing her total movement speed, granting her ghosting, and allowing her to cast Skystrike. Behind Enemy Lines can be recast after 0.5 seconds during the channel."
     }
   },
   "sources": [
@@ -314,6 +315,12 @@
       "path": "From Online/champions/Quinn.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Quinn/Vault",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Vault execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

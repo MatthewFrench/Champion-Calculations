@@ -107,7 +107,8 @@
       "context_notes": [
         "Source targeting: Passive.",
         "Source effectRadius: 900.",
-        "Source notes (summary): PENDING FOR TEST:: The pattern/probability of Garden of Thorns spawning one seed or two."
+        "Source notes (summary): Garden of Thorns periodically spawns one or two seeds; exact spawn-distribution weighting remains a follow-up measurement item.",
+        "Manual verification (2026-02-24): Garden of Thorns is a seed lifecycle system (spawn -> short grace period -> stompable seed -> spell conversion). Q/E conversion determines resulting plant behavior, so simulation should model seed state transitions rather than direct passive damage events."
       ]
     },
     "basic_ability_1": {
@@ -324,6 +325,12 @@
       "path": "From Online/champions/Zyra.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Zyra/Garden_of_Thorns",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Garden of Thorns seed lifecycle, conversion gating, and player-visible deny semantics"
     }
   ],
   "notes": [

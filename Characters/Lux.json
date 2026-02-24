@@ -311,7 +311,8 @@
         "Source targeting: Direction.",
         "Source castTime: 1.",
         "Source notes (summary): Final Spark grants sight of its surroundings during the cast time and for 0.5 seconds afterwards."
-      ]
+      ],
+      "description_source": "Active: Lux fires a massive light beam in a line in the target direction that deals magic damage to enemies hit and reveals them for 1.5 seconds, as well as grants sight of the surrounding area."
     }
   },
   "sources": [

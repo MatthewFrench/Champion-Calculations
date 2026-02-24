@@ -165,7 +165,7 @@
             40.0,
             50.0
           ],
-          "context_notes": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1."
+          "context_notes": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1.5 seconds, lasting for up to 120 seconds and granting sight within its radius. The trap will spring upon contact with an enemy, dealing magic damage every second over 4 seconds."
         },
         {
           "id": "total_magic_damage",
@@ -177,7 +177,7 @@
             160.0,
             200.0
           ],
-          "context_notes": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1."
+          "context_notes": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1.5 seconds, lasting for up to 120 seconds and granting sight within its radius. The trap will spring upon contact with an enemy, dealing magic damage every second over 4 seconds."
         },
         {
           "id": "nidalee_w_effect_2",
@@ -328,6 +328,12 @@
       "path": "From Online/champions/Nidalee.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Nidalee",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

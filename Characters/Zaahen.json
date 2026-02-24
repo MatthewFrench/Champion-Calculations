@@ -160,7 +160,7 @@
             100.0,
             125.0
           ],
-          "context_notes": "Recast: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and knock up the target for 0."
+          "context_notes": "Recast: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and knock up the target for 0.75 seconds."
         },
         {
           "id": "zaahen_q_effect_4",
@@ -418,6 +418,12 @@
       "path": "From Online/champions/Zaahen.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Zaahen/The_Darkin_Glaive",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for The Darkin Glaive execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

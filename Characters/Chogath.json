@@ -380,7 +380,8 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
-        "Source notes (summary): The increased size stacks additively with other size increases."
+        "Source notes (summary): The increased size stacks additively with other size increases.",
+        "Manual verification (2026-02-24): Feast is a unit-targeted cast with 0.25-second windup; damage resolves on hit and only then checks kill-confirm stack gain. Non-champion stack cap applies only to non-epic monster/minion takedowns, while champion and epic takedowns continue stack growth and visibly increase size/range."
       ]
     }
   },
@@ -390,6 +391,12 @@
       "path": "From Online/champions/Chogath.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Cho%27Gath/Feast",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Feast execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

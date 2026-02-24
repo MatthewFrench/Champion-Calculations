@@ -234,7 +234,8 @@
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source effectRadius: 1300.",
-        "Source notes (summary): Damage taken in excess of the fatal damage taken does not apply to the target's health after it was restored."
+        "Source notes (summary): Damage taken in excess of the fatal damage taken does not apply to the target's health after it was restored.",
+        "Manual verification (2026-02-24): Bailout grants ramping combat stats with takedown refresh; the fatal-damage branch restores health then applies true-damage burn until takedown stop condition or death, with single-trigger limits per application state."
       ]
     },
     "basic_ability_3": {
@@ -362,6 +363,12 @@
       "path": "From Online/champions/Renata.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Renata_Glasc/Bailout",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Bailout execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

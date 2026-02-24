@@ -341,7 +341,7 @@
             128.0,
             192.0
           ],
-          "context_notes": "Recast: After 0."
+          "context_notes": "Recast: After 0.2 seconds into the cast time, Jhin fires a round in the target direction that grants sight around its trajectory for 0.5 seconds and deals physical damage to enemies hit, increased by 0% : 300% (based on target's missing health). The bullet stops upon hitting an enemy champion, slowing them by 80% for 0.5 seconds and revealing them for 2 seconds. Each cast has a static cooldown of 1 second."
         },
         {
           "id": "maximum_physical_damage_per_bullet",
@@ -351,7 +351,7 @@
             512.0,
             768.0
           ],
-          "context_notes": "Recast: After 0."
+          "context_notes": "Recast: After 0.2 seconds into the cast time, Jhin fires a round in the target direction that grants sight around its trajectory for 0.5 seconds and deals physical damage to enemies hit, increased by 0% : 300% (based on target's missing health). The bullet stops upon hitting an enemy champion, slowing them by 80% for 0.5 seconds and revealing them for 2 seconds. Each cast has a static cooldown of 1 second."
         },
         {
           "id": "minimum_fourth_shot_damage",
@@ -398,7 +398,8 @@
         "Source castTime: 1 / 0.25.",
         "Source speed: 5000.",
         "Source notes (summary): Applies spell damage to enemy champions and area damage to other enemy units."
-      ]
+      ],
+      "description_source": "Active: Jhin channels for up to 10 seconds, transforming his weapon into a cannon and gaining the ability to recast Curtain Call 4 times within the duration."
     }
   },
   "sources": [
@@ -407,6 +408,12 @@
       "path": "From Online/champions/Jhin.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Jhin/Curtain_Call",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Curtain Call execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

@@ -102,7 +102,7 @@
             260.0,
             320.0
           ],
-          "context_notes": "Upon collision, the ball bounces once in the same direction from the target's location, granting sight of the area before exploding in the same radius after a brief delay, dealing magic damage to enemies hit and slowing them for 1."
+          "context_notes": "Upon collision, the ball bounces once from the target's location, then explodes after a brief delay to deal magic damage and slow enemies hit for 1.5 seconds."
         },
         {
           "id": "slow",
@@ -114,7 +114,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "Upon collision, the ball bounces once in the same direction from the target's location, granting sight of the area before exploding in the same radius after a brief delay, dealing magic damage to enemies hit and slowing them for 1."
+          "context_notes": "Upon collision, the ball bounces once from the target's location, then explodes after a brief delay to deal magic damage and slow enemies hit for 1.5 seconds."
         },
         {
           "id": "milio_q_effect_3",
@@ -259,7 +259,7 @@
             135.0,
             165.0
           ],
-          "context_notes": "Active: Milio envelops himself or the target allied champion in protective flames, granting the target a shield and bonus movement speed for 2."
+          "context_notes": "Active: Milio envelops himself or an allied champion in protective flames, granting a shield and bonus movement speed for 2.5 seconds."
         },
         {
           "id": "bonus_movement_speed",
@@ -271,7 +271,7 @@
             18.0,
             20.0
           ],
-          "context_notes": "Active: Milio envelops himself or the target allied champion in protective flames, granting the target a shield and bonus movement speed for 2."
+          "context_notes": "Active: Milio envelops himself or an allied champion in protective flames, granting a shield and bonus movement speed for 2.5 seconds."
         },
         {
           "id": "milio_e_effect_2",
@@ -365,6 +365,12 @@
       "path": "From Online/champions/Milio.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Milio",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -1,4 +1,4 @@
-use anyhow::{Result, anyhow};
+use anyhow::{Context, Result, anyhow};
 use rayon::prelude::*;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -21,7 +21,8 @@ use crate::reporting::{
     write_controlled_champion_report_json, write_controlled_champion_report_markdown,
 };
 use crate::scripts::champions::{
-    ChampionRuneProcTelemetryEntry, resolve_controlled_champion_script,
+    ChampionRuneProcTelemetryEntry, resolve_controlled_champion_script_result,
+    supported_controlled_champion_script_keys,
 };
 use crate::scripts::coverage::is_item_effect_unmodeled;
 use crate::search::{
@@ -100,6 +101,53 @@ const FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION: u32 = 2;
 const CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION: u32 = 2;
 const FIXED_SWEEP_REPEAT_SEED_STRIDE: u64 = 0x9E37_79B9_7F4A_7C15;
 
+// Controlled-champion modes should fail fast when script coverage is missing so runs do not
+// silently degrade into auto-attack-only behavior for unsupported champions.
+pub(super) fn resolve_controlled_champion_script_or_error(
+    controlled_champion_name: &str,
+) -> Result<crate::scripts::champions::ControlledChampionScriptHandle> {
+    let resolved_script = resolve_controlled_champion_script_result(controlled_champion_name)
+        .with_context(|| {
+            format!(
+                "failed to initialize controlled-champion script for '{}'",
+                controlled_champion_name
+            )
+        })?;
+    resolved_script.ok_or_else(|| {
+        let supported_champions = supported_controlled_champion_script_keys();
+        let supported_champions = if supported_champions.is_empty() {
+            "<none>".to_string()
+        } else {
+            supported_champions.join(", ")
+        };
+        anyhow!(
+            "Controlled champion '{}' has no registered controlled-champion script. Supported controlled champions: {}.",
+            controlled_champion_name,
+            supported_champions
+        )
+    })
+}
+
+pub(super) fn validate_world_positions_for_enemy_scenarios(
+    controlled_champion_name: &str,
+    enemy_scenarios: &[(String, f64, Vec<EnemyConfig>)],
+) -> Result<()> {
+    for (encounter_name, _, enemies) in enemy_scenarios {
+        crate::world::build_world_state_for_controlled_champion_encounter(
+            controlled_champion_name,
+            enemies,
+        )
+        .map_err(|err| {
+            anyhow!(
+                "Encounter '{}' has invalid world-position ownership data: {}",
+                encounter_name,
+                err
+            )
+        })?;
+    }
+    Ok(())
+}
+
 pub(super) fn run_controlled_champion_fixed_loadout_evaluation(
     scenario_path: &Path,
     options: &ControlledChampionFixedLoadoutOptions<'_>,
@@ -147,8 +195,9 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
     );
     let controlled_champion_base =
         champion_at_level(&controlled_champion_config.base, sim_cfg.champion_level);
-    sim_cfg.controlled_champion_script =
-        resolve_controlled_champion_script(&controlled_champion_base.name);
+    sim_cfg.controlled_champion_script = Some(resolve_controlled_champion_script_or_error(
+        &controlled_champion_base.name,
+    )?);
     let controlled_champion_loadout_selection = controlled_champion_config.loadout_selection;
     let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
 
@@ -171,6 +220,17 @@ pub(super) fn run_controlled_champion_stepper(scenario_path: &Path, ticks: usize
             e
         })
         .collect::<Vec<_>>();
+    crate::world::build_world_state_for_controlled_champion_encounter(
+        &controlled_champion_base.name,
+        &enemies,
+    )
+    .map_err(|err| {
+        anyhow!(
+            "Encounter '{}' has invalid world-position ownership data: {}",
+            selected_encounter_name,
+            err
+        )
+    })?;
 
     let loadout_domain = build_loadout_domain();
     let controlled_champion_loadout_selection =

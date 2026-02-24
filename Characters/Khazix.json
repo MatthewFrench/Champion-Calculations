@@ -142,7 +142,8 @@
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
         "Source effectRadius: 375.",
-        "Source notes (summary): A team's allies are champions, pets, minions and outer turrets."
+        "Source notes (summary): A team's allies are champions, pets, minions and outer turrets.",
+        "Manual verification (2026-02-24): Taste Their Fear is target-required single-hit damage with isolation-based amplification and cooldown branching, where isolation is evaluated from nearby allied-unit proximity around the target."
       ]
     },
     "basic_ability_2": {
@@ -318,6 +319,12 @@
       "path": "From Online/champions/Khazix.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kha%27Zix/Taste_Their_Fear",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Taste Their Fear execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

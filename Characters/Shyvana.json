@@ -102,7 +102,7 @@
             80.0,
             100.0
           ],
-          "context_notes": "Active: Shyvana empowers her next basic attack within 6 seconds to gain 25 bonus range, deal 100% AD (+ 50% AP) physical damage, and cause her to strike again after 0."
+          "context_notes": "Active: Shyvana empowers her next basic attack within 6 seconds to gain bonus range, deal physical damage, and strike again after 0.25 seconds for the second hit."
         },
         {
           "id": "bonus_attack_speed",
@@ -165,7 +165,7 @@
             45.0,
             50.0
           ],
-          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0."
+          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0.5 seconds to nearby enemies."
         },
         {
           "id": "bonus_movement_speed_decay",
@@ -177,7 +177,7 @@
             6.75,
             7.5
           ],
-          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0."
+          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0.5 seconds to nearby enemies."
         },
         {
           "id": "magic_damage_per_tick",
@@ -189,7 +189,7 @@
             25.0,
             30.0
           ],
-          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0."
+          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0.5 seconds to nearby enemies."
         },
         {
           "id": "bonus_magic_damage",
@@ -374,7 +374,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.25.",
         "Source notes (summary): Dragon Descent's displacement immunity begins from the start of the cast time."
-      ]
+      ],
+      "description_source": "Passive - Fury: Shyvana generates Fury per second while alive and in Human form and 2 Fury per basic attack on-hit in either form. Shyvana gains 100 Fury upon learning Dragon's Descent."
     }
   },
   "sources": [
@@ -383,6 +384,12 @@
       "path": "From Online/champions/Shyvana.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Shyvana",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

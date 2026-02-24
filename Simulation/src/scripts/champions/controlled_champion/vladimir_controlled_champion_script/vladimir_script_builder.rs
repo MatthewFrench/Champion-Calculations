@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use anyhow::{Result, anyhow};
+
 use crate::defaults::{
     vladimir_cast_profile_defaults, vladimir_defensive_ability_two_policy_defaults,
     vladimir_offensive_ability_defaults, vladimir_sanguine_pool_defaults,
@@ -9,7 +11,7 @@ use crate::scripts::champions::vladimir;
 use super::super::{ControlledChampionAbilityTuning, ControlledChampionScriptHandle};
 use super::vladimir_script_model::{VladimirControlledChampionScript, from_vladimir_cast_profile};
 
-pub(crate) fn build_vladimir_script() -> ControlledChampionScriptHandle {
+pub(crate) fn build_vladimir_script() -> Result<ControlledChampionScriptHandle> {
     let cast_profile = vladimir_cast_profile_defaults("vladimir")
         .map(|defaults| {
             from_vladimir_cast_profile(vladimir::VladimirCastProfile {
@@ -46,17 +48,17 @@ pub(crate) fn build_vladimir_script() -> ControlledChampionScriptHandle {
             offensive_ultimate_base_cooldown_seconds: defaults.r_base_cooldown_seconds,
         })
         .unwrap_or_default();
-    let pool_defaults = vladimir_sanguine_pool_defaults("vladimir").unwrap_or_else(|| {
-        panic!("missing Vladimir Sanguine Pool defaults in canonical champion data")
-    });
+    let pool_defaults = vladimir_sanguine_pool_defaults("vladimir").ok_or_else(|| {
+        anyhow!("missing Vladimir Sanguine Pool defaults in canonical champion data")
+    })?;
     let defensive_ability_two_policy_defaults =
-        vladimir_defensive_ability_two_policy_defaults("vladimir").unwrap_or_else(|| {
-            panic!(
+        vladimir_defensive_ability_two_policy_defaults("vladimir").ok_or_else(|| {
+            anyhow!(
                 "missing Vladimir defensive ability two policy defaults in champion simulation data"
             )
-        });
+        })?;
 
-    Arc::new(VladimirControlledChampionScript {
+    Ok(Arc::new(VladimirControlledChampionScript {
         cast_profile,
         offensive_tuning,
         defensive_ability_two_rank: pool_defaults.default_rank,
@@ -75,5 +77,5 @@ pub(crate) fn build_vladimir_script() -> ControlledChampionScriptHandle {
         prioritize_offensive_ultimate_before_defensive_ability_two:
             defensive_ability_two_policy_defaults
                 .prioritize_offensive_ultimate_before_defensive_ability_two,
-    })
+    }))
 }

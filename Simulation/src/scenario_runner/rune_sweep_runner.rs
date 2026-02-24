@@ -49,7 +49,9 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
     let controlled_champion_base =
         champion_at_level(&controlled_champion_config.base, sim.champion_level);
     let controlled_champion_name = controlled_champion_base.name.clone();
-    sim.controlled_champion_script = resolve_controlled_champion_script(&controlled_champion_name);
+    sim.controlled_champion_script = Some(resolve_controlled_champion_script_or_error(
+        &controlled_champion_name,
+    )?);
 
     let loadout_domain = build_loadout_domain();
     controlled_champion_loadout_selection =
@@ -109,6 +111,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
         sim.champion_level,
         &sim.stack_overrides,
     )?;
+    validate_world_positions_for_enemy_scenarios(&controlled_champion_name, &enemy_scenarios)?;
 
     let enemy_presets = load_enemy_urf_presets()?;
     validate_enemy_urf_presets(&enemy_presets, &items, &loadout_domain, &urf)?;

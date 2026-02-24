@@ -102,7 +102,7 @@
             260.0,
             310.0
           ],
-          "context_notes": "Active: Blitzcrank fires their right hand in the target direction that catches the first enemy hit, dealing them magic damage, stunning them for 0."
+          "context_notes": "Active: Blitzcrank fires their right hand in the target direction that catches the first enemy hit, dealing them magic damage, stunning them for 0.65 seconds, and pulling them towards Blitzcrank, during which they are revealed."
         },
         {
           "id": "blitzcrank_q_effect_2",
@@ -137,7 +137,8 @@
         "Source castTime: 0.25.",
         "Source speed: 1800 / 1800.",
         "Source notes (summary): Rocket Grab's range is composed of a missile with 1080 range, and a smaller center-range area check at the end (colloqially known as a 'lollipop')."
-      ]
+      ],
+      "description_source": "Active: Blitzcrank fires their right hand in the target direction that catches the first enemy hit, dealing them magic damage, stunning them for 0.65 seconds, and pulling them towards Blitzcrank, during which they are revealed."
     },
     "basic_ability_2": {
       "name": "Overdrive",
@@ -272,7 +273,7 @@
             400.0,
             525.0
           ],
-          "context_notes": "Active: Blitzcrank detonates a static field that destroys the damage-mitigating shields of all nearby enemies, excluding the shields of monsters, and then deals them magic damage and silences them for 0."
+          "context_notes": "Active: Blitzcrank detonates a static field that destroys the damage-mitigating shields of all nearby enemies, excluding the shields of monsters, and then deals them magic damage and silences them for 0.5 seconds."
         }
       ],
       "description": "Passive: While Static Field is not on cooldown, Blitzcrank's basic attacks apply a stack to the target on-hit. While the target is afflicted, one stack is consumed every 1 second to strike them with lightning, dealing magic damage each time.",
@@ -308,6 +309,12 @@
       "path": "From Online/champions/Blitzcrank.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Blitzcrank",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

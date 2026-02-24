@@ -109,7 +109,7 @@
             170.0,
             200.0
           ],
-          "context_notes": "He also gains a shield that absorbs magic damage for 1."
+          "context_notes": "He also gains a shield that absorbs magic damage for 1.5 seconds."
         }
       ],
       "description": "Active: Kassadin fires an orb of void energy at the target enemy that deals magic damage and disrupts their ongoing channels.",
@@ -369,6 +369,12 @@
       "path": "From Online/champions/Kassadin.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kassadin",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

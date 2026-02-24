@@ -283,7 +283,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source speed: 2500 / 2000.",
-        "Source notes (summary): Scatter the Weak is blocked by the portion of Wind Wall it collides with."
+        "Source notes (summary): Scatter the Weak is blocked by the portion of Wind Wall it collides with.",
+        "Manual verification (2026-02-24): Scatter the Weak applies cone knockback after cast windup, while displaced Dark Spheres create secondary collision paths that stun and reveal enemies struck, with split damage handling between primary cone and sphere collisions."
       ]
     },
     "ultimate": {
@@ -375,6 +376,12 @@
       "path": "From Online/champions/Syndra.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Syndra/Scatter_the_Weak",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Scatter the Weak execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

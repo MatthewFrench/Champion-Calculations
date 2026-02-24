@@ -26,11 +26,18 @@ Read first:
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
 - [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
 - [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.
+- [ ] Touched champion abilities have non-empty `description_source` values; missing values were backfilled from authoritative/source-corpus ability text.
+- [ ] If temporary fallback-derived `description_source` values were used to close completeness, provenance-hardening follow-up was explicitly tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Touched champion/effect `context_notes` strings were checked for truncation artifacts (for example `for 0.` / `within 4.`) and normalized to complete timing/unit semantics.
 - [ ] Truncation audits used strict fragment criteria (integer-dot tokens) so valid decimal timing values (for example `0.25`) were not misclassified.
+- [ ] Truncation audits included a secondary cadence-fragment sweep (for example `every 0.` patterns) so truncated periodic-tick notes were not missed.
+- [ ] Truncation audits included a tertiary article-token sweep (for example `during the 0.` patterns) so article-interposed timing fragments were not missed.
 - [ ] Truncation audits handled both `context_notes` string and `context_notes` array shapes so queue counts were not underreported.
+- [ ] If scripted/bulk truncation cleanup was used, replacements were scoped to `context_notes` fields and a post-edit audit confirmed `description`/`description_source` text was unchanged unless intentionally updated.
+- [ ] Intentional integer quantities in touched notes avoid terminal integer-dot phrasing (for example use `3 stacks` instead of `3.`) so truncation audits do not flag false positives.
 - [ ] `Simulation/champion_behavior_verification_tracker.json` was updated to reflect manual verified champion/ability scope for this wave (or explicitly marked unchanged with reason).
 - [ ] Tracker integrity check passed: `manual_behavior_verified_champion_keys` count equals `totals.manual_behavior_verified_champions`, and `source_extracted_only_champions` equals corpus-total minus verified-count.
+- [ ] When tracker baseline is full-corpus manual coverage (`172/172`), touched champions remain in `manual_behavior_verified_champion_keys` unless a documented downgrade reason is recorded.
 - [ ] Each manually verified champion in this wave includes at least one page-level champion ability source in `sources`, and the wave entry in `Simulation/champion_behavior_verification_tracker.json` records that page-level citation.
 - [ ] `sources` and `schema_notes` are updated.
 - [ ] Champion `sources` entries include complete provenance metadata (`url`/`path`, `accessed`, `used_for`), and missing `sources[].accessed` values were backfilled on touched files.

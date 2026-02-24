@@ -90,7 +90,8 @@
       "context_notes": [
         "Source targeting: Passive.",
         "Source notes (summary): Ornn's Forge Menu is a special menu in the HUD which has 5 slots."
-      ]
+      ],
+      "description_source": "Innate - Living Forge: Ornn can purchase non-consumable items from anywhere on the field by forging them himself, and is also presented a Forge Menu to quickly forge his recommended items. Once Ornn selects an item to forge, he channels for 4 seconds, building the item and paying its gold cost upon completion. The channel is interrupted if Ornn takes damage from enemy champions or turrets. Living Forge is disabled for 4 seconds after starting the channel."
     },
     "basic_ability_1": {
       "name": "Volcanic Rupture",
@@ -171,7 +172,7 @@
             15.0,
             16.0
           ],
-          "context_notes": "Over the march he belches fire over a cone in front of him, dealing magic damage every 0."
+          "context_notes": "Over the march he belches fire over a cone in front of him, dealing magic damage every 0.15 seconds to enemies hit. The final gout of flame can reach slightly farther and will apply Brittle for 3 seconds."
         },
         {
           "id": "magic_damage_per_tick",
@@ -183,7 +184,7 @@
             3.0,
             3.2
           ],
-          "context_notes": "Over the march he belches fire over a cone in front of him, dealing magic damage every 0."
+          "context_notes": "Over the march he belches fire over a cone in front of him, dealing magic damage every 0.15 seconds to enemies hit. The final gout of flame can reach slightly farther and will apply Brittle for 3 seconds."
         },
         {
           "id": "total_minimum_minion_damage",
@@ -325,7 +326,8 @@
         "Source speed: 1600.",
         "Source effectRadius: 360 / 150.",
         "Source notes (summary): Spell shields may only block one instance of damage."
-      ]
+      ],
+      "description_source": "Active: Ornn charges in the target direction, dealing physical damage to enemies he passes through and stopping upon colliding with terrain."
     },
     "ultimate": {
       "name": "Call of the Forge God",
@@ -398,7 +400,8 @@
         "Source speed: 1600 / 450 / 1250.",
         "Source effectRadius: 3000 / 2550.",
         "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
-      ]
+      ],
+      "description_source": "Active: Ornn sounds his horn, summoning a lava elemental at maximum range from the target direction that stampedes towards his casting position at increasing speed. The elemental deals magic damage to enemies it passes through and slows them for 2 seconds."
     }
   },
   "sources": [
@@ -407,6 +410,12 @@
       "path": "From Online/champions/Ornn.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ornn",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -232,7 +232,8 @@
         "Source castTime: 0.6.",
         "Source effectRadius: Varied.",
         "Source notes (summary): The highlighted areas denote the sweetspot - enemies are affected where the two areas overlap (See edge range and center range)."
-      ]
+      ],
+      "description_source": "Aatrox can activate The Darkin Blade three times before the ability goes on cooldown, with a 1-second static cooldown between casts. If Aatrox does not recast the ability within 4 seconds of the previous cast, it goes on cooldown."
     },
     "basic_ability_2": {
       "name": "Infernal Chains",
@@ -251,7 +252,7 @@
             60.0,
             70.0
           ],
-          "context_notes": "Active: Aatrox sends a chain in the target direction that deals physical damage to the first enemy hit, doubled against minions, and slowing them for 1."
+          "context_notes": "Active: Aatrox sends a chain in the target direction that damages the first enemy hit and slows them for 1.5 seconds, with increased minion damage."
         },
         {
           "id": "minion_damage",
@@ -263,7 +264,7 @@
             120.0,
             140.0
           ],
-          "context_notes": "Active: Aatrox sends a chain in the target direction that deals physical damage to the first enemy hit, doubled against minions, and slowing them for 1."
+          "context_notes": "Active: Aatrox sends a chain in the target direction that damages the first enemy hit and slows them for 1.5 seconds, with increased minion damage."
         },
         {
           "id": "slow",
@@ -275,7 +276,7 @@
             32.5,
             35.0
           ],
-          "context_notes": "Active: Aatrox sends a chain in the target direction that deals physical damage to the first enemy hit, doubled against minions, and slowing them for 1."
+          "context_notes": "Active: Aatrox sends a chain in the target direction that damages the first enemy hit and slows them for 1.5 seconds, with increased minion damage."
         },
         {
           "id": "aatrox_w_effect_2",
@@ -348,7 +349,7 @@
       "context_notes": [
         "Source targeting: Location.",
         "Source castTime: none.",
-        "Source speed: 800 / Up to 1340.",
+        "Source speed: 800 / up to 1340 units per second.",
         "Source notes (summary): The dash distance can be extended to up-to 500 units when targeting across terrain."
       ]
     },
@@ -422,6 +423,12 @@
       "path": "From Online/champions/Aatrox.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Aatrox",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

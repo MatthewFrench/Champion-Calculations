@@ -271,7 +271,7 @@
             125.0,
             150.0
           ],
-          "context_notes": "Active: Xin Zhao dashes to the target enemy's location, dealing magic damage to them and nearby enemies and slowing all targets hit by 30% for 0."
+          "context_notes": "Active: Xin Zhao dashes to the target enemy's location, dealing magic damage to them and nearby enemies and slowing all targets hit by 30% for 0.5 seconds. Audacious Charge's range is increased against Challenged targets."
         },
         {
           "id": "bonus_attack_speed",
@@ -341,7 +341,7 @@
             175.0,
             275.0
           ],
-          "context_notes": "Active: Xin Zhao sweeps his spear around him, dealing physical damage to nearby enemies, capped at 600 against minions and monsters, and knocking back all targets hit that are not Challenged up-to 700 units over 0."
+          "context_notes": "Active: Xin Zhao sweeps his spear around him, dealing physical damage to nearby enemies, capped at 600 against minions and monsters, and knocking back all targets hit that are not Challenged up-to 700 units over 0.75 seconds, as well as stunning them for the same duration."
         },
         {
           "id": "xinzhao_r_effect_3",
@@ -381,6 +381,18 @@
       "path": "From Online/champions/XinZhao.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Audacious_Charge",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Audacious Charge execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Xin_Zhao/Crescent_Guard",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Crescent Guard execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

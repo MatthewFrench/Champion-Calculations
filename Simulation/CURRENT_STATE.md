@@ -1,4 +1,4 @@
-# Current State Snapshot (2026-02-19)
+# Current State Snapshot (2026-02-24)
 
 This file is a concise handoff for developers and AI agents.
 
@@ -10,8 +10,10 @@ This file is a concise handoff for developers and AI agents.
 ## What Is Implemented Now
 - Rust simulation engine with fixed server-tick stepping (URF default 30 Hz).
 - Generic actor/champion abstractions for controlled champion and opponents.
+- World subsystem skeleton is present under `src/world/` with deterministic map-bound ownership state and encounter-position validation.
 - Champion script dispatch under `src/scripts/champions/`.
 - Engine-facing controlled champion script facade under `src/scripts/champions/controlled_champion.rs`.
+- Controlled champion script coverage now includes `Vladimir` and `Sona`.
 - Controlled champion basic attacks now execute through recurring start/windup/hit events (hitbox/projectile-aware), using shared runtime attack-speed/on-hit effect paths.
 - Shared loadout runtime now includes generic combat-time rune trigger hooks (on-hit, ability-hit, outgoing-damage healing, immobilize-triggered effects).
 - Combat-time keystone coverage now includes Press the Attack, Fleet Footwork, Conqueror, Aftershock, Electrocute, First Strike, and Phase Rush.
@@ -19,6 +21,7 @@ This file is a concise handoff for developers and AI agents.
 - Controlled champion and enemy actors now run rune combat logic through the same shared runtime interfaces.
 - Search now also applies explicit unmodeled-item-effect quality gates (hard-gate or per-item penalty) alongside unmodeled-rune policy.
 - CLI primary modes are `controlled_champion`, `controlled_champion_fixed_loadout`, `controlled_champion_fixed_loadout_rune_sweep`, and `controlled_champion_step` (`vladimir`/`vladimir_step` aliases still accepted).
+- Controlled-champion modes now fail fast when the selected champion has no registered controlled-champion script, with an actionable supported-champion list in the error path.
 - Item and runtime loadout script hooks under `src/scripts/items/` and `src/scripts/runtime/`.
 - Shared runtime stat-query resolution for cooldowns and scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage) from base data + runtime buff state.
 - Strict scenario schema and minimal scenario setup under `Simulation/scenarios/`.
@@ -98,6 +101,21 @@ This file is a concise handoff for developers and AI agents.
 - Added calibration regressions for Electrocute, Arcane Comet, First Strike, and Aftershock level-scaling formulas plus a pool multi-target tick-hit/damage regression.
 - Deterministic loadout stat parsing now supports shard stat `tenacity`.
 - Controlled champion search now fails fast when strict ranking produces no valid full-build candidates, preventing invalid empty-build report/trace outputs.
+- Controlled champion scenario, fixed-loadout, rune-sweep, and step modes now fail fast when the selected controlled champion has no registered controlled-champion script (instead of silently running without script abilities).
+- Controlled champion script initialization now returns typed errors to runtime orchestration (no panic path) for missing champion-script defaults.
+- Controlled champion scenario, fixed-loadout, rune-sweep, and step flows now validate encounter placement through shared world-state ownership checks before search/runtime execution.
+
+## Full-Game Transformation Status (Non-Data)
+- Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `94%` (`IN_PROGRESS`).
+- Weighted completion estimate: `41%` (`IN_PROGRESS`).
+- Bucket snapshot (complete / remaining):
+  - Runtime Systems Completeness (`30%` weight): `31% / 69%`
+  - Determinism And Replay Guarantees (`20%` weight): `56% / 44%`
+  - Calibration And Correctness (`20%` weight): `46% / 54%`
+  - Performance Envelope (`15%` weight): `47% / 53%`
+  - Renderer-Contract Readiness (`15%` weight): `30% / 70%`
+- Canonical status and gap detail:
+  - `FULL_GAME_SIMULATION_BLUEPRINT.md` (`Current Status Snapshot` section)
 
 ## Recent Observed Runtime Characteristic
 - Coverage stage is currently the dominant fixed cost in short runs.
@@ -105,12 +123,18 @@ This file is a concise handoff for developers and AI agents.
 
 ## Current Known Tradeoff
 - Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
+- Runtime still carries a meaningful fail-fast crash-surface backlog (`expect`/`panic!` in non-test engine/default channels) that should be converted to typed error propagation over additional slices.
 
-## Highest-Value Next Work
-1. Reduce coverage-stage latency by constructing legal locked rune pages directly (instead of random rejection sampling).
-2. Persist and reuse coverage-stage seed corpus across runs.
-3. Add explicit coverage tuning controls (enable/disable, trials-per-asset, top-per-asset).
-4. Add guardrail tests for:
+## Highest-Value Next Work (Largest Impact First)
+1. Add non-champion actor classes (minion/monster/structure) and lifecycle ownership channels under `src/world/*`.
+2. Integrate world-state ownership into simulation-step movement channels (replace isolated enemy-position ownership paths).
+3. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.
+4. Reduce `panic!`/`expect` runtime crash surfaces in defaults and champion-script loading paths with typed fail-fast error propagation.
+5. Expand controlled-champion script coverage beyond `Vladimir` and `Sona`, while reducing static registry coupling.
+6. Reduce coverage-stage latency by constructing legal locked rune pages directly (instead of random rejection sampling).
+7. Persist and reuse coverage-stage seed corpus across runs.
+8. Add explicit coverage tuning controls (enable/disable, trials-per-asset, top-per-asset).
+9. Add guardrail tests for:
    - asset coverage guarantee
    - post-coverage time-budget start behavior.
 
@@ -125,6 +149,8 @@ This file is a concise handoff for developers and AI agents.
   - `src/reporting.rs`
 - Coverage tracking:
   - `COVERAGE_GAPS.md`
+- Full-game target blueprint:
+  - `FULL_GAME_SIMULATION_BLUEPRINT.md`
 - Data authoring workflow:
   - `DATA_AUTHORING_GUIDE.md`
   - `COVERAGE_CHECKLIST.md`

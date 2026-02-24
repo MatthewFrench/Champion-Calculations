@@ -149,7 +149,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Entering stealth cancels Twitch's current basic attack."
+        "Source notes (summary): Entering stealth cancels Twitch's current basic attack.",
+        "Manual verification (2026-02-24): Ambush has a 1-second pre-stealth delay into camouflage, grants conditional movement speed while stealthed, and grants a 6-second attack-speed window on stealth break; attacking or casting Venom Cask/Contaminate breaks camouflage."
       ]
     },
     "basic_ability_2": {
@@ -353,6 +354,12 @@
       "path": "From Online/champions/Twitch.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Twitch/Ambush",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Ambush execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

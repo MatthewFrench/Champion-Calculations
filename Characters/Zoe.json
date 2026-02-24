@@ -276,7 +276,8 @@
         "Source targeting: Auto.",
         "Source effectRadius: 2200 / Global / 1500 /  525.",
         "Source notes (summary): The in-game tooltip for Spell Thief while Zoe has a Spell Shard uses the tooltip of the mimicked spell or item active."
-      ]
+      ],
+      "description_source": "Passive - Wheeeee: Whenever Zoe casts Spell Thief or a summoner spell, she gains bonus movement speed for a duration, and summons three bolts that orbit her for the next 10 seconds."
     },
     "basic_ability_3": {
       "name": "Sleepy Trouble Bubble",
@@ -298,7 +299,7 @@
             190.0,
             230.0
           ],
-          "context_notes": "The burst deals magic damage to the target and inflicts them with drowsy for 1."
+          "context_notes": "The burst deals magic damage to the target and inflicts them with drowsy for 1.4 seconds, which gradually slows them until they fall asleep for 2.25 seconds. While the target is asleep, they are inflicted with 30% magic resistance reduction."
         },
         {
           "id": "maximum_slow",
@@ -310,7 +311,7 @@
             25.0,
             30.0
           ],
-          "context_notes": "The burst deals magic damage to the target and inflicts them with drowsy for 1."
+          "context_notes": "The burst deals magic damage to the target and inflicts them with drowsy for 1.4 seconds, which gradually slows them until they fall asleep for 2.25 seconds. While the target is asleep, they are inflicted with 30% magic resistance reduction."
         },
         {
           "id": "bonus_damage_cap",
@@ -367,7 +368,8 @@
         "Source speed: 1850.",
         "Source effectRadius: 250.",
         "Source notes (summary): Applies spell damage for the bubble and default damage for the wake-up damage."
-      ]
+      ],
+      "description_source": "Active: Zoe kicks a bubble in the target direction that bursts upon the first enemy hit, otherwise lingering at maximum range while slightly bouncing forward over 1 second, then becoming a trap for 5 seconds that bursts upon contact with an enemy. The bubble can move through terrain only once, but travels the entire distance as bonus range, and will fall short if it would enter terrain again."
     },
     "ultimate": {
       "name": "Portal Jump",
@@ -416,6 +418,12 @@
       "path": "From Online/champions/Zoe.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Zoe",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

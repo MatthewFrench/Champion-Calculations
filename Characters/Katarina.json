@@ -214,7 +214,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.15.",
         "Source notes (summary): Shunpo's effects occur before the cast time."
-      ]
+      ],
+      "description_source": "Active: Katarina blinks to a target location near the unit or Dagger closest to the cursor, dealing magic damage to the nearest enemy in range and applying on-hit effects."
     },
     "ultimate": {
       "name": "Death Lotus",
@@ -294,7 +295,8 @@
         "Source speed: 2400.",
         "Source effectRadius: 550.",
         "Source notes (summary): An alternate form of writing the formula for the bonus AD ratio (and which the game data is using internally) is (16% × (1 + 312."
-      ]
+      ],
+      "description_source": "Active: Katarina channels for up to 2.5 seconds, rapidly throwing a dagger every 0.166 seconds to up to 3 of the closest nearby enemy champions, revealing herself in the process.Each dagger deals physical damage and magic damage, applies on-hit effects, with on-hit damage reduced in effectiveness, triggers on-attack effects, and inflicts Grievous Wounds on the target for 3 seconds."
     }
   },
   "sources": [

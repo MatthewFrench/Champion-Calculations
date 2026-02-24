@@ -207,7 +207,8 @@
         "Source castTime: none.",
         "Source speed: 950 / 850 / 1650.",
         "Source notes (summary): Prowling Projectile can turn clockwise or counter-clockwise at a rate of 90 degrees per 0.5 seconds before acceleration."
-      ]
+      ],
+      "description_source": "Active: Yuumi fires an errant missile in the target direction that deals magic damage to the first enemy hit. If the target is a champion, they are also revealed and slowed by 20% for 1 second."
     },
     "basic_ability_2": {
       "name": "You and Me!",
@@ -274,7 +275,8 @@
         "Source castTime: none.",
         "Source speed: 1200 / 1300 / 1400 / 1500 / 1600.",
         "Source notes (summary): The Best Friend's healing on-hit is affected by Yuumi's heal and shield power."
-      ]
+      ],
+      "description_source": "Passive: While Yuumi is attached, she is untargetable (except by turrets and inbound projectiles) and casts her abilities from the Anchor's position, empowering them with additional effects."
     },
     "basic_ability_3": {
       "name": "Zoomies",
@@ -473,7 +475,8 @@
         "Source castTime: none.",
         "Source speed: 3000.",
         "Source notes (summary): While Yuumi's anchor is not at full health, the heal on the anchor is reapplied each time you hit another ally."
-      ]
+      ],
+      "description_source": "Active: Yuumi and Book channel for up to 3.5 seconds, during which they are ghosted, to launch 5 magical waves in the target direction."
     }
   },
   "sources": [

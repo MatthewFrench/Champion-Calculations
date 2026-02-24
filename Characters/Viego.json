@@ -214,8 +214,10 @@
         "Source targeting: Auto / Direction.",
         "Source castTime: none.",
         "Source speed: 1000 / 1300.",
-        "Source notes (summary): The reduced cooldown from the charge will not occur if Spectral Maw's cooldown is already below 3 seconds."
-      ]
+        "Source notes (summary): The reduced cooldown from the charge will not occur if Spectral Maw's cooldown is already below 3 seconds.",
+        "Manual verification (2026-02-24): Spectral Maw is a charge-and-release cast with movement slow during charge; recast resolves projectile plus fixed dash. Full timeout cancels into full cooldown, interruption uses the 3-second branch, and recast resets basic attack timer rather than acting as instant point-click stun."
+      ],
+      "description_source": "Active: Viego charges while being slowed to increase Spectral Maw's range and stun duration, then recasts to fire and dash. Full channel timeout cancels into full cooldown; interruption applies a short cooldown branch."
     },
     "basic_ability_3": {
       "name": "Harrowed Path",
@@ -330,6 +332,12 @@
       "path": "From Online/champions/Viego.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Viego/Spectral_Maw",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Spectral Maw charge-release timing, cancellation branches, and player-visible stun/dash semantics"
     }
   ],
   "notes": [

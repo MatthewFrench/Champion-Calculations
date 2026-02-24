@@ -369,7 +369,7 @@
             3.0,
             4.0
           ],
-          "context_notes": "Active: Yorick summons the Maiden of the Mist over 1."
+          "context_notes": "Active: Yorick summons the Maiden of the Mist over 1.5 seconds, along with a number of Mist Walkers surrounding her at the target location, which remain on the battlefield until she or Yorick dies. Eulogy of the Isles can be recast once while the Maiden is alive after 10 seconds of the activation."
         },
         {
           "id": "yorick_r_effect_2",
@@ -417,6 +417,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Last Rites empowered-hit timing, heal scope, and grave-interaction semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yorick/Eulogy_of_the_Isles",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Eulogy of the Isles execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

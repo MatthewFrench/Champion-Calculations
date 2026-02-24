@@ -289,7 +289,8 @@
         "Source castTime: 100% of Tristana's windup time (0.23 at base attack speed).",
         "Source speed: 2400.",
         "Source effectRadius: 300 / 300 / 600.",
-        "Source notes (summary): Explosive Charge's cast time is always 100% of the caster's attack windup time."
+        "Source notes (summary): Explosive Charge's cast time is always 100% of the caster's attack windup time.",
+        "Manual verification (2026-02-24): Explosive Charge attaches for 4 seconds and detonates on expiry or full stacks; Tristana attacks and abilities add stacks up to instant detonation threshold, with larger detonation radius when attached to turrets."
       ]
     },
     "ultimate": {
@@ -365,6 +366,12 @@
       "path": "From Online/champions/Tristana.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Tristana/Explosive_Charge",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Explosive Charge execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

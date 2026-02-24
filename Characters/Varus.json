@@ -176,7 +176,8 @@
         "Source castTime: none.",
         "Source speed: 1900.",
         "Source notes (summary): The arrow missile range is 825 to 1525; the range increases by 140 per 0.25 seconds for the first 1.25 seconds."
-      ]
+      ],
+      "description_source": "Active: Varus charges while being slowed by 20% for up to 4 seconds to increase Piercing Arrow's range over the first 1.5 seconds and its effects over the first 1.25 seconds of the channel."
     },
     "basic_ability_2": {
       "name": "Blighted Quiver",

@@ -135,7 +135,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source speed: 2000.",
-        "Source notes (summary): Mystic Shot deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+        "Source notes (summary): Mystic Shot deals basic damage, but also triggers spell effects by also being tagged as spell damage.",
+        "Manual verification (2026-02-24): Mystic Shot is a 0.25-second cast linear projectile that applies on-hit and on-attack effects to the first unit hit and refunds 1.5 seconds from Ezreal ability cooldowns on successful hit, including Mystic Shot itself."
       ]
     },
     "basic_ability_2": {
@@ -317,6 +318,12 @@
       "path": "From Online/champions/Ezreal.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Mystic_Shot",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Mystic Shot execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

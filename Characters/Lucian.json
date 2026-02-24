@@ -85,7 +85,8 @@
       "description": "Innate: After casting an ability, Lucian's next basic attack within 3.5 seconds fires an additional shot on-attack after 0.25 seconds, which deals 50% / 55% / 60% (based on level) AD physical damage, increased to 100% AD against minions. He will shoot the same target, else another target within 50 units beyond his basic attack range automatically.",
       "context_notes": [
         "Source targeting: Passive.",
-        "Source notes (summary): Lightslinger is triggered and consumed by the first attack, even if no target can be found upon firing the second attack."
+        "Source notes (summary): Lightslinger is triggered and consumed by the first attack, even if no target can be found upon firing the second attack.",
+        "Manual verification (2026-02-24): Lightslinger creates a post-ability two-shot cadence with a 0.25-second follow-up delay; the first shot consumes the trigger, the second can retarget nearby if needed, and Vigilance grants up to four empowered follow-up shots via ally or immobilize triggers."
       ]
     },
     "basic_ability_1": {
@@ -310,7 +311,8 @@
         "Source castTime: none.",
         "Source speed: 2800.",
         "Source notes (summary): The fire rate increases with the number of shots."
-      ]
+      ],
+      "description_source": "Active: Lucian channels for up to 3 seconds, rapidly firing up to 22 (+ 0 : 22 (+ 0 : 6) (based on critical strike chance)) shots in the target direction over the duration. Each shot deals physical damage to the first enemy hit, doubled against minions. The Culling can be recast after 0.75 seconds during the channel, and does so automatically when the channel ends."
     }
   },
   "sources": [
@@ -319,6 +321,12 @@
       "path": "From Online/champions/Lucian.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Lucian/Lightslinger",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Lightslinger execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

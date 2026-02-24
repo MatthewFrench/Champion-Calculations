@@ -152,7 +152,8 @@
         "Source targeting: Direction.",
         "Source castTime: 100% of Zeri's windup time (0.237 at base attack speed).",
         "Source speed: 2600 / 3400.",
-        "Source notes (summary): Burst Fire is automatically learned with her first skill point upon spawning."
+        "Source notes (summary): Burst Fire is automatically learned with her first skill point upon spawning.",
+        "Manual verification (2026-02-24): Burst Fire is an attack-replacement burst (7 rounds over cast time) using basic-attack projectile semantics, with attack-speed-scaled cadence and one-time on-hit/on-attack trigger handling per cast."
       ]
     },
     "basic_ability_2": {
@@ -358,6 +359,12 @@
       "path": "From Online/champions/Zeri.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Zeri/Burst_Fire",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Burst Fire execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

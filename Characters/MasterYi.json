@@ -252,7 +252,7 @@
             45.0,
             55.0
           ],
-          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0."
+          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0.5 seconds with stronger healing at low health."
         },
         {
           "id": "maximum_heal_per_tick",
@@ -264,7 +264,7 @@
             90.0,
             110.0
           ],
-          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0."
+          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0.5 seconds with stronger healing at low health."
         },
         {
           "id": "minimum_total_heal",
@@ -276,7 +276,7 @@
             360.0,
             440.0
           ],
-          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0."
+          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0.5 seconds with stronger healing at low health."
         },
         {
           "id": "maximum_total_heal",
@@ -288,7 +288,7 @@
             720.0,
             880.0
           ],
-          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0."
+          "context_notes": "Active: Master Yi channels for up to 4 seconds, healing himself every 0.5 seconds with stronger healing at low health."
         },
         {
           "id": "modified_damage_reduction",
@@ -345,7 +345,8 @@
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source notes (summary): Meditate's healing amount updates dynamically as he heals himself, making Master Yi heal for less as his current health increases."
-      ]
+      ],
+      "description_source": "Active: Master Yi channels for up to 4 seconds, healing himself every 0.5 seconds, increased by 0% : 100% (based on missing health)."
     },
     "basic_ability_3": {
       "name": "Wuju Style",
@@ -451,6 +452,12 @@
       "path": "From Online/champions/MasterYi.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Master_Yi",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

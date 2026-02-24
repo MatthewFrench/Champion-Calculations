@@ -210,7 +210,7 @@
             45.0,
             50.0
           ],
-          "context_notes": "Tryndamere also applies a curse to all nearby enemy champions for 3."
+          "context_notes": "Tryndamere also applies a curse to all nearby enemy champions for 3.25 seconds. While accursed, they become slowed while facing in the opposite direction of Tryndamere."
         },
         {
           "id": "tryndamere_w_effect_3",
@@ -337,6 +337,12 @@
       "path": "From Online/champions/Tryndamere.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Tryndamere/Mocking_Shout",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Mocking Shout execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

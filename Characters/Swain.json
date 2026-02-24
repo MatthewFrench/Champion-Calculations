@@ -180,7 +180,7 @@
             175.0,
             210.0
           ],
-          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1."
+          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1.5 seconds, dealing magic damage to enemies within, halved against minions, and slowing them for 1.5 seconds."
         },
         {
           "id": "minion_damage",
@@ -192,7 +192,7 @@
             87.5,
             105.0
           ],
-          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1."
+          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1.5 seconds, dealing magic damage to enemies within, halved against minions, and slowing them for 1.5 seconds."
         },
         {
           "id": "slow",
@@ -204,7 +204,7 @@
             65.0,
             70.0
           ],
-          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1."
+          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1.5 seconds, dealing magic damage to enemies within, halved against minions, and slowing them for 1.5 seconds."
         },
         {
           "id": "swain_w_effect_2",
@@ -262,7 +262,7 @@
             210.0,
             250.0
           ],
-          "context_notes": "At maximum range, the wave homes back to Swain and detonates upon the first enemy hit, dealing magic damage to nearby enemies and rooting them for 1."
+          "context_notes": "At maximum range, the wave homes back to Swain and detonates upon the first enemy hit, dealing magic damage to nearby enemies and rooting them for 1.5 seconds, during which they are revealed. Nevermove can be recast while champions hit are rooted."
         },
         {
           "id": "swain_e_effect_3",
@@ -402,6 +402,18 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Demonic Ascension periodic cadence and energy-gated sustain-state behavior"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Swain/Vision_of_Empire",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Vision of Empire execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Swain/Nevermove",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Nevermove execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

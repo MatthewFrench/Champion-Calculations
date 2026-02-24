@@ -167,7 +167,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.75.",
         "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
-      ]
+      ],
+      "description_source": "Passive: Illaoi's Tentacle damage is increased. Active: Illaoi slams down a Tentacle in the target direction."
     },
     "basic_ability_2": {
       "name": "Harsh Lesson",
@@ -304,7 +305,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source speed: 1900.",
-        "Source notes (summary): PENDING FOR TEST: The self-reveal has not been fully tested for complete confirmation."
+        "Source notes (summary): Illaoi reveals herself while firing Test of Spirit if an enemy champion is nearby.",
+        "Manual verification (2026-02-24): Test of Spirit is a direction skillshot with cast lock; on champion hit it pulls Spirit over 0.75 seconds, then tether/Vessel follow-up states resolve over time instead of instant one-frame damage. Tentacle autonomous slam cadence is a persistent post-cast state."
       ]
     },
     "ultimate": {
@@ -366,6 +368,12 @@
       "path": "From Online/champions/Illaoi.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Illaoi/Test_of_Spirit",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Test of Spirit spirit-pull timing, tether-state transitions, and player-visible resolution semantics"
     }
   ],
   "notes": [

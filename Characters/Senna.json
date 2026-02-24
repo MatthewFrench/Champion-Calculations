@@ -91,7 +91,8 @@
       "context_notes": [
         "Source targeting: Passive.",
         "Source effectRadius: 2000.",
-        "Source notes (summary): If a target's mark has a remaining duration less than 0."
+        "Source notes (summary): If a target's mark has less than 0.25 seconds remaining when Senna begins windup, the mark duration is extended to 0.75 seconds for that attack sequence.",
+        "Manual verification (2026-02-24): Absolution combines mark-consume combat cadence (4-second mark with consume lockout) and Mist-wraith stack economy scaling; movement burst and mark bonus damage resolve only on successful follow-up hit consumption."
       ]
     },
     "basic_ability_1": {
@@ -369,6 +370,12 @@
       "path": "From Online/champions/Senna.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Senna/Absolution",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Absolution execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

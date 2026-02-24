@@ -143,7 +143,8 @@
         "Source castTime: 0.35 : 0.175 (based on bonus attack speed) / 0.35 : 0.28 (based on bonus attack speed).",
         "Source speed: 1200.",
         "Source effectRadius: 215.",
-        "Source notes (summary): This ability always employs Quick cast."
+        "Source notes (summary): This ability always employs Quick cast.",
+        "Manual verification (2026-02-24): Steel Tempest cast time scales with bonus attack speed, grants a 6-second stack window on hit, and converts to whirlwind knockup on third stack consumption; Sweeping Blade combination modifies the cast into point-blank slash resolution."
       ]
     },
     "basic_ability_2": {
@@ -330,6 +331,12 @@
       "path": "From Online/champions/Yasuo.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yasuo/Steel_Tempest",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Steel Tempest execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

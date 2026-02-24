@@ -219,7 +219,7 @@
             16.0,
             18.0
           ],
-          "context_notes": "Active: Gragas channels for 0."
+          "context_notes": "Active: Gragas channels for 0.75 seconds, drinking out of his brew, and gains damage reduction for 2.5 seconds."
         },
         {
           "id": "bonus_magic_damage",
@@ -262,7 +262,8 @@
         "Source castTime: none.",
         "Source effectRadius: 250.",
         "Source notes (summary): The enhanced attack will apply other on-hit effects and can critically strike as normal."
-      ]
+      ],
+      "description_source": "Active: Gragas channels for 0.75 seconds, drinking out of his brew, and gains damage reduction for 2.5 seconds."
     },
     "basic_ability_3": {
       "name": "Body Slam",
@@ -339,7 +340,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "Active: Gragas hurls a cask that travels to the target location over 0."
+          "context_notes": "Active: Gragas hurls a cask that travels to the target location over 0.5 seconds, exploding on impact to deal magic damage to all enemies within the area and knock them back 900 units, though not through terrain, from the epicenter of the explosion, as well as granting sight of the area for 1 second."
         }
       ],
       "description": "Active: Gragas hurls a cask that travels to the target location over 0.5 seconds, exploding on impact to deal magic damage to all enemies within the area and knock them back 900 units, though not through terrain, from the epicenter of the explosion, as well as granting sight of the area for 1 second.",
@@ -375,6 +376,12 @@
       "path": "From Online/champions/Gragas.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gragas",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

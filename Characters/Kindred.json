@@ -284,7 +284,8 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
-        "Source notes (summary): If the target becomes untargetable, dies, or is too far away or no longer in sight during the cast time, this ability will cancel and not pay its cost but still go on cooldown."
+        "Source notes (summary): If the target becomes untargetable, dies, or is too far away or no longer in sight during the cast time, this ability will cancel and not pay its cost but still go on cooldown.",
+        "Manual verification (2026-02-24): Mounting Dread applies initial slow and mark stacks, then resolves execute-style bonus damage on the third hit with missing-health scaling and threshold-sensitive combat timing."
       ]
     },
     "ultimate": {
@@ -342,6 +343,12 @@
       "path": "From Online/champions/Kindred.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kindred/Mounting_Dread",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Mounting Dread execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

@@ -207,7 +207,7 @@
             50.0,
             60.0
           ],
-          "context_notes": "Recast: Galio refreshes the damage reduction for 2 seconds and deals magic damage to nearby enemy champions, increased by 0% : 200% (based on channel time), as well as taunts them for 0."
+          "context_notes": "Recast: Galio refreshes the damage reduction for 2 seconds and deals magic damage to nearby enemy champions, increased by channel time, while taunting them for 0.5 to 1.5 seconds based on channel time."
         },
         {
           "id": "maximum_magic_damage",
@@ -219,7 +219,7 @@
             150.0,
             180.0
           ],
-          "context_notes": "Recast: Galio refreshes the damage reduction for 2 seconds and deals magic damage to nearby enemy champions, increased by 0% : 200% (based on channel time), as well as taunts them for 0."
+          "context_notes": "Recast: Galio refreshes the damage reduction for 2 seconds and deals magic damage to nearby enemy champions, increased by channel time, while taunting them for 0.5 to 1.5 seconds based on channel time."
         },
         {
           "id": "galio_w_effect_5",
@@ -254,7 +254,8 @@
         "Source castTime: none.",
         "Source effectRadius: 175 : 350 (based on channel time).",
         "Source notes (summary): The static movement speed modifier overrides the target's base movement speed value to the modified amount, and their bonus movement speed value to 0."
-      ]
+      ],
+      "description_source": "Passive: Galio gains Anti-Magic Bulwark, and restores it after 12 / 10 / 8 (based on level) seconds without taking damage.Anti-Magic Bulwark: Gain a shield that absorbs magic damage."
     },
     "basic_ability_3": {
       "name": "Justice Punch",
@@ -276,7 +277,7 @@
             210.0,
             250.0
           ],
-          "context_notes": "Galio deals magic damage to enemies he passes through, reduced to 80% against non-champions, and knocks them up for 0."
+          "context_notes": "Galio deals magic damage to enemies he passes through, reduced against non-champions, and knocks them up for 0.75 seconds while briefly revealing them."
         },
         {
           "id": "non_champion_damage",
@@ -288,7 +289,7 @@
             168.0,
             200.0
           ],
-          "context_notes": "Galio deals magic damage to enemies he passes through, reduced to 80% against non-champions, and knocks them up for 0."
+          "context_notes": "Galio deals magic damage to enemies he passes through, reduced against non-champions, and knocks them up for 0.75 seconds while briefly revealing them."
         }
       ],
       "description": "Active: Galio steps back in the opposite direction over the cast time, then dashes to the target location until he hits an enemy champion or terrain.",
@@ -319,7 +320,8 @@
         "Source castTime: 0.4.",
         "Source speed: 2300.",
         "Source notes (summary): Galio will initiate the dash even if his step backwards is knocked down."
-      ]
+      ],
+      "description_source": "Active: Galio steps back in the opposite direction over the cast time, then dashes to the target location until he hits an enemy champion or terrain."
     },
     "ultimate": {
       "name": "Hero's Entrance",
@@ -339,7 +341,7 @@
             250.0,
             350.0
           ],
-          "context_notes": "After channeling for 1."
+          "context_notes": "After channeling for 1.25 seconds, Galio becomes crowd-control immune, then lands after his leap to deal magic damage and knock back nearby enemies."
         }
       ],
       "description": "Active: Galio prepares to make an entrance, channeling for 2.75 seconds and designating the target allied champion's location at the time of cast as his landing spot. Additionally, he resets Shield of Durand's passive shield for himself and grants it to all allied champions within the area for 5 seconds.",
@@ -366,7 +368,8 @@
         "Source castTime: none.",
         "Source effectRadius: 650.",
         "Source notes (summary): Hero's Entrance does not resist allied crowd control."
-      ]
+      ],
+      "description_source": "Active: Galio prepares to make an entrance, channeling for 2.75 seconds and designating the target allied champion's location at the time of cast as his landing spot. Additionally, he resets Shield of Durand's passive shield for himself and grants it to all allied champions within the area for 5 seconds."
     }
   },
   "sources": [
@@ -375,6 +378,12 @@
       "path": "From Online/champions/Galio.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Galio",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

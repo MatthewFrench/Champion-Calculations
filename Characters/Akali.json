@@ -153,7 +153,7 @@
             45.0,
             50.0
           ],
-          "context_notes": "Active: Akali restores 100 energy over 0."
+          "context_notes": "Active: Akali restores 100 energy over 0.4 seconds and gains bonus movement speed that decays over 2 seconds. She also detonates a smoke bomb a fixed distance away in the target direction, creating a circular shroud that expands over the next 5 seconds into a ring. The shroud does not permeate terrain, and will expand toward nearby enemy champions. While the shroud is active, Akali's maximum energy is increased by 100."
         },
         {
           "id": "shroud_duration",
@@ -165,7 +165,7 @@
             6.5,
             7.0
           ],
-          "context_notes": "Active: Akali restores 100 energy over 0."
+          "context_notes": "Active: Akali restores 100 energy over 0.4 seconds and gains bonus movement speed that decays over 2 seconds. She also detonates a smoke bomb a fixed distance away in the target direction, creating a circular shroud that expands over the next 5 seconds into a ring. The shroud does not permeate terrain, and will expand toward nearby enemy champions. While the shroud is active, Akali's maximum energy is increased by 100."
         },
         {
           "id": "akali_w_effect_2",
@@ -352,6 +352,12 @@
       "path": "From Online/champions/Akali.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Akali",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

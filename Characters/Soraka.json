@@ -99,7 +99,7 @@
             190.0,
             225.0
           ],
-          "context_notes": "Active: Soraka calls down a star upon the target location that grants sight of the area before landing after 0."
+          "context_notes": "Active: Soraka calls down a star upon the target location that grants sight before landing after 0.25 to 1 second based on target range, dealing magic damage and slowing enemies hit."
         },
         {
           "id": "soraka_q_effect_2",
@@ -115,7 +115,7 @@
             105.0,
             120.0
           ],
-          "context_notes": "Rejuvenation: Heal every 0."
+          "context_notes": "Rejuvenation: Heal every 0.2 seconds and grant bonus movement speed that decays over the duration."
         },
         {
           "id": "heal_per_tick",
@@ -127,7 +127,7 @@
             8.75,
             10.0
           ],
-          "context_notes": "Rejuvenation: Heal every 0."
+          "context_notes": "Rejuvenation: Heal every 0.2 seconds and grant bonus movement speed that decays over the duration."
         },
         {
           "id": "bonus_movement_speed",
@@ -139,7 +139,7 @@
             27.5,
             30.0
           ],
-          "context_notes": "Rejuvenation: Heal every 0."
+          "context_notes": "Rejuvenation: Heal every 0.2 seconds and grant bonus movement speed that decays over the duration."
         }
       ],
       "description": "Active: Soraka calls down a star upon the target location that grants sight of the area before landing after 0.25 : 1 (based on target range) seconds, dealing magic damage to enemies hit and slowing them by 30% for 1.5 seconds.",
@@ -381,6 +381,12 @@
       "path": "From Online/champions/Soraka.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Soraka",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

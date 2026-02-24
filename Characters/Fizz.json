@@ -149,7 +149,7 @@
             75.0,
             90.0
           ],
-          "context_notes": "Passive: Fizz's basic attacks rend enemies on-hit, dealing magic damage every 0."
+          "context_notes": "Passive: Fizz's basic attacks apply a rend that deals magic damage every 0.5 seconds over 3 seconds, refreshing on subsequent hits."
         },
         {
           "id": "passive_magic_damage_per_tick",
@@ -161,7 +161,7 @@
             12.5,
             15.0
           ],
-          "context_notes": "Passive: Fizz's basic attacks rend enemies on-hit, dealing magic damage every 0."
+          "context_notes": "Passive: Fizz's basic attacks apply a rend that deals magic damage every 0.5 seconds over 3 seconds, refreshing on subsequent hits."
         },
         {
           "id": "active_magic_damage",
@@ -245,7 +245,7 @@
             230.0,
             280.0
           ],
-          "context_notes": "He then begins to hop off of his trident over 0."
+          "context_notes": "He then begins to hop off his trident over 0.5 seconds before landing to damage and slow nearby enemies."
         },
         {
           "id": "slow",
@@ -257,7 +257,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "He then begins to hop off of his trident over 0."
+          "context_notes": "He then begins to hop off his trident over 0.5 seconds before landing to damage and slow nearby enemies."
         },
         {
           "id": "fizz_e_effect_3",
@@ -373,6 +373,12 @@
       "path": "From Online/champions/Fizz.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Fizz",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

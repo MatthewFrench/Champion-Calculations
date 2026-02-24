@@ -1,9 +1,50 @@
 use super::super::shared_parsing_primitives::as_str;
 use super::*;
 
+const SUPPORTED_SEARCH_STRATEGIES: [&str; 8] = [
+    "greedy",
+    "beam",
+    "random",
+    "hill_climb",
+    "genetic",
+    "simulated_annealing",
+    "mcts",
+    "portfolio",
+];
+
+fn is_supported_search_strategy(strategy: &str) -> bool {
+    SUPPORTED_SEARCH_STRATEGIES.contains(&strategy)
+}
+
+fn validate_search_strategy(strategy: &str) -> Result<()> {
+    if is_supported_search_strategy(strategy) {
+        return Ok(());
+    }
+    Err(anyhow!(
+        "search.strategy '{}' is invalid; supported values: {}",
+        strategy,
+        SUPPORTED_SEARCH_STRATEGIES.join(", ")
+    ))
+}
+
+fn validate_portfolio_strategies(portfolio_strategies: &[String]) -> Result<()> {
+    for strategy in portfolio_strategies {
+        if is_supported_search_strategy(strategy) {
+            continue;
+        }
+        return Err(anyhow!(
+            "search.portfolio_strategies contains invalid strategy '{}'; supported values: {}",
+            strategy,
+            SUPPORTED_SEARCH_STRATEGIES.join(", ")
+        ));
+    }
+    Ok(())
+}
+
 pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
     let defaults = simulator_defaults();
     let search_defaults = &defaults.search_defaults;
+    let strategy = as_str(data, "strategy")?.to_string();
     let portfolio_strategies = data
         .get("portfolio_strategies")
         .and_then(Value::as_array)
@@ -14,8 +55,10 @@ pub(crate) fn parse_build_search(data: &Value) -> Result<BuildSearchConfig> {
                 .collect::<Vec<_>>()
         })
         .unwrap_or_default();
+    validate_search_strategy(&strategy)?;
+    validate_portfolio_strategies(&portfolio_strategies)?;
     Ok(BuildSearchConfig {
-        strategy: as_str(data, "strategy")?.to_string(),
+        strategy,
         beam_width: data
             .get("beam_width")
             .and_then(Value::as_u64)

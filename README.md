@@ -1,6 +1,6 @@
 # Champion Calculations (League of Legends Simulator)
 
-This repository contains a data-driven combat simulator focused on URF team-fight optimization, with Vladimir as the current controlled champion benchmark scenario.
+This repository contains a data-driven combat simulator focused on URF team-fight optimization, with Vladimir and Sona as current controlled champion benchmark scenarios.
 
 ## Project Goal
 - Build a generic, reusable simulation engine that can evaluate champion + item + rune loadouts with realistic combat behavior.
@@ -11,6 +11,9 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Runtime implementation is Rust (`Simulation/`).
 - Search is parallelized and supports multiple algorithms (`beam`, `hill_climb`, `genetic`, `simulated_annealing`, `mcts`, `random`, `portfolio`).
 - Controlled-champion and opponent simulation use shared generic abstractions (actors/champions), not enemy-only core paths.
+- A shared world ownership scaffold exists under `Simulation/src/world/` and is used for deterministic encounter placement validation before run execution.
+- Controlled champion script coverage currently includes `Vladimir` and `Sona`.
+- Controlled-champion modes now fail fast when the selected champion has no registered controlled-champion script, preventing silent no-script degradations.
 - Runtime metrics are resolved from canonical base data plus active buff state through shared stat queries:
   - cooldown metrics (ability/item/neutral)
   - scalar combat metrics (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
@@ -154,6 +157,8 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - `Simulation/ARCHITECTURE_TRANSFORMATION_PLAN.md`
   - `Simulation/ARCHITECTURE_REFACTOR_CHECKLIST.md`
   - `Simulation/tools/architecture_metrics.sh` (line-budget/progress snapshot command)
+- Full-game target blueprint (non-data + runtime systems to renderer-ready parity):
+  - `Simulation/FULL_GAME_SIMULATION_BLUEPRINT.md`
 - Roadmap and status:
   - `Simulation/IMPLEMENTATION_ROADMAP.md`
   - `Simulation/IMPROVEMENT_TRACKER.md`

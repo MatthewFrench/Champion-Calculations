@@ -105,7 +105,7 @@
             220.0,
             265.0
           ],
-          "context_notes": "If the anchor hits an enemy, it deals magic damage, reveals them for 1."
+          "context_notes": "If the anchor hits an enemy, it deals magic damage, reveals them for 1.15 seconds, stuns them for 1 second, and drags them toward Nautilus while he also dashes toward them, both over 0.9 seconds."
         },
         {
           "id": "nautilus_q_effect_3",
@@ -144,7 +144,8 @@
         "Source castTime: 0.25.",
         "Source speed: 2000.",
         "Source notes (summary): Dredge Line has two hitboxes."
-      ]
+      ],
+      "description_source": "Active: Nautilus hurls his anchor in the target direction that stops on the first enemy or terrain hit."
     },
     "basic_ability_2": {
       "name": "Titan's Wrath",
@@ -175,7 +176,7 @@
             60.0,
             70.0
           ],
-          "context_notes": "Pain of Wrath: The target takes magic damage over time, half dealt immediately and the other half dealt after 1."
+          "context_notes": "Pain of Wrath: The target takes magic damage over time, half dealt immediately and the other half dealt after 1.25 seconds."
         },
         {
           "id": "magic_damage_per_instance",
@@ -187,7 +188,7 @@
             30.0,
             35.0
           ],
-          "context_notes": "Pain of Wrath: The target takes magic damage over time, half dealt immediately and the other half dealt after 1."
+          "context_notes": "Pain of Wrath: The target takes magic damage over time, half dealt immediately and the other half dealt after 1.25 seconds."
         },
         {
           "id": "nautilus_w_effect_3",
@@ -421,6 +422,18 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Depth Charge tracking cadence, wake eruptions, and final-target branch behavior"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nautilus/Dredge_Line",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Dredge Line execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nautilus/Titan%27s_Wrath",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Titan's Wrath execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

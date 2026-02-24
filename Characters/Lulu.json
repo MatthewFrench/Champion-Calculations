@@ -311,7 +311,7 @@
             190.0,
             230.0
           ],
-          "context_notes": "Self / Ally Cast: Lulu sends Pix to the target ally for 6."
+          "context_notes": "Self / Ally Cast: Lulu sends Pix to the target ally for 6.25 seconds. If the target is a champion, they are granted a shield for 2.5 seconds."
         }
       ],
       "description": "Active: Lulu can cast Help, Pix! on herself or an ally or enemy.",
@@ -403,6 +403,12 @@
       "path": "From Online/champions/Lulu.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Lulu",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

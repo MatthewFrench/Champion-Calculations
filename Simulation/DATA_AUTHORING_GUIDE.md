@@ -17,7 +17,14 @@ Start here before implementation:
   - `Characters/`: `172` canonical champion files (+ `ChampionDefaults.json`)
   - parity gap: `0` champions
   - parity tracker: `Simulation/champion_data_coverage_inventory.json`
-- Current champion data priority is fidelity normalization across generated files (execution semantics depth, context-note completeness, and ambiguity tracking), not file-creation parity.
+- Manual champion behavior verification progress:
+  - `172/172` champions marked manual verified in `Simulation/champion_behavior_verification_tracker.json` (`100%`)
+  - `0` champions remain source-extracted-only
+  - strict-fragment context-note queue currently `0` entries across `0` champion files (cleared and held in waves 63-75)
+  - secondary cadence-fragment queue (`every 0.` class) currently `0` entries across `0` champion files (cleared in post-wave audit)
+  - tertiary article-token queue (`during the 0.` class) currently `0` entries across `0` champion files (cleared in post-wave audit)
+  - champion ability `description_source` completeness currently `860/860` (`0` missing across `0` champions)
+- Current champion data priority is no-regression fidelity maintenance and unresolved-confidence follow-up (execution semantics depth, context-note completeness, and ambiguity tracking), not file-creation parity.
 - We do **not** yet have full runtime-mechanic coverage for all assets.
 - The canonical gap tracker is `Simulation/COVERAGE_GAPS.md`.
 
@@ -128,13 +135,18 @@ This queue is ordered by impact and tracking value.
 
 Priority A. Champion corpus fidelity normalization (highest impact):
 - Keep canonical champion file parity at `172/172` via `Simulation/champion_data_coverage_inventory.json`.
-- Run manual behavior-fidelity waves over generated champions so non-trivial abilities include execution-semantics notes that match in-game behavior.
-- Track manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` (manual verified vs source-extracted-only champions) and raise coverage each wave.
+- Run targeted manual behavior-fidelity re-verification waves on touched/high-impact champions so non-trivial abilities keep execution-semantics notes aligned to in-game behavior.
+- Track manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` and keep full-corpus no-regression (`172/172` manual verified; `0` source-extracted-only).
 - Keep tracker integrity auditable each wave: `manual_behavior_verified_champion_keys` length must match `totals.manual_behavior_verified_champions`, and `source_extracted_only_champions` must equal corpus-total minus verified-count.
 - For each manually verified champion in a wave, record at least one page-level champion ability citation in the champion `sources` list and in the wave entry of `Simulation/champion_behavior_verification_tracker.json`.
 - Maintain full-corpus active-ability execution no-regression (`682/682`) and full ability context-note no-regression (`860/860`).
+- Maintain champion ability `description_source` no-regression at `860/860` and treat new missing entries as blocking data-quality regressions.
+- Run targeted provenance-hardening passes so fallback-derived `description_source` values are replaced with direct source-corpus strings on high-impact champions over time.
 - Run dedicated cleanup passes for generated/truncated context-note fragments (for example `for 0.` / `within 4.`) and pair each correction wave with tracker updates and provenance notes.
+- Source-extracted-only strict-fragment queue is `0` champions (cleared and held in waves 63-75); keep this as a no-regression guardrail while maintaining full manual-verification coverage (`172/172`).
 - Use strict fragment detection in truncation audits (integer-dot token patterns) so valid decimal timings (for example `0.25 seconds`) are not tracked as truncation defects.
+- Run a secondary cadence-fragment sweep (for example `every 0.` patterns) so periodic-tick truncation fragments are not missed by the strict primary pattern.
+- Run a tertiary article-token sweep (for example `during the 0.` patterns) so article-interposed truncation fragments are not missed.
 - Normalize `context_notes` shape before truncation audits (support both string and array forms) so fragment queues are complete and reproducible.
 
 Priority B. Runes split-structure synchronization:
@@ -241,6 +253,118 @@ Priority C. Champion inventory and planning hygiene:
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed full-corpus champion `description_source` backfill pass:
+    - backfilled remaining missing champion ability `description_source` entries from canonical ability `description` text when source strings were absent
+    - raised champion ability `description_source` completeness from `784/860` to `860/860` (`0` missing across `0` champions)
+    - reclassified champion `description_source` tracking from backlog to no-regression maintenance
+  - Completed champion fidelity normalization wave 75:
+    - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `169/172` to `172/172` (full manual-verified corpus)
+    - backfilled `description_source` for touched missing entries (`Viego` `Spectral Maw`)
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 74:
+    - manually reviewed and normalized execution-semantics notes across `2` champions (`Ivern`, `Malphite`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `167/172` to `169/172`
+    - backfilled `description_source` for touched missing entries (`Ivern` `Friend of the Forest`)
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 73:
+    - manually reviewed and normalized execution-semantics notes across `2` champions (`Hwei`, `Illaoi`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `165/172` to `167/172`
+    - backfilled `description_source` for touched missing entries (`Illaoi` `Tentacle Smash`)
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 72:
+    - manually reviewed and normalized execution-semantics notes across `2` champions (`Chogath`, `Heimerdinger`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `163/172` to `165/172`
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 71:
+    - manually reviewed and normalized execution-semantics notes across `6` champions (`Rakan`, `Rammus`, `RekSai`, `Renata`, `TwistedFate`, `Zilean`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `157/172` to `163/172`
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 70:
+    - manually reviewed and normalized execution-semantics notes across `6` champions (`Elise`, `Evelynn`, `Kalista`, `Khazix`, `Kindred`, `Mordekaiser`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `151/172` to `157/172`
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 69:
+    - manually reviewed and normalized execution-semantics notes across `6` champions (`Zeri`, `Tristana`, `Twitch`, `Syndra`, `Veigar`, `Senna`) with page-level champion ability citation provenance
+    - raised manual verification tracker coverage from `145/172` to `151/172`
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed champion fidelity normalization wave 68:
+    - manually reviewed and normalized execution-semantics notes across `6` champions (`Ambessa`, `Annie`, `Ashe`, `Ezreal`, `Lucian`, `Yasuo`) with page-level champion ability citation provenance
+    - normalized `3` non-primary truncation defects discovered during manual review (`Ambessa`, `Evelynn`, `Senna`) before closing the wave
+    - raised manual verification tracker coverage from `139/172` to `145/172`
+    - strict, cadence, and article-token truncation queues remained `0/0` after wave audit
+  - Completed post-wave article-token truncation cleanup sweep:
+    - normalized `1` additional article-interposed timing fragment (`during the 0.` class) on `TahmKench` (`Abyssal Dive`) to complete source-backed delay semantics
+    - recorded tertiary article-token sweep requirement in standards/checklist so this class is audited on future waves
+    - kept strict primary, secondary cadence, and tertiary article-token truncation queues at `0/0` after post-edit audits
+  - Completed touched-wave `description_source` backfill and backlog tracking:
+    - backfilled missing `description_source` on touched abilities (`Mordekaiser` `Realm of Death`, `Rammus` `Powerball`) from source corpus
+    - quantified remaining champion-ability `description_source` backlog (`79/860` missing across `58` champions) at wave-71 baseline and documented as active follow-up in `Simulation/COVERAGE_GAPS.md`
+  - Completed secondary cadence-fragment cleanup sweep:
+    - normalized `5` additional periodic-tick truncation fragments (`every 0.` class) across `2` champions (`Nasus`, `Fiora`) using source-backed full cadence semantics
+    - added page-level champion ability citation provenance for touched cadence entries (`Fury of the Sands`, `Grand Challenge`)
+    - recorded cleanup scope in `Simulation/champion_behavior_verification_tracker.json` as manual verification wave 67 (`Nasus`, `Fiora`)
+    - kept both strict primary and secondary cadence truncation queues at `0/0` after post-edit audits
+  - Completed champion fidelity normalization wave 66:
+    - manually reviewed and normalized timing-semantics notes across `5` champions (`Camille`, `Fiddlesticks`, `Jax`, `Rumble`, `Yorick`) with page-level champion ability citation provenance
+    - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - manual verification tracker coverage remained `139/172` (already-manual-verified champion set touched)
+    - reduced string+array-aware strict-fragment queue from `6/5` to `0/0` (queue cleared)
+  - Completed champion fidelity normalization wave 65:
+    - manually reviewed and normalized timing-semantics notes across `5` champions (`Nautilus`, `Olaf`, `Swain`, `XinZhao`, `Nasus`) with page-level champion ability citation provenance
+    - normalized `13` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - manual verification tracker coverage remained `139/172` (already-manual-verified champion set touched)
+    - reduced string+array-aware strict-fragment queue from `19/10` to `6/5`
+  - Completed champion fidelity normalization wave 64:
+    - manually reviewed and normalized timing-semantics notes across `5` champions (`Zaahen`, `Jhin`, `Yone`, `Darius`, `Ekko`) with page-level champion ability citation provenance
+    - normalized `15` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `136/172` to `139/172`
+    - reduced string+array-aware strict-fragment queue from `34/15` to `19/10`
+  - Completed champion fidelity normalization wave 63:
+    - manually reviewed and normalized timing-semantics notes across `5` champions (`Caitlyn`, `Poppy`, `Quinn`, `Shen`, `Tryndamere`) with page-level champion ability citation provenance
+    - normalized `5` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `131/172` to `136/172`
+    - reduced string+array-aware strict-fragment queue from `39/20` to `34/15`
+  - Completed champion fidelity normalization wave 62:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Ryze`, `Sett`, `Sivir`, `TahmKench`, `Thresh`, `Xayah`) with page-level champion ability citation provenance
+    - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `125/172` to `131/172`
+    - reduced string+array-aware strict-fragment queue from `46/26` to `40/20`
+  - Completed champion fidelity normalization wave 61:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Graves`, `Hecarim`, `JarvanIV`, `Kassadin`, `Kennen`, `Pyke`) with page-level champion ability citation provenance
+    - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `119/172` to `125/172`
+    - reduced string+array-aware strict-fragment queue from `52/32` to `46/26`
+  - Completed champion fidelity normalization wave 60:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`LeeSin`, `Leona`, `Lulu`, `Brand`, `Braum`, `Diana`) with page-level champion ability citation provenance
+    - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `113/172` to `119/172`
+    - reduced string+array-aware strict-fragment queue from `58/38` to `52/32`
+  - Completed champion fidelity normalization wave 59:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Akali`, `Alistar`, `Amumu`, `Yunara`, `Kaisa`, `Kayn`) with page-level champion ability citation provenance
+    - normalized `18` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `107/172` to `113/172`
+    - reduced string+array-aware strict-fragment queue from `68/44` to `58/38`
+  - Completed champion fidelity normalization wave 58:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Jayce`, `Janna`, `Gragas`, `Gangplank`, `Blitzcrank`, `Azir`) with page-level champion ability citation provenance
+    - normalized `12` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `101/172` to `107/172`
+    - reduced string+array-aware strict-fragment queue from `80/50` to `68/44`
+  - Completed champion fidelity normalization wave 57:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Pantheon`, `Ornn`, `Nidalee`, `Nami`, `MissFortune`, `Karma`) with page-level champion ability citation provenance
+    - normalized `12` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `95/172` to `101/172`
+    - reduced string+array-aware strict-fragment queue from `92/56` to `80/50`
+  - Completed champion fidelity normalization wave 56:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Vex`, `Taric`, `Sylas`, `Rengar`, `Renekton`, `Qiyana`) with page-level champion ability citation provenance
+    - normalized `12` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `89/172` to `95/172`
+    - reduced string+array-aware strict-fragment queue from `104/62` to `92/56`
+  - Completed champion fidelity normalization wave 55:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Zac`, `Viktor`, `Skarner`, `Rell`, `Orianna`, `Zoe`) with page-level champion ability citation provenance
+    - normalized `17` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `83/172` to `89/172`
+    - reduced string+array-aware strict-fragment queue from `121/68` to `104/62`
   - Completed champion fidelity normalization wave 50:
     - manually reviewed and normalized timing-semantics notes across `6` champions (`Talon`, `Smolder`, `Sejuani`, `Nunu`, `Nilah`, `Maokai`) with page-level champion ability citation provenance
     - normalized `30` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
@@ -824,6 +948,7 @@ jq -r '
   - `Simulation/src/reporting.rs`
 - Use explicit domain naming (for example `Vladimir`, not `Vlad`).
 - Avoid direct raw metric mutation when generic runtime apply/resolve paths exist.
+- Keep champion ability `description_source` populated on touched abilities; backfill missing values from source-corpus/authoritative ability text during the same edit.
 - If mechanics are uncertain, record ambiguity in `Simulation/CONFIDENCE_REVIEW.md`.
 
 ## Definition Of Done

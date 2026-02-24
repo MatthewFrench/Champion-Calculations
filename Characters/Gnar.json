@@ -322,7 +322,8 @@
         "Source castTime: 0.25.",
         "Source effectRadius: 475.",
         "Source notes (summary): Gnar is locked out of moving and casting movement abilities for 0.175 seconds after the cast time."
-      ]
+      ],
+      "description_source": "Mini Gnar - Passive: Hyper's bonus movement speed is increased."
     }
   },
   "sources": [

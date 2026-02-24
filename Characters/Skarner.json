@@ -193,7 +193,7 @@
             110.0,
             130.0
           ],
-          "context_notes": "Active: Skarner slams his claws into the ground, shielding himself equal to 8% of his maximum health for 2."
+          "context_notes": "Active: Skarner slams his claws into the ground, shielding himself equal to 8% of his maximum health for 2.5 seconds and releasing a shockwave that quickly expands in a radius around him to deal magic damage to enemies hit and slow them by 20% for 1 second."
         },
         {
           "id": "skarner_w_effect_2",
@@ -257,7 +257,7 @@
             120.0,
             150.0
           ],
-          "context_notes": "If Skarner's attached target collides with terrain, the charge ends, detaching them from him, dealing physical damage, stunning them for 1."
+          "context_notes": "If Skarner's attached target collides with terrain, the charge ends, detaching them from him, dealing physical damage, stunning them for 1.1 seconds, and reducing Ixtal's Impact's cooldown by 35%."
         },
         {
           "id": "skarner_e_effect_4",
@@ -311,7 +311,7 @@
             250.0,
             350.0
           ],
-          "context_notes": "Active: Skarner winds up his stingers over the cast time, then lashes them forward in an isosceles trapezoid in the target direction, dealing magic damage to enemies hit and impaling up to 3 of the closest enemy champions within the area to suppress them for 1."
+          "context_notes": "Active: Skarner winds up his stingers over the cast time, then lashes them forward in an isosceles trapezoid in the target direction, dealing magic damage to enemies hit and impaling up to 3 of the closest enemy champions within the area to suppress them for 1.5 seconds. While suppressed, the targets are revealed and attached to Skarner. If he successfully impales at least one enemy champion, Skarner gains 40% bonus movement speed for the same duration."
         },
         {
           "id": "skarner_r_effect_2",
@@ -349,6 +349,12 @@
       "path": "From Online/champions/Skarner.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Skarner",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -282,7 +282,7 @@
             400.0,
             600.0
           ],
-          "context_notes": "After 0."
+          "context_notes": "After 0.3 seconds, a gust rushes along the same area that deals equal parts physical and magic damage to marked enemies within and pulls them towards the location Yone blinked to, then knocks them up for 0.75 seconds."
         },
         {
           "id": "physical_damage",
@@ -292,7 +292,7 @@
             200.0,
             300.0
           ],
-          "context_notes": "After 0."
+          "context_notes": "After 0.3 seconds, a gust rushes along the same area that deals equal parts physical and magic damage to marked enemies within and pulls them towards the location Yone blinked to, then knocks them up for 0.75 seconds."
         },
         {
           "id": "magic_damage",
@@ -302,7 +302,7 @@
             200.0,
             300.0
           ],
-          "context_notes": "After 0."
+          "context_notes": "After 0.3 seconds, a gust rushes along the same area that deals equal parts physical and magic damage to marked enemies within and pulls them towards the location Yone blinked to, then knocks them up for 0.75 seconds."
         },
         {
           "id": "yone_r_effect_3",
@@ -331,6 +331,12 @@
       "path": "From Online/champions/Yone.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Fate_Sealed",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Fate Sealed execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

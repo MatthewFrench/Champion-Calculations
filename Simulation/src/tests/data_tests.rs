@@ -471,6 +471,35 @@ fn search_quality_profiles_apply_unmodeled_quality_gate_policy() {
 }
 
 #[test]
+fn parse_build_search_rejects_invalid_strategy() {
+    let error = parse_build_search(&serde_json::json!({
+        "strategy": "invalid_strategy"
+    }))
+    .expect_err("unknown search.strategy should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("search.strategy 'invalid_strategy' is invalid"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
+fn parse_build_search_rejects_invalid_portfolio_strategies_entry() {
+    let error = parse_build_search(&serde_json::json!({
+        "strategy": "portfolio",
+        "portfolio_strategies": ["beam", "invalid_strategy"]
+    }))
+    .expect_err("unknown search.portfolio_strategies entry should be rejected");
+    assert!(
+        error
+            .to_string()
+            .contains("search.portfolio_strategies contains invalid strategy 'invalid_strategy'"),
+        "unexpected error: {error}"
+    );
+}
+
+#[test]
 fn parse_simulation_config_rejects_legacy_max_time_field() {
     let simulation = serde_json::json!({
         "time_limit_seconds": 60.0,

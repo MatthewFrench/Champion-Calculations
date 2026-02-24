@@ -147,8 +147,10 @@
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 250.",
-        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
-      ]
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual verification (2026-02-24): Powerball is an accelerating movement channel with collision-triggered area impact; collision resolves damage plus short stun/reveal and follow-up slow, while manual recast ends channel without collision impact."
+      ],
+      "description_source": "Active: Rammus rolls into an accelerating ball, channeling for up to 6 seconds to gain 25% : 40.83% (based on level) bonus total movement speed per second over the duration, up to a maximum of 150% : 245% (based on level). Powerball can be recast after 1 second within the duration, and does so automatically afterwards or upon casting Defensive Ball Curl."
     },
     "basic_ability_2": {
       "name": "Defensive Ball Curl",
@@ -353,6 +355,12 @@
       "path": "From Online/champions/Rammus.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rammus/Powerball",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Powerball execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

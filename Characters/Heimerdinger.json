@@ -335,7 +335,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Toggle abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): Toggle abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual verification (2026-02-24): UPGRADE!!! is a two-step empowerment state: first cast arms the next Q/W/E cast, then consuming cast resolves the empowered variant while sharing base-ability cooldown cadence. Recast after 3 seconds cancels empowerment into short cooldown, and only the arm cast is the initial player-visible activation."
       ]
     }
   },
@@ -345,6 +346,12 @@
       "path": "From Online/champions/Heimerdinger.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Heimerdinger/UPGRADE%21%21%21",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for UPGRADE!!! empowerment sequencing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

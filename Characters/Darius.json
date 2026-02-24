@@ -110,7 +110,7 @@
             140.0,
             170.0
           ],
-          "context_notes": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0."
+          "context_notes": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0.75 seconds, afterward swinging it around himself to deal physical damage to nearby enemies. Enemies within the inner radius take 35% damage."
         },
         {
           "id": "reduced_damage_handle",
@@ -122,7 +122,7 @@
             49.0,
             59.5
           ],
-          "context_notes": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0."
+          "context_notes": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0.75 seconds, afterward swinging it around himself to deal physical damage to nearby enemies. Enemies within the inner radius take 35% damage."
         },
         {
           "id": "darius_q_effect_2",
@@ -275,7 +275,8 @@
         "Source castTime: 0.25.",
         "Source effectRadius: 535.",
         "Source notes (summary): Enemies hit by Apprehend will quickly be dragged to Darius before rebounding over a longer period."
-      ]
+      ],
+      "description_source": "Passive: Darius gains armor penetration."
     },
     "ultimate": {
       "name": "Noxian Guillotine",
@@ -292,7 +293,7 @@
             250.0,
             375.0
           ],
-          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2."
+          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2.5 seconds from the start of the cast time."
         },
         {
           "id": "bonus_damage_per_stack",
@@ -302,7 +303,7 @@
             50.0,
             75.0
           ],
-          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2."
+          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2.5 seconds from the start of the cast time."
         },
         {
           "id": "maximum_true_damage",
@@ -312,7 +313,7 @@
             500.0,
             750.0
           ],
-          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2."
+          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2.5 seconds from the start of the cast time."
         },
         {
           "id": "darius_r_effect_2",
@@ -357,6 +358,18 @@
       "path": "From Online/champions/Darius.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Decimate",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Decimate execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Noxian_Guillotine",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Noxian Guillotine execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

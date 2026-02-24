@@ -343,7 +343,8 @@
         "Source speed: 3200.",
         "Source effectRadius: Global /  600.",
         "Source notes (summary): Unlike most projectiles, Fear Beyond Death can hit the edge of targets whose center is further than the missile range."
-      ]
+      ],
+      "description_source": "Active: Urgot fires a chem-drill in the target direction that impales the first enemy champion hit, dealing physical damage and leashing the target for 4 seconds, during which they are revealed and slowed by 0% : 75% (based on target's missing health)."
     }
   },
   "sources": [

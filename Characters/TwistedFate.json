@@ -260,7 +260,8 @@
         "Source castTime: none.",
         "Source speed: 1500.",
         "Source effectRadius: 325.",
-        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual verification (2026-02-24): Pick a Card cycles selectable cards at 0.5-second cadence, and recast locks the next empowered basic attack (0.25-second cast behavior) into card-specific resource, area-slow, or stun branch resolution."
       ]
     },
     "basic_ability_3": {
@@ -345,7 +346,8 @@
         "Source castTime: none.",
         "Source effectRadius: Global.",
         "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
-      ]
+      ],
+      "description_source": "Active: Twisted Fate marks all targetable enemy champions, revealing them for a duration. Destiny can be recast after 0.5 seconds within the duration."
     }
   },
   "sources": [
@@ -354,6 +356,12 @@
       "path": "From Online/champions/TwistedFate.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Twisted_Fate/Pick_a_Card",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Pick a Card execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

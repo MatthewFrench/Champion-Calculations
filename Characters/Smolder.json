@@ -365,7 +365,8 @@
         "Source speed: 1700.",
         "Source effectRadius: 1000.",
         "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
-      ]
+      ],
+      "description_source": "Active: Smolder shouts for his mother to attack from above, causing her to exhale a wave of fire from behind him and towards the target direction, granting sight of its surroundings as it travels. The wave heals Smolder and deals physical damage to enemies hit, with those in the center taking 50% increased damage and becoming slowed by 40% for 2 seconds."
     }
   },
   "sources": [

@@ -239,7 +239,7 @@
             140.0,
             170.0
           ],
-          "context_notes": "Active: Nasus unleashes a spirit fire at the target location, granting sight of the area for 2."
+          "context_notes": "Active: Nasus unleashes a spirit fire at the target location, granting sight of the area for 2.5 seconds and, after a 0.264 seconds delay, dealing magic damage to enemies within."
         },
         {
           "id": "magic_damage_per_tick",
@@ -353,7 +353,7 @@
             2.0,
             2.5
           ],
-          "context_notes": "While Nasus is empowered, he deals magic damage every 0."
+          "context_notes": "While Nasus is empowered, he deals magic damage every 0.5 seconds to nearby enemies, capped at 240 per second, and Siphoning Strike's cooldown is halved."
         },
         {
           "id": "total_magic_damage",
@@ -363,7 +363,7 @@
             60.0,
             75.0
           ],
-          "context_notes": "While Nasus is empowered, he deals magic damage every 0."
+          "context_notes": "While Nasus is empowered, he deals magic damage every 0.5 seconds to nearby enemies, capped at 240 per second, and Siphoning Strike's cooldown is halved."
         }
       ],
       "description": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration.",
@@ -399,6 +399,18 @@
       "path": "From Online/champions/Nasus.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Spirit_Fire",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Spirit Fire execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Fury_of_the_Sands",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Fury of the Sands execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

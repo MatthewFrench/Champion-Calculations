@@ -398,7 +398,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.25.",
         "Source effectRadius: 450.",
-        "Source notes (summary): The bounce can occur an indefinite amount of times while Teemo is alive."
+        "Source notes (summary): The bounce can occur an indefinite amount of times while Teemo is alive.",
+        "Manual verification (2026-02-24): Noxious Trap uses charge-based ammo with short cast windup, then a 1-second arming delay before stealth activation; contact triggers area poison/slow over time. Mushroom bounce chaining resolves as sequential re-landings, not instant multi-hop damage."
       ]
     }
   },
@@ -408,6 +409,12 @@
       "path": "From Online/champions/Teemo.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Teemo/Noxious_Trap",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Noxious Trap charge cadence, arming timing, and player-visible trigger/bounce semantics"
     }
   ],
   "notes": [

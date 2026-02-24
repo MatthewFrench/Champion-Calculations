@@ -178,7 +178,7 @@
             125.0,
             150.0
           ],
-          "context_notes": "Active: Ambessa braces herself for up to 0."
+          "context_notes": "Active: Ambessa braces herself for up to 0.5 seconds, during which in the first 0.225 seconds she is unable to act. After Ambessa finishes bracing, she smashes the ground beneath her, dealing physical damage to nearby enemies. Drakehound's Step's dash may be buffered during the lockout or initiated within 0.25 seconds of the lockout ending."
         },
         {
           "id": "increased_physical_damage",
@@ -190,7 +190,7 @@
             187.5,
             225.0
           ],
-          "context_notes": "Additionally, Ambessa shields herself at the time of cast for 50 : 351."
+          "context_notes": "Additionally, Ambessa shields herself at the time of cast for 50 : 351.76 (based on level) (+ 150% bonus AD) for 1.5 seconds. If the shield mitigates any amount of damage taken from champions, large monsters, or turrets before Ambessa smashes the ground, Repudiation's damage is increased by 50%."
         },
         {
           "id": "ambessa_w_effect_3",
@@ -224,7 +224,8 @@
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 325.",
-        "Source notes (summary): Repudiation's bracing time is unaffected by the initiation of Drakehound's Step dash."
+        "Source notes (summary): Repudiation's bracing time is unaffected by the initiation of Drakehound's Step dash.",
+        "Manual verification (2026-02-24): Repudiation is a two-step action with a brace window (up to 0.5 seconds, first 0.225 seconds action-locked) followed by ground-smash resolution; Drakehound's Step can be buffered during lockout and can shift the smash endpoint when the brace completes mid-dash."
       ]
     },
     "basic_ability_3": {
@@ -373,6 +374,12 @@
       "path": "From Online/champions/Ambessa.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Ambessa/Repudiation",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Repudiation execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

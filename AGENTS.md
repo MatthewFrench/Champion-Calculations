@@ -18,6 +18,51 @@ These instructions apply to the entire repository.
 - Data authoring and source/provenance workflow:
   - `Simulation/DATA_AUTHORING_GUIDE.md`
 
+## Repository Structure Map (Non-Exhaustive)
+- This is a high-value navigation map, not a complete file listing.
+- Use it to quickly locate ownership boundaries and likely edit locations.
+
+```text
+/
+  AGENTS.md                         # Repository-wide rules and engineering standards
+  README.md                         # Project-level architecture/status summary
+  Characters/                       # Canonical champion gameplay + simulation defaults
+  Items/                            # Canonical item data and structured effects
+  Game Mode/                        # Mode-owned defaults (for example URF)
+  Masteries/                        # Rune/mastery domain data inputs
+  Simulation/
+    README.md                       # Simulator-specific behavior and module ownership notes
+    ARCHITECTURE_STANDARDS.md       # Source of truth for module boundaries/owner channels
+    ARCHITECTURE_TRANSFORMATION_PLAN.md
+                                   # Architecture migration status and friction tracking
+    IMPLEMENTATION_ROADMAP.md       # Feature and architecture milestone status
+    IMPROVEMENT_TRACKER.md          # Chronological landed improvements
+    COVERAGE_GAPS.md                # Known realism/data/runtime gaps
+    src/
+      main.rs                       # Thin entrypoint orchestration
+      simulation_contracts.rs       # Shared contracts exposed at crate root
+      engine.rs                     # Engine facade (delegates to engine/*)
+      search.rs                     # Search facade (delegates to search/*)
+      scenario_runner.rs            # Scenario facade (delegates to scenario_runner/*)
+      defaults.rs                   # Defaults facade (delegates to defaults/*)
+      data.rs                       # Data facade (delegates to data/*)
+      reporting.rs                  # Reporting facade (delegates to reporting/*)
+      scripts/                      # Champion/item/rune/runtime script ownership
+      tests/                        # Cross-module/integration-style regression tests
+```
+
+## Important Files (Non-Exhaustive)
+- `AGENTS.md`: mandatory working rules, ownership boundaries, validation requirements.
+- `README.md`: top-level status and architecture summary for contributors.
+- `Simulation/ARCHITECTURE_STANDARDS.md`: canonical architecture and owner-channel standards.
+- `Simulation/ARCHITECTURE_TRANSFORMATION_PLAN.md`: architecture progress, status indicators, friction.
+- `Simulation/IMPLEMENTATION_ROADMAP.md`: in-progress/planned simulator work.
+- `Simulation/IMPROVEMENT_TRACKER.md`: landed improvements and historical context.
+- `Simulation/COVERAGE_GAPS.md`: realism and fidelity gaps that still need work.
+- `Simulation/src/engine.rs`, `Simulation/src/search.rs`, `Simulation/src/scenario_runner.rs`: subsystem facades; implementation should generally be pushed into submodules.
+- `Simulation/src/scripts/`: champion/item/rune/runtime specialization modules.
+- `Simulation/src/tests/`: high-value regression tests spanning major workflows.
+
 ## Core Architecture Standard
 - Keep the simulator generic and replaceable.
 - Do not add champion-specific, item-specific, rune-specific, or mastery-specific behavior to shared core modules when it can be scripted.
@@ -144,3 +189,23 @@ These instructions apply to the entire repository.
 - Use clear, explicit test file names (for example `engine_tests.rs`, `stat_resolution_tests.rs`).
 - Place integration/overall tests under the crate root `tests/` directory.
 - Place unit tests in co-located relative `tests/` directories near the module they validate (for example `src/scripts/runtime/tests/loadout_runtime_tests.rs`).
+
+## Function Change Test Requirement
+- When modifying an existing code function, first evaluate whether current test coverage is sufficient for the behavior being changed.
+- Add or update high-value unit tests for the function when the change affects logic, invariants, side effects, or edge-case handling.
+- Tests should be pragmatic and necessary:
+  - include the primary behavior path
+  - include high-risk edge/corner behavior where regressions are likely
+  - avoid low-value or redundant tests
+- If no new test is added for a functional change, explicitly justify why in the user-facing update.
+
+## Function And Module Comment Standard
+- When modifying a function/module, ensure comments are high-value and necessary, not decorative.
+- Add/update a top comment when it materially improves maintainability for non-obvious behavior.
+- Good comments should capture relevant context such as:
+  - purpose and intent
+  - important assumptions/invariants
+  - edge cases/caveats
+  - tribal knowledge needed for safe modification
+- Do not add comments that merely restate obvious code.
+- Keep comments synchronized with behavior changes; stale comments are treated as defects.

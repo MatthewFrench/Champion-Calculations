@@ -278,7 +278,7 @@
             130.0,
             185.0
           ],
-          "context_notes": "Passive: Jax's basic attacks generate a stack of Grandmaster-at-Arms on-hit for 2."
+          "context_notes": "Passive: Jax's basic attacks generate a stack of Grandmaster-at-Arms on-hit for 2.5 seconds, refreshing on subsequent hits and stacking up to 2 times. At 2 stacks, his next basic attack on-hit is empowered to have an uncancellable windup and consume all stacks to deal additional magic damage, reduced to 50% against structures. While Grandmaster-at-Arms is active, the empowered attack triggers at 1 stack instead."
         },
         {
           "id": "magic_damage",
@@ -368,6 +368,12 @@
       "path": "From Online/champions/Jax.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Grandmaster-at-Arms",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Grandmaster-at-Arms execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

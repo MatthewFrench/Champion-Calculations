@@ -90,7 +90,8 @@
       "context_notes": [
         "Source targeting: Passive.",
         "Source notes (summary): Chime spawns are weighted towards the areas of the map that Bard is currently present in and spawn in pairs, with the only exception being the second and third spawns on Summoner's Rift, which spawn only one."
-      ]
+      ],
+      "description_source": "Innate - Ancient Chimes: Bard's presence causes sacred Chimes to appear at random locations on the map, lingering for up to 10 minutes. Collecting a Chime restores 12% maximum mana and grants Bard 20 + (1 per minute after 5 minutes) experience, as well as 24% bonus movement speed out of combat for 20 seconds, which stacks up to 10 times. Each Chime collected beyond the first instead grants an additional 14% bonus movement speed, up to a total of 150% bonus movement speed. Bard empowers his Meeps each time he collects 5 Chimes."
     },
     "basic_ability_1": {
       "name": "Cosmic Binding",
@@ -179,7 +180,7 @@
             100.0,
             125.0
           ],
-          "context_notes": "If the champion is an ally or Bard himself, they are healed for an amount based on the shrine's power and gain bonus movement speed decaying over 1."
+          "context_notes": "If consumed by Bard or an ally, the shrine heals based on charge power and grants bonus movement speed that decays over 1.5 seconds."
         },
         {
           "id": "maximum_heal",
@@ -191,7 +192,7 @@
             162.5,
             200.0
           ],
-          "context_notes": "If the champion is an ally or Bard himself, they are healed for an amount based on the shrine's power and gain bonus movement speed decaying over 1."
+          "context_notes": "If consumed by Bard or an ally, the shrine heals based on charge power and grants bonus movement speed that decays over 1.5 seconds."
         },
         {
           "id": "bonus_movement_speed",
@@ -203,7 +204,7 @@
             27.5,
             30.0
           ],
-          "context_notes": "If the champion is an ally or Bard himself, they are healed for an amount based on the shrine's power and gain bonus movement speed decaying over 1."
+          "context_notes": "If consumed by Bard or an ally, the shrine heals based on charge power and grants bonus movement speed that decays over 1.5 seconds."
         },
         {
           "id": "bard_w_effect_3",
@@ -330,6 +331,12 @@
       "path": "From Online/champions/Bard.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bard",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

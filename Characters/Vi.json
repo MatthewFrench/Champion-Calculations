@@ -180,7 +180,8 @@
         "Source castTime: none.",
         "Source speed: 1450 : 1540 (based on channel time).",
         "Source notes (summary): Vault Breaker's dash range extends up to 50 units when going through a wall."
-      ]
+      ],
+      "description_source": "Active: Vi charges while being slowed by 15% for up to 4 seconds to increase Vault Breaker's range, speed, and damage over the first 1.25 seconds of the channel."
     },
     "basic_ability_2": {
       "name": "Denting Blows",

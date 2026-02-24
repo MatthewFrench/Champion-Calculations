@@ -1,6 +1,48 @@
 # Improvement Tracker
 
 ## Done
+- Added world-state ownership scaffold plus non-Vladimir controlled-champion production-path validation:
+  - added `src/world/*` with explicit map bounds ownership, actor position registration channels, and deterministic distance projections.
+  - added shared encounter world validation (`validate_world_positions_for_enemy_scenarios(...)`) and wired it into controlled scenario, fixed-loadout, rune-sweep, and step run paths.
+  - expanded controlled-champion script coverage with `Sona`:
+    - `src/scripts/champions/controlled_champion/sona_controlled_champion_script.rs`
+    - `Simulation/scenarios/sona_urf_teamfight.json`
+  - switched controlled-champion script builder/registry initialization to typed `Result` propagation to remove panic-based script initialization failure paths.
+  - added regression coverage:
+    - `resolve_controlled_champion_script_or_error_accepts_second_registered_champion`
+    - `validate_world_positions_for_enemy_scenarios_rejects_out_of_bounds_positions`
+    - `controlled_champion_stepper_runs_non_vladimir_registered_scenario`
+    - `world_state_registers_actor_positions_and_computes_distances`
+    - `world_state_rejects_actor_positions_outside_bounds`
+    - `world_state_rejects_duplicate_actor_ids`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Added controlled-champion script-coverage fail-fast guardrails plus full-game status board refresh:
+  - controlled-champion run modes (`controlled_champion`, `controlled_champion_fixed_loadout`, `controlled_champion_fixed_loadout_rune_sweep`, `controlled_champion_step`) now fail fast when selected champion has no registered controlled-champion script.
+  - added `resolve_controlled_champion_script_or_error(...)` to enforce script registration in scenario execution paths.
+  - added explicit supported-controlled-champion diagnostics from script registry keys.
+  - added regression tests:
+    - `resolve_controlled_champion_script_or_error_accepts_registered_champion`
+    - `resolve_controlled_champion_script_or_error_rejects_unregistered_champion`
+    in `src/tests/scenario_runner_tests.rs`.
+  - updated full-game planning docs with weighted completion status and remaining-gap breakdown:
+    - `Simulation/FULL_GAME_SIMULATION_BLUEPRINT.md`
+    - `Simulation/CURRENT_STATE.md`
+    - `Simulation/IMPLEMENTATION_ROADMAP.md`
+- Added a canonical full-game simulation blueprint document:
+  - created `Simulation/FULL_GAME_SIMULATION_BLUEPRINT.md` with end-state definition, codebase-anchored baseline review, non-data capability matrix, phased execution gates, and governance model for renderer-ready fidelity.
+  - linked the blueprint from:
+    - `README.md`
+    - `Simulation/README.md`
+  - updated `Simulation/IMPLEMENTATION_ROADMAP.md` to track blueprint completion as item `44`.
+- Hardened search-strategy parse validation to prevent silent empty-result runs:
+  - added explicit supported-strategy validation in
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing/build_search_config_value_mapping.rs`
+  - parser now rejects unknown `search.strategy` values and unknown `search.portfolio_strategies` entries with actionable path-specific errors.
+  - added regression tests:
+    - `parse_build_search_rejects_invalid_strategy`
+    - `parse_build_search_rejects_invalid_portfolio_strategies_entry`
+    in `src/tests/data_tests.rs`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Completed architecture remaining dense-target decomposition follow-up:
   - split `src/search/strategy/full_loadout_search_strategies.rs` into explicit owner leaves:
     - `src/search/strategy/full_loadout_search_strategies/beam_search_strategy.rs`
@@ -39,6 +81,141 @@
 - Resolved prior controlled-champion script channel visibility/export compile-integrity regression:
   - controlled-champion re-export surface and registry wiring are now stable after decomposition
   - full compile/lint/test gates are green in the current worktree
+- Completed data-first champion fidelity verification wave 75:
+  - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
+  - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `169/172` to `172/172` (full manual-verified corpus)
+  - backfilled touched missing `description_source` entry (`Viego` `Spectral Maw`)
+  - logged unresolved `Zyra` passive one-vs-two seed spawn distribution weighting follow-up in `Simulation/COVERAGE_GAPS.md` and `Simulation/CONFIDENCE_REVIEW.md`
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed full-corpus champion `description_source` backfill pass:
+  - backfilled all remaining missing champion ability `description_source` entries from canonical ability `description` text where source strings were absent
+  - raised champion ability `description_source` completeness from `784/860` to `860/860` (`0` missing across `0` champions)
+  - updated coverage docs to treat `description_source` completeness as a no-regression guardrail
+  - documented follow-up provenance-hardening pass to replace fallback-derived `description_source` values with direct source-corpus strings on high-impact champions
+- Completed data-first champion fidelity verification wave 74:
+  - manually reviewed and normalized execution-semantics notes across `2` champions (`Ivern`, `Malphite`)
+  - added page-level champion ability source provenance to both touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `167/172` to `169/172`
+  - backfilled touched missing `description_source` entry (`Ivern` `Friend of the Forest`)
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed data-first champion fidelity verification wave 73:
+  - manually reviewed and normalized execution-semantics notes across `2` champions (`Hwei`, `Illaoi`)
+  - added page-level champion ability source provenance to both touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `165/172` to `167/172`
+  - backfilled touched missing `description_source` entry (`Illaoi` `Tentacle Smash`)
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed data-first champion fidelity verification wave 72:
+  - manually reviewed and normalized execution-semantics notes across `2` champions (`Chogath`, `Heimerdinger`)
+  - added page-level champion ability source provenance to both touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `163/172` to `165/172`
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed data-first champion fidelity verification wave 71:
+  - manually reviewed and normalized execution-semantics notes across `6` champions (`Rakan`, `Rammus`, `RekSai`, `Renata`, `TwistedFate`, `Zilean`)
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `157/172` to `163/172`
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed data-first champion fidelity verification wave 70:
+  - manually reviewed and normalized execution-semantics notes across `6` champions (`Elise`, `Evelynn`, `Kalista`, `Khazix`, `Kindred`, `Mordekaiser`)
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `151/172` to `157/172`
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed data-first champion fidelity verification wave 69:
+  - manually reviewed and normalized execution-semantics notes across `6` champions (`Zeri`, `Tristana`, `Twitch`, `Syndra`, `Veigar`, `Senna`)
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `145/172` to `151/172`
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed data-first champion fidelity verification wave 68:
+  - manually reviewed and normalized execution-semantics notes across `6` champions (`Ambessa`, `Annie`, `Ashe`, `Ezreal`, `Lucian`, `Yasuo`)
+  - normalized `3` non-primary truncation defects discovered during manual review (`Ambessa`, `Evelynn`, `Senna`) to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `139/172` to `145/172`
+  - validated strict primary, secondary cadence, and tertiary article-token truncation queues remain clear (`0/0`)
+- Completed post-wave tertiary article-token truncation cleanup sweep:
+  - normalized `1` additional article-interposed timing fragment (`during the 0.` class) on `TahmKench` (`Abyssal Dive`) to complete source-backed delay semantics
+  - documented and adopted tertiary article-token audit requirements alongside strict primary and secondary cadence checks
+  - validated all three truncation queues as clear after the sweep (`0/0` each)
+- Completed touched-wave champion `description_source` backfill and backlog quantification:
+  - backfilled missing `description_source` entries on touched manual-review abilities (`Mordekaiser` `Realm of Death`, `Rammus` `Powerball`)
+  - quantified remaining champion-ability `description_source` backlog at wave-71 baseline (`79/860` missing entries across `58` champions); backlog has since been fully closed (`860/860`, `0` missing) and documented in `Simulation/COVERAGE_GAPS.md`
+- Completed post-wave secondary cadence-fragment cleanup sweep:
+  - normalized `5` additional periodic-tick truncation fragments (`every 0.` class) across `2` champions (`Nasus`, `Fiora`) to complete source-backed timing cadence semantics
+  - added page-level champion ability source provenance for cadence-touched abilities (`Fury of the Sands`, `Grand Challenge`)
+  - recorded cleanup scope in `Simulation/champion_behavior_verification_tracker.json` as manual verification wave 67 (`Nasus`, `Fiora`)
+  - documented and adopted a secondary cadence-fragment audit requirement alongside strict primary truncation regex checks
+  - validated both truncation queues as clear after the sweep (strict primary `0/0`, secondary cadence `0/0`)
+- Completed data-first champion fidelity verification wave 66:
+  - manually reviewed and normalized timing-fragment execution notes across `5` champions (`Camille`, `Fiddlesticks`, `Jax`, `Rumble`, `Yorick`)
+  - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all five touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - manual behavior verification tracker coverage remained `139/172` (already-manual-verified champion set touched)
+  - reduced string+array-aware strict fragment queue from `6/5` to `0/0` (queue cleared)
+- Completed data-first champion fidelity verification wave 65:
+  - manually reviewed and normalized timing-fragment execution notes across `5` champions (`Nautilus`, `Olaf`, `Swain`, `XinZhao`, `Nasus`)
+  - normalized `13` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all five touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - manual behavior verification tracker coverage remained `139/172` (already-manual-verified champion set touched)
+  - reduced string+array-aware strict fragment queue from `19/10` to `6/5`
+- Completed data-first champion fidelity verification wave 64:
+  - manually reviewed and normalized timing-fragment execution notes across `5` champions (`Zaahen`, `Jhin`, `Yone`, `Darius`, `Ekko`)
+  - normalized `15` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all five touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `136/172` to `139/172`
+  - reduced string+array-aware strict fragment queue from `34/15` to `19/10`
+- Completed data-first champion fidelity verification wave 63:
+  - manually reviewed and normalized timing-fragment execution notes across `5` champions (`Caitlyn`, `Poppy`, `Quinn`, `Shen`, `Tryndamere`)
+  - normalized `5` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all five touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `131/172` to `136/172`
+  - reduced string+array-aware strict fragment queue from `39/20` to `34/15`
+- Completed data-first champion fidelity verification wave 62:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Ryze`, `Sett`, `Sivir`, `TahmKench`, `Thresh`, `Xayah`)
+  - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `125/172` to `131/172`
+  - reduced string+array-aware strict fragment queue from `46/26` to `40/20`
+- Completed data-first champion fidelity verification wave 61:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Graves`, `Hecarim`, `JarvanIV`, `Kassadin`, `Kennen`, `Pyke`)
+  - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `119/172` to `125/172`
+  - reduced string+array-aware strict fragment queue from `52/32` to `46/26`
+- Completed data-first champion fidelity verification wave 60:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`LeeSin`, `Leona`, `Lulu`, `Brand`, `Braum`, `Diana`)
+  - normalized `6` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `113/172` to `119/172`
+  - reduced string+array-aware strict fragment queue from `58/38` to `52/32`
+- Completed data-first champion fidelity verification wave 59:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Akali`, `Alistar`, `Amumu`, `Yunara`, `Kaisa`, `Kayn`)
+  - normalized `18` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `107/172` to `113/172`
+  - reduced string+array-aware strict fragment queue from `68/44` to `58/38`
+- Completed data-first champion fidelity verification wave 58:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Jayce`, `Janna`, `Gragas`, `Gangplank`, `Blitzcrank`, `Azir`)
+  - normalized `12` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `101/172` to `107/172`
+  - reduced string+array-aware strict fragment queue from `80/50` to `68/44`
+- Completed data-first champion fidelity verification wave 57:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Pantheon`, `Ornn`, `Nidalee`, `Nami`, `MissFortune`, `Karma`)
+  - normalized `12` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `95/172` to `101/172`
+  - reduced string+array-aware strict fragment queue from `92/56` to `80/50`
+- Completed data-first champion fidelity verification wave 56:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Vex`, `Taric`, `Sylas`, `Rengar`, `Renekton`, `Qiyana`)
+  - normalized `12` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `89/172` to `95/172`
+  - reduced string+array-aware strict fragment queue from `104/62` to `92/56`
+- Completed data-first champion fidelity verification wave 55:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Zac`, `Viktor`, `Skarner`, `Rell`, `Orianna`, `Zoe`)
+  - normalized `17` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `83/172` to `89/172`
+  - reduced string+array-aware strict fragment queue from `121/68` to `104/62`
 - Completed data-first champion fidelity verification wave 50:
   - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Talon`, `Smolder`, `Sejuani`, `Nunu`, `Nilah`, `Maokai`)
   - normalized `30` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
@@ -1396,16 +1573,6 @@
     - the same ability script can be attached to different actors and different keybind slots at runtime.
     - no shared engine conditionals are needed for champion-specific stolen-ability routing.
 
-- [P1] Add a second controlled champion script end-to-end (non-Vladimir)
-  - Goal: validate that the controlled-champion architecture is truly multi-champion in production paths.
-  - Scope:
-    - add one non-Vladimir controlled champion script implementation with canonical data loaders.
-    - add/update one scenario that runs `--mode controlled_champion` using the new champion.
-    - keep engine/shared modules unchanged except for generic extension points.
-  - Success criteria:
-    - controlled-champion scenario runs successfully for at least one non-Vladimir champion.
-    - no champion-specific hardcoding is added to shared core modules.
-
 - [P1] Optional strict maximum-quality coverage gate
   - Goal: support reproducibility/CI runs that require complete pre-budget coverage.
   - Scope:
@@ -1425,16 +1592,6 @@
   - Success criteria:
     - adding a new controlled champion script is a small, localized change.
     - no engine changes required for registry growth.
-
-- [P1] Controlled champion non-Vladimir integration guardrail
-  - Goal: prevent regressions where generic mode silently drifts back to Vladimir-only assumptions.
-  - Scope:
-    - add an integration test that runs `--mode controlled_champion` with a non-Vladimir scenario.
-    - assert stable run/report contract behavior for that scenario.
-    - keep assertions deterministic and CI-friendly.
-  - Success criteria:
-    - CI includes at least one passing non-Vladimir controlled-champion integration path.
-    - regressions in generic controlled-champion orchestration are caught early.
 
 - [P1] Controlled champion defensive ability risk-gate policy (discussion needed)
   - Goal: avoid unconditional defensive-ability spam while preserving intended “pool in multi-enemy windows” behavior.
@@ -1462,26 +1619,6 @@
     - ignore `z` for combat checks and use 2D geometry only.
   - Follow-up:
     - revisit only when a verified gameplay interaction requires `z` in calculations.
-
-- [P0] Full codebase structure audit and abstraction-first reorganization
-  - Goal: examine the entire simulator codebase layout and optimize it for long-term versatility.
-  - Scope:
-    - review all modules for abstraction boundaries and ownership clarity.
-    - identify files that should move, split, or be grouped by domain.
-    - define phased migration checkpoints so functionality remains stable while restructuring.
-  - Success criteria:
-    - documented target architecture with an ordered migration checklist.
-    - reduced cross-module coupling and cleaner extension points.
-
-- [P1] File naming and module-size standards for maintainability
-  - Goal: enforce consistent, descriptive naming and avoid oversized files.
-  - Scope:
-    - define naming standards for files, folders, modules, and registries.
-    - apply progressive splits to large files into focused submodules where practical.
-    - preserve language idioms while favoring descriptive names.
-  - Success criteria:
-    - new and migrated modules follow documented naming conventions.
-    - large modules are split into smaller units with clear responsibilities.
 
 - [P1] Architecture revisit checkpoints after each major feature tranche
   - Goal: continually reassess structure as functionality expands.
@@ -1633,38 +1770,6 @@
   - Success criteria:
     - Per-enemy derived combat stats are printed in diagnostics.
     - Champion-to-champion auto attack profiles materially differ where expected.
-
-- [P1] Codebase modularization and script-friendly architecture
-  - Goal: eliminate single-file bottleneck and keep champion/item logic out of `main.rs`.
-  - Scope:
-    - Split core into modules (engine, search, reporting, data loading, scripts, CLI).
-    - Move item/champion/rune special cases into dedicated script modules/hooks.
-    - Define clear interfaces for extending champion/item behavior.
-  - Success criteria:
-    - `main.rs` becomes a thin CLI orchestration entrypoint.
-    - New champion/item behavior can be added without touching core engine files.
-
-- [P1] CI/CD for pull requests, main branch, and releases
-  - Goal: automate quality checks and release artifacts with run findings.
-  - Scope:
-    - Add CI workflows for pull requests and main:
-      - build
-      - test
-      - formatting/lint gates
-    - Add release workflow that packages binary and attaches generated findings/report summary.
-  - Success criteria:
-    - PRs and main branch enforce green checks.
-    - Releases include artifacts plus generated run report in release notes/attachments.
-
-- [P2] Repository quality gates (linting, style, module boundaries)
-  - Goal: enforce maintainable structure and coding standards automatically.
-  - Scope:
-    - Add `rustfmt` and `clippy` checks in CI.
-    - Add deny/warn policy for common maintainability issues.
-    - Add lightweight module size/ownership conventions in docs.
-  - Success criteria:
-    - New changes consistently conform to style and lint rules.
-    - Core simulation logic stays split across coherent modules over time.
 
 ## Open Questions
 - Enemy respawn behavior:

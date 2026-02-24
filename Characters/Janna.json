@@ -324,7 +324,7 @@
             37.5,
             50.0
           ],
-          "context_notes": "Janna also channels for up to 3 seconds, healing herself and nearby allies every 0."
+          "context_notes": "Janna also channels for up to 3 seconds, healing herself and nearby allies every 0.25 seconds."
         },
         {
           "id": "total_heal",
@@ -334,7 +334,7 @@
             450.0,
             600.0
           ],
-          "context_notes": "Janna also channels for up to 3 seconds, healing herself and nearby allies every 0."
+          "context_notes": "Janna also channels for up to 3 seconds, healing herself and nearby allies every 0.25 seconds."
         }
       ],
       "description": "Active: Janna unleashes a blast that knocks back all nearby enemies to up to 875 units over 0.5 seconds based on their proximity, though not through terrain.",
@@ -361,7 +361,8 @@
         "Source castTime: none.",
         "Source effectRadius: 700.",
         "Source notes (summary): The following table refers for interactions while Janna is channeling: Type Channel Attacking Interrupts Abilities Interrupts Movement Interrupts Items Usable Shurelya's Battlesong Youmuu's Ghostblade Randuin's Omen Disabled Hextech Rocketbelt Interrupted by A"
-      ]
+      ],
+      "description_source": "Active: Janna unleashes a blast that knocks back all nearby enemies to up to 875 units over 0.5 seconds based on their proximity, though not through terrain."
     }
   },
   "sources": [
@@ -370,6 +371,12 @@
       "path": "From Online/champions/Janna.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Janna",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

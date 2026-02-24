@@ -155,7 +155,8 @@
         "Source targeting: Auto / Direction.",
         "Source castTime: none.",
         "Source notes (summary): The onset of Arcanopulse's self- slow and first range increase is at a random interval of 0 to 0."
-      ]
+      ],
+      "description_source": "Active: Xerath charges while being slowed by 0% : 40% (based on channel time) for up to 3 seconds to increase Arcanopulse's range over the first 1.5 to 1.75 seconds of the channel."
     },
     "basic_ability_2": {
       "name": "Eye of Destruction",
@@ -372,7 +373,8 @@
         "Source castTime: none.",
         "Source effectRadius: 200.",
         "Source notes (summary): Rite of the Arcane cannot be canceled via movement commands during the first second of its channel."
-      ]
+      ],
+      "description_source": "Active: Xerath channels for up to 10 seconds, gaining the ability to recast Rite of the Arcane multiple times after 0.5 seconds within the duration. If Rite of the Arcane ends without any of the recasts being used, half of its cooldown is refunded."
     }
   },
   "sources": [

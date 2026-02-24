@@ -112,7 +112,7 @@
             100.0,
             120.0
           ],
-          "context_notes": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1."
+          "context_notes": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1.5 seconds."
         },
         {
           "id": "slow",
@@ -124,7 +124,7 @@
             30.0,
             35.0
           ],
-          "context_notes": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1."
+          "context_notes": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1.5 seconds."
         },
         {
           "id": "magic_damage_2",
@@ -376,6 +376,12 @@
       "path": "From Online/champions/Sylas.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sylas",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -27,6 +27,111 @@ fn fixed_sweep_repeat_seed_values_are_unique_and_reproducible() {
     }
 }
 
+#[test]
+fn resolve_controlled_champion_script_or_error_accepts_registered_champion() {
+    let script = resolve_controlled_champion_script_or_error("Vladimir")
+        .expect("registered controlled champion should resolve script");
+    let cast_profile = script.default_cast_profile();
+    assert!(
+        !cast_profile.offensive_primary_ability_id.is_empty(),
+        "resolved script should provide a non-empty offensive ability identifier"
+    );
+}
+
+#[test]
+fn resolve_controlled_champion_script_or_error_accepts_second_registered_champion() {
+    let script = resolve_controlled_champion_script_or_error("Sona")
+        .expect("second registered controlled champion should resolve script");
+    let cast_profile = script.default_cast_profile();
+    assert_eq!(
+        cast_profile.offensive_ultimate_ability_id, "crescendo",
+        "Sona controlled script should expose Crescendo as ultimate ability identity"
+    );
+}
+
+#[test]
+fn resolve_controlled_champion_script_or_error_rejects_unregistered_champion() {
+    let champion_bases = load_champion_bases().expect("champion data should load");
+    let supported_champions =
+        crate::scripts::champions::supported_controlled_champion_script_keys()
+            .iter()
+            .map(|key| key.to_string())
+            .collect::<HashSet<_>>();
+    let unsupported_champion = champion_bases
+        .values()
+        .find(|champion| !supported_champions.contains(&crate::to_norm_key(&champion.name)))
+        .map(|champion| champion.name.clone())
+        .expect("test requires at least one champion without controlled script coverage");
+    let error = resolve_controlled_champion_script_or_error(&unsupported_champion)
+        .expect_err("unregistered controlled champion should fail fast");
+    assert!(
+        error
+            .to_string()
+            .contains("has no registered controlled-champion script"),
+        "unexpected error: {}",
+        error
+    );
+    assert!(
+        error.to_string().contains("Supported controlled champions"),
+        "unexpected error: {}",
+        error
+    );
+}
+
+#[test]
+fn validate_world_positions_for_enemy_scenarios_rejects_out_of_bounds_positions() {
+    let champion_bases = load_champion_bases().expect("champion data should load");
+    let champion_name = champion_bases
+        .values()
+        .next()
+        .map(|champion| champion.name.clone())
+        .expect("at least one champion should exist");
+    let scenario = json!({
+        "opponents": {
+            "encounters": [
+                {
+                    "name": "invalid_world_position",
+                    "weight": 1.0,
+                    "actors": [{
+                        "id": "enemy_out_of_bounds",
+                        "champion": champion_name,
+                        "placement": {
+                            "position": { "x": 9000.0, "y": 0.0 },
+                            "movement": "hold_position"
+                        }
+                    }]
+                }
+            ]
+        }
+    });
+    let encounters = parse_opponent_encounters(&scenario, &champion_bases, 18, &HashMap::new())
+        .expect("encounters should parse before world validation");
+    let enemy_scenarios = encounters
+        .iter()
+        .map(|encounter| {
+            (
+                encounter.name.clone(),
+                encounter.weight,
+                encounter.actors.clone(),
+            )
+        })
+        .collect::<Vec<_>>();
+    let err = validate_world_positions_for_enemy_scenarios("Vladimir", &enemy_scenarios)
+        .expect_err("out-of-bounds encounter positions should fail world validation");
+    assert!(
+        err.to_string().contains("outside map bounds"),
+        "unexpected error: {}",
+        err
+    );
+}
+
+#[test]
+fn controlled_champion_stepper_runs_non_vladimir_registered_scenario() {
+    let scenario_path = resolve_scenario_path("sona_urf_teamfight");
+    run_controlled_champion_stepper(&scenario_path, 1)
+        .expect("Sona controlled champion stepper scenario should run");
+}
+
 fn sample_rune_proc_telemetry_entry() -> ChampionRuneProcTelemetryEntry {
     ChampionRuneProcTelemetryEntry {
         rune_name: "Conqueror".to_string(),

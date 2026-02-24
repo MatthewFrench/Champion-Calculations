@@ -174,7 +174,7 @@
             35.0,
             40.0
           ],
-          "context_notes": "Enemies within the clouds are poisoned to take magic damage every 0."
+          "context_notes": "Enemies within the clouds are poisoned, taking magic damage every 0.263 seconds while grounded and slowed."
         },
         {
           "id": "total_magic_damage",
@@ -186,7 +186,7 @@
             175.0,
             200.0
           ],
-          "context_notes": "Enemies within the clouds are poisoned to take magic damage every 0."
+          "context_notes": "Enemies within the clouds are poisoned, taking magic damage every 0.263 seconds while grounded and slowed."
         },
         {
           "id": "slow",
@@ -198,7 +198,7 @@
             70.0,
             80.0
           ],
-          "context_notes": "Enemies within the clouds are poisoned to take magic damage every 0."
+          "context_notes": "Enemies within the clouds are poisoned, taking magic damage every 0.263 seconds while grounded and slowed."
         }
       ],
       "description": "Active: Cassiopeia spews forth 7 bolts of venom in an arc at the target location, creating toxic clouds at the area for 5 seconds.",
@@ -387,6 +387,12 @@
       "path": "From Online/champions/Cassiopeia.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Cassiopeia",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -353,7 +353,8 @@
         "Source castTime: none.",
         "Source speed: 1500 + 100% movement speed.",
         "Source effectRadius: 325.",
-        "Source notes (summary): The dash speed can be up-to doubled if Unstoppable Force is targeted at the middle of a wall so that his destination ends up on the other side."
+        "Source notes (summary): The dash speed can be up-to doubled if Unstoppable Force is targeted at the middle of a wall so that his destination ends up on the other side.",
+        "Manual verification (2026-02-24): Unstoppable Force is an unstoppable location dash with travel time (not instant teleport), then area damage/knockup on arrival. Player-visible impact resolves after dash path completion, so targets leaving the impact radius before arrival avoid the hit."
       ]
     }
   },
@@ -363,6 +364,12 @@
       "path": "From Online/champions/Malphite.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Malphite/Unstoppable_Force",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Unstoppable Force dash timing, impact resolution, and player-visible crowd-control semantics"
     }
   ],
   "notes": [

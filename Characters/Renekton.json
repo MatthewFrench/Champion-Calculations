@@ -413,7 +413,7 @@
             75.0,
             120.0
           ],
-          "context_notes": "During this time, he deals magic damage every 0."
+          "context_notes": "During this time, he deals magic damage every 0.5 seconds to nearby enemies and generates 5 Fury per second, up to a maximum of 75 Fury."
         },
         {
           "id": "total_magic_damage",
@@ -423,7 +423,7 @@
             2250.0,
             3600.0
           ],
-          "context_notes": "During this time, he deals magic damage every 0."
+          "context_notes": "During this time, he deals magic damage every 0.5 seconds to nearby enemies and generates 5 Fury per second, up to a maximum of 75 Fury."
         }
       ],
       "description": "Active: Renekton empowers himself for 15 seconds, gaining bonus health, 20% increased size, 25 bonus attack range, and 20 Fury, as well as increasing Cull the Meek's effect radius.",
@@ -450,6 +450,12 @@
       "path": "From Online/champions/Renekton.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Renekton",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

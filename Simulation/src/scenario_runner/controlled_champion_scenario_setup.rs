@@ -77,7 +77,9 @@ pub(super) fn prepare_controlled_champion_scenario_search_setup(
     let controlled_champion_loadout_selection = controlled_champion_config.loadout_selection;
     let controlled_champion_stack_overrides = controlled_champion_config.stack_overrides;
     let controlled_champion_name = controlled_champion_base_raw.name.clone();
-    sim.controlled_champion_script = resolve_controlled_champion_script(&controlled_champion_name);
+    sim.controlled_champion_script = Some(resolve_controlled_champion_script_or_error(
+        &controlled_champion_name,
+    )?);
 
     let enemy_scenarios_raw: Vec<ParsedOpponentEncounter> = parse_opponent_encounters(
         &scenario,
@@ -108,6 +110,7 @@ pub(super) fn prepare_controlled_champion_scenario_search_setup(
             (encounter.name.clone(), encounter.weight, scaled)
         })
         .collect::<Vec<_>>();
+    validate_world_positions_for_enemy_scenarios(&controlled_champion_name, &enemy_scenarios)?;
 
     let mut search_cfg = parse_build_search(
         scenario

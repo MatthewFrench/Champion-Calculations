@@ -1,6 +1,6 @@
 # URF Controlled Champion Objective Simulator
 
-This simulator targets controlled-champion URF teamfight optimization with champion-specific behavior delegated through script capabilities (Vladimir is the current implemented controlled champion script). For a fixed seed, it is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
+This simulator targets controlled-champion URF teamfight optimization with champion-specific behavior delegated through script capabilities (current implemented controlled champion scripts: Vladimir and Sona). Controlled-champion run modes fail fast when script coverage is missing for the selected champion. For a fixed seed, it is deterministic and runs on a fixed server-tick loop (default 30 Hz) with an event queue for attacks, scripted champion actions, and survivability effects.
 
 ## Coverage Documentation Start Here
 - Coverage status and complete versus incomplete sets:
@@ -13,9 +13,13 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - `DATA_AUTHORING_GUIDE.md`
 - Current implementation handoff snapshot:
   - `CURRENT_STATE.md`
+- Full-game target blueprint (systems required beyond data coverage):
+  - `FULL_GAME_SIMULATION_BLUEPRINT.md`
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
+- Controlled-champion run modes require a registered controlled-champion script and return an actionable error for unsupported champions.
+- `src/world/*` owns deterministic map-bound world state registration/projections and validates encounter placement before scenario execution.
 - Combat runs with 2D positions (controlled champion fixed at origin; enemies maintain range with deterministic orbit/chase motion).
 - Simulation intentionally ignores vertical `z` index for now; combat checks use only 2D geometry (`x`,`y`) until a verified gameplay interaction requires `z`.
 - Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz`.
@@ -132,7 +136,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - scalar combat metrics resolve through shared runtime stat queries (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
   - modeled item cooldown passives (for example Heartsteel and Luden's Echo) load base cooldowns from canonical item effects data and then apply runtime haste/buff state
 - Rune runtime tuning defaults are loaded from `data/simulator_defaults.json` under `rune_runtime_defaults` (global ownership).
-- Controlled-champion combat sequencing decisions are delegated through a champion-script facade from engine (Vladimir is currently the implemented controlled-champion script).
+- Controlled-champion combat sequencing decisions are delegated through a champion-script facade from engine (current implemented controlled champion scripts: Vladimir and Sona).
 - Enemy champion script events are generated in scripts and applied by generic engine action handling.
 - Foundational combat primitives are present for future fidelity work:
   - generic status effects (duration/stacks/persistence)

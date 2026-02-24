@@ -114,7 +114,7 @@
             250.0,
             300.0
           ],
-          "context_notes": "The scythe catches the first enemy hit to deal magic damage, stun and reveal them for 1."
+          "context_notes": "The scythe catches the first enemy hit to deal magic damage, stun and reveal them for 1.5 seconds, and render them airborne for 0.4 seconds, as well as reduce Death Sentence's current cooldown by 2 seconds. Thresh will also mark the target Shackled for 1.5 seconds, during which he is unable to declare basic attacks, and is slowed by 20% for 1 second."
         },
         {
           "id": "thresh_q_effect_3",
@@ -155,7 +155,8 @@
         "Source speed: 1900 / 1400.",
         "Source effectRadius: Global / 3000.",
         "Source notes (summary): Thresh will track the target if they change locations."
-      ]
+      ],
+      "description_source": "Active: Thresh throws out his scythe in the target direction, becoming unable to move or attack while it is in flight."
     },
     "basic_ability_2": {
       "name": "Dark Passage",
@@ -300,7 +301,8 @@
         "Source speed: 2000.",
         "Source effectRadius: 270.",
         "Source notes (summary): Flay's effects start at the start of the cast time."
-      ]
+      ],
+      "description_source": "Passive: Thresh's basic attacks are empowered to deal bonus magic damage, with the AD ratio increasing over 10 seconds without basic attacking enemies."
     },
     "ultimate": {
       "name": "The Box",
@@ -355,6 +357,12 @@
       "path": "From Online/champions/Thresh.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Thresh",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

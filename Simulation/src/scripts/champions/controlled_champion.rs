@@ -1,6 +1,7 @@
 mod controlled_champion_script_channels;
 mod controlled_champion_script_contracts;
 mod controlled_champion_script_registry;
+mod sona_controlled_champion_script;
 mod vladimir_controlled_champion_script;
 
 pub(crate) use self::controlled_champion_script_channels::{
@@ -20,4 +21,8 @@ pub(crate) use self::controlled_champion_script_contracts::{
     ControlledChampionScriptCapability, ControlledChampionScriptHandle,
     ControlledChampionSingleTargetCastDecision, ControlledChampionTargetSnapshot,
 };
+#[cfg(test)]
 pub(crate) use self::controlled_champion_script_registry::resolve_controlled_champion_script;
+pub(crate) use self::controlled_champion_script_registry::{
+    resolve_controlled_champion_script_result, supported_controlled_champion_script_keys,
+};

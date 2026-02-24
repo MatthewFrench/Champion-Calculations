@@ -368,7 +368,8 @@
         "Source targeting: Direction / Auto.",
         "Source castTime: none.",
         "Source notes (summary): Life Form Disintegration Ray's direction updates gradually (moving the cursor from one side of Vel'Koz to the other will not make him rotate instantly)."
-      ]
+      ],
+      "description_source": "Passive - Researched: Applying 3 Deconstruction stacks to an enemy champion marks them as Researched for 7 seconds, refreshing on basic attacks and ability hits against them."
     }
   },
   "sources": [

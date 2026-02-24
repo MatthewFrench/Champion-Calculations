@@ -119,7 +119,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Toggled abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): Toggled abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual verification (2026-02-24): Subject: Disaster is a mood-entry cast in Hwei's two-input system; the first Q cast enters selection state (no projectile/damage yet), then QQ/QW/QE or Wash Brush exits the state and commits the actual spell cast."
       ]
     },
     "basic_ability_2": {
@@ -293,6 +294,12 @@
       "path": "From Online/champions/Hwei.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Hwei/Subject%3A_Disaster",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Subject: Disaster mood-entry sequencing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

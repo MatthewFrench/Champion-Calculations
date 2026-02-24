@@ -108,7 +108,7 @@
             52.5,
             65.0
           ],
-          "context_notes": "Pow-Pow: Basic attacks with Pow-Pow generate a stack of Rev'd up for 2."
+          "context_notes": "Pow-Pow: Basic attacks generate a Rev'd up stack for 2.5 seconds, refreshing on subsequent Pow-Pow attacks and stacking up to 3 stacks."
         },
         {
           "id": "attack_speed_per_subsequent_stack",
@@ -120,7 +120,7 @@
             26.25,
             32.5
           ],
-          "context_notes": "Pow-Pow: Basic attacks with Pow-Pow generate a stack of Rev'd up for 2."
+          "context_notes": "Pow-Pow: Basic attacks generate a Rev'd up stack for 2.5 seconds, refreshing on subsequent Pow-Pow attacks and stacking up to 3 stacks."
         },
         {
           "id": "maximum_attack_speed",
@@ -132,7 +132,7 @@
             105.0,
             130.0
           ],
-          "context_notes": "Pow-Pow: Basic attacks with Pow-Pow generate a stack of Rev'd up for 2."
+          "context_notes": "Pow-Pow: Basic attacks generate a Rev'd up stack for 2.5 seconds, refreshing on subsequent Pow-Pow attacks and stacking up to 3 stacks."
         },
         {
           "id": "bonus_range",
@@ -260,7 +260,7 @@
             240.0,
             290.0
           ],
-          "context_notes": "Active: Jinx tosses out 3 Chompers centered at the target location, landing after 0."
+          "context_notes": "Active: Jinx tosses out 3 Chompers centered at the target location, landing after 0.4 seconds before arming and triggering on contact."
         },
         {
           "id": "jinx_e_effect_2",
@@ -384,6 +384,12 @@
       "path": "From Online/champions/Jinx.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Jinx",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -220,7 +220,7 @@
             190.0,
             230.0
           ],
-          "context_notes": "Active: Poppy gains 40% bonus movement speed and creates an aura around herself for 2 seconds, causing all enemies who attempt to dash into or within it to be dealt magic damage and knocked up for 0."
+          "context_notes": "Active: Poppy gains 40% bonus movement speed and creates an aura around herself for 2 seconds, causing all enemies who attempt to dash into or within it to be dealt magic damage and knocked up for 0.5 seconds. If a target was successfully interrupted, they become grounded and slowed by 25% for 2 seconds."
         },
         {
           "id": "poppy_w_effect_3",
@@ -392,7 +392,8 @@
         "Source speed: 2500.",
         "Source effectRadius: 180 / 225.",
         "Source notes (summary): The erupting hammer of the charged cast that sends out a missile will be centered on the first champion struck, not at the location the missile collided with them."
-      ]
+      ],
+      "description_source": "Active: Poppy charges while being slowed by 15% for up to 4 seconds to increase Keeper's Verdict's range and knock back distance over 0.5 seconds after the first 0.5 seconds of the channel. Keeper's Verdict can be recast within the duration."
     }
   },
   "sources": [
@@ -401,6 +402,12 @@
       "path": "From Online/champions/Poppy.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Poppy/Steadfast_Presence",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Steadfast Presence execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

@@ -188,7 +188,8 @@
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 1500.",
-        "Source notes (summary): Burrow does not count as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): Burrow does not count as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual verification (2026-02-24): Burrow is a persistent form-state toggle that changes attack range and vision model, enables Tremor Sense pulses, and switches to burrowed ability routing until explicitly unburrowed."
       ]
     },
     "basic_ability_3": {
@@ -280,7 +281,8 @@
         "Source castTime: 0.25.",
         "Source speed: 1400.",
         "Source notes (summary): Rek'Sai will track the target if they change locations while dashing to them."
-      ]
+      ],
+      "description_source": "Passive: Rek'Sai applies Marked as Prey to enemy champions she damages, lasting for 5 seconds."
     }
   },
   "sources": [
@@ -289,6 +291,12 @@
       "path": "From Online/champions/RekSai.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rek%27Sai/Burrow",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Burrow execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

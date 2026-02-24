@@ -247,7 +247,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "A field of ooze is created in its wake for 3 seconds, slowing enemies within the area every 0."
+          "context_notes": "A field of ooze is created in its wake for 3 seconds, slowing enemies within the area every 0.25 seconds."
         }
       ],
       "description": "Active: Kog'Maw spews a gob of ooze in the target direction that deals magic damage to enemies hit.",
@@ -295,7 +295,7 @@
             140.0,
             180.0
           ],
-          "context_notes": "Active: Kog'Maw spits a globule of acid into the air that drops to the target location after 0."
+          "context_notes": "Active: Kog'Maw spits acid that drops at the target location after 0.6 seconds, then deals magic damage and reveals enemies hit."
         },
         {
           "id": "maximum_magic_damage",
@@ -305,7 +305,7 @@
             280.0,
             360.0
           ],
-          "context_notes": "Active: Kog'Maw spits a globule of acid into the air that drops to the target location after 0."
+          "context_notes": "Active: Kog'Maw spits acid that drops at the target location after 0.6 seconds, then deals magic damage and reveals enemies hit."
         },
         {
           "id": "kogmaw_r_effect_2",
@@ -349,6 +349,12 @@
       "path": "From Online/champions/KogMaw.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kog%27Maw",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

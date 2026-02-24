@@ -321,7 +321,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "Active: Xayah leaps into the air, becoming ghosted and untargetable for 1."
+          "context_notes": "Active: Xayah leaps into the air, becoming ghosted and untargetable for 1.5 seconds. After 1 second, she shoots 5 Feathers in a cone in the target direction that deal physical damage to enemies hit."
         },
         {
           "id": "xayah_r_effect_2",
@@ -361,6 +361,12 @@
       "path": "From Online/champions/Xayah.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Xayah",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

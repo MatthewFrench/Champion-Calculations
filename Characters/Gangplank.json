@@ -374,7 +374,7 @@
             1260.0,
             1800.0
           ],
-          "context_notes": "Fire at Will: Cannon Barrage fires[ 6 additional waves ][ 2 additional clusters ]over its duration; 18 waves of cannonballs are called down in clusters of 3 every 1."
+          "context_notes": "Fire at Will: Cannon Barrage fires[ 6 additional waves ][ 2 additional clusters ]over its duration; 18 waves of cannonballs are called down in clusters of 3 every 1.33 seconds."
         },
         {
           "id": "maximum_mixed_total_damage_with_fire_at_will_and_death_s_daughter",
@@ -384,7 +384,7 @@
             1470.0,
             2100.0
           ],
-          "context_notes": "Fire at Will: Cannon Barrage fires[ 6 additional waves ][ 2 additional clusters ]over its duration; 18 waves of cannonballs are called down in clusters of 3 every 1."
+          "context_notes": "Fire at Will: Cannon Barrage fires[ 6 additional waves ][ 2 additional clusters ]over its duration; 18 waves of cannonballs are called down in clusters of 3 every 1.33 seconds."
         },
         {
           "id": "gangplank_r_effect_5",
@@ -424,6 +424,12 @@
       "path": "From Online/champions/Gangplank.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gangplank",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

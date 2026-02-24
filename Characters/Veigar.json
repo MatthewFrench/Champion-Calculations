@@ -243,7 +243,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.25.",
         "Source effectRadius: 411 / 290 / 390.",
-        "Source notes (summary): The stun and the knockdown are applied to units that are within a certain distance interval from the center of the area of effect."
+        "Source notes (summary): The stun and the knockdown are applied to units that are within a certain distance interval from the center of the area of effect.",
+        "Manual verification (2026-02-24): Event Horizon creates a delayed cage where only edge contact applies knockdown plus stun; crowd-control timing is defined by edge touch and cage lifetime rather than immediate center impact."
       ]
     },
     "ultimate": {
@@ -305,6 +306,12 @@
       "path": "From Online/champions/Veigar.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Veigar/Event_Horizon",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Event Horizon execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

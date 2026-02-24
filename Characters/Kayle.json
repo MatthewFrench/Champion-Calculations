@@ -114,7 +114,7 @@
             180.0,
             220.0
           ],
-          "context_notes": "Active: Kayle conjures a portal in front of her that faces the target direction, from which, after 0."
+          "context_notes": "Active: Kayle conjures a portal and fires a celestial sword after 0.25 seconds, damaging and slowing enemies hit."
         },
         {
           "id": "slow",
@@ -126,7 +126,7 @@
             40.0,
             45.0
           ],
-          "context_notes": "Active: Kayle conjures a portal in front of her that faces the target direction, from which, after 0."
+          "context_notes": "Active: Kayle conjures a portal and fires a celestial sword after 0.25 seconds, damaging and slowing enemies hit."
         },
         {
           "id": "kayle_q_effect_2",
@@ -308,7 +308,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "After 2."
+          "context_notes": "After 2.5 seconds, Divine Judgment rains swords around the protected target to deal magic damage to nearby enemies."
         },
         {
           "id": "kayle_r_effect_3",
@@ -347,6 +347,12 @@
       "path": "From Online/champions/Kayle.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kayle",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

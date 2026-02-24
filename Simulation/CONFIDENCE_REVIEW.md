@@ -34,6 +34,8 @@
 - Respawn timing currently uses level-scaling and URF flat reduction, but does not yet include full game-time increase-factor modeling from live rules.
 - Projectile interaction is not yet full collision/hitbox/path-block fidelity.
 - Ability identity is still partially represented by champion-specific cast fields; slot mapping foundations exist, but full actor-wide slot-agnostic runtime remapping support (for stolen/swapped abilities) is not yet implemented.
+- Champion data uncertainty follow-up:
+  - `Zyra` `Garden of Thorns` one-vs-two seed spawn distribution weighting remains unresolved from current source notes; lifecycle/state sequencing is modeled, but exact probability weighting needs an authoritative verification source before confidence can be raised further.
 
 ## Questions To Review
 1. Do we want to include game-time as an explicit simulation input so death timers can apply full time-based scaling (not just level-based scaling)?

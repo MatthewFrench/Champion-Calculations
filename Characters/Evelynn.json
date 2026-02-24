@@ -301,7 +301,8 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
-        "Source notes (summary): The mark fully forming signifies the 2."
+        "Source notes (summary): The mark fully forming signifies the 2.5 seconds have elapsed, meaning the charm will apply on the triggering hit.",
+        "Manual verification (2026-02-24): Allure applies a 5-second curse window; expunge always slows and refunds mana, while matured marks (at least 2.5 seconds) add charm and target-type branches (champion magic-resist shred versus monster bonus-damage and extended charm)."
       ]
     },
     "basic_ability_3": {
@@ -419,7 +420,8 @@
         "Source castTime: 0.35.",
         "Source effectRadius: 500.",
         "Source notes (summary): Last Caress can be buffered during Empowered Whiplash."
-      ]
+      ],
+      "description_source": "Active: Evelynn reveals her true form, becoming untargetable at the start of the cast time and then unleashing her lashers in a cone in the target direction, dealing magic damage to enemies struck within. After 0.5 seconds, she blinks 700 units in the opposite direction and becomes targetable again."
     }
   },
   "sources": [
@@ -428,6 +430,12 @@
       "path": "From Online/champions/Evelynn.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Evelynn/Allure",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Allure execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

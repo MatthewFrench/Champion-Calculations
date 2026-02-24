@@ -139,7 +139,7 @@
             210.0,
             260.0
           ],
-          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage and slows them for 2."
+          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage, and slows them for 2.5 seconds."
         },
         {
           "id": "total_physical_damage",
@@ -151,7 +151,7 @@
             315.0,
             390.0
           ],
-          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage and slows them for 2."
+          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage, and slows them for 2.5 seconds."
         },
         {
           "id": "slow",
@@ -163,7 +163,7 @@
             45.0,
             50.0
           ],
-          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage and slows them for 2."
+          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage, and slows them for 2.5 seconds."
         },
         {
           "id": "kled_q_effect_3",
@@ -333,7 +333,7 @@
             30.0,
             40.0
           ],
-          "context_notes": "While charging, the duo gain a shield for every 0."
+          "context_notes": "While charging, the duo gain a shield every 0.25 seconds while traveling, building up to the maximum shield amount over the charge window."
         },
         {
           "id": "maximum_shield",
@@ -343,7 +343,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "While charging, the duo gain a shield for every 0."
+          "context_notes": "While charging, the duo gain a shield every 0.25 seconds while traveling, building up to the maximum shield amount over the charge window."
         },
         {
           "id": "kled_r_effect_3",
@@ -394,6 +394,12 @@
       "path": "From Online/champions/Kled.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kled",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

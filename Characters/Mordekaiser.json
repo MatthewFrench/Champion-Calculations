@@ -282,8 +282,10 @@
         "Source targeting: Unit.",
         "Source castTime: 0.5.",
         "Source effectRadius: 1200.",
-        "Source notes (summary): Mordekaiser's Realm of Death."
-      ]
+        "Source notes (summary): Mordekaiser's Realm of Death.",
+        "Manual verification (2026-02-24): Realm of Death is a target-required 0.5-second cast that isolates Mordekaiser and target in a duel realm for fixed duration, applies stat steal on entry, and returns both actors to nearest valid exit space when the realm ends."
+      ],
+      "description_source": "Active: Mordekaiser aims his mace towards the target enemy champion, slowing them by 75% and revealing them over the cast time, and then banishing them with him to the Death Realm for 7 seconds. Mordekaiser also consumes the target's soul for 7 seconds, healing himself for 10% of their maximum health and reducing their current ability power, total attack speed, maximum health, armor, magic resistance, and size by 10% for the duration. Additionally, the target's base attack damage is reduced by 10% of their current total AD for the same duration. Mordekaiser gains the reduced stats of the target for himself for the same duration, and if the target dies while inside the Death Realm, he keeps their partial stats until they respawn."
     }
   },
   "sources": [
@@ -292,6 +294,12 @@
       "path": "From Online/champions/Mordekaiser.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Mordekaiser/Realm_of_Death",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Realm of Death execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

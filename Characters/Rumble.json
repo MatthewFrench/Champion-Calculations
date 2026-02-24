@@ -325,7 +325,7 @@
             115.0,
             145.0
           ],
-          "context_notes": "Active: Rumble generates 20 Heat to grant himself a shield for 1."
+          "context_notes": "Active: Rumble generates 20 Heat to grant himself a shield for 1.5 seconds."
         },
         {
           "id": "bonus_movement_speed",
@@ -640,6 +640,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for The Equalizer deployment timing and persistent burn-field tick cadence"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rumble/Scrap_Shield",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Scrap Shield execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

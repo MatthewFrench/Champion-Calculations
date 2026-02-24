@@ -104,7 +104,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "Active: Draven starts spinning his axe, empowering his next basic attack within 5."
+          "context_notes": "Active: Draven starts spinning his axe, empowering his next basic attack within 5.8 seconds with bonus physical damage."
         },
         {
           "id": "draven_q_effect_2",
@@ -160,7 +160,7 @@
             35.0,
             40.0
           ],
-          "context_notes": "Active: Draven enters an adrenaline rush, gaining bonus attack speed for 3 seconds as well as decaying bonus movement speed and ghosting for 1."
+          "context_notes": "Active: Draven enters an adrenaline rush, gaining bonus attack speed for 3 seconds plus decaying movement speed and ghosting for 1.5 seconds."
         },
         {
           "id": "bonus_movement_speed",
@@ -172,7 +172,7 @@
             65.0,
             70.0
           ],
-          "context_notes": "Active: Draven enters an adrenaline rush, gaining bonus attack speed for 3 seconds as well as decaying bonus movement speed and ghosting for 1."
+          "context_notes": "Active: Draven enters an adrenaline rush, gaining bonus attack speed for 3 seconds plus decaying movement speed and ghosting for 1.5 seconds."
         },
         {
           "id": "draven_w_effect_2",
@@ -362,6 +362,12 @@
       "path": "From Online/champions/Draven.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Draven",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

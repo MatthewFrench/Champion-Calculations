@@ -17,6 +17,7 @@ mod scripts;
 mod search;
 mod simulation_contracts;
 mod status;
+mod world;
 
 pub(crate) use crate::core::*;
 pub(crate) use crate::data::{

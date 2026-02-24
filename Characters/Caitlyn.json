@@ -195,7 +195,7 @@
             170.0,
             215.0
           ],
-          "context_notes": "The next enemy champion that springs the trap is rooted for 1."
+          "context_notes": "The next enemy champion that springs the trap is rooted for 1.5 seconds and revealed for 3 seconds, as well as takes additional damage from the Headshot granted by this ability. Trapped targets become immune to further Yordle Snap Traps for 3 seconds, preventing them from springing subsequent traps for the duration."
         }
       ],
       "description": "Active: Caitlyn sets a visible trap at the target location that is untargetable and arms after 1 second, lasting for a duration. The trap grants sight of the area for 1 second after being placed.",
@@ -331,7 +331,8 @@
         "Source castTime: 0.375.",
         "Source speed: 3200.",
         "Source notes (summary): The following will cancel Ace in the Hole's channel (mana expenditure is not compensated): Caitlyn is interrupted."
-      ]
+      ],
+      "description_source": "Active: Caitlyn locks onto the target enemy champion and channels for 1 second, revealing them as well as revealing herself."
     }
   },
   "sources": [
@@ -340,6 +341,12 @@
       "path": "From Online/champions/Caitlyn.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Caitlyn/Yordle_Snap_Trap",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Yordle Snap Trap execution timing, activation gating, and player-visible resolution semantics"
     }
   ],
   "notes": [
