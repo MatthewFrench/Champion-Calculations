@@ -146,8 +146,7 @@ where
             }
             let parent_a = tournament_parent_full(&scored, &mut local_seed, 3);
             let parent_b = tournament_parent_full(&scored, &mut local_seed, 3);
-            let mut child = if rand_f64(&mut local_seed) <= config.crossover_rate.clamp(0.0, 1.0)
-            {
+            let mut child = if rand_f64(&mut local_seed) <= config.crossover_rate.clamp(0.0, 1.0) {
                 crossover_full_candidates(&parent_a, &parent_b, params, &mut local_seed)
             } else {
                 parent_a

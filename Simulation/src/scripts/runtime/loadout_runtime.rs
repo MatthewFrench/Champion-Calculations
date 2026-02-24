@@ -1,17 +1,18 @@
-use crate::defaults::LevelScalingRange;
-use std::collections::HashMap;
-
 mod combat_bonus_resolution;
 mod rune_proc_telemetry;
 mod runtime_effect_mutations;
 mod runtime_stat_projections;
 mod runtime_state_initialization;
 mod runtime_state_reporting;
+mod runtime_state_schema;
 
 pub(crate) type RuneProcTelemetryEntry = self::rune_proc_telemetry::RuneProcTelemetryEntry;
 #[cfg(test)]
 pub(crate) type RuneProcTelemetrySourceEntry =
     self::rune_proc_telemetry::RuneProcTelemetrySourceEntry;
+
+use self::runtime_state_schema::{HitWindowTargetState, level_scaled_range_value};
+pub(crate) use self::runtime_state_schema::{LoadoutRuntimeState, OnHitEffectProfile};
 
 #[cfg(test)]
 use self::rune_proc_telemetry::{MODELED_RUNE_TELEMETRY_KEYS, rune_telemetry_index};
@@ -19,9 +20,7 @@ use self::rune_proc_telemetry::{MODELED_RUNE_TELEMETRY_KEYS, rune_telemetry_inde
 use self::combat_bonus_resolution::{
     calculate_ability_bonus_damage_impl, calculate_on_hit_bonus_damage_impl,
 };
-use self::rune_proc_telemetry::{
-    MODELED_RUNE_TELEMETRY_KEY_COUNT, RuneProcTelemetryTotals, build_rune_proc_telemetry_entries,
-};
+use self::rune_proc_telemetry::build_rune_proc_telemetry_entries;
 use self::runtime_effect_mutations::{
     on_enemy_kill_heal_impl, on_outgoing_damage_heal_impl, trigger_immobilize_rune_damage_impl,
 };
@@ -35,162 +34,6 @@ use self::runtime_state_initialization::{
 use self::runtime_state_reporting::{
     describe_runtime_cooldowns_impl, describe_runtime_stacks_impl,
 };
-
-#[derive(Debug, Clone, Copy)]
-pub(crate) struct OnHitEffectProfile {
-    pub on_hit_magic_flat: f64,
-    pub on_hit_magic_ad_ratio: f64,
-    pub periodic_true_hit_every: usize,
-    pub periodic_true_hit_base: f64,
-    pub periodic_true_hit_ad_ratio: f64,
-    pub periodic_true_hit_target_max_health_ratio: f64,
-}
-
-#[derive(Debug, Clone, Copy, Default)]
-struct PressTheAttackTargetState {
-    stacks: usize,
-    stack_expires_at: f64,
-    vulnerable_until: f64,
-}
-
-#[derive(Debug, Clone, Copy, Default)]
-struct HitWindowTargetState {
-    stacks: usize,
-    expires_at: f64,
-}
-
-#[derive(Debug, Clone)]
-pub(crate) struct LoadoutRuntimeState {
-    has_lethal_tempo: bool,
-    has_grasp: bool,
-    has_kraken: bool,
-    has_blade_of_the_ruined_king: bool,
-    has_heartsteel: bool,
-    has_liandry: bool,
-    has_luden: bool,
-    has_guinsoo: bool,
-    has_second_wind: bool,
-    has_press_the_attack: bool,
-    has_fleet_footwork: bool,
-    has_conqueror: bool,
-    has_aftershock: bool,
-    has_electrocute: bool,
-    has_first_strike: bool,
-    has_phase_rush: bool,
-    has_arcane_comet: bool,
-    has_summon_aery: bool,
-    has_hail_of_blades: bool,
-    has_dark_harvest: bool,
-    has_triumph: bool,
-    has_gathering_storm: bool,
-    owner_is_melee: bool,
-    rune_proc_telemetry_enabled: bool,
-
-    pub attacks_landed: usize,
-    pub lethal_tempo_stacks: usize,
-    pub hail_of_blades_remaining_attacks: usize,
-    pub guinsoo_stacks: usize,
-    pub conqueror_stacks: usize,
-    pub dark_harvest_souls: usize,
-    pub grasp_cooldown_seconds: f64,
-    pub heartsteel_cooldown_seconds: f64,
-    pub luden_cooldown_seconds: f64,
-    pub grasp_ready_at: f64,
-    pub heartsteel_ready_at: f64,
-    pub luden_ready_at: f64,
-    pub conqueror_expires_at: f64,
-    pub fleet_ready_at: f64,
-    pub aftershock_ready_at: f64,
-    pub aftershock_active_until: f64,
-    pub electrocute_ready_at: f64,
-    pub first_strike_ready_at: f64,
-    pub first_strike_window_until: f64,
-    pub phase_rush_ready_at: f64,
-    pub phase_rush_active_until: f64,
-    pub arcane_comet_ready_at: f64,
-    pub summon_aery_ready_at: f64,
-    pub hail_of_blades_ready_at: f64,
-    pub hail_of_blades_expires_at: f64,
-    pub dark_harvest_ready_at: f64,
-    pub pending_fleet_heal: f64,
-    press_the_attack_targets: HashMap<usize, PressTheAttackTargetState>,
-    electrocute_targets: HashMap<usize, HitWindowTargetState>,
-    phase_rush_targets: HashMap<usize, HitWindowTargetState>,
-    rune_proc_telemetry_totals: [RuneProcTelemetryTotals; MODELED_RUNE_TELEMETRY_KEY_COUNT],
-}
-
-impl Default for LoadoutRuntimeState {
-    fn default() -> Self {
-        Self {
-            has_lethal_tempo: false,
-            has_grasp: false,
-            has_kraken: false,
-            has_blade_of_the_ruined_king: false,
-            has_heartsteel: false,
-            has_liandry: false,
-            has_luden: false,
-            has_guinsoo: false,
-            has_second_wind: false,
-            has_press_the_attack: false,
-            has_fleet_footwork: false,
-            has_conqueror: false,
-            has_aftershock: false,
-            has_electrocute: false,
-            has_first_strike: false,
-            has_phase_rush: false,
-            has_arcane_comet: false,
-            has_summon_aery: false,
-            has_hail_of_blades: false,
-            has_dark_harvest: false,
-            has_triumph: false,
-            has_gathering_storm: false,
-            owner_is_melee: false,
-            rune_proc_telemetry_enabled: true,
-            attacks_landed: 0,
-            lethal_tempo_stacks: 0,
-            hail_of_blades_remaining_attacks: 0,
-            guinsoo_stacks: 0,
-            conqueror_stacks: 0,
-            dark_harvest_souls: 0,
-            grasp_cooldown_seconds: 4.0,
-            heartsteel_cooldown_seconds: 0.0,
-            luden_cooldown_seconds: 0.0,
-            grasp_ready_at: 0.0,
-            heartsteel_ready_at: 0.0,
-            luden_ready_at: 0.0,
-            conqueror_expires_at: 0.0,
-            fleet_ready_at: 0.0,
-            aftershock_ready_at: 0.0,
-            aftershock_active_until: 0.0,
-            electrocute_ready_at: 0.0,
-            first_strike_ready_at: 0.0,
-            first_strike_window_until: 0.0,
-            phase_rush_ready_at: 0.0,
-            phase_rush_active_until: 0.0,
-            arcane_comet_ready_at: 0.0,
-            summon_aery_ready_at: 0.0,
-            hail_of_blades_ready_at: 0.0,
-            hail_of_blades_expires_at: 0.0,
-            dark_harvest_ready_at: 0.0,
-            pending_fleet_heal: 0.0,
-            press_the_attack_targets: HashMap::new(),
-            electrocute_targets: HashMap::new(),
-            phase_rush_targets: HashMap::new(),
-            rune_proc_telemetry_totals: [RuneProcTelemetryTotals::default();
-                MODELED_RUNE_TELEMETRY_KEY_COUNT],
-        }
-    }
-}
-
-fn level_scaled_value(level: usize, min: f64, max: f64) -> f64 {
-    let clamped_level = level.clamp(1, 18);
-    let t = (clamped_level as f64 - 1.0) / 17.0;
-    min + (max - min) * t
-}
-
-fn level_scaled_range_value(level: usize, range: LevelScalingRange) -> f64 {
-    level_scaled_value(level, range.min, range.max)
-}
 
 #[cfg(test)]
 pub(crate) fn build_loadout_runtime_state(

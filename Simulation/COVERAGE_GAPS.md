@@ -25,7 +25,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Champion files (From Online parity) | `172/172` champions from `From Online/champions/*.json` have canonical `Characters/<Champion>.json` files | N/A | File-parity gap is closed; remaining champion gap is behavior-fidelity normalization across generated files |
 | Champion active-ability execution metadata (full corpus) | `682/682` active abilities across canonical champions include non-empty `execution` objects | N/A | No active-execution gap; keep as no-regression guardrail |
 | Champion ability context-note coverage | `860/860` champion abilities include `context_notes` execution semantics | N/A | No context-note completeness gap; keep as no-regression guardrail |
-| Champion manual behavior verification coverage | `47/172` champions are marked manual verified in `Simulation/champion_behavior_verification_tracker.json` | N/A | `125` champions remain source-extracted-only and need deeper manual behavior verification |
+| Champion manual behavior verification coverage | `59/172` champions are marked manual verified in `Simulation/champion_behavior_verification_tracker.json` | N/A | `113` champions remain source-extracted-only and need deeper manual behavior verification |
 | Controlled champion scripts (full corpus) | `172/172` canonical champions have ability data | `1/172` (`Vladimir`) | `171` champions remain data-complete but unscripted at runtime |
 | Enemy scripted-event champions (full corpus) | `172/172` canonical champions have ability data | `5/172` (`Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`) | Enemy scripted-event runtime coverage remains intentionally partial |
 | Item files | `320` canonical item JSON files (`295` loaded by runtime after excluded ranks), plus `2` non-canonical report artifacts under `Items/` | Runtime effect coverage is a subset of legal URF pool | Effect behavior not modeled for many items |
@@ -34,6 +34,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Stat shards | `3` slots (`2` options each) | Deterministic parse covers shard stats | Tenacity runtime effect incomplete |
 
 ## Deferred Runtime Expansion Backlog (Expand Later)
+- Resolve current controlled-champion script channel visibility/export regressions so validation gates pass again (`Simulation/src/scripts/champions/controlled_champion.rs` and `Simulation/src/scripts/champions/controlled_champion/*`; unresolved symbol/re-export errors in `engine.rs`, `scenario_runner.rs`, and related tests).
 - Expand controlled champion script coverage beyond `Vladimir` using the existing capability interface.
 - Add full enemy-script event-path tests (cooldown, range, and followup behavior per event).
 - Unify rune runtime key mapping and telemetry key mapping to one canonical table.
@@ -66,6 +67,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Low-confidence page-verification queue | `0/0` low-confidence item files (`parse_confidence < 0.65`) lack page-level citation | Queue is cleared; keep this as a no-regression guardrail |
 | Legal URF unmodeled page-level citation depth | `0/102` legal-URF unmodeled effect items still have no page-level citation | Queue is cleared; keep this as a no-regression guardrail while expanding broader page-depth coverage |
 | CommunityDragon source URL accessibility | `0/243` structured item files still cite legacy `global/en_us/v1/items.json` source URLs | Endpoint migration is complete; keep URL-health checks as a no-regression guardrail |
+| League Wiki URL-health automation reliability | Automated URL checks against League Wiki currently return HTTP `403` for valid page URLs in this environment | Keep normalized League Wiki URLs in `sources`; treat manual browser verification as acceptable when scripted URL checks are blocked |
 | Canonical sell-price alignment | `3/300` item files with numeric sell values differ from Data Dragon `16.3.1` sell values (`World Atlas`, `Runic Compass`, `Bounty of Worlds`) | All current mismatches are intentional page-level No Sell overrides for support-quest staging; keep this explicit exception register |
 | Item stat-key canonicalization | `0/322` item files use legacy `stats.magicResistance` key (`30` files normalized to `stats.magicResist`) | Canonical key normalization is complete; keep this as a no-regression guardrail to avoid silent magic-resist stat drops in loader parsing |
 | Crit-stat key canonicalization | `0/322` item files use legacy `stats.criticalStrikeChance` keys (`22` files normalized in dedicated wave plus opportunistic early migration on `Navori Flickerblade`) | Canonical crit stat-key normalization is complete; keep this as a no-regression guardrail |
@@ -107,9 +109,10 @@ This file tracks what is complete and not complete for coverage across data and 
 | Non-structured item provenance (`Items/*.json` without `effects_structured`) | `0/77` canonical non-structured item files have null/empty `sources` | Queue is cleared for canonical item files; keep this as a no-regression guardrail |
 | Items-folder provenance completeness (`Items/*.json`, canonical + report artifacts) | `0/322` item JSON files have null/empty `sources`; `0/322` have source entries missing `accessed` | Folder-level provenance/accessed normalization is complete; keep this as a no-regression guardrail |
 | Champion corpus parity (`From Online/champions` -> `Characters`) | `172/172` champion keys have canonical `Characters/<Champion>.json` parity (`0` missing) | File-parity backlog is cleared; keep inventory as a no-regression guardrail and prioritize per-champion behavior-fidelity review waves |
-| Champion manual verification tracker coverage | `47/172` champions currently marked `manual_behavior_verified` (`27.33%`) in `Simulation/champion_behavior_verification_tracker.json` | Continue fidelity waves until high-impact champion roster is fully manual verified; treat source-extracted-only champions as pending quality work |
-| Champion manual-verification page-level citation depth | `5/5` champions in the latest fidelity wave include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
-| Champion context-note truncation audit | `280` ability entries across `107` champion files are currently flagged by strict regex audit as candidate truncated timing fragments in `context_notes` (for example `for 0.` or `within 4.`) | Queue remains tracked with string+array-aware strict auditing; continue cleanup waves to normalize fragments into complete timing/unit semantics |
+| Champion manual verification tracker coverage | `59/172` champions currently marked `manual_behavior_verified` (`34.3%`) in `Simulation/champion_behavior_verification_tracker.json` | Continue fidelity waves until high-impact champion roster is fully manual verified; treat source-extracted-only champions as pending quality work |
+| Champion verification tracker integrity | `manual_behavior_verified_champion_keys` count and tracker totals are now reconciled (`59` verified keys, `113` source-extracted-only, corpus `172`) | Keep per-wave reconciliation check as a no-regression guardrail (`verified_count == key_count`; `source_extracted_only == corpus_total - verified_count`) |
+| Champion manual-verification page-level citation depth | `6/6` champions in the latest fidelity wave include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
+| Champion context-note truncation audit | `219` ability entries across `94` champion files are currently flagged by strict regex audit as candidate truncated timing fragments in `context_notes` (for example `for 0.` or `within 4.`) | Queue remains tracked with string+array-aware strict auditing; continue cleanup waves to normalize fragments into complete timing/unit semantics |
 | Champion source metadata completeness (`Characters/*.json`) | `0/173` champion JSON files have null/empty `sources`; `0/173` have source entries missing `accessed` | Champion provenance/accessed normalization is complete; keep this as a no-regression guardrail |
 | Champion active-ability execution metadata completeness | `682/682` champion active abilities include non-empty `execution` objects | Active-ability execution metadata backlog is cleared; keep this as a no-regression guardrail |
 | Champion context-note coverage completeness | `860/860` champion abilities include `context_notes` | Context-note completeness backlog is cleared; keep this as a no-regression guardrail |
@@ -119,7 +122,18 @@ This file tracks what is complete and not complete for coverage across data and 
 ## Data Coverage Progress (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured at the time each wave landed; use "Coverage At A Glance" and "Champion Corpus Parity Snapshot" for current totals.
 - Completed:
-  - added `Simulation/champion_behavior_verification_tracker.json` to track deeper manual champion behavior verification beyond source extraction (current baseline: `47/172` manual verified, policy defaulting to intended non-bug behavior)
+  - added `Simulation/champion_behavior_verification_tracker.json` to track deeper manual champion behavior verification beyond source extraction (current baseline: `59/172` manual verified, policy defaulting to intended non-bug behavior)
+  - completed champion fidelity normalization wave 50:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Talon`, `Smolder`, `Sejuani`, `Nunu`, `Nilah`, `Maokai`) with page-level champion ability citation provenance
+    - normalized `30` strict fragment candidates in touched champion ability/effect `context_notes` to source-backed complete timing semantics
+    - raised manual verification tracker coverage from `53/172` to `59/172`
+    - reduced string+array-aware strict fragment queue from `249/100` to `219/94`
+  - completed champion fidelity normalization wave 49:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Mel`, `Katarina`, `Corki`, `Velkoz`, `Singed`, `Ziggs`) with page-level champion ability citation provenance
+    - normalized `33` strict fragment candidates in touched champion ability/effect `context_notes` to source-backed complete timing semantics
+    - corrected tracker-key integrity drift by adding missing `Lissandra` to `manual_behavior_verified_champion_keys` so key-list totals reconcile with tracker totals
+    - raised manual verification tracker coverage from `47/172` to `53/172`
+    - reduced string+array-aware strict fragment queue from `282/106` to `249/100`
   - completed champion fidelity normalization wave 48:
     - manually reviewed and normalized timing-semantics notes across `5` champions (`Udyr`, `Sion`, `Lissandra`, `AurelionSol`, `Naafiri`) with page-level champion ability citation provenance
     - normalized `29` strict fragment candidates in touched champion ability/effect `context_notes` to source-backed complete timing semantics
@@ -423,8 +437,8 @@ This file tracks what is complete and not complete for coverage across data and 
 25. Maintain champion provenance/accessed no-regression (`Characters`: `0/173` unsourced and `0/173` with missing `sources[].accessed`).
 26. Maintain mastery provenance/accessed no-regression (`Masteries`: `0/2` unsourced and `0/2` with missing `sources[].accessed`).
 27. Maintain champion active-ability execution metadata no-regression (`682/682` active abilities with non-empty `execution` objects).
-28. Maintain champion manual behavior-verification tracker and increase manual coverage each wave (`47/172` current baseline).
-29. Execute champion context-note truncation cleanup waves for the tracked backlog (`280` ability entries across `107` champion files, string+array-aware strict audit) and require complete timing/unit semantics before marking entries manually verified.
+28. Maintain champion manual behavior-verification tracker and increase manual coverage each wave (`59/172` current baseline).
+29. Execute champion context-note truncation cleanup waves for the tracked backlog (`219` ability entries across `94` champion files, string+array-aware strict audit) and require complete timing/unit semantics before marking entries manually verified.
 
 ### Remaining Broader No-Page Queue (`0`)
 - None (queue cleared in wave 39; keep as a no-regression guardrail).
@@ -447,13 +461,13 @@ This file tracks what is complete and not complete for coverage across data and 
    - phase 2 (in progress): run manual execution-semantics review waves over generated champion files, prioritizing high-impact kits and attack-cadence-coupled abilities.
    - phase 3 (completed): standardized context-note depth for champion passives and closed passive-note backlog (`172/172` documented).
    - phase 4 (continuous): keep source denominator synchronized when new `From Online/champions` entries appear, then open targeted parity/fidelity deltas for new champions only.
-  - phase 5 (in progress): raise manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` (`47/172` -> target full-corpus long term) with wave-level reviewed champion/ability scope.
+  - phase 5 (in progress): raise manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` (`59/172` -> target full-corpus long term) with wave-level reviewed champion/ability scope.
 5. Runes Reforged Split-Structure Plan:
    - phase 1 (completed): create split index/stat-shards/tree files (`Masteries/RunesReforged/RunesReforged.json`, `StatShards/stat_shards.json`, `Trees/*/{tree,primary_runes,secondary_runes}.json`).
    - phase 2 (in progress): keep split files and flat compatibility file synchronized on every rune/mastery edit, with explicit parity audits in authoring checks.
    - phase 3 (pending runtime follow-up): migrate runtime/data loaders to consume split structure directly, then deprecate flat-file compatibility path in a controlled code phase.
 6. Champion Context-Note Truncation Cleanup Plan:
-  - phase 1 (completed): inventory strict-regex-detected truncated timing fragments with string+array-aware context-note normalization (`280` ability entries across `107` champion files after wave-48 cleanup; corrected-method pre-cleanup baseline `360/123`) and track as explicit gap.
+  - phase 1 (completed): inventory strict-regex-detected truncated timing fragments with string+array-aware context-note normalization (`219` ability entries across `94` champion files after wave-50 cleanup; corrected-method pre-cleanup baseline `360/123`) and track as explicit gap.
    - phase 2 (in progress): prioritize high-impact combat kits/attack-cadence abilities and normalize truncated notes to full timing/unit semantics with page-level verification.
    - phase 3 (pending): run full-corpus no-regression audit to keep truncation-fragment queue at `0` on future champion edits.
 

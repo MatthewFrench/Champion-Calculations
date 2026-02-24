@@ -58,7 +58,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Full rune-proc telemetry collection is disabled for search-time scoring simulations and enabled explicitly for trace/report replay simulations.
 - Rune telemetry runtime bookkeeping uses fixed-index counter arrays (no per-event hashmap lookup/allocation in hot paths).
 - Rune-proc telemetry trigger/source accounting and telemetry-entry assembly now route through `src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`.
-- Runtime on-hit and ability bonus-damage resolution now routes through `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`.
+- Runtime on-hit and ability bonus-damage resolution now routes through `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` facade plus explicit owner leaves under `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/`.
 - Runtime rune-proc trigger mutation helpers now route through `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`.
 - Runtime state initialization/reset ownership now routes through `src/scripts/runtime/loadout_runtime/runtime_state_initialization.rs`.
 - Runtime mutation-effect ownership now routes through `src/scripts/runtime/loadout_runtime/runtime_effect_mutations.rs`.
@@ -84,10 +84,10 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - full-loadout candidate scoring/ranking helper ownership now routes through `src/search/candidate_space/full_loadout_candidate_scoring.rs`
   - item-only candidate mutation/crossover/parent-selection helper ownership now routes through `src/search/candidate_space/item_candidate_operations.rs`
   - item-only candidate scoring/dedupe helper ownership now routes through `src/search/candidate_space/item_candidate_scoring.rs`
-- Full-loadout search orchestration ownership now routes through `src/search/full_loadout_search_orchestration.rs` (`FullLoadoutSearchParams`, `build_search_ranked_full_loadout`, seed-elite aggregation, adaptive strategy expansion, bleed candidate generation).
+- Full-loadout search orchestration ownership now routes through `src/search/full_loadout_search_orchestration.rs` facade plus explicit owner leaves under `src/search/full_loadout_search_orchestration/` (`strategy_dispatch.rs`, `seed_elite_generation.rs`, `adaptive_candidate_generation.rs`, `bleed_candidate_generation.rs`).
 - Search strategy ownership now routes through `src/search/strategy/*`:
   - item-only strategy facade ownership routes through `src/search/strategy/item_candidate_search_strategies.rs` with explicit owner leaves under `src/search/strategy/item_candidate_search_strategies/`
-  - full-loadout strategy helper ownership routes through `src/search/strategy/full_loadout_search_strategies.rs`
+  - full-loadout strategy helper ownership routes through `src/search/strategy/full_loadout_search_strategies.rs` facade with explicit owner leaves under `src/search/strategy/full_loadout_search_strategies/`
 - Search scoring/diversity ownership now routes through `src/search/scoring/*`:
   - item-build scoring/diversity helper ownership routes through `src/search/scoring/item_build_scoring_and_diversity.rs`
   - full-loadout scoring/diversity helper ownership routes through `src/search/scoring/full_loadout_scoring_and_diversity.rs`
@@ -101,7 +101,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Scenario strict-ranking heuristic ordering helper ownership now routes through `src/scenario_runner/strict_ranking_ordering.rs`.
 - Scenario legal candidate-space estimation/probability formatting helper ownership now routes through `src/scenario_runner/search_space_estimation.rs`.
 - Scenario controlled-champion runtime/search support helper ownership now routes through `src/scenario_runner/controlled_champion_search_runtime_support.rs` (coverage-asset locking, partial-candidate completion, telemetry/trace shaping, progress-state primitives).
-- Scenario controlled-champion candidate-search phase orchestration now routes through `src/scenario_runner/controlled_champion_candidate_search.rs` (maximum-quality coverage stage, ensemble-seed strategy orchestration, candidate merge/dedupe, strict full ranking).
+- Scenario controlled-champion candidate-search phase orchestration now routes through `src/scenario_runner/controlled_champion_candidate_search.rs` with explicit phase-owner leaves (`coverage_stage_execution.rs`, `seed_and_strict_execution.rs`, `seed_and_strict_execution/*`).
 - Scenario controlled-champion setup and enemy-build preparation ownership now routes through `src/scenario_runner/controlled_champion_scenario_setup.rs`.
 - Scenario controlled-champion strict-ranking fallback/tie-break/seed-diagnostics finalization ownership now routes through `src/scenario_runner/controlled_champion_strict_ranking_finalization.rs`.
 - Scenario controlled-champion post-search result-reporting orchestration now routes through `src/scenario_runner/controlled_champion_result_reporting.rs`.
@@ -109,6 +109,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Scenario controlled-champion trace/report artifact writing now routes through `src/scenario_runner/controlled_champion_result_artifact_writing.rs`.
 - Scenario fixed-loadout and fixed-loadout-rune-sweep execution entrypoint implementation now routes through `src/scenario_runner/fixed_loadout_runner.rs` and `src/scenario_runner/rune_sweep_runner.rs`, with shared enemy-scenario projection ownership in `src/scenario_runner/controlled_champion_enemy_scenario_projection.rs` and rune-sweep aggregation/report projection routed through explicit leaves under `src/scenario_runner/rune_sweep_runner/`.
 - Scenario controlled-champion execution entrypoint now routes through `src/scenario_runner/controlled_champion_scenario_runner.rs` facade, `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` owner leaf, and explicit execution sub-leaves under `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution/`.
+- Controlled champion script ownership now routes through `src/scripts/champions/controlled_champion.rs` facade plus explicit owner leaves under `src/scripts/champions/controlled_champion/` (contracts, registry, channels) and `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script/` (model/capability/builder).
 - Core combat-primitives/status/cast-lock ownership now routes through `src/core/combat_primitives_state.rs`.
 - Defaults champion/item simulation-default loading now routes through a thin defaults-loader facade plus explicit leaf owners:
   - `src/defaults/champion_item_simulation_defaults_loader.rs`

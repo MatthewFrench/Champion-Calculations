@@ -61,8 +61,8 @@ where
                 } else {
                     child.value_sum / child.visits as f64
                 };
-                let explore =
-                    config.exploration * ((parent_visits.ln() / (child.visits.max(1) as f64)).sqrt());
+                let explore = config.exploration
+                    * ((parent_visits.ln() / (child.visits.max(1) as f64)).sqrt());
                 let uct = exploit + explore;
                 if uct > best_uct {
                     best_uct = uct;

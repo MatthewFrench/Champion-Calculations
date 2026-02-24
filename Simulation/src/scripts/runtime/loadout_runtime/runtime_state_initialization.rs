@@ -1,4 +1,5 @@
-use super::{LoadoutRuntimeState, MODELED_RUNE_TELEMETRY_KEY_COUNT, RuneProcTelemetryTotals};
+use super::LoadoutRuntimeState;
+use super::rune_proc_telemetry::{MODELED_RUNE_TELEMETRY_KEY_COUNT, RuneProcTelemetryTotals};
 use crate::defaults::{
     heartsteel_colossal_consumption_cooldown_seconds_default, luden_echo_cooldown_seconds_default,
     rune_runtime_defaults,

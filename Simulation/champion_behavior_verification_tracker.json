@@ -22,9 +22,9 @@
   },
   "totals": {
     "champion_corpus_total": 172,
-    "manual_behavior_verified_champions": 53,
-    "source_extracted_only_champions": 119,
-    "manual_verification_percent": 30.81
+    "manual_behavior_verified_champions": 59,
+    "source_extracted_only_champions": 113,
+    "manual_verification_percent": 34.3
   },
   "manual_behavior_verified_champion_keys": [
     "Akshan",
@@ -48,22 +48,28 @@
     "Lillia",
     "Lissandra",
     "Lux",
+    "Maokai",
     "Mel",
     "MonkeyKing",
     "Morgana",
     "Naafiri",
     "Nasus",
     "Nautilus",
+    "Nilah",
     "Nocturne",
+    "Nunu",
     "Olaf",
     "Riven",
     "Rumble",
+    "Sejuani",
     "Shaco",
     "Singed",
     "Sion",
+    "Smolder",
     "Sona",
     "Swain",
     "Taliyah",
+    "Talon",
     "Trundle",
     "Udyr",
     "Urgot",
@@ -471,6 +477,67 @@
         ],
         "focus": "Satchel Charge knockback resolution timing and Hexplosive Minefield slow-duration timing normalization",
         "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Ziggs"
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_50": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Talon",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Rake linger-and-return delay timing plus Shadow Assault linger-window duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Talon"
+      },
+      {
+        "key": "Smolder",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Achooo slow-duration/explosion timing and Flap, Flap, Flap flight-window duration normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Smolder"
+      },
+      {
+        "key": "Sejuani",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Arctic Assault knockup duration, Winter's Wrath two-stage cast timing, and Glacial Prison empowered stun-window normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Sejuani"
+      },
+      {
+        "key": "Nunu",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "basic_ability_3"
+        ],
+        "focus": "Biggest Snowball Ever knockup/stun charge scaling and Snowball Barrage volley/root timing normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Nunu_%26_Willump"
+      },
+      {
+        "key": "Nilah",
+        "abilities_reviewed": [
+          "basic_ability_2",
+          "ultimate"
+        ],
+        "focus": "Jubilant Veil duration normalization and Apotheosis tick cadence normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Nilah"
+      },
+      {
+        "key": "Maokai",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3",
+          "ultimate"
+        ],
+        "focus": "Bramble Smash slow duration, Sapling Toss chase window timing, and Nature's Grasp root-duration scaling normalization",
+        "page_level_ability_source": "https://wiki.leagueoflegends.com/en-us/Maokai"
       }
     ]
   }

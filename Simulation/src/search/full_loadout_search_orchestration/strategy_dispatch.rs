@@ -3,9 +3,7 @@ use std::time::Instant;
 
 use crate::status::deadline_reached;
 
-use super::super::candidate_space::full_loadout_candidate_operations::{
-    candidate_loadout_variants, canonical_build_candidate, canonical_key,
-};
+use super::super::candidate_space::full_loadout_candidate_operations::candidate_loadout_variants;
 use super::super::candidate_space::full_loadout_candidate_scoring::unique_ranked_full_candidates;
 use super::super::strategy::full_loadout_search_strategies::{
     beam_search_ranked_full, genetic_search_ranked_full, hill_climb_search_ranked_full,
@@ -13,7 +11,8 @@ use super::super::strategy::full_loadout_search_strategies::{
 };
 use super::super::{
     BuildKey, BuildSearchConfig, GeneticSearchConfig, HillClimbSearchConfig, MctsSearchConfig,
-    SimulatedAnnealingSearchConfig, can_add_item_to_build,
+    SimulatedAnnealingSearchConfig, can_add_item_to_build, canonical_build_candidate,
+    canonical_key,
 };
 use super::FullLoadoutSearchParams;
 

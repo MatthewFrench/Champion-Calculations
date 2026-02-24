@@ -130,6 +130,7 @@ Priority A. Champion corpus fidelity normalization (highest impact):
 - Keep canonical champion file parity at `172/172` via `Simulation/champion_data_coverage_inventory.json`.
 - Run manual behavior-fidelity waves over generated champions so non-trivial abilities include execution-semantics notes that match in-game behavior.
 - Track manual verification coverage in `Simulation/champion_behavior_verification_tracker.json` (manual verified vs source-extracted-only champions) and raise coverage each wave.
+- Keep tracker integrity auditable each wave: `manual_behavior_verified_champion_keys` length must match `totals.manual_behavior_verified_champions`, and `source_extracted_only_champions` must equal corpus-total minus verified-count.
 - For each manually verified champion in a wave, record at least one page-level champion ability citation in the champion `sources` list and in the wave entry of `Simulation/champion_behavior_verification_tracker.json`.
 - Maintain full-corpus active-ability execution no-regression (`682/682`) and full ability context-note no-regression (`860/860`).
 - Run dedicated cleanup passes for generated/truncated context-note fragments (for example `for 0.` / `within 4.`) and pair each correction wave with tracker updates and provenance notes.
@@ -240,6 +241,17 @@ Priority C. Champion inventory and planning hygiene:
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed champion fidelity normalization wave 50:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Talon`, `Smolder`, `Sejuani`, `Nunu`, `Nilah`, `Maokai`) with page-level champion ability citation provenance
+    - normalized `30` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - raised manual verification tracker coverage from `53/172` to `59/172`
+    - reduced string+array-aware strict-fragment queue from `249/100` to `219/94`
+  - Completed champion fidelity normalization wave 49:
+    - manually reviewed and normalized timing-semantics notes across `6` champions (`Mel`, `Katarina`, `Corki`, `Velkoz`, `Singed`, `Ziggs`) with page-level champion ability citation provenance
+    - normalized `33` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+    - corrected tracker-key integrity drift by adding missing `Lissandra` to `manual_behavior_verified_champion_keys` and re-reconciling totals
+    - raised manual verification tracker coverage from `47/172` to `53/172`
+    - reduced string+array-aware strict-fragment queue from `282/106` to `249/100`
   - Completed champion fidelity normalization wave 48:
     - manually reviewed and normalized timing-semantics notes across `5` champions (`Udyr`, `Sion`, `Lissandra`, `AurelionSol`, `Naafiri`) with page-level champion ability citation provenance
     - normalized `29` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics

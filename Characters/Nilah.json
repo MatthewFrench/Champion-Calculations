@@ -173,7 +173,7 @@
             22.5,
             25.0
           ],
-          "context_notes": "Active: Nilah envelops herself in mist for 2."
+          "context_notes": "Active: Nilah envelops herself in mist for 2.25 seconds, becoming ghosted, gaining movement speed, and dodging non-turret basic attacks."
         },
         {
           "id": "nilah_w_effect_2",
@@ -280,7 +280,7 @@
             25.0,
             35.0
           ],
-          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0.25 seconds before the final pull and burst."
         },
         {
           "id": "total_physical_damage",
@@ -290,7 +290,7 @@
             100.0,
             140.0
           ],
-          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0.25 seconds before the final pull and burst."
         },
         {
           "id": "burst_physical_damage",
@@ -300,7 +300,7 @@
             225.0,
             325.0
           ],
-          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0.25 seconds before the final pull and burst."
         },
         {
           "id": "maximum_total_physical_damage",
@@ -310,7 +310,7 @@
             325.0,
             465.0
           ],
-          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0.25 seconds before the final pull and burst."
         },
         {
           "id": "nilah_r_effect_2",
@@ -354,6 +354,12 @@
       "path": "From Online/champions/Nilah.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Nilah",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

@@ -38,10 +38,10 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - full-loadout candidate scoring/ranking helper ownership now routes through `Simulation/src/search/candidate_space/full_loadout_candidate_scoring.rs`
   - item-only candidate mutation/crossover/parent-selection helper ownership now routes through `Simulation/src/search/candidate_space/item_candidate_operations.rs`
   - item-only candidate scoring/dedupe helper ownership now routes through `Simulation/src/search/candidate_space/item_candidate_scoring.rs`
-- Full-loadout search orchestration ownership now routes through `Simulation/src/search/full_loadout_search_orchestration.rs` (`FullLoadoutSearchParams`, full-loadout strategy dispatch, ensemble-seed elites, adaptive strategy expansion, bleed candidate generation).
+- Full-loadout search orchestration ownership now routes through `Simulation/src/search/full_loadout_search_orchestration.rs` facade plus explicit owner leaves under `Simulation/src/search/full_loadout_search_orchestration/` (`strategy_dispatch.rs`, `seed_elite_generation.rs`, `adaptive_candidate_generation.rs`, `bleed_candidate_generation.rs`).
 - Search strategy ownership now routes through `Simulation/src/search/strategy/*`:
   - item-only strategy facade ownership routes through `Simulation/src/search/strategy/item_candidate_search_strategies.rs` with explicit owner leaves under `Simulation/src/search/strategy/item_candidate_search_strategies/`
-  - full-loadout strategy helper ownership routes through `Simulation/src/search/strategy/full_loadout_search_strategies.rs`
+  - full-loadout strategy helper ownership routes through `Simulation/src/search/strategy/full_loadout_search_strategies.rs` facade with explicit owner leaves under `Simulation/src/search/strategy/full_loadout_search_strategies/`
 - Search scoring/diversity ownership now routes through `Simulation/src/search/scoring/*`:
   - item-build scoring/diversity helper ownership routes through `Simulation/src/search/scoring/item_build_scoring_and_diversity.rs`
   - full-loadout scoring/diversity helper ownership routes through `Simulation/src/search/scoring/full_loadout_scoring_and_diversity.rs`
@@ -55,7 +55,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - strict-ranking heuristic ordering helpers now route through `Simulation/src/scenario_runner/strict_ranking_ordering.rs`
   - legal candidate-space estimation/probability formatting helpers now route through `Simulation/src/scenario_runner/search_space_estimation.rs`
   - controlled champion runtime/search support helper ownership now routes through `Simulation/src/scenario_runner/controlled_champion_search_runtime_support.rs` (coverage-asset locking, partial-candidate completion, telemetry/trace shaping, progress-state primitives)
-  - controlled champion candidate-search phase orchestration now routes through `Simulation/src/scenario_runner/controlled_champion_candidate_search.rs` (maximum-quality coverage stage, ensemble-seed strategy orchestration, candidate merge/dedupe, strict full ranking)
+  - controlled champion candidate-search phase orchestration now routes through `Simulation/src/scenario_runner/controlled_champion_candidate_search.rs` with explicit phase-owner leaves (`coverage_stage_execution.rs`, `seed_and_strict_execution.rs`, `seed_and_strict_execution/*`)
   - controlled champion setup and enemy-build preparation ownership now routes through `Simulation/src/scenario_runner/controlled_champion_scenario_setup.rs`
   - controlled champion strict-ranking fallback/tie-break/seed-diagnostics finalization ownership now routes through `Simulation/src/scenario_runner/controlled_champion_strict_ranking_finalization.rs`
   - controlled champion post-search result-reporting orchestration now routes through `Simulation/src/scenario_runner/controlled_champion_result_reporting.rs`
@@ -78,7 +78,8 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Data simulation/search configuration parsing ownership now routes through `Simulation/src/data/simulation_search_configuration_parsing.rs` facade plus explicit parse owner leaves under `Simulation/src/data/simulation_search_configuration_parsing/`.
 - Data loadout-domain modeling/legality/sampling ownership now routes through `Simulation/src/data/loadout_domain_modeling.rs` facade plus explicit owner leaves under `Simulation/src/data/loadout_domain_modeling/`.
 - Data loadout effect/stat resolution ownership now routes through `Simulation/src/data/loadout_effect_resolution.rs`.
-- Runtime combat bonus-resolution ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`.
+- Runtime combat bonus-resolution ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` facade plus explicit owner leaves under `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution/`.
+- Controlled champion script ownership now routes through `Simulation/src/scripts/champions/controlled_champion.rs` facade plus explicit owner leaves under `Simulation/src/scripts/champions/controlled_champion/` (contracts, registry, channels) and `Simulation/src/scripts/champions/controlled_champion/vladimir_controlled_champion_script/` (model/capability/builder).
 - Runtime rune-proc state mutation ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`.
 - Runtime rune-proc telemetry ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`.
 - Runtime state initialization/reset ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/runtime_state_initialization.rs`.

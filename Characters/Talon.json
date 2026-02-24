@@ -182,7 +182,7 @@
             150.0,
             180.0
           ],
-          "context_notes": "At maximum range, the daggers linger for 0."
+          "context_notes": "At maximum range, the daggers linger for 0.7 seconds before homing back to Talon, dealing physical damage to enemies hit and slowing them for 1 second."
         },
         {
           "id": "total_physical_damage",
@@ -194,7 +194,7 @@
             230.0,
             270.0
           ],
-          "context_notes": "At maximum range, the daggers linger for 0."
+          "context_notes": "At maximum range, the daggers linger for 0.7 seconds before homing back to Talon, dealing physical damage to enemies hit and slowing them for 1 second."
         },
         {
           "id": "slow",
@@ -206,7 +206,7 @@
             55.0,
             60.0
           ],
-          "context_notes": "At maximum range, the daggers linger for 0."
+          "context_notes": "At maximum range, the daggers linger for 0.7 seconds before homing back to Talon, dealing physical damage to enemies hit and slowing them for 1 second."
         },
         {
           "id": "talon_w_effect_3",
@@ -297,7 +297,7 @@
             135.0,
             180.0
           ],
-          "context_notes": "Active: Talon disperses a ring of blades around him that deals physical damage to enemies hit and lingers at maximum range for up to 2."
+          "context_notes": "Active: Talon disperses a ring of blades around him that deals physical damage to enemies hit and lingers at maximum range for up to 2.5 seconds, during which he gains invisibility and bonus movement speed."
         },
         {
           "id": "bonus_movement_speed",
@@ -307,7 +307,7 @@
             55.0,
             70.0
           ],
-          "context_notes": "Active: Talon disperses a ring of blades around him that deals physical damage to enemies hit and lingers at maximum range for up to 2."
+          "context_notes": "Active: Talon disperses a ring of blades around him that deals physical damage to enemies hit and lingers at maximum range for up to 2.5 seconds, during which he gains invisibility and bonus movement speed."
         },
         {
           "id": "talon_r_effect_2",
@@ -359,6 +359,12 @@
       "path": "From Online/champions/Talon.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Talon",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

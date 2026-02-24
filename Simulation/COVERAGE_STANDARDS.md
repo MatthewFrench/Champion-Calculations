@@ -48,6 +48,7 @@ Research requirements for data updates:
 - For low-confidence formula interpretation, do not rely only on dataset-level sources; add at least one page-level citation (for example item page or patch notes) in `sources`.
 - When a League Wiki item page is a redirect (common for pseudo-item, turret-item, minion-item, or champion-upgrade identities), cite both the redirect URL and the canonical parent gameplay/champion page used to verify behavior semantics.
 - Validate that source URLs used in `sources` resolve at authoring time (prefer HTTP 200) so provenance remains auditable.
+- If League Wiki blocks scripted URL checks (for example HTTP 403 on automated HEAD/GET), validate reachability via manual browser open and keep normalized page URLs in `sources`.
 - For CommunityDragon item-dataset citations, use the current endpoint `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json`.
 - Perform an entity-intent review before raising confidence: confirm the entity's gameplay role, intended combat pattern, and whether the structured effects reflect that behavior.
 - Perform an in-game execution-semantics review for non-trivial effects before raising confidence: confirm activation requirements, target/range gating, and timing behavior.
@@ -105,6 +106,7 @@ Data requirements:
 - Ability geometry and cast data are in `abilities.<ability_key>.execution`.
 - Active abilities should have non-empty `execution` metadata; treat missing active-execution objects as a blocking coverage gap unless source data is unavailable and explicitly documented.
 - Champion behavior-fidelity progress must be tracked in `Simulation/champion_behavior_verification_tracker.json` (manual verified vs source-extracted-only status).
+- Tracker totals must reconcile with tracked keys after each wave: `manual_behavior_verified_champion_keys` length equals `totals.manual_behavior_verified_champions`, and `source_extracted_only_champions` equals corpus-total minus verified-count.
 - Manual champion verification waves must include page-level champion ability citations for each touched champion (both in champion `sources` and in tracker wave metadata).
 - Touched champion ability/effect `context_notes` entries must not contain truncated timing fragments; resolve fragmentary notes to complete behavior descriptions in the same change.
 - Any simulator-only policy remains minimal and under `simulation`.

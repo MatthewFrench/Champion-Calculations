@@ -3,7 +3,6 @@ use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::time::Instant;
 
-use crate::data::LoadoutDomain;
 use crate::status::deadline_reached;
 
 use super::{
@@ -17,21 +16,12 @@ mod full_loadout_search_orchestration;
 mod scoring;
 mod strategy;
 
-use self::candidate_space::full_loadout_candidate_operations::{
-    candidate_loadout_variants, candidate_order_key, crossover_full_candidates,
-    mutate_full_candidate, repair_full_candidate,
-};
-use self::candidate_space::full_loadout_candidate_scoring::unique_ranked_full_candidates;
 use self::candidate_space::item_candidate_operations::{crossover_builds, mutate_build};
 use self::candidate_space::item_candidate_scoring::unique_ranked_from_candidates;
 pub(crate) use self::full_loadout_search_orchestration::FullLoadoutSearchParams;
 pub(crate) use self::full_loadout_search_orchestration::{
     adaptive_strategy_candidates_full_loadout, build_search_ranked_full_loadout,
     generate_bleed_candidates_full_loadout, strategy_seed_elites_full_loadout,
-};
-use self::strategy::full_loadout_search_strategies::{
-    beam_search_ranked_full, genetic_search_ranked_full, hill_climb_search_ranked_full,
-    mcts_search_ranked_full, random_search_ranked_full, simulated_annealing_search_ranked_full,
 };
 use self::strategy::item_candidate_search_strategies::{
     beam_search_ranked, genetic_search_ranked, hill_climb_search_ranked, mcts_search_ranked,

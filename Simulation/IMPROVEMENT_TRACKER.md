@@ -1,6 +1,57 @@
 # Improvement Tracker
 
 ## Done
+- Completed architecture remaining dense-target decomposition follow-up:
+  - split `src/search/strategy/full_loadout_search_strategies.rs` into explicit owner leaves:
+    - `src/search/strategy/full_loadout_search_strategies/beam_search_strategy.rs`
+    - `src/search/strategy/full_loadout_search_strategies/iterative_search_strategies.rs`
+    - `src/search/strategy/full_loadout_search_strategies/mcts_search_strategy.rs`
+  - split `src/search/full_loadout_search_orchestration.rs` into explicit owner leaves:
+    - `src/search/full_loadout_search_orchestration/strategy_dispatch.rs`
+    - `src/search/full_loadout_search_orchestration/seed_elite_generation.rs`
+    - `src/search/full_loadout_search_orchestration/adaptive_candidate_generation.rs`
+    - `src/search/full_loadout_search_orchestration/bleed_candidate_generation.rs`
+  - split `src/scripts/runtime/loadout_runtime.rs` into a thin facade with explicit state schema ownership:
+    - `src/scripts/runtime/loadout_runtime/runtime_state_schema.rs`
+  - split `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` into explicit owner leaves:
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/on_hit_bonus_damage_resolution.rs`
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/ability_bonus_damage_resolution.rs`
+  - split `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` into explicit owner leaves:
+    - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution/seed_candidate_collection.rs`
+    - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution/strict_candidate_scoring.rs`
+  - split `src/scripts/champions/controlled_champion.rs` into explicit owner leaves:
+    - `src/scripts/champions/controlled_champion/controlled_champion_script_contracts.rs`
+    - `src/scripts/champions/controlled_champion/controlled_champion_script_registry.rs`
+    - `src/scripts/champions/controlled_champion/controlled_champion_script_channels.rs`
+  - split `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script.rs` into explicit owner leaves:
+    - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script/vladimir_script_model.rs`
+    - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script/vladimir_script_capability_channels.rs`
+    - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script/vladimir_script_builder.rs`
+  - reduced:
+    - `src/search/strategy/full_loadout_search_strategies.rs` from `409` to `98` lines
+    - `src/search/full_loadout_search_orchestration.rs` from `380` to `76` lines
+    - `src/scripts/runtime/loadout_runtime.rs` from `363` to `206` lines
+    - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` from `359` to `213` lines
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` from `357` to `66` lines
+    - `src/scripts/champions/controlled_champion.rs` from `351` to `23` lines
+    - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script.rs` from `350` to `5` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Resolved prior controlled-champion script channel visibility/export compile-integrity regression:
+  - controlled-champion re-export surface and registry wiring are now stable after decomposition
+  - full compile/lint/test gates are green in the current worktree
+- Completed data-first champion fidelity verification wave 50:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Talon`, `Smolder`, `Sejuani`, `Nunu`, `Nilah`, `Maokai`)
+  - normalized `30` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - raised manual behavior verification tracker coverage from `53/172` to `59/172`
+  - reduced string+array-aware strict fragment queue from `249/100` to `219/94`
+- Completed data-first champion fidelity verification wave 49 + tracker-integrity reconciliation:
+  - manually reviewed and normalized timing-fragment execution notes across `6` champions (`Mel`, `Katarina`, `Corki`, `Velkoz`, `Singed`, `Ziggs`)
+  - normalized `33` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics
+  - added page-level champion ability source provenance to all six touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`
+  - corrected tracker-key integrity drift by adding missing `Lissandra` to `manual_behavior_verified_champion_keys` and re-reconciling totals
+  - raised manual behavior verification tracker coverage from `47/172` to `53/172`
+  - reduced string+array-aware strict fragment queue from `282/106` to `249/100`
 - Completed data-first champion fidelity verification wave 48 + page-level citation enforcement:
   - manually reviewed and normalized timing-fragment execution notes across `5` champions (`Udyr`, `Sion`, `Lissandra`, `AurelionSol`, `Naafiri`)
   - normalized `29` strict fragment candidates in touched champion ability/effect `context_notes` to complete source-backed timing semantics

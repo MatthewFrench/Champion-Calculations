@@ -3,11 +3,11 @@ use std::time::Instant;
 
 use crate::status::deadline_reached;
 
-use super::super::super::candidate_space::full_loadout_candidate_operations::{
-    candidate_loadout_variants, canonical_build_candidate, canonical_key,
-};
+use super::super::super::candidate_space::full_loadout_candidate_operations::candidate_loadout_variants;
 use super::super::super::candidate_space::full_loadout_candidate_scoring::score_full_candidates;
-use super::super::super::{BuildKey, FullLoadoutSearchParams, is_boots};
+use super::super::super::{
+    BuildKey, FullLoadoutSearchParams, canonical_build_candidate, canonical_key, is_boots,
+};
 
 pub(super) fn beam_search_ranked_full<F>(
     params: &FullLoadoutSearchParams<'_>,

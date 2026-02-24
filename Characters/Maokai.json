@@ -126,7 +126,7 @@
             210.0,
             255.0
           ],
-          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0."
+          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0.25 seconds."
         },
         {
           "id": "bonus_monster_damage",
@@ -138,7 +138,7 @@
             150.0,
             160.0
           ],
-          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0."
+          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0.25 seconds."
         },
         {
           "id": "total_monster_damage",
@@ -150,7 +150,7 @@
             360.0,
             415.0
           ],
-          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0."
+          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0.25 seconds."
         },
         {
           "id": "maokai_q_effect_2",
@@ -272,7 +272,7 @@
             125.0,
             150.0
           ],
-          "context_notes": "Once landed, a Sapling remains stationary for 30 seconds or until it reacts to the first nearby visible enemy, chasing them for up to 2."
+          "context_notes": "Once landed, a Sapling remains stationary for 30 seconds or until it reacts to the first nearby visible enemy, chasing them for up to 2.5 seconds before exploding."
         },
         {
           "id": "magic_damage_per_instance",
@@ -382,7 +382,7 @@
             225.0,
             300.0
           ],
-          "context_notes": "Each bramble deals magic damage to enemies hit and roots them for 0."
+          "context_notes": "Each bramble deals magic damage to enemies hit and roots them for 0.75 to 2.25 seconds based on distance traveled."
         }
       ],
       "description": "Active: Maokai summons a colossal wall of five thorny brambles that slowly advances in the target direction, accelerating over time, each stopping when they collide with an enemy champion. Hitting at least one enemy champion grants Maokai bonus movement speed decaying over 2 seconds.",
@@ -418,6 +418,12 @@
       "path": "From Online/champions/Maokai.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Maokai",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
     }
   ],
   "notes": [

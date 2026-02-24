@@ -1,6 +1,14 @@
-use std::cmp::Ordering;
-
 use super::*;
+
+mod seed_candidate_collection;
+mod strict_candidate_scoring;
+
+use self::seed_candidate_collection::{
+    SeedCandidateCollectionContext, collect_seed_candidate_state,
+};
+use self::strict_candidate_scoring::{
+    StrictCandidateScoringContext, score_remaining_strict_candidates,
+};
 
 #[derive(Debug)]
 pub(in crate::scenario_runner) struct SeedAndStrictRankingExecution {
@@ -105,6 +113,7 @@ pub(in crate::scenario_runner) fn run_seed_and_strict_ranking(
         None,
         false,
     );
+
     let strategy_elite_score_fn =
         |candidate: &BuildKey| full_score_for_search_type("strategy_elites", candidate);
     let mut strategy_elites = strategy_seed_elites_full_loadout(
@@ -138,6 +147,7 @@ pub(in crate::scenario_runner) fn run_seed_and_strict_ranking(
             *candidates = unique;
         }
     }
+
     let adaptive_score_fn =
         |candidate: &BuildKey| full_score_for_search_type("adaptive_search", candidate);
     let adaptive_candidates = adaptive_strategy_candidates_full_loadout(
@@ -156,204 +166,48 @@ pub(in crate::scenario_runner) fn run_seed_and_strict_ranking(
         Some("merging strict candidates"),
         true,
     );
-    let bleed_candidate_count = bleed_candidates.len();
-    let adaptive_candidate_count = adaptive_candidates.len();
 
-    let mut candidate_keys = Vec::new();
-    let mut best_seeded_candidate: Option<(BuildKey, f64)> = None;
-    let mut seed_top_sets = Vec::new();
-    for (seed_idx, ranked) in seed_ranked.iter().enumerate() {
-        let mut seed_top = HashSet::new();
-        for (ranked_idx, (candidate, score)) in ranked.iter().enumerate() {
-            if score.is_finite() {
-                let candidate_key = canonical_build_candidate(candidate.clone());
-                let replace = best_seeded_candidate
-                    .as_ref()
-                    .map(|(best_key, best_score)| {
-                        *score > *best_score
-                            || ((*score - *best_score).abs() <= f64::EPSILON
-                                && build_key_cache_string(&candidate_key)
-                                    < build_key_cache_string(best_key))
-                    })
-                    .unwrap_or(true);
-                if replace {
-                    best_seeded_candidate = Some((candidate_key, *score));
-                }
-            }
-            if candidate.item_indices.len() == max_items {
-                candidate_keys.push(candidate.clone());
-                if ranked_idx < search_cfg.ensemble_seed_top_k.max(1) {
-                    seed_top.insert(candidate.clone());
-                }
-                continue;
-            }
-            if !score.is_finite() {
-                continue;
-            }
-            let mut completion_seed =
-                partial_candidate_completion_seed(search_cfg.seed, seed_idx, ranked_idx, candidate);
-            let completed = complete_partial_candidate_to_full(
-                candidate,
-                item_pool,
-                max_items,
-                &mut completion_seed,
-            );
-            if completed.item_indices.len() != max_items {
-                continue;
-            }
-            candidate_keys.push(completed.clone());
-            if ranked_idx < search_cfg.ensemble_seed_top_k.max(1) {
-                seed_top.insert(completed);
-            }
-        }
-        seed_top_sets.push(seed_top);
-    }
-    for candidate in coverage_seed_candidates {
-        candidate_keys.push(candidate.clone());
-    }
-    for candidate in bleed_candidates {
-        candidate_keys.push(candidate);
-    }
-    for candidate in adaptive_candidates {
-        candidate_keys.push(candidate);
-    }
-    let candidate_keys_generated = candidate_keys.len();
-    let mut unique_candidate_keys = candidate_keys
-        .into_iter()
-        .map(canonical_build_candidate)
-        .collect::<HashSet<_>>()
-        .into_iter()
-        .collect::<Vec<_>>();
-    unique_candidate_keys.sort_by_key(build_key_cache_string);
-    if unique_candidate_keys.is_empty() {
-        let mut fallback_seed = search_cfg.seed ^ 0x9e37_79b9_7f4a_7c15;
-        unique_candidate_keys.push(canonical_build_candidate(BuildKey {
-            item_indices: random_valid_build(item_pool, max_items, &mut fallback_seed),
-            loadout_selection: random_loadout_selection(
-                controlled_champion_search_base_loadout_selection,
-                search_loadout_domain,
-                &mut fallback_seed,
-            ),
-        }));
-    }
-    let candidate_duplicates_pruned =
-        candidate_keys_generated.saturating_sub(unique_candidate_keys.len());
+    let collected = collect_seed_candidate_state(SeedCandidateCollectionContext {
+        search_cfg,
+        seed_ranked: &seed_ranked,
+        coverage_seed_candidates,
+        bleed_candidates,
+        adaptive_candidates,
+        item_pool,
+        max_items,
+        search_loadout_domain,
+        controlled_champion_search_base_loadout_selection,
+    });
 
-    let mut strict_scores = HashMap::<BuildKey, f64>::new();
-    for ranked in &seed_ranked {
-        for (candidate, score) in ranked {
-            if candidate.item_indices.len() != max_items {
-                continue;
-            }
-            if !score.is_finite() {
-                continue;
-            }
-            let entry = strict_scores.entry(candidate.clone()).or_insert(*score);
-            if *score > *entry {
-                *entry = *score;
-            }
-        }
-    }
-
-    let total_candidates = unique_candidate_keys.len();
-    let strict_seed_scored_candidates = strict_scores.len().min(total_candidates);
-    let mut processed_keys = strict_scores.keys().cloned().collect::<HashSet<_>>();
-    let mut processed_candidates = processed_keys.len().min(total_candidates);
-    let mut timed_out = timeout_flag.load(AtomicOrdering::Relaxed) > 0;
-    status.emit(
-        "strict_full_ranking",
-        Some((processed_candidates, total_candidates)),
-        strict_scores
-            .values()
-            .copied()
-            .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal)),
-        Some("evaluating all generated candidates"),
-        true,
-    );
-    let remaining_keys = unique_candidate_keys
-        .iter()
-        .filter(|key| !processed_keys.contains(*key))
-        .cloned()
-        .collect::<Vec<_>>();
-    let strict_remaining_candidates = remaining_keys.len();
-    let (remaining_keys, strict_random_promotions_done) =
-        if search_cfg.strict_ranking_enable_heuristic_ordering {
-            heuristic_sort_remaining_candidates_for_strict_ranking(
-                remaining_keys,
-                &strict_scores,
-                item_pool.len(),
-                search_cfg.strict_ranking_rune_signal_weight,
-                search_cfg.strict_ranking_shard_signal_weight,
-                search_cfg.seed,
-                search_cfg.strict_ranking_exploration_promotions,
-            )
-        } else {
-            (remaining_keys, 0)
-        };
-    let mut strict_non_finite_candidates = 0usize;
-    let batch_size = 128usize;
-    for batch in remaining_keys.chunks(batch_size) {
-        if deadline_reached(current_deadline()) {
-            timeout_flag.store(1, AtomicOrdering::Relaxed);
-            timed_out = true;
-            break;
-        }
-        let scored_batch = batch
-            .par_iter()
-            .map(|key| {
-                (
-                    key.clone(),
-                    full_score_for_search_type("strict_full_ranking", key),
-                )
-            })
-            .collect::<Vec<_>>();
-        for (key, score) in scored_batch {
-            if score.is_finite() {
-                strict_scores.insert(key.clone(), score);
-            } else {
-                strict_non_finite_candidates += 1;
-            }
-            processed_keys.insert(key);
-            processed_candidates += 1;
-            status.emit(
-                "strict_full_ranking",
-                Some((processed_candidates, total_candidates)),
-                strict_scores
-                    .values()
-                    .copied()
-                    .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Equal)),
-                None,
-                false,
-            );
-        }
-    }
-
-    let strict_candidates_skipped_timeout =
-        total_candidates.saturating_sub(processed_candidates.min(total_candidates));
-    let strict_completion_percent = if total_candidates > 0 {
-        100.0 * (processed_candidates.min(total_candidates) as f64) / (total_candidates as f64)
-    } else {
-        100.0
-    };
+    let strict_scoring = score_remaining_strict_candidates(StrictCandidateScoringContext {
+        search_cfg,
+        item_pool,
+        timeout_flag,
+        status,
+        current_deadline,
+        full_score_for_search_type,
+        unique_candidate_keys: collected.unique_candidate_keys.clone(),
+        strict_scores: collected.strict_scores,
+    });
 
     SeedAndStrictRankingExecution {
         seed_ranked,
-        seed_top_sets,
-        best_seeded_candidate,
-        unique_candidate_keys,
-        strict_scores,
-        candidate_keys_generated,
-        candidate_duplicates_pruned,
-        strict_seed_scored_candidates,
-        strict_remaining_candidates,
-        strict_non_finite_candidates,
-        strict_candidates_skipped_timeout,
-        strict_completion_percent,
-        strict_random_promotions_done,
-        processed_candidates,
-        total_candidates,
-        timed_out,
-        bleed_candidate_count,
-        adaptive_candidate_count,
+        seed_top_sets: collected.seed_top_sets,
+        best_seeded_candidate: collected.best_seeded_candidate,
+        unique_candidate_keys: collected.unique_candidate_keys,
+        strict_scores: strict_scoring.strict_scores,
+        candidate_keys_generated: collected.candidate_keys_generated,
+        candidate_duplicates_pruned: collected.candidate_duplicates_pruned,
+        strict_seed_scored_candidates: collected.strict_seed_scored_candidates,
+        strict_remaining_candidates: strict_scoring.strict_remaining_candidates,
+        strict_non_finite_candidates: strict_scoring.strict_non_finite_candidates,
+        strict_candidates_skipped_timeout: strict_scoring.strict_candidates_skipped_timeout,
+        strict_completion_percent: strict_scoring.strict_completion_percent,
+        strict_random_promotions_done: strict_scoring.strict_random_promotions_done,
+        processed_candidates: strict_scoring.processed_candidates,
+        total_candidates: strict_scoring.total_candidates,
+        timed_out: strict_scoring.timed_out,
+        bleed_candidate_count: collected.bleed_candidate_count,
+        adaptive_candidate_count: collected.adaptive_candidate_count,
     }
 }

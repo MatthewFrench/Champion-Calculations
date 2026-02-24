@@ -30,6 +30,7 @@ Read first:
 - [ ] Truncation audits used strict fragment criteria (integer-dot tokens) so valid decimal timing values (for example `0.25`) were not misclassified.
 - [ ] Truncation audits handled both `context_notes` string and `context_notes` array shapes so queue counts were not underreported.
 - [ ] `Simulation/champion_behavior_verification_tracker.json` was updated to reflect manual verified champion/ability scope for this wave (or explicitly marked unchanged with reason).
+- [ ] Tracker integrity check passed: `manual_behavior_verified_champion_keys` count equals `totals.manual_behavior_verified_champions`, and `source_extracted_only_champions` equals corpus-total minus verified-count.
 - [ ] Each manually verified champion in this wave includes at least one page-level champion ability source in `sources`, and the wave entry in `Simulation/champion_behavior_verification_tracker.json` records that page-level citation.
 - [ ] `sources` and `schema_notes` are updated.
 - [ ] Champion `sources` entries include complete provenance metadata (`url`/`path`, `accessed`, `used_for`), and missing `sources[].accessed` values were backfilled on touched files.

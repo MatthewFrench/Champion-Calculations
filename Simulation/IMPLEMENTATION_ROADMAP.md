@@ -264,6 +264,23 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - enforce owner-channel mutation flows for runtime state, queues, caches, and data transforms
   - track rollout via `ARCHITECTURE_TRANSFORMATION_PLAN.md`
 - Recent progress:
+  - completed remaining dense-target follow-up by splitting:
+    - `src/search/strategy/full_loadout_search_strategies.rs` into explicit strategy leaves (`beam_search_strategy.rs`, `iterative_search_strategies.rs`, `mcts_search_strategy.rs`)
+    - `src/search/full_loadout_search_orchestration.rs` into explicit orchestration leaves (`strategy_dispatch.rs`, `seed_elite_generation.rs`, `adaptive_candidate_generation.rs`, `bleed_candidate_generation.rs`)
+    - `src/scripts/runtime/loadout_runtime.rs` into a thin facade with explicit runtime state-schema ownership (`runtime_state_schema.rs`)
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` into explicit owner leaves (`on_hit_bonus_damage_resolution.rs`, `ability_bonus_damage_resolution.rs`)
+    - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` into explicit phase-owner leaves (`seed_candidate_collection.rs`, `strict_candidate_scoring.rs`)
+    - `src/scripts/champions/controlled_champion.rs` into explicit contract/registry/channel owner leaves
+    - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script.rs` into explicit model/capability/builder owner leaves
+  - reduced:
+    - `src/search/strategy/full_loadout_search_strategies.rs` from `409` to `98` lines
+    - `src/search/full_loadout_search_orchestration.rs` from `380` to `76` lines
+    - `src/scripts/runtime/loadout_runtime.rs` from `363` to `206` lines
+    - `src/scenario_runner/controlled_champion_candidate_search/seed_and_strict_execution.rs` from `359` to `213` lines
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` from `357` to `66` lines
+    - `src/scripts/champions/controlled_champion.rs` from `351` to `23` lines
+    - `src/scripts/champions/controlled_champion/vladimir_controlled_champion_script.rs` from `350` to `5` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
   - completed high-friction scenario result-analysis decomposition by splitting:
     - `src/scenario_runner/controlled_champion_result_build_analysis/build_order_analysis.rs`
     - `src/scenario_runner/controlled_champion_result_build_analysis/candidate_metrics_projection.rs`

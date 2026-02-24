@@ -1,10 +1,9 @@
 use std::collections::{HashMap, HashSet};
 
 use super::super::candidate_space::full_loadout_candidate_operations::{
-    candidate_order_key, canonical_build_candidate, crossover_full_candidates,
-    mutate_full_candidate, repair_full_candidate,
+    candidate_order_key, crossover_full_candidates, mutate_full_candidate, repair_full_candidate,
 };
-use super::super::{BuildKey, BuildSearchConfig, rand_index};
+use super::super::{BuildKey, BuildSearchConfig, canonical_build_candidate, rand_index};
 use super::FullLoadoutSearchParams;
 
 pub(super) fn generate_bleed_candidates_full_loadout(
@@ -71,8 +70,12 @@ pub(super) fn generate_bleed_candidates_full_loadout(
                 .get(rand_index(&mut seed, list_b.len()))
                 .cloned()
                 .unwrap_or(parent_a.clone());
-            let mut child =
-                crossover_full_candidates(&parent_a_candidate, &parent_b_candidate, params, &mut seed);
+            let mut child = crossover_full_candidates(
+                &parent_a_candidate,
+                &parent_b_candidate,
+                params,
+                &mut seed,
+            );
             mutate_full_candidate(params, &mut child, mutation_rate, &mut seed);
             canonical_build_candidate(child)
         } else {
