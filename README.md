@@ -14,6 +14,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - A shared world ownership scaffold exists under `Simulation/src/world/` and is used for deterministic encounter placement validation before run execution.
 - Controlled champion script coverage currently includes `Vladimir` and `Sona`.
 - Controlled-champion modes now fail fast when the selected champion has no registered controlled-champion script, preventing silent no-script degradations.
+- Engine event-resolution/trace channels now guard stale actor-index payloads (non-test `expect(...)` callsites in `Simulation/src` are now zero).
 - Runtime metrics are resolved from canonical base data plus active buff state through shared stat queries:
   - cooldown metrics (ability/item/neutral)
   - scalar combat metrics (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)

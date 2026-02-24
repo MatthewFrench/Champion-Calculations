@@ -6,17 +6,19 @@ impl ControlledChampionCombatSimulation {
             self.schedule_next_attack(idx);
             return;
         }
-        let token = self
-            .begin_enemy_attack_sequence(idx)
-            .expect("enemy attack event index should be valid");
-        let enemy_name = self
-            .enemy_name(idx)
-            .expect("enemy attack event index should be valid");
+        let Some(token) = self.begin_enemy_attack_sequence(idx) else {
+            return;
+        };
+        let Some(enemy_name) = self.enemy_name(idx) else {
+            self.schedule_next_attack(idx);
+            return;
+        };
         self.trace_event("attack_start", format!("{} begins auto attack", enemy_name));
-        let windup = self
-            .enemy_attack_windup_seconds(idx)
-            .expect("enemy attack event index should be valid")
-            .max(0.0);
+        let Some(windup_seconds) = self.enemy_attack_windup_seconds(idx) else {
+            self.schedule_next_attack(idx);
+            return;
+        };
+        let windup = windup_seconds.max(0.0);
         self.schedule_event(windup, 35, EventType::AttackWindup { idx, token }, None);
     }
 
@@ -35,7 +37,7 @@ impl ControlledChampionCombatSimulation {
         if !self.enemy_can_take_actions(idx) {
             let enemy_name = self
                 .enemy_name(idx)
-                .expect("enemy attack windup index should be valid");
+                .unwrap_or_else(|| format!("enemy_{idx}"));
             self.trace_event(
                 "attack_cancelled",
                 format!(
@@ -46,16 +48,19 @@ impl ControlledChampionCombatSimulation {
             self.schedule_next_attack(idx);
             return;
         }
-        let source = self
-            .enemy_position(idx)
-            .expect("enemy attack windup index should be valid");
+        let Some(source) = self.enemy_position(idx) else {
+            self.schedule_next_attack(idx);
+            return;
+        };
         let target_at_release = self.target_position;
-        let projectile_speed = self
-            .enemy_attack_projectile_speed(idx)
-            .expect("enemy attack windup index should be valid");
-        let effect_hitbox_radius = self
-            .enemy_attack_effect_hitbox_radius(idx)
-            .expect("enemy attack windup index should be valid");
+        let Some(projectile_speed) = self.enemy_attack_projectile_speed(idx) else {
+            self.schedule_next_attack(idx);
+            return;
+        };
+        let Some(effect_hitbox_radius) = self.enemy_attack_effect_hitbox_radius(idx) else {
+            self.schedule_next_attack(idx);
+            return;
+        };
         let travel =
             self.enemy_projectile_delay_from_points(source, target_at_release, projectile_speed);
         self.schedule_event(
@@ -89,7 +94,7 @@ impl ControlledChampionCombatSimulation {
         if projectile_speed <= 0.0 && !self.enemy_can_take_actions(idx) {
             let enemy_name = self
                 .enemy_name(idx)
-                .expect("enemy attack hit index should be valid");
+                .unwrap_or_else(|| format!("enemy_{idx}"));
             self.trace_event(
                 "attack_cancelled",
                 format!(
@@ -102,12 +107,15 @@ impl ControlledChampionCombatSimulation {
         }
         let target_current = self.health.max(0.0);
         let target_max = self.max_health.max(1.0);
-        let (physical, magic, true_damage) = self
-            .consume_enemy_attack_damage_with_on_hit(idx, target_current, target_max)
-            .expect("enemy attack hit event index should be valid");
+        let Some((physical, magic, true_damage)) =
+            self.consume_enemy_attack_damage_with_on_hit(idx, target_current, target_max)
+        else {
+            self.schedule_next_attack(idx);
+            return;
+        };
         let enemy_name = self
             .enemy_name(idx)
-            .expect("enemy attack hit event index should be valid");
+            .unwrap_or_else(|| format!("enemy_{idx}"));
         let outcome = if projectile_speed > 0.0
             && self.is_projectile_blocked(source, target_at_release, effect_hitbox_radius)
         {

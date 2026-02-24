@@ -15,9 +15,9 @@ impl ControlledChampionCombatSimulation {
         if idx >= self.enemy_count() || !self.enemy_is_active(idx) {
             return;
         }
-        let enemy_name = self
-            .enemy_name(idx)
-            .expect("controlled champion offensive primary target index should be valid");
+        let Some(enemy_name) = self.enemy_name(idx) else {
+            return;
+        };
         if projectile_speed > 0.0
             && self.is_projectile_blocked(source, target_at_cast, effect_hitbox_radius)
         {
@@ -30,12 +30,12 @@ impl ControlledChampionCombatSimulation {
             );
             return;
         }
-        let enemy_position = self
-            .enemy_position(idx)
-            .expect("controlled champion offensive primary target index should be valid");
-        let enemy_hitbox_radius = self
-            .enemy_hitbox_radius(idx)
-            .expect("controlled champion offensive primary target index should be valid");
+        let Some(enemy_position) = self.enemy_position(idx) else {
+            return;
+        };
+        let Some(enemy_hitbox_radius) = self.enemy_hitbox_radius(idx) else {
+            return;
+        };
         let hit = if projectile_speed > 0.0 {
             path_hits_circle(
                 source,

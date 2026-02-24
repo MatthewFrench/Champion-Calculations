@@ -154,7 +154,7 @@
         "Source effectRadius: 550.",
         "Source notes (summary): This ability always employs Quick cast."
       ],
-      "description_source": "Active: Pyke charges while being slowed by 20% for up to 3 seconds to increase Bone Skewer's range over the first second of the channel. Bone Skewer can be recast within the duration."
+      "description_source": "Bone Skewer can be tapped for a close stab or charged up to 3 seconds for a thrown hook; thrown cast pulls the first target hit and slows, while charge cancel or timeout applies full cooldown with 75% mana refund."
     },
     "basic_ability_2": {
       "name": "Ghostwater Dive",
@@ -315,6 +315,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Pyke",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Pyke/Bone_Skewer",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Bone Skewer tap-vs-charge release semantics and refund behavior"
     }
   ],
   "notes": [
@@ -329,7 +335,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 81): Bone Skewer provenance was hardened for tap-versus-charge flow, thrown-hit pull resolution, and cancel refund semantics."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

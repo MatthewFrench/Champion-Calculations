@@ -101,6 +101,8 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Recent progress:
   - shared runtime stat-query resolver now covers cooldowns plus scalar combat metrics (incoming damage taken, healing, movement speed, outgoing bonus-ability damage)
   - key combat-time engine/runtime call sites now resolve from base metric data + runtime buff state instead of direct raw values
+  - event-resolution/trace/query owner channels now use guarded actor-index reads and fallback paths instead of panic-on-missing assumptions
+  - non-test `expect(...)` callsites under `Simulation/src` are now eliminated
 - Success criteria:
   - combat effects represented as status instances, not ad hoc booleans.
 
@@ -1050,6 +1052,16 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - at least one non-Vladimir controlled-champion run path is validated in tests.
   - script initialization failures are surfaced as runtime errors with champion-specific context.
 
+48. `DONE` Runtime crash-surface hardening pass (guarded event channels and script-default soft-fail).
+- Scope:
+  - replace non-test engine event-resolution/trace/actor-channel panic-on-index paths with guarded owner-channel reads and deterministic early-return fallback behavior.
+  - harden blocking score cache lock/condvar poisoning handling to recover via poisoned inner state instead of panicking.
+  - convert enemy champion script defaults lookups (`Morgana`, `Warwick`, `Vayne`, `Sona`) from panic-based behavior to soft-fail no-op behavior when canonical defaults are unavailable.
+  - add regression coverage for guarded out-of-range enemy query behavior and cache poison recovery.
+- Success criteria:
+  - non-test `expect(...)` callsites under `Simulation/src` are reduced to zero.
+  - runtime crash surfaces are materially reduced while preserving deterministic behavior and green validation gates.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1069,6 +1081,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 45 (controlled-champion modes now fail fast when script coverage is missing)
 - `DONE` Item 46 (world-state ownership scaffold + encounter placement guardrails landed)
 - `DONE` Item 47 (non-Vladimir controlled-champion path validated with typed script-init errors)
+- `DONE` Item 48 (runtime crash-surface hardening landed; non-test `expect(...)` now zero)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

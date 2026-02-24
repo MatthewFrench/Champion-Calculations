@@ -13,8 +13,7 @@ pub(crate) fn apply_behavior(profile: &mut ChampionBehaviorProfile) {
 }
 
 pub(crate) fn event_cooldown_seconds(event: ChampionScriptEvent) -> Option<f64> {
-    let defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    let defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)?;
     match event {
         ChampionScriptEvent::MorganaDarkBinding => Some(defaults.dark_binding_cooldown_seconds),
         ChampionScriptEvent::MorganaSoulShackles => Some(defaults.soul_shackles_cooldown_seconds),
@@ -26,8 +25,10 @@ pub(crate) fn execute_dark_binding(
     input: ChampionScriptExecutionInput,
     runtime: &mut ChampionLoadoutRuntime,
 ) -> Vec<ChampionScriptAction> {
-    let ability_defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    let Some(ability_defaults) = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+    else {
+        return Vec::new();
+    };
     if input.distance_to_target > ability_defaults.dark_binding_cast_range {
         return Vec::new();
     }
@@ -62,8 +63,10 @@ pub(crate) fn execute_dark_binding(
 pub(crate) fn execute_soul_shackles(
     input: ChampionScriptExecutionInput,
 ) -> Vec<ChampionScriptAction> {
-    let ability_defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    let Some(ability_defaults) = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+    else {
+        return Vec::new();
+    };
     if input.distance_to_target > ability_defaults.soul_shackles_cast_range {
         return Vec::new();
     }
@@ -95,8 +98,10 @@ pub(crate) fn execute_soul_shackles(
 pub(crate) fn execute_soul_shackles_detonate(
     input: ChampionScriptExecutionInput,
 ) -> Vec<ChampionScriptAction> {
-    let ability_defaults = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Morgana.json abilities"));
+    let Some(ability_defaults) = morgana_binding_and_soul_shackles_ability_defaults(CHAMPION_KEY)
+    else {
+        return Vec::new();
+    };
     if input.distance_to_target > ability_defaults.soul_shackles_cast_range {
         return Vec::new();
     }

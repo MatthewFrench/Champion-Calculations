@@ -85,6 +85,8 @@ Read first:
 - [ ] Existing distributed/prismatic `shop.prices` fields were preserved during edits (or any intentional removal/policy shift is explicitly documented in `Simulation/COVERAGE_GAPS.md`).
 - [ ] For round/phase progression effects, acquisition-timing backfill behavior was verified; if not encoded, the gap is explicitly documented in `schema_notes.context_notes` and tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Any dataset-vs-page-level discrepancy discovered during review (for example sell-state or restriction behavior) is documented in `schema_notes.context_notes` and tracked in `Simulation/COVERAGE_GAPS.md`.
+- [ ] If current canonical effect text and patch-history values diverge, canonical current behavior is modeled while historical values are kept as context-only metadata.
+- [ ] If threshold brackets are inferred from published cadence/cap constraints (not explicitly tabulated in source text), inference status is documented in `modifiers`/`schema_notes.context_notes` and tracked in `Simulation/CONFIDENCE_REVIEW.md`.
 - [ ] If sources include known bug-specific behavior, structured data still models intended behavior by default and bug divergence is documented as a note only.
 - [ ] Intended non-bug behavior remains the default canonical data model for all touched entities (bug behavior is never promoted to canonical data).
 - [ ] Cleanse-style actives include source-verified activation constraints and scope nuances when available (for example airborne lockout, suppression/nearsight handling, cast-time behavior).

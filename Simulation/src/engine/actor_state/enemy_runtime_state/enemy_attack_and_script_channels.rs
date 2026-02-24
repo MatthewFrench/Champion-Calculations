@@ -64,10 +64,9 @@ impl ControlledChampionCombatSimulation {
         idx: usize,
     ) -> f64 {
         let now = self.time;
-        let state = self
-            .enemy_state
-            .get_mut(idx)
-            .expect("enemy script action index should be valid");
+        let Some(state) = self.enemy_state.get_mut(idx) else {
+            return 0.0;
+        };
         let enemy_level = state.enemy.level;
         let enemy_bonus_health = (state.max_health - state.enemy.base.base_health).max(0.0);
         on_immobilize_rune_damage(&mut state.runtime, now, enemy_level, enemy_bonus_health)
@@ -82,10 +81,9 @@ impl ControlledChampionCombatSimulation {
         target_max_health: f64,
         now: f64,
     ) -> Vec<ChampionScriptAction> {
-        let state = self
-            .enemy_state
-            .get_mut(idx)
-            .expect("champion script event index should be valid");
+        let Some(state) = self.enemy_state.get_mut(idx) else {
+            return Vec::new();
+        };
         let input = ChampionScriptExecutionInput {
             event: script_event,
             actor_position: champion_script_point_from_vec2(state.position),

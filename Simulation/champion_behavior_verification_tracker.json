@@ -1901,5 +1901,201 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_76": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Aatrox",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "The Darkin Blade cast-chain lockouts, sweetspot hit-confirm timing, and knockup resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Aatrox/The_Darkin_Blade"
+        ]
+      },
+      {
+        "key": "Blitzcrank",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Rocket Grab projectile travel lockout, hit-confirm displacement, and post-connect action-lock timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Blitzcrank/Rocket_Grab"
+        ]
+      },
+      {
+        "key": "Caitlyn",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Ace in the Hole target channel timing, projectile body-block branch, and cancellation cooldown semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Caitlyn/Ace_in_the_Hole"
+        ]
+      },
+      {
+        "key": "Darius",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Apprehend passive-plus-active sequencing, pull/rebound displacement timing, and cone hit-confirm semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Apprehend"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_77": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "AurelionSol",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Breath of Light sustained channel cadence, steerable beam timing, and per-second primary-target bonus resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Aurelion_Sol/Breath_of_Light"
+        ]
+      },
+      {
+        "key": "Varus",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Piercing Arrow charge/recast sequencing, timeout cancel/refund branch, and charge-scaled projectile damage semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Varus/Piercing_Arrow"
+        ]
+      },
+      {
+        "key": "Jhin",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Curtain Call channel-to-recast shot sequencing, per-shot windup timing, and fourth-shot amplification behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jhin/Curtain_Call"
+        ]
+      },
+      {
+        "key": "Thresh",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Death Sentence projectile hit phase, tether tug cadence, and recast dash transition semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Thresh/Death_Sentence"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_78": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Zyra",
+        "abilities_reviewed": [
+          "passive"
+        ],
+        "focus": "Garden of Thorns one-vs-two seed spawn weighting research and stochastic-branch confidence documentation",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zyra/Garden_of_Thorns",
+          "https://wiki.leagueoflegends.com/en-us/Zyra/Patch_history"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_80": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Braum",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Glacial Fissure cast windup, first-target knockup emphasis, and persistent slow-field cadence semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Braum/Glacial_Fissure"
+        ]
+      },
+      {
+        "key": "Lux",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Final Spark cast timing, reveal window, and player-visible vision-duration semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Lux/Final_Spark"
+        ]
+      },
+      {
+        "key": "Pantheon",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Comet Spear tap-versus-charge release flow, recast gating, and cancel/refund semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Pantheon/Comet_Spear"
+        ]
+      },
+      {
+        "key": "Poppy",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Keeper's Verdict charge threshold, empowered recast branch, and knockback distance behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Poppy/Keeper%27s_Verdict"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_81": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Mordekaiser",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Realm of Death target-cast isolation, stat-steal persistence, and post-kill retention semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Mordekaiser/Realm_of_Death"
+        ]
+      },
+      {
+        "key": "Pyke",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Bone Skewer tap-versus-charge behavior, thrown-hit pull resolution, and cancel/timeout refund semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Pyke/Bone_Skewer"
+        ]
+      },
+      {
+        "key": "Sion",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Decimating Smash charge cadence, release/interrupt timing, and upgraded crowd-control threshold semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Sion/Decimating_Smash"
+        ]
+      },
+      {
+        "key": "Urgot",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Fear Beyond Death launch timing, leash-and-threshold recast window, and successful execute follow-through semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Urgot/Fear_Beyond_Death"
+        ]
+      }
+    ]
   }
 }

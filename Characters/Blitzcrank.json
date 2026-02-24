@@ -136,9 +136,10 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source speed: 1800 / 1800.",
-        "Source notes (summary): Rocket Grab's range is composed of a missile with 1080 range, and a smaller center-range area check at the end (colloqially known as a 'lollipop')."
+        "Source notes (summary): Rocket Grab's range is composed of a missile with 1080 range, and a smaller center-range area check at the end (colloqially known as a 'lollipop').",
+        "Manual re-verification (2026-02-24): Rocket Grab is a projectile hit-confirm cast with full caster action lock during travel; resolution includes displacement on contact, so it is not an instant displacement from cast start."
       ],
-      "description_source": "Active: Blitzcrank fires their right hand in the target direction that catches the first enemy hit, dealing them magic damage, stunning them for 0.65 seconds, and pulling them towards Blitzcrank, during which they are revealed."
+      "description_source": "Active: Blitzcrank fires a hand skillshot that hits the first target, dealing magic damage, a 0.65-second stun, and a pull toward Blitzcrank. Blitzcrank cannot move or attack while the hook is in flight and for 0.25 seconds after connecting."
     },
     "basic_ability_2": {
       "name": "Overdrive",
@@ -315,6 +316,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Blitzcrank",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Blitzcrank/Rocket_Grab",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Rocket Grab projectile/lockout semantics"
     }
   ],
   "notes": [

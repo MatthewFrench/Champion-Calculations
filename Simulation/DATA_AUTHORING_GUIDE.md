@@ -218,7 +218,8 @@ Priority C. Champion inventory and planning hygiene:
 - Track lifecycle-policy exceptions in `Simulation/COVERAGE_GAPS.md` so legacy data does not silently re-enter active simulation pools.
 
 14. Dragonheart acquisition-round fidelity:
-- Track whether Arena acquisition-round immediate soul backfill behavior (documented in page-level patch-history notes) should be promoted from context-note follow-up into canonical structured effects.
+- Canonical structured effects now include immediate backfill branch plus inferred round-threshold brackets (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) from cadence/cap constraints.
+- Keep inference validation tracked until an explicit authoritative threshold table is published.
 
 15. Champion-ability upgrade pseudo-item policy:
 - Define canonical expectations for pseudo-item upgrade entries tied to champion abilities (for example `Fire at Will`), including source provenance shape and simulation-use eligibility semantics.
@@ -253,6 +254,19 @@ Priority C. Champion inventory and planning hygiene:
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed champion provenance-hardening wave 81:
+    - re-verified and hardened source-corpus `description_source` phrasing for `Mordekaiser` (`R`), `Pyke` (`Q`), `Sion` (`Q`), and `Urgot` (`R`)
+    - added page-level champion ability citation provenance for all touched champions and recorded scope in `Simulation/champion_behavior_verification_tracker.json`
+  - Completed champion provenance-hardening wave 80:
+    - re-verified and hardened source-corpus `description_source` phrasing for `Braum` (`R`), `Lux` (`R`), `Pantheon` (`Q`), and `Poppy` (`R`)
+    - repaired a discovered truncated context-note fragment in `Poppy` `Keeper's Verdict` while hardening provenance
+    - added page-level champion ability citation provenance for all touched champions and recorded scope in `Simulation/champion_behavior_verification_tracker.json`
+  - Completed item confidence-reconciliation wave 82:
+    - encoded `Dragonheart` acquisition-round immediate backfill threshold brackets as inferred structured modifiers (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) based on published cadence/cap constraints
+    - reconciled `Gambler's Blade` historical V14.12 `245` cap note against current canonical `240` cap and documented historical-only context metadata
+  - Completed data-quality audit wave 83:
+    - re-ran split-vs-flat rune parity checks (`61/61` rune IDs, `3/3` stat shard slots)
+    - re-ran champion no-regression audits (tracker integrity, `description_source` completeness, truncation queues) and confirmed clean state
   - Completed full-corpus champion `description_source` backfill pass:
     - backfilled remaining missing champion ability `description_source` entries from canonical ability `description` text when source strings were absent
     - raised champion ability `description_source` completeness from `784/860` to `860/860` (`0` missing across `0` champions)
@@ -622,7 +636,7 @@ Priority C. Champion inventory and planning hygiene:
   - Backfilled source provenance for previously unsourced distributed utility/legacy entries (`Lucky Dice`, `Enhanced Lucky Dice`, `Poro-Snax`, `Total Biscuit of Everlasting Will`, `Your Cut`) and normalized sparse legacy active-shape inconsistencies (`active: {}` -> `active: []` where applicable).
   - Reduced non-structured item provenance backlog from `79` to `74` files with null/empty `sources`.
   - Completed non-structured provenance completion wave 41 by backfilling sources for the remaining `72` canonical non-structured unsourced item files, clearing canonical non-structured provenance to `0/77` unsourced (the `2` non-item report artifacts under `Items/` are now sourced and tracked separately from canonical item coverage counts).
-  - Logged a data-reconciliation follow-up on `Gambler's Blade`: structured range currently uses `30` to `240` per Tier-1/local tooltip data, while wiki patch history references a historical `245` cap increase.
+  - Logged a data-reconciliation follow-up on `Gambler's Blade`: structured range currently uses `30` to `240` per Tier-1/local tooltip data, while wiki patch history references a historical `245` cap increase (since resolved as historical-context-only tracking).
   - Canonical non-structured provenance backlog is now cleared (`0/77` unsourced); keep this as a no-regression guardrail.
 - Remaining risks and improvements:
 - Tracked broader page-level formula citation queue is cleared (`243/243`); keep this as a no-regression guardrail on future complex/non-trivial edits.
@@ -637,13 +651,13 @@ Priority C. Champion inventory and planning hygiene:
   - Resolve the tracked cross-version ID/name drift exception (`Zephyr` vs current Tier-1 `Gunmetal Greaves` on ID `3172`) with explicit legacy-ID policy.
   - Resolve canonical lifecycle/availability policy for rotating-mode-only item identities (`Wordless Promise`, `Perplexity`, `Atma's Reckoning`) so simulation pools stay intentionally scoped.
   - Standardize lifecycle-marker coverage policy for any additional retired/replaced item identities (currently explicit on `Zephyr` only).
-  - Resolve Dragonheart acquisition-round backfill and phase-timing semantics if simulation accuracy should include purchase-round-sensitive soul grants.
+  - Validate Dragonheart inferred acquisition-round threshold brackets against an explicit authoritative table if published; keep inferred mapping documented in confidence notes until then.
   - Resolve Lifeline special-case snapback interactions (displacement/channel/crowd-control edge cases) if simulation accuracy should include these interaction branches.
   - Continue Golden Spatula fidelity follow-up on mode-scoped stat/economy drift and non-modeled runtime handling assumptions (confidence floor work is complete).
   - Muramana Shock proc-damage exclusion is now documented in data, but runtime proc-damage classification for champion-ability branches is still a deferred code-layer follow-up.
   - Maintain intended-behavior-first policy for known bug notes; do not implement bug behavior in canonical data.
   - Run a broader targeted-active audit to confirm cooldown and cast-range metadata are consistently encoded when page/tooltips publish those values.
-  - Reconcile `Gambler's Blade` stored-gold cap (`240` vs historical patch-note `245`) and document canonical source-of-truth decision.
+  - Maintain `Gambler's Blade` canonical-240 plus historical-245 reconciliation policy as a no-regression guardrail on future edits.
   - Define canonical policy for champion-ability upgrade pseudo-items so upgrade entries are represented consistently across data and coverage tracking.
   - Maintain distributed/prismatic economy no-regression (`57/57` explicit) while finalizing canonical policy for non-shop acquisition vs Tier-1 gold fields, including unresolved page-vs-dataset economy drift (`Cost 0 / Sell 2000` page display vs Tier-1 `1000 / 400` values on multiple Arena distributed identities).
   - Keep redirect-backed pseudo-item provenance policy enforced (redirect item URL + canonical parent gameplay/champion page citation) so minion/turret/champion-upgrade semantics remain auditable.

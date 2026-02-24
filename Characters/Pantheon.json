@@ -209,7 +209,7 @@
         "Source speed: 2700.",
         "Source notes (summary): This ability always employs Quick cast."
       ],
-      "description_source": "Active: Pantheon charges while being slowed by 10% for up to 4 seconds to increase Comet Spear's range after 0.35 seconds of channeling. Comet Spear can be recast within the duration."
+      "description_source": "Comet Spear can be tapped for a short thrust or charged up to 4 seconds for a thrown spear; charge increases range after 0.35 seconds, recast releases the throw, and cancel or timeout applies full cooldown with partial mana refund."
     },
     "basic_ability_2": {
       "name": "Shield Vault",
@@ -422,6 +422,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Pantheon",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Pantheon/Comet_Spear",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Comet Spear tap-vs-charge release semantics and cooldown/refund behavior"
     }
   ],
   "notes": [
@@ -436,7 +442,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 80): Comet Spear provenance was hardened for tap-versus-charge execution flow and release/cancel behavior semantics."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

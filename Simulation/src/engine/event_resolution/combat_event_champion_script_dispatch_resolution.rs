@@ -17,9 +17,9 @@ impl ControlledChampionCombatSimulation {
         if self.time + 1e-9 < script_ready_at {
             return;
         }
-        let champion_name = self
-            .enemy_name(idx)
-            .expect("champion script event index should be valid");
+        let Some(champion_name) = self.enemy_name(idx) else {
+            return;
+        };
         let distance_to_target = self.distance_to_target(idx);
         let target_current_health = self.health;
         let target_max_health = self.max_health;

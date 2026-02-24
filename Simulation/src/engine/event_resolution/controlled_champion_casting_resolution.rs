@@ -179,7 +179,12 @@ impl ControlledChampionCombatSimulation {
                 },
             );
 
-            if let Some(offensive_primary) = offensive.offensive_primary {
+            if let Some(offensive_primary) = offensive.offensive_primary
+                && let (Some(target_at_cast), Some(target_name)) = (
+                    self.enemy_position(offensive_primary.target_index),
+                    self.enemy_name(offensive_primary.target_index),
+                )
+            {
                 self.set_controlled_champion_ability_ready_at(
                     &offensive_primary.ability_id,
                     offensive_primary.next_ready_at,
@@ -189,12 +194,6 @@ impl ControlledChampionCombatSimulation {
                     0.0,
                     0.0,
                 );
-                let target_at_cast = self
-                    .enemy_position(offensive_primary.target_index)
-                    .expect("offensive primary target index should be valid");
-                let target_name = self
-                    .enemy_name(offensive_primary.target_index)
-                    .expect("offensive primary target index should be valid");
                 self.schedule_event(
                     offensive_primary.impact_delay_seconds,
                     50,

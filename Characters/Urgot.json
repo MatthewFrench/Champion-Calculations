@@ -344,7 +344,7 @@
         "Source effectRadius: Global /  600.",
         "Source notes (summary): Unlike most projectiles, Fear Beyond Death can hit the edge of targets whose center is further than the missile range."
       ],
-      "description_source": "Active: Urgot fires a chem-drill in the target direction that impales the first enemy champion hit, dealing physical damage and leashing the target for 4 seconds, during which they are revealed and slowed by 0% : 75% (based on target's missing health)."
+      "description_source": "Fear Beyond Death fires a chem-drill skillshot after a 0.5-second cast; the hit target is leashed for 4 seconds with missing-health-based slow, and recast executes thresholded targets after channel while fearing nearby enemies on successful execution."
     }
   },
   "sources": [
@@ -353,6 +353,18 @@
       "path": "From Online/champions/Urgot.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Urgot",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Urgot/Fear_Beyond_Death",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Fear Beyond Death launch, leash window, and execute recast semantics"
     }
   ],
   "notes": [
@@ -367,7 +379,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 81): Fear Beyond Death provenance was hardened for launch timing, leash/threshold recast gating, and successful execute follow-through semantics."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

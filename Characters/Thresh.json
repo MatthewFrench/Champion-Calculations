@@ -154,9 +154,10 @@
         "Source castTime: 0.5 / None.",
         "Source speed: 1900 / 1400.",
         "Source effectRadius: Global / 3000.",
-        "Source notes (summary): Thresh will track the target if they change locations."
+        "Source notes (summary): Thresh will track the target if they change locations.",
+        "Manual re-verification (2026-02-24): Death Sentence is a projectile-hook cast with post-hit tether state; tug cadence and recast dash are separate phases, so control timing is not a single instant displacement event."
       ],
-      "description_source": "Active: Thresh throws out his scythe in the target direction, becoming unable to move or attack while it is in flight."
+      "description_source": "Active: Thresh throws his scythe and cannot move or attack while it travels. On hit it deals magic damage, stuns and reveals, applies Shackled, and pulls in tugs; Thresh can recast to dash to the Shackled target."
     },
     "basic_ability_2": {
       "name": "Dark Passage",
@@ -363,6 +364,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Thresh",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Thresh/Death_Sentence",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Death Sentence hit/tug/recast sequencing"
     }
   ],
   "notes": [

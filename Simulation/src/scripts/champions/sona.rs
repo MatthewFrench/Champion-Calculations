@@ -14,19 +14,17 @@ pub(crate) fn event_cooldown_seconds(event: ChampionScriptEvent) -> Option<f64> 
     if event != ChampionScriptEvent::SonaCrescendo {
         return None;
     }
-    Some(
-        sona_crescendo_ability_defaults(CHAMPION_KEY)
-            .unwrap_or_else(|| panic!("Missing Characters/Sona.json abilities.ultimate"))
-            .crescendo_cooldown_seconds,
-    )
+    sona_crescendo_ability_defaults(CHAMPION_KEY)
+        .map(|defaults| defaults.crescendo_cooldown_seconds)
 }
 
 pub(crate) fn execute_crescendo(
     input: ChampionScriptExecutionInput,
     runtime: &mut ChampionLoadoutRuntime,
 ) -> Vec<ChampionScriptAction> {
-    let ability_defaults = sona_crescendo_ability_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Sona.json abilities.ultimate"));
+    let Some(ability_defaults) = sona_crescendo_ability_defaults(CHAMPION_KEY) else {
+        return Vec::new();
+    };
     if input.distance_to_target > ability_defaults.crescendo_cast_range {
         return Vec::new();
     }

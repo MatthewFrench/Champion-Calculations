@@ -231,9 +231,10 @@
         "Source targeting: Direction.",
         "Source castTime: 0.6.",
         "Source effectRadius: Varied.",
-        "Source notes (summary): The highlighted areas denote the sweetspot - enemies are affected where the two areas overlap (See edge range and center range)."
+        "Source notes (summary): The highlighted areas denote the sweetspot - enemies are affected where the two areas overlap (See edge range and center range).",
+        "Manual re-verification (2026-02-24): The Darkin Blade is a chained 3-cast sequence with per-cast lockouts and independent hit zones; each cast has windup/travel resolution, and sweetspot knockup only occurs on sweetspot overlap rather than all hit locations."
       ],
-      "description_source": "Aatrox can activate The Darkin Blade three times before the ability goes on cooldown, with a 1-second static cooldown between casts. If Aatrox does not recast the ability within 4 seconds of the previous cast, it goes on cooldown."
+      "description_source": "Aatrox can activate The Darkin Blade three times before it goes on cooldown with a 1-second static cooldown between casts. Active: each cast strikes an area for physical damage; sweetspot hits deal 70% bonus damage and knock up for 0.25 seconds, with later casts gaining 25% more damage."
     },
     "basic_ability_2": {
       "name": "Infernal Chains",
@@ -429,6 +430,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Aatrox",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Aatrox/The_Darkin_Blade",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for The Darkin Blade cast-chain semantics"
     }
   ],
   "notes": [

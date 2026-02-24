@@ -31,9 +31,9 @@ impl ControlledChampionCombatSimulation {
                 } => {
                     let source = vec2_from_champion_script_point(source);
                     let effect_hitbox_radius = hitbox.radius();
-                    let enemy_name = self
-                        .enemy_name(idx)
-                        .expect("enemy script action index should be valid");
+                    let Some(enemy_name) = self.enemy_name(idx) else {
+                        continue;
+                    };
                     let outcome = if projectile_speed > 0.0
                         && self.is_projectile_blocked(
                             source,

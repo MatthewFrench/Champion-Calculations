@@ -9,10 +9,10 @@ use crate::defaults::{
 pub(crate) const CHAMPION_KEY: &str = "warwick";
 
 pub(crate) fn apply_behavior(profile: &mut ChampionBehaviorProfile) {
-    let passive_defaults = warwick_eternal_hunger_passive_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Warwick.json abilities.passive"));
-    profile.on_hit_magic_flat = passive_defaults.on_hit_magic_flat;
-    profile.on_hit_magic_ad_ratio = passive_defaults.on_hit_magic_ad_ratio;
+    if let Some(passive_defaults) = warwick_eternal_hunger_passive_defaults(CHAMPION_KEY) {
+        profile.on_hit_magic_flat = passive_defaults.on_hit_magic_flat;
+        profile.on_hit_magic_ad_ratio = passive_defaults.on_hit_magic_ad_ratio;
+    }
     super::apply_behavior_override(CHAMPION_KEY, profile);
 }
 
@@ -20,18 +20,16 @@ pub(crate) fn event_cooldown_seconds(event: ChampionScriptEvent) -> Option<f64> 
     if event != ChampionScriptEvent::WarwickInfiniteDuress {
         return None;
     }
-    Some(
-        warwick_infinite_duress_ability_defaults(CHAMPION_KEY)
-            .unwrap_or_else(|| panic!("Missing Characters/Warwick.json abilities.ultimate"))
-            .infinite_duress_cooldown_seconds,
-    )
+    warwick_infinite_duress_ability_defaults(CHAMPION_KEY)
+        .map(|defaults| defaults.infinite_duress_cooldown_seconds)
 }
 
 pub(crate) fn execute_infinite_duress(
     input: ChampionScriptExecutionInput,
 ) -> Vec<ChampionScriptAction> {
-    let ability_defaults = warwick_infinite_duress_ability_defaults(CHAMPION_KEY)
-        .unwrap_or_else(|| panic!("Missing Characters/Warwick.json abilities.ultimate"));
+    let Some(ability_defaults) = warwick_infinite_duress_ability_defaults(CHAMPION_KEY) else {
+        return Vec::new();
+    };
     if input.distance_to_target > ability_defaults.infinite_duress_cast_range {
         return Vec::new();
     }

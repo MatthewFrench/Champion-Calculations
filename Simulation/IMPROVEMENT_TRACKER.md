@@ -1,6 +1,32 @@
 # Improvement Tracker
 
 ## Done
+- Landed runtime crash-surface hardening slice across engine/runtime/cache/script channels:
+  - replaced panic-on-index event-resolution/trace/actor-channel assumptions with guarded owner-channel reads and deterministic early-return fallback behavior in:
+    - `src/engine/combat_timing_and_targeting.rs`
+    - `src/engine/event_resolution/combat_event_enemy_auto_attack_resolution.rs`
+    - `src/engine/event_resolution/combat_event_controlled_champion_auto_attack_resolution.rs`
+    - `src/engine/event_resolution/combat_event_controlled_champion_offensive_ability_hit_resolution.rs`
+    - `src/engine/event_resolution/controlled_champion_casting_resolution.rs`
+    - `src/engine/event_resolution/enemy_script_action_resolution.rs`
+    - `src/engine/event_resolution/combat_event_champion_script_dispatch_resolution.rs`
+    - `src/engine/trace_snapshot_reporting/trace_snapshot_summary_projection.rs`
+    - `src/engine/actor_state/enemy_runtime_state/enemy_attack_and_script_channels.rs`
+  - hardened blocking score cache lock/condvar poisoning recovery in:
+    - `src/cache.rs`
+  - converted enemy champion script canonical-default lookups from panic behavior to soft-fail/no-op behavior in:
+    - `src/scripts/champions/morgana.rs`
+    - `src/scripts/champions/warwick.rs`
+    - `src/scripts/champions/vayne.rs`
+    - `src/scripts/champions/sona.rs`
+  - added regression tests:
+    - `out_of_bounds_enemy_queries_return_safe_defaults` (`src/tests/engine_tests.rs`)
+    - `blocking_score_cache_reuses_computed_value_for_duplicate_key` (`src/tests/cache_tests.rs`)
+    - `blocking_score_cache_recovers_from_poisoned_mutex_state` (`src/tests/cache_tests.rs`)
+  - net crash-surface reduction from last checkpoint:
+    - non-test `expect(...)`: `33` -> `0`
+    - non-test `panic!`: `38` -> `26`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Added world-state ownership scaffold plus non-Vladimir controlled-champion production-path validation:
   - added `src/world/*` with explicit map bounds ownership, actor position registration channels, and deterministic distance projections.
   - added shared encounter world validation (`validate_world_positions_for_enemy_scenarios(...)`) and wired it into controlled scenario, fixed-loadout, rune-sweep, and step run paths.
@@ -81,6 +107,26 @@
 - Resolved prior controlled-champion script channel visibility/export compile-integrity regression:
   - controlled-champion re-export surface and registry wiring are now stable after decomposition
   - full compile/lint/test gates are green in the current worktree
+- Completed data-first waves 76-79 (provenance hardening + item/rune alignment):
+  - champion provenance-hardening wave 76: `Aatrox` (`Q`), `Blitzcrank` (`Q`), `Caitlyn` (`R`), `Darius` (`E`)
+  - champion provenance-hardening wave 77: `Aurelion Sol` (`Q`), `Varus` (`Q`), `Jhin` (`R`), `Thresh` (`Q`)
+  - champion confidence wave 78: `Zyra` passive stochastic weighting research with explicit unresolved-confidence tracking
+  - data-quality wave 79: `Dragonheart` immediate backfill branch baseline encoding, `Twin Mask` transfer-ratio normalization, and split-vs-flat rune parity verification (`61/61` rune IDs, `3/3` shard slots)
+- Completed data-first champion provenance-hardening wave 81:
+  - re-verified and hardened source-corpus `description_source` phrasing for `Mordekaiser` (`R`), `Pyke` (`Q`), `Sion` (`Q`), and `Urgot` (`R`)
+  - added/verified page-level champion ability citation provenance for all touched champions and recorded wave-level scope in `Simulation/champion_behavior_verification_tracker.json`
+  - maintained full manual behavior tracker coverage (`172/172`) and clean tracker integrity totals
+- Completed data-first champion provenance-hardening wave 80:
+  - re-verified and hardened source-corpus `description_source` phrasing for `Braum` (`R`), `Lux` (`R`), `Pantheon` (`Q`), and `Poppy` (`R`)
+  - repaired a discovered truncation defect in touched data (`Poppy` `Keeper's Verdict` effect note: `charged for at least 0.` -> full threshold semantics)
+  - added/verified page-level champion ability citation provenance for all touched champions and recorded wave-level scope in `Simulation/champion_behavior_verification_tracker.json`
+- Completed data-first item confidence-reconciliation wave 82:
+  - extended `Dragonheart` immediate backfill modeling with inferred round-threshold brackets (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) derived from published cadence + cap constraints
+  - raised `Dragonheart` immediate-backfill branch confidence above low-confidence floor and documented inference basis in data notes/modifiers
+  - reconciled `Gambler's Blade` current canonical `240` max versus historical V14.12 `245` patch-history note (historical context preserved, canonical behavior unchanged)
+- Completed data-quality no-regression audit wave 83:
+  - re-ran split-vs-flat runes parity checks and confirmed no drift (`61/61` rune IDs aligned, `3/3` stat shard slots aligned)
+  - re-ran champion data no-regression checks (tracker integrity, `description_source` completeness, truncation queues) and confirmed clean state after waves 80-82
 - Completed data-first champion fidelity verification wave 75:
   - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
   - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`

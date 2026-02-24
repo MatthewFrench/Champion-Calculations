@@ -56,6 +56,8 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Combat-time keystone coverage also includes Electrocute, First Strike, and Phase Rush.
 - Combat-time rune coverage now also includes Arcane Comet, Summon Aery, Hail of Blades, Dark Harvest, Triumph, Gathering Storm, and Second Wind.
 - Controlled champion and enemy actors consume the same shared rune-combat runtime interfaces; controlled-champion runtime module now only owns defensive item/revive policy helpers.
+- Engine event-resolution and trace owner channels now guard stale/out-of-range actor indices and skip invalid payloads instead of panicking.
+- Blocking score cache lock/condvar poisoning now recovers via poisoned inner state instead of panicking.
 - Search scoring now also supports explicit unmodeled-item-effect quality gating (hard gate or per-item penalty) to reduce ranking bias from unimplemented item effects.
 - When unmodeled hard gates are enabled, controlled-champion candidate generation space is constrained up front (modeled-rune loadout domain and modeled-runtime-item pool) so invalid candidates are not generated and then rejected later.
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.

@@ -175,9 +175,10 @@
         "Source targeting: Auto / Direction.",
         "Source castTime: none.",
         "Source speed: 1900.",
-        "Source notes (summary): The arrow missile range is 825 to 1525; the range increases by 140 per 0.25 seconds for the first 1.25 seconds."
+        "Source notes (summary): The arrow missile range is 825 to 1525; the range increases by 140 per 0.25 seconds for the first 1.25 seconds.",
+        "Manual re-verification (2026-02-24): Piercing Arrow is charge-and-release with explicit cancel/refund branch on timeout; damage/range scaling follows channel duration and resolves on projectile hit, not at channel start."
       ],
-      "description_source": "Active: Varus charges while being slowed by 20% for up to 4 seconds to increase Piercing Arrow's range over the first 1.5 seconds and its effects over the first 1.25 seconds of the channel."
+      "description_source": "Active: Varus channels for up to 4 seconds while slowed to increase Piercing Arrow range and effect scaling, and can recast to fire. Recast fires a piercing arrow that deals physical damage increased by charge time, with damage reduced by enemies hit; full timeout cancels and refunds 50% mana cost."
     },
     "basic_ability_2": {
       "name": "Blighted Quiver",
@@ -421,6 +422,12 @@
       "path": "From Online/champions/Varus.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Varus/Piercing_Arrow",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Piercing Arrow charge/recast semantics"
     }
   ],
   "notes": [

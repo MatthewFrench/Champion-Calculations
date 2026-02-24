@@ -359,7 +359,7 @@
             300.0,
             400.0
           ],
-          "context_notes": "If Keeper's Verdict was charged for at least 0."
+          "context_notes": "If Keeper's Verdict was charged for at least 0.5 seconds, it deals 100% increased damage and enemies hit are knocked back up to 3400 units toward their fountain."
         },
         {
           "id": "poppy_r_effect_4",
@@ -393,7 +393,7 @@
         "Source effectRadius: 180 / 225.",
         "Source notes (summary): The erupting hammer of the charged cast that sends out a missile will be centered on the first champion struck, not at the location the missile collided with them."
       ],
-      "description_source": "Active: Poppy charges while being slowed by 15% for up to 4 seconds to increase Keeper's Verdict's range and knock back distance over 0.5 seconds after the first 0.5 seconds of the channel. Keeper's Verdict can be recast within the duration."
+      "description_source": "Keeper's Verdict charges up to 4 seconds while Poppy is slowed, with recast release for local knock-up and an empowered branch after 0.5 seconds that doubles damage and knocks enemies toward their fountain."
     }
   },
   "sources": [
@@ -408,6 +408,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Steadfast Presence execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Poppy/Keeper%27s_Verdict",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Keeper's Verdict charge threshold, empowered release, and knockback semantics"
     }
   ],
   "notes": [
@@ -422,7 +428,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 80): Keeper's Verdict charge-threshold semantics were normalized and truncated context-note text was repaired."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

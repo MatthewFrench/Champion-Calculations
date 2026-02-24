@@ -58,7 +58,10 @@ impl BlockingScoreCache {
         let shard_idx = self.shard_idx(&key);
         let shard = &self.shards[shard_idx];
         loop {
-            let mut guard = shard.states.lock().expect("cache mutex poisoned");
+            let mut guard = match shard.states.lock() {
+                Ok(guard) => guard,
+                Err(poisoned) => poisoned.into_inner(),
+            };
             match guard.get(&key) {
                 Some(CacheState::Ready(v)) => {
                     self.hits.fetch_add(1, AtomicOrdering::Relaxed);
@@ -66,7 +69,10 @@ impl BlockingScoreCache {
                 }
                 Some(CacheState::InFlight) => {
                     self.waits.fetch_add(1, AtomicOrdering::Relaxed);
-                    guard = shard.cv.wait(guard).expect("cache condvar wait poisoned");
+                    guard = match shard.cv.wait(guard) {
+                        Ok(guard) => guard,
+                        Err(poisoned) => poisoned.into_inner(),
+                    };
                     drop(guard);
                     continue;
                 }
@@ -75,7 +81,10 @@ impl BlockingScoreCache {
                     guard.insert(key.clone(), CacheState::InFlight);
                     drop(guard);
                     let value = compute();
-                    let mut done = shard.states.lock().expect("cache mutex poisoned");
+                    let mut done = match shard.states.lock() {
+                        Ok(guard) => guard,
+                        Err(poisoned) => poisoned.into_inner(),
+                    };
                     done.insert(key.clone(), CacheState::Ready(value));
                     shard.cv.notify_all();
                     return value;
@@ -96,3 +105,7 @@ impl BlockingScoreCache {
         self.waits.load(AtomicOrdering::Relaxed)
     }
 }
+
+#[cfg(test)]
+#[path = "tests/cache_tests.rs"]
+mod tests;

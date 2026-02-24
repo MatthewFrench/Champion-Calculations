@@ -104,14 +104,17 @@ This file is a concise handoff for developers and AI agents.
 - Controlled champion scenario, fixed-loadout, rune-sweep, and step modes now fail fast when the selected controlled champion has no registered controlled-champion script (instead of silently running without script abilities).
 - Controlled champion script initialization now returns typed errors to runtime orchestration (no panic path) for missing champion-script defaults.
 - Controlled champion scenario, fixed-loadout, rune-sweep, and step flows now validate encounter placement through shared world-state ownership checks before search/runtime execution.
+- Engine event-resolution and trace/query paths now use guarded owner-channel reads instead of panic-on-missing index assumptions.
+- Non-test `expect(...)` callsites are now removed from `Simulation/src`.
+- Enemy champion script modules (`Morgana`, `Warwick`, `Vayne`, `Sona`) now fail soft (no action/cooldown output) when required canonical ability defaults are missing.
 
 ## Full-Game Transformation Status (Non-Data)
-- Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `94%` (`IN_PROGRESS`).
-- Weighted completion estimate: `41%` (`IN_PROGRESS`).
+- Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `95%` (`IN_PROGRESS`).
+- Weighted completion estimate: `42%` (`IN_PROGRESS`).
 - Bucket snapshot (complete / remaining):
   - Runtime Systems Completeness (`30%` weight): `31% / 69%`
-  - Determinism And Replay Guarantees (`20%` weight): `56% / 44%`
-  - Calibration And Correctness (`20%` weight): `46% / 54%`
+  - Determinism And Replay Guarantees (`20%` weight): `57% / 43%`
+  - Calibration And Correctness (`20%` weight): `47% / 53%`
   - Performance Envelope (`15%` weight): `47% / 53%`
   - Renderer-Contract Readiness (`15%` weight): `30% / 70%`
 - Canonical status and gap detail:
@@ -123,13 +126,13 @@ This file is a concise handoff for developers and AI agents.
 
 ## Current Known Tradeoff
 - Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
-- Runtime still carries a meaningful fail-fast crash-surface backlog (`expect`/`panic!` in non-test engine/default channels) that should be converted to typed error propagation over additional slices.
+- Runtime crash-surface backlog is now concentrated in defaults loaders (`26` non-test `panic!` callsites under `Simulation/src`) and should be converted to typed error propagation over additional slices.
 
 ## Highest-Value Next Work (Largest Impact First)
 1. Add non-champion actor classes (minion/monster/structure) and lifecycle ownership channels under `src/world/*`.
 2. Integrate world-state ownership into simulation-step movement channels (replace isolated enemy-position ownership paths).
 3. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.
-4. Reduce `panic!`/`expect` runtime crash surfaces in defaults and champion-script loading paths with typed fail-fast error propagation.
+4. Reduce remaining defaults-loader `panic!` crash surfaces with typed fail-fast error propagation.
 5. Expand controlled-champion script coverage beyond `Vladimir` and `Sona`, while reducing static registry coupling.
 6. Reduce coverage-stage latency by constructing legal locked rune pages directly (instead of random rejection sampling).
 7. Persist and reuse coverage-stage seed corpus across runs.

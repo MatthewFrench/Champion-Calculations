@@ -107,8 +107,9 @@
       "context_notes": [
         "Source targeting: Passive.",
         "Source effectRadius: 900.",
-        "Source notes (summary): Garden of Thorns periodically spawns one or two seeds; exact spawn-distribution weighting remains a follow-up measurement item.",
-        "Manual verification (2026-02-24): Garden of Thorns is a seed lifecycle system (spawn -> short grace period -> stompable seed -> spell conversion). Q/E conversion determines resulting plant behavior, so simulation should model seed state transitions rather than direct passive damage events."
+        "Source notes (summary): Garden of Thorns periodically spawns one or two seeds; template and patch-history review confirm stochastic two-seed occurrences but do not publish a deterministic weighting value.",
+        "Manual verification (2026-02-24): Garden of Thorns is a seed lifecycle system (spawn -> short grace period -> stompable seed -> spell conversion). Q/E conversion determines resulting plant behavior, so simulation should model seed state transitions rather than direct passive damage events.",
+        "Research note (2026-02-24): Current template data and patch-history documentation were reviewed for one-vs-two seed weighting; no authoritative probability metric is published, so weighting remains unparameterized in canonical data."
       ]
     },
     "basic_ability_1": {
@@ -331,6 +332,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Garden of Thorns seed lifecycle, conversion gating, and player-visible deny semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Zyra/Patch_history",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (patch history)",
+      "used_for": "historical validation that Garden of Thorns two-seed spawns are documented as occasional without published deterministic weighting"
     }
   ],
   "notes": [

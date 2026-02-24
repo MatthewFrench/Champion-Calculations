@@ -13,9 +13,10 @@ impl ControlledChampionCombatSimulation {
         self.controlled_champion_attack_sequence =
             self.controlled_champion_attack_sequence.wrapping_add(1);
         let token = self.controlled_champion_attack_sequence;
-        let enemy_name = self
-            .enemy_name(idx)
-            .expect("controlled champion attack target index should be valid");
+        let Some(enemy_name) = self.enemy_name(idx) else {
+            self.schedule_next_controlled_champion_attack();
+            return;
+        };
         self.trace_event(
             "controlled_champion_attack_start",
             format!(
@@ -59,9 +60,10 @@ impl ControlledChampionCombatSimulation {
             return;
         }
         let source = self.target_position;
-        let target_at_release = self
-            .enemy_position(idx)
-            .expect("controlled champion attack windup index should be valid");
+        let Some(target_at_release) = self.enemy_position(idx) else {
+            self.schedule_next_controlled_champion_attack();
+            return;
+        };
         let projectile_speed = self.controlled_champion_behavior.attack_projectile_speed;
         let effect_hitbox_radius = self
             .controlled_champion_behavior
@@ -107,9 +109,10 @@ impl ControlledChampionCombatSimulation {
             self.schedule_next_controlled_champion_attack();
             return;
         }
-        let enemy_name = self
-            .enemy_name(idx)
-            .expect("controlled champion attack hit index should be valid");
+        let Some(enemy_name) = self.enemy_name(idx) else {
+            self.schedule_next_controlled_champion_attack();
+            return;
+        };
         if projectile_speed > 0.0
             && self.is_projectile_blocked(source, target_at_release, effect_hitbox_radius)
         {
@@ -124,12 +127,14 @@ impl ControlledChampionCombatSimulation {
             return;
         }
 
-        let enemy_position = self
-            .enemy_position(idx)
-            .expect("controlled champion attack hit index should be valid");
-        let enemy_hitbox_radius = self
-            .enemy_hitbox_radius(idx)
-            .expect("controlled champion attack hit index should be valid");
+        let Some(enemy_position) = self.enemy_position(idx) else {
+            self.schedule_next_controlled_champion_attack();
+            return;
+        };
+        let Some(enemy_hitbox_radius) = self.enemy_hitbox_radius(idx) else {
+            self.schedule_next_controlled_champion_attack();
+            return;
+        };
         let hit = if projectile_speed > 0.0 {
             path_hits_circle(
                 source,

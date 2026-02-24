@@ -36,6 +36,8 @@
 - Ability identity is still partially represented by champion-specific cast fields; slot mapping foundations exist, but full actor-wide slot-agnostic runtime remapping support (for stolen/swapped abilities) is not yet implemented.
 - Champion data uncertainty follow-up:
   - `Zyra` `Garden of Thorns` one-vs-two seed spawn distribution weighting remains unresolved from current source notes; lifecycle/state sequencing is modeled, but exact probability weighting needs an authoritative verification source before confidence can be raised further.
+- Item data uncertainty follow-up:
+  - `Dragonheart` immediate soul-backfill thresholds are currently modeled with inferred round brackets (derived from published two-round cadence and cap constraints), but no explicit authoritative threshold table is published in current sources.
 
 ## Questions To Review
 1. Do we want to include game-time as an explicit simulation input so death timers can apply full time-based scaling (not just level-based scaling)?
@@ -59,6 +61,15 @@
 - Ability theft baseline semantics:
   - League wiki documents Sylas Hijack as on-target cooldown-gated steal with hijacked cast held temporarily and cast as recast behavior.
   - Source: [Sylas (League Wiki)](https://wiki.leagueoflegends.com/en-us/Sylas)
+
+## Data Research Notes (2026-02-24)
+- Dragonheart immediate backfill:
+  - Current page notes confirm acquisition-round immediate soul backfill up to 4 stacks, but do not publish explicit per-round thresholds.
+  - Source: [Dragonheart](https://wiki.leagueoflegends.com/en-us/Dragonheart)
+  - Source: [Dragonheart Patch History](https://wiki.leagueoflegends.com/en-us/Dragonheart/Patch_history)
+- Gambler's Blade cap reconciliation:
+  - Current canonical effect text shows max stored value 240; patch history records a V14.12 historical increase to 245.
+  - Source: [Gambler's Blade](https://wiki.leagueoflegends.com/en-us/Gambler%27s_Blade)
 
 ## Script-Extraction Backlog (From Audit)
 - Vladimir defensive/offensive decisions are script-owned, but the engine still executes some Vladimir effect applications directly after script decisions.

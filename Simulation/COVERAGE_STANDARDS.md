@@ -58,6 +58,8 @@ Research requirements for data updates:
 - If an effect has separate basic-attack-hit and ability-damage branches, encode each branch as separate structured effects with explicit trigger and gating semantics.
 - If source notes include trigger exclusions or interaction edge rules (for example dodged/blocked/blinded misses, spell-shield handling, proc-damage classification, zero-damage proc eligibility, below-threshold retrigger clauses), encode them explicitly in structured `conditions`/`modifiers` and summarize the execution impact in `schema_notes.context_notes`.
 - If sources present both per-tick and total values for one timed effect, ensure structured values are cadence-consistent (per-tick value matches interval) and capture total-over-duration for auditability.
+- If current canonical effect text and patch-history values diverge, model current canonical behavior by default and record historical values as context notes/modifiers only.
+- If threshold tables are not explicitly published but can be derived from published cadence/cap constraints, mark the encoded table as inferred and track remaining uncertainty in `Simulation/CONFIDENCE_REVIEW.md`.
 - If sources describe known in-game bugs, capture them as notes for follow-up, but keep intended behavior as canonical in data.
 - Project policy lock: data coverage must default to intended non-bug behavior; bug behavior is documented only as follow-up notes and is not part of canonical simulation data.
 

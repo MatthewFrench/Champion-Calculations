@@ -210,9 +210,10 @@
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: none.",
-        "Source notes (summary): This ability always employs Quick cast."
+        "Source notes (summary): This ability always employs Quick cast.",
+        "Manual re-verification (2026-02-24): Breath of Light is a sustained channel with continuous tick cadence and steer control; per-second bonus events are tied to uninterrupted primary-target burn duration, not a one-time on-cast burst."
       ],
-      "description_source": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage."
+      "description_source": "Active: Aurelion Sol channels for up to 3.25 seconds to breathe starfire, steering the beam while it burns the first target and nearby enemies every 0.125 seconds (secondary targets take 50%). Full-second burns on the primary target trigger bonus magic damage and generate Stardust versus champions."
     },
     "basic_ability_2": {
       "name": "Astral Flight",
@@ -415,6 +416,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Aurelion_Sol",
       "accessed": "2026-02-24",
       "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Aurelion_Sol/Breath_of_Light",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Breath of Light channel/tick semantics"
     }
   ],
   "notes": [

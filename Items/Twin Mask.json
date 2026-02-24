@@ -17,7 +17,7 @@
   "effects_structured": [
     {
       "id": "twin_mask_stat_link",
-      "raw": "Gain 20% of a teammate's AD, AP, total attack speed, max health, armor, magic resist, and ability haste.",
+      "raw": "Gain 15% of a teammate's AD, AP, total attack speed, max health, armor, magic resist, and ability haste.",
       "effect_type": "stat_link",
       "applies_to": "self",
       "source": "teammate",
@@ -36,7 +36,7 @@
     },
     {
       "id": "twin_mask_stat_link_bonus",
-      "raw": "If the teammate also has Twin Mask and is alive, gain 35% of those stats instead.",
+      "raw": "If the teammate also has Twin Mask and is alive, gain 30% of those stats instead.",
       "effect_type": "stat_link",
       "applies_to": "self",
       "source": "teammate",
@@ -73,7 +73,8 @@
     "effects_structured_generated_at": "2026-02-09T23:46:08.072690+00:00",
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Unanimity stat-link updates dynamically with teammate live stats; base and doubled transfer ratios were aligned to current page-verified 15%/30% values."
+      "Unanimity stat-link updates dynamically with teammate live stats; base and doubled transfer ratios were aligned to current page-verified 15%/30% values.",
+      "Data consistency update (2026-02-24): Twin Mask raw text percentages were normalized to match page-verified structured values (15% base / 30% dual-mask branch)."
     ]
   },
   "sources": [

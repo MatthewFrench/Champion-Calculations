@@ -164,9 +164,9 @@ impl ControlledChampionCombatSimulation {
         } else {
             lines.push("enemies:".to_string());
             for idx in 0..enemy_count {
-                let snapshot = self
-                    .enemy_trace_snapshot_at(idx, self.time)
-                    .expect("enemy trace snapshot index should be valid");
+                let Some(snapshot) = self.enemy_trace_snapshot_at(idx, self.time) else {
+                    continue;
+                };
 
                 let mut enemy_abilities = Vec::new();
                 if let Some(impact_at) = self.enemy_next_attack_impact_at(idx) {

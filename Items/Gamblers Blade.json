@@ -47,6 +47,11 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "historical_patch_note": "V14.12 patch history briefly raised max per-trigger stored gold to 245, but current canonical effect text is 240 after Arena rotation returns.",
+        "canonical_current_max_per_trigger": 240,
+        "historical_max_per_trigger_v14_12": 245
+      },
       "numbers_extracted": [
         12,
         30,
@@ -98,6 +103,7 @@
     "context_notes": [
       "Execution model: Money In The Bank stores gold on qualifying basic-attack on-hit and ability-hit events with a 2.5-second per-attack/ability throttle.",
       "Player-visible behavior: stored gold resolves at round end as full payout on round win or 25% loss on round loss.",
+      "Patch-history reconciliation: current canonical per-trigger storage cap is 240; V14.12 patch history includes a historical 245-cap interval that is retained as context only.",
       "Page notes indicate gold storage can continue briefly after winner determination before the next round starts; this edge timing is documented but not explicitly modeled.",
       "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
@@ -120,6 +126,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Gambler%27s_Blade",
       "accessed": "2026-02-23",
       "used_for": "page-level verification of Money In The Bank trigger chance, storage window behavior, and round-end payout/loss semantics"
+    },
+    {
+      "name": "League Wiki (Gambler's Blade patch history)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gambler%27s_Blade#Patch_History",
+      "accessed": "2026-02-24",
+      "used_for": "reconciliation of historical V14.12 245-cap note against current canonical 240-cap behavior"
     },
     {
       "type": "Generated item data",

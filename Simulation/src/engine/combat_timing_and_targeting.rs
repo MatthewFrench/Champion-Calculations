@@ -118,20 +118,26 @@ impl ControlledChampionCombatSimulation {
 
     pub(super) fn distance_to_target(&self, idx: usize) -> f64 {
         self.enemy_position(idx)
-            .expect("enemy distance query index should be valid")
-            .distance_to(self.target_position)
+            .map(|enemy_position| enemy_position.distance_to(self.target_position))
+            .unwrap_or(f64::INFINITY)
     }
 
     pub(super) fn enemy_in_attack_range(&self, idx: usize) -> bool {
+        let Some(attack_range) = self.enemy_attack_range(idx) else {
+            return false;
+        };
+        let Some(enemy_hitbox_radius) = self.enemy_hitbox_radius(idx) else {
+            return false;
+        };
+        let Some(effect_hitbox_radius) = self.enemy_attack_effect_hitbox_radius(idx) else {
+            return false;
+        };
         within_reach_with_hitboxes(
             self.distance_to_target(idx),
-            self.enemy_attack_range(idx)
-                .expect("enemy attack-range query index should be valid"),
-            self.enemy_hitbox_radius(idx)
-                .expect("enemy hitbox-radius query index should be valid"),
+            attack_range,
+            enemy_hitbox_radius,
             self.controlled_champion_hitbox_radius,
-            self.enemy_attack_effect_hitbox_radius(idx)
-                .expect("enemy attack-effect-hitbox query index should be valid"),
+            effect_hitbox_radius,
         )
     }
 
@@ -141,12 +147,14 @@ impl ControlledChampionCombatSimulation {
         range: f64,
         effect_hitbox_radius: f64,
     ) -> bool {
+        let Some(enemy_hitbox_radius) = self.enemy_hitbox_radius(idx) else {
+            return false;
+        };
         within_reach_with_hitboxes(
             self.distance_to_target(idx),
             range,
             self.controlled_champion_hitbox_radius,
-            self.enemy_hitbox_radius(idx)
-                .expect("enemy hitbox-radius query index should be valid"),
+            enemy_hitbox_radius,
             effect_hitbox_radius,
         )
     }

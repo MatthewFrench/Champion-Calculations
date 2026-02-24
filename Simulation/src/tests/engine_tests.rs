@@ -17,6 +17,36 @@ fn spawn_positions_keep_melee_closer_than_ranged() {
 }
 
 #[test]
+fn out_of_bounds_enemy_queries_return_safe_defaults() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemy = test_enemy("Fallback Target");
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(1.0, false);
+    let urf = test_urf();
+
+    let runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let invalid_index = 999;
+    assert!(
+        runner.distance_to_target(invalid_index).is_infinite(),
+        "invalid enemy index should not panic and should resolve to +infinity distance"
+    );
+    assert!(
+        !runner.enemy_in_attack_range(invalid_index),
+        "invalid enemy index should be treated as not in attack range"
+    );
+}
+
+#[test]
 fn projectile_path_intersection_detects_blocks() {
     let source = Vec2 { x: 0.0, y: 0.0 };
     let target = Vec2 { x: 1000.0, y: 0.0 };

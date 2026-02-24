@@ -215,7 +215,7 @@
         "Source castTime: none.",
         "Source notes (summary): For the target to be hit, their center needs to be inside the red or blue areas (based on charge time), and their edge must hit the yellow part of the cone."
       ],
-      "description_source": "Active: Sion prepares a strike in the target direction, charging for up to 2 seconds to increase Decimating Smash's range over an area, knock up duration, stun duration, and damage every 0.25 seconds, which has up to a maximum bonus for the base damage and up to a 200% bonus for the scaling damage."
+      "description_source": "Decimating Smash is a charge-release attack up to 2 seconds: damage, area, and crowd-control durations ramp every 0.25 seconds, with an upgraded knock-up and stun branch after sufficient charge."
     },
     "basic_ability_2": {
       "name": "Soul Furnace",
@@ -446,6 +446,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Sion",
       "accessed": "2026-02-24",
       "used_for": "manual behavior-fidelity verification for ability timing, cadence, and player-visible execution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Sion/Decimating_Smash",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Decimating Smash charge cadence, release windows, and upgraded crowd-control branch"
     }
   ],
   "notes": [
@@ -460,7 +466,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 81): Decimating Smash provenance was hardened for charge cadence, recast/interrupt windows, and upgraded crowd-control semantics."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

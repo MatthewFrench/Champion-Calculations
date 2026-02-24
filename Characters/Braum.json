@@ -355,7 +355,7 @@
         "Source effectRadius: 300 /  60 × 10.",
         "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
       ],
-      "description_source": "Active: Braum leaps into the air and slams his shield into the ground, creating a fissure from the impact that travels forth in the target direction, dealing magic damage to enemies within its path as well as those around Braum."
+      "description_source": "Glacial Fissure has a 0.5-second cast windup, sends a forward fissure that damages enemies hit (first champion hit is knocked up longer), and leaves a 4-second ice field that reapplies slow every 0.25 seconds."
     }
   },
   "sources": [
@@ -370,6 +370,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Braum",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Braum/Glacial_Fissure",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Glacial Fissure cast, fissure-travel, and slow-field cadence semantics"
     }
   ],
   "notes": [
@@ -384,7 +390,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 80): Glacial Fissure was reviewed for cast windup, first-target knockup emphasis, and periodic slow-field cadence semantics."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

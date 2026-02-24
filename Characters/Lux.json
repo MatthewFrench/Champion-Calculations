@@ -312,7 +312,7 @@
         "Source castTime: 1.",
         "Source notes (summary): Final Spark grants sight of its surroundings during the cast time and for 0.5 seconds afterwards."
       ],
-      "description_source": "Active: Lux fires a massive light beam in a line in the target direction that deals magic damage to enemies hit and reveals them for 1.5 seconds, as well as grants sight of the surrounding area."
+      "description_source": "Final Spark has a 1-second cast time, fires a line beam that deals magic damage and reveals enemies hit for 1.5 seconds, and grants surrounding vision during cast plus 0.5 seconds after firing."
     }
   },
   "sources": [
@@ -321,6 +321,18 @@
       "path": "From Online/champions/Lux.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "type": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Lux",
+      "accessed": "2026-02-24",
+      "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Lux/Final_Spark",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Final Spark cast timing, reveal duration, and vision-window semantics"
     }
   ],
   "notes": [
@@ -335,7 +347,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 80): Final Spark was reviewed for cast timing, reveal application window, and player-visible sight behavior."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

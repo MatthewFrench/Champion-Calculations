@@ -330,9 +330,10 @@
         "Source targeting: Unit.",
         "Source castTime: 0.375.",
         "Source speed: 3200.",
-        "Source notes (summary): The following will cancel Ace in the Hole's channel (mana expenditure is not compensated): Caitlyn is interrupted."
+        "Source notes (summary): The following will cancel Ace in the Hole's channel (mana expenditure is not compensated): Caitlyn is interrupted.",
+        "Manual re-verification (2026-02-24): Ace in the Hole is a target-gated channel then missile resolution sequence; damage happens only on projectile contact, and intervening champions can body-block the shot before it reaches the marked target."
       ],
-      "description_source": "Active: Caitlyn locks onto the target enemy champion and channels for 1 second, revealing them as well as revealing herself."
+      "description_source": "Active: Caitlyn locks onto a target champion and channels for 1 second, revealing both target and herself. On completion she fires a homing shot that deals physical damage to the first enemy champion hit; cancellation places Ace in the Hole on a 5-second cooldown."
     }
   },
   "sources": [
@@ -347,6 +348,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Yordle Snap Trap execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Caitlyn/Ace_in_the_Hole",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Ace in the Hole channel/projectile semantics"
     }
   ],
   "notes": [

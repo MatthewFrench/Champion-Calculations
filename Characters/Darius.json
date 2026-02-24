@@ -274,9 +274,10 @@
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source effectRadius: 535.",
-        "Source notes (summary): Enemies hit by Apprehend will quickly be dragged to Darius before rebounding over a longer period."
+        "Source notes (summary): Enemies hit by Apprehend will quickly be dragged to Darius before rebounding over a longer period.",
+        "Manual re-verification (2026-02-24): Apprehend combines a persistent passive stat modifier with an active displacement cast; pull/rebound control resolves after cast windup and is position-dependent on cone hit confirmation."
       ],
-      "description_source": "Passive: Darius gains armor penetration."
+      "description_source": "Passive: Darius gains armor penetration. Active: Darius sweeps his axe in a cone, pulling enemies toward him, causing a short rebound airborne displacement, and applying a 40% slow for 1 second."
     },
     "ultimate": {
       "name": "Noxian Guillotine",
@@ -370,6 +371,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Noxian Guillotine execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Apprehend",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source provenance hardening for Apprehend passive+active displacement semantics"
     }
   ],
   "notes": [

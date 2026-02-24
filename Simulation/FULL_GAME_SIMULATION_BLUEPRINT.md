@@ -314,16 +314,16 @@ Status labels:
 - `BLOCKED`
 
 ## Current Status Snapshot (2026-02-24)
-Overall weighted completion estimate for this blueprint: `41%` (`IN_PROGRESS`).
+Overall weighted completion estimate for this blueprint: `42%` (`IN_PROGRESS`).
 
 Bucket status (complete / remaining):
 - Runtime Systems Completeness (`30%` weight): `31% / 69%`
   - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation
   - largest remaining gap: world state is not yet integrated into step-time pathing/collision, and no non-champion actor ecology or macro match systems exist yet
-- Determinism And Replay Guarantees (`20%` weight): `56% / 44%`
-  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization
+- Determinism And Replay Guarantees (`20%` weight): `57% / 43%`
+  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, and guarded event-resolution fallback paths without non-test `expect(...)` crash points
   - largest remaining gap: no replay checksum verifier and no full-match deterministic replay contract
-- Calibration And Correctness (`20%` weight): `46% / 54%`
+- Calibration And Correctness (`20%` weight): `47% / 53%`
   - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, and new world/script registration guardrails
   - largest remaining gap: no golden interaction harness/property-suite for full-system invariants
 - Performance Envelope (`15%` weight): `47% / 53%`
@@ -343,7 +343,7 @@ Phase-level status:
 ## Current Non-Data High Friction
 - runtime remains optimized for combat-scenario evaluation, not full-map lifecycle orchestration
 - simplified movement and event taxonomy constrain expansion into full game behavior
-- runtime crash surfaces still include non-test `expect`/`panic!` paths in hot combat/default channels (current scan: `33` `expect(...)` and `38` `panic!` callsites under `Simulation/src`)
+- runtime crash surfaces are now concentrated in defaults-loader panic paths (current scan: `0` non-test `expect(...)` and `26` non-test `panic!` callsites under `Simulation/src`)
 - controlled-champion script registry is still static and low-coverage (`Vladimir`, `Sona`) relative to full roster requirements
 
 ## Immediate Next Work (Execution-Ready)
