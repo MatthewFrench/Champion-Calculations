@@ -2097,5 +2097,112 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_84": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Olaf",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Reckless Swing target-cast windup timing, target-invalidation cancellation behavior, and successful-hit refund/cooldown-reduction semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Reckless_Swing"
+        ]
+      },
+      {
+        "key": "Nasus",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2"
+        ],
+        "focus": "Siphoning Strike empowered-hit cadence plus Wither gradual slow/cripple ramp semantics with timing-correct, non-truncated execution notes",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Siphoning_Strike",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Wither"
+        ]
+      },
+      {
+        "key": "Darius",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Crippling Strike empowered-hit resolution timing, post-effect cooldown-start semantics, and attack-event outcome behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Crippling_Strike"
+        ]
+      },
+      {
+        "key": "Blitzcrank",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Power Fist empowered-hit cadence, on-hit knockup resolution branches, and intended-non-bug behavior policy adherence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Blitzcrank/Power_Fist"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_88": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Jax",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Empower cast-gating versus empowered-hit resolution timing, attack-reset cadence, and separate on-hit magic-packet semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Empower"
+        ]
+      },
+      {
+        "key": "Renekton",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Ruthless Predator multi-hit cast-lock cadence, empowered branch stun-duration semantics, and truncation-defect correction for attack-coupled execution notes",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Ruthless_Predator"
+        ]
+      },
+      {
+        "key": "Rengar",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Savagery empowered first-hit critical branch, attack-reset cadence, and cast-input versus hit-resolution timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rengar/Savagery"
+        ]
+      },
+      {
+        "key": "MonkeyKing",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Crushing Blow empowered-hit timing, clone-assisted cooldown-reduction/hit-event semantics, and non-instant cast resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Wukong/Crushing_Blow"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_89": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Braum",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Glacial Fissure first-target knockup minimum-duration truncation correction and travel-distance-scaled knockup timing clarification",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Braum/Glacial_Fissure"
+        ]
+      }
+    ]
   }
 }

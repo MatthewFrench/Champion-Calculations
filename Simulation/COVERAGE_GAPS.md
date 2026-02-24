@@ -58,6 +58,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Item provenance (`Items/*.json` with `effects_structured`) | `0/243` have `sources: null` | Provenance backlog is cleared; keep this as a no-regression guardrail |
 | Item source metadata completeness (`sources[].accessed`) | `0/243` structured item files have source entries missing `accessed` date metadata | Structured-item source metadata normalization is complete; keep this as a no-regression guardrail |
 | Item review metadata (`effects_structured_reviewed`) | `0` missing, `0` non-ISO format | Legacy non-ISO values normalized; enforce ISO format on new edits |
+| Structured-item parse-confidence completeness (`effects_structured[].parse_confidence`) | `0/243` structured item files have missing/null parse-confidence effect entries (`0` missing entries total) | Missing/null parse-confidence backlog is cleared after wave 87; keep this as a no-regression guardrail |
 | Item parse confidence | `0` item files have `parse_confidence < 0.65` | Low-confidence backlog is cleared; keep this as a no-regression guardrail |
 | Modeled runtime item data precision | `0/9` modeled runtime item files have minimum numeric `parse_confidence <= 0.60`; `0/9` remain at `0.65`; `0/9` have missing numeric confidence | Modeled runtime confidence floor is now >= `0.70`; maintain this as a no-regression guardrail |
 | Legal URF unmodeled item provenance | `0/102` legal unmodeled effect items still have `sources: null` | High-impact legal URF provenance backlog is cleared; maintain this as a guardrail |
@@ -111,7 +112,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Champion corpus parity (`From Online/champions` -> `Characters`) | `172/172` champion keys have canonical `Characters/<Champion>.json` parity (`0` missing) | File-parity backlog is cleared; keep inventory as a no-regression guardrail |
 | Champion manual verification tracker coverage | `172/172` champions currently marked `manual_behavior_verified` (`100%`) in `Simulation/champion_behavior_verification_tracker.json` | Full-corpus manual verification is complete; keep this as a no-regression guardrail and re-open targeted waves when semantics change |
 | Champion verification tracker integrity | `manual_behavior_verified_champion_keys` count and tracker totals are reconciled (`172` verified keys, `0` source-extracted-only, corpus `172`) | Keep per-wave reconciliation check as a no-regression guardrail (`verified_count == key_count`; `source_extracted_only == corpus_total - verified_count`) |
-| Champion manual-verification page-level citation depth | `4/4` champions in the latest fidelity wave include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
+| Champion manual-verification page-level citation depth | `5/5` champions touched in the latest fidelity waves (`88-89`) include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
 | Champion context-note truncation audit | `0` ability entries across `0` champion files are currently flagged by strict regex audit as candidate truncated timing fragments in `context_notes`; secondary cadence-fragment sweep (`every 0.` class) and tertiary article-token sweep (`during the 0.` class) are also `0/0` | Queue is cleared; keep string+array-aware strict auditing plus cadence/article-token sweeps as no-regression guardrails |
 | Source-extracted-only strict-fragment queue | `0` source-extracted-only champions currently have strict-fragment notes | Queue is cleared; keep this as a no-regression guardrail while maintaining full-corpus manual verification coverage |
 | Champion source metadata completeness (`Characters/*.json`) | `0/173` champion JSON files have null/empty `sources`; `0/173` have source entries missing `accessed` | Champion provenance/accessed normalization is complete; keep this as a no-regression guardrail |
@@ -127,6 +128,19 @@ This file tracks what is complete and not complete for coverage across data and 
 - Note: historical bullets below retain per-wave baseline counts captured at the time each wave landed; use "Coverage At A Glance" and "Champion Corpus Parity Snapshot" for current totals.
 - Completed:
   - added `Simulation/champion_behavior_verification_tracker.json` to track deeper manual champion behavior verification beyond source extraction (current baseline: `172/172` manual verified, policy defaulting to intended non-bug behavior)
+  - completed item parse-confidence completeness wave 87:
+    - backfilled missing/null `effects_structured[].parse_confidence` metadata on the remaining queue (`12` effect entries across `5` files: `Trinity Force`, `Twilight's Edge`, `Warden's Eye`, `Wooglet's Witchcap`, `Zeke's Convergence`)
+    - cleared structured-item missing/null parse-confidence queue to `0` entries (`0/243` files with gaps)
+  - completed champion attack-cadence fidelity wave 88:
+    - manually re-verified and normalized cast-gating versus hit-resolution execution semantics on `Jax` (`W`), `Renekton` (`W`), `Rengar` (`Q`), and `MonkeyKing` (`Q`)
+    - added page-level ability template citations for each touched champion and recorded wave scope in `Simulation/champion_behavior_verification_tracker.json`
+    - corrected discovered truncation defects on `Renekton` `Ruthless Predator` effect context notes and aligned empowered stun-duration semantics to source-verified values
+  - completed champion truncation-correction wave 89:
+    - corrected `Braum` `Glacial Fissure` first-target knockup context-note truncation (`at least 0.` -> minimum `0.6` seconds plus travel-distance-scaled maximum duration semantics)
+    - recorded page-level citation provenance and wave scope in `Simulation/champion_behavior_verification_tracker.json`
+  - completed runes cadence-text normalization wave 90:
+    - corrected `Lethal Tempo` stack-decay interval text artifacts (`0. 5` -> `0.5`) in both flat and split rune structures
+    - synchronized parsed numeric extraction (`numbers_extracted: [0.5]`) across flat + split to maintain parse consistency and parity (`61/61` rune IDs; `3/3` stat shard slots)
   - completed champion provenance-hardening wave 81:
     - re-verified and hardened source-corpus `description_source` phrasing for `Mordekaiser` (`R`), `Pyke` (`Q`), `Sion` (`Q`), and `Urgot` (`R`)
     - added page-level champion ability citations for each touched ability and recorded wave scope in `Simulation/champion_behavior_verification_tracker.json`
@@ -573,6 +587,7 @@ This file tracks what is complete and not complete for coverage across data and 
    - preserve `Masteries/RunesReforged/StatShards/stat_shards.json` parity with flat-file stat shard data
 4. Maintain modeled runtime confidence floor (`>= 0.70`) and continue second-pass semantic refinement on complex proc/per-target effects.
 5. Maintain item low-confidence backlog at `0` files (`parse_confidence < 0.65`) as a no-regression requirement.
+   - maintain structured-item parse-confidence completeness (`effects_structured[].parse_confidence` missing/null queue at `0`)
 6. Maintain page-level verification citation depth for complex item semantics as a no-regression guardrail (current League Wiki page coverage: `243/243`, remaining no-page queue: `0/243`).
 7. Maintain legal URF unmodeled page-level citation depth at `0/102` as a no-regression guardrail.
 8. Maintain rune low-confidence floor (`0` runes with `parse_confidence <= 0.60`) and continue condition-note taxonomy cleanup for remaining medium-confidence narrative effects.
@@ -598,7 +613,7 @@ This file tracks what is complete and not complete for coverage across data and 
 26. Maintain mastery provenance/accessed no-regression (`Masteries`: `0/2` unsourced and `0/2` with missing `sources[].accessed`).
 27. Maintain champion active-ability execution metadata no-regression (`682/682` active abilities with non-empty `execution` objects).
 28. Maintain champion manual behavior-verification tracker at full-corpus coverage (`172/172` current baseline) and run targeted re-verification waves when semantics change.
-29. Keep champion context-note truncation queues at `0/0` (strict primary regex plus secondary cadence-fragment sweep plus tertiary article-token sweep) on every champion wave so truncation regressions are caught immediately.
+29. Keep champion context-note truncation queues at `0/0` (strict primary regex plus secondary cadence-fragment sweep plus tertiary article-token sweep plus cast-time fragment sweep for `have a 0.` patterns) on every champion wave so truncation regressions are caught immediately.
 30. Maintain champion ability `description_source` no-regression (`860/860` currently populated) and treat missing entries as blocking regressions.
 
 ### Remaining Broader No-Page Queue (`0`)

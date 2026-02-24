@@ -315,7 +315,7 @@
             1.5,
             2.0
           ],
-          "context_notes": "The first target hit is knocked up for at least 0."
+          "context_notes": "The first target hit is knocked up for at least 0.6 seconds, up to the listed maximum duration based on fissure travel distance before impact."
         },
         {
           "id": "slow",

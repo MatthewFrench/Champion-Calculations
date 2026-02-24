@@ -136,7 +136,10 @@ pub(super) fn champion_ability_execution_defaults_for_role_internal(
     is_melee: bool,
 ) -> AbilityExecutionDefaultsEntry {
     let defaults = CHAMPION_ABILITY_EXECUTION_DEFAULTS.get_or_init(|| {
-        load_champion_ability_execution_defaults().unwrap_or_else(|err| panic!("{}", err))
+        load_champion_ability_execution_defaults().unwrap_or(AbilityExecutionDefaultsByRole {
+            melee: AbilityExecutionDefaultsEntry::default(),
+            ranged: AbilityExecutionDefaultsEntry::default(),
+        })
     });
     if is_melee {
         defaults.melee

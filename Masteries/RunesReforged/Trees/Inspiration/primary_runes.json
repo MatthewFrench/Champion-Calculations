@@ -398,15 +398,15 @@
                 10
               ],
               "scaling": null,
-              "trigger": null,
-              "applies_to": "ally",
+              "trigger": "passive",
+              "applies_to": "self",
               "formula": {
                 "type": "flat",
                 "value": 10,
                 "unit": null
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.85
             },
             {
               "raw": "You cannot purchase Boots nor any Tier-2 boots prior to obtaining Slightly Magical Boots .",
@@ -618,15 +618,15 @@
                 40
               ],
               "scaling": null,
-              "trigger": null,
-              "applies_to": "ally",
+              "trigger": "on_potion_consumed",
+              "applies_to": "self",
               "formula": {
                 "type": "flat",
                 "value": 40,
                 "unit": "percent"
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.85
             },
             {
               "raw": "If a health potion is consumed while one is already active, this effect will trigger on the activation of the next potion once the restoration of the current one ends.",

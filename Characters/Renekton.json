@@ -241,7 +241,7 @@
             100.0,
             130.0
           ],
-          "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0."
+          "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0.2-second cast time, 175 range, and two-hit resolution that deals modified physical damage and stuns for 0.75 seconds."
         },
         {
           "id": "physical_damage_per_hit",
@@ -253,7 +253,7 @@
             50.0,
             65.0
           ],
-          "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0."
+          "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0.2-second cast time and strike twice, with each hit applying on-hit effects and per-hit physical damage."
         },
         {
           "id": "renekton_w_effect_2",
@@ -269,7 +269,7 @@
             150.0,
             195.0
           ],
-          "context_notes": "Reign of Anger Bonus: Renekton instead strikes 3 times, completely destroying damage-mitigating shields on the target upon the first strike if they are not a monster, as well as increasing the stun duration to 1."
+          "context_notes": "Reign of Anger Bonus: Renekton instead strikes 3 times, completely destroying damage-mitigating shields on the target upon the first strike if they are not a monster, and increases stun duration to 1.5 seconds."
         },
         {
           "id": "renekton_w_effect_4",
@@ -290,7 +290,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Each strike of Ruthless Predator deals basic damage, but the first strike also triggers spell effects by also being tagged as spell damage."
+        "Source notes (summary): Each strike of Ruthless Predator deals basic damage, but the first strike also triggers spell effects by also being tagged as spell damage.",
+        "Manual review (2026-02-24): Ruthless Predator is cast-gated and attack-cadence-coupled; input arms an empowered attack and damage/control resolve at empowered-hit contact rather than on cast input.",
+        "Manual review (2026-02-24): Resolution is multi-hit with the first strike carrying spell-tag interaction and empowered-fury branch extending to a three-hit pattern with longer stun duration."
       ]
     },
     "basic_ability_3": {
@@ -456,6 +458,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Renekton",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Ruthless_Predator",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Ruthless Predator cast timing, multi-hit strike semantics, stun durations, and attack-cadence-coupled resolution"
     }
   ],
   "notes": [

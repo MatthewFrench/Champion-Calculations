@@ -1,6 +1,28 @@
 # Improvement Tracker
 
 ## Done
+- Landed defaults-loader hardening follow-up for champion-owned channels:
+  - converted champion-specific defaults caches in `src/defaults.rs` to fallible cached loading (no panic in these optional channels):
+    - `vladimir_sanguine_pool_defaults`
+    - `vladimir_defensive_ability_two_policy_defaults`
+    - `vladimir_cast_profile_defaults`
+    - `vladimir_offensive_ability_defaults`
+    - `warwick_infinite_duress_ability_defaults`
+    - `warwick_eternal_hunger_passive_defaults`
+    - `vayne_tumble_ability_defaults`
+    - `vayne_silver_bolts_ability_defaults`
+    - `morgana_binding_and_soul_shackles_ability_defaults`
+    - `sona_crescendo_ability_defaults`
+    - `doctor_mundo_infected_bonesaw_ability_defaults`
+  - updated Doctor Mundo script callsites to consume fallible defaults access and soft-fail safely when defaults are unavailable.
+  - removed non-critical panic paths in optional defaults maps/channels:
+    - `champion_simulation_data_map` now falls back to empty map
+    - `CHAMPION_ABILITY_EXECUTION_DATA` cache now falls back to empty map
+    - `champion_slot_bindings` cache now falls back to empty map
+    - execution-default helper loaders now fall back to deterministic zeroed execution defaults instead of panicking
+  - net crash-surface reduction from previous checkpoint:
+    - non-test `panic!`: `26` -> `10`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed runtime crash-surface hardening slice across engine/runtime/cache/script channels:
   - replaced panic-on-index event-resolution/trace/actor-channel assumptions with guarded owner-channel reads and deterministic early-return fallback behavior in:
     - `src/engine/combat_timing_and_targeting.rs`
@@ -127,6 +149,19 @@
 - Completed data-quality no-regression audit wave 83:
   - re-ran split-vs-flat runes parity checks and confirmed no drift (`61/61` rune IDs aligned, `3/3` stat shard slots aligned)
   - re-ran champion data no-regression checks (tracker integrity, `description_source` completeness, truncation queues) and confirmed clean state after waves 80-82
+- Completed data-first item parse-confidence completeness wave 87:
+  - backfilled missing/null `effects_structured[].parse_confidence` metadata on the remaining queue (`12` effect entries across `5` item files: `Trinity Force`, `Twilight's Edge`, `Warden's Eye`, `Wooglet's Witchcap`, `Zeke's Convergence`)
+  - cleared structured-item missing/null parse-confidence queue to `0` entries (`0/243` files with gaps)
+- Completed data-first champion attack-cadence fidelity wave 88:
+  - manually re-verified cast-gating versus hit-resolution semantics on `Jax` (`W`), `Renekton` (`W`), `Rengar` (`Q`), and `MonkeyKing` (`Q`)
+  - added page-level ability template citations to each touched champion and recorded scope in `Simulation/champion_behavior_verification_tracker.json`
+  - corrected discovered truncation defects in `Renekton` `Ruthless Predator` effect notes and aligned empowered stun-duration semantics to source-verified values
+- Completed data-first champion truncation-correction wave 89:
+  - corrected `Braum` `Glacial Fissure` first-target knockup truncation defect (`at least 0.` -> minimum `0.6` seconds plus travel-distance-scaled maximum duration semantics)
+  - recorded page-level citation provenance and wave scope in `Simulation/champion_behavior_verification_tracker.json`
+- Completed data-first runes cadence-text normalization wave 90:
+  - corrected `Lethal Tempo` stack-decay interval text artifacts (`0. 5` -> `0.5`) in flat and split rune structures
+  - synchronized parsed numeric extraction for the interval branch (`numbers_extracted: [0.5]`) while preserving full split-vs-flat parity (`61/61` rune IDs, `3/3` shard slots)
 - Completed data-first champion fidelity verification wave 75:
   - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
   - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`

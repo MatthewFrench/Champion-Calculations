@@ -25,6 +25,9 @@ Start here before implementation:
   - tertiary article-token queue (`during the 0.` class) currently `0` entries across `0` champion files (cleared in post-wave audit)
   - champion ability `description_source` completeness currently `860/860` (`0` missing across `0` champions)
 - Current champion data priority is no-regression fidelity maintenance and unresolved-confidence follow-up (execution semantics depth, context-note completeness, and ambiguity tracking), not file-creation parity.
+- Structured-item parse-confidence completeness is currently fully normalized:
+  - `243/243` structured item files have numeric `effects_structured[].parse_confidence` entries on all structured effects (`0` missing/null entries)
+- Rune cadence-text spacing artifact queue is currently clear (`0` remaining `0. 5`-style interval strings in flat/split canonical files).
 - We do **not** yet have full runtime-mechanic coverage for all assets.
 - The canonical gap tracker is `Simulation/COVERAGE_GAPS.md`.
 
@@ -147,6 +150,7 @@ Priority A. Champion corpus fidelity normalization (highest impact):
 - Use strict fragment detection in truncation audits (integer-dot token patterns) so valid decimal timings (for example `0.25 seconds`) are not tracked as truncation defects.
 - Run a secondary cadence-fragment sweep (for example `every 0.` patterns) so periodic-tick truncation fragments are not missed by the strict primary pattern.
 - Run a tertiary article-token sweep (for example `during the 0.` patterns) so article-interposed truncation fragments are not missed.
+- Run a cast-time fragment sweep (for example `have a 0.` patterns) so cast-windup truncation defects are not missed.
 - Normalize `context_notes` shape before truncation audits (support both string and array forms) so fragment queues are complete and reproducible.
 
 Priority B. Runes split-structure synchronization:
@@ -167,6 +171,8 @@ Priority C. Champion inventory and planning hygiene:
 - Track unresolved low-confidence entries in `Simulation/COVERAGE_GAPS.md`.
 - Current low-confidence item queue (`0` files):
   - None currently (`parse_confidence < 0.65` queue cleared).
+- Current structured-item missing/null parse-confidence queue (`0` files, `0` effect entries):
+  - None currently; keep numeric `parse_confidence` coverage as a no-regression guardrail on touched structured effects.
 
 3. Page-level citation depth for ambiguous formulas:
 - Keep Tier-2 dataset citations in place and add page-level references where formulas remain low-confidence.
@@ -254,6 +260,19 @@ Priority C. Champion inventory and planning hygiene:
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed item parse-confidence completeness wave 87:
+    - backfilled missing/null `effects_structured[].parse_confidence` values across `12` remaining effect entries in `5` item files (`Trinity Force`, `Twilight's Edge`, `Warden's Eye`, `Wooglet's Witchcap`, `Zeke's Convergence`)
+    - cleared structured-item missing/null parse-confidence queue to `0` entries (`0/243` files with gaps)
+  - Completed champion attack-cadence fidelity wave 88:
+    - manually re-verified cast-gating and hit-resolution timing semantics on `Jax` (`W`), `Renekton` (`W`), `Rengar` (`Q`), and `MonkeyKing` (`Q`)
+    - added page-level ability template citations for each touched champion and recorded wave scope in `Simulation/champion_behavior_verification_tracker.json`
+    - corrected `Renekton` `Ruthless Predator` truncation defects and aligned empowered branch stun-duration semantics to source-verified values
+  - Completed champion truncation-correction wave 89:
+    - corrected `Braum` `Glacial Fissure` first-target knockup truncation (`at least 0.` -> `at least 0.6 seconds`) and clarified travel-distance-scaled maximum duration semantics
+    - recorded page-level citation provenance and wave scope in `Simulation/champion_behavior_verification_tracker.json`
+  - Completed runes cadence-text normalization wave 90:
+    - corrected `Lethal Tempo` interval spacing artifacts (`0. 5` -> `0.5`) in flat and split rune structures
+    - synchronized parsed numeric extraction (`numbers_extracted: [0.5]`) to maintain flat/split semantic parity
   - Completed champion provenance-hardening wave 81:
     - re-verified and hardened source-corpus `description_source` phrasing for `Mordekaiser` (`R`), `Pyke` (`Q`), `Sion` (`Q`), and `Urgot` (`R`)
     - added page-level champion ability citation provenance for all touched champions and recorded scope in `Simulation/champion_behavior_verification_tracker.json`
@@ -744,6 +763,19 @@ for name in names:
     minimum=min((e.get('parse_confidence') for e in effects if isinstance(e.get('parse_confidence'), (int,float))), default=None)
     print(f\"{item.get('name')}\tmin_parse_confidence={minimum}\")
 PY
+```
+
+Items with structured effects and missing/null `parse_confidence` entries:
+```bash
+for f in Items/*.json; do
+  if [ "$(jq '(.effects_structured // []) | length' "$f")" -eq 0 ]; then
+    continue
+  fi
+  missing=$(jq '[.effects_structured[]? | select((has("parse_confidence") | not) or .parse_confidence == null)] | length' "$f")
+  if [ "$missing" -gt 0 ]; then
+    echo "$(basename "$f") : missing_or_null_parse_confidence_entries=$missing"
+  fi
+done
 ```
 
 Items with non-ISO or missing review metadata:

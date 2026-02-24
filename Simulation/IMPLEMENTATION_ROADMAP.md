@@ -1062,6 +1062,16 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - non-test `expect(...)` callsites under `Simulation/src` are reduced to zero.
   - runtime crash surfaces are materially reduced while preserving deterministic behavior and green validation gates.
 
+49. `DONE` Defaults-loader hardening follow-up for champion-owned channels.
+- Scope:
+  - convert champion-specific defaults caches in `src/defaults.rs` (`Vladimir`, `Warwick`, `Vayne`, `Morgana`, `Sona`, `Doctor Mundo`) to fallible cached loading that returns `Option` instead of panicking on load failure.
+  - update champion script callsites to consume fallible defaults accessors and soft-fail when canonical defaults are unavailable.
+  - remove non-critical panic paths in optional defaults maps (`champion_simulation_data`, `champion_slot_bindings`, champion ability execution-data map) by using safe fallback containers.
+  - remove panic fallback in shared execution-default helper loaders by using deterministic default execution entries.
+- Success criteria:
+  - panic usage in optional champion defaults channels is removed.
+  - crash-surface backlog is reduced to core required defaults loading paths only.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1082,6 +1092,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 46 (world-state ownership scaffold + encounter placement guardrails landed)
 - `DONE` Item 47 (non-Vladimir controlled-champion path validated with typed script-init errors)
 - `DONE` Item 48 (runtime crash-surface hardening landed; non-test `expect(...)` now zero)
+- `DONE` Item 49 (champion defaults-loader hardening landed; non-test `panic!` reduced further)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

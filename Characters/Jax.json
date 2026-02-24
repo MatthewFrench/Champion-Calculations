@@ -194,7 +194,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Empower is applied in a separate damage instance from Jax's basic attacks."
+        "Source notes (summary): Empower is applied in a separate damage instance from Jax's basic attacks.",
+        "Manual review (2026-02-24): Empower is cast-gated and attack-cadence-coupled; cast arms an empowered-hit window and damage resolves when the empowered attack or Leap Strike hit connects, not at cast input time.",
+        "Manual review (2026-02-24): In basic-attack usage, Empower resets the attack timer and resolves as a distinct on-hit magic-damage packet after the empowered swing lands."
       ]
     },
     "basic_ability_3": {
@@ -374,6 +376,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Grandmaster-at-Arms execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Empower",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Empower cast gating, attack-reset cadence, and empowered-hit resolution semantics"
     }
   ],
   "notes": [

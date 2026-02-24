@@ -152,7 +152,8 @@
       ],
       "scaling_terms": [],
       "range_units": 600,
-      "numbers_extracted": []
+      "numbers_extracted": [],
+      "parse_confidence": 0.72
     },
     {
       "id": "solstice_sleigh_ward_refill_on_shop_visit",
@@ -170,7 +171,8 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": []
+      "numbers_extracted": [],
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -190,10 +192,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.078628+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Solstice Sleigh is modeled as an engage-support utility item: crowd-control procs grant brief speed plus bonus health to self and the lowest-health nearby ally.",
-      "Support-income diminishing minion-gold behavior now encodes page-verified threshold formulas and reduction ranges (pre-5-minutes and post-5-minutes), while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies."
+      "Support-income diminishing minion-gold behavior now encodes page-verified threshold formulas and reduction ranges (pre-5-minutes and post-5-minutes), while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
+      "Quality normalization (2026-02-24): missing parse_confidence metadata on ward utility branches was backfilled after manual review."
     ]
   },
   "sources": [

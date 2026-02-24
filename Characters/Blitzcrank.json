@@ -210,7 +210,7 @@
       "type": "Active",
       "slot": "E",
       "default_keybinding": "E",
-      "description_source": "Active:  Blitzcrank charges up a fist to make the next  basic attack deal double damage and  knock up the target into the air.",
+      "description_source": "Active: Blitzcrank empowers their next basic attack on-hit within 5 seconds to have an uncancellable windup, deal 100% AD (+ 25% AP) bonus physical damage and knock up the target for 1 second. This damage is affected by critical strike modifiers.",
       "effects": [
         {
           "id": "blitzcrank_e_effect_1",
@@ -246,7 +246,10 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Power Fist deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+        "Source cooldown start: post-effect.",
+        "Source notes (summary): Power Fist is an empowered on-hit attack with uncancellable windup and basic-attack-timer reset, so damage and knockup resolve on hit rather than on cast press.",
+        "Source notes (summary): The attack is tagged as both basic and spell damage; crowd-control branch nuance is explicit in source notes (for example dodge/blind vs block/spell-shield handling).",
+        "Policy note: known bug-only branches are not modeled as canonical behavior; intended non-bug hit resolution remains the default simulation target."
       ]
     },
     "ultimate": {
@@ -322,6 +325,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior re-verification and description_source provenance hardening for Rocket Grab projectile/lockout semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Blitzcrank/Power_Fist",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source hardening for Power Fist empowered-hit cadence and knockup resolution semantics"
     }
   ],
   "notes": [

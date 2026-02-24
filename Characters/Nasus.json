@@ -86,7 +86,7 @@
       "type": "Active",
       "slot": "Q",
       "default_keybinding": "Q",
-      "description_source": "Active:  Nasus' next basic attack within a period will gain  bonus range and deal bonus physical damage based on the amount of Siphoning Strike stacks.",
+      "description_source": "Active: Nasus empowers his next basic attack within 10 seconds to have an uncancellable windup, gain 50 bonus range, and deal bonus physical damage. Siphoning Strike's base damage is affected by critical strike modifiers.",
       "effects": [
         {
           "id": "bonus_physical_damage",
@@ -134,6 +134,7 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
+        "Source cooldown start: post-effect.",
         "Source notes (summary): Siphoning Strike is a next-basic-attack empower with attack-cadence-coupled hit timing (not instant on cast), including an uncancellable windup and auto-attack-timer reset behavior.",
         "Source notes (summary): Both base and stack bonus damage are treated as basic damage while also being tagged to trigger spell-effect hooks; stack gain applies on valid kill targets and excludes secondary-effect cleanups (for example Tiamat splash)."
       ]
@@ -155,7 +156,7 @@
             83.0,
             95.0
           ],
-          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
         },
         {
           "id": "additional_slow_per_second",
@@ -167,7 +168,7 @@
             12.0,
             15.0
           ],
-          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
         },
         {
           "id": "maximum_cripple",
@@ -179,7 +180,7 @@
             62.25,
             71.25
           ],
-          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
         },
         {
           "id": "additional_cripple_per_second",
@@ -191,10 +192,10 @@
             9.0,
             11.25
           ],
-          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
         }
       ],
-      "description": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26.25%, ]both increasing every second over the duration.",
+      "description": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, both increasing every second over the duration.",
       "cooldown_seconds_by_rank": [
         15.0,
         14.0,
@@ -219,6 +220,7 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
+        "Manual behavior verification (2026-02-24): Wither is a target-locked debuff with player-visible gradual ramp, so slow and cripple values update over duration rather than resolving as a single static snapshot at cast time.",
         "Source notes (summary): Wither interrupts the target's attack windup when it is first applied."
       ]
     },
@@ -405,6 +407,18 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Spirit Fire execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Siphoning_Strike",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source hardening for Siphoning Strike empowered-hit cadence, cooldown start, and on-hit resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Wither",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and context-note cleanup for Wither ramping slow/cripple execution semantics"
     },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Fury_of_the_Sands",

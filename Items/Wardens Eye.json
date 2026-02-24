@@ -28,7 +28,8 @@
       ],
       "conditions": [
         "line_of_sight_can_be_obstructed_by_terrain"
-      ]
+      ],
+      "parse_confidence": 0.72
     }
   ],
   "shop": {},

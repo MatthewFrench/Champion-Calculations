@@ -276,7 +276,8 @@
       ],
       "scaling_terms": [],
       "range_units": 600,
-      "numbers_extracted": []
+      "numbers_extracted": [],
+      "parse_confidence": 0.72
     },
     {
       "id": "runic_compass_ward_charges_refill_at_shop",
@@ -294,7 +295,8 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": []
+      "numbers_extracted": [],
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -313,13 +315,14 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.065696+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Runic Compass is modeled as the second support-quest tier: Shared Riches charge economy plus quest progression into Bounty of Worlds with expanded ward stock.",
       "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
       "Execution-semantics review confirms Shared Riches is target/range gated: charge spend only occurs with an ally nearby and resolves on minion-kill execute or champion/structure damage events.",
       "Sell-state policy resolved for support-quest staging: represent page-verified No Sell behavior with shop.prices.sell = 0 for quest-stage items.",
-      "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell."
+      "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell.",
+      "Quality normalization (2026-02-24): missing parse_confidence metadata on ward utility branches was backfilled after manual review."
     ]
   },
   "sources": [

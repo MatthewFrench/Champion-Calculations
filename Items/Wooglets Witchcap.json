@@ -37,7 +37,8 @@
       "effect_type": "stat_modifier",
       "applies_to": "self",
       "stat": "ability_power_total_percent",
-      "value": 50
+      "value": 50,
+      "parse_confidence": 0.8
     },
     {
       "id": "wooglets_stasis",
@@ -62,7 +63,8 @@
         }
       ],
       "cannot_act": true,
-      "cooldown_seconds": 120
+      "cooldown_seconds": 120,
+      "parse_confidence": 0.78
     }
   ],
   "shop": {

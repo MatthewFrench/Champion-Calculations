@@ -32,7 +32,8 @@
       ],
       "value": 0.15,
       "unit": "ratio",
-      "conditions": []
+      "conditions": [],
+      "parse_confidence": 0.72
     },
     {
       "id": "twin_mask_stat_link_bonus",
@@ -54,7 +55,8 @@
       "conditions": [
         "teammate_has_twin_mask",
         "teammate_alive"
-      ]
+      ],
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -74,7 +76,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Unanimity stat-link updates dynamically with teammate live stats; base and doubled transfer ratios were aligned to current page-verified 15%/30% values.",
-      "Data consistency update (2026-02-24): Twin Mask raw text percentages were normalized to match page-verified structured values (15% base / 30% dual-mask branch)."
+      "Data consistency update (2026-02-24): Twin Mask raw text percentages were normalized to match page-verified structured values (15% base / 30% dual-mask branch).",
+      "Quality normalization (2026-02-24): missing parse_confidence metadata on both stat-link branches was backfilled after manual review."
     ]
   },
   "sources": [

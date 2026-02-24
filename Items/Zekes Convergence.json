@@ -39,7 +39,8 @@
       "effect_type": "stat_modifier",
       "applies_to": "self",
       "stat": "ultimate_haste_flat",
-      "value": 15
+      "value": 15,
+      "parse_confidence": 0.8
     },
     {
       "id": "zekes_frostfire_tempest_damage",

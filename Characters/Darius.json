@@ -168,7 +168,7 @@
       "type": "Active",
       "slot": "W",
       "default_keybinding": "W",
-      "description_source": "Active:  Darius' next  basic attack within a few seconds deals increased physical damage and  slows the target.",
+      "description_source": "Active: Darius empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and slow the target by 90% for 1 second. This damage is affected by critical strike modifiers.",
       "effects": [
         {
           "id": "bonus_physical_damage",
@@ -216,8 +216,10 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
+        "Source cooldown start: post-effect.",
         "Source notes (summary): Crippling Strike is a next-basic-attack empower with uncancellable empowered-hit windup and basic-attack-timer reset, so damage/slow resolve on the attack event rather than at cast time.",
-        "Source notes (summary): Damage is basic-damage-class while also triggering spell-effect hooks; source notes specify spell-shield does not block damage and kill-triggered cooldown/mana refunds have explicit target exclusions."
+        "Source notes (summary): Damage is basic-damage-class while also triggering spell-effect hooks; source notes specify spell-shield does not block damage and kill-triggered cooldown/mana refunds have explicit target exclusions.",
+        "Manual behavior verification (2026-02-24): Crippling Strike's empowered-hit outcome remains tied to the basic-attack event even when the swing animation is canceled by subsequent cast input (for example Decimate)."
       ]
     },
     "basic_ability_3": {
@@ -377,6 +379,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior re-verification and description_source provenance hardening for Apprehend passive+active displacement semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Crippling_Strike",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source hardening for Crippling Strike empowered-hit cadence, cooldown-start timing, and on-hit resolution semantics"
     }
   ],
   "notes": [

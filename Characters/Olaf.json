@@ -246,7 +246,7 @@
       "type": "Active",
       "slot": "E",
       "default_keybinding": "E",
-      "description_source": "Active:  Olaf consumes  health to strike thunder onto the target enemy, dealing true damage. If this kills the target, Olaf  heals the  health cost.",
+      "description_source": "Active: Olaf strikes thunder onto the target enemy, dealing true damage. If Reckless Swing kills the target, Olaf heals himself equal to the health cost. Basic attacks reduce Reckless Swing's cooldown by 1 second, increased to 2 against monsters.",
       "effects": [
         {
           "id": "true_damage",
@@ -294,8 +294,9 @@
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25 : 0.175 (based on bonus attack speed).",
-        "Source notes (summary): Reckless Swing is a target-required cast with attack-speed-scaled windup (not instant), then resolves true damage on hit; if the target invalidates during cast, the action can cancel without cost/cooldown.",
-        "Source notes (summary): Basic attacks reduce Reckless Swing cooldown by 1 second (2 against monsters), and kill-confirm health refund is tied to successful hit resolution."
+        "Manual behavior verification (2026-02-24): Reckless Swing is a target-required cast with attack-speed-scaled windup, so true-damage resolution is tied to cast completion (not instant on key press).",
+        "Manual behavior verification (2026-02-24): If the target becomes invalid during windup (for example death, untargetable, out-of-range, or out-of-sight), cast can cancel without health cost/cooldown; kill refund only applies on successful hit resolution.",
+        "Source notes (summary): Basic attacks reduce Reckless Swing cooldown by 1 second (2 against monsters)."
       ]
     },
     "ultimate": {
@@ -383,6 +384,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Tough It Out execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Reckless_Swing",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification and description_source hardening for Reckless Swing cast windup, target-invalidation cancellation, and on-hit resolution semantics"
     }
   ],
   "notes": [

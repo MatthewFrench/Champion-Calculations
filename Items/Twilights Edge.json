@@ -48,7 +48,8 @@
           "id": "spirit_world",
           "selection": "random"
         }
-      ]
+      ],
+      "parse_confidence": 0.7
     },
     {
       "id": "twilights_edge_material_world_ad",
@@ -61,7 +62,8 @@
       },
       "stat": "attack_damage_total_percent",
       "value": 20,
-      "duration_seconds": null
+      "duration_seconds": null,
+      "parse_confidence": 0.7
     },
     {
       "id": "twilights_edge_material_world_as",
@@ -77,7 +79,8 @@
         50,
         150
       ],
-      "duration_seconds": null
+      "duration_seconds": null,
+      "parse_confidence": 0.68
     },
     {
       "id": "twilights_edge_spirit_world_ap",
@@ -90,7 +93,8 @@
       },
       "stat": "ability_power_total_percent",
       "value": 20,
-      "duration_seconds": null
+      "duration_seconds": null,
+      "parse_confidence": 0.7
     },
     {
       "id": "twilights_edge_spirit_world_ability_haste",
@@ -106,7 +110,8 @@
         30,
         120
       ],
-      "duration_seconds": null
+      "duration_seconds": null,
+      "parse_confidence": 0.68
     }
   ],
   "shop": {

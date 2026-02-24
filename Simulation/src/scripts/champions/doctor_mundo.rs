@@ -14,14 +14,18 @@ pub(crate) fn event_cooldown_seconds(event: ChampionScriptEvent) -> Option<f64> 
     if event != ChampionScriptEvent::DoctorMundoInfectedBonesaw {
         return None;
     }
-    Some(doctor_mundo_infected_bonesaw_ability_defaults().cooldown_seconds)
+    doctor_mundo_infected_bonesaw_ability_defaults(CHAMPION_KEY)
+        .map(|defaults| defaults.cooldown_seconds)
 }
 
 pub(crate) fn execute_infected_bonesaw(
     input: ChampionScriptExecutionInput,
     runtime: &mut ChampionLoadoutRuntime,
 ) -> Vec<ChampionScriptAction> {
-    let ability_defaults = doctor_mundo_infected_bonesaw_ability_defaults();
+    let Some(ability_defaults) = doctor_mundo_infected_bonesaw_ability_defaults(CHAMPION_KEY)
+    else {
+        return Vec::new();
+    };
     if input.distance_to_target > ability_defaults.cast_range {
         return Vec::new();
     }

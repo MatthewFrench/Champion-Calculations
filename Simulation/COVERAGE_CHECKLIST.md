@@ -32,6 +32,7 @@ Read first:
 - [ ] Truncation audits used strict fragment criteria (integer-dot tokens) so valid decimal timing values (for example `0.25`) were not misclassified.
 - [ ] Truncation audits included a secondary cadence-fragment sweep (for example `every 0.` patterns) so truncated periodic-tick notes were not missed.
 - [ ] Truncation audits included a tertiary article-token sweep (for example `during the 0.` patterns) so article-interposed timing fragments were not missed.
+- [ ] Truncation audits included a cast-time fragment sweep (for example `have a 0.` patterns) so cast-windup truncation defects were not missed.
 - [ ] Truncation audits handled both `context_notes` string and `context_notes` array shapes so queue counts were not underreported.
 - [ ] If scripted/bulk truncation cleanup was used, replacements were scoped to `context_notes` fields and a post-edit audit confirmed `description`/`description_source` text was unchanged unless intentionally updated.
 - [ ] Intentional integer quantities in touched notes avoid terminal integer-dot phrasing (for example use `3 stacks` instead of `3.`) so truncation audits do not flag false positives.
@@ -97,6 +98,7 @@ Read first:
 - [ ] Legacy/reference lifecycle metadata includes required fields (`status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) so ID/name drift handling is explicit.
 - [ ] Any intentional sell/economy override is listed as an explicit exception (item file context notes + `Simulation/COVERAGE_GAPS.md` snapshot/priority notes).
 - [ ] Any `parse_confidence < 0.65` entry is tracked with explicit follow-up in `Simulation/COVERAGE_GAPS.md`.
+- [ ] Touched structured item effects keep numeric `parse_confidence` values (no null/missing confidence on edited `effects_structured` entries).
 - [ ] Runtime-modeled effect entries use numeric `parse_confidence` values (no null/missing confidence on modeled effects).
 - [ ] Runtime-modeled item condition tokens remain parser-compatible with existing loaders (or loader updates are shipped in the same change).
 - [ ] If the item affects combat or runtime behavior, behavior is implemented in scripts or runtime modules (not core engine modules).
@@ -105,6 +107,7 @@ Read first:
 
 ## 4) Rune And Shard Coverage
 - [ ] Rune canonical data is synchronized between flat compatibility file (`Masteries/RunesReforged.json`) and split structure (`Masteries/RunesReforged/RunesReforged.json` + `Trees/*/primary_runes.json` + `Trees/*/secondary_runes.json` + `StatShards/stat_shards.json`).
+- [ ] Rune decimal text normalization was checked for generated spacing artifacts (for example `0. 5` -> `0.5`) in both flat and split files when touched.
 - [ ] Split rune-tree structure exists and is complete for all trees (`Domination`, `Inspiration`, `Precision`, `Resolve`, `Sorcery`) with both primary and secondary files.
 - [ ] Mastery files touched in this change include explicit `sources` entries with complete `accessed` metadata (backfill missing `sources[].accessed` values in touched files).
 - [ ] Deterministic stat effects are parseable by `Simulation/src/data.rs`.

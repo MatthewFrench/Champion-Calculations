@@ -44,7 +44,8 @@
       "applies_to": "self",
       "required_gold_from_item": 400,
       "target_item": "Runic Compass",
-      "grants_ward_stock": 3
+      "grants_ward_stock": 3,
+      "parse_confidence": 0.72
     },
     {
       "id": "world_atlas_shared_riches_charge_gain",
@@ -56,7 +57,8 @@
         "interval_seconds": 20.0
       },
       "stack_name": "shared_riches_charge",
-      "max_stacks": 3
+      "max_stacks": 3,
+      "parse_confidence": 0.72
     },
     {
       "id": "world_atlas_shared_riches_ally_range",
@@ -65,7 +67,8 @@
       "applies_to": "self",
       "conditions": [
         "ally_within_1050"
-      ]
+      ],
+      "parse_confidence": 0.72
     },
     {
       "id": "world_atlas_minion_kill_gold",
@@ -81,7 +84,8 @@
       ],
       "resource": "gold",
       "value": 15,
-      "grants_kill_credit_to_nearest_ally": true
+      "grants_kill_credit_to_nearest_ally": true,
+      "parse_confidence": 0.72
     },
     {
       "id": "world_atlas_minion_execute",
@@ -98,7 +102,8 @@
       "threshold_percent_by_attack_type": {
         "melee": 50,
         "ranged": 30
-      }
+      },
+      "parse_confidence": 0.72
     },
     {
       "id": "world_atlas_damage_gold",
@@ -116,7 +121,8 @@
       "value_by_attack_type": {
         "melee": 22,
         "ranged": 20
-      }
+      },
+      "parse_confidence": 0.72
     },
     {
       "id": "world_atlas_minion_kill_penalty",
@@ -176,13 +182,14 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.013086+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "World Atlas is modeled as the support-quest starter that supplies Shared Riches charge economy and quest progression into Runic Compass.",
       "Exact gold for allied champion kill credit is not specified; the effect notes kill credit without a numeric value.",
       "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
       "Sell-state policy resolved for support-quest staging: represent page-verified No Sell behavior with shop.prices.sell = 0 for quest-stage items.",
-      "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell."
+      "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell.",
+      "Quality normalization (2026-02-24): missing parse_confidence metadata for Shared Riches core branches was backfilled with medium-high confidence values after manual semantics review."
     ]
   },
   "sources": [

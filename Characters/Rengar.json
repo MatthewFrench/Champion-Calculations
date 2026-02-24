@@ -140,7 +140,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Savagery deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+        "Source notes (summary): Savagery deals basic damage, but also triggers spell effects by also being tagged as spell damage.",
+        "Manual review (2026-02-24): Savagery is cast-gated and attack-cadence-coupled; the cast arms empowered strikes, while the bonus-damage packet resolves on empowered-hit contact.",
+        "Manual review (2026-02-24): The first empowered strike is the critical-strike-enabled stab branch and the attack-timer reset allows immediate weave into that empowered-hit window."
       ]
     },
     "basic_ability_2": {
@@ -329,6 +331,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Rengar",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rengar/Savagery",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Savagery empowered-hit cadence, attack-reset timing, and critical-first-hit branch resolution"
     }
   ],
   "notes": [

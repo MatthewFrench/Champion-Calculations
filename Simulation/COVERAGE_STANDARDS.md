@@ -67,6 +67,7 @@ Data metadata requirements:
 - `schema_notes.effects_structured_reviewed` should use ISO date format `YYYY-MM-DD`.
 - If a legacy free-text review note is replaced with an ISO review date, preserve the note in `schema_notes.context_notes`.
 - If any effect keeps `parse_confidence < 0.65`, add a concrete follow-up note in `Simulation/COVERAGE_GAPS.md`.
+- Touched structured item effects should keep numeric `parse_confidence` values even when not runtime-modeled (avoid null/missing confidence on edited `effects_structured` entries).
 - Runtime-modeled item effects should use numeric `parse_confidence` values (avoid null/missing confidence on modeled effect entries).
 - Do not leave runtime-modeled item files with `sources: null`.
 - Do not leave canonical item files unsourced, including non-structured placeholder/stat-only items (`effects_structured` empty is allowed, `sources` missing is not).
@@ -81,6 +82,7 @@ Data metadata requirements:
 - Use strict fragment detection for truncation audits (integer-dot tokens like `for 0.`), and do not classify valid decimals (for example `for 0.25 seconds`) as truncation defects.
 - Run a secondary cadence-fragment sweep for phrases like `every 0.` so truncated periodic-tick notes are not missed by the strict primary pattern.
 - Run a tertiary article-token sweep for phrases like `during the 0.` so article-interposed truncation fragments are also detected.
+- Run a cast-time fragment sweep for phrases like `have a 0.` so truncated cast-windup timing notes are also detected.
 - Truncation audits must normalize `context_notes` shape before matching (support both string and array forms on ability/effect notes) so queue counts are complete and reproducible.
 - If truncation cleanup uses scripted/bulk edits, scope replacements to `context_notes` fields only and run a post-edit audit so canonical `description`/`description_source` text is unchanged unless intentionally edited.
 - When a note contains an integer quantity that is intentional (for example stack count), avoid terminal integer-dot phrasing (for example `up to 3.`) and include units/entity labels (for example `up to 3 stacks`) so truncation audits remain reliable.
@@ -233,6 +235,7 @@ These are quality improvements to already-covered assets.
 - Maintain champion corpus parity inventory (`Simulation/champion_data_coverage_inventory.json`) as a no-regression guardrail (`172/172` current file parity) and prioritize fidelity-normalization waves over generated champion data.
 - Maintain manual behavior-verification tracker full-corpus coverage (`Simulation/champion_behavior_verification_tracker.json`, currently `172/172`) and run targeted re-verification waves when champion semantics change.
 - Maintain full provenance coverage for item files with `effects_structured` (all currently sourced) and keep this as a no-regression guardrail.
+- Maintain full parse-confidence completeness for structured item effects (`null`/missing queue at `0` after wave 87) and keep this as a no-regression guardrail.
 - Enforce `sources` de-duplication on champion/item files during future edits.
 - Raise precision of low-confidence modeled item parses (`parse_confidence` around `0.55` to `0.65`) with manual formula normalization notes.
 - Add/maintain a data audit for runtime-modeled item condition token compatibility to prevent loader/parser regressions.

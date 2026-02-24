@@ -162,7 +162,9 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Crushing Blow triggers on structures and wards but the armor reduction is not applied."
+        "Source notes (summary): Crushing Blow triggers on structures and wards but the armor reduction is not applied.",
+        "Manual review (2026-02-24): Crushing Blow is cast-gated and attack-cadence-coupled; cast primes the next basic attack and damage plus armor reduction resolve only on empowered-hit contact.",
+        "Manual review (2026-02-24): Crushing Blow resets Wukong's and clone attack timers, and cooldown reduction branches resolve from subsequent hit events rather than cast input."
       ]
     },
     "basic_ability_2": {
@@ -377,6 +379,12 @@
       "path": "From Online/champions/MonkeyKing.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Wukong/Crushing_Blow",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Crushing Blow cast gating, empowered-hit timing, clone interaction, and armor-reduction resolution semantics"
     }
   ],
   "notes": [

@@ -38,6 +38,7 @@
   - `Zyra` `Garden of Thorns` one-vs-two seed spawn distribution weighting remains unresolved from current source notes; lifecycle/state sequencing is modeled, but exact probability weighting needs an authoritative verification source before confidence can be raised further.
 - Item data uncertainty follow-up:
   - `Dragonheart` immediate soul-backfill thresholds are currently modeled with inferred round brackets (derived from published two-round cadence and cap constraints), but no explicit authoritative threshold table is published in current sources.
+  - `Twilight's Edge` mode-branch range values (`50-150%` attack speed and `30-120` ability haste) are modeled as published ranges, but source text does not expose the exact scaling axis for interpolation.
 
 ## Questions To Review
 1. Do we want to include game-time as an explicit simulation input so death timers can apply full time-based scaling (not just level-based scaling)?
@@ -70,6 +71,17 @@
 - Gambler's Blade cap reconciliation:
   - Current canonical effect text shows max stored value 240; patch history records a V14.12 historical increase to 245.
   - Source: [Gambler's Blade](https://wiki.leagueoflegends.com/en-us/Gambler%27s_Blade)
+- Attack-cadence-coupled champion ability fidelity wave:
+  - Re-verified `Jax` `Empower`, `Renekton` `Ruthless Predator`, `Rengar` `Savagery`, and `Wukong` `Crushing Blow` with explicit cast-gate versus empowered-hit resolution timing notes and page-level template citations.
+  - Source: [Template:Data_Jax/Empower](https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Empower)
+  - Source: [Template:Data_Renekton/Ruthless_Predator](https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Ruthless_Predator)
+  - Source: [Template:Data_Rengar/Savagery](https://wiki.leagueoflegends.com/en-us/Template:Data_Rengar/Savagery)
+  - Source: [Template:Data_Wukong/Crushing_Blow](https://wiki.leagueoflegends.com/en-us/Template:Data_Wukong/Crushing_Blow)
+- Champion truncation-defect correction:
+  - Corrected `Braum` `Glacial Fissure` first-target knockup note from truncated text to source-aligned minimum `0.6s` plus travel-distance-scaled maximum duration semantics.
+  - Source: [Template:Data_Braum/Glacial_Fissure](https://wiki.leagueoflegends.com/en-us/Template:Data_Braum/Glacial_Fissure)
+- Rune cadence text normalization:
+  - Corrected `Lethal Tempo` stack-decay interval text artifacts (`0. 5` -> `0.5`) and synchronized parsed numeric extraction (`0.5`) across flat and split rune structures.
 
 ## Script-Extraction Backlog (From Audit)
 - Vladimir defensive/offensive decisions are script-owned, but the engine still executes some Vladimir effect applications directly after script decisions.

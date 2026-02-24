@@ -62,7 +62,8 @@
           "ratio": 0.03
         }
       ],
-      "cap_vs_monsters": 300
+      "cap_vs_monsters": 300,
+      "parse_confidence": 0.72
     },
     {
       "id": "zazzaks_minion_kill_penalty",
@@ -110,7 +111,8 @@
         "type": "on_activate"
       },
       "ward_type": "stealth",
-      "range_units": 600
+      "range_units": 600,
+      "parse_confidence": 0.72
     },
     {
       "id": "zazzaks_ward_refill",
@@ -120,7 +122,8 @@
       "resource": "ward_charge",
       "trigger": {
         "type": "on_shop_visit"
-      }
+      },
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
@@ -140,10 +143,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.016033+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Zaz'Zak's Realmspike is modeled as an offensive support branch item: spell-hit champion triggers a delayed area magic explosion with AP and target-max-health scaling.",
-      "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies."
+      "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
+      "Quality normalization (2026-02-24): missing parse_confidence metadata for Void Explosion and ward utility branches was backfilled after manual review."
     ]
   },
   "sources": [

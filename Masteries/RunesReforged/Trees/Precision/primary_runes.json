@@ -98,7 +98,7 @@
           "wiki_descriptions": [
             "Passive: Basic attacks on-attack against enemy champions grant a stack for 6 seconds, refreshing on subsequent attacks and stacking up to 6 times. Gain ( 6% / 4. 8 % ) bonus attack speed for each stack, up to ( 36% / 28. 8 % ) at maximum stacks.",
             "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 – 32. 47 / 6 – 26. 12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0. 6 6 % ) per 1% bonus attack speed .",
-            "Stacks expire one by one every 0. 5 seconds when the duration ends.",
+            "Stacks expire one by one every 0.5 seconds when the duration ends.",
             "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
           ],
           "effects_structured": [
@@ -217,15 +217,14 @@
               "parse_confidence": 0.9
             },
             {
-              "raw": "Stacks expire one by one every 0. 5 seconds when the duration ends.",
+              "raw": "Stacks expire one by one every 0.5 seconds when the duration ends.",
               "effect_type": "condition_note",
               "stat": "stack_decay_interval_seconds",
               "unit": "seconds",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                0.0,
-                5
+                0.5
               ],
               "scaling": null,
               "trigger": "passive",

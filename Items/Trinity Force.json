@@ -50,7 +50,8 @@
       "duration_seconds": 10.0,
       "cooldown_seconds": 1.5,
       "cooldown_starts_on": "empowered_attack",
-      "conditions": []
+      "conditions": [],
+      "parse_confidence": 0.78
     },
     {
       "id": "trinity_spellblade_damage",
@@ -73,7 +74,8 @@
         }
       ],
       "consumes_buff": "spellblade_ready",
-      "is_on_hit": true
+      "is_on_hit": true,
+      "parse_confidence": 0.78
     },
     {
       "id": "trinity_quicken_move_speed",
@@ -86,7 +88,8 @@
       "stat": "movement_speed_flat",
       "value": 20,
       "duration_seconds": 2.0,
-      "conditions": []
+      "conditions": [],
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
