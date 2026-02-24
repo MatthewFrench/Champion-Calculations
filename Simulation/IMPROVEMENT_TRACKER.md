@@ -1,6 +1,171 @@
 # Improvement Tracker
 
 ## Done
+- Completed second-stage scenario/reporting split + shim stabilization slice:
+  - split controlled champion scenario execution ownership into:
+    - `src/scenario_runner/controlled_champion_scenario_runner.rs` (facade)
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (execution owner leaf)
+  - split markdown loadout/build section ownership into:
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/build_ranking_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/enemy_profile_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/loadout_profile_sections.rs`
+  - removed root compatibility shims from `src/main.rs` (`crate::Ordering`, `crate::EnemyDerivedCombatStats`) and updated downstream imports to explicit owners
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed high-impact `main.rs` orchestration-contract decomposition:
+  - added explicit root contract owner leaves under `src/simulation_contracts/`:
+    - `runtime_actor_contracts.rs`
+    - `search_reporting_contracts.rs`
+    - `entrypoint_cli_contracts.rs`
+  - added `src/simulation_contracts.rs` as the thin facade/re-export surface for root contract ownership
+  - moved shared runtime/search/reporting contracts and CLI/options contract declarations out of `src/main.rs` while preserving root-level compatibility exports
+  - reduced `src/main.rs` from `679` to `149` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed second-stage `ARCH-041` champion/item/preset data decomposition:
+  - added explicit owner leaves under `src/data/champion_item_preset_data_loading/`:
+    - `champion_base_loading.rs`
+    - `item_pool_loading.rs`
+    - `urf_mode_loading.rs`
+    - `enemy_preset_loading.rs`
+  - rewired `src/data/champion_item_preset_data_loading.rs` into a thin facade/re-export surface while preserving `data.rs` facade exports
+  - reduced `src/data/champion_item_preset_data_loading.rs` from `620` to `17` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed second-stage `ARCH-041` simulation/search config parsing decomposition:
+  - added explicit parse owner leaves under `src/data/simulation_search_configuration_parsing/`:
+    - `shared_parsing_primitives.rs`
+    - `simulation_config_parsing.rs`
+    - `enemy_config_parsing.rs`
+    - `build_search_config_parsing.rs`
+    - `loadout_selection_parsing.rs`
+  - rewired `src/data/simulation_search_configuration_parsing.rs` into a thin facade/re-export surface while preserving `data.rs` facade exports
+  - reduced `src/data/simulation_search_configuration_parsing.rs` from `599` to `15` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed champion parity planning + runes split-structure wave 43:
+  - generated `Simulation/champion_data_coverage_inventory.json` from `From Online/champions/*.json` vs `Characters/*.json` (excluding `ChampionDefaults.json`) with explicit parity totals (`6/172` covered, `166` missing)
+  - created split Runes Reforged authoring structure:
+    - `Masteries/RunesReforged/RunesReforged.json` (split index)
+    - `Masteries/RunesReforged/StatShards/stat_shards.json`
+    - `Masteries/RunesReforged/Trees/{Domination,Inspiration,Precision,Resolve,Sorcery}/tree.json`
+    - `Masteries/RunesReforged/Trees/{Domination,Inspiration,Precision,Resolve,Sorcery}/primary_runes.json`
+    - `Masteries/RunesReforged/Trees/{Domination,Inspiration,Precision,Resolve,Sorcery}/secondary_runes.json`
+  - encoded explicit primary-path and secondary-path selection context/rules in per-tree split files so primary and secondary rune pools are tracked independently
+  - preserved runtime compatibility by retaining `Masteries/RunesReforged.json` flat-file path while documenting split structure as the data-authoring baseline
+- Completed champion/mastery provenance + champion active-execution normalization wave 42:
+  - added provenance sources for `Characters/ChampionDefaults.json` (project champion corpus + generated champion datasets) to close the remaining champion-defaults sourcing gap
+  - backfilled missing generated-source `sources[].accessed` metadata on `Characters/DrMundo.json`, `Characters/Morgana.json`, `Characters/Sona.json`, `Characters/Vayne.json`, `Characters/Vladimir.json`, and `Characters/Warwick.json`
+  - backfilled missing `sources[].accessed` metadata for all `6` source entries in `Masteries/Season2016.json`
+  - completed champion active-ability execution metadata coverage (`23/23`) by adding execution objects for `DrMundo` (`W`, `E`), `Morgana` (`W`, `E`), `Sona` (`W`, `E`), `Vayne` (`E`), `Vladimir` (`W`), and `Warwick` (`W`, `E`)
+  - corrected `Vayne` `Silver Bolts` data typing from `Active` to source-aligned `Passive`
+- Continued second-stage defaults schema decomposition by splitting simulator/default schema-type ownership into explicit schema owner leaves:
+  - added `src/defaults/simulator_defaults_schema_types/simulation_search_and_engine_defaults_schema.rs`
+  - added `src/defaults/simulator_defaults_schema_types/rune_runtime_defaults_schema.rs`
+  - added `src/defaults/simulator_defaults_schema_types/champion_ai_and_execution_schema.rs`
+  - added `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema.rs`
+  - added `src/defaults/simulator_defaults_schema_types/champion_file_defaults_schema.rs`
+  - rewired `src/defaults/simulator_defaults_schema_types.rs` into a thin facade/re-export surface while preserving defaults call-site contracts
+  - reduced `src/defaults/simulator_defaults_schema_types.rs` from `637` to `22` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed non-structured item provenance completion wave 41:
+  - backfilled `sources` coverage for the remaining `72` canonical non-structured unsourced item files (validated against Data Dragon, CommunityDragon, local ingestion snapshots, and League Wiki page presence)
+  - cleared canonical non-structured provenance backlog to `0/77` unsourced (`74` queue previously included `2` non-item report artifacts under `Items/`)
+  - normalized empty `active` object outliers to canonical array form (`active: []`) on `Eye of the Herald`, `Tunneler`, `Turret Plating`, `Vampiric Scepter`, `Void Staff`, `Winged Moonplate`, and `Zeal`
+  - refreshed `schema_notes.effects_structured_reviewed` metadata to `2026-02-24` across touched queue
+- Continued second-stage scenario execution decomposition by splitting controlled-champion fixed-loadout rune-sweep ownership into explicit owner leaves:
+  - added `src/scenario_runner/rune_sweep_runner/result_aggregation.rs`
+  - added `src/scenario_runner/rune_sweep_runner/report_writing.rs`
+  - rewired `src/scenario_runner/rune_sweep_runner.rs` into a thin facade that preserves `run_controlled_champion_fixed_loadout_rune_sweep_impl(...)` while delegating read-only aggregation and markdown/json report projection to owner leaves
+  - reduced `src/scenario_runner/rune_sweep_runner.rs` from `627` to `308` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed distributed/prismatic economy reconciliation wave 40:
+  - backfilled explicit `shop.prices` on the remaining `34` distributed/prismatic item files, raising explicit distributed economy coverage from `23/57` to `57/57`
+  - validated all distributed-item `shop.prices` values against Data Dragon `16.3.1` by item ID (no distributed price mismatches after backfill)
+  - added distributed acquisition/economy context notes across the touched queue and refreshed `effects_structured_reviewed` metadata to `2026-02-24`
+  - backfilled provenance on previously unsourced distributed utility/legacy entries (`Lucky Dice`, `Enhanced Lucky Dice`, `Poro-Snax`, `Total Biscuit of Everlasting Will`, `Your Cut`)
+  - normalized sparse legacy active-shape inconsistencies (`active: {}` -> `active: []` on legacy consumable/reward files where active payload was empty)
+  - reduced non-structured item files with null/empty `sources` from `79` to `74`
+- Continued second-stage reporting decomposition by splitting controlled-champion markdown report ownership into explicit section-owner leaves:
+  - added `src/reporting/controlled_champion_report_markdown_writer/header_and_objective_sections.rs`
+  - added `src/reporting/controlled_champion_report_markdown_writer/search_diagnostics_section.rs`
+  - added `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections.rs`
+  - rewired `src/reporting/controlled_champion_report_markdown_writer.rs` into a thin facade that preserves `write_controlled_champion_report_markdown(...)` while delegating section projections through explicit `append_*` owner APIs
+  - reduced `src/reporting/controlled_champion_report_markdown_writer.rs` from `633` to `122` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued data-first item execution-semantics and citation wave 39:
+  - manually reviewed and refined structured data for `Anti-Tower Socks`, `Base Turret Reinforced Armor (Turret Item)`, `Black Hole Gauntlet`, `Cruelty`, `Darksteel Talons`, `Death's Daughter`, `Decapitator`, `Empyrean Promise`, `Mirage Blade`, `Ohmwrecker (Turret Item)`, `Phreakish Gusto`, `Raise Morale`, `Reinforced Armor (Turret Item)`, `Shield of Molten Stone`, `Super Mech Armor`, `Super Mech Power Field`, `Twilight's Edge`, `Twin Mask`, `Warden's Eye`, and `Wooglet's Witchcap`
+  - added page-level League Wiki citations for all twenty queued items and used dual-source fallback citations (redirect page + canonical parent gameplay/champion page) for redirect-backed pseudo-item identities
+  - cleared broader structured no-page citation queue from `20/243` to `0/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+  - expanded distributed/prismatic explicit economy representation from `13/57` to `23/57` by backfilling `shop.prices` on ten distributed Arena items
+  - corrected verified data mismatches on `Darksteel Talons`, `Twin Mask`, `Twilight's Edge`, `Empyrean Promise`, `Warden's Eye`, `Wooglet's Witchcap`, and `Black Hole Gauntlet` from manual page-level review
+  - documented new deferred runtime follow-up scope for teammate-stat-link modeling (`Twin Mask`) in coverage gaps
+- Continued second-stage `loadout_runtime` owner-channel decomposition with large low-risk splits:
+  - added explicit runtime owner leaves:
+    - `src/scripts/runtime/loadout_runtime/runtime_stat_projections.rs`
+    - `src/scripts/runtime/loadout_runtime/runtime_state_initialization.rs`
+    - `src/scripts/runtime/loadout_runtime/runtime_effect_mutations.rs`
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/projection_helpers.rs`
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`
+  - rewired `src/scripts/runtime/loadout_runtime.rs` and `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` into thin facades that preserve stable entrypoints while delegating to explicit owner leaves
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `609` to `363` lines
+  - reduced `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` from `613` to `357` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued data-first item execution-semantics and citation wave 38:
+  - manually reviewed and refined structured item behavior for `Arcane Sweeper (Trinket)`, `Farsight Alteration`, `Oracle Lens`, `Stealth Ward`, `Slightly Magical Boots`, `Crown of the Shattered Queen`, and `Turbo Chemtank`
+  - added page-level League Wiki citations for all seven items and updated each file with explicit execution-model/player-visible behavior notes
+  - encoded trinket utility fidelity details (activation lockout, recharge/charge scaling, ward limits, reveal/detection windows, and level-gating semantics) for the four vision-trinket items
+  - expanded distributed/prismatic economy representation (`shop.prices`) from `10/57` to `13/57` files (`Crown of the Shattered Queen`, `Turbo Chemtank`, `Slightly Magical Boots`)
+  - increased page-level item citation depth from `216/243` to `223/243`
+  - reduced broader structured no-page citation queue from `27/243` to `20/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Completed architecture modularization `ARCH-051`/`ARCH-060` and continued `ARCH-030` second-stage decomposition:
+  - extracted remaining core utility ownership out of `src/core.rs` into:
+    - `src/core/objective_scoring_math.rs`
+    - `src/core/build_candidate_random_helpers.rs`
+  - moved objective-score aggregation, deterministic RNG helpers, and build-key/build-repair helper clusters into explicit core owner leaves while preserving stable `core.rs` facade exports
+  - reduced `src/core.rs` from `611` to `162` lines
+  - removed script-tree `mod.rs` carriers and migrated to explicit module files:
+    - `src/scripts.rs`
+    - `src/scripts/champions.rs`
+    - `src/scripts/items.rs`
+    - `src/scripts/registry.rs`
+    - `src/scripts/runes.rs`
+    - `src/scripts/runtime.rs`
+    - `src/scripts/champions/*.rs` champion leaves
+  - reduced `mod.rs` count under `src/` from `12` to `0`
+  - split controlled-champion support ownership into explicit owner leaves under:
+    - `src/scenario_runner/controlled_champion_search_runtime_support/coverage_locked_asset_candidate_generation.rs`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_seed_derivation.rs`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_runtime_reporting_projections.rs`
+  - rewired `src/scenario_runner/controlled_champion_search_runtime_support.rs` into a thin facade/re-export surface and reduced it from `682` to `165` lines
+  - extracted champion-simulation metadata/AI/profile loader ownership out of `src/defaults.rs` into:
+    - `src/defaults/champion_simulation_data_loading.rs`
+  - reduced `src/defaults.rs` from `679` to `386` lines while preserving defaults facade/cache entrypoints
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued data-first item execution-semantics and citation wave 37:
+  - manually reviewed and refined structured item behavior for `Armored Advance`, `Black Spear`, `Ghostcrawlers`, `Guardian's Amulet`, `Guardian's Horn`, `Guardian's Orb`, `Scout's Slingshot`, `Swiftmarch`, and `Zephyr`
+  - added page-level League Wiki citations for all nine items and updated each file with explicit execution-model/player-visible behavior notes
+  - added Arena mode overlays (`mode_overrides.ARENA`) for `Guardian's Horn` and `Guardian's Orb` to represent map-difference stat/effect divergence
+  - captured source-reconciliation risks discovered during manual review (`Zephyr`/`Gunmetal Greaves` shared ID drift, `Ghostcrawlers` sell-value dataset-vs-page divergence, and `Black Spear` bind-window runtime follow-up scope)
+  - increased page-level item citation depth from `207/243` to `216/243`
+  - cleared higher-priority no-page citation queue (`9` -> `0`) and reduced broader structured no-page queue from `36/243` to `27/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Continued data-first item execution-semantics and citation wave 36:
+  - manually reviewed and refined structured item behavior for `Boots of Swiftness`, `Ionian Boots of Lucidity`, `Plated Steelcaps`, `Recurve Bow`, and `Cull`
+  - added page-level League Wiki citations for all five items and updated each file with explicit execution-model/player-visible behavior notes
+  - corrected `Cull` Reap completeness to include on-hit sustain, minion-gold progression cap, and one-time completion payout semantics
+  - aligned Quicksilver-family edge semantics by normalizing `Mercurial Scimitar` cleanse constraints/scope metadata with `Quicksilver Sash`
+  - added explicit `mode_overrides` overlays for `Overcharged` to encode Swiftplay and URF Sudden Death timing/value divergence while preserving Clash baseline at root
+  - reconciled `Wordless Promise` active cooldown to page-verified `10s` Promise behavior and documented tier-1 tooltip ambiguity
+  - increased page-level item citation depth from `202/243` to `207/243`
+  - reduced broader structured no-page citation queue from `41/243` to `36/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Continued second-stage defaults decomposition by splitting champion simulation-default loading into explicit champion-family leaves:
+  - added `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders/`
+  - added `vladimir_simulation_defaults_loader.rs`, `warwick_simulation_defaults_loader.rs`, `vayne_simulation_defaults_loader.rs`, `morgana_simulation_defaults_loader.rs`, `sona_simulation_defaults_loader.rs`, and `doctor_mundo_simulation_defaults_loader.rs`
+  - rewired `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs` into a thin re-export facade (`20` lines)
+  - reduced the largest champion defaults leaf from `687` to `237` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued high-impact `loadout_runtime` decomposition by extracting runtime cooldown/stack reporting ownership into a dedicated runtime leaf module:
+  - added `src/scripts/runtime/loadout_runtime/runtime_state_reporting.rs`
+  - moved runtime cooldown/stack description projection out of `src/scripts/runtime/loadout_runtime.rs`
+  - preserved `describe_runtime_cooldowns(...)` and `describe_runtime_stacks(...)` as stable runtime API entrypoints while delegating internals to the new runtime-state-reporting owner module
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `777` to `609` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Continued data-first item execution-semantics and citation wave 35:
   - manually reviewed and refined structured item behavior for `Oblivion Orb`, `Phage`, `Sheen`, `Quicksilver Sash`, and `Verdant Barrier`
   - added page-level League Wiki citations for all five items and replaced stale review dates with `2026-02-24` manual execution-semantics notes

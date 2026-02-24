@@ -1,0 +1,605 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Tree Secondary",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "tree": {
+    "id": 8400,
+    "key": "Resolve",
+    "name": "Resolve",
+    "icon": "perk-images/Styles/7204_Resolve.png"
+  },
+  "selection_context": "secondary_path",
+  "slot_count": 3,
+  "rune_count": 9,
+  "slots": [
+    {
+      "slot_index": 2,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8446,
+          "key": "Demolish",
+          "name": "Demolish",
+          "icon": "perk-images/Styles/Resolve/Demolish/Demolish.png",
+          "short_desc": "Your third attack against turrets deals bonus damage.",
+          "long_desc": "Your third attack against towers deals [85 (+28% max Health) Melee || 50 (+20% max Health) Ranged] bonus physical damage.<br><br>Cooldown: 30s",
+          "wiki_descriptions": [
+            "Passive: Basic attacks against turrets apply a stack of Demolish , stacking up to 3 times. The third stack against a turret consumes them all to deal ( 85 / 50 ) (+ ( 28% / 20% ) of your maximum health) bonus physical damage .",
+            "Demolish cannot be triggered on the same turret by any of its users more than once every 3 seconds."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Basic attacks against turrets apply a stack of Demolish , stacking up to 3 times. The third stack against a turret consumes them all to deal ( 85 / 50 ) (+ ( 28% / 20% ) of your maximum health) bonus physical damage .",
+              "effect_type": "damage",
+              "stat": "health",
+              "unit": "percent",
+              "values": [
+                3,
+                85,
+                50,
+                28,
+                20
+              ],
+              "value_range": null,
+              "numbers_extracted": [
+                3,
+                85,
+                50,
+                28,
+                20
+              ],
+              "scaling": null,
+              "trigger": "on_hit",
+              "applies_to": "structure",
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  3,
+                  85,
+                  50,
+                  28,
+                  20
+                ],
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Demolish cannot be triggered on the same turret by any of its users more than once every 3 seconds.",
+              "effect_type": "condition_note",
+              "stat": "per_turret_retrigger_cooldown_seconds",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                3
+              ],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": 3,
+                "unit": "seconds"
+              },
+              "conditions": [
+                "same_turret_retrigger_limit"
+              ],
+              "parse_confidence": 0.7
+            }
+          ],
+          "template_source": "Template:Rune data Demolish"
+        },
+        {
+          "id": 8463,
+          "key": "FontOfLife",
+          "name": "Font of Life",
+          "icon": "perk-images/Styles/Resolve/FontOfLife/FontOfLife.png",
+          "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>Impairing</lol-uikit-tooltipped-keyword> the movement of an enemy champion heals nearby allied champions. ",
+          "long_desc": "Impairing the movement of an enemy champion restores <healing>@BaseHeal@ Health</healing> to you and the lowest health nearby allied champion.<br><br>70% effect for Ranged Users.<br><br>Cooldown: 20s",
+          "wiki_descriptions": [
+            "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54. 71 / 7 – 38. 29 ) (based on your level)."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54. 71 / 7 – 38. 29 ) (based on your level).",
+              "effect_type": "healing",
+              "stat": "healing",
+              "unit": null,
+              "values": [
+                1000,
+                10,
+                54.0,
+                71,
+                7,
+                38.0,
+                29
+              ],
+              "value_range": [
+                10,
+                54.0
+              ],
+              "numbers_extracted": [
+                1000,
+                10,
+                54.0,
+                71,
+                7,
+                38.0,
+                29
+              ],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": "on_immobilize",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  1000,
+                  10,
+                  54.0,
+                  71,
+                  7,
+                  38.0,
+                  29
+                ],
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Font of Life"
+        },
+        {
+          "id": 8401,
+          "key": "ShieldBash",
+          "name": "Shield Bash",
+          "icon": "perk-images/Styles/Resolve/MirrorShell/MirrorShell.png",
+          "short_desc": "Whenever you gain a shield, your next basic attack against a champion deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> damage.",
+          "long_desc": "Whenever you gain a new shield,  your next basic attack against a champion deals <scaleLevel>5 - 30</scaleLevel> <scaleHealth>(+2.5% Bonus Health)</scaleHealth> <scaleMana>(+15.0% New Shield Amount)</scaleMana> bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> damage.<br><br>You have up to 2s after the shield expires to use this effect.",
+          "wiki_descriptions": [
+            "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
+            "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
+              "effect_type": "damage",
+              "stat": "adaptive",
+              "unit": "percent",
+              "values": null,
+              "value_range": [
+                5,
+                32.0
+              ],
+              "numbers_extracted": [
+                5,
+                32.0,
+                94,
+                2.0,
+                5,
+                15,
+                2
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 5,
+                "max": 32.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "range",
+                "min": 5,
+                "max": 32.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
+              "effect_type": "condition_note",
+              "stat": "adaptive_damage_type_resolution",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.75
+            }
+          ],
+          "template_source": "Template:Rune data Shield Bash"
+        }
+      ]
+    },
+    {
+      "slot_index": 3,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8429,
+          "key": "Conditioning",
+          "name": "Conditioning",
+          "icon": "perk-images/Styles/Resolve/Conditioning/Conditioning.png",
+          "short_desc": "After 12 min gain +8 Armor and +8 Magic Resist and increase your Armor and Magic Resist by 3%.",
+          "long_desc": "After 12 min gain +8 Armor and +8 Magic Resist and increase your Armor and Magic Resist by 3%.",
+          "wiki_descriptions": [
+            "Passive: After 12 minutes, gain 8 bonus armor and 8 bonus magic resistance and your total armor and total magic resistance are increased by 3%."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: After 12 minutes, gain 8 bonus armor and 8 bonus magic resistance and your total armor and total magic resistance are increased by 3%.",
+              "effect_type": "stat_modifier",
+              "stat": "armor",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                12,
+                8,
+                8,
+                3
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 12,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Conditioning"
+        },
+        {
+          "id": 8444,
+          "key": "SecondWind",
+          "name": "Second Wind",
+          "icon": "perk-images/Styles/Resolve/SecondWind/SecondWind.png",
+          "short_desc": "After taking damage from an enemy champion heal back some missing health over time. ",
+          "long_desc": "After taking damage from an enemy champion, heal for 4% of your missing health over 10s.",
+          "wiki_descriptions": [
+            "Passive: After taking damage from an enemy champion , regenerate 4% of your missing health over 10 seconds, refreshing on subsequent damage."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: After taking damage from an enemy champion , regenerate 4% of your missing health over 10 seconds, refreshing on subsequent damage.",
+              "effect_type": "damage",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                4,
+                10
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 4,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Second Wind"
+        },
+        {
+          "id": 8473,
+          "key": "BonePlating",
+          "name": "Bone Plating",
+          "icon": "perk-images/Styles/Resolve/BonePlating/BonePlating.png",
+          "short_desc": "After taking damage from an enemy champion, the next 3 spells or attacks you receive from them deal 30-60 (based on level) less damage.<br><br>Duration: 1.5s<br>Cooldown: 55s",
+          "long_desc": "After taking damage from an enemy champion, the next 3 spells or attacks you receive from them deal 30-60 (based on level) less damage.<br><br>Duration: 1.5s<br>Cooldown: 55s",
+          "wiki_descriptions": [
+            "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63. 53 (based on level) less damage (including true damage )."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63. 53 (based on level) less damage (including true damage ).",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "seconds",
+              "values": null,
+              "value_range": [
+                30,
+                63.0
+              ],
+              "numbers_extracted": [
+                1.0,
+                5,
+                3,
+                30,
+                63.0,
+                53
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 30,
+                "max": 63.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "range",
+                "min": 30,
+                "max": 63.0,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Bone Plating"
+        }
+      ]
+    },
+    {
+      "slot_index": 4,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8451,
+          "key": "Overgrowth",
+          "name": "Overgrowth",
+          "icon": "perk-images/Styles/Resolve/Overgrowth/Overgrowth.png",
+          "short_desc": "Gain permanent max health when minions or monsters die near you.",
+          "long_desc": "Absorb life essence from monsters or enemy minions that die near you, permanently gaining 3 maximum health for every 8.<br><br>When you've absorbed 120 monsters or enemy minions, gain an additional 3.5% maximum health.",
+          "wiki_descriptions": [
+            "Passive: Every 8 monsters or enemy minions that die near you permanently generates a stack . Each stack grants 3 bonus health . This effect can stack indefinitely.",
+            "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3. 5 %."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Every 8 monsters or enemy minions that die near you permanently generates a stack . Each stack grants 3 bonus health . This effect can stack indefinitely.",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                8,
+                3
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": "enemy",
+              "formula": {
+                "type": "flat",
+                "value": 8,
+                "unit": "health"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3. 5 %.",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                15,
+                120,
+                3.0,
+                5
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "minion",
+              "formula": {
+                "type": "flat",
+                "value": 15,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Overgrowth"
+        },
+        {
+          "id": 8453,
+          "key": "Revitalize",
+          "name": "Revitalize",
+          "icon": "perk-images/Styles/Resolve/Revitalize/Revitalize.png",
+          "short_desc": "Gain 5% Heal and Shield Power.<br><br>Heals and shields you cast or receive are 10% stronger on targets below 40% health.",
+          "long_desc": "Gain 5% Heal and Shield Power.<br><br>Heals and shields you cast or receive are 10% stronger on targets below 40% health.",
+          "wiki_descriptions": [
+            "Passive: Grants 5% Heal and shield power .",
+            "Outgoing healing and outgoing shielding are increased by 10% on targets below 40% of their maximum health .",
+            "Incoming healing, incoming shielding, self-healing and self-shielding are increased by 10% while you are below 40% of your maximum health ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Grants 5% Heal and shield power .",
+              "effect_type": "healing",
+              "stat": "shield",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                5
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 5,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Outgoing healing and outgoing shielding are increased by 10% on targets below 40% of their maximum health .",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                10,
+                40
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 10,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Incoming healing, incoming shielding, self-healing and self-shielding are increased by 10% while you are below 40% of your maximum health .",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                10,
+                40
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": 10,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Revitalize"
+        },
+        {
+          "id": 8242,
+          "key": "Unflinching",
+          "name": "Unflinching",
+          "icon": "perk-images/Styles/Sorcery/Unflinching/Unflinching.png",
+          "short_desc": "Gain Armor and Magic Resist when receiving crowd control.",
+          "long_desc": "Gain 10 Armor and Magic Resist when crowd controlled and for 2 seconds after.",
+          "wiki_descriptions": [
+            "Passive: While afflicted with crowd control sourced from enemy champions , gain 10 bonus armor and 10 bonus magic resistance , lingering for 2 seconds after the impairment ends."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: While afflicted with crowd control sourced from enemy champions , gain 10 bonus armor and 10 bonus magic resistance , lingering for 2 seconds after the impairment ends.",
+              "effect_type": "stat_modifier",
+              "stat": "armor",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                10,
+                10,
+                2
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 10,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Unflinching"
+        }
+      ]
+    }
+  ],
+  "selection_rules": {
+    "pick_count": 2,
+    "allowed_slot_types": [
+      "minor"
+    ],
+    "forbidden_slot_types": [
+      "keystone"
+    ],
+    "cannot_pick_same_slot_twice": true
+  },
+  "schema_notes": {
+    "effects_structured": "Best-effort numeric parsing with canonical stat keys. Use raw text for exact wording.",
+    "wiki_templates": "Descriptions sourced from Template:Rune data <Rune Name> when available.",
+    "stat_shards_source": "Parsed from LoL Wiki Rune shards table.",
+    "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
+    "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
+    "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "secondary rune-tree split generation"
+    }
+  ]
+}

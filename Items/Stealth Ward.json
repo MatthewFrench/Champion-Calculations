@@ -11,14 +11,14 @@
     {
       "unique": true,
       "name": "Trinket",
-      "effects": "Consume a charge to place an invisible {{tip|Totem Ward}} at the target location, which grants {{tip|sight}} of the surrounding area for {{pp|90 to 120|type=average champion level}} seconds.",
+      "effects": "Consume a charge to place an invisible {{tip|Totem Ward}} at the target location, which grants {{tip|sight}} of the surrounding area for {{pp|90 to 120|type=average champion level}} seconds ({{pp|210 to 90|type=average champion level}} seconds recharge time; 2 charges; 600 range).",
       "range": 600
     }
   ],
   "effects_structured": [
     {
       "id": "stealth_ward_totem_placement",
-      "raw": "Consume a charge to place an invisible Totem Ward that grants vision for 90 to 120 seconds (scales with average champion level).",
+      "raw": "Consume a charge to place an invisible Totem Ward that grants vision for 90 to 120 seconds based on average champion level.",
       "effect_type": "place_ward",
       "stat": "totem_ward",
       "value": 1,
@@ -30,29 +30,110 @@
       "trigger": "on_activate",
       "applies_to": "target_location",
       "conditions": [
-        "consume_charge"
+        "consume_charge",
+        "shared_map_cap_with_totem_ward"
       ],
       "status_effects": [
         "invisible",
-        "grants_vision"
+        "grants_vision",
+        "visible_for_1_second_on_placement"
       ],
       "scaling_terms": [
         {
           "stat": "average_champion_level",
           "type": "linear",
           "min": 90,
-          "max": 120
+          "max": 120,
+          "scope": "ward_duration_seconds"
+        },
+        {
+          "stat": "average_champion_level",
+          "type": "linear_desc",
+          "min": 210,
+          "max": 90,
+          "scope": "charge_recharge_seconds"
         }
       ],
+      "charges": 2,
       "range_units": 600,
       "numbers_extracted": [
         90,
-        120
+        120,
+        210,
+        90,
+        2,
+        600,
+        3,
+        1
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.82
+    },
+    {
+      "id": "stealth_ward_recharge_and_charges",
+      "raw": "Stealth Ward stores up to 2 charges and recharges from 210 to 90 seconds based on average champion level.",
+      "effect_type": "condition_note",
+      "stat": "trinket_recharge_time",
+      "value": null,
+      "value_range": {
+        "min": 210,
+        "max": 90
+      },
+      "unit": "seconds",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "max_charges_2",
+        "cooldown_scales_with_average_champion_level",
+        "affected_by_item_haste"
+      ],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "average_champion_level",
+          "type": "linear_desc",
+          "min": 210,
+          "max": 90
+        }
+      ],
+      "numbers_extracted": [
+        210,
+        90,
+        2
+      ],
+      "parse_confidence": 0.82
+    },
+    {
+      "id": "stealth_ward_shared_map_limit",
+      "raw": "A player can have at most 3 Totem/Stealth Wards on the map at one time.",
+      "effect_type": "condition_note",
+      "stat": "placement_limit",
+      "value": 3,
+      "value_range": null,
+      "unit": "ward",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "shared_with_totem_ward"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.82
     }
   ],
   "shop": {
+    "prices": {
+      "total": 0,
+      "sell": 0
+    },
     "purchasable": true
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3340_class_t1_wardingtotem.png",
@@ -67,7 +148,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.014588+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Stealth Ward is a targeted trinket placement action (600 range) that consumes a charge and creates a ward with duration scaling by average champion level (90 to 120 seconds).",
+      "Visibility semantics: placed Stealth/Totem wards are briefly visible before entering stealth; the shared map limit is three active Totem/Stealth wards per player.",
+      "Charge cadence: recharge scales from 210 to 90 seconds by average champion level and is affected by item-haste trinket cooldown behavior."
+    ]
   },
   "sources": [
     {
@@ -87,6 +173,12 @@
       "path": "From Online/items/Stealth Ward.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Stealth Ward",
+      "url": "https://wiki.leagueoflegends.com/en-us/Stealth_Ward",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of ward duration/recharge scaling, charge count, shared map cap, and placement visibility behavior"
     }
   ]
 }

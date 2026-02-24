@@ -134,7 +134,11 @@
     "purchasable": true,
     "tags": [
       "MARKSMAN"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6671_marksman_t4_galeforce.png",
   "simpleDescription": null,
@@ -145,10 +149,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.001597+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Cloudburst II is modeled as an active dash that resolves missile targeting at dash end against the lowest-health-percent enemy in range, prioritizing enemy champions.",
-      "Damage is modeled as three homing missiles with level-scaled total damage, bonus AD scaling, and additional scaling from target missing health."
+      "Damage is modeled as three homing missiles with level-scaled total damage, bonus AD scaling, and additional scaling from target missing health.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

@@ -1,0 +1,419 @@
+{
+  "name": "Kayn",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 103.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 410.0,
+      "per_level": 50.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 38.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 11.5,
+      "per_level": 0.95
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.669,
+      "per_level_percent": 2.7
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.49500000476837,
+    "base_windup_seconds": 0.280000001192092,
+    "windup_fraction": 0.1872909700996785,
+    "windup_percent": 18.729097009967848,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.280000001192092,
+      "attack_total_time": 1.49500000476837,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "The Darkin Scythe",
+      "type": "Passive",
+      "description_source": "Innate: Whenever  Kayn scores champion  takedowns or deals damage against champions, he earns orbs that unlocks his  Darkin Slayer and  Shadow Assassin forms. Kayn can return to the summoning platform to transform, permanently empowering his abilities.",
+      "effects": [
+        {
+          "id": "kayn_p_effect_1",
+          "description": "Innate: Kayn has a secondary experience bar that tracks progress toward his Darkin Slayer and Shadow Assassin forms. He gathers orbs from champion takedowns and each instance of damage (excluding damage over time) dealt against champions. Once he has earned enough orbs, he unlocks a form based on whether he earned more from melee or ranged champions (for Darkin Slayer and Shadow Assassin, respectively), with the other form unlocked later."
+        },
+        {
+          "id": "kayn_p_effect_2",
+          "description": "While near his team's summoning platform, Kayn can choose a form to enter transformation over 6 seconds, becoming invulnerable, untargetable, and unable to act for the duration. At the end of the transformation he is restored to full health and mana. The transformation will grant a passive bonus and permanently empower some of Kayn's abilities based on the form chosen. He gains a one-time Homeguard once the transformation is complete.Kayn cannot activate the transformation while he is affected by cast-inhibiting crowd control or a lockout that disables abilities."
+        },
+        {
+          "id": "kayn_p_effect_3",
+          "description": "Shadow Assassin Bonus: Upon entering combat with enemy champions, Kayn becomes empowered for 3 seconds to deal 20% : 42.35% (based on level) of post-mitigation physical and magic damage dealt against enemy champions as bonus magic damage. This effect cannot trigger again until Kayn has been out of combat with champions for over 8 seconds, with the timer being reset if he recasts Umbral Trespass."
+        },
+        {
+          "id": "kayn_p_effect_4",
+          "description": "Darkin Slayer Bonus: Rhaast heals for 25% (+ 0.5% per 100 bonus health) of the post-mitigation physical damage that he deals to enemy champions with his abilities."
+        }
+      ],
+      "description": "Innate: Kayn has a secondary experience bar that tracks progress toward his Darkin Slayer and Shadow Assassin forms. He gathers orbs from champion takedowns and each instance of damage (excluding damage over time) dealt against champions. Once he has earned enough orbs, he unlocks a form based on whether he earned more from melee or ranged champions (for Darkin Slayer and Shadow Assassin, respectively), with the other form unlocked later.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The Shadow Assassin Bonus will not be triggered nor have its out-of-combat timer be refreshed if Kayn deals true damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Reaping Slash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Kayn  dashes in the target direction, dealing physical damage to enemies he passes through. He then swings his scythe, dealing the same damage to surrounding enemies.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            75.0,
+            105.0,
+            135.0,
+            165.0,
+            195.0
+          ],
+          "context_notes": "Active: Kayn dashes in the target direction, dealing physical damage to enemies he passes through."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            150.0,
+            210.0,
+            270.0,
+            330.0,
+            390.0
+          ],
+          "context_notes": "Active: Kayn dashes in the target direction, dealing physical damage to enemies he passes through."
+        },
+        {
+          "id": "non_champion_damage",
+          "description": "Non-Champion Damage",
+          "base_by_rank": [
+            115.0,
+            145.0,
+            175.0,
+            205.0,
+            235.0
+          ],
+          "context_notes": "Both instances of Reaping Slash deal 40 bonus physical damage against minions and monsters."
+        },
+        {
+          "id": "total_non_champion_damage",
+          "description": "Total Non-Champion Damage",
+          "base_by_rank": [
+            230.0,
+            290.0,
+            350.0,
+            410.0,
+            470.0
+          ],
+          "context_notes": "Both instances of Reaping Slash deal 40 bonus physical damage against minions and monsters."
+        },
+        {
+          "id": "capped_monster_damage_per_hit",
+          "description": "Capped Monster Damage per Hit",
+          "base_by_rank": [
+            200.0,
+            250.0,
+            300.0,
+            350.0,
+            400.0
+          ],
+          "context_notes": "Darkin Slayer Bonus: Reaping Slash's damage is modified to deal 65% AD (+ 6% (+ 3."
+        },
+        {
+          "id": "total_capped_monster_damage",
+          "description": "Total Capped Monster Damage",
+          "base_by_rank": [
+            400.0,
+            500.0,
+            600.0,
+            700.0,
+            800.0
+          ],
+          "context_notes": "Darkin Slayer Bonus: Reaping Slash's damage is modified to deal 65% AD (+ 6% (+ 3."
+        },
+        {
+          "id": "kayn_q_effect_4",
+          "description": "Reaping Slash's dash speed scales with Kayn's total movement speed."
+        }
+      ],
+      "description": "Active: Kayn dashes in the target direction, dealing physical damage to enemies he passes through. He then swings his scythe, dealing the same damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.5,
+        6.0,
+        5.5,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source notes (summary): Spell shields will block only a single instance of damage - either the dash or the slash."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Blade's Reach",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            85.0,
+            130.0,
+            175.0,
+            220.0,
+            265.0
+          ],
+          "context_notes": "Active: Kayn swings his scythe in the target direction, dealing physical damage to enemies hit and slowing them by 90% decaying over 1."
+        },
+        {
+          "id": "kayn_w_effect_2",
+          "description": "Shadow Assassin Bonus: Blade's Reach's radius is extended by 200 units. Kayn conjures an untargetable shadow at the casting position to perform Blade's Reach's sweep over 0.55 seconds in his stead, removing the ability's cast time."
+        },
+        {
+          "id": "kayn_w_effect_3",
+          "description": "Darkin Slayer Bonus: Blade's Reach knocks up enemies hit for 1 second."
+        }
+      ],
+      "description": "Active: Kayn swings his scythe in the target direction, dealing physical damage to enemies hit and slowing them by 90% decaying over 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.55
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.55 / None.",
+        "Source notes (summary): The shadow is considered an allied champion and can interact with effects such as World Atlas' and Runic Compass' Quest and local reward from structures."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Shadow Step",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Kayn gains  bonus movement speed,  ghosting and the ability to enter terrain for a duration. If he has recently been in combat with enemy champions, the duration is dramatically reduced.",
+      "effects": [
+        {
+          "id": "duration",
+          "description": "Duration",
+          "base_by_rank": [
+            7.0,
+            7.5,
+            8.0,
+            8.5,
+            9.0
+          ],
+          "context_notes": "Active: Kayn gains 40% bonus total movement speed, ghosting and the ability to ignore terrain collision for a duration."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            90.0,
+            100.0,
+            110.0,
+            120.0,
+            130.0
+          ],
+          "context_notes": "Kayn heals himself upon entering terrain for the first time from casting Shadow Step and he gains unobstructed vision while inside."
+        },
+        {
+          "id": "kayn_e_effect_3",
+          "description": "Receiving damage from or dealing damage to an enemy champion while Shadow Step is active reduces its remaining duration to 1.5 seconds. This effect also cannot remain active out of terrain for longer than 1.5 seconds and will cancel immediately if Kayn performs a basic attack or becomes immobilized or polymorphed."
+        },
+        {
+          "id": "kayn_e_effect_4",
+          "description": "Shadow Assassin Bonus: Shadow Step's cooldown is reduced to 10 seconds at all ranks. Kayn gains 100% slow resist while active and, upon entering terrain, the bonus total movement speed is increased to 70% for the remaining duration."
+        }
+      ],
+      "description": "Active: Kayn gains 40% bonus total movement speed, ghosting and the ability to ignore terrain collision for a duration. If he has been in combat with enemy champions within the last 3 seconds, Shadow Step will instead last 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        21.0,
+        19.0,
+        17.0,
+        15.0,
+        13.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): As Rhaast, an alternate icon for Shadow Step is used but has no modified effect."
+      ]
+    },
+    "ultimate": {
+      "name": "Umbral Trespass",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Kayn marks enemy champions he has damaged for a few seconds.",
+      "effects": [
+        {
+          "id": "kayn_r_effect_1",
+          "description": "Passive: Kayn marks enemy champions he damaged in the last 3.15 seconds."
+        },
+        {
+          "id": "kayn_r_effect_2",
+          "description": "Active: Kayn vanishes and dashes to a marked enemy champion over 0.25 seconds, attaching himself to them at the end of the dash. After 0.5 seconds of his arrival, he channels for up to 2 seconds, during which the target is revealed. Umbral Trespass can be recast during the channel after 0.1 seconds have elapsed, and does so automatically after the duration or if it is interrupted."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Recast: After a delay of 0."
+        },
+        {
+          "id": "kayn_r_effect_4",
+          "description": "Shadow Assassin Bonus: Umbral Trespass gains 200 bonus cast range and emerge range. Additionally, emerging will reset The Darkin Scythe's cooldown."
+        },
+        {
+          "id": "kayn_r_effect_5",
+          "description": "Darkin Slayer Bonus: Umbral Trespass is modified to deal physical damage equal to 15% (+ 10% per 100 bonus AD) of the target's maximum health, and also heals Rhaast for 11.25% (+ 7.5% per 100 bonus AD) of the target's maximum health after the recast's delay."
+        }
+      ],
+      "description": "Passive: Kayn marks enemy champions he damaged in the last 3.15 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Direction.",
+        "Source castTime: none.",
+        "Source effectRadius: 300 / 500.",
+        "Source notes (summary): Umbral Trespass' recast delay lasts for an inconsistent period of time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kayn.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kayn"
+  }
+}

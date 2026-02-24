@@ -155,7 +155,11 @@
     "purchasable": true,
     "tags": [
       "TANK"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447114_reverberation.png",
   "simpleDescription": null,
@@ -164,10 +168,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.054598+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model review: Reverberate applies once after combat-start timing gate, Resonate enhances each on-hit, and Rumble stack growth refreshes on qualifying crowd-control events.",
-      "Rumble semantics include both immobilize and ground events as stack triggers, with triple on-hit application only when at max stacks and a qualifying trigger occurs."
+      "Rumble semantics include both immobilize and ground events as stack triggers, with triple on-hit application only when at max stacks and a qualifying trigger occurs.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

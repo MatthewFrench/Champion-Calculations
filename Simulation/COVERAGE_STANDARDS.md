@@ -29,7 +29,7 @@ These examples are the baseline quality bar for new coverage.
 | Champion data + controlled runtime | `Characters/Vladimir.json`, `Simulation/src/scripts/champions/vladimir/`, `Simulation/src/scripts/champions/controlled_champion.rs`, `Simulation/src/scripts/champions/vladimir/tests/vladimir_tests.rs` | Canonical champion data drives script defaults, slot bindings, runtime decisions, and regression tests. |
 | Ability event coverage (enemy scripted events) | `Simulation/src/scripts/champions/morgana/mod.rs`, `Simulation/src/scripts/champions/tests/champions_tests.rs` | Includes range gating, damage formulas, and a scheduled followup event (`Soul Shackles Detonate`) with tested behavior. |
 | Item runtime coverage | Data: `Items/Zhonyas Hourglass.json`, `Items/Guardian Angel.json`, `Items/Protoplasm Harness.json`, `Items/Heartsteel.json`, `Items/Ludens Echo.json`; Code: `Simulation/src/defaults.rs`, `Simulation/src/scripts/items/hooks.rs`, `Simulation/src/scripts/runtime/loadout_runtime.rs`; Tests: `Simulation/src/scripts/runtime/tests/loadout_runtime_tests.rs`, `Simulation/src/scripts/runtime/tests/controlled_champion_loadout_tests.rs` | Shows end-to-end flow from structured item effects -> typed loader defaults -> runtime behavior -> regression tests. |
-| Rune and shard runtime coverage | Data: `Masteries/RunesReforged.json`, `Simulation/data/simulator_defaults.json`; Code: `Simulation/src/scripts/runes/effects.rs`, `Simulation/src/scripts/runtime/loadout_runtime.rs`, `Simulation/src/data.rs`, `Simulation/src/defaults.rs`; Tests: `Simulation/src/scripts/runtime/tests/loadout_runtime_tests.rs`, `Simulation/src/scripts/runtime/tests/controlled_champion_loadout_tests.rs` | Dynamic rune behavior, level-scaled formulas, telemetry, deterministic parsing, and coverage-key guard tests are all represented. |
+| Rune and shard runtime coverage | Data: `Masteries/RunesReforged.json`, `Masteries/RunesReforged/RunesReforged.json`, `Simulation/data/simulator_defaults.json`; Code: `Simulation/src/scripts/runes/effects.rs`, `Simulation/src/scripts/runtime/loadout_runtime.rs`, `Simulation/src/data.rs`, `Simulation/src/defaults.rs`; Tests: `Simulation/src/scripts/runtime/tests/loadout_runtime_tests.rs`, `Simulation/src/scripts/runtime/tests/controlled_champion_loadout_tests.rs` | Dynamic rune behavior, level-scaled formulas, telemetry, deterministic parsing, and coverage-key guard tests are all represented. |
 
 ## Source Hierarchy And Research Standard
 When adding or changing data coverage, use this source order:
@@ -46,6 +46,7 @@ Research requirements for data updates:
 - Web research is acceptable and encouraged to fully understand data behavior, fill information gaps, and verify uncertain mechanics before finalizing structured data.
 - For non-trivial or low-confidence structured effects, include at least one Tier-2 citation source (CommunityDragon or League Wiki) in the item `sources` list when available.
 - For low-confidence formula interpretation, do not rely only on dataset-level sources; add at least one page-level citation (for example item page or patch notes) in `sources`.
+- When a League Wiki item page is a redirect (common for pseudo-item, turret-item, minion-item, or champion-upgrade identities), cite both the redirect URL and the canonical parent gameplay/champion page used to verify behavior semantics.
 - Validate that source URLs used in `sources` resolve at authoring time (prefer HTTP 200) so provenance remains auditable.
 - For CommunityDragon item-dataset citations, use the current endpoint `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json`.
 - Perform an entity-intent review before raising confidence: confirm the entity's gameplay role, intended combat pattern, and whether the structured effects reflect that behavior.
@@ -63,7 +64,10 @@ Data metadata requirements:
 - If any effect keeps `parse_confidence < 0.65`, add a concrete follow-up note in `Simulation/COVERAGE_GAPS.md`.
 - Runtime-modeled item effects should use numeric `parse_confidence` values (avoid null/missing confidence on modeled effect entries).
 - Do not leave runtime-modeled item files with `sources: null`.
+- Do not leave canonical item files unsourced, including non-structured placeholder/stat-only items (`effects_structured` empty is allowed, `sources` missing is not).
 - When editing an item file, backfill missing `sources[].accessed` values on existing source entries in that file so provenance metadata stays complete.
+- When editing champion or mastery files, backfill missing `sources[].accessed` values on existing source entries in the touched file so provenance metadata stays complete across domains.
+- When editing Runes Reforged data, keep flat and split datasets synchronized (`Masteries/RunesReforged.json` plus `Masteries/RunesReforged/` tree/stat-shard files) and treat split-vs-flat drift as blocking.
 - When editing existing non-trivial champion/item/rune data, explicitly sanity-check the entity's gameplay purpose and behavior pattern, then record that intent in `schema_notes.context_notes` when confidence or semantics changed.
 - When semantics are updated, record the verified in-game execution model in `schema_notes.context_notes` (what the player does, when the effect resolves, and who is affected).
 - When data semantics exceed current runtime capability (for example visibility-state windows, on-attack trigger classes, charge-state transforms, mode-gated resource branches), document the deferred code follow-up explicitly in `Simulation/COVERAGE_GAPS.md` in the same change.
@@ -72,14 +76,17 @@ Data metadata requirements:
 - If editing a shared-rule effect on one member of an item family (for example the support-quest upgrade line), review sibling items for rule-schema consistency and track deferred sibling harmonization in `Simulation/COVERAGE_GAPS.md`.
 - If an effect's timing or values differ by mode (for example Clash vs Swiftplay sudden-death behavior), encode the mode scope explicitly in `conditions`/`context_notes` and track unresolved canonical mode-policy decisions in `Simulation/COVERAGE_GAPS.md`.
 - For mode-variant item behavior, keep Tier-1 baseline semantics at the root item object and encode only divergent mode semantics in `mode_overrides.<mode_key>` (for example `mode_overrides.URF` or `mode_overrides.ARENA`) using sparse override fields.
+- When adding `mode_overrides.<mode_key>` branches before runtime overlay support exists, cite the mode-page source in the item `sources` list and log deferred runtime-consumption follow-up in `Simulation/COVERAGE_GAPS.md`.
 - For distributed/prismatic or other mode-exclusive items, record acquisition/availability scope explicitly in `schema_notes.context_notes` (for example Arena-only anvil acquisition) and track dataset-vs-page availability drift in `Simulation/COVERAGE_GAPS.md`.
 - For distributed/prismatic mode-scoped items where Tier-1 datasets expose economy fields, keep explicit `shop.prices.total` / `shop.prices.sell` for reconciliation and document that acquisition is non-shop (for example Prismatic Item Anvils) in `schema_notes.context_notes`.
+- Treat removal of already-established distributed/prismatic `shop.prices` fields as a blocking regression unless an explicit policy change is documented in `Simulation/COVERAGE_GAPS.md`.
 - For round/phase progression effects, verify whether acquisition timing backfills prior progression states; if not encoded, document the gap explicitly in `schema_notes.context_notes` and track it in `Simulation/COVERAGE_GAPS.md`.
 - If Tier-1 dataset fields and page-level gameplay behavior disagree (for example sell-state restrictions), document the discrepancy in `schema_notes.context_notes` and track canonical-resolution follow-up in `Simulation/COVERAGE_GAPS.md`.
 - When item economy fields are edited (for example `shop.prices.sell`), validate against Tier-1 dataset values and document any intentional override policy in coverage docs.
 - Intentional economy overrides (for example page-verified No Sell behavior where Tier-1 datasets still provide numeric sell values) are acceptable only when the owning item file and `Simulation/COVERAGE_GAPS.md` both explicitly record the exception.
 - Item stat blocks must use loader-canonical key vocabulary (for example `magicResist` and `critChance` under `stats`); legacy aliases that bypass loader mapping (for example `magicResistance`, `criticalStrikeChance`) are not acceptable.
 - When Tier-1 reconciliation uses item IDs, verify ID-to-name alignment against current datasets and track any legacy-ID/name drift exception in `Simulation/COVERAGE_GAPS.md`.
+- If Tier-1 and page-level sources disagree because one item ID is reused for different mode-scoped identities, do not silently collapse to one source; document reconciliation strategy in `schema_notes.context_notes` and track mode-aware identity follow-up in `Simulation/COVERAGE_GAPS.md`.
 - If an item is retained only as legacy/reference data (retired or replaced in current Tier-1 datasets), add explicit `lifecycle` metadata with `exclude_from_simulation = true` and a concrete replacement/reason note.
 - Lifecycle metadata on legacy/reference items should include at least `status`, `exclude_from_simulation`, `reason`, `replacement_item`, and `replacement_id` so ID/name drift remains auditable.
 - When a known bug diverges from intended gameplay behavior, keep intended behavior as the canonical simulation target and track bug-emulation requests as deferred runtime follow-up work.
@@ -87,9 +94,11 @@ Data metadata requirements:
 ## Standards By Coverage Category
 ### 1) Champion Coverage Standard (Data + Runtime)
 Data requirements:
+- Champion corpus parity is mandatory: every champion key in `From Online/champions/*.json` must have one canonical `Characters/<Champion>.json` file with matching identity.
 - Champion file includes canonical `base_stats`, `basic_attack`, and `abilities`.
 - Ability identities are stable and slot bindings are data-owned (no slot hardcoding in engine paths).
 - Ability geometry and cast data are in `abilities.<ability_key>.execution`.
+- Active abilities should have non-empty `execution` metadata; treat missing active-execution objects as a blocking coverage gap unless source data is unavailable and explicitly documented.
 - Any simulator-only policy remains minimal and under `simulation`.
 - `sources` and `schema_notes` are present and current.
 
@@ -106,6 +115,7 @@ Test requirements:
 
 Documentation requirements:
 - Update `Simulation/COVERAGE_GAPS.md` counts and lists.
+- Update `Simulation/champion_data_coverage_inventory.json` in the same change when champion corpus parity counts move.
 - Mark the champion status as data-complete, runtime-complete, or partial (explicitly).
 
 ### 2) Ability Coverage Standard (Scripted Ability/Event Behavior)
@@ -136,6 +146,8 @@ Data requirements:
 - Structured effects include trigger/cooldown/duration/scaling metadata required by runtime loaders.
 - Active cast effects should explicitly encode cooldown and cast-range metadata when those values are available in source text.
 - Missing active cooldown/cast-range metadata (when source text provides those values) is a blocking data-quality failure.
+- Redirect-backed pseudo-items should include dual provenance in `sources` (redirect page + canonical parent gameplay/champion page) so behavior interpretation remains auditable.
+- Trinket/ward utility items should explicitly encode charge count, recharge scaling, placement limits, level requirements, and reveal/detection timing windows when source text or notes provide those values.
 - Non-trivial active or combat-triggered effects include execution-semantics notes for activation gating, timing, and player-visible resolution behavior.
 - Distributed/prismatic mode-exclusive items explicitly document both economy representation (`shop.prices`) and acquisition scope (for example Arena anvil-only) when those differ from standard shop purchasing.
 - Multi-phase active effects (for example mark + timeout branch + recast branch) encode each branch explicitly, including cooldown-start semantics.
@@ -169,9 +181,13 @@ Documentation requirements:
 
 ### 4) Rune, Mastery, And Shard Coverage Standard
 Data requirements:
-- Canonical source remains `Masteries/RunesReforged.json`.
+- Canonical rune authoring includes both:
+  - compatibility flat file: `Masteries/RunesReforged.json`
+  - split structure: `Masteries/RunesReforged/RunesReforged.json`, `Masteries/RunesReforged/Trees/*/primary_runes.json`, `Masteries/RunesReforged/Trees/*/secondary_runes.json`, and `Masteries/RunesReforged/StatShards/stat_shards.json`
+- Split structure and flat file must remain synchronized on every rune/mastery edit until runtime loader migration lands.
 - Rune path slot ordering and shard slot options stay valid.
 - Deterministic stat effects are encoded in parseable structured-effect forms.
+- Mastery JSON files keep explicit `sources` provenance with complete `sources[].accessed` metadata on touched entries.
 - Avoid `effect_type = stat_modifier` entries with null/empty `stat` unless explicitly documented as narrative-only.
 - Prefer `effect_type = condition_note` for narrative constraints that are not direct stat modifiers.
 - Legacy `Season2016` masteries remain unsupported unless explicit project direction changes.
@@ -196,6 +212,7 @@ Documentation requirements:
 These are quality improvements to already-covered assets.
 
 ### Data Quality Improvements
+- Maintain champion corpus parity inventory (`Simulation/champion_data_coverage_inventory.json`) as a no-regression guardrail (`172/172` current file parity) and prioritize fidelity-normalization waves over generated champion data.
 - Maintain full provenance coverage for item files with `effects_structured` (all currently sourced) and keep this as a no-regression guardrail.
 - Enforce `sources` de-duplication on champion/item files during future edits.
 - Raise precision of low-confidence modeled item parses (`parse_confidence` around `0.55` to `0.65`) with manual formula normalization notes.
@@ -221,6 +238,8 @@ These are intentionally deferred while data-first work is active:
 - Unify rune runtime key mapping and telemetry key mapping to a single canonical table.
 - Complete runtime tenacity behavior application for shard-supported tenacity stats.
 - Add explicit opt-in bug-emulation runtime pathways for known bug-divergence scenarios while keeping intended behavior as the default simulation target.
+- Add ally-state stat-link runtime support for teammate-transfer effects (for example `Twin Mask`) when Arena runtime modeling is expanded.
+- Add runtime loader migration for split rune authoring files (`Masteries/RunesReforged/RunesReforged.json` and tree/stat-shard files) before removing flat-file compatibility.
 
 ## Standard Adoption Rule
 When adding new coverage:

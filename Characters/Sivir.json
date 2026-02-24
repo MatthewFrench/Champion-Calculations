@@ -1,0 +1,395 @@
+{
+  "name": "Sivir",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 340.0,
+      "per_level": 45.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 30.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 3.25,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.6
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.180000007152557,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Fleet of Foot",
+      "type": "Passive",
+      "description_source": "Innate:  Sivir's basic attacks and damaging abilities against enemy  champions briefly grant her a burst of  move speed.",
+      "effects": [
+        {
+          "id": "sivir_p_effect_1",
+          "description": "Innate: Sivir's basic attacks on-attack and ability hits against enemy champions grant her 55 : 75 (based on level) bonus movement speed decaying over 1.5 seconds, refreshing on subsequent hits."
+        }
+      ],
+      "description": "Innate: Sivir's basic attacks on-attack and ability hits against enemy champions grant her 55 : 75 (based on level) bonus movement speed decaying over 1.5 seconds, refreshing on subsequent hits.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Fleet of Foot will trigger even if the attack is dodged, blocked or misses due to blind or if the ability is negated by a spell shield."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Boomerang Blade",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Sivir hurls her crossblade in the target direction that deals physical damage to enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Sivir hurls her crossblade in the target direction, dealing physical damage to enemies within its path, increased by 0% : 40% (+ 0% : 12%) (based on critical strike chance)."
+        },
+        {
+          "id": "minimum_damage",
+          "description": "Minimum Damage",
+          "base_by_rank": [
+            24.0,
+            34.0,
+            44.0,
+            54.0,
+            64.0
+          ],
+          "context_notes": "Boomerang Blade's damage is reduced by 0% : 60% (based on non-champions hit)."
+        },
+        {
+          "id": "total_maximum_champion_damage",
+          "description": "Total Maximum Champion Damage",
+          "base_by_rank": [
+            120.0,
+            170.0,
+            220.0,
+            270.0,
+            320.0
+          ],
+          "context_notes": "Boomerang Blade's damage is reduced by 0% : 60% (based on non-champions hit)."
+        },
+        {
+          "id": "sivir_q_effect_3",
+          "description": "Enemies can be hit only once per pass."
+        }
+      ],
+      "description": "Active: Sivir hurls her crossblade in the target direction, dealing physical damage to enemies within its path, increased by 0% : 40% (+ 0% : 12%) (based on critical strike chance).",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          60.0,
+          65.0,
+          70.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1450.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25 : 0.1 (based on bonus attack speed).",
+        "Source speed: 1450 / 1200.",
+        "Source notes (summary): Due to the cast time effectively rounding up to full game ticks, at undesturbed game tick interval times the technical minimum cast time is 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Ricochet",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Sivir gains  bonus attack speed for a few seconds. During this time, her basic attacks create projectiles that repeatedly bounce to nearby surrounding enemies, dealing physical damage.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Sivir empowers her crossblade for the next 4 seconds, gaining bonus attack speed and causing her basic attacks to bounce to additional surrounding enemies, dealing physical damage to them."
+        },
+        {
+          "id": "bounce_damage",
+          "description": "Bounce Damage",
+          "base_by_rank": [
+            40.0,
+            42.5,
+            45.0,
+            47.5,
+            50.0
+          ],
+          "context_notes": "Active: Sivir empowers her crossblade for the next 4 seconds, gaining bonus attack speed and causing her basic attacks to bounce to additional surrounding enemies, dealing physical damage to them."
+        },
+        {
+          "id": "bounce_critical_damage",
+          "description": "Bounce Critical Damage",
+          "base_by_rank": [
+            80.0,
+            85.0,
+            90.0,
+            95.0,
+            100.0
+          ],
+          "context_notes": "Active: Sivir empowers her crossblade for the next 4 seconds, gaining bonus attack speed and causing her basic attacks to bounce to additional surrounding enemies, dealing physical damage to them."
+        },
+        {
+          "id": "minion_bounce_damage",
+          "description": "Minion Bounce Damage",
+          "base_by_rank": [
+            26.0,
+            27.625,
+            29.25,
+            30.875,
+            32.5
+          ],
+          "context_notes": "Active: Sivir empowers her crossblade for the next 4 seconds, gaining bonus attack speed and causing her basic attacks to bounce to additional surrounding enemies, dealing physical damage to them."
+        },
+        {
+          "id": "minion_bounce_critical_damage",
+          "description": "Minion Bounce Critical Damage",
+          "base_by_rank": [
+            52.0,
+            55.25,
+            58.5,
+            61.75,
+            65.0
+          ],
+          "context_notes": "Active: Sivir empowers her crossblade for the next 4 seconds, gaining bonus attack speed and causing her basic attacks to bounce to additional surrounding enemies, dealing physical damage to them."
+        },
+        {
+          "id": "sivir_w_effect_2",
+          "description": "Bounces occur only up to 8 times and can target each enemy up to one additional time per empowered attack. They prioritize the nearest new target, then the nearest target if no new targets are available."
+        },
+        {
+          "id": "sivir_w_effect_3",
+          "description": "Ricochet resets Sivir's basic attack timer if it was not already active. The target does not have to be visible to be bounced to."
+        }
+      ],
+      "description": "Active: Sivir empowers her crossblade for the next 4 seconds, gaining bonus attack speed and causing her basic attacks to bounce to additional surrounding enemies, dealing physical damage to them. If the triggering attack critically strikes, the bounces will do so as well for (200% + 30%) damage. Ricochet deals 65% damage against minions and executes them if they would be left below 15 health.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1750.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 1750 / 1000.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Ricochet-enhanced basic attacks can bounce from structures onto secondary targets but not from nearby units onto structures."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Spell Shield",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Sivir briefly gains a  spell shield.",
+      "effects": [
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            60.0,
+            65.0,
+            70.0,
+            75.0,
+            80.0
+          ],
+          "context_notes": "Active: Sivir gains a spell shield for 1."
+        }
+      ],
+      "description": "Active: Sivir gains a spell shield for 1.5 seconds. Upon successfully blocking a hostile effect, she heals herself and activates Fleet of Foot after 0.25 seconds.",
+      "cooldown_seconds_by_rank": [
+        24.0,
+        22.5,
+        21.0,
+        19.5,
+        18.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Spell Shield will heal and activate Fleet of Foot if any effect is blocked."
+      ]
+    },
+    "ultimate": {
+      "name": "On the Hunt",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Sivir gains On the Hunt for a period, and creates an aura that grants allied champions On the Hunt for the remaining duration. Sivir can refresh her duration whenever she scores an enemy  takedown within a short time of damaging them.",
+      "effects": [
+        {
+          "id": "buff_duration",
+          "description": "Buff Duration",
+          "base_by_rank": [
+            8.0,
+            10.0,
+            12.0
+          ],
+          "context_notes": "Active: Sivir gains On the Hunt for a duration and grants it to nearby allied champions for the remaining duration."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "On the Hunt: Gain bonus movement speed."
+        },
+        {
+          "id": "sivir_r_effect_3",
+          "description": "While active, Sivir's basic attacks on-attack reduce her basic abilities' current cooldowns by 0.5 seconds each."
+        },
+        {
+          "id": "sivir_r_effect_4",
+          "description": "Sivir can refresh the duration of her On the Hunt buff whenever she scores a takedown against an enemy champion within 3 seconds of damaging them."
+        }
+      ],
+      "description": "Active: Sivir gains On the Hunt for a duration and grants it to nearby allied champions for the remaining duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 1000.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 1000.",
+        "Source notes (summary): No additional notes."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Sivir.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Sivir"
+  }
+}

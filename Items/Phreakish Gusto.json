@@ -85,7 +85,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.068042+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Item page redirects to Caster minion; this entry models minion-only combat rule modifiers (turret-shot scaling and lane-minion on-hit bonus)."
+    ]
   },
   "sources": [
     {
@@ -105,6 +108,18 @@
       "path": "From Online/items/Phreakish Gusto.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Phreakish_Gusto",
+      "accessed": "2026-02-24",
+      "used_for": "page-level minion-item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki gameplay page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Caster_minion",
+      "accessed": "2026-02-24",
+      "used_for": "canonical combat-rule source for Phreakish Gusto redirect semantics"
     }
   ]
 }

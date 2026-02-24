@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Split Index",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "legacy_flat_file": "Masteries/RunesReforged.json",
+  "split_layout": {
+    "tree_root": "Masteries/RunesReforged/Trees",
+    "stat_shards_file": "Masteries/RunesReforged/StatShards/stat_shards.json",
+    "runtime_compatibility": "legacy_flat_file_retained"
+  },
+  "selection_rules": {
+    "primary_path": {
+      "keystone_slots": 1,
+      "secondary_slots": 3
+    },
+    "secondary_path": {
+      "slots": 2
+    },
+    "stat_shard_slots": 3
+  },
+  "tree_files": [
+    {
+      "id": 8100,
+      "key": "Domination",
+      "name": "Domination",
+      "icon": "perk-images/Styles/7200_Domination.png",
+      "folder": "Trees/Domination",
+      "tree_index": "Trees/Domination/tree.json",
+      "primary_runes": "Trees/Domination/primary_runes.json",
+      "secondary_runes": "Trees/Domination/secondary_runes.json"
+    },
+    {
+      "id": 8300,
+      "key": "Inspiration",
+      "name": "Inspiration",
+      "icon": "perk-images/Styles/7203_Whimsy.png",
+      "folder": "Trees/Inspiration",
+      "tree_index": "Trees/Inspiration/tree.json",
+      "primary_runes": "Trees/Inspiration/primary_runes.json",
+      "secondary_runes": "Trees/Inspiration/secondary_runes.json"
+    },
+    {
+      "id": 8000,
+      "key": "Precision",
+      "name": "Precision",
+      "icon": "perk-images/Styles/7201_Precision.png",
+      "folder": "Trees/Precision",
+      "tree_index": "Trees/Precision/tree.json",
+      "primary_runes": "Trees/Precision/primary_runes.json",
+      "secondary_runes": "Trees/Precision/secondary_runes.json"
+    },
+    {
+      "id": 8400,
+      "key": "Resolve",
+      "name": "Resolve",
+      "icon": "perk-images/Styles/7204_Resolve.png",
+      "folder": "Trees/Resolve",
+      "tree_index": "Trees/Resolve/tree.json",
+      "primary_runes": "Trees/Resolve/primary_runes.json",
+      "secondary_runes": "Trees/Resolve/secondary_runes.json"
+    },
+    {
+      "id": 8200,
+      "key": "Sorcery",
+      "name": "Sorcery",
+      "icon": "perk-images/Styles/7202_Sorcery.png",
+      "folder": "Trees/Sorcery",
+      "tree_index": "Trees/Sorcery/tree.json",
+      "primary_runes": "Trees/Sorcery/primary_runes.json",
+      "secondary_runes": "Trees/Sorcery/secondary_runes.json"
+    }
+  ],
+  "totals": {
+    "tree_count": 5,
+    "total_runes": 61,
+    "total_stat_shard_slots": 3
+  },
+  "schema_notes": {
+    "effects_structured": "Best-effort numeric parsing with canonical stat keys. Use raw text for exact wording.",
+    "wiki_templates": "Descriptions sourced from Template:Rune data <Rune Name> when available.",
+    "stat_shards_source": "Parsed from LoL Wiki Rune shards table.",
+    "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
+    "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
+    "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "split index generation"
+    }
+  ]
+}

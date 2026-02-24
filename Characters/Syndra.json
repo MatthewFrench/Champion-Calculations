@@ -1,0 +1,399 @@
+{
+  "name": "Syndra",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 563.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 480.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 54.0,
+      "per_level": 2.9
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.112499997019767,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Transcendent",
+      "type": "Passive",
+      "description_source": "Innate:  Syndra collects Splinters of Wrath that enhance her  abilities based on the number of them collected, up to a maximum amount. She can collect them from dealing damage to enemy  champions, ranking up her abilities, and killing large  minions.",
+      "effects": [
+        {
+          "id": "syndra_p_effect_1",
+          "description": "Innate: Syndra collects Splinters of Wrath that enhance each of her abilities based on the number of them collected, stacking up to 120 times. She gains Splinters of Wrath from the following:\nDealing two instances of ability damage to an enemy champion within 4 seconds grants 1 / 2 / 3 (based on level) Splinters. This cannot occur on the same target more than once every few seconds.\nRanking up an ability with any skill points beyond level 1 grants 5 Splinters, up to 85.\nKilling a large minion grants 1 Splinter."
+        },
+        {
+          "id": "syndra_p_effect_2",
+          "description": "Collecting a Splinter of Wrath from an enemy restores 20 : 255 (based on level) mana. Splinters of Wrath are brought to Syndra from enemies over 0.6 seconds."
+        },
+        {
+          "id": "syndra_p_effect_3",
+          "description": "At 120 Splinters of Wrath, Syndra achieves Transcendence, increasing her ability power by 15%."
+        },
+        {
+          "id": "syndra_p_effect_4",
+          "description": "Syndra can collect Splinters of Wrath from enemies even if she is at maximum stacks. These Splinters do not grant any stacks, but will still restore mana for Syndra."
+        }
+      ],
+      "description": "Innate: Syndra collects Splinters of Wrath that enhance each of her abilities based on the number of them collected, stacking up to 120 times. She gains Splinters of Wrath from the following:\nDealing two instances of ability damage to an enemy champion within 4 seconds grants 1 / 2 / 3 (based on level) Splinters. This cannot occur on the same target more than once every few seconds.\nRanking up an ability with any skill points beyond level 1 grants 5 Splinters, up to 85.\nKilling a large minion grants 1 Splinter.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Syndra's abilities gain additional visual effects when they reach their Splinter of Wrath thresholds."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Dark Sphere",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active: After a brief delay,  Syndra conjures a Dark Sphere at the target location that deals magic damage to nearby enemies. The Dark Sphere then remains on the ground for a few seconds.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            115.0,
+            150.0,
+            185.0,
+            220.0
+          ],
+          "context_notes": "Active: Syndra conjures a Dark Sphere at the target location that appears after a 0."
+        },
+        {
+          "id": "syndra_q_effect_2",
+          "description": "Transcendent Bonus: Collecting 40 Splinters of Wrath causes Syndra to periodically stock a Dark Sphere charge, up to a maximum of 2."
+        }
+      ],
+      "description": "Active: Syndra conjures a Dark Sphere at the target location that appears after a 0.6-second delay, dealing magic damage to nearby enemies. The Dark Sphere then remains on the ground for 6 seconds.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 210.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 210.",
+        "Source notes (summary): Dark Sphere can be conjured inside terrain, but cannot be thrown there with Force of Will."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Force of Will",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Syndra grabs the nearest  Dark Sphere, enemy  minion or non-epic  monster from the target location, and holds it for a few seconds.",
+      "effects": [
+        {
+          "id": "syndra_w_effect_1",
+          "description": "Active: Syndra telekinetically grabs the nearest Dark Sphere, enemy minion or non-epic monster within 500 units from the target location, and holds the target near her for 5 seconds. If a Dark Sphere is grabbed, its duration is refreshed; if a minion or monster is grabbed, it is put in stasis. She prioritizes grabbing the nearest unit, then Dark Spheres."
+        },
+        {
+          "id": "syndra_w_effect_2",
+          "description": "Force of Will can be recast while the target is being held."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Recast: Syndra throws the grabbed target towards the target location, granting sight of their surroundings as they fall and dealing magic damage to them and nearby enemies once they land."
+        },
+        {
+          "id": "bonus_damage",
+          "description": "Bonus Damage",
+          "base_by_rank": [
+            8.4,
+            12.6,
+            16.8,
+            21.0,
+            25.2
+          ],
+          "context_notes": "Transcendent Bonus: Collecting 60 Splinters of Wrath enhances Force of Will to deal 12% (+ 2% per 100 AP) bonus true damage."
+        },
+        {
+          "id": "total_mixed_damage",
+          "description": "Total Mixed Damage",
+          "base_by_rank": [
+            78.4,
+            117.6,
+            156.8,
+            196.0,
+            235.2
+          ],
+          "context_notes": "Transcendent Bonus: Collecting 60 Splinters of Wrath enhances Force of Will to deal 12% (+ 2% per 100 AP) bonus true damage."
+        }
+      ],
+      "description": "Active: Syndra telekinetically grabs the nearest Dark Sphere, enemy minion or non-epic monster within 500 units from the target location, and holds the target near her for 5 seconds. If a Dark Sphere is grabbed, its duration is refreshed; if a minion or monster is grabbed, it is put in stasis. She prioritizes grabbing the nearest unit, then Dark Spheres.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 225.",
+        "Source notes (summary): The initial cast does not count as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Scatter the Weak",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Syndra propels a wave of force in a cone in the target direction that deals magic damage and  knocks back enemies hit based on proximity.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            95.0,
+            130.0,
+            165.0,
+            200.0
+          ],
+          "context_notes": "Active: Syndra propels a wave of force in a cone in the target direction that deals magic damage to enemies hit and knocks them back for 400 units and up to 800 units away from Syndra based on proximity, though not through terrain."
+        },
+        {
+          "id": "syndra_e_effect_2",
+          "description": "Dark Spheres can be knocked back for 950 units and up to 1200 units away from Syndra based on proximity, knocking back enemies they hit over 70 units, though not through terrain. Targets hit are also stunned for 1.25 seconds, during which they are also revealed, and dealt Scatter the Weak's damage if they were not damaged by the initial cast."
+        },
+        {
+          "id": "syndra_e_effect_3",
+          "description": "Transcendent Bonus: Collecting 80 Splinters of Wrath enhances Scatter the Weak to have an increased scatter angle and slow enemies hit by 70% for 1.25 seconds starting after the knock back ends or if the target was hit by a pushed Dark Sphere, after the stun has ended."
+        }
+      ],
+      "description": "Active: Syndra propels a wave of force in a cone in the target direction that deals magic damage to enemies hit and knocks them back for 400 units and up to 800 units away from Syndra based on proximity, though not through terrain.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        15.0,
+        15.0,
+        15.0,
+        15.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2500 / 2000.",
+        "Source notes (summary): Scatter the Weak is blocked by the portion of Wind Wall it collides with."
+      ]
+    },
+    "ultimate": {
+      "name": "Unleashed Power",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Syndra creates a few  Dark Spheres and grabs a few more nearby, then barrages them at the target enemy champion. Each sphere deals magic damage upon hit, and remains on the ground for a few seconds.",
+      "effects": [
+        {
+          "id": "ability_haste",
+          "description": "Ability Haste",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "Passive: Dark Sphere gains ability haste."
+        },
+        {
+          "id": "magic_damage_per_sphere",
+          "description": "Magic Damage per Sphere",
+          "base_by_rank": [
+            90.0,
+            130.0,
+            170.0
+          ],
+          "context_notes": "Active: Syndra enters a 0."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            270.0,
+            390.0,
+            510.0
+          ],
+          "context_notes": "Active: Syndra enters a 0."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            630.0,
+            910.0,
+            1190.0
+          ],
+          "context_notes": "Active: Syndra enters a 0."
+        },
+        {
+          "id": "syndra_r_effect_3",
+          "description": "The Dark Spheres will then remain on the ground for 6 seconds."
+        },
+        {
+          "id": "syndra_r_effect_4",
+          "description": "Transcendent Bonus: Collecting 100 Splinters of Wrath enhances Unleashed Power to execute the target if it would damage them to below 15% of their maximum health."
+        }
+      ],
+      "description": "Passive: Dark Sphere gains ability haste.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 3000.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 3000.",
+        "Source notes (summary): Unleashed Power makes Syndra enter a brief cast time, but the initial cast is completed instantly."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Syndra.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Syndra"
+  }
+}

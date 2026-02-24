@@ -1,0 +1,506 @@
+{
+  "name": "Yuumi",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Enchanter",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 500.0,
+      "per_level": 69.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 440.0,
+      "per_level": 45.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 25.0,
+      "per_level": 1.1
+    },
+    "attack_range": 425.0,
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 10.0,
+      "per_level": 0.4
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 49.0,
+      "per_level": 3.1
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.15624999767169437,
+    "windup_percent": 15.624999767169436,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Feline Friendship",
+      "type": "Passive",
+      "description_source": "Innate: Periodically,  Yuumi's next  basic attack or  ability hit against enemy champions will  heal her. If she is  attached to an ally within a short time, they are healed as well.",
+      "effects": [
+        {
+          "id": "yuumi_p_effect_1",
+          "description": "Innate: Periodically, Yuumi's next basic attack against an enemy champion is empowered to have an uncancellable windup, gain 50 bonus range and become non-projectile. Upon hitting them with the basic attack or Prowling Projectile, or upon a Final Chapter hit on ally champions while attached, the buff is consumed to heal her for 20 : 120.59 (based on level) (+ 25% AP). If she is attached to an ally or does so within 4 seconds, they are healed for the same amount."
+        },
+        {
+          "id": "yuumi_p_effect_2",
+          "description": "Innate: While attached to an ally, Yuumi grants them 2 permanent Friendship stacks whenever they kill enemy champions or minions. The ally with the highest Friendship stacks becomes Yuumi's Best Friend, which empowers her abilities with additional effects while she is attached to them."
+        }
+      ],
+      "description": "Innate: Periodically, Yuumi's next basic attack against an enemy champion is empowered to have an uncancellable windup, gain 50 bonus range and become non-projectile. Upon hitting them with the basic attack or Prowling Projectile, or upon a Final Chapter hit on ally champions while attached, the buff is consumed to heal her for 20 : 120.59 (based on level) (+ 25% AP). If she is attached to an ally or does so within 4 seconds, they are healed for the same amount.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.294117647058822,
+        18.58823529411765,
+        17.88235294117647,
+        17.176470588235293,
+        16.470588235294116,
+        15.764705882352942,
+        15.058823529411764,
+        14.352941176470587,
+        13.647058823529411,
+        12.941176470588236,
+        12.235294117647058,
+        11.529411764705882,
+        10.823529411764705,
+        10.117647058823529,
+        9.411764705882351,
+        8.705882352941176,
+        8.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Feline Friendship will not be consumed if Yuumi isn't missing health, except when triggered by a basic attack."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Prowling Projectile",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            95.0,
+            130.0,
+            165.0,
+            200.0,
+            235.0
+          ],
+          "context_notes": "Active: Yuumi fires an errant missile in the target direction that deals magic damage to the first enemy hit."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            80.0,
+            135.0,
+            190.0,
+            245.0,
+            300.0,
+            355.0
+          ],
+          "context_notes": "Attached Bonus: Yuumi channels for up to 1."
+        },
+        {
+          "id": "enhanced_slow",
+          "description": "Enhanced Slow",
+          "base_by_rank": [
+            50.0,
+            53.0,
+            56.0,
+            59.0,
+            62.0,
+            65.0
+          ],
+          "context_notes": "Attached Bonus: Yuumi channels for up to 1."
+        },
+        {
+          "id": "minimum_bonus_magic_damage_on_hit",
+          "description": "Minimum Bonus Magic Damage On-Hit",
+          "base_by_rank": [
+            10.0,
+            12.0,
+            14.0,
+            16.0,
+            18.0,
+            20.0
+          ],
+          "context_notes": "Best Friend Bonus: Prowling Projectile always applies its enhanced slow against champions and hitting a champion grants her Best Friend bonus magic damage on-hit for 5 seconds, increased by 0% : 75% (based on Anchor's critical strike chance)."
+        },
+        {
+          "id": "maximum_bonus_magic_damage_on_hit",
+          "description": "Maximum Bonus Magic Damage On-Hit",
+          "base_by_rank": [
+            17.5,
+            21.0,
+            24.5,
+            28.0,
+            31.5,
+            35.0
+          ],
+          "context_notes": "Best Friend Bonus: Prowling Projectile always applies its enhanced slow against champions and hitting a champion grants her Best Friend bonus magic damage on-hit for 5 seconds, increased by 0% : 75% (based on Anchor's critical strike chance)."
+        }
+      ],
+      "description": "Active: Yuumi fires an errant missile in the target direction that deals magic damage to the first enemy hit. If the target is a champion, they are also revealed and slowed by 20% for 1 second.",
+      "cooldown_seconds_by_rank": [
+        6.5,
+        6.5,
+        6.5,
+        6.5,
+        6.5,
+        6.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 950.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 950 / 850 / 1650.",
+        "Source notes (summary): Prowling Projectile is able to turn clockwise or counter-clockwise at a rate of 90° per 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "You and Me!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "yuumi_w_effect_1",
+          "description": "Passive: While Yuumi is attached, she is untargetable (except by turrets and inbound projectiles) and casts her abilities from the Anchor's position, empowering them with additional effects."
+        },
+        {
+          "id": "yuumi_w_effect_2",
+          "description": "Active: Yuumi channels for 0.25 seconds, then upon completion dashes to the target allied champion and attaches to them upon arrival, designating them as her Anchor. You and Me! can be recast after 0.5 seconds of the attachment."
+        },
+        {
+          "id": "yuumi_w_effect_3",
+          "description": "Recast - Change of Plan: Yuumi detaches from her Anchor and dashes to the target allied champion to attach to them, refreshing the recast. She will detach automatically if her Anchor dies or under certain circumstances. If recast without a valid target, Yuumi will detach and dash 250-units in the target direction, placing You and Me! on a 0.25-second cooldown if it is not already on cooldown."
+        },
+        {
+          "id": "yuumi_w_effect_4",
+          "description": "Yuumi will be knocked down by any immobilizing or polymorphing crowd control during the dash."
+        },
+        {
+          "id": "yuumi_w_effect_5",
+          "description": "Yuumi starts with a skill point in You and Me! and Prowling Projectile instead has 6 ranks."
+        },
+        {
+          "id": "heal_and_shield_power",
+          "description": "Heal and Shield Power",
+          "base_by_rank": [
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0
+          ],
+          "context_notes": "Best Friend Bonus: Yuumi gains heal and shield power and her Best Friend gains healing on-hit."
+        },
+        {
+          "id": "healing_on_hit",
+          "description": "Healing On-Hit",
+          "base_by_rank": [
+            3.0,
+            4.0,
+            5.0,
+            6.0,
+            7.0
+          ],
+          "context_notes": "Best Friend Bonus: Yuumi gains heal and shield power and her Best Friend gains healing on-hit."
+        }
+      ],
+      "description": "Passive: While Yuumi is attached, she is untargetable (except by turrets and inbound projectiles) and casts her abilities from the Anchor's position, empowering them with additional effects.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        5.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Direction.",
+        "Source castTime: none.",
+        "Source speed: 1200 / 1300 / 1400 / 1500 / 1600.",
+        "Source notes (summary): The Best Friend's healing on-hit is affected by Yuumi's heal and shield power."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Zoomies",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Yuumi  shields herself and gains  bonus movement speed and  bonus attack speed for a short time.",
+      "effects": [
+        {
+          "id": "shield",
+          "description": "Shield",
+          "base_by_rank": [
+            65.0,
+            90.0,
+            115.0,
+            140.0,
+            165.0
+          ],
+          "context_notes": "Active: Yuumi grants herself a shield and gains bonus attack speed for 3 seconds."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            25.0,
+            27.5,
+            30.0,
+            32.5,
+            35.0
+          ],
+          "context_notes": "Active: Yuumi grants herself a shield and gains bonus attack speed for 3 seconds."
+        },
+        {
+          "id": "minimum_mana_restored",
+          "description": "Minimum Mana Restored",
+          "base_by_rank": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0
+          ],
+          "context_notes": "Attached Bonus: Zoomies affects the Anchor instead of Yuumi and additionally restores mana to the Anchor, increased by 0% : 100% (based on Anchor's missing mana)."
+        },
+        {
+          "id": "maximum_mana_restored",
+          "description": "Maximum Mana Restored",
+          "base_by_rank": [
+            40.0,
+            48.0,
+            56.0,
+            64.0,
+            72.0
+          ],
+          "context_notes": "Attached Bonus: Zoomies affects the Anchor instead of Yuumi and additionally restores mana to the Anchor, increased by 0% : 100% (based on Anchor's missing mana)."
+        }
+      ],
+      "description": "Active: Yuumi grants herself a shield and gains bonus attack speed for 3 seconds. She also gains 20% bonus movement speed while the shield holds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          90.0,
+          100.0,
+          110.0,
+          120.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The Anchor's mana bar will briefly become a light blue upon restoring the mana."
+      ]
+    },
+    "ultimate": {
+      "name": "Final Chapter",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "yuumi_r_effect_1",
+          "description": "Active: Yuumi and Book channel for up to 3.5 seconds, during which they are ghosted, to launch 5 magical waves in the target direction."
+        },
+        {
+          "id": "heal_per_hit",
+          "description": "Heal per Hit",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Allied champions hit by the waves are healed, with each heal instance beyond maximum health being converted into a shield that lasts for 1."
+        },
+        {
+          "id": "total_heal",
+          "description": "Total Heal",
+          "base_by_rank": [
+            150.0,
+            200.0,
+            250.0
+          ],
+          "context_notes": "Allied champions hit by the waves are healed, with each heal instance beyond maximum health being converted into a shield that lasts for 1."
+        },
+        {
+          "id": "magic_damage_per_hit",
+          "description": "Magic Damage per Hit",
+          "base_by_rank": [
+            75.0,
+            125.0,
+            175.0
+          ],
+          "context_notes": "Enemies struck by the waves take magic damage and are slowed by 10% for 1."
+        },
+        {
+          "id": "reduced_damage_per_hit",
+          "description": "Reduced Damage per Hit",
+          "base_by_rank": [
+            18.75,
+            31.25,
+            43.75
+          ],
+          "context_notes": "Enemies struck by the waves take magic damage and are slowed by 10% for 1."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Enemies struck by the waves take magic damage and are slowed by 10% for 1."
+        },
+        {
+          "id": "yuumi_r_effect_4",
+          "description": "Attached Bonus: Yuumi can steer the direction of the waves if initially cast while attached. Detaching causes her to lose this bonus for the duration. Additionally, Feline Friendship can trigger from also hitting allied champions."
+        },
+        {
+          "id": "best_friend_heal_per_hit",
+          "description": "Best Friend Heal per Hit",
+          "base_by_rank": [
+            39.0,
+            52.0,
+            65.0
+          ],
+          "context_notes": "Best Friend Bonus: Final Chapter's heal to the Best Friend is increased by 30%."
+        },
+        {
+          "id": "best_friend_total_heal",
+          "description": "Best Friend Total Heal",
+          "base_by_rank": [
+            195.0,
+            260.0,
+            325.0
+          ],
+          "context_notes": "Best Friend Bonus: Final Chapter's heal to the Best Friend is increased by 30%."
+        },
+        {
+          "id": "yuumi_r_effect_6",
+          "description": "While not attached, Yuumi can move while channeling Final Chapter."
+        }
+      ],
+      "description": "Active: Yuumi and Book channel for up to 3.5 seconds, during which they are ghosted, to launch 5 magical waves in the target direction.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        110.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 3000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 3000.",
+        "Source notes (summary): While Yuumi's anchor is not at full health, the heal on the anchor is reapplied each time you hit another ally."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Yuumi.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Yuumi"
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "name": "Amumu",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Support",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 685.0,
+      "per_level": 94.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 285.0,
+      "per_level": 40.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 7.4,
+      "per_level": 0.55
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 3.8
+    },
+    "attack_speed": {
+      "base": 0.736,
+      "per_level_percent": 2.18
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0661564618349075,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Cursed Touch",
+      "type": "Passive",
+      "description_source": "Innate:  Amumu's basic attacks and  Curse of the Sad Mummy mark enemies with Curse.  Despair will refresh ongoing Curse marks on enemies hit.",
+      "effects": [
+        {
+          "id": "amumu_p_effect_1",
+          "description": "Innate: Amumu's basic attacks and Curse of the Sad Mummy are empowered to mark enemies with Curse for 3 seconds, refreshing on subsequent applications and Despair's per-tick damage."
+        },
+        {
+          "id": "amumu_p_effect_2",
+          "description": "Cursed targets receive 10% bonus true damage from all incoming pre-mitigation magic damage."
+        }
+      ],
+      "description": "Innate: Amumu's basic attacks and Curse of the Sad Mummy are empowered to mark enemies with Curse for 3 seconds, refreshing on subsequent applications and Despair's per-tick damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): If the triggering basic attack from Amumu applies magic damage on-hit, Curse will be applied before the magic damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bandage Toss",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Amumu throws a bandage that deals magic damage and  stuns the first enemy hit while he  dashes to them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            95.0,
+            120.0,
+            145.0,
+            170.0
+          ],
+          "context_notes": "Active: Amumu throws a bandage in the target direction that deals magic damage to the first enemy hit, stunning them for 1 second and pulling him to them, during which they are revealed."
+        },
+        {
+          "id": "amumu_q_effect_2",
+          "description": "Amumu periodically stocks a Bandage Toss charge, up to a maximum of 2."
+        },
+        {
+          "id": "amumu_q_effect_3",
+          "description": "Despair can be cast during the dash."
+        }
+      ],
+      "description": "Active: Amumu throws a bandage in the target direction that deals magic damage to the first enemy hit, stunning them for 1 second and pulling him to them, during which they are revealed.",
+      "cooldown_seconds_by_rank": [
+        3.0,
+        3.0,
+        3.0,
+        3.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000 / 1800.",
+        "Source notes (summary): Amumu will track the target if they change locations."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Despair",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Toggle:  Amumu begins crying, continually dealing magic damage to nearby enemies based on their maximum health.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            5.0,
+            5.0,
+            5.0,
+            5.0,
+            5.0
+          ],
+          "context_notes": "Toggle: Amumu cries a continuous pool of tears, dealing magic damage every 0."
+        }
+      ],
+      "description": "Toggle: Amumu cries a continuous pool of tears, dealing magic damage every 0.5 seconds to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cost": {
+        "resource": "mana_per_second",
+        "value_by_rank": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): Toggle abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Tantrum",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Amumu gains damage reduction against physical damage.  Tantrum's cooldown is reduced whenever he is hit by a  basic attack.",
+      "effects": [
+        {
+          "id": "physical_damage_reduction",
+          "description": "Physical Damage Reduction",
+          "base_by_rank": [
+            5.0,
+            7.0,
+            9.0,
+            11.0,
+            13.0
+          ],
+          "context_notes": "Passive: Amumu reduces every instance of pre-mitigation physical damage taken, capped at 50% of the damage instance."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            65.0,
+            95.0,
+            125.0,
+            155.0,
+            185.0
+          ],
+          "context_notes": "Active: Amumu releases his anger, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "amumu_e_effect_3",
+          "description": "Tantrum's current cooldown is reduced by 0.75 seconds whenever Amumu is hit by a basic attack on-hit."
+        }
+      ],
+      "description": "Passive: Amumu reduces every instance of pre-mitigation physical damage taken, capped at 50% of the damage instance.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          35.0,
+          35.0,
+          35.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): A basic attack's basic damage and each on-hit effect are all separate damage instances, and may be reduced each if they deal physical damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Curse of the Sad Mummy",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Amumu entangles nearby enemies in bandages, dealing magic damage as well as briefly  knocking down and  stunning them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "Active: Amumu entangles nearby enemies in bandages, dealing magic damage as well as knocking them down and stunning them for 1."
+        }
+      ],
+      "description": "Active: Amumu entangles nearby enemies in bandages, dealing magic damage as well as knocking them down and stunning them for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        150.0,
+        125.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          150.0,
+          200.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 550.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 550.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Amumu.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Amumu"
+  }
+}

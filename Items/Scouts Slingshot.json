@@ -32,7 +32,11 @@
       "interval_seconds": null,
       "trigger": "on_damage_to_champion",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "cooldown_reduced_by_on_attack_events",
+        "counts_as_spell_damage",
+        "not_blocked_by_spell_shield"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "cooldown_reduction_on_attack_seconds": 1.0,
@@ -41,7 +45,7 @@
         40,
         1
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.86
     }
   ],
   "shop": {
@@ -62,7 +66,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.028219+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Bullseye procs on champion damage, deals bonus magic spell damage, and then begins a 40-second cooldown reduced by 1 second on each on-attack event.",
+      "Player-visible behavior: Bullseye is passive-only (no cast), and page notes indicate the proc itself is treated as spell damage and is not blocked by spell shields."
+    ]
   },
   "sources": [
     {
@@ -82,6 +90,12 @@
       "path": "From Online/items/Scouts Slingshot.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Scout's Slingshot",
+      "url": "https://wiki.leagueoflegends.com/en-us/Scout%27s_Slingshot",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Bullseye cooldown reduction behavior and spell-damage interaction notes"
     }
   ]
 }

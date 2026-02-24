@@ -9,13 +9,13 @@
   "passives": [],
   "active": [
     {
-      "effects": "Consume one charge to summon a {{tip|Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip|sight|visible}}."
+      "effects": "Consume one charge to summon a {{tip|Sweeper Drone}} that escorts you for the next 8 seconds, detecting nearby enemies that are not {{tip|sight|visible}} ({{pp|160 to 100|type=average champion level}} seconds recharge time; 2 charges; {{pp|600 to 750|type=level}} range)."
     }
   ],
   "effects_structured": [
     {
       "id": "consume_charge_summon_sweeper_drone",
-      "raw": "Consume one charge to summon a Sweeper Drone for 8 seconds that detects nearby invisible enemies/wards.",
+      "raw": "Consume one charge to summon a Sweeper Drone for 8 seconds that detects nearby units that are not visible.",
       "effect_type": "summon_warding_entity",
       "stat": "sweeper_drone",
       "value": 1,
@@ -27,20 +27,98 @@
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
-        "consume_charge"
+        "consume_charge",
+        "detection_range_scales_with_owner_level"
       ],
       "status_effects": [
         "detects_invisible_units",
-        "reveals_wards_traps"
+        "reveals_wards_traps",
+        "detects_untargetable_units"
+      ],
+      "scaling_terms": [
+        {
+          "stat": "owner_level",
+          "type": "linear",
+          "min": 600,
+          "max": 750,
+          "scope": "sweeper_detection_range"
+        }
+      ],
+      "numbers_extracted": [
+        8,
+        600,
+        750
+      ],
+      "parse_confidence": 0.82
+    },
+    {
+      "id": "oracle_lens_recharge_and_charges",
+      "raw": "Oracle Lens stores up to 2 charges and recharges from 160 to 100 seconds based on average champion level (affected by item haste).",
+      "effect_type": "condition_note",
+      "stat": "trinket_recharge_time",
+      "value": null,
+      "value_range": {
+        "min": 160,
+        "max": 100
+      },
+      "unit": "seconds",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "max_charges_2",
+        "cooldown_scales_with_average_champion_level",
+        "affected_by_item_haste"
+      ],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "average_champion_level",
+          "type": "linear_desc",
+          "min": 160,
+          "max": 100
+        }
+      ],
+      "numbers_extracted": [
+        160,
+        100,
+        2
+      ],
+      "parse_confidence": 0.82
+    },
+    {
+      "id": "oracle_lens_ward_hit_reveal_window",
+      "raw": "While Oracle Lens is active, wards hit by your attacks are revealed to your team for 2 seconds.",
+      "effect_type": "reveal",
+      "stat": "vision",
+      "value": 1,
+      "value_range": null,
+      "unit": "target",
+      "duration_seconds": 2.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_basic_attack_hit",
+      "applies_to": "enemy_ward_hit",
+      "conditions": [
+        "while_oracle_lens_active"
+      ],
+      "status_effects": [
+        "target_revealed_to_team"
       ],
       "scaling_terms": [],
       "numbers_extracted": [
-        8
+        2
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
+    "prices": {
+      "total": 0,
+      "sell": 0
+    },
     "purchasable": true
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3364_class_t1_oracleslens.png",
@@ -57,9 +135,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.070113+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Detection radius and specific ward reveal rules are not encoded in this payload."
+      "Execution model: Oracle Lens is a charge-consuming active that follows the owner for 8 seconds; detection radius scales by owner level (600 to 750 range) and the cast itself is not target-locked.",
+      "Charge/cadence semantics: Oracle Lens stores 2 charges and recharges from 160 to 100 seconds based on average champion level, with trinket cooldown behavior affected by item haste.",
+      "Player-visible reveal branch: while active, attacking a ward briefly reveals that ward to the user's team for 2 seconds."
     ]
   },
   "sources": [
@@ -80,6 +160,12 @@
       "path": "From Online/items/Oracle Lens.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Oracle Lens",
+      "url": "https://wiki.leagueoflegends.com/en-us/Oracle_Lens",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of duration, recharge/charge scaling, detection range scaling, and ward-hit reveal behavior while active"
     }
   ]
 }

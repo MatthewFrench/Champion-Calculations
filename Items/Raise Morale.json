@@ -50,9 +50,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.044640+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Effect is tied to Gangplank's Cannon Barrage area."
+      "Effect is tied to Gangplank's Cannon Barrage area.",
+      "Pseudo-item upgrade tied to Gangplank Cannon Barrage; allied movement-speed bonus persists briefly after leaving the barrage area."
     ]
   },
   "sources": [
@@ -73,6 +74,18 @@
       "path": "From Online/items/Raise Morale.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Raise_Morale",
+      "accessed": "2026-02-24",
+      "used_for": "page-level pseudo-item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki champion page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gangplank",
+      "accessed": "2026-02-24",
+      "used_for": "canonical source for Cannon Barrage upgrade behavior tied to Raise Morale"
     }
   ]
 }

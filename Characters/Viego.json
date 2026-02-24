@@ -1,0 +1,354 @@
+{
+  "name": "Viego",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "none",
+      "base": 0.0,
+      "per_level": 0.0,
+      "context_notes": "Champion does not use mana/energy as a standard regenerating resource for ability costs."
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 34.0,
+      "per_level": 4.6
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 200.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.75
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.13553,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Sovereign's Domination",
+      "type": "Passive",
+      "description_source": "Innate: Scoring an enemy champion  takedown will spawn a Mist Wraith for a period.  Viego can consume the Mist Wraith to briefly become  untargetable and  blink to it, which  heals him for a portion of the target's maximum health and grants Possession.",
+      "effects": [
+        {
+          "id": "viego_p_effect_1",
+          "description": "Innate: Whenever Viego scores an enemy champion takedown while alive and within 3 seconds of damaging them, a Mist Wraith spawns from that champion's corpse for 8 seconds. Viego can basic attack a Mist Wraith to consume it: causing him to blink to its location after winding up for 1 second, during which he is untargetable (except to turrets) and unable to act. He then gains Possession and heals himself for 2% (+ 2.5% per 100 bonus AD) (+ 2% per 100 AP) (+ 5% per 100% bonus attack speed) of the target's maximum health."
+        },
+        {
+          "id": "viego_p_effect_2",
+          "description": "Possession: For 10 seconds, Viego assumes the enemy champion's form and gains their basic attacks, basic abilities, items, and base stats (based on Viego's level). He also gains a free cast of Heartbreaker, which is initially placed on a 1.5-second cooldown, and 10% bonus movement speed while facing enemy champions within 2500 units."
+        },
+        {
+          "id": "viego_p_effect_3",
+          "description": "Viego cannot use item actives, consumable items, nor the shop during Possession. Casting Heartbreaker or attacking a Mist Wraith ends Possession immediately."
+        },
+        {
+          "id": "viego_p_effect_4",
+          "description": "Viego will preserve his current health percentage between transformations."
+        }
+      ],
+      "description": "Innate: Whenever Viego scores an enemy champion takedown while alive and within 3 seconds of damaging them, a Mist Wraith spawns from that champion's corpse for 8 seconds. Viego can basic attack a Mist Wraith to consume it: causing him to blink to its location after winding up for 1 second, during which he is untargetable (except to turrets) and unable to act. He then gains Possession and heals himself for 2% (+ 2.5% per 100 bonus AD) (+ 2% per 100 AP) (+ 5% per 100% bonus attack speed) of the target's maximum health.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Viego will copy the possessed champion's ability ranks."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Blade of the Ruined King",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Viego's basic attacks deal bonus physical damage based on the target's current health. Additionally, Viego's damaging abilities apply a mark to enemies hit. His next basic attack will consume the mark to strike twice, dealing additional modified physical damage and  healing him.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            2.0,
+            3.0,
+            4.0,
+            5.0,
+            6.0
+          ],
+          "context_notes": "Passive: Viego's basic attacks deal bonus physical damage on-hit."
+        },
+        {
+          "id": "minimum_bonus_damage",
+          "description": "Minimum Bonus Damage",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Passive: Viego's basic attacks deal bonus physical damage on-hit."
+        },
+        {
+          "id": "viego_q_effect_2",
+          "description": "Additionally, his damaging abilities apply a mark to enemies hit for 4 seconds. Viego's next basic attack against a marked target is empowered to consume the mark on-hit to strike a second time, dealing 20% AD (+ 15% AP) physical damage. He also heals himself for a portion of the post-mitigation damage dealt by the second strike: 100% against minions, 125% against monsters, and 150% against other targets."
+        },
+        {
+          "id": "viego_q_effect_3",
+          "description": "The second strike applies on-hit effects and can critically strike for (200% + 30%) damage."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            25.0,
+            40.0,
+            55.0,
+            70.0,
+            85.0
+          ],
+          "context_notes": "Active: Viego stabs in a line in the target direction that deals physical damage to enemies hit, increased by 0% : 60% (+ 0% : 18%) (based on critical strike chance)."
+        },
+        {
+          "id": "viego_q_effect_5",
+          "description": "Blade of the Ruined King's passive remains under Possession, and while transformed, the second strike is instead converted to bonus damage on-hit which no longer applies on-hit effects but can still critically strike (based on the Possession's stats, abilities and/or item effects)."
+        }
+      ],
+      "description": "Passive: Viego's basic attacks deal bonus physical damage on-hit. This damage can critically strike for (170% + 21%) damage, has a minimum threshold and is capped at 80 against monsters.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        4.5,
+        4.0,
+        3.5,
+        3.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 140.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 140% of Viego's windup time (0.35 at base attack speed).",
+        "Source notes (summary): The mark will not be applied to the primary target struck by Heartbreaker, but it can triggered from it."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Spectral Maw",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "viego_w_effect_1",
+          "description": "Active: Viego charges while being slowed by 10% for up to 3 seconds to increase Spectral Maw's missile range and stun duration over the first second of the channel."
+        },
+        {
+          "id": "viego_w_effect_2",
+          "description": "Spectral Maw can be recast within the duration. If the charge completes without reactivation, Spectral Maw is cancelled and placed on full cooldown. If the charge is interrupted, it will be placed on a 3-second cooldown."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            135.0,
+            190.0,
+            245.0,
+            300.0
+          ],
+          "context_notes": "Recast: Viego hurls a blast of mist in the target direction and dashes a fixed distance in the same direction, though not through terrain."
+        },
+        {
+          "id": "viego_w_effect_4",
+          "description": "Spectral Maw resets Viego's basic attack timer. Viego can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Viego charges while being slowed by 10% for up to 3 seconds to increase Spectral Maw's missile range and stun duration over the first second of the channel.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1000.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Direction.",
+        "Source castTime: none.",
+        "Source speed: 1000 / 1300.",
+        "Source notes (summary): The reduced cooldown from the charge will not occur if Spectral Maw's cooldown is already below 3 seconds."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Harrowed Path",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Viego sends a spectre in the target direction that creates a trail of mist in its wake for a period. If it hits terrain, the mist is spread further around either side.",
+      "effects": [
+        {
+          "id": "viego_e_effect_1",
+          "description": "Active: Viego sends a spectre in the target direction that creates a trail of mist in its wake which lasts 8 seconds. If it hits terrain, the mist will spread further around either side."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "While inside the mist, Viego gains bonus attack speed."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            25.0,
+            27.5,
+            30.0,
+            32.5,
+            35.0
+          ],
+          "context_notes": "While inside the mist, Viego gains bonus attack speed."
+        },
+        {
+          "id": "viego_e_effect_3",
+          "description": "Declaring a basic attack or casting an ability will break the camouflage and remove the bonus movement speed, preventing Viego from gaining them again for 1 second, increased to 2 seconds if he attacked a large monster. This duration refreshes on subsequent attacks and ability casts."
+        },
+        {
+          "id": "viego_e_effect_4",
+          "description": "Harrowed Path can be cast during any of Viego's abilities. Viego cannot gain the camouflage nor bonus movement speed from Harrowed Path for 1 second if he casted it during Spectral Maw's channel or started the channel while the mist was active."
+        }
+      ],
+      "description": "Active: Viego sends a spectre in the target direction that creates a trail of mist in its wake which lasts 8 seconds. If it hits terrain, the mist will spread further around either side.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        12.0,
+        10.0,
+        8.0,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 1600 / 1200.",
+        "Source notes (summary): Spectral Maw's recast does not incur the 1 second cooldown for regaining the stealth and instead prevents the stealth from being gained until the dash ends, resetting the cooldown if it is active."
+      ]
+    },
+    "ultimate": {
+      "name": "Heartbreaker",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Viego  blinks with  displacement immunity to the target location and attacks the most wounded enemy champion nearby, which briefly  slows them, applies  on-hit effects, and deals bonus physical damage by a portion of their missing health.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            12.0,
+            16.0,
+            20.0
+          ],
+          "context_notes": "Active: Viego gains displacement immunity over the cast time, then blinks to the target location."
+        },
+        {
+          "id": "viego_r_effect_2",
+          "description": "All targets hit are dealt 120% AD physical damage, increased by 0% : 70% (+ 0% : 21%) (based on critical strike chance)."
+        },
+        {
+          "id": "viego_r_effect_3",
+          "description": "If a Possession is discarded, Heartbreaker will be placed on a 1.5-second cooldown if it is not already on cooldown."
+        }
+      ],
+      "description": "Active: Viego gains displacement immunity over the cast time, then blinks to the target location. Upon arrival, he strikes the most wounded enemy champion nearby, dealing physical damage, slowing them by 99% for 0.25 seconds, and applying on-hit effects. Other nearby enemies are knocked back up to 400-units away based on proximity, though not through terrain.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Heartbreaker will cast at the edge of its range if the target location is further beyond."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Viego.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Viego"
+  }
+}

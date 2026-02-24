@@ -1,0 +1,434 @@
+{
+  "name": "Taliyah",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 550.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 470.0,
+      "per_level": 30.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 18.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 1.36
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.138541668653488,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Rock Surfing",
+      "type": "Passive",
+      "description_source": "Innate:  Taliyah gains  bonus movement speed while near terrain. This effect will be put on  cooldown while in combat or casting an ability.",
+      "effects": [
+        {
+          "id": "taliyah_p_effect_1",
+          "description": "Innate: While near terrain, Taliyah gains 10% / 15% / 25% / 40% (based on level) bonus movement speed, which builds up over 1 second while in range for at least 0.4 seconds, and decays at the same rate once out of range for at least 3 seconds."
+        },
+        {
+          "id": "taliyah_p_effect_2",
+          "description": "If Taliyah is casting an ability or enters champion combat, Rock Surfing cannot occur again for a few seconds."
+        }
+      ],
+      "description": "Innate: While near terrain, Taliyah gains 10% / 15% / 25% / 40% (based on level) bonus movement speed, which builds up over 1 second while in range for at least 0.4 seconds, and decays at the same rate once out of range for at least 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The movement speed builds up and decays linearly (by the same amount in the same interval), 25% of the maximum value every 0."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Threaded Volley",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Taliyah barrages out 5 Stone Shards that each explode upon the first enemy hit, dealing magic damage to nearby enemies. This also creates an area of Worked Ground under Taliyah's location that lasts for a while.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            72.5,
+            90.0,
+            107.5,
+            125.0
+          ],
+          "context_notes": "Active: Taliyah barrages 5 Stone Shards in the target direction over 1."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            22.0,
+            29.0,
+            36.0,
+            43.0,
+            50.0
+          ],
+          "context_notes": "Active: Taliyah barrages 5 Stone Shards in the target direction over 1."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            143.0,
+            188.5,
+            234.0,
+            279.5,
+            325.0
+          ],
+          "context_notes": "Active: Taliyah barrages 5 Stone Shards in the target direction over 1."
+        },
+        {
+          "id": "taliyah_q_effect_2",
+          "description": "Taliyah can move and cast other abilities while launching Stone Shards, and is unable to basic attack until she launches the third Stone Shard."
+        },
+        {
+          "id": "taliyah_q_effect_3",
+          "description": "Casting Threaded Volley creates an area of Worked Ground at Taliyah's cast location that has a radius of 400 units and lasts 30 seconds. While Taliyah is within an area of Worked Ground, Threaded Volley's cast consumes the area to become empowered with a new effect, costing 10 mana and having 50% reduced cooldown, though not below 0.75 seconds."
+        },
+        {
+          "id": "empowered_damage",
+          "description": "Empowered Damage",
+          "base_by_rank": [
+            99.0,
+            130.5,
+            162.0,
+            193.5,
+            225.0
+          ],
+          "context_notes": "Empowered Active: Taliyah hurls a Boulder that explodes upon the first enemy hit, dealing 180% damage to them and normal damage to nearby enemies, slowing all targets hit for 1."
+        },
+        {
+          "id": "secondary_target_damage",
+          "description": "Secondary Target Damage",
+          "base_by_rank": [
+            55.0,
+            72.5,
+            90.0,
+            107.5,
+            125.0
+          ],
+          "context_notes": "Empowered Active: Taliyah hurls a Boulder that explodes upon the first enemy hit, dealing 180% damage to them and normal damage to nearby enemies, slowing all targets hit for 1."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Empowered Active: Taliyah hurls a Boulder that explodes upon the first enemy hit, dealing 180% damage to them and normal damage to nearby enemies, slowing all targets hit for 1."
+        },
+        {
+          "id": "bonus_monster_damage",
+          "description": "Bonus Monster Damage",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Against monsters, Threaded Volley deals bonus magic damage per Stone Shard, and the Boulder from the empowered cast deals 80% bonus damage against the primary target."
+        },
+        {
+          "id": "boulder_bonus_monster_damage",
+          "description": "Boulder Bonus Monster Damage",
+          "base_by_rank": [
+            36.0,
+            45.0,
+            54.0,
+            63.0,
+            72.0
+          ],
+          "context_notes": "Against monsters, Threaded Volley deals bonus magic damage per Stone Shard, and the Boulder from the empowered cast deals 80% bonus damage against the primary target."
+        }
+      ],
+      "description": "Active: Taliyah barrages 5 Stone Shards in the target direction over 1.5 seconds that each shatter upon the first enemy hit, dealing magic damage to nearby enemies and revealing them for 0.5 seconds. Subsequent hits deal 40% damage.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.0,
+        5.0,
+        4.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          60.0,
+          65.0,
+          70.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 3600.0,
+        "effect_hitbox_radius": 175.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 3600 - 1800 / 2000.",
+        "Source effectRadius: 175 /  225.",
+        "Source notes (summary): Threaded Volley will continue casting while in stasis."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Seismic Shove",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Taliyah creates a ledge at the target location that erects after a brief delay, briefly  knocking enemies hit in the target direction.",
+      "effects": [
+        {
+          "id": "taliyah_w_effect_1",
+          "description": "Active: Taliyah marks the target location and selects a direction. After 0.792 seconds, a ledge erupts from the area that knocks enemies hit 400 units in the target direction over 1 second."
+        }
+      ],
+      "description": "Active: Taliyah marks the target location and selects a direction. After 0.792 seconds, a ledge erupts from the area that knocks enemies hit 400 units in the target direction over 1 second.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        12.5,
+        11.0,
+        9.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          30.0,
+          20.0,
+          10.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Vector.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 225.",
+        "Source notes (summary): The delay is measured from the start of the cast, before the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Unraveled Earth",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Taliyah scatters a field of stones in the target direction that deals magic damage to enemies hit. The stones remain for a few seconds and  slow enemies within.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            105.0,
+            150.0,
+            195.0,
+            240.0
+          ],
+          "context_notes": "Active: Taliyah scatters a field of 22 stones across the ground in the target direction that deals magic damage to enemies hit while they erupt."
+        },
+        {
+          "id": "detonation_magic_damage",
+          "description": "Detonation Magic Damage",
+          "base_by_rank": [
+            25.0,
+            40.0,
+            55.0,
+            70.0,
+            85.0
+          ],
+          "context_notes": "Enemies that dash or are knocked over a stone will detonate it, taking magic damage and becoming stunned for 0."
+        },
+        {
+          "id": "total_maximum_detonation_damage",
+          "description": "Total Maximum Detonation Damage",
+          "base_by_rank": [
+            62.5,
+            100.0,
+            137.5,
+            175.0,
+            212.5
+          ],
+          "context_notes": "An enemy can detonate up to 4 stones, but the damage is reduced by 0% : 75% (based on stones detonated)."
+        },
+        {
+          "id": "taliyah_e_effect_4",
+          "description": "Unraveled Earth deals 225% damage against monsters."
+        }
+      ],
+      "description": "Active: Taliyah scatters a field of 22 stones across the ground in the target direction that deals magic damage to enemies hit while they erupt. The stones then remain for 4 seconds and slow enemies within the area by 20%.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        14.0,
+        14.0,
+        14.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 800.",
+        "Source notes (summary): Unraveled Earth fires 6 rows of stones: the first row has 2 stones, and the rest have 4 each."
+      ]
+    },
+    "ultimate": {
+      "name": "Weaver's Wall",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Taliyah summons a torrent of spiraling rocks that cascades in the target direction, which  knocks aside champions hit and erects a wall of terrain in its wake. The wall lasts a few seconds before slowly disintegrating from the starting end.",
+      "effects": [
+        {
+          "id": "taliyah_r_effect_1",
+          "description": "Active: Taliyah summons a torrent of spiraling rocks that cascades in the target direction, knocking aside champions hit and erecting a wall of terrain in its wake. The wall lasts for 4 seconds after completion, then slowly disintegrates from its starting point."
+        },
+        {
+          "id": "taliyah_r_effect_2",
+          "description": "Taliyah also channels for 1 second, during which Weaver's Wall can be recast and she reveals herself."
+        },
+        {
+          "id": "taliyah_r_effect_3",
+          "description": "Recast: Upon completing the channel, Taliyah surfs on the wall as it emerges, revealing herself in the process. After 0.75 seconds, she may input a movement command to jump off the wall to the target location, and automatically does so upon being immobilized or silenced or reaching maximum range.Once the wall has fully formed, Taliyah can recast to destroy the wall instantly."
+        },
+        {
+          "id": "taliyah_r_effect_4",
+          "description": "Weaver's Wall is placed on a 3-second static cooldown upon taking champion or turret damage."
+        }
+      ],
+      "description": "Active: Taliyah summons a torrent of spiraling rocks that cascades in the target direction, knocking aside champions hit and erecting a wall of terrain in its wake. The wall lasts for 4 seconds after completion, then slowly disintegrates from its starting point.",
+      "cooldown_seconds_by_rank": [
+        180.0,
+        150.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: none.",
+        "Source speed: 1500 / 1200.",
+        "Source notes (summary): If a champion is standing next to a portion of the generated terrain and that portion expires by any means, enemies' spell shield will be consumed."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Taliyah.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Taliyah"
+  }
+}

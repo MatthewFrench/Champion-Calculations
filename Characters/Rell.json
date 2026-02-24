@@ -1,0 +1,368 @@
+{
+  "name": "Rell",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Support",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 320.0,
+      "per_level": 40.0
+    },
+    "move_speed": 315.0,
+    "armor": {
+      "base": 30.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 1.8
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 2.0,
+    "base_windup_seconds": 0.42,
+    "windup_fraction": 0.21,
+    "windup_percent": 21.0,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.42,
+      "attack_total_time": 2.0,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Break the Mold",
+      "type": "Passive",
+      "description_source": "Innate:  Rell's  basic attacks deal bonus magic damage  on-hit equal to a percentage of her total armor and total magic resistance.",
+      "effects": [
+        {
+          "id": "rell_p_effect_1",
+          "description": "Innate: Rell's basic attacks deal bonus magic damage on-hit equal to the sum of 5% of her total armor and 5% of her total magic resistance."
+        },
+        {
+          "id": "rell_p_effect_2",
+          "description": "Innate: Rell's basic attacks on-hit and abilities against non- minions apply a stack of Break The Mold for 5 seconds, refreshing on subsequent hits and stacking up to 5 times. Each stack reduces the target's armor and magic resistance by 3% for a maximum of 15% reduction."
+        },
+        {
+          "id": "rell_p_effect_3",
+          "description": "Rell gains bonus armor and bonus magic resistance equal to the sum resistances reduced from all afflicted enemies."
+        },
+        {
+          "id": "rell_p_effect_4",
+          "description": "Break the Mold will reduce the target's armor and magic resistance by a minimum of 1.5 : 3.18 (based on level)."
+        }
+      ],
+      "description": "Innate: Rell's basic attacks deal bonus magic damage on-hit equal to the sum of 5% of her total armor and 5% of her total magic resistance.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The attacks do not affect structures."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Shattering Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Rell thrusts her lance in the target direction that destroys damage  shields of enemies hit before dealing magic damage and  stunning.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            100.0,
+            140.0,
+            180.0,
+            220.0
+          ],
+          "context_notes": "Active: Rell thrusts her lance in the target direction, lunging forward 100 units and destroying the damage-mitigating shields of all enemies hit (excluding the shields of monsters) before dealing them magic damage and stunning them for 0."
+        }
+      ],
+      "description": "Active: Rell thrusts her lance in the target direction, lunging forward 100 units and destroying the damage-mitigating shields of all enemies hit (excluding the shields of monsters) before dealing them magic damage and stunning them for 0.65 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.5,
+        10.0,
+        9.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.4.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Ferromancy: Crash Down",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive - Mounted Alacrity: While  Rell is Mounted, she gains bonus movement speed.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Passive - Mounted Alacrity: While Rell is Mounted, she gains bonus movement speed."
+        },
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0,
+            80.0,
+            100.0
+          ],
+          "context_notes": "Active: Rell becomes Dismounted and leaps to the target location over the cast time, granting herself a shield that lasts until destroyed or casting Ferromancy: Mount Up."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Rell becomes Dismounted and leaps to the target location over the cast time, granting herself a shield that lasts until destroyed or casting Ferromancy: Mount Up."
+        },
+        {
+          "id": "rell_w_effect_3",
+          "description": "While Rell is Dismounted, she can cast Ferromancy: Mount Up. Upon completing a Recall channel or respawning, Rell will automatically revert to Mounted form without casting the ability and reset Ferromancy: Mount Up's cooldown."
+        },
+        {
+          "id": "rell_w_effect_4",
+          "description": "This ability can be cast only while Rell is Mounted. Rell can cast Magnet Storm during the dash, and is considered to be dismounted at the start of the cast time."
+        }
+      ],
+      "description": "Passive - Mounted Alacrity: While Rell is Mounted, she gains bonus movement speed.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.625,
+        "effect_hitbox_radius": 180.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.625.",
+        "Source effectRadius: 180.",
+        "Source notes (summary): Mounted Alacrity grants 15 bonus movement speed if the ability has not been learned (rank 0)."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Full Tilt",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Rell empowers herself and an allied  champion with bonus movement speed for a few seconds, which is increased when moving towards the empowered ally or an enemy champion.",
+      "effects": [
+        {
+          "id": "rell_e_effect_1",
+          "description": "Active: Rell powers up herself and the target allied champion for 3 seconds, both gaining 10% bonus movement speed, increased to 25% while facing the empowered ally or a visible enemy champion."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            5.0,
+            5.5,
+            6.0,
+            6.5,
+            7.0
+          ],
+          "context_notes": "Additionally, Rell's next basic attack or Shattering Strike within 5 seconds creates an explosion around the target that deals bonus magic damage, capped at 150 : 317."
+        },
+        {
+          "id": "rell_e_effect_3",
+          "description": "If cast without a valid target, or self-cast, Full Tilt will automatically target the closest allied champion in range."
+        }
+      ],
+      "description": "Active: Rell powers up herself and the target allied champion for 3 seconds, both gaining 10% bonus movement speed, increased to 25% while facing the empowered ally or a visible enemy champion.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 300 / 2200 / 1600.",
+        "Source notes (summary): If Shattering Strike hits more than one enemy, the Full Tilt explosion will be centered around the unit with the lowest Spawn ID."
+      ]
+    },
+    "ultimate": {
+      "name": "Magnet Storm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Rell erupts in magnetic fury,  pulling nearby enemies inward. She then emits a  Kinematic field that continually deals magic damage over a short time.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            15.0,
+            25.0,
+            35.0
+          ],
+          "context_notes": "Active: Rell erupts with magnetic fury, pulling nearby enemies inward and creating a gravitational field around her for the next 2 seconds that deals magic damage every 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            120.0,
+            200.0,
+            280.0
+          ],
+          "context_notes": "Active: Rell erupts with magnetic fury, pulling nearby enemies inward and creating a gravitational field around her for the next 2 seconds that deals magic damage every 0."
+        }
+      ],
+      "description": "Active: Rell erupts with magnetic fury, pulling nearby enemies inward and creating a gravitational field around her for the next 2 seconds that deals magic damage every 0.25 seconds to nearby enemies and drags them towards her.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 300.0,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source speed: 300.",
+        "Source effectRadius: 450 /  375.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Rell.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Rell"
+  }
+}

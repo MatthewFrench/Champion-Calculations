@@ -1,0 +1,334 @@
+{
+  "name": "Alistar",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Support",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 685.0,
+      "per_level": 120.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 40.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 8.5,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 3.75
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.125
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Triumphant Roar",
+      "type": "Passive",
+      "description_source": "Innate:  Alistar generates  stacks of Triumph from  stunning or  displacing enemy champions or when a nearby enemy  dies.",
+      "effects": [
+        {
+          "id": "alistar_p_effect_1",
+          "description": "Innate: Alistar generates a stack of Triumph for each enemy champion he stuns or displaces with his abilities, and each time a nearby enemy minion or non-epic monster dies. He generates 7 stacks if a nearby enemy champion or epic monster dies."
+        },
+        {
+          "id": "alistar_p_effect_2",
+          "description": "At 7 stacks, Alistar consumes them all to heal himself for 5% of his maximum health and nearby allied champions for 7% of his maximum health."
+        },
+        {
+          "id": "alistar_p_effect_3",
+          "description": "Triumphant Roar can occur only once every few seconds, though Alistar may still generate stacks before then."
+        }
+      ],
+      "description": "Innate: Alistar generates a stack of Triumph for each enemy champion he stuns or displaces with his abilities, and each time a nearby enemy minion or non-epic monster dies. He generates 7 stacks if a nearby enemy champion or epic monster dies.",
+      "cooldown_seconds_by_rank": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1000 / 950.",
+        "Source notes (summary): If Alistar is at 7 stacks when Triumphant Roar comes off cooldown, he will roar as soon as it elapses."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Pulverize",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Alistar smashes the ground, dealing magic damage to nearby enemies and briefly  stunning and  knocking them up.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            100.0,
+            140.0,
+            180.0,
+            220.0
+          ],
+          "context_notes": "Active: Alistar smashes the ground beneath him, dealing magic damage to nearby enemies and stunning and knocking them up simultaneously for 1 second."
+        }
+      ],
+      "description": "Active: Alistar smashes the ground beneath him, dealing magic damage to nearby enemies and stunning and knocking them up simultaneously for 1 second.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25 / 0.15.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): Pulverize can be buffered during Headbutt to cast with reduced cast time when the dash ends."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Headbutt",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Alistar  dashes to the target enemy, dealing magic damage,  stunning, and  knocking them back.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            110.0,
+            165.0,
+            220.0,
+            275.0
+          ],
+          "context_notes": "Active: Alistar dashes to the target enemy's location."
+        }
+      ],
+      "description": "Active: Alistar dashes to the target enemy's location. If they are within 400 units upon arrival, he deals them magic damage and knocks them back 700 units over 0.5 seconds while also stunning them for 0.75 seconds.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 1200 / 1544 / ∞.",
+        "Source notes (summary): The dash speed depends on the inverse of the distance to the target: If Alistar's radius overlaps with his target's, he will dash with 1200 speed."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Trample",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Alistar becomes  ghosted and continually deals magic damage to nearby enemies. He generates a stack of Trample each time this damages at least one  champion.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            8.0,
+            11.0,
+            14.0,
+            17.0,
+            20.0
+          ],
+          "context_notes": "Active: Alistar tramples the ground around him every 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            80.0,
+            110.0,
+            140.0,
+            170.0,
+            200.0
+          ],
+          "context_notes": "Active: Alistar tramples the ground around him every 0."
+        },
+        {
+          "id": "alistar_e_effect_2",
+          "description": "At 5 stacks, Alistar's next basic attack on-hit against a champion within 6 seconds ends Trample's effects to deal 20 : 305 (based on level) bonus magic damage and stun the target for 1 second."
+        }
+      ],
+      "description": "Active: Alistar tramples the ground around him every 0.5 seconds over 5 seconds, becoming ghosted and dealing magic damage to nearby enemies. Each time this damages at least one enemy champion, he generates a stack of Trample that lasts for the remaining duration, stacking up to 5 times.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.5,
+        11.0,
+        10.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): Trample deals persistent area damage damage around Alistar, while the bonus damage on the resulting attack is proc damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Unbreakable Will",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Alistar lets out a wild roar,  cleansing all  crowd control effects and gaining damage reduction for a few seconds.",
+      "effects": [
+        {
+          "id": "damage_reduction",
+          "description": "Damage Reduction",
+          "base_by_rank": [
+            55.0,
+            65.0,
+            75.0
+          ],
+          "context_notes": "Active: Alistar cleanses himself of all crowd control."
+        }
+      ],
+      "description": "Active: Alistar cleanses himself of all crowd control. For the next 7 seconds, he reduces incoming damage taken.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): True damage cannot be reduced by any means and will deal full damage to Alistar during Unbreakable Will."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Alistar.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Alistar"
+  }
+}

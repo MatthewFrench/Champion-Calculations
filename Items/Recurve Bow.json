@@ -31,13 +31,18 @@
       "interval_seconds": null,
       "trigger": "on_hit",
       "applies_to": "enemy",
-      "conditions": [],
+      "conditions": [
+        "exclude_structures"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "benefits_from_lifesteal": true
+      },
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.79
     }
   ],
   "shop": {
@@ -59,7 +64,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.066676+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Sting adds 15 bonus physical damage to each qualifying basic-attack hit as an on-hit rider.",
+      "Player-visible behavior: Sting damage does not apply to structures and the bonus damage contributes to lifesteal."
+    ]
   },
   "sources": [
     {
@@ -79,6 +88,12 @@
       "path": "From Online/items/Recurve Bow.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Recurve Bow",
+      "url": "https://wiki.leagueoflegends.com/en-us/Recurve_Bow",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Sting on-hit targeting exclusions and lifesteal interaction semantics"
     }
   ]
 }

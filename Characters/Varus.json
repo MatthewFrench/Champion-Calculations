@@ -1,0 +1,444 @@
+{
+  "name": "Varus",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Artillery",
+    "Mage",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 105.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 320.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 575.0,
+    "health_regeneration": {
+      "base": 3.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 3.4
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.124561406672,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Living Vengeance",
+      "type": "Passive",
+      "description_source": "Innate: When  Varus kills an enemy, he gains  bonus attack speed,  bonus attack damage, and  ability power for a few seconds. The amount is based on his other sources of  bonus attack speed, and is increased on an enemy  champion  takedown.",
+      "effects": [
+        {
+          "id": "varus_p_effect_1",
+          "description": "Innate: When Varus kills an enemy, he gains 10% / 15% / 20% (based on level) bonus attack speed as well as bonus attack damage and ability power equal to 10% of his total bonus attack speed for 5 / 7 / 9 / 11 (based on level) seconds, refreshing on subsequent unit kills."
+        },
+        {
+          "id": "varus_p_effect_2",
+          "description": "Varus also gains Living Vengeance's bonuses upon scoring a champion takedown, which empowers it for the same duration to grant him 50% bonus attack speed, bonus attack damage and ability power equal to 25% of his total bonus attack speed, and an increased attack speed cap of 3.33. Living Vengeance's empowerment may only be refreshed by subsequent champion takedowns."
+        }
+      ],
+      "description": "Innate: When Varus kills an enemy, he gains 10% / 15% / 20% (based on level) bonus attack speed as well as bonus attack damage and ability power equal to 10% of his total bonus attack speed for 5 / 7 / 9 / 11 (based on level) seconds, refreshing on subsequent unit kills.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Varus cannot gain the standard bonuses while Living Vengeance is empowered."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Piercing Arrow",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "varus_q_effect_1",
+          "description": "Active: Varus charges while being slowed by 20% for up to 4 seconds to increase Piercing Arrow's range over the first 1.5 seconds and its effects over the first 1.25 seconds of the channel."
+        },
+        {
+          "id": "varus_q_effect_2",
+          "description": "Piercing Arrow can be recast within the duration. If the charge completes without reactivation, Piercing Arrow is cancelled and refunds 50% of the mana cost."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            53.33,
+            106.67,
+            160.0,
+            213.33,
+            266.67
+          ],
+          "context_notes": "Recast: Varus fires a piercing arrow in the target direction that deals physical damage to enemies hit."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            80.0,
+            160.0,
+            240.0,
+            320.0,
+            400.0
+          ],
+          "context_notes": "Recast: Varus fires a piercing arrow in the target direction that deals physical damage to enemies hit."
+        },
+        {
+          "id": "minimum_reduced_damage",
+          "description": "Minimum Reduced Damage",
+          "base_by_rank": [
+            17.6,
+            35.2,
+            52.8,
+            70.4,
+            88.0
+          ],
+          "context_notes": "Recast: Varus fires a piercing arrow in the target direction that deals physical damage to enemies hit."
+        },
+        {
+          "id": "maximum_reduced_damage",
+          "description": "Maximum Reduced Damage",
+          "base_by_rank": [
+            26.4,
+            52.8,
+            79.2,
+            105.6,
+            132.0
+          ],
+          "context_notes": "Recast: Varus fires a piercing arrow in the target direction that deals physical damage to enemies hit."
+        }
+      ],
+      "description": "Active: Varus charges while being slowed by 20% for up to 4 seconds to increase Piercing Arrow's range over the first 1.5 seconds and its effects over the first 1.25 seconds of the channel.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1900.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Direction.",
+        "Source castTime: none.",
+        "Source speed: 1900.",
+        "Source notes (summary): The arrow missile range is 825 to 1525; The range increases by 140 per 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Blighted Quiver",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Varus'  basic attacks deal bonus magic damage and apply a  stack of Blight, up to 3. His  abilities detonate all Blight stacks on enemies hit to apply new effects.",
+      "effects": [
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            8.0,
+            17.0,
+            26.0,
+            35.0,
+            44.0
+          ],
+          "context_notes": "Passive: Varus' basic attacks are empowered to deal bonus magic damage and apply a stack of Blight on-hit for 6 seconds, refreshing on subsequent applications and stacking up to 3 times."
+        },
+        {
+          "id": "bonus_magic_damage_per_stack",
+          "description": "Bonus Magic Damage per Stack",
+          "base_by_rank": [
+            3.0,
+            3.5,
+            4.0,
+            4.5,
+            5.0
+          ],
+          "context_notes": "Blight: For each stack consumed, the target is dealt bonus magic damage."
+        },
+        {
+          "id": "bonus_magic_damage_at_max_stacks",
+          "description": "Bonus Magic Damage at Max Stacks",
+          "base_by_rank": [
+            9.0,
+            10.5,
+            12.0,
+            13.5,
+            15.0
+          ],
+          "context_notes": "Blight: For each stack consumed, the target is dealt bonus magic damage."
+        },
+        {
+          "id": "maximum_bonus_magic_damage_per_stack",
+          "description": "Maximum Bonus Magic Damage per Stack",
+          "base_by_rank": [
+            4.5,
+            5.25,
+            6.0,
+            6.75,
+            7.5
+          ],
+          "context_notes": "Blight: For each stack consumed, the target is dealt bonus magic damage."
+        },
+        {
+          "id": "maximum_bonus_magic_damage_at_max_stacks",
+          "description": "Maximum Bonus Magic Damage at Max Stacks",
+          "base_by_rank": [
+            13.5,
+            15.75,
+            18.0,
+            20.25,
+            22.5
+          ],
+          "context_notes": "Blight: For each stack consumed, the target is dealt bonus magic damage."
+        },
+        {
+          "id": "active_minimum_magic_damage",
+          "description": "Active Minimum Magic Damage",
+          "base_by_rank": [
+            6.0,
+            8.0,
+            10.0,
+            12.0,
+            14.0
+          ],
+          "context_notes": "Active: Varus' next Piercing Arrow within 5."
+        },
+        {
+          "id": "active_maximum_magic_damage",
+          "description": "Active Maximum Magic Damage",
+          "base_by_rank": [
+            9.0,
+            12.0,
+            15.0,
+            18.0,
+            21.0
+          ],
+          "context_notes": "Active: Varus' next Piercing Arrow within 5."
+        },
+        {
+          "id": "varus_w_effect_4",
+          "description": "If Varus does not cast Piercing Arrow, Blighted Quiver can be recast after 1 second within the duration, and does so automatically afterwards or when he dies. Blighted Quiver can be cast during the first 0.85 seconds of Piercing Arrow's charge, and will be placed on full cooldown after the charge ends even if Piercing Arrow is not recast."
+        },
+        {
+          "id": "varus_w_effect_5",
+          "description": "Recast: Varus ends Blighted Quiver and places it on a 1-second cooldown."
+        },
+        {
+          "id": "varus_w_effect_6",
+          "description": "Blighted Quiver's active and recast can both be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Passive: Varus' basic attacks are empowered to deal bonus magic damage and apply a stack of Blight on-hit for 6 seconds, refreshing on subsequent applications and stacking up to 3 times. Varus' abilities detonate all Blight stacks on affected enemies hit.",
+      "cooldown_seconds_by_rank": [
+        40.0,
+        40.0,
+        40.0,
+        40.0,
+        40.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The monster damage cap is also increased by 0% : 50% (based on Piercing Arrow's charge time) if the stacks were consumed with Piercing Arrow."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Hail of Arrows",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Varus fires a hail of arrows to the target location that deals physical damage to enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Varus fires a hail of arrows at the target location that land after 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "The area then becomes desecrated for 4 seconds, slowing enemies within and inflicting them with Grievous Wounds."
+        }
+      ],
+      "description": "Active: Varus fires a hail of arrows at the target location that land after 0.5 seconds, dealing physical damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        16.0,
+        14.0,
+        12.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.2419,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.2419.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Slow lingers for 0."
+      ]
+    },
+    "ultimate": {
+      "name": "Chain of Corruption",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Varus unleashes a tendril in the target direction that infects the first enemy champion hit, dealing magic damage and  rooting them for a short time. They are also  revealed and rapidly inflicted with  Blight stacks.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Varus unleashes a tendril of corruption in the target direction that infects the first enemy champion hit, dealing magic damage and rooting them for 2 seconds, during which they are revealed."
+        },
+        {
+          "id": "varus_r_effect_2",
+          "description": "Upon impact, the tendril roots into the ground from where the target was hit, seeking out nearby enemy champions that are in the immediate area. If a target does not leave the area within 2 seconds, they subsequently become infected as well, taking the same damage and effects. A new tendril is then spread out from the infected target that is closest to a nearby uninfected enemy champion. The infection can spread repeatedly until there are no new targets."
+        },
+        {
+          "id": "varus_r_effect_3",
+          "description": "The target does not have to be visible to be caught by the tendril."
+        }
+      ],
+      "description": "Active: Varus unleashes a tendril of corruption in the target direction that infects the first enemy champion hit, dealing magic damage and rooting them for 2 seconds, during which they are revealed. Over the first 1.75 seconds of the root, they are also inflicted with maximum stacks of Blight.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        80.0,
+        60.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.2419,
+        "projectile_speed": 1500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.2419.",
+        "Source speed: 1500.",
+        "Source notes (summary): The first Blight stack is applied after ~0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Varus.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Varus"
+  }
+}

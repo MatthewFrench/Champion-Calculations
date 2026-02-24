@@ -118,7 +118,11 @@
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7102_realityfracture.png",
   "simpleDescription": null,
@@ -129,11 +133,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.041077+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: ZZ'Rot periodically spawns allied Voidmites from qualifying basic-attack or damaging-ability events, with a shared cooldown.",
       "Player-visible behavior: spawned Voidmites are untargetable temporary attackers with short lifetime and per-attack scaling damage.",
-      "Page notes include clone-on-death spawn behavior and visual-state details (hidden health bar/transparency); visual details are documented but not modeled as combat-state mechanics."
+      "Page notes include clone-on-death spawn behavior and visual-state details (hidden health bar/transparency); visual details are documented but not modeled as combat-state mechanics.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

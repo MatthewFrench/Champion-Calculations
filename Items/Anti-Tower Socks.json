@@ -59,9 +59,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.710565+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Manual batch review A-items chunk 1."
+      "Manual batch review A-items chunk 1.",
+      "Item page redirects to Siege minion; this entry models siege-minion turret-shot damage scaling and lane-minion on-hit behavior. Mid-lane turret-only attack-speed behavior remains documented but unmodeled."
     ]
   },
   "sources": [
@@ -82,6 +83,18 @@
       "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
       "accessed": "2026-02-23",
       "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Anti-Tower_Socks",
+      "accessed": "2026-02-24",
+      "used_for": "page-level item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki gameplay page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Siege_minion",
+      "accessed": "2026-02-24",
+      "used_for": "canonical combat-rule source for Anti-Tower Socks redirect semantics"
     }
   ]
 }

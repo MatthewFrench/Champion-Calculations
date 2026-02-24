@@ -41,7 +41,9 @@
       "trigger": "passive",
       "applies_to": "self",
       "conditions": [
-        "champion_damage"
+        "incoming_champion_damage_only",
+        "cooldown_restarts_on_champion_damage",
+        "placed_on_cooldown_on_death"
       ],
       "status_effects": [
         "safeguard"
@@ -52,10 +54,14 @@
         3,
         30
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.83
     }
   ],
   "shop": {
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    },
     "purchasable": true,
     "tags": [
       "MAGE"
@@ -68,9 +74,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.020137+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Safeguard cooldown timer restarts upon taking champion damage."
+      "Execution model: Safeguard is a defensive passive state that applies only to incoming champion damage, lingers 3 seconds after champion damage is taken, and then enters a 30-second cooldown that restarts on champion damage events.",
+      "Availability/economy note: this distributed item is Arena-scoped via Prismatic Item Anvils; Tier-1 datasets expose reconciliation prices (total 1000 / sell 400) while page-level presentation shows anvil-style acquisition (cost 0 / sell 2000).",
+      "Known-bug note retained as non-canonical behavior: page notes mention a spell-shield interaction bug; structured data models intended Safeguard behavior by default."
     ]
   },
   "sources": [
@@ -91,6 +99,12 @@
       "path": "From Online/items/Crown of the Shattered Queen.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Crown of the Shattered Queen",
+      "url": "https://wiki.leagueoflegends.com/en-us/Crown_of_the_Shattered_Queen",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Safeguard timing/cooldown semantics, Arena-only availability, and distributed-item acquisition/economy presentation"
     }
   ]
 }

@@ -20,17 +20,25 @@
       "raw": "Bind allied champion as Oathsworn after cast/channel; target incapacitated after channel.",
       "effect_type": "utility",
       "stat": "oathsworn_bond",
+      "cast_time_seconds": 3.5,
+      "channel_seconds": 3.0,
       "duration_seconds": 6,
       "trigger": "active",
       "applies_to": "ally",
       "conditions": [
+        "unit_targeted_ally_champion",
         "cast_time_3.5s",
-        "channel_3s"
+        "channel_3s",
+        "consumes_item_on_success"
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
+    "prices": {
+      "total": 0,
+      "sell": 0
+    },
     "purchasable": true
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3599_kalistapassiveitem.png",
@@ -42,9 +50,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.714581+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Manual batch review A-items chunk 1."
+      "Execution model: Oathsworn Bond is a unit-targeted ally bind with a 3.5-second cast time, a 3-second joint channel, and 6 seconds of target inability-to-act after the channel.",
+      "Player-visible behavior: this item is champion-scoped (Kalista and Sylas interactions) and consumes itself on successful bind.",
+      "Follow-up note: page-level notes include rebind/no-effect time-window nuances (for example post-3:00 no-effect casts with cooldown) that are intentionally documented for later runtime policy support."
     ]
   },
   "sources": [
@@ -65,6 +75,12 @@
       "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
       "accessed": "2026-02-23",
       "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Black Spear",
+      "url": "https://wiki.leagueoflegends.com/en-us/Black_Spear",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Oathsworn Bond cast/channel timing, champion scope, and bind execution behavior"
     }
   ]
 }

@@ -1,0 +1,448 @@
+{
+  "name": "Gangplank",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 114.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 280.0,
+      "per_level": 60.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 31.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 4.2
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 3.2
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.51999998092651,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.16447368627439948,
+    "windup_percent": 16.44736862743995,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.51999998092651,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Trial by Fire",
+      "type": "Passive",
+      "description_source": "Innate: Every few seconds,  Gangplank's next basic attack  on-hit will burn the target, continually dealing bonus true damage and granting him  bonus movement speed.",
+      "effects": [
+        {
+          "id": "gangplank_p_effect_1",
+          "description": "Innate: Periodically, Gangplank empowers his next basic attack on-hit to set the target on fire, dealing them[ 50 : 273.53 (based on level) (+ 100% bonus AD) bonus true damage over 2.5 seconds. ][ 5 : 27.35 (based on level) (+ 10% bonus AD) bonus true damage every 0.25 seconds over 2.5 seconds. ] Turrets are dealt 50% damage."
+        },
+        {
+          "id": "gangplank_p_effect_2",
+          "description": "If Gangplank successfully hits a target with Trial by Fire, he gains 15% : 31.76% (based on level) bonus movement speed for 2 seconds. Every time a Powder Keg explodes, the cooldown for Trial by Fire resets and Gangplank gains its bonus movement speed."
+        },
+        {
+          "id": "gangplank_p_effect_3",
+          "description": "Trial by Fire cannot be applied with Parrrley nor Powder Keg."
+        }
+      ],
+      "description": "Innate: Periodically, Gangplank empowers his next basic attack on-hit to set the target on fire, dealing them[ 50 : 273.53 (based on level) (+ 100% bonus AD) bonus true damage over 2.5 seconds. ][ 5 : 27.35 (based on level) (+ 10% bonus AD) bonus true damage every 0.25 seconds over 2.5 seconds. ] Turrets are dealt 50% damage.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        15.0,
+        15.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Reapplying Trial by Fire before a previous application has run out will stack the full damage, instead of refreshing the duration."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Parrrley",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Gangplank shoots the target enemy with his pistol, dealing physical damage and applying  on-hit and  on-attack effects.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            10.0,
+            40.0,
+            70.0,
+            100.0,
+            130.0
+          ],
+          "context_notes": "Active: Gangplank fires a shot at the target enemy that deals physical damage, applies on-hit effects as a ranged attack, and triggers on-attack effects."
+        },
+        {
+          "id": "gold_plunder",
+          "description": "Gold Plunder",
+          "base_by_rank": [
+            3.0,
+            4.0,
+            5.0,
+            6.0,
+            7.0
+          ],
+          "context_notes": "If Parrrley kills the target, Gangplank plunders gold and Silver Serpents."
+        },
+        {
+          "id": "silver_serpent_plunder",
+          "description": "Silver Serpent Plunder",
+          "base_by_rank": [
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0
+          ],
+          "context_notes": "If Parrrley kills the target, Gangplank plunders gold and Silver Serpents."
+        },
+        {
+          "id": "gangplank_q_effect_3",
+          "description": "Silver Serpents can be spent while at the shop to upgrade Cannon Barrage."
+        }
+      ],
+      "description": "Active: Gangplank fires a shot at the target enemy that deals physical damage, applies on-hit effects as a ranged attack, and triggers on-attack effects. Parrrley can critically strike for (200% + 30%) damage.",
+      "cooldown_seconds_by_rank": [
+        4.5,
+        4.5,
+        4.5,
+        4.5,
+        4.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          45.0,
+          40.0,
+          35.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 2600.",
+        "Source notes (summary): Parrrley deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Remove Scurvy",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Gangplank eats citrus to  cleanse  crowd control effects and  heal based on his missing health.",
+      "effects": [
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            45.0,
+            70.0,
+            95.0,
+            120.0,
+            145.0
+          ],
+          "context_notes": "Active: Gangplank consumes a large quantity of citrus fruit, cleansing himself from all crowd control and healing himself."
+        }
+      ],
+      "description": "Active: Gangplank consumes a large quantity of citrus fruit, cleansing himself from all crowd control and healing himself.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.0,
+        18.0,
+        16.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Remove Scury does not remove debuffs other than crowd control, even if both occur from the same effect."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Powder Keg",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Gangplank places a Powder Keg at the target location, which can be  attacked or  shot to damage it. If an enemy destroys a Powder Keg, it is safely dismantled.",
+      "effects": [
+        {
+          "id": "gangplank_e_effect_1",
+          "description": "Active: Gangplank consumes a charge to place a powder keg at the target location that lasts for 25 seconds and will connect to other kegs with overlapping connection radius through a trail of black powder. The keg starts with 3 health and loses 1 every 2 / 1 / 0.5 (based on level) seconds until it is left with 1 health."
+        },
+        {
+          "id": "maximum_charges",
+          "description": "Maximum charges",
+          "base_by_rank": [
+            3.0,
+            3.0,
+            4.0,
+            4.0,
+            5.0
+          ],
+          "context_notes": "Gangplank periodically stocks a Powder Keg charge, up to a maximum."
+        },
+        {
+          "id": "gangplank_e_effect_3",
+          "description": "Kegs can be attacked by enemies or Gangplank (including his Parrrley), dealing 1 damage to it. When an enemy destroys it, it is safely defused. When Gangplank destroys it, it explodes and also triggers a chain reaction that explodes other nearby connected kegs with a 0.33 seconds-delay between explosions. The explosions also grant sight of their radiuses for 2 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Enemies caught in an explosion are dealt the triggering attack's damage and slowed for 2 seconds."
+        },
+        {
+          "id": "bonus_champion_damage",
+          "description": "Bonus Champion Damage",
+          "base_by_rank": [
+            75.0,
+            95.0,
+            115.0,
+            135.0,
+            155.0
+          ],
+          "context_notes": "Enemies caught in an explosion are dealt the triggering attack's damage and slowed for 2 seconds."
+        },
+        {
+          "id": "gangplank_e_effect_5",
+          "description": "The triggering attack on the keg can critically strike, causing the explosion to deal the attack's critical damage."
+        }
+      ],
+      "description": "Active: Gangplank consumes a charge to place a powder keg at the target location that lasts for 25 seconds and will connect to other kegs with overlapping connection radius through a trail of black powder. The keg starts with 3 health and loses 1 every 2 / 1 / 0.5 (based on level) seconds until it is left with 1 health.",
+      "cooldown_seconds_by_rank": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "cost": {
+        "resource": "charge",
+        "value_by_rank": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 345.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 345 /  360.",
+        "Source notes (summary): The slow, bonus physical damage to champions, and keg health decay speed are determined when the keg is placed."
+      ]
+    },
+    "ultimate": {
+      "name": "Cannon Barrage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Gangplank orders a cannon bombardment to the target location, each blast deals magic damage and  slows enemies within.",
+      "effects": [
+        {
+          "id": "magic_damage_per_wave",
+          "description": "Magic Damage Per Wave",
+          "base_by_rank": [
+            40.0,
+            70.0,
+            100.0
+          ],
+          "context_notes": "Active: Gangplank shoots a flare into the air, signaling his ship off-shore to fire upon the target location, calling down 12 waves of cannonballs in clusters of 3 every 2 seconds, each wave in a cluster hitting 0."
+        },
+        {
+          "id": "magic_damage_per_cluster",
+          "description": "Magic Damage Per Cluster",
+          "base_by_rank": [
+            120.0,
+            210.0,
+            300.0
+          ],
+          "context_notes": "Active: Gangplank shoots a flare into the air, signaling his ship off-shore to fire upon the target location, calling down 12 waves of cannonballs in clusters of 3 every 2 seconds, each wave in a cluster hitting 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            480.0,
+            840.0,
+            1200.0
+          ],
+          "context_notes": "Active: Gangplank shoots a flare into the air, signaling his ship off-shore to fire upon the target location, calling down 12 waves of cannonballs in clusters of 3 every 2 seconds, each wave in a cluster hitting 0."
+        },
+        {
+          "id": "gangplank_r_effect_2",
+          "description": "While within the shop area, Gangplank can purchase upgrades for his ship at the cost of 500 Silver Serpents each, which improve Cannon Barrage with new effects:"
+        },
+        {
+          "id": "true_damage_with_death_s_daughter",
+          "description": "True Damage with Death's Daughter",
+          "base_by_rank": [
+            120.0,
+            210.0,
+            300.0
+          ],
+          "context_notes": "Death's Daughter: A large cannonball lands in the center of the barrage after the first cluster of waves occur, dealing a cluster's worth of true damage to enemies within the impact and slowing them by 75% for 1 second."
+        },
+        {
+          "id": "total_mixed_damage_with_death_s_daughter",
+          "description": "Total Mixed Damage with Death's Daughter",
+          "base_by_rank": [
+            600.0,
+            1050.0,
+            1500.0
+          ],
+          "context_notes": "Death's Daughter: A large cannonball lands in the center of the barrage after the first cluster of waves occur, dealing a cluster's worth of true damage to enemies within the impact and slowing them by 75% for 1 second."
+        },
+        {
+          "id": "total_magic_damage_with_fire_at_will",
+          "description": "Total Magic Damage with Fire at Will",
+          "base_by_rank": [
+            720.0,
+            1260.0,
+            1800.0
+          ],
+          "context_notes": "Fire at Will: Cannon Barrage fires[ 6 additional waves ][ 2 additional clusters ]over its duration; 18 waves of cannonballs are called down in clusters of 3 every 1."
+        },
+        {
+          "id": "maximum_mixed_total_damage_with_fire_at_will_and_death_s_daughter",
+          "description": "Maximum Mixed Total Damage with Fire at Will and Death's Daughter",
+          "base_by_rank": [
+            840.0,
+            1470.0,
+            2100.0
+          ],
+          "context_notes": "Fire at Will: Cannon Barrage fires[ 6 additional waves ][ 2 additional clusters ]over its duration; 18 waves of cannonballs are called down in clusters of 3 every 1."
+        },
+        {
+          "id": "gangplank_r_effect_5",
+          "description": "Raise Morale: Cannon Barrage grants Gangplank and all allies within the area 40% bonus movement speed, lingering for 2 seconds."
+        }
+      ],
+      "description": "Active: Gangplank shoots a flare into the air, signaling his ship off-shore to fire upon the target location, calling down 12 waves of cannonballs in clusters of 3 every 2 seconds, each wave in a cluster hitting 0.25 seconds after the other, and granting sight of the area for the duration. Each wave deals magic damage to all enemies within the area and slows them by 30% for 0.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        160.0,
+        140.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 580.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 580.",
+        "Source notes (summary): Gangplank's upgrades for Cannon Barrage are offered through a special menu in the HUD which is only visible while inside the area eligible for accessing the shop."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Gangplank.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Gangplank"
+  }
+}

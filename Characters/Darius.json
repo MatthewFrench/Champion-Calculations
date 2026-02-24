@@ -1,0 +1,380 @@
+{
+  "name": "Darius",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 652.0,
+      "per_level": 114.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 263.0,
+      "per_level": 58.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 37.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 10.0,
+      "per_level": 0.95
+    },
+    "resource_regeneration": {
+      "base": 6.6,
+      "per_level": 0.35
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 5.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Hemorrhage",
+      "type": "Passive",
+      "description_source": "Innate:  Darius'  basic attacks and damaging  abilities apply a  stack of Hemorrhage, stacking up to a cap.",
+      "effects": [
+        {
+          "id": "darius_p_effect_1",
+          "description": "Innate: Darius' damaging basic attacks and abilities apply a stack of Hemorrhage to enemies for 5 seconds, refreshing on subsequent applications and stacking up to 5 times."
+        },
+        {
+          "id": "darius_p_effect_2",
+          "description": "Hemorrhage: For each stack, the target is dealt[ 13 : 32 (based on level) (+ 30% bonus AD) total physical damage over the duration, ][ 3.25 : 8 (based on level) (+ 7.5% bonus AD) physical damage every 1.25 seconds over the duration, ]up to a maximum of[ 65 : 160 (based on level) (+ 150% bonus AD) total physical damage over the duration. ][ 16.25 : 40 (based on level) (+ 37.5% bonus AD) physical damage with each tick. ]Hemorrhage deals 200% damage against monsters."
+        },
+        {
+          "id": "darius_p_effect_3",
+          "description": "When Darius kills a champion with Noxian Guillotine, or applies 5 stacks on an enemy champion, he becomes empowered with Noxian Might for 5 seconds."
+        },
+        {
+          "id": "darius_p_effect_4",
+          "description": "Noxian Might: Darius gains 30 : 280 (based on level) bonus attack damage and instantly applies 5 Hemorrhage stacks through his usual means."
+        }
+      ],
+      "description": "Innate: Darius' damaging basic attacks and abilities apply a stack of Hemorrhage to enemies for 5 seconds, refreshing on subsequent applications and stacking up to 5 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): If Hemorrhage's total post-mitigation damage is higher than the target's current health, a small area of sight is granted around the target for the duration of Hemorrhage and for another 2 seconds after it ends."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Decimate",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Darius briefly winds up to spin his axe in a circle while  ghosted, dealing physical damage to enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage_blade",
+          "description": "Physical Damage (Blade)",
+          "base_by_rank": [
+            50.0,
+            80.0,
+            110.0,
+            140.0,
+            170.0
+          ],
+          "context_notes": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0."
+        },
+        {
+          "id": "reduced_damage_handle",
+          "description": "Reduced Damage (Handle)",
+          "base_by_rank": [
+            17.5,
+            28.0,
+            38.5,
+            49.0,
+            59.5
+          ],
+          "context_notes": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0."
+        },
+        {
+          "id": "darius_q_effect_2",
+          "description": "Against champions and large monsters hit, Darius heals for 17% : 51% (based on number of targets hit by the outer radius) of his missing health. Enemies hit by the inner radius do not refresh the duration of or gain a stack of Hemorrhage."
+        },
+        {
+          "id": "darius_q_effect_3",
+          "description": "Darius can move during Decimate, but is unable to declare basic attacks or cast Apprehend or Noxian Guillotine."
+        }
+      ],
+      "description": "Active: Darius becomes ghosted for 1 second and hefts his axe for 0.75 seconds, afterward swinging it around himself to deal physical damage to nearby enemies. Enemies within the inner radius take 35% damage.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          25.0,
+          30.0,
+          35.0,
+          40.0,
+          45.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 240.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 240 / 460.",
+        "Source notes (summary): Decimate will cancel if Darius enters stasis or uses Dash during the delay."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Crippling Strike",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Darius' next  basic attack within a few seconds deals increased physical damage and  slows the target.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "Active: Darius empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and slow the target by 90% for 1 second."
+        },
+        {
+          "id": "darius_w_effect_2",
+          "description": "If this attack kills the target, half of Crippling Strike's cooldown is reduced and its mana cost is refunded."
+        },
+        {
+          "id": "darius_w_effect_3",
+          "description": "Crippling Strike resets Darius' basic attack timer."
+        }
+      ],
+      "description": "Active: Darius empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and slow the target by 90% for 1 second. This damage is affected by critical strike modifiers.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Crippling Strike deals basic damage but will also trigger spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Apprehend",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "armor_penetration",
+          "description": "Armor Penetration",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Passive: Darius gains armor penetration."
+        },
+        {
+          "id": "darius_e_effect_2",
+          "description": "Active: Darius sweeps his axe in a cone in the target direction, granting sight of the area for 1 second while pulling enemies hit towards him. Upon arrival, they rebound 150 units off of him, remaining airborne and becoming slowed by 40% for 1 second."
+        },
+        {
+          "id": "darius_e_effect_3",
+          "description": "Darius is unable to move or cast Decimate or Noxian Guillotine for 0.4 seconds after Apprehend's cast time."
+        }
+      ],
+      "description": "Passive: Darius gains armor penetration.",
+      "cooldown_seconds_by_rank": [
+        26.0,
+        23.5,
+        21.0,
+        18.5,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          60.0,
+          50.0,
+          40.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 535.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 535.",
+        "Source notes (summary): Enemies hit by Apprehend will quickly be dragged to Darius before rebounding over a longer period."
+      ]
+    },
+    "ultimate": {
+      "name": "Noxian Guillotine",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Darius  leaps to an enemy champion and strikes a lethal blow, dealing true damage based on the target's current  Hemorrhage stacks.",
+      "effects": [
+        {
+          "id": "true_damage",
+          "description": "True Damage",
+          "base_by_rank": [
+            125.0,
+            250.0,
+            375.0
+          ],
+          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2."
+        },
+        {
+          "id": "bonus_damage_per_stack",
+          "description": "Bonus Damage Per Stack",
+          "base_by_rank": [
+            25.0,
+            50.0,
+            75.0
+          ],
+          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2."
+        },
+        {
+          "id": "maximum_true_damage",
+          "description": "Maximum True Damage",
+          "base_by_rank": [
+            250.0,
+            500.0,
+            750.0
+          ],
+          "context_notes": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2."
+        },
+        {
+          "id": "darius_r_effect_2",
+          "description": "If the target dies within 0.15 seconds after being hit by Noxian Guillotine, Darius fears nearby minions and monsters for 3 seconds, during which they are gradually slowed by up to 99% over the duration. He can also recast the ability within 20 seconds at no cost, which refreshes on further successful executions."
+        },
+        {
+          "id": "darius_r_effect_3",
+          "description": "At rank 3, Noxian Guillotine has no mana cost and recast timer."
+        },
+        {
+          "id": "darius_r_effect_4",
+          "description": "Darius is unable to cast Decimate or Apprehend for 0.25 seconds after Noxian Guillotine's cast time."
+        }
+      ],
+      "description": "Active: Darius attempts to execute the target enemy champion, leaping towards them to deal true damage, increased by 0% : 100% (based on target's Hemorrhage stacks), and granting sight of the area around them for 2.5 seconds from the start of the cast time.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.3667
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.3667.",
+        "Source notes (summary): Noxian Guillotine's cooldown after the recast or recast window is calculated by taking the values at the end, and using this formula: (Noxian Guillotine's Cooldown - time since first cast) × 100 ÷ (100 + AH)."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Darius.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Darius"
+  }
+}

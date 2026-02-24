@@ -1,0 +1,364 @@
+{
+  "name": "Caitlyn",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 580.0,
+      "per_level": 107.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 315.0,
+      "per_level": 40.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 27.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 650.0,
+    "health_regeneration": {
+      "base": 3.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.4,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 3.8
+    },
+    "attack_speed": {
+      "base": 0.681,
+      "per_level_percent": 4.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.122916668653488,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Headshot",
+      "type": "Passive",
+      "description_source": "Innate:  Caitlyn's  basic attacks generate  stacks of Count  on-attack. At maximum stacks, her next basic attack will fire a Headshot dealing bonus physical damage that scales with her  critical strike chance.",
+      "effects": [
+        {
+          "id": "caitlyn_p_effect_1",
+          "description": "Innate: Caitlyn's basic attacks generate a stack of Count on-attack, doubled if she is within brush. At 5 stacks, or 4 while in brush, her next basic attack consumes all stacks on-attack to become a Headshot."
+        },
+        {
+          "id": "caitlyn_p_effect_2",
+          "description": "Headshot: Caitlyn's basic attack is empowered to have an uncancellable windup and deal 60% / 80% / 100% (based on level) (+ 0% : 100% (+ 0% : 30%) (based on critical strike chance)) AD bonus physical damage, increased to 110% (+ 0% : 100% (+ 0% : 30%) (based on critical strike chance)) AD against non-champions."
+        },
+        {
+          "id": "caitlyn_p_effect_3",
+          "description": "Enemies that step over a Yordle Snap Trap or are hit by 90 Caliber Net can grant an additional Headshot against them at 1300 range within 1.8 seconds, without consuming stacks. Each method grants only one Headshot at a time."
+        }
+      ],
+      "description": "Innate: Caitlyn's basic attacks generate a stack of Count on-attack, doubled if she is within brush. At 5 stacks, or 4 while in brush, her next basic attack consumes all stacks on-attack to become a Headshot.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 3000.",
+        "Source notes (summary): If Caitlyn's current target becomes trapped by Yordle Snap Trap or 90 Caliber Net while her attack is on cooldown, this ongoing cooldown will be refunded partially so that her next attack on them can begin earlier."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Piltover Peacemaker",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Caitlyn revs up her rifle to unleash a penetrating shot that deals physical damage to enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            50.0,
+            90.0,
+            130.0,
+            170.0,
+            210.0
+          ],
+          "context_notes": "Active: Caitlyn fires a piercing shot in the target direction that deals physical damage to the first enemy it passes through, after which it expands in width but deals only 60% damage to enemies it hits thereafter."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            30.0,
+            54.0,
+            78.0,
+            102.0,
+            126.0
+          ],
+          "context_notes": "Active: Caitlyn fires a piercing shot in the target direction that deals physical damage to the first enemy it passes through, after which it expands in width but deals only 60% damage to enemies it hits thereafter."
+        },
+        {
+          "id": "caitlyn_q_effect_2",
+          "description": "Enemies revealed by Yordle Snap Trap always take full damage from Piltover Peacemaker."
+        }
+      ],
+      "description": "Active: Caitlyn fires a piercing shot in the target direction that deals physical damage to the first enemy it passes through, after which it expands in width but deals only 60% damage to enemies it hits thereafter.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          60.0,
+          65.0,
+          70.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.625,
+        "projectile_speed": 2200.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.625.",
+        "Source speed: 2200.",
+        "Source notes (summary): Upon Piltover Peacemaker dealing damage to an enemy, Caitlyn's attack timer is forcibly reset."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Yordle Snap Trap",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Caitlyn sets a trap at the target location that lasts for a while. The trap springs when an enemy champion steps on it,  revealing and  rooting them.",
+      "effects": [
+        {
+          "id": "trap_duration",
+          "description": "Trap Duration",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Caitlyn sets a visible trap at the target location that is untargetable and arms after 1 second, lasting for a duration."
+        },
+        {
+          "id": "maximum_number_of_traps",
+          "description": "Maximum Number of Traps",
+          "base_by_rank": [
+            3.0,
+            3.0,
+            4.0,
+            4.0,
+            5.0
+          ],
+          "context_notes": "Caitlyn periodically stocks a Yordle Snap Trap charge, up to a maximum amount."
+        },
+        {
+          "id": "headshot_damage_increase",
+          "description": "Headshot Damage Increase",
+          "base_by_rank": [
+            35.0,
+            80.0,
+            125.0,
+            170.0,
+            215.0
+          ],
+          "context_notes": "The next enemy champion that springs the trap is rooted for 1."
+        }
+      ],
+      "description": "Active: Caitlyn sets a visible trap at the target location that is untargetable and arms after 1 second, lasting for a duration. The trap grants sight of the area for 1 second after being placed.",
+      "cooldown_seconds_by_rank": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Multiple armed traps on the same location will spring all at once if an enemy steps on one of them."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "90 Caliber Net",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Caitlyn fires a heavy net that  slows the first target hit and deals magic damage to them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "Active: Caitlyn fires a net in the target direction and recoils 390 units in the opposite direction."
+        },
+        {
+          "id": "caitlyn_e_effect_2",
+          "description": "Caitlyn will not dash backwards if she is immobilized or grounded during the cast time. She can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Active: Caitlyn fires a net in the target direction and recoils 390 units in the opposite direction. The net deals magic damage to the first enemy hit and slows them by 50% for 1 second.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.0,
+        12.0,
+        10.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          75.0,
+          75.0,
+          75.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.15,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 140.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.15.",
+        "Source speed: 1600 / 1000.",
+        "Source effectRadius: 140.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "Ace in the Hole",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "caitlyn_r_effect_1",
+          "description": "Active: Caitlyn locks onto the target enemy champion and channels for 1 second, revealing them as well as revealing herself."
+        },
+        {
+          "id": "caitlyn_r_effect_2",
+          "description": "Ace in the Hole is placed on a 5-second cooldown if canceled."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical damage",
+          "base_by_rank": [
+            300.0,
+            475.0,
+            650.0
+          ],
+          "context_notes": "Once Caitlyn completes the channel, she fires a homing bullet toward the target that deals physical damage to the first enemy champion it hits, increased by 0% : 30% (+ 0% : 9%) (based on critical strike chance)."
+        }
+      ],
+      "description": "Active: Caitlyn locks onto the target enemy champion and channels for 1 second, revealing them as well as revealing herself.",
+      "cooldown_seconds_by_rank": [
+        90.0,
+        90.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.375,
+        "projectile_speed": 3200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.375.",
+        "Source speed: 3200.",
+        "Source notes (summary): The following will cancel Ace in the Hole's channel (mana expenditure is not compensated): Caitlyn is interrupted."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Caitlyn.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Caitlyn"
+  }
+}

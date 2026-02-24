@@ -1,0 +1,421 @@
+{
+  "name": "Aurora",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Burst",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 607.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 475.0,
+      "per_level": 30.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 23.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 53.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.668,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.099465,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Spirit Abjuration",
+      "type": "Passive",
+      "description_source": "Innate:  Aurora's  basic attacks and damaging  abilities inflict a  stack of Spirit Abjuration, stacking up to 3 times.",
+      "effects": [
+        {
+          "id": "aurora_p_effect_1",
+          "description": "Innate: Aurora's damaging basic attacks and abilities apply a stack of Spirit Abjuration to enemies for 4 seconds, refreshing on subsequent applications and stacking up to 3 times. The third stack against a target consumes them all to deal bonus magic damage equal to 1% (+ 2.7% per 100 AP) of the target's maximum health, capped at 100 : 290 (based on level) against monsters."
+        },
+        {
+          "id": "aurora_p_effect_2",
+          "description": "Upon consuming the stacks from a champion, Aurora additionally exorcises them, freeing a Spirit from the target that follows her for the same duration. For each active Spirit, Aurora is healed for 3 : 22 (based on level) (+ 2% AP) every second. Subsequent exorcisms free further Spirits and refresh all active Spirits. Aurora may have up to 4 Spirits at a time, for a maximum heal per tick of 12 : 88 (based on level) (+ 8% AP)."
+        }
+      ],
+      "description": "Innate: Aurora's damaging basic attacks and abilities apply a stack of Spirit Abjuration to enemies for 4 seconds, refreshing on subsequent applications and stacking up to 3 times. The third stack against a target consumes them all to deal bonus magic damage equal to 1% (+ 2.7% per 100 AP) of the target's maximum health, capped at 100 : 290 (based on level) against monsters.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The spirits grant vision of a small area around themselves."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Twofold Hex",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Aurora fires a bolt of energy that deals magic damage to enemies hit and marks them for a short time. Twofold Hex can be recast while at least one target is marked.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            45.0,
+            70.0,
+            95.0,
+            120.0,
+            145.0
+          ],
+          "context_notes": "Active: Aurora fires a bolt of energy in the target direction that deals magic damage to enemies hit and marks them with a curse for 3."
+        },
+        {
+          "id": "aurora_q_effect_2",
+          "description": "Twofold Hex can be recast after 0.1 seconds while at least one target is marked, and does so automatically at the end of the mark's duration."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            45.0,
+            70.0,
+            95.0,
+            120.0,
+            145.0
+          ],
+          "context_notes": "Recast: Aurora expunges the curse from all marked targets, drawing the spiritual energy back to her as bolts that each deal magic damage to all enemies they pass through, reduced to 40% against minions and 50% against monsters and increased by 0% : 50% (based on target's missing health)."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            67.5,
+            105.0,
+            142.5,
+            180.0,
+            217.5
+          ],
+          "context_notes": "Recast: Aurora expunges the curse from all marked targets, drawing the spiritual energy back to her as bolts that each deal magic damage to all enemies they pass through, reduced to 40% against minions and 50% against monsters and increased by 0% : 50% (based on target's missing health)."
+        },
+        {
+          "id": "subsequent_bolt_minimum_magic_damage",
+          "description": "Subsequent Bolt Minimum Magic Damage",
+          "base_by_rank": [
+            9.0,
+            14.0,
+            19.0,
+            24.0,
+            29.0
+          ],
+          "context_notes": "Recast: Aurora expunges the curse from all marked targets, drawing the spiritual energy back to her as bolts that each deal magic damage to all enemies they pass through, reduced to 40% against minions and 50% against monsters and increased by 0% : 50% (based on target's missing health)."
+        },
+        {
+          "id": "subsequent_bolt_maximum_magic_damage",
+          "description": "Subsequent Bolt Maximum Magic Damage",
+          "base_by_rank": [
+            13.5,
+            21.0,
+            28.5,
+            36.0,
+            43.5
+          ],
+          "context_notes": "Recast: Aurora expunges the curse from all marked targets, drawing the spiritual energy back to her as bolts that each deal magic damage to all enemies they pass through, reduced to 40% against minions and 50% against monsters and increased by 0% : 50% (based on target's missing health)."
+        }
+      ],
+      "description": "Active: Aurora fires a bolt of energy in the target direction that deals magic damage to enemies hit and marks them with a curse for 3.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.5,
+        8.0,
+        7.5,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.25 / None.",
+        "Source speed: 1600 / 2000.",
+        "Source effectRadius: Global.",
+        "Source notes (summary): Twofold Hex can also be recast for 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Across the Veil",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Aurora  hops into  invisibility for a moment and gains Realm Hopper for a few seconds.",
+      "effects": [
+        {
+          "id": "invisibility_duration",
+          "description": "Invisibility Duration",
+          "base_by_rank": [
+            1.0,
+            1.15,
+            1.3,
+            1.45,
+            1.6
+          ],
+          "context_notes": "Active: Aurora hops in the target direction inside a portal to the Spirit Realm."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Realm Hopper: Aurora becomes ghosted and gains bonus movement speed for the duration."
+        },
+        {
+          "id": "aurora_w_effect_3",
+          "description": "Scoring a takedown against an enemy champion within 3 seconds of damaging them will reset Across the Veil's cooldown."
+        }
+      ],
+      "description": "Active: Aurora hops in the target direction inside a portal to the Spirit Realm. Upon completing the dash, she becomes invisible for a duration and gains Realm Hopper for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        21.0,
+        20.0,
+        19.0,
+        18.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 350.",
+        "Source notes (summary): Aurora will not gain the stealth if her dash is interrupted."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "The Weirding",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Aurora blasts energy and  recoils backward. The blast deals magic damage to enemies hit and  slows them for a moment.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Aurora blasts energy in a line in the target direction and recoils 250 units in the opposite direction."
+        }
+      ],
+      "description": "Active: Aurora blasts energy in a line in the target direction and recoils 250 units in the opposite direction. The blast deals magic damage to enemies hit and slows them by 80% for 1 second decaying after the first 0.15 seconds.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        14.0,
+        13.0,
+        12.0,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "projectile_speed": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.35.",
+        "Source speed: 150 + 200% movement speed.",
+        "Source notes (summary): Aurora is locked out of using all abilities, summoner spells, and item actives during the dash."
+      ]
+    },
+    "ultimate": {
+      "name": "Between Worlds",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Aurora becomes  unstoppable and  leaps, unleashing an expanding shockwave that deals magic damage to enemies hit and  slows them briefly, and gaining  Realm Hopper for a few seconds.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            175.0,
+            275.0,
+            375.0
+          ],
+          "context_notes": "Active: Aurora leaps in the target direction with displacement immunity over 0."
+        },
+        {
+          "id": "realm_hopper_duration",
+          "description": "Realm Hopper Duration",
+          "base_by_rank": [
+            3.5,
+            4.25,
+            5.0
+          ],
+          "context_notes": "Active: Aurora leaps in the target direction with displacement immunity over 0."
+        },
+        {
+          "id": "rift_duration",
+          "description": "Rift Duration",
+          "base_by_rank": [
+            1.75,
+            2.5,
+            3.25
+          ],
+          "context_notes": "The shockwave leaves behind a circular rift to the Spirit Realm for a duration, forming borders that interact with Aurora and enemies."
+        },
+        {
+          "id": "slow_duration",
+          "description": "Slow Duration",
+          "base_by_rank": [
+            1.5,
+            1.75,
+            2.0
+          ],
+          "context_notes": "The shockwave leaves behind a circular rift to the Spirit Realm for a duration, forming borders that interact with Aurora and enemies."
+        },
+        {
+          "id": "aurora_r_effect_3",
+          "description": "Between Worlds can be recast after 1 second of unleashing the shockwave while the rift is active."
+        },
+        {
+          "id": "aurora_r_effect_4",
+          "description": "Recast: Aurora closes the rift prematurely."
+        },
+        {
+          "id": "aurora_r_effect_5",
+          "description": "The rift closes immediately if Aurora dies, enters resurrection, leaves the area, or is not within the area upon creation."
+        }
+      ],
+      "description": "Active: Aurora leaps in the target direction with displacement immunity over 0.4 seconds. She then gains Realm Hopper for a duration and unleashes a shockwave from 425 units in front of her, expanding over 0.75 seconds to deal magic damage to enemies hit and slow them by 30% for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        120.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 700.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 700.",
+        "Source notes (summary): Collision with the border is essentially moving within range of it while being targetable, including via normal movement, dash, or displacement."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Aurora.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Aurora"
+  }
+}

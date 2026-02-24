@@ -1,0 +1,372 @@
+{
+  "name": "Zed",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 654.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "energy",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 29.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 3.4
+    },
+    "attack_speed": {
+      "base": 0.651,
+      "per_level_percent": 3.3
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.102405503392219,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Contempt for the Weak",
+      "type": "Passive",
+      "description_source": "Innate:  Zed's basic attacks against targets below half health will deal bonus magic damage equal to a portion of their maximum health.",
+      "effects": [
+        {
+          "id": "zed_p_effect_1",
+          "description": "Innate: Zed's basic attacks on-hit against targets below 50% maximum health are empowered to deal 6% / 8% / 10% (based on level) of the target's maximum health as bonus magic damage."
+        },
+        {
+          "id": "zed_p_effect_2",
+          "description": "Against monsters, Contempt for the Weak deals 75% damage and is capped at 175."
+        },
+        {
+          "id": "zed_p_effect_3",
+          "description": "Contempt for the Weak cannot occur on the same champion more than once every few seconds."
+        }
+      ],
+      "description": "Innate: Zed's basic attacks on-hit against targets below 50% maximum health are empowered to deal 6% / 8% / 10% (based on level) of the target's maximum health as bonus magic damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The enhanced attack applies other on-hit effects and can critically strike as normal (the bonus damage cannot)."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Razor Shuriken",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Zed throws a shuriken in the target direction that deals physical damage to enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Zed throws a shuriken in the target direction that deals physical damage to enemies hit, reduced to 60% against targets beyond the first."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            48.0,
+            72.0,
+            96.0,
+            120.0,
+            144.0
+          ],
+          "context_notes": "Active: Zed throws a shuriken in the target direction that deals physical damage to enemies hit, reduced to 60% against targets beyond the first."
+        }
+      ],
+      "description": "Active: Zed throws a shuriken in the target direction that deals physical damage to enemies hit, reduced to 60% against targets beyond the first.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          75.0,
+          70.0,
+          65.0,
+          60.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1700.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1700.",
+        "Source notes (summary): Shurikens blocked by spell shield still count as being hit for the reduced pass-through damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Living Shadow",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive: Whenever  Zed and his  Shadows hit an ability on the same target, he restores  energy.",
+      "effects": [
+        {
+          "id": "energy_restored",
+          "description": "Energy Restored",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Passive: Zed restores energy whenever he and his Shadows or multiple Shadows hit an ability on the same target."
+        },
+        {
+          "id": "zed_w_effect_2",
+          "description": "Active: Zed creates a Shadow that dashes to the target location and remains there for 5.25 seconds, being able to mimic Razor Shuriken and Shadow Slash regardless of range. Living Shadow can be recast while within range of the Shadow."
+        },
+        {
+          "id": "zed_w_effect_3",
+          "description": "Recast - Shadow Swap: Zed and the Shadow blink to swap places."
+        },
+        {
+          "id": "zed_w_effect_4",
+          "description": "If an ability is cast while the Shadow is dashing, it will cast that ability once it has been placed. See Pets for more details about Shadows."
+        }
+      ],
+      "description": "Passive: Zed restores energy whenever he and his Shadows or multiple Shadows hit an ability on the same target. This may only occur once per cast ability.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          40.0,
+          35.0,
+          30.0,
+          25.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2500.0,
+        "effect_hitbox_radius": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Location / Auto.",
+        "Source castTime: none.",
+        "Source speed: 2500.",
+        "Source effectRadius: 2000 / Global.",
+        "Source notes (summary): Zed gains a buff for 5."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Shadow Slash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Zed slashes to deal physical damage to nearby enemies hit. Enemies hit by a  Shadow's slash are also briefly  slowed.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            70.0,
+            95.0,
+            120.0,
+            145.0,
+            170.0
+          ],
+          "context_notes": "Active: Zed slashes to deal physical damage to nearby enemies."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Enemies hit by a Shadow's slash are slowed for 1."
+        },
+        {
+          "id": "enhanced_slow",
+          "description": "Enhanced Slow",
+          "base_by_rank": [
+            30.0,
+            37.5,
+            45.0,
+            52.5,
+            60.0
+          ],
+          "context_notes": "Enemies hit by a Shadow's slash are slowed for 1."
+        },
+        {
+          "id": "zed_e_effect_3",
+          "description": "Living Shadow's current cooldown is reduced by 3 seconds for each enemy champion hit by Zed's slash."
+        }
+      ],
+      "description": "Active: Zed slashes to deal physical damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        4.5,
+        4.0,
+        3.5,
+        3.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 290.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 315 / 290.",
+        "Source notes (summary): An enemy counts as being hit by multiple slashes at once when they are hit by a Shadow Slash from Zed and at least one of his Shadows, or two of his Shadows."
+      ]
+    },
+    "ultimate": {
+      "name": "Death Mark",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Zed becomes  untargetable while  dashing to the target enemy champion, then renders them Marked for Death for a short time, during which he is  ghosted. He leaves behind a  Shadow that will remain for a period and mimic  Razor Shuriken and  Shadow Slash.",
+      "effects": [
+        {
+          "id": "zed_r_effect_1",
+          "description": "Active: Zed becomes untargetable and, after a 0.6-second delay, he dashes to 125 units beyond the target enemy champion from his position at the end of the delay over 0.35 seconds. Afterwards, he becomes targetable again, renders the target Marked for Death for 3 seconds, and gains ghosting for the same duration."
+        },
+        {
+          "id": "zed_r_effect_2",
+          "description": "Zed also spawns a Shadow at his casting position for 9 seconds which is able to mimic Razor Shuriken and Shadow Slash regardless of range. Death Mark can be recast after 0.5 seconds of his reappearance while the Shadow is active, though not in the last 1.25 seconds of its duration."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            100.0,
+            100.0,
+            100.0
+          ],
+          "context_notes": "Marked for Death: Zed stores a portion of all pre-mitigation physical damage and magic damage he and his Shadows deal to the target, detonating at the end of the duration to deal physical damage."
+        },
+        {
+          "id": "zed_r_effect_4",
+          "description": "Recast - Shadow Swap: Zed and the Shadow blink to swap places."
+        },
+        {
+          "id": "zed_r_effect_5",
+          "description": "If the target dies or is 1950 or more units away before the dash begins, Death Mark is cancelled, causing the ability to go on a 0.5-second cooldown, Zed to reappear at the cast location, and the Shadow he spawned to disappear."
+        }
+      ],
+      "description": "Active: Zed becomes untargetable and, after a 0.6-second delay, he dashes to 125 units beyond the target enemy champion from his position at the end of the delay over 0.35 seconds. Afterwards, he becomes targetable again, renders the target Marked for Death for 3 seconds, and gains ghosting for the same duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        110.0,
+        100.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: Global.",
+        "Source notes (summary): Zed gains a buff for 7."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Zed.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Zed"
+  }
+}

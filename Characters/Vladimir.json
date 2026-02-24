@@ -37,7 +37,11 @@
           "description": "Gains bonus health based on Ability Power"
         }
       ],
-      "name": "Crimson Pact"
+      "name": "Crimson Pact",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Crimson Pact is a bidirectional stat-conversion passive between bonus health and ability power and should be treated as a continuous derived-stat relationship."
+      ]
     },
     "basic_ability_3": {
       "slot": "E",
@@ -151,7 +155,14 @@
         "cast_windup_seconds": 0.3,
         "projectile_speed": 0.0,
         "effect_hitbox_radius": 275.0
-      }
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none (charge/release spell model).",
+        "Source speed: 4000.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): Tides of Blood is a health-cost charge spell with movement allowed during charge; release timing controls damage/slow outcome and should be modeled as cast+resolution rather than instant tooltip damage."
+      ]
     },
     "basic_ability_2": {
       "slot": "W",
@@ -263,7 +274,14 @@
         }
       ],
       "default_keybinding": "W",
-      "description": "Become untargetable for 2s, gain decaying move speed, slow enemies, and deal magic damage over time based on bonus health; heal for a percent of damage dealt. Costs 15% current health."
+      "description": "Become untargetable for 2s, gain decaying move speed, slow enemies, and deal magic damage over time based on bonus health; heal for a percent of damage dealt. Costs 15% current health.",
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Execution metadata mapped from generated champion data: castTime none (instant cast) and effectRadius 350 for pooled area effect."
+      ]
     },
     "basic_ability_1": {
       "slot": "Q",
@@ -397,7 +415,12 @@
         "cast_windup_seconds": 0.2,
         "projectile_speed": 0.0,
         "effect_hitbox_radius": 80.0
-      }
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Healing resolves when cast completes, and if the target becomes untargetable before resolution Vladimir may still receive the heal even when damage does not land."
+      ]
     },
     "ultimate": {
       "slot": "R",
@@ -524,7 +547,13 @@
         "cast_windup_seconds": 0.25,
         "projectile_speed": 0.0,
         "effect_hitbox_radius": 375.0
-      }
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): Hemoplague amplifies most incoming damage during infection; source notes mention true-damage non-amplification as bug-context, so intended behavior should remain the default simulation target."
+      ]
     }
   },
   "name": "Vladimir",
@@ -532,7 +561,8 @@
     {
       "type": "Generated champion data",
       "path": "From Online/champions/Vladimir.json",
-      "used_for": "raw basic attack timing stats and radii"
+      "used_for": "raw basic attack timing stats and radii",
+      "accessed": "2026-02-24"
     },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Crimson_Pact",

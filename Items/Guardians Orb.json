@@ -35,13 +35,15 @@
       "interval_seconds": null,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "has_mana_resource"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.86
     },
     {
       "id": "recovery_bonus_health_regeneration_for_manaless_champions",
@@ -64,9 +66,24 @@
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.86
     }
   ],
+  "mode_overrides": {
+    "ARENA": {
+      "stats": {
+        "abilityPower": {
+          "flat": 55.0
+        },
+        "abilityHaste": {
+          "flat": 25.0
+        },
+        "health": {
+          "flat": 0.0
+        }
+      }
+    }
+  },
   "shop": {
     "prices": {
       "total": 950,
@@ -87,7 +104,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.058703+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Recovery routes to mana regeneration for mana-resource champions and to health regeneration for manaless champions.",
+      "Mode-scoped behavior: Arena map-difference notes report alternate stat package (AP/ability-haste/health) and are encoded under mode_overrides.ARENA for deferred runtime consumption.",
+      "Verification note: page notes mention a possible tooltip/behavior inconsistency around mana-user health restoration; this is tracked as informational until canonical confirmation."
+    ]
   },
   "sources": [
     {
@@ -107,6 +129,12 @@
       "path": "From Online/items/Guardians Orb.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Guardian's Orb",
+      "url": "https://wiki.leagueoflegends.com/en-us/Guardian%27s_Orb",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Recovery routing semantics and Arena-specific stat-package differences"
     }
   ]
 }

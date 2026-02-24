@@ -1,0 +1,414 @@
+{
+  "name": "Cho'Gath",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Specialist",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 644.0,
+      "per_level": 94.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 270.0,
+      "per_level": 60.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 38.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 7.2,
+      "per_level": 0.45
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 69.0,
+      "per_level": 4.2
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 1.44
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0810000002384185,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Carnivore",
+      "type": "Passive",
+      "description_source": "Innate: Whenever  Cho'Gath kills an enemy, it  heals and restores  mana.",
+      "effects": [
+        {
+          "id": "chogath_p_effect_1",
+          "description": "Innate: Whenever Cho'Gath kills an enemy, it heals for 18 : 56 (based on level) health and restores 4.72 : 10.04 (based on level) mana."
+        }
+      ],
+      "description": "Innate: Whenever Cho'Gath kills an enemy, it heals for 18 : 56 (based on level) health and restores 4.72 : 10.04 (based on level) mana.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Carnivore will also trigger when Cho'Gath destroys a turret, but not from other structures."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Rupture",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Cho'Gath ruptures the target location, dealing magic damage and  knocking up enemies within,  slowing them upon landing.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic damage",
+          "base_by_rank": [
+            80.0,
+            135.0,
+            190.0,
+            245.0,
+            300.0
+          ],
+          "context_notes": "Active: Cho'Gath ruptures the target location after a 0."
+        }
+      ],
+      "description": "Active: Cho'Gath ruptures the target location after a 0.627 seconds delay, granting sight of the area before dealing magic damage to enemies within and knocking them up for 1 second, and afterwards slowing them by 60% for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): The delay before the rupture does not include the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Feral Scream",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Cho'Gath roars in a cone, dealing magic damage and  silencing enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "Active: Cho'Gath roars in a cone in the target direction, dealing magic damage to enemies hit."
+        },
+        {
+          "id": "silence_duration",
+          "description": "Silence Duration",
+          "base_by_rank": [
+            1.6,
+            1.7,
+            1.8,
+            1.9,
+            2.0
+          ],
+          "context_notes": "Enemy champions and Rift Scuttlers hit are also silenced for a duration."
+        }
+      ],
+      "description": "Active: Cho'Gath roars in a cone in the target direction, dealing magic damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.5,
+        10.0,
+        9.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Vorpal Spikes",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Cho'Gath's next few basic attacks launch forth deadly spikes, dealing magic damage to enemies hit based on  Feast stacks and each target's maximum health, and  slowing them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0,
+            80.0,
+            100.0
+          ],
+          "context_notes": "Active: Cho'Gath empowers its next 3 basic attacks within 6 seconds to gain 50 bonus range and launch a blast of spikes on-attack in the target's direction."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            60.0,
+            120.0,
+            180.0,
+            240.0,
+            300.0
+          ],
+          "context_notes": "Active: Cho'Gath empowers its next 3 basic attacks within 6 seconds to gain 50 bonus range and launch a blast of spikes on-attack in the target's direction."
+        },
+        {
+          "id": "monster_damage",
+          "description": "Monster Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "Active: Cho'Gath empowers its next 3 basic attacks within 6 seconds to gain 50 bonus range and launch a blast of spikes on-attack in the target's direction."
+        },
+        {
+          "id": "total_monster_damage",
+          "description": "Total Monster Damage",
+          "base_by_rank": [
+            300.0,
+            450.0,
+            600.0,
+            750.0,
+            900.0
+          ],
+          "context_notes": "Active: Cho'Gath empowers its next 3 basic attacks within 6 seconds to gain 50 bonus range and launch a blast of spikes on-attack in the target's direction."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Cho'Gath empowers its next 3 basic attacks within 6 seconds to gain 50 bonus range and launch a blast of spikes on-attack in the target's direction."
+        },
+        {
+          "id": "chogath_e_effect_2",
+          "description": "The width of the blast of spikes increases based on Cho'Gath's character size modifier when they launch, including but not limited to the bonus from Feast stacks."
+        },
+        {
+          "id": "chogath_e_effect_3",
+          "description": "Vorpal Spikes resets Cho'Gath's basic attack timer."
+        }
+      ],
+      "description": "Active: Cho'Gath empowers its next 3 basic attacks within 6 seconds to gain 50 bonus range and launch a blast of spikes on-attack in the target's direction. Enemies struck are dealt magic damage and slowed by an amount that decays over 1.5 seconds. The damage is modified against monsters.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.0,
+        6.0,
+        5.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1475.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 1475.",
+        "Source notes (summary): The missiles are launched from an offset 25 units in front of Cho'Gath and towards the target's location on-attack-complete."
+      ]
+    },
+    "ultimate": {
+      "name": "Feast",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Cho'Gath devours an enemy, dealing true damage based on Cho'Gath's bonus health. If this attack kills the target, Cho'Gath gains a permanent Feast  stack that infinitely stacks.",
+      "effects": [
+        {
+          "id": "champion_true_damage",
+          "description": "Champion True Damage",
+          "base_by_rank": [
+            300.0,
+            475.0,
+            650.0
+          ],
+          "context_notes": "Active: Cho'Gath attempts to eat the target enemy, dealing them true damage."
+        },
+        {
+          "id": "non_champion_true_damage",
+          "description": "Non-Champion True Damage",
+          "base_by_rank": [
+            1200.0,
+            1200.0,
+            1200.0
+          ],
+          "context_notes": "Active: Cho'Gath attempts to eat the target enemy, dealing them true damage."
+        },
+        {
+          "id": "chogath_r_effect_2",
+          "description": "If the target is killed, Cho'Gath gains a stack of Feast. Only 6 stacks can be gained from non-epic monsters or minions."
+        },
+        {
+          "id": "bonus_health_per_stack",
+          "description": "Bonus Health Per Stack",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0
+          ],
+          "context_notes": "Each stack of Feast increases the cast range of the ability by 2."
+        },
+        {
+          "id": "bonus_attack_range_per_stack",
+          "description": "Bonus Attack Range Per Stack",
+          "base_by_rank": [
+            4.7,
+            6.2,
+            7.7
+          ],
+          "context_notes": "Each stack of Feast increases the cast range of the ability by 2."
+        },
+        {
+          "id": "bonus_size_per_stack",
+          "description": "Bonus Size Per Stack",
+          "base_by_rank": [
+            6.0,
+            8.0,
+            10.0
+          ],
+          "context_notes": "Each stack of Feast increases the cast range of the ability by 2."
+        }
+      ],
+      "description": "Active: Cho'Gath attempts to eat the target enemy, dealing them true damage. Against non- champions, the base damage is modified.",
+      "cooldown_seconds_by_rank": [
+        80.0,
+        70.0,
+        60.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): The increased size stacks additively with other size increases."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Chogath.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Chogath"
+  }
+}

@@ -134,7 +134,11 @@
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7113_detonationorb.png",
   "simpleDescription": null,
@@ -143,11 +147,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.037227+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: ability damage to enemy champions applies and refreshes a 3-second mark that accumulates stored post-mitigation damage from each qualifying hit.",
       "Player-visible behavior: marked targets take delayed true-damage detonation on expiry unless stored damage becomes lethal earlier, in which case the detonation resolves immediately.",
-      "Immobilized targets use the higher storage ratio, so crowd-control windows increase the delayed burst payload."
+      "Immobilized targets use the higher storage ratio, so crowd-control windows increase the delayed burst payload.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

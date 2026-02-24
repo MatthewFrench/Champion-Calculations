@@ -50,7 +50,11 @@
       },
       "stack_name": "like_the_wind",
       "duration_seconds": 6.0,
-      "max_stacks": 5
+      "max_stacks": 5,
+      "conditions": [
+        "stacks_refresh_on_subsequent_basic_attacks"
+      ],
+      "parse_confidence": 0.84
     },
     {
       "id": "zephyr_like_the_wind_movespeed",
@@ -60,7 +64,8 @@
       "stat": "movement_speed_bonus_percent",
       "value_per_stack": 5,
       "stack_name": "like_the_wind",
-      "max_value": 25
+      "max_value": 25,
+      "parse_confidence": 0.84
     }
   ],
   "shop": {
@@ -81,9 +86,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.059125+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Legacy status: this file is preserved for historical reference but marked exclude_from_simulation because ID 3172 now resolves to Gunmetal Greaves in current Tier-1 datasets."
+      "Execution model: Like the Wind stacks on basic attacks, refreshes duration on subsequent attacks, and grants per-stack bonus movement speed up to five stacks.",
+      "Data reconciliation note: page-level item data currently presents Arena-scoped Zephyr on ID 3172 while Tier-1 datasets map ID 3172 to Gunmetal Greaves; file remains excluded from simulation until mode-aware identity resolution is implemented."
     ]
   },
   "sources": [
@@ -104,6 +110,12 @@
       "path": "From Online/items/Zephyr.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Zephyr",
+      "url": "https://wiki.leagueoflegends.com/en-us/Zephyr",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Like the Wind stack behavior and Arena-scoped availability context"
     }
   ]
 }

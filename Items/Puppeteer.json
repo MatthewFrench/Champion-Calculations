@@ -187,7 +187,11 @@
     "purchasable": true,
     "tags": [
       "SUPPORT"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447123_puppeteer.png",
   "simpleDescription": null,
@@ -196,11 +200,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.031491+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: stacks are applied only by basic attacks that hit enemy champions; the fourth hit consumes all stacks and applies crowd-control immediately on the target.",
       "Player-visible timing: berserk/fear duration is 2 seconds on resolution of the fourth stack, with shared 25-second item cooldown and 15-second stack expiration window.",
-      "Cooldown refund trigger is tied to ally/self heal, shield, or ability-sourced buff events and is limited to once per cast."
+      "Cooldown refund trigger is tied to ally/self heal, shield, or ability-sourced buff events and is limited to once per cast.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

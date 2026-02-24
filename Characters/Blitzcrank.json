@@ -1,0 +1,332 @@
+{
+  "name": "Blitzcrank",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Catcher",
+    "Support",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 267.0,
+      "per_level": 40.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 37.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 8.5,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.13
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0299999993294477,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Mana Barrier",
+      "type": "Passive",
+      "description_source": "Innate: Periodically, when  Blitzcrank gets to low-health, Mana Barrier generates a  shield that scales with  maximum mana.",
+      "effects": [
+        {
+          "id": "blitzcrank_p_effect_1",
+          "description": "Innate: Periodically, when damaged to 30% maximum health, Blitzcrank generates a shield equal to 35% of maximum mana, lasting for up to 10 seconds."
+        }
+      ],
+      "description": "Innate: Periodically, when damaged to 30% maximum health, Blitzcrank generates a shield equal to 35% of maximum mana, lasting for up to 10 seconds.",
+      "cooldown_seconds_by_rank": [
+        90.0,
+        90.0,
+        90.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The shield will absorb the portion of incoming damage that would reduce health past 30%."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Rocket Grab",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            110.0,
+            160.0,
+            210.0,
+            260.0,
+            310.0
+          ],
+          "context_notes": "Active: Blitzcrank fires their right hand in the target direction that catches the first enemy hit, dealing them magic damage, stunning them for 0."
+        },
+        {
+          "id": "blitzcrank_q_effect_2",
+          "description": "Blitzcrank is unable to move or attack while Rocket Grab is in flight and for 0.25 seconds after it hits an enemy."
+        }
+      ],
+      "description": "Active: Blitzcrank fires their right hand in the target direction that catches the first enemy hit, dealing them magic damage, stunning them for 0.65 seconds, and pulling them towards Blitzcrank, during which they are revealed.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1800 / 1800.",
+        "Source notes (summary): Rocket Grab's range is composed of a missile with 1080 range, and a smaller center-range area check at the end (colloqially known as a 'lollipop')."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Overdrive",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Blitzcrank shifts into overdrive, gaining  bonus attack speed and a burst of  movement speed.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Active: Blitzcrank shifts into overdrive, gaining bonus attack speed for 5 seconds and bonus movement speed that decays to 10% over the first 2."
+        },
+        {
+          "id": "initial_bonus_movement_speed",
+          "description": "Initial Bonus Movement Speed",
+          "base_by_rank": [
+            60.0,
+            65.0,
+            70.0,
+            75.0,
+            80.0
+          ],
+          "context_notes": "Active: Blitzcrank shifts into overdrive, gaining bonus attack speed for 5 seconds and bonus movement speed that decays to 10% over the first 2."
+        },
+        {
+          "id": "blitzcrank_w_effect_2",
+          "description": "When Overdrive ends, Blitzcrank is slowed by 30% for 1.5 seconds."
+        }
+      ],
+      "description": "Active: Blitzcrank shifts into overdrive, gaining bonus attack speed for 5 seconds and bonus movement speed that decays to 10% over the first 2.9 seconds.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        15.0,
+        15.0,
+        15.0,
+        15.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          75.0,
+          75.0,
+          75.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The movement speed boost's decay is linear."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Power Fist",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Blitzcrank charges up a fist to make the next  basic attack deal double damage and  knock up the target into the air.",
+      "effects": [
+        {
+          "id": "blitzcrank_e_effect_1",
+          "description": "Active: Blitzcrank empowers their next basic attack on-hit within 5 seconds to have an uncancellable windup, deal 100% AD (+ 25% AP) bonus physical damage and knock up the target for 1 second. This damage is affected by critical strike modifiers."
+        },
+        {
+          "id": "blitzcrank_e_effect_2",
+          "description": "Power Fist resets Blitzcrank's basic attack timer."
+        }
+      ],
+      "description": "Active: Blitzcrank empowers their next basic attack on-hit within 5 seconds to have an uncancellable windup, deal 100% AD (+ 25% AP) bonus physical damage and knock up the target for 1 second. This damage is affected by critical strike modifiers.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.5,
+        6.0,
+        5.5,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          25.0,
+          25.0,
+          25.0,
+          25.0,
+          25.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Power Fist deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Static Field",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive: While Static Field is ready,  Blitzcrank's  basic attacks apply a  stack of Static Field.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            100.0,
+            150.0
+          ],
+          "context_notes": "Passive: While Static Field is not on cooldown, Blitzcrank's basic attacks apply a stack to the target on-hit."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            275.0,
+            400.0,
+            525.0
+          ],
+          "context_notes": "Active: Blitzcrank detonates a static field that destroys the damage-mitigating shields of all nearby enemies, excluding the shields of monsters, and then deals them magic damage and silences them for 0."
+        }
+      ],
+      "description": "Passive: While Static Field is not on cooldown, Blitzcrank's basic attacks apply a stack to the target on-hit. While the target is afflicted, one stack is consumed every 1 second to strike them with lightning, dealing magic damage each time.",
+      "cooldown_seconds_by_rank": [
+        60.0,
+        40.0,
+        20.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): Blitzcrank's attacks do not have to deal damage to apply the mark."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Blitzcrank.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Blitzcrank"
+  }
+}

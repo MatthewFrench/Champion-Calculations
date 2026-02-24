@@ -1,0 +1,452 @@
+{
+  "name": "Evelynn",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 642.0,
+      "per_level": 98.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 315.0,
+      "per_level": 42.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 37.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 8.11,
+      "per_level": 0.6
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.667,
+      "per_level_percent": 2.1
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.5,
+    "base_windup_seconds": 0.230000004172325,
+    "windup_fraction": 0.15333333611488334,
+    "windup_percent": 15.333333611488333,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.230000004172325,
+      "attack_total_time": 1.5,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Demon Shade",
+      "type": "Passive",
+      "description_source": "Innate: While out of combat,  Evelynn gains Demon Shade.",
+      "effects": [
+        {
+          "id": "evelynn_p_effect_1",
+          "description": "Innate: Evelynn shrouds herself in Demon Shade after not performing actions that break stealth for 4 seconds. Attacking or casting abilities ends Demon Shade immediately and places it on a 4-second static cooldown, reduced to 1.25 seconds from casting Last Caress. Taking damage from champions or turrets interrupts Demon Shade and places it on a 1.5-second static cooldown."
+        },
+        {
+          "id": "evelynn_p_effect_2",
+          "description": "Demon Shade: While below 250 : 630 (based on level) (+ 250% AP) health, Evelynn heals herself for 15 : 165.88 (based on level) every second. From level 6 onward, Demon Shade also grants camouflage."
+        }
+      ],
+      "description": "Innate: Evelynn shrouds herself in Demon Shade after not performing actions that break stealth for 4 seconds. Attacking or casting abilities ends Demon Shade immediately and places it on a 4-second static cooldown, reduced to 1.25 seconds from casting Last Caress. Taking damage from champions or turrets interrupts Demon Shade and places it on a 1.5-second static cooldown.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Demon Shade is also placed on a 1."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Hate Spike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Evelynn fires her Lasher, dealing magic damage to the first enemy hit and marking them. Evelynn's next few attacks against the marked target will deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "Active: Evelynn launches a dart in the target direction, dealing magic damage to the first enemy hit and marking them for 4 seconds."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            15.0,
+            25.0,
+            35.0,
+            45.0,
+            55.0
+          ],
+          "context_notes": "Evelynn's next 3 basic attacks or abilities against the marked target deal bonus magic damage."
+        },
+        {
+          "id": "total_bonus_damage",
+          "description": "Total Bonus Damage",
+          "base_by_rank": [
+            45.0,
+            75.0,
+            105.0,
+            135.0,
+            165.0
+          ],
+          "context_notes": "Evelynn's next 3 basic attacks or abilities against the marked target deal bonus magic damage."
+        },
+        {
+          "id": "evelynn_q_effect_3",
+          "description": "Hate Spike may be recast up to 3 times at no cost until the ability comes off cooldown."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "Recast: Evelynn unleashes a line of deadly spikes in the direction of the nearest visible enemy that deals magic damage to all enemies struck."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            75.0,
+            90.0,
+            105.0,
+            120.0,
+            135.0
+          ],
+          "context_notes": "Recast: Evelynn unleashes a line of deadly spikes in the direction of the nearest visible enemy that deals magic damage to all enemies struck."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            145.0,
+            195.0,
+            245.0,
+            295.0,
+            345.0
+          ],
+          "context_notes": "Recast: Evelynn unleashes a line of deadly spikes in the direction of the nearest visible enemy that deals magic damage to all enemies struck."
+        },
+        {
+          "id": "evelynn_q_effect_5",
+          "description": "Hate Spike's recast prioritizes targeting Evelynn's attack target, then the nearest enemy champion, then the nearest non-champion."
+        },
+        {
+          "id": "evelynn_q_effect_6",
+          "description": "A nearby visible enemy is required to recast this ability."
+        }
+      ],
+      "description": "Active: Evelynn launches a dart in the target direction, dealing magic damage to the first enemy hit and marking them for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.3,
+        "projectile_speed": 2400.0,
+        "effect_hitbox_radius": 550.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Proximity.",
+        "Source castTime: 0.3 / None.",
+        "Source speed: 2400.",
+        "Source effectRadius: 550.",
+        "Source notes (summary): Each cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Allure",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Evelynn curses the target enemy, causing her next  basic attack or  ability against the target to expunge the curse,  slowing the target and refunding the  mana cost.",
+      "effects": [
+        {
+          "id": "evelynn_w_effect_1",
+          "description": "Active: Evelynn curses the target enemy champion or medium or large monster for 5 seconds."
+        },
+        {
+          "id": "evelynn_w_effect_2",
+          "description": "Evelynn's next basic attack or ability against the accursed target expunges them, slowing them by 45% for 0.75 seconds."
+        },
+        {
+          "id": "disable_duration",
+          "description": "Disable Duration",
+          "base_by_rank": [
+            1.25,
+            1.5,
+            1.75,
+            2.0,
+            2.25
+          ],
+          "context_notes": "Expunging a target will refund Allure's mana cost."
+        },
+        {
+          "id": "magic_resistance_reduction",
+          "description": "Magic Resistance Reduction",
+          "base_by_rank": [
+            35.0,
+            37.5,
+            40.0,
+            42.5,
+            45.0
+          ],
+          "context_notes": "Against champions, the expunge also inflicts magic resistance reduction for 4 seconds."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            250.0,
+            300.0,
+            350.0,
+            400.0,
+            450.0
+          ],
+          "context_notes": "Against monsters, the expunge deals bonus magic damage and increases the duration of the charm by 2 seconds."
+        },
+        {
+          "id": "monster_disable_duration",
+          "description": "Monster Disable Duration",
+          "base_by_rank": [
+            3.25,
+            3.5,
+            3.75,
+            4.0,
+            4.25
+          ],
+          "context_notes": "Against monsters, the expunge deals bonus magic damage and increases the duration of the charm by 2 seconds."
+        },
+        {
+          "id": "evelynn_w_effect_6",
+          "description": "Casting Allure does not break Demon Shade nor its fade into it."
+        }
+      ],
+      "description": "Active: Evelynn curses the target enemy champion or medium or large monster for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        14.0,
+        13.0,
+        12.0,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): The mark fully forming signifies the 2."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Whiplash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Evelynn whips the target enemy, dealing magic damage based on the target's maximum health and applying  on-hit effects. She then gains  bonus movement speed for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Evelynn whips the target enemy with her lashers, dealing magic damage and applying on-hit effects."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Evelynn also gains bonus movement speed for 2 seconds."
+        },
+        {
+          "id": "evelynn_e_effect_3",
+          "description": "Gaining Demon Shade resets Whiplash's cooldown and empowers its next cast. The damage based on the target's health ratio for both Whiplash and its empowered cast deals a minimum of 25 and is capped at 450 against monsters."
+        }
+      ],
+      "description": "Active: Evelynn whips the target enemy with her lashers, dealing magic damage and applying on-hit effects.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Whiplash can be dodged and blocked but may not miss if Evelynn is blinded."
+      ]
+    },
+    "ultimate": {
+      "name": "Last Caress",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            125.0,
+            250.0,
+            375.0
+          ],
+          "context_notes": "Active: Evelynn reveals her true form, becoming untargetable at the start of the cast time and then unleashing her lashers in a cone in the target direction, dealing magic damage to enemies struck within."
+        },
+        {
+          "id": "empowered_damage",
+          "description": "Empowered Damage",
+          "base_by_rank": [
+            300.0,
+            600.0,
+            900.0
+          ],
+          "context_notes": "Last Caress is empowered to deal 240% damage against enemies below 30% of their maximum health."
+        }
+      ],
+      "description": "Active: Evelynn reveals her true form, becoming untargetable at the start of the cast time and then unleashing her lashers in a cone in the target direction, dealing magic damage to enemies struck within. After 0.5 seconds, she blinks 700 units in the opposite direction and becomes targetable again.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.35.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Last Caress can be buffered during Empowered Whiplash."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Evelynn.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Evelynn"
+  }
+}

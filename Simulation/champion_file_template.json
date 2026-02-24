@@ -1,0 +1,135 @@
+{
+  "name": "<Champion Display Name>",
+  "data_version": "<patch version, e.g. 16.3.1>",
+  "role_tags": [
+    "<Primary Role>",
+    "<Secondary Role>"
+  ],
+  "base_stats": {
+    "health": { "base": 0, "per_level": 0 },
+    "resource": {
+      "type": "<mana|energy|health|none|...>",
+      "base": 0,
+      "per_level": 0
+    },
+    "move_speed": 0,
+    "armor": { "base": 0, "per_level": 0 },
+    "magic_resist": { "base": 0, "per_level": 0 },
+    "attack_range": 0,
+    "health_regeneration": { "base": 0, "per_level": 0 },
+    "resource_regeneration": { "base": 0, "per_level": 0 },
+    "crit_chance": { "base": 0, "per_level": 0 },
+    "attack_damage": { "base": 0, "per_level": 0 },
+    "attack_speed": { "base": 0, "per_level_percent": 0 }
+  },
+  "basic_attack": {
+    "attack_type": "<melee|ranged>",
+    "is_projectile": false,
+    "base_attack_period_seconds": 0,
+    "base_windup_seconds": 0,
+    "windup_fraction": 0,
+    "windup_percent": 0,
+    "missile_speed": 0,
+    "missile_travel_time_seconds_per_unit": 0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0,
+      "attack_total_time": 0,
+      "attack_delay_offset": 0,
+      "gameplay_radius": 0
+    },
+    "calculation_notes": "Document source and fallback choices."
+  },
+  "abilities": {
+    "passive": {
+      "name": "<Passive Name>",
+      "type": "Passive",
+      "description": "<Passive description>",
+      "effects": []
+    },
+    "basic_ability_1": {
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "name": "<Q Name>",
+      "type": "Active",
+      "cooldown_seconds_by_rank": [],
+      "cost": {
+        "resource": "<resource>",
+        "value_by_rank": [],
+        "value_type": "flat"
+      },
+      "description": "<Q description>",
+      "effects": [],
+      "execution": {
+        "cast_windup_seconds": 0,
+        "projectile_speed": 0,
+        "effect_hitbox_radius": 0
+      }
+    },
+    "basic_ability_2": {
+      "slot": "W",
+      "default_keybinding": "W",
+      "name": "<W Name>",
+      "type": "Active",
+      "cooldown_seconds_by_rank": [],
+      "description": "<W description>",
+      "effects": [],
+      "execution": {
+        "cast_windup_seconds": 0,
+        "effect_hitbox_radius": 0
+      }
+    },
+    "basic_ability_3": {
+      "slot": "E",
+      "default_keybinding": "E",
+      "name": "<E Name>",
+      "type": "Active",
+      "cooldown_seconds_by_rank": [],
+      "description": "<E description>",
+      "effects": [],
+      "execution": {
+        "cast_windup_seconds": 0,
+        "effect_hitbox_radius": 0
+      }
+    },
+    "ultimate": {
+      "slot": "R",
+      "default_keybinding": "R",
+      "name": "<R Name>",
+      "type": "Active",
+      "cooldown_seconds_by_rank": [],
+      "description": "<R description>",
+      "effects": [],
+      "execution": {
+        "cast_windup_seconds": 0,
+        "effect_hitbox_radius": 0
+      }
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/<ChampionKey>.json",
+      "accessed": "<YYYY-MM-DD>",
+      "used_for": "canonical champion baseline generation"
+    }
+  ],
+  "notes": [
+    "State what was sourced versus inferred.",
+    "Capture any unresolved ambiguities that affect simulation.",
+    "Record what still needs manual gameplay-semantic review."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "<ChampionKey>"
+  }
+}

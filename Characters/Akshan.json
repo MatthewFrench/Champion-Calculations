@@ -1,0 +1,443 @@
+{
+  "name": "Akshan",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 107.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 52.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 4.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1667,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Dirty Fighting",
+      "type": "Passive",
+      "description_source": "Innate:  Akshan's  basic attack causes him to fire a second attack that deals reduced physical damage. If Akshan cancels the second attack, he gains a brief burst of  move speed, increased based on his  attack speed.",
+      "effects": [
+        {
+          "id": "akshan_p_effect_1",
+          "description": "Innate: Whenever Akshan uses a basic attack, he fires an additional shot after a delay that deals 50% AD physical damage, increased to 100% AD against minions. Issuing an attack order on a different target before the additional shot has been launched causes Akshan to fire it at the new target. If the second shot is cancelled instead, he gains 20 : 81.47 (based on level) × (1 + 100% bonus attack speed) bonus movement speed decaying over 1 second."
+        },
+        {
+          "id": "akshan_p_effect_2",
+          "description": "The additional shot applies on-hit effects, triggers on-attack effects, and is affected by critical strike modifiers."
+        },
+        {
+          "id": "akshan_p_effect_3",
+          "description": "Innate: Akshan's basic attacks on-hit and ability hits apply a stack of Dirty Fighting to enemies for 5 seconds, refreshing on subsequent applications and stacking up to 3 times. The third stack against a target consumes them all to deal them 15 / 40 / 80 / 150 (based on level) (+ 60% AP) bonus magic damage; if the target is a champion, Akshan will also gain a 40 : 317.62 (based on level) (+ 35% bonus AD) shield for 2 seconds. The shield may be gained only once every few seconds."
+        }
+      ],
+      "description": "Innate: Whenever Akshan uses a basic attack, he fires an additional shot after a delay that deals 50% AD physical damage, increased to 100% AD against minions. Issuing an attack order on a different target before the additional shot has been launched causes Akshan to fire it at the new target. If the second shot is cancelled instead, he gains 20 : 81.47 (based on level) × (1 + 100% bonus attack speed) bonus movement speed decaying over 1 second.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 2000 / 5000.",
+        "Source notes (summary): If the first shot has killed its target, Akshan will automatically acquire another enemy within 200 units beyond his basic attack range, else he can do so by issuing an attack order to a different target."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Avengerang",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Akshan throws a boomerang that deals physical damage to enemies hit, extending the boomerang range and briefly  revealing them. If this hits an enemy  champion, Akshan gains a brief burst of  move speed.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            45.0,
+            75.0,
+            105.0,
+            135.0,
+            165.0
+          ],
+          "context_notes": "Active: Akshan throws a boomerang in the target direction that briefly grants sight around its trajectory and deals physical damage to enemies hit, revealing them for 1 second and extending its range each time it hits a target."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            90.0,
+            150.0,
+            210.0,
+            270.0,
+            330.0
+          ],
+          "context_notes": "Once the boomerang has passed its original range and has not hit a target in the last 500 units of travelling, it homes back to Akshan and applies the same effects to enemies hit."
+        },
+        {
+          "id": "non_champion_damage",
+          "description": "Non-Champion Damage",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Avengerang deals reduced damage against non-champions."
+        },
+        {
+          "id": "akshan_q_effect_4",
+          "description": "Enemies can be hit only once per pass."
+        }
+      ],
+      "description": "Active: Akshan throws a boomerang in the target direction that briefly grants sight around its trajectory and deals physical damage to enemies hit, revealing them for 1 second and extending its range each time it hits a target. If this hits an enemy champion, Akshan gains 20% (+ 5% per 100 AP) bonus movement speed that decays over 1 second.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1500 / 2400.",
+        "Source effectRadius: 400.",
+        "Source notes (summary): Spell shield will only block a single hit."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Going Rogue",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive: Enemy  champions that kill allied champions are marked as a Scoundrel for a long time. When  Akshan scores a  takedown on a Scoundrel, he gains  bonus gold, all allies killed by the Scoundrel are resurrected, and Scoundrel status is removed from all other enemies.",
+      "effects": [
+        {
+          "id": "akshan_w_effect_1",
+          "description": "Passive: Akshan marks enemy champions that kill allied champions as Scoundrels for 60 seconds. If Akshan scores a takedown against a Scoundrel while alive and within 3 seconds of damaging them, he receives an additional 100 and resurrects all dead allied champions that they have slain after 1 second."
+        },
+        {
+          "id": "akshan_w_effect_2",
+          "description": "When Akshan claims a Scoundrel's bounty he removes the marks of all other enemies. Scoundrels refresh their mark duration on subsequent kills, and will have their mark removed when they die by any means. Akshan cannot mark enemies as Scoundrels while they are dead. Allies are resurrected at their summoning platform."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            80.0,
+            90.0,
+            100.0,
+            110.0,
+            120.0
+          ],
+          "context_notes": "Active: Akshan enters camouflage, which lasts indefinitely while he is near terrain or inside brush, and for 2 seconds otherwise."
+        },
+        {
+          "id": "akshan_w_effect_4",
+          "description": "Going Rogue can be recast after 1 second, and does so automatically after its duration. Attacking or casting abilities ends Going Rogue immediately."
+        },
+        {
+          "id": "akshan_w_effect_5",
+          "description": "Akshan can move during Going Rogue's cast time."
+        },
+        {
+          "id": "akshan_w_effect_6",
+          "description": "Recast: Akshan ends Going Rogue."
+        }
+      ],
+      "description": "Passive: Akshan marks enemy champions that kill allied champions as Scoundrels for 60 seconds. If Akshan scores a takedown against a Scoundrel while alive and within 3 seconds of damaging them, he receives an additional 100 and resurrects all dead allied champions that they have slain after 1 second.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        14.0,
+        10.0,
+        6.0,
+        2.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          30.0,
+          20.0,
+          10.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.5.",
+        "Source notes (summary): The mark displays the duration and slay count."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Heroic Swing",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "First Cast:  Akshan prepares to swing by firing a hook that embeds in the first terrain hit. Heroic Swing's second cast can be used while the hook is attached.",
+      "effects": [
+        {
+          "id": "akshan_e_effect_1",
+          "description": "Active: Akshan can activate Heroic Swing three times before the ability goes on cooldown, and can use the third cast only after 0.5 seconds of the second cast. Akshan may input an attack or movement command to use the second and third casts."
+        },
+        {
+          "id": "akshan_e_effect_2",
+          "description": "First Cast: Akshan fires a hook in the target direction that embeds in the first terrain hit, and enters preparation for up to 2.125 seconds. Heroic Swing's second cast can be used while the hook is attached. If the hook fails to attach or Akshan is moved or becomes immobilized, grounded, or polymorphed within the duration, the preparation will end prematurely, cancelling Heroic Swing in the process."
+        },
+        {
+          "id": "physical_damage_per_shot",
+          "description": "Physical Damage per Shot",
+          "base_by_rank": [
+            8.0,
+            16.0,
+            24.0,
+            32.0,
+            40.0
+          ],
+          "context_notes": "Second Cast: Akshan swings around the terrain in either a clockwise or counterclockwise direction based on the position of the cursor relative to his facing direction, stopping upon colliding with an enemy champion or terrain."
+        },
+        {
+          "id": "akshan_e_effect_4",
+          "description": "Third Cast: Akshan ends the swing by jumping to the target location and fires one last shot at a nearby visible enemy."
+        },
+        {
+          "id": "akshan_e_effect_5",
+          "description": "Scoring an enemy champion takedown reduces Heroic Swing's current cooldown to 0.5 seconds. The shots can critically strike for[ (150% + 15%) damage ][ 50% bonus critical damage ]and apply life steal."
+        },
+        {
+          "id": "akshan_e_effect_6",
+          "description": "Avengerang and Going Rogue can be cast during the third cast's dash. Comeuppance can be cast at all points during Heroic Swing, though Akshan cannot fire during the swing while it is active. Akshan prioritizes firing at enemy champions with stacks of Dirty Fighting, then those damaged by his targeted spells in the last 4 seconds, then the nearest enemy. Heroic Swing can be cast during Akshan's other abilities."
+        }
+      ],
+      "description": "Active: Akshan can activate Heroic Swing three times before the ability goes on cooldown, and can use the third cast only after 0.5 seconds of the second cast. Akshan may input an attack or movement command to use the second and third casts.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        16.5,
+        15.0,
+        13.5,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2500.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Location.",
+        "Source castTime: none.",
+        "Source speed: 2500 / 1200 / 3000.",
+        "Source notes (summary): The second cast's dash will displace Akshan around the terrain in either a clockwise or counterclockwise direction, with the specific direction being determined by the position of the player's cursor relative to his facing direction."
+      ]
+    },
+    "ultimate": {
+      "name": "Comeuppance",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Akshan locks onto the target enemy champion and begins  channeling power into his gun to store bullets,  revealing them as well as  revealing himself. Comeuppance will recast after the channel, or can recast early.",
+      "effects": [
+        {
+          "id": "maximum_bullets_stored",
+          "description": "Maximum Bullets Stored",
+          "base_by_rank": [
+            5.0,
+            6.0,
+            7.0
+          ],
+          "context_notes": "Active: Akshan locks onto the target enemy champion and begins channeling for 2."
+        },
+        {
+          "id": "bullet_storing_interval_time",
+          "description": "Bullet Storing Interval Time",
+          "base_by_rank": [
+            0.625,
+            0.5208,
+            0.4167
+          ],
+          "context_notes": "Active: Akshan locks onto the target enemy champion and begins channeling for 2."
+        },
+        {
+          "id": "akshan_r_effect_2",
+          "description": "Comeuppance can be recast after 0.5 seconds during the channel, and does so automatically afterwards. Comeuppance is placed on a 5-second cooldown if the channel is cancelled."
+        },
+        {
+          "id": "minimum_physical_damage_per_bullet",
+          "description": "Minimum Physical Damage per Bullet",
+          "base_by_rank": [
+            25.0,
+            35.0,
+            45.0
+          ],
+          "context_notes": "Recast: Akshan fires all stored bullets at the target, each briefly granting sight around their trajectory and dealing physical damage to the first enemy hit, increased by 0% : 30% (+ 0% : 9%) (based on critical strike chance), as well as by 0% : 200% (based on target's missing health)."
+        },
+        {
+          "id": "maximum_physical_damage_per_bullet",
+          "description": "Maximum Physical Damage per Bullet",
+          "base_by_rank": [
+            75.0,
+            105.0,
+            135.0
+          ],
+          "context_notes": "Recast: Akshan fires all stored bullets at the target, each briefly granting sight around their trajectory and dealing physical damage to the first enemy hit, increased by 0% : 30% (+ 0% : 9%) (based on critical strike chance), as well as by 0% : 200% (based on target's missing health)."
+        },
+        {
+          "id": "minimum_charged_physical_damage",
+          "description": "Minimum Charged Physical Damage",
+          "base_by_rank": [
+            125.0,
+            210.0,
+            315.0
+          ],
+          "context_notes": "Recast: Akshan fires all stored bullets at the target, each briefly granting sight around their trajectory and dealing physical damage to the first enemy hit, increased by 0% : 30% (+ 0% : 9%) (based on critical strike chance), as well as by 0% : 200% (based on target's missing health)."
+        },
+        {
+          "id": "damage_to_target_on_67_missing_hp",
+          "description": "Damage to target on 67% missing hp",
+          "base_by_rank": [
+            375.0,
+            630.0,
+            945.0
+          ],
+          "context_notes": "Recast: Akshan fires all stored bullets at the target, each briefly granting sight around their trajectory and dealing physical damage to the first enemy hit, increased by 0% : 30% (+ 0% : 9%) (based on critical strike chance), as well as by 0% : 200% (based on target's missing health)."
+        },
+        {
+          "id": "akshan_r_effect_4",
+          "description": "Each bullet's damage applies life steal and executes minions."
+        },
+        {
+          "id": "akshan_r_effect_5",
+          "description": "Akshan can move while channeling Comeuppance."
+        }
+      ],
+      "description": "Active: Akshan locks onto the target enemy champion and begins channeling for 2.5 seconds, revealing them as well as revealing himself. He gradually stores bullets into his weapon over the duration.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        85.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 3200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 3200.",
+        "Source notes (summary): Comeuppance refreshes the duration of Dirty Fighting stacks on the target every 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Akshan.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Akshan"
+  }
+}

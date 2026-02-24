@@ -1,0 +1,358 @@
+{
+  "name": "Ashe",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 101.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 280.0,
+      "per_level": 35.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.6
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 600.0,
+    "health_regeneration": {
+      "base": 3.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.65
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0807017534971237,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Frost Shot",
+      "type": "Passive",
+      "description_source": "Innate:  Ashe's  basic attacks deal increased damage based on her critical strike chance and critical strike damage.",
+      "effects": [
+        {
+          "id": "ashe_p_effect_1",
+          "description": "Innate: Ashe's basic attacks deal bonus physical damage equal to 0% : 100% (+ 0% : 30%) (based on critical strike chance) of the attack's damage. Critical strikes do not deal any additional damage."
+        },
+        {
+          "id": "ashe_p_effect_2",
+          "description": "Innate - Frost Shot: Ashe's basic attacks and ability hits apply Frost to enemies for 2 seconds, which slows them by 20% : 31.18% (based on level) for the duration."
+        },
+        {
+          "id": "ashe_p_effect_3",
+          "description": "Innate - Critical Slow: Ashe's critical strikes double Frost's slow strength to 40% : 62.35% (based on level), decaying over the first second of the duration to its normal strength."
+        }
+      ],
+      "description": "Innate: Ashe's basic attacks deal bonus physical damage equal to 0% : 100% (+ 0% : 30%) (based on critical strike chance) of the attack's damage. Critical strikes do not deal any additional damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Ashe's critical strikes are still considered critical strike damage and thus will be reduced by Randuin's Omen's Resilience."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Ranger's Focus",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Ashe's basic attacks generate  stacks of Focus, up to a cap. Once the stacks reach the cap, she can cast Ranger's Focus.",
+      "effects": [
+        {
+          "id": "ashe_q_effect_1",
+          "description": "Passive: While Ranger's Focus is inactive, Ashe's basic attacks on-attack generate a stack of Focus for 4 seconds, refreshing on subsequent attacks and stacking up to 4 times. Stacks expire one by one every second when the duration ends."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: For 6 seconds, Ashe gains bonus attack speed and empowers her basic attacks to fire a flurry of five arrows that deal modified physical damage."
+        },
+        {
+          "id": "physical_damage_per_arrow",
+          "description": "Physical Damage Per Arrow",
+          "base_by_rank": [
+            22.0,
+            23.5,
+            25.0,
+            26.5,
+            28.0
+          ],
+          "context_notes": "Active: For 6 seconds, Ashe gains bonus attack speed and empowers her basic attacks to fire a flurry of five arrows that deal modified physical damage."
+        },
+        {
+          "id": "total_damage_per_flurry",
+          "description": "Total Damage Per Flurry",
+          "base_by_rank": [
+            110.0,
+            117.5,
+            125.0,
+            132.5,
+            140.0
+          ],
+          "context_notes": "Active: For 6 seconds, Ashe gains bonus attack speed and empowers her basic attacks to fire a flurry of five arrows that deal modified physical damage."
+        },
+        {
+          "id": "ashe_q_effect_3",
+          "description": "Ranger's Focus resets Ashe's basic attack timer."
+        }
+      ],
+      "description": "Passive: While Ranger's Focus is inactive, Ashe's basic attacks on-attack generate a stack of Focus for 4 seconds, refreshing on subsequent attacks and stacking up to 4 times. Stacks expire one by one every second when the duration ends.",
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The flurries deal 1 instance of basic damage followed by 4 instances of a non-reactive type of damage (either default or proc)."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Volley",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ashe fires arrows in a cone dealing physical damage and applying  Critical Slow to the first enemies hit.",
+      "effects": [
+        {
+          "id": "arrows",
+          "description": "Arrows",
+          "base_by_rank": [
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0
+          ],
+          "context_notes": "Active: Ashe shoots a volley of arrows in a cone in the target direction, each dealing physical damage to the first enemy hit, and applying Critical Slow to enemy champions hit."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            95.0,
+            130.0,
+            165.0,
+            200.0
+          ],
+          "context_notes": "Active: Ashe shoots a volley of arrows in a cone in the target direction, each dealing physical damage to the first enemy hit, and applying Critical Slow to enemy champions hit."
+        },
+        {
+          "id": "ashe_w_effect_2",
+          "description": "Enemies can intercept multiple arrows but do not take damage from any beyond the first."
+        }
+      ],
+      "description": "Active: Ashe shoots a volley of arrows in a cone in the target direction, each dealing physical damage to the first enemy hit, and applying Critical Slow to enemy champions hit.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        14.5,
+        11.0,
+        7.5,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          70.0,
+          65.0,
+          60.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source effectRadius: 1200.",
+        "Source notes (summary): The missiles are spawned in a straight horizontal line 75 units in front of Ashe, with a total width of 75/100/100/123/123 units."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Hawkshot",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ashe sends a hawk spirit to a location,  exposing the area along its path and a large area at its destination.",
+      "effects": [
+        {
+          "id": "ashe_e_effect_1",
+          "description": "Active: Ashe sends a hawk spirit to a location, granting sight of the area along its path[ repeatedly for 0.5 seconds after every 100 units traveled ][ for effectively up-to 1.8 seconds at any location ]and at its destination for 5 seconds."
+        },
+        {
+          "id": "ashe_e_effect_2",
+          "description": "Ashe periodically stocks a Hawkshot charge, up to a maximum of 2."
+        }
+      ],
+      "description": "Active: Ashe sends a hawk spirit to a location, granting sight of the area along its path[ repeatedly for 0.5 seconds after every 100 units traveled ][ for effectively up-to 1.8 seconds at any location ]and at its destination for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "charge",
+        "value_by_rank": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1400.0,
+        "effect_hitbox_radius": 1000.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1400.",
+        "Source effectRadius: 1000.",
+        "Source notes (summary): Hawkshot's recharge timer seems to start at the beginning of the game, even prior to ranking the ability, but upon actually ranking the ability, it starts with one charge and the recharge timer starts from 0."
+      ]
+    },
+    "ultimate": {
+      "name": "Enchanted Crystal Arrow",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Ashe launches a crystal arrow of ice that  stuns the first enemy champion hit, dealing magic damage. The arrow accelerates initially and its stun duration increases the farther the arrow has traveled.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            200.0,
+            400.0,
+            600.0
+          ],
+          "context_notes": "Active: Ashe fires a massive arrow of ice in the target direction, briefly granting sight of the area it flies through."
+        },
+        {
+          "id": "ashe_r_effect_2",
+          "description": "Enemies surrounding the primary target are dealt the same damage and afflicted with Frost Shot."
+        }
+      ],
+      "description": "Active: Ashe fires a massive arrow of ice in the target direction, briefly granting sight of the area it flies through. The arrow shatters upon hitting an enemy champion, dealing them magic damage, stunning them for 1 : 3.5 (based on distance traveled) seconds, and granting sight of the area around them for 1 second.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        80.0,
+        60.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1500 : 2100.",
+        "Source effectRadius: 400 /  350.",
+        "Source notes (summary): Enchanted Crystal Arrow's projectile has an icon on the mini-map while it is in flight."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ashe.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ashe"
+  }
+}

@@ -1,0 +1,435 @@
+{
+  "name": "K'Sante",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Skirmisher",
+    "Tank",
+    "Warden"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 625.0,
+      "per_level": 120.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 320.0,
+      "per_level": 60.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 2.1
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 9.5,
+      "per_level": 1.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 1.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.688,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1046875,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Dauntless Instinct",
+      "type": "Passive",
+      "description_source": "Innate:  K'Sante's  abilities mark enemies hit for a short time. His  basic attacks  on-hit consume the mark to deal bonus physical damage based on the target's maximum health.",
+      "effects": [
+        {
+          "id": "ksante_p_effect_1",
+          "description": "Innate: K'Sante's abilities mark enemies hit for 4 seconds. His basic attacks against marked enemies are empowered to consume the mark on-hit, dealing 12 (+ 1% : 2.12% (based on level) of target's maximum health) bonus physical damage. The damage based on the target's health ratio deals a minimum of 15 : 110 (based on level) against minions and is capped at 20 : 115 (based on level) against monsters."
+        },
+        {
+          "id": "ksante_p_effect_2",
+          "description": "All Out Bonus: K'Sante's basic attacks and ability damage, as well as Dauntless Instinct's mark consumption, are empowered to deal bonus physical damage equal to 1% (+ 1% per 100 bonus armor) (+ 1% per 100 bonus magic resistance) of the target's maximum health."
+        }
+      ],
+      "description": "Innate: K'Sante's abilities mark enemies hit for 4 seconds. His basic attacks against marked enemies are empowered to consume the mark on-hit, dealing 12 (+ 1% : 2.12% (based on level) of target's maximum health) bonus physical damage. The damage based on the target's health ratio deals a minimum of 15 : 110 (based on level) against minions and is capped at 20 : 115 (based on level) against monsters.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Spell shield will block the mark's application, but not the mark's consumption from an attack."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Ntofo Strikes",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "Active: K'Sante slams his ntofo down in the target direction that deals physical damage to enemies hit and slows them by 80% for 0."
+        },
+        {
+          "id": "ksante_q_effect_2",
+          "description": "If this hits at least one enemy, K'Sante generates a stack for 6 seconds, stacking up to 2 times and refreshing on subsequent hits. At 2 stacks, the next Ntofo Strikes cast consumes them all to become empowered with a new effect."
+        },
+        {
+          "id": "ksante_q_effect_3",
+          "description": "Empowered Active: K'Sante fires a shockwave in the target direction that applies the same effects to enemies hit, but also pulls them towards him over 0.65 seconds and stuns them for 0.8 seconds."
+        },
+        {
+          "id": "ksante_q_effect_4",
+          "description": "All Out Bonus: Ntofo Strikes' cooldown is reduced by 33%, with a minimum total cooldown of 1.33 seconds. Upon entering All Out, Ntofo Strikes' stacks are reset. Ntofo Strikes' cooldown is reset if K'Sante had 2 stacks before entering All Out."
+        },
+        {
+          "id": "ksante_q_effect_5",
+          "description": "Ntofo Strikes resets K'Sante's basic attack timer."
+        }
+      ],
+      "description": "Active: K'Sante slams his ntofo down in the target direction that deals physical damage to enemies hit and slows them by 80% for 0.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.45
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.45 : 0.35 (based on bonus resistances).",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Path Maker",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "ksante_w_effect_1",
+          "description": "Active: K'Sante raises his ntofos defensively and prepares to dash in the target direction, charging for a minimum of 0.4 seconds and up to 1 second. During this time, he gains displacement immunity and 30% damage reduction; additionally, Path Maker's range, stun duration, and All Out bonus true damage modifier increase over the first 0.9 seconds of the channel."
+        },
+        {
+          "id": "ksante_w_effect_2",
+          "description": "Path Maker can be recast within the duration, and does so automatically afterwards. Path Maker's charge cannot be interrupted by crowd control."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            45.0,
+            75.0,
+            105.0,
+            135.0,
+            165.0
+          ],
+          "context_notes": "Recast: K'Sante dashes in the direction he targeted at the time of cast, though not through terrain, dealing physical damage to enemies he passes through, carrying them alongside him, and stunning them for 0."
+        },
+        {
+          "id": "monster_damage_cap",
+          "description": "Monster Damage Cap",
+          "base_by_rank": [
+            180.0,
+            260.0,
+            340.0,
+            420.0,
+            500.0
+          ],
+          "context_notes": "Recast: K'Sante dashes in the direction he targeted at the time of cast, though not through terrain, dealing physical damage to enemies he passes through, carrying them alongside him, and stunning them for 0."
+        },
+        {
+          "id": "minimum_bonus_true_damage",
+          "description": "Minimum Bonus True Damage",
+          "base_by_rank": [
+            4.5,
+            7.5,
+            10.5,
+            13.5,
+            16.5
+          ],
+          "context_notes": "All Out Bonus: Path Maker no longer applies its knock back and stun, but its damage reduction is increased to 75%, the dash deals 10% : 80% (based on channel time) bonus true damage, and the dash speed is increased by 20%."
+        },
+        {
+          "id": "maximum_bonus_true_damage",
+          "description": "Maximum Bonus True Damage",
+          "base_by_rank": [
+            36.0,
+            60.0,
+            84.0,
+            108.0,
+            132.0
+          ],
+          "context_notes": "All Out Bonus: Path Maker no longer applies its knock back and stun, but its damage reduction is increased to 75%, the dash deals 10% : 80% (based on channel time) bonus true damage, and the dash speed is increased by 20%."
+        },
+        {
+          "id": "total_maximum_mixed_damage",
+          "description": "Total Maximum Mixed Damage",
+          "base_by_rank": [
+            81.0,
+            135.0,
+            189.0,
+            243.0,
+            297.0
+          ],
+          "context_notes": "All Out Bonus: Path Maker no longer applies its knock back and stun, but its damage reduction is increased to 75%, the dash deals 10% : 80% (based on channel time) bonus true damage, and the dash speed is increased by 20%."
+        },
+        {
+          "id": "ksante_w_effect_5",
+          "description": "Ntofo Strikes and All Out can be cast during the dash. Path Maker's recast can be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Active: K'Sante raises his ntofos defensively and prepares to dash in the target direction, charging for a minimum of 0.4 seconds and up to 1 second. During this time, he gains displacement immunity and 30% damage reduction; additionally, Path Maker's range, stun duration, and All Out bonus true damage modifier increase over the first 0.9 seconds of the channel.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: none.",
+        "Source speed: 1300 / 1500 / 1800.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Footwork",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  K'Sante  dashes, granting himself a  shield.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: K'Sante dashes to the target location, though not through terrain, and grants himself a shield for 2 seconds."
+        },
+        {
+          "id": "ksante_e_effect_2",
+          "description": "Footwork can also be cast on allies with increased range and speed, and the ability to dash through terrain. If the target ally is a champion, they receive the shield as well."
+        },
+        {
+          "id": "ksante_e_effect_3",
+          "description": "All Out Bonus: Footwork's dash speed is increased, and its cooldown is reduced by 50%."
+        },
+        {
+          "id": "ksante_e_effect_4",
+          "description": "K'Sante can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: K'Sante dashes to the target location, though not through terrain, and grants himself a shield for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          50.0,
+          55.0,
+          60.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Location /  Unit.",
+        "Source castTime: none.",
+        "Source speed: (500 / 1250 / 1100 / 1400) + 100% movement speed.",
+        "Source notes (summary): Footwork's cast on allies has a forgiveness radius of 150 units."
+      ]
+    },
+    "ultimate": {
+      "name": "All Out",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  K'Sante  roots an enemy and then shatters his tonfas,  knocking them back,  blinking behind them, and dealing physical damage. If the enemy is pushed into terrain, they will be knocked over it and take additional physical damage.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            115.0,
+            150.0
+          ],
+          "context_notes": "Active: K'Sante roots the target enemy champion for 0."
+        },
+        {
+          "id": "strike_physical_damage",
+          "description": "Strike Physical Damage",
+          "base_by_rank": [
+            80.0,
+            115.0,
+            150.0
+          ],
+          "context_notes": "If there is valid map-generated terrain 350 units in the cast direction from the target's location at the time of cast, the target is instead pulled to a location that is directly 450 units away from the edge of the other side of the terrain and K'Sante blinks 100 units behind that location, dealing them the physical damage near their emergence from the terrain."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            160.0,
+            230.0,
+            300.0
+          ],
+          "context_notes": "If there is valid map-generated terrain 350 units in the cast direction from the target's location at the time of cast, the target is instead pulled to a location that is directly 450 units away from the edge of the other side of the terrain and K'Sante blinks 100 units behind that location, dealing them the physical damage near their emergence from the terrain."
+        },
+        {
+          "id": "ksante_r_effect_3",
+          "description": "After K'Sante blinks, he enters All Out for 15 seconds."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0
+          ],
+          "context_notes": "All Out: K'Sante gains a health threshold equal to 65% maximum health which cannot be modified nor exceeded by any means."
+        },
+        {
+          "id": "ksante_r_effect_5",
+          "description": "K'Sante retains his maximum health and bonus resistances during All Out. Health lost from gaining the health threshold is not restored after the effect ends. If the target is pulled over terrain, K'Sante will vanish during their displacement and reappear near the end of it."
+        }
+      ],
+      "description": "Active: K'Sante roots the target enemy champion for 0.5 seconds and gains displacement immunity over the cast time. He then shatters his ntofos, pulling the target to a location that is 300 units in the cast direction from their location at the time of cast, during which they are revealed, and blinking 175 units behind that location. The target is dealt physical damage near the end of the displacement and is stunned for 0.3 seconds once it ends.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: unit.",
+        "Source castTime: 0.4.",
+        "Source speed: 2000.",
+        "Source effectRadius: 350 / 5000 / Global.",
+        "Source notes (summary): All Out's cast has a forgiveness radius of 50 units."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/KSante.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "KSante"
+  }
+}

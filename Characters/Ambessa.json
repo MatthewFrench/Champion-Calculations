@@ -1,0 +1,397 @@
+{
+  "name": "Ambessa",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "energy",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 4.9
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.15625,
+    "windup_percent": 15.625,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Drakehound's Step",
+      "type": "Passive",
+      "description_source": "Innate: During any of  Ambessa's  ability  lockouts, the player may right-click to select a location or target to  dash toward after the lockout ends. An indicator appears on the ground denoting the direction and destination location.",
+      "effects": [
+        {
+          "id": "ambessa_p_effect_1",
+          "description": "Innate: During the lockout of Ambessa's abilities, inputting an attack or movement command causes her to dash to or towards the target or location, respectively, after the lockout ends. This dash cannot pass through terrain.Ambessa cannot dash while immobilized or grounded."
+        },
+        {
+          "id": "ambessa_p_effect_2",
+          "description": "Innate: Whenever Ambessa casts an ability, she generates a stack of Medarda Maxim after the ability's respective lockout for 4 seconds, refreshing with subsequent casts and stacking up to 3 times. Basic attacks consume one stack each to become empowered."
+        },
+        {
+          "id": "ambessa_p_effect_3",
+          "description": "Medarda Maxim: Ambessa's next basic attack on-attack is empowered to have an uncancellable windup, gain 75 bonus range and 50% bonus attack speed, deal 5 : 32.94 (based on level) (+ 25% bonus AD) bonus physical damage, and restore 40 / 55 / 70 (based on level) energy."
+        }
+      ],
+      "description": "Innate: During the lockout of Ambessa's abilities, inputting an attack or movement command causes her to dash to or towards the target or location, respectively, after the lockout ends. This dash cannot pass through terrain.Ambessa cannot dash while immobilized or grounded.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 770 / 830 / 890 / 950 (based on level) + 100% movement speed.",
+        "Source notes (summary): Stacks of Medarda Maxim are consumed on-hit, so means of applying on-hit effects without attacking (eg."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Cunning Sweep",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Ambessa slashes with her twin drakehounds in the target direction, dealing physical damage to enemies hit. The damage is  increased against enemies hit by the outer edge.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Ambessa enters a 0."
+        },
+        {
+          "id": "increased_physical_damage",
+          "description": "Increased Physical Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Active: Ambessa enters a 0."
+        },
+        {
+          "id": "ambessa_q_effect_2",
+          "description": "If this hits at least one enemy, Ambessa can cast Sundering Slam within the next 4 seconds."
+        },
+        {
+          "id": "ambessa_q_effect_3",
+          "description": "Against monsters, Cunning Sweep deals 150 bonus physical damage and the damage based on their health ratio is capped at 100 : 323.53 (based on level)."
+        }
+      ],
+      "description": "Active: Ambessa enters a 0.225-second lockout, at the end of which she slashes with her twin drakehounds in a cone in the target direction, dealing physical damage to enemies hit. The damage is doubled against enemies hit by the outer edge. Drakehound's Step's dash may be buffered during the lockout or initiated within 0.275 seconds of the lockout ending, and Ambessa will perform the dash after her slash completes.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 135.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source effectRadius: 275 / 135 / 400.",
+        "Source notes (summary): Cunning Sweep will slash from wherever Ambessa is at the end of the lockout."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Repudiation",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ambessa briefly braces herself, then smashes the ground beneath her. If she performs  Drakehound's Step's  dash during Repudiation, she will smash the ground at her destination instead.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Ambessa braces herself for up to 0."
+        },
+        {
+          "id": "increased_physical_damage",
+          "description": "Increased Physical Damage",
+          "base_by_rank": [
+            75.0,
+            112.5,
+            150.0,
+            187.5,
+            225.0
+          ],
+          "context_notes": "Additionally, Ambessa shields herself at the time of cast for 50 : 351."
+        },
+        {
+          "id": "ambessa_w_effect_3",
+          "description": "Ambessa will smash the ground at the end of Drakehound's Step's dash if she would finish bracing during it, and otherwise always smashes the ground from wherever she is at the end of the bracing time."
+        }
+      ],
+      "description": "Active: Ambessa braces herself for up to 0.5 seconds, during which in the first 0.225 seconds she is unable to act. After Ambessa finishes bracing, she smashes the ground beneath her, dealing physical damage to nearby enemies. Drakehound's Step's dash may be buffered during the lockout or initiated within 0.25 seconds of the lockout ending.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        17.0,
+        16.0,
+        15.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): Repudiation's bracing time is unaffected by the initiation of Drakehound's Step dash."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Lacerate",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ambessa spins her twin drakehounds around her, dealing physical damage to enemies hit and  slowing them briefly.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Active: Ambessa enters a 0."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Ambessa enters a 0."
+        }
+      ],
+      "description": "Active: Ambessa enters a 0.225-second lockout and spins her twin drakehounds around her to deal physical damage to nearby enemies and slow them by 99% decaying over 1 second. Drakehound's Step's dash may be buffered during the lockout or initiated within 0.275 seconds of the lockout ending; in either case, she will spin a second time at the end of the dash to apply the same effects at no additional cost.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): Ambessa will cast the second spin of Lacerate from wherever she is at the end of the dash."
+      ]
+    },
+    "ultimate": {
+      "name": "Public Execution",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Ambessa gains  armor penetration and  heals for a percentage of the damage dealt by her active abilities.",
+      "effects": [
+        {
+          "id": "armor_penetration",
+          "description": "Armor Penetration",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "Passive: Ambessa gains armor penetration and heals herself for a percentage of the post-mitigation damage she deals to enemies with her active abilities."
+        },
+        {
+          "id": "healing_percentage",
+          "description": "Healing Percentage",
+          "base_by_rank": [
+            10.0,
+            12.5,
+            15.0
+          ],
+          "context_notes": "Passive: Ambessa gains armor penetration and heals herself for a percentage of the post-mitigation damage she deals to enemies with her active abilities."
+        },
+        {
+          "id": "minion_healing_percentage",
+          "description": "Minion Healing Percentage",
+          "base_by_rank": [
+            2.5,
+            3.125,
+            3.75
+          ],
+          "context_notes": "Passive: Ambessa gains armor penetration and heals herself for a percentage of the post-mitigation damage she deals to enemies with her active abilities."
+        },
+        {
+          "id": "monster_healing_percentage",
+          "description": "Monster Healing Percentage",
+          "base_by_rank": [
+            4.0,
+            5.0,
+            6.0
+          ],
+          "context_notes": "Passive: Ambessa gains armor penetration and heals herself for a percentage of the post-mitigation damage she deals to enemies with her active abilities."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Ambessa prepares a strike in a line in the target direction, then blinks behind the farthest enemy champion within the area and seizes them."
+        },
+        {
+          "id": "ambessa_r_effect_3",
+          "description": "Ambessa is displacement immune and unable to act during the cast time and while the target is suppressed, lingering for 0.1 seconds afterwards. Drakehound's Step's dash may be buffered during the cast time or lockout, as well as initiated within 0.275 seconds of the lockout ending."
+        }
+      ],
+      "description": "Passive: Ambessa gains armor penetration and heals herself for a percentage of the post-mitigation damage she deals to enemies with her active abilities. The healing effectiveness is reduced to 25% against minions and 40% against monsters.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        115.0,
+        100.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.55
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.55.",
+        "Source notes (summary): Public Execution's attachment depends on the application of the suppression; if the suppression is not applied, neither is the attachment."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ambessa.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ambessa"
+  }
+}

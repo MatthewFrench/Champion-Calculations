@@ -1,0 +1,378 @@
+{
+  "name": "Singed",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Specialist",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 96.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 330.0,
+      "per_level": 45.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 34.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 9.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.55
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 3.4
+    },
+    "attack_speed": {
+      "base": 0.7,
+      "per_level_percent": 1.9
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Noxious Slipstream",
+      "type": "Passive",
+      "description_source": "Innate: Whenever  Singed moves near a  champion, he gains  bonus movement speed for a short time, which refreshes on subsequent passes and  stacks up to a cap.",
+      "effects": [
+        {
+          "id": "singed_p_effect_1",
+          "description": "Innate: Whenever Singed moves near a champion, he gains a stack of Noxious Slipstream for 2 seconds, refreshing on subsequent passes and stacking up to 25 times."
+        },
+        {
+          "id": "singed_p_effect_2",
+          "description": "Noxious Slipstream: For each stack, Singed gains 25% bonus movement speed, up to a maximum of 625%."
+        },
+        {
+          "id": "singed_p_effect_3",
+          "description": "This effect cannot occur on the same target more than once every few seconds."
+        }
+      ],
+      "description": "Innate: Whenever Singed moves near a champion, he gains a stack of Noxious Slipstream for 2 seconds, refreshing on subsequent passes and stacking up to 25 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 225."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Poison Trail",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Toggle:  Singed continually creates a toxic cloud that shortly lingers in his wake, which continually inflicts  poison to enemies within.",
+      "effects": [
+        {
+          "id": "singed_q_effect_1",
+          "description": "Toggle: Singed continually creates a toxic cloud in his wake that lingers for 3.25 seconds. The cloud inflicts poison to enemies within."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            5.0,
+            7.5,
+            10.0,
+            12.5,
+            15.0
+          ],
+          "context_notes": "poison: The target takes magic damage every 0."
+        },
+        {
+          "id": "magic_damage_per_second",
+          "description": "Magic Damage per Second",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "poison: The target takes magic damage every 0."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "poison: The target takes magic damage every 0."
+        },
+        {
+          "id": "singed_q_effect_3",
+          "description": "Singed earns the kill credit of enemy minions that are poisoned and would die to the damage of allied minions within the time before the next damage instance."
+        }
+      ],
+      "description": "Toggle: Singed continually creates a toxic cloud in his wake that lingers for 3.25 seconds. The cloud inflicts poison to enemies within.",
+      "cooldown_seconds_by_rank": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cost": {
+        "resource": "mana_per_second",
+        "value_by_rank": [
+          13.0,
+          13.0,
+          13.0,
+          13.0,
+          13.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 180.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 180.",
+        "Source notes (summary): Toggled abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Mega Adhesive",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Singed creates a field of adhesive at the target location for a short time that  grounds and  slows enemies within.",
+      "effects": [
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            50.0,
+            55.0,
+            60.0,
+            65.0,
+            70.0
+          ],
+          "context_notes": "Active: Singed spills a potent adhesive that lands at the target location after 0."
+        }
+      ],
+      "description": "Active: Singed spills a potent adhesive that lands at the target location after 0.375 seconds, creating a field for 3 seconds that grounds enemies within and slows them.",
+      "cooldown_seconds_by_rank": [
+        17.0,
+        16.0,
+        15.0,
+        14.0,
+        13.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 265.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 265.",
+        "Source notes (summary): The goo missile is VFX only, to convey which location Singed threw the adhesive at."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Fling",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Singed  flings the target enemy, dealing magic damage based on their maximum health.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            60.0,
+            70.0,
+            80.0,
+            90.0
+          ],
+          "context_notes": "Active: Singed flings the target enemy 550 units over himself over 0."
+        },
+        {
+          "id": "root_duration",
+          "description": "Root Duration",
+          "base_by_rank": [
+            1.0,
+            1.25,
+            1.5,
+            1.75,
+            2.0
+          ],
+          "context_notes": "If the target lands on Mega Adhesive's area of effect after the displacement, they are rooted for a duration."
+        }
+      ],
+      "description": "Active: Singed flings the target enemy 550 units over himself over 0.693 seconds, dealing magic damage. The damage based on the target's health ratio is capped at 300 against minions and monsters.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Fling can throw enemies over walls (circumstances permitting)."
+      ]
+    },
+    "ultimate": {
+      "name": "Insanity Potion",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Singed empowers himself for some time with  bonus ability power,  bonus armor,  bonus magic resist,  bonus movement speed,  bonus health regen, and  bonus mana regen.",
+      "effects": [
+        {
+          "id": "bonus_stats",
+          "description": "Bonus Stats",
+          "base_by_rank": [
+            25.0,
+            60.0,
+            95.0
+          ],
+          "context_notes": "Active: Singed empowers himself for 25 seconds with ability power, bonus armor, bonus magic resistance, bonus movement speed, bonus health regeneration, and bonus mana regeneration."
+        },
+        {
+          "id": "hp_mana_regenerated_per_0_5_seconds",
+          "description": "HP/Mana Regenerated per 0.5 Seconds",
+          "base_by_rank": [
+            2.5,
+            6.0,
+            9.5
+          ],
+          "context_notes": "Active: Singed empowers himself for 25 seconds with ability power, bonus armor, bonus magic resistance, bonus movement speed, bonus health regeneration, and bonus mana regeneration."
+        },
+        {
+          "id": "total_hp_mana_regeneration_per_5_seconds",
+          "description": "Total HP/Mana Regeneration (per 5 Seconds)",
+          "base_by_rank": [
+            125.0,
+            300.0,
+            475.0
+          ],
+          "context_notes": "Active: Singed empowers himself for 25 seconds with ability power, bonus armor, bonus magic resistance, bonus movement speed, bonus health regeneration, and bonus mana regeneration."
+        },
+        {
+          "id": "singed_r_effect_2",
+          "description": "During this time, Poison Trail additionally applies Grievous Wounds for 1 second, which refreshes every 0.25 seconds while the poison persists."
+        }
+      ],
+      "description": "Active: Singed empowers himself for 25 seconds with ability power, bonus armor, bonus magic resistance, bonus movement speed, bonus health regeneration, and bonus mana regeneration.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): No additional notes."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Singed.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Singed"
+  }
+}

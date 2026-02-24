@@ -1,0 +1,387 @@
+{
+  "name": "Miss Fortune",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 625.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 40.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 2.4
+    },
+    "attack_speed": {
+      "base": 0.656,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.151993364095687,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Love Tap",
+      "type": "Passive",
+      "description_source": "Innate:  Miss Fortune's  basic attacks apply a mark that expires when attacking a new enemy. If the enemy was unmarked, this also deals bonus physical damage.",
+      "effects": [
+        {
+          "id": "missfortune_p_effect_1",
+          "description": "Innate: Miss Fortune's basic attacks are empowered to apply a mark that expires upon attacking a new enemy. If the enemy was unmarked, this also deals 50% : 100% (based on level) AD bonus physical damage, halved to 25% : 50% (based on level) AD against minions."
+        }
+      ],
+      "description": "Innate: Miss Fortune's basic attacks are empowered to apply a mark that expires upon attacking a new enemy. If the enemy was unmarked, this also deals 50% : 100% (based on level) AD bonus physical damage, halved to 25% : 50% (based on level) AD against minions.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): With Runaan's Hurricane, Love Tap only applies to the primary target."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Double Up",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Miss Fortune fires a shot at the target enemy that deals physical damage, which then bounces to hit another enemy behind them. This applies  on-hit effects to both enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            20.0,
+            45.0,
+            70.0,
+            95.0,
+            120.0
+          ],
+          "context_notes": "Active: Miss Fortune fires a shot at the target enemy that deals physical damage, triggers on-attack effects, and bounces to hit another enemy behind them, applying on-hit effects to both enemies hit."
+        },
+        {
+          "id": "missfortune_q_effect_2",
+          "description": "Double Up's bounce can critically strike for[ (150% + 15%) damage. ][ 50% bonus critical damage. ]If Double Up kills the primary target, the bounce will critically strike."
+        },
+        {
+          "id": "missfortune_q_effect_3",
+          "description": "The bounce prioritizes units directly behind the primary target. A target does not have to be visible to be hit by the bounce."
+        }
+      ],
+      "description": "Active: Miss Fortune fires a shot at the target enemy that deals physical damage, triggers on-attack effects, and bounces to hit another enemy behind them, applying on-hit effects to both enemies hit.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.0,
+        5.0,
+        4.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "projectile_speed": 1400.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: Basic Attack Timer.",
+        "Source speed: 1400.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Double Up deals basic damage to both targets, but also triggers spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Strut",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Miss Fortune gains  bonus movement speed after a few seconds without being attacked. This bonus is increased after another few seconds, and is granted instantly whenever Strut is cast.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Passive: Miss Fortune gains bonus movement speed after 4 seconds without taking non- persistent damage."
+        },
+        {
+          "id": "increased_bonus_movement_speed",
+          "description": "Increased Bonus Movement Speed",
+          "base_by_rank": [
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
+          ],
+          "context_notes": "Passive: Miss Fortune gains bonus movement speed after 4 seconds without taking non- persistent damage."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            40.0,
+            55.0,
+            70.0,
+            85.0,
+            100.0
+          ],
+          "context_notes": "Active: Miss Fortune gains bonus attack speed for 4 seconds."
+        },
+        {
+          "id": "missfortune_w_effect_3",
+          "description": "Marking a new target with Love Tap reduces Strut's current cooldown by 2 seconds."
+        }
+      ],
+      "description": "Passive: Miss Fortune gains bonus movement speed after 4 seconds without taking non- persistent damage. This bonus is increased after another 3 seconds, and is granted instantly whenever Strut is cast.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Make It Rain",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Miss Fortune casts a storm of bullets at the target location for a short time, which continually deals magic damage and  slows enemies within.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            8.75,
+            12.5,
+            16.25,
+            20.0,
+            23.75
+          ],
+          "context_notes": "Active: Miss Fortune casts a storm of bullets at the target location for 2 seconds, granting sight of the area, dealing magic damage every 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "Active: Miss Fortune casts a storm of bullets at the target location for 2 seconds, granting sight of the area, dealing magic damage every 0."
+        }
+      ],
+      "description": "Active: Miss Fortune casts a storm of bullets at the target location for 2 seconds, granting sight of the area, dealing magic damage every 0.25 seconds to enemies within, and slowing them by 40% (+ 6% per 100 AP).",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        17.0,
+        16.0,
+        15.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Make It Rain's slow cannot be cleansed."
+      ]
+    },
+    "ultimate": {
+      "name": "Bullet Time",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "physical_damage_per_wave",
+          "description": "Physical Damage per Wave",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0
+          ],
+          "context_notes": "Active: Miss Fortune channels for up to 3 seconds, firing a number of waves of bullets in the target direction."
+        },
+        {
+          "id": "total_waves",
+          "description": "Total Waves",
+          "base_by_rank": [
+            14.0,
+            16.0,
+            18.0
+          ],
+          "context_notes": "Active: Miss Fortune channels for up to 3 seconds, firing a number of waves of bullets in the target direction."
+        },
+        {
+          "id": "maximum_total_physical_damage",
+          "description": "Maximum Total Physical Damage",
+          "base_by_rank": [
+            280.0,
+            500.0,
+            720.0
+          ],
+          "context_notes": "Active: Miss Fortune channels for up to 3 seconds, firing a number of waves of bullets in the target direction."
+        },
+        {
+          "id": "wave_interval_time",
+          "description": "Wave Interval Time",
+          "base_by_rank": [
+            0.2036,
+            0.1781,
+            0.1583
+          ],
+          "context_notes": "Active: Miss Fortune channels for up to 3 seconds, firing a number of waves of bullets in the target direction."
+        },
+        {
+          "id": "missfortune_r_effect_2",
+          "description": "Each of the waves can critically strike for (130% + 9%) damage."
+        }
+      ],
+      "description": "Active: Miss Fortune channels for up to 3 seconds, firing a number of waves of bullets in the target direction. Each wave is in a spread of 6 projectiles that deals physical damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        110.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 1450.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 2000.",
+        "Source effectRadius: 1450.",
+        "Source notes (summary): The damage dealt by each wave of Bullet Time is calculated when the wave reaches the target."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/MissFortune.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "MissFortune"
+  }
+}

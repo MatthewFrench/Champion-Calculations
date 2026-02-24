@@ -1,0 +1,460 @@
+{
+  "name": "Briar",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 625.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "frenzy",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 30.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.553,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.1931745009658725,
+    "windup_percent": 19.317450096587248,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.553,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Crimson Curse",
+      "type": "Passive",
+      "description_source": "Innate:  Briar has no  base health regeneration but she gains increased healing from other sources based on her missing health.",
+      "effects": [
+        {
+          "id": "briar_p_effect_1",
+          "description": "Innate: Briar's basic attacks on-hit and abilities inflict a bleed against enemies for 5 seconds, refreshing on subsequent applications, stacking up to 5 times and dealing 25% damage for stacks beyond the first. The bleed deals[ 10 : 54.71 (based on level) (+ 50% bonus AD) total physical damage and heals Briar for 2.5 : 13.68 (based on level) (+ 12.5% bonus AD) health over the duration, increased by 2.5 : 13.68 (based on level) (+ 12.5% bonus AD) and 0.63 : 3.42 (based on level) (+ 3.125% bonus AD) for each subsequent stack respectively and up to a maximum of 20 : 109.41 (based on level) (+ 100% bonus AD) total physical damage and 5 : 27.35 (based on level) (+ 25% bonus AD) health over the duration. ][ 1 : 5.47 (based on level) (+ 5% bonus AD) physical damage and heals Briar for 0.25 : 1.37 (based on level) (+ 1.25% bonus AD) health every 0.5 seconds, increased by 0.25 : 1.37 (based on level) (+ 1.25% bonus AD) and 0.06 : 0.34 (based on level) (+ 0.3125% bonus AD) for each subsequent stack respectively and up to a maximum of 2 : 10.94 (based on level) (+ 10% bonus AD) physical damage and 0.5 : 2.74 (based on level) (+ 2.5% bonus AD) health per tick. ]If a target dies while bleeding, she will heal herself equal to 125% of the remaining bleed damage."
+        },
+        {
+          "id": "briar_p_effect_2",
+          "description": "Briar has no base health regeneration, but she increases healing from all sources by 0% : 40% (based on missing health) (+ 0% : 2.5% (based on missing health) per 100 bonus health)."
+        }
+      ],
+      "description": "Innate: Briar's basic attacks on-hit and abilities inflict a bleed against enemies for 5 seconds, refreshing on subsequent applications, stacking up to 5 times and dealing 25% damage for stacks beyond the first. The bleed deals[ 10 : 54.71 (based on level) (+ 50% bonus AD) total physical damage and heals Briar for 2.5 : 13.68 (based on level) (+ 12.5% bonus AD) health over the duration, increased by 2.5 : 13.68 (based on level) (+ 12.5% bonus AD) and 0.63 : 3.42 (based on level) (+ 3.125% bonus AD) for each subsequent stack respectively and up to a maximum of 20 : 109.41 (based on level) (+ 100% bonus AD) total physical damage and 5 : 27.35 (based on level) (+ 25% bonus AD) health over the duration. ][ 1 : 5.47 (based on level) (+ 5% bonus AD) physical damage and heals Briar for 0.25 : 1.37 (based on level) (+ 1.25% bonus AD) health every 0.5 seconds, increased by 0.25 : 1.37 (based on level) (+ 1.25% bonus AD) and 0.06 : 0.34 (based on level) (+ 0.3125% bonus AD) for each subsequent stack respectively and up to a maximum of 2 : 10.94 (based on level) (+ 10% bonus AD) physical damage and 0.5 : 2.74 (based on level) (+ 2.5% bonus AD) health per tick. ]If a target dies while bleeding, she will heal herself equal to 125% of the remaining bleed damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The bleed always heals briar for 25% of the pre-mitigation damage dealt."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Head Rush",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Briar  leaps to the target unit. If the target is an enemy, she deals physical damage,  stuns them briefly, and additionally reduces their  armor and  magic resistance for a few seconds.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Briar leaps to the target unit."
+        },
+        {
+          "id": "resistances_reduction",
+          "description": "Resistances Reduction",
+          "base_by_rank": [
+            10.0,
+            12.5,
+            15.0,
+            17.5,
+            20.0
+          ],
+          "context_notes": "Active: Briar leaps to the target unit."
+        },
+        {
+          "id": "briar_q_effect_2",
+          "description": "Head Rush resets Briar's basic attack timer."
+        }
+      ],
+      "description": "Active: Briar leaps to the target unit. If the target is an enemy, she deals physical damage, applies on-hit effects, triggers on-attack effects, stuns them for 0.85 seconds, and reduces their armor and magic resistance for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          5.0,
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 600 : 900 (based on distance).",
+        "Source notes (summary): Head Rush can be cast on jungle plants, wards, and traps."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Blood Frenzy",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Briar  dashes and senses her surroundings. If there is a nearby enemy upon her arrival, she gains Blood Frenzy for a few seconds, during which she can cast  Snack Attack.",
+      "effects": [
+        {
+          "id": "briar_w_effect_1",
+          "description": "Active: Briar dashes in the target direction. If there is a nearby enemy upon her arrival, she gains Blood Frenzy for 5 seconds, during which she can cast Snack Attack."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            55.0,
+            65.0,
+            75.0,
+            85.0,
+            95.0
+          ],
+          "context_notes": "Blood Frenzy: Briar breaks free from her pillory, causing her to become forced to basic attack the nearest enemy."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            24.0,
+            33.0,
+            42.0,
+            51.0,
+            60.0
+          ],
+          "context_notes": "Blood Frenzy: Briar breaks free from her pillory, causing her to become forced to basic attack the nearest enemy."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
+          ],
+          "context_notes": "Blood Frenzy: Briar breaks free from her pillory, causing her to become forced to basic attack the nearest enemy."
+        },
+        {
+          "id": "briar_w_effect_3",
+          "description": "Briar prioritizes attacking champions, then large monsters or minions, and then any other unit. If she casts Head Rush on a non-champion, she will shift her target priority to large monsters or minions, then champions, and then any other unit."
+        },
+        {
+          "id": "briar_w_effect_4",
+          "description": "Blood Frenzy causes Briar to become unable to receive movement and attack commands. The frenzy ends early if there are no longer any nearby valid targets or Chilling Scream is cast. Blood Frenzy resets Briar's basic attack timer. Head Rush and Certain Death can be cast during the dash."
+        }
+      ],
+      "description": "Active: Briar dashes in the target direction. If there is a nearby enemy upon her arrival, she gains Blood Frenzy for 5 seconds, during which she can cast Snack Attack.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          5.0,
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1200.0,
+        "effect_hitbox_radius": 275.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1200.",
+        "Source effectRadius: 1000 / 275.",
+        "Source notes (summary): Blood Frenzy acquires targets regardless of if they are visible or not."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Chilling Scream",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "heal_per_tick",
+          "description": "Heal Per Tick",
+          "base_by_rank": [
+            2.5,
+            2.875,
+            3.25,
+            3.625,
+            4.0
+          ],
+          "context_notes": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0."
+        },
+        {
+          "id": "maximum_heal",
+          "description": "Maximum Heal",
+          "base_by_rank": [
+            10.0,
+            11.5,
+            13.0,
+            14.5,
+            16.0
+          ],
+          "context_notes": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0."
+        },
+        {
+          "id": "briar_e_effect_2",
+          "description": "Chilling Scream can be recast within the duration, and does so automatically afterwards. Chilling Scream's charge cannot be interrupted by crowd control."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            80.0,
+            115.0,
+            150.0,
+            185.0,
+            220.0
+          ],
+          "context_notes": "Recast: Briar unleashes the scream in the direction she targeted at the time of cast, dealing magic damage to enemies hit and slowing them by 80% for 0."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            2.0,
+            2.875,
+            3.75,
+            4.625,
+            5.5
+          ],
+          "context_notes": "Recast: Briar unleashes the scream in the direction she targeted at the time of cast, dealing magic damage to enemies hit and slowing them by 80% for 0."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            140.0,
+            215.0,
+            290.0,
+            365.0,
+            440.0
+          ],
+          "context_notes": "If Chilling Scream was charged for its full duration, enemies hit are also knocked back 575 units."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            220.0,
+            330.0,
+            440.0,
+            550.0,
+            660.0
+          ],
+          "context_notes": "If Chilling Scream was charged for its full duration, enemies hit are also knocked back 575 units."
+        }
+      ],
+      "description": "Active: Briar prepares to unleash a scream in the target direction, charging for up to 1 second, during which she increases Chilling Scream's damage and range, and gains 35% damage reduction and heals herself every 0.25 seconds.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        16.0,
+        16.0,
+        16.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          5.0,
+          5.0,
+          5.0,
+          5.0,
+          5.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.15,
+        "projectile_speed": 1900.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: None / 0.15.",
+        "Source speed: 1900 / 1800.",
+        "Source notes (summary): Chilling Scream increases its damage by its minimum every 0."
+      ]
+    },
+    "ultimate": {
+      "name": "Certain Death",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "briar_r_effect_1",
+          "description": "Active: Briar kicks her pillory's hemolith in the target direction, briefly granting sight of its surroundings as it travels and marking the first enemy champion hit as her prey. The mark's application disrupts the target's ongoing channels. While the target is marked, they are revealed."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "If a target is hit, Briar cleanses herself from all crowd control and becomes immune to them over a cast time, afterwards dashing to them with displacement immunity."
+        },
+        {
+          "id": "life_steal",
+          "description": "Life Steal",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0
+          ],
+          "context_notes": "Hematomania: Briar gains all effects of Blood Frenzy as well as bonus armor and bonus magic resistance equal to 20% AD, life steal, and additional bonus movement speed."
+        },
+        {
+          "id": "additional_bonus_movement_speed",
+          "description": "Additional Bonus Movement Speed",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "Hematomania: Briar gains all effects of Blood Frenzy as well as bonus armor and bonus magic resistance equal to 20% AD, life steal, and additional bonus movement speed."
+        },
+        {
+          "id": "briar_r_effect_4",
+          "description": "While in the empowered frenzy, Briar prioritizes attacking the marked target over all other units and regardless of range. If that target becomes invalid, she will shift back to her normal targeting priority until the marked target can be attacked again. Hematomania lasts until the mark is dispelled by any means, including Briar's or the target's death."
+        },
+        {
+          "id": "briar_r_effect_5",
+          "description": "Casting Chilling Scream removes the target's mark and ends Hematomania early. Head Rush's cast does not shift her targeting priority during Hematomania."
+        }
+      ],
+      "description": "Active: Briar kicks her pillory's hemolith in the target direction, briefly granting sight of its surroundings as it travels and marking the first enemy champion hit as her prey. The mark's application disrupts the target's ongoing channels. While the target is marked, they are revealed.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          5.0,
+          5.0,
+          5.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 1.0,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 575.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 1 / 1.25.",
+        "Source speed: 2000 / 2500 : 5000.",
+        "Source effectRadius: Global /  1500 /  575.",
+        "Source notes (summary): Briar will track the target with the dash if they change locations."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Briar.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Briar"
+  }
+}

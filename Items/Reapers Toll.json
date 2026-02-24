@@ -154,7 +154,11 @@
     "purchasable": true,
     "tags": [
       "MARKSMAN"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/443090_reaperstoll.png",
   "simpleDescription": null,
@@ -163,11 +167,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.073577+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: each basic attack on-hit applies a persistent Reap stack for the combat phase and simultaneously recalculates bonus true damage from target maximum health plus per-stack scaling.",
       "Player-visible behavior: repeated hits progressively lower the target's health-threshold floor for the round (down to a 50% maximum-health floor), creating a sustained anti-frontline execute window.",
-      "Patch-history verification confirms this file's current ranged/melee baseline and attack-speed gain semantics for the latest Arena tuning."
+      "Patch-history verification confirms this file's current ranged/melee baseline and attack-speed gain semantics for the latest Arena tuning.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

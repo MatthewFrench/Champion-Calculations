@@ -53,6 +53,11 @@ The target keeps subsystem facades and moves implementation into explicit leaf m
 ```text
 src/
   main.rs
+  simulation_contracts.rs
+  simulation_contracts/
+    runtime_actor_contracts.rs
+    search_reporting_contracts.rs
+    entrypoint_cli_contracts.rs
   core.rs
   core/
     combat_primitives_state.rs
@@ -366,18 +371,7 @@ Acceptance gates:
 
 Current `mod.rs` inventory under `src/`:
 
-- `src/scripts/mod.rs`
-- `src/scripts/champions/mod.rs`
-- `src/scripts/champions/doctor_mundo/mod.rs`
-- `src/scripts/champions/morgana/mod.rs`
-- `src/scripts/champions/sona/mod.rs`
-- `src/scripts/champions/vayne/mod.rs`
-- `src/scripts/champions/vladimir/mod.rs`
-- `src/scripts/champions/warwick/mod.rs`
-- `src/scripts/items/mod.rs`
-- `src/scripts/registry/mod.rs`
-- `src/scripts/runes/mod.rs`
-- `src/scripts/runtime/mod.rs`
+- none (`0` files; verified `2026-02-24`)
 
 Planned migration convention:
 
@@ -392,14 +386,14 @@ Track and update at each architecture milestone close:
 | Metric | Baseline | Current | Target |
 |---|---|---|---|
 | `engine.rs` line count | 3579 | 601 | <= 700 |
-| `scenario_runner.rs` line count | 4284 | 286 | <= 700 |
+| `scenario_runner.rs` line count | 4284 | 284 | <= 700 |
 | `search.rs` line count | 2244 | 569 | <= 700 |
-| `defaults.rs` line count | 2455 | 679 | <= 700 |
+| `defaults.rs` line count | 2455 | 386 | <= 700 |
 | `data.rs` line count | 2008 | 116 | <= 700 |
-| `reporting.rs` line count | 1075 | 140 | <= 700 |
-| `core.rs` line count | 933 | 611 | <= 700 |
-| count of `mod.rs` files under `src/` | 12 | 12 | minimal/justified |
-| architecture milestones complete | 1/18 | 14/18 | 18/18 |
+| `reporting.rs` line count | 1075 | 139 | <= 700 |
+| `core.rs` line count | 933 | 162 | <= 700 |
+| count of `mod.rs` files under `src/` | 12 | 0 | minimal/justified |
+| architecture milestones complete | 1/18 | 18/18 | 18/18 |
 
 Convenience metrics command:
 
@@ -421,7 +415,7 @@ Status legend:
 | ARCH-010 | DONE | Extract engine geometry modules | geometry helpers and position-update ownership moved out of facade, and `engine.rs <= 3000` |
 | ARCH-011 | DONE | Extract engine event queue modules | queue types/scheduling moved and queue channel hardened |
 | ARCH-012 | DONE | Extract engine damage/impact resolution modules | damage/impact/heal/revive writes routed through owner APIs with explicit owner-command naming |
-| ARCH-013 | IN_PROGRESS | Extract engine actor-state modules | actor state helpers moved from facade |
+| ARCH-013 | DONE | Extract engine actor-state modules | actor state helpers moved from facade |
 | ARCH-014 | DONE | Split engine event-dispatch resolution hotspot | `src/engine/event_resolution/combat_event_dispatch_resolution.rs` decomposed into smaller owner slices with stable event-order behavior |
 | ARCH-020 | DONE | Extract search candidate-space modules | candidate operations outside `search.rs` |
 | ARCH-021 | DONE | Extract search strategy modules | strategy implementations in `search/strategy/*` |
@@ -431,15 +425,15 @@ Status legend:
 | ARCH-040 | DONE | Split defaults by domain loaders | `defaults.rs` is a typed facade with domain leaf loaders |
 | ARCH-041 | DONE | Split data by concern | `data.rs` is a parse/load facade with explicit leaf concern modules |
 | ARCH-050 | DONE | Split reporting and formatting modules | reporting decomposition complete with stable outputs |
-| ARCH-051 | IN_PROGRESS | Split core utility clusters | core combat primitives/math/random helpers separated |
-| ARCH-060 | PLANNED | Reduce/justify remaining `mod.rs` usage | each `mod.rs` removed or explicitly justified |
-| ARCH-070 | PLANNED | Remove compatibility shims and stabilize | no stale shims, all milestones reconciled in docs |
+| ARCH-051 | DONE | Split core utility clusters | core combat primitives/math/random/build-key helpers separated into explicit `src/core/*` owner modules |
+| ARCH-060 | DONE | Reduce/justify remaining `mod.rs` usage | each `mod.rs` removed or explicitly justified |
+| ARCH-070 | DONE | Remove compatibility shims and stabilize | no stale shims, all milestones reconciled in docs |
 
 Progress summary:
 
-- Completed: `14/18` milestones (`77.8%`)
-- In progress: `2/18`
-- Planned: `2/18`
+- Completed: `18/18` milestones (`100.0%`)
+- In progress: `0/18`
+- Planned: `0/18`
 
 Recent progress log:
 
@@ -906,6 +900,39 @@ Recent progress log:
   - moved `StatusEffect*`, `CastLock*`, and `CombatPrimitivesState` ownership out of `src/core.rs` while preserving `core.rs` facade re-exports.
   - `core.rs` reduced from `933` to `611` lines (meets facade target `<= 700`).
   - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: `ARCH-051` completed by extracting remaining core utility clusters out of `core.rs`:
+  - added core owner modules:
+    - `src/core/objective_scoring_math.rs`
+    - `src/core/build_candidate_random_helpers.rs`
+  - moved objective-score aggregation helpers, deterministic RNG helpers, build-key utilities, and candidate/build repair helpers into explicit core owner leaves while preserving stable `core.rs` facade exports.
+  - `core.rs` reduced from `611` to `162` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: `ARCH-060` completed by removing script-tree `mod.rs` carriers and switching to explicit module file facades:
+  - migrated:
+    - `src/scripts/mod.rs` -> `src/scripts.rs`
+    - `src/scripts/champions/mod.rs` -> `src/scripts/champions.rs`
+    - `src/scripts/items/mod.rs` -> `src/scripts/items.rs`
+    - `src/scripts/registry/mod.rs` -> `src/scripts/registry.rs`
+    - `src/scripts/runes/mod.rs` -> `src/scripts/runes.rs`
+    - `src/scripts/runtime/mod.rs` -> `src/scripts/runtime.rs`
+    - `src/scripts/champions/*/mod.rs` -> explicit champion files (`doctor_mundo.rs`, `morgana.rs`, `sona.rs`, `vayne.rs`, `vladimir.rs`, `warwick.rs`)
+  - updated module-private test-path wiring to keep the test layout contract stable after file moves.
+  - `mod.rs` count under `src/` is now `0`.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Continued `ARCH-030` second-stage decomposition inside controlled-champion runtime/search support ownership:
+  - added explicit support owner leaves under:
+    - `src/scenario_runner/controlled_champion_search_runtime_support/coverage_locked_asset_candidate_generation.rs`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_seed_derivation.rs`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_runtime_reporting_projections.rs`
+  - rewired `src/scenario_runner/controlled_champion_search_runtime_support.rs` into a thin support facade/re-export surface with owner-channel split by concern (coverage candidate mutation, deterministic seed derivation, read-only reporting projections).
+  - `src/scenario_runner/controlled_champion_search_runtime_support.rs` reduced from `682` to `165` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Continued second-stage `ARCH-040` defaults decomposition by extracting champion-simulation metadata/AI/profile loader ownership out of `defaults.rs`:
+  - added defaults owner leaf module:
+    - `src/defaults/champion_simulation_data_loading.rs`
+  - moved champion simulation profile loading, champion slot-binding derivation, ability-execution default loading, champion AI profile normalization, and URF respawn-default loading into the new explicit defaults leaf module while keeping `defaults.rs` facade/caches stable.
+  - `defaults.rs` reduced from `679` to `386` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
 - 2026-02-24: `ARCH-014` completed by splitting event-dispatch resolution into explicit event-family owner slices:
   - added event-resolution owner modules:
     - `src/engine/event_resolution/combat_event_enemy_auto_attack_resolution.rs`
@@ -969,7 +996,7 @@ Recent progress log:
     - `src/defaults/champion_item_simulation_defaults_loader/item_simulation_defaults_loaders.rs`
     - `src/defaults/champion_item_simulation_defaults_loader/simulation_defaults_extraction_helpers.rs`
   - rewired `src/defaults/champion_item_simulation_defaults_loader.rs` into a thin loader facade/re-export surface.
-  - reduced `src/defaults/champion_item_simulation_defaults_loader.rs` from `1065` to `16` lines (largest remaining defaults leaf now `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs` at `687` lines).
+  - reduced `src/defaults/champion_item_simulation_defaults_loader.rs` from `1065` to `16` lines.
   - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
 - 2026-02-24: Continued scenario execution decomposition by extracting setup and enemy-build preparation ownership out of `controlled_champion_scenario_runner.rs`:
   - added scenario-runner setup owner module:
@@ -1002,13 +1029,86 @@ Recent progress log:
   - preserved existing runtime API surface by keeping `calculate_on_hit_bonus_damage(...)` and `calculate_ability_bonus_damage(...)` as stable `loadout_runtime` entrypoints that delegate to the new owner module.
   - reduced `src/scripts/runtime/loadout_runtime.rs` from `1347` to `777` lines.
   - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Continued second-stage `ARCH-040` defaults decomposition by splitting champion simulation-default loading into explicit champion-family leaf modules:
+  - added explicit champion defaults owner leaves under:
+    - `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders/`
+    - `vladimir_simulation_defaults_loader.rs`
+    - `warwick_simulation_defaults_loader.rs`
+    - `vayne_simulation_defaults_loader.rs`
+    - `morgana_simulation_defaults_loader.rs`
+    - `sona_simulation_defaults_loader.rs`
+    - `doctor_mundo_simulation_defaults_loader.rs`
+  - rewired `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs` into a thin re-export facade (`20` lines).
+  - reduced largest champion defaults leaf from `687` to `237` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Continued high-impact `loadout_runtime` decomposition by extracting runtime cooldown/stack reporting ownership:
+  - added runtime owner module:
+    - `src/scripts/runtime/loadout_runtime/runtime_state_reporting.rs`
+  - moved runtime cooldown and stack description projections into explicit owner APIs consumed by `loadout_runtime.rs` (`describe_runtime_cooldowns_impl`, `describe_runtime_stacks_impl`).
+  - preserved existing runtime API surface by keeping `describe_runtime_cooldowns(...)` and `describe_runtime_stacks(...)` as stable `loadout_runtime` entrypoints that delegate to the new owner module.
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `777` to `609` lines (now below the `<=700` budget target).
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Continued second-stage runtime decomposition by fixing the missing `combat_bonus_resolution` projection leaf and then splitting runtime read-only projection ownership:
+  - added runtime owner leaves:
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/projection_helpers.rs`
+    - `src/scripts/runtime/loadout_runtime/runtime_stat_projections.rs`
+  - moved read-only runtime projection channels (attack speed, incoming multipliers, movement speed, regeneration) into explicit owner APIs while preserving stable `loadout_runtime` facade entrypoints.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Continued second-stage runtime decomposition by splitting runtime initialization/reset and runtime mutation-effect channels:
+  - added runtime owner leaves:
+    - `src/scripts/runtime/loadout_runtime/runtime_state_initialization.rs`
+    - `src/scripts/runtime/loadout_runtime/runtime_effect_mutations.rs`
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`
+  - moved loadout-runtime flag/cooldown initialization, transient reset ownership, outgoing-heal/enemy-kill/aftershock mutation channels, and rune-proc state mutation helpers into explicit owner leaves while preserving stable facade entrypoints.
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `609` to `363` lines and reduced `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` from `613` to `357` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Completed high-impact `main.rs` orchestration-contract decomposition by moving shared root contracts into explicit owner leaves:
+  - added root contract facade and owner leaves:
+    - `src/simulation_contracts.rs`
+    - `src/simulation_contracts/runtime_actor_contracts.rs`
+    - `src/simulation_contracts/search_reporting_contracts.rs`
+    - `src/simulation_contracts/entrypoint_cli_contracts.rs`
+  - moved runtime/search/reporting contract types plus CLI/options contracts out of `src/main.rs` into explicit owner leaves while preserving root-level compatibility exports.
+  - reduced `src/main.rs` from `679` to `149` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Completed second-stage `ARCH-041` champion/item/preset data decomposition by splitting `champion_item_preset_data_loading` ownership into explicit data leaves:
+  - added explicit data owner leaves under:
+    - `src/data/champion_item_preset_data_loading/champion_base_loading.rs`
+    - `src/data/champion_item_preset_data_loading/item_pool_loading.rs`
+    - `src/data/champion_item_preset_data_loading/urf_mode_loading.rs`
+    - `src/data/champion_item_preset_data_loading/enemy_preset_loading.rs`
+  - rewired `src/data/champion_item_preset_data_loading.rs` into a thin facade/re-export surface while preserving `data.rs` facade exports and call-site contracts.
+  - reduced `src/data/champion_item_preset_data_loading.rs` from `620` to `17` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Completed second-stage `ARCH-041` simulation/search config parsing decomposition by splitting `simulation_search_configuration_parsing` ownership into explicit parse leaves:
+  - added explicit parse owner leaves under:
+    - `src/data/simulation_search_configuration_parsing/shared_parsing_primitives.rs`
+    - `src/data/simulation_search_configuration_parsing/simulation_config_parsing.rs`
+    - `src/data/simulation_search_configuration_parsing/enemy_config_parsing.rs`
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs`
+    - `src/data/simulation_search_configuration_parsing/loadout_selection_parsing.rs`
+  - rewired `src/data/simulation_search_configuration_parsing.rs` into a thin facade/re-export surface while preserving `data.rs` facade exports and call-site contracts.
+  - reduced `src/data/simulation_search_configuration_parsing.rs` from `599` to `15` lines.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Completed second-stage scenario/reporting ownership decomposition and finalized compatibility-shim cleanup:
+  - split controlled champion execution ownership into:
+    - `src/scenario_runner/controlled_champion_scenario_runner.rs` (facade)
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (execution owner leaf)
+  - split reporting loadout/build section ownership into:
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/build_ranking_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/enemy_profile_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/loadout_profile_sections.rs`
+  - removed root compatibility shims in `src/main.rs` (`crate::Ordering`, `crate::EnemyDerivedCombatStats`) and updated downstream modules to explicit owner imports.
+  - full validation remained green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+- 2026-02-24: Marked `ARCH-013` DONE after actor-state boundary audit confirmed no remaining facade-side mutable enemy-state write channels outside owner modules.
+- 2026-02-24: Marked `ARCH-070` DONE after compatibility-shim removal and doc reconciliation across roadmap/tracker/readmes.
 
 ## 12) Immediate Next Batch
 
-1. Continue high-impact decomposition of `src/scripts/runtime/loadout_runtime.rs` (`777` lines) by extracting remaining runtime-owner slices (state/cooldown description formatting and runtime-state initialization helpers) so the module drops below `<=700`.
-2. Continue `ARCH-051` by splitting remaining core utility clusters (objective-scoring math, random helpers, and build-key utility helpers) into explicit `src/core/*` owner modules.
-3. Continue second-stage defaults/data leaf decomposition (`src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`, `src/data/champion_item_preset_data_loading.rs`, `src/data/simulation_search_configuration_parsing.rs`) for maintainability.
-4. Continue `ARCH-060` planning/execution by reducing or justifying the remaining `mod.rs` files under `src/scripts/*`.
+1. Keep architecture milestones closed by enforcing standards in new feature work (no new oversized facades and no new cross-owner mutation channels).
+2. Optionally split `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (`574` lines) if execution orchestration ownership needs deeper granularity.
+3. Optionally split `src/scenario_runner/controlled_champion_result_reporting_projection.rs` (`310` lines) if reporting projection ownership needs finer owner channels.
+4. Continue periodic architecture metrics + validation checks to catch regressions early.
 
 ## 13) Observed High-Value Improvements
 
@@ -1069,7 +1169,47 @@ These were identified while executing `ARCH-010`, `ARCH-011`, `ARCH-012`, `ARCH-
 53. Done: extracted strict-ranking fallback insertion/tie-break sorting/seed-hit diagnostics ownership into `src/scenario_runner/controlled_champion_strict_ranking_finalization.rs` and reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `725` to `656` lines.
 54. Done: started `src/scripts/runtime/loadout_runtime.rs` decomposition by extracting rune-proc telemetry ownership into `src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs` and reducing the parent runtime module from `1639` to `1347` lines.
 55. Done: continued `src/scripts/runtime/loadout_runtime.rs` decomposition by extracting combat bonus-resolution ownership into `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` and reducing the parent runtime module from `1347` to `777` lines.
-56. Next: continue `src/scripts/runtime/loadout_runtime.rs` decomposition, then finish remaining `ARCH-051` utility splits and `ARCH-060`/`ARCH-070` stabilization work.
+56. Done: continued `src/scripts/runtime/loadout_runtime.rs` decomposition by extracting runtime cooldown/stack reporting ownership into `src/scripts/runtime/loadout_runtime/runtime_state_reporting.rs` and reducing the parent runtime module from `777` to `609` lines (below budget).
+57. Done: continued `ARCH-040` defaults decomposition by splitting champion defaults loading into explicit champion-family leaves under `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders/*`, reducing the largest champion defaults leaf from `687` to `237` lines.
+58. Done: completed `ARCH-051` by extracting objective-scoring math and build/random helper ownership into `src/core/objective_scoring_math.rs` and `src/core/build_candidate_random_helpers.rs`, reducing `src/core.rs` from `611` to `162` lines.
+59. Done: completed `ARCH-060` by migrating script-tree `mod.rs` files to explicit module facades/files (`src/scripts.rs`, `src/scripts/champions.rs`, champion leaf `*.rs`, and sibling script owner files), reducing `mod.rs` count under `src/` from `12` to `0`.
+60. Done: continued `ARCH-030` by decomposing `src/scenario_runner/controlled_champion_search_runtime_support.rs` into explicit owner leaves (`coverage_locked_asset_candidate_generation.rs`, `search_seed_derivation.rs`, `search_runtime_reporting_projections.rs`) and reducing the support facade from `682` to `165` lines.
+61. Done: continued second-stage `ARCH-040` defaults decomposition by extracting champion-simulation metadata/AI/profile loader ownership into `src/defaults/champion_simulation_data_loading.rs` and reducing `src/defaults.rs` from `679` to `386` lines.
+62. Done: continued second-stage runtime decomposition by extracting read-only projection ownership into `src/scripts/runtime/loadout_runtime/runtime_stat_projections.rs` and `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/projection_helpers.rs`.
+63. Done: continued second-stage runtime decomposition by extracting runtime initialization/reset ownership into `src/scripts/runtime/loadout_runtime/runtime_state_initialization.rs`.
+64. Done: continued second-stage runtime decomposition by extracting runtime mutation-effect ownership into `src/scripts/runtime/loadout_runtime/runtime_effect_mutations.rs`.
+65. Done: continued second-stage runtime decomposition by extracting rune-proc state mutation ownership into `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`, reducing `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` from `613` to `357` lines and `src/scripts/runtime/loadout_runtime.rs` from `609` to `363` lines.
+66. Done: continued second-stage reporting decomposition by extracting controlled-champion markdown report section ownership under `src/reporting/controlled_champion_report_markdown_writer/`:
+    - `header_and_objective_sections.rs`
+    - `search_diagnostics_section.rs`
+    - `loadout_and_build_sections.rs`
+   while preserving `write_controlled_champion_report_markdown(...)` as the stable facade API in `src/reporting/controlled_champion_report_markdown_writer.rs` and reducing that facade from `633` to `122` lines.
+67. Done: continued second-stage scenario execution decomposition by splitting controlled-champion fixed-loadout rune-sweep ownership under `src/scenario_runner/rune_sweep_runner/`:
+    - `result_aggregation.rs`
+    - `report_writing.rs`
+   while preserving `run_controlled_champion_fixed_loadout_rune_sweep_impl(...)` as the stable facade entrypoint in `src/scenario_runner/rune_sweep_runner.rs` and reducing that facade from `627` to `308` lines.
+68. Done: continued second-stage defaults schema decomposition by splitting simulator/default schema-type ownership under `src/defaults/simulator_defaults_schema_types/`:
+    - `simulation_search_and_engine_defaults_schema.rs`
+    - `rune_runtime_defaults_schema.rs`
+    - `champion_ai_and_execution_schema.rs`
+    - `champion_behavior_and_ability_defaults_schema.rs`
+    - `champion_file_defaults_schema.rs`
+   while preserving `src/defaults/simulator_defaults_schema_types.rs` as the stable facade/re-export surface and reducing that facade from `637` to `22` lines.
+69. Done: completed high-impact root contract decomposition by moving shared runtime/search/reporting contracts and CLI/options contracts out of `src/main.rs` into explicit owner leaves under `src/simulation_contracts/`, reducing `src/main.rs` from `679` to `149` lines while preserving root-level compatibility exports.
+70. Done: completed second-stage `ARCH-041` data decomposition by splitting champion/item/preset loading + URF legality validation ownership into explicit leaves under `src/data/champion_item_preset_data_loading/*`, reducing `src/data/champion_item_preset_data_loading.rs` from `620` to `17` lines while preserving `data.rs` facade contracts.
+71. Done: completed second-stage `ARCH-041` data decomposition by splitting simulation/search config parse ownership into explicit leaves under `src/data/simulation_search_configuration_parsing/*`, reducing `src/data/simulation_search_configuration_parsing.rs` from `599` to `15` lines while preserving `data.rs` facade contracts.
+72. Done: completed second-stage scenario/reporting decomposition and `ARCH-070` stabilization by:
+   - splitting controlled champion scenario execution ownership into:
+     - `src/scenario_runner/controlled_champion_scenario_runner.rs` (thin facade)
+     - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (execution owner leaf)
+   - splitting reporting loadout/build section ownership under:
+     - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/build_ranking_sections.rs`
+     - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/enemy_profile_sections.rs`
+     - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/loadout_profile_sections.rs`
+   - removing root compatibility shims from `src/main.rs`:
+     - `crate::Ordering`
+     - `crate::EnemyDerivedCombatStats`
+   - updating downstream imports to explicit owners and keeping full validation green.
 
 ## 14) Update Rules
 
@@ -1086,10 +1226,10 @@ When milestone statuses change:
 
 Status indicator:
 
-- Milestone completion: `14/18` (`77.8%`) complete, `2/18` in progress.
+- Milestone completion: `18/18` (`100.0%`) complete, `0/18` in progress.
 - Over-budget-gap closure (tracked-facade progress): `100.00%` complete (`0` over-budget lines remain out of `11,678` baseline over-budget lines).
-- Raw line-budget helper output: `116.25%` (overshoots because multiple facades are now well below target budgets).
-- Overall architecture-program completion estimate (including non-line-budget milestones): `99%`.
+- Raw line-budget helper output: `122.63%` (overshoots because multiple facades are now well below target budgets).
+- Overall architecture-program completion estimate (including non-line-budget milestones): `100.0%`.
 
 Remaining facade line-gap to target (`current - 700`):
 
@@ -1107,9 +1247,10 @@ Current unresolved blockers:
 
 Current high-friction areas:
 
-- `src/core.rs` is now below budget, but remaining `ARCH-051` utility splits (objective-score math/random/build-key helpers) are still valuable to keep ownership and test surfaces explicit.
-- `src/data/simulation_search_configuration_parsing.rs` (599 lines) and `src/data/champion_item_preset_data_loading.rs` (620 lines) remain large leaf modules and will benefit from second-stage split by concern, even though facade targets are met.
-- `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs` is still large (`687` lines, below hard split threshold but above warning), so champion-family leaf decomposition remains a high-value follow-up.
-- `src/scripts/runtime/loadout_runtime.rs` remains slightly above budget (`777` lines); combat-bonus and telemetry ownership are extracted, but state-initialization and runtime-cooldown/stack reporting helpers are still co-located and should be split to close the last gap.
-- `mod.rs` cleanup/justification work under `src/scripts/*` remains outstanding (`ARCH-060`).
+- `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (`574` lines) is under budget but remains the largest single orchestration leaf; any further split should preserve setup/search/report sequencing boundaries.
+- `src/scenario_runner/controlled_champion_result_reporting_projection.rs` (`310` lines) is explicit and under budget, but it still aggregates many projection channels and may be the next best optional split for finer reporting ownership.
+- `src/data/champion_item_preset_data_loading/item_pool_loading.rs` (`236` lines) is under budget but still owns multiple item-loading + filtering channels; future follow-up can split pure loading from filtering/projection if deeper decomposition is desired.
+- `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs` (`266` lines) is under budget but still combines parse mapping and profile-tuning helpers; optional follow-up can split parse mapping from profile application if ownership granularity needs to be tightened.
+- Root-level compatibility shims removed (`crate::Ordering`, `crate::EnemyDerivedCombatStats`); downstream code now imports explicit owner modules directly.
+- `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema.rs` (`191` lines) is now explicit and under budget; remaining defaults friction is now primarily cross-module call-site churn rather than file size.
 - Workspace concurrency risk remains high due broad parallel data-file edits outside architecture slices; architecture extractions must stay tightly scoped to avoid merge churn.

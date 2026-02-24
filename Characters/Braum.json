@@ -1,0 +1,387 @@
+{
+  "name": "Braum",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Support",
+    "Tank",
+    "Warden"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 112.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 311.0,
+      "per_level": 45.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 1.0
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0700000002980232,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Concussive Blows",
+      "type": "Passive",
+      "description_source": "Innate:  Braum's  basic attacks and  Winter's Bite apply a  stack of Concussive Blows. Once the first stack is applied, allied champion  basic attacks can also stack Concussive Blows.",
+      "effects": [
+        {
+          "id": "braum_p_effect_1",
+          "description": "Innate: Braum's basic attacks and Winter's Bite each apply a stack of Concussive Blows to their target for 4 seconds, refreshing on subsequent applications and stacking up to 4 times. Once the first stack has been applied, any allied champion's basic attack applies an additional stack to the target on-hit."
+        },
+        {
+          "id": "braum_p_effect_2",
+          "description": "The fourth stack against a target consumes them all to deal 26 : 216 (based on his level) magic damage and stun them for 1.25 : 1.75 (based on his level) seconds."
+        },
+        {
+          "id": "braum_p_effect_3",
+          "description": "This effect cannot apply to the same target more than once every few seconds. During this immunity period, affected targets take[ bonus magic damage equal to 40% of the trigger damage ][ 10.4 : 86.4 (based on level) bonus magic damage ]from Braum's basic attacks."
+        }
+      ],
+      "description": "Innate: Braum's basic attacks and Winter's Bite each apply a stack of Concussive Blows to their target for 4 seconds, refreshing on subsequent applications and stacking up to 4 times. Once the first stack has been applied, any allied champion's basic attack applies an additional stack to the target on-hit.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Concussive Blows won't be applied if the attack is dodged or blocked or if the attack misses."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Winter's Bite",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Braum propels freezing ice from his shield,  slowing and dealing magic damage to the first enemy hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            120.0,
+            165.0,
+            210.0,
+            255.0
+          ],
+          "context_notes": "Active: Braum propels ice from his shield in the target direction, dealing magic damage to the first enemy hit and slowing them by 70% decaying over 2 seconds."
+        }
+      ],
+      "description": "Active: Braum propels ice from his shield in the target direction, dealing magic damage to the first enemy hit and slowing them by 70% decaying over 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          50.0,
+          55.0,
+          60.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1700.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1700.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Stand Behind Me",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Braum  dashes to a target allied  champion or  minion. On arrival, both of them gain  armor and  magic resistance for a few seconds.",
+      "effects": [
+        {
+          "id": "ally_bonus_armor",
+          "description": "Ally Bonus Armor",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Braum dashes to put himself between the target ally and the closest visible enemy champion within 1500 units, and upon arrival grants himself and the ally bonus armor and bonus magic resistance for 3 seconds."
+        },
+        {
+          "id": "ally_bonus_magic_resistance",
+          "description": "Ally Bonus Magic Resistance",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Braum dashes to put himself between the target ally and the closest visible enemy champion within 1500 units, and upon arrival grants himself and the ally bonus armor and bonus magic resistance for 3 seconds."
+        },
+        {
+          "id": "self_bonus_armor",
+          "description": "Self Bonus Armor",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Stand Behind Me can be self cast to instantly grant Braum the bonus resistances."
+        },
+        {
+          "id": "self_bonus_magic_resistance",
+          "description": "Self Bonus Magic Resistance",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Stand Behind Me can be self cast to instantly grant Braum the bonus resistances."
+        },
+        {
+          "id": "braum_w_effect_3",
+          "description": "Unbreakable can be cast during the dash."
+        }
+      ],
+      "description": "Active: Braum dashes to put himself between the target ally and the closest visible enemy champion within 1500 units, and upon arrival grants himself and the ally bonus armor and bonus magic resistance for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): Stand Behind Me can be used on allied minions but not on wards nor traps."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Unbreakable",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Braum becomes  ghosted and raises his shield in a direction for a few seconds, intercepting any enemy  projectiles to hit him and be destroyed.",
+      "effects": [
+        {
+          "id": "damage_reduction",
+          "description": "Damage reduction",
+          "base_by_rank": [
+            35.0,
+            40.0,
+            45.0,
+            50.0,
+            55.0
+          ],
+          "context_notes": "Active: Braum sets his shield in the target direction for a duration, creating a barrier in front of him that intercepts all incoming hostile projectiles and reduces the damage Braum takes through it."
+        },
+        {
+          "id": "barrier_duration",
+          "description": "Barrier Duration",
+          "base_by_rank": [
+            3.0,
+            3.25,
+            3.5,
+            3.75,
+            4.0
+          ],
+          "context_notes": "Active: Braum sets his shield in the target direction for a duration, creating a barrier in front of him that intercepts all incoming hostile projectiles and reduces the damage Braum takes through it."
+        },
+        {
+          "id": "braum_e_effect_2",
+          "description": "While his shield is raised, Braum also gains 10% bonus movement speed and ghosting."
+        }
+      ],
+      "description": "Active: Braum sets his shield in the target direction for a duration, creating a barrier in front of him that intercepts all incoming hostile projectiles and reduces the damage Braum takes through it. The first instance of damage dealt by a champion from this direction is reduced by 100%. Unbreakable does not affect turrets.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.0,
+        12.0,
+        10.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source notes (summary): Definitions Incoming: Damage sources coming from somewhere facing the shield."
+      ]
+    },
+    "ultimate": {
+      "name": "Glacial Fissure",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            300.0,
+            450.0
+          ],
+          "context_notes": "Active: Braum leaps into the air and slams his shield into the ground, creating a fissure from the impact that travels forth in the target direction, dealing magic damage to enemies within its path as well as those around Braum."
+        },
+        {
+          "id": "maximum_knockup_duration",
+          "description": "Maximum Knockup Duration",
+          "base_by_rank": [
+            1.0,
+            1.5,
+            2.0
+          ],
+          "context_notes": "The first target hit is knocked up for at least 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "A field of ice is created along the fissure's path, lasting for 4 seconds and slowing enemies within the area every 0."
+        }
+      ],
+      "description": "Active: Braum leaps into the air and slams his shield into the ground, creating a fissure from the impact that travels forth in the target direction, dealing magic damage to enemies within its path as well as those around Braum.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 1400.0,
+        "effect_hitbox_radius": 10.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source speed: 1400.",
+        "Source effectRadius: 300 /  60 × 10.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Braum.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Braum"
+  }
+}

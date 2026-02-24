@@ -46,5 +46,19 @@
     "Runecarver",
     "Solstice Sleigh"
   ],
-  "low_confidence_count": 44
+  "low_confidence_count": 44,
+  "sources": [
+    {
+      "name": "Project item corpus",
+      "path": "Items/*.json",
+      "accessed": "2026-02-24",
+      "used_for": "aggregated quality/schema report generation over local item data"
+    },
+    {
+      "name": "Report generation output",
+      "path": "Items/items_quality_report.json",
+      "accessed": "2026-02-24",
+      "used_for": "persisted snapshot of offline quality/schema audit results"
+    }
+  ]
 }

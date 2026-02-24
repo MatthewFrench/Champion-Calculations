@@ -37,13 +37,15 @@
       "interval_seconds": null,
       "trigger": "on_equip",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "always_on_while_equipped"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         40
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.9
     },
     {
       "id": "noxian_fervor_grant_adaptive_force_from_total_movement_speed",
@@ -58,7 +60,9 @@
       "interval_seconds": null,
       "trigger": "on_equip",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "dynamic_recalculation_with_total_movement_speed"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -70,7 +74,7 @@
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.86
     }
   ],
   "shop": {
@@ -89,7 +93,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.004309+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Fleetfooted and Noxian Fervor are continuous passives while equipped (no activation).",
+      "Execution model: Noxian Fervor adaptive force should dynamically recalculate from current total movement speed as movement modifiers change.",
+      "Player-visible behavior: this item is role-quest gated and upgrades from Boots of Swiftness in Summoner's Rift."
+    ]
   },
   "sources": [
     {
@@ -109,6 +118,12 @@
       "path": "From Online/items/Swiftmarch.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Swiftmarch",
+      "url": "https://wiki.leagueoflegends.com/en-us/Swiftmarch",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Fleetfooted/Noxian Fervor semantics and role-quest acquisition behavior"
     }
   ]
 }

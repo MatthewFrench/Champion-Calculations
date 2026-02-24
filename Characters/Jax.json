@@ -1,0 +1,392 @@
+{
+  "name": "Jax",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 103.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 339.0,
+      "per_level": 52.0
+    },
+    "move_speed": 350.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 4.25
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 3.4
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0918904393911361,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Relentless Assault",
+      "type": "Passive",
+      "description_source": "Innate:  Jax's  basic attacks generate  stacks, up to a cap. Stacks expire one at a time.",
+      "effects": [
+        {
+          "id": "jax_p_effect_1",
+          "description": "Innate: Jax's basic attacks generate a stack of Relentless Assault on-attack for 2.5 seconds, refreshing on subsequent attacks and stacking up to 8 times. Stacks expire one by one every 0.25 seconds when the duration ends."
+        },
+        {
+          "id": "jax_p_effect_2",
+          "description": "Relentless Assault: For each stack, Jax gains 5% : 14% (based on level) bonus attack speed, up to a maximum of 40% : 112% (based on level)."
+        },
+        {
+          "id": "jax_p_effect_3",
+          "description": "Grandmaster at Angling: While out-of-combat with champions and idle in the river for 10 seconds, Jax will occasionally catch a fish, granting him 1 and 1 ability power for 5 seconds. He catches a fish at an average rate of one every 15 seconds. He also has a 5% chance to catch a rare fish that grants 10 and 10 ability power for 5 seconds."
+        }
+      ],
+      "description": "Innate: Jax's basic attacks generate a stack of Relentless Assault on-attack for 2.5 seconds, refreshing on subsequent attacks and stacking up to 8 times. Stacks expire one by one every 0.25 seconds when the duration ends.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Jax will start fishing while idle in the river if he is in-combat with only monsters (e."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Leap Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Jax  dashes to the target unit. If they are an enemy, he deals physical damage.",
+      "effects": [
+        {
+          "id": "jax_q_effect_1",
+          "description": "Active: Jax dashes to the target unit's location."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            65.0,
+            105.0,
+            145.0,
+            185.0,
+            225.0
+          ],
+          "context_notes": "If the target is an enemy and they are in range upon arrival, Jax deals physical damage to them."
+        },
+        {
+          "id": "jax_q_effect_3",
+          "description": "Jax can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Jax dashes to the target unit's location.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          65.0,
+          65.0,
+          65.0,
+          65.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: false.",
+        "Source notes (summary): Leap Strike cannot target structures; on enemy champions, Jax is ordered to basic attack after the dash, and spell shields block the damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Empower",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Jax empowers his next basic attack or  Leap Strike against an enemy to deal additional magic damage.",
+      "effects": [
+        {
+          "id": "additional_magic_damage",
+          "description": "Additional Magic Damage",
+          "base_by_rank": [
+            50.0,
+            85.0,
+            120.0,
+            155.0,
+            190.0
+          ],
+          "context_notes": "Active: Jax empowers his next basic attack or Leap Strike against an enemy within 10 seconds to deal additional magic damage, reduced to 50% against structures."
+        },
+        {
+          "id": "jax_w_effect_2",
+          "description": "Empower resets Jax's basic attack timer."
+        }
+      ],
+      "description": "Active: Jax empowers his next basic attack or Leap Strike against an enemy within 10 seconds to deal additional magic damage, reduced to 50% against structures. If Empower is used on a basic attack, it will gain 50 bonus range and have an uncancellable windup.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.0,
+        5.0,
+        4.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Empower is applied in a separate damage instance from Jax's basic attacks."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Counter Strike",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Jax enters Evasion for a short time: a defensive stance that causes him to  dodge all incoming non- turret basic attacks and take reduced damage from all  area of effect abilities from  champions.",
+      "effects": [
+        {
+          "id": "jax_e_effect_1",
+          "description": "Active: Jax enters Evasion for 2 seconds: a defensive stance that causes him to dodge all incoming non- turret basic attacks and take 25% reduced damage from all area of effect abilities sourced from champions. Counter Strike can be recast after 1 second, and does so automatically after the duration."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            40.0,
+            70.0,
+            100.0,
+            130.0,
+            160.0
+          ],
+          "context_notes": "Recast: Jax deals magic damage to nearby enemies, with the total damage increased by 20% for each attack dodged, up to a 100% increase, and stuns them for 1 second."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            80.0,
+            140.0,
+            200.0,
+            260.0,
+            320.0
+          ],
+          "context_notes": "Recast: Jax deals magic damage to nearby enemies, with the total damage increased by 20% for each attack dodged, up to a 100% increase, and stuns them for 1 second."
+        }
+      ],
+      "description": "Active: Jax enters Evasion for 2 seconds: a defensive stance that causes him to dodge all incoming non- turret basic attacks and take 25% reduced damage from all area of effect abilities sourced from champions. Counter Strike can be recast after 1 second, and does so automatically after the duration.",
+      "cooldown_seconds_by_rank": [
+        17.0,
+        15.0,
+        13.0,
+        11.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "ultimate": {
+      "name": "Grandmaster-at-Arms",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Jax's  basic attacks generate  stacks. At max stacks, he consumes them to deal additional magic damage.",
+      "effects": [
+        {
+          "id": "additional_magic_damage",
+          "description": "Additional Magic Damage",
+          "base_by_rank": [
+            75.0,
+            130.0,
+            185.0
+          ],
+          "context_notes": "Passive: Jax's basic attacks generate a stack of Grandmaster-at-Arms on-hit for 2."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            100.0,
+            175.0,
+            250.0
+          ],
+          "context_notes": "Active: Jax swings his lantern around, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "bonus_armor",
+          "description": "Bonus Armor",
+          "base_by_rank": [
+            45.0,
+            60.0,
+            75.0
+          ],
+          "context_notes": "Active: Jax swings his lantern around, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "bonus_magic_resistance",
+          "description": "Bonus Magic Resistance",
+          "base_by_rank": [
+            27.0,
+            36.0,
+            45.0
+          ],
+          "context_notes": "Active: Jax swings his lantern around, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "bonus_armor_per_champion_hit",
+          "description": "Bonus Armor per Champion Hit",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Jax swings his lantern around, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "bonus_magic_resistance_per_champion_hit",
+          "description": "Bonus Magic Resistance per Champion Hit",
+          "base_by_rank": [
+            12.0,
+            15.0,
+            18.0
+          ],
+          "context_notes": "Active: Jax swings his lantern around, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "jax_r_effect_3",
+          "description": "Jax can move during Grandmaster-at-Arms' cast time."
+        }
+      ],
+      "description": "Passive: Jax's basic attacks generate a stack of Grandmaster-at-Arms on-hit for 2.5 seconds, refreshing on subsequent hits and stacking up to 2 times. At 2 stacks, his next basic attack on-hit is empowered to have an uncancellable windup and consume all stacks to deal additional magic damage, reduced to 50% against structures. While Grandmaster-at-Arms is active, the empowered attack triggers at 1 stack instead.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        100.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): The on-hit deals proc damage."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Jax.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Jax"
+  }
+}

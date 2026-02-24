@@ -1,0 +1,959 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Tree Primary",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "tree": {
+    "id": 8300,
+    "key": "Inspiration",
+    "name": "Inspiration",
+    "icon": "perk-images/Styles/7203_Whimsy.png"
+  },
+  "selection_context": "primary_path",
+  "slot_count": 4,
+  "rune_count": 12,
+  "slots": [
+    {
+      "slot_index": 1,
+      "slot_type": "keystone",
+      "runes": [
+        {
+          "id": 8351,
+          "key": "GlacialAugment",
+          "name": "Glacial Augment",
+          "icon": "perk-images/Styles/Inspiration/GlacialAugment/GlacialAugment.png",
+          "short_desc": "Immobilizing an enemy champion will cause 3 glacial rays that slow nearby enemies and reduce their damage to your allies.",
+          "long_desc": "Immobilizing an enemy champion will cause 3 glacial rays to emanate from them towards you and other nearby champions, creating frozen zones for 3 (+ the immobilizing effect's duration) seconds that slow enemies for 20% (+90% per 100% Heal and Shield Power) (+6% per 100 Ability Power) (+7% per 100 bonus Attack Damage) and reduce their damage by 15% against your allies (not including yourself). <br><br>Cooldown: 25s",
+          "wiki_descriptions": [
+            "Passive: Immobilizing an enemy champion will cause 3 glacial rays to emanate from them towards you and other nearby enemy champions, creating icy zones with a 700 unit radius that last for 3 (+ 100% of the immobilizing effect's duration ) seconds.",
+            "Enemies within the icy zones, which have a width of 80 units, are slowed by 20% (+ 7% per 100 bonus AD) (+ 6% per 100 AP) (+ 9% per 10% heal and shield power) and have their damage reduced by 15% against your allies, excluding yourself."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Immobilizing an enemy champion will cause 3 glacial rays to emanate from them towards you and other nearby enemy champions, creating icy zones with a 700 unit radius that last for 3 (+ 100% of the immobilizing effect's duration ) seconds.",
+              "effect_type": "stat_modifier",
+              "stat": "mana",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                3,
+                700,
+                3,
+                100
+              ],
+              "scaling": null,
+              "trigger": "on_immobilize",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 3,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Enemies within the icy zones, which have a width of 80 units, are slowed by 20% (+ 7% per 100 bonus AD) (+ 6% per 100 AP) (+ 9% per 10% heal and shield power) and have their damage reduced by 15% against your allies, excluding yourself.",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                80,
+                20,
+                7,
+                100,
+                6,
+                100,
+                9,
+                10,
+                15
+              ],
+              "scaling": null,
+              "trigger": "on_slow",
+              "applies_to": "ally",
+              "formula": {
+                "type": "flat",
+                "value": 80,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Glacial Augment"
+        },
+        {
+          "id": 8360,
+          "key": "UnsealedSpellbook",
+          "name": "Unsealed Spellbook",
+          "icon": "perk-images/Styles/Inspiration/UnsealedSpellbook/UnsealedSpellbook.png",
+          "short_desc": "Swap Summoner Spells while out of combat. Swapping to unique Summoner Spells will increase the rate at which you can make future swaps.",
+          "long_desc": "Swap one of your equipped Summoner Spells to a new, single use Summoner Spell. Each unique Summoner Spell you swap to permanently decreases your swap cooldown by 25s (initial swap cooldown is @f3@ seconds). <br><br>Your first swap becomes available at 6 mins. <br><rules><br>Summoner Spells can only be swapped while out of combat. <br>After using a swapped Summoner Spell you must swap 3 more times before the first can be selected again.<br>Smite damage increases after two Summoner Spell swaps. </rules>",
+          "wiki_descriptions": [
+            "Passive: While not channeling Teleport and being out-of-combat for 5 seconds, you can swap one of your equipped summoner spells to a new, single use summoner spell. You cannot select a summoner spell you have already equipped.",
+            "Your first swap becomes available at 6:00 . Swaps have an initial cooldown of 270 seconds; selecting a unique summoner spell reduces the swap cooldown by 25 seconds. You must swap to 3 different summoner spells before returning to one you have already used.",
+            "Selecting a summoner spell places it on a 5-second cooldown. Using a selected summoner spell places the summoner spell in the same slot on a 10-second cooldown."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: While not channeling Teleport and being out-of-combat for 5 seconds, you can swap one of your equipped summoner spells to a new, single use summoner spell. You cannot select a summoner spell you have already equipped.",
+              "effect_type": "condition_note",
+              "stat": null,
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                5
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 5,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Your first swap becomes available at 6:00 . Swaps have an initial cooldown of 270 seconds; selecting a unique summoner spell reduces the swap cooldown by 25 seconds. You must swap to 3 different summoner spells before returning to one you have already used.",
+              "effect_type": "cooldown",
+              "stat": "cooldown",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                6,
+                0,
+                270,
+                25,
+                3
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 6,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Selecting a summoner spell places it on a 5-second cooldown. Using a selected summoner spell places the summoner spell in the same slot on a 10-second cooldown.",
+              "effect_type": "cooldown",
+              "stat": "cooldown",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                5,
+                10
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 5,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Unsealed Spellbook"
+        },
+        {
+          "id": 8369,
+          "key": "FirstStrike",
+          "name": "First Strike",
+          "icon": "perk-images/Styles/Inspiration/FirstStrike/FirstStrike.png",
+          "short_desc": "When you initiate champion combat, deal 7% extra damage for 3 seconds and gain gold based on damage dealt.",
+          "long_desc": "Attacks or abilities against an enemy champion within 0.25s of entering champion combat grant 10 gold and <b>First Strike</b> for 3 seconds, causing you to deal <truedamage>7%</truedamage> extra <truedamage> damage</truedamage> against champions, and granting <gold>50% (35% for ranged champions)</gold> of bonus damage dealt as <gold>gold</gold>.<br><br>Cooldown: <scaleLevel>25 - 15</scaleLevel>s",
+          "wiki_descriptions": [
+            "Passive: Initiating combat with an enemy champion within the first 0. 25 seconds of champion combat grants 10 and First Strike for 3 seconds, causing all of your post-mitigation damage dealt against champions to deal 7% bonus true damage . Afterwards, you are granted gold equal to ( 50% / 35% ) of all bonus damage dealt within the duration.",
+            "First Strike will be placed on full cooldown without activating its effects after being struck by an enemy champion before you strike them."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Initiating combat with an enemy champion within the first 0. 25 seconds of champion combat grants 10 and First Strike for 3 seconds, causing all of your post-mitigation damage dealt against champions to deal 7% bonus true damage . Afterwards, you are granted gold equal to ( 50% / 35% ) of all bonus damage dealt within the duration.",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": [
+                0.0,
+                25,
+                10,
+                3,
+                7,
+                50,
+                35
+              ],
+              "value_range": null,
+              "numbers_extracted": [
+                0.0,
+                25,
+                10,
+                3,
+                7,
+                50,
+                35
+              ],
+              "scaling": null,
+              "trigger": "on_damage",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  0.0,
+                  25,
+                  10,
+                  3,
+                  7,
+                  50,
+                  35
+                ],
+                "unit": "percent"
+              },
+              "conditions": [
+                "vs_champions"
+              ],
+              "parse_confidence": 1.0
+            },
+            {
+              "raw": "First Strike will be placed on full cooldown without activating its effects after being struck by an enemy champion before you strike them.",
+              "effect_type": "cooldown",
+              "stat": "cooldown",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.68
+            }
+          ],
+          "template_source": "Template:Rune data First Strike"
+        }
+      ]
+    },
+    {
+      "slot_index": 2,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8306,
+          "key": "HextechFlashtraption",
+          "name": "Hextech Flashtraption",
+          "icon": "perk-images/Styles/Inspiration/HextechFlashtraption/HextechFlashtraption.png",
+          "short_desc": "While Flash is on cooldown it is replaced by <i>Hexflash</i>.<br><br><i>Hexflash</i>: Channel, then blink to a new location.",
+          "long_desc": "While Flash is on cooldown it is replaced by <i>Hexflash</i>.<br><br><i>Hexflash</i>: Channel for 2s to blink to a new location.<br><br>Cooldown: 20s. Goes on a 10s cooldown when you enter champion combat.",
+          "wiki_descriptions": [
+            "Passive: While Flash has a remaining cooldown greater than 2 seconds, it is replaced by Hexflash .",
+            "Active: You begin charging for up to 2. 5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
+            "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0. 25 seconds.",
+            "Uses Quick Casting by default, which requires the Active to be held and the Recast to occur on release."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: While Flash has a remaining cooldown greater than 2 seconds, it is replaced by Hexflash .",
+              "effect_type": "cooldown",
+              "stat": "cooldown",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                2
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 2,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Active: You begin charging for up to 2. 5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
+              "effect_type": "cooldown",
+              "stat": "movement_speed",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                2.0,
+                5,
+                0,
+                1,
+                1,
+                10
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 2.0,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0. 25 seconds.",
+              "effect_type": "stat_modifier",
+              "stat": "movement_speed",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                50,
+                0.0,
+                25
+              ],
+              "scaling": null,
+              "trigger": "on_cast",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 50,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Uses Quick Casting by default, which requires the Active to be held and the Recast to occur on release.",
+              "effect_type": "condition_note",
+              "stat": "hexflash_input_model",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": null,
+              "trigger": "on_cast",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.75
+            }
+          ],
+          "template_source": "Template:Rune data Hextech Flashtraption"
+        },
+        {
+          "id": 8304,
+          "key": "MagicalFootwear",
+          "name": "Magical Footwear",
+          "icon": "perk-images/Styles/Inspiration/MagicalFootwear/MagicalFootwear.png",
+          "short_desc": "You get free boots at 12 min but you cannot buy boots before then. Each <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>takedown</lol-uikit-tooltipped-keyword> you get makes your boots come 45s sooner.",
+          "long_desc": "You get free Slightly Magical Footwear at 12 min, but you cannot buy boots before then. For each takedown you acquire the boots 45s sooner.<br><br>Slightly Magical Footwear grants you an additional <speed>10 Move Speed</speed>.",
+          "wiki_descriptions": [
+            "Passive: After 12 minutes (reduced by 45 seconds whenever scoring a takedown against an enemy champion), you gain Slightly Magical Boots for free . Slightly Magical Boots are identical to Boots and can be upgraded as if it were the item. If the inventory is full while receiving the boots, they will appear as soon as a slot in the inventory is available.",
+            "Additionally, your boots grant an additional 10 bonus movement speed .",
+            "You cannot purchase Boots nor any Tier-2 boots prior to obtaining Slightly Magical Boots ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: After 12 minutes (reduced by 45 seconds whenever scoring a takedown against an enemy champion), you gain Slightly Magical Boots for free . Slightly Magical Boots are identical to Boots and can be upgraded as if it were the item. If the inventory is full while receiving the boots, they will appear as soon as a slot in the inventory is available.",
+              "effect_type": "stat_modifier",
+              "stat": "free_boots_unlock_time_seconds",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                12,
+                45
+              ],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": 12,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Additionally, your boots grant an additional 10 bonus movement speed .",
+              "effect_type": "stat_modifier",
+              "stat": "movement_speed",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                10
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": "ally",
+              "formula": {
+                "type": "flat",
+                "value": 10,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "You cannot purchase Boots nor any Tier-2 boots prior to obtaining Slightly Magical Boots .",
+              "effect_type": "condition_note",
+              "stat": "boot_purchase_restriction_before_unlock",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                -2
+              ],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": -2,
+                "unit": null
+              },
+              "conditions": [
+                "cannot_purchase_boots_before_unlock"
+              ],
+              "parse_confidence": 0.7
+            }
+          ],
+          "template_source": "Template:Rune data Magical Footwear"
+        },
+        {
+          "id": 8321,
+          "key": "CashBack",
+          "name": "Cash Back",
+          "icon": "perk-images/Styles/Inspiration/CashBack/CashBack2.png",
+          "short_desc": "Get some gold back when you purchase Legendary Items.",
+          "long_desc": "Get 7.5% Gold back when you purchase Legendary Items.",
+          "wiki_descriptions": [
+            "Passive: Upon purchasing a Legendary item , you are automatically refunded 7. 5 % of its total gold cost.",
+            "Selling or undoing the item's purchase will cancel the refund, reducing your current gold equal to the refunded amount."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Upon purchasing a Legendary item , you are automatically refunded 7. 5 % of its total gold cost.",
+              "effect_type": "resource",
+              "stat": "gold",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                7.0,
+                5
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": "ally",
+              "formula": {
+                "type": "flat",
+                "value": 7.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Selling or undoing the item's purchase will cancel the refund, reducing your current gold equal to the refunded amount.",
+              "effect_type": "condition_note",
+              "stat": "legendary_purchase_refund_reversal",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": null,
+              "trigger": "on_sell_or_undo",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.75
+            }
+          ],
+          "template_source": "Template:Rune data Cash Back"
+        }
+      ]
+    },
+    {
+      "slot_index": 3,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8313,
+          "key": "PerfectTiming",
+          "name": "Triple Tonic",
+          "icon": "perk-images/Styles/Inspiration/PerfectTiming/AlchemistCabinet.png",
+          "short_desc": "Upon reaching level 3, gain an Elixir of Avarice.<br>Upon reaching level 6, gain an Elixir of Force.<br>Upon reaching level 9, gain an Elixir of Skill. ",
+          "long_desc": "Upon reaching level 3, gain an Elixir of Avarice.<br>Upon reaching level 6, gain an Elixir of Force.<br>Upon reaching level 9, gain an Elixir of Skill. ",
+          "wiki_descriptions": [
+            "Passive: Gain an Elixir upon reaching each of the following levels: Level 3: Elixir of Avarice Level 6: Elixir of Force Level 9: Elixir of Skill",
+            "If the inventory is full upon the user becoming eligible to receive Elixir of Avarice or Elixir of Force , each item will be granted as soon as an empty slot is available. If the inventory is full upon becoming eligible to receive Elixir of Skill , the item is consumed automatically."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Level 3: Gain Elixir of Avarice.",
+              "effect_type": "grant_item",
+              "stat": "grant_elixir",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                3
+              ],
+              "formula": {
+                "type": "grant",
+                "item": "Elixir of Avarice",
+                "level": 3
+              },
+              "trigger": "on_level",
+              "applies_to": "self",
+              "conditions": [
+                "level_3"
+              ],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Level 6: Gain Elixir of Force.",
+              "effect_type": "grant_item",
+              "stat": "grant_elixir",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                6
+              ],
+              "formula": {
+                "type": "grant",
+                "item": "Elixir of Force",
+                "level": 6
+              },
+              "trigger": "on_level",
+              "applies_to": "self",
+              "conditions": [
+                "level_6"
+              ],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Level 9: Gain Elixir of Skill.",
+              "effect_type": "grant_item",
+              "stat": "grant_elixir",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                9
+              ],
+              "formula": {
+                "type": "grant",
+                "item": "Elixir of Skill",
+                "level": 9
+              },
+              "trigger": "on_level",
+              "applies_to": "self",
+              "conditions": [
+                "level_9"
+              ],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "If inventory is full while receiving an elixir, it appears when a slot is available.",
+              "effect_type": "inventory_rule",
+              "stat": "grant_delay",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "formula": {
+                "type": "defer_grant_until_slot_available"
+              },
+              "trigger": "on_grant",
+              "applies_to": "self",
+              "conditions": [
+                "inventory_full"
+              ],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Triple Tonic",
+          "manual_override": true,
+          "override_sources": [
+            "https://wiki.leagueoflegends.com/en-us/Template:Rune_data_Triple_Tonic"
+          ]
+        },
+        {
+          "id": 8352,
+          "key": "TimeWarpTonic",
+          "name": "Time Warp Tonic",
+          "icon": "perk-images/Styles/Inspiration/TimeWarpTonic/TimeWarpTonic.png",
+          "short_desc": "Potions grant some restoration immediately.",
+          "long_desc": "Consuming a potion grants 40% of its health restoration immediately.",
+          "wiki_descriptions": [
+            "Passive: Upon consuming a potion ( ), you additionally heal equal to 40% of its total health restoration.",
+            "If a health potion is consumed while one is already active, this effect will trigger on the activation of the next potion once the restoration of the current one ends."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Upon consuming a potion ( ), you additionally heal equal to 40% of its total health restoration.",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                40
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": "ally",
+              "formula": {
+                "type": "flat",
+                "value": 40,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "If a health potion is consumed while one is already active, this effect will trigger on the activation of the next potion once the restoration of the current one ends.",
+              "effect_type": "condition_note",
+              "stat": "potion_overlap_trigger_timing",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.68
+            }
+          ],
+          "template_source": "Template:Rune data Time Warp Tonic"
+        },
+        {
+          "id": 8345,
+          "key": "BiscuitDelivery",
+          "name": "Biscuit Delivery",
+          "icon": "perk-images/Styles/Inspiration/BiscuitDelivery/BiscuitDelivery.png",
+          "short_desc": "Gain a free Biscuit every 2 min, until 6 min. Consuming or selling a Biscuit permanently increases your max health and restores health.",
+          "long_desc": "Biscuit Delivery: Gain a Total Biscuit of Everlasting Will every 2 mins, until 6 min.<br><br>Biscuits restore 20 + 2% of your maximum health, increased by up to 100% based on missing Health. Consuming or selling a Biscuit permanently increases your max health by 30. ",
+          "wiki_descriptions": [
+            "Passive: Receive a Total Biscuit of Everlasting Will at 2:00 , 4:00 , and 6:00 . If the inventory is full while receiving a biscuit, the biscuit(s) will appear as soon as a slot in the inventory is available.",
+            "Consuming a Biscuit will permanently increase your maximum health by 30 , in addition to its effects. You will also gain the increased health if you sell the biscuit for 5 ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Receive a Total Biscuit of Everlasting Will at 2:00 , 4:00 , and 6:00 . If the inventory is full while receiving a biscuit, the biscuit(s) will appear as soon as a slot in the inventory is available.",
+              "effect_type": "condition_note",
+              "stat": null,
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                2,
+                0,
+                4,
+                0,
+                6,
+                0
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 2,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Consuming a Biscuit will permanently increase your maximum health by 30 , in addition to its effects. You will also gain the increased health if you sell the biscuit for 5 .",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                30,
+                5
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 30,
+                "unit": "health"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Biscuit Delivery"
+        }
+      ]
+    },
+    {
+      "slot_index": 4,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8347,
+          "key": "CosmicInsight",
+          "name": "Cosmic Insight",
+          "icon": "perk-images/Styles/Inspiration/CosmicInsight/CosmicInsight.png",
+          "short_desc": "+<attention>18</attention> Summoner Spell Haste<br>+<attention>10</attention> Item Haste",
+          "long_desc": "+<attention>18</attention> Summoner Spell Haste<br>+<attention>10</attention> Item Haste",
+          "wiki_descriptions": [
+            "Passive: Gain 18 summoner spell haste and 10 item haste ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain 18 summoner spell haste and 10 item haste .",
+              "effect_type": "stat_modifier",
+              "stat": "summoner_spell_haste",
+              "unit": "flat",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                18,
+                10
+              ],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": 18,
+                "unit": "flat"
+              },
+              "conditions": [],
+              "parse_confidence": 0.7,
+              "additional_stats": [
+                {
+                  "stat": "item_haste",
+                  "value": 10,
+                  "unit": "flat"
+                }
+              ]
+            }
+          ],
+          "template_source": "Template:Rune data Cosmic Insight"
+        },
+        {
+          "id": 8410,
+          "key": "ApproachVelocity",
+          "name": "Approach Velocity",
+          "icon": "perk-images/Styles/Resolve/ApproachVelocity/ApproachVelocity.png",
+          "short_desc": "Bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> towards nearby enemy champions that are <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>movement impaired</lol-uikit-tooltipped-keyword>, increased for enemy champions that you impair.",
+          "long_desc": "Gain <speed>7.5% Move Speed</speed> towards nearby enemy champions that are movement impaired. This bonus is increased to <speed>15% Move Speed</speed> for any enemy champion that you impair. <br><br>Activation Range for CC from allies: 1000",
+          "wiki_descriptions": [
+            "Passive: Gain 7. 5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
+            "This bonus is doubled to 15% and does not have a range cap nor require vision toward enemy champions whose movement you impaired when they were visible . (note)"
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain 7. 5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
+              "effect_type": "stat_modifier",
+              "stat": "movement_speed",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                7.0,
+                5,
+                1000
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 7.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "This bonus is doubled to 15% and does not have a range cap nor require vision toward enemy champions whose movement you impaired when they were visible . (note)",
+              "effect_type": "condition_note",
+              "stat": null,
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                15
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 15,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Approach Velocity"
+        },
+        {
+          "id": 8316,
+          "key": "JackOfAllTrades",
+          "name": "Jack Of All Trades",
+          "icon": "perk-images/Styles/Inspiration/JackOfAllTrades/JackofAllTrades2.png",
+          "short_desc": "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks.",
+          "long_desc": "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain 10 or 25 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks, respectively.",
+          "wiki_descriptions": [
+            "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks.",
+            "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain 10 or 25 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks, respectively."
+          ],
+          "effects_structured": [
+            {
+              "raw": "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks.",
+              "effect_type": "stat_modifier",
+              "stat": "adaptive",
+              "unit": null,
+              "values": [
+                1,
+                5,
+                10
+              ],
+              "value_range": null,
+              "numbers_extracted": [
+                1,
+                5,
+                10
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  1,
+                  5,
+                  10
+                ],
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain 10 or 25 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks, respectively.",
+              "effect_type": "stat_modifier",
+              "stat": "adaptive",
+              "unit": null,
+              "values": [
+                1,
+                10,
+                25,
+                5,
+                10
+              ],
+              "value_range": null,
+              "numbers_extracted": [
+                1,
+                10,
+                25,
+                5,
+                10
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  1,
+                  10,
+                  25,
+                  5,
+                  10
+                ],
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": null
+        }
+      ]
+    }
+  ],
+  "selection_rules": {
+    "keystone_slots_required": 1,
+    "minor_slots_required": 3
+  },
+  "schema_notes": {
+    "effects_structured": "Best-effort numeric parsing with canonical stat keys. Use raw text for exact wording.",
+    "wiki_templates": "Descriptions sourced from Template:Rune data <Rune Name> when available.",
+    "stat_shards_source": "Parsed from LoL Wiki Rune shards table.",
+    "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
+    "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
+    "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "primary rune-tree split generation"
+    }
+  ]
+}

@@ -1,0 +1,373 @@
+{
+  "name": "Skarner",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 320.0,
+      "per_level": 40.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 7.2,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 5.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Threads of Vibration",
+      "type": "Passive",
+      "description_source": "Innate:  Skarner's  basic attacks  on-hit,  Shattered Earth,  Upheaval, and  Impale apply a  stack of Quaking to enemies hit for 4 seconds, refreshing on subsequent applications and stacking up to 3 times. Enemies afflicted with 3 stacks take magic damage based on their maximum health.",
+      "effects": [
+        {
+          "id": "skarner_p_effect_1",
+          "description": "Innate: Skarner's basic attacks on-hit, Shattered Earth, Upheaval, and Impale apply a stack of Quaking to enemies hit for 4 seconds, refreshing on subsequent applications and stacking up to 3 times. Enemies afflicted with 3 stacks take magic damage equal to [ 5% : 9.47% (based on level) of their maximum health over the duration, capped at 100 : 323.53 (based on level) against monsters. ][ 0.63% : 1.18% (based on level) of their maximum health every 0.5 seconds over the duration, capped at 12.5 : 40.44 (based on level) per tick against monsters. ]"
+        }
+      ],
+      "description": "Innate: Skarner's basic attacks on-hit, Shattered Earth, Upheaval, and Impale apply a stack of Quaking to enemies hit for 4 seconds, refreshing on subsequent applications and stacking up to 3 times. Enemies afflicted with 3 stacks take magic damage equal to [ 5% : 9.47% (based on level) of their maximum health over the duration, capped at 100 : 323.53 (based on level) against monsters. ][ 0.63% : 1.18% (based on level) of their maximum health every 0.5 seconds over the duration, capped at 12.5 : 40.44 (based on level) per tick against monsters. ]",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Basic attacks that are dodged by the target or missed while Skarner is blinded do not apply stacks of Quake."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Shattered Earth",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Skarner rips a boulder out of the ground, empowering his next three basic attacks with  bonus attack speed and bonus physical damage to the target and surrounding enemies. The final attack slams the boulder, dealing additional damage based on each target's maximum health and  slowing them.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage_per_hit",
+          "description": "Bonus Physical Damage per Hit",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Active: Skarner rips a boulder from the ground, empowering up to three of his next basic attacks within 5 seconds of each other."
+        },
+        {
+          "id": "total_bonus_physical_damage",
+          "description": "Total Bonus Physical Damage",
+          "base_by_rank": [
+            30.0,
+            60.0,
+            90.0,
+            120.0,
+            150.0
+          ],
+          "context_notes": "Active: Skarner rips a boulder from the ground, empowering up to three of his next basic attacks within 5 seconds of each other."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Skarner rips a boulder from the ground, empowering up to three of his next basic attacks within 5 seconds of each other."
+        },
+        {
+          "id": "monster_percent_health_damage_cap",
+          "description": "Monster Percent Health Damage Cap",
+          "base_by_rank": [
+            150.0,
+            200.0,
+            250.0,
+            300.0,
+            350.0
+          ],
+          "context_notes": "The final attack slams the boulder, dealing an additional 9% of each target's maximum health physical damage and slowing afflicted enemies by 40% for 1 second."
+        },
+        {
+          "id": "skarner_q_effect_3",
+          "description": "After 0.5 seconds of the cast, Skarner gains the ability to use Upheaval during Shattered Earth."
+        },
+        {
+          "id": "skarner_q_effect_4",
+          "description": "Casting Shattered Earth resets Skarner's basic attack timer. Shattered Earth's duration is paused during Ixtal's Impact."
+        }
+      ],
+      "description": "Active: Skarner rips a boulder from the ground, empowering up to three of his next basic attacks within 5 seconds of each other. These attacks gain 25 bonus range, bonus attack speed, and deal bonus physical damage to the target and surrounding enemies, including structures.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        6.75,
+        5.5,
+        4.25,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.35.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): General The empowered attacks can be parried and will not trigger the area of effect if either the target blocks or dodges the attack, or if the attacks miss while Skarner is blinded."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Seismic Bastion",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Skarner slams his claws into the ground,  shielding himself based on his maximum health and releasing a shockwave that quickly expands in a radius around him to deal magic damage to enemies hit and briefly  slow them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            70.0,
+            90.0,
+            110.0,
+            130.0
+          ],
+          "context_notes": "Active: Skarner slams his claws into the ground, shielding himself equal to 8% of his maximum health for 2."
+        },
+        {
+          "id": "skarner_w_effect_2",
+          "description": "Skarner can move during Seismic Bastion's cast time."
+        }
+      ],
+      "description": "Active: Skarner slams his claws into the ground, shielding himself equal to 8% of his maximum health for 2.5 seconds and releasing a shockwave that quickly expands in a radius around him to deal magic damage to enemies hit and slow them by 20% for 1 second.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.3,
+        "projectile_speed": 1650.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.3.",
+        "Source speed: 1650.",
+        "Source effectRadius: 600 / 700.",
+        "Source notes (summary): The shield is granted at the start of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Ixtal's Impact",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Skarner charges in the target direction for a duration while ignoring terrain collision and gaining  ghosting and  slow immunity. He starts slowly but ramps up in  movement speed over the course of the charge, and is able to steer himself increasingly fast when keeping the same direction. Ixtal's Impact can be recast after 1 second, and does so automatically after the duration.",
+      "effects": [
+        {
+          "id": "skarner_e_effect_1",
+          "description": "Active: Skarner charges forward in the direction of the cursor for up to 2.75 seconds, during which he gains slow immunity, becomes ghosted, ignores terrain collision, and has unobstructed vision of the surrounding 650 units. He automatically navigates his movement along the way and is able to steer himself with a slow turn rate that increases over time, resetting upon changing direction. Ixtal's Impact can be recast after 1 second, and does so automatically after the duration."
+        },
+        {
+          "id": "skarner_e_effect_2",
+          "description": "Skarner begins the charge at a static amount of 150 movement speed that increases by 100 every 0.264 seconds, up to 950 total movement speed by the end of the duration. If Skarner collides with an enemy champion or large monster, he grabs them with his claws for the time of the remaining charge, attaching them to himself, suppressing them, revealing them, increasing the charge's turn rate to the maximum, and gaining 300 bonus movement speed, with a minimum total of 650 and a maximum total of 1150. If a target has been grabbed before the first 1.75 seconds of the charge, the remaining duration is set to 1 second, and set to 0.5 seconds otherwise. The charge does not ramp up in speed while a target is grabbed."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            30.0,
+            60.0,
+            90.0,
+            120.0,
+            150.0
+          ],
+          "context_notes": "If Skarner's attached target collides with terrain, the charge ends, detaching them from him, dealing physical damage, stunning them for 1."
+        },
+        {
+          "id": "skarner_e_effect_4",
+          "description": "Recast: Skarner ends Ixtal's Impact. If a target has been grabbed, he detaches them from himself."
+        },
+        {
+          "id": "skarner_e_effect_5",
+          "description": "Ixtal's Impact ends immediately if Skarner becomes immobilized or grounded, or is affected by any form of cast-inhibiting crowd control, during the charge. The grabbed target is detached if this occurs. While the target is grabbed, they are attached to Skarner 200 units in front of him."
+        }
+      ],
+      "description": "Active: Skarner charges forward in the direction of the cursor for up to 2.75 seconds, during which he gains slow immunity, becomes ghosted, ignores terrain collision, and has unobstructed vision of the surrounding 650 units. He automatically navigates his movement along the way and is able to steer himself with a slow turn rate that increases over time, resetting upon changing direction. Ixtal's Impact can be recast after 1 second, and does so automatically after the duration.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        21.0,
+        20.0,
+        19.0,
+        18.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source notes (summary): While Ixtal's Impact is active, Skarner's movement speed is set to a static amount that cannot change by any means other than by the ability itself."
+      ]
+    },
+    "ultimate": {
+      "name": "Impale",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Skarner winds up his stingers over the cast time with  displacement immunity, then lashes them forward in the target direction, dealing magic damage to enemies hit and impaling up to 3 of the closest enemy champions within the area to briefly  suppress. While suppressed, the targets are  revealed and  attached to Skarner. If he successfully impales at least one enemy champion, Skarner gains  bonus movement speed for Impale's duration.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Skarner winds up his stingers over the cast time, then lashes them forward in an isosceles trapezoid in the target direction, dealing magic damage to enemies hit and impaling up to 3 of the closest enemy champions within the area to suppress them for 1."
+        },
+        {
+          "id": "skarner_r_effect_2",
+          "description": "If Impale is cast during Shattered Earth, Skarner automatically casts Upheaval in the direction of Impale's cast. Skarner is unable to basic attack, cast Shattered Earth or Ixtal's Impact, or use Flash during Impale. While the targets are impaled, they are attached to Skarner 300 units in front of him. Targets are placed 200 units in the same direction at the end of the effect."
+        }
+      ],
+      "description": "Active: Skarner winds up his stingers over the cast time, then lashes them forward in an isosceles trapezoid in the target direction, dealing magic damage to enemies hit and impaling up to 3 of the closest enemy champions within the area to suppress them for 1.5 seconds. While suppressed, the targets are revealed and attached to Skarner. If he successfully impales at least one enemy champion, Skarner gains 40% bonus movement speed for the same duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.75
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.75.",
+        "Source notes (summary): Impale's attachment depends on the application of the suppression; if the suppression is not applied, neither is the attachment."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Skarner.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Skarner"
+  }
+}

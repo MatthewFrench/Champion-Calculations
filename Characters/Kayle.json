@@ -1,0 +1,371 @@
+{
+  "name": "Kayle",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 670.0,
+      "per_level": 92.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 330.0,
+      "per_level": 50.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 22.0,
+      "per_level": 1.3
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 50.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.54999995231628,
+    "base_windup_seconds": 0.300000011920928,
+    "windup_fraction": 0.19354840074195856,
+    "windup_percent": 19.354840074195856,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.300000011920928,
+      "attack_total_time": 1.54999995231628,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Divine Ascent",
+      "type": "Passive",
+      "description_source": "Innate:  Kayle ascends through four forms that each grant additional bonuses:\nLevel 1 - Zealous: Kayle's  basic attacks  on-attack grant her  stacking  attack speed, and at maximum stacks she also gains  move speed.\nLevel 6 - Arisen: Kayle gains  range and becomes a ranged champion.\nLevel 11 - Aflame: While at maximum stacks, Kayle's basic attacks launches a fire wave that deals magic damage.\nLevel 16 - Transcendent: Kayle is permanently at maximum stacks, in addition to gaining even more  range.",
+      "effects": [
+        {
+          "id": "kayle_p_effect_1",
+          "description": "Innate: Kayle ascends through four forms that each grant additional bonuses. She ascends upon spending a skill point at levels 1, 6, 11, and 16."
+        },
+        {
+          "id": "kayle_p_effect_2",
+          "description": "Level 1 - Zealous: Kayle's basic attacks on-attack generate a stack of Zeal for 5 seconds, refreshing on subsequent attacks and stacking up to 5 times. For each stack, she gains 6% bonus attack speed, up to a maximum of 30%. At max stacks, she becomes Exalted, gaining 10% bonus movement speed."
+        },
+        {
+          "id": "kayle_p_effect_3",
+          "description": "Level 6 - Arisen: Kayle becomes ranged and gains 350 bonus attack range for a total of 525."
+        },
+        {
+          "id": "kayle_p_effect_4",
+          "description": "Level 11 - Aflame: Kayle gains 10% bonus size. While Kayle is Exalted, her basic attacks on-attack also launch a wave of fire forward that deals 20 : 47 (based on level) (+ 10% bonus AD) (+ 25% AP) magic damage to all enemies it passes through. The wave is affected by critical strike modifiers."
+        },
+        {
+          "id": "kayle_p_effect_5",
+          "description": "Level 16 - Transcendent: Kayle gains an additional 100 bonus attack range for a total of 625, and permanently gains the full effects of Zealous."
+        }
+      ],
+      "description": "Innate: Kayle ascends through four forms that each grant additional bonuses. She ascends upon spending a skill point at levels 1, 6, 11, and 16.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Zealous The stacking bonus attack speed can be tracked on the HUD via a buff called Zeal, while the maximum stacks bonus grants the buff Exalted."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Radiant Blast",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Kayle summons a celestial sword that travels forward and expands upon hitting a target, dealing magic damage,  slowing, and reducing the  armor and  magic resist of all targets struck.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            100.0,
+            140.0,
+            180.0,
+            220.0
+          ],
+          "context_notes": "Active: Kayle conjures a portal in front of her that faces the target direction, from which, after 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "Active: Kayle conjures a portal in front of her that faces the target direction, from which, after 0."
+        },
+        {
+          "id": "kayle_q_effect_2",
+          "description": "The sword expands upon hitting an enemy, targets struck in the area are dealt magic damage, slowed for 2 seconds, and inflicted with 15% reduced armor and magic resistance for 4 seconds."
+        }
+      ],
+      "description": "Active: Kayle conjures a portal in front of her that faces the target direction, from which, after 0.25 seconds, a celestial sword launches forward.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: Attack Windup Time.",
+        "Source speed: 1600.",
+        "Source notes (summary): Details This ability has a cast time and cast delay."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Celestial Blessing",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Kayle  heals herself and an allied champion. Additionally, both of them gains  move speed for a brief time.",
+      "effects": [
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            55.0,
+            80.0,
+            105.0,
+            130.0,
+            155.0
+          ],
+          "context_notes": "Active: Kayle and the target allied champion are healed and gain bonus movement speed for 2 seconds."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0
+          ],
+          "context_notes": "Active: Kayle and the target allied champion are healed and gain bonus movement speed for 2 seconds."
+        },
+        {
+          "id": "kayle_w_effect_2",
+          "description": "If cast without a valid target, or self-cast, Celestial Blessing will automatically target the closest allied champion in range, prioritizing the one with the lowest health."
+        },
+        {
+          "id": "kayle_w_effect_3",
+          "description": "Kayle can move during Celestial Blessing's cast time."
+        }
+      ],
+      "description": "Active: Kayle and the target allied champion are healed and gain bonus movement speed for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        15.0,
+        15.0,
+        15.0,
+        15.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit / Auto.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Details Celestial Blessing's cast time does not interrupt movement and the effects are applied at the start."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Starfire Spellblade",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Kayle deals bonus magic damage on-hit.",
+      "effects": [
+        {
+          "id": "passive_damage",
+          "description": "Passive Damage",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Passive: Kayle deals bonus magic damage on-hit."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            8.0,
+            8.5,
+            9.0,
+            9.5,
+            10.0
+          ],
+          "context_notes": "Active: Kayle kindles her blade, empowering her next basic attack within 6 seconds to have an uncancellable windup and deal additional bonus magic damage on-hit that is capped at 400 against monsters."
+        },
+        {
+          "id": "kayle_e_effect_3",
+          "description": "Aflame Bonus: The attack explodes upon the target, dealing its damage to surrounding enemies and applying on-hit effects. This is affected by critical strike modifiers."
+        },
+        {
+          "id": "kayle_e_effect_4",
+          "description": "Starfire Spellblade resets Kayle's basic attack timer. Starfire Spellblade does not deal bonus damage against structures."
+        }
+      ],
+      "description": "Passive: Kayle deals bonus magic damage on-hit.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): Details Starfire Spellblade deals: The physical damage part of both the attack and the explosion deals basic damage and spell damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Divine Judgment",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Kayle grants herself or an allied champion  invulnerability for the next few seconds, and conjures flaming swords around herself.",
+      "effects": [
+        {
+          "id": "kayle_r_effect_1",
+          "description": "Active: Kayle grants herself or a target allied champion invulnerability for 2.5 seconds from the start of the cast time, and conjures flaming swords around herself."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "After 2."
+        },
+        {
+          "id": "kayle_r_effect_3",
+          "description": "Kayle can move during Divine Judgment's cast time."
+        }
+      ],
+      "description": "Active: Kayle grants herself or a target allied champion invulnerability for 2.5 seconds from the start of the cast time, and conjures flaming swords around herself.",
+      "cooldown_seconds_by_rank": [
+        160.0,
+        120.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 675.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 675 / 675 / 775.",
+        "Source notes (summary): Details Divine Judgment's effects persist through the target's death."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kayle.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kayle"
+  }
+}

@@ -249,7 +249,11 @@
       "FIGHTER",
       "MARKSMAN",
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447118_pyromancerscloak.png",
   "simpleDescription": null,
@@ -260,11 +264,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.011562+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Spark applies a burn on qualifying basic-attack or ability-hit events with a shared 5-second trigger cooldown; the burn then deals periodic damage for 3 seconds in 0.25-second ticks.",
       "Player-visible behavior: applying Burn to a champion spawns a delayed fireball (0.5 seconds) that lands near the user and creates a temporary blaze zone with ally/self buff-heal effects and enemy periodic damage.",
-      "Blaze strength scales by unique Burn sources (up to 10); stack-scaling semantics are represented, but exact multi-source ownership timing remains a follow-up fidelity area."
+      "Blaze strength scales by unique Burn sources (up to 10); stack-scaling semantics are represented, but exact multi-source ownership timing remains a follow-up fidelity area.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

@@ -1,0 +1,457 @@
+{
+  "name": "Bel'Veth",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 105.0
+    },
+    "resource": {
+      "type": "none",
+      "base": 0.0,
+      "per_level": 0.0,
+      "context_notes": "Champion does not use mana/energy as a standard regenerating resource for ability costs."
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 1.5
+    },
+    "attack_speed": {
+      "base": 0.85,
+      "per_level_percent": 0.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0525,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Death in Lavender",
+      "type": "Passive",
+      "description_source": "Innate:  Bel'Veth's attack speed cap is greatly increased, but her  attack speed does not grow by  leveling up. The damage dealt by her  basic attacks (including  on-hit effects) is reduced.",
+      "effects": [
+        {
+          "id": "belveth_p_effect_1",
+          "description": "Innate: Bel'Veth attacks 36% faster than the median champion and is allowed to exceed the attack speed cap, but all sources of damage (including on-hit damage) dealt by her basic attacks are reduced to 75%. Her attack speed does not increase through growth (per level)."
+        },
+        {
+          "id": "belveth_p_effect_2",
+          "description": "Innate: Bel'Veth's ability casts each generate 2 stacks of Death in Lavender, lasting for 5 seconds, refreshing on basic attacks and subsequent casts, and stacking up to 6 times. While Bel'Veth has stacks, she becomes ghosted and gains 20% : 43.14% (based on level) bonus attack speed. Her basic attacks each consume 1 stack."
+        },
+        {
+          "id": "belveth_p_effect_3",
+          "description": "Innate: Whenever Bel'Veth scores a takedown against a champion, monster, or large minion within 3 seconds of damaging them, she generates a permanent stack of Lavender. Large minions and monsters generate 1 stack, champions and epic monsters generate 2 stacks.\nLavender: For each stack, Bel'Veth gains 0.28% : 1.2% (based on level) bonus attack speed."
+        }
+      ],
+      "description": "Innate: Bel'Veth attacks 36% faster than the median champion and is allowed to exceed the attack speed cap, but all sources of damage (including on-hit damage) dealt by her basic attacks are reduced to 75%. Her attack speed does not increase through growth (per level).",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Bel'Veth's attack speed cap is increased to 9999."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Void Surge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Bel'Veth  dashes in the target direction, though not through terrain, dealing physical damage to enemies she passes through.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0
+          ],
+          "context_notes": "Active: Bel'Veth dashes in the designated direction, though not through terrain, dealing physical damage to enemies she passes through."
+        },
+        {
+          "id": "monster_bonus_physical_damage",
+          "description": "Monster Bonus Physical Damage",
+          "base_by_rank": [
+            55.0,
+            65.0,
+            75.0,
+            85.0,
+            95.0
+          ],
+          "context_notes": "Void Surge deals bonus physical damage to monsters and modified damage against minions."
+        },
+        {
+          "id": "total_monster_damage",
+          "description": "Total Monster Damage",
+          "base_by_rank": [
+            55.0,
+            70.0,
+            85.0,
+            100.0,
+            115.0
+          ],
+          "context_notes": "Void Surge deals bonus physical damage to monsters and modified damage against minions."
+        },
+        {
+          "id": "modified_minion_damage",
+          "description": "Modified Minion Damage",
+          "base_by_rank": [
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
+          ],
+          "context_notes": "Void Surge deals bonus physical damage to monsters and modified damage against minions."
+        },
+        {
+          "id": "belveth_q_effect_3",
+          "description": "Void Surge can be cast only within a cardinal direction that is off cooldown, and incurs a cooldown between casts. Each cardinal direction has a unique cooldown that is reduced equivalent to 0.25 ability haste per 1% bonus attack speed. These cooldowns reset upon respawning."
+        },
+        {
+          "id": "belveth_q_effect_4",
+          "description": "Void Surge resets Bel'Veth's basic attack timer."
+        }
+      ],
+      "description": "Active: Bel'Veth dashes in the designated direction, though not through terrain, dealing physical damage to enemies she passes through. Against the first target, Void Surge can critically strike for (200% + 30%) damage and applies on-hit effects, with on-hit damage reduced to 75% effectiveness, and life steal.",
+      "cooldown_seconds_by_rank": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: None.",
+        "Source speed: 800 / 850 / 900 / 950 / 1000 + 100% movement speed.",
+        "Source notes (summary): Void Surge applies basic damage, additionally tagged as spell damage to the first (closest) enemy hit and area damage to secondary enemies: Void Surge will apply spell effects to all targets hit."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Above and Below",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Bel'Veth slams her tail in the target direction that deals magic damage to enemies hit, briefly  knocking up and  slowing them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Bel'Veth slams her tail down in the target direction that deals magic damage to enemies hit, knocks them up for 0."
+        },
+        {
+          "id": "slow_duration",
+          "description": "Slow Duration",
+          "base_by_rank": [
+            1.25,
+            1.5,
+            1.75,
+            2.0,
+            2.25
+          ],
+          "context_notes": "Active: Bel'Veth slams her tail down in the target direction that deals magic damage to enemies hit, knocks them up for 0."
+        },
+        {
+          "id": "belveth_w_effect_2",
+          "description": "If this hits an enemy champion, it resets Void Surge's dash cooldown of the target direction."
+        }
+      ],
+      "description": "Active: Bel'Veth slams her tail down in the target direction that deals magic damage to enemies hit, knocks them up for 0.75 seconds, and slows them by 50% for a duration.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.5
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Royal Maelstrom",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Bel'Veth enters a brief defensive stance, gaining  life steal and damage reduction.\nDuring this time, Bel'Veth rapidly slashes at the most wounded enemy, with the max number of slashes increased based on her bonus attack speed. Each slash deals physical damage, and applies  life steal,  on-hit and  spell effects based on the target's missing health.",
+      "effects": [
+        {
+          "id": "damage_reduction",
+          "description": "Damage Reduction",
+          "base_by_rank": [
+            35.0,
+            40.0,
+            45.0,
+            50.0,
+            55.0
+          ],
+          "context_notes": "Active: Bel'Veth enters a frenzy for 1."
+        },
+        {
+          "id": "minimum_physical_damage_per_hit",
+          "description": "Minimum Physical Damage per hit",
+          "base_by_rank": [
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0
+          ],
+          "context_notes": "While active, she rapidly slashes at the nearest enemy with the lowest current health percentage for up to 6 (+ 1 per 33."
+        },
+        {
+          "id": "maximum_physical_damage_per_hit",
+          "description": "Maximum Physical Damage per hit",
+          "base_by_rank": [
+            24.0,
+            28.0,
+            32.0,
+            36.0,
+            40.0
+          ],
+          "context_notes": "While active, she rapidly slashes at the nearest enemy with the lowest current health percentage for up to 6 (+ 1 per 33."
+        },
+        {
+          "id": "minimum_monster_damage_per_hit",
+          "description": "Minimum Monster Damage per hit",
+          "base_by_rank": [
+            9.0,
+            10.5,
+            12.0,
+            13.5,
+            15.0
+          ],
+          "context_notes": "Royal Maelstrom deals 150% damage to monsters, applies life steal, and is affected by critical strike modifiers."
+        },
+        {
+          "id": "maximum_monster_damage_per_hit",
+          "description": "Maximum Monster Damage per hit",
+          "base_by_rank": [
+            36.0,
+            42.0,
+            48.0,
+            54.0,
+            60.0
+          ],
+          "context_notes": "Royal Maelstrom deals 150% damage to monsters, applies life steal, and is affected by critical strike modifiers."
+        },
+        {
+          "id": "belveth_e_effect_4",
+          "description": "Royal Maelstrom can be recast after 0.75 seconds within the duration, and does so automatically after the duration or when Bel'Veth casts an ability."
+        },
+        {
+          "id": "belveth_e_effect_5",
+          "description": "Recast: Bel'Veth ends Royal Maelstrom."
+        },
+        {
+          "id": "belveth_e_effect_6",
+          "description": "The target does not have to be visible to be hit by this ability."
+        }
+      ],
+      "description": "Active: Bel'Veth enters a frenzy for 1.5 seconds, during which she is unable to move, but gains damage reduction and 20% (+ 100% life steal) life steal.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Applies spell damage and procs basic damage required effects."
+      ]
+    },
+    "ultimate": {
+      "name": "Endless Banquet",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive: Every second basic attack on the same target deals bonus true damage and generates a stack that increases the damage. This can stack infinitely, and expires after a short time or upon switching targets.",
+      "effects": [
+        {
+          "id": "bonus_true_damage",
+          "description": "Bonus True Damage",
+          "base_by_rank": [
+            6.0,
+            10.0,
+            14.0
+          ],
+          "context_notes": "Passive: Bel'Veth's basic attacks on-hit apply a mark to the target for 5 seconds, refreshing on subsequent hits."
+        },
+        {
+          "id": "maximum_monster_damage",
+          "description": "Maximum Monster Damage",
+          "base_by_rank": [
+            30.0,
+            50.0,
+            70.0
+          ],
+          "context_notes": "Passive: Bel'Veth's basic attacks on-hit apply a mark to the target for 5 seconds, refreshing on subsequent hits."
+        },
+        {
+          "id": "belveth_r_effect_2",
+          "description": "Passive: When Bel'Veth scores a takedown against an enemy champion or epic monster while alive, a Void Coral is spawned from their corpse for 15 seconds. Baron Nashor, the pit Rift Herald, and Voidgrubs (once per spawn group) spawn an Enhanced Void Coral."
+        },
+        {
+          "id": "true_damage",
+          "description": "True Damage",
+          "base_by_rank": [
+            150.0,
+            200.0,
+            250.0
+          ],
+          "context_notes": "Active: Bel'Veth dashes to the target Void Coral to consume it over the cast time, slowing nearby enemies by 25% : 96% (based on seconds elapsed) for the duration."
+        },
+        {
+          "id": "bonus_health",
+          "description": "Bonus Health",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0
+          ],
+          "context_notes": "True Form: Bel'Veth evolves into a monster, gaining bonus health, bonus movement speed out-of-combat, 75 bonus attack range, as well as increased total attack speed."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            10.0,
+            45.0,
+            80.0
+          ],
+          "context_notes": "True Form: Bel'Veth evolves into a monster, gaining bonus health, bonus movement speed out-of-combat, 75 bonus attack range, as well as increased total attack speed."
+        },
+        {
+          "id": "increased_total_attack_speed",
+          "description": "Increased Total Attack Speed",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0
+          ],
+          "context_notes": "True Form: Bel'Veth evolves into a monster, gaining bonus health, bonus movement speed out-of-combat, 75 bonus attack range, as well as increased total attack speed."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0
+          ],
+          "context_notes": "True Form: Bel'Veth evolves into a monster, gaining bonus health, bonus movement speed out-of-combat, 75 bonus attack range, as well as increased total attack speed."
+        },
+        {
+          "id": "belveth_r_effect_5",
+          "description": "A nearby Void Coral is required to cast this ability. The on-hit modifiers from Death in Lavender, Void Surge and Royal Maelstrom affect the bonus true damage applied by Endless Banquet's passive. See Pets for details about Void Remora and Void Corals."
+        }
+      ],
+      "description": "Passive: Bel'Veth's basic attacks on-hit apply a mark to the target for 5 seconds, refreshing on subsequent hits. Every second attack on-hit against the marked target deals bonus true damage and generates a stack of Endless Banquet that increases this damage by the same value. This effect stacks infinitely, but is capped at 5 stacks against epic monsters. The mark and stacks expire upon attacking a new target.",
+      "cooldown_seconds_by_rank": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 1.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 1.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Applies proc damage on the bonus true damage and deals area damage on the explosion."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Belveth.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Belveth"
+  }
+}

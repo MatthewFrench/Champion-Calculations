@@ -1,0 +1,405 @@
+{
+  "name": "Soraka",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Enchanter",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 605.0,
+      "per_level": 88.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 425.0,
+      "per_level": 40.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 2.5,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 11.5,
+      "per_level": 0.4
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 50.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.14
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.112999998033046,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Salvation",
+      "type": "Passive",
+      "description_source": "Innate:  Soraka gains tremendous  bonus movement speed while facing nearby allied  champions that are at low health.",
+      "effects": [
+        {
+          "id": "soraka_p_effect_1",
+          "description": "Innate: Soraka gains 90% bonus movement speed while facing nearby allied champions that are below 40% of their maximum health."
+        }
+      ],
+      "description": "Innate: Soraka gains 90% bonus movement speed while facing nearby allied champions that are below 40% of their maximum health.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 2500.",
+        "Source notes (summary): Soraka will see an arrow indicating the direction in which she can gain the bonus movement speed."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Starcall",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Soraka calls down a star upon the target location that deals magic damage and briefly  slows enemies hit. If this hits at least one enemy  champion, the star dust returns to Soraka to grant her Rejuvenation for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            85.0,
+            120.0,
+            155.0,
+            190.0,
+            225.0
+          ],
+          "context_notes": "Active: Soraka calls down a star upon the target location that grants sight of the area before landing after 0."
+        },
+        {
+          "id": "soraka_q_effect_2",
+          "description": "If this hits at least one enemy champion, star dust returns to Soraka, granting her Rejuvenation for 2.5 seconds. While Soraka has Rejuvenation, casting Astral Infusion will also grant Rejuvenation to the target for the same duration."
+        },
+        {
+          "id": "total_heal",
+          "description": "Total Heal",
+          "base_by_rank": [
+            60.0,
+            75.0,
+            90.0,
+            105.0,
+            120.0
+          ],
+          "context_notes": "Rejuvenation: Heal every 0."
+        },
+        {
+          "id": "heal_per_tick",
+          "description": "Heal per Tick",
+          "base_by_rank": [
+            5.0,
+            6.25,
+            7.5,
+            8.75,
+            10.0
+          ],
+          "context_notes": "Rejuvenation: Heal every 0."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            22.5,
+            25.0,
+            27.5,
+            30.0
+          ],
+          "context_notes": "Rejuvenation: Heal every 0."
+        }
+      ],
+      "description": "Active: Soraka calls down a star upon the target location that grants sight of the area before landing after 0.25 : 1 (based on target range) seconds, dealing magic damage to enemies hit and slowing them by 30% for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.0,
+        6.0,
+        5.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          50.0,
+          55.0,
+          60.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 265.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 265.",
+        "Source notes (summary): Starcall counts as hitting even if it gets blocked by spell shield, granting Rejuvenation."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Astral Infusion",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Soraka consumes a portion of her maximum health to  heal the target allied champion.",
+      "effects": [
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            90.0,
+            110.0,
+            130.0,
+            150.0,
+            170.0
+          ],
+          "context_notes": "Active: Soraka heals the target allied champion."
+        },
+        {
+          "id": "health_cost_reduction",
+          "description": "Health Cost Reduction",
+          "base_by_rank": [
+            80.0,
+            85.0,
+            90.0,
+            95.0,
+            100.0
+          ],
+          "context_notes": "If cast while under Rejuvenation, the health cost will be reduced by a percentage."
+        },
+        {
+          "id": "reduced_health_cost",
+          "description": "Reduced Health Cost",
+          "base_by_rank": [
+            2.0,
+            1.5,
+            1.0,
+            0.5
+          ],
+          "context_notes": "If cast while under Rejuvenation, the health cost will be reduced by a percentage."
+        },
+        {
+          "id": "soraka_w_effect_3",
+          "description": "Astral Infusion cannot be cast if Soraka is below 5% of her maximum health."
+        }
+      ],
+      "description": "Active: Soraka heals the target allied champion.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        5.0,
+        4.0,
+        3.0,
+        2.0
+      ],
+      "cost": {
+        "resource": "other",
+        "value_by_rank": [
+          10.0,
+          10.0,
+          10.0,
+          10.0,
+          10.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Astral Infusion can also be targeted on allied decoys."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Equinox",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Soraka creates a celestial zone at the target location that deals magic damage to enemy champions within upon casting. The zone then persists for a brief moment and  siliences enemies within.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            95.0,
+            120.0,
+            145.0,
+            170.0
+          ],
+          "context_notes": "Active: Soraka creates a celestial zone at the target location that deals magic damage to enemy champions within at the time of cast."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            140.0,
+            190.0,
+            240.0,
+            290.0,
+            340.0
+          ],
+          "context_notes": "Afterwards, the zone erupts to deal the same damage to enemy champions within and root them for a duration."
+        },
+        {
+          "id": "root_duration",
+          "description": "Root Duration",
+          "base_by_rank": [
+            1.0,
+            1.25,
+            1.5,
+            1.75,
+            2.0
+          ],
+          "context_notes": "Afterwards, the zone erupts to deal the same damage to enemy champions within and root them for a duration."
+        }
+      ],
+      "description": "Active: Soraka creates a celestial zone at the target location that deals magic damage to enemy champions within at the time of cast. The zone then persists for 1.5 seconds and silences enemies within.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 260.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 260.",
+        "Source notes (summary): Equinox's silence is marked as non-dispellable, so it is not removed by most cleanses."
+      ]
+    },
+    "ultimate": {
+      "name": "Wish",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Soraka calls upon the stars,  healing herself and all allied  champions, regardless of distance. The healing is increased on targets at low health.",
+      "effects": [
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Soraka calls upon the stars, healing herself and all allied champions, increased by 50% on targets below 40% of their maximum health."
+        },
+        {
+          "id": "increased_heal",
+          "description": "Increased Heal",
+          "base_by_rank": [
+            225.0,
+            375.0,
+            525.0
+          ],
+          "context_notes": "Active: Soraka calls upon the stars, healing herself and all allied champions, increased by 50% on targets below 40% of their maximum health."
+        }
+      ],
+      "description": "Active: Soraka calls upon the stars, healing herself and all allied champions, increased by 50% on targets below 40% of their maximum health.",
+      "cooldown_seconds_by_rank": [
+        150.0,
+        135.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: Global.",
+        "Source notes (summary): Due to several character stats needing to be recalculated each time a character spawns, casting Wish immediately upon respawning will cause its cooldown to be unaffected by ability haste, and the healing will not be increased by Soraka's ability power."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Soraka.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Soraka"
+  }
+}

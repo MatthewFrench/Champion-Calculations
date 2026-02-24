@@ -1,0 +1,463 @@
+{
+  "name": "Mel",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Artillery",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 480.0,
+      "per_level": 28.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 9.0,
+      "per_level": 0.9
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 54.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.143999993801117,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Searing Brilliance",
+      "type": "Passive",
+      "description_source": "Innate - Overwhelm:  Mel's damaging  basic attacks and  abilities apply a  stack of Overwhelm to enemies hit for a few seconds, stacking infinitely. Each stack stores magic damage; if the total stored damage would kill the target, the next stack will consume them all to detonate the damage.",
+      "effects": [
+        {
+          "id": "mel_p_effect_1",
+          "description": "Innate: Mel's basic attacks and abilities apply a stack of Overwhelm for each instance of damage they deal to enemies for 5 seconds, refreshing on subsequent damage instances and stacking infinitely."
+        },
+        {
+          "id": "mel_p_effect_2",
+          "description": "Overwhelm: Store 50 / 60 / 70 / 80 (based on Golden Eclipse's rank) (+ 10% AP) magic damage on the affected enemy with the first stack, reduced[ to 60% ][ to 30 / 36 / 42 / 48 (based on Golden Eclipse's rank) (+ 6% AP) ]against minions. For each stack, store an additional 2 / 3 / 4 / 5 (based on Golden Eclipse's rank) (+ 0.75% AP) magic damage on the target. If the total post-mitigation damage stored exceeds the target's current health and shields, the next stack applied against them will consume them all to deal the stored damage."
+        },
+        {
+          "id": "mel_p_effect_3",
+          "description": "Innate - Searing Brilliance: Mel's ability casts each generate 3 stacks of Searing Brilliance for 5 seconds, refreshing on subsequent casts and stacking up to 9 times. Her next basic attack consumes all stacks of Searing Brilliance to additionally fire an equal number of blazing projectiles at the target. Each projectile deals 8 : 32.59 (based on level) (+ 4% AP) magic damage, for a total possible damage of 72 : 293.29 (based on level) (+ 36% AP) at maximum stacks."
+        }
+      ],
+      "description": "Innate: Mel's basic attacks and abilities apply a stack of Overwhelm for each instance of damage they deal to enemies for 5 seconds, refreshing on subsequent damage instances and stacking infinitely.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The first stack also benefits from the per-stack bonus stored damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Radiant Volley",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Mel concentrates a bombardment of luminous bolts that explode in an area, dealing magic damage.",
+      "effects": [
+        {
+          "id": "initial_explosion_magic_damage",
+          "description": "Initial Explosion Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Mel launches a barrage of luminous bolts at the target location over 0."
+        },
+        {
+          "id": "magic_damage_per_subsequent_explosion",
+          "description": "Magic Damage per Subsequent Explosion",
+          "base_by_rank": [
+            5.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0
+          ],
+          "context_notes": "Active: Mel launches a barrage of luminous bolts at the target location over 0."
+        },
+        {
+          "id": "number_of_bolts",
+          "description": "Number of Bolts",
+          "base_by_rank": [
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0
+          ],
+          "context_notes": "Active: Mel launches a barrage of luminous bolts at the target location over 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            90.0,
+            132.0,
+            176.0,
+            222.0,
+            270.0
+          ],
+          "context_notes": "Active: Mel launches a barrage of luminous bolts at the target location over 0."
+        },
+        {
+          "id": "mel_q_effect_2",
+          "description": "The bolts momentarily grant sight during their travel, while the explosions grant sight over their target area. Both can see through brush and terrain."
+        }
+      ],
+      "description": "Active: Mel launches a barrage of luminous bolts at the target location over 0.5 seconds which distribute evenly in the area. Each bolt explodes upon landing to deal magic damage to nearby enemies, with all explosions after the first dealing reduced damage.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "projectile_speed": 3800.0,
+        "effect_hitbox_radius": 100.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.35.",
+        "Source speed: 3800.",
+        "Source effectRadius: 200 /  100.",
+        "Source notes (summary): Radiant Volley has a channel time of 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Rebuttal",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Mel forms a protective barrier around herself for 0.75 seconds, becoming  invulnerable to non- turret damage and gaining decaying  bonus move speed.",
+      "effects": [
+        {
+          "id": "shield",
+          "description": "Shield",
+          "base_by_rank": [
+            80.0,
+            110.0,
+            140.0,
+            170.0,
+            200.0
+          ],
+          "context_notes": "Active: Mel forms a protective barrier around herself for 0."
+        },
+        {
+          "id": "replicated_projectile_magic_damage_modifier",
+          "description": "Replicated Projectile Magic Damage Modifier",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "Replicated projectiles have the same features that the original ones do, but they retain a ratio of the damage that the original ones would deal."
+        },
+        {
+          "id": "replicated_projectile_physical_damage_modifier",
+          "description": "Replicated Projectile Physical Damage Modifier",
+          "base_by_rank": [
+            28.0,
+            31.5,
+            35.0,
+            38.5,
+            42.0
+          ],
+          "context_notes": "Replicated projectiles have the same features that the original ones do, but they retain a ratio of the damage that the original ones would deal."
+        }
+      ],
+      "description": "Active: Mel forms a protective barrier around herself for 0.75 seconds, granting herself a shield for the duration, and gaining 40% bonus movement speed that decays over 1.5 seconds. Additionally, all hostile projectiles sourced from enemy champions that collide with the barrier will be destroyed instantly before Mel fires the same projectiles as her own, either toward or in the direction of the original sources, or toward herself.",
+      "cooldown_seconds_by_rank": [
+        35.0,
+        32.0,
+        29.0,
+        26.0,
+        23.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          60.0,
+          40.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 175.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 175.",
+        "Source notes (summary): Rebuttal's barrier will also instantly destroy missiles that are already within its radius when the ability is cast."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Solar Snare",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Mel fires an orb that deals magic damage to enemies hit and  roots them for a moment.",
+      "effects": [
+        {
+          "id": "orb_magic_damage",
+          "description": "Orb Magic Damage",
+          "base_by_rank": [
+            60.0,
+            105.0,
+            150.0,
+            195.0,
+            240.0
+          ],
+          "context_notes": "Active: Mel fires an orb in the target direction that grants sight of its surroundings every 0."
+        },
+        {
+          "id": "field_magic_damage_per_tick",
+          "description": "Field Magic Damage per Tick",
+          "base_by_rank": [
+            2.0,
+            3.5,
+            5.0,
+            6.5,
+            8.0
+          ],
+          "context_notes": "The orb emanates a field of solar radiation that additionally expands after a 0."
+        },
+        {
+          "id": "field_magic_damage_per_second",
+          "description": "Field Magic Damage per Second",
+          "base_by_rank": [
+            16.0,
+            28.0,
+            40.0,
+            52.0,
+            64.0
+          ],
+          "context_notes": "The orb emanates a field of solar radiation that additionally expands after a 0."
+        },
+        {
+          "id": "orb_minion_magic_damage",
+          "description": "Orb Minion Magic Damage",
+          "base_by_rank": [
+            30.0,
+            52.5,
+            75.0,
+            97.5,
+            120.0
+          ],
+          "context_notes": "Both the orb and the field of Solar Snare deal 50% damage against minions."
+        },
+        {
+          "id": "field_minion_magic_damage_per_tick",
+          "description": "Field Minion Magic Damage per Tick",
+          "base_by_rank": [
+            1.0,
+            1.75,
+            2.5,
+            3.25,
+            4.0
+          ],
+          "context_notes": "Both the orb and the field of Solar Snare deal 50% damage against minions."
+        },
+        {
+          "id": "field_magic_damage_per_second_2",
+          "description": "Field Magic Damage per Second",
+          "base_by_rank": [
+            8.0,
+            14.0,
+            20.0,
+            26.0,
+            32.0
+          ],
+          "context_notes": "Both the orb and the field of Solar Snare deal 50% damage against minions."
+        }
+      ],
+      "description": "Active: Mel fires an orb in the target direction that grants sight of its surroundings every 0.25 seconds as it travels. Enemies hit by the orb are dealt magic damage and rooted for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.5,
+        10.0,
+        9.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1100.0,
+        "effect_hitbox_radius": 60.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1100.",
+        "Source effectRadius: 70 / 70 / 230 / 60.",
+        "Source notes (summary): Spell shield will only block the orb ( root portion)."
+      ]
+    },
+    "ultimate": {
+      "name": "Golden Eclipse",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Overwhelm stores more damage.",
+      "effects": [
+        {
+          "id": "increased_stored_damage",
+          "description": "Increased Stored Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "Passive: Overwhelm stacks store more damage."
+        },
+        {
+          "id": "stored_damage_increase_per_stack",
+          "description": "Stored Damage Increase per Stack",
+          "base_by_rank": [
+            1.0,
+            2.0,
+            3.0
+          ],
+          "context_notes": "Passive: Overwhelm stacks store more damage."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0
+          ],
+          "context_notes": "Active: Mel unleashes a radiant blast on all enemies affected by Overwhelm, dealing magic damage to each of them."
+        },
+        {
+          "id": "mel_r_effect_3",
+          "description": "An enemy champion affected by Overwhelm is required to cast this ability. The target does not have to be visible to be hit by this ability."
+        }
+      ],
+      "description": "Passive: Overwhelm stacks store more damage.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.75
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.75.",
+        "Source notes (summary): Golden Eclipse can be cast even if all affected targets are untargetable."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Mel.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Mel"
+  }
+}

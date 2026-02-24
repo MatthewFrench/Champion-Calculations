@@ -1,0 +1,357 @@
+{
+  "name": "Vi",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 105.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 295.0,
+      "per_level": 65.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 30.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 10.0,
+      "per_level": 1.0
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.65
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.360000014305114,
+    "windup_fraction": 0.22500000558793604,
+    "windup_percent": 22.500000558793605,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.360000014305114,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Blast Shield",
+      "type": "Passive",
+      "description_source": "Innate: Periodically,  Vi's next ability hit will generate a  shield by a portion of her maximum health for a short time.",
+      "effects": [
+        {
+          "id": "vi_p_effect_1",
+          "description": "Innate: Periodically, Vi's next ability hit grants her a shield equal to 12% of her maximum health for 3 seconds."
+        },
+        {
+          "id": "vi_p_effect_2",
+          "description": "Blast Shield's cooldown is reduced by 4 seconds each time Denting Blows is consumed."
+        }
+      ],
+      "description": "Innate: Periodically, Vi's next ability hit grants her a shield equal to 12% of her maximum health for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.764705882352942,
+        15.529411764705882,
+        15.294117647058824,
+        15.058823529411764,
+        14.823529411764707,
+        14.588235294117647,
+        14.352941176470589,
+        14.117647058823529,
+        13.882352941176471,
+        13.647058823529411,
+        13.411764705882353,
+        13.176470588235293,
+        12.941176470588236,
+        12.705882352941178,
+        12.470588235294118,
+        12.235294117647058,
+        12.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Vault Breaker will trigger Blast Shield even if it's blocked by a spell shield."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Vault Breaker",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "vi_q_effect_1",
+          "description": "Active: Vi charges while being slowed by 15% for up to 4 seconds to increase Vault Breaker's range, speed, and damage over the first 1.25 seconds of the channel."
+        },
+        {
+          "id": "vi_q_effect_2",
+          "description": "Vault Breaker can be recast within the duration. If the charge completes without reactivation, Vault Breaker is cancelled, 50% of the mana cost is refunded, and it is placed on full cooldown. If the charge is interrupted, 50% of the mana cost is refunded and it is placed on a 3-second cooldown."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Recast: Vi dashes in the target direction to deal physical damage to enemies within her path, increased by 0% : 150% (based on channel time), and pull all non-champions hit towards her."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "Recast: Vi dashes in the target direction to deal physical damage to enemies within her path, increased by 0% : 150% (based on channel time), and pull all non-champions hit towards her."
+        },
+        {
+          "id": "vi_q_effect_4",
+          "description": "She stops upon hitting an enemy champion, knocking them back over 0.75 seconds."
+        },
+        {
+          "id": "vi_q_effect_5",
+          "description": "Relentless Force and Cease and Desist can be cast during the dash."
+        }
+      ],
+      "description": "Active: Vi charges while being slowed by 15% for up to 4 seconds to increase Vault Breaker's range, speed, and damage over the first 1.25 seconds of the channel.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        10.5,
+        9.0,
+        7.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1450.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Direction.",
+        "Source castTime: none.",
+        "Source speed: 1450 : 1540 (based on channel time).",
+        "Source notes (summary): Vault Breaker's dash range extends up to 50 units when going through a wall."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Denting Blows",
+      "type": "Passive",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Vi's  basic attacks and  Vault Breaker apply a  stack of Denting Blows.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0
+          ],
+          "context_notes": "Passive: Vi's basic attacks on-hit and Vault Breaker apply a stack of Denting Blows to enemies hit for 4 seconds, refreshing on subsequent applications and stacking up to 3 times."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "After consuming Denting Blows, Vi gains bonus attack speed for 4 seconds, which refreshes on subsequent triggers."
+        }
+      ],
+      "description": "Passive: Vi's basic attacks on-hit and Vault Breaker apply a stack of Denting Blows to enemies hit for 4 seconds, refreshing on subsequent applications and stacking up to 3 times. The third stack consumes them all to deal bonus physical damage, capped at 300 against non-champions, and inflict 20% armor reduction for 4 seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The armor penetration will apply after the triggering damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Relentless Force",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Vi's next basic attack gains  bonus range and deals modified physical damage to enemies hit in a cone.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            10.0,
+            30.0,
+            50.0,
+            70.0,
+            90.0
+          ],
+          "context_notes": "Active: Vi empowers her next basic attack within 6 seconds to have an uncancellable windup, gain 50 bonus range and trigger a blast in the target's direction that deals modified physical damage to enemies hit in a cone."
+        },
+        {
+          "id": "vi_e_effect_2",
+          "description": "Vi periodically stocks a Relentless Force charge, up to a maximum of 2."
+        },
+        {
+          "id": "vi_e_effect_3",
+          "description": "Relentless Force resets Vi's basic attack timer."
+        }
+      ],
+      "description": "Active: Vi empowers her next basic attack within 6 seconds to have an uncancellable windup, gain 50 bonus range and trigger a blast in the target's direction that deals modified physical damage to enemies hit in a cone.Relentless Force can critically strike for (100% + 30%) AD bonus physical damage against the primary target. Secondary targets take the same damage but do not count as being critically struck.",
+      "cooldown_seconds_by_rank": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          26.0,
+          32.0,
+          38.0,
+          44.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): Applies spell damage to the primary target, applies basic damage required effects on the primary target, and applies area damage to secondary targets."
+      ]
+    },
+    "ultimate": {
+      "name": "Cease and Desist",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Vi  reveals the target enemy champion and  dashes to them with  displacement immunity, dealing physical damage to enemies she passes through and briefly  knocking aside and  stunning them.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Vi singles out the target enemy champion, dashing with displacement immunity towards them and revealing them."
+        },
+        {
+          "id": "vi_r_effect_2",
+          "description": "Enemies she dashes through are dealt the same damage, knocked aside by 350 units over 0.25 seconds, and stunned for 0.75 seconds."
+        }
+      ],
+      "description": "Active: Vi singles out the target enemy champion, dashing with displacement immunity towards them and revealing them. Upon approaching within 300 units of the target, she dashes through and grabs them over 1.05 seconds, knocking them up for 1.3 seconds and dealing physical damage after 0.75 seconds into the grab duration.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        115.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 800.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 800.",
+        "Source notes (summary): Vi will track the target if they change locations."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Vi.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Vi"
+  }
+}

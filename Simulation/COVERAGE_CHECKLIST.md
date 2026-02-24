@@ -19,10 +19,15 @@ Read first:
 - [ ] No deprecated schema keys were reintroduced.
 
 ## 2) Champion Coverage
+- [ ] Champion key parity was checked against `From Online/champions/*.json`, and every added/edited canonical champion file preserves 1:1 key identity with source corpus naming.
 - [ ] `Characters/<Champion>.json` has complete canonical sections (`base_stats`, `basic_attack`, `abilities`).
 - [ ] Ability execution geometry and timing are on `abilities.<ability_key>.execution`.
+- [ ] Champion active abilities keep non-empty `execution` objects (no active-ability execution metadata regressions).
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
+- [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
+- [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.
 - [ ] `sources` and `schema_notes` are updated.
+- [ ] Champion `sources` entries include complete provenance metadata (`url`/`path`, `accessed`, `used_for`), and missing `sources[].accessed` values were backfilled on touched files.
 - [ ] If champion behavior changed at runtime, script logic is implemented in `Simulation/src/scripts/champions/<champion>/`.
 - [ ] If controlled champion behavior was added, `Simulation/src/scripts/champions/controlled_champion.rs` registry wiring is updated.
 - [ ] If enemy scripted events changed, `Simulation/src/scripts/champions/mod.rs` event registry and labels are updated.
@@ -33,19 +38,23 @@ Read first:
 - [ ] Item `stats` keys use loader-canonical names (for example `magicResist`, `critChance`, not legacy aliases like `magicResistance` or `criticalStrikeChance`).
 - [ ] Structured effects use stable effect identifiers and include trigger, cooldown, duration, and scaling where applicable.
 - [ ] Active cast effects include explicit cooldown and cast-range metadata when these values are present in source text (blocking gate when applicable).
+- [ ] Trinket/ward utility items encode source-verified charge count, recharge scaling, placement limits, level requirements, and reveal/detection timing windows when available.
 - [ ] Non-trivial active/on-hit/combat-triggered item effects were manually reviewed for execution semantics (activation gating, target/range requirements, timing/windup, and resolution timing).
 - [ ] `schema_notes.effects_structured_reviewed` is updated.
 - [ ] `schema_notes.effects_structured_reviewed` uses ISO date format `YYYY-MM-DD`.
 - [ ] If a non-ISO legacy review note was replaced, the original note is preserved in `schema_notes.context_notes`.
+- [ ] Canonical item files touched in this change remain sourced even when `effects_structured` is empty (non-structured/stat-only/placeholder entries are not exempt from provenance).
 - [ ] Runtime-modeled items include explicit `sources` entries (do not leave modeled items with `sources: null`).
 - [ ] `sources` entries include `url` or `path`, `accessed`, and `used_for` fields.
 - [ ] If the edited item file had legacy source entries missing `accessed`, they were backfilled in the same change.
 - [ ] Cited source URLs were verified to resolve at authoring time, and CommunityDragon item dataset citations use the current `global/default/v1/items.json` endpoint.
 - [ ] Non-trivial or low-confidence item effects include at least one Tier-2 citation source (CommunityDragon or League Wiki) when available.
 - [ ] Low-confidence formula interpretations include at least one page-level verification source (for example item page or patch notes), not only dataset-level citations.
+- [ ] If a cited item page is a redirect (pseudo-item/turret-item/minion-item/champion-upgrade identities), `sources` includes both the redirect URL and the canonical parent gameplay/champion page used for behavior verification.
 - [ ] For non-trivial edits to existing item data, entity-purpose and gameplay-pattern sanity check was completed and captured in `schema_notes.context_notes` when semantics/confidence changed.
 - [ ] For semantics updates, `schema_notes.context_notes` includes a concise execution-model note (what the player does, when effect applies, and who receives it).
 - [ ] If updated data semantics cannot be represented by current runtime capabilities, deferred code follow-up scope is explicitly recorded in `Simulation/COVERAGE_GAPS.md` in the same change.
+- [ ] For ally-state transfer effects (for example teammate stat-link mechanics), dynamic update and alive/ownership gating semantics are documented in data, and deferred runtime follow-up is tracked when unmodeled.
 - [ ] If an effect has separate basic-attack-hit and ability-damage branches, each branch is represented as its own structured effect with explicit trigger and limiter semantics.
 - [ ] For multi-phase active effects (for example mark/recast/timeout), each branch and cooldown-start event is explicitly represented in structured data and/or context notes.
 - [ ] For single-use transform actives, post-use state transitions (for example transform/shatter behavior and reactivation constraints) are explicitly represented in structured data and/or context notes.
@@ -57,14 +66,17 @@ Read first:
 - [ ] If a shared-rule effect was edited on one item in a progression/family set, sibling items were reviewed for rule-schema/confidence consistency (or deferred sibling work was explicitly tracked in `Simulation/COVERAGE_GAPS.md`).
 - [ ] If effect timing/values differ by mode, mode scope is explicit in `conditions`/`schema_notes.context_notes`, and unresolved cross-mode policy decisions are tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] For mode-variant item behavior, root data remains Tier-1 baseline and only divergent semantics are encoded under `mode_overrides.<mode_key>` (or explicitly tracked as deferred policy work in `Simulation/COVERAGE_GAPS.md`).
+- [ ] If `mode_overrides.<mode_key>` branches were added or changed, each branch has explicit mode-page citation provenance and runtime overlay-consumption follow-up is tracked when current runtime cannot consume overlays yet.
 - [ ] If the item is distributed/prismatic or mode-exclusive, acquisition/availability scope is explicit in `schema_notes.context_notes`, and dataset-vs-page availability drift is tracked in `Simulation/COVERAGE_GAPS.md` when discovered.
 - [ ] If the item is distributed/prismatic and Tier-1 datasets expose economy values, `shop.prices.total`/`shop.prices.sell` are explicitly populated and context notes clarify non-shop acquisition semantics (for example Prismatic Anvils).
+- [ ] Existing distributed/prismatic `shop.prices` fields were preserved during edits (or any intentional removal/policy shift is explicitly documented in `Simulation/COVERAGE_GAPS.md`).
 - [ ] For round/phase progression effects, acquisition-timing backfill behavior was verified; if not encoded, the gap is explicitly documented in `schema_notes.context_notes` and tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Any dataset-vs-page-level discrepancy discovered during review (for example sell-state or restriction behavior) is documented in `schema_notes.context_notes` and tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] If sources include known bug-specific behavior, the structured data still models intended behavior by default and any bug-emulation need is logged as deferred runtime follow-up in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Cleanse-style actives include source-verified activation constraints and scope nuances when available (for example airborne lockout, suppression/nearsight handling, cast-time behavior).
 - [ ] If item economy fields were edited (for example `shop.prices.sell`), values were cross-checked against Tier-1 dataset values and intentional overrides were documented.
 - [ ] If item economy fields were edited (for example `shop.prices.total` / `shop.prices.sell`), Tier-1 ID/name drift was checked (legacy file identity vs current dataset identity), and any exception was tracked in `Simulation/COVERAGE_GAPS.md`.
+- [ ] If Tier-1 and page-level sources diverge because one item ID maps to different mode-scoped identities, reconciliation notes were added in `schema_notes.context_notes` and mode-aware identity follow-up was tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] If the item is retired/replaced but retained for reference, `lifecycle` metadata explicitly marks simulation exclusion (`exclude_from_simulation = true`) with replacement/reason notes.
 - [ ] Legacy/reference lifecycle metadata includes required fields (`status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) so ID/name drift handling is explicit.
 - [ ] Any intentional sell/economy override is listed as an explicit exception (item file context notes + `Simulation/COVERAGE_GAPS.md` snapshot/priority notes).
@@ -76,7 +88,9 @@ Read first:
 - [ ] Item behavior has regression tests.
 
 ## 4) Rune And Shard Coverage
-- [ ] Rune canonical data in `Masteries/RunesReforged.json` is valid and ordered by legal slots.
+- [ ] Rune canonical data is synchronized between flat compatibility file (`Masteries/RunesReforged.json`) and split structure (`Masteries/RunesReforged/RunesReforged.json` + `Trees/*/primary_runes.json` + `Trees/*/secondary_runes.json` + `StatShards/stat_shards.json`).
+- [ ] Split rune-tree structure exists and is complete for all trees (`Domination`, `Inspiration`, `Precision`, `Resolve`, `Sorcery`) with both primary and secondary files.
+- [ ] Mastery files touched in this change include explicit `sources` entries with complete `accessed` metadata (backfill missing `sources[].accessed` values in touched files).
 - [ ] Deterministic stat effects are parseable by `Simulation/src/data.rs`.
 - [ ] `effect_type = stat_modifier` entries do not use null/empty `stat` unless explicitly documented as narrative-only.
 - [ ] New deterministic stat keys are handled in `apply_stat_bonus` when needed.
@@ -88,6 +102,7 @@ Read first:
 ## 5) Coverage Documentation Tracking (Required)
 - [ ] `Simulation/COVERAGE_GAPS.md` snapshot counts are updated when modeled sets or legal pools change.
 - [ ] `Simulation/COVERAGE_GAPS.md` lists reflect the current champion, item, rune, and shard runtime state.
+- [ ] `Simulation/champion_data_coverage_inventory.json` is refreshed when champion corpus parity counts change.
 - [ ] Data coverage and runtime coverage are distinguished explicitly (do not mark data-only completion as runtime completion).
 - [ ] Compatibility aliases are documented when they affect coverage interpretation.
 - [ ] Intentional unchanged gaps are explicitly recorded as unchanged.

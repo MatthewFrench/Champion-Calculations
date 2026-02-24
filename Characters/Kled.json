@@ -1,0 +1,418 @@
+{
+  "name": "Kled",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Skirmisher",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 410.0,
+      "per_level": 84.0
+    },
+    "resource": {
+      "type": "courage",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 305.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 2.05
+    },
+    "attack_range": 250.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.280000001192092,
+    "windup_fraction": 0.1749999981373552,
+    "windup_percent": 17.49999981373552,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.280000001192092,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Skaarl the Cowardly Lizard",
+      "type": "Passive",
+      "description_source": "Innate:  Kled rides his semi-trusty steed,  Skaarl, whom takes damage for him while he is Mounted. When  Skaarl's health depletes, Kled dismounts,  cleansing from all  crowd control.",
+      "effects": [
+        {
+          "id": "kled_p_effect_1",
+          "description": "Innate: Kled rides his semi-trusty mount, Skaarl. While Mounted, all damage dealt to the duo is suffered by Skaarl, who has 400 : 1556.76 (based on level) base health; additional sources of health are applied to Skaarl's maximum health. Effects based on percentage health consider Kled and Skaarl's combined maximum health."
+        },
+        {
+          "id": "kled_p_effect_2",
+          "description": "Being reduced below 0 health causes Skaarl to flee, forcing Kled to be Dismounted, with all damage in excess of Skaarl's health being ignored. Upon dismounting, Kled lunges in the direction of the allied Nexus, though not through terrain, while cleansing himself of all crowd control and becoming unable to act, untargetable, and immune to crowd control for 0.5 seconds. Dismounting resets the cooldown and charges of Pocket Pistol."
+        },
+        {
+          "id": "kled_p_effect_3",
+          "description": "While Kled is Dismounted, his base health and movement speed are reduced; however, he gains bonus movement speed while moving toward enemy champions. Additionally, he gains bonus attack range, and his attacks deal 85% / 90% / 95% / 100% (based on level) damage to champions. Bear Trap on a Rope is replaced with Pocket Pistol, while Jousting and Chaaaaaaaarge!!! become unusable."
+        },
+        {
+          "id": "kled_p_effect_4",
+          "description": "While Mounted, healing and health regeneration will first replenish Skaarl's health and will only apply to Kled's health while Skaarl is at full health."
+        },
+        {
+          "id": "kled_p_effect_5",
+          "description": "For more details, check the Dismounted part of the ability."
+        }
+      ],
+      "description": "Innate: Kled rides his semi-trusty mount, Skaarl. While Mounted, all damage dealt to the duo is suffered by Skaarl, who has 400 : 1556.76 (based on level) base health; additional sources of health are applied to Skaarl's maximum health. Effects based on percentage health consider Kled and Skaarl's combined maximum health.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 400.",
+        "Source notes (summary): Kled and Skaarl's health bar is split in two segments, representing each of them respectively."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bear Trap on a Rope",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Kled throws a bear trap in the target direction that deals physical damage to enemies hit and forms a  tether against the first  champion or  large monster hit,  revealing them.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            30.0,
+            55.0,
+            80.0,
+            105.0,
+            130.0
+          ],
+          "context_notes": "Active: Kled throws a bear trap in the target direction that deals physical damage to enemies hit, increased to 150% against minions, small pets, and small monsters."
+        },
+        {
+          "id": "minion_and_small_monster_damage",
+          "description": "Minion and Small Monster Damage",
+          "base_by_rank": [
+            45.0,
+            82.5,
+            120.0,
+            157.5,
+            195.0
+          ],
+          "context_notes": "Active: Kled throws a bear trap in the target direction that deals physical damage to enemies hit, increased to 150% against minions, small pets, and small monsters."
+        },
+        {
+          "id": "physical_damage_2",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            110.0,
+            160.0,
+            210.0,
+            260.0
+          ],
+          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage and slows them for 2."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            90.0,
+            165.0,
+            240.0,
+            315.0,
+            390.0
+          ],
+          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage and slows them for 2."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "The tether's radius shrinks over its duration, and if it is not broken before then, Kled pulls the target 150 units toward him, deals physical damage and slows them for 2."
+        },
+        {
+          "id": "kled_q_effect_3",
+          "description": "Bear Trap on a Rope can be cast while Jousting."
+        }
+      ],
+      "description": "Active: Kled throws a bear trap in the target direction that deals physical damage to enemies hit, increased to 150% against minions, small pets, and small monsters. The bear trap collides with the first enemy champion, large pet, or large monster hit, revealing them for 2.5 seconds, and forming a tether between Kled and the target for 1.75 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1600.",
+        "Source notes (summary): Applies spell damage to enemy champions, large monsters and large pets, while applying area damage to all other enemy units."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Violent Tendencies",
+      "type": "Passive",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Kled periodically gains Violent Tendencies, which starts expiring upon his next basic attack.",
+      "effects": [
+        {
+          "id": "kled_w_effect_1",
+          "description": "Passive: Kled periodically gains Violent Tendencies, which starts expiring upon his next basic attack."
+        },
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Violent Tendencies: Kled gains 150% bonus attack speed on his next 4 basic attacks within 4 seconds."
+        },
+        {
+          "id": "structure_bonus_damage",
+          "description": "Structure Bonus Damage",
+          "base_by_rank": [
+            62.0,
+            64.02411764705883,
+            66.04823529411765,
+            68.07235294117648,
+            70.09647058823529,
+            72.12058823529412,
+            74.14470588235294,
+            76.16882352941177,
+            78.19294117647058,
+            80.21705882352941,
+            82.24117647058823,
+            84.26529411764706,
+            86.28941176470587,
+            88.3135294117647,
+            90.33764705882353,
+            92.36176470588235,
+            94.38588235294117,
+            96.41
+          ],
+          "context_notes": "Against structures, the fourth attack deals modified bonus physical damage."
+        }
+      ],
+      "description": "Passive: Kled periodically gains Violent Tendencies, which starts expiring upon his next basic attack.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Violent Tendencies' bonus damage is applied as a separate damage instance from the attack that triggers it."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Jousting",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Skaarl  dashes in the target direction, dealing physical damage to enemies she passes through and marking enemy  champions hit. The mark  reveals the target for a short time, during which Jousting can be recast.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            35.0,
+            60.0,
+            85.0,
+            110.0,
+            135.0
+          ],
+          "context_notes": "Active: Skaarl dashes in the target direction, though not through terrain, dealing physical damage to enemies she passes through and pulling minions, pets and small monsters hit towards her."
+        },
+        {
+          "id": "kled_e_effect_2",
+          "description": "Upon hitting an enemy champion or large monster, Skaarl dashes a fixed 350 units through them, marking them for 3 seconds, during which they are revealed. After the dash ends, the duo gain 50% bonus movement speed for 1 second. Jousting can be recast after 0.5 seconds of the first dash ending while the target is marked."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            70.0,
+            120.0,
+            170.0,
+            220.0,
+            270.0
+          ],
+          "context_notes": "Recast: Skaarl consumes the mark to dash through the marked target, applying the same effects as the first cast though being able to dash through terrain."
+        },
+        {
+          "id": "kled_e_effect_4",
+          "description": "The mark will remain even if the target dies, and ends prematurely if the duo are too far away or Kled dismounts."
+        },
+        {
+          "id": "kled_e_effect_5",
+          "description": "Bear Trap on a Rope and Chaaaaaaaarge!!! can be cast during either of the dashes."
+        }
+      ],
+      "description": "Active: Skaarl dashes in the target direction, though not through terrain, dealing physical damage to enemies she passes through and pulling minions, pets and small monsters hit towards her.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: none.",
+        "Source speed: 600 + 100% movement speed.",
+        "Source notes (summary): Jousting will go on cooldown at the end of its first dash, but its cooldown cannot be reduced by cooldown refunding effects such as Transcendence while its mark is active."
+      ]
+    },
+    "ultimate": {
+      "name": "Chaaaaaaaarge!!!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active: Kled &  Skaarl become  ghosted and  unstoppably charge to a location, building up  bonus movement speed and  shield and leaving a draft in their wake that grants Mr. Kled's Wild Ride to allies that follow the draft.",
+      "effects": [
+        {
+          "id": "kled_r_effect_1",
+          "description": "Active: Kled & Skaarl charge toward the target location, automatically navigating terrain along the way, during which they are ghosted, immune to crowd control and revealed to enemy champions in a 1250 radius. If the charge does not complete within 15 seconds, it will end prematurely. The charge is interrupted instantly if Kled dismounts during it."
+        },
+        {
+          "id": "minimum_shield",
+          "description": "Minimum Shield",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0
+          ],
+          "context_notes": "While charging, the duo gain a shield for every 0."
+        },
+        {
+          "id": "maximum_shield",
+          "description": "Maximum Shield",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "While charging, the duo gain a shield for every 0."
+        },
+        {
+          "id": "kled_r_effect_3",
+          "description": "Mr. Kled's Wild Ride: While in champion combat, gain 40% bonus movement speed. After not being in champion combat for 3 seconds, if Kled is charging, gain bonus movement speed up to Kled's current movement speed; otherwise gain up to 650 total movement speed."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            4.0,
+            6.0,
+            8.0
+          ],
+          "context_notes": "Kled & Skaarl will dash toward the first visible enemy champion in range of the charge, revealing the target during the dash and colliding with the first visible enemy champion in their path to deal magic damage, increased by 0% : 200% (based on charge time), knock them back 150 units, and end the charge."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            12.0,
+            18.0,
+            24.0
+          ],
+          "context_notes": "Kled & Skaarl will dash toward the first visible enemy champion in range of the charge, revealing the target during the dash and colliding with the first visible enemy champion in their path to deal magic damage, increased by 0% : 200% (based on charge time), knock them back 150 units, and end the charge."
+        }
+      ],
+      "description": "Active: Kled & Skaarl charge toward the target location, automatically navigating terrain along the way, during which they are ghosted, immune to crowd control and revealed to enemy champions in a 1250 radius. If the charge does not complete within 15 seconds, it will end prematurely. The charge is interrupted instantly if Kled dismounts during it.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        125.0,
+        110.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1000.0
+      },
+      "context_notes": [
+        "Source targeting: location.",
+        "Source castTime: none.",
+        "Source speed: 1000 / 600.",
+        "Source notes (summary): During the charge the duo gain (950 − (starting movement speed)) ÷ 12 × (time ÷ 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kled.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kled"
+  }
+}

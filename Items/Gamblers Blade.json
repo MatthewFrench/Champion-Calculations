@@ -81,7 +81,11 @@
     }
   ],
   "shop": {
-    "purchasable": true
+    "purchasable": true,
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7101_gamblers_blade.png",
   "simpleDescription": null,
@@ -90,11 +94,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.043375+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Money In The Bank stores gold on qualifying basic-attack on-hit and ability-hit events with a 2.5-second per-attack/ability throttle.",
       "Player-visible behavior: stored gold resolves at round end as full payout on round win or 25% loss on round loss.",
-      "Page notes indicate gold storage can continue briefly after winner determination before the next round starts; this edge timing is documented but not explicitly modeled."
+      "Page notes indicate gold storage can continue briefly after winner determination before the next round starts; this edge timing is documented but not explicitly modeled.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

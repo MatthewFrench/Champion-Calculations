@@ -67,7 +67,11 @@
     "purchasable": true,
     "tags": [
       "ASSASSIN"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3131_fighter_t3_swordofthedivine.png",
   "simpleDescription": null,
@@ -78,11 +82,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.000835+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Excoriate continuously rerolls bonus critical-strike-damage contribution every 0.25 seconds while equipped, scaling to a maximum tied to current critical-strike chance.",
       "Player-visible behavior: crit-damage output fluctuates over time even without casting or hitting, so burst windows depend on random roll timing at hit resolution.",
-      "Patch-history verification confirms the current maximum scaling coefficient represented here."
+      "Patch-history verification confirms the current maximum scaling coefficient represented here.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

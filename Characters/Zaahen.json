@@ -1,0 +1,442 @@
+{
+  "name": "Zaahen",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 114.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 55.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.8
+    },
+    "resource_regeneration": {
+      "base": 8.15,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.15625,
+    "windup_percent": 15.625,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Cultivation of War",
+      "type": "Passive",
+      "description_source": "Innate:  Zaahen's  basic attacks and  abilities against enemy  champions grant him  stacks of Determination, refreshing on subsequent damage to champions and stacking up to 12 times.",
+      "effects": [
+        {
+          "id": "zaahen_p_effect_1",
+          "description": "Innate: Zaahen generates a stack of Determination for each enemy champion damaged by his basic attacks and abilities, lasting for 5 seconds, refreshing on subsequent triggers, and stacking up to 12 times. After the duration, the stacks expire by 1 / 2 / 3 / 4 / 5 (based on seconds elapsed) every 0.5 seconds."
+        },
+        {
+          "id": "zaahen_p_effect_2",
+          "description": "Determination: For each stack, Zaahen gains bonus attack damage equal to 1.5% : 2.95% (based on level) AD. At maximum stacks, Zaahen becomes filled with Determination, causing him to double the bonus to 36% : 70.87% (based on level) AD.Periodically, if Zaahen would take lethal damage while at maximum stacks of Determination, he refreshes its duration and enters resurrection for 4 seconds: becoming invulnerable, untargetable, and unable to act. Additionally, he restores[ 30% / 45% / 60% / 75% (based on level) of his maximum health ][ 0.94% / 1.41% / 1.88% / 2.34% (based on level) of his maximum health every 0.125 seconds ]over the duration. Afterwards, he revives himself and refreshes the duration of Determination."
+        }
+      ],
+      "description": "Innate: Zaahen generates a stack of Determination for each enemy champion damaged by his basic attacks and abilities, lasting for 5 seconds, refreshing on subsequent triggers, and stacking up to 12 times. After the duration, the stacks expire by 1 / 2 / 3 / 4 / 5 (based on seconds elapsed) every 0.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        300.0,
+        240.0,
+        180.0,
+        120.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The bonus attack damage granted by Determination stacks will update dynamically with Zaahen's total attack damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "The Darkin Glaive",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Zaahen's next  basic attack strikes twice, dealing modified physical damage, applying  on-hit effects and  healing him based on his maximum health.",
+      "effects": [
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            15.0,
+            30.0,
+            45.0,
+            60.0,
+            75.0
+          ],
+          "context_notes": "Active: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup and gain 25 bonus range."
+        },
+        {
+          "id": "physical_damage_per_hit",
+          "description": "Physical Damage per Hit",
+          "base_by_rank": [
+            7.5,
+            15.0,
+            22.5,
+            30.0,
+            37.5
+          ],
+          "context_notes": "Active: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup and gain 25 bonus range."
+        },
+        {
+          "id": "champion_healing",
+          "description": "Champion Healing",
+          "base_by_rank": [
+            5.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0
+          ],
+          "context_notes": "Active: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup and gain 25 bonus range."
+        },
+        {
+          "id": "non_champion_healing",
+          "description": "Non-Champion Healing",
+          "base_by_rank": [
+            2.5,
+            3.0,
+            3.5,
+            4.0,
+            4.5
+          ],
+          "context_notes": "Active: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup and gain 25 bonus range."
+        },
+        {
+          "id": "zaahen_q_effect_2",
+          "description": "After 1.5 seconds of using the empowered attack, The Darkin Glaive can be recast within the next 4 seconds at no additional cost, modifying it with a new effect."
+        },
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            25.0,
+            50.0,
+            75.0,
+            100.0,
+            125.0
+          ],
+          "context_notes": "Recast: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 25 bonus range, deal bonus physical damage and knock up the target for 0."
+        },
+        {
+          "id": "zaahen_q_effect_4",
+          "description": "The Darkin Glaive deals 200% damage against monsters."
+        },
+        {
+          "id": "zaahen_q_effect_5",
+          "description": "Both casts of The Darkin Glaive reset Zaahen's basic attack timer."
+        }
+      ],
+      "description": "Active: Zaahen empowers his next basic attack within 4 seconds to have an uncancellable windup and gain 25 bonus range. On-attack, he strikes the target twice. If the target was a champion, minion, or monster, he also heals himself. The strikes deal modified physical damage and the heal is reduced to 50% against minions and monsters.Each strike applies on-hit effects and can critically strike for[ (50% + 15%) ][ 50% bonus critical damage ]AD bonus physical damage.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          25.0,
+          25.0,
+          25.0,
+          25.0,
+          25.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Spell shield will only block the knock up from the recast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Dreaded Return",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Zaahen extends his glaive in the target direction, dealing physical damage to enemies hit. Upon reaching maximum range, all enemies in the area are dealt physical damage,  stunned briefly, and  pulled toward Zaahen.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Active: Zaahen extends his glaive in the target direction, dealing physical damage to enemies hit."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Zaahen extends his glaive in the target direction, dealing physical damage to enemies hit."
+        }
+      ],
+      "description": "Active: Zaahen extends his glaive in the target direction, dealing physical damage to enemies hit. Upon reaching maximum range, all enemies hit are dealt the same physical damage, stunned for 0.25 seconds, and pulled 225 units toward Zaahen.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 2900.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source speed: 2900 / 900.",
+        "Source notes (summary): Spell shield will block both passes, as well as the second one individually if circumstances permit."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Aureate Rush",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Zaahen  dashes to the target location. Upon arrival, he flourishes his glaive to deal physical damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Active: Zaahen dashes to the target location."
+        },
+        {
+          "id": "increased_physical_damage",
+          "description": "Increased Physical Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Enemies hit by the outer edge are dealt 50% increased physical damage and bonus magic damage, with the latter capped at 400 against monsters."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            4.0,
+            4.5,
+            5.0,
+            5.5,
+            6.0
+          ],
+          "context_notes": "Enemies hit by the outer edge are dealt 50% increased physical damage and bonus magic damage, with the latter capped at 400 against monsters."
+        },
+        {
+          "id": "zaahen_e_effect_3",
+          "description": "Aureate Rush deals 75 bonus physical damage against monsters."
+        }
+      ],
+      "description": "Active: Zaahen dashes to the target location. Upon arrival, he flourishes his glaive to deal physical damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 900.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 900.",
+        "Source effectRadius: 200 / 375.",
+        "Source notes (summary): The dash does not have a minimum cast distance."
+      ]
+    },
+    "ultimate": {
+      "name": "Grim Deliverance",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Zaahen gains  armor penetration.",
+      "effects": [
+        {
+          "id": "armor_penetration",
+          "description": "Armor Penetration",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "Passive: Zaahen gains armor penetration."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            250.0,
+            400.0,
+            550.0
+          ],
+          "context_notes": "Active: Zaahen gains crowd control immunity over the cast time, then launches with displacement immunity into the air to the target location."
+        },
+        {
+          "id": "healing_per_champion_hit",
+          "description": "Healing per Champion hit",
+          "base_by_rank": [
+            82.5,
+            132.0,
+            181.5
+          ],
+          "context_notes": "Active: Zaahen gains crowd control immunity over the cast time, then launches with displacement immunity into the air to the target location."
+        },
+        {
+          "id": "zaahen_r_effect_3",
+          "description": "Zaahen is unable to act and gains 50% damage reduction from the start of the cast time. He retains these effects as well as the displacement immunity during the delay before the slam and for up-to an additional 0.25 seconds afterwards."
+        }
+      ],
+      "description": "Passive: Zaahen gains armor penetration.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        95.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 2800.0,
+        "effect_hitbox_radius": 550.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.5.",
+        "Source speed: 2800.",
+        "Source effectRadius: 550.",
+        "Source notes (summary): The lockout, damage reduction, and displacement immunity may last for up to an additional 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Zaahen.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Zaahen"
+  }
+}

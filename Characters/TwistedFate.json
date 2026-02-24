@@ -1,0 +1,378 @@
+{
+  "name": "Twisted Fate",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Mage",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 604.0,
+      "per_level": 108.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 333.0,
+      "per_level": 39.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 4.35
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 52.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Loaded Dice",
+      "type": "Passive",
+      "description_source": "Innate: Whenever  Twisted Fate kills an enemy, he generates a small amount of  bonus gold based on chance.",
+      "effects": [
+        {
+          "id": "twistedfate_p_effect_1",
+          "description": "Innate: Whenever Twisted Fate kills an enemy, he generates 1 : 6 (based on probability). He also has a chance equal to his critical strike chance to generate an additional 1 : 6 (based on probability)."
+        },
+        {
+          "id": "twistedfate_p_effect_2",
+          "description": "As you'd expect, Twisted Fate plays with loaded dice. His initial dice roll is weighted to have an increased chance of granting 6, while his critical dice roll is weighted against him and has an increased chance of granting 1."
+        }
+      ],
+      "description": "Innate: Whenever Twisted Fate kills an enemy, he generates 1 : 6 (based on probability). He also has a chance equal to his critical strike chance to generate an additional 1 : 6 (based on probability).",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The expected bonus gold gained per unit killed is 4."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Wild Cards",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Twisted Fate throws a fan of three cards in the target direction that each deal magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            105.0,
+            150.0,
+            195.0,
+            240.0
+          ],
+          "context_notes": "Active: Twisted Fate throws a fan of three cards in a cone in the target direction that each deal magic damage to enemies hit."
+        },
+        {
+          "id": "twistedfate_q_effect_2",
+          "description": "Enemies can be damaged only once per pass."
+        }
+      ],
+      "description": "Active: Twisted Fate throws a fan of three cards in a cone in the target direction that each deal magic damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        5.75,
+        5.5,
+        5.25,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1000.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Pick a Card",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Twisted Fate cycles through three cards over the next few seconds. Pick a Card can be recast within the duration, which selects the current card hovered.",
+      "effects": [
+        {
+          "id": "twistedfate_w_effect_1",
+          "description": "Active: Twisted Fate cycles through three cards for 6 seconds, hovering each for 0.5 seconds at a time. Pick a Card can be recast within the duration, which selects the current card hovered."
+        },
+        {
+          "id": "twistedfate_w_effect_2",
+          "description": "Recast: Twisted Fate empowers his next basic attack within 6 seconds to have a 0.25-second cast time, deal modified magic damage, and apply an additional effect based on the card selected. This attack cannot critically strike but its damage is increased based on critical strike chance."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Blue Card Bonus: Deals magic damage, increased by 0% : 57."
+        },
+        {
+          "id": "mana_restored",
+          "description": "Mana Restored",
+          "base_by_rank": [
+            70.0,
+            90.0,
+            110.0,
+            130.0,
+            150.0
+          ],
+          "context_notes": "Blue Card Bonus: Deals magic damage, increased by 0% : 57."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0,
+            75.0,
+            90.0
+          ],
+          "context_notes": "Red Card Bonus: Deals magic damage to the target and surrounding enemies, increased by 0% : 35% (based on critical strike chance)."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Red Card Bonus: Deals magic damage to the target and surrounding enemies, increased by 0% : 35% (based on critical strike chance)."
+        },
+        {
+          "id": "magic_damage_3",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            15.0,
+            22.5,
+            30.0,
+            37.5,
+            45.0
+          ],
+          "context_notes": "Gold Card Bonus: Deals magic damage, increased by 0% : 25% (based on critical strike chance), and stuns the target for a duration."
+        },
+        {
+          "id": "stun_duration",
+          "description": "Stun Duration",
+          "base_by_rank": [
+            1.0,
+            1.25,
+            1.5,
+            1.75,
+            2.0
+          ],
+          "context_notes": "Gold Card Bonus: Deals magic damage, increased by 0% : 25% (based on critical strike chance), and stuns the target for a duration."
+        },
+        {
+          "id": "twistedfate_w_effect_6",
+          "description": "Pick a Card's recast resets Twisted Fate's basic attack timer. The recast can be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Active: Twisted Fate cycles through three cards for 6 seconds, hovering each for 0.5 seconds at a time. Pick a Card can be recast within the duration, which selects the current card hovered.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 1500.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Stacked Deck",
+      "type": "Passive",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Twisted Fate gains  bonus attack speed. His  basic attacks  on-hit generate  stacks of Stacked Deck, which stacks up to a cap.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            15.0,
+            25.0,
+            35.0,
+            45.0,
+            55.0
+          ],
+          "context_notes": "Passive: Twisted Fate gains bonus attack speed."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            65.0,
+            90.0,
+            115.0,
+            140.0,
+            165.0
+          ],
+          "context_notes": "Passive: Twisted Fate gains bonus attack speed."
+        }
+      ],
+      "description": "Passive: Twisted Fate gains bonus attack speed. His basic attacks on-hit generate a stack of Stacked Deck, stacking up to 3 times. At 3 stacks, his next basic attack is empowered to consume them all to deal bonus magic damage, reduced to 50% against structures.Twisted Fate gains maximum stacks of Stacked Deck upon respawning.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Stacked Deck can be dodged and/or missed if Twisted Fate is blinded (the on-hit effect is not consumed in either case) but cannot be blocked (the enhanced attack is consumed and the bonus damage is still applied)."
+      ]
+    },
+    "ultimate": {
+      "name": "Destiny",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "effect_duration",
+          "description": "Effect Duration",
+          "base_by_rank": [
+            6.0,
+            8.0,
+            10.0
+          ],
+          "context_notes": "Active: Twisted Fate marks all targetable enemy champions, revealing them for a duration."
+        },
+        {
+          "id": "twistedfate_r_effect_2",
+          "description": "Recast - Gate: Twisted Fate channels for 1.5 seconds before blinking to the target location, destroying all projectiles targeting him in the process."
+        }
+      ],
+      "description": "Active: Twisted Fate marks all targetable enemy champions, revealing them for a duration. Destiny can be recast after 0.5 seconds within the duration.",
+      "cooldown_seconds_by_rank": [
+        170.0,
+        140.0,
+        110.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Location.",
+        "Source castTime: none.",
+        "Source effectRadius: Global.",
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/TwistedFate.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "TwistedFate"
+  }
+}

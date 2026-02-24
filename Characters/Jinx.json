@@ -1,0 +1,408 @@
+{
+  "name": "Jinx",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 105.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 260.0,
+      "per_level": 50.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 6.7,
+      "per_level": 1.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 3.25
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.270000010728836,
+    "windup_fraction": 0.16875000419095232,
+    "windup_percent": 16.875000419095233,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.270000010728836,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Get Excited!",
+      "type": "Passive",
+      "description_source": "Innate: Whenever  Jinx scores a  takedown against an enemy  champion, epic  monster,  turret, or inhibitor shortly after damaging them, she gains a burst of  movement speed for a few seconds.",
+      "effects": [
+        {
+          "id": "jinx_p_effect_1",
+          "description": "Innate: Whenever Jinx scores a takedown against an enemy champion, epic monster, turret, or inhibitor within 3 seconds of damaging them, she gains 175% bonus movement speed decaying over 6 seconds."
+        },
+        {
+          "id": "jinx_p_effect_2",
+          "description": "Additionally, she is allowed to exceed the attack speed cap and gains a stack of Get Excited! for the same duration, stacking up to 5 times. Only takedowns against enemy champions can grant stacks beyond the first."
+        },
+        {
+          "id": "jinx_p_effect_3",
+          "description": "Get Excited!: For each stack, Jinx gains 25% total attack speed, up to a maximum of 125%."
+        }
+      ],
+      "description": "Innate: Whenever Jinx scores a takedown against an enemy champion, epic monster, turret, or inhibitor within 3 seconds of damaging them, she gains 175% bonus movement speed decaying over 6 seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Jinx's attack speed cap is increased to 90."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Switcheroo!",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Toggle:  Jinx switches between Pow-Pow, her minigun, and Fishbones, her rocket launcher.",
+      "effects": [
+        {
+          "id": "jinx_q_effect_1",
+          "description": "Toggle: Jinx switches between Pow-Pow, her minigun, and Fishbones, her rocket launcher."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            15.0,
+            27.5,
+            40.0,
+            52.5,
+            65.0
+          ],
+          "context_notes": "Pow-Pow: Basic attacks with Pow-Pow generate a stack of Rev'd up for 2."
+        },
+        {
+          "id": "attack_speed_per_subsequent_stack",
+          "description": "Attack Speed per Subsequent Stack",
+          "base_by_rank": [
+            7.5,
+            13.75,
+            20.0,
+            26.25,
+            32.5
+          ],
+          "context_notes": "Pow-Pow: Basic attacks with Pow-Pow generate a stack of Rev'd up for 2."
+        },
+        {
+          "id": "maximum_attack_speed",
+          "description": "Maximum Attack Speed",
+          "base_by_rank": [
+            30.0,
+            55.0,
+            80.0,
+            105.0,
+            130.0
+          ],
+          "context_notes": "Pow-Pow: Basic attacks with Pow-Pow generate a stack of Rev'd up for 2."
+        },
+        {
+          "id": "bonus_range",
+          "description": "Bonus Range",
+          "base_by_rank": [
+            100.0,
+            125.0,
+            150.0,
+            175.0,
+            200.0
+          ],
+          "context_notes": "Fishbones: Basic attacks with Fishbones cost mana on-attack to deal 110% AD modified physical damage to the target and nearby enemies."
+        },
+        {
+          "id": "jinx_q_effect_4",
+          "description": "Only the first attack after switching to Fishbones will benefit from Rev'd up."
+        }
+      ],
+      "description": "Toggle: Jinx switches between Pow-Pow, her minigun, and Fishbones, her rocket launcher.",
+      "cooldown_seconds_by_rank": [
+        0.9,
+        0.9,
+        0.9,
+        0.9,
+        0.9
+      ],
+      "cost": {
+        "resource": "other",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): Toggle abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Zap!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Jinx fires a shock bolt in the target direction that deals physical damage to the first enemy hit,  slowing and  revealing them for a short time.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            10.0,
+            60.0,
+            110.0,
+            160.0,
+            210.0
+          ],
+          "context_notes": "Active: Jinx fires a shock blast in the target direction that deals physical damage to the first enemy it hits and reveals and slows them for 2 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Active: Jinx fires a shock blast in the target direction that deals physical damage to the first enemy it hits and reveals and slows them for 2 seconds."
+        }
+      ],
+      "description": "Active: Jinx fires a shock blast in the target direction that deals physical damage to the first enemy it hits and reveals and slows them for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.0,
+        6.0,
+        5.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.6,
+        "projectile_speed": 3300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.6 : 0.4 (based on bonus attack speed).",
+        "Source speed: 3300.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Flame Chompers!",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Jinx tosses a line of Chompers at the target location that explode after a few seconds, dealing magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            90.0,
+            140.0,
+            190.0,
+            240.0,
+            290.0
+          ],
+          "context_notes": "Active: Jinx tosses out 3 Chompers centered at the target location, landing after 0."
+        },
+        {
+          "id": "jinx_e_effect_2",
+          "description": "Each Chomper explodes on contact with an enemy champion, knocking them down and rooting them for 1.5 seconds. Enemy champions can be affected by only one Chomper."
+        }
+      ],
+      "description": "Active: Jinx tosses out 3 Chompers centered at the target location, landing after 0.4 seconds, arming after 0.75 seconds, and exploding after 5 seconds to deal magic damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        24.0,
+        20.5,
+        17.0,
+        13.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 225.",
+        "Source notes (summary): Chompers will halt when encountering Wind Wall and Unbreakable."
+      ]
+    },
+    "ultimate": {
+      "name": "Super Mega Death Rocket!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Jinx fires a rocket in the target direction that explodes upon the first enemy champion hit, dealing physical damage to the target and surrounding enemies.",
+      "effects": [
+        {
+          "id": "jinx_r_effect_1",
+          "description": "Active: Jinx fires a massive rocket in the target direction, briefly granting sight of its surroundings and exploding upon colliding with an enemy champion. The explosion deals physical damage to nearby enemies and grants sight of the area for 2 seconds."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            200.0,
+            350.0,
+            500.0
+          ],
+          "context_notes": "Super Mega Death Rocket!"
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0
+          ],
+          "context_notes": "Super Mega Death Rocket!"
+        },
+        {
+          "id": "maximum_secondary_damage",
+          "description": "Maximum Secondary Damage",
+          "base_by_rank": [
+            160.0,
+            280.0,
+            400.0
+          ],
+          "context_notes": "Enemies surrounding the primary target take 80% damage."
+        },
+        {
+          "id": "minimum_secondary_damage",
+          "description": "Minimum Secondary Damage",
+          "base_by_rank": [
+            16.0,
+            28.0,
+            40.0
+          ],
+          "context_notes": "Enemies surrounding the primary target take 80% damage."
+        }
+      ],
+      "description": "Active: Jinx fires a massive rocket in the target direction, briefly granting sight of its surroundings and exploding upon colliding with an enemy champion. The explosion deals physical damage to nearby enemies and grants sight of the area for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        85.0,
+        65.0,
+        45.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.6,
+        "projectile_speed": 1700.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.6.",
+        "Source speed: 1700 / 2200.",
+        "Source effectRadius: 400 /  1000 / 1000.",
+        "Source notes (summary): Spell shield will not prevent the explosion."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Jinx.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Jinx"
+  }
+}

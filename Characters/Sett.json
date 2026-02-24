@@ -1,0 +1,330 @@
+{
+  "name": "Sett",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 670.0,
+      "per_level": 114.0
+    },
+    "resource": {
+      "type": "grit",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.75
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0857142857,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Pit Grit",
+      "type": "Passive",
+      "description_source": "Innate - Heart of the Half-Beast:  Sett  regenerates additional health based on his missing health.",
+      "effects": [
+        {
+          "id": "sett_p_effect_1",
+          "description": "Innate - Heart of the Half-Beast: Sett regenerates[ an additional 0.075 / 0.25 / 0.5 / 1 / 1.025 / 1.05 (based on level) health every 0.5 seconds per 5% of his missing health. ][ up-to an additional 1.425 / 4.75 / 9.5 / 19 / 19.475 / 19.95 (based on level) health per 0.5 seconds, with the maximum reached at the threshold of 95% missing health. ]"
+        },
+        {
+          "id": "sett_p_effect_2",
+          "description": "Innate - Heavy Hands: Sett's basic attacks alternate between his Left Punch and a Right Punch on-attack. Sett begins attacking with his Left Punch, and will reset back to it after 2 seconds of not performing a Right Punch."
+        },
+        {
+          "id": "sett_p_effect_3",
+          "description": "Sett's Right Punch is empowered to gain 50 bonus range (unless Knuckle Down is active), attack at 8 times the Left Punch's attack speed, and deal 5 : 100 (based on level) (+ 55% bonus AD) bonus physical damage."
+        }
+      ],
+      "description": "Innate - Heart of the Half-Beast: Sett regenerates[ an additional 0.075 / 0.25 / 0.5 / 1 / 1.025 / 1.05 (based on level) health every 0.5 seconds per 5% of his missing health. ][ up-to an additional 1.425 / 4.75 / 9.5 / 19 / 19.475 / 19.95 (based on level) health per 0.5 seconds, with the maximum reached at the threshold of 95% missing health. ]",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Alternatively, Pit Grit grants Sett 0."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Knuckle Down",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Sett empowers his next two basic attacks within a few seconds to gain  bonus range and deal bonus physical damage based on the target's maximum health.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Active: Sett empowers his next two basic attacks within 5 seconds to gain 50 bonus range and deal bonus physical damage, capped at 400 total damage of each attack against monsters."
+        },
+        {
+          "id": "total_bonus_physical_damage",
+          "description": "Total Bonus Physical Damage",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0,
+            80.0,
+            100.0
+          ],
+          "context_notes": "Active: Sett empowers his next two basic attacks within 5 seconds to gain 50 bonus range and deal bonus physical damage, capped at 400 total damage of each attack against monsters."
+        },
+        {
+          "id": "sett_q_effect_2",
+          "description": "For 1.5 seconds, Sett also gains 30% bonus movement speed while facing visible enemy champions within 2000 units."
+        },
+        {
+          "id": "sett_q_effect_3",
+          "description": "Knuckle Down resets Sett's basic attack timer. The empowered attacks are guaranteed to be a Left Punch followed by a Right Punch, resetting Sett's current Pit Grit state (if applicable) and ignoring the usual time-out period for a follow-up Right Punch."
+        }
+      ],
+      "description": "Active: Sett empowers his next two basic attacks within 5 seconds to gain 50 bonus range and deal bonus physical damage, capped at 400 total damage of each attack against monsters.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The bonus movement speed buff is named Looking For a Fight."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Haymaker",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Sett stores Grit equal to damage taken, which gradually expires after a few seconds.",
+      "effects": [
+        {
+          "id": "sett_w_effect_1",
+          "description": "Passive: Sett stores 100% of post-mitigation damage taken as Grit on his resource bar, up to a cap of 50% of his maximum health. Each instance of stored Grit decays in value by 30% every second after 4 seconds."
+        },
+        {
+          "id": "sett_w_effect_2",
+          "description": "Active: Sett charges up a strike over the cast time. Additionally, he immediately consumes all of his stored Grit to grant himself a shield at the start of the cast time that is equal to the expended Grit for 3 seconds, decaying in strength over the duration after 0.75 seconds."
+        },
+        {
+          "id": "damage",
+          "description": "Damage",
+          "base_by_rank": [
+            80.0,
+            100.0,
+            120.0,
+            140.0,
+            160.0
+          ],
+          "context_notes": "After the cast time, he unleashes a massive blast in an area in the target direction, dealing physical damage to enemies hit; those hit in a line in the middle are dealt true damage instead."
+        }
+      ],
+      "description": "Passive: Sett stores 100% of post-mitigation damage taken as Grit on his resource bar, up to a cap of 50% of his maximum health. Each instance of stored Grit decays in value by 30% every second after 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        16.5,
+        15.0,
+        13.5,
+        12.0
+      ],
+      "cost": {
+        "resource": "grit",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.75
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.75.",
+        "Source notes (summary): Haymaker's total hitbox uses the intersection of a trapezoid and a circle."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Facebreaker",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            50.0,
+            70.0,
+            90.0,
+            110.0,
+            130.0
+          ],
+          "context_notes": "Active: Sett pulls in enemies at his front and back along the target direction, dealing physical damage and slowing them by 70% for 0."
+        },
+        {
+          "id": "sett_e_effect_2",
+          "description": "If Facebreaker affects at least one enemy on each side, all enemies are stunned for 1 second upon landing."
+        },
+        {
+          "id": "sett_e_effect_3",
+          "description": "Sett becomes unable to move or attack for 0.25 seconds after Facebreaker's cast time."
+        }
+      ],
+      "description": "Active: Sett pulls in enemies at his front and back along the target direction, dealing physical damage and slowing them by 70% for 0.5 seconds. Facebreaker deals 125 : 250 (based on level) bonus physical damage to monsters.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Sett will afterwards attempt to basic attack the closest target picked up by Facebreaker, prioritising champions and prioritising those in front of him."
+      ]
+    },
+    "ultimate": {
+      "name": "The Show Stopper",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Sett  carries the target enemy  champion and  dashes through the air with  displacement immunity, then slams them into the ground to deal physical damage to nearby enemies based on the target's bonus health. Enemies hit are also briefly  slowed.",
+      "effects": [
+        {
+          "id": "sett_r_effect_1",
+          "description": "Active: Sett suppresses and reveals the target enemy champion while dashing with displacement immunity to their location and attaching them to himself upon arrival. He leaps another 600 units in the same direction to slam the target into the ground, creating a massive shockwave and quickly sliding forward 250 units beyond the impact."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "Enemies within the epicenter take physical damage, and other enemies hit by the shockwave take physical damage that is reduced by up to 75% based on proximity."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0
+          ],
+          "context_notes": "Enemies within the epicenter take physical damage, and other enemies hit by the shockwave take physical damage that is reduced by up to 75% based on proximity."
+        },
+        {
+          "id": "sett_r_effect_3",
+          "description": "The leap will end and create the impact prematurely upon encountering terrain that cannot be dashed through, whether by distance or invalid space."
+        }
+      ],
+      "description": "Active: Sett suppresses and reveals the target enemy champion while dashing with displacement immunity to their location and attaching them to himself upon arrival. He leaps another 600 units in the same direction to slam the target into the ground, creating a massive shockwave and quickly sliding forward 250 units beyond the impact.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): The Show Stopper's attachment depends on the suppression; if the target does not remain suppressed by the end of the dash, they are not attached to Sett when he arrives to them."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Sett.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Sett"
+  }
+}

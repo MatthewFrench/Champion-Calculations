@@ -1,0 +1,377 @@
+{
+  "name": "Twitch",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 27.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 7.25,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.679,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0980840176343917,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Deadly Venom",
+      "type": "Passive",
+      "description_source": "Innate:  Twitch's  basic attacks apply  stacks of Deadly Venom for a few seconds, which stacks up to a cap.",
+      "effects": [
+        {
+          "id": "twitch_p_effect_1",
+          "description": "Innate: Twitch's basic attacks apply a stack of Deadly Venom for 6 seconds upon landing, refreshing on subsequent applications and stacking up to 6 times."
+        },
+        {
+          "id": "twitch_p_effect_2",
+          "description": "Deadly Venom: For each stack, the target is dealt[ 1 / 2 / 3 / 4 / 5 (based on level) (+ 3% AP) true damage per second over the duration, ][ 6 / 12 / 18 / 24 / 30 (based on level) (+ 18% AP) total true damage over the duration, ]for a maximum of[ 6 / 12 / 18 / 24 / 30 (based on level) (+ 18% AP) true damage with each tick. ][ 36 / 72 / 108 / 144 / 180 (based on level) (+ 108% AP) total true damage over the duration. ]This effect is considered a poison."
+        }
+      ],
+      "description": "Innate: Twitch's basic attacks apply a stack of Deadly Venom for 6 seconds upon landing, refreshing on subsequent applications and stacking up to 6 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Deadly Venom deals persistent proc damage, and does not trigger spell effects."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Ambush",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Twitch becomes  camouflaged for some time, gaining  bonus movement speed, increased while facing enemy  champions that cannot see him.",
+      "effects": [
+        {
+          "id": "stealth_duration",
+          "description": "Stealth Duration",
+          "base_by_rank": [
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0
+          ],
+          "context_notes": "Active: After a 1-second delay, Twitch becomes camouflaged for a duration."
+        },
+        {
+          "id": "twitch_q_effect_2",
+          "description": "During this time, Twitch gains 10% bonus movement speed, increased to 30% while facing enemy champions within a 1000-unit radius who cannot see him."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "Upon breaking stealth, Twitch gains bonus attack speed for 6 seconds."
+        },
+        {
+          "id": "twitch_q_effect_4",
+          "description": "When an enemy champion dies while afflicted with Deadly Venom, Ambush's cooldown is reset."
+        }
+      ],
+      "description": "Active: After a 1-second delay, Twitch becomes camouflaged for a duration. Attacking or casting Venom Cask or Contaminate ends Ambush immediately.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        16.0,
+        16.0,
+        16.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Entering stealth cancels Twitch's current basic attack."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Venom Cask",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Twitch tosses a cask that explodes at the target location, inflicting  Deadly Venom to enemies hit.",
+      "effects": [
+        {
+          "id": "twitch_w_effect_1",
+          "description": "Active: Twitch hurls a cask of venom that explodes at the target location, applying Deadly Venom to enemies hit and granting sight of the area."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "The area then becomes contaminated for 3 seconds, applying a Deadly Venom stack each second to enemies within and slowing them."
+        }
+      ],
+      "description": "Active: Twitch hurls a cask of venom that explodes at the target location, applying Deadly Venom to enemies hit and granting sight of the area.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1400.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1400.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Venom Cask can apply a maximum of 4 Deadly Venom stacks per enemy per cast."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Contaminate",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Twitch spreads a toxin to nearby enemies afflicted with  Deadly Venom, dealing physical damage. This deals additional physical and magic damage based on stacks of  Deadly Venom.",
+      "effects": [
+        {
+          "id": "base_physical_damage",
+          "description": "Base Physical Damage",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Twitch sends out a lethal toxin to each nearby enemy afflicted by Deadly Venom, dealing them physical damage."
+        },
+        {
+          "id": "physical_damage_per_stack",
+          "description": "Physical Damage Per Stack",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Contaminate deals additional physical damage and 35% AP magic damage for each stack of Deadly Venom on the target."
+        },
+        {
+          "id": "minimum_mixed_damage",
+          "description": "Minimum Mixed Damage",
+          "base_by_rank": [
+            35.0,
+            50.0,
+            65.0,
+            80.0,
+            95.0
+          ],
+          "context_notes": "Contaminate deals additional physical damage and 35% AP magic damage for each stack of Deadly Venom on the target."
+        },
+        {
+          "id": "maximum_mixed_damage",
+          "description": "Maximum Mixed Damage",
+          "base_by_rank": [
+            110.0,
+            150.0,
+            190.0,
+            230.0,
+            270.0
+          ],
+          "context_notes": "Contaminate deals additional physical damage and 35% AP magic damage for each stack of Deadly Venom on the target."
+        },
+        {
+          "id": "twitch_e_effect_3",
+          "description": "A nearby enemy with Deadly Venom is required to cast this ability. The target does not have to be visible to be targeted by this ability."
+        }
+      ],
+      "description": "Active: Twitch sends out a lethal toxin to each nearby enemy afflicted by Deadly Venom, dealing them physical damage.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 1200.",
+        "Source notes (summary): Contaminate will deal the additional damage to targets based on the number of Deadly Venom stacks they had at the start of the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "Spray and Pray",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Twitch gains  bonus attack damage and  bonus attack range for a few seconds, during which his basic attacks are replaced with bolts that deal the attack's damage to all enemies in a line.",
+      "effects": [
+        {
+          "id": "bonus_attack_damage",
+          "description": "Bonus Attack Damage",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0
+          ],
+          "context_notes": "Active: Twitch gains bonus attack damage and 300 bonus attack range for 6 seconds, during which his basic attacks are replaced by bolts that travel slightly further than his attack range in a straight line, dealing damage to every enemy unit hit."
+        },
+        {
+          "id": "twitch_r_effect_2",
+          "description": "The bolts deal 100% : 60% (based on enemies hit) of the triggering attack's damage, apply on-hit effects, and can critically strike for (200% + 30%) damage."
+        }
+      ],
+      "description": "Active: Twitch gains bonus attack damage and 300 bonus attack range for 6 seconds, during which his basic attacks are replaced by bolts that travel slightly further than his attack range in a straight line, dealing damage to every enemy unit hit.",
+      "cooldown_seconds_by_rank": [
+        90.0,
+        90.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 5000.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 5000.",
+        "Source notes (summary): The extra distance that the bolts travel scales with bonus attack range."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Twitch.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Twitch"
+  }
+}

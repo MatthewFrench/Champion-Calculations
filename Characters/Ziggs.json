@@ -1,0 +1,401 @@
+{
+  "name": "Ziggs",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Artillery",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 606.0,
+      "per_level": 106.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 480.0,
+      "per_level": 23.5
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 3.1
+    },
+    "attack_speed": {
+      "base": 0.656,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Short Fuse",
+      "type": "Passive",
+      "description_source": "Innate: Periodically,  Ziggs' next basic attack will deal bonus magic damage, increased against  structures.",
+      "effects": [
+        {
+          "id": "ziggs_p_effect_1",
+          "description": "Innate: Periodically, Ziggs empowers his next basic attack on-attack to deal 20 : 184 (based on level) (+ 50% AP) bonus magic damage,[ increased by 75% against structures. ][ increased to 35 : 322 (based on level) (+ 87.5% AP) against structures. ]"
+        },
+        {
+          "id": "ziggs_p_effect_2",
+          "description": "Short Fuse's cooldown is reduced by 4 / 5 / 6 (based on level) seconds whenever Ziggs casts an ability."
+        }
+      ],
+      "description": "Innate: Periodically, Ziggs empowers his next basic attack on-attack to deal 20 : 184 (based on level) (+ 50% AP) bonus magic damage,[ increased by 75% against structures. ][ increased to 35 : 322 (based on level) (+ 87.5% AP) against structures. ]",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 1500.",
+        "Source notes (summary): The empowered attack will not trigger against wards."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bouncing Bomb",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Ziggs throws a bomb to the target location that bounces twice forward. It will explode upon hitting an enemy, terrain, or the final bounce, dealing magic damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "ziggs_q_effect_1",
+          "description": "Active: Ziggs throws a bomb to the target location that bounces forward up to two times, with the distance traveled each time being based on how far it was originally thrown."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "The bomb explodes upon landing near an enemy, within terrain, or the final bounce, dealing magic damage to nearby enemies."
+        }
+      ],
+      "description": "Active: Ziggs throws a bomb to the target location that bounces forward up to two times, with the distance traveled each time being based on how far it was originally thrown.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        5.5,
+        5.0,
+        4.5,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1700.0,
+        "effect_hitbox_radius": 240.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1700 / Fixed time.",
+        "Source effectRadius: 240.",
+        "Source notes (summary): Bouncing Bomb can be thrown or bounce over units/terrain."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Satchel Charge",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ziggs hurls a charge to the target location that remains for a few seconds. Satchel Charge can be recast within the duration, and does so automatically afterwards.",
+      "effects": [
+        {
+          "id": "ziggs_w_effect_1",
+          "description": "Active: Ziggs hurls a charge to the target location, remaining there for 4 seconds and granting sight of the area. Satchel Charge can be recast within the duration, and does so automatically afterwards. If recast while in flight, the charge will explode immediately upon landing."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Recast: Ziggs detonates the charge, causing it to explode to deal magic damage to nearby enemies and knock them back over 0."
+        },
+        {
+          "id": "demolition_threshold",
+          "description": "Demolition Threshold",
+          "base_by_rank": [
+            25.0,
+            27.5,
+            30.0,
+            32.5,
+            35.0
+          ],
+          "context_notes": "Turret Explosion: The explosion also executes enemy turrets within that are below a maximum health threshold."
+        },
+        {
+          "id": "ziggs_w_effect_4",
+          "description": "Ziggs does not dash if he is immobilized or grounded. He can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Ziggs hurls a charge to the target location, remaining there for 4 seconds and granting sight of the area. Satchel Charge can be recast within the duration, and does so automatically afterwards. If recast while in flight, the charge will explode immediately upon landing.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        18.0,
+        16.0,
+        14.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1750.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Location / Auto.",
+        "Source castTime: 0.25.",
+        "Source speed: 1750.",
+        "Source effectRadius: 325 /  400.",
+        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Hexplosive Minefield",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ziggs scatters proximity mines over the target location that remain a period. Each mine will explode upon contact with an enemy or terrain, dealing magic damage and briefly  slowing them.",
+      "effects": [
+        {
+          "id": "ziggs_e_effect_1",
+          "description": "Active: Ziggs scatters a cluster of 11 proximity mines over the target location that grant sight of the area for 2 seconds, arming after 0.5 seconds and lasting for up to 10 seconds."
+        },
+        {
+          "id": "magic_damage_per_mine",
+          "description": "Magic Damage per Mine",
+          "base_by_rank": [
+            30.0,
+            70.0,
+            110.0,
+            150.0,
+            190.0
+          ],
+          "context_notes": "Each mine within the area explodes upon contact with terrain or an enemy, dealing magic damage and slowing them for 1."
+        },
+        {
+          "id": "reduced_damage_per_mine",
+          "description": "Reduced Damage per Mine",
+          "base_by_rank": [
+            12.0,
+            28.0,
+            44.0,
+            60.0,
+            76.0
+          ],
+          "context_notes": "Each mine within the area explodes upon contact with terrain or an enemy, dealing magic damage and slowing them for 1."
+        },
+        {
+          "id": "maximum_total_magic_damage",
+          "description": "Maximum Total Magic Damage",
+          "base_by_rank": [
+            150.0,
+            350.0,
+            550.0,
+            750.0,
+            950.0
+          ],
+          "context_notes": "Each mine within the area explodes upon contact with terrain or an enemy, dealing magic damage and slowing them for 1."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Each mine within the area explodes upon contact with terrain or an enemy, dealing magic damage and slowing them for 1."
+        }
+      ],
+      "description": "Active: Ziggs scatters a cluster of 11 proximity mines over the target location that grant sight of the area for 2 seconds, arming after 0.5 seconds and lasting for up to 10 seconds.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        16.0,
+        16.0,
+        16.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          80.0,
+          90.0,
+          100.0,
+          110.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1550.0,
+        "effect_hitbox_radius": 135.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1550.",
+        "Source effectRadius: 335 /  135.",
+        "Source notes (summary): The mine cluster is built of 2 rings, with 3 mines in the inner ring (radius pending for test) and 8 mines on the other ring (200 radius), all equally spaced."
+      ]
+    },
+    "ultimate": {
+      "name": "Mega Inferno Bomb",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Ziggs catapults the Mega Inferno Bomb to the target location that deals magic damage to enemies hit, increased at the epicenter.",
+      "effects": [
+        {
+          "id": "ziggs_r_effect_1",
+          "description": "Active: Ziggs catapults the Mega Inferno Bomb to the target location, granting sight within a 600 radius around its destination for 4 seconds."
+        },
+        {
+          "id": "epicenter_magic_damage",
+          "description": "Epicenter Magic Damage",
+          "base_by_rank": [
+            300.0,
+            500.0,
+            700.0
+          ],
+          "context_notes": "The bomb explodes upon arrival to deal magic damage to enemies hit, reduced to 65% against those outside of the epicenter."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            195.0,
+            325.0,
+            455.0
+          ],
+          "context_notes": "The bomb explodes upon arrival to deal magic damage to enemies hit, reduced to 65% against those outside of the epicenter."
+        }
+      ],
+      "description": "Active: Ziggs catapults the Mega Inferno Bomb to the target location, granting sight within a 600 radius around its destination for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        95.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.375,
+        "projectile_speed": 2250.0,
+        "effect_hitbox_radius": 525.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.375.",
+        "Source speed: 2250.",
+        "Source effectRadius: 525.",
+        "Source notes (summary): Allies cannot see Mega Inferno Bomb's area indicator until shortly before the blast."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ziggs.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ziggs"
+  }
+}

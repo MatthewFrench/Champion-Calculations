@@ -235,7 +235,8 @@
       "used_for": [
         "system overview",
         "tree names and historical context"
-      ]
+      ],
+      "accessed": "2026-02-24"
     },
     {
       "name": "Ferocity Mastery Tree (2016)",
@@ -244,7 +245,8 @@
         "Ferocity tier lists",
         "keystone list",
         "points per tier"
-      ]
+      ],
+      "accessed": "2026-02-24"
     },
     {
       "name": "Cunning Mastery Tree (2016)",
@@ -253,7 +255,8 @@
         "Cunning tier lists",
         "keystone list",
         "points per tier"
-      ]
+      ],
+      "accessed": "2026-02-24"
     },
     {
       "name": "Resolve Mastery Tree (2016)",
@@ -262,21 +265,24 @@
         "Resolve tier lists",
         "keystone list",
         "points per tier"
-      ]
+      ],
+      "accessed": "2026-02-24"
     },
     {
       "name": "Template:Mastery data documentation",
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Mastery_data/doc",
       "used_for": [
         "future per-mastery effect fields"
-      ]
+      ],
+      "accessed": "2026-02-24"
     },
     {
       "name": "League of Legends Wiki - Mastery data templates category",
       "url": "https://wiki.leagueoflegends.com/en-us/Category:Mastery_data_templates",
       "used_for": [
         "enumerating Season 2016 mastery templates"
-      ]
+      ],
+      "accessed": "2026-02-24"
     }
   ],
   "masteries": [

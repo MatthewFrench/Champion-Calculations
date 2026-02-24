@@ -37,7 +37,9 @@
       "interval_seconds": null,
       "trigger": "always",
       "applies_to": "structure",
-      "conditions": [],
+      "conditions": [
+        "post_windup_projectile_cannot_be_evaded_parried_or_intercepted"
+      ],
       "status_effects": [
         "undodgeable_attacks"
       ],
@@ -111,7 +113,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.003328+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Turret pseudo-item behavior is sourced from Turret#Items; Dodge Piercing applies after windup and Warming Up damage stacks persist across target changes until timeout."
+    ]
   },
   "sources": [
     {
@@ -131,6 +136,18 @@
       "path": "From Online/items/Ohmwrecker Turret Item.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ohmwrecker_(Turret_Item)",
+      "accessed": "2026-02-24",
+      "used_for": "page-level turret-item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki gameplay page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Turret",
+      "accessed": "2026-02-24",
+      "used_for": "canonical source for turret pseudo-item mechanics (Dodge Piercing/Warming Up)"
     }
   ]
 }

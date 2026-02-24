@@ -37,6 +37,7 @@ mod controlled_champion_candidate_search;
 mod controlled_champion_result_artifact_writing;
 mod controlled_champion_result_build_analysis;
 mod controlled_champion_result_reporting;
+mod controlled_champion_result_reporting_projection;
 mod controlled_champion_scenario_runner;
 mod controlled_champion_scenario_setup;
 mod controlled_champion_search_runtime_support;
@@ -53,9 +54,6 @@ mod strict_ranking_ordering;
 use self::controlled_champion_candidate_search::{
     CoverageStageRunContext, SeedAndStrictRankingRunContext, run_maximum_quality_coverage_stage,
     run_seed_and_strict_ranking,
-};
-use self::controlled_champion_result_reporting::{
-    ControlledChampionResultReportingContext, emit_controlled_champion_result_reporting,
 };
 use self::controlled_champion_scenario_runner::run_controlled_champion_scenario_impl;
 use self::controlled_champion_search_runtime_support::{

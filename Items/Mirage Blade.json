@@ -50,7 +50,11 @@
     }
   ],
   "shop": {
-    "purchasable": true
+    "purchasable": true,
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7100_mirageblade.png",
   "simpleDescription": null,
@@ -59,7 +63,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.078937+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Current Arena identity models Blur cooldown-reduction behavior; legacy Black Market Brawlers Mark of the Sands / Mirage Step branch is historical and intentionally excluded."
+    ]
   },
   "sources": [
     {
@@ -79,6 +86,12 @@
       "path": "From Online/items/Mirage Blade.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Mirage_Blade",
+      "accessed": "2026-02-24",
+      "used_for": "page-level Arena item passive behavior and legacy-branch verification"
     }
   ]
 }

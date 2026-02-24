@@ -1,0 +1,429 @@
+{
+  "name": "Nautilus",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Support",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 646.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 400.0,
+      "per_level": 47.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 39.0,
+      "per_level": 4.95
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.65,
+      "per_level": 0.5
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.706,
+      "per_level_percent": 1.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.00637254910543561,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Staggering Blow",
+      "type": "Passive",
+      "description_source": "Innate:  Nautilus' basic attacks deal bonus physical damage and briefly  root the target.",
+      "effects": [
+        {
+          "id": "nautilus_p_effect_1",
+          "description": "Innate: Nautilus' basic attacks are empowered to deal 14 : 128 (based on level) bonus physical damage and root the target for 0.75 : 1.5 (based on level) seconds."
+        },
+        {
+          "id": "nautilus_p_effect_2",
+          "description": "This effect cannot occur on the same target more than once every few seconds."
+        }
+      ],
+      "description": "Innate: Nautilus' basic attacks are empowered to deal 14 : 128 (based on level) bonus physical damage and root the target for 0.75 : 1.5 (based on level) seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Spell shield will block the root but not the bonus damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Dredge Line",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "nautilus_q_effect_1",
+          "description": "Active: Nautilus hurls his anchor in the target direction that stops on the first enemy or terrain hit."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            85.0,
+            130.0,
+            175.0,
+            220.0,
+            265.0
+          ],
+          "context_notes": "If the anchor hits an enemy, it deals magic damage, reveals them for 1."
+        },
+        {
+          "id": "nautilus_q_effect_3",
+          "description": "If the anchor hits terrain, Nautilus dashes to that location and 50% of Dredge Line's cooldown and mana cost are refunded."
+        },
+        {
+          "id": "nautilus_q_effect_4",
+          "description": "Nautilus is unable to move or attack while Dredge Line is in flight. He can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Nautilus hurls his anchor in the target direction that stops on the first enemy or terrain hit.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source notes (summary): Dredge Line has two hitboxes."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Titan's Wrath",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Nautilus  shields himself for a few seconds. While the shield holds, his  basic attacks apply Pain of Wrath to the target and surrounding enemies.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            50.0,
+            60.0,
+            70.0,
+            80.0,
+            90.0
+          ],
+          "context_notes": "Active: Nautilus grants himself a shield for 6 seconds, and while it holds, his basic attacks are empowered to apply Pain of Wrath to the target and enemies near them."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Pain of Wrath: The target takes magic damage over time, half dealt immediately and the other half dealt after 1."
+        },
+        {
+          "id": "magic_damage_per_instance",
+          "description": "Magic Damage per Instance",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Pain of Wrath: The target takes magic damage over time, half dealt immediately and the other half dealt after 1."
+        },
+        {
+          "id": "nautilus_w_effect_3",
+          "description": "Titan's Wrath resets Nautilus' basic attack timer."
+        }
+      ],
+      "description": "Active: Nautilus grants himself a shield for 6 seconds, and while it holds, his basic attacks are empowered to apply Pain of Wrath to the target and enemies near them.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): Pain of Wrath's first damage instance is tagged as spell damage, while the second damage instance is tagged as persistent damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Riptide",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Nautilus sends three waves of explosions that radiate from him, each dealing magic damage and briefly  slowing enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            90.0,
+            125.0,
+            160.0,
+            195.0
+          ],
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            27.5,
+            45.0,
+            62.5,
+            80.0,
+            97.5
+          ],
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+        },
+        {
+          "id": "maximum_total_damage",
+          "description": "Maximum Total Damage",
+          "base_by_rank": [
+            110.0,
+            180.0,
+            250.0,
+            320.0,
+            390.0
+          ],
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Nautilus sends three waves of explosions that radiate from him over 0."
+        },
+        {
+          "id": "monster_bonus_damage",
+          "description": "Monster Bonus Damage",
+          "base_by_rank": [
+            125.0,
+            165.0,
+            205.0,
+            245.0,
+            285.0
+          ],
+          "context_notes": "The first hit against monsters deals bonus magic damage."
+        }
+      ],
+      "description": "Active: Nautilus sends three waves of explosions that radiate from him over 0.561 seconds. Each wave deals magic damage to enemies hit, reduced to 50% against those hit by subsequent waves beyond the first, and slows them by an amount that decays over 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.5,
+        6.0,
+        5.5,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 215.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 0 - 350 / 215 - 465 / 350 - 590.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "Depth Charge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Nautilus sends a Depth Charge that chases the target enemy champion. It creates eruptions in its wake that deal magic damage to enemies hit, as well as briefly  knocking up and  stunning them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            125.0,
+            175.0,
+            225.0
+          ],
+          "context_notes": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0."
+        },
+        {
+          "id": "stun_duration",
+          "description": "Stun Duration",
+          "base_by_rank": [
+            1.0,
+            1.5,
+            2.0
+          ],
+          "context_notes": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            150.0,
+            275.0,
+            400.0
+          ],
+          "context_notes": "Upon reaching the primary target, the Depth Charge erupts a final time at their location."
+        },
+        {
+          "id": "knock_up_duration",
+          "description": "Knock Up Duration",
+          "base_by_rank": [
+            1.0,
+            1.5,
+            2.0
+          ],
+          "context_notes": "Upon reaching the primary target, the Depth Charge erupts a final time at their location."
+        }
+      ],
+      "description": "Active: Nautilus sends out a Depth Charge that chases the target enemy champion, accelerating over time and creating eruptions every 0.264 seconds in its wake that also briefly grant sight of the area. Enemies hit by the eruptions are dealt magic damage, knocked up for 1 second, and stunned for a duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.46,
+        "projectile_speed": 275.0,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.46.",
+        "Source speed: 275 + 466.67 per second.",
+        "Source effectRadius: 225 / 300 / 750.",
+        "Source notes (summary): Depth Charge starts in an offset from whichever direction Nautilus is facing at the end of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Nautilus.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Nautilus"
+  }
+}

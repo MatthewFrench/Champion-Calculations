@@ -1,0 +1,389 @@
+{
+  "name": "Tristana",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 102.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 32.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 30.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 7.2,
+      "per_level": 0.45
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 2.9
+    },
+    "attack_speed": {
+      "base": 0.656,
+      "per_level_percent": 1.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.151993364095687,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Draw a Bead",
+      "type": "Passive",
+      "description_source": "Innate: Based on level,  Tristana gains  bonus range on her  basic attacks,  Explosive Charge and  Buster Shot.",
+      "effects": [
+        {
+          "id": "tristana_p_effect_1",
+          "description": "Innate: Tristana's basic attacks, Explosive Charge and Buster Shot gain 0 : 167.65 (based on level) bonus range, for a total of 550 : 717.65 (based on level)."
+        }
+      ],
+      "description": "Innate: Tristana's basic attacks, Explosive Charge and Buster Shot gain 0 : 167.65 (based on level) bonus range, for a total of 550 : 717.65 (based on level).",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Rapid Fire",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Tristana gains tremendous  bonus attack speed for a few seconds.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            60.0,
+            75.0,
+            90.0,
+            105.0,
+            120.0
+          ],
+          "context_notes": "Active: Tristana empowers her cannon, gaining bonus attack speed for 7 seconds."
+        }
+      ],
+      "description": "Active: Tristana empowers her cannon, gaining bonus attack speed for 7 seconds.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Rapid Fire is a non-refreshing buff that will not update on rank-up."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Rocket Jump",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Tristana jumps to the target location. Upon landing, she deals magic damage and  slows nearby enemies for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Active: Tristana jumps to the target location."
+        },
+        {
+          "id": "tristana_w_effect_2",
+          "description": "Scoring an enemy champion takedown or detonating Explosive Charge at maximum stacks on a champion will reset Rocket Jump's cooldown."
+        },
+        {
+          "id": "tristana_w_effect_3",
+          "description": "Tristana can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Active: Tristana jumps to the target location. Upon landing, she deals magic damage to nearby enemies and slows them by 40% for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.0,
+        18.0,
+        16.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1100.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1100.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): Tristana can still use her abilities, summoner spells, and item actives during Rocket Jump."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Explosive Charge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive: Enemies explode when killed by  Tristana's basic attacks, dealing magic damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            45.0,
+            60.0,
+            75.0,
+            90.0,
+            105.0
+          ],
+          "context_notes": "Passive: Tristana's basic attacks are empowered to trigger an explosion when they kill the target, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Tristana tosses an explosive charge at the target enemy that attaches to them for 4 seconds."
+        },
+        {
+          "id": "bonus_damage_per_stack",
+          "description": "Bonus Damage Per Stack",
+          "base_by_rank": [
+            15.0,
+            21.25,
+            27.5,
+            33.75,
+            40.0
+          ],
+          "context_notes": "Tristana's basic attacks on-hit and abilities against the target increase Explosive Charge's damage by 25%, stacking up to 4 times for a maximum 100% increase, upon which the charge also detonates instantly."
+        },
+        {
+          "id": "full_stack_bonus_damage",
+          "description": "Full Stack Bonus Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Tristana's basic attacks on-hit and abilities against the target increase Explosive Charge's damage by 25%, stacking up to 4 times for a maximum 100% increase, upon which the charge also detonates instantly."
+        },
+        {
+          "id": "full_stack_physical_damage",
+          "description": "Full Stack Physical Damage",
+          "base_by_rank": [
+            120.0,
+            170.0,
+            220.0,
+            270.0,
+            320.0
+          ],
+          "context_notes": "Tristana's basic attacks on-hit and abilities against the target increase Explosive Charge's damage by 25%, stacking up to 4 times for a maximum 100% increase, upon which the charge also detonates instantly."
+        },
+        {
+          "id": "tristana_e_effect_4",
+          "description": "If Buster Shot is used to apply the last stack, the detonation will instead be delayed until the end of the knock back or the 4 seconds expire."
+        }
+      ],
+      "description": "Passive: Tristana's basic attacks are empowered to trigger an explosion when they kill the target, dealing magic damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.5,
+        15.0,
+        14.5,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 100.0,
+        "projectile_speed": 2400.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 100% of Tristana's windup time (0.23 at base attack speed).",
+        "Source speed: 2400.",
+        "Source effectRadius: 300 / 300 / 600.",
+        "Source notes (summary): Explosive Charge's cast time is always 100% of the caster's attack windup time."
+      ]
+    },
+    "ultimate": {
+      "name": "Buster Shot",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Tristana fires a massive cannonball at the target enemy that deals magic damage. They and surrounding enemies are also briefly  knocked back and  stunned, during which they are  revealed.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            225.0,
+            275.0,
+            325.0
+          ],
+          "context_notes": "Active: Tristana fires a massive cannonball at the target enemy that deals magic damage."
+        },
+        {
+          "id": "knock_back_distance",
+          "description": "Knock Back Distance",
+          "base_by_rank": [
+            600.0,
+            800.0,
+            1000.0
+          ],
+          "context_notes": "Active: Tristana fires a massive cannonball at the target enemy that deals magic damage."
+        },
+        {
+          "id": "stun_duration",
+          "description": "Stun Duration",
+          "base_by_rank": [
+            0.4,
+            0.55,
+            0.7
+          ],
+          "context_notes": "Active: Tristana fires a massive cannonball at the target enemy that deals magic damage."
+        }
+      ],
+      "description": "Active: Tristana fires a massive cannonball at the target enemy that deals magic damage. They and surrounding enemies are also knocked back and stunned for a duration, during which all targets are revealed.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000 / 1500.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Applies spell damage to the primary target and deals 0 default damage to secondary targets."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Tristana.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Tristana"
+  }
+}

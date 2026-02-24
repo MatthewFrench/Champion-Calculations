@@ -1,0 +1,588 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Tree Secondary",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "tree": {
+    "id": 8000,
+    "key": "Precision",
+    "name": "Precision",
+    "icon": "perk-images/Styles/7201_Precision.png"
+  },
+  "selection_context": "secondary_path",
+  "slot_count": 3,
+  "rune_count": 9,
+  "slots": [
+    {
+      "slot_index": 2,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 9101,
+          "key": "AbsorbLife",
+          "name": "Absorb Life",
+          "icon": "perk-images/Styles/Precision/AbsorbLife/AbsorbLife.png",
+          "short_desc": "Killing a target heals you.",
+          "long_desc": "Killing a target heals you for @HealAmount@.",
+          "wiki_descriptions": [
+            "Passive: Killing an enemy heals you for 1 – 27 (based on level) ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Killing an enemy heals you for 1 – 27 (based on level) .",
+              "effect_type": "healing",
+              "stat": "healing",
+              "unit": null,
+              "values": null,
+              "value_range": [
+                1,
+                27
+              ],
+              "numbers_extracted": [
+                1,
+                27
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 1,
+                "max": 27,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": null,
+              "applies_to": "enemy",
+              "formula": {
+                "type": "range",
+                "min": 1,
+                "max": 27,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Absorb Life"
+        },
+        {
+          "id": 9111,
+          "key": "Triumph",
+          "name": "Triumph",
+          "icon": "perk-images/Styles/Precision/Triumph.png",
+          "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> restore 5% of your missing health and grant an additional 20 gold. ",
+          "long_desc": "Takedowns restore 5% of your missing health, 2.5% of your max health, and grant an additional 20 gold. <br><br><hr><br><i>'The most dangerous game brings the greatest glory.' <br>—Noxian Reckoner</i>",
+          "wiki_descriptions": [
+            "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                2.0,
+                5,
+                5,
+                20,
+                1
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 2.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Triumph"
+        },
+        {
+          "id": 8009,
+          "key": "PresenceOfMind",
+          "name": "Presence of Mind",
+          "icon": "perk-images/Styles/Precision/PresenceOfMind/PresenceOfMind.png",
+          "short_desc": "Restore a small amount of mana or energy when damaging an enemy champion. Takedowns restore mana or energy.",
+          "long_desc": "Damaging an enemy champion restores 6-50 (80% for ranged) mana or 6 energy.<br><br>Takedowns restore 15% of your maximum mana or energy. <br><br>Cooldown for damage restoration: 8s",
+          "wiki_descriptions": [
+            "Passive: Scoring a takedown against an enemy champion restores 15% of your maximum mana or 15% of your maximum energy after a 1-second delay.",
+            "Damaging an enemy champion restores ( 6 – 56 / 4. 8 – 44. 8 ) (based on level) mana or 6 energy (8 second cooldown)."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Scoring a takedown against an enemy champion restores 15% of your maximum mana or 15% of your maximum energy after a 1-second delay.",
+              "effect_type": "stat_modifier",
+              "stat": "mana",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                15,
+                15,
+                1
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 15,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Damaging an enemy champion restores ( 6 – 56 / 4. 8 – 44. 8 ) (based on level) mana or 6 energy (8 second cooldown).",
+              "effect_type": "cooldown",
+              "stat": "cooldown",
+              "unit": "seconds",
+              "values": [
+                6,
+                56,
+                4.0,
+                8,
+                44.0,
+                8,
+                6,
+                8
+              ],
+              "value_range": [
+                6,
+                56
+              ],
+              "numbers_extracted": [
+                6,
+                56,
+                4.0,
+                8,
+                44.0,
+                8,
+                6,
+                8
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 6,
+                "max": 56,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": null,
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  6,
+                  56,
+                  4.0,
+                  8,
+                  44.0,
+                  8,
+                  6,
+                  8
+                ],
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Presence of Mind"
+        }
+      ]
+    },
+    {
+      "slot_index": 3,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 9104,
+          "key": "LegendAlacrity",
+          "name": "Legend: Alacrity",
+          "icon": "perk-images/Styles/Precision/LegendAlacrity/LegendAlacrity.png",
+          "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent <b>Attack Speed</b>. ",
+          "long_desc": "Gain 3% attack speed plus an additional 1.5% for every <i>Legend</i> stack (<statGood>max 10 stacks</statGood>).<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
+          "wiki_descriptions": [
+            "Passive: Gain 3% (+ 1. 5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
+            "Legend: Gain Legend stacks for every 100 points earned, up to 10: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills"
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain 3% (+ 1. 5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
+              "effect_type": "stat_modifier",
+              "stat": "attack_speed",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                3,
+                1.0,
+                5,
+                18
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 3,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Legend: Gain Legend stacks for every 100 points earned, up to 10: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills",
+              "effect_type": "condition_note",
+              "stat": "legend_stack_acquisition_rules",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                100,
+                10,
+                100,
+                100,
+                25,
+                4
+              ],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": 100,
+                "unit": null
+              },
+              "conditions": [
+                "stacks_from_champion_takedown",
+                "stacks_from_epic_monster_takedown",
+                "stacks_from_large_monster_kill",
+                "stacks_from_minion_kill"
+              ],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Legend: Alacrity"
+        },
+        {
+          "id": 9105,
+          "key": "LegendHaste",
+          "name": "Legend: Haste",
+          "icon": "perk-images/Styles/Precision/LegendHaste/LegendHaste.png",
+          "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent Basic Ability <b>Haste</b>. ",
+          "long_desc": "Gain 1.5 basic ability haste for every <i>Legend</i> stack (<statGood>max 10 stacks</statGood>).<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
+          "wiki_descriptions": [
+            "Passive: Gain 1. 5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
+            "Legend: Gain Legend stacks for every 100 points earned, up to 10: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills"
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain 1. 5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
+              "effect_type": "stat_modifier",
+              "stat": "ability_haste",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                1.0,
+                5,
+                15
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 1.0,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Legend: Gain Legend stacks for every 100 points earned, up to 10: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills",
+              "effect_type": "condition_note",
+              "stat": null,
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                100,
+                10,
+                100,
+                100,
+                25,
+                4
+              ],
+              "scaling": null,
+              "trigger": "on_takedown",
+              "applies_to": "minion",
+              "formula": {
+                "type": "flat",
+                "value": 100,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Legend: Haste"
+        },
+        {
+          "id": 9103,
+          "key": "LegendBloodline",
+          "name": "Legend: Bloodline",
+          "icon": "perk-images/Styles/Precision/LegendBloodline/LegendBloodline.png",
+          "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> on enemies grant permanent<b> Life Steal</b>, up to a cap. Once the cap is reached, increase your max health. Weaker earlier but stronger later game than other Legend Runes.",
+          "long_desc": "Gain <scaleAD>0.45% Life Steal</scaleAD> for every <i>Legend</i> stack (<statGood>max 15 stacks</statGood>). At maximum <i>Legend</i> stacks, gain <scaleHealth>85 max health</scaleHealth>.<br><br>Earn progress toward <i>Legend</i> stacks for every champion takedown, epic monster takedown, large monster kill, and minion kill.",
+          "wiki_descriptions": [
+            "Passive: Gain 0. 45 % life steal per Legend stack , up to 6. 75 % at maximum stacks, at which you also gain 85 bonus health .",
+            "Legend: Gain Legend stacks for every 100 points earned, up to 15: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills"
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain 0. 45 % life steal per Legend stack , up to 6. 75 % at maximum stacks, at which you also gain 85 bonus health .",
+              "effect_type": "healing",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                0.0,
+                45,
+                6.0,
+                75,
+                85
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 0.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Legend: Gain Legend stacks for every 100 points earned, up to 15: 100 points for champion takedowns 100 points for epic monster takedowns 25 points for large monster kills 4 points for minion kills",
+              "effect_type": "condition_note",
+              "stat": null,
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                100,
+                15,
+                100,
+                100,
+                25,
+                4
+              ],
+              "scaling": null,
+              "trigger": "on_takedown",
+              "applies_to": "minion",
+              "formula": {
+                "type": "flat",
+                "value": 100,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Legend: Bloodline"
+        }
+      ]
+    },
+    {
+      "slot_index": 4,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8014,
+          "key": "CoupDeGrace",
+          "name": "Coup de Grace",
+          "icon": "perk-images/Styles/Precision/CoupDeGrace/CoupDeGrace.png",
+          "short_desc": "Deal more damage to low health enemy champions.",
+          "long_desc": "Deal 8% more damage to champions who have less than 40% health.",
+          "wiki_descriptions": [
+            "Passive: Deal 8% increased damage to champions below 40% maximum health ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Deal 8% increased damage to champions below 40% maximum health .",
+              "effect_type": "damage",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                8,
+                40
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 8,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Coup de Grace"
+        },
+        {
+          "id": 8017,
+          "key": "CutDown",
+          "name": "Cut Down",
+          "icon": "perk-images/Styles/Precision/CutDown/CutDown.png",
+          "short_desc": "Deal more damage to high health enemy champions.",
+          "long_desc": "Deal 8% more damage to champions who have more than 60% health.",
+          "wiki_descriptions": [
+            "Passive: Deal 8% increased damage to champions above 60% maximum health ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Deal 8% increased damage to champions above 60% maximum health .",
+              "effect_type": "damage",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                8,
+                60
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 8,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Cut Down"
+        },
+        {
+          "id": 8299,
+          "key": "LastStand",
+          "name": "Last Stand",
+          "icon": "perk-images/Styles/Sorcery/LastStand/LastStand.png",
+          "short_desc": "Deal more damage to champions while you are low on health.",
+          "long_desc": "Deal 5% - 11% increased damage to champions while you are below 60% health. Max damage gained at 30% health.",
+          "wiki_descriptions": [
+            "Passive: Deal 5% increased damage to champions while below 60% maximum health . This increases further based on your missing health , up to 11% increased damage while below 30% maximum health ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Deal 5% increased damage to champions while below 60% maximum health . This increases further based on your missing health , up to 11% increased damage while below 30% maximum health .",
+              "effect_type": "damage",
+              "stat": "health",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                5,
+                60,
+                11,
+                30
+              ],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 5,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Last Stand"
+        }
+      ]
+    }
+  ],
+  "selection_rules": {
+    "pick_count": 2,
+    "allowed_slot_types": [
+      "minor"
+    ],
+    "forbidden_slot_types": [
+      "keystone"
+    ],
+    "cannot_pick_same_slot_twice": true
+  },
+  "schema_notes": {
+    "effects_structured": "Best-effort numeric parsing with canonical stat keys. Use raw text for exact wording.",
+    "wiki_templates": "Descriptions sourced from Template:Rune data <Rune Name> when available.",
+    "stat_shards_source": "Parsed from LoL Wiki Rune shards table.",
+    "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
+    "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
+    "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "secondary rune-tree split generation"
+    }
+  ]
+}

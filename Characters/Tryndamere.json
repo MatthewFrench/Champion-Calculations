@@ -1,0 +1,361 @@
+{
+  "name": "Tryndamere",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 696.0,
+      "per_level": 108.0
+    },
+    "resource": {
+      "type": "fury",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.8
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 4.5
+    },
+    "attack_speed": {
+      "base": 0.67,
+      "per_level_percent": 3.4
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.109999999403953,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Battle Fury",
+      "type": "Passive",
+      "description_source": "Innate:  Tryndamere generates  Fury on his  basic attacks,  critical strikes, and enemy kills. His Fury begins to decay after a period without dealing or taking damage.",
+      "effects": [
+        {
+          "id": "tryndamere_p_effect_1",
+          "description": "Innate: Tryndamere generates 5 Fury on his basic attacks on-hit, and 10 Fury on critical strikes and each time he kills an enemy. After 8 seconds without dealing or taking damage, Tryndamere loses 5 Fury per second."
+        },
+        {
+          "id": "tryndamere_p_effect_2",
+          "description": "Tryndamere gains 0% : 50% (based on Fury) critical strike chance."
+        }
+      ],
+      "description": "Innate: Tryndamere generates 5 Fury on his basic attacks on-hit, and 10 Fury on critical strikes and each time he kills an enemy. After 8 seconds without dealing or taking damage, Tryndamere loses 5 Fury per second.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Fury generation stacks additively: if the given action triggers multiple ways of generating Fury, all of them apply."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bloodlust",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Tryndamere gains  bonus attack damage based on his missing health.",
+      "effects": [
+        {
+          "id": "maximum_bonus_attack_damage",
+          "description": "Maximum Bonus Attack Damage",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Passive: Tryndamere gains bonus attack damage based on his missing health, up to a maximum amount at 90% missing health."
+        },
+        {
+          "id": "bonus_attack_damage_per_1_missing_health",
+          "description": "Bonus Attack Damage per 1% missing health",
+          "base_by_rank": [
+            0.22,
+            0.3875,
+            0.555,
+            0.7225,
+            0.89
+          ],
+          "context_notes": "Passive: Tryndamere gains bonus attack damage based on his missing health, up to a maximum amount at 90% missing health."
+        },
+        {
+          "id": "minimum_heal",
+          "description": "Minimum Heal",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Active: Tryndamere consumes all of his Fury to heal himself, increased for every point of Fury consumed."
+        },
+        {
+          "id": "heal_per_1_fury",
+          "description": "Heal Per 1 Fury",
+          "base_by_rank": [
+            0.5,
+            0.95,
+            1.4,
+            1.85,
+            2.3
+          ],
+          "context_notes": "Active: Tryndamere consumes all of his Fury to heal himself, increased for every point of Fury consumed."
+        },
+        {
+          "id": "maximum_heal",
+          "description": "Maximum Heal",
+          "base_by_rank": [
+            80.0,
+            135.0,
+            190.0,
+            245.0,
+            300.0
+          ],
+          "context_notes": "Active: Tryndamere consumes all of his Fury to heal himself, increased for every point of Fury consumed."
+        }
+      ],
+      "description": "Passive: Tryndamere gains bonus attack damage based on his missing health, up to a maximum amount at 90% missing health.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "fury",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Bloodlust can still be activated even if Tryndamere does not have any Fury."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Mocking Shout",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Tryndamere reduces the  attack damage of nearby champions for a few seconds. Targets facing away from him are also  slowed.",
+      "effects": [
+        {
+          "id": "attack_damage_reduction",
+          "description": "Attack Damage Reduction",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Active: Tryndamere reduces the bonus attack damage of nearby enemy champions for 4 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Tryndamere also applies a curse to all nearby enemy champions for 3."
+        },
+        {
+          "id": "tryndamere_w_effect_3",
+          "description": "A nearby enemy champion is required to cast this ability. The target does not have to be visible to be targeted by this ability."
+        }
+      ],
+      "description": "Active: Tryndamere reduces the bonus attack damage of nearby enemy champions for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        14.0,
+        14.0,
+        14.0,
+        14.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.3,
+        "effect_hitbox_radius": 850.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: 0.3.",
+        "Source effectRadius: 850.",
+        "Source notes (summary): Mocking Shout very briefly reveals Tryndamere if he uses it while in the fog of war to enemies."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Spinning Slash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Tryndamere  dashes to the target location, dealing physical damage and generating  Fury per enemy hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Tryndamere dashes to the target location, dealing physical damage to enemies hit and generating 2 Fury per enemy hit, increased to 5 Fury against champions."
+        },
+        {
+          "id": "tryndamere_e_effect_2",
+          "description": "Critical strikes on-hit reduce Spinning Slash's current cooldown by 0.75 seconds, doubled to 1.5 seconds against champions."
+        },
+        {
+          "id": "tryndamere_e_effect_3",
+          "description": "Bloodlust and Undying Rage can be cast during the dash."
+        }
+      ],
+      "description": "Active: Tryndamere dashes to the target location, dealing physical damage to enemies hit and generating 2 Fury per enemy hit, increased to 5 Fury against champions.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 225.",
+        "Source notes (summary): Spinning Slash's Fury generation stacks additively with Battle Fury's Fury generation on kill."
+      ]
+    },
+    "ultimate": {
+      "name": "Undying Rage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Tryndamere becomes enraged, gaining  Fury and a  minimum health threshold for a few seconds.",
+      "effects": [
+        {
+          "id": "fury_gained",
+          "description": "Fury Gained",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0
+          ],
+          "context_notes": "Active: Tryndamere becomes enraged, instantly gaining Fury and a minimum health threshold for 5 seconds."
+        },
+        {
+          "id": "minimum_health_threshold",
+          "description": "Minimum Health Threshold",
+          "base_by_rank": [
+            30.0,
+            50.0,
+            70.0
+          ],
+          "context_notes": "Active: Tryndamere becomes enraged, instantly gaining Fury and a minimum health threshold for 5 seconds."
+        },
+        {
+          "id": "tryndamere_r_effect_2",
+          "description": "Undying Rage can be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Active: Tryndamere becomes enraged, instantly gaining Fury and a minimum health threshold for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Undying Rage will prevent Mel's Overwhelm's stacks from being consumed."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Tryndamere.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Tryndamere"
+  }
+}

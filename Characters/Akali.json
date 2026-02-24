@@ -1,0 +1,376 @@
+{
+  "name": "Akali",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 119.0
+    },
+    "resource": {
+      "type": "energy",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 23.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 37.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.2
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.160999998450279,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Assassin's Mark",
+      "type": "Passive",
+      "description_source": "Innate:  Akali's damaging  abilities against a champion create a ring around them for a few seconds, and she gains  move speed while moving away from the ring.",
+      "effects": [
+        {
+          "id": "akali_p_effect_1",
+          "description": "Innate: When Akali damages an enemy champion with an ability, she creates a ring around them for 4 seconds, refreshing on subsequent damaging abilities against champions. For 2 seconds, she gains 30% / 40% / 50% / 60% (based on level) bonus movement speed while moving away from the center of the ring. Only one ring may be active at a time."
+        },
+        {
+          "id": "akali_p_effect_2",
+          "description": "When Akali exits the ring, for 2 seconds, she regains the bonus movement speed while facing nearby enemy champions and becomes empowered with Swinging Kama for 4 seconds, during which she cannot create another ring."
+        },
+        {
+          "id": "akali_p_effect_3",
+          "description": "Swinging Kama: Akali's next basic attack is empowered to have its range doubled and deal 35 : 212 (based on level) (+ 60% bonus AD) (+ 55% AP) bonus magic damage."
+        }
+      ],
+      "description": "Innate: When Akali damages an enemy champion with an ability, she creates a ring around them for 4 seconds, refreshing on subsequent damaging abilities against champions. For 2 seconds, she gains 30% / 40% / 50% / 60% (based on level) bonus movement speed while moving away from the center of the ring. Only one ring may be active at a time.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Enemies cannot see the ring, but can see the empower effect."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Five Point Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Akali throws out a cone of kunai that deals magic damage to enemies hit. Targets hit at maximum range are briefly  slowed.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            45.0,
+            70.0,
+            95.0,
+            120.0,
+            145.0
+          ],
+          "context_notes": "Active: Akali unleashes kunai in a cone in the target direction, dealing magic damage to enemies hit."
+        }
+      ],
+      "description": "Active: Akali unleashes kunai in a cone in the target direction, dealing magic damage to enemies hit. Targets beyond a certain range are also slowed by 50% for 0.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          110.0,
+          100.0,
+          90.0,
+          80.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25 / 0.225 / 0.2 / 0.175 (based on level).",
+        "Source notes (summary): Five Point Strike will hit enemies after only 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Twilight Shroud",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Akali restores  energy and gains a brief burst of  move speed. She also drops a smoke shroud that makes her  invisible, attacking or using abilities will briefly reveal her.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Akali restores 100 energy over 0."
+        },
+        {
+          "id": "shroud_duration",
+          "description": "Shroud Duration",
+          "base_by_rank": [
+            5.0,
+            5.5,
+            6.0,
+            6.5,
+            7.0
+          ],
+          "context_notes": "Active: Akali restores 100 energy over 0."
+        },
+        {
+          "id": "akali_w_effect_2",
+          "description": "Entering the shroud renders Akali invisible, unless she is dashing."
+        },
+        {
+          "id": "akali_w_effect_3",
+          "description": "Declaring a basic attack or casting an ability will break the invisibility and prevent Akali from entering it for 1 : 0.625 (based on minutes) seconds, refreshing on subsequent attacks and casts."
+        },
+        {
+          "id": "akali_w_effect_4",
+          "description": "The marked section of Twilight Shroud will linger for the mark's duration, even after the shroud ends."
+        },
+        {
+          "id": "akali_w_effect_5",
+          "description": "Akali can move during Twilight Shroud's cast time."
+        }
+      ],
+      "description": "Active: Akali restores 100 energy over 0.4 seconds and gains bonus movement speed that decays over 2 seconds. She also detonates a smoke bomb a fixed distance away in the target direction, creating a circular shroud that expands over the next 5 seconds into a ring. The shroud does not permeate terrain, and will expand toward nearby enemy champions. While the shroud is active, Akali's maximum energy is increased by 100.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 350 / 1175.",
+        "Source notes (summary): Akali will also not gain the invisibility if she is Recalling."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Shuriken Flip",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Akali  dashes backward and throws a shuriken forward that deals magic damage and marks the first enemy or  smoke cloud hit for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            21.0,
+            42.0,
+            63.0,
+            84.0,
+            105.0
+          ],
+          "context_notes": "Active: Akali flips backward and, after the cast time, throws a shuriken in the target direction that deals magic damage to the first enemy hit."
+        },
+        {
+          "id": "akali_e_effect_2",
+          "description": "The shuriken marks and reveals the enemy or the last smoke section hit for 3 seconds, during which Shuriken Flip can be recast to consume the mark."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            49.0,
+            98.0,
+            147.0,
+            196.0,
+            245.0
+          ],
+          "context_notes": "Recast: Akali dashes towards the marked target or smoke section."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            70.0,
+            140.0,
+            210.0,
+            280.0,
+            350.0
+          ],
+          "context_notes": "Recast: Akali dashes towards the marked target or smoke section."
+        },
+        {
+          "id": "akali_e_effect_4",
+          "description": "Akali will not flip backwards if she is immobilized or grounded during the cast time. Twilight Shroud and Perfect Execution can be cast during the recast's dash."
+        }
+      ],
+      "description": "Active: Akali flips backward and, after the cast time, throws a shuriken in the target direction that deals magic damage to the first enemy hit.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4,
+        "projectile_speed": 1800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.4 / 0.25.",
+        "Source speed: 1800 / 1500.",
+        "Source effectRadius: Global.",
+        "Source notes (summary): Akali will track the target if they change locations."
+      ]
+    },
+    "ultimate": {
+      "name": "Perfect Execution",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Akali  dashes in the direction of the target enemy champion, dealing physical damage to enemies she passes through.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            110.0,
+            220.0,
+            330.0
+          ],
+          "context_notes": "Active: Akali dashes 750 units in the direction of the target enemy champion, dealing magic damage to enemies she passes through."
+        },
+        {
+          "id": "akali_r_effect_2",
+          "description": "Perfect Execution can be recast after a 2.5-second static cooldown within 10 seconds of the first activation."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            70.0,
+            140.0,
+            210.0
+          ],
+          "context_notes": "Recast: Akali dashes 800 units in the target direction, dealing magic damage to enemies she passes through, increased by 0% : 200% (based on target's missing health)."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            210.0,
+            420.0,
+            630.0
+          ],
+          "context_notes": "Recast: Akali dashes 800 units in the target direction, dealing magic damage to enemies she passes through, increased by 0% : 200% (based on target's missing health)."
+        }
+      ],
+      "description": "Active: Akali dashes 750 units in the direction of the target enemy champion, dealing magic damage to enemies she passes through. If this hits an enemy, she flips over them to continue the dash up to the normal range but for at least another 150 units.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        90.0,
+        60.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Direction.",
+        "Source castTime: 0.25 / None.",
+        "Source speed: 1500 / 3000.",
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Akali.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Akali"
+  }
+}

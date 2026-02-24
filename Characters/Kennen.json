@@ -1,0 +1,376 @@
+{
+  "name": "Kennen",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 580.0,
+      "per_level": 98.0
+    },
+    "resource": {
+      "type": "energy",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 29.0,
+      "per_level": 4.95
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 48.0,
+      "per_level": 3.75
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.4
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Mark of the Storm",
+      "type": "Passive",
+      "description_source": "Innate:  Kennen's  abilities apply a  stack of Mark of the Storm to enemies hit.",
+      "effects": [
+        {
+          "id": "kennen_p_effect_1",
+          "description": "Innate: Kennen's abilities apply a stack of Mark of the Storm to enemies hit for 6 seconds, refreshing on subsequent applications and stacking up to 3 times."
+        },
+        {
+          "id": "kennen_p_effect_2",
+          "description": "The third stack against a target consumes them all to stun them for 1.25 seconds and restore 25 energy. The stun duration is reduced to 0.5 seconds if this occurs on the same target again within 6 seconds."
+        },
+        {
+          "id": "kennen_p_effect_3",
+          "description": "Slicing Maelstrom can apply only up to 3 stacks on a target."
+        }
+      ],
+      "description": "Innate: Kennen's abilities apply a stack of Mark of the Storm to enemies hit for 6 seconds, refreshing on subsequent applications and stacking up to 3 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Kennen will still restore energy if the target dies from the third stack of Mark of the Storm."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Thundering Shuriken",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Kennen throws a shuriken in the target direction that deals magic damage to the first enemy hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            125.0,
+            175.0,
+            225.0,
+            275.0
+          ],
+          "context_notes": "Active: Kennen throws a shuriken in the target direction that deals magic damage to the first enemy hit."
+        }
+      ],
+      "description": "Active: Kennen throws a shuriken in the target direction that deals magic damage to the first enemy hit.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.25,
+        5.5,
+        4.75,
+        4.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          60.0,
+          55.0,
+          50.0,
+          45.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.175,
+        "projectile_speed": 1700.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.175.",
+        "Source speed: 1700.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Electrical Surge",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Kennen's basic attacks  on-attack generate a stack of Electrical Surge, which stacks up to a cap. At max stacks, his next basic attack consumes them all to deal bonus magic damage and apply a stack of  Mark of the Storm.",
+      "effects": [
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            35.0,
+            45.0,
+            55.0,
+            65.0,
+            75.0
+          ],
+          "context_notes": "Passive: Kennen's basic attacks on-attack generate a stack of Electrical Surge, stacking up to 4 times."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            95.0,
+            120.0,
+            145.0,
+            170.0
+          ],
+          "context_notes": "Active: Kennen sends out a surge of electricity that deals magic damage to all nearby enemies afflicted by Mark of the Storm or within Slicing Maelstrom."
+        },
+        {
+          "id": "kennen_w_effect_3",
+          "description": "An enemy within 775 units with Mark of the Storm or inside Slicing Maelstrom is required to cast this ability. The target does not have to be visible to be targeted by this ability."
+        }
+      ],
+      "description": "Passive: Kennen's basic attacks on-attack generate a stack of Electrical Surge, stacking up to 4 times. At 4 stacks, his next basic attack on-attack is empowered to consume all stacks on-hit to deal bonus magic damage and apply a stack of Mark of the Storm.Kennen gains maximum stacks of Electrical Surge upon respawning.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        11.25,
+        9.5,
+        7.75,
+        6.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 775.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 775.",
+        "Source notes (summary): The empowered basic attack applies bonus spell damage, while the electrical surge deals area damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Lightning Rush",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Kennen becomes lightning, a  ghosted form that gains  bonus movement speed for a short time. He deals magic damage to enemies he passes through and restores  energy if he damaged an enemy at all. Lightning Rush can be recast within the duration and automatically recasts afterwards.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Kennen turns into lightning for 2 seconds, becoming unable to declare basic attacks but gaining ghosting and 100% bonus movement speed."
+        },
+        {
+          "id": "non_champion_damage",
+          "description": "Non-Champion Damage",
+          "base_by_rank": [
+            52.0,
+            78.0,
+            104.0,
+            130.0,
+            156.0
+          ],
+          "context_notes": "Active: Kennen turns into lightning for 2 seconds, becoming unable to declare basic attacks but gaining ghosting and 100% bonus movement speed."
+        },
+        {
+          "id": "kennen_e_effect_2",
+          "description": "Lightning Rush can be recast after 0.5 seconds, and does so automatically after the duration."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Recast: Kennen ends Lightning Rush to gain bonus attack speed and be allowed to exceed the attack speed cap by the amount gained for 4 seconds."
+        },
+        {
+          "id": "kennen_e_effect_4",
+          "description": "Lightning Rush's recast can be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Active: Kennen turns into lightning for 2 seconds, becoming unable to declare basic attacks but gaining ghosting and 100% bonus movement speed. He deals magic damage to enemies he passes through, reduced to 65% against non-champions, and restores 40 energy upon damaging at least one enemy.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Lightning Rush will only damage any particular enemy once per cast."
+      ]
+    },
+    "ultimate": {
+      "name": "Slicing Maelstrom",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Kennen summons a storm that strikes at nearby enemy champions, dealing magic damage. Enemies take increased damage from each subsequent strike.",
+      "effects": [
+        {
+          "id": "bonus_resistances",
+          "description": "Bonus Resistances",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0
+          ],
+          "context_notes": "Active: Kennen summons a storm around himself for 3 seconds, gaining bonus armor and bonus magic resistance for the duration."
+        },
+        {
+          "id": "magic_damage_per_bolt",
+          "description": "Magic Damage Per Bolt",
+          "base_by_rank": [
+            40.0,
+            75.0,
+            110.0
+          ],
+          "context_notes": "The storm strikes lightning bolts down on nearby enemies every 0."
+        },
+        {
+          "id": "total_single_target_damage",
+          "description": "Total Single-Target Damage",
+          "base_by_rank": [
+            300.0,
+            562.5,
+            825.0
+          ],
+          "context_notes": "Slicing Maelstrom gains 10% additional damage for each subsequent strike a target has received, up to a combined total of 150% of the initial strike's damage."
+        },
+        {
+          "id": "kennen_r_effect_4",
+          "description": "Kennen can move during Slicing Maelstrom's cast time."
+        }
+      ],
+      "description": "Active: Kennen summons a storm around himself for 3 seconds, gaining bonus armor and bonus magic resistance for the duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 550.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 550."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kennen.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kennen"
+  }
+}

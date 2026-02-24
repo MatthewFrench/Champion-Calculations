@@ -1,0 +1,385 @@
+{
+  "name": "Kalista",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 560.0,
+      "per_level": 114.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 45.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 6.3,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 4.75
+    },
+    "attack_speed": {
+      "base": 0.694,
+      "per_level_percent": 4.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0599999986588954,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Martial Poise",
+      "type": "Passive",
+      "description_source": "Innate: During each  basic attack or casting of  Pierce,  Kalista can optionally choose a target direction to quickly  dash to. The range is based on dash angle and Kalista's Boots tier. The dash speed scales with bonus attack speed and certain movement speed effects.",
+      "effects": [
+        {
+          "id": "kalista_p_effect_1",
+          "description": "Innate: Whenever Kalista inputs a movement command during her basic attack windup or the cast time of Pierce, she will dash in that direction afterward.Kalista cannot dash while immobilized or grounded, and she will be knocked down by any immobilizing or polymorphing crowd control during the dash."
+        },
+        {
+          "id": "kalista_p_effect_2",
+          "description": "Martial Poise's dash range and speed details:\nDash range of basic attacks is modified by the tier of Kalista's Boots and the angle of the dash.\nAt a 0° angle towards the target, the minimum dash range is 140 / 153 / 166 / 175 (based on Boots Tier) units.\nAt a 90° angle, the maximum dash range is 240 / 263 / 280 / 300 (based on Boots Tier) units.\nDash range of Pierce is 300 units when dashing anywhere in the direction of the point of cast.\nIf the dash is inputted to a location that is away from Pierce's point of cast, the dash range is reduced based on the angle, with a minimum distance of 150 units if the inputted location is directly opposite.\nDash speed is increased based on the tier of Kalista's Boots, and is affected by her bonus attack speed as well as multiplicative movement speed modifiers she is under the effect of (including slows)."
+        },
+        {
+          "id": "kalista_p_effect_3",
+          "description": "Innate - Oathsworn Bond: Kalista begins the game with an exclusive Black Spear that she can activate on an allied champion to deem them Oathsworn, forming a tether together.Kalista can purchase the Black Spear from the shop at no cost to obtain it again and, before 3 minutes of game time, may activate the item again on a different target to designate a new Oathsworn. See Black Spear for more details."
+        }
+      ],
+      "description": "Innate: Whenever Kalista inputs a movement command during her basic attack windup or the cast time of Pierce, she will dash in that direction afterward.Kalista cannot dash while immobilized or grounded, and she will be knocked down by any immobilizing or polymorphing crowd control during the dash.",
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source notes (summary): Basic attacks and Pierce cannot be cast while dashing."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Pierce",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Kalista throws a spear in the target direction that deals physical damage to the first enemy hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            10.0,
+            75.0,
+            140.0,
+            205.0,
+            270.0
+          ],
+          "context_notes": "Active: Kalista launches a spear in the target direction that deals physical damage to the first enemy hit."
+        },
+        {
+          "id": "kalista_q_effect_2",
+          "description": "If Pierce kills the target, the spear continues onward to transfer all of the target's Rend stacks to the next enemy it hits. If Pierce kills multiple targets, only the last target killed will have their Rend stacks transferred to the next enemy hit that survives. (bug)"
+        }
+      ],
+      "description": "Active: Kalista launches a spear in the target direction that deals physical damage to the first enemy hit.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2400.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2400.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Sentinel",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive - Soul-Marked: While  Kalista and her  Oathsworn are  tethered, their basic attacks and  Pierce apply a Soul-Mark to their targets for a few seconds. If both Soul-Marks are applied to the same target, they take bonus magic damage.",
+      "effects": [
+        {
+          "id": "kalista_w_effect_1",
+          "description": "Passive - Soul-Marked: While Kalista and her Oathsworn are tethered, their basic attacks and Pierce apply a Soul-Mark to the target hit for 4 seconds."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            10.0,
+            12.0,
+            14.0,
+            16.0,
+            18.0
+          ],
+          "context_notes": "If both Kalista's and the Oathsworn's Soul-Mark are applied to the same enemy, the marks are consumed to deal magic damage to the target, capped against non-champions."
+        },
+        {
+          "id": "maximum_non_champion_damage",
+          "description": "Maximum Non-Champion Damage",
+          "base_by_rank": [
+            100.0,
+            125.0,
+            150.0,
+            175.0,
+            200.0
+          ],
+          "context_notes": "If both Kalista's and the Oathsworn's Soul-Mark are applied to the same enemy, the marks are consumed to deal magic damage to the target, capped against non-champions."
+        },
+        {
+          "id": "kalista_w_effect_3",
+          "description": "Active: Kalista summons a Sentinel that patrols back and forth on a path along the target direction, granting sight of its surroundings as it travels."
+        },
+        {
+          "id": "kalista_w_effect_4",
+          "description": "Kalista periodically stocks a Sentinel charge, up to a maximum of 2."
+        },
+        {
+          "id": "kalista_w_effect_5",
+          "description": "See Pets for more details about Sentinels."
+        }
+      ],
+      "description": "Passive - Soul-Marked: While Kalista and her Oathsworn are tethered, their basic attacks and Pierce apply a Soul-Mark to the target hit for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        30.0,
+        30.0,
+        30.0,
+        30.0,
+        30.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.5
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.5.",
+        "Source notes (summary): The damage is dealt on-attack of Kalista's basic attack if she applies the second mark."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Rend",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Kalista's  basic attacks  on-hit and  Pierce lodge a spear into their target, applying a  stack of Rend for a few seconds.",
+      "effects": [
+        {
+          "id": "kalista_e_effect_1",
+          "description": "Passive: Kalista's basic attacks on-hit and Pierce apply a stack of Rend to enemies for 4 seconds, refreshing on subsequent hits and stacking up to 254 times."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            5.0,
+            15.0,
+            25.0,
+            35.0,
+            45.0
+          ],
+          "context_notes": "Active: Kalista rips out all lodged spears from nearby enemies, consuming all stacks to deal physical damage while applying slow for 2 seconds, with each additional spear on the target, after the first dealing reduced damage."
+        },
+        {
+          "id": "damage_per_additional_stack",
+          "description": "Damage per Additional Stack",
+          "base_by_rank": [
+            7.0,
+            14.0,
+            21.0,
+            28.0,
+            35.0
+          ],
+          "context_notes": "Active: Kalista rips out all lodged spears from nearby enemies, consuming all stacks to deal physical damage while applying slow for 2 seconds, with each additional spear on the target, after the first dealing reduced damage."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            10.0,
+            18.0,
+            26.0,
+            34.0,
+            42.0
+          ],
+          "context_notes": "Active: Kalista rips out all lodged spears from nearby enemies, consuming all stacks to deal physical damage while applying slow for 2 seconds, with each additional spear on the target, after the first dealing reduced damage."
+        },
+        {
+          "id": "mana_restored",
+          "description": "Mana Restored",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "A nearby enemy with a Rend stack is required to cast this ability."
+        },
+        {
+          "id": "kalista_e_effect_4",
+          "description": "Rend can be used during the dash of Martial Poise, and during the cast time of Pierce. If rend is used during the cast time of Pierce, before the projectile spawns, doing so will repeat the first-spear damage to a target already damaged by rend, (note) in addition to empowering the projectile with rend's effects."
+        }
+      ],
+      "description": "Passive: Kalista's basic attacks on-hit and Pierce apply a stack of Rend to enemies for 4 seconds, refreshing on subsequent hits and stacking up to 254 times.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 1100.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 1100.",
+        "Source notes (summary): Rend cannot activate on untargetable enemies."
+      ]
+    },
+    "ultimate": {
+      "name": "Fate's Call",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Kalista invokes her  tether to retrieve her Oathsworn,  vanishing and  cleansing them from all  crowd control, and hold them for a few seconds.",
+      "effects": [
+        {
+          "id": "kalista_r_effect_1",
+          "description": "Active: Kalista invokes her tether to retrieve and hold her Oathsworn for 4 seconds. Kalista cleanses the Oathsworn from all crowd control and renders them invulnerable and untargetable for the duration, and pulls them to her over 1 second."
+        },
+        {
+          "id": "kalista_r_effect_2",
+          "description": "While held, the Oathsworn is vanished and may select a target location to dash to with displacement immunity, ending Fate's Call's invocation and reappearing at the location. If the invocation ends without the Oathsworn selecting a target location, they will automatically do so at maximum range from Kalista's facing direction. Kalista is briefly unable to start basic attacks or cast basic abilities when the Oathsworn starts their flight."
+        },
+        {
+          "id": "airborne_duration",
+          "description": "Airborne Duration",
+          "base_by_rank": [
+            1.0,
+            1.5,
+            2.0
+          ],
+          "context_notes": "The Oathsworn's dash stops upon colliding with an enemy champion."
+        },
+        {
+          "id": "kalista_r_effect_4",
+          "description": "The Oathsworn must be within tether range to cast this ability, and is also silenced and unable to perform movement or attack commands while Fate's Call is in effect."
+        }
+      ],
+      "description": "Active: Kalista invokes her tether to retrieve and hold her Oathsworn for 4 seconds. Kalista cleanses the Oathsworn from all crowd control and renders them invulnerable and untargetable for the duration, and pulls them to her over 1 second.",
+      "cooldown_seconds_by_rank": [
+        160.0,
+        140.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: none.",
+        "Source notes (summary): The Oathsworn's landing location of the lunge is precisely to their base attack range from the closest target they hit and relative to where this target would be displaced to from the knock back."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kalista.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kalista"
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "name": "Pyke",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Catcher",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 670.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 415.0,
+      "per_level": 50.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 43.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 1.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 2.0
+    },
+    "attack_speed": {
+      "base": 0.667,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.5,
+    "base_windup_seconds": 0.300000011920928,
+    "windup_fraction": 0.20000000794728534,
+    "windup_percent": 20.000000794728535,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.300000011920928,
+      "attack_total_time": 1.5,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Gift of the Drowned Ones",
+      "type": "Passive",
+      "effects": [
+        {
+          "id": "pyke_p_effect_1",
+          "description": "Innate: Pyke's maximum health cannot increase except through growth (per level), instead he gains[ 1 bonus attack damage per 14 bonus health. ][ bonus attack damage equal to 7.143% of bonus health. ]"
+        },
+        {
+          "id": "pyke_p_effect_2",
+          "description": "Innate: Pyke gains 1 bonus movement speed while in the river."
+        },
+        {
+          "id": "pyke_p_effect_3",
+          "description": "Innate: Pyke stores 9% (+ 0.2% per 1 Lethality) of the post-mitigation damage he takes from enemy champions as grey health on his health bar, increased to 40% (+ 0.4% per 1 Lethality) while there are two or more visible enemy champions nearby. He can store up to 80 (+ 800% bonus AD) grey health, with an upper cap of 55% of his maximum health."
+        },
+        {
+          "id": "pyke_p_effect_4",
+          "description": "While Pyke is not visible to enemies, he rapidly consumes his grey health to heal for the same amount."
+        }
+      ],
+      "description": "Innate: Pyke's maximum health cannot increase except through growth (per level), instead he gains[ 1 bonus attack damage per 14 bonus health. ][ bonus attack damage equal to 7.143% of bonus health. ]",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1500.",
+        "Source notes (summary): Game elements that increase health based on the champion's health (e."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bone Skewer",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "pyke_q_effect_1",
+          "description": "Active: Pyke charges while being slowed by 20% for up to 3 seconds to increase Bone Skewer's range over the first second of the channel. Bone Skewer can be recast within the duration."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "Recast: Pyke hurls his harpoon in the target direction, becoming unable to act while it is in flight and dealing physical damage to the first enemy hit and pulling them, during which they are also revealed, then slowing them by 90% for 1 second."
+        },
+        {
+          "id": "pyke_q_effect_3",
+          "description": "Releasing the ability within 0.4 seconds causes Pyke to instead thrust his blade in the target direction, dealing the same damage to the closest enemy champion, or closest enemy otherwise."
+        },
+        {
+          "id": "pyke_q_effect_4",
+          "description": "If the charge is interrupted or completes without reactivation, Bone Skewer is cancelled and the ability is put on full cooldown but refunds 75% of the mana cost. Bone Skewer's mana cost is also refunded if it hits an enemy champion."
+        }
+      ],
+      "description": "Active: Pyke charges while being slowed by 20% for up to 3 seconds to increase Bone Skewer's range over the first second of the channel. Bone Skewer can be recast within the duration.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 550.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 550.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Ghostwater Dive",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Pyke submerges into water, entering  camouflage and gaining a burst of  movement speed for a few seconds. Nearby enemies are alerted of his presence.",
+      "effects": [
+        {
+          "id": "pyke_w_effect_1",
+          "description": "Active: Pyke submerges into water for 5 seconds, entering camouflage and gaining 45% (+ 2% per 1 Lethality) bonus movement speed that decays over the duration. Attacking or casting abilities ends Ghostwater Dive immediately."
+        },
+        {
+          "id": "pyke_w_effect_2",
+          "description": "Enemy champions within 1500 units of Pyke are alerted of his presence and whether he can execute them with Death from Below."
+        }
+      ],
+      "description": "Active: Pyke submerges into water for 5 seconds, entering camouflage and gaining 45% (+ 2% per 1 Lethality) bonus movement speed that decays over the duration. Attacking or casting abilities ends Ghostwater Dive immediately.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          65.0,
+          65.0,
+          65.0,
+          65.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): When an enemy is alerted, sharks will circle underneath their feet while a sound will be played to them that changes based on health threshold."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Phantom Undertow",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Pyke dashes in the target direction, leaving behind a phantom and becoming  ghosted.",
+      "effects": [
+        {
+          "id": "pyke_e_effect_1",
+          "description": "Active: Pyke dashes in the target direction, leaving behind a Phantom. Pyke is ghosted while the Phantom is active."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "After 1 second, the Phantom homes back to Pyke to stun enemies around it and those it passes through along the way for 1."
+        }
+      ],
+      "description": "Active: Pyke dashes in the target direction, leaving behind a Phantom. Pyke is ghosted while the Phantom is active.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        14.0,
+        13.0,
+        12.0,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 3000.0,
+        "effect_hitbox_radius": 110.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 3000.",
+        "Source effectRadius: 110.",
+        "Source notes (summary): The dash distance can be extended to up to 900 units (estimated) when targeting across terrain."
+      ]
+    },
+    "ultimate": {
+      "name": "Death from Below",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Pyke strikes the target location in a X pattern, which  executes enemy  champions hit that are at low health. Other enemies hit are instead dealt physical damage.",
+      "effects": [
+        {
+          "id": "pyke_r_effect_1",
+          "description": "Active: Pyke marks the target location with the shape of an X before striking it, executing enemy champions within the area that are below 250 : 550 (based on level) (+ 80% bonus AD) (+ 1.5 per 1 Lethality) health. Other enemies hit and enemy champions above the threshold are instead dealt[ 50% of the amount as physical damage. ][ 125 : 275 (based on level) (+ 40% bonus AD) (+ 0.75 per 1 Lethality) physical damage. ]"
+        },
+        {
+          "id": "pyke_r_effect_2",
+          "description": "If Death from Below hits an enemy champion or at least one is killed inside the X by the execution or an ally, Pyke will blink to the center of the X. For the latter case Pyke can also recast the ability within 20 seconds at no cost."
+        },
+        {
+          "id": "pyke_r_effect_3",
+          "description": "Each successful execution grants one Your Cut to the last assisting ally, instead of its natural assist gold. Otherwise, Pyke is granted a Your Cut for each enemy champion killed inside the X by an ally during Death from Below's cast time."
+        }
+      ],
+      "description": "Active: Pyke marks the target location with the shape of an X before striking it, executing enemy champions within the area that are below 250 : 550 (based on level) (+ 80% bonus AD) (+ 1.5 per 1 Lethality) health. Other enemies hit and enemy champions above the threshold are instead dealt[ 50% of the amount as physical damage. ][ 125 : 275 (based on level) (+ 40% bonus AD) (+ 0.75 per 1 Lethality) physical damage. ]",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        85.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 100.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 125 / 282.5  ×  100.",
+        "Source notes (summary): Applies raw damage to executed targets and area damage to targets above the threshold."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Pyke.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Pyke"
+  }
+}

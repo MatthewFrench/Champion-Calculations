@@ -1,0 +1,431 @@
+{
+  "name": "Ornn",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 660.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 341.0,
+      "per_level": 65.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.6
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 69.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.349999994039535,
+    "windup_fraction": 0.21874999301508158,
+    "windup_percent": 21.874999301508158,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.349999994039535,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Living Forge",
+      "type": "Passive",
+      "effects": [
+        {
+          "id": "ornn_p_effect_1",
+          "description": "Innate - Living Forge: Ornn can purchase non-consumable items from anywhere on the field by forging them himself, and is also presented a Forge Menu to quickly forge his recommended items. Once Ornn selects an item to forge, he channels for 4 seconds, building the item and paying its gold cost upon completion. The channel is interrupted if Ornn takes damage from enemy champions or turrets. Living Forge is disabled for 4 seconds after starting the channel."
+        },
+        {
+          "id": "ornn_p_effect_2",
+          "description": "Innate - Master Craftsman: Ornn uses his craftsmanship in forgery to upgrade most Legendary items that he and his teammates own into Masterwork items, increasing the gold value of all upgradeable stats by exactly 1000, shared equally among them. When Ornn reaches level 13, the first eligible Legendary item in his inventory is upgraded automatically. For each level after 13 and before 18 (levels 14:17, total of 4, once per ally per game), Ornn can upgrade the first eligible Legendary item in an allied champion's inventory into its Masterwork variant. He can do so by selecting the ally while within 600 range, and forges the item by performing Living Forge's channel.Additionally, Ornn increases his bonus armor, bonus magic resistance and bonus health by 10% from all sources, further increased by 4% each time he upgrades a Legendary item into a Masterwork item, for a total increase of 30% to each stat after the maximum of 5 upgrades."
+        },
+        {
+          "id": "ornn_p_effect_3",
+          "description": "Innate - Temper: Ornn's basic attacks on-hit against Brittle enemies knock them back a short distance. Ornn's and allies' immobilizing effects against Brittle enemies will consume the debuff to deal bonus magic damage equal to 10% : 18.94% (based on Ornn's level) of the target's maximum health, capped at 200 : 500 (based on Bellows Breath's rank) against monsters, and cause the crowd control to last 30% longer (if applicable)."
+        },
+        {
+          "id": "ornn_p_effect_4",
+          "description": "Ornn will prioritize upgrading the first Legendary item eligible for a Masterwork upgrade based on its position in the inventory, detecting each slot until an eligible item is found."
+        }
+      ],
+      "description": "Innate - Living Forge: Ornn can purchase non-consumable items from anywhere on the field by forging them himself, and is also presented a Forge Menu to quickly forge his recommended items. Once Ornn selects an item to forge, he channels for 4 seconds, building the item and paying its gold cost upon completion. The channel is interrupted if Ornn takes damage from enemy champions or turrets. Living Forge is disabled for 4 seconds after starting the channel.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Ornn's Forge Menu is a special menu in the HUD which has 5 slots."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Volcanic Rupture",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Ornn sends a fissure in the target direction that deals physical damage and  slows enemies hit for a short time.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            20.0,
+            45.0,
+            70.0,
+            95.0,
+            120.0
+          ],
+          "context_notes": "Active: Ornn sends a fissure in the target direction that deals physical damage to enemies hit and slows them by 40% for 2 seconds."
+        },
+        {
+          "id": "ornn_q_effect_2",
+          "description": "The fissure stops at maximum range or 200 units behind the first enemy champion struck. After a 1.125-second delay, a magma pillar then erupts to knock aside enemies, though not through terrain, and linger as impassible terrain for 4 seconds."
+        },
+        {
+          "id": "ornn_q_effect_3",
+          "description": "The pillar will not expire while Ornn is charging."
+        }
+      ],
+      "description": "Active: Ornn sends a fissure in the target direction that deals physical damage to enemies hit and slows them by 40% for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.5,
+        8.0,
+        7.5,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          45.0,
+          45.0,
+          45.0,
+          45.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1800.",
+        "Source notes (summary): The fissure will move an 200 units beyond the first champion it hits, not exceeding the maximum range of the ability."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Bellows Breath",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ornn marches in the target direction with  displacement immunity, belching fire in a cone that continually deals magic damage for a brief time. The final gout of flame will apply  Brittle for a short time.",
+      "effects": [
+        {
+          "id": "ornn_w_effect_1",
+          "description": "Active: Ornn marches forward in the target direction over 0.75 seconds, gaining displacement immunity and becoming unable to act for the duration."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "context_notes": "Over the march he belches fire over a cone in front of him, dealing magic damage every 0."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            2.4,
+            2.6,
+            2.8,
+            3.0,
+            3.2
+          ],
+          "context_notes": "Over the march he belches fire over a cone in front of him, dealing magic damage every 0."
+        },
+        {
+          "id": "total_minimum_minion_damage",
+          "description": "Total Minimum/Minion Damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "Bellows Breath has a minimum damage threshold, which is also the damage dealt to minions, and is capped against monsters."
+        },
+        {
+          "id": "minimum_minion_damage_per_tick",
+          "description": "Minimum/Minion Damage Per Tick",
+          "base_by_rank": [
+            16.0,
+            26.0,
+            36.0,
+            46.0,
+            56.0
+          ],
+          "context_notes": "Bellows Breath has a minimum damage threshold, which is also the damage dealt to minions, and is capped against monsters."
+        },
+        {
+          "id": "total_monster_damage_cap",
+          "description": "Total Monster Damage Cap",
+          "base_by_rank": [
+            260.0,
+            320.0,
+            380.0,
+            440.0,
+            500.0
+          ],
+          "context_notes": "Bellows Breath has a minimum damage threshold, which is also the damage dealt to minions, and is capped against monsters."
+        },
+        {
+          "id": "monster_damage_cap_per_tick",
+          "description": "Monster Damage Cap Per Tick",
+          "base_by_rank": [
+            52.0,
+            64.0,
+            76.0,
+            88.0,
+            100.0
+          ],
+          "context_notes": "Bellows Breath has a minimum damage threshold, which is also the damage dealt to minions, and is capped against monsters."
+        }
+      ],
+      "description": "Active: Ornn marches forward in the target direction over 0.75 seconds, gaining displacement immunity and becoming unable to act for the duration.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.5,
+        11.0,
+        10.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          50.0,
+          55.0,
+          60.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 175.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source effectRadius: 175.",
+        "Source notes (summary): Ornn's lunge distance is based on the distance he would travel in the target direction by standard movement over a time period of 0."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Searing Charge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            125.0,
+            170.0,
+            215.0,
+            260.0
+          ],
+          "context_notes": "Active: Ornn charges in the target direction, dealing physical damage to enemies he passes through and stopping upon colliding with terrain."
+        },
+        {
+          "id": "ornn_e_effect_2",
+          "description": "If Ornn collides with terrain during the charge, he creates a shockwave that knocks up and stuns nearby enemies for 1.25 seconds and deals the same damage if they were not already hit by the charge."
+        },
+        {
+          "id": "ornn_e_effect_3",
+          "description": "The shockwave destroys the pillar formed by Volcanic Rupture and partially destroys terrain created by enemy champions."
+        },
+        {
+          "id": "ornn_e_effect_4",
+          "description": "Ornn cannot basic attack nor cast abilities for 0.5 seconds after the dash ends."
+        }
+      ],
+      "description": "Active: Ornn charges in the target direction, dealing physical damage to enemies he passes through and stopping upon colliding with terrain.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.5,
+        13.0,
+        12.5,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          40.0,
+          45.0,
+          50.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.35.",
+        "Source speed: 1600.",
+        "Source effectRadius: 360 / 150.",
+        "Source notes (summary): Spell shields may only block one instance of damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Call of the Forge God",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            125.0,
+            175.0,
+            225.0
+          ],
+          "context_notes": "Active: Ornn sounds his horn, summoning a lava elemental at maximum range from the target direction that stampedes towards his casting position at increasing speed."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Ornn sounds his horn, summoning a lava elemental at maximum range from the target direction that stampedes towards his casting position at increasing speed."
+        },
+        {
+          "id": "ornn_r_effect_2",
+          "description": "Call of the Forge God can be recast after 1.25 seconds while the elemental is active."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            250.0,
+            350.0,
+            450.0
+          ],
+          "context_notes": "Recast: Ornn dashes in the target direction, though not through terrain."
+        },
+        {
+          "id": "ornn_r_effect_4",
+          "description": "Each pass applies Brittle to targets for 3 seconds and can affect enemies only once. The elemental briefly grants sight around its trajectory as it travels."
+        }
+      ],
+      "description": "Active: Ornn sounds his horn, summoning a lava elemental at maximum range from the target direction that stampedes towards his casting position at increasing speed. The elemental deals magic damage to enemies it passes through and slows them for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        120.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 2550.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source speed: 1600 / 450 / 1250.",
+        "Source effectRadius: 3000 / 2550.",
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ornn.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ornn"
+  }
+}

@@ -89,11 +89,13 @@
         "type": "on_activate"
       },
       "tether_range_units": 1250,
-      "cooldown_seconds": 0,
+      "cooldown_seconds": 10,
       "conditions": [
-        "target_ally_champion"
+        "target_ally_champion",
+        "target_not_already_promised_by_other_wordless_promise",
+        "team_limited_to_one_wordless_promise"
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.86
     }
   ],
   "shop": {
@@ -115,8 +117,9 @@
     "effects_structured_generated_at": "2026-02-09T23:46:08.069083+00:00",
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Verified Promise execution semantics from page-level source: active is a targeted ally-link cast (0s tooltip cooldown), and passive stat sharing applies only while tether conditions are met.",
-      "Promise link behavior note: passive stat-sharing is suspended while the item holder is dead."
+      "Verified Promise execution semantics from page-level source: active is a targeted ally-link cast with a 10-second cooldown and one-per-team / one-promise-target limitations.",
+      "Promise link behavior note: passive stat-sharing is suspended while the item holder is dead.",
+      "Data reconciliation note: Tier-1 tooltip text can surface as '(0s)' for this active, but page-level and patch-history behavior indicate a 10-second Promise cooldown."
     ]
   },
   "sources": [

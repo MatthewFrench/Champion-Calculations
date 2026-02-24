@@ -1,0 +1,343 @@
+{
+  "name": "Lucian",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 641.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 320.0,
+      "per_level": 43.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 28.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.150000005960464,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Lightslinger",
+      "type": "Passive",
+      "description_source": "Innate: After casting an ability,  Lucian's next  basic attack within a few seconds fires a second attack that deals reduced physical damage.",
+      "effects": [
+        {
+          "id": "lucian_p_effect_1",
+          "description": "Innate: After casting an ability, Lucian's next basic attack within 3.5 seconds fires an additional shot on-attack after 0.25 seconds, which deals 50% / 55% / 60% (based on level) AD physical damage, increased to 100% AD against minions. He will shoot the same target, else another target within 50 units beyond his basic attack range automatically."
+        },
+        {
+          "id": "lucian_p_effect_2",
+          "description": "The second shot applies on-hit effects, triggers on-attack effects, and is affected by critical strike modifiers."
+        },
+        {
+          "id": "lucian_p_effect_3",
+          "description": "Innate - Vigilance: Whenever Lucian is healed or shielded by an ally, or an enemy champion within 1000 units is immobilized, his next two shots within 6 seconds are empowered to deal 15 (+ 20% AD) bonus magic damage on-hit. He can store up to 4 empowered shots at a time."
+        }
+      ],
+      "description": "Innate: After casting an ability, Lucian's next basic attack within 3.5 seconds fires an additional shot on-attack after 0.25 seconds, which deals 50% / 55% / 60% (based on level) AD physical damage, increased to 100% AD against minions. He will shoot the same target, else another target within 50 units beyond his basic attack range automatically.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Lightslinger is triggered and consumed by the first attack, even if no target can be found upon firing the second attack."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Piercing Light",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Lucian fires a laser in a line in the direction of the target enemy, dealing physical damage to enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            115.0,
+            150.0,
+            185.0,
+            220.0
+          ],
+          "context_notes": "Active: Lucian fires a laser in a line in the direction of the target enemy that deals physical damage to enemies hit."
+        }
+      ],
+      "description": "Active: Lucian fires a laser in a line in the direction of the target enemy that deals physical damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          48.0,
+          56.0,
+          64.0,
+          72.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.4 : 0.25 (based on level).",
+        "Source notes (summary): Piercing Light will attempt to lead the target if it is moving but does not adjust further during the cast time (enemies can dodge the laser if they change their position by a sufficient amount during the cast time)."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Ardent Blaze",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Lucian fires a missile in the target direction that explodes in a cross pattern upon hitting an enemy or maximum range, dealing magic damage and marking enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            110.0,
+            145.0,
+            180.0,
+            215.0
+          ],
+          "context_notes": "Active: Lucian fires a missile in the target direction that explodes in a cross pattern upon hitting an enemy or reaching maximum range, dealing magic damage to enemies hit and granting sight of the area for 1 second."
+        },
+        {
+          "id": "lucian_w_effect_2",
+          "description": "Enemies hit are marked for 6 seconds."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            60.0,
+            65.0,
+            70.0,
+            75.0,
+            80.0
+          ],
+          "context_notes": "Lucian gains bonus movement speed for 1 second when he or allied champions damage a marked target."
+        }
+      ],
+      "description": "Active: Lucian fires a missile in the target direction that explodes in a cross pattern upon hitting an enemy or reaching maximum range, dealing magic damage to enemies hit and granting sight of the area for 1 second.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1600.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Relentless Pursuit",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive: Relentless Pursuit's cooldown is  reduced for each  Lightslinger shot hit, doubled against enemy  champions.",
+      "effects": [
+        {
+          "id": "lucian_e_effect_1",
+          "description": "Passive: Relentless Pursuit's current cooldown is reduced by 1 second for each Lightslinger shot hit, doubled to 2 seconds against enemy champions."
+        },
+        {
+          "id": "lucian_e_effect_2",
+          "description": "Active: Lucian dashes in the target direction."
+        },
+        {
+          "id": "lucian_e_effect_3",
+          "description": "Relentless Pursuit resets Lucian's basic attack timer. Lucian can cast any of his abilities during the dash. Relentless Pursuit can be cast during Ardent Blaze's cast time and during The Culling's channel."
+        }
+      ],
+      "description": "Passive: Relentless Pursuit's current cooldown is reduced by 1 second for each Lightslinger shot hit, doubled to 2 seconds against enemy champions.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        17.0,
+        16.0,
+        15.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          30.0,
+          20.0,
+          10.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1350.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1350.",
+        "Source notes (summary): Additional on-hits during Lightslinger are not considered for the cooldown reduction (i."
+      ]
+    },
+    "ultimate": {
+      "name": "The Culling",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "physical_damage_per_shot",
+          "description": "Physical Damage Per Shot",
+          "base_by_rank": [
+            15.0,
+            30.0,
+            45.0
+          ],
+          "context_notes": "Active: Lucian channels for up to 3 seconds, rapidly firing up to 22 (+ 0 : 22 (+ 0 : 6) (based on critical strike chance)) shots in the target direction over the duration."
+        },
+        {
+          "id": "minion_damage_per_shot",
+          "description": "Minion Damage Per Shot",
+          "base_by_rank": [
+            30.0,
+            60.0,
+            90.0
+          ],
+          "context_notes": "Active: Lucian channels for up to 3 seconds, rapidly firing up to 22 (+ 0 : 22 (+ 0 : 6) (based on critical strike chance)) shots in the target direction over the duration."
+        },
+        {
+          "id": "lucian_r_effect_2",
+          "description": "While channeling, Lucian is ghosted and may still move."
+        },
+        {
+          "id": "lucian_r_effect_3",
+          "description": "Recast: Lucian ends The Culling."
+        }
+      ],
+      "description": "Active: Lucian channels for up to 3 seconds, rapidly firing up to 22 (+ 0 : 22 (+ 0 : 6) (based on critical strike chance)) shots in the target direction over the duration. Each shot deals physical damage to the first enemy hit, doubled against minions. The Culling can be recast after 0.75 seconds during the channel, and does so automatically when the channel ends.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        100.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: none.",
+        "Source speed: 2800.",
+        "Source notes (summary): The fire rate increases with the number of shots."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Lucian.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Lucian"
+  }
+}

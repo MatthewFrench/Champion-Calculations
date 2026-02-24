@@ -1,0 +1,365 @@
+{
+  "name": "Orianna",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 585.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 418.0,
+      "per_level": 25.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 20.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 26.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 44.0,
+      "per_level": 2.6
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.124561406672,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Clockwork Windup",
+      "type": "Passive",
+      "description_source": "Innate:  Orianna is accompanied by  The Ball, which she commands with her  abilities. The Ball attaches to Orianna when she approaches it, and snaps back to her when she moves too far away. The Ball incurs a  brief cooldown on Orianna's abilities whenever it moves.",
+      "effects": [
+        {
+          "id": "orianna_p_effect_1",
+          "description": "Innate - The Ball: Orianna is accompanied by The Ball, which she commands with her abilities. The Ball incurs a 0.01-second global cooldown on all of her abilities when she casts any ability. Additionally, The Ball attaches to Orianna if she is near it, and snaps back to her if she moves too far away from it, which incurs a 0.75-second cooldown on Command: Shockwave."
+        },
+        {
+          "id": "orianna_p_effect_2",
+          "description": "Innate: Orianna's basic attacks generate a stack of Clockwork Winding for 4 seconds, refreshing on subsequent attacks and stacking up to 2 times. All stacks are lost when attacking a new enemy.\nClockwork Winding: Orianna's basic attacks are empowered to deal 10 : 54.71 (based on level) (+ 15% AP) bonus magic damage on-hit, increased by[ 20% ][ 2 : 10.94 (based on level) (+ 3% AP) ]per stack, up to 14 : 76.59 (based on level) (+ 21% AP) total bonus magic damage."
+        },
+        {
+          "id": "orianna_p_effect_3",
+          "description": "See Pets for more details about The Ball."
+        }
+      ],
+      "description": "Innate - The Ball: Orianna is accompanied by The Ball, which she commands with her abilities. The Ball incurs a 0.01-second global cooldown on all of her abilities when she casts any ability. Additionally, The Ball attaches to Orianna if she is near it, and snaps back to her if she moves too far away from it, which incurs a 0.75-second cooldown on Command: Shockwave.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1290 / 1355 / 135.",
+        "Source notes (summary): Clockwork Winding's stack count can be seen in Orianna's buff bar."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Command: Attack",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Orianna commands  The Ball to fly to the target location and remain there, dealing magic damage to enemies it passes through and nearby enemies upon arrival.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Orianna commands The Ball to fly to the target location and remain there, dealing magic damage to enemies it passes through and nearby enemies upon arrival, reduced to 70% against those hit beyond the first."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            42.0,
+            63.0,
+            84.0,
+            105.0,
+            126.0
+          ],
+          "context_notes": "Active: Orianna commands The Ball to fly to the target location and remain there, dealing magic damage to enemies it passes through and nearby enemies upon arrival, reduced to 70% against those hit beyond the first."
+        }
+      ],
+      "description": "Active: Orianna commands The Ball to fly to the target location and remain there, dealing magic damage to enemies it passes through and nearby enemies upon arrival, reduced to 70% against those hit beyond the first.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        5.25,
+        4.5,
+        3.75,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          35.0,
+          35.0,
+          35.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1400.0,
+        "effect_hitbox_radius": 175.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: None.",
+        "Source speed: 1400.",
+        "Source effectRadius: 175.",
+        "Source notes (summary): If The Ball is currently on Orianna herself, Command: Attack will have it cast to fly at least 150 units if the player attempts to cast it closer."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Command: Dissonance",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Orianna commands  The Ball to emit an electric pulse that deals magic damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Orianna commands The Ball to emit an electric pulse that deals magic damage to nearby enemies."
+        },
+        {
+          "id": "movement_speed_modifier",
+          "description": "Movement Speed Modifier",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "The pulse leaves behind an electric field that last 3 seconds, granting bonus movement speed to Orianna and her allies when they move within."
+        }
+      ],
+      "description": "Active: Orianna commands The Ball to emit an electric pulse that deals magic damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 225.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Command: Protect",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  The Ball grants bonus  armor and  magic resist to the unit it is attached to.",
+      "effects": [
+        {
+          "id": "bonus_resistances",
+          "description": "Bonus Resistances",
+          "base_by_rank": [
+            6.0,
+            12.0,
+            18.0,
+            24.0,
+            30.0
+          ],
+          "context_notes": "Passive: The Ball grants bonus armor and bonus magic resistance to the unit it is attached to."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Orianna commands The Ball to fly to herself or the target allied champion and attach itself to the target, dealing magic damage to enemies it passes through and granting the target a shield for 2."
+        },
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            55.0,
+            90.0,
+            125.0,
+            160.0,
+            195.0
+          ],
+          "context_notes": "Active: Orianna commands The Ball to fly to herself or the target allied champion and attach itself to the target, dealing magic damage to enemies it passes through and granting the target a shield for 2."
+        }
+      ],
+      "description": "Passive: The Ball grants bonus armor and bonus magic resistance to the unit it is attached to.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1850.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 1850.",
+        "Source notes (summary): The Ball does not grant sight while in flight, but the sound effect of striking an enemy is audible through the Fog of War."
+      ]
+    },
+    "ultimate": {
+      "name": "Command: Shockwave",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Orianna commands  The Ball to unleash a shockwave that deals magic damage to nearby enemies, briefly  stunning and  pulling them inward.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            250.0,
+            400.0,
+            550.0
+          ],
+          "context_notes": "Active: Orianna commands The Ball to unleash a shockwave that deals magic damage to nearby enemies, stuns them for 0."
+        }
+      ],
+      "description": "Active: Orianna commands The Ball to unleash a shockwave that deals magic damage to nearby enemies, stuns them for 0.75 seconds, and pulls them over 325 units, though not through terrain.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        95.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 415.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 415.",
+        "Source notes (summary): Command: Shockwave tosses enemies a set distance (those on the edge of the flinging area will be tossed to the center while those close to the middle will go over The Ball towards the edge) and can send them through walls."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Orianna.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Orianna"
+  }
+}

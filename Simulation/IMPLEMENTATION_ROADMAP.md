@@ -256,7 +256,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - cooldown handling is explicit and tested.
 
-19a. `IN_PROGRESS` Architecture modularization and ownership-channel hardening.
+19a. `DONE` Architecture modularization and ownership-channel hardening.
 - Scope:
   - split oversized core files into explicit concern folders and small leaf modules
   - adopt explicit naming standards for module files (avoid ambiguous names like `events.rs`)
@@ -264,6 +264,97 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - enforce owner-channel mutation flows for runtime state, queues, caches, and data transforms
   - track rollout via `ARCHITECTURE_TRANSFORMATION_PLAN.md`
 - Recent progress:
+  - completed second-stage `ARCH-041` simulation/search config parsing decomposition by splitting `src/data/simulation_search_configuration_parsing.rs` ownership into explicit parse owner leaves under:
+    - `src/data/simulation_search_configuration_parsing/shared_parsing_primitives.rs`
+    - `src/data/simulation_search_configuration_parsing/simulation_config_parsing.rs`
+    - `src/data/simulation_search_configuration_parsing/enemy_config_parsing.rs`
+    - `src/data/simulation_search_configuration_parsing/build_search_config_parsing.rs`
+    - `src/data/simulation_search_configuration_parsing/loadout_selection_parsing.rs`
+  - rewired `src/data/simulation_search_configuration_parsing.rs` into a thin facade/re-export surface while preserving `data.rs` facade exports and reduced it from `599` to `15` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - completed second-stage `ARCH-041` champion/item/preset data decomposition by splitting `src/data/champion_item_preset_data_loading.rs` ownership into explicit owner leaves under:
+    - `src/data/champion_item_preset_data_loading/champion_base_loading.rs`
+    - `src/data/champion_item_preset_data_loading/item_pool_loading.rs`
+    - `src/data/champion_item_preset_data_loading/urf_mode_loading.rs`
+    - `src/data/champion_item_preset_data_loading/enemy_preset_loading.rs`
+  - rewired `src/data/champion_item_preset_data_loading.rs` into a thin facade/re-export surface while preserving `data.rs` facade exports and reduced it from `620` to `17` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - completed high-impact `main.rs` decomposition by moving shared runtime/search/reporting contracts and CLI/options contracts into explicit owner leaves under:
+    - `src/simulation_contracts/runtime_actor_contracts.rs`
+    - `src/simulation_contracts/search_reporting_contracts.rs`
+    - `src/simulation_contracts/entrypoint_cli_contracts.rs`
+    - `src/simulation_contracts.rs` (facade/re-export surface)
+  - preserved root-level compatibility exports while reducing `src/main.rs` from `679` to `149` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - continued second-stage defaults schema decomposition by splitting simulator/default schema-type ownership under:
+    - `src/defaults/simulator_defaults_schema_types/simulation_search_and_engine_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/rune_runtime_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_ai_and_execution_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_behavior_and_ability_defaults_schema.rs`
+    - `src/defaults/simulator_defaults_schema_types/champion_file_defaults_schema.rs`
+  - rewired `src/defaults/simulator_defaults_schema_types.rs` into a thin schema facade/re-export surface while preserving the defaults API and reduced it from `637` to `22` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - continued second-stage scenario execution decomposition by splitting controlled-champion fixed-loadout rune-sweep ownership under:
+    - `src/scenario_runner/rune_sweep_runner/result_aggregation.rs`
+    - `src/scenario_runner/rune_sweep_runner/report_writing.rs`
+  - moved rune-sweep read-only outcome/objective aggregation and markdown/json report projection into explicit owner leaves while preserving `run_controlled_champion_fixed_loadout_rune_sweep_impl(...)` as the stable facade entrypoint
+  - reduced `src/scenario_runner/rune_sweep_runner.rs` from `627` to `308` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - continued second-stage reporting decomposition by splitting `src/reporting/controlled_champion_report_markdown_writer.rs` into explicit section-owner leaves under:
+    - `src/reporting/controlled_champion_report_markdown_writer/header_and_objective_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/search_diagnostics_section.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections.rs`
+  - preserved `write_controlled_champion_report_markdown(...)` as a stable facade entrypoint while delegating section ownership to explicit `append_*` projection helpers
+  - reduced `src/reporting/controlled_champion_report_markdown_writer.rs` from `633` to `122` lines and re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - continued second-stage runtime decomposition by extracting explicit owner channels under `src/scripts/runtime/loadout_runtime/`:
+    - `runtime_stat_projections.rs`
+    - `runtime_state_initialization.rs`
+    - `runtime_effect_mutations.rs`
+    - `combat_bonus_resolution/projection_helpers.rs`
+    - `combat_bonus_resolution/rune_proc_state_mutations.rs`
+  - rewired `src/scripts/runtime/loadout_runtime.rs` and `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` into thinner facades with stable entrypoints and delegated owner logic
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `609` to `363` lines and reduced `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` from `613` to `357` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - completed `ARCH-051` by extracting remaining core utility ownership out of `src/core.rs` into:
+    - `src/core/objective_scoring_math.rs`
+    - `src/core/build_candidate_random_helpers.rs`
+  - moved objective-score aggregation helpers, deterministic RNG helpers, and build-key/build-repair helper ownership into explicit core owner leaves while preserving stable `core.rs` facade exports
+  - reduced `src/core.rs` from `611` to `162` lines
+  - completed `ARCH-060` by removing script-tree `mod.rs` files and migrating to explicit module facades/files:
+    - `src/scripts.rs`
+    - `src/scripts/champions.rs`
+    - `src/scripts/items.rs`
+    - `src/scripts/registry.rs`
+    - `src/scripts/runes.rs`
+    - `src/scripts/runtime.rs`
+    - `src/scripts/champions/*.rs` champion leaves
+  - reduced `mod.rs` file count under `src/` from `12` to `0`
+  - continued `ARCH-030` second-stage decomposition by splitting controlled-champion support ownership under:
+    - `src/scenario_runner/controlled_champion_search_runtime_support/coverage_locked_asset_candidate_generation.rs`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_seed_derivation.rs`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_runtime_reporting_projections.rs`
+  - rewired `src/scenario_runner/controlled_champion_search_runtime_support.rs` into a thin support facade with owner-channel split by concern and reduced it from `682` to `165` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - continued second-stage defaults decomposition by extracting champion-simulation metadata/AI/profile loader ownership out of `src/defaults.rs` into:
+    - `src/defaults/champion_simulation_data_loading.rs`
+  - moved champion simulation profile loading, champion slot-binding derivation, ability-execution default loading, champion AI profile normalization, and URF respawn-default loading into the new defaults owner leaf module while preserving stable defaults facade/cache entrypoints
+  - reduced `src/defaults.rs` from `679` to `386` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - continued second-stage defaults decomposition by splitting champion simulation-default loading into explicit champion-family leaves under:
+    - `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders/`
+    - `vladimir_simulation_defaults_loader.rs`
+    - `warwick_simulation_defaults_loader.rs`
+    - `vayne_simulation_defaults_loader.rs`
+    - `morgana_simulation_defaults_loader.rs`
+    - `sona_simulation_defaults_loader.rs`
+    - `doctor_mundo_simulation_defaults_loader.rs`
+  - rewired `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs` into a thin defaults-loader facade/re-export surface and reduced it from `687` to `20` lines (largest champion defaults leaf now `237` lines)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - continued high-impact `loadout_runtime` decomposition by extracting runtime cooldown/stack reporting ownership out of `src/scripts/runtime/loadout_runtime.rs` into:
+    - `src/scripts/runtime/loadout_runtime/runtime_state_reporting.rs`
+  - moved runtime cooldown/stack description projection into explicit runtime owner helpers while preserving `describe_runtime_cooldowns(...)` and `describe_runtime_stacks(...)` as stable runtime API entrypoints
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `777` to `609` lines (below the `<=700` target)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
   - continued high-impact `loadout_runtime` decomposition by extracting combat bonus-resolution ownership out of `src/scripts/runtime/loadout_runtime.rs` into:
     - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`
   - moved on-hit and ability bonus-damage resolution, rune-trigger execution, and stack-window progression into explicit runtime owner helpers while preserving `calculate_on_hit_bonus_damage(...)` and `calculate_ability_bonus_damage(...)` as stable runtime API entrypoints
@@ -602,14 +693,23 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - re-ran full correctness/quality validation after scenario result-reporting extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
   - re-ran full correctness/quality validation after scenario result-reporting analysis/artifact split (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
   - re-ran full correctness/quality validation after event-dispatch owner-slice extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
-- Next valued items:
-  - continue high-impact decomposition of `src/scripts/runtime/loadout_runtime.rs` (`777` lines) by extracting remaining runtime-owner slices (state/cooldown description formatting and runtime-state initialization helpers) to close the final `<=700` gap
-  - continue `ARCH-051` by splitting remaining core utility clusters (objective-score math, random helpers, and build-key utilities) into explicit `src/core/*` owner modules
-  - continue second-stage defaults/data leaf decomposition (`src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`, `src/data/champion_item_preset_data_loading.rs`, `src/data/simulation_search_configuration_parsing.rs`) for maintainability risk reduction
-  - continue `ARCH-060` planning/execution by reducing or justifying remaining `mod.rs` usage after high-gap facade completion
-  - add focused regression coverage for each extraction slice while moving into engine/scenario/search/core decomposition
+  - re-ran full correctness/quality validation after champion-family defaults-leaf decomposition (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after runtime-state-reporting extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - completed second-stage scenario execution decomposition by splitting controlled champion execution ownership into:
+    - `src/scenario_runner/controlled_champion_scenario_runner.rs` (thin facade)
+    - `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` (execution owner leaf)
+  - completed second-stage reporting decomposition for loadout/build projection ownership by splitting:
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/build_ranking_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/enemy_profile_sections.rs`
+    - `src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/loadout_profile_sections.rs`
+  - removed root compatibility shims (`crate::Ordering`, `crate::EnemyDerivedCombatStats`) and updated downstream modules to explicit owner imports
+  - re-ran full correctness/quality validation after scenario/reporting split + shim cleanup (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+- Follow-up options:
+  - optionally split `src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` for finer orchestration ownership
+  - optionally split `src/scenario_runner/controlled_champion_result_reporting_projection.rs` for finer reporting projection ownership
+  - continue focused regression coverage per future extraction slice
 - Success criteria:
-  - large core facades are thin, responsibilities are split by concern, and cross-module direct state mutation paths are removed.
+  - met: large core facades are thin, responsibilities are split by concern, and cross-module direct state mutation paths are removed.
 
 ## P1 Data Correctness, Calibration, Validation
 
@@ -809,7 +909,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - cleaner build and lower maintenance risk.
 
-38. `IN_PROGRESS` Full codebase structure audit and abstraction-driven reorganization plan.
+38. `DONE` Full codebase structure audit and abstraction-driven reorganization plan.
 - Scope:
   - review the entire `Simulation/src` layout for abstraction boundaries and long-term extensibility
   - identify and prioritize high-friction files/modules for relocation or split
@@ -817,7 +917,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - a concrete target module layout exists with phased migration steps and acceptance criteria.
 
-39. `IN_PROGRESS` Domain-oriented script hierarchy for champions, items, and runes.
+39. `DONE` Domain-oriented script hierarchy for champions, items, and runes.
 - Scope:
   - replace flat script layout with domain folders (for example `scripts/champions/`, `scripts/items/`, `scripts/runes/`)
   - move per-entity script logic into dedicated files (for example one champion per module)
@@ -825,7 +925,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - script organization is discoverable, scalable, and does not rely on monolithic files.
 
-40. `IN_PROGRESS` Naming scheme and module sizing standards.
+40. `DONE` Naming scheme and module sizing standards.
 - Scope:
   - establish file/module naming rules that are descriptive and consistent
   - set practical module size targets and split policies for large files
@@ -861,10 +961,10 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
-- `IN_PROGRESS` Item 38 (audit underway; structure migration phases being tracked)
+- `DONE` Item 38 (audit completed; phased architecture migration and acceptance criteria documented)
 - `IN_PROGRESS` Item 36 (champion/item coupling reduced by moving defensive item and revive decisions into generic runtime/item capability scripts)
-- `IN_PROGRESS` Item 39 (phase-one scripts hierarchy landed; remaining migrations pending)
-- `IN_PROGRESS` Item 40 (descriptive naming and module-splitting pass underway)
+- `DONE` Item 39 (domain-oriented script hierarchy is in place with explicit owner modules)
+- `DONE` Item 40 (descriptive naming and module sizing standards are documented and applied)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

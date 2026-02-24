@@ -1,0 +1,409 @@
+{
+  "name": "Zac",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 685.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "health",
+      "base": 0.0,
+      "per_level": 0.0,
+      "context_notes": "Champion does not use mana/energy as a standard regenerating resource for ability costs."
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 3.4
+    },
+    "attack_speed": {
+      "base": 0.736,
+      "per_level_percent": 1.6
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.567999958992,
+    "base_windup_seconds": 0.363000005483627,
+    "windup_fraction": 0.2315051115925948,
+    "windup_percent": 23.15051115925948,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.363000005483627,
+      "attack_total_time": 1.567999958992,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Cell Division",
+      "type": "Passive",
+      "description_source": "Innate - Goo:  Zac's abilities have a  health cost. Whenever Zac's abilities damage an enemy, he sheds a number of chunks on the ground that remain for a few seconds. Zac and enemy champions can collect the chunks; an enemy will destroy it, while Zac will  heal a portion of his maximum health.",
+      "effects": [
+        {
+          "id": "zac_p_effect_1",
+          "description": "Innate - The Secret Weapon: Zac gains increased percentage size equal to 1.5% of his bonus health, capped at 35% increased size at 2333.33 bonus health. Zac's size also reduces based on his missing health, down to 70% total size while at 0% health."
+        },
+        {
+          "id": "zac_p_effect_2",
+          "description": "Innate - Goo: Whenever Zac damages at least one enemy with an ability, he sheds a number of chunks of himself to a nearby location, landing towards nearby visible enemy champions and lasting for 6 seconds.\n Stretching Strikes: 1 chunk for each strike hit (excluding the collision) on different targets, up to 2\n Unstable Matter: 1 chunk if it hits at least one target\n Elastic Slingshot: 1 chunk for each enemy champion hit\n Let's Bounce!: 1 chunk for each bounce that hits an enemy champion, up to 4"
+        },
+        {
+          "id": "zac_p_effect_3",
+          "description": "Both Zac and enemy champions can interact with a chunk by being within 50 units of it: an enemy will destroy it, while Zac will consume it to heal for 4% : 8.47% (based on level) of his maximum health."
+        },
+        {
+          "id": "zac_p_effect_4",
+          "description": "Innate - Cell Division: Periodically, upon taking fatal damage, Zac enters resurrection for 8 / 7 / 6 / 5 / 4 (based on level) seconds, instantly restoring 50% of his maximum health and becoming untargetable and unable to act for the duration. Zac then splits into four uncontrollable bloblets away from his location, though stopping at terrain. After 1.5 seconds of the bloblets being untargetable, they start moving toward Zac's location over the remaining duration. Any damage the bloblets receive, excluding damage dealt in excess of each bloblet's total maximum health, is also redirected to Zac as true damage. While in resurrection, Zac cannot take damage from sources other than the redirected damage from his bloblets."
+        },
+        {
+          "id": "zac_p_effect_5",
+          "description": "After the duration, Zac is revived with 10 : 50% maximum health. Zac will die once all bloblets are killed."
+        },
+        {
+          "id": "zac_p_effect_6",
+          "description": "See Pets for stats and details for bloblets."
+        }
+      ],
+      "description": "Innate - The Secret Weapon: Zac gains increased percentage size equal to 1.5% of his bonus health, capped at 35% increased size at 2333.33 bonus health. Zac's size also reduces based on his missing health, down to 70% total size while at 0% health.",
+      "cooldown_seconds_by_rank": [
+        300.0,
+        300.0,
+        300.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The damage directed to Zac is internal raw damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Stretching Strikes",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            40.0,
+            55.0,
+            70.0,
+            85.0,
+            100.0
+          ],
+          "context_notes": "Active: Zac stretches his left arm in the target direction that catches the first enemy hit, dealing magic damage, slowing them by 40% for 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            80.0,
+            110.0,
+            140.0,
+            170.0,
+            200.0
+          ],
+          "context_notes": "Active: Zac stretches his left arm in the target direction that catches the first enemy hit, dealing magic damage, slowing them by 40% for 0."
+        },
+        {
+          "id": "zac_q_effect_2",
+          "description": "While the tether persists, Zac's next basic attack is replaced by a second Stretching Strike, empowering it to have a 0.25-second cast time and gain 25 bonus attack range. This attack cannot critically strike, nor apply on-hit effects."
+        },
+        {
+          "id": "zac_q_effect_3",
+          "description": "If the two Stretching Strikes affect different targets, both are knocked down and rooted for 0.5 seconds while the secondary target is dealt the initial magic damage and applied the same slow. After a 0.4-second delay, Zac displaces them toward each other over 300 units, though not through terrain."
+        },
+        {
+          "id": "zac_q_effect_4",
+          "description": "If the two targets are within 700 units of each other, they are instead slammed together through the displacement. Upon impact of each other, both targets are knocked up and stunned for 0.25 seconds and all enemies within the impact are dealt the initial magic damage and applied the same slow."
+        },
+        {
+          "id": "zac_q_effect_5",
+          "description": "Both Stretching Strikes (the cast and the empowered attack) reset Zac's basic attack timer. Zac is unable to move or attack while his left arm is in flight."
+        }
+      ],
+      "description": "Active: Zac stretches his left arm in the target direction that catches the first enemy hit, dealing magic damage, slowing them by 40% for 0.5 seconds, and forming a tether between Zac and the target for 2 seconds, during which they are revealed.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        12.5,
+        11.0,
+        9.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          8.0,
+          8.0,
+          8.0,
+          8.0,
+          8.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.33,
+        "projectile_speed": 2800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.33.",
+        "Source speed: 2800.",
+        "Source notes (summary): If both Stretching Strikes affect the same target, the target will be dealt the damage and applied the slow for both hits."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Unstable Matter",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Zac explodes to deal magic damage to nearby enemies hit based on their maximum health.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Active: Zac explodes to deal magic damage to nearby enemies, the damage based on the target's max health ratio is capped at 200 against minions and monsters."
+        },
+        {
+          "id": "capped_non_champion_damage",
+          "description": "Capped Non-Champion Damage",
+          "base_by_rank": [
+            240.0,
+            250.0,
+            260.0,
+            270.0,
+            280.0
+          ],
+          "context_notes": "Active: Zac explodes to deal magic damage to nearby enemies, the damage based on the target's max health ratio is capped at 200 against minions and monsters."
+        },
+        {
+          "id": "zac_w_effect_2",
+          "description": "Zac grants ghosting to aggroed monsters hit for 5 seconds."
+        },
+        {
+          "id": "zac_w_effect_3",
+          "description": "Unstable Matter's current cooldown is reduced by 1 second whenever Zac collects a Cell Division chunk."
+        }
+      ],
+      "description": "Active: Zac explodes to deal magic damage to nearby enemies, the damage based on the target's max health ratio is capped at 200 against minions and monsters.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): If Unstable Matter is the cause of monster aggro, the monsters will not receive ghosting."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Elastic Slingshot",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "maximum_range_channel_duration",
+          "description": "Maximum Range Channel Duration",
+          "base_by_rank": [
+            0.9,
+            1.0,
+            1.1,
+            1.2,
+            1.3
+          ],
+          "context_notes": "Active: Zac charges for up to 4."
+        },
+        {
+          "id": "zac_e_effect_2",
+          "description": "Elastic Slingshot can be recast within the duration. If Zac cancels the channel himself, or the charge completes without reactivation, 50% of Elastic Slingshot's health cost and cooldown are refunded."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            105.0,
+            150.0,
+            195.0,
+            240.0
+          ],
+          "context_notes": "Recast: Zac leaps to the target location within the boundaries of the cone."
+        }
+      ],
+      "description": "Active: Zac charges for up to 4.5 seconds to increase Elastic Slingshot's range over a cone in the target direction.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        19.0,
+        16.0,
+        13.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "current_health",
+        "value_by_rank": [
+          4.0,
+          4.0,
+          4.0,
+          4.0,
+          4.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1350.0,
+        "effect_hitbox_radius": 265.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Location.",
+        "Source castTime: none.",
+        "Source speed: 1350.",
+        "Source effectRadius: 265.",
+        "Source notes (summary): Quick casting: Elastic Slingshot's channel begins when the key is pressed and held, launching Zac towards the cursor when released."
+      ]
+    },
+    "ultimate": {
+      "name": "Let's Bounce!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Zac bounces four times. Each impact deals magic damage to enemies hit and briefly  knocks back and  slows them.",
+      "effects": [
+        {
+          "id": "primary_magic_damage",
+          "description": "Primary Magic Damage",
+          "base_by_rank": [
+            140.0,
+            210.0,
+            280.0
+          ],
+          "context_notes": "Active: Zac bounces after the cast time, then bounces 3 additional times each second over 3 seconds."
+        },
+        {
+          "id": "reduced_magic_damage",
+          "description": "Reduced Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0
+          ],
+          "context_notes": "Active: Zac bounces after the cast time, then bounces 3 additional times each second over 3 seconds."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            350.0,
+            525.0,
+            700.0
+          ],
+          "context_notes": "Active: Zac bounces after the cast time, then bounces 3 additional times each second over 3 seconds."
+        },
+        {
+          "id": "zac_r_effect_2",
+          "description": "Zac can move while Let's Bounce! is active, gaining ghosting and 20% : 50% (based on duration) bonus movement speed, but becomes unable to declare basic attacks, Stretching Strikes, and Elastic Slingshot. He also automatically consumes all chunks within the bounce radius."
+        }
+      ],
+      "description": "Active: Zac bounces after the cast time, then bounces 3 additional times each second over 3 seconds. Each bounce deals magic damage to enemies hit, knocks them back over 1 second, and slows them by 20% for the same duration. An enemy can be hit by multiple bounces, but ones beyond the first deal 50% damage to them and do not apply the knock back.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.3,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.3.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Spell shield only blocks a single instance of damage."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Zac.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Zac"
+  }
+}

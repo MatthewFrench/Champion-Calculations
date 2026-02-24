@@ -1,0 +1,316 @@
+{
+  "name": "Mordekaiser",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 645.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "shield",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 37.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 2.36599993705749,
+    "base_windup_seconds": 0.5,
+    "windup_fraction": 0.2113271400259766,
+    "windup_percent": 21.13271400259766,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.5,
+      "attack_total_time": 2.36599993705749,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Darkness Rise",
+      "type": "Passive",
+      "description_source": "Innate:  Mordekaiser's basic attacks deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "mordekaiser_p_effect_1",
+          "description": "Innate: Mordekaiser's basic attacks are empowered to deal 40% AP bonus magic damage on-hit."
+        },
+        {
+          "id": "mordekaiser_p_effect_2",
+          "description": "Innate: Mordekaiser generates a stack for each enemy champion or large monster damaged by his basic attacks on-hit or basic abilities, lasting for 4 seconds, refreshing on subsequent triggers, and stacking up to 3 times. At 3 stacks, he gains Darkness Rise."
+        },
+        {
+          "id": "mordekaiser_p_effect_3",
+          "description": "Darkness Rise: Mordekaiser gains 3% / 6% / 9% / 12% (based on level) bonus movement speed and deals[ 5 (+ 30% AP) (+ 1% : 5.47% (based on level) of target's maximum health) magic damage every second ][ 0.625 (+ 3.75% AP) (+ 0.13% : 0.68% (based on level) of target's maximum health) magic damage every 0.125 seconds ]to nearby enemies. Against monsters, the damage is capped at[ 40 : 218.82 (based on level) per second. ][ 5 : 25 (based on level) per 0.125 seconds. ]"
+        }
+      ],
+      "description": "Innate: Mordekaiser's basic attacks are empowered to deal 40% AP bonus magic damage on-hit.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): Darkness Rise deals persistent area damage damage around Mordekaiser, while the bonus damage on his basic attacks is proc damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Obliterate",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Mordekaiser smashes the area in the target direction, dealing magic damage to enemies within,  increased if it hits only one enemy.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            3.235294117647059,
+            6.470588235294118,
+            9.705882352941178,
+            12.941176470588236,
+            16.176470588235293,
+            19.411764705882355,
+            22.647058823529413,
+            25.88235294117647,
+            29.11764705882353,
+            32.35294117647059,
+            35.588235294117645,
+            38.82352941176471,
+            42.05882352941177,
+            45.294117647058826,
+            48.529411764705884,
+            51.76470588235294,
+            55.0
+          ],
+          "context_notes": "Active: Mordekaiser strikes his mace down in a line in the target direction, dealing magic damage to enemies within, increased if only one enemy is hit."
+        },
+        {
+          "id": "isolated_damage_increase",
+          "description": "Isolated Damage Increase",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Mordekaiser strikes his mace down in a line in the target direction, dealing magic damage to enemies within, increased if only one enemy is hit."
+        }
+      ],
+      "description": "Active: Mordekaiser strikes his mace down in a line in the target direction, dealing magic damage to enemies within, increased if only one enemy is hit.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.0,
+        6.0,
+        5.0,
+        4.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.5
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Indestructible",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Mordekaiser stores a portion of the damage he deals and receives as Potential Shield, up to a portion of his maximum health. This begins to decay after a brief time without fighting.",
+      "effects": [
+        {
+          "id": "mordekaiser_w_effect_1",
+          "description": "Passive: Mordekaiser stores 45% of the post-mitigation damage he deals and 7.5% of the pre-mitigation damage he takes,[ reduced by 75% for non-champion sources, ][ reduced to 11.25% of damage dealt and 3.75% of damage taken for non-champion sources, ]as Potential Shield on his secondary resource bar, up to 30% of his maximum health. The Potential Shield decays by 8 : 25 (based on level) every second after not dealing or taking damage for 1 second. While Indestructible is not on cooldown, the Potential Shield will not decay below a minimum of 5% of his maximum health, and it will be set to that amount when it comes off cooldown if it was previously below it."
+        },
+        {
+          "id": "mordekaiser_w_effect_2",
+          "description": "Active: Mordekaiser consumes his Potential Shield to grant himself a shield for the same amount for 4 seconds. The shield decays exponentially over the duration. Indestructible can be recast after 0.5 seconds while the shield is active."
+        },
+        {
+          "id": "shield_to_healing",
+          "description": "Shield to Healing",
+          "base_by_rank": [
+            35.0,
+            37.5,
+            40.0,
+            42.5,
+            45.0
+          ],
+          "context_notes": "Recast: Mordekaiser consumes the remaining shield, healing for a portion of the amount."
+        }
+      ],
+      "description": "Passive: Mordekaiser stores 45% of the post-mitigation damage he deals and 7.5% of the pre-mitigation damage he takes,[ reduced by 75% for non-champion sources, ][ reduced to 11.25% of damage dealt and 3.75% of damage taken for non-champion sources, ]as Potential Shield on his secondary resource bar, up to 30% of his maximum health. The Potential Shield decays by 8 : 25 (based on level) every second after not dealing or taking damage for 1 second. While Indestructible is not on cooldown, the Potential Shield will not decay below a minimum of 5% of his maximum health, and it will be set to that amount when it comes off cooldown if it was previously below it.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Death's Grasp",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Mordekaiser gains  magic penetration.",
+      "effects": [
+        {
+          "id": "magic_penetration",
+          "description": "Magic Penetration",
+          "base_by_rank": [
+            5.0,
+            7.5,
+            10.0,
+            12.5,
+            15.0
+          ],
+          "context_notes": "Passive: Mordekaiser gains magic penetration."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            75.0,
+            90.0,
+            105.0,
+            120.0
+          ],
+          "context_notes": "Active: Mordekaiser summons a claw in the target direction that grants sight of the area."
+        }
+      ],
+      "description": "Passive: Mordekaiser gains magic penetration.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        16.0,
+        14.0,
+        12.0,
+        10.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 3000.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 3000.",
+        "Source effectRadius: 800 / 200.",
+        "Source notes (summary): Death's Grasp will still pull even if Mordekaiser dies."
+      ]
+    },
+    "ultimate": {
+      "name": "Realm of Death",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "mordekaiser_r_effect_1",
+          "description": "Active: Mordekaiser aims his mace towards the target enemy champion, slowing them by 75% and revealing them over the cast time, and then banishing them with him to the Death Realm for 7 seconds. Mordekaiser also consumes the target's soul for 7 seconds, healing himself for 10% of their maximum health and reducing their current ability power, total attack speed, maximum health, armor, magic resistance, and size by 10% for the duration. Additionally, the target's base attack damage is reduced by 10% of their current total AD for the same duration. Mordekaiser gains the reduced stats of the target for himself for the same duration, and if the target dies while inside the Death Realm, he keeps their partial stats until they respawn."
+        },
+        {
+          "id": "mordekaiser_r_effect_2",
+          "description": "Units between realms see each other as spirits, considering each other dead and negating any interactions between each other. Only Mordekaiser and the target will enter the realm; other champions cannot follow them. Everything that occurs inside the Death Realm is hidden to units outside of it, and vice versa. Most pets still inside the realm are killed at its end."
+        },
+        {
+          "id": "mordekaiser_r_effect_3",
+          "description": "If one of the two affected champions leave the Death Realm, because of having died or having it dispelled, the other will do so as well."
+        }
+      ],
+      "description": "Active: Mordekaiser aims his mace towards the target enemy champion, slowing them by 75% and revealing them over the cast time, and then banishing them with him to the Death Realm for 7 seconds. Mordekaiser also consumes the target's soul for 7 seconds, healing himself for 10% of their maximum health and reducing their current ability power, total attack speed, maximum health, armor, magic resistance, and size by 10% for the duration. Additionally, the target's base attack damage is reduced by 10% of their current total AD for the same duration. Mordekaiser gains the reduced stats of the target for himself for the same duration, and if the target dies while inside the Death Realm, he keeps their partial stats until they respawn.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        120.0,
+        100.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 1200.",
+        "Source notes (summary): Mordekaiser's Realm of Death."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Mordekaiser.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Mordekaiser"
+  }
+}

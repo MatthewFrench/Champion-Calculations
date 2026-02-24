@@ -1,0 +1,327 @@
+{
+  "name": "Katarina",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 672.0,
+      "per_level": 108.0
+    },
+    "resource": {
+      "type": "none",
+      "base": 0.0,
+      "per_level": 0.0,
+      "context_notes": "Champion does not use mana/energy as a standard regenerating resource for ability costs."
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.74
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.150000005960464,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Voracity",
+      "type": "Passive",
+      "description_source": "Innate: Scoring a champion  takedown within a short time of damaging them  reduces the current cooldowns of  Katarina's  abilities.",
+      "effects": [
+        {
+          "id": "katarina_p_effect_1",
+          "description": "Innate: Scoring a champion takedown within 3 seconds of damaging them will reduce the current cooldowns of Katarina's abilities by 15 seconds."
+        },
+        {
+          "id": "katarina_p_effect_2",
+          "description": "Innate - Sinister Steel: Whenever Katarina retrieves a Dagger, she slashes around herself to deal 68 : 275 (based on level) (+ 60% bonus AD) (+ 70% / 80% / 90% / 100% (based on level) AP) magic damage to nearby enemies, apply on-hit effects to enemy champions hit, and reduce Shunpo's current cooldown by 78% / 84% / 90% / 96% (based on level) of its total cooldown."
+        },
+        {
+          "id": "katarina_p_effect_3",
+          "description": "Daggers grant sight of their radius and will disappear after being on the ground for 4 seconds."
+        }
+      ],
+      "description": "Innate: Scoring a champion takedown within 3 seconds of damaging them will reduce the current cooldowns of Katarina's abilities by 15 seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 340.",
+        "Source notes (summary): Voracity's cooldown reduction will still take effect even after Katarina dies."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bouncing Blade",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Katarina throws a Dagger at the target enemy that can bounce to up to two additional nearby enemies, dealing magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            115.0,
+            150.0,
+            185.0,
+            220.0
+          ],
+          "context_notes": "Active: Katarina throws a Dagger at the target enemy that deals magic damage and can bounce to up to two additional visible nearby enemies."
+        },
+        {
+          "id": "katarina_q_effect_2",
+          "description": "The Dagger lands 1.023 seconds after striking the first target, about 350 units opposite from their position when it struck them."
+        }
+      ],
+      "description": "Active: Katarina throws a Dagger at the target enemy that deals magic damage and can bounce to up to two additional visible nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 450.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 1600 / 0.15 seconds.",
+        "Source effectRadius: 450.",
+        "Source notes (summary): Bouncing Blade will not be destroyed in-flight if the target dies before reaching them but it will on clones that expire."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Preparation",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Katarina briefly gains  ghosting and a burst of  movement speed, tossing a Dagger into the air directly above herself.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement speed",
+          "base_by_rank": [
+            50.0,
+            60.0,
+            70.0,
+            80.0,
+            90.0
+          ],
+          "context_notes": "Active: Katarina tosses a Dagger into the air above her current location and gains bonus movement speed that decays until it lands after 1."
+        }
+      ],
+      "description": "Active: Katarina tosses a Dagger into the air above her current location and gains bonus movement speed that decays until it lands after 1.25 seconds, becoming ghosted for the same duration.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        14.0,
+        13.0,
+        12.0,
+        11.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Shunpo",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Katarina blinks to a target location near the unit or Dagger closest to the cursor, dealing magic damage to the nearest enemy in range and applying on-hit effects."
+        },
+        {
+          "id": "katarina_e_effect_2",
+          "description": "Katarina prioritizes blinking to the location near Daggers, then enemy champions, then enemy non-champions, and then any other unit."
+        },
+        {
+          "id": "katarina_e_effect_3",
+          "description": "Shunpo resets Katarina's basic attack timer."
+        }
+      ],
+      "description": "Active: Katarina blinks to a target location near the unit or Dagger closest to the cursor, dealing magic damage to the nearest enemy in range and applying on-hit effects.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.15
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.15.",
+        "Source notes (summary): Shunpo's effects occur before the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "Death Lotus",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "physical_damage_per_dagger",
+          "description": "Physical Damage Per Dagger",
+          "base_by_rank": [
+            16.0,
+            16.0,
+            16.0
+          ],
+          "context_notes": "Active: Katarina channels for up to 2."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            240.0,
+            240.0,
+            240.0
+          ],
+          "context_notes": "Active: Katarina channels for up to 2."
+        },
+        {
+          "id": "magic_damage_per_dagger",
+          "description": "Magic Damage Per Dagger",
+          "base_by_rank": [
+            25.0,
+            37.5,
+            50.0
+          ],
+          "context_notes": "Active: Katarina channels for up to 2."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            375.0,
+            562.5,
+            750.0
+          ],
+          "context_notes": "Active: Katarina channels for up to 2."
+        },
+        {
+          "id": "on_hit_damage_effectiveness",
+          "description": "On-Hit Damage Effectiveness",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Active: Katarina channels for up to 2."
+        },
+        {
+          "id": "katarina_r_effect_2",
+          "description": "An enemy champion within 500 units is required to cast this ability. The target does not have to be visible to be hit by this ability."
+        }
+      ],
+      "description": "Active: Katarina channels for up to 2.5 seconds, rapidly throwing a dagger every 0.166 seconds to up to 3 of the closest nearby enemy champions, revealing herself in the process.Each dagger deals physical damage and magic damage, applies on-hit effects, with on-hit damage reduced in effectiveness, triggers on-attack effects, and inflicts Grievous Wounds on the target for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        75.0,
+        60.0,
+        45.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2400.0,
+        "effect_hitbox_radius": 550.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: none.",
+        "Source speed: 2400.",
+        "Source effectRadius: 550.",
+        "Source notes (summary): An alternate form of writing the formula for the bonus AD ratio (and which the game data is using internally) is (16% × (1 + 312."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Katarina.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Katarina"
+  }
+}

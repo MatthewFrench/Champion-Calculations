@@ -1,0 +1,393 @@
+{
+  "name": "Ivern",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Catcher",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 450.0,
+      "per_level": 60.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 27.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 475.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 50.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 3.4
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 70.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Friend of the Forest",
+      "type": "Passive",
+      "effects": [
+        {
+          "id": "ivern_p_effect_1",
+          "description": "Innate: Ivern cannot attack nor damage non-epic monsters. Instead, targeting a jungle camp initiates a 2.5 second channel that will plant a grove upon the camp. Placing a grove costs 94.5 : -45.3 (based on level) health and 90 : -37.9 (based on level) mana. The channel cannot be cancelled in the first 0.15 seconds and in the last 0.5 seconds."
+        },
+        {
+          "id": "ivern_p_effect_2",
+          "description": "Ivern cannot place a grove while he is affected by cast-inhibiting crowd control or a lockout that disables abilities."
+        },
+        {
+          "id": "ivern_p_effect_3",
+          "description": "The grove matures over 40 : 1 (based on level) seconds. When fully matured, Ivern can target the camp again to free it after a 0.5-second cast time, clearing the camp and receiving the full gold and full experience bounties. Using Smite on a monster within the grove will instantly free the camp regardless of maturity."
+        },
+        {
+          "id": "ivern_p_effect_4",
+          "description": "If the camp's large monster has already been slain prior to planting a grove, Ivern will free the camp upon completing the channel at no cost. Similarly, the grove will instantly mature if the large monster is slain."
+        }
+      ],
+      "description": "Innate: Ivern cannot attack nor damage non-epic monsters. Instead, targeting a jungle camp initiates a 2.5 second channel that will plant a grove upon the camp. Placing a grove costs 94.5 : -45.3 (based on level) health and 90 : -37.9 (based on level) mana. The channel cannot be cancelled in the first 0.15 seconds and in the last 0.5 seconds.",
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source notes (summary): Freeing the Krug camp will only grant the gold and experience of 1 Ancient Krug, 2 Krugs, and 3 Mini Krugs."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Rootcaller",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Ivern throws a vine in the target direction that deals magic damage and  roots the first enemy hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            125.0,
+            170.0,
+            215.0,
+            260.0
+          ],
+          "context_notes": "Active: Ivern throws a vine in the target direction, dealing magic damage to the first enemy hit and rooting them for a duration, during which they are also revealed."
+        },
+        {
+          "id": "root_duration",
+          "description": "Root Duration",
+          "base_by_rank": [
+            1.6,
+            1.7,
+            1.8,
+            1.9,
+            2.0
+          ],
+          "context_notes": "Active: Ivern throws a vine in the target direction, dealing magic damage to the first enemy hit and rooting them for a duration, during which they are also revealed."
+        },
+        {
+          "id": "ivern_q_effect_2",
+          "description": "Ivern and allied champions can select the target rooted by Rootcaller to dash to their location, stopping at their attack range."
+        },
+        {
+          "id": "ivern_q_effect_3",
+          "description": "Recast: Ivern dashes to the rooted target."
+        },
+        {
+          "id": "ivern_q_effect_4",
+          "description": "Hitting a non-epic monster reduces Rootcaller's cooldown by 50%."
+        }
+      ],
+      "description": "Active: Ivern throws a vine in the target direction, dealing magic damage to the first enemy hit and rooting them for a duration, during which they are also revealed. Rootcaller can be recast while the target is rooted.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.25.",
+        "Source speed: 1300.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Brushmaker",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive: While  Ivern is in  brush, his basic attacks deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            20.0,
+            27.5,
+            35.0,
+            42.5,
+            50.0
+          ],
+          "context_notes": "Passive: While Ivern is in brush, his basic attacks are empowered to deal bonus magic damage on-hit."
+        },
+        {
+          "id": "ivern_w_effect_2",
+          "description": "Active: Ivern grows a patch of brush at the target location for 45 seconds, granting sight of the area within and around it for 8 seconds. Brushes despawn instantly after allied vision within them is lost. Spawning brush near terrain or other brush increases its radius."
+        },
+        {
+          "id": "ally_bonus_magic_damage",
+          "description": "Ally Bonus Magic Damage",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "While allied champions are in any brush when Ivern is within 1000 units, their basic attacks are empowered to fire a bolt at the target on-hit that deals them bonus magic damage."
+        },
+        {
+          "id": "ivern_w_effect_4",
+          "description": "Ivern periodically stocks a Brushmaker charge, up to a maximum of 3."
+        }
+      ],
+      "description": "Passive: While Ivern is in brush, his basic attacks are empowered to deal bonus magic damage on-hit. This bonus persists for 3 seconds after leaving brush.",
+      "cooldown_seconds_by_rank": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 3500.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 3500.",
+        "Source notes (summary): A brush will be immediately exposed if grown within the sight of an enemy turret."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Triggerseed",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ivern can target an ally champion,  Daisy, or himself to  shield them for a short time.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            75.0,
+            115.0,
+            155.0,
+            195.0,
+            235.0
+          ],
+          "context_notes": "Active: Ivern places a seed on the target allied champion, Daisy, or himself, granting the target a shield for 2 seconds."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            90.0,
+            110.0,
+            130.0,
+            150.0
+          ],
+          "context_notes": "After 2 seconds, the seed explodes to deal magic damage to nearby enemies and slow them for 2 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "After 2 seconds, the seed explodes to deal magic damage to nearby enemies and slow them for 2 seconds."
+        },
+        {
+          "id": "ivern_e_effect_3",
+          "description": "If the seed does not damage an enemy champion and the shield persists by the end of the duration, the shield is reapplied for the same strength and duration without the explosion effect."
+        }
+      ],
+      "description": "Active: Ivern places a seed on the target allied champion, Daisy, or himself, granting the target a shield for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): The explosion occurs regardless of whether the shield is maintained."
+      ]
+    },
+    "ultimate": {
+      "name": "Daisy!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Ivern summons his Sentinel friend  Daisy to fight with him.",
+      "effects": [
+        {
+          "id": "ivern_r_effect_1",
+          "description": "Active: Ivern summons his sentinel friend Daisy to his side, who lands 350 units away from him in the target direction and remains on the field for up to 45 seconds as a controllable pet."
+        },
+        {
+          "id": "ivern_r_effect_2",
+          "description": "Daisy! can be recast at any time while Daisy is alive."
+        },
+        {
+          "id": "ivern_r_effect_3",
+          "description": "Recast - Daisy, wait!: Ivern commands Daisy to move to the target location. If cast on Ivern, Daisy will follow him."
+        },
+        {
+          "id": "ivern_r_effect_4",
+          "description": "The recast of Daisy! can be used while affected by cast-inhibiting crowd control. See Pets for more details about Daisy."
+        }
+      ],
+      "description": "Active: Ivern summons his sentinel friend Daisy to his side, who lands 350 units away from him in the target direction and remains on the field for up to 45 seconds as a controllable pet.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        130.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5
+      },
+      "context_notes": [
+        "Source targeting: Direction / Location.",
+        "Source castTime: 0.5.",
+        "Source notes (summary): Only the initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ivern.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ivern"
+  }
+}

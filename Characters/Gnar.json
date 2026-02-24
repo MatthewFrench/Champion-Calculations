@@ -1,0 +1,355 @@
+{
+  "name": "Gnar",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Specialist",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 540.0,
+      "per_level": 79.0
+    },
+    "resource": {
+      "type": "rage",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 3.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 4.5,
+      "per_level": 1.25
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 6.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.153999999165534,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Rage Gene",
+      "type": "Passive",
+      "description_source": "Innate - Rage Gene:  Mini Gnar generates Rage while fighting. At maximum Rage, his next  ability will be  Mega Gnar's as he transforms, losing Mini Gnar's passive effects in exchange for increased stats and new abilities.",
+      "effects": [
+        {
+          "id": "gnar_p_effect_1",
+          "description": "Innate - Rage Gene: Mini Gnar generates 4 / 7 / 11 (based on level) Rage over 2 seconds upon dealing or receiving damage, up to 100. Against non-champions, basic attacks and Boomerang Throw instantly generate[ 0.5 / 0.875 / 1.375 (based on level) Rage. ][ 12.5% of the amount. ] Against champions, Boomerang Throw instantly generates[ 1 / 1.75 / 2.75 (based on level) Rage, ][ 25% of the amount, ]and basic attacks instantly generate[ 2 / 3.5 / 5.5 (based on level). ][ 50% of the amount. ] Boomerang Throw can only generate Rage once per cast, and grants Rage based on the first enemy hit. Gnar's Rage decays after being out of combat for 13 seconds."
+        },
+        {
+          "id": "gnar_p_effect_2",
+          "description": "At maximum Rage, Gnar's abilities switch to Mega Gnar's abilities, for 4 seconds and until transforming back to his Mini Gnar form, with the exception of Hop, which switches after the transformation. Casting any of them during this time also causes Gnar to transform into Mega Gnar instantly, else he will transform automatically after the 4 seconds have elapsed."
+        },
+        {
+          "id": "gnar_p_effect_3",
+          "description": "Gnar's Mega form lasts for 15 seconds, with his Rage bar depleting as an indication of remaining time. Rage cannot be generated while in this form. Afterwards, Gnar returns to Mini Gnar, retaining his current percentage health and becoming too tired to generate Rage for 15 seconds."
+        },
+        {
+          "id": "gnar_p_effect_4",
+          "description": "Gnar gains different stat bonuses based on whether he is in Mini or Mega form. Both of Gnar's forms share their ability cooldowns."
+        }
+      ],
+      "description": "Innate - Rage Gene: Mini Gnar generates 4 / 7 / 11 (based on level) Rage over 2 seconds upon dealing or receiving damage, up to 100. Against non-champions, basic attacks and Boomerang Throw instantly generate[ 0.5 / 0.875 / 1.375 (based on level) Rage. ][ 12.5% of the amount. ] Against champions, Boomerang Throw instantly generates[ 1 / 1.75 / 2.75 (based on level) Rage, ][ 25% of the amount, ]and basic attacks instantly generate[ 2 / 3.5 / 5.5 (based on level). ][ 50% of the amount. ] Boomerang Throw can only generate Rage once per cast, and grants Rage based on the first enemy hit. Gnar's Rage decays after being out of combat for 13 seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The Rage generated upon dealing or receiving damage occurs over 2 seconds with 4 ticks every 0."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Boomerang Throw",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Mini Gnar throws a boomerang in the target direction that deals physical damage and  slows enemies hit. At maximum range or hitting an enemy, the boomerang flies back toward Gnar based on his current movement, dealing reduced damage.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            5.0,
+            45.0,
+            85.0,
+            125.0,
+            165.0
+          ],
+          "context_notes": "Active: Gnar throws a boomerang in a line in the target direction that deals physical damage to enemies in its path and slows them for 2 seconds."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            2.5,
+            22.5,
+            42.5,
+            62.5,
+            82.5
+          ],
+          "context_notes": "Active: Gnar throws a boomerang in a line in the target direction that deals physical damage to enemies in its path and slows them for 2 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Active: Gnar throws a boomerang in a line in the target direction that deals physical damage to enemies in its path and slows them for 2 seconds."
+        },
+        {
+          "id": "gnar_q_effect_2",
+          "description": "Catching the boomerang while it is returning back refunds 40% of the ability's total cooldown."
+        },
+        {
+          "id": "gnar_q_effect_3",
+          "description": "Enemies can be hit only once per pass."
+        }
+      ],
+      "description": "Active: Gnar throws a boomerang in a line in the target direction that deals physical damage to enemies in its path and slows them for 2 seconds. After reaching its maximum range or hitting an enemy, the boomerang flies back toward Gnar based on his current movement, dealing 50% damage to subsequent targets.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2500 - 1400 / 60 - 2600.",
+        "Source notes (summary): The boomerang return direction is determined at the apex of its flight by Gnar's current position and which direction Gnar is heading at the time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Hyper",
+      "type": "Passive",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Mini Gnar's  basic attacks  on-hit and damaging  abilities apply  stacks. The third stack deals bonus magic damage based on the target's maximum health, and grants a burst of  movement speed to Gnar.",
+      "effects": [
+        {
+          "id": "gnar_w_effect_1",
+          "description": "Passive: Gnar's basic attacks on-hit and ability hits apply a stack of Hyper to enemies for 3.5 seconds, refreshing on subsequent applications and stacking up to 3 times."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0
+          ],
+          "context_notes": "The third stack against a target consumes them all to deal bonus magic damage, capped at 300 against monsters, and grant Gnar 20% / 40% / 60% / 80% (based on GNAR!"
+        },
+        {
+          "id": "gnar_w_effect_3",
+          "description": "Gnar gains Hyper's bonus movement speed when he leaves Mega form."
+        }
+      ],
+      "description": "Passive: Gnar's basic attacks on-hit and ability hits apply a stack of Hyper to enemies for 3.5 seconds, refreshing on subsequent applications and stacking up to 3 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The bonus movement speed's duration refreshes whenever Gnar would receive it (by hitting a target three times again)."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Hop",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Mini Gnar  leaps to the target location and bounces off of any unit he lands on,  leaping forth again without a bounce. He also gains  bonus attack speed for a few seconds.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "Active: Gnar leaps to the target location, then gains bonus attack speed for 6 seconds."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            50.0,
+            85.0,
+            120.0,
+            155.0,
+            190.0
+          ],
+          "context_notes": "If Gnar lands on a unit he will bounce 500 units further in the same direction."
+        },
+        {
+          "id": "gnar_e_effect_3",
+          "description": "If Hop is used to transform, it will not grant bonus attack speed. Instead, after bouncing Gnar will send out a shockwave as per Crunch where he lands."
+        },
+        {
+          "id": "gnar_e_effect_4",
+          "description": "Gnar will not bounce if he is immobilized during the first leap."
+        },
+        {
+          "id": "gnar_e_effect_5",
+          "description": "Boomerang Throw can be cast during the dash."
+        }
+      ],
+      "description": "Active: Gnar leaps to the target location, then gains bonus attack speed for 6 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        19.5,
+        17.0,
+        14.5,
+        12.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 150.",
+        "Source notes (summary): Hop does not allow Gnar to bounce off wards."
+      ]
+    },
+    "ultimate": {
+      "name": "GNAR!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "hyper_bonus_movement_speed",
+          "description": "Hyper Bonus Movement Speed",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0
+          ],
+          "context_notes": "Mini Gnar - Passive: Hyper's bonus movement speed is increased."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "Mega Gnar - Active: Gnar thrusts in the target direction, knocking away nearby enemies up to 590 units in that direction, though not through terrain, and afterwards dealing them physical damage, as well as slowing them by 45% after a 0."
+        },
+        {
+          "id": "disable_duration",
+          "description": "Disable Duration",
+          "base_by_rank": [
+            1.25,
+            1.5,
+            1.75
+          ],
+          "context_notes": "Mega Gnar - Active: Gnar thrusts in the target direction, knocking away nearby enemies up to 590 units in that direction, though not through terrain, and afterwards dealing them physical damage, as well as slowing them by 45% after a 0."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            300.0,
+            450.0,
+            600.0
+          ],
+          "context_notes": "Enemies that collide with terrain take 50% increased damage immediately and are stunned instantly instead of slowed after a delay."
+        }
+      ],
+      "description": "Mini Gnar - Passive: Hyper's bonus movement speed is increased.",
+      "cooldown_seconds_by_rank": [
+        90.0,
+        60.0,
+        30.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 475.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 475.",
+        "Source notes (summary): Gnar is locked out of moving and casting movement abilities for 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Gnar.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Gnar"
+  }
+}

@@ -130,7 +130,11 @@
       "ASSASSIN",
       "FIGHTER",
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447116_kinkoujitte.png",
   "simpleDescription": null,
@@ -139,11 +143,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.045583+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: weakpoints are directional arcs on nearby enemies; they expose after a 4-second delay and remain available for 11.25 seconds unless consumed earlier.",
       "Player-visible behavior: damaging an exposed weakpoint while facing its direction consumes that weakpoint immediately, applies the bonus true-damage payload, and grants short movement speed before a new weakpoint is assigned.",
-      "Post-rework Arena patch history confirms the current AD/AP scaling model and higher movement-speed floor used in this file."
+      "Post-rework Arena patch history confirms the current AD/AP scaling model and higher movement-speed floor used in this file.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

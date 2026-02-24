@@ -32,7 +32,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - high-traffic enemy read projections (name/position/hitbox/attack profile/health snapshots/status lines) now route through actor-state owner query APIs in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
   - trace-snapshot enemy-section composition now routes through actor-state owner projection APIs (`enemy_count`, `enemy_trace_snapshot_at`) in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
   - enemy auto-attack token lifecycle and next-hit bonus consume/reset now route through actor-state owner APIs in `Simulation/src/engine/actor_state/enemy_runtime_state.rs`
-- Search ownership extraction is now in progress under `Simulation/src/search/candidate_space/*`:
+- Search ownership extraction is complete under `Simulation/src/search/candidate_space/*`:
   - full-loadout candidate mutation/canonicalization helper ownership now routes through `Simulation/src/search/candidate_space/full_loadout_candidate_operations.rs`
   - full-loadout candidate scoring/ranking helper ownership now routes through `Simulation/src/search/candidate_space/full_loadout_candidate_scoring.rs`
   - item-only candidate mutation/crossover/parent-selection helper ownership now routes through `Simulation/src/search/candidate_space/item_candidate_operations.rs`
@@ -46,7 +46,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - full-loadout scoring/diversity helper ownership routes through `Simulation/src/search/scoring/full_loadout_scoring_and_diversity.rs`
   - stat-key targeted item-build selection helper ownership routes through `Simulation/src/search/scoring/stat_key_build_selection.rs`
   - item-name list formatting helper ownership routes through `Simulation/src/search/scoring/item_name_list_formatting.rs`
-- Scenario parsing ownership has started to move out of `Simulation/src/scenario_runner.rs`:
+- Scenario ownership extraction is complete and routes through explicit owner modules:
   - controlled champion/search-default parse helpers now route through `Simulation/src/scenario_runner/scenario_parsing.rs`
   - opponent encounter parse and legacy-key validation helpers now route through `Simulation/src/scenario_runner/encounter_parsing.rs` with typed parse output (`ParsedOpponentEncounter`)
   - run-output path/key formatting helpers now route through `Simulation/src/scenario_runner/run_output_paths.rs`
@@ -60,23 +60,31 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - controlled champion post-search result-reporting orchestration now routes through `Simulation/src/scenario_runner/controlled_champion_result_reporting.rs`
   - controlled champion ranked-build analysis and diagnostics assembly now route through `Simulation/src/scenario_runner/controlled_champion_result_build_analysis.rs`
   - controlled champion trace/report artifact writing now routes through `Simulation/src/scenario_runner/controlled_champion_result_artifact_writing.rs`
-  - fixed-loadout and fixed-loadout-rune-sweep execution entrypoint implementation now routes through `Simulation/src/scenario_runner/fixed_loadout_runner.rs` and `Simulation/src/scenario_runner/rune_sweep_runner.rs`
-  - controlled-champion scenario execution entrypoint implementation now routes through `Simulation/src/scenario_runner/controlled_champion_scenario_runner.rs`
+  - fixed-loadout and fixed-loadout-rune-sweep execution entrypoint implementation now routes through `Simulation/src/scenario_runner/fixed_loadout_runner.rs` and `Simulation/src/scenario_runner/rune_sweep_runner.rs`, with rune-sweep aggregation/report projection split into explicit leaves under `Simulation/src/scenario_runner/rune_sweep_runner/`
+  - controlled-champion scenario execution entrypoint now routes through `Simulation/src/scenario_runner/controlled_champion_scenario_runner.rs` facade and `Simulation/src/scenario_runner/controlled_champion_scenario_runner/controlled_champion_scenario_execution.rs` owner leaf
+- Root runtime/search/reporting/CLI contract ownership now routes through `Simulation/src/simulation_contracts.rs` plus explicit owner leaves under `Simulation/src/simulation_contracts/`, and `Simulation/src/main.rs` is now a thin orchestration entrypoint.
 - Core combat-primitives/status/cast-lock ownership now routes through `Simulation/src/core/combat_primitives_state.rs`.
 - Defaults champion/item simulation-default loading now routes through a thin defaults-loader facade plus explicit leaf owners:
   - `Simulation/src/defaults/champion_item_simulation_defaults_loader.rs`
   - `Simulation/src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`
+  - `Simulation/src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders/*.rs` (explicit champion-family leaves)
   - `Simulation/src/defaults/champion_item_simulation_defaults_loader/item_simulation_defaults_loaders.rs`
   - `Simulation/src/defaults/champion_item_simulation_defaults_loader/simulation_defaults_extraction_helpers.rs`
-- Defaults schema/type ownership now routes through `Simulation/src/defaults/simulator_defaults_schema_types.rs`.
+- Defaults schema/type ownership now routes through `Simulation/src/defaults/simulator_defaults_schema_types.rs` facade plus explicit leaves under `Simulation/src/defaults/simulator_defaults_schema_types/`.
+- Defaults champion-simulation metadata/AI/profile loader ownership now routes through `Simulation/src/defaults/champion_simulation_data_loading.rs`.
 - Defaults path/key normalization and shared JSON effect helper ownership now routes through `Simulation/src/defaults/defaults_path_key_and_effect_helpers.rs`.
-- Data champion/item/preset loading and URF legality ownership now routes through `Simulation/src/data/champion_item_preset_data_loading.rs`.
-- Data simulation/search configuration parsing ownership now routes through `Simulation/src/data/simulation_search_configuration_parsing.rs`.
+- Data champion/item/preset loading and URF legality ownership now routes through `Simulation/src/data/champion_item_preset_data_loading.rs` facade plus explicit leaves under `Simulation/src/data/champion_item_preset_data_loading/`.
+- Data simulation/search configuration parsing ownership now routes through `Simulation/src/data/simulation_search_configuration_parsing.rs` facade plus explicit parse owner leaves under `Simulation/src/data/simulation_search_configuration_parsing/`.
 - Data loadout-domain modeling/legality/sampling ownership now routes through `Simulation/src/data/loadout_domain_modeling.rs`.
 - Data loadout effect/stat resolution ownership now routes through `Simulation/src/data/loadout_effect_resolution.rs`.
 - Runtime combat bonus-resolution ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`.
+- Runtime rune-proc state mutation ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/combat_bonus_resolution/rune_proc_state_mutations.rs`.
 - Runtime rune-proc telemetry ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`.
-- Reporting markdown run-report rendering ownership now routes through `Simulation/src/reporting/controlled_champion_report_markdown_writer.rs`.
+- Runtime state initialization/reset ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/runtime_state_initialization.rs`.
+- Runtime mutation-effect ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/runtime_effect_mutations.rs`.
+- Runtime read-only projection ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/runtime_stat_projections.rs`.
+- Runtime cooldown/stack reporting ownership now routes through `Simulation/src/scripts/runtime/loadout_runtime/runtime_state_reporting.rs`.
+- Reporting markdown run-report rendering ownership now routes through `Simulation/src/reporting/controlled_champion_report_markdown_writer.rs` facade plus explicit section leaves under `Simulation/src/reporting/controlled_champion_report_markdown_writer/` and `Simulation/src/reporting/controlled_champion_report_markdown_writer/loadout_and_build_sections/`.
 - Reporting JSON run-report serialization ownership now routes through `Simulation/src/reporting/controlled_champion_report_json_writer.rs`.
 - Controlled champion reports and trace outputs focus on the optimized build outcome (no baseline comparison workflow).
 - Reports explicitly flag controlled champion rune selections that are currently unmodeled in deterministic/runtime combat logic.

@@ -82,7 +82,11 @@
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4637_mage_t3_demonicembrace.png",
   "simpleDescription": null,
@@ -93,10 +97,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.051189+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Sinister Pact is modeled as a missing-health scaler that increases both ability power and bonus movement speed at identical per-100-missing-health rates.",
-      "Bonuses scale off missing current health, capped at 3000 missing health (45% AP and 45% bonus move speed)."
+      "Bonuses scale off missing current health, capped at 3000 missing health (45% AP and 45% bonus move speed).",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

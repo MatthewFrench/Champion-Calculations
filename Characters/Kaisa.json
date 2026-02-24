@@ -1,0 +1,392 @@
+{
+  "name": "Kai'Sa",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 102.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 345.0,
+      "per_level": 40.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 2.6
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 1.8
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.55200004577636,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.16108246947566424,
+    "windup_percent": 16.108246947566425,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.55200004577636,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Second Skin",
+      "type": "Passive",
+      "description_source": "Innate - Living Weapon:  Kai'Sa can permanently evolve each of her basic abilities by obtaining  attack damage,  ability power, and  attack speed, respectively.",
+      "effects": [
+        {
+          "id": "kaisa_p_effect_1",
+          "description": "Innate - Living Weapon: Kai'Sa can evolve each of her basic abilities by gaining a set amount of permanent stats from items and stat growth, granting them additional effects. Evolving an ability causes her to enter a 2-second cast time. The upgrade is lost if the stat requirement is no longer met."
+        },
+        {
+          "id": "kaisa_p_effect_2",
+          "description": "Innate - Plasma: Kai'Sa's basic attacks on-hit and Void Seeker apply stacks of Plasma to enemies for 4 seconds, refreshing on subsequent applications and stacking up to 5 times. Basic attacks each apply 1 stack and Void Seeker applies 2 stacks, increased to 3 if it is evolved. Her and nearby allies' immobilizing effects and polymorphs against enemy champions will also apply a stack of Plasma."
+        },
+        {
+          "id": "kaisa_p_effect_3",
+          "description": "Innate - Caustic Wounds: Plasma stacks applied by Kai'Sa's basic attacks or Void Seeker deal 4 : 26.35 (based on level) (+ 12% AP) bonus magic damage plus 1 : 6.59 (based on level) (+ 3% AP) additional magic damage per Plasma stack before application, up to a total of 8 : 52.71 (based on level) (+ 24% AP) bonus magic damage at 4 Plasma stacks before application. The fifth stack against a target consumes them all to deal additional bonus magic damage equal to 15% (+ 6% per 100 AP) of the target's missing health, capped at 400 against monsters."
+        }
+      ],
+      "description": "Innate - Living Weapon: Kai'Sa can evolve each of her basic abilities by gaining a set amount of permanent stats from items and stat growth, granting them additional effects. Evolving an ability causes her to enter a 2-second cast time. The upgrade is lost if the stat requirement is no longer met.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 2750.",
+        "Source notes (summary): Adaptive force from items does not count toward evolutions."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Icathian Rain",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Kai'Sa shoots a swarm of missiles that evenly seek out nearby enemies, dealing physical damage.",
+      "effects": [
+        {
+          "id": "physical_damage_per_missile",
+          "description": "Physical Damage Per Missile",
+          "base_by_rank": [
+            40.0,
+            55.0,
+            70.0,
+            85.0,
+            100.0
+          ],
+          "context_notes": "Active: Kai'Sa releases a swarm of 6 missiles that evenly distributes among nearby visible enemies, each one hitting their target after 0."
+        },
+        {
+          "id": "reduced_damage_per_missile",
+          "description": "Reduced Damage Per Missile",
+          "base_by_rank": [
+            10.0,
+            13.75,
+            17.5,
+            21.25,
+            25.0
+          ],
+          "context_notes": "Non-minions take 25% damage from missiles beyond their first."
+        },
+        {
+          "id": "total_single_target_damage",
+          "description": "Total Single-Target Damage",
+          "base_by_rank": [
+            90.0,
+            123.75,
+            157.5,
+            191.25,
+            225.0
+          ],
+          "context_notes": "Non-minions take 25% damage from missiles beyond their first."
+        },
+        {
+          "id": "total_evolved_single_target_damage",
+          "description": "Total Evolved Single-Target Damage",
+          "base_by_rank": [
+            150.0,
+            206.25,
+            262.5,
+            318.75,
+            375.0
+          ],
+          "context_notes": "Evolution: Requires[ 100 : 49 (based on level) attack damage from items ][ 100 attack damage from items and stat growth ]to upgrade : Icathian Rain instead fires 12 missiles."
+        },
+        {
+          "id": "kaisa_q_effect_4",
+          "description": "A nearby enemy is required to cast this ability."
+        }
+      ],
+      "description": "Active: Kai'Sa releases a swarm of 6 missiles that evenly distributes among nearby visible enemies, each one hitting their target after 0.4 seconds to deal physical damage. Minions below 35% health take double damage.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          55.0,
+          55.0,
+          55.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: none.",
+        "Source notes (summary): The first missile on a target applies area damage, while the rest on the same target apply persistent area damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Void Seeker",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Kai'Sa fires a void bolt in the target direction that grants  sight around its trajectory as it travels and deals magic damage to the first enemy hit,  revealing them for a few seconds.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            30.0,
+            55.0,
+            80.0,
+            105.0,
+            130.0
+          ],
+          "context_notes": "Active: Kai'Sa fires a void bolt in the target direction that briefly grants sight around its trajectory as it travels, deals magic damage to the first enemy hit, applies 2 Plasma, and reveals them for 4 seconds."
+        },
+        {
+          "id": "kaisa_w_effect_2",
+          "description": "Evolution: Requires 100 ability power from items to upgrade : Void Seeker applies 3 Plasma instead and refunds 75% of its cooldown if it hits an enemy champion."
+        }
+      ],
+      "description": "Active: Kai'Sa fires a void bolt in the target direction that briefly grants sight around its trajectory as it travels, deals magic damage to the first enemy hit, applies 2 Plasma, and reveals them for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.0,
+        18.0,
+        16.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          60.0,
+          65.0,
+          70.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4,
+        "projectile_speed": 1750.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.4.",
+        "Source speed: 1750.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Supercharge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Kai'Sa briefly becomes  ghosted and gains  bonus move speed during the cast time, then gains  bonus attack speed for a few seconds.",
+      "effects": [
+        {
+          "id": "minimum_movement_speed",
+          "description": "Minimum Movement Speed",
+          "base_by_rank": [
+            55.0,
+            60.0,
+            65.0,
+            70.0,
+            75.0
+          ],
+          "context_notes": "Active: Kai'Sa charges up over the cast time, during which she is still able to move, becoming ghosted and gaining bonus movement speed for the duration, with the effectiveness increased by 0% : 100% (based on bonus attack speed)."
+        },
+        {
+          "id": "maximum_movement_speed",
+          "description": "Maximum Movement Speed",
+          "base_by_rank": [
+            110.0,
+            120.0,
+            130.0,
+            140.0,
+            150.0
+          ],
+          "context_notes": "Active: Kai'Sa charges up over the cast time, during which she is still able to move, becoming ghosted and gaining bonus movement speed for the duration, with the effectiveness increased by 0% : 100% (based on bonus attack speed)."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "After completing the charge, she gains bonus attack speed for 4 seconds, during which her attacks have a lower windup of 6."
+        },
+        {
+          "id": "kaisa_e_effect_3",
+          "description": "Supercharge's current cooldown is reduced by 0.5 seconds on-attack."
+        },
+        {
+          "id": "kaisa_e_effect_4",
+          "description": "Evolution: Requires[ 100% : 65% (based on level) attack speed from items ][ 100% attack speed from items and stat growth ]to upgrade : Supercharge grants invisibility at the start of the cast time for 0.5 seconds."
+        }
+      ],
+      "description": "Active: Kai'Sa charges up over the cast time, during which she is still able to move, becoming ghosted and gaining bonus movement speed for the duration, with the effectiveness increased by 0% : 100% (based on bonus attack speed).",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 1.2
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 1.2 : 0.6 (based on bonus attack speed).",
+        "Source notes (summary): Her attack commands during this time are switched to movement commands instead."
+      ]
+    },
+    "ultimate": {
+      "name": "Killer Instinct",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Kai'Sa briefly  shields herself and  dashes near an enemy champion affected by Plasma.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            70.0,
+            90.0,
+            110.0
+          ],
+          "context_notes": "Active: Kai'Sa grants herself a shield for 2 seconds and dashes to a target location near a visible enemy champion that was affected by Plasma within the last 4 seconds."
+        },
+        {
+          "id": "kaisa_r_effect_2",
+          "description": "An enemy champion within range and affected by Plasma is required to cast this ability. Killer Instinct resets Kai'Sa's basic attack timer. Kai'Sa can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Active: Kai'Sa grants herself a shield for 2 seconds and dashes to a target location near a visible enemy champion that was affected by Plasma within the last 4 seconds. The shield's duration is refreshed when the dash ends.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        100.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 3800.0,
+        "effect_hitbox_radius": 525.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 3800.",
+        "Source effectRadius: 525.",
+        "Source notes (summary): Kai'Sa will issue a movement command to the targeted location regardless of whether the target location is valid."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kaisa.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kaisa"
+  }
+}

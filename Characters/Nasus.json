@@ -1,0 +1,422 @@
+{
+  "name": "Nasus",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 326.0,
+      "per_level": 62.0
+    },
+    "move_speed": 350.0,
+    "armor": {
+      "base": 34.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 7.45,
+      "per_level": 0.5
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 67.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 3.48
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0986036509275436,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Soul Eater",
+      "type": "Passive",
+      "description_source": "Innate:  Nasus gains  life steal based on level.",
+      "effects": [
+        {
+          "id": "nasus_p_effect_1",
+          "description": "Innate: Nasus gains 12% / 18% / 24% (based on level) life steal."
+        }
+      ],
+      "description": "Innate: Nasus gains 12% / 18% / 24% (based on level) life steal.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Siphoning Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Nasus' next basic attack within a period will gain  bonus range and deal bonus physical damage based on the amount of Siphoning Strike stacks.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Active: Nasus empowers his next basic attack within 10 seconds to have an uncancellable windup, gain 50 bonus range, and deal bonus physical damage."
+        },
+        {
+          "id": "nasus_q_effect_2",
+          "description": "If Siphoning Strike kills the target, Nasus permanently gains 3 stacks, increased to 12 if the target is a champion, large minion, or large monster."
+        },
+        {
+          "id": "nasus_q_effect_3",
+          "description": "Siphoning Strike resets Nasus' basic attack timer."
+        }
+      ],
+      "description": "Active: Nasus empowers his next basic attack within 10 seconds to have an uncancellable windup, gain 50 bonus range, and deal bonus physical damage. Siphoning Strike's base damage is affected by critical strike modifiers.",
+      "cooldown_seconds_by_rank": [
+        7.5,
+        6.5,
+        5.5,
+        4.5,
+        3.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Both Siphoning Strike's base damage and damage from stacks are treated as basic damage but also trigger spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Wither",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Nasus ages the target enemy champion for a few seconds, gradually  slowing and  crippling them over the duration.",
+      "effects": [
+        {
+          "id": "maximum_slow",
+          "description": "Maximum Slow",
+          "base_by_rank": [
+            47.0,
+            59.0,
+            71.0,
+            83.0,
+            95.0
+          ],
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+        },
+        {
+          "id": "additional_slow_per_second",
+          "description": "Additional Slow Per Second",
+          "base_by_rank": [
+            3.0,
+            6.0,
+            9.0,
+            12.0,
+            15.0
+          ],
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+        },
+        {
+          "id": "maximum_cripple",
+          "description": "Maximum Cripple",
+          "base_by_rank": [
+            35.25,
+            44.25,
+            53.25,
+            62.25,
+            71.25
+          ],
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+        },
+        {
+          "id": "additional_cripple_per_second",
+          "description": "Additional Cripple Per Second",
+          "base_by_rank": [
+            2.25,
+            4.5,
+            6.75,
+            9.0,
+            11.25
+          ],
+          "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26."
+        }
+      ],
+      "description": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by[ 75% of that amount, ][ 26.25%, ]both increasing every second over the duration.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        14.0,
+        13.0,
+        12.0,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Wither interrupts the target's attack windup when it is first applied."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Spirit Fire",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Nasus unleashes a spirit fire at the target location that deals magic damage to enemies within.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            80.0,
+            110.0,
+            140.0,
+            170.0
+          ],
+          "context_notes": "Active: Nasus unleashes a spirit fire at the target location, granting sight of the area for 2."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            10.0,
+            16.0,
+            22.0,
+            28.0,
+            34.0
+          ],
+          "context_notes": "The fire then remains for 5 seconds, dealing magic damage each second to enemies within and inflicting them with armor reduction, lingering for 1 second."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            100.0,
+            160.0,
+            220.0,
+            280.0,
+            340.0
+          ],
+          "context_notes": "The fire then remains for 5 seconds, dealing magic damage each second to enemies within and inflicting them with armor reduction, lingering for 1 second."
+        },
+        {
+          "id": "armor_reduction",
+          "description": "Armor Reduction",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "The fire then remains for 5 seconds, dealing magic damage each second to enemies within and inflicting them with armor reduction, lingering for 1 second."
+        }
+      ],
+      "description": "Active: Nasus unleashes a spirit fire at the target location, granting sight of the area for 2.5 seconds and, after a 0.264 seconds delay, dealing magic damage to enemies within.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 400 /  200.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "ultimate": {
+      "name": "Fury of the Sands",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Nasus empowers himself for some time, gaining bonus size,  health,  armor,  magic resist, and  attack range.",
+      "effects": [
+        {
+          "id": "bonus_health",
+          "description": "Bonus Health",
+          "base_by_rank": [
+            300.0,
+            450.0,
+            600.0
+          ],
+          "context_notes": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration."
+        },
+        {
+          "id": "bonus_resistances",
+          "description": "Bonus Resistances",
+          "base_by_rank": [
+            40.0,
+            55.0,
+            70.0
+          ],
+          "context_notes": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration."
+        },
+        {
+          "id": "increased_size",
+          "description": "Increased Size",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            1.5,
+            2.0,
+            2.5
+          ],
+          "context_notes": "While Nasus is empowered, he deals magic damage every 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            45.0,
+            60.0,
+            75.0
+          ],
+          "context_notes": "While Nasus is empowered, he deals magic damage every 0."
+        }
+      ],
+      "description": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.2,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.2.",
+        "Source effectRadius: 400.",
+        "Source notes (summary): Fury of the Sands' bonus health is not affected by Grievous Wounds and Nasus retains it once the duration ends."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Nasus.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Nasus"
+  }
+}

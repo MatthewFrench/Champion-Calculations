@@ -1,0 +1,419 @@
+{
+  "name": "Volibear",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 70.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 6.25,
+      "per_level": 0.5
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "The Relentless Storm",
+      "type": "Passive",
+      "description_source": "Innate:  Volibear's  basic attacks and  ability hits generate a  stack of The Relentless Storm, which stacks up to 5 times. At 5 stacks, he gains Lightning Claws.",
+      "effects": [
+        {
+          "id": "volibear_p_effect_1",
+          "description": "Innate: Whenever Volibear damages at least one enemy with a basic attack or ability, he generates a stack of The Relentless Storm for 6 seconds, refreshing on subsequent damage and stacking up to 5 times. At 5 stacks, Volibear gains Lightning Claws."
+        },
+        {
+          "id": "volibear_p_effect_2",
+          "description": "The Relentless Storm: For each stack, Volibear gains 5% (+ 3% per 100 AP) bonus attack speed, up to 25% (+ 15% per 100 AP)."
+        },
+        {
+          "id": "volibear_p_effect_3",
+          "description": "Lightning Claws: Volibear's claws ignite with lightning, empowering his basic attacks on-hit to deal 11 : 68 (based on level) (+ 45% AP) bonus magic damage to the target and the nearest visible enemy within 450 units of the target, chaining up to 4 subsequent targets."
+        }
+      ],
+      "description": "Innate: Whenever Volibear damages at least one enemy with a basic attack or ability, he generates a stack of The Relentless Storm for 6 seconds, refreshing on subsequent damage and stacking up to 5 times. At 5 stacks, Volibear gains Lightning Claws.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 450.",
+        "Source notes (summary): Volibear's spikes visually grow as The Relentless Storm stacks."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Thundering Smash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Volibear becomes  ghosted and gains  bonus movement speed for a few seconds, increased while facing an enemy champion.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            12.0,
+            15.5,
+            19.0,
+            22.5,
+            26.0
+          ],
+          "context_notes": "Active: Volibear drops on all fours, becoming ghosted and gaining bonus movement speed for 4 seconds, doubled while facing a nearby visible enemy champion."
+        },
+        {
+          "id": "increased_bonus_movement_speed",
+          "description": "Increased Bonus Movement Speed",
+          "base_by_rank": [
+            24.0,
+            31.0,
+            38.0,
+            45.0,
+            52.0
+          ],
+          "context_notes": "Active: Volibear drops on all fours, becoming ghosted and gaining bonus movement speed for 4 seconds, doubled while facing a nearby visible enemy champion."
+        },
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "During this time, Volibear's next basic attack is empowered to have an uncancellable windup, gain 25 bonus range, and pounce on the target, dealing bonus physical damage and stunning them for 1 second."
+        },
+        {
+          "id": "volibear_q_effect_3",
+          "description": "If Volibear becomes immobilized or polymorphed by an enemy during Thundering Smash, the effect ends prematurely and the cooldown is reset."
+        },
+        {
+          "id": "volibear_q_effect_4",
+          "description": "Thundering Smash resets Volibear's basic attack timer."
+        }
+      ],
+      "description": "Active: Volibear drops on all fours, becoming ghosted and gaining bonus movement speed for 4 seconds, doubled while facing a nearby visible enemy champion.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 2000.",
+        "Source notes (summary): Thundering Smash's bonus damage cannot critically strike; the base damage of the attack can, however."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Frenzied Maul",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Volibear strikes the target enemy to deal physical damage based on his bonus health, apply  on-hit and  on-attack effects, and mark them Wounded for a period.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            5.0,
+            30.0,
+            55.0,
+            80.0,
+            105.0
+          ],
+          "context_notes": "Active: Volibear slashes the target enemy with his claws to deal physical damage, apply on-hit effects, trigger on-attack effects, and mark the target Wounded for 8 seconds."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Wounded Bonus: If the target is already Wounded, Volibear takes a bite out of them instead, dealing 50% (+ 15% per 100 bonus AD) increased damage and healing himself."
+        },
+        {
+          "id": "minion_heal",
+          "description": "Minion Heal",
+          "base_by_rank": [
+            10.0,
+            17.5,
+            25.0,
+            32.5,
+            40.0
+          ],
+          "context_notes": "Wounded Bonus: If the target is already Wounded, Volibear takes a bite out of them instead, dealing 50% (+ 15% per 100 bonus AD) increased damage and healing himself."
+        },
+        {
+          "id": "volibear_w_effect_3",
+          "description": "Frenzied Maul applies life steal."
+        }
+      ],
+      "description": "Active: Volibear slashes the target enemy with his claws to deal physical damage, apply on-hit effects, trigger on-attack effects, and mark the target Wounded for 8 seconds.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Volibear will be ordered to basic attack the target after casting Frenzied Maul."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Sky Splitter",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Volibear conjures a lightning bolt to strike the target location, dealing magic damage to enemies hit based on their maximum health and  slowing them for a short time.",
+      "effects": [
+        {
+          "id": "volibear_e_effect_1",
+          "description": "Active: Volibear summons a lightning bolt to strike at the target location after a 2-second delay, granting sight of the area for 1 second after the first second of the delay. If Volibear is within the strike, he gains a shield equal to 14% of his maximum health (+ 75% AP) for 3 seconds."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            110.0,
+            140.0,
+            170.0,
+            200.0
+          ],
+          "context_notes": "The bolt deals magic damage to enemies hit, capped against non- champions, and slows them by 40% for 2 seconds."
+        },
+        {
+          "id": "non_champion_capped_damage",
+          "description": "Non-Champion Capped Damage",
+          "base_by_rank": [
+            150.0,
+            265.0,
+            380.0,
+            495.0,
+            610.0
+          ],
+          "context_notes": "The bolt deals magic damage to enemies hit, capped against non- champions, and slows them by 40% for 2 seconds."
+        }
+      ],
+      "description": "Active: Volibear summons a lightning bolt to strike at the target location after a 2-second delay, granting sight of the area for 1 second after the first second of the delay. If Volibear is within the strike, he gains a shield equal to 14% of his maximum health (+ 75% AP) for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        16.0,
+        16.0,
+        16.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 325 / 425.",
+        "Source notes (summary): Enemies cannot see the location of the cast for the first second, but they can already tell that the spell is underway by noticing Volibear's cast animation."
+      ]
+    },
+    "ultimate": {
+      "name": "Stormbringer",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Volibear gains Stormbringer and  leaps with  Cc-immunity to the target location. The impact deals physical damage to enemies hit in the epicenter, and briefly  slows nearby enemies.",
+      "effects": [
+        {
+          "id": "volibear_r_effect_1",
+          "description": "Active: Volibear gains Stormbringer for 12 seconds and leaps to the target location with displacement immunity over 1 second, granting sight of the area in a 500 radius during the travel."
+        },
+        {
+          "id": "bonus_health",
+          "description": "Bonus Health",
+          "base_by_rank": [
+            175.0,
+            350.0,
+            525.0
+          ],
+          "context_notes": "Stormbringer: Volibear gains ghosting, bonus health, 50 bonus attack range, 25 increased range on Frenzied Maul, and 35% increased size."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            300.0,
+            500.0,
+            700.0
+          ],
+          "context_notes": "Volibear impacts after 1 second, slowing nearby enemies by 50% decaying over 1 second."
+        },
+        {
+          "id": "turret_disable_duration",
+          "description": "Turret Disable Duration",
+          "base_by_rank": [
+            2.0,
+            3.0,
+            4.0
+          ],
+          "context_notes": "Volibear also disables enemy turrets in an area for a duration, rendering them unable to attack, as well as dealing them the same damage."
+        },
+        {
+          "id": "volibear_r_effect_5",
+          "description": "Thundering Smash's duration will be paused for the leap."
+        }
+      ],
+      "description": "Active: Volibear gains Stormbringer for 12 seconds and leaps to the target location with displacement immunity over 1 second, granting sight of the area in a 500 radius during the travel.",
+      "cooldown_seconds_by_rank": [
+        160.0,
+        135.0,
+        110.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 750.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 750.",
+        "Source effectRadius: 300 / 500 / 700.",
+        "Source notes (summary): Stormbringer will disable any turret that is not the Nexus Obelisk, even if it is untargetable."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Volibear.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Volibear"
+  }
+}

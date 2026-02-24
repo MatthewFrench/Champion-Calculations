@@ -1,0 +1,440 @@
+{
+  "name": "Zoe",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 106.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 425.0,
+      "per_level": 25.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.65
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.138541668653488,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "More Sparkles!",
+      "type": "Passive",
+      "description_source": "Innate: After casting an ability,  Zoe's next basic attack or  Spell Thief bolt within a few seconds will deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "zoe_p_effect_1",
+          "description": "Innate: After casting an ability, Zoe empowers her next basic attack or Spell Thief bolt within 5 seconds to become non-projectile and deal 16 : 150 (based on level) (+ 20% AP) bonus magic damage."
+        }
+      ],
+      "description": "Innate: After casting an ability, Zoe empowers her next basic attack or Spell Thief bolt within 5 seconds to become non-projectile and deal 16 : 150 (based on level) (+ 20% AP) bonus magic damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The empowered attack will trigger but not be consumed against wards."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Paddle Star!",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Zoe shoots a star in the target direction that explodes upon hitting an enemy, dealing magic damage to nearby enemies hit based on the distance travelled.",
+      "effects": [
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            2.0,
+            5.294117647058823,
+            8.588235294117647,
+            11.882352941176471,
+            15.176470588235293,
+            18.470588235294116,
+            21.764705882352942,
+            25.058823529411764,
+            28.352941176470587,
+            31.64705882352941,
+            34.94117647058823,
+            38.23529411764706,
+            41.529411764705884,
+            44.8235294117647,
+            48.11764705882353,
+            51.41176470588235,
+            54.705882352941174,
+            58.0
+          ],
+          "context_notes": "Active: Zoe shoots a star in the target direction that explodes upon hitting an enemy, dealing magic damage to nearby enemies hit."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            5.0,
+            13.235294117647058,
+            21.470588235294116,
+            29.705882352941174,
+            37.94117647058823,
+            46.17647058823529,
+            54.41176470588235,
+            62.647058823529406,
+            70.88235294117646,
+            79.11764705882352,
+            87.35294117647058,
+            95.58823529411764,
+            103.8235294117647,
+            112.05882352941175,
+            120.29411764705881,
+            128.52941176470586,
+            136.76470588235293,
+            145.0
+          ],
+          "context_notes": "Active: Zoe shoots a star in the target direction that explodes upon hitting an enemy, dealing magic damage to nearby enemies hit."
+        },
+        {
+          "id": "zoe_q_effect_2",
+          "description": "The star lingers at maximum range for 1 second, during which Paddle Star! can be recast after 0.25 seconds in the duration."
+        },
+        {
+          "id": "zoe_q_effect_3",
+          "description": "Recast: Zoe redirects the star in the target path, empowering it with increased speed and radius, and resetting its damage modifier on cast. The redirected star can travel until it reaches 800-units outbound from Zoe."
+        },
+        {
+          "id": "zoe_q_effect_4",
+          "description": "Paddle Star!'s recast can be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Active: Zoe shoots a star in the target direction that explodes upon hitting an enemy, dealing magic damage to nearby enemies hit. The total damage is increased by 0% : 150% (based on distance traveled).",
+      "cooldown_seconds_by_rank": [
+        8.5,
+        8.0,
+        7.5,
+        7.0,
+        6.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1200.0,
+        "effect_hitbox_radius": 180.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25 / None.",
+        "Source speed: 1200 / 2500.",
+        "Source effectRadius: 180.",
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as More Sparkles!"
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Spell Thief",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Passive - Wheeeee: Whenever Zoe casts Spell Thief or a summoner spell, she gains bonus movement speed for a duration, and summons three bolts that orbit her for the next 10 seconds."
+        },
+        {
+          "id": "bonus_movement_speed_duration",
+          "description": "Bonus Movement Speed Duration",
+          "base_by_rank": [
+            2.0,
+            2.25,
+            2.5,
+            2.75,
+            3.0
+          ],
+          "context_notes": "Passive - Wheeeee: Whenever Zoe casts Spell Thief or a summoner spell, she gains bonus movement speed for a duration, and summons three bolts that orbit her for the next 10 seconds."
+        },
+        {
+          "id": "magic_damage_per_bolt",
+          "description": "Magic Damage Per Bolt",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "If Zoe is not affected by complete crowd control, she shoots one bolt at a time at the nearest non- sleeping enemy in range, prioritizing her attack target, dealing magic damage with each bolt."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "If Zoe is not affected by complete crowd control, she shoots one bolt at a time at the nearest non- sleeping enemy in range, prioritizing her attack target, dealing magic damage with each bolt."
+        },
+        {
+          "id": "zoe_w_effect_3",
+          "description": "Passive: Whenever a nearby enemy champion casts a specific summoner spell or item active, they drop the corresponding Spell Shard onto the ground that grants sight over a 100-radius area and remains for 40 seconds. Enemy minions have a 10% chance to spawn with a random Spell Shard that drops and remains for 20 seconds if Zoe kills them. Allied champions that kill them will cause the orb to drop only if Zoe is nearby."
+        },
+        {
+          "id": "zoe_w_effect_4",
+          "description": "Zoe can collect a Spell Shard by moving directly onto it, holding it for up to 60 seconds. Collecting a new Spell Shard replaces the current one."
+        },
+        {
+          "id": "zoe_w_effect_5",
+          "description": "Active: Zoe mimics the active effect of the collected Spell Shard."
+        }
+      ],
+      "description": "Passive - Wheeeee: Whenever Zoe casts Spell Thief or a summoner spell, she gains bonus movement speed for a duration, and summons three bolts that orbit her for the next 10 seconds.",
+      "cooldown_seconds_by_rank": [
+        0.25,
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
+      "cost": {
+        "resource": "other",
+        "value_by_rank": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "effect_hitbox_radius": 525.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source effectRadius: 2200 / Global / 1500 /  525.",
+        "Source notes (summary): The in-game tooltip for Spell Thief while Zoe has a Spell Shard uses the tooltip of the mimicked spell or item active."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Sleepy Trouble Bubble",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "zoe_e_effect_1",
+          "description": "Active: Zoe kicks a bubble in the target direction that bursts upon the first enemy hit, otherwise lingering at maximum range while slightly bouncing forward over 1 second, then becoming a trap for 5 seconds that bursts upon contact with an enemy. The bubble can move through terrain only once, but travels the entire distance as bonus range, and will fall short if it would enter terrain again."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "The burst deals magic damage to the target and inflicts them with drowsy for 1."
+        },
+        {
+          "id": "maximum_slow",
+          "description": "Maximum Slow",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "The burst deals magic damage to the target and inflicts them with drowsy for 1."
+        },
+        {
+          "id": "bonus_damage_cap",
+          "description": "Bonus Damage Cap",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "The next instance of non- persistent damage that the sleeping target takes from champions, large monsters or turrets consumes the debuff to deal bonus true damage equal to the post-mitigation damage dealt, capped at Sleepy Trouble Bubble's damage."
+        },
+        {
+          "id": "maximum_mixed_damage",
+          "description": "Maximum Mixed Damage",
+          "base_by_rank": [
+            140.0,
+            220.0,
+            300.0,
+            380.0,
+            460.0
+          ],
+          "context_notes": "The next instance of non- persistent damage that the sleeping target takes from champions, large monsters or turrets consumes the debuff to deal bonus true damage equal to the post-mitigation damage dealt, capped at Sleepy Trouble Bubble's damage."
+        }
+      ],
+      "description": "Active: Zoe kicks a bubble in the target direction that bursts upon the first enemy hit, otherwise lingering at maximum range while slightly bouncing forward over 1 second, then becoming a trap for 5 seconds that bursts upon contact with an enemy. The bubble can move through terrain only once, but travels the entire distance as bonus range, and will fall short if it would enter terrain again.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1850.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1850.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): Applies spell damage for the bubble and default damage for the wake-up damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Portal Jump",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Zoe  blinks in the target direction, after which she cannot move for a brief moment.",
+      "effects": [
+        {
+          "id": "zoe_r_effect_1",
+          "description": "Active: After a 0.15-second delay, Zoe blinks in the target direction and remains there for 0.95 seconds to 1.25 seconds, during which she sets her movement speed to a static 0 and has unobstructed vision. Afterwards, she blinks back to her casting position."
+        },
+        {
+          "id": "zoe_r_effect_2",
+          "description": "Portal Jump resets Zoe's basic attack timer. Zoe briefly becomes unable to act after casting Portal Jump as well as after blinking back."
+        }
+      ],
+      "description": "Active: After a 0.15-second delay, Zoe blinks in the target direction and remains there for 0.95 seconds to 1.25 seconds, during which she sets her movement speed to a static 0 and has unobstructed vision. Afterwards, she blinks back to her casting position.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        8.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Zoe will remain at the blink destination for an inconsistent period of time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Zoe.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Zoe"
+  }
+}

@@ -68,6 +68,125 @@
       "parse_confidence": 0.65
     }
   ],
+  "mode_overrides": {
+    "SWIFTPLAY": {
+      "effects_structured": [
+        {
+          "id": "overcharged_turret_malfunction_stat_loss_at_55_minutes",
+          "raw": "At 25 minutes, turrets start losing 35% of total armor and magic resist per minute.",
+          "effect_type": "stat_modifier",
+          "stat": "armor_and_magic_resist",
+          "value": -0.35,
+          "value_range": null,
+          "unit": "ratio_per_minute",
+          "duration_seconds": null,
+          "cooldown_seconds": null,
+          "interval_seconds": null,
+          "trigger": "on_game_time",
+          "applies_to": "structure",
+          "conditions": [
+            "swiftplay_mode_sudden_death",
+            "game_time_at_least_25_minutes"
+          ],
+          "status_effects": [
+            "overcharged"
+          ],
+          "scaling_terms": [],
+          "numbers_extracted": [
+            25,
+            35
+          ],
+          "parse_confidence": 0.8
+        },
+        {
+          "id": "overcharged_turret_health_decay_after_60_minutes",
+          "raw": "After 30 minutes, targetable structures lose 3.3% of maximum health every 2 seconds.",
+          "effect_type": "health_decay_over_time",
+          "stat": "max_health",
+          "value": -0.033,
+          "value_range": null,
+          "unit": "ratio_per_tick",
+          "duration_seconds": null,
+          "cooldown_seconds": null,
+          "interval_seconds": 2.0,
+          "trigger": "on_game_time",
+          "applies_to": "structure",
+          "conditions": [
+            "swiftplay_mode_sudden_death",
+            "game_time_at_least_30_minutes"
+          ],
+          "status_effects": [
+            "sudden_death"
+          ],
+          "scaling_terms": [],
+          "numbers_extracted": [
+            30,
+            3.3,
+            2
+          ],
+          "parse_confidence": 0.8
+        }
+      ]
+    },
+    "URF": {
+      "effects_structured": [
+        {
+          "id": "overcharged_turret_malfunction_stat_loss_at_55_minutes",
+          "raw": "At 35 minutes, turrets start losing 35% of total armor and magic resist per minute.",
+          "effect_type": "stat_modifier",
+          "stat": "armor_and_magic_resist",
+          "value": -0.35,
+          "value_range": null,
+          "unit": "ratio_per_minute",
+          "duration_seconds": null,
+          "cooldown_seconds": null,
+          "interval_seconds": null,
+          "trigger": "on_game_time",
+          "applies_to": "structure",
+          "conditions": [
+            "urf_mode_sudden_death",
+            "game_time_at_least_35_minutes"
+          ],
+          "status_effects": [
+            "overcharged"
+          ],
+          "scaling_terms": [],
+          "numbers_extracted": [
+            35
+          ],
+          "parse_confidence": 0.8
+        },
+        {
+          "id": "overcharged_turret_health_decay_after_60_minutes",
+          "raw": "After 40 minutes, targetable structures lose 3.3% of maximum health every 2 seconds.",
+          "effect_type": "health_decay_over_time",
+          "stat": "max_health",
+          "value": -0.033,
+          "value_range": null,
+          "unit": "ratio_per_tick",
+          "duration_seconds": null,
+          "cooldown_seconds": null,
+          "interval_seconds": 2.0,
+          "trigger": "on_game_time",
+          "applies_to": "structure",
+          "conditions": [
+            "urf_mode_sudden_death",
+            "game_time_at_least_40_minutes"
+          ],
+          "status_effects": [
+            "sudden_death"
+          ],
+          "scaling_terms": [],
+          "numbers_extracted": [
+            40,
+            3.3,
+            2
+          ],
+          "parse_confidence": 0.8
+        }
+      ]
+    }
+  },
   "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1507_tournament_suddendeath.png",
   "simpleDescription": null,
@@ -76,11 +195,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.052362+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Execution model: Sudden Death starts with a timed resistance-loss phase, then transitions to periodic structure max-health decay. The percentage values are mode-defined and not provided in this item payload.",
+      "Execution model: Sudden Death starts with a timed resistance-loss phase, then transitions to periodic structure max-health decay; Clash percentages remain mode-defined and are not explicit in this item payload.",
       "Clash page-level behavior: resistance loss starts at 55:00, then escalating max-health decay starts at 60:00 in 30-second ticks.",
-      "Swiftplay uses different Sudden Death timing/values (Overcharged starts earlier), so this file keeps Clash-aligned timing semantics and tracks mode variance in sources."
+      "Mode variance is now represented with sparse overlays under mode_overrides: Swiftplay (25:00 / 30:00 cadence branch) and URF (35:00 / 40:00 cadence branch), while root fields remain Clash-aligned baseline semantics."
     ]
   },
   "sources": [
@@ -107,6 +226,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Swiftplay",
       "accessed": "2026-02-23",
       "used_for": "mode-variance verification for Overcharged timing and Sudden Death behavior outside Clash"
+    },
+    {
+      "name": "League Wiki (Ultra Rapid Fire)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ultra_Rapid_Fire",
+      "accessed": "2026-02-24",
+      "used_for": "URF-specific Sudden Death timing and Overcharged structure-decay cadence verification"
     },
     {
       "type": "Generated item data",

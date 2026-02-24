@@ -11,6 +11,13 @@ Start here before implementation:
   - `From Online/champions/`
   - `From Online/items/`
   - `Masteries/RunesReforged.json`
+  - `Masteries/RunesReforged/` (split tree/stat-shard structure)
+- Champion corpus file parity is complete:
+  - `From Online/champions`: `172` champion files
+  - `Characters/`: `172` canonical champion files (+ `ChampionDefaults.json`)
+  - parity gap: `0` champions
+  - parity tracker: `Simulation/champion_data_coverage_inventory.json`
+- Current champion data priority is fidelity normalization across generated files (execution semantics depth, context-note completeness, and ambiguity tracking), not file-creation parity.
 - We do **not** yet have full runtime-mechanic coverage for all assets.
 - The canonical gap tracker is `Simulation/COVERAGE_GAPS.md`.
 
@@ -22,7 +29,13 @@ Start here before implementation:
 - Item canonical data:
   - `Items/<Item>.json`
 - Rune and shard canonical data:
-  - `Masteries/RunesReforged.json`
+  - `Masteries/RunesReforged.json` (flat compatibility file)
+  - `Masteries/RunesReforged/RunesReforged.json` (split index)
+  - `Masteries/RunesReforged/Trees/*/primary_runes.json`
+  - `Masteries/RunesReforged/Trees/*/secondary_runes.json`
+  - `Masteries/RunesReforged/StatShards/stat_shards.json`
+- Champion corpus parity tracking:
+  - `Simulation/champion_data_coverage_inventory.json`
 - Mode defaults (for example URF respawn):
   - `Game Mode/<Mode>.json`
 - Global simulator/search/engine defaults:
@@ -45,7 +58,8 @@ Detailed acceptance criteria for these examples live in:
   - `Simulation/src/scripts/items/hooks.rs`
   - `Simulation/src/scripts/runtime/controlled_champion_loadout.rs`
 - Modeled combat-time rune behavior:
-  - `Masteries/RunesReforged.json` (for canonical rune definitions)
+  - `Masteries/RunesReforged.json` (runtime compatibility)
+  - `Masteries/RunesReforged/RunesReforged.json` (split authoring index)
   - `Simulation/src/scripts/runes/effects.rs`
   - `Simulation/src/scripts/runtime/loadout_runtime.rs`
 - Coverage registry and tests:
@@ -66,6 +80,7 @@ Detailed acceptance criteria for these examples live in:
   - If a mechanic is ambiguous, record it in `Simulation/CONFIDENCE_REVIEW.md`.
   - Web research is acceptable and encouraged for behavior verification and formula clarification before finalizing structured effects.
   - For low-confidence formula interpretations, include at least one page-level verification source (for example item page or patch notes), not only dataset-level citations.
+  - If an item-page citation resolves through a redirect (pseudo-item/turret-item/minion-item/champion-upgrade identities), cite both the redirect URL and the canonical parent gameplay/champion page used for semantic verification.
   - For manual confidence increases, perform an entity-intent review first (what the item/rune is for in gameplay and whether structured effects capture that role).
   - Keep `schema_notes.effects_structured_reviewed` normalized as `YYYY-MM-DD`.
   - For CommunityDragon item-dataset citations, use `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json`.
@@ -73,6 +88,7 @@ Detailed acceptance criteria for these examples live in:
   - If an item is retained only as legacy/reference data, add explicit `lifecycle` metadata with `status`, `exclude_from_simulation = true`, `reason`, `replacement_item`, and `replacement_id`.
   - If research uncovers known bug-specific behavior, document it, but keep intended behavior as canonical for simulation data unless a bug-emulation policy is explicitly approved.
   - For mode-variant item behavior, keep root fields as Tier-1 baseline semantics and encode only mode-specific divergence under `mode_overrides.<mode_key>` (for example `mode_overrides.URF`, `mode_overrides.ARENA`).
+  - If `mode_overrides` branches are added before runtime mode-overlay consumption exists, add explicit mode-page citations and log deferred runtime follow-up in `Simulation/COVERAGE_GAPS.md` in the same change.
 
 ## In-Game Behavior Fidelity Review (Required)
 Command audits are necessary but not sufficient. For non-trivial data edits, perform manual behavior review before and after editing.
@@ -107,6 +123,20 @@ Documentation and confidence rules for behavior fidelity:
 ## Data-First Priority Queue (Current)
 This queue is ordered by impact and tracking value.
 
+Priority A. Champion corpus fidelity normalization (highest impact):
+- Keep canonical champion file parity at `172/172` via `Simulation/champion_data_coverage_inventory.json`.
+- Run manual behavior-fidelity waves over generated champions so non-trivial abilities include execution-semantics notes that match in-game behavior.
+- Maintain full-corpus active-ability execution no-regression (`682/682`) and full ability context-note no-regression (`860/860`).
+
+Priority B. Runes split-structure synchronization:
+- Keep split rune structure (`Masteries/RunesReforged/`) synchronized with flat compatibility file (`Masteries/RunesReforged.json`) on every rune/mastery edit.
+- Keep per-tree primary and secondary files complete for all five trees (`Domination`, `Inspiration`, `Precision`, `Resolve`, `Sorcery`) plus stat shard parity file.
+- Track any split-vs-flat drift as blocking data-quality regression.
+
+Priority C. Champion inventory and planning hygiene:
+- Refresh `Simulation/champion_data_coverage_inventory.json` after every champion denominator/parity change (new champion keys).
+- Keep champion fidelity wave scope explicit (recommended 10-20 champions per pass) and close each wave with realistic confidence/provenance notes.
+
 1. Modeled runtime confidence floor maintenance:
 - Current modeled runtime set has numeric confidence coverage with minimum `parse_confidence >= 0.70`.
 - Keep this as a no-regression guardrail while refining complex per-target/proc semantics.
@@ -134,8 +164,8 @@ This queue is ordered by impact and tracking value.
 - Runtime-filtered legal URF pool currently tracks `113` legendary items (`111` with effect payload, `102` unmodeled effect items).
 - Current no-page-citation queue is `0/102` after wave 31 (cleared).
 - Maintain this queue at `0` and treat regressions as blocking.
-- Next page-depth expansion should prioritize remaining complex no-page structured items from the broader `41/243` non-page set (for example `Armored Advance`, `Boots of Swiftness`, `Ghostcrawlers`, `Ionian Boots of Lucidity`, `Recurve Bow`).
-- Current higher-priority no-page subset (ranked `EPIC`/`LEGENDARY`/`BOOTS`/`STARTER`) is `14` items: `Armored Advance`, `Black Spear`, `Boots of Swiftness`, `Cull`, `Ghostcrawlers`, `Guardian's Amulet`, `Guardian's Horn`, `Guardian's Orb`, `Ionian Boots of Lucidity`, `Plated Steelcaps`, `Recurve Bow`, `Scout's Slingshot`, `Swiftmarch`, `Zephyr`.
+- Broader structured no-page queue is now cleared (`0/243`); keep this as a no-regression guardrail and maintain page-level depth on future complex edits.
+- Current higher-priority no-page subset (ranked `EPIC`/`LEGENDARY`/`BOOTS`/`STARTER`) is cleared (`0` items).
 - Keep intentional No Sell support-quest sell-value overrides (`World Atlas`, `Runic Compass`, `Bounty of Worlds`) and shared support-income rule-table precision as maintenance follow-up.
 
 7. Champion provenance cleanup:
@@ -156,7 +186,7 @@ This queue is ordered by impact and tracking value.
 
 11. Distributed-item economy representation:
 - Keep explicit `shop.prices` representation on distributed/prismatic items when Tier-1 datasets provide economy values.
-- Current coverage is `10/57` distributed items with explicit `shop.prices`; continue rollout on the remaining `47` files while preserving acquisition-scope notes (non-shop anvil sourcing).
+- Current coverage is `57/57` distributed items with explicit `shop.prices`; keep this as a no-regression guardrail while preserving acquisition-scope notes and documenting page-vs-dataset economy presentation drift.
 
 12. Mode-scoped effect semantics:
 - For shared-ID effects that differ by mode timing/values (for example Sudden Death effects), encode current-mode scope explicitly in structured conditions and `schema_notes.context_notes`.
@@ -178,17 +208,35 @@ This queue is ordered by impact and tracking value.
 - Phase 3: run no-regression audits for trigger-token consistency/confidence floors and update queue metrics.
 
 17. Distributed/prismatic economy rollout plan (documented):
-- Phase 1: backfill `shop.prices.total`/`shop.prices.sell` on remaining distributed/prismatic files when Tier-1 provides explicit values.
-- Phase 2: document acquisition scope and page-vs-dataset economy drift on each touched file.
-- Phase 3: classify each discrepancy as accepted canonical, intentional override, or unresolved follow-up in coverage docs with explicit counts.
+- Phase 1 (completed): backfill `shop.prices.total`/`shop.prices.sell` on all distributed/prismatic files when Tier-1 provides explicit values (`57/57` explicit).
+- Phase 2 (in progress): document acquisition scope and page-vs-dataset economy drift on each touched file.
+- Phase 3 (pending): classify each discrepancy as accepted canonical, intentional override, or unresolved follow-up in coverage docs with explicit counts.
 
 18. Policy-resolution plan (documentation-first):
 - Resolve distributed availability/map-overlay policy (dataset map flags vs page-level mode scope) using a canonical `mode_overrides.<mode>` shape that stores only divergent fields and keeps Tier-1 baseline at root.
 - Resolve legacy ID/name drift handling for deterministic Tier-1 reconciliation by standardizing `lifecycle` metadata requirements (`status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) for legacy-reference files.
 - Sync policy outcomes across standards/checklist/gaps in the same change when decisions land.
 
+19. Champion source metadata no-regression:
+- Maintain champion provenance completeness at `0/173` unsourced files and `0/173` files with missing `sources[].accessed`.
+- Keep `Characters/ChampionDefaults.json` sourced and update provenance when champion-default envelopes are revised.
+
+20. Mastery source metadata no-regression:
+- Maintain mastery provenance completeness at `0/2` unsourced files and `0/2` files with missing `sources[].accessed`.
+- Keep `Masteries/Season2016.json` and `Masteries/RunesReforged.json` source metadata normalized on touched entries.
+
+21. Champion active-ability execution metadata no-regression:
+- Maintain `682/682` champion active abilities with non-empty `execution` objects.
+- Treat missing active execution objects as a blocking data-quality gap unless source data is unavailable and explicitly documented.
+
 ### Progress Snapshot (2026-02-24)
+- Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed champion fidelity normalization wave 44:
+    - closed full-corpus active-ability execution gaps (`682/682` with non-empty `execution`)
+    - closed full-corpus champion ability context-note gaps (`860/860` with non-empty `context_notes`)
+    - refined attack-cadence-coupled execution semantics for `Olaf` `Reckless Swing` and normalized missing context/execution metadata on `Jax`, `Leblanc`, `Aphelios`, `Vladimir`, `Sona`, `DrMundo`, `Morgana`, `Vayne`, and `Warwick`
+    - revalidated champion corpus/data provenance guardrails (`172/172` parity and `0/173` source/accessed gaps in `Characters/*.json`)
   - `9` modeled runtime item files now have explicit `sources`.
   - `8` preset-critical item files now have explicit `sources` (including `Stridebreaker`).
   - `23` additional item files had both source provenance backfilled and legacy non-ISO review metadata normalized.
@@ -202,6 +250,14 @@ This queue is ordered by impact and tracking value.
   - Non-ISO/missing item review metadata reduced from `23` non-ISO + `0` missing to `0` total.
   - `Bloodthirster` review metadata gap was filled.
   - `Characters/Vladimir.json` duplicate source entry was removed.
+  - Added provenance sources to `Characters/ChampionDefaults.json` (project champion corpus + generated champion datasets) to close champion-defaults sourcing gap.
+  - Backfilled champion-source `sources[].accessed` metadata on generated-source entries for `DrMundo`, `Morgana`, `Sona`, `Vayne`, `Vladimir`, and `Warwick`, reducing champion missing-accessed backlog to `0/7`.
+  - Backfilled `Masteries/Season2016.json` source `accessed` metadata (`6` entries), reducing mastery missing-accessed backlog to `0/2`.
+  - Completed champion active-ability execution metadata coverage (`23/23`) by filling missing `execution` objects across `DrMundo` (`W`, `E`), `Morgana` (`W`, `E`), `Sona` (`W`, `E`), `Vayne` (`E`), `Vladimir` (`W`), and `Warwick` (`W`, `E`).
+  - Corrected `Vayne` `Silver Bolts` ability type from `Active` to source-aligned `Passive`.
+  - Added champion parity inventory file `Simulation/champion_data_coverage_inventory.json` (current snapshot: `6/172` canonical champion files, `166` missing from `Characters/` vs `From Online/champions` denominator).
+  - Created split runes structure under `Masteries/RunesReforged/` with top-level index, stat shard file, and per-tree `primary_runes.json` + `secondary_runes.json` files for all five trees.
+  - Kept runtime compatibility by retaining flat file `Masteries/RunesReforged.json` while documenting split structure as authoring baseline.
   - Rune entries using `stat_modifier` with null/empty `stat` were reduced from `13` to `0` by converting narrative-only entries to `condition_note`.
   - Restored parser-compatible Protoplasm Lifeline threshold condition token (`health_below_30_percent`) after identifying a data-only compatibility regression.
   - Refined high-impact preset item data (`Stridebreaker`, `Warmog's Armor`, `Titanic Hydra`, `Rabadon's Deathcap`, `Phantom Dancer`) with entity-intent notes and page-level citations.
@@ -378,14 +434,38 @@ This queue is ordered by impact and tracking value.
   - Expanded execution-edge semantics for Spellblade trigger exclusions, Quicksilver activation constraints/cleanse scope, and Annul shield lifecycle notes (including death/cooldown restart interactions).
   - Increased page-level item citation coverage from `197/243` to `202/243`.
   - Reduced broader structured no-page citation queue from `46/243` to `41/243` while keeping legal URF unmodeled no-page queue at `0/102`.
+  - Completed data-first item execution-semantics and citation wave 36 (`Boots of Swiftness`, `Ionian Boots of Lucidity`, `Plated Steelcaps`, `Recurve Bow`, `Cull`) with manual behavior review and page-level verification.
+  - Added full Reap branch coverage for `Cull` (on-hit sustain, minion-gold progression cap, and completion payout/disable semantics) after gameplay-intent review.
+  - Added `Overcharged` `mode_overrides` overlays for Swiftplay and URF Sudden Death timing/value divergence while preserving Clash baseline semantics at root.
+  - Aligned Quicksilver-family edge semantics on `Mercurial Scimitar` with `Quicksilver Sash` (airborne lockout, suppression/nearsight scope, no-cast-time/stealth behavior, cooldown-transfer note).
+  - Reconciled `Wordless Promise` active-cooldown fidelity from tooltip-ambiguous baseline to page-verified `10s` Promise cooldown with team/target gating notes.
+  - Increased page-level item citation coverage from `202/243` to `207/243`.
+  - Reduced broader structured no-page citation queue from `41/243` to `36/243` while keeping legal URF unmodeled no-page queue at `0/102`.
+  - Completed data-first item execution-semantics and citation wave 37 (`Armored Advance`, `Black Spear`, `Ghostcrawlers`, `Guardian's Amulet`, `Guardian's Horn`, `Guardian's Orb`, `Scout's Slingshot`, `Swiftmarch`, `Zephyr`) with manual behavior review and page-level verification.
+  - Added mode-variant Arena overlays (`mode_overrides.ARENA`) for `Guardian's Horn` and `Guardian's Orb`; documented Zephyr/Gunmetal-Greaves shared-ID drift and Black Spear bind-window/runtime follow-up scope.
+  - Increased page-level item citation coverage from `207/243` to `216/243`.
+  - Reduced broader structured no-page citation queue from `36/243` to `27/243` and cleared higher-priority no-page subset (`9` -> `0`) while keeping legal URF unmodeled no-page queue at `0/102`.
+  - Completed data-first item execution-semantics and citation wave 38 (`Arcane Sweeper (Trinket)`, `Farsight Alteration`, `Oracle Lens`, `Stealth Ward`, `Slightly Magical Boots`, `Crown of the Shattered Queen`, `Turbo Chemtank`) with manual behavior review and page-level verification.
+  - Added trinket execution-semantics detail for activation lockouts, charge/recharge scaling, ward limits, detection ranges, and player-visible reveal windows on wave-38 vision utility items.
+  - Expanded distributed-item explicit economy representation from `10/57` to `13/57` by adding `shop.prices` on `Crown of the Shattered Queen`, `Turbo Chemtank`, and `Slightly Magical Boots` with acquisition-scope reconciliation notes.
+  - Increased page-level item citation coverage from `216/243` to `223/243`.
+  - Reduced broader structured no-page citation queue from `27/243` to `20/243` while keeping legal URF unmodeled no-page queue at `0/102`.
+  - Completed data-first item execution-semantics and citation wave 39 (`Anti-Tower Socks`, `Base Turret Reinforced Armor (Turret Item)`, `Black Hole Gauntlet`, `Cruelty`, `Darksteel Talons`, `Death's Daughter`, `Decapitator`, `Empyrean Promise`, `Mirage Blade`, `Ohmwrecker (Turret Item)`, `Phreakish Gusto`, `Raise Morale`, `Reinforced Armor (Turret Item)`, `Shield of Molten Stone`, `Super Mech Armor`, `Super Mech Power Field`, `Twilight's Edge`, `Twin Mask`, `Warden's Eye`, `Wooglet's Witchcap`) with manual behavior review and page-level verification.
+  - Cleared broader structured no-page citation queue from `20/243` to `0/243` by adding page-level sources for all remaining queued items and dual-citation fallback on redirect-backed pseudo-items.
+  - Expanded distributed-item explicit economy representation from `13/57` to `23/57` by adding `shop.prices` on ten distributed Arena identities.
+  - Corrected page-verified structured-value mismatches on `Darksteel Talons` (melee armor ratio), `Twin Mask` (15%/30% teammate transfer), `Twilight's Edge` (20% AD/AP world modifiers), `Empyrean Promise` (20s active cooldown + dash speed), `Warden's Eye` (trap reveal + line-of-sight note), `Wooglet's Witchcap` (120s stasis cooldown), and `Black Hole Gauntlet` (max-health scaling branch).
+  - Completed distributed/prismatic economy rollout wave 40 across the remaining `34` distributed files by backfilling explicit `shop.prices` from Tier-1 item-ID reconciliation (`23/57` -> `57/57`).
+  - Backfilled source provenance for previously unsourced distributed utility/legacy entries (`Lucky Dice`, `Enhanced Lucky Dice`, `Poro-Snax`, `Total Biscuit of Everlasting Will`, `Your Cut`) and normalized sparse legacy active-shape inconsistencies (`active: {}` -> `active: []` where applicable).
+  - Reduced non-structured item provenance backlog from `79` to `74` files with null/empty `sources`.
+  - Completed non-structured provenance completion wave 41 by backfilling sources for the remaining `72` canonical non-structured unsourced item files, clearing canonical non-structured provenance to `0/77` unsourced (the `2` non-item report artifacts under `Items/` are now sourced and tracked separately from canonical item coverage counts).
   - Logged a data-reconciliation follow-up on `Gambler's Blade`: structured range currently uses `30` to `240` per Tier-1/local tooltip data, while wiki patch history references a historical `245` cap increase.
-  - Identified a lower-priority provenance expansion opportunity: `79` non-structured item files currently have null/empty `sources`.
+  - Canonical non-structured provenance backlog is now cleared (`0/77` unsourced); keep this as a no-regression guardrail.
 - Remaining risks and improvements:
-  - Page-level formula citations are still partial (`202/243` via League Wiki item pages); continue broad page-level expansion for complex non-trivial items.
+- Tracked broader page-level formula citation queue is cleared (`243/243`); keep this as a no-regression guardrail on future complex/non-trivial edits.
   - Item low-confidence backlog is cleared (`0` files with `parse_confidence < 0.65`); rune low-confidence backlog remains `0` at the `<= 0.60` threshold.
   - Low-confidence page-verification queue is cleared (`0/0` low-confidence item files without page-level citations).
   - Legal URF unmodeled page-level citation depth is now cleared (`0/102` without page-level citations); maintain this as a no-regression guardrail.
-  - Broader structured no-page citation queue remains (`41/243`), now focused on non-legal-URF or lower-priority item classes.
+- Broader structured no-page citation queue is now cleared (`0/243`); maintain queue-clear state as a no-regression requirement.
   - Legal URF unmodeled low-confidence citation-depth gap remains cleared (`0/0`).
   - Source endpoint correctness and sell-value reconciliation are now no-regression requirements; periodic audits are still required with explicit handling for the `3` intentional support-quest sell overrides.
   - Structured-item `sources[].accessed` metadata is now fully normalized; keep it guarded as a no-regression requirement.
@@ -401,10 +481,11 @@ This queue is ordered by impact and tracking value.
   - Run a broader targeted-active audit to confirm cooldown and cast-range metadata are consistently encoded when page/tooltips publish those values.
   - Reconcile `Gambler's Blade` stored-gold cap (`240` vs historical patch-note `245`) and document canonical source-of-truth decision.
   - Define canonical policy for champion-ability upgrade pseudo-items so upgrade entries are represented consistently across data and coverage tracking.
-  - Continue distributed/prismatic economy rollout (`10/57` currently explicit) while finalizing canonical policy for non-shop acquisition vs Tier-1 gold fields, including unresolved page-vs-dataset economy drift (`Cost 0 / Sell 2000` page display vs Tier-1 `1000 / 400` values on multiple Arena distributed identities).
+  - Maintain distributed/prismatic economy no-regression (`57/57` explicit) while finalizing canonical policy for non-shop acquisition vs Tier-1 gold fields, including unresolved page-vs-dataset economy drift (`Cost 0 / Sell 2000` page display vs Tier-1 `1000 / 400` values on multiple Arena distributed identities).
+  - Keep redirect-backed pseudo-item provenance policy enforced (redirect item URL + canonical parent gameplay/champion page citation) so minion/turret/champion-upgrade semantics remain auditable.
   - Define canonical distributed-item availability/map-overlay policy when Tier-1 map flags and page-level mode scope diverge (for example Arena-scoped distributed identities).
-  - Define canonical mode-scoping for shared-ID item effects when mode timings/values differ (for example `Overcharged` in Clash vs Swiftplay).
-  - Non-structured item provenance is not yet a full baseline (`79` files currently have null/empty `sources`).
+  - Extend canonical mode-scoping policy beyond `Overcharged` and add runtime mode-overlay consumption so `mode_overrides` branches are selected automatically per active mode (`Guardian's Horn` / `Guardian's Orb` Arena overlays included).
+  - Non-structured item provenance baseline is now complete for canonical items (`0/77` unsourced); keep this as a no-regression guardrail and maintain folder-level provenance/accessed completeness across the two non-item `Items/` report artifacts.
   - Support-income diminishing-gold formulas are now explicit across the support-quest family, but shared runtime-table encoding is still pending for exact per-minute behavior.
 - Remaining work should be tracked from `Simulation/COVERAGE_GAPS.md` Data Quality Gap Snapshot counts.
 
@@ -578,13 +659,22 @@ for f in \
 done
 ```
 
-Runes with null `stat` in `stat_modifier` entries:
+Runes with null `stat` in `stat_modifier` entries (flat compatibility file):
 ```bash
 jq -r '
   .paths[].slots[].runes[]
   | select([(.effects_structured // [])[] | select(.effect_type=="stat_modifier" and (.stat==null or .stat==""))] | length > 0)
   | .name
 ' Masteries/RunesReforged.json | sort -u
+```
+
+Runes with null `stat` in split primary-tree files:
+```bash
+jq -r '
+  .slots[].runes[]
+  | select([(.effects_structured // [])[] | select(.effect_type=="stat_modifier" and (.stat==null or .stat==""))] | length > 0)
+  | .name
+' Masteries/RunesReforged/Trees/*/primary_runes.json | sort -u
 ```
 
 ## How We Got The Complete Examples There
@@ -598,7 +688,12 @@ jq -r '
 ### Step 2: Canonicalize into domain-owned files
 - Champion gameplay values go in `Characters/<Champion>.json` (`base_stats`, `abilities`, `basic_attack`).
 - Item gameplay values go in `Items/<Item>.json` with structured effects (`effects_structured`) and stable effect IDs.
-- Runes/shards stay in `Masteries/RunesReforged.json`.
+- Runes/shards stay synchronized across:
+  - `Masteries/RunesReforged.json` (flat compatibility file)
+  - `Masteries/RunesReforged/RunesReforged.json` (split index)
+  - `Masteries/RunesReforged/Trees/*/primary_runes.json`
+  - `Masteries/RunesReforged/Trees/*/secondary_runes.json`
+  - `Masteries/RunesReforged/StatShards/stat_shards.json`
 
 ### Step 3: Load defaults from canonical data, not hardcoded literals
 - Add or reuse loader paths in `Simulation/src/defaults.rs`.
@@ -616,9 +711,14 @@ jq -r '
 ### Step 7: Update tracking docs
 - Update `Simulation/COVERAGE_GAPS.md`.
 - Update `Simulation/IMPROVEMENT_TRACKER.md`.
+- Update `Simulation/champion_data_coverage_inventory.json` whenever champion corpus parity counts change.
 - Update docs if architecture/ownership changed.
 
 ## Champion Authoring Playbook
+### Step 0: Confirm champion corpus parity target
+- Use `Simulation/champion_data_coverage_inventory.json` as a no-regression denominator check (`From Online/champions/*.json` vs `Characters/*.json`).
+- When parity is already complete, select the next fidelity wave (low-confidence mechanics, shallow context notes, or behavior-ambiguity champions) instead of file-creation waves.
+
 ### Step 1: Author canonical champion file
 - Required base shape:
   - `name`, `data_version`, `base_stats`, `basic_attack`, `abilities`.
@@ -655,7 +755,11 @@ jq -r '
 
 ## Rune And Shard Authoring Playbook
 ### Step 1: Use canonical rune/shard source data
-- Source of truth: `Masteries/RunesReforged.json`.
+- Authoring source of truth:
+  - split index: `Masteries/RunesReforged/RunesReforged.json`
+  - per-tree files: `Masteries/RunesReforged/Trees/*/primary_runes.json` and `Masteries/RunesReforged/Trees/*/secondary_runes.json`
+  - stat shards: `Masteries/RunesReforged/StatShards/stat_shards.json`
+- Runtime compatibility source (must stay synchronized until loader migration): `Masteries/RunesReforged.json`.
 
 ### Step 2: Wire deterministic stat effects
 - Ensure effect shape is parseable by `Simulation/src/data.rs` (`apply_structured_effect`, `apply_stat_bonus`).
@@ -668,6 +772,7 @@ jq -r '
 
 ### Step 4: Legacy mastery note
 - Legacy `Season2016` masteries are intentionally retired from runtime support.
+- Runes Reforged split files are data-authoring baseline; runtime still reads flat compatibility file until deferred code migration.
 
 ## Data Authoring Rules That Must Hold
 - Do not hardcode champion/item/rune behavior in shared core modules:

@@ -1,0 +1,322 @@
+{
+  "name": "Lee Sin",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 645.0,
+      "per_level": 108.0
+    },
+    "resource": {
+      "type": "energy",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 3.7
+    },
+    "attack_speed": {
+      "base": 0.651,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.104687497019767,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Flurry",
+      "type": "Passive",
+      "description_source": "Innate: After  Lee Sin casts an ability, his next 2  basic attacks within a short time gain  bonus attack speed and restore  energy.",
+      "effects": [
+        {
+          "id": "leesin_p_effect_1",
+          "description": "Innate: After casting an ability, Lee Sin's next 2 basic attacks on-hit within 3 seconds gain 40% bonus attack speed and restore energy.The first attack restores 20 / 30 / 40 (based on level) energy and the second attack restores[ 10 / 15 / 20 (based on level) energy. ][ half of the previous amount. ]"
+        }
+      ],
+      "description": "Innate: After casting an ability, Lee Sin's next 2 basic attacks on-hit within 3 seconds gain 40% bonus attack speed and restore energy.The first attack restores 20 / 30 / 40 (based on level) energy and the second attack restores[ 10 / 15 / 20 (based on level) energy. ][ half of the previous amount. ]",
+      "context_notes": [
+        "Source targeting: Passive."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Sonic Wave",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Lee Sin fires a sonic blast in the target direction that deals physical damage to the first enemy hit and marks them for a short time, during which they are  revealed.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Lee Sin fires a sonic blast in the target direction that deals physical damage to the first enemy hit and marks them for 3 seconds, during which they are revealed."
+        },
+        {
+          "id": "leesin_q_effect_2",
+          "description": "While the target is marked, Lee Sin can cast Resonating Strike."
+        }
+      ],
+      "description": "Active: Lee Sin fires a sonic blast in the target direction that deals physical damage to the first enemy hit and marks them for 3 seconds, during which they are revealed.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1800.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1800.",
+        "Source effectRadius: 400.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Safeguard",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Lee Sin  dashes to the target allied unit. If the ally is a  champion, both they and Lee Sin gain a  shield for a short time upon his arrival and Safeguard's cooldown is  halved.\nLee Sin can self-cast Safeguard to shield himself.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            70.0,
+            115.0,
+            160.0,
+            205.0,
+            250.0
+          ],
+          "context_notes": "Active: Lee Sin dashes to the target allied unit's location."
+        },
+        {
+          "id": "leesin_w_effect_2",
+          "description": "After Safeguard is cast, Lee Sin can cast Iron Will within the next 3 seconds."
+        },
+        {
+          "id": "leesin_w_effect_3",
+          "description": "Iron Will and Cripple can be cast during the dash."
+        }
+      ],
+      "description": "Active: Lee Sin dashes to the target allied unit's location. If the ally is a champion upon arrival, both they and Lee Sin gain a shield for 2 seconds and Safeguard's cooldown is halved.\nLee Sin can self-cast Safeguard to shield himself.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1350.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 1350 + 100% movement speed.",
+        "Source notes (summary): Lee Sin cannot self-cast Safeguard while grounded or rooted."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Tempest",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Lee Sin deals magic damage to nearby enemies, marking them for a few seconds and, if they are not  invisible when struck,  revealing them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            35.0,
+            60.0,
+            85.0,
+            110.0,
+            135.0
+          ],
+          "context_notes": "Active: Lee Sin smashes the ground beneath him, dealing magic damage to nearby enemies, marking them for 4 seconds and, if they are not invisible when struck, revealing them for the same duration."
+        },
+        {
+          "id": "leesin_e_effect_2",
+          "description": "If Tempest hits an enemy, Lee Sin can cast Cripple within the next 3 seconds after a 0.1-second delay."
+        }
+      ],
+      "description": "Active: Lee Sin smashes the ground beneath him, dealing magic damage to nearby enemies, marking them for 4 seconds and, if they are not invisible when struck, revealing them for the same duration.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "energy",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 450.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 450.",
+        "Source notes (summary): Tempest's sight reveal only reveals the affected targets, but visually also lights up the Fog of War in a 400 radius."
+      ]
+    },
+    "ultimate": {
+      "name": "Dragon's Rage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Lee Sin  roots the target enemy  champion and roundhouse kicks them, dealing physical damage and  knocking them back.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            175.0,
+            400.0,
+            625.0
+          ],
+          "context_notes": "Active: Lee Sin roots the target enemy champion over the cast time, then roundhouse kicks them to deal physical damage and knock them back up to 800 units over 0."
+        },
+        {
+          "id": "collision_physical_damage",
+          "description": "Collision Physical Damage",
+          "base_by_rank": [
+            175.0,
+            400.0,
+            625.0
+          ],
+          "context_notes": "Enemies that collide with the displaced enemy while it is airborne take the same damage plus bonus physical damage and are knocked up for 1 second."
+        }
+      ],
+      "description": "Active: Lee Sin roots the target enemy champion over the cast time, then roundhouse kicks them to deal physical damage and knock them back up to 800 units over 0.8 seconds, rendering them airborne for 1 second.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        85.0,
+        60.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): The spell indicator for this ability also displays the direction for the knock back relative to Lee Sin's position."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/LeeSin.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "LeeSin"
+  }
+}

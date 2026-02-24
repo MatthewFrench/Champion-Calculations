@@ -1,0 +1,648 @@
+{
+  "name": "Rumble",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Fighter",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 105.0
+    },
+    "resource": {
+      "type": "heat",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 1.55
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 1.85
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Junkyard Titan",
+      "type": "Passive",
+      "description_source": "Innate:  Rumble's  basic ability casts generate  Heat, which gradually expires after a few seconds without generating Heat. Rumble enters the Danger Zone while he has at least  50 Heat, and becomes Overheated at  Max Heat.",
+      "effects": [
+        {
+          "id": "rumble_p_effect_1",
+          "description": "Innate: Rumble's basic ability casts generate Heat, which decays by 10 Heat per second after not using any basic ability within 4 seconds or The Equalizer within 2 seconds. Rumble's mech enters the Danger Zone when at or above 50 Heat, and becomes Overheated while at 150 Heat."
+        },
+        {
+          "id": "rumble_p_effect_2",
+          "description": "Danger Zone: Rumble's mech enters the Danger Zone, empowering his basic abilities."
+        },
+        {
+          "id": "rumble_p_effect_3",
+          "description": "Overheated: Rumble's mech becomes Overheated, disabling his abilities as his Heat decays back down to 0 over 4 seconds. During this time, he gains 50% : 142.54% (based on level) bonus attack speed and empowers his basic attacks to deal 5 : 44.12 (based on level) (+ 25% AP) (+ 4% of the target's maximum health) bonus magic damage on-hit. The damage based on the target's health ratio is capped at 65 : 163.32 (based on level) against monsters."
+        }
+      ],
+      "description": "Innate: Rumble's basic ability casts generate Heat, which decays by 10 Heat per second after not using any basic ability within 4 seconds or The Equalizer within 2 seconds. Rumble's mech enters the Danger Zone when at or above 50 Heat, and becomes Overheated while at 150 Heat.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): While Rumble is overheating, a Silenced icon will appear above him to signify he cannot cast abilities."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Flamespitter",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Rumble activates a flamethrower for a short time that continually deals magic damage in a frontal cone.",
+      "effects": [
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            15.0,
+            21.25,
+            27.5,
+            33.75,
+            40.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "magic_damage_per_second",
+          "description": "Magic Damage per Second",
+          "base_by_rank": [
+            20.0,
+            28.33,
+            36.67,
+            45.0,
+            53.33
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            5.0,
+            7.083,
+            9.167,
+            11.25,
+            13.333
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            75.0,
+            106.25,
+            137.5,
+            168.75,
+            200.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "minimum_minion_damage",
+          "description": "Minimum Minion Damage",
+          "base_by_rank": [
+            10.5,
+            14.88,
+            19.25,
+            23.63,
+            28.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "minion_damage_per_second",
+          "description": "Minion Damage per Second",
+          "base_by_rank": [
+            14.0,
+            19.83,
+            25.67,
+            31.5,
+            37.33
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "minion_damage_per_tick",
+          "description": "Minion Damage per Tick",
+          "base_by_rank": [
+            3.5,
+            4.958,
+            6.417,
+            7.875,
+            9.333
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "maximum_minion_damage",
+          "description": "Maximum Minion Damage",
+          "base_by_rank": [
+            52.5,
+            74.38,
+            96.25,
+            118.13,
+            140.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0."
+        },
+        {
+          "id": "minimum_enhanced_damage",
+          "description": "Minimum Enhanced Damage",
+          "base_by_rank": [
+            22.5,
+            31.875,
+            41.25,
+            50.625,
+            60.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "enhanced_damage_per_second",
+          "description": "Enhanced Damage per Second",
+          "base_by_rank": [
+            30.0,
+            42.5,
+            55.0,
+            67.5,
+            80.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "enhanced_damage_per_tick",
+          "description": "Enhanced Damage per Tick",
+          "base_by_rank": [
+            7.5,
+            10.625,
+            13.75,
+            16.875,
+            20.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "maximum_enhanced_damage",
+          "description": "Maximum Enhanced Damage",
+          "base_by_rank": [
+            112.5,
+            159.38,
+            206.25,
+            253.13,
+            300.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "minimum_enhanced_minion_damage",
+          "description": "Minimum Enhanced Minion Damage",
+          "base_by_rank": [
+            15.75,
+            22.313,
+            28.875,
+            35.438,
+            42.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "enhanced_minion_damage_per_second",
+          "description": "Enhanced Minion Damage per Second",
+          "base_by_rank": [
+            21.0,
+            29.75,
+            38.5,
+            47.25,
+            56.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "enhanced_minion_damage_per_tick",
+          "description": "Enhanced Minion Damage per Tick",
+          "base_by_rank": [
+            5.25,
+            7.438,
+            9.625,
+            11.813,
+            14.0
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        },
+        {
+          "id": "maximum_enhanced_minion_damage",
+          "description": "Maximum Enhanced Minion Damage",
+          "base_by_rank": [
+            78.75,
+            124.69,
+            170.63,
+            216.56,
+            262.5
+          ],
+          "context_notes": "Danger Zone Bonus: Flamespitter's damage is increased by 50%."
+        }
+      ],
+      "description": "Active: Rumble generates 20 Heat to activate his flamethrower for 3 seconds, spewing forth flames in a frontal cone every 0.25 seconds. Enemies hit by the flame are scorched for 0.6 seconds, taking magic damage every 0.25 seconds as well as upon being hit if not currently scorched, refreshing on subsequent inflictions.Flamespitter's damage is reduced to 70% against minions.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Flamespitter will deal an additional tick of damage to a minion if it would die to its per-tick damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Scrap Shield",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Rumble briefly  shields himself and gains  bonus movement speed.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            25.0,
+            55.0,
+            85.0,
+            115.0,
+            145.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to grant himself a shield for 1."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Rumble also gains bonus movement speed for 1 to 1."
+        },
+        {
+          "id": "enhanced_shield_strength",
+          "description": "Enhanced Shield Strength",
+          "base_by_rank": [
+            37.5,
+            82.5,
+            127.5,
+            172.5,
+            217.5
+          ],
+          "context_notes": "Danger Zone Bonus: Scrap Shield's shield strength and bonus movement speed are increased in effectiveness by 50%."
+        },
+        {
+          "id": "enhanced_bonus_movement_speed",
+          "description": "Enhanced Bonus Movement Speed",
+          "base_by_rank": [
+            15.0,
+            22.5,
+            30.0,
+            37.5,
+            45.0
+          ],
+          "context_notes": "Danger Zone Bonus: Scrap Shield's shield strength and bonus movement speed are increased in effectiveness by 50%."
+        }
+      ],
+      "description": "Active: Rumble generates 20 Heat to grant himself a shield for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The movement speed buff is supposed to last for 1 second, but due to a bug may last 0."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Electro Harpoon",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Rumble shoots a harpoon in the target direction that deals magic damage and briefly  slows the first enemy hit, reducing their  magic resist for a few seconds. These effects can stack with multiple harpoons.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            80.0,
+            105.0,
+            130.0,
+            155.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            110.0,
+            160.0,
+            210.0,
+            260.0,
+            310.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds."
+        },
+        {
+          "id": "magic_resistance_reduction",
+          "description": "Magic Resistance Reduction",
+          "base_by_rank": [
+            10.0,
+            12.0,
+            14.0,
+            16.0,
+            18.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds."
+        },
+        {
+          "id": "total_mr_reduction",
+          "description": "Total MR Reduction",
+          "base_by_rank": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds."
+        },
+        {
+          "id": "total_slow",
+          "description": "Total Slow",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds."
+        },
+        {
+          "id": "rumble_e_effect_2",
+          "description": "Rumble periodically stocks an Electro Harpoon charge, up to a maximum of 2."
+        },
+        {
+          "id": "enhanced_damage",
+          "description": "Enhanced Damage",
+          "base_by_rank": [
+            82.5,
+            120.0,
+            157.5,
+            195.0,
+            232.5
+          ],
+          "context_notes": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%."
+        },
+        {
+          "id": "total_enhanced_damage",
+          "description": "Total Enhanced Damage",
+          "base_by_rank": [
+            165.0,
+            240.0,
+            315.0,
+            390.0,
+            465.0
+          ],
+          "context_notes": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%."
+        },
+        {
+          "id": "enhanced_magic_resistance_reduction",
+          "description": "Enhanced Magic Resistance Reduction",
+          "base_by_rank": [
+            15.0,
+            18.0,
+            21.0,
+            24.0,
+            27.0
+          ],
+          "context_notes": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%."
+        },
+        {
+          "id": "total_enhanced_mr_reduction",
+          "description": "Total Enhanced MR Reduction",
+          "base_by_rank": [
+            30.0,
+            36.0,
+            42.0,
+            48.0,
+            54.0
+          ],
+          "context_notes": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%."
+        },
+        {
+          "id": "enhanced_slow",
+          "description": "Enhanced Slow",
+          "base_by_rank": [
+            22.5,
+            30.0,
+            37.5,
+            45.0,
+            52.5
+          ],
+          "context_notes": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%."
+        },
+        {
+          "id": "total_enhanced_slow",
+          "description": "Total Enhanced Slow",
+          "base_by_rank": [
+            45.0,
+            60.0,
+            75.0,
+            90.0,
+            105.0
+          ],
+          "context_notes": "Danger Zone Bonus: Electro Harpoon's effects are increased by 50%."
+        },
+        {
+          "id": "rumble_e_effect_4",
+          "description": "If Rumble casts Electro Harpoon before his mech becomes Overheated, he may still use another charge within 3 seconds of the initial cast."
+        }
+      ],
+      "description": "Active: Rumble generates 20 Heat to shoot a harpoon in the target direction that deals magic damage to the first enemy hit, inflicting them with magic resistance reduction for 4 seconds and slowing them for 2 seconds. These effects stack additively with multiple harpoons, refreshing their duration and stacking up to 2 times.",
+      "cooldown_seconds_by_rank": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source notes (summary): If Electro Harpoon is empowered with Danger Zone's bonus and hits a target that is afflicted with the non-enhanced slow and shred applied by previous, non-empowered Electro Harpoon casts, the effectiveness of both debuffs on the target are increased to their enhanced values for all stacks of each debuff."
+      ]
+    },
+    "ultimate": {
+      "name": "The Equalizer",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Rumble deploys a barrage of rockets along the target path that create a field which lingers for a few seconds.",
+      "effects": [
+        {
+          "id": "rumble_r_effect_1",
+          "description": "Active: Rumble deploys a barrage of rockets from the sky along the target path in a line over 0.75 seconds. Each rocket impacts the ground to create a field of fire that lasts 4.5 seconds."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            35.0,
+            52.5,
+            70.0
+          ],
+          "context_notes": "Enemies struck by the impact or within the field are marked Burning for 1 second, taking magic damage every 0."
+        },
+        {
+          "id": "magic_damage_per_second",
+          "description": "Magic Damage per Second",
+          "base_by_rank": [
+            140.0,
+            210.0,
+            280.0
+          ],
+          "context_notes": "Enemies struck by the impact or within the field are marked Burning for 1 second, taking magic damage every 0."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            700.0,
+            1050.0,
+            1400.0
+          ],
+          "context_notes": "Enemies struck by the impact or within the field are marked Burning for 1 second, taking magic damage every 0."
+        }
+      ],
+      "description": "Active: Rumble deploys a barrage of rockets from the sky along the target path in a line over 0.75 seconds. Each rocket impacts the ground to create a field of fire that lasts 4.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        105.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.5833,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Vector.",
+        "Source castTime: None / 0.5833.",
+        "Source speed: 1600.",
+        "Source notes (summary): The Equalizer's cumulative hitbox consists of a row of six rockets, each having a circular area of effect with a radius of 205 units."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Rumble.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Rumble"
+  }
+}

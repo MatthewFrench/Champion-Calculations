@@ -23,7 +23,11 @@
       "radius_units": 1100,
       "reveal_types": [
         "camouflage",
-        "invisible"
+        "invisible",
+        "trap"
+      ],
+      "conditions": [
+        "line_of_sight_can_be_obstructed_by_terrain"
       ]
     }
   ],
@@ -35,7 +39,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.074839+00:00",
-    "effects_structured_reviewed": "2026-02-12"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Turret True Sight reveals stealth units and traps within 1100 range; line-of-sight can still be obstructed by terrain per turret gameplay notes."
+    ]
   },
   "sources": [
     {
@@ -55,6 +62,18 @@
       "path": "From Online/items/Wardens Eye.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Warden%27s_Eye",
+      "accessed": "2026-02-24",
+      "used_for": "page-level turret-item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki gameplay page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Turret",
+      "accessed": "2026-02-24",
+      "used_for": "canonical source for turret pseudo-item true-sight radius and visibility behavior"
     }
   ]
 }

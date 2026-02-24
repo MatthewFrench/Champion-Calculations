@@ -1,0 +1,490 @@
+{
+  "name": "Gwen",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 115.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 330.0,
+      "per_level": 40.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 39.0,
+      "per_level": 4.9
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.69,
+      "per_level_percent": 2.25
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.52499998,
+    "base_windup_seconds": 0.300000012,
+    "windup_fraction": 0.19672132192421404,
+    "windup_percent": 19.672132192421405,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.300000012,
+      "attack_total_time": 1.52499998,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "A Thousand Cuts",
+      "type": "Passive",
+      "description_source": "Innate:  Gwen's  basic attacks  on-hit and damaging abilities deal bonus magic damage equal to a portion of the target's maximum health and  heal her for a portion of this damage dealt against  champions.",
+      "effects": [
+        {
+          "id": "gwen_p_effect_1",
+          "description": "Innate: Gwen's basic attacks on-hit, the center of Snip Snip!, and Needlework deal bonus magic damage equal to 1% (+ 0.6% per 100 AP) of the target's maximum health."
+        },
+        {
+          "id": "gwen_p_effect_2",
+          "description": "A Thousand Cuts is modified based on the target:\n Heals Gwen for 50% of post-mitigation damage dealt against champions, capped at 10 : 26.76 (based on level) (+ 6.5% AP) per instance.\nDeals an additional 8 : 32.59 (based on level) bonus magic damage against minions that are below 40% health.\nDeals a maximum of 3 (+ 5% AP) magic damage against monsters."
+        }
+      ],
+      "description": "Innate: Gwen's basic attacks on-hit, the center of Snip Snip!, and Needlework deal bonus magic damage equal to 1% (+ 0.6% per 100 AP) of the target's maximum health.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The attacks do not deal the bonus damage against structures."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Snip Snip!",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Gwen's  basic attacks  on-hit generate  stacks of Snippy, up to a cap.",
+      "effects": [
+        {
+          "id": "gwen_q_effect_1",
+          "description": "Passive: Gwen's basic attacks generate a stack of Snippy on-hit for 6 seconds, stacking up to 4 times and refreshing on subsequent attacks."
+        },
+        {
+          "id": "damage_per_snip",
+          "description": "Damage per Snip",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Gwen snips at least twice with her scissors in a cone in the target direction over the cast time, dealing magic damage per snip to all enemies within the area, with the final snip dealing increased damage."
+        },
+        {
+          "id": "center_damage_per_snip",
+          "description": "Center Damage per Snip",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Gwen snips at least twice with her scissors in a cone in the target direction over the cast time, dealing magic damage per snip to all enemies within the area, with the final snip dealing increased damage."
+        },
+        {
+          "id": "final_snip_damage",
+          "description": "Final Snip Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Gwen snips at least twice with her scissors in a cone in the target direction over the cast time, dealing magic damage per snip to all enemies within the area, with the final snip dealing increased damage."
+        },
+        {
+          "id": "final_snip_center_damage",
+          "description": "Final Snip Center Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Gwen snips at least twice with her scissors in a cone in the target direction over the cast time, dealing magic damage per snip to all enemies within the area, with the final snip dealing increased damage."
+        },
+        {
+          "id": "minimum_damage",
+          "description": "Minimum Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "If Gwen has any Snippy stacks, she consumes them to snip an additional time for each."
+        },
+        {
+          "id": "minimum_center_damage",
+          "description": "Minimum Center Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "If Gwen has any Snippy stacks, she consumes them to snip an additional time for each."
+        },
+        {
+          "id": "maximum_damage",
+          "description": "Maximum Damage",
+          "base_by_rank": [
+            110.0,
+            160.0,
+            210.0,
+            260.0,
+            310.0
+          ],
+          "context_notes": "If Gwen has any Snippy stacks, she consumes them to snip an additional time for each."
+        },
+        {
+          "id": "maximum_center_damage",
+          "description": "Maximum Center Damage",
+          "base_by_rank": [
+            110.0,
+            160.0,
+            210.0,
+            260.0,
+            310.0
+          ],
+          "context_notes": "If Gwen has any Snippy stacks, she consumes them to snip an additional time for each."
+        }
+      ],
+      "description": "Passive: Gwen's basic attacks generate a stack of Snippy on-hit for 6 seconds, stacking up to 4 times and refreshing on subsequent attacks.",
+      "cooldown_seconds_by_rank": [
+        6.5,
+        5.75,
+        5.0,
+        4.25,
+        3.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 465.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: -50 : 465.",
+        "Source notes (summary): Snip Snip!"
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Hallowed Mist",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Gwen summons the Hallowed Mist upon her current location for a few seconds. Hallowed Mist can be recast within this time, and does so automatically if she attempts to leave the area.",
+      "effects": [
+        {
+          "id": "gwen_w_effect_1",
+          "description": "Active: Gwen summons the Hallowed Mist upon her current location, lasting for 4 seconds. Hallowed Mist can be recast after 0.5 seconds, and does so automatically if Gwen attempts to leave the area."
+        },
+        {
+          "id": "bonus_resistances",
+          "description": "Bonus Resistances",
+          "base_by_rank": [
+            22.0,
+            24.0,
+            26.0,
+            28.0,
+            30.0
+          ],
+          "context_notes": "While inside the mist, Gwen becomes ghosted, gains bonus armor and bonus magic resistance and is untargetable to all enemies (except turrets and monsters) outside of the mist."
+        },
+        {
+          "id": "gwen_w_effect_3",
+          "description": "Recast: Gwen commands the mist to move to her current location."
+        },
+        {
+          "id": "gwen_w_effect_4",
+          "description": "Gwen negates all attacks by monsters outside of the mist."
+        }
+      ],
+      "description": "Active: Gwen summons the Hallowed Mist upon her current location, lasting for 4 seconds. Hallowed Mist can be recast after 0.5 seconds, and does so automatically if Gwen attempts to leave the area.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        21.0,
+        20.0,
+        19.0,
+        18.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 480.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 2000.",
+        "Source effectRadius: 480.",
+        "Source notes (summary): Hallowed Mist's untargetability does not apply to monsters nor turrets, meaning they are allowed to gain aggro against Gwen and attack her regardless of being in the mist or not."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Skip 'n Slash",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Gwen  dashes to the target location, and afterwards empowers her  basic attacks for a duration, gaining  bonus attack speed, magic damage, and  range.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Active: Gwen dashes to the target location, then empowers her basic attacks within the next 4 seconds to deal 15 (+ 20% AP) bonus magic damage on-hit and gain bonus attack speed and 75 bonus attack range."
+        },
+        {
+          "id": "cooldown_refund",
+          "description": "Cooldown Refund",
+          "base_by_rank": [
+            25.0,
+            35.0,
+            45.0,
+            55.0,
+            65.0
+          ],
+          "context_notes": "Gwen's first basic attack within the duration refunds a percentage of Skip 'n Slash's cooldown."
+        },
+        {
+          "id": "gwen_e_effect_3",
+          "description": "Skip 'n Slash resets Gwen's basic attack timer, and can be cast during any of her abilities, and vice versa."
+        }
+      ],
+      "description": "Active: Gwen dashes to the target location, then empowers her basic attacks within the next 4 seconds to deal 15 (+ 20% AP) bonus magic damage on-hit and gain bonus attack speed and 75 bonus attack range.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.5,
+        12.0,
+        11.5,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          35.0,
+          35.0,
+          35.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source notes (summary): Skip 'n Slash has no minimum dash range."
+      ]
+    },
+    "ultimate": {
+      "name": "Needlework",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "First Cast:  Gwen launches a needle in the target direction that deals magic damage and  slows enemies hit. Needlework can be recast up to two more times.",
+      "effects": [
+        {
+          "id": "magic_damage_per_needle",
+          "description": "Magic Damage per Needle",
+          "base_by_rank": [
+            35.0,
+            65.0,
+            95.0
+          ],
+          "context_notes": "Active: Gwen launches a needle in the target direction that deals magic damage to enemies hit and slows them for 1."
+        },
+        {
+          "id": "damage_with_a_thousand_cuts",
+          "description": "Damage with A Thousand Cuts",
+          "base_by_rank": [
+            35.0,
+            65.0,
+            95.0
+          ],
+          "context_notes": "Active: Gwen launches a needle in the target direction that deals magic damage to enemies hit and slows them for 1."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0
+          ],
+          "context_notes": "Active: Gwen launches a needle in the target direction that deals magic damage to enemies hit and slows them for 1."
+        },
+        {
+          "id": "subsequent_slow",
+          "description": "Subsequent Slow",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0
+          ],
+          "context_notes": "Needlework can be recast twice more within 8 seconds of the activation at no additional cost, with a 1-second static cooldown between casts."
+        },
+        {
+          "id": "second_cast_total_damage",
+          "description": "Second Cast Total Damage",
+          "base_by_rank": [
+            105.0,
+            195.0,
+            285.0
+          ],
+          "context_notes": "Recast: Gwen mimics the first cast's effects, while barraging three needles on the second cast and five on the third cast."
+        },
+        {
+          "id": "third_cast_total_damage",
+          "description": "Third Cast Total Damage",
+          "base_by_rank": [
+            175.0,
+            325.0,
+            475.0
+          ],
+          "context_notes": "Recast: Gwen mimics the first cast's effects, while barraging three needles on the second cast and five on the third cast."
+        },
+        {
+          "id": "maximum_total_damage",
+          "description": "Maximum Total Damage",
+          "base_by_rank": [
+            315.0,
+            585.0,
+            855.0
+          ],
+          "context_notes": "Recast: Gwen mimics the first cast's effects, while barraging three needles on the second cast and five on the third cast."
+        },
+        {
+          "id": "gwen_r_effect_4",
+          "description": "Gwen can move during Needlework's cast times."
+        }
+      ],
+      "description": "Active: Gwen launches a needle in the target direction that deals magic damage to enemies hit and slows them for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1800.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25 / 0.5.",
+        "Source speed: 1800.",
+        "Source notes (summary): Dying during the cast time will prevent the remaining needles of the cast from being launched."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Gwen.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Gwen"
+  }
+}

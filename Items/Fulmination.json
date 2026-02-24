@@ -123,7 +123,11 @@
     "purchasable": true,
     "tags": [
       "MARKSMAN"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3055_fulmination.png",
   "simpleDescription": null,
@@ -134,11 +138,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.025753+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Fulmination uses Energize stack accumulation (up to 100), with Dynamo consuming a fully charged Energized basic attack to apply current-health bonus magic damage.",
       "Player-visible behavior: Polarity preserves Energize charges when changing to a different target than the previous Energized-hit target, enabling consecutive charged hits across target swaps.",
-      "Dynamo ratio is verified at 13% of target current health in current page-level patch history."
+      "Dynamo ratio is verified at 13% of target current health in current page-level patch history.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

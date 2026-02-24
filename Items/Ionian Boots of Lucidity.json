@@ -24,7 +24,7 @@
   "effects_structured": [
     {
       "id": "ionian_insight_grant_summoner_spell_haste",
-      "raw": "Gain 10 [[Haste#Summoner spell haste summoner spell haste]].",
+      "raw": "Gain 10 summoner spell haste.",
       "effect_type": "stat_modifier",
       "stat": "summoner_spell_haste",
       "value": 10,
@@ -41,7 +41,7 @@
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.9
     }
   ],
   "shop": {
@@ -58,7 +58,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.009824+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Ionian Insight is a permanent passive stat grant that increases summoner spell haste by 10 while equipped.",
+      "Player-visible behavior: the haste bonus is always active and has no trigger, stack, or cast requirement."
+    ]
   },
   "sources": [
     {
@@ -78,6 +82,12 @@
       "path": "From Online/items/Ionian Boots of Lucidity.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Ionian Boots of Lucidity",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ionian_Boots_of_Lucidity",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Ionian Insight summoner-spell-haste value and always-on passive execution behavior"
     }
   ]
 }

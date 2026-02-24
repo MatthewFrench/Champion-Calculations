@@ -55,5 +55,19 @@
     "abilities": {
       "execution_defaults": "Role-based fallback used when abilities.<ability_key>.execution is not present on champion data."
     }
-  }
+  },
+  "sources": [
+    {
+      "name": "Project champion corpus (canonical files)",
+      "path": "Characters/*.json",
+      "accessed": "2026-02-24",
+      "used_for": "deriving role-level fallback envelopes for attack range, basic-attack timing, and ability execution defaults"
+    },
+    {
+      "name": "Generated champion datasets",
+      "path": "From Online/champions/*.json",
+      "accessed": "2026-02-24",
+      "used_for": "cross-validating generic fallback timing/radius defaults against ingested champion timing/radius fields"
+    }
+  ]
 }

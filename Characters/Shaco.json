@@ -1,0 +1,488 @@
+{
+  "name": "Shaco",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 297.0,
+      "per_level": 40.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 30.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.35
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.694,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0784961655735969,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Backstab",
+      "type": "Passive",
+      "description_source": "Innate:  Shaco's basic attacks deal bonus physical damage when hitting an enemy from behind.",
+      "effects": [
+        {
+          "id": "shaco_p_effect_1",
+          "description": "Innate: Shaco's basic attacks are empowered to deal 20 : 31.18 (based on level) (+ 20% bonus AD) bonus physical damage when hitting an enemy from behind. This damage is affected by critical strike modifiers."
+        },
+        {
+          "id": "shaco_p_effect_2",
+          "description": "Deceive and Two-Shiv Poison have additional effects when they hit an enemy from behind."
+        }
+      ],
+      "description": "Innate: Shaco's basic attacks are empowered to deal 20 : 31.18 (based on level) (+ 20% bonus AD) bonus physical damage when hitting an enemy from behind. This damage is affected by critical strike modifiers.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Backstab's bonus damage adds to the damage instance of the original basic attack."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Deceive",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Shaco becomes  invisible for a short time and  blinks to the target location.",
+      "effects": [
+        {
+          "id": "invisibility_duration",
+          "description": "Invisibility Duration",
+          "base_by_rank": [
+            2.5,
+            2.75,
+            3.0,
+            3.25,
+            3.5
+          ],
+          "context_notes": "Active: Shaco becomes invisible for a duration, and after a 0."
+        },
+        {
+          "id": "shaco_q_effect_2",
+          "description": "Deceive's invisibility breaks when Shaco uses a basic attack or casts Two-Shiv Poison, but not from casting Jack in the Box or Hallucinate."
+        },
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            25.0,
+            35.0,
+            45.0,
+            55.0,
+            65.0
+          ],
+          "context_notes": "After breaking the invisibility, Shaco empowers his next basic attack within 0."
+        },
+        {
+          "id": "shaco_q_effect_4",
+          "description": "Backstab Bonus: The attack will critically strike for (160% + 18%) damage, increased to (200% + 30%) if a critical strike was rolled."
+        }
+      ],
+      "description": "Active: Shaco becomes invisible for a duration, and after a 0.125-second delay, he blinks to the target location.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.5,
+        12.0,
+        11.5,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source notes (summary): If the attack would have already critically struck based on Shaco's critical strike chance, the base Backstab critical damage modifier will be overridden by the default critical damage modifier."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Jack in the Box",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Shaco summons a box at the target location that becomes  stealthed after a short time.",
+      "effects": [
+        {
+          "id": "shaco_w_effect_1",
+          "description": "Active: Shaco summons a box at the target location that becomes stealthed after arming over 2 seconds, lasting for up to 40 (+ 10% AP) seconds. The box is invulnerable and untargetable to enemies while stealthed."
+        },
+        {
+          "id": "fear_duration",
+          "description": "Fear Duration",
+          "base_by_rank": [
+            0.5,
+            0.75,
+            1.0,
+            1.25,
+            1.5
+          ],
+          "context_notes": "The box will spring out upon enemy contact, fearing nearby enemies for a duration, modified to 2."
+        },
+        {
+          "id": "root_duration",
+          "description": "Root Duration",
+          "base_by_rank": [
+            0.5,
+            0.75,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "context_notes": "The box will spring out upon enemy contact, fearing nearby enemies for a duration, modified to 2."
+        },
+        {
+          "id": "slow_duration",
+          "description": "Slow Duration",
+          "base_by_rank": [
+            0.8,
+            1.05,
+            1.3,
+            1.55,
+            1.8
+          ],
+          "context_notes": "The box will spring out upon enemy contact, fearing nearby enemies for a duration, modified to 2."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            25.0,
+            40.0,
+            55.0,
+            70.0,
+            85.0
+          ],
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+        },
+        {
+          "id": "bonus_monster_damage",
+          "description": "Bonus Monster Damage",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+        },
+        {
+          "id": "total_monster_damage",
+          "description": "Total Monster Damage",
+          "base_by_rank": [
+            30.0,
+            50.0,
+            70.0,
+            90.0,
+            110.0
+          ],
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+        },
+        {
+          "id": "increased_monster_damage",
+          "description": "Increased Monster Damage",
+          "base_by_rank": [
+            45.0,
+            75.0,
+            105.0,
+            135.0,
+            165.0
+          ],
+          "context_notes": "Once sprung, the box will remain for 5 seconds, during which it will automatically fire at nearby visible enemies every 0."
+        },
+        {
+          "id": "shaco_w_effect_4",
+          "description": "See Pets for more details about boxes."
+        }
+      ],
+      "description": "Active: Shaco summons a box at the target location that becomes stealthed after arming over 2 seconds, lasting for up to 40 (+ 10% AP) seconds. The box is invulnerable and untargetable to enemies while stealthed.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        15.0,
+        15.0,
+        15.0,
+        15.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          65.0,
+          60.0,
+          55.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): The root and fear are applied at the same time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Two-Shiv Poison",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive: While Two-Shiv Poison is not on cooldown,  Shaco's basic attacks will  slow enemies for a short time.",
+      "effects": [
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            22.5,
+            25.0,
+            27.5,
+            30.0
+          ],
+          "context_notes": "Passive: Shaco's basic attacks slow enemies for 2 seconds while Two-Shiv Poison is not on cooldown."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            95.0,
+            120.0,
+            145.0,
+            170.0
+          ],
+          "context_notes": "Active: Shaco throws a dagger at the target enemy that deals magic damage, increased by 50% if they are below 30% of their maximum health, and slows them for 3 seconds."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            105.0,
+            142.5,
+            180.0,
+            217.5,
+            255.0
+          ],
+          "context_notes": "Active: Shaco throws a dagger at the target enemy that deals magic damage, increased by 50% if they are below 30% of their maximum health, and slows them for 3 seconds."
+        },
+        {
+          "id": "slow_2",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            22.5,
+            25.0,
+            27.5,
+            30.0
+          ],
+          "context_notes": "Active: Shaco throws a dagger at the target enemy that deals magic damage, increased by 50% if they are below 30% of their maximum health, and slows them for 3 seconds."
+        },
+        {
+          "id": "shaco_e_effect_3",
+          "description": "Backstab Bonus: The dagger deals an additional 15 : 54.12 (based on level) (+ 10% AP) bonus magic damage, increased to 22.5 : 81.18 (based on level) (+ 15% AP) if the target is below 30% of their maximum health."
+        }
+      ],
+      "description": "Passive: Shaco's basic attacks slow enemies for 2 seconds while Two-Shiv Poison is not on cooldown.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          75.0,
+          75.0,
+          75.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 1500.",
+        "Source notes (summary): Shaco replicates the last attack animation he performed for Two-Shiv Poison's animation."
+      ]
+    },
+    "ultimate": {
+      "name": "Hallucinate",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Shaco briefly  vanishes and  blinks in the target direction, creating a  clone of himself for some time.",
+      "effects": [
+        {
+          "id": "shaco_r_effect_1",
+          "description": "Active: Shaco vanishes for 0.5 seconds and blinks in the target direction while creating a clone of himself that is summoned in the opposite direction, remaining within control range of him as a controllable clone for up to 18 seconds. Hallucinate can be recast at any time while the clone is alive, and can be used while affected by cast-inhibiting crowd control."
+        },
+        {
+          "id": "shaco_r_effect_2",
+          "description": "Recast: Shaco commands the clone to move to the target location."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            225.0,
+            300.0
+          ],
+          "context_notes": "The clone will explode upon dying or expiring to deal magic damage to nearby enemies and deploy three mini-boxes that activate instantly, fearing nearby enemies for 1 second, increased to 2."
+        },
+        {
+          "id": "modified_magic_damage",
+          "description": "Modified Magic Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "The boxes possess Jack in the Box's effects, except they have a doubled, but shared health, and deal modified magic damage with each attack, increased when attacking a single unit."
+        },
+        {
+          "id": "increased_modified_damage",
+          "description": "Increased Modified Damage",
+          "base_by_rank": [
+            25.0,
+            50.0,
+            75.0
+          ],
+          "context_notes": "The boxes possess Jack in the Box's effects, except they have a doubled, but shared health, and deal modified magic damage with each attack, increased when attacking a single unit."
+        },
+        {
+          "id": "shaco_r_effect_5",
+          "description": "See Pets for more details about Shaco's clone."
+        }
+      ],
+      "description": "Active: Shaco vanishes for 0.5 seconds and blinks in the target direction while creating a clone of himself that is summoned in the opposite direction, remaining within control range of him as a controllable clone for up to 18 seconds. Hallucinate can be recast at any time while the clone is alive, and can be used while affected by cast-inhibiting crowd control.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        90.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): If the explosion hits at least one minion, the boxes will fear all enemies regardless of their unit type for 2."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Shaco.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Shaco"
+  }
+}

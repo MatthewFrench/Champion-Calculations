@@ -1,0 +1,378 @@
+{
+  "name": "Irelia",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 115.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 50.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 2.05
+    },
+    "attack_range": 200.0,
+    "health_regeneration": {
+      "base": 3.5,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.656,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.52499997615814,
+    "base_windup_seconds": 0.300000011920928,
+    "windup_fraction": 0.19672132236795425,
+    "windup_percent": 19.672132236795427,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.300000011920928,
+      "attack_total_time": 1.52499997615814,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Ionian Fervor",
+      "type": "Passive",
+      "description_source": "Innate:  Irelia's  abilities generate a  stack of Ionian Fervor for each enemy champion hit, as well as one stack if she hits at least one non-champion.  Basic attacks against enemy  champions and large  monsters will also refresh the duration.",
+      "effects": [
+        {
+          "id": "irelia_p_effect_1",
+          "description": "Innate: Irelia generates a stack of Ionian Fervor for each enemy champion hit by her abilities, or if she hits at least one non-champion, lasting for 6 seconds, refreshing on basic attacks and ability hits against enemy champions, large monsters, and structures, and stacking up to 4 times."
+        },
+        {
+          "id": "irelia_p_effect_2",
+          "description": "Ionian Fervor: For each stack, Irelia gains 10% : 26.76% (based on level) bonus attack speed, up to a maximum of 40% : 107.06% (based on level). At maximum stacks, Irelia's basic attacks are empowered to deal 10 : 67 (based on level) (+ 20% bonus AD) bonus magic damage on-hit, reduced to[ 50% ][ 5 : 33.5 (based on level) (+ 10% bonus AD) ]against structures."
+        },
+        {
+          "id": "irelia_p_effect_3",
+          "description": "Innate - Unsteady: Enemy champions and large monsters hit by Flawless Duet or Vanguard's Edge's initial barrage are marked as Unsteady for 5 seconds. The mark can be consumed by Bladesurge."
+        }
+      ],
+      "description": "Innate: Irelia generates a stack of Ionian Fervor for each enemy champion hit by her abilities, or if she hits at least one non-champion, lasting for 6 seconds, refreshing on basic attacks and ability hits against enemy champions, large monsters, and structures, and stacking up to 4 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): PENDING FOR TEST:: Parry interactions ( block and dodge)."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bladesurge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Irelia  dashes through the target enemy, dealing physical damage, applying  on-hit effects, and  healing herself.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            5.0,
+            25.0,
+            45.0,
+            65.0,
+            85.0
+          ],
+          "context_notes": "Active: Irelia dashes 100 units through the target enemy's location, and upon collision or dash completion, she deals physical damage, applies on-hit effects, and heals herself."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0
+          ],
+          "context_notes": "Active: Irelia dashes 100 units through the target enemy's location, and upon collision or dash completion, she deals physical damage, applies on-hit effects, and heals herself."
+        },
+        {
+          "id": "irelia_q_effect_2",
+          "description": "Bladesurge's current cooldown is reduced to 0.2 seconds upon collision of targets marked as Unsteady, and is reset if the target dies to or during Bladesurge's dash."
+        },
+        {
+          "id": "irelia_q_effect_3",
+          "description": "Flawless Duet can be cast during the dash."
+        }
+      ],
+      "description": "Active: Irelia dashes 100 units through the target enemy's location, and upon collision or dash completion, she deals physical damage, applies on-hit effects, and heals herself. Bladesurge deals 50 : 237 (based on level) bonus physical damage to minions.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          15.0,
+          15.0,
+          15.0,
+          15.0,
+          15.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1400.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 1400 + 100% movement speed.",
+        "Source notes (summary): Bladesurge will be buffered and cast when the cooldown ends or is reset if the player attempts to cast it within 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Defiant Dance",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "irelia_w_effect_1",
+          "description": "Active: Irelia assumes a defensive stance with her blades to charge for up to 1.5 seconds, during which she reduces incoming physical damage by 40% : 70% (based on level) (+ 7% per 100 AP) and incoming magic damage by 20% : 35% (based on level) (+ 3.5% per 100 AP). Additionally, Defiant Dance's damage increases over the first 0.75 seconds of the channel."
+        },
+        {
+          "id": "irelia_w_effect_2",
+          "description": "Defiant Dance can be recast within the duration, and does so automatically afterwards. Defiant Dance's charge cannot be interrupted by crowd control."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Recast: Irelia swipes her blades in the target direction, dealing physical damage to enemies around her and within a line, increased by 0% : 200% (based on channel time)."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            30.0,
+            60.0,
+            90.0,
+            120.0,
+            150.0
+          ],
+          "context_notes": "Recast: Irelia swipes her blades in the target direction, dealing physical damage to enemies around her and within a line, increased by 0% : 200% (based on channel time)."
+        },
+        {
+          "id": "irelia_w_effect_4",
+          "description": "Defiant Dance's recast can be used while affected by cast-inhibiting crowd control. Ionian Fervor's duration is paused during the charge; if Ionian Fervor has less than 1 second remaining when the charge starts, it is set to 1 second when the charge ends."
+        }
+      ],
+      "description": "Active: Irelia assumes a defensive stance with her blades to charge for up to 1.5 seconds, during which she reduces incoming physical damage by 40% : 70% (based on level) (+ 7% per 100 AP) and incoming magic damage by 20% : 35% (based on level) (+ 3.5% per 100 AP). Additionally, Defiant Dance's damage increases over the first 0.75 seconds of the channel.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        18.0,
+        16.0,
+        14.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 120.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Direction.",
+        "Source castTime: None / 0.25.",
+        "Source effectRadius: 300 /  120.",
+        "Source notes (summary): Enemies around Irelia will be dealt the damage once the recast's cast time ends, while enemies within the line are dealt the damage via a missile that reaches the furthest targets after a 0."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Flawless Duet",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Irelia sends a blade to the target location for a short time.\nFlawless Duet can be recast within the duration, and does so automatically after the duration. The recast cannot be  interrupted.",
+      "effects": [
+        {
+          "id": "irelia_e_effect_1",
+          "description": "Active: Irelia sends a blade to the target location for 3.5 seconds. Flawless Duet can be recast after 0.15 seconds while the blade is active, and does so automatically at the end of its duration."
+        },
+        {
+          "id": "irelia_e_effect_2",
+          "description": "Recast: Irelia sends a second blade to the target location, or to her current position if Flawless Duet was recast automatically."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Once both blades have been placed, they fly toward each other regardless of distance and converge over 0."
+        },
+        {
+          "id": "irelia_e_effect_4",
+          "description": "Flawless Duet's recast can be used during Bladesurge and the cast time of Vanguard's Edge, but is not used automatically while she is affected by cast-inhibiting crowd control or a lockout that disables abilities. Each of the blades' travel times are 0.264 seconds."
+        }
+      ],
+      "description": "Active: Irelia sends a blade to the target location for 3.5 seconds. Flawless Duet can be recast after 0.15 seconds while the blade is active, and does so automatically at the end of its duration.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: None.",
+        "Source speed: 2000 / Distance ÷ 0.1 s.",
+        "Source effectRadius: Global.",
+        "Source notes (summary): Both casts count as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "ultimate": {
+      "name": "Vanguard's Edge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Irelia launches a barrage of blades in the target direction that expand outward upon hitting an enemy champion, dealing magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            125.0,
+            200.0,
+            275.0
+          ],
+          "context_notes": "Active: Irelia launches a barrage of blades in the target direction, expanding outward upon hitting an enemy champion, dealing magic damage to all enemies hit and revealing them for 1 second."
+        },
+        {
+          "id": "irelia_r_effect_2",
+          "description": "After expanding, the blades drop on the ground, knocking all enemy units away from them, though not rendering them airborne, and forming a spade-shaped perimeter around the enemy champion hit for 2.5 seconds that grants sight of its surroundings. Enemies that pass through the blades for the first time are dealt the same magic damage and are slowed by 90% for 1.5 seconds."
+        },
+        {
+          "id": "irelia_r_effect_3",
+          "description": "The perimeter will point at the same angle Irelia casted it from, but based on the target's center."
+        }
+      ],
+      "description": "Active: Irelia launches a barrage of blades in the target direction, expanding outward upon hitting an enemy champion, dealing magic damage to all enemies hit and revealing them for 1 second.",
+      "cooldown_seconds_by_rank": [
+        125.0,
+        105.0,
+        85.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.4.",
+        "Source speed: 2000.",
+        "Source notes (summary): Enemies that cross the perimeter are not marked Unsteady."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Irelia.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Irelia"
+  }
+}

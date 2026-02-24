@@ -1,0 +1,338 @@
+{
+  "name": "Quinn",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Marksman",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 565.0,
+      "per_level": 107.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 269.0,
+      "per_level": 35.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 28.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.4
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 59.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.668,
+      "per_level_percent": 3.1
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.12456139922142,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Harrier",
+      "type": "Passive",
+      "description_source": "Innate:  Quinn's damaging abilities mark enemies with Vulnerable and  reveal them for a few seconds. Periodically,  Valor marks a nearby enemy with Vulnerable.",
+      "effects": [
+        {
+          "id": "quinn_p_effect_1",
+          "description": "Innate: Quinn's Blinding Assault against the primary target, Vault, and Skystrike mark enemies hit with Vulnerable for 4 seconds, during which they are revealed. Valor will periodically mark a nearby visible enemy if no Vulnerable targets exist for 1 second."
+        },
+        {
+          "id": "quinn_p_effect_2",
+          "description": "Quinn's basic attacks on-hit against Vulnerable targets are empowered to consume the mark to deal 15 : 132.35 (based on level) (+ 40% bonus AD) bonus physical damage."
+        },
+        {
+          "id": "quinn_p_effect_3",
+          "description": "While Behind Enemy Lines is active, Harrier is disabled and all Vulnerable marks are removed."
+        }
+      ],
+      "description": "Innate: Quinn's Blinding Assault against the primary target, Vault, and Skystrike mark enemies hit with Vulnerable for 4 seconds, during which they are revealed. Valor will periodically mark a nearby visible enemy if no Vulnerable targets exist for 1 second.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 525.",
+        "Source notes (summary): If a mark applied by an ability is overwritten, consumed, or timed out, Harrier goes on a 1-second cooldown if it's not already on cooldown."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Blinding Assault",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Quinn sends  Valor in the target direction who stops upon hitting an enemy, dealing physical damage all nearby enemies.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            65.0,
+            100.0,
+            135.0,
+            170.0,
+            205.0
+          ],
+          "context_notes": "Active: Quinn sends Valor in the target direction who stops upon hitting an enemy, marking them as Vulnerable and dealing physical damage to all nearby enemies."
+        },
+        {
+          "id": "quinn_q_effect_2",
+          "description": "The primary target is nearsighted for 1.75 seconds if they are a champion, and disarmed for the same duration otherwise."
+        }
+      ],
+      "description": "Active: Quinn sends Valor in the target direction who stops upon hitting an enemy, marking them as Vulnerable and dealing physical damage to all nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.5,
+        10.0,
+        9.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1550.0,
+        "effect_hitbox_radius": 210.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1550.",
+        "Source effectRadius: 210.",
+        "Source notes (summary): Blinding Assault's nearsight will persist through death."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Heightened Senses",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive: Attacking a  Vulnerable target or consuming a mark grants  Quinn  bonus attack speed and  bonus movement speed for a short time.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            28.0,
+            41.0,
+            54.0,
+            67.0,
+            80.0
+          ],
+          "context_notes": "Passive: Whenever Quinn uses a basic attack on-attack against a Vulnerable target or consumes their mark, she gains bonus attack speed and bonus movement speed for 2 seconds."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Passive: Whenever Quinn uses a basic attack on-attack against a Vulnerable target or consumes their mark, she gains bonus attack speed and bonus movement speed for 2 seconds."
+        },
+        {
+          "id": "quinn_w_effect_2",
+          "description": "Active: Valor grants sight of the surrounding area for 2 seconds and reveals enemy champions within for the same duration."
+        }
+      ],
+      "description": "Passive: Whenever Quinn uses a basic attack on-attack against a Vulnerable target or consumes their mark, she gains bonus attack speed and bonus movement speed for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        50.0,
+        45.0,
+        40.0,
+        35.0,
+        30.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 2100.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 2100.",
+        "Source notes (summary): Quinn marks enemy champions who were previously unseen but were revealed Heightened Senses in order to gain assist credit, lasting for the standard credit timer."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Vault",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Quinn  dashes to the target enemy, dealing physical damage,  knocking them back, marking them as  Vulnerable, and briefly  slowing them. She then  leaps backward.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical damage",
+          "base_by_rank": [
+            40.0,
+            65.0,
+            90.0,
+            115.0,
+            140.0
+          ],
+          "context_notes": "Active: Quinn dashes to the target enemy, marking them as Vulnerable, dealing physical damage, knocking them back a very short distance over 0."
+        },
+        {
+          "id": "quinn_e_effect_2",
+          "description": "Vault resets Quinn's basic attack timer shortly after the initial dash. Heightened Senses can be cast during either of the dashes."
+        }
+      ],
+      "description": "Active: Quinn dashes to the target enemy, marking them as Vulnerable, dealing physical damage, knocking them back a very short distance over 0.5 seconds, and slowing them by 50% decaying over 1.5 seconds. She then leaps back 525 units away from them.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 2500 / 850.",
+        "Source notes (summary): Quinn will track the target if they change locations."
+      ]
+    },
+    "ultimate": {
+      "name": "Behind Enemy Lines",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "total_movement_speed_increase",
+          "description": "Total Movement Speed Increase",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0
+          ],
+          "context_notes": "Active: Quinn channels for 2 seconds, signaling Valor to pair up."
+        },
+        {
+          "id": "quinn_r_effect_2",
+          "description": "Taking damage from non- minions while Behind Enemy Lines is active or while Quinn is channeling the ability causes her to lose the bonus total movement speed for 3 seconds. Becoming immobilized, grounded, or silenced ends Behind Enemy Lines immediately and puts it on cooldown without performing Skystrike."
+        },
+        {
+          "id": "quinn_r_effect_3",
+          "description": "Once Behind Enemy Lines has been learned, respawning or entering any summoning platform will spawn Valor instantly."
+        },
+        {
+          "id": "quinn_r_effect_4",
+          "description": "Recast: Quinn cancels the channel, placing Behind Enemy Lines on cooldown."
+        }
+      ],
+      "description": "Active: Quinn channels for 2 seconds, signaling Valor to pair up. Upon completion, he picks her up and they unite, increasing her total movement speed, granting her ghosting, and allowing her to cast Skystrike. Behind Enemy Lines can be recast after 0.5 seconds during the channel.",
+      "cooldown_seconds_by_rank": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Taking damage from non- minions removes the bonus movement speed buff temporarily by suppressing it with the status effect of a slow."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Quinn.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Quinn"
+  }
+}

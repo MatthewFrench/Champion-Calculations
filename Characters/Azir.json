@@ -1,0 +1,407 @@
+{
+  "name": "Azir",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 575.0,
+      "per_level": 119.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 320.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 56.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 5.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.15624999767169437,
+    "windup_percent": 15.624999767169436,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": -0.150000005960464,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Shurima's Legacy",
+      "type": "Passive",
+      "description_source": "Innate:  Azir periodically can summon the Disc of the Sun from the ruins of allied or enemy  turrets.",
+      "effects": [
+        {
+          "id": "azir_p_effect_1",
+          "description": "Innate: Whenever a turret outside the enemy team's base is destroyed, a marker is placed above its ruins which can be targeted by Azir."
+        },
+        {
+          "id": "azir_p_effect_2",
+          "description": "Innate - Disc of the Sun: Azir can select a marker to construct the Sun Disc above the ruins after a 0.5-second cast time. The Sun Disc will activate after being assembled over 5 seconds.Azir cannot construct a Sun Disc with the marker while he is affected by cast-inhibiting crowd control or a lockout that disables abilities."
+        },
+        {
+          "id": "azir_p_effect_3",
+          "description": "The Sun Disc functions the same as a standard inner turret but deals magic damage, gains 40% AP bonus attack damage, and grants its kill credit to Azir. The Sun Disc's health decays over 45 seconds and loses 100 armor and 100 magic resistance while Azir is not alive or is too far away."
+        },
+        {
+          "id": "azir_p_effect_4",
+          "description": "See Pets for more details about the Sun Disc."
+        }
+      ],
+      "description": "Innate: Whenever a turret outside the enemy team's base is destroyed, a marker is placed above its ruins which can be targeted by Azir.",
+      "cooldown_seconds_by_rank": [
+        90.0,
+        90.0,
+        90.0
+      ],
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Conquering Sands",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Azir sends all Sand Soldiers to dash towards a location. They deal magic damage and  slow enemies they pass through.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            80.0,
+            100.0,
+            120.0,
+            140.0
+          ],
+          "context_notes": "Active: Azir orders all Sand Soldiers to dash toward the target location, dealing magic damage to all enemies they pass through as well as those in front of them upon arrival, and slowing them by 25% for 1 second."
+        },
+        {
+          "id": "azir_q_effect_2",
+          "description": "Enemies hit by subsequent soldiers take no additional damage and are instead slowed by an additional 25% per soldier."
+        },
+        {
+          "id": "azir_q_effect_3",
+          "description": "A summoned Sand Soldier is required to cast this ability."
+        }
+      ],
+      "description": "Active: Azir orders all Sand Soldiers to dash toward the target location, dealing magic damage to all enemies they pass through as well as those in front of them upon arrival, and slowing them by 25% for 1 second.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        12.0,
+        10.0,
+        8.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          80.0,
+          90.0,
+          100.0,
+          110.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 150.",
+        "Source notes (summary): Sand Soldiers dash about 50 units further away from Azir than the target location, making them stab targets slightly further away."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Arise!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Azir summons a Sand Soldier to attack nearby targets for him, replacing his  basic attacks against enemies within their range. Their attacks deal magic damage to enemies in a line.",
+      "effects": [
+        {
+          "id": "azir_w_effect_1",
+          "description": "Active: Azir summons a Sand Soldier at the target location that is untargetable, lasts 10 seconds, and grants sight of its surroundings. The Sand Soldier expires twice as fast while within range of an enemy turret, and does so instantly if Azir is too far away.Azir periodically stocks a Sand Soldier, up to a maximum of 2."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            3.235294117647059,
+            6.470588235294118,
+            9.705882352941178,
+            12.941176470588236,
+            16.176470588235293,
+            19.411764705882355,
+            22.647058823529413,
+            25.88235294117647,
+            29.11764705882353,
+            32.35294117647059,
+            35.588235294117645,
+            38.82352941176471,
+            42.05882352941177,
+            45.294117647058826,
+            48.529411764705884,
+            51.76470588235294,
+            55.0
+          ],
+          "context_notes": "When Azir declares a basic attack against an enemy in a soldier's attack range, the Sand Soldier attacks in his stead, thrusting their spear in the target's direction to deal magic damage to enemies struck in a line, applying on-hit effects to the primary target, with on-hit damage reduced to 50% effectiveness, and triggering on-attack effects once."
+        },
+        {
+          "id": "azir_w_effect_3",
+          "description": "Sand Soldiers cannot attack structures, wards, nor traps."
+        },
+        {
+          "id": "azir_w_effect_4",
+          "description": "See Pets for more details about Sand Soldiers."
+        }
+      ],
+      "description": "Active: Azir summons a Sand Soldier at the target location that is untargetable, lasts 10 seconds, and grants sight of its surroundings. The Sand Soldier expires twice as fast while within range of an enemy turret, and does so instantly if Azir is too far away.Azir periodically stocks a Sand Soldier, up to a maximum of 2.",
+      "cooldown_seconds_by_rank": [
+        1.5,
+        1.5,
+        1.5,
+        1.5,
+        1.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          35.0,
+          30.0,
+          25.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Soldiers' attacks deal area damage; against the main target, the damage is additionally tagged as basic damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Shifting Sands",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Azir  shields himself and  dashes to the target Sand Soldier, dealing magic damage to enemies he passes through.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Azir grants himself a shield for 1."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Azir grants himself a shield for 1."
+        },
+        {
+          "id": "azir_e_effect_2",
+          "description": "If Azir dashes into an enemy champion, he stops and gains a charge of Arise!."
+        },
+        {
+          "id": "azir_e_effect_3",
+          "description": "A summoned Sand Soldier is required to cast this ability. Azir can cast of any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Azir grants himself a shield for 1.5 seconds and dashes to the Sand Soldier closest to the cursor, dealing magic damage to enemies within his path.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.5,
+        19.0,
+        17.5,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): Azir will track the Sand Soldier if they change locations, such as by Conquering Sands."
+      ]
+    },
+    "ultimate": {
+      "name": "Emperor's Divide",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Azir summons a wall of soldiers that charges forward, dealing magic damage and  knocking back enemies hit.",
+      "effects": [
+        {
+          "id": "width",
+          "description": "Width",
+          "base_by_rank": [
+            6.0,
+            7.0,
+            8.0
+          ],
+          "context_notes": "Active: Azir calls forth a phalanx of soldiers from 175 units behind him, catching enemies from up to 325 units behind him and charging forward 575 units in the target direction."
+        },
+        {
+          "id": "width_charge",
+          "description": "Width (charge)",
+          "base_by_rank": [
+            620.0,
+            720.0,
+            820.0
+          ],
+          "context_notes": "Active: Azir calls forth a phalanx of soldiers from 175 units behind him, catching enemies from up to 325 units behind him and charging forward 575 units in the target direction."
+        },
+        {
+          "id": "width_impassable_wall",
+          "description": "Width (impassable wall)",
+          "base_by_rank": [
+            750.0,
+            850.0,
+            950.0
+          ],
+          "context_notes": "Active: Azir calls forth a phalanx of soldiers from 175 units behind him, catching enemies from up to 325 units behind him and charging forward 575 units in the target direction."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            200.0,
+            400.0,
+            600.0
+          ],
+          "context_notes": "Enemies impacted by the charge are dealt magic damage and knocked away over 1 second to a line 650 units in front of Azir."
+        },
+        {
+          "id": "azir_r_effect_3",
+          "description": "Upon finishing their charge, the soldiers stand as a wall for 5 seconds, acting as impassible terrain against enemies and granting sight of their surroundings. Azir and his allies can move through these soldiers."
+        }
+      ],
+      "description": "Active: Azir calls forth a phalanx of soldiers from 175 units behind him, catching enemies from up to 325 units behind him and charging forward 575 units in the target direction.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 1000.0,
+        "effect_hitbox_radius": 125.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source speed: 1000 / 1400.",
+        "Source effectRadius: 125.",
+        "Source notes (summary): The soldier units are spawned only 175 units behind Azir, but do not control the knock back directly."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Azir.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Azir"
+  }
+}

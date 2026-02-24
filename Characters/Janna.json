@@ -1,0 +1,394 @@
+{
+  "name": "Janna",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Enchanter",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 570.0,
+      "per_level": 90.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 360.0,
+      "per_level": 50.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 28.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 11.5,
+      "per_level": 0.4
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 47.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Tailwind",
+      "type": "Passive",
+      "description_source": "Innate: Nearby allied champions gain  bonus movement speed while moving toward  Janna.",
+      "effects": [
+        {
+          "id": "janna_p_effect_1",
+          "description": "Innate: Janna grants 6% bonus movement speed to nearby allied champions that are facing in the direction of her location."
+        },
+        {
+          "id": "janna_p_effect_2",
+          "description": "Janna's basic attacks on-hit and Zephyr deal bonus magic damage equal to 30% of her bonus movement speed."
+        }
+      ],
+      "description": "Innate: Janna grants 6% bonus movement speed to nearby allied champions that are facing in the direction of her location.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1200.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Howling Gale",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Janna summons a whirlwind at her current location that matures over a short time, increasing its range, speed, damage, and knock up duration.",
+      "effects": [
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            55.0,
+            90.0,
+            125.0,
+            160.0,
+            195.0
+          ],
+          "context_notes": "Active: Janna summons a whirlwind at her current location that charges up over 3 seconds, increasing its range, speed, damage, and knock up duration every second over the duration."
+        },
+        {
+          "id": "bonus_damage_per_second",
+          "description": "Bonus Damage Per Second",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Janna summons a whirlwind at her current location that charges up over 3 seconds, increasing its range, speed, damage, and knock up duration every second over the duration."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            85.0,
+            135.0,
+            185.0,
+            235.0,
+            285.0
+          ],
+          "context_notes": "Active: Janna summons a whirlwind at her current location that charges up over 3 seconds, increasing its range, speed, damage, and knock up duration every second over the duration."
+        },
+        {
+          "id": "janna_q_effect_2",
+          "description": "Howling Gale can be recast at any time within the duration, and does so automatically after the duration."
+        },
+        {
+          "id": "janna_q_effect_3",
+          "description": "Recast: Janna launches the whirlwind in the direction she targeted over 1.25 seconds, dealing magic damage to enemies hit and knocking them up for 0.5 : 1.25 (based on seconds charged) seconds."
+        }
+      ],
+      "description": "Active: Janna summons a whirlwind at her current location that charges up over 3 seconds, increasing its range, speed, damage, and knock up duration every second over the duration. Howling Gale's direction is determined by this cast.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        14.0,
+        14.0,
+        14.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          90.0,
+          95.0,
+          100.0,
+          105.0,
+          110.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 880.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: none.",
+        "Source speed: 880 : 1408 (based on seconds charged).",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Zephyr",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Janna gains  bonus movement speed and becomes permanently  ghosted.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0
+          ],
+          "context_notes": "Passive: Janna is ghosted and gains bonus movement speed."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            85.0,
+            115.0,
+            145.0,
+            175.0
+          ],
+          "context_notes": "Active: Janna sends an air elemental at the target enemy that deals magic damage and slows them for 2 seconds, capped at 99%."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            24.0,
+            28.0,
+            32.0,
+            36.0
+          ],
+          "context_notes": "Active: Janna sends an air elemental at the target enemy that deals magic damage and slows them for 2 seconds, capped at 99%."
+        }
+      ],
+      "description": "Passive: Janna is ghosted and gains bonus movement speed.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.245,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.245.",
+        "Source speed: 1600.",
+        "Source notes (summary): The maximum slow (99%) is reached with 1316."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Eye of the Storm",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive: Whenever  Janna's abilities  slow or  knock up at least one enemy  champion, she  refunds a portion of  Eye of the Storm's cooldown.",
+      "effects": [
+        {
+          "id": "janna_e_effect_1",
+          "description": "Passive: Whenever Janna's abilities slow or knock up at least one enemy champion, 20% of Eye of the Storm's cooldown is refunded. This may occur once per spell cast."
+        },
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Janna grants the target allied champion or turret, or herself, a shield for 4 seconds."
+        },
+        {
+          "id": "bonus_attack_damage",
+          "description": "Bonus Attack Damage",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "While the shield holds, the target gains bonus attack damage."
+        }
+      ],
+      "description": "Passive: Whenever Janna's abilities slow or knock up at least one enemy champion, 20% of Eye of the Storm's cooldown is refunded. This may occur once per spell cast.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): Eye of the Storm has a forgiveness radius of 175 units."
+      ]
+    },
+    "ultimate": {
+      "name": "Monsoon",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "janna_r_effect_1",
+          "description": "Active: Janna unleashes a blast that knocks back all nearby enemies to up to 875 units over 0.5 seconds based on their proximity, though not through terrain."
+        },
+        {
+          "id": "heal_per_tick",
+          "description": "Heal Per Tick",
+          "base_by_rank": [
+            25.0,
+            37.5,
+            50.0
+          ],
+          "context_notes": "Janna also channels for up to 3 seconds, healing herself and nearby allies every 0."
+        },
+        {
+          "id": "total_heal",
+          "description": "Total Heal",
+          "base_by_rank": [
+            300.0,
+            450.0,
+            600.0
+          ],
+          "context_notes": "Janna also channels for up to 3 seconds, healing herself and nearby allies every 0."
+        }
+      ],
+      "description": "Active: Janna unleashes a blast that knocks back all nearby enemies to up to 875 units over 0.5 seconds based on their proximity, though not through terrain.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        115.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 700.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 700.",
+        "Source notes (summary): The following table refers for interactions while Janna is channeling: Type Channel Attacking Interrupts Abilities Interrupts Movement Interrupts Items Usable Shurelya's Battlesong Youmuu's Ghostblade Randuin's Omen Disabled Hextech Rocketbelt Interrupted by A"
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Janna.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Janna"
+  }
+}

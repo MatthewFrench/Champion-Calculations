@@ -1,0 +1,390 @@
+{
+  "name": "Illaoi",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 656.0,
+      "per_level": 115.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 50.0
+    },
+    "move_speed": 350.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 9.5,
+      "per_level": 0.8
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 5.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.75,
+    "base_windup_seconds": 0.375,
+    "windup_fraction": 0.21428571428571427,
+    "windup_percent": 21.428571428571427,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.375,
+      "attack_total_time": 1.75,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Prophet of an Elder God",
+      "type": "Passive",
+      "description_source": "Innate: Periodically, a Tentacle will spawn next to nearby terrain. It can be killed by enemy basic attacks and will become dormant if  Illaoi leaves it alone.",
+      "effects": [
+        {
+          "id": "illaoi_p_effect_1",
+          "description": "Innate: Periodically, Illaoi spawns a Tentacle on the nearest terrain, if no other Tentacle is around it. Tentacles fully spawn after a 2 second delay and are untargetable in the meantime."
+        },
+        {
+          "id": "illaoi_p_effect_2",
+          "description": "Tentacles are commanded to attack by Illaoi's abilities, dealing 9 : 180 (based on level) (+ 110% AD) (+ 40% AP) physical damage to all enemies struck, increased by 0% : 30% (based on Tentacle Smash's rank).Each enemy individually reduces the slam damage by 50% for every slam they were hit by in the last 0.66 seconds, capped at 75% less damage."
+        },
+        {
+          "id": "illaoi_p_effect_3",
+          "description": "Each Tentacle also heals Illaoi for 5% of her missing health if it hits at least one enemy champion."
+        },
+        {
+          "id": "illaoi_p_effect_4",
+          "description": "See Pets for more details about Tentacles."
+        }
+      ],
+      "description": "Innate: Periodically, Illaoi spawns a Tentacle on the nearest terrain, if no other Tentacle is around it. Tentacles fully spawn after a 2 second delay and are untargetable in the meantime.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        17.277058823529412,
+        16.554117647058824,
+        15.831176470588236,
+        15.108235294117648,
+        14.38529411764706,
+        13.66235294117647,
+        12.939411764705882,
+        12.216470588235294,
+        11.493529411764706,
+        10.770588235294118,
+        10.047647058823529,
+        9.32470588235294,
+        8.601764705882353,
+        7.878823529411765,
+        7.155882352941177,
+        6.432941176470589,
+        5.710000000000001
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1000.",
+        "Source notes (summary): Illaoi cannot spawn Tentacles on ally invulnerable structures [6] (note), in addition to neither her nor the Vessel being able to spawn them in Nexus Obelisk's attack range."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Tentacle Smash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "damage_increase",
+          "description": "Damage Increase",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Passive: Tentacle damage is increased."
+        },
+        {
+          "id": "illaoi_q_effect_2",
+          "description": "Active: Illaoi slams down a Tentacle in the target direction."
+        },
+        {
+          "id": "illaoi_q_effect_3",
+          "description": "Illaoi reveals herself during the cast if there is an enemy champion nearby."
+        }
+      ],
+      "description": "Passive: Tentacle damage is increased.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.75
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.75.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Harsh Lesson",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Illaoi's next basic attack gains  bonus attack range and causes her to  leap to her target, dealing additional physical damage and commanding nearby Tentacles to attack the target.",
+      "effects": [
+        {
+          "id": "illaoi_w_effect_1",
+          "description": "Active: Illaoi empowers her next basic attack within 6 seconds to gain 225 bonus range and cause her to leap to the target's location if they are beyond her normal basic attack range."
+        },
+        {
+          "id": "additional_physical_damage",
+          "description": "Additional Physical Damage",
+          "base_by_rank": [
+            3.0,
+            3.5,
+            4.0,
+            4.5,
+            5.0
+          ],
+          "context_notes": "The attack deals additional physical damage, with a minimum threshold, and capped at 300 against non-champions, and commands all Tentacles in range to attack the target."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "The attack deals additional physical damage, with a minimum threshold, and capped at 300 against non-champions, and commands all Tentacles in range to attack the target."
+        },
+        {
+          "id": "illaoi_w_effect_3",
+          "description": "Harsh Lesson resets Illaoi's basic attack timer."
+        },
+        {
+          "id": "illaoi_w_effect_4",
+          "description": "Harsh Lesson can be activated during Illaoi's other abilities."
+        }
+      ],
+      "description": "Active: Illaoi empowers her next basic attack within 6 seconds to gain 225 bonus range and cause her to leap to the target's location if they are beyond her normal basic attack range.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Harsh Lesson cannot be cast while pulling a Spirit."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Test of Spirit",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Illaoi reaches with a tendril in the target direction that stops upon the first enemy hit. If the target is a  champion, she rips their Spirit out from them to stand before her.",
+      "effects": [
+        {
+          "id": "illaoi_e_effect_1",
+          "description": "Active: Illaoi launches a tendril in the target direction that stops at the first enemy hit, pulling their Spirit out in front of Illaoi over 0.75 seconds if they are a champion. The target is tethered to the Spirit for 7 seconds, revealing them in addition to granting sight of the area around them while the tether remains."
+        },
+        {
+          "id": "damage_transmission",
+          "description": "Damage Transmission",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "The Spirit spawns with the target's current health, armor and magic resist, and redirects a portion of the pre-mitigation damage received to the tethered champion."
+        },
+        {
+          "id": "illaoi_e_effect_3",
+          "description": "When the Spirit is killed or the target leaves tether range, the tether is severed, marking the target as a Vessel for 4 seconds and slowing them by 80% for 1.5 seconds once the tether returns back to them. Each Tentacle autonomously attacks the closest Vessel or Spirit, prioritizing the latter, once every 4.5 / 4 / 3.5 (based on level) seconds."
+        },
+        {
+          "id": "illaoi_e_effect_4",
+          "description": "Enemies made a Vessel continuously spawn a Tentacle near themselves, when possible. Tentacles can spawn 300 units closer to each other than when spawned by Illaoi."
+        },
+        {
+          "id": "illaoi_e_effect_5",
+          "description": "Illaoi is unable to act while firing the projectile and while the target's Spirit is being pulled. She also reveals herself while firing the projectile if there is an enemy champion nearby. Vessels can dispel their mark by scoring a takedown against Illaoi. Test of Spirit cannot be cast again until the Spirit dies."
+        }
+      ],
+      "description": "Active: Illaoi launches a tendril in the target direction that stops at the first enemy hit, pulling their Spirit out in front of Illaoi over 0.75 seconds if they are a champion. The target is tethered to the Spirit for 7 seconds, revealing them in addition to granting sight of the area around them while the tether remains.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          40.0,
+          45.0,
+          50.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1900.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1900.",
+        "Source notes (summary): PENDING FOR TEST: The self-reveal has not been fully tested for complete confirmation."
+      ]
+    },
+    "ultimate": {
+      "name": "Leap of Faith",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Illaoi becomes  unstoppable before dealing physical damage to nearby enemies. For each enemy  champion hit, a Tentacle is summoned around her for a period.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Illaoi gains displacement immunity and leaps into the air for the cast time."
+        },
+        {
+          "id": "illaoi_r_effect_2",
+          "description": "For the duration, Harsh Lesson's cooldown is halved, all Tentacles awakened by Illaoi are untargetable, will not show their hitboxes, nor go dormant, and will take 0.5 seconds to make an attack; however they will then incur a lockout of 0.5 seconds before being able to start a new attack."
+        },
+        {
+          "id": "illaoi_r_effect_3",
+          "description": "This does not affect the Tentacle attack from Tentacle Smash."
+        }
+      ],
+      "description": "Active: Illaoi gains displacement immunity and leaps into the air for the cast time. She then slams her idol into the ground, dealing physical damage to nearby enemies. For each enemy champion hit, a Tentacle is summoned for 8 seconds (up to a maximum of 6 summons).",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        95.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Illaoi.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Illaoi"
+  }
+}

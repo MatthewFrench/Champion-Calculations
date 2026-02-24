@@ -1,0 +1,379 @@
+{
+  "name": "Fiora",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 60.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.69,
+      "per_level_percent": 3.2
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.45000004768371,
+    "base_windup_seconds": 0.200000002980232,
+    "windup_fraction": 0.1379310320021853,
+    "windup_percent": 13.793103200218528,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.200000002980232,
+      "attack_total_time": 1.45000004768371,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Duelist's Dance",
+      "type": "Passive",
+      "description_source": "Innate:  Fiora challenges nearby enemy champions, calling out a direction from which she will try to strike their Vitals. A new Vital is called out after some time or if one is struck.",
+      "effects": [
+        {
+          "id": "fiora_p_effect_1",
+          "description": "Innate: Fiora identifies the Vitals of nearby visible enemy champions, marked as an arc around them in North-, East-, South- or Westward direction. Vitals take 1.75 seconds to become targetable and linger for 13.25 seconds afterwards while Fiora remains near the target, otherwise the Vital will disappear. After a Vital ends, Fiora identifies a new one on her target."
+        },
+        {
+          "id": "fiora_p_effect_2",
+          "description": "Dealing damage in the direction of a Vital will trigger it to deal bonus true damage equal to 3% (+ 4% per 100 bonus AD) of target's maximum health, heal Fiora for 35 : 107.65 (based on level), and grant her 20% / 30% / 40% / 50% (based on Grand Challenge's Rank) bonus movement speed that decays over 1.85 seconds."
+        }
+      ],
+      "description": "Innate: Fiora identifies the Vitals of nearby visible enemy champions, marked as an arc around them in North-, East-, South- or Westward direction. Vitals take 1.75 seconds to become targetable and linger for 13.25 seconds afterwards while Fiora remains near the target, otherwise the Vital will disappear. After a Vital ends, Fiora identifies a new one on her target.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1200  1350 /  250.",
+        "Source notes (summary): Vitals can be triggered by any source of damage Fiora deals, except those with default damage and reactive damage types."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Lunge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Fiora  dashes in the target direction and then stabs a nearby enemy, dealing physical damage and applying  on-hit effects.",
+      "effects": [
+        {
+          "id": "fiora_q_effect_1",
+          "description": "Active: Fiora dashes in the target direction, then stabs a nearby enemy based on a priority. Lunge can hit structures and wards. Stabbing a target reduces Lunge's cooldown by 50%."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            70.0,
+            80.0,
+            90.0,
+            100.0,
+            110.0
+          ],
+          "context_notes": "The stab deals physical damage and applies on-hit effects."
+        },
+        {
+          "id": "fiora_q_effect_3",
+          "description": "Fiora can cast any of her abilities during the dash. The target does not have to be visible to be hit by this ability, unless it is a ward."
+        }
+      ],
+      "description": "Active: Fiora dashes in the target direction, then stabs a nearby enemy based on a priority. Lunge can hit structures and wards. Stabbing a target reduces Lunge's cooldown by 50%.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        11.25,
+        9.5,
+        7.75,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1100.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1100 + 300% / 350% bonus movement speed.",
+        "Source notes (summary): Lunge deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Riposte",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Fiora briefly parries all incoming damage and  debuffs, then stabs in a direction, dealing magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "fiora_w_effect_1",
+          "description": "Active: Fiora enters a defensive stance for 0.75 seconds, during which she is unable to act, prevents all incoming non- turret damage, and gains debuff immunity."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            110.0,
+            150.0,
+            190.0,
+            230.0,
+            270.0
+          ],
+          "context_notes": "Additionally, over the first 0."
+        },
+        {
+          "id": "fiora_w_effect_3",
+          "description": "The enemy champion struck is also slowed and crippled by 25% for 2 seconds. If Riposte negates at least one hostile immobilizing effect, Fiora stuns the target for the same duration instead."
+        }
+      ],
+      "description": "Active: Fiora enters a defensive stance for 0.75 seconds, during which she is unable to act, prevents all incoming non- turret damage, and gains debuff immunity.",
+      "cooldown_seconds_by_rank": [
+        24.0,
+        22.0,
+        20.0,
+        18.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 3200.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 3200.",
+        "Source notes (summary): Riposte is not invulnerability but instead reduces any damage to her by 100% late into the damage event."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Bladework",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Fiora gains  bonus range and  bonus attack speed for the next two attacks.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            50.0,
+            60.0,
+            70.0,
+            80.0,
+            90.0
+          ],
+          "context_notes": "Active: Fiora empowers her next two basic attacks on-attack within 4 seconds to gain 25 bonus range and bonus attack speed."
+        },
+        {
+          "id": "critical_damage",
+          "description": "Critical damage",
+          "base_by_rank": [
+            160.0,
+            170.0,
+            180.0,
+            190.0,
+            200.0
+          ],
+          "context_notes": "The first attack slows the target by 30% for 1 second but cannot critically strike."
+        },
+        {
+          "id": "fiora_e_effect_3",
+          "description": "Bladework resets Fiora's basic attack timer."
+        }
+      ],
+      "description": "Active: Fiora empowers her next two basic attacks on-attack within 4 seconds to gain 25 bonus range and bonus attack speed.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Spell shield will only block the slow from the first hit."
+      ]
+    },
+    "ultimate": {
+      "name": "Grand Challenge",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Duelist's Dance's  bonus movement speed is increased.",
+      "effects": [
+        {
+          "id": "additional_bonus_movement_speed",
+          "description": "Additional Bonus Movement Speed",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "context_notes": "Passive: Duelist's Dance's bonus movement speed is increased."
+        },
+        {
+          "id": "fiora_r_effect_2",
+          "description": "Active: Fiora challenges the target enemy champion for 8 seconds, highlighting all four of their Vitals after a 0.5-second delay. While in effect, Duelist's Dance does not identify new Vitals on Grand Challenge's target, and unlike Duelist's Dance, Grand Challenge's Vitals will linger regardless of range."
+        },
+        {
+          "id": "fiora_r_effect_3",
+          "description": "While near the target, Fiora gains Duelist's Dance's bonus movement speed."
+        },
+        {
+          "id": "heal_per_tick",
+          "description": "Heal per Tick",
+          "base_by_rank": [
+            18.75,
+            25.0,
+            31.25
+          ],
+          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0."
+        },
+        {
+          "id": "heal_per_second",
+          "description": "Heal per Second",
+          "base_by_rank": [
+            75.0,
+            100.0,
+            125.0
+          ],
+          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0."
+        },
+        {
+          "id": "maximum_heal",
+          "description": "Maximum Heal",
+          "base_by_rank": [
+            375.0,
+            500.0,
+            625.0
+          ],
+          "context_notes": "If Fiora triggers at least one Vital before the target dies, or triggers all four otherwise, a Victory Zone is created on their death location for 5 seconds, which heals Fiora and all allies within the area every 0."
+        }
+      ],
+      "description": "Passive: Duelist's Dance's bonus movement speed is increased.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        90.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 550 / 500.",
+        "Source notes (summary): Grand Challenge is dispelled instantly if targeting a decoy."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Fiora.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Fiora"
+  }
+}

@@ -1,0 +1,399 @@
+{
+  "name": "Camille",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 650.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 339.0,
+      "per_level": 52.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.8
+    },
+    "resource_regeneration": {
+      "base": 8.15,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 3.8
+    },
+    "attack_speed": {
+      "base": 0.644,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.55200004577636,
+    "base_windup_seconds": 0.300000011920928,
+    "windup_fraction": 0.19329897105180716,
+    "windup_percent": 19.329897105180716,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.300000011920928,
+      "attack_total_time": 1.55200004577636,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Adaptive Defenses",
+      "type": "Passive",
+      "description_source": "Innate: Periodically,  Camille's next basic attack against a champion will  on-hit grant her a  shield against their damage type (physical or magical) for a short time.",
+      "effects": [
+        {
+          "id": "camille_p_effect_1",
+          "description": "Innate: Periodically, Camille's next basic attack on-hit against an enemy champion grants her a shield equal to 20% of her maximum health, lasting for 2 seconds and absorbing damage from either exclusively physical damage or magic damage, based on which type the target has previously dealt most of against champions as well as on Camille's current armor and magic resistance."
+        }
+      ],
+      "description": "Innate: Periodically, Camille's next basic attack on-hit against an enemy champion grants her a shield equal to 20% of her maximum health, lasting for 2 seconds and absorbing damage from either exclusively physical damage or magic damage, based on which type the target has previously dealt most of against champions as well as on Camille's current armor and magic resistance.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        14.0,
+        10.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Adaptive Defenses goes on cooldown after the shield expires or is destroyed."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Precision Protocol",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Camille's next basic attack deals bonus physical damage and grants her  bonus movement speed.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Camille empowers her next basic attack within 4 seconds to have an uncancellable windup, gain 50 bonus range, deal bonus physical damage and grant her bonus movement speed for 1 second."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "Active: Camille empowers her next basic attack within 4 seconds to have an uncancellable windup, gain 50 bonus range, deal bonus physical damage and grant her bonus movement speed for 1 second."
+        },
+        {
+          "id": "camille_q_effect_2",
+          "description": "After 0.25 seconds of using the empowered attack, Precision Protocol can then be recast within the next 3.5 seconds at no additional cost."
+        },
+        {
+          "id": "increased_mixed_damage",
+          "description": "Increased Mixed Damage",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Recast: Camille mimics the first cast's effects."
+        },
+        {
+          "id": "camille_q_effect_4",
+          "description": "Both casts of Precision Protocol reset Camille's basic attack timer. Camille is able to cast Tactical Sweep, Hookshot, or The Hextech Ultimatum during the windup of Precision Protocol's empowered attack without cancelling it."
+        }
+      ],
+      "description": "Active: Camille empowers her next basic attack within 4 seconds to have an uncancellable windup, gain 50 bonus range, deal bonus physical damage and grant her bonus movement speed for 1 second. This attack cannot critically strike.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          25.0,
+          25.0,
+          25.0,
+          25.0,
+          25.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Both casts count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Tactical Sweep",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Camille briefly becomes  ghosted and sweeps her leg after a delay, dealing physical damage to enemies hit in a cone. Enemies in the outer half are slowed and take increased damage, while also  healing her.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Camille sweeps her leg in a cone in the target direction over 1."
+        },
+        {
+          "id": "outer_cone_additional_damage",
+          "description": "Outer Cone Additional Damage",
+          "base_by_rank": [
+            6.0,
+            6.5,
+            7.0,
+            7.5,
+            8.0
+          ],
+          "context_notes": "Enemies hit by the outer half of the cone take additional physical damage, capped at 300 against monsters, and are slowed by 80% decaying over 2 seconds."
+        },
+        {
+          "id": "non_epic_monster_damage",
+          "description": "Non-Epic Monster Damage",
+          "base_by_rank": [
+            30.0,
+            42.5,
+            55.0,
+            67.5,
+            80.0
+          ],
+          "context_notes": "Non-epic monsters take 50% damage from Tactical Sweep."
+        },
+        {
+          "id": "bonus_non_epic_monster_damage",
+          "description": "Bonus Non-Epic Monster Damage",
+          "base_by_rank": [
+            3.0,
+            3.25,
+            3.5,
+            3.75,
+            4.0
+          ],
+          "context_notes": "Non-epic monsters take 50% damage from Tactical Sweep."
+        },
+        {
+          "id": "camille_w_effect_4",
+          "description": "Other abilities can be cast during the animation without cancelling it."
+        }
+      ],
+      "description": "Active: Camille sweeps her leg in a cone in the target direction over 1.1 seconds, during which she is ghosted and unable to declare basic attacks. Afterwards, she deals physical damage to all enemies within.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        14.0,
+        13.0,
+        12.0,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source effectRadius: 325 / 650.",
+        "Source notes (summary): Camille can move during the delay, but the hitbox and Camille's visuals are fixed to the initial target direction."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Hookshot",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Camille fires a grapple,  dashing onto any terrain she hits and briefly perching onto it.",
+      "effects": [
+        {
+          "id": "camille_e_effect_1",
+          "description": "Active: Camille fires a grapple in the target direction. If the grapple collides with terrain, Camille will dash toward and attach to the terrain for 0.75 seconds, during which she gains the ability to cast Wall Dive."
+        },
+        {
+          "id": "camille_e_effect_2",
+          "description": "Camille will be knocked down by any immobilizing or polymorphing crowd control during the dash."
+        },
+        {
+          "id": "camille_e_effect_3",
+          "description": "Other abilities can be cast during the ability. Casting The Hextech Ultimatum will cause the grapple to disappear if it is in flight."
+        }
+      ],
+      "description": "Active: Camille fires a grapple in the target direction. If the grapple collides with terrain, Camille will dash toward and attach to the terrain for 0.75 seconds, during which she gains the ability to cast Wall Dive.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1400.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 1400.",
+        "Source notes (summary): Camille may move while the grapple is in flight."
+      ]
+    },
+    "ultimate": {
+      "name": "The Hextech Ultimatum",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Camille  dives onto an enemy champion, creating a zone around the target and  knocking away all other enemies.",
+      "effects": [
+        {
+          "id": "camille_r_effect_1",
+          "description": "Active: Camille becomes untargetable and leaps with displacement immunity towards the target enemy champion over 0.5 seconds, revealing them for the duration and disrupting their ongoing channels."
+        },
+        {
+          "id": "zone_duration",
+          "description": "Zone Duration",
+          "base_by_rank": [
+            2.5,
+            3.25,
+            4.0
+          ],
+          "context_notes": "Upon landing on the target, she becomes targetable again and creates a hexagonal zone around her current location for a duration, knocking away all other nearby enemies on impact, though not through terrain."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            4.0,
+            6.0,
+            8.0
+          ],
+          "context_notes": "The target cannot escape the zone through any means."
+        },
+        {
+          "id": "camille_r_effect_4",
+          "description": "The Hextech Ultimatum ends automatically within 1 second if Camille leaves the area or dies."
+        }
+      ],
+      "description": "Active: Camille becomes untargetable and leaps with displacement immunity towards the target enemy champion over 0.5 seconds, revealing them for the duration and disrupting their ongoing channels.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        115.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 425.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 425.",
+        "Source notes (summary): Camille will attempt to basic attack the target upon landing."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Camille.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Camille"
+  }
+}

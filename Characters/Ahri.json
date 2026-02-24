@@ -1,0 +1,408 @@
+{
+  "name": "Ahri",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Burst",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 418.0,
+      "per_level": 25.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 2.5,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 53.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.668,
+      "per_level_percent": 2.2
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Essence Theft",
+      "type": "Passive",
+      "description_source": "Innate:  Ahri generates a  stack of Essence Fragment from killing  minions and  monsters. At max stacks, she consumes them to  heal herself.",
+      "effects": [
+        {
+          "id": "ahri_p_effect_1",
+          "description": "Innate: Ahri generates a stack of Essence Fragment whenever she kills a minion or monster. At 9 stacks, she consumes them to heal herself for 35 : 102.06 (based on level) (+ 20% AP)."
+        },
+        {
+          "id": "ahri_p_effect_2",
+          "description": "Additionally, whenever Ahri scores a champion takedown within 3 seconds of damaging them, she brings their essence to her to consume it to heal herself for 75 : 175.59 (based on level) (+ 30% AP)."
+        }
+      ],
+      "description": "Innate: Ahri generates a stack of Essence Fragment whenever she kills a minion or monster. At 9 stacks, she consumes them to heal herself for 35 : 102.06 (based on level) (+ 20% AP).",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Orb of Deception",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Ahri sends out her orb, dealing magic damage to enemies it passes through. After a point, the orb travels back to her, dealing the same amount in true damage to enemies it passes through.",
+      "effects": [
+        {
+          "id": "damage_per_pass",
+          "description": "Damage Per Pass",
+          "base_by_rank": [
+            40.0,
+            65.0,
+            90.0,
+            115.0,
+            140.0
+          ],
+          "context_notes": "Active: Ahri sends her orb in the target direction that deals magic damage to enemies it passes through."
+        },
+        {
+          "id": "total_mixed_damage",
+          "description": "Total Mixed Damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "Active: Ahri sends her orb in the target direction that deals magic damage to enemies it passes through."
+        },
+        {
+          "id": "ahri_q_effect_2",
+          "description": "Enemies can be hit only once per pass."
+        }
+      ],
+      "description": "Active: Ahri sends her orb in the target direction that deals magic damage to enemies it passes through. Upon reaching maximum range, it returns to her to deal the same amount in true damage to enemies it passes through.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          65.0,
+          75.0,
+          85.0,
+          95.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1550.0,
+        "effect_hitbox_radius": 100.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1550 / 60 - 2600.",
+        "Source effectRadius: 100.",
+        "Source notes (summary): Orb of Deception will hit additional units around the return point in a small circle when the orb turns around."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Fox-Fire",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ahri gains a burst of  move speed and conjures three fox-fires that orbit her for a short time. Fox-fires home onto nearby enemies, dealing magic damage.",
+      "effects": [
+        {
+          "id": "ahri_w_effect_1",
+          "description": "Active: Ahri gains 40% bonus movement speed that decays over 2 seconds and conjures three flames which orbit her clockwise for up to 2.5 seconds."
+        },
+        {
+          "id": "primary_magic_damage",
+          "description": "Primary Magic Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "After 0."
+        },
+        {
+          "id": "subsequent_magic_damage",
+          "description": "Subsequent Magic Damage",
+          "base_by_rank": [
+            16.0,
+            24.0,
+            32.0,
+            40.0,
+            48.0
+          ],
+          "context_notes": "After 0."
+        },
+        {
+          "id": "total_single_target_damage",
+          "description": "Total Single-Target Damage",
+          "base_by_rank": [
+            72.0,
+            108.0,
+            144.0,
+            180.0,
+            216.0
+          ],
+          "context_notes": "After 0."
+        },
+        {
+          "id": "ahri_w_effect_3",
+          "description": "Flames prioritize enemy champions hit by Charm, then enemy champions, then minions that would die to Fox-Fire's damage, and then the target of Ahri's last basic attack within 3 seconds."
+        },
+        {
+          "id": "primary_minion_damage",
+          "description": "Primary Minion Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Fox-Fire's damage is doubled against minions below 20% maximum health."
+        },
+        {
+          "id": "subsequent_minion_damage",
+          "description": "Subsequent Minion Damage",
+          "base_by_rank": [
+            32.0,
+            48.0,
+            64.0,
+            80.0,
+            96.0
+          ],
+          "context_notes": "Fox-Fire's damage is doubled against minions below 20% maximum health."
+        }
+      ],
+      "description": "Active: Ahri gains 40% bonus movement speed that decays over 2 seconds and conjures three flames which orbit her clockwise for up to 2.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 75.92,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 75.92° per second / 1400.",
+        "Source effectRadius: 150 / 550 / 725.",
+        "Source notes (summary): Each missile of Fox-Fire has its own shorter non-priority range."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Charm",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ahri blows forth a kiss that  charms the first enemy hit, dealing magic damage and  knocking them down.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Ahri blows forth a kiss in the target direction that deals magic damage to the first enemy hit, knocking them down and charming and slowing them by 65% for a duration."
+        },
+        {
+          "id": "disable_duration",
+          "description": "Disable Duration",
+          "base_by_rank": [
+            1.2,
+            1.35,
+            1.5,
+            1.65,
+            1.8
+          ],
+          "context_notes": "Active: Ahri blows forth a kiss in the target direction that deals magic damage to the first enemy hit, knocking them down and charming and slowing them by 65% for a duration."
+        }
+      ],
+      "description": "Active: Ahri blows forth a kiss in the target direction that deals magic damage to the first enemy hit, knocking them down and charming and slowing them by 65% for a duration.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1550.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1550.",
+        "Source notes (summary): Charm is able to slow targets otherwise immune to slows upon charming them."
+      ]
+    },
+    "ultimate": {
+      "name": "Spirit Rush",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Ahri  dashes forward and fires essence bolts to nearby enemies, dealing magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            125.0,
+            175.0
+          ],
+          "context_notes": "Active: Ahri dashes to the target location and then fires essence bolts to up to 3 nearby visible enemies, each dealing magic damage."
+        },
+        {
+          "id": "ahri_r_effect_2",
+          "description": "Recast: Ahri mimics the first cast's effects."
+        },
+        {
+          "id": "ahri_r_effect_3",
+          "description": "Spirit Rush's recast duration will persist even after using all recasts. Fox-Fire can be cast during the dash."
+        }
+      ],
+      "description": "Active: Ahri dashes to the target location and then fires essence bolts to up to 3 nearby visible enemies, each dealing magic damage. Spirit Rush can be recast twice more within 15 seconds of the activation at no additional cost, with a 1-second static cooldown between casts. Consuming a champion's essence with Essence Theft while Spirit Rush is active extends the recast duration by and up to 10 seconds, and grants an additional recast, storing up to 3 recasts at a time.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        120.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1200.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1200 + 100% movement speed / 1400.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ahri.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ahri"
+  }
+}

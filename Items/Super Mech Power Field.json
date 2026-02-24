@@ -52,7 +52,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.042321+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Item page redirects to Super minion; aura grants nearby non-super minions bonus resistances while excluding super-minion recipients."
+    ]
   },
   "sources": [
     {
@@ -72,6 +75,18 @@
       "path": "From Online/items/Super Mech Power Field.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Super_Mech_Power_Field",
+      "accessed": "2026-02-24",
+      "used_for": "page-level minion-item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki gameplay page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Super_minion",
+      "accessed": "2026-02-24",
+      "used_for": "canonical combat-rule source for Super Mech Power Field redirect semantics"
     }
   ]
 }

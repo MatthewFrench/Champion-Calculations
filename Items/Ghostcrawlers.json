@@ -28,12 +28,13 @@
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": 6.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self",
       "conditions": [
-        "ends_on_basic_attack_or_ability_cast"
+        "ends_on_basic_attack_or_ability_cast",
+        "ability_cast_ends_effect_after_cast_time"
       ],
       "status_effects": [
         "ghosted",
@@ -41,9 +42,10 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [
-        6
+        6,
+        15
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.86
     },
     {
       "id": "wall_walk_bonus_movement_speed_while_inside_terrain",
@@ -59,14 +61,14 @@
       "trigger": "while_in_terrain",
       "applies_to": "self",
       "conditions": [
-        "while_condition"
+        "while_inside_terrain"
       ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         300
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.84
     }
   ],
   "shop": {
@@ -83,7 +85,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.020624+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Wall Walk is an active with 15-second cooldown that grants ghosted terrain traversal for up to 6 seconds and ends early on basic attack or ability cast.",
+      "Player-visible behavior: while inside terrain during Wall Walk, the holder gains +300 bonus movement speed.",
+      "Data reconciliation note: page-level sell value (250) differs from Tier-1 dataset sell value (350); retained Tier-1 baseline pending canonical mode-specific economy policy."
+    ]
   },
   "sources": [
     {
@@ -103,6 +110,12 @@
       "path": "From Online/items/Ghostcrawlers.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Ghostcrawlers",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ghostcrawlers",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Wall Walk cooldown, cast-end interruption semantics, and Arena-scoped behavior notes"
     }
   ]
 }

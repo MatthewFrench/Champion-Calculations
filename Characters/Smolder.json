@@ -1,0 +1,398 @@
+{
+  "name": "Smolder",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 575.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 40.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 3.75,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 8.5,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 2.3
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 4.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.13377659,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Dragon Practice",
+      "type": "Passive",
+      "description_source": "Innate:  Smolder generates a  stack of Dragon Practice from damaging champions with abilities, or when  Super Scorcher Breath kills  minions and  monsters. His  basic abilities deal bonus magic damage based on stacks.",
+      "effects": [
+        {
+          "id": "smolder_p_effect_1",
+          "description": "Innate: Smolder generates a stack of Dragon Practice each time he hits an enemy champion with an ability, or whenever Super Scorcher Breath kills a minion or monster. His basic abilities deal bonus magic damage based on stacks.\n Super Scorcher Breath: Deals bonus magic damage equal to 40% : 60% (+ 0% : 6%) (based on critical strike chance) of Dragon Practice stacks.\n Achooo!: Explosions deal bonus magic damage equal to 55% of Dragon Practice stacks.\n Flap, Flap, Flap: Attacks each deal bonus magic damage equal to 12% of Dragon Practice stacks."
+        }
+      ],
+      "description": "Innate: Smolder generates a stack of Dragon Practice each time he hits an enemy champion with an ability, or whenever Super Scorcher Breath kills a minion or monster. His basic abilities deal bonus magic damage based on stacks.\n Super Scorcher Breath: Deals bonus magic damage equal to 40% : 60% (+ 0% : 6%) (based on critical strike chance) of Dragon Practice stacks.\n Achooo!: Explosions deal bonus magic damage equal to 55% of Dragon Practice stacks.\n Flap, Flap, Flap: Attacks each deal bonus magic damage equal to 12% of Dragon Practice stacks.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Super Scorcher Breath grants a stack if the target dies while the initial missile is in flight."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Super Scorcher Breath",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Smolder spits a fireball that deals physical damage to the target enemy.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            65.0,
+            80.0,
+            95.0,
+            110.0,
+            125.0
+          ],
+          "context_notes": "Active: Smolder spits a fireball at the target enemy that deals physical damage, increased by 0% : 50% (+ 0% : 15%) (based on critical strike chance); applies on-hit effects; applies life steal at 50% effectiveness; and triggers on-attack effects."
+        },
+        {
+          "id": "smolder_q_effect_2",
+          "description": "Super Scorcher Breath becomes empowered with new effects based on the number of Dragon Practice stacks:"
+        },
+        {
+          "id": "smolder_q_effect_3",
+          "description": "Tier 1 - 25 stacks: The fireball explodes upon collision to deal the same physical damage to nearby enemies. The explosion benefits from life steal at 50% effectiveness and applies on-hit effects."
+        },
+        {
+          "id": "physical_damage_2",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            32.5,
+            40.0,
+            47.5,
+            55.0,
+            62.5
+          ],
+          "context_notes": "Tier 2 - 125 stacks: The fireball sends forth 2 (+ 0."
+        },
+        {
+          "id": "smolder_q_effect_5",
+          "description": "Tier 3 - 225 stacks: Enemies hit are set on fire for 3 seconds, causing them to take bonus true damage equal to[ 2.5% per 100 bonus AD (+ 0.5% per 100 Dragon Practice stacks) of their maximum health over the duration, capped at 300 against monsters. ][ 0.83% per 100 bonus AD (+ 0.17% per 100 Dragon Practice stacks) of their maximum health each second, capped at 100 per tick against monsters. ]Subsequent applications of the burn stack, though not refreshing the duration of the previous burn. Enemy champions afflicted with the burn are also executed once Smolder deals damage to them that would leave them below 6.5% of their maximum health."
+        }
+      ],
+      "description": "Active: Smolder spits a fireball at the target enemy that deals physical damage, increased by 0% : 50% (+ 0% : 15%) (based on critical strike chance); applies on-hit effects; applies life steal at 50% effectiveness; and triggers on-attack effects. If Super Scorcher Breath kills at least one target, Smolder restores 15 mana.",
+      "cooldown_seconds_by_rank": [
+        5.5,
+        5.0,
+        4.5,
+        4.0,
+        3.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          25.0,
+          25.0,
+          25.0,
+          25.0,
+          25.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 100.0,
+        "projectile_speed": 1800.0,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 100% of Smolder's windup time (0.261 at base attack speed).",
+        "Source speed: 1800 / 900.",
+        "Source effectRadius: 285 / 150.",
+        "Source notes (summary): Any applied Dragon Practice damage is affected by the same damage modifiers as Super Scorcher Breath and does not benefit from the ability's life steal."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Achooo!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Smolder sneezes forth a glob that deals physical damage to enemies hit and  slows them. Hitting an enemy  champion creates an explosion that deals physical damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "glob_physical_damage",
+          "description": "Glob Physical Damage",
+          "base_by_rank": [
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
+          ],
+          "context_notes": "Active: Smolder sneezes a fiery glob in the target direction that deals physical damage to enemies hit and slows them by 35% for 1."
+        },
+        {
+          "id": "explosion_physical_damage",
+          "description": "Explosion Physical Damage",
+          "base_by_rank": [
+            10.0,
+            35.0,
+            60.0,
+            85.0,
+            110.0
+          ],
+          "context_notes": "Active: Smolder sneezes a fiery glob in the target direction that deals physical damage to enemies hit and slows them by 35% for 1."
+        },
+        {
+          "id": "total_physical_damage_on_champion_hit",
+          "description": "Total Physical Damage On Champion Hit",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Active: Smolder sneezes a fiery glob in the target direction that deals physical damage to enemies hit and slows them by 35% for 1."
+        }
+      ],
+      "description": "Active: Smolder sneezes a fiery glob in the target direction that deals physical damage to enemies hit and slows them by 35% for 1.5 seconds, slowing down in missile speed after travelling 1200 units. Hitting an enemy champion creates an explosion that deals physical damage to nearby enemies, with subsequent explosions against the same target dealing 75% damage of the previous explosion's damage.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 385.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.35.",
+        "Source speed: 2000 / 400.",
+        "Source effectRadius: 385.",
+        "Source notes (summary): Smolder can't declare basic attacks for a brief moment after the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Flap, Flap, Flap",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Smolder takes flight for a short time, becoming  ghosted and gaining  bonus movement speed and the ability to ignore terrain collision. While in flight, he automatically fires bolts at a nearby enemy, dealing physical damage with each hit. The number of attacks increases based on  critical strike chance.",
+      "effects": [
+        {
+          "id": "physical_damage_per_hit",
+          "description": "Physical Damage per Hit",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Smolder takes flight for 1."
+        },
+        {
+          "id": "minimum_total_physical_damage",
+          "description": "Minimum Total Physical Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Smolder takes flight for 1."
+        },
+        {
+          "id": "smolder_e_effect_2",
+          "description": "Flap, Flap, Flap ends immediately if Smolder casts another ability or becomes immobilized."
+        }
+      ],
+      "description": "Active: Smolder takes flight for 1.25 seconds, becoming ghosted and gaining 75% bonus movement speed, unobstructed vision, and the ability to ignore terrain collision. While in flight, he automatically fires up to 5 (+ 1 per 100 Dragon Practice stacks) bolts at the nearest and most wounded visible enemy, dealing physical damage with each hit and prioritizing enemy champions.",
+      "cooldown_seconds_by_rank": [
+        24.0,
+        22.0,
+        20.0,
+        18.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          65.0,
+          65.0,
+          65.0,
+          65.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1800.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 1800.",
+        "Source notes (summary): Smolder's attack range is reduced to 0 for the duration of Flap, Flap, Flap."
+      ]
+    },
+    "ultimate": {
+      "name": "MMOOOMMMM!",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "self_heal",
+          "description": "Self Heal",
+          "base_by_rank": [
+            100.0,
+            135.0,
+            170.0
+          ],
+          "context_notes": "Active: Smolder shouts for his mother to attack from above, causing her to exhale a wave of fire from behind him and towards the target direction, granting sight of its surroundings as it travels."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "Active: Smolder shouts for his mother to attack from above, causing her to exhale a wave of fire from behind him and towards the target direction, granting sight of its surroundings as it travels."
+        },
+        {
+          "id": "increased_physical_damage",
+          "description": "Increased Physical Damage",
+          "base_by_rank": [
+            300.0,
+            450.0,
+            600.0
+          ],
+          "context_notes": "Active: Smolder shouts for his mother to attack from above, causing her to exhale a wave of fire from behind him and towards the target direction, granting sight of its surroundings as it travels."
+        },
+        {
+          "id": "smolder_r_effect_2",
+          "description": "MMOOOMMMM! deals 50% damage against minions and monsters."
+        }
+      ],
+      "description": "Active: Smolder shouts for his mother to attack from above, causing her to exhale a wave of fire from behind him and towards the target direction, granting sight of its surroundings as it travels. The wave heals Smolder and deals physical damage to enemies hit, with those in the center taking 50% increased damage and becoming slowed by 40% for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        110.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.75,
+        "projectile_speed": 1700.0,
+        "effect_hitbox_radius": 1000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.75.",
+        "Source speed: 1700.",
+        "Source effectRadius: 1000.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Smolder.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Smolder"
+  }
+}

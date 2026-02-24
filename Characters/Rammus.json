@@ -1,0 +1,377 @@
+{
+  "name": "Rammus",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 645.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 310.0,
+      "per_level": 33.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.85,
+      "per_level": 0.5
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 2.75
+    },
+    "attack_speed": {
+      "base": 0.7,
+      "per_level_percent": 2.215
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0708333328366279,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Spiked Shell",
+      "type": "Passive",
+      "description_source": "Innate:  Rammus gains bonus AD equal to a percentage of his total armor and total magic resistance.",
+      "effects": [
+        {
+          "id": "rammus_p_effect_1",
+          "description": "Innate: Rammus gains bonus attack damage equal to the sum of 15% total armor and 15% total magic resistance."
+        }
+      ],
+      "description": "Innate: Rammus gains bonus attack damage equal to the sum of 15% total armor and 15% total magic resistance.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Powerball",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "rammus_q_effect_1",
+          "description": "Active: Rammus rolls into an accelerating ball, channeling for up to 6 seconds to gain 25% : 40.83% (based on level) bonus total movement speed per second over the duration, up to a maximum of 150% : 245% (based on level). Powerball can be recast after 1 second within the duration, and does so automatically afterwards or upon casting Defensive Ball Curl."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Rammus stops rolling upon colliding with an enemy, dealing magic damage to all nearby enemies and knocking them back 125 units, though not through terrain."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Rammus stops rolling upon colliding with an enemy, dealing magic damage to all nearby enemies and knocking them back 125 units, though not through terrain."
+        },
+        {
+          "id": "rammus_q_effect_3",
+          "description": "Recast: Rammus ends Powerball."
+        }
+      ],
+      "description": "Active: Rammus rolls into an accelerating ball, channeling for up to 6 seconds to gain 25% : 40.83% (based on level) bonus total movement speed per second over the duration, up to a maximum of 150% : 245% (based on level). Powerball can be recast after 1 second within the duration, and does so automatically afterwards or upon casting Defensive Ball Curl.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        10.5,
+        9.0,
+        7.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Defensive Ball Curl",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Rammus enters a defensive stance for a few seconds, gaining  bonus armor and  bonus magic resist. During this time, enemies that land a basic attack against Rammus are dealt magic damage.",
+      "effects": [
+        {
+          "id": "bonus_armor",
+          "description": "Bonus Armor",
+          "base_by_rank": [
+            27.0,
+            32.0,
+            37.0,
+            42.0,
+            47.0
+          ],
+          "context_notes": "Active: Rammus enters a defensive stance for 7 seconds, gaining bonus armor and bonus magic resistance."
+        },
+        {
+          "id": "bonus_magic_resistance",
+          "description": "Bonus Magic Resistance",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Rammus enters a defensive stance for 7 seconds, gaining bonus armor and bonus magic resistance."
+        },
+        {
+          "id": "rammus_w_effect_2",
+          "description": "Defensive Ball Curl can be recast after 1 second within the duration, and does so automatically upon casting Powerball or Soaring Slam."
+        },
+        {
+          "id": "rammus_w_effect_3",
+          "description": "Recast: Rammus ends Defensive Ball Curl."
+        }
+      ],
+      "description": "Active: Rammus enters a defensive stance for 7 seconds, gaining bonus armor and bonus magic resistance. While active, enemies that use a basic attack on-hit against Rammus are dealt 15 (+ 10% total armor) (+ 10% total magic resistance) magic damage.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Frenzying Taunt",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Rammus briefly  taunts the target enemy  champion or  monster.",
+      "effects": [
+        {
+          "id": "taunt_duration",
+          "description": "Taunt Duration",
+          "base_by_rank": [
+            1.2,
+            1.4,
+            1.6,
+            1.8,
+            2.0
+          ],
+          "context_notes": "Active: Rammus taunts the target enemy champion or monster for a duration."
+        },
+        {
+          "id": "monster_magic_damage",
+          "description": "Monster Magic Damage",
+          "base_by_rank": [
+            80.0,
+            100.0,
+            120.0,
+            140.0,
+            160.0
+          ],
+          "context_notes": "Active: Rammus taunts the target enemy champion or monster for a duration."
+        }
+      ],
+      "description": "Active: Rammus taunts the target enemy champion or monster for a duration. Monsters are additionally dealt magic damage upon being affected.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Frenzying Taunt, despite being usable on monsters, does not force them to attack Rammus."
+      ]
+    },
+    "ultimate": {
+      "name": "Soaring Slam",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Rammus  leaps to the target location with  Cc-immunity, dealing magic damage to nearby enemies and briefly  slowing them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Rammus leaps to the target location with immunity to crowd control."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Active: Rammus leaps to the target location with immunity to crowd control."
+        },
+        {
+          "id": "rammus_r_effect_2",
+          "description": "If Soaring Slam was cast during Powerball, enemies within the epicenter are also knocked up for 0.75 seconds and are dealt Powerball's damage. Powerball will not collide with enemies during the dash, and its channel will be maintained for the dash and end afterwards."
+        },
+        {
+          "id": "rammus_r_effect_3",
+          "description": "The impact causes 3 aftershocks to burst from the area over 3.5 seconds, each one applying and refreshing the duration of the initial slow."
+        },
+        {
+          "id": "rammus_r_effect_4",
+          "description": "Soaring Slam's damage affects structures and is doubled against turrets."
+        }
+      ],
+      "description": "Active: Rammus leaps to the target location with immunity to crowd control. Upon arrival, he creates an impact that deals magic damage to nearby enemies and slows them for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 900.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: None.",
+        "Source speed: 900 / 2000.",
+        "Source effectRadius: 400 / 200 / 400.",
+        "Source notes (summary): Spell shield will block the impact (including with Powerball) but not each aftershock."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Rammus.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Rammus"
+  }
+}

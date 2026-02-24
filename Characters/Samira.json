@@ -1,0 +1,415 @@
+{
+  "name": "Samira",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 108.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 349.0,
+      "per_level": 38.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 3.25,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 3.3
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.150000006,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Daredevil Impulse",
+      "type": "Passive",
+      "description_source": "Innate:  Samira's  basic attacks and damaging  abilities against enemy  champions that are unique from the previous hit generate a Style  stack, up to 6.",
+      "effects": [
+        {
+          "id": "samira_p_effect_1",
+          "description": "Innate: Samira's damaging basic attacks and abilities against at least one enemy champion unique from the previous damaging hit made against champions generate a stack of Style for 6 seconds, refreshing on subsequent unique or non-unique hits and stacking up to 6 times."
+        },
+        {
+          "id": "samira_p_effect_2",
+          "description": "Style: For each stack, Samira gains 2.75% / 3% / 3.25% / 3.5% (based on level) bonus movement speed, up to a maximum of 16.5% / 18% / 19.5% / 21% (based on level). At maximum stacks, Samira can cast Inferno Trigger."
+        },
+        {
+          "id": "samira_p_effect_3",
+          "description": "Innate: Samira's basic attacks against targets within 200 units of her use her blade, becoming non-projectile. Blade attacks, Blade Whirl, Wild Rush, and the slash and explosives of Flair deal 2 : 21 (based on level) (+ 3.5% : 11.32% (based on level) AD) bonus magic damage, increased by 0% : 100% (based on target's missing health), up to 4 : 42 (based on level) (+ 7% : 22.65% (based on level) AD)."
+        },
+        {
+          "id": "samira_p_effect_4",
+          "description": "Samira's basic attack against an immobilized target is empowered to have an uncancellable windup and fire 6 bolts over 0.5 seconds, each dealing 17% AD physical damage and applying life steal. If the target is a monster or is airborne, the attack also knocks them up for 0.5 seconds."
+        },
+        {
+          "id": "samira_p_effect_5",
+          "description": "The empowered attack resets Samira's basic attack timer, is affected by critical strike modifiers, applies on-hit effects only once, and cannot occur on the same target more than once every few seconds."
+        },
+        {
+          "id": "samira_p_effect_6",
+          "description": "If the target is further away from Samira's attack range, initiating an attack against the immobilized target while within valid range of them will first cause her to dash toward them up to her attack range, then automatically cast the bolts."
+        }
+      ],
+      "description": "Innate: Samira's damaging basic attacks and abilities against at least one enemy champion unique from the previous damaging hit made against champions generate a stack of Style for 6 seconds, refreshing on subsequent unique or non-unique hits and stacking up to 6 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 2050 / 2800.",
+        "Source notes (summary): The Style stack count is represented by the grades to the left of Samira's health bar, visible to the player only, as well as a stack counter under the health bar, visible to all players."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Flair",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Samira fires a shot in the target direction that deals physical damage to the first enemy hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0
+          ],
+          "context_notes": "Active: Samira fires a shot in the target direction that deals physical damage to the first enemy hit."
+        },
+        {
+          "id": "samira_q_effect_2",
+          "description": "If a targetable enemy is in front of Samira at the time of cast, she will instead slash with her blade in a cone, dealing the same damage to enemies hit."
+        },
+        {
+          "id": "samira_q_effect_3",
+          "description": "If Flair is cast during Wild Rush, Samira deploys explosives in her wake that detonate upon the end of the dash, dealing the same damage to enemies hit."
+        },
+        {
+          "id": "samira_q_effect_4",
+          "description": "Flair can critically strike for (150% + 15%) damage and will apply life steal at 80% effectiveness."
+        }
+      ],
+      "description": "Active: Samira fires a shot in the target direction that deals physical damage to the first enemy hit.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        5.0,
+        4.0,
+        3.0,
+        2.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2600.",
+        "Source notes (summary): Applies spell damage on the shot and area damage on the slash and explosives."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Blade Whirl",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Samira briefly spins her blade twice, dealing physical damage to nearby enemies each time. During this time, she destroys all incoming enemy  projectiles.",
+      "effects": [
+        {
+          "id": "samira_w_effect_1",
+          "description": "Active: Samira spins her blade over 0.75 seconds, destroying all hostile non- turret projectiles within the area for the duration."
+        },
+        {
+          "id": "physical_damage_per_hit",
+          "description": "Physical Damage per Hit",
+          "base_by_rank": [
+            20.0,
+            35.0,
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Samira slashes twice during Blade Whirl, each one dealing physical damage to all nearby enemies."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            40.0,
+            70.0,
+            100.0,
+            130.0,
+            160.0
+          ],
+          "context_notes": "Samira slashes twice during Blade Whirl, each one dealing physical damage to all nearby enemies."
+        },
+        {
+          "id": "samira_w_effect_3",
+          "description": "Samira cannot basic attack nor cast Flair during Blade Whirl. Casting Inferno Trigger will end Blade Whirl early."
+        }
+      ],
+      "description": "Active: Samira spins her blade over 0.75 seconds, destroying all hostile non- turret projectiles within the area for the duration.",
+      "cooldown_seconds_by_rank": [
+        30.0,
+        28.0,
+        26.0,
+        24.0,
+        22.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.1,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.1.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): Spell shield will block the damage from one slash."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Wild Rush",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Samira  dashes at the target enemy or enemy structure, dealing magic damage to enemies she passes through. She also gains  bonus attack speed for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            60.0,
+            70.0,
+            80.0,
+            90.0
+          ],
+          "context_notes": "Active: Samira dashes a fixed distance in the direction of the target enemy or enemy structure, dealing magic damage to enemies she passes through."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Samira dashes a fixed distance in the direction of the target enemy or enemy structure, dealing magic damage to enemies she passes through."
+        },
+        {
+          "id": "samira_e_effect_2",
+          "description": "Scoring a takedown against an enemy champion within 3 seconds of damaging them resets Wild Rush's cooldown."
+        },
+        {
+          "id": "samira_e_effect_3",
+          "description": "Flair and Inferno Trigger can be cast during the dash. Casting Blade Whirl will buffer it to cast at the end of the dash."
+        }
+      ],
+      "description": "Active: Samira dashes a fixed distance in the direction of the target enemy or enemy structure, dealing magic damage to enemies she passes through. She also gains bonus attack speed for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        18.0,
+        16.0,
+        14.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 1600.",
+        "Source notes (summary): Samira gains the attack speed buff at the start of the dash."
+      ]
+    },
+    "ultimate": {
+      "name": "Inferno Trigger",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Samira unleashes a torrent of shots, reducing her  movement speed and rapidly firing shots that deal physical damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "physical_damage_per_shot",
+          "description": "Physical Damage Per Shot",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0
+          ],
+          "context_notes": "Active: Samira unleashes a torrent of shots for 2."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            200.0,
+            400.0,
+            600.0
+          ],
+          "context_notes": "Active: Samira unleashes a torrent of shots for 2."
+        },
+        {
+          "id": "minion_damage_per_shot",
+          "description": "Minion Damage Per Shot",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0
+          ],
+          "context_notes": "Active: Samira unleashes a torrent of shots for 2."
+        },
+        {
+          "id": "total_minion_damage",
+          "description": "Total Minion Damage",
+          "base_by_rank": [
+            50.0,
+            100.0,
+            150.0
+          ],
+          "context_notes": "Active: Samira unleashes a torrent of shots for 2."
+        },
+        {
+          "id": "samira_r_effect_2",
+          "description": "A nearby visible enemy is required to cast this ability, and targets do not have to be visible to be shot at. Style stacks are consumed at the end of the effect."
+        },
+        {
+          "id": "samira_r_effect_3",
+          "description": "Samira cannot basic attack nor cast Flair and Blade Whirl during Inferno Trigger, but she can still move. Inferno Trigger will end prematurely if Samira is affected by any form of cast-inhibiting crowd control as well as disarm. Inferno Trigger cannot be cast while Samira is disarmed."
+        }
+      ],
+      "description": "Active: Samira unleashes a torrent of shots for 2.277 seconds, reducing her movement speed by 30% and rapidly shooting at nearby enemies over 2.013 seconds at sporadic times in 0.2-second intervals each (up to 10 times per enemy), dealing physical damage with each shot, reduced by 75% against minions. This damage is affected by critical strike modifiers and applies life steal at 80% effectiveness.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        5.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "none",
+        "value_by_rank": [
+          6.0,
+          6.0,
+          6.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Proximity.",
+        "Source castTime: none.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): Samira's facing direction remains as it had been or, if she is moving, towards that direction during Inferno Trigger."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Samira.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Samira"
+  }
+}

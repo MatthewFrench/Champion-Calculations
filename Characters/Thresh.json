@@ -1,0 +1,379 @@
+{
+  "name": "Thresh",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Catcher",
+    "Support",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 620.0,
+      "per_level": 120.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 274.0,
+      "per_level": 44.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 0.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.55
+    },
+    "attack_range": 450.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 56.0,
+      "per_level": 2.2
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0604166686534881,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Damnation",
+      "type": "Passive",
+      "description_source": "Innate:  Thresh's  armor does not increase by  leveling up.",
+      "effects": [
+        {
+          "id": "thresh_p_effect_1",
+          "description": "Innate: Thresh's armor does not increase through growth (per level)."
+        },
+        {
+          "id": "thresh_p_effect_2",
+          "description": "Innate: Enemy champions, large minions and large monsters that die near Thresh drop a Soul for 8 seconds. Epic monsters drop 2 Souls while lesser minions and monsters have a 33.3% chance to drop a Soul."
+        },
+        {
+          "id": "thresh_p_effect_3",
+          "description": "Thresh automatically collects Souls near him or a placed Dark Passage."
+        },
+        {
+          "id": "thresh_p_effect_4",
+          "description": "Soul: For each stack, Thresh gains 1 ability power and 1 bonus armor."
+        }
+      ],
+      "description": "Innate: Thresh's armor does not increase through growth (per level).",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1900.",
+        "Source notes (summary): Souls grant a small area of sight."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Death Sentence",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "thresh_q_effect_1",
+          "description": "Active: Thresh throws out his scythe in the target direction, becoming unable to move or attack while it is in flight."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "The scythe catches the first enemy hit to deal magic damage, stun and reveal them for 1."
+        },
+        {
+          "id": "thresh_q_effect_3",
+          "description": "While the target is stunned, Thresh tugs his hook towards him twice, once after a 0.1-second delay and again 0.6 seconds after that. With each tug, the target is pulled a short distance towards Thresh. After 0.5 seconds of hitting an enemy, or instantly after hitting a minion or monster, Thresh can recast the ability while the target is Shackled."
+        },
+        {
+          "id": "thresh_q_effect_4",
+          "description": "Recast - Deathly Leap: Thresh stops tugging his hook and dashes to the Shackled enemy, becoming able to attack again upon arrival. He can cast Dark Passage and Flay during the dash."
+        }
+      ],
+      "description": "Active: Thresh throws out his scythe in the target direction, becoming unable to move or attack while it is in flight.",
+      "cooldown_seconds_by_rank": [
+        19.0,
+        16.5,
+        14.0,
+        11.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 1900.0,
+        "effect_hitbox_radius": 3000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.5 / None.",
+        "Source speed: 1900 / 1400.",
+        "Source effectRadius: Global / 3000.",
+        "Source notes (summary): Thresh will track the target if they change locations."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Dark Passage",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Thresh throws his lantern to the target location that remains for a few seconds while he remains nearby. He and the first allied champion to come near the lantern are granted a  shield for a few seconds, with the amount based on  Souls.",
+      "effects": [
+        {
+          "id": "thresh_w_effect_1",
+          "description": "Active: Thresh throws his lantern to the target location over 0.5 seconds, lasting for 6 seconds while he remains nearby and granting sight of its surroundings. If Thresh moves too far away from the lantern, it returns back to him immediately."
+        },
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            50.0,
+            70.0,
+            90.0,
+            110.0,
+            130.0
+          ],
+          "context_notes": "Thresh and the first allied champion to come near the lantern are granted a shield for 4 seconds."
+        },
+        {
+          "id": "thresh_w_effect_3",
+          "description": "An ally cannot select the lantern while immobilized, grounded, or silenced. The lantern will not expire from Thresh moving too far away if he is dashing with Deathly Leap."
+        }
+      ],
+      "description": "Active: Thresh throws his lantern to the target location over 0.5 seconds, lasting for 6 seconds while he remains nearby and granting sight of its surroundings. If Thresh moves too far away from the lantern, it returns back to him immediately.",
+      "cooldown_seconds_by_rank": [
+        21.0,
+        20.0,
+        19.0,
+        18.0,
+        17.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 350 / 150.",
+        "Source notes (summary): The dashing ally will track Thresh if he changes locations."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Flay",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "effects": [
+        {
+          "id": "minimum_bonus_magic_damage",
+          "description": "Minimum Bonus Magic Damage",
+          "base_by_rank": [
+            1.7,
+            1.7,
+            1.7,
+            1.7,
+            1.7
+          ],
+          "context_notes": "Passive: Thresh's basic attacks are empowered to deal bonus magic damage, with the AD ratio increasing over 10 seconds without basic attacking enemies."
+        },
+        {
+          "id": "maximum_bonus_magic_damage",
+          "description": "Maximum Bonus Magic Damage",
+          "base_by_rank": [
+            1.7,
+            1.7,
+            1.7,
+            1.7,
+            1.7
+          ],
+          "context_notes": "Passive: Thresh's basic attacks are empowered to deal bonus magic damage, with the AD ratio increasing over 10 seconds without basic attacking enemies."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            120.0,
+            165.0,
+            210.0,
+            255.0
+          ],
+          "context_notes": "Active: Thresh sweeps his chain across the ground in a broad line and a radius around him, starting behind him and towards the target direction."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Thresh sweeps his chain across the ground in a broad line and a radius around him, starting behind him and towards the target direction."
+        }
+      ],
+      "description": "Passive: Thresh's basic attacks are empowered to deal bonus magic damage, with the AD ratio increasing over 10 seconds without basic attacking enemies.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.25,
+        11.5,
+        10.75,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.3889,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 270.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.3889.",
+        "Source speed: 2000.",
+        "Source effectRadius: 270.",
+        "Source notes (summary): Flay's effects start at the start of the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "The Box",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Thresh erects a pentagon of spectral walls around him that each last a few seconds. A wall will break upon enemy champion contact, dealing magic damage and  slowing them for a short time. Subsequent wall breaks will not deal damage but still  slow enemies briefly.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            250.0,
+            400.0,
+            550.0
+          ],
+          "context_notes": "Active: Thresh erects a pentagon of spectral walls around him that each last for 5 seconds."
+        },
+        {
+          "id": "thresh_r_effect_2",
+          "description": "Enemies that break a wall cannot do so again for 1 second."
+        }
+      ],
+      "description": "Active: Thresh erects a pentagon of spectral walls around him that each last for 5 seconds. A wall will break upon enemy champion contact, dealing magic damage and slowing them by 99% for 2 seconds. After the first wall breaks, the rest will deal no damage and slow for only 1 second.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.45
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.45.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Thresh.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Thresh"
+  }
+}

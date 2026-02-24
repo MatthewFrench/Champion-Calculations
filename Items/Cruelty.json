@@ -75,7 +75,11 @@
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6035_fighter_t3_silvermeredawn.png",
   "simpleDescription": null,
@@ -84,9 +88,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.027826+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Cooldown is per target per cast instance."
+      "Cooldown is per target per cast instance.",
+      "Watch Them Fall is a delayed AoE triggered by immobilize/ground and uses per-target per-cast cooldown gating; page notes indicate internal cooldown behavior may diverge from tooltip wording."
     ]
   },
   "sources": [
@@ -107,6 +112,12 @@
       "path": "From Online/items/Cruelty.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Cruelty",
+      "accessed": "2026-02-24",
+      "used_for": "page-level Arena item behavior and cooldown-scope verification"
     }
   ]
 }

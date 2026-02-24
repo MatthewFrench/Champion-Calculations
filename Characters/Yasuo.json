@@ -1,0 +1,354 @@
+{
+  "name": "Yasuo",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "flow",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 4.6
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.697,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0799999982118606,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Way of the Wanderer",
+      "type": "Passive",
+      "description_source": "Innate - Intent:  Yasuo gains increased  critical strike chance.",
+      "effects": [
+        {
+          "id": "yasuo_p_effect_1",
+          "description": "Innate - Intent: Yasuo's total critical strike chance is doubled from all other sources. Additionally,[ every 1% critical strike chance in excess of 100% is converted into 0.5 bonus attack damage. ][ every 50% critical strike chance in excess of 100% is converted into 25 bonus attack damage. ]"
+        },
+        {
+          "id": "yasuo_p_effect_2",
+          "description": "Yasuo's critical strikes deal only[ (180% + 27%) AD physical damage. ][ 90% of the critical damage champions usually have. ]"
+        },
+        {
+          "id": "yasuo_p_effect_3",
+          "description": "Innate - Resolve: Yasuo generates a stack of Flow for every 59 / 52.5 / 46 (based on level) units he travels by any means. At[ 100 stacks ][ 5900 / 5250 / 4600 (based on level) units traveled ]and upon taking damage from an enemy champion or monster, Yasuo consumes all Flow to grant himself a shield for 125 : 674.46 (based on level) that lasts for 1 second."
+        }
+      ],
+      "description": "Innate - Intent: Yasuo's total critical strike chance is doubled from all other sources. Additionally,[ every 1% critical strike chance in excess of 100% is converted into 0.5 bonus attack damage. ][ every 50% critical strike chance in excess of 100% is converted into 25 bonus attack damage. ]",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Yasuo gains the shield before the damage instance; the shield will mitigate the damage that triggered it."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Steel Tempest",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Yasuo thrusts his sword in a line in the target direction that deals physical damage to enemies hit and applies  on-hit and  on-attack effects to the first enemy hit. This can  critically strike.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            20.0,
+            45.0,
+            70.0,
+            95.0,
+            120.0
+          ],
+          "context_notes": "Active: Yasuo thrusts his sword in a line in the target direction that deals physical damage to enemies hit, applies on-hit effects to the first enemy hit, and triggers on-attack effects once."
+        },
+        {
+          "id": "yasuo_q_effect_2",
+          "description": "Steel Wind Rising: If this hits at least one enemy, Yasuo generates a stack of Gathering Storm for 6 seconds, stacking up to 2 times and refreshing on subsequent hits. At 2 stacks, the next Steel Tempest cast consumes them all to become empowered with a new effect."
+        },
+        {
+          "id": "yasuo_q_effect_3",
+          "description": "Gathering Storm Bonus: Yasuo unleashes a whirlwind in the target direction that applies and triggers the same effects and additionally knocks up enemies hit for 0.9 seconds."
+        },
+        {
+          "id": "yasuo_q_effect_4",
+          "description": "Steel Tempest's thrust will fail to hit targets after the cast time if Yasuo was affected by disarming crowd control during it, but the cooldown of the ability is reset to 0.1 seconds."
+        },
+        {
+          "id": "yasuo_q_effect_5",
+          "description": "If Steel Tempest is cast during Sweeping Blade, the cast is modified to cause Yasuo to slash around himself at the end of the dash, applying and triggering the same effects against nearby enemies. This slash can be empowered by Gathering Storm's bonus, causing it to additionally apply the knock up to enemies hit. Steel Tempest's cast time is not incurred when it is cast this way, but Yasuo will become unable to declare basic attacks for 0.5 seconds after the dash ends."
+        }
+      ],
+      "description": "Active: Yasuo thrusts his sword in a line in the target direction that deals physical damage to enemies hit, applies on-hit effects to the first enemy hit, and triggers on-attack effects once. Steel Tempest's damage based on its AD ratio can critically strike for (200% + 30%) damage.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.35,
+        "projectile_speed": 1200.0,
+        "effect_hitbox_radius": 215.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.35 : 0.175 (based on bonus attack speed) / 0.35 : 0.28 (based on bonus attack speed).",
+        "Source speed: 1200.",
+        "Source effectRadius: 215.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Wind Wall",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Yasuo raises a wind wall that drifts in the target direction for a few seconds, blocking all enemy  projectiles that hit it.",
+      "effects": [
+        {
+          "id": "wall_width",
+          "description": "Wall Width",
+          "base_by_rank": [
+            320.0,
+            390.0,
+            460.0,
+            530.0,
+            600.0
+          ],
+          "context_notes": "Active: Yasuo raises a wall of wind in the target direction for 4 seconds that destroys all hostile non- turret projectiles that collide with it and grants sight of its surroundings."
+        },
+        {
+          "id": "yasuo_w_effect_2",
+          "description": "The wall travels in the targeted direction over the first 0.6 seconds, then drifts forward another 50 units over the remaining duration."
+        }
+      ],
+      "description": "Active: Yasuo raises a wall of wind in the target direction for 4 seconds that destroys all hostile non- turret projectiles that collide with it and grants sight of its surroundings.",
+      "cooldown_seconds_by_rank": [
+        25.0,
+        23.0,
+        21.0,
+        19.0,
+        17.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.013,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.013.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Wind Wall grants sight in a small static area in front of the cast location."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Sweeping Blade",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Yasuo  dashes in the target enemy's direction, dealing magic damage,  briefly becoming  ghosted, and generating a stack of Ride the Wind for a few seconds, stacking up to a cap.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            85.0,
+            100.0,
+            115.0,
+            130.0
+          ],
+          "context_notes": "Active: Yasuo dashes a fixed distance in the direction of the target enemy and becomes ghosted for 2 seconds, refreshing on subsequent casts."
+        },
+        {
+          "id": "bonus_damage_per_stack",
+          "description": "Bonus Damage per Stack",
+          "base_by_rank": [
+            17.5,
+            21.25,
+            25.0,
+            28.75,
+            32.5
+          ],
+          "context_notes": "Ride the Wind: Sweeping Blade's damage is increased by 25% per stack, up to 100% at maximum stacks."
+        },
+        {
+          "id": "maximum_bonus_damage",
+          "description": "Maximum Bonus Damage",
+          "base_by_rank": [
+            70.0,
+            85.0,
+            100.0,
+            115.0,
+            130.0
+          ],
+          "context_notes": "Ride the Wind: Sweeping Blade's damage is increased by 25% per stack, up to 100% at maximum stacks."
+        },
+        {
+          "id": "total_combined_damage",
+          "description": "Total Combined Damage",
+          "base_by_rank": [
+            140.0,
+            170.0,
+            200.0,
+            230.0,
+            260.0
+          ],
+          "context_notes": "Ride the Wind: Sweeping Blade's damage is increased by 25% per stack, up to 100% at maximum stacks."
+        },
+        {
+          "id": "yasuo_e_effect_3",
+          "description": "Sweeping Blade can be cast on the same target only once every few seconds."
+        },
+        {
+          "id": "yasuo_e_effect_4",
+          "description": "Yasuo will be knocked down by any immobilizing or polymorphing crowd control during the dash."
+        },
+        {
+          "id": "yasuo_e_effect_5",
+          "description": "Last Breath can be cast during the dash."
+        }
+      ],
+      "description": "Active: Yasuo dashes a fixed distance in the direction of the target enemy and becomes ghosted for 2 seconds, refreshing on subsequent casts. Upon impact, he deals magic damage to the target and generates a stack of Ride the Wind for 5 seconds, which refreshes on subsequent hits and stacks up to 4 times.",
+      "cooldown_seconds_by_rank": [
+        0.5,
+        0.4,
+        0.3,
+        0.2,
+        0.1
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 750.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 750 + 60% movement speed.",
+        "Source notes (summary): If Steel Tempest has been buffered, Wind Wall may also be cast during the dash."
+      ]
+    },
+    "ultimate": {
+      "name": "Last Breath",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Yasuo  blinks to the target  airborne enemy champion and instantly generates max  Flow. He then briefly  knocks up,  reveals, and deals physical damage to all nearby  airborne enemies.",
+      "effects": [
+        {
+          "id": "yasuo_r_effect_1",
+          "description": "Active: Yasuo blinks to the opposite side of a visible airborne enemy champion nearest to the cursor, instantly generating maximum Flow while resetting Gathering Storm stacks."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            200.0,
+            350.0,
+            500.0
+          ],
+          "context_notes": "Upon arrival, he knocks up all nearby airborne enemy champions for 1 second, revealing them, becoming unable to act himself, and slashing them with his sword over the duration to deal physical damage thereafter."
+        },
+        {
+          "id": "yasuo_r_effect_3",
+          "description": "For the next 15 seconds, the damage dealt by Yasuo's critical strikes ignores 60% of the target's bonus armor."
+        },
+        {
+          "id": "yasuo_r_effect_4",
+          "description": "A nearby airborne enemy champion is required to cast this ability. If Yasuo would blink inside the attack range of an enemy turret (including the Nexus Obelisk), Last Breath will instead attempt to position him outside of it."
+        }
+      ],
+      "description": "Active: Yasuo blinks to the opposite side of a visible airborne enemy champion nearest to the cursor, instantly generating maximum Flow while resetting Gathering Storm stacks.",
+      "cooldown_seconds_by_rank": [
+        70.0,
+        50.0,
+        30.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Proximity.",
+        "Source castTime: none.",
+        "Source effectRadius: 400.",
+        "Source notes (summary): Last Breath can be cast on targets suspended in mid-air by Nami's Aqua Prison's stun."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Yasuo.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Yasuo"
+  }
+}

@@ -37,16 +37,51 @@
       "interval_seconds": null,
       "trigger": "on_equip",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "granted_by_magical_footwear_rune"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.82
+    },
+    {
+      "id": "slightly_magical_boots_upgrade_and_repurchase_persistence",
+      "raw": "Slightly Quicker persists through boot upgrades and remains after selling Slightly Magical Boots once obtained.",
+      "effect_type": "condition_note",
+      "stat": "bonus_movement_speed_persistence",
+      "value": 10,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "persists_on_boot_upgrades",
+        "persists_after_selling_source_item",
+        "boots_purchase_disabled_until_rune_grants_item"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        10,
+        25,
+        35
+      ],
+      "parse_confidence": 0.8
     }
   ],
-  "shop": {},
+  "shop": {
+    "prices": {
+      "total": 300,
+      "sell": 90
+    },
+    "purchasable": false
+  },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2422_class_t1_slightlymagicalboots.png",
   "simpleDescription": null,
   "nicknames": [],
@@ -54,7 +89,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.031876+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Slightly Magical Boots grants baseline boots movement speed (+25) and an additional +10 bonus movement speed from Slightly Quicker for a total of +35 while equipped.",
+      "Acquisition model: this item is rune-granted via Magical Footwear and cannot be purchased beforehand; once granted, Slightly Quicker persists through tier-2 boot upgrades and remains available even after selling the source item.",
+      "Tier-1 naming note: Data Dragon labels ID 2422 as Slightly Magical Footwear; this file keeps local naming compatibility while retaining canonical ID and economy values."
+    ]
   },
   "sources": [
     {
@@ -74,6 +114,12 @@
       "path": "From Online/items/Slightly Magical Boots.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Slightly Magical Boots",
+      "url": "https://wiki.leagueoflegends.com/en-us/Slightly_Magical_Boots",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Slightly Quicker persistence semantics, rune-gated acquisition behavior, and item economy values"
     }
   ]
 }

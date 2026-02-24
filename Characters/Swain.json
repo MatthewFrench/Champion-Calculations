@@ -1,0 +1,410 @@
+{
+  "name": "Swain",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 595.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 400.0,
+      "per_level": 29.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 31.0,
+      "per_level": 1.55
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 3.0,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 10.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 2.7
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.11
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.159999996423721,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Ravenous Flock",
+      "type": "Passive",
+      "description_source": "Innate: Enemy champions that  die will leave behind a Soul Fragment for some time.  Swain will collect nearby Soul Fragments, as well as with  Vision of Empire and  Nevermove.",
+      "effects": [
+        {
+          "id": "swain_p_effect_1",
+          "description": "Innate: Enemy champions that die will leave behind a Soul Fragment for 16 seconds. Swain's ravens will collect nearby dropped Soul Fragments, as well as rip the Soul Fragments out of champions hit by Vision of Empire or Nevermove's recast. Once a raven has collected a Soul Fragment, it will fly towards Swain to grant it to him, while also granting sight of its surroundings during the travel.\nSoul Fragment: For each stack, Swain gains 15 bonus health permanently. Upon claiming the fragment, he will heal for 6% of his maximum health."
+        }
+      ],
+      "description": "Innate: Enemy champions that die will leave behind a Soul Fragment for 16 seconds. Swain's ravens will collect nearby dropped Soul Fragments, as well as rip the Soul Fragments out of champions hit by Vision of Empire or Nevermove's recast. Once a raven has collected a Soul Fragment, it will fly towards Swain to grant it to him, while also granting sight of its surroundings during the travel.\nSoul Fragment: For each stack, Swain gains 15 bonus health permanently. Upon claiming the fragment, he will heal for 6% of his maximum health.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 1200.",
+        "Source effectRadius: 1100 /  250.",
+        "Source notes (summary): Dropped Soul Fragments can be collected after a 1-second delay."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Death's Hand",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Swain unleashes five bolts of eldritch power over 0.264 seconds in a cone in the target direction that deal magic damage to enemies hit. Subsequent bolts against an enemy deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0."
+        },
+        {
+          "id": "bonus_damage_per_bolt",
+          "description": "Bonus Damage Per Bolt",
+          "base_by_rank": [
+            15.0,
+            22.5,
+            30.0,
+            37.5,
+            45.0
+          ],
+          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0."
+        },
+        {
+          "id": "total_damage",
+          "description": "Total Damage",
+          "base_by_rank": [
+            120.0,
+            180.0,
+            240.0,
+            300.0,
+            360.0
+          ],
+          "context_notes": "Active: Swain unleashes five bolts of eldritch power over 0."
+        },
+        {
+          "id": "swain_q_effect_2",
+          "description": "Swain reveals himself during the cast if there is an enemy champion nearby."
+        }
+      ],
+      "description": "Active: Swain unleashes five bolts of eldritch power over 0.264 seconds in a cone in the target direction that deal magic damage to enemies hit. Subsequent bolts against an enemy deal 25% bonus damage.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.0,
+        5.0,
+        4.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 725.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 725.",
+        "Source notes (summary): Death's Hand will still cast and deal damage if Swain dies during the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Vision of Empire",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Swain summons a demonic eye at the target location that explodes after a brief moment, dealing magic damage and  slowing enemies within for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1."
+        },
+        {
+          "id": "minion_damage",
+          "description": "Minion Damage",
+          "base_by_rank": [
+            35.0,
+            52.5,
+            70.0,
+            87.5,
+            105.0
+          ],
+          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            50.0,
+            55.0,
+            60.0,
+            65.0,
+            70.0
+          ],
+          "context_notes": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1."
+        },
+        {
+          "id": "swain_w_effect_2",
+          "description": "Enemy champions hit are also revealed for 6 seconds and have a Soul Fragment collected from them."
+        }
+      ],
+      "description": "Active: Swain summons a demonic eye at the target location that grants sight of the area for 2 seconds and explodes after 1.5 seconds, dealing magic damage to enemies within, halved against minions, and slowing them for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        21.0,
+        20.0,
+        19.0,
+        18.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): Enemy champions protected by a spell shield do not have a Soul Fragment collected from them but are revealed anyway."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Nevermove",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Swain launches a demonic wave in the target direction.",
+      "effects": [
+        {
+          "id": "swain_e_effect_1",
+          "description": "Active: Swain launches a demonic wave in the target direction."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            90.0,
+            130.0,
+            170.0,
+            210.0,
+            250.0
+          ],
+          "context_notes": "At maximum range, the wave homes back to Swain and detonates upon the first enemy hit, dealing magic damage to nearby enemies and rooting them for 1."
+        },
+        {
+          "id": "swain_e_effect_3",
+          "description": "Recast: Swain pulls the rooted champions over 290 units and collects a Soul Fragment from each of them, revealing himself for 5 seconds. If the targets would be pulled past Swain, they rebound off of him instead, knocking them back the excess distance."
+        }
+      ],
+      "description": "Active: Swain launches a demonic wave in the target direction.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.5,
+        11.0,
+        10.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1125.0,
+        "effect_hitbox_radius": 100.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.25.",
+        "Source speed: 1125 : 1800 (based on seconds in flight) / 2000 : 2800 (based on seconds in flight).",
+        "Source effectRadius: 100 / Global.",
+        "Source notes (summary): Nevermove's missiles have their speed update to accelerate at specific times by the server."
+      ]
+    },
+    "ultimate": {
+      "name": "Demonic Ascension",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Swain frees the demon within, gaining Demonic Ascension and generating Demonic Energy. Demonic Ascension is maintained with Demonic Energy that gradually decays over time.",
+      "effects": [
+        {
+          "id": "swain_r_effect_1",
+          "description": "Active: Swain frees the demon within himself, gaining Demonic Ascension and generating 50 Demonic Energy. Demonic Ascension is maintained with Demonic Energy, which decays by 5 every 0.5 seconds, increased to 7.5 after 5 seconds have elapsed, and is lost once all Demonic Energy is depleted to 0. Swain generates 10 Demonic Energy every 0.5 seconds while draining from at least one enemy champion, and fully restores it to the maximum of 50 upon scoring a champion takedown."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            7.5,
+            12.5,
+            17.5
+          ],
+          "context_notes": "Demonic Ascension: Swain is ghosted and drains the lifeforce of nearby enemies, both dealing magic damage and healing himself every 0."
+        },
+        {
+          "id": "heal_per_tick",
+          "description": "Heal per Tick",
+          "base_by_rank": [
+            7.5,
+            15.0,
+            22.5
+          ],
+          "context_notes": "Demonic Ascension: Swain is ghosted and drains the lifeforce of nearby enemies, both dealing magic damage and healing himself every 0."
+        },
+        {
+          "id": "reduced_heal_per_tick",
+          "description": "Reduced Heal per Tick",
+          "base_by_rank": [
+            0.75,
+            1.5,
+            2.25
+          ],
+          "context_notes": "Demonic Ascension: Swain is ghosted and drains the lifeforce of nearby enemies, both dealing magic damage and healing himself every 0."
+        },
+        {
+          "id": "swain_r_effect_3",
+          "description": "After 2 seconds, Swain gains the ability to cast Demonflare, up to 100 times, and does so automatically when Demonic Ascension expires if Demonflare is not on cooldown."
+        },
+        {
+          "id": "swain_r_effect_4",
+          "description": "The targets do not have to be visible to be hit by this ability."
+        },
+        {
+          "id": "swain_r_effect_5",
+          "description": "Swain can move during Demonic Ascension's cast time."
+        }
+      ],
+      "description": "Active: Swain frees the demon within himself, gaining Demonic Ascension and generating 50 Demonic Energy. Demonic Ascension is maintained with Demonic Energy, which decays by 5 every 0.5 seconds, increased to 7.5 after 5 seconds have elapsed, and is lost once all Demonic Energy is depleted to 0. Swain generates 10 Demonic Energy every 0.5 seconds while draining from at least one enemy champion, and fully restores it to the maximum of 50 upon scoring a champion takedown.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        120.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 650.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 650.",
+        "Source notes (summary): Demonic Energy is displayed in a bar under Swain's health bar."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Swain.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Swain"
+  }
+}

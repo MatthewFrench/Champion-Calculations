@@ -14,14 +14,38 @@
     {
       "unique": true,
       "name": "Reap",
-      "effects": "Killing a [[minion]] grants an additional {{g|1}}, up to a '''maximum''' of {{g|100}}."
+      "effects": "Restore {{as|3 health}} [[on-hit]]. Killing a [[minion]] grants an additional {{g|1}}, up to a '''maximum''' of {{g|100}}. After 100 minions, gain an additional {{g|350}} and disable this passive."
     }
   ],
   "active": [],
   "effects_structured": [
     {
-      "id": "cull_reap_bonus_gold",
-      "raw": "Killing a [[minion]] grants an additional {{g 1}}, up to a '''maximum''' of {{g 100}}.",
+      "id": "cull_reap_restore_health_on_hit",
+      "raw": "Restore 3 health on-hit.",
+      "effect_type": "healing",
+      "stat": "health",
+      "value": 3,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_hit",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "triggers_on_turrets_and_wards": true
+      },
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.8
+    },
+    {
+      "id": "cull_reap_bonus_gold_on_minion_kill",
+      "raw": "Killing a minion grants an additional 1 gold, up to a maximum of 100.",
       "effect_type": "resource_modifier",
       "stat": "gold",
       "value": 1,
@@ -32,7 +56,9 @@
       "interval_seconds": null,
       "trigger": "on_minion_kill",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "disabled_after_reap_completion"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "caps": {
@@ -43,7 +69,33 @@
         1,
         100
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.82
+    },
+    {
+      "id": "cull_reap_completion_bonus_gold",
+      "raw": "After 100 minion kills from Reap, gain an additional 350 gold and disable Reap.",
+      "effect_type": "resource_modifier",
+      "stat": "gold",
+      "value": 350,
+      "value_range": null,
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_reap_completion",
+      "applies_to": "self",
+      "conditions": [
+        "reap_minion_kills_reached_100"
+      ],
+      "status_effects": [
+        "reap_disabled"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        100,
+        350
+      ],
+      "parse_confidence": 0.82
     }
   ],
   "shop": {
@@ -69,7 +121,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.036339+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Reap has both always-on on-hit sustain (3 health) and progression gold branches (1 gold per minion kill up to 100, then one-time +350 completion payout).",
+      "Player-visible behavior: the on-hit heal applies to attacks against turrets and wards; Reap completion permanently disables its minion-kill gold branch."
+    ]
   },
   "sources": [
     {
@@ -89,6 +145,12 @@
       "path": "From Online/items/Cull.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Cull",
+      "url": "https://wiki.leagueoflegends.com/en-us/Cull",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Reap on-hit sustain, completion payout semantics, and on-hit interaction notes"
     }
   ]
 }

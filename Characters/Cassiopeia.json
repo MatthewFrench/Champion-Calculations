@@ -1,0 +1,411 @@
+{
+  "name": "Cassiopeia",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 450.0,
+      "per_level": 40.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 18.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 53.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.647,
+      "per_level_percent": 1.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.108000002801418,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Serpentine Grace",
+      "type": "Passive",
+      "description_source": "Innate:  Cassiopeia increases the effectiveness of all  Movement Speed bonuses by a percentage.",
+      "effects": [
+        {
+          "id": "cassiopeia_p_effect_1",
+          "description": "Innate: Cassiopeia increases the effectiveness of all movement speed bonuses by 6% : 44% (based on level)."
+        }
+      ],
+      "description": "Innate: Cassiopeia increases the effectiveness of all movement speed bonuses by 6% : 44% (based on level).",
+      "context_notes": [
+        "Source targeting: Passive."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Noxious Blast",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Cassiopeia blasts an area with  Poison after a brief delay, dealing magic damage over time to enemies hit. She gains  bonus movement speed if she hits an enemy  champion.",
+      "effects": [
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            75.0,
+            110.0,
+            145.0,
+            180.0,
+            215.0
+          ],
+          "context_notes": "Active: Cassiopeia creates a blast at the target location that explodes after a 0."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            10.71,
+            15.71,
+            20.71,
+            25.71,
+            30.71
+          ],
+          "context_notes": "Active: Cassiopeia creates a blast at the target location that explodes after a 0."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "If Noxious Blast hits an enemy champion, Cassiopeia gains bonus movement speed that decays over 3 seconds."
+        }
+      ],
+      "description": "Active: Cassiopeia creates a blast at the target location that explodes after a 0.4-second delay. Enemies within the blast are poisoned for 3 seconds, taking magic damage every 0.429 seconds over the duration.",
+      "cooldown_seconds_by_rank": [
+        3.5,
+        3.5,
+        3.5,
+        3.5,
+        3.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Noxious Blast always uses quick cast, regardless of player settings."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Miasma",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Cassiopeia spews several clouds of  Poison that linger, continually dealing magic damage to enemies within. They are also  slowed and  grounded.",
+      "effects": [
+        {
+          "id": "cassiopeia_w_effect_1",
+          "description": "Active: Cassiopeia spews forth 7 bolts of venom in an arc at the target location, creating toxic clouds at the area for 5 seconds."
+        },
+        {
+          "id": "magic_damage_per_second",
+          "description": "Magic Damage Per Second",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Enemies within the clouds are poisoned to take magic damage every 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            100.0,
+            125.0,
+            150.0,
+            175.0,
+            200.0
+          ],
+          "context_notes": "Enemies within the clouds are poisoned to take magic damage every 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0,
+            70.0,
+            80.0
+          ],
+          "context_notes": "Enemies within the clouds are poisoned to take magic damage every 0."
+        }
+      ],
+      "description": "Active: Cassiopeia spews forth 7 bolts of venom in an arc at the target location, creating toxic clouds at the area for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        24.0,
+        22.0,
+        20.0,
+        18.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 3000.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 3000.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Miasma's slow and ground debuffs are each marked as non-dispellable, so they are not removed by most cleanses."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Twin Fang",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Cassiopeia launches an attack at the target enemy that deals magic damage. If this attack kills the target, the  mana cost is refunded.",
+      "effects": [
+        {
+          "id": "cassiopeia_e_effect_1",
+          "description": "Active: Cassiopeia launches her fangs at the target enemy that deal 52 : 128 (based on level) (+ 10% AP) magic damage. If this kills the target, Twin Fang's mana cost is refunded."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            20.0,
+            43.0,
+            66.0,
+            89.0,
+            112.0
+          ],
+          "context_notes": "Against a poisoned target, Twin Fang deals bonus magic damage and heals Cassiopeia."
+        },
+        {
+          "id": "total_enhanced_damage",
+          "description": "Total Enhanced Damage",
+          "base_by_rank": [
+            52.0,
+            56.0,
+            60.0,
+            64.0,
+            68.0,
+            72.0,
+            76.0,
+            80.0,
+            84.0,
+            88.0,
+            92.0,
+            96.0,
+            100.0,
+            104.0,
+            108.0,
+            112.0,
+            116.0,
+            120.0
+          ],
+          "context_notes": "Against a poisoned target, Twin Fang deals bonus magic damage and heals Cassiopeia."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            10.0,
+            11.5,
+            13.0,
+            14.5,
+            16.0
+          ],
+          "context_notes": "Against a poisoned target, Twin Fang deals bonus magic damage and heals Cassiopeia."
+        },
+        {
+          "id": "reduced_heal",
+          "description": "Reduced Heal",
+          "base_by_rank": [
+            2.5,
+            2.875,
+            3.25,
+            3.625,
+            4.0
+          ],
+          "context_notes": "Against a poisoned target, Twin Fang deals bonus magic damage and heals Cassiopeia."
+        }
+      ],
+      "description": "Active: Cassiopeia launches her fangs at the target enemy that deal 52 : 128 (based on level) (+ 10% AP) magic damage. If this kills the target, Twin Fang's mana cost is refunded.",
+      "cooldown_seconds_by_rank": [
+        0.75,
+        0.75,
+        0.75,
+        0.75,
+        0.75
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.125,
+        "projectile_speed": 2500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.125.",
+        "Source speed: 2500.",
+        "Source notes (summary): Upon reaching the target, Twin Fang will wait for an ongoing Noxious Blast to explode before dealing its damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Petrifying Gaze",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Cassiopeia blasts in a cone, dealing magic damage to enemies hit and  stunning any that are facing her, while  slowing any others with their back turned.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Cassiopeia blasts enemies in a cone in the target direction, dealing magic damage to enemies struck within and slowing them by 40% for 2 seconds."
+        }
+      ],
+      "description": "Active: Cassiopeia blasts enemies in a cone in the target direction, dealing magic damage to enemies struck within and slowing them by 40% for 2 seconds. Enemies with their facing direction towards her are instead stunned for the same duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 850.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 850.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Cassiopeia.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Cassiopeia"
+  }
+}

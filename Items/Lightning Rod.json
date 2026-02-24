@@ -183,7 +183,11 @@
     "purchasable": true,
     "tags": [
       "TANK"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/447119_lightningrod.png",
   "simpleDescription": null,
@@ -192,10 +196,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.060178+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model review: Call Lightning is an automatic periodic cast that creates delayed area impact at player position, affecting enemies in area and optionally granting self shield if still inside strike zone.",
-      "Fully Automated modifies autocast cadence globally, applying ability-haste scaling and enforcing a 5-second floor specifically for Call Lightning."
+      "Fully Automated modifies autocast cadence globally, applying ability-haste scaling and enforcing a 5-second floor specifically for Call Lightning.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

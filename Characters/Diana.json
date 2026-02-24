@@ -1,0 +1,387 @@
+{
+  "name": "Diana",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Diver",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 375.0,
+      "per_level": 25.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 31.0,
+      "per_level": 4.3
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 6.5,
+      "per_level": 0.85
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0916666686534881,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Moonsilver Blade",
+      "type": "Passive",
+      "description_source": "Innate:  Diana gains  attack speed, increased shortly after casting an ability.",
+      "effects": [
+        {
+          "id": "diana_p_effect_1",
+          "description": "Innate: Diana gains 15% : 37.35% (based on level) bonus attack speed. After casting an ability, this bonus is tripled to 45% : 112.06% (based on level) for 5 seconds."
+        },
+        {
+          "id": "diana_p_effect_2",
+          "description": "Innate - Moonsilver Blade: Diana's basic attacks on-hit generate a stack of Moonsilver Blade for 5 seconds, refreshing on subsequent attacks and stacking up to 2 times. At 2 stacks, Diana empowers her next basic attack to consume the stacks on-hit to additionally cleave nearby enemies, dealing them 20 : 270 (based on level) (+ 50% AP) magic damage. Moonsilver Blade deals 230% damage against monsters."
+        }
+      ],
+      "description": "Innate: Diana gains 15% : 37.35% (based on level) bonus attack speed. After casting an ability, this bonus is tripled to 45% : 112.06% (based on level) for 5 seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 175.",
+        "Source notes (summary): Moonsilver Blade will affect structures."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Crescent Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Diana unleashes a bolt of lunar energy that deals magic damage to enemies hit in an arc before exploding at the target location.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Active: Diana unleashes a bolt of lunar energy that travels in a counter-clockwise arc before exploding at the target location, granting sight of the area for 0."
+        },
+        {
+          "id": "diana_q_effect_2",
+          "description": "Lunar Rush interacts with Moonlight."
+        }
+      ],
+      "description": "Active: Diana unleashes a bolt of lunar energy that travels in a counter-clockwise arc before exploding at the target location, granting sight of the area for 0.5 seconds and dealing magic damage to enemies hit and afflicting them with Moonlight for 3 seconds, during which they are revealed.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1900.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1900 / 2100.",
+        "Source notes (summary): Even if the target spell shields the bolt, they may still be damaged by the explosion."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Pale Cascade",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Diana  shields herself, creating three orbiting spheres that detonate on contact with enemies to deal magic damage in an area.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            45.0,
+            60.0,
+            75.0,
+            90.0,
+            105.0
+          ],
+          "context_notes": "Active: Diana grants herself a shield for up to 5 seconds and creates three spheres that orbit her counterclockwise for the same duration, detonating upon contact with an enemy to deal magic damage to nearby enemies."
+        },
+        {
+          "id": "magic_damage_per_orb",
+          "description": "Magic Damage per Orb",
+          "base_by_rank": [
+            20.0,
+            32.0,
+            44.0,
+            56.0,
+            68.0
+          ],
+          "context_notes": "Active: Diana grants herself a shield for up to 5 seconds and creates three spheres that orbit her counterclockwise for the same duration, detonating upon contact with an enemy to deal magic damage to nearby enemies."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            60.0,
+            96.0,
+            132.0,
+            168.0,
+            204.0
+          ],
+          "context_notes": "Active: Diana grants herself a shield for up to 5 seconds and creates three spheres that orbit her counterclockwise for the same duration, detonating upon contact with an enemy to deal magic damage to nearby enemies."
+        },
+        {
+          "id": "maximum_shield_strength",
+          "description": "Maximum Shield Strength",
+          "base_by_rank": [
+            90.0,
+            120.0,
+            150.0,
+            180.0,
+            210.0
+          ],
+          "context_notes": "If all three spheres detonate, Pale Cascade's shield is reapplied, stacking with its original shield and refreshing the duration."
+        }
+      ],
+      "description": "Active: Diana grants herself a shield for up to 5 seconds and creates three spheres that orbit her counterclockwise for the same duration, detonating upon contact with an enemy to deal magic damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        13.5,
+        12.0,
+        10.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): On the second application of Pale Cascade's shield, Shield Power will apply to both the new shield amount and the shield amount remaining from the first shield, which has already benefited from shield power."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Lunar Rush",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Diana  dashes to an enemy and deals magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            70.0,
+            90.0,
+            110.0,
+            130.0
+          ],
+          "context_notes": "Active: Diana dashes to the target enemy's location, and upon completion, she deals them magic damage and consumes Moonlight from all enemies."
+        },
+        {
+          "id": "diana_e_effect_2",
+          "description": "If Moonlight is consumed from the target, Lunar Rush's current cooldown is reduced to 0.25 seconds."
+        },
+        {
+          "id": "diana_e_effect_3",
+          "description": "Diana can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Active: Diana dashes to the target enemy's location, and upon completion, she deals them magic damage and consumes Moonlight from all enemies. If the target is within 400 range, Diana will dash through their location.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.0,
+        18.0,
+        16.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): Diana will attempt to basic attack the target."
+      ]
+    },
+    "ultimate": {
+      "name": "Moonfall",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Diana  draws in and  slows nearby enemies.",
+      "effects": [
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Diana pulls in all nearby enemies, during which they are revealed, then slows them for 2 seconds."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "If an enemy champion is pulled in, she calls down a beam of moonlight to strike upon the area around her after 1 second, dealing magic damage to all nearby enemies, increased for each champion pulled beyond the first."
+        },
+        {
+          "id": "bonus_damage_per_champion",
+          "description": "Bonus Damage Per Champion",
+          "base_by_rank": [
+            35.0,
+            60.0,
+            85.0
+          ],
+          "context_notes": "If an enemy champion is pulled in, she calls down a beam of moonlight to strike upon the area around her after 1 second, dealing magic damage to all nearby enemies, increased for each champion pulled beyond the first."
+        },
+        {
+          "id": "total_damage_vs_5_champions",
+          "description": "Total Damage Vs. 5 Champions",
+          "base_by_rank": [
+            340.0,
+            540.0,
+            740.0
+          ],
+          "context_notes": "If an enemy champion is pulled in, she calls down a beam of moonlight to strike upon the area around her after 1 second, dealing magic damage to all nearby enemies, increased for each champion pulled beyond the first."
+        }
+      ],
+      "description": "Active: Diana pulls in all nearby enemies, during which they are revealed, then slows them for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        90.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 475 / 225.",
+        "Source notes (summary): Enemies stay in the area for a maximum of approximately 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Diana.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Diana"
+  }
+}

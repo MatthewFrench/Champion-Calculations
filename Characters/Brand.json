@@ -1,0 +1,375 @@
+{
+  "name": "Brand",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 570.0,
+      "per_level": 105.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 469.0,
+      "per_level": 21.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 27.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 9.0,
+      "per_level": 0.6
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 57.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.681,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.112499997019767,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Blaze",
+      "type": "Passive",
+      "description_source": "Innate:  Brand's  abilities apply a  stack of Ablaze to enemies hit. Subsequent abilities used against a target with Ablaze are empowered. Killing an enemy afflicted with Ablaze or with an ability restores  mana.",
+      "effects": [
+        {
+          "id": "brand_p_effect_1",
+          "description": "Innate: Brand's abilities apply a stack of Ablaze to enemies hit for 4 seconds, stacking up to 3 times and refreshing the duration of all stacks with each application. Subsequent abilities used against a target with Ablaze are empowered. Killing an enemy afflicted with Ablaze or any enemy with an ability restores 20 : 40 (based on level) mana."
+        },
+        {
+          "id": "brand_p_effect_2",
+          "description": "Ablaze: While afflicted with Ablaze, the target is dealt magic damage equal to[ 2% of their maximum health over 4 seconds. ][ 0.167% of their maximum health every 0.25 seconds over 4 seconds. ]Each stack of Ablaze deals damage to the target individually and applies their damage ticks dependent on the time they were applied, even if the duration of all the stacks are refreshed. Ablaze deals 265% damage per tick to monsters; this damage is capped at[ 10 / 20 / 30 (based on Ablaze stacks) per tick against non-epic monsters and 20 / 40 / 60 (based on Ablaze stacks) per tick against epic monsters. ][ a total of 160 / 320 / 480 (based on Ablaze stacks) against non-epic monsters and 320 / 640 / 960 (based on Ablaze stacks) against epic monsters. ]"
+        },
+        {
+          "id": "brand_p_effect_3",
+          "description": "Upon applying 3 stacks of Ablaze to a large monster or enemy champion, the fire becomes unstable, causing it form a fiery ring around the target that grants sight within its radius and, after 2 seconds, consumes their stacks to explode. All enemies within the detonation are applied a stack of Ablaze and dealt magic damage equal to 8% : 12% (based on level) (+ 2% per 100 AP) of their maximum health, capped at 270 / 355 / 440 / 525 (based on level) against monsters."
+        },
+        {
+          "id": "brand_p_effect_4",
+          "description": "Brand cannot stack Ablaze more than once on enemies that have had a ring explode from them in the last 4 seconds."
+        },
+        {
+          "id": "brand_p_effect_5",
+          "description": "The ring will form even if the target dies to the ability applying the third stack, and will still trigger the explosion if the target dies before it."
+        }
+      ],
+      "description": "Innate: Brand's abilities apply a stack of Ablaze to enemies hit for 4 seconds, stacking up to 3 times and refreshing the duration of all stacks with each application. Subsequent abilities used against a target with Ablaze are empowered. Killing an enemy afflicted with Ablaze or any enemy with an ability restores 20 : 40 (based on level) mana.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 475.",
+        "Source notes (summary): Ablaze is a debuff that persists through death."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Sear",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Brand launches a fireball in the target direction that deals magic damage to the first enemy hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "Active: Brand launches a fireball in the target direction that deals magic damage to the first enemy hit."
+        },
+        {
+          "id": "brand_q_effect_2",
+          "description": "Ablaze Bonus: The target is stunned for 1.75 seconds."
+        }
+      ],
+      "description": "Active: Brand launches a fireball in the target direction that deals magic damage to the first enemy hit.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1600.",
+        "Source notes (summary): With an ability haste value of 81 / 70 / 58 / 47 / 36 to 162 / 145 / 129 / 113 / 96 based on the ranges of applications from the target, it is possible to apply the stun without having to use other abilities."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Pillar of Flame",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active: After a brief delay,  Brand erupts a pillar of flame at the target location that deals magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            120.0,
+            165.0,
+            210.0,
+            255.0
+          ],
+          "context_notes": "Active: After a 0."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            93.75,
+            150.0,
+            206.25,
+            262.5,
+            318.75
+          ],
+          "context_notes": "Ablaze Bonus: The target takes 25% increased damage."
+        }
+      ],
+      "description": "Active: After a 0.627 seconds delay, Brand erupts a pillar of flame at the target location that deals magic damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 260.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 260.",
+        "Source notes (summary): The delay before the eruption does not include the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Conflagration",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Brand sets the target enemy aflame, which creates a blast that deals magic damage to them and nearby enemies.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            80.0,
+            105.0,
+            130.0,
+            155.0
+          ],
+          "context_notes": "Active: Brand sets the target enemy aflame, which creates a blast that deals magic damage to them and causes the flame to spread from the target to nearby enemies, dealing them the same damage."
+        },
+        {
+          "id": "brand_e_effect_2",
+          "description": "Ablaze Bonus: Conflagration's spread range is doubled."
+        }
+      ],
+      "description": "Active: Brand sets the target enemy aflame, which creates a blast that deals magic damage to them and causes the flame to spread from the target to nearby enemies, dealing them the same damage.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 900.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 900.",
+        "Source effectRadius: 300 / 600.",
+        "Source notes (summary): The flame spreads to enemies near the primary target at the time of cast."
+      ]
+    },
+    "ultimate": {
+      "name": "Pyroclasm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Brand unleashes a devastating torrent of fire that bounces to nearby enemies, dealing magic damage each time it bounces.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            100.0,
+            175.0,
+            250.0
+          ],
+          "context_notes": "Active: Brand launches a fireball at the target enemy that bounces between nearby enemies and Brand up to four times, dealing magic damage to enemies each time and having a 0."
+        },
+        {
+          "id": "total_single_target_damage",
+          "description": "Total Single-Target Damage",
+          "base_by_rank": [
+            300.0,
+            525.0,
+            750.0
+          ],
+          "context_notes": "Active: Brand launches a fireball at the target enemy that bounces between nearby enemies and Brand up to four times, dealing magic damage to enemies each time and having a 0."
+        },
+        {
+          "id": "brand_r_effect_2",
+          "description": "Pyroclasm prioritizes Ablaze enemy champions, then other enemy champions, then any valid bounce target, then Brand."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0
+          ],
+          "context_notes": "Ablaze Bonus: The target is slowed for 0."
+        },
+        {
+          "id": "brand_r_effect_4",
+          "description": "The target does not have to be visible for the fireball to bounce to them."
+        }
+      ],
+      "description": "Active: Brand launches a fireball at the target enemy that bounces between nearby enemies and Brand up to four times, dealing magic damage to enemies each time and having a 0.15-second delay between bounces.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        90.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 750.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 750 - 3000.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): The fireball acquires a new valid, bounce target once the bounce delay finishes."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Brand.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Brand"
+  }
+}

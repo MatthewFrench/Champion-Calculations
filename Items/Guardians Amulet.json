@@ -38,14 +38,16 @@
       "interval_seconds": 5.0,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "has_mana_resource"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         10,
         5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.84
     },
     {
       "id": "recovery_restore_health_for_manaless_champions",
@@ -68,7 +70,7 @@
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.84
     }
   ],
   "shop": {
@@ -88,7 +90,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.053373+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Recovery ticks every 5 seconds and routes to mana restoration for mana users or health restoration for manaless champions.",
+      "Player-visible behavior: this item is Arena-only and limited to one Guardian starter item."
+    ]
   },
   "sources": [
     {
@@ -108,6 +114,12 @@
       "path": "From Online/items/Guardians Amulet.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Guardian's Amulet",
+      "url": "https://wiki.leagueoflegends.com/en-us/Guardian%27s_Amulet",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Recovery tick semantics, Arena availability, and guardian-item limitation behavior"
     }
   ]
 }

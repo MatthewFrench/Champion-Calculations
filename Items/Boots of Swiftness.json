@@ -28,7 +28,7 @@
       "unit": "percent",
       "trigger": "passive",
       "applies_to": "self",
-      "parse_confidence": 0.9
+      "parse_confidence": 0.94
     }
   ],
   "shop": {
@@ -47,9 +47,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.048198+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Manual review: slow resist passive."
+      "Execution model: Fleetfooted is a constant passive that continuously scales down incoming slow intensity by 25% while the item is equipped.",
+      "Player-visible behavior: this effect does not require activation and applies immediately to all incoming slows."
     ]
   },
   "sources": [
@@ -70,6 +71,12 @@
       "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
       "accessed": "2026-02-23",
       "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Boots of Swiftness",
+      "url": "https://wiki.leagueoflegends.com/en-us/Boots_of_Swiftness",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Fleetfooted slow-resist semantics and always-on passive execution behavior"
     }
   ]
 }

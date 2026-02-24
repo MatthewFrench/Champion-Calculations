@@ -1,0 +1,282 @@
+{
+  "name": "Aphelios",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 102.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 348.0,
+      "per_level": 42.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 3.25,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 6.5,
+      "per_level": 0.4
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 2.3
+    },
+    "attack_speed": {
+      "base": 0.665,
+      "per_level_percent": 2.1
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.5,
+    "base_windup_seconds": 0.23000000417232513,
+    "windup_fraction": 0.15333333611488342,
+    "windup_percent": 15.333333611488342,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.23000000417232513,
+      "attack_total_time": 1.5,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "The Hitman and the Seer",
+      "type": "Passive",
+      "description_source": "Innate:  Aphelios wields 5 Lunari Weapons made by his sister Alune. He has access to two at a time: main weapon and off-hand weapon. Each weapon grants him a unique basic attack and a  primary ability.",
+      "effects": [
+        {
+          "id": "aphelios_p_effect_1",
+          "description": "Innate: Aphelios has access to an arsenal of 5 Moonstone Weapons, created by his sister Alune. He equips two weapons at any one time, one as his main weapon and one as his off-hand. Each weapon has a unique basic attack and effect."
+        },
+        {
+          "id": "aphelios_p_effect_2",
+          "description": "Aphelios begins the game with Calibrum as his main weapon and Severum in his off-hand, with Gravitum, Infernum, and Crescendum queued in reserve. His weapons are initially in this order, but they can be rearranged based on their usage."
+        },
+        {
+          "id": "aphelios_p_effect_3",
+          "description": "Innate - Moonlight: Weapons granted to Aphelios have 50 Moonlight for ammunition, which is consumed upon basic attacking on-attack and upon casting his primary abilities. Any of his abilities that automatically cause him to attack during their effect will not consume additional Moonlight. Once his main weapon's Moonlight is exhausted, it is moved to the end of the reserve queue; Alune then assembles his next available weapon from the reserve over 1 second, placing its primary ability on a 1.5-second cooldown from the start of the assembly. Aphelios cannot cast Phase during the assembly."
+        },
+        {
+          "id": "bonus_attack_damage",
+          "description": "Bonus Attack Damage",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Innate - Weapon Master: Aphelios cannot improve his abilities via skill points."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            9.0,
+            18.0,
+            27.0,
+            36.0,
+            45.0,
+            54.0
+          ],
+          "context_notes": "Innate - Weapon Master: Aphelios cannot improve his abilities via skill points."
+        },
+        {
+          "id": "lethality",
+          "description": "Lethality",
+          "base_by_rank": [
+            4.5,
+            9.0,
+            13.5,
+            18.0,
+            22.5,
+            27.0
+          ],
+          "context_notes": "Innate - Weapon Master: Aphelios cannot improve his abilities via skill points."
+        }
+      ],
+      "description": "Innate: Aphelios has access to an arsenal of 5 Moonstone Weapons, created by his sister Alune. He equips two weapons at any one time, one as his main weapon and one as his off-hand. Each weapon has a unique basic attack and effect.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The attack damage, attack speed and lethality within Aphelios' unique rank-up menu in the HUD correspond to the Q, W, E ability rank-up hotkeys, respectively, for the purposes of assigning skill points via keyboard."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Weapons of the Faithful",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "The active effect of  Aphelios'  ability varies based on his current main weapon.\n Calibrum -  Moonshot: Long range shot that marks its target for a long-range follow-up attack.\n Severum -  Onslaught: Gain bonus  movement speed while attacking a single enemy with both weapons.\n Gravitum -  Binding Eclipse:  Root enemies who are  slowed by this weapon.\n Infernum -  Duskwave: Blast enemies in a cone and attack them with your off-hand weapon.\n Crescendum -  Sentry: Deploy a sentry with your off-hand weapon that attacks nearby enemies.",
+      "effects": [
+        {
+          "id": "aphelios_q_effect_1",
+          "description": "The active effect of Aphelios' varies based on his current main weapon."
+        },
+        {
+          "id": "aphelios_q_effect_2",
+          "description": "The individual actives do not share a cooldown."
+        }
+      ],
+      "description": "The active effect of Aphelios' varies based on his current main weapon.",
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: N/A.",
+        "Source castTime: none.",
+        "Source notes (summary): Execution semantics are weapon-dependent (Calibrum / Severum / Gravitum / Infernum / Crescendum branches) and should be modeled per active-weapon branch rather than as one fixed cast profile."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Phase",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Aphelios switches between his main weapon and off-hand weapon.",
+      "effects": [
+        {
+          "id": "aphelios_w_effect_1",
+          "description": "Toggle: Aphelios switches between his main weapon and off-hand weapon over 0.25 seconds."
+        }
+      ],
+      "description": "Toggle: Aphelios switches between his main weapon and off-hand weapon over 0.25 seconds.",
+      "cooldown_seconds_by_rank": [
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source notes (summary): Toggled abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Weapon Queue System",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "The icon of this ability reflects the next weapon that is the next in  Aphelios' weapon queue.",
+      "effects": [
+        {
+          "id": "aphelios_e_effect_1",
+          "description": "The icon of this ability reflects the next weapon that is in reserve."
+        },
+        {
+          "id": "aphelios_e_effect_2",
+          "description": "Active: Aphelios receives a text prompt of the weapon Alune will create next."
+        }
+      ],
+      "description": "The icon of this ability reflects the next weapon that is in reserve.",
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): This ability is queue-information utility (next-weapon prompt and off-hand icon), not a direct combat-resolution spell instance."
+      ]
+    },
+    "ultimate": {
+      "name": "Moonlight Vigil",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Aphelios fires a concentrated blast of moonlight that explodes upon hitting an enemy champion, dealing physical damage to enemy champions in the area.",
+      "effects": [
+        {
+          "id": "aphelios_r_effect_1",
+          "description": "Active: Aphelios casts forth a lunar spotlight in the target direction that briefly grants sight of the area along its path and stops upon illuminating an enemy champion. Alune smites the area centered on the illuminated target, dealing 125 / 175 / 225 (based on level) (+ 20% bonus AD) (+ 100% AP) physical damage to enemy champions struck and locking-on to each target hit, as well as granting sight of the area for 2 seconds."
+        },
+        {
+          "id": "aphelios_r_effect_2",
+          "description": "After 0.3 seconds of the illumination, attacks based on Aphelios' current main weapon will launch from the sky against each locked-on target, dealing 100% AD physical damage and applying on-hit effects. These attacks can critically strike for 100% : 130% (+ 0% : 9%) (based on critical strike chance) damage. There is no range limit for locked-on targets.\n Calibrum: Applies an empowered mark that deals 50 / 80 / 110 (based on level) bonus physical damage per mark consumed.\n Severum: Heals Aphelios for 250 / 350 / 450 (based on level) if at least one enemy champion is hit.\n Gravitum: Increases the initial slow to 99% and empowers Binding Eclipse to root targets affected by the enhanced slow for 1.35 seconds.\n Infernum: The initial blast deals 50 / 100 / 150 (based on level) (+ 25% bonus AD) bonus physical damage.[ The attack instead deals 110% AD physical damage against locked-on targets, and causes an explosion of bolts in a 400-radius circle that deals 74.25% / 99% (based on level) AD physical damage to targets hit. ][ Performs Infernum's attacks and Infernum's bolts in a 400-radius circle: primary targets are dealt Infernum's primary damage; secondary targets are dealt 90% of Infernum's regular bolt damage; both are modified by Moonlight Vigil's critical damage modifier. ]Enemy champions will take damage from overlapping areas.\n Crescendum: Generates 5 additional spectral Chakrams that return to Aphelios from the first enemy champion hit, for a total of 6, on top of those from other targets hit."
+        }
+      ],
+      "description": "Active: Aphelios casts forth a lunar spotlight in the target direction that briefly grants sight of the area along its path and stops upon illuminating an enemy champion. Alune smites the area centered on the illuminated target, dealing 125 / 175 / 225 (based on level) (+ 20% bonus AD) (+ 100% AP) physical damage to enemy champions struck and locking-on to each target hit, as well as granting sight of the area for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        110.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.6,
+        "projectile_speed": 1000.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.6.",
+        "Source speed: 1000.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): When critically striking, the attacks on locked-on targets when using Severum and Crescendum deal slightly more than 120% damage."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Aphelios.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Aphelios"
+  }
+}

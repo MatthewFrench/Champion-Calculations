@@ -79,7 +79,11 @@
     "purchasable": true,
     "tags": [
       "TANK"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3061_forceofentropy.png",
   "simpleDescription": null,
@@ -88,11 +92,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.035304+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Atrophy applies a chance-gated immobilize extension with chance equal to critical strike chance percent (1% chance per 1% critical strike chance), capped at 100%.",
       "Player-visible behavior: successful procs extend qualifying immobilize effects by a flat 0.25 seconds and by 33% of the original immobilize duration.",
-      "Page notes state suppression and stasis are excluded from Atrophy extension semantics."
+      "Page notes state suppression and stasis are excluded from Atrophy extension semantics.",
+      "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400)."
     ]
   },
   "sources": [

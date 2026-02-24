@@ -1,0 +1,342 @@
+{
+  "name": "Kha'Zix",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 643.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 327.0,
+      "per_level": 40.0
+    },
+    "move_speed": 350.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 7.59,
+      "per_level": 0.5
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 3.1
+    },
+    "attack_speed": {
+      "base": 0.668,
+      "per_level_percent": 2.7
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0994652435183525,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Unseen Threat",
+      "type": "Passive",
+      "description_source": "Innate:  Kha'Zix gains Unseen Threat whenever the enemy loses  sight of him causing his next basic attack against an enemy Champion to deal bonus magic damage and slow.",
+      "effects": [
+        {
+          "id": "khazix_p_effect_1",
+          "description": "Innate: Kha'Zix gains Unseen Threat whenever the enemy loses sight of him or he activates Void Assault. Unseen Threat: Kha'Zix empowers his next basic attack against an enemy champion to deal 17 : 150 (based on level) (+ 50% bonus AD) bonus magic damage and slow them by 25% for 2 seconds."
+        }
+      ],
+      "description": "Innate: Kha'Zix gains Unseen Threat whenever the enemy loses sight of him or he activates Void Assault. Unseen Threat: Kha'Zix empowers his next basic attack against an enemy champion to deal 17 : 150 (based on level) (+ 50% bonus AD) bonus magic damage and slow them by 25% for 2 seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Any form of vision loss may trigger Unseen Threat, such as Curse of the Black Mist, nearsight and Brushmaker."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Taste Their Fear",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Kha'Zix considers any enemy unit to be Isolated if they are not nearby to one of their allies. His abilities have special interactions against Isolated targets.",
+      "effects": [
+        {
+          "id": "khazix_q_effect_1",
+          "description": "Passive: Kha'Zix considers any enemy unit to be Isolated if they are not nearby to one of their allies. Taste Their Fear, Evolved Reaper Claws, and Evolved Spike Racks have special interactions against Isolated targets."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            105.0,
+            130.0,
+            155.0,
+            180.0
+          ],
+          "context_notes": "Active: Kha'Zix slashes the target enemy, dealing physical damage, increased by 110% against Isolated targets."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            168.0,
+            220.5,
+            273.0,
+            325.5,
+            378.0
+          ],
+          "context_notes": "Active: Kha'Zix slashes the target enemy, dealing physical damage, increased by 110% against Isolated targets."
+        }
+      ],
+      "description": "Passive: Kha'Zix considers any enemy unit to be Isolated if they are not nearby to one of their allies. Taste Their Fear, Evolved Reaper Claws, and Evolved Spike Racks have special interactions against Isolated targets.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): A team's allies are champions, pets, minions and outer turrets."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Void Spike",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Kha'Zix fires a bolt of spikes in the target direction that explodes upon hitting an enemy, dealing physical damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            75.0,
+            105.0,
+            135.0,
+            165.0,
+            195.0
+          ],
+          "context_notes": "Active: Kha'Zix fires a bolt of spikes in the target direction that explodes upon hitting an enemy, dealing physical damage to nearby enemies."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            55.0,
+            75.0,
+            95.0,
+            115.0,
+            135.0
+          ],
+          "context_notes": "Kha'Zix heals himself if he is within the explosion."
+        }
+      ],
+      "description": "Active: Kha'Zix fires a bolt of spikes in the target direction that explodes upon hitting an enemy, dealing physical damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          60.0,
+          65.0,
+          70.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1700.0,
+        "effect_hitbox_radius": 275.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1700.",
+        "Source effectRadius: 275.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Leap",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Kha'Zix  leaps to the target location, dealing physical damage to nearby enemies upon landing.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            65.0,
+            100.0,
+            135.0,
+            170.0,
+            205.0
+          ],
+          "context_notes": "Active: Kha'Zix leaps to the target location, dealing physical damage to nearby enemies upon arrival."
+        },
+        {
+          "id": "khazix_e_effect_2",
+          "description": "Taste Their Fear can be cast during the dash."
+        }
+      ],
+      "description": "Active: Kha'Zix leaps to the target location, dealing physical damage to nearby enemies upon arrival.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        18.0,
+        16.0,
+        14.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Kha'Zix can use his summoner spells and item actives while leaping."
+      ]
+    },
+    "ultimate": {
+      "name": "Void Assault",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive: Each rank in Void Assault allows Kha'Zix to evolve one of his abilities, granting it additional effects.",
+      "effects": [
+        {
+          "id": "khazix_r_effect_1",
+          "description": "Passive: Each rank in Void Assault allows Kha'Zix to evolve one of his abilities, granting it additional effects. Evolving an ability causes him to enter a 2-second cast time.Kha'Zix cannot evolve while he is affected by cast-inhibiting crowd control or a lockout that disables abilities."
+        },
+        {
+          "id": "khazix_r_effect_2",
+          "description": "Active: Kha'Zix becomes invisible for 1.25 seconds, during which he gains 40% bonus movement speed."
+        },
+        {
+          "id": "khazix_r_effect_3",
+          "description": "After 2 seconds of leaving invisibility, and for the next 12 seconds, Void Assault can be recast at no additional cost."
+        },
+        {
+          "id": "khazix_r_effect_4",
+          "description": "Recast: Kha'Zix mimics the first cast's effects."
+        }
+      ],
+      "description": "Passive: Each rank in Void Assault allows Kha'Zix to evolve one of his abilities, granting it additional effects. Evolving an ability causes him to enter a 2-second cast time.Kha'Zix cannot evolve while he is affected by cast-inhibiting crowd control or a lockout that disables abilities.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        85.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Each cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Khazix.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Khazix"
+  }
+}

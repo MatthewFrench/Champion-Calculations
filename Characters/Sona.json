@@ -115,7 +115,11 @@
           "description": "Tempo slow"
         }
       ],
-      "name": "Power Chord"
+      "name": "Power Chord",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Sona passive combines Power Chord attack-empower cadence with Accelerando stack progression; cast sequencing and successful Q/W outcomes determine haste and Crescendo cooldown conversion."
+      ]
     },
     "basic_ability_3": {
       "slot": "E",
@@ -188,7 +192,14 @@
         }
       ],
       "type": "Active",
-      "description": "Grant bonus move speed to yourself and allies; the self-buff lasts longer and can end early if you take damage after 3s."
+      "description": "Grant bonus move speed to yourself and allies; the self-buff lasts longer and can end early if you take damage after 3s.",
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Execution metadata mapped from generated champion data: castTime none with 400 aura-radius execution footprint."
+      ]
     },
     "basic_ability_2": {
       "slot": "W",
@@ -288,7 +299,15 @@
         }
       ],
       "type": "Active",
-      "description": "Heal and briefly shield; mitigated damage contributes to Accelerando stacks."
+      "description": "Heal and briefly shield; mitigated damage contributes to Accelerando stacks.",
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1300.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Execution metadata mapped from generated champion data: castTime none, heal-bolt speed 1300, and aura-radius execution footprint 400 (source effectRadius reported as 1000/400)."
+      ]
     },
     "basic_ability_1": {
       "slot": "Q",
@@ -371,7 +390,14 @@
       "execution": {
         "cast_windup_seconds": 0.15,
         "effect_hitbox_radius": 140.0
-      }
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 1300.",
+        "Source effectRadius: 825 / 400.",
+        "Source notes (summary): Hymn of Valor fires auto-target bolts with prioritized target selection, then grants a tagged-ally Melody follow-up on next attack."
+      ]
     },
     "ultimate": {
       "slot": "R",
@@ -486,7 +512,8 @@
     {
       "type": "Generated champion data",
       "path": "From Online/champions/Sona.json",
-      "used_for": "raw basic attack timing stats and radii"
+      "used_for": "raw basic attack timing stats and radii",
+      "accessed": "2026-02-24"
     }
   ],
   "schema_notes": {

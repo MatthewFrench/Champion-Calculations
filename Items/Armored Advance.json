@@ -38,9 +38,10 @@
       "trigger": "passive",
       "applies_to": "self",
       "conditions": [
+        "incoming_basic_damage_only",
         "exclude_turrets"
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.9
     },
     {
       "id": "armored_advance_noxian_endurance_shield",
@@ -63,9 +64,10 @@
       "trigger": "on_damage",
       "applies_to": "self",
       "conditions": [
-        "physical_damage_from_champions"
+        "physical_damage_from_champions",
+        "shield_absorbs_physical_damage_only"
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.88
     }
   ],
   "shop": {
@@ -84,9 +86,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.711514+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Manual batch review A-items chunk 1."
+      "Execution model: Plating is always-on and applies only to incoming basic damage while explicitly excluding turret attacks.",
+      "Execution model: Noxian Endurance triggers from incoming physical champion damage and grants a 5-second physical-damage-only shield on a 15-second cooldown.",
+      "Player-visible behavior: this item is obtained by mid-lane role-quest boot upgrade (Plated Steelcaps -> Armored Advance) rather than direct purchase flow."
     ]
   },
   "sources": [
@@ -107,6 +111,12 @@
       "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
       "accessed": "2026-02-23",
       "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Armored Advance",
+      "url": "https://wiki.leagueoflegends.com/en-us/Armored_Advance",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Plating damage scope, Noxian Endurance trigger/cooldown behavior, and role-quest acquisition context"
     }
   ]
 }

@@ -1,0 +1,365 @@
+{
+  "name": "Jarvan IV",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Diver",
+    "Fighter",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 55.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 4.6
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 6.5,
+      "per_level": 0.45
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.124559998512268,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Martial Cadence",
+      "type": "Passive",
+      "description_source": "Innate:  Jarvan IV's basic attacks deal bonus physical damage equal to a portion of the target's current health.",
+      "effects": [
+        {
+          "id": "jarvaniv_p_effect_1",
+          "description": "Innate: Jarvan IV's basic attacks are empowered to deal bonus physical damage equal to 8% of the target's current health, with a minimum threshold of 20 and capped at 400 against non- champion targets."
+        },
+        {
+          "id": "jarvaniv_p_effect_2",
+          "description": "This effect cannot occur on the same target more than once every few seconds."
+        }
+      ],
+      "description": "Innate: Jarvan IV's basic attacks are empowered to deal bonus physical damage equal to 8% of the target's current health, with a minimum threshold of 20 and capped at 400 against non- champion targets.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Martial Cadence's damage is based on the current health of the target before any damage of the attack has been dealt."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Dragon Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Jarvan IV extends his lance in the target direction, dealing physical damage to enemies hit and  reducing their armor for a short time.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            90.0,
+            130.0,
+            170.0,
+            210.0,
+            250.0
+          ],
+          "context_notes": "Active: Jarvan IV extends his lance in the target direction, dealing physical damage to enemies hit and inflicting them with armor reduction for 3 seconds."
+        },
+        {
+          "id": "armor_reduction",
+          "description": "Armor Reduction",
+          "base_by_rank": [
+            10.0,
+            14.0,
+            18.0,
+            22.0,
+            26.0
+          ],
+          "context_notes": "Active: Jarvan IV extends his lance in the target direction, dealing physical damage to enemies hit and inflicting them with armor reduction for 3 seconds."
+        },
+        {
+          "id": "jarvaniv_q_effect_2",
+          "description": "If the lance connects with a deployed Demacian Standard, Jarvan IV dashes to its location, knocking up nearby enemies around him and along his path for 0.75 seconds."
+        },
+        {
+          "id": "jarvaniv_q_effect_3",
+          "description": "Jarvan IV can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Jarvan IV extends his lance in the target direction, dealing physical damage to enemies hit and inflicting them with armor reduction for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          50.0,
+          55.0,
+          60.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.4.",
+        "Source notes (summary): The armor reduction is applied after the damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Golden Aegis",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Jarvan IV  slows nearby enemies for a short time.",
+      "effects": [
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Active: Jarvan IV slows all nearby enemies for 2 seconds."
+        },
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            60.0,
+            80.0,
+            100.0,
+            120.0,
+            140.0
+          ],
+          "context_notes": "Jarvan IV also grants himself a shield for 4 seconds, increased by 1."
+        }
+      ],
+      "description": "Active: Jarvan IV slows all nearby enemies for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): Golden Aegis deals no damage and thus does not trigger turret aggro, or effects such as Elixir of Sorcery and Sudden Impact's activation."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Demacian Standard",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Jarvan IV gains  bonus attack speed.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            22.5,
+            25.0,
+            27.5,
+            30.0
+          ],
+          "context_notes": "Passive: Jarvan IV gains bonus attack speed."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Jarvan IV throws a Demacian flag to the target location, dealing magic damage to enemies within the area."
+        },
+        {
+          "id": "jarvaniv_e_effect_3",
+          "description": "The flag then remains for 8 seconds, granting sight of its surroundings and providing an aura that grants Demacian Standard's passive bonus attack speed to all nearby allied champions as well as Jarvan IV himself."
+        }
+      ],
+      "description": "Passive: Jarvan IV gains bonus attack speed.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.5,
+        11.0,
+        10.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          55.0,
+          55.0,
+          55.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 200 / 1000 / 700.",
+        "Source notes (summary): The attack speed granted from a deployed Demacian Standard stacks additively with Demacian Standard's passive permanent bonus attack speed to Jarvan IV, but the aura from multiple Demacian Standards does not stack."
+      ]
+    },
+    "ultimate": {
+      "name": "Cataclysm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Jarvan IV  leaps  Unstoppably to the target enemy champion's location, dealing physical damage to nearby enemies upon impact.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            200.0,
+            325.0,
+            450.0
+          ],
+          "context_notes": "Active: Jarvan IV leaps with displacement immunity to the target enemy champion's location over 0."
+        },
+        {
+          "id": "jarvaniv_r_effect_2",
+          "description": "Upon impact, he creates a circle of impassable terrain that knocks aside enemies within the perimeter over 0.15 seconds, knocking them out of the circle if they are on the outer edge and pulling them in otherwise. The terrain lasts for 3.5 seconds and grants sight of the area. Cataclysm can be recast after 0.75 seconds while the terrain is present."
+        },
+        {
+          "id": "jarvaniv_r_effect_3",
+          "description": "Recast: Jarvan IV destroys the terrain created by Cataclysm."
+        }
+      ],
+      "description": "Active: Jarvan IV leaps with displacement immunity to the target enemy champion's location over 0.35 seconds, dealing physical damage to all nearby enemies upon arrival.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: Varies.",
+        "Source effectRadius: 350 / 1700.",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/JarvanIV.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "JarvanIV"
+  }
+}

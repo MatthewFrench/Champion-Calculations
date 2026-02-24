@@ -1,0 +1,388 @@
+{
+  "name": "Hecarim",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Diver",
+    "Fighter",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 625.0,
+      "per_level": 106.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 280.0,
+      "per_level": 40.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 5.45
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 3.7
+    },
+    "attack_speed": {
+      "base": 0.67,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.050000000745058,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Warpath",
+      "type": "Passive",
+      "description_source": "Innate:  Hecarim gains  bonus attack damage equal to a portion of his  bonus movement speed.",
+      "effects": [
+        {
+          "id": "hecarim_p_effect_1",
+          "description": "Innate: Hecarim gains bonus attack damage equal to 12% : 24% (based on level) of his bonus movement speed."
+        }
+      ],
+      "description": "Innate: Hecarim gains bonus attack damage equal to 12% : 24% (based on level) of his bonus movement speed.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Warpath's bonus attack damage will adjust itself to any temporary movement speed buffs and debuffs Hecarim is affected by."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Rampage",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Hecarim cleaves his glaive to deal physical damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Hecarim cleaves his glaive around himself, dealing physical damage to nearby enemies, reduced to 60% against minions."
+        },
+        {
+          "id": "minion_damage",
+          "description": "Minion damage",
+          "base_by_rank": [
+            36.0,
+            54.0,
+            72.0,
+            90.0,
+            108.0
+          ],
+          "context_notes": "Active: Hecarim cleaves his glaive around himself, dealing physical damage to nearby enemies, reduced to 60% against minions."
+        },
+        {
+          "id": "hecarim_q_effect_2",
+          "description": "If this damages an enemy, Hecarim gains a stack of Rampage for 8 seconds, refreshing on subsequent damage and stacking up to 3 times. Each stack increases Rampage's damage by 3% (+ 3% per 100 bonus AD) and reduces its base cooldown by 0.75 seconds, up to a 9% (+ 9% per 100 bonus AD) damage increase and a 2.25-second reduction of the base cooldown at maximum stacks. Stacks expire one by one every 1 second when the duration ends."
+        }
+      ],
+      "description": "Active: Hecarim cleaves his glaive around himself, dealing physical damage to nearby enemies, reduced to 60% against minions.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        3.25,
+        2.5,
+        1.75
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          28.0,
+          26.0,
+          24.0,
+          22.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 375."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Spirit of Dread",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Hecarim continually deals magic damage to nearby enemies for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Hecarim surrounds himself with the Spirit of Dread for 4 seconds, dealing magic damage every second to nearby enemies."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "Active: Hecarim surrounds himself with the Spirit of Dread for 4 seconds, dealing magic damage every second to nearby enemies."
+        },
+        {
+          "id": "bonus_resistances",
+          "description": "Bonus Resistances",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0,
+            25.0
+          ],
+          "context_notes": "While active, Hecarim gains bonus armor and bonus magic resistance and is healed for 25% of the post-mitigation damage dealt to enemies within the area from all sources, halved to 12."
+        },
+        {
+          "id": "capped_healing",
+          "description": "Capped Healing",
+          "base_by_rank": [
+            120.0,
+            150.0,
+            180.0,
+            210.0,
+            240.0
+          ],
+          "context_notes": "While active, Hecarim gains bonus armor and bonus magic resistance and is healed for 25% of the post-mitigation damage dealt to enemies within the area from all sources, halved to 12."
+        }
+      ],
+      "description": "Active: Hecarim surrounds himself with the Spirit of Dread for 4 seconds, dealing magic damage every second to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        14.0,
+        14.0,
+        14.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 525.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 525.",
+        "Source notes (summary): The healing cap against minions accounts for every single one regardless of how many are present and/or affected by Spirit of Dread at the time of cast."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Devastating Charge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Hecarim becomes  ghosted and builds up  bonus movement speed over a short time.",
+      "effects": [
+        {
+          "id": "hecarim_e_effect_1",
+          "description": "Active: Hecarim becomes ghosted and gains 25% : 65% (based on time active) bonus total movement speed for 4 seconds."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0,
+            75.0,
+            90.0
+          ],
+          "context_notes": "During this time, Hecarim's next basic attack is replaced by a Devastating Charge, empowering it to gain 50 : 250 (based on distance traveled) bonus range and cause him to dash in the target's direction, revealing them for 1 second."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "During this time, Hecarim's next basic attack is replaced by a Devastating Charge, empowering it to gain 50 : 250 (based on distance traveled) bonus range and cause him to dash in the target's direction, revealing them for 1 second."
+        },
+        {
+          "id": "hecarim_e_effect_3",
+          "description": "Devastating Charge can critically strike for (100% + 30%) AD bonus physical damage."
+        },
+        {
+          "id": "hecarim_e_effect_4",
+          "description": "Devastating Charge resets Hecarim's basic attack timer. Hecarim can cast any of his abilities during the dash. Devastating Charge's duration is paused during Onslaught of Shadows."
+        }
+      ],
+      "description": "Active: Hecarim becomes ghosted and gains 25% : 65% (based on time active) bonus total movement speed for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        20.0,
+        19.0,
+        18.0,
+        17.0,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Hecarim can cast any of his abilities while dashing."
+      ]
+    },
+    "ultimate": {
+      "name": "Onslaught of Shadows",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Hecarim summons spectral riders and  charges in the target direction, dealing magic damage to enemies they pass through.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Hecarim dashes with displacement immunity to the target location and summons 5 spectral riders in an arrow formation that charge alongside him in the target direction, dealing magic damage to all enemies in their path and revealing them for 2."
+        },
+        {
+          "id": "hecarim_r_effect_2",
+          "description": "Upon arrival, he fears nearby enemies for 0.75 : 1.5 (based on distance traveled) seconds and slows them by 0% : 99% (based on distance from Hecarim)."
+        },
+        {
+          "id": "hecarim_r_effect_3",
+          "description": "The wave of spectral riders travels independently of Hecarim and will always charge at the same distance."
+        }
+      ],
+      "description": "Active: Hecarim dashes with displacement immunity to the target location and summons 5 spectral riders in an arrow formation that charge alongside him in the target direction, dealing magic damage to all enemies in their path and revealing them for 2.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        140.0,
+        120.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1100.0,
+        "effect_hitbox_radius": 315.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1100.",
+        "Source effectRadius: 315.",
+        "Source notes (summary): The spectral rider missiles originate at Hecarim's location, 145 units behind and 100 units to either side of him, and 290 units behind and 200 units to either side."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Hecarim.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Hecarim"
+  }
+}

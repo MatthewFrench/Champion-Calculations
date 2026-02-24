@@ -1,0 +1,341 @@
+{
+  "name": "Ezreal",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 102.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 375.0,
+      "per_level": 70.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 8.5,
+      "per_level": 1.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 60.0,
+      "per_level": 3.75
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.111613474786281,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Rising Spell Force",
+      "type": "Passive",
+      "description_source": "Innate:  Ezreal's abilities generate  stacks of Rising Spell Force for each enemy hit, up to a cap.",
+      "effects": [
+        {
+          "id": "ezreal_p_effect_1",
+          "description": "Innate: Ezreal generates a stack of Rising Spell Force for each enemy hit by his abilities, lasting for 6 seconds, refreshing on subsequent hits, and stacking up to 5 times."
+        },
+        {
+          "id": "ezreal_p_effect_2",
+          "description": "Rising Spell Force: For each stack, Ezreal gains 10% bonus attack speed, up to a maximum of 50%."
+        }
+      ],
+      "description": "Innate: Ezreal generates a stack of Rising Spell Force for each enemy hit by his abilities, lasting for 6 seconds, refreshing on subsequent hits, and stacking up to 5 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Rising Spell Force will stack even if the abilities hit were blocked by spell shields."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Mystic Shot",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Ezreal fires a bolt of energy that deals physical damage to the first enemy hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            20.0,
+            45.0,
+            70.0,
+            95.0,
+            120.0
+          ],
+          "context_notes": "Active: Ezreal fires a bolt of energy in the target direction that deals physical damage to the first enemy hit, applying on-hit effects and triggering on-attack effects."
+        },
+        {
+          "id": "ezreal_q_effect_2",
+          "description": "If Mystic Shot successfully hits an enemy, the current cooldowns of Ezreal's abilities, including Mystic Shot's, are reduced by 1.5 seconds."
+        }
+      ],
+      "description": "Active: Ezreal fires a bolt of energy in the target direction that deals physical damage to the first enemy hit, applying on-hit effects and triggering on-attack effects.",
+      "cooldown_seconds_by_rank": [
+        5.5,
+        5.25,
+        5.0,
+        4.75,
+        4.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          28.0,
+          31.0,
+          34.0,
+          37.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source notes (summary): Mystic Shot deals basic damage, but also triggers spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Essence Flux",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ezreal fires an orb that shortly marks the first enemy  champion, epic  monster, or  structure hit.",
+      "effects": [
+        {
+          "id": "ezreal_w_effect_1",
+          "description": "Active: Ezreal fires an orb in the target direction that marks the first enemy champion, epic monster, or structure hit for 4 seconds."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            80.0,
+            135.0,
+            190.0,
+            245.0,
+            300.0
+          ],
+          "context_notes": "His next basic attack or ability against the target detonates the mark to deal them bonus magic damage."
+        },
+        {
+          "id": "ezreal_w_effect_3",
+          "description": "If the mark was detonated with an ability, Ezreal restores 60 mana plus the mana cost of that ability."
+        }
+      ],
+      "description": "Active: Ezreal fires an orb in the target direction that marks the first enemy champion, epic monster, or structure hit for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1700.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1700.",
+        "Source notes (summary): The application of Essence Flux deals 0 proc damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Arcane Shift",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ezreal  blinks to the target location and fires a bolt that strikes the nearest enemy, dealing magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "Active: Ezreal blinks from his current location to up to 475 units towards the target location, then fires a homing bolt towards the nearest enemy that deals magic damage and reveals them for 1 second."
+        },
+        {
+          "id": "ezreal_e_effect_2",
+          "description": "Arcane Shift prioritizes firing at the nearest enemy marked by Essence Flux."
+        },
+        {
+          "id": "ezreal_e_effect_3",
+          "description": "The target does not have to be visible to be hit by this ability."
+        }
+      ],
+      "description": "Active: Ezreal blinks from his current location to up to 475 units towards the target location, then fires a homing bolt towards the nearest enemy that deals magic damage and reveals them for 1 second.",
+      "cooldown_seconds_by_rank": [
+        26.0,
+        23.0,
+        20.0,
+        17.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 750.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source effectRadius: 750.",
+        "Source notes (summary): If Ezreal is moved during the cast time, his range to blink will update accordingly."
+      ]
+    },
+    "ultimate": {
+      "name": "Trueshot Barrage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Ezreal fires a powerful arc of energy that deals magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            350.0,
+            550.0,
+            750.0
+          ],
+          "context_notes": "Active: Ezreal fires a powerful arc of energy in the target direction that briefly grants sight of its surroundings and deals magic damage to enemies hit."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            175.0,
+            275.0,
+            375.0
+          ],
+          "context_notes": "Minions and non-epic monsters take 50% reduced damage."
+        }
+      ],
+      "description": "Active: Ezreal fires a powerful arc of energy in the target direction that briefly grants sight of its surroundings and deals magic damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 1.0,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 1.",
+        "Source speed: 2000.",
+        "Source notes (summary): Trueshot Barrage's projectile has an icon on the mini-map while it is in flight."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ezreal.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ezreal"
+  }
+}

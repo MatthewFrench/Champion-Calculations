@@ -1,0 +1,418 @@
+{
+  "name": "LeBlanc",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Burst",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 598.0,
+      "per_level": 108.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 400.0,
+      "per_level": 25.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 22.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 2.2
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.35
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.133333340287208,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Mirror Image",
+      "type": "Passive",
+      "description_source": "Innate: When  LeBlanc reaches low health, she creates a  clone of herself and together they enter brief  invisibility.",
+      "effects": [
+        {
+          "id": "leblanc_p_effect_1",
+          "description": "Innate: Periodically, when LeBlanc is damaged to 40% maximum health, she creates a clone of herself, after which they both instantly become invisible for 1 second."
+        },
+        {
+          "id": "leblanc_p_effect_2",
+          "description": "The clone can cast basic attacks with no effect and lasts 8 seconds. Upon spawning, it starts moving up to 1900 units toward a random direction in front of LeBlanc's movement, determined at the moment of its spawning."
+        },
+        {
+          "id": "leblanc_p_effect_3",
+          "description": "See Pets for more details about LeBlanc's clone."
+        }
+      ],
+      "description": "Innate: Periodically, when LeBlanc is damaged to 40% maximum health, she creates a clone of herself, after which they both instantly become invisible for 1 second.",
+      "cooldown_seconds_by_rank": [
+        60.0,
+        60.0,
+        60.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The clone has a leash range."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Sigil of Malice",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  LeBlanc projects an orb at the target enemy, dealing magic damage and marking them for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            65.0,
+            90.0,
+            115.0,
+            140.0,
+            165.0
+          ],
+          "context_notes": "Active: LeBlanc projects an orb at the target enemy that deals magic damage and marks them for 3."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            130.0,
+            180.0,
+            230.0,
+            280.0,
+            330.0
+          ],
+          "context_notes": "LeBlanc's next damaging ability against the marked target will consume the mark to deal the same magic damage again."
+        },
+        {
+          "id": "leblanc_q_effect_3",
+          "description": "Sigil of Malice's orb deals 10 : 146 (based on level) bonus magic damage against minions and refunds 100% of its mana cost and 30% of its remaining cooldown if either the orb or its mark's consumption kills the target."
+        }
+      ],
+      "description": "Active: LeBlanc projects an orb at the target enemy that deals magic damage and marks them for 3.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source notes (summary): Sigil of Malice and Mimic: Sigil of Malice can detonate each other's marks."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Distortion",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  LeBlanc  dashes to the target location, dealing magic damage to nearby enemies upon arrival. She leaves behind a return pad at her original location that lasts a few seconds, during which she can recast.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            115.0,
+            155.0,
+            195.0,
+            235.0
+          ],
+          "context_notes": "Active: LeBlanc dashes to the target location, dealing magic damage to all nearby enemies upon arrival and leaving a return pad at the cast location for 4 seconds."
+        },
+        {
+          "id": "leblanc_w_effect_2",
+          "description": "Recast: LeBlanc blinks to Distortion's return pad, regardless of range."
+        }
+      ],
+      "description": "Active: LeBlanc dashes to the target location, dealing magic damage to all nearby enemies upon arrival and leaving a return pad at the cast location for 4 seconds. Distortion can be recast after 0.2 seconds of the dash ending for the pad's duration.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        13.75,
+        12.5,
+        11.25,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1450.0,
+        "effect_hitbox_radius": 240.0
+      },
+      "context_notes": [
+        "Source targeting: Location / Auto.",
+        "Source castTime: none.",
+        "Source speed: 1450.",
+        "Source effectRadius: 240.",
+        "Source notes (summary): Distortion will be buffered and cast as soon as the cooldown ends if the player attempts to cast it within 0."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Ethereal Chains",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  LeBlanc flings an illusory chain in the target direction that deals magic damage and  tethers the first enemy hit,  revealing them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            70.0,
+            90.0,
+            110.0,
+            130.0
+          ],
+          "context_notes": "Active: LeBlanc flings an illusory chain in the target direction that deals magic damage to the first enemy it hits and forms a tether between LeBlanc and the target for 1."
+        },
+        {
+          "id": "fracture_magic_damage",
+          "description": "Fracture Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "If the tether is not broken by the end of its duration, it fractures to deal magic damage to the target and root them for 1."
+        },
+        {
+          "id": "total_damage",
+          "description": "Total Damage",
+          "base_by_rank": [
+            130.0,
+            190.0,
+            250.0,
+            310.0,
+            370.0
+          ],
+          "context_notes": "If the tether is not broken by the end of its duration, it fractures to deal magic damage to the target and root them for 1."
+        }
+      ],
+      "description": "Active: LeBlanc flings an illusory chain in the target direction that deals magic damage to the first enemy it hits and forms a tether between LeBlanc and the target for 1.5 seconds, during which they are revealed.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.25,
+        12.5,
+        11.75,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1750.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1750.",
+        "Source notes (summary): Both the initial and the delayed damage can detonate Sigil of Malice."
+      ]
+    },
+    "ultimate": {
+      "name": "Mimic",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  LeBlanc casts a mimicked version of her most recent ability, which deals modified damage.",
+      "effects": [
+        {
+          "id": "leblanc_r_effect_1",
+          "description": "Active: LeBlanc casts a mimicked version of her most recently used basic ability, applying the same effects and dealing modified magic damage."
+        },
+        {
+          "id": "orb_magic_damage",
+          "description": "Orb Magic Damage",
+          "base_by_rank": [
+            70.0,
+            140.0,
+            210.0
+          ],
+          "context_notes": "Mimic: Sigil of Malice: The orb deals modified damage, while the mark consumption deals double that amount."
+        },
+        {
+          "id": "mark_magic_damage",
+          "description": "Mark Magic Damage",
+          "base_by_rank": [
+            140.0,
+            280.0,
+            420.0
+          ],
+          "context_notes": "Mimic: Sigil of Malice: The orb deals modified damage, while the mark consumption deals double that amount."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            210.0,
+            420.0,
+            630.0
+          ],
+          "context_notes": "Mimic: Sigil of Malice: The orb deals modified damage, while the mark consumption deals double that amount."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            300.0,
+            450.0
+          ],
+          "context_notes": "Mimic: Distortion: Deals modified damage."
+        },
+        {
+          "id": "application_magic_damage",
+          "description": "Application Magic Damage",
+          "base_by_rank": [
+            70.0,
+            140.0,
+            210.0
+          ],
+          "context_notes": "Mimic: Ethereal Chains: The tether's application deals modified damage, while its fracturing deals double that amount."
+        },
+        {
+          "id": "fracture_magic_damage",
+          "description": "Fracture Magic Damage",
+          "base_by_rank": [
+            140.0,
+            280.0,
+            420.0
+          ],
+          "context_notes": "Mimic: Ethereal Chains: The tether's application deals modified damage, while its fracturing deals double that amount."
+        },
+        {
+          "id": "total_magic_damage_2",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            210.0,
+            420.0,
+            630.0
+          ],
+          "context_notes": "Mimic: Ethereal Chains: The tether's application deals modified damage, while its fracturing deals double that amount."
+        }
+      ],
+      "description": "Active: LeBlanc casts a mimicked version of her most recently used basic ability, applying the same effects and dealing modified magic damage.",
+      "cooldown_seconds_by_rank": [
+        45.0,
+        35.0,
+        25.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Varied.",
+        "Source castTime: none.",
+        "Source notes (summary): Mimic defaults to Mimic: Sigil of Malice if no basic ability was used before rank-up, and copied-spell execution semantics follow the mimicked basic ability branch."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Leblanc.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Leblanc"
+  }
+}

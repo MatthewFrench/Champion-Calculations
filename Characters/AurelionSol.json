@@ -1,0 +1,432 @@
+{
+  "name": "Aurelion Sol",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 90.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 530.0,
+      "per_level": 40.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 22.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 1.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Cosmic Creator",
+      "type": "Passive",
+      "description_source": "Innate:  Aurelion Sol's damaging abilities against enemies generate him permanent stacks of Stardust, which gradually augments his abilities.\n Breath of Light's bursts deal bonus magic damage based on the target's maximum health.\n Astral Flight's distance is increased.\n Singularity's area and execute threshold are increased.\n Falling Star/ The Skies Descend has increased impact area.",
+      "effects": [
+        {
+          "id": "aurelionsol_p_effect_1",
+          "description": "Innate: Aurelion Sol's damaging abilities against enemies generate him permanent stacks of Stardust, which gradually augments his abilities.\n Breath of Light: Bursts deal bonus magic damage based on the target's maximum health.\n Astral Flight: Range is increased by 7.5 units per Stardust.\n Singularity: Outer and inner radius increased equal to 15% Stardust, and the execution threshold is increased.\n Falling Star / The Skies Descend: Impact radius increased equal to 15% Stardust."
+        }
+      ],
+      "description": "Innate: Aurelion Sol's damaging abilities against enemies generate him permanent stacks of Stardust, which gradually augments his abilities.\n Breath of Light: Bursts deal bonus magic damage based on the target's maximum health.\n Astral Flight: Range is increased by 7.5 units per Stardust.\n Singularity: Outer and inner radius increased equal to 15% Stardust, and the execution threshold is increased.\n Falling Star / The Skies Descend: Impact radius increased equal to 15% Stardust.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Singularity's relative size and ratio stays the same when affected by Cosmic Creator's size modifier."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Breath of Light",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            5.625,
+            7.5,
+            9.375,
+            11.25,
+            13.125
+          ],
+          "context_notes": "Active: Aurelion Sol charges for up to 3."
+        },
+        {
+          "id": "magic_damage_per_second",
+          "description": "Magic Damage per Second",
+          "base_by_rank": [
+            45.0,
+            60.0,
+            75.0,
+            90.0,
+            105.0
+          ],
+          "context_notes": "Active: Aurelion Sol charges for up to 3."
+        },
+        {
+          "id": "total_maximum_magic_damage",
+          "description": "Total Maximum Magic Damage",
+          "base_by_rank": [
+            146.25,
+            195.0,
+            243.75,
+            292.5
+          ],
+          "context_notes": "Active: Aurelion Sol charges for up to 3."
+        },
+        {
+          "id": "secondary_target_damage_per_tick",
+          "description": "Secondary Target Damage per Tick",
+          "base_by_rank": [
+            2.8125,
+            3.75,
+            4.6875,
+            5.625,
+            6.5625
+          ],
+          "context_notes": "Active: Aurelion Sol charges for up to 3."
+        },
+        {
+          "id": "secondary_magic_damage_per_second",
+          "description": "Secondary Magic Damage per Second",
+          "base_by_rank": [
+            22.5,
+            30.0,
+            37.5,
+            45.0,
+            52.5
+          ],
+          "context_notes": "Active: Aurelion Sol charges for up to 3."
+        },
+        {
+          "id": "secondary_target_total_maximum_damage",
+          "description": "Secondary Target Total Maximum Damage",
+          "base_by_rank": [
+            73.125,
+            97.5,
+            121.875,
+            146.25
+          ],
+          "context_notes": "Active: Aurelion Sol charges for up to 3."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
+          ],
+          "context_notes": "Against the primary target, the beam will deal a burst of bonus magic damage for each full second that it burns them, and additionally generates 2 Stardust if they are a champion."
+        },
+        {
+          "id": "aurelionsol_q_effect_3",
+          "description": "Breath of Light can be recast within the duration, and does so automatically afterwards."
+        },
+        {
+          "id": "aurelionsol_q_effect_4",
+          "description": "Recast: Aurelion Sol ends Breath of Light early."
+        },
+        {
+          "id": "aurelionsol_q_effect_5",
+          "description": "At rank 5, Breath of Light's channel duration is increased to 160 seconds."
+        },
+        {
+          "id": "aurelionsol_q_effect_6",
+          "description": "Breath of Light cannot be cast for 1 second if the channel is cancelled within the first 0.25 seconds."
+        }
+      ],
+      "description": "Active: Aurelion Sol charges for up to 3.25 seconds to exhale a beam of starfire, during which he can steer the beam in the target direction. The beam collides with the first enemy hit to burn them, revealing them and dealing magic damage to them and surrounding enemies every 0.125 seconds. Secondary targets are dealt 50% damage.",
+      "cooldown_seconds_by_rank": [
+        3.0,
+        3.0,
+        3.0,
+        3.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "other",
+        "value_by_rank": [
+          8.75,
+          10.0,
+          11.25,
+          12.5,
+          13.75
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Astral Flight",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Aurelion Sol  flies in the target direction. During flight, he can cast any of his abilities, and  Breath of Light has no  cooldown, no maximum channel duration, and its flat damage is increased.  Aurelion Sol flies at a reduced speed while channeling  Breath of Light.",
+      "effects": [
+        {
+          "id": "breath_of_light_flat_damage_modifier",
+          "description": "Breath of Light Flat Damage Modifier",
+          "base_by_rank": [
+            108.0,
+            109.0,
+            110.0,
+            111.0,
+            112.0
+          ],
+          "context_notes": "Active: Aurelion Sol dashes in the target direction and resets Breath of Light's cooldown."
+        },
+        {
+          "id": "aurelionsol_w_effect_2",
+          "description": "Aurelion Sol will be knocked down by any immobilizing crowd control during the dash."
+        },
+        {
+          "id": "aurelionsol_w_effect_3",
+          "description": "Astral Flight can be recast after 0.5 seconds during the dash, and does so automatically upon arrival."
+        },
+        {
+          "id": "aurelionsol_w_effect_4",
+          "description": "Recast: Aurelion Sol ends Astral Flight."
+        },
+        {
+          "id": "aurelionsol_w_effect_5",
+          "description": "Scoring a champion takedown within 3 seconds of damaging them reduces Astral Flight's current cooldown by 90% of its total cooldown."
+        },
+        {
+          "id": "aurelionsol_w_effect_6",
+          "description": "Aurelion Sol will not dash if he is immobilized or grounded during the cast time. He can cast any of his abilities during the dash. Breath of Light's channel will be interrupted if Astral Flight ends or Singularity or Falling Star / The Skies Descend is cast during the flight, but the ability will automatically be cast afterwards."
+        }
+      ],
+      "description": "Active: Aurelion Sol dashes in the target direction and resets Breath of Light's cooldown. During flight, he has unobstructed vision and Breath of Light has no cooldown and maximum channel duration and its flat damage is increased, but Astral Flight's dash speed is reduced by 50% during its channel.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.5,
+        19.0,
+        17.5,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4,
+        "projectile_speed": 340.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.4 / None.",
+        "Source speed: 340 + 100% movement speed / 170 + 50% movement speed.",
+        "Source notes (summary): If a takedown is scored while Astral Flight is active, the cooldown will be reduced after it ends."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Singularity",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Aurelion Sol conjures a black hole at the target location for a few seconds that continually deals magic damage to enemies within. Enemies in the black hole are  dragged toward the center. Enemies within the center are  executed at low health.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            2.5,
+            3.75,
+            5.0,
+            6.25,
+            7.5
+          ],
+          "context_notes": "Active: Aurelion Sol conjures a black hole at the target location after a 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Aurelion Sol conjures a black hole at the target location after a 0."
+        },
+        {
+          "id": "aurelionsol_e_effect_2",
+          "description": "Enemies in the black hole are dragged inward until they reach the center, and minions and monsters also have their movement speed reduced to 0. Enemies within the center are executed below 5% (+ 2.6% Stardust)% of their maximum health, excluding epic monsters."
+        },
+        {
+          "id": "aurelionsol_e_effect_3",
+          "description": "After Singularity ends, it generates 1 Stardust for each full second that enemy champions were inside it, as well as varying amounts for enemy units that were killed while being within the area:\nChampions and epic monsters grant 2 Stardust.\nLarge minions and monsters grant 2 Stardust.\nSmall minions and monsters grant 1 Stardust."
+        }
+      ],
+      "description": "Active: Aurelion Sol conjures a black hole at the target location after a 0.5-second delay that lasts for 5 seconds, granting sight of the area and dealing magic damage every 0.25 seconds to enemies within.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          90.0,
+          90.0,
+          90.0,
+          90.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.2,
+        "effect_hitbox_radius": 16.93
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.2.",
+        "Source effectRadius: √(275² + 16.93²  ×  Stardust).",
+        "Source notes (summary): Clones are counted as champions for all of this ability's effects and grant stacks of Stardust if they are killed in the area."
+      ]
+    },
+    "ultimate": {
+      "name": "Falling Star",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Aurelion Sol calls down a star that strikes the target location, dealing magic damage and briefly  stunning enemies hit. This generates Stardust for each enemy champion hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Aurelion Sol calls down a star that strikes the target location after 1."
+        },
+        {
+          "id": "aurelionsol_r_effect_2",
+          "description": "Once Falling Star has been learned, gathering 75 Stardust causes the next cast of Falling Star to transform into The Skies Descend, empowering the impact with new effects."
+        }
+      ],
+      "description": "Active: Aurelion Sol calls down a star that strikes the target location after 1.25 seconds, dealing magic damage to enemies hit and stunning them for 1 second. This generates 5 Stardust for each enemy champion hit.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        110.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 16.93
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: √(275² + 16.93²  ×  Stardust).",
+        "Source notes (summary): Aurelion Sol will transform Falling Star into The Skies Descend each time he gathers 75 Stardust from the last time he used the empowered cast, or once he has gathered that amount after learning the ability."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/AurelionSol.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "AurelionSol"
+  }
+}

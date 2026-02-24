@@ -1,0 +1,408 @@
+{
+  "name": "Viktor",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 405.0,
+      "per_level": 45.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 23.0,
+      "per_level": 4.4
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 53.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.11
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.11999999731779,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Glorious Evolution",
+      "type": "Passive",
+      "description_source": "Innate:  Viktor collects Hex Fragments from enemies he kills and enemy champion  takedowns.",
+      "effects": [
+        {
+          "id": "viktor_p_effect_1",
+          "description": "Innate: Viktor can augment each of his abilities at the cost of 100 Hex Fragments, which he gains from killing enemies:\n Minions and monsters generate 1 Hex Fragment.\nSiege minions, super minions, and epic monsters generate 10 Hex Fragments.\nEnemy champion takedowns generate 20 Hex Fragments."
+        },
+        {
+          "id": "viktor_p_effect_2",
+          "description": "Arcane Storm can be augmented after all of Viktor's basic abilities have been augmented."
+        }
+      ],
+      "description": "Innate: Viktor can augment each of his abilities at the cost of 100 Hex Fragments, which he gains from killing enemies:\n Minions and monsters generate 1 Hex Fragment.\nSiege minions, super minions, and epic monsters generate 10 Hex Fragments.\nEnemy champion takedowns generate 20 Hex Fragments.",
+      "context_notes": [
+        "Source targeting: Passive."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Siphon Power",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Viktor throws a draining device at the target enemy that deals magic damage. He also gains Discharge and  shields himself for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            75.0,
+            90.0,
+            105.0,
+            120.0
+          ],
+          "context_notes": "Active: Viktor throws a draining device at the target enemy that deals magic damage."
+        },
+        {
+          "id": "modified_magic_damage",
+          "description": "Modified Magic Damage",
+          "base_by_rank": [
+            20.0,
+            45.0,
+            70.0,
+            95.0,
+            120.0
+          ],
+          "context_notes": "Discharge: Viktor's next basic attack is empowered to become non-projectile and deal modified magic damage."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Discharge: Viktor's next basic attack is empowered to become non-projectile and deal modified magic damage."
+        },
+        {
+          "id": "viktor_q_effect_3",
+          "description": "Augment: Turbocharge — After the device hits, Viktor gains 30% bonus movement speed for 2.5 seconds and the shield's strength is increased[ by 60%. ][ to 64 : 224 (based on level) (+ 40% AP). ]"
+        }
+      ],
+      "description": "Active: Viktor throws a draining device at the target enemy that deals magic damage. He also grants himself a shield for 40 : 140 (based on level) (+ 25% AP) for 2.5 seconds and gains Discharge for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          45.0,
+          50.0,
+          55.0,
+          60.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source notes (summary): Discharge does not convert the bonus damage dealt by Spellblade to magic damage from physical."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Gravity Field",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Viktor deploys a gravity field that remains at the target location for a few seconds. After a brief delay, the field will activate to continually  slow enemies within and inflict  stack of Gravity Field.",
+      "effects": [
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            33.0,
+            36.0,
+            39.0,
+            42.0,
+            45.0
+          ],
+          "context_notes": "Active: Viktor deploys a gravity field at the target location for 4."
+        },
+        {
+          "id": "viktor_w_effect_2",
+          "description": "The field applies a stack of Heavy Gravity to enemies within every 0.25 seconds, stacking up to 5 times. The fifth stack consumes them all to knock down and stun the target for 1.5 seconds. The knockdown and stun can be triggered only once per cast per enemy."
+        },
+        {
+          "id": "viktor_w_effect_3",
+          "description": "Augment: Magnetize — Viktor's other abilities, excluding Arcane Storm's persistent damage, slow enemies hit by 20% for 1 second."
+        }
+      ],
+      "description": "Active: Viktor deploys a gravity field at the target location for 4.5 seconds. After a 0.75-second delay, it activates to slow enemies within for 1 second, refreshing every 0.25 seconds while they remain inside.",
+      "cooldown_seconds_by_rank": [
+        17.0,
+        16.0,
+        15.0,
+        14.0,
+        13.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          65.0,
+          65.0,
+          65.0,
+          65.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 340.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 340.",
+        "Source notes (summary): Gravity Field applies a single debuff for both the slow and the stack."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Hextech Ray",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Viktor fires an energy beam along the target path that deals magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Viktor fires an energy beam along the target path that deals magic damage to enemies hit and briefly grants sight of the area."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            20.0,
+            50.0,
+            80.0,
+            110.0,
+            140.0
+          ],
+          "context_notes": "Augment: Aftershock — The path explodes along the beam's wake after 1 second, dealing magic damage to enemies hit."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            90.0,
+            160.0,
+            230.0,
+            300.0,
+            370.0
+          ],
+          "context_notes": "Augment: Aftershock — The path explodes along the beam's wake after 1 second, dealing magic damage to enemies hit."
+        }
+      ],
+      "description": "Active: Viktor fires an energy beam along the target path that deals magic damage to enemies hit and briefly grants sight of the area.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1050.0,
+        "effect_hitbox_radius": 500.0
+      },
+      "context_notes": [
+        "Source targeting: Vector.",
+        "Source castTime: none.",
+        "Source speed: 1050 / 1500.",
+        "Source effectRadius: 500.",
+        "Source notes (summary): Viktor may freely act while the ray is traveling."
+      ]
+    },
+    "ultimate": {
+      "name": "Arcane Storm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Viktor conjures an arcane singularity at the target location that deals magic damage to enemies within and  disrupts their channeled abilities. The singularity then remains for a duration, continually dealing magic damage to enemies within the area. If the initial hit has struck at least one enemy  champion, it will automatically follow the nearest one hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            100.0,
+            175.0,
+            250.0
+          ],
+          "context_notes": "Active: Viktor conjures an arcane singularity at the target location, dealing magic damage to enemies within the area and disrupting their channeled abilities."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            65.0,
+            105.0,
+            145.0
+          ],
+          "context_notes": "The singularity then remains active as a moving storm for 6."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            490.0,
+            805.0,
+            1120.0
+          ],
+          "context_notes": "The singularity then remains active as a moving storm for 6."
+        },
+        {
+          "id": "viktor_r_effect_3",
+          "description": "Arcane Storm can be recast at any time while the singularity is active."
+        },
+        {
+          "id": "viktor_r_effect_4",
+          "description": "Recast: Viktor directs the singularity to the target location, or to follow the target enemy champion or himself for its remaining duration."
+        },
+        {
+          "id": "viktor_r_effect_5",
+          "description": "Augment: Perfect Storm — The singularity moves 25% faster. Additionally, whenever an enemy champion is taken down after being damaged by Arcane Storm, the singularity increases the storm's size by 40% and extends its duration by 3 seconds. The storm's radius can be increased up to 6 times and the singularity's duration can be extended only up to the original duration."
+        },
+        {
+          "id": "viktor_r_effect_6",
+          "description": "Arcane Storm's recast can be used while affected by cast-inhibiting crowd control."
+        }
+      ],
+      "description": "Active: Viktor conjures an arcane singularity at the target location, dealing magic damage to enemies within the area and disrupting their channeled abilities.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 200.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Location / Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 200 : 300 / 250 : 375.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): Viktor can command the singularity regardless of how far away he is from it."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Viktor.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Viktor"
+  }
+}

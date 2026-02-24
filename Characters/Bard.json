@@ -1,0 +1,354 @@
+{
+  "name": "Bard",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Catcher",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 103.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 50.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 34.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.45
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 52.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.60000002384185,
+    "base_windup_seconds": 0.300000011920928,
+    "windup_fraction": 0.18750000465661315,
+    "windup_percent": 18.750000465661316,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.300000011920928,
+      "attack_total_time": 1.60000002384185,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Traveler's Call",
+      "type": "Passive",
+      "effects": [
+        {
+          "id": "bard_p_effect_1",
+          "description": "Innate - Ancient Chimes: Bard's presence causes sacred Chimes to appear at random locations on the map, lingering for up to 10 minutes. Collecting a Chime restores 12% maximum mana and grants Bard 20 + (1 per minute after 5 minutes) experience, as well as 24% bonus movement speed out of combat for 20 seconds, which stacks up to 10 times. Each Chime collected beyond the first instead grants an additional 14% bonus movement speed, up to a total of 150% bonus movement speed. Bard empowers his Meeps each time he collects 5 Chimes."
+        },
+        {
+          "id": "bard_p_effect_2",
+          "description": "Innate - Meeps: Bard's presence attracts Meeps, which are small spirits that come to his side. While he has Meeps, his basic attacks are empowered to each consume a Meep on-attack to deal 35 (+ 10 per 5 Chimes collected) (+ 40% AP) bonus magic damage.\nAt 5 Chimes, Meeps slow damaged enemies by 25% : 75% (based on number of Chimes) for 1 second.\nAt 15 Chimes, Meeps deal the damage to enemies within 150 units of the primary target as well as those in a cone behind them.\nAt 35 Chimes, the cone's radius increases."
+        },
+        {
+          "id": "bard_p_effect_3",
+          "description": "Bard can have up to 1 : 9 (based on number of Chimes) Meeps at a time."
+        }
+      ],
+      "description": "Innate - Ancient Chimes: Bard's presence causes sacred Chimes to appear at random locations on the map, lingering for up to 10 minutes. Collecting a Chime restores 12% maximum mana and grants Bard 20 + (1 per minute after 5 minutes) experience, as well as 24% bonus movement speed out of combat for 20 seconds, which stacks up to 10 times. Each Chime collected beyond the first instead grants an additional 14% bonus movement speed, up to a total of 150% bonus movement speed. Bard empowers his Meeps each time he collects 5 Chimes.",
+      "cooldown_seconds_by_rank": [
+        50.0,
+        8.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Chime spawns are weighted towards the areas of the map that Bard is currently present in and spawn in pairs, with the only exception being the second and third spawns on Summoner's Rift, which spawn only one."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Cosmic Binding",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Bard fires an energy bolt in the target direction that deals magic damage and  slows the first enemy hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Bard fires an energy bolt in the target direction that deals magic damage to the first enemy hit and slows them by 60% for a duration."
+        },
+        {
+          "id": "disable_duration",
+          "description": "Disable Duration",
+          "base_by_rank": [
+            1.0,
+            1.2,
+            1.4,
+            1.6,
+            1.8
+          ],
+          "context_notes": "Active: Bard fires an energy bolt in the target direction that deals magic damage to the first enemy hit and slows them by 60% for a duration."
+        },
+        {
+          "id": "bard_q_effect_2",
+          "description": "After Cosmic Binding hits an enemy, the bolt continues behind them for 300 units. If the bolt hits terrain or a second enemy, it stuns both targets for the same duration, dealing the same damage to the secondary target."
+        }
+      ],
+      "description": "Active: Bard fires an energy bolt in the target direction that deals magic damage to the first enemy hit and slows them by 60% for a duration.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1500.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1500.",
+        "Source notes (summary): Cosmic Binding's interaction with spell shields: If the first target has a spell shield, they will block the damage but the bolt will still pass through them."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Caretaker's Shrine",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Bard conjures a shrine which powers up over a period, disappearing when a champion steps on it.",
+      "effects": [
+        {
+          "id": "bard_w_effect_1",
+          "description": "Active: Bard conjures a shrine at the target location that grants sight of its surroundings for 1 second and gathers power over 5 seconds. Up to 3 shrines may be active at a time. Shrines may last indefinitely until being consumed by a champion moving over them."
+        },
+        {
+          "id": "minimum_heal",
+          "description": "Minimum Heal",
+          "base_by_rank": [
+            25.0,
+            50.0,
+            75.0,
+            100.0,
+            125.0
+          ],
+          "context_notes": "If the champion is an ally or Bard himself, they are healed for an amount based on the shrine's power and gain bonus movement speed decaying over 1."
+        },
+        {
+          "id": "maximum_heal",
+          "description": "Maximum Heal",
+          "base_by_rank": [
+            50.0,
+            87.5,
+            125.0,
+            162.5,
+            200.0
+          ],
+          "context_notes": "If the champion is an ally or Bard himself, they are healed for an amount based on the shrine's power and gain bonus movement speed decaying over 1."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            22.5,
+            25.0,
+            27.5,
+            30.0
+          ],
+          "context_notes": "If the champion is an ally or Bard himself, they are healed for an amount based on the shrine's power and gain bonus movement speed decaying over 1."
+        },
+        {
+          "id": "bard_w_effect_3",
+          "description": "Bard periodically stocks a Caretaker's Shrine charge, up to a maximum of 2."
+        }
+      ],
+      "description": "Active: Bard conjures a shrine at the target location that grants sight of its surroundings for 1 second and gathers power over 5 seconds. Up to 3 shrines may be active at a time. Shrines may last indefinitely until being consumed by a champion moving over them.",
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location / Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Caretaker's Shrine can be cast directly on an ally and it will be treated as a unit-targeted ability for effects such as Guardian."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Magical Journey",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Bard opens a one-way portal through nearby terrain. Champions can enter by moving into the portal, however allies will be faster.",
+      "effects": [
+        {
+          "id": "bard_e_effect_1",
+          "description": "Active: Bard opens a one-way magical corridor through a piece of terrain in the target direction for 10 seconds."
+        },
+        {
+          "id": "bard_e_effect_2",
+          "description": "A champion can pass through the corridor by selecting it while within proximity of it, becoming revealed during the travel. Bard and allies travel through the portal at 33% increased speed."
+        },
+        {
+          "id": "bard_e_effect_3",
+          "description": "A valid piece of terrain within the target range is required to cast this ability. Magical Journey cannot be taken while immobilized or grounded."
+        }
+      ],
+      "description": "Active: Bard opens a one-way magical corridor through a piece of terrain in the target direction for 10 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        20.5,
+        19.0,
+        17.5,
+        16.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 900.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 900 / 1197.",
+        "Source notes (summary): Clones are counted as champions for this ability's effects and can access the portal, but other pets cannot."
+      ]
+    },
+    "ultimate": {
+      "name": "Tempered Fate",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Bard sends spirit energy arcing to a location, putting all  champions,  minions,  monsters, and  turrets hit into  stasis for a short time.",
+      "effects": [
+        {
+          "id": "bard_r_effect_1",
+          "description": "Active: Bard sends magical energy arcing to the target location, granting sight of the area during travel. Upon impact, it puts all units within into stasis for 2.5 seconds, as well as stunning all enemy champions, minions, and turrets struck for the same duration. Enemies hit are revealed for the duration."
+        },
+        {
+          "id": "bard_r_effect_2",
+          "description": "Epic monsters and turrets are affected by Tempered Fate despite being immune to crowd control."
+        }
+      ],
+      "description": "Active: Bard sends magical energy arcing to the target location, granting sight of the area during travel. Upon impact, it puts all units within into stasis for 2.5 seconds, as well as stunning all enemy champions, minions, and turrets struck for the same duration. Enemies hit are revealed for the duration.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        95.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.5.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): Tempered Fate's stun is affected by Tenacity."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Bard.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Bard"
+  }
+}

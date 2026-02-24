@@ -30,7 +30,11 @@
           "description": "Heal from ability damage"
         }
       ],
-      "name": "Soul Siphon"
+      "name": "Soul Siphon",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Soul Siphon healing is tied to Morgana ability damage against champion and qualifying minion/monster targets, based on post-mitigation damage dealt."
+      ]
     },
     "basic_ability_3": {
       "slot": "E",
@@ -84,7 +88,13 @@
         }
       ],
       "type": "Active",
-      "description": "Grant a magic-damage shield that also blocks crowd control while it holds."
+      "description": "Grant a magic-damage shield that also blocks crowd control while it holds.",
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Execution metadata mapped from generated champion data: castTime none (instant targeted shield); no area radius published in source payload."
+      ]
     },
     "basic_ability_2": {
       "slot": "W",
@@ -243,7 +253,14 @@
         }
       ],
       "type": "Active",
-      "description": "Create an area for 5s that deals magic damage per tick, increasing with target missing health; deals increased damage to monsters."
+      "description": "Create an area for 5s that deals magic damage per tick, increasing with target missing health; deals increased damage to monsters.",
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 280.0
+      },
+      "context_notes": [
+        "Execution metadata mapped from generated champion data: castTime 0.25 and effectRadius 280 for targeted ground zone."
+      ]
     },
     "basic_ability_1": {
       "slot": "Q",
@@ -496,7 +513,8 @@
     {
       "type": "Generated champion data",
       "path": "From Online/champions/Morgana.json",
-      "used_for": "raw basic attack timing stats and radii"
+      "used_for": "raw basic attack timing stats and radii",
+      "accessed": "2026-02-24"
     }
   ],
   "schema_notes": {

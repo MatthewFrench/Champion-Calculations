@@ -3,5 +3,19 @@
   "files": {},
   "generated_at": "2026-02-14T07:41:01.394724+00:00",
   "items_checked": 320,
-  "warnings": []
+  "warnings": [],
+  "sources": [
+    {
+      "name": "Project item corpus",
+      "path": "Items/*.json",
+      "accessed": "2026-02-24",
+      "used_for": "aggregated quality/schema report generation over local item data"
+    },
+    {
+      "name": "Report generation output",
+      "path": "Items/items_schema_validation_report.json",
+      "accessed": "2026-02-24",
+      "used_for": "persisted snapshot of offline quality/schema audit results"
+    }
+  ]
 }

@@ -1,150 +1,21 @@
 use anyhow::{Result, anyhow};
 use rayon::prelude::*;
-use serde_json::json;
 use std::cmp::Ordering;
-use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 use super::*;
+mod report_writing;
+mod result_aggregation;
+
+use self::report_writing::{RuneSweepReportWriteInput, write_rune_sweep_reports};
+use self::result_aggregation::{
+    RuneSweepEntry, average_combat_outcomes, average_objective_breakdowns,
+};
 
 pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
     scenario_path: &Path,
     options: &ControlledChampionFixedLoadoutOptions<'_>,
 ) -> Result<()> {
-    #[derive(Debug, Clone)]
-    struct RuneSweepEntry {
-        keystone_name: String,
-        loadout_selection: LoadoutSelection,
-        objective_score: f64,
-        outcome: CombatOutcome,
-        objective_breakdown: ObjectiveScoreBreakdown,
-        rune_proc_telemetry: Vec<crate::scripts::champions::ChampionRuneProcTelemetryEntry>,
-        seed_repeat_scores: Vec<f64>,
-        seed_repeat_values: Vec<u64>,
-    }
-
-    fn average_combat_outcomes(outcomes: &[CombatOutcome]) -> CombatOutcome {
-        if outcomes.is_empty() {
-            return CombatOutcome::default();
-        }
-        let n = outcomes.len() as f64;
-        CombatOutcome {
-            time_alive_seconds: outcomes
-                .iter()
-                .map(|outcome| outcome.time_alive_seconds)
-                .sum::<f64>()
-                / n,
-            damage_dealt: outcomes
-                .iter()
-                .map(|outcome| outcome.damage_dealt)
-                .sum::<f64>()
-                / n,
-            healing_done: outcomes
-                .iter()
-                .map(|outcome| outcome.healing_done)
-                .sum::<f64>()
-                / n,
-            enemy_kills: ((outcomes
-                .iter()
-                .map(|outcome| outcome.enemy_kills as f64)
-                .sum::<f64>()
-                / n)
-                .round()
-                .max(0.0)) as usize,
-            invulnerable_seconds: outcomes
-                .iter()
-                .map(|outcome| outcome.invulnerable_seconds)
-                .sum::<f64>()
-                / n,
-        }
-    }
-
-    fn average_component_impacts(impacts: &[ObjectiveComponentImpact]) -> ObjectiveComponentImpact {
-        if impacts.is_empty() {
-            return ObjectiveComponentImpact::default();
-        }
-        let n = impacts.len() as f64;
-        ObjectiveComponentImpact {
-            weight: impacts.iter().map(|impact| impact.weight).sum::<f64>() / n,
-            normalized_ratio: impacts
-                .iter()
-                .map(|impact| impact.normalized_ratio)
-                .sum::<f64>()
-                / n,
-            contribution: impacts
-                .iter()
-                .map(|impact| impact.contribution)
-                .sum::<f64>()
-                / n,
-            impact_percent: impacts
-                .iter()
-                .map(|impact| impact.impact_percent)
-                .sum::<f64>()
-                / n,
-        }
-    }
-
-    fn average_objective_breakdowns(
-        breakdowns: &[ObjectiveScoreBreakdown],
-    ) -> ObjectiveScoreBreakdown {
-        if breakdowns.is_empty() {
-            return ObjectiveScoreBreakdown::default();
-        }
-        let n = breakdowns.len() as f64;
-        ObjectiveScoreBreakdown {
-            weighted_mean_score: breakdowns
-                .iter()
-                .map(|breakdown| breakdown.weighted_mean_score)
-                .sum::<f64>()
-                / n,
-            worst_case_score: breakdowns
-                .iter()
-                .map(|breakdown| breakdown.worst_case_score)
-                .sum::<f64>()
-                / n,
-            worst_case_weight: breakdowns
-                .iter()
-                .map(|breakdown| breakdown.worst_case_weight)
-                .sum::<f64>()
-                / n,
-            final_score: breakdowns
-                .iter()
-                .map(|breakdown| breakdown.final_score)
-                .sum::<f64>()
-                / n,
-            survival: average_component_impacts(
-                &breakdowns
-                    .iter()
-                    .map(|breakdown| breakdown.survival)
-                    .collect::<Vec<_>>(),
-            ),
-            damage: average_component_impacts(
-                &breakdowns
-                    .iter()
-                    .map(|breakdown| breakdown.damage)
-                    .collect::<Vec<_>>(),
-            ),
-            healing: average_component_impacts(
-                &breakdowns
-                    .iter()
-                    .map(|breakdown| breakdown.healing)
-                    .collect::<Vec<_>>(),
-            ),
-            enemy_kills: average_component_impacts(
-                &breakdowns
-                    .iter()
-                    .map(|breakdown| breakdown.enemy_kills)
-                    .collect::<Vec<_>>(),
-            ),
-            invulnerable_seconds: average_component_impacts(
-                &breakdowns
-                    .iter()
-                    .map(|breakdown| breakdown.invulnerable_seconds)
-                    .collect::<Vec<_>>(),
-            ),
-        }
-    }
-
     let items = load_items()?;
     let urf = load_urf_buffs()?;
     let champion_bases = load_champion_bases()?;
@@ -422,206 +293,16 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
             .unwrap_or(Ordering::Equal)
             .then_with(|| to_norm_key(&a.keystone_name).cmp(&to_norm_key(&b.keystone_name)))
     });
-
-    let run_label = options
-        .fixed_eval_label
-        .as_deref()
-        .unwrap_or("fixed_loadout_rune_sweep");
-    let default_output_dir = default_fixed_loadout_rune_sweep_output_directory(
-        options.search_quality_profile,
-        run_label,
-    );
-    fs::create_dir_all(&default_output_dir)?;
-    let controlled_champion_key = to_norm_key(&controlled_champion_name);
-    let report_path = options
-        .report_path_override
-        .map(PathBuf::from)
-        .unwrap_or_else(|| {
-            default_output_dir.join(format!(
-                "{controlled_champion_key}_fixed_loadout_rune_sweep_report.md"
-            ))
-        });
-    if let Some(parent) = report_path.parent() {
-        fs::create_dir_all(parent)?;
-    }
-    let json_report_path = report_path.with_extension("json");
-
-    let best_score = sweep_results
-        .first()
-        .map(|entry| entry.objective_score)
-        .unwrap_or(0.0);
-    let mut markdown = String::new();
-    markdown.push_str("# Controlled Champion Fixed Loadout Rune Sweep\n\n");
-    markdown.push_str(&format!("- Scenario: `{}`\n", scenario_path.display()));
-    markdown.push_str(&format!(
-        "- Search quality profile: `{}`\n",
-        search_quality_profile_key(options.search_quality_profile)
-    ));
-    markdown.push_str(&format!(
-        "- Controlled champion: `{}`\n",
-        controlled_champion_name
-    ));
-    markdown.push_str(&format!(
-        "- Build items: `{}`\n",
-        fixed_build_items
-            .iter()
-            .map(|item| item.name.clone())
-            .collect::<Vec<_>>()
-            .join(", ")
-    ));
-    markdown.push_str(&format!(
-        "- Baseline runes: `{}`\n",
-        controlled_champion_loadout_selection.rune_names.join(", ")
-    ));
-    markdown.push_str(&format!(
-        "- Baseline shards: `{}`\n\n",
-        controlled_champion_loadout_selection.shard_stats.join(", ")
-    ));
-    markdown.push_str(&format!(
-        "- Seed repeats per keystone: `{}`\n\n",
-        sweep_seed_repeats
-    ));
-    markdown.push_str(&format!("- Seed base: `{}`\n\n", search_cfg.seed));
-    markdown.push_str("## Rune Sweep Ranking\n");
-    for (idx, result) in sweep_results.iter().enumerate() {
-        if sweep_seed_repeats > 1 {
-            let (_, score_stddev) = mean_std(&result.seed_repeat_scores);
-            let repeat_seeds = result
-                .seed_repeat_values
-                .iter()
-                .map(|seed| seed.to_string())
-                .collect::<Vec<_>>()
-                .join(", ");
-            markdown.push_str(&format!(
-                "{}. `{}`\n  - Score: `{:.4}`\n  - Delta: `{:+.4}`\n  - Seed stddev: `{:.4}`\n  - Outcome:\n    - Time alive: `{:.2}s`\n    - Damage dealt: `{:.1}`\n    - Healing done: `{:.1}`\n    - Enemy kills: `{}`\n    - Invulnerable seconds: `{:.2}s`\n  - Seeds: `[{}]`\n",
-                idx + 1,
-                result.keystone_name,
-                result.objective_score,
-                result.objective_score - best_score,
-                score_stddev,
-                result.outcome.time_alive_seconds,
-                result.outcome.damage_dealt,
-                result.outcome.healing_done,
-                result.outcome.enemy_kills,
-                result.outcome.invulnerable_seconds,
-                repeat_seeds
-            ));
-        } else {
-            markdown.push_str(&format!(
-                "{}. `{}`\n  - Score: `{:.4}`\n  - Delta: `{:+.4}`\n  - Outcome:\n    - Time alive: `{:.2}s`\n    - Damage dealt: `{:.1}`\n    - Healing done: `{:.1}`\n    - Enemy kills: `{}`\n    - Invulnerable seconds: `{:.2}s`\n",
-                idx + 1,
-                result.keystone_name,
-                result.objective_score,
-                result.objective_score - best_score,
-                result.outcome.time_alive_seconds,
-                result.outcome.damage_dealt,
-                result.outcome.healing_done,
-                result.outcome.enemy_kills,
-                result.outcome.invulnerable_seconds
-            ));
-        }
-    }
-    markdown.push('\n');
-    markdown.push_str("## Rune Proc Telemetry\n");
-    for result in &sweep_results {
-        markdown.push_str(&format!("- {}:\n", result.keystone_name));
-        append_rune_proc_telemetry_markdown_entries(
-            &mut markdown,
-            "  - ",
-            "    ",
-            &result.rune_proc_telemetry,
-            result.outcome.damage_dealt,
-            result.outcome.healing_done,
-        );
-    }
-    fs::write(&report_path, markdown)?;
-
-    let json_report = json!({
-        "schema_version": FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION,
-        "scenario_path": scenario_path.display().to_string(),
-        "search_quality_profile": search_quality_profile_key(options.search_quality_profile),
-        "controlled_champion_name": controlled_champion_name,
-        "items": fixed_build_items.iter().map(|item| item.name.clone()).collect::<Vec<_>>(),
-        "baseline_rune_names": controlled_champion_loadout_selection.rune_names,
-        "baseline_shard_stats": controlled_champion_loadout_selection.shard_stats,
-        "seed_base": search_cfg.seed,
-        "seed_repeats_per_keystone": sweep_seed_repeats,
-        "results": sweep_results.iter().map(|result| {
-            json!({
-                "keystone_name": result.keystone_name,
-                "loadout_selection": {
-                    "rune_names": result.loadout_selection.rune_names,
-                    "shard_stats": result.loadout_selection.shard_stats
-                },
-                "objective_score": result.objective_score,
-                "outcome": {
-                    "time_alive_seconds": result.outcome.time_alive_seconds,
-                    "damage_dealt": result.outcome.damage_dealt,
-                    "healing_done": result.outcome.healing_done,
-                    "enemy_kills": result.outcome.enemy_kills,
-                    "invulnerable_seconds": result.outcome.invulnerable_seconds
-                },
-                "objective_breakdown": {
-                    "weighted_mean_score": result.objective_breakdown.weighted_mean_score,
-                    "worst_case_score": result.objective_breakdown.worst_case_score,
-                    "worst_case_weight": result.objective_breakdown.worst_case_weight,
-                    "final_score": result.objective_breakdown.final_score,
-                    "components": {
-                        "survival": {
-                            "weight": result.objective_breakdown.survival.weight,
-                            "normalized_ratio": result.objective_breakdown.survival.normalized_ratio,
-                            "contribution": result.objective_breakdown.survival.contribution,
-                            "impact_percent": result.objective_breakdown.survival.impact_percent
-                        },
-                        "damage": {
-                            "weight": result.objective_breakdown.damage.weight,
-                            "normalized_ratio": result.objective_breakdown.damage.normalized_ratio,
-                            "contribution": result.objective_breakdown.damage.contribution,
-                            "impact_percent": result.objective_breakdown.damage.impact_percent
-                        },
-                        "healing": {
-                            "weight": result.objective_breakdown.healing.weight,
-                            "normalized_ratio": result.objective_breakdown.healing.normalized_ratio,
-                            "contribution": result.objective_breakdown.healing.contribution,
-                            "impact_percent": result.objective_breakdown.healing.impact_percent
-                        },
-                        "enemy_kills": {
-                            "weight": result.objective_breakdown.enemy_kills.weight,
-                            "normalized_ratio": result.objective_breakdown.enemy_kills.normalized_ratio,
-                            "contribution": result.objective_breakdown.enemy_kills.contribution,
-                            "impact_percent": result.objective_breakdown.enemy_kills.impact_percent
-                        },
-                        "invulnerable_seconds": {
-                            "weight": result.objective_breakdown.invulnerable_seconds.weight,
-                            "normalized_ratio": result.objective_breakdown.invulnerable_seconds.normalized_ratio,
-                            "contribution": result.objective_breakdown.invulnerable_seconds.contribution,
-                            "impact_percent": result.objective_breakdown.invulnerable_seconds.impact_percent
-                        }
-                    }
-                },
-                "seed_repeat_scores": result.seed_repeat_scores,
-                "seed_repeat_values": result.seed_repeat_values,
-                "rune_proc_telemetry": rune_proc_telemetry_json(
-                    &result.rune_proc_telemetry,
-                    result.outcome.damage_dealt,
-                    result.outcome.healing_done,
-                )
-            })
-        }).collect::<Vec<_>>()
-    });
-    fs::write(
-        &json_report_path,
-        serde_json::to_string_pretty(&json_report)?,
-    )?;
-
-    println!(
-        "Fixed-loadout rune sweep report written: {}",
-        format_repo_relative_path(&report_path)
-    );
-    println!(
-        "Fixed-loadout rune sweep JSON written: {}",
-        format_repo_relative_path(&json_report_path)
-    );
-
-    Ok(())
+    write_rune_sweep_reports(&RuneSweepReportWriteInput {
+        scenario_path,
+        report_path_override: options.report_path_override,
+        search_quality_profile: options.search_quality_profile,
+        fixed_eval_label: options.fixed_eval_label.as_deref(),
+        controlled_champion_name: &controlled_champion_name,
+        fixed_build_items: &fixed_build_items,
+        controlled_champion_loadout_selection: &controlled_champion_loadout_selection,
+        sweep_seed_repeats,
+        seed_base: search_cfg.seed,
+        sweep_results: &sweep_results,
+    })
 }

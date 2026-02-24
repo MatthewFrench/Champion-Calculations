@@ -1,0 +1,352 @@
+{
+  "name": "Nidalee",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Mage",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 295.0,
+      "per_level": 45.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 32.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.45
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.6
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.638,
+      "per_level_percent": 3.22
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.150000005960464,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Prowl",
+      "type": "Passive",
+      "description_source": "Innate - Prowl: While in  brush,  Nidalee becomes  ghosted and gains  bonus movement speed for a short time, increased when facing a nearby enemy  champion. These bonuses briefly persist after exiting brush.",
+      "effects": [
+        {
+          "id": "nidalee_p_effect_1",
+          "description": "Innate - Prowl: While in brush, Nidalee gains ghosting and 10% bonus movement speed, increased to 30% while facing a visible enemy champion within 1400 range. The bonuses persist for 2 seconds after leaving brush."
+        },
+        {
+          "id": "nidalee_p_effect_2",
+          "description": "Innate - Hunt: Hitting monsters or enemy champions with Javelin Toss or Bushwhack when Nidalee is nearby grants her ghosting and 10% bonus movement speed for 4 seconds and applies a Hunted mark to the target for the same duration, during which they are revealed as well as grant sight of a 300-unit radius around them. The bonus movement speed is increased to 30% while facing a Hunted target. Additionally, the first cast of both Takedown and Pounce against a Hunted target is enhanced."
+        },
+        {
+          "id": "nidalee_p_effect_3",
+          "description": "The bonus movement speed from Prowl and Hunt can stack, but cannot exceed 30%."
+        }
+      ],
+      "description": "Innate - Prowl: While in brush, Nidalee gains ghosting and 10% bonus movement speed, increased to 30% while facing a visible enemy champion within 1400 range. The bonuses persist for 2 seconds after leaving brush.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 3000 / 5500.",
+        "Source notes (summary): Bushwhack reveals and grants sight around the target for 4 seconds even while Nidalee is not nearby."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Javelin Toss",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Nidalee hurls a javelin in the target direction that deals magic damage to the first enemy hit based on distance travelled.",
+      "effects": [
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            70.0,
+            90.0,
+            110.0,
+            130.0,
+            150.0
+          ],
+          "context_notes": "Active: Nidalee hurls a javelin in the target direction that deals magic damage to the first enemy hit, increased by 0% : 225% (based on distance traveled)."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            227.5,
+            292.5,
+            357.5,
+            422.5,
+            487.5
+          ],
+          "context_notes": "Active: Nidalee hurls a javelin in the target direction that deals magic damage to the first enemy hit, increased by 0% : 225% (based on distance traveled)."
+        }
+      ],
+      "description": "Active: Nidalee hurls a javelin in the target direction that deals magic damage to the first enemy hit, increased by 0% : 225% (based on distance traveled).",
+      "cooldown_seconds_by_rank": [
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1300.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Bushwhack",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Nidalee lays a  stealthed that will spring upon contact with an enemy, continually dealing magic damage over a few seconds.",
+      "effects": [
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            40.0,
+            80.0,
+            120.0,
+            160.0,
+            200.0
+          ],
+          "context_notes": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1."
+        },
+        {
+          "id": "nidalee_w_effect_2",
+          "description": "Traps have 6 maximum health and can only be damaged by champion basic attacks (2 hit points from ranged and 3 hit points from melee). Up to a maximum of 4 / 6 / 8 / 10 (based on level) traps may be active at once."
+        },
+        {
+          "id": "nidalee_w_effect_3",
+          "description": "See Pets for more details about traps."
+        }
+      ],
+      "description": "Active: Nidalee lays a trap at the target location that becomes stealthed after arming over 1.5 seconds, lasting for up to 120 seconds and granting sight within its radius. The trap will spring upon contact with an enemy, dealing magic damage every second over 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Primal Surge",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Nidalee revitalizes herself or the target allied champion, granting  bonus attack speed for a few seconds and  healing the target based on their missing health.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Active: Nidalee revitalizes herself or the target allied champion, granting the target bonus attack speed for 7 seconds and healing them for an amount that is increased by 0% : 100% (based on target's missing health)."
+        },
+        {
+          "id": "minimum_heal",
+          "description": "Minimum Heal",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Nidalee revitalizes herself or the target allied champion, granting the target bonus attack speed for 7 seconds and healing them for an amount that is increased by 0% : 100% (based on target's missing health)."
+        },
+        {
+          "id": "maximum_heal",
+          "description": "Maximum Heal",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "Active: Nidalee revitalizes herself or the target allied champion, granting the target bonus attack speed for 7 seconds and healing them for an amount that is increased by 0% : 100% (based on target's missing health)."
+        }
+      ],
+      "description": "Active: Nidalee revitalizes herself or the target allied champion, granting the target bonus attack speed for 7 seconds and healing them for an amount that is increased by 0% : 100% (based on target's missing health).",
+      "cooldown_seconds_by_rank": [
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): The bonus attack speed will persist through Cougar Form if Nidalee uses Primal Surge on herself."
+      ]
+    },
+    "ultimate": {
+      "name": "Aspect of the Cougar",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Nidalee switches between her Human Form and Cougar Form.",
+      "effects": [
+        {
+          "id": "nidalee_r_effect_1",
+          "description": "Active: Nidalee switches between her Human Form and Cougar Form."
+        },
+        {
+          "id": "nidalee_r_effect_2",
+          "description": "Cougar Form: Nidalee transforms into a cougar, gaining melee attacks with 125 range and access to her cougar abilities."
+        },
+        {
+          "id": "nidalee_r_effect_3",
+          "description": "Human Form: Nidalee transforms into a human, gaining ranged attacks with 525 range and access to her human abilities. While in this form, applying a Hunted mark will reset Aspect of the Cougar's cooldown."
+        },
+        {
+          "id": "nidalee_r_effect_4",
+          "description": "Nidalee begins with one rank in Aspect of the Cougar and can increase it at levels 6, 11, and 16. Cougar Form's abilities scale based on Aspect of the Cougar's rank."
+        }
+      ],
+      "description": "Active: Nidalee switches between her Human Form and Cougar Form.",
+      "cooldown_seconds_by_rank": [
+        3.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Transformations do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Nidalee.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Nidalee"
+  }
+}

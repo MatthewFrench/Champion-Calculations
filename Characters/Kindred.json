@@ -1,0 +1,366 @@
+{
+  "name": "Kindred",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 595.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 35.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 29.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.4
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 65.0,
+      "per_level": 3.25
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.12456139922142,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Mark of the Kindred",
+      "type": "Passive",
+      "description_source": "Innate: Both  Lamb and  Wolf mark targets to hunt. Scoring a  takedown against a hunted target collects a permanent stack of Mark of the Kindred. Lamb can select an enemy  champion to hunt, and Wolf automatically selects a large  monster to hunt.",
+      "effects": [
+        {
+          "id": "kindred_p_effect_1",
+          "description": "Innate: Both Lamb and Wolf mark targets to hunt. Scoring a takedown against a hunted target collects a stack of Mark of the Kindred. Mark of the Kindred: Lamb gains 75 : 250 (based on marks) bonus range on her basic attacks and Mounting Dread."
+        },
+        {
+          "id": "kindred_p_effect_2",
+          "description": "Innate - Lamb: Lamb is offered a selection of enemy champions to hunt if she has not been in combat with them in the last 6 seconds. Once selected, the mark is applied after an 8-second delay and thereafter it can be collected by Kindred. Lamb gains the ability to select a new target every 75 seconds. Targets successfully hunted cannot be marked again for 4 minutes."
+        },
+        {
+          "id": "kindred_p_effect_3",
+          "description": "Innate - Wolf: Starting at 3:15, Wolf periodically marks a random large monster within the enemy team's jungle for 180 seconds. The hunted camp is highlighted on the mini map to both teams. Once the hunted target is slain or the mark expires, Wolf will wait 45 seconds before selecting a new target. The type of monster that Wolf can mark changes based on Kindred's current Mark of the Kindred stacks:\n0 : Rift Scuttler\n1 : 3: Rift Scuttler, Crimson Raptor, Gromp\n4 : 7: Ancient Krug, Blue Sentinel, Greater Murk Wolf, or Red Brambleback\n8 + : Rift Herald or Baron Nashor, Dragon or Elder Dragon"
+        }
+      ],
+      "description": "Innate: Both Lamb and Wolf mark targets to hunt. Scoring a takedown against a hunted target collects a stack of Mark of the Kindred. Mark of the Kindred: Lamb gains 75 : 250 (based on marks) bonus range on her basic attacks and Mounting Dread.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The selection of enemy champions to mark is offered through a special menu in the HUD that displays the portraits of up to 5 enemy champions."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Dance of Arrows",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Lamb  dashes toward the target location, gaining  bonus attack speed for a few seconds. She then fires at up to three nearby enemies, dealing physical damage.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            40.0,
+            65.0,
+            90.0,
+            115.0,
+            140.0
+          ],
+          "context_notes": "Active: Lamb dashes toward the target location, gaining 35% (+ 5% per mark) bonus attack speed for 4 seconds and firing an arrow at up to 3 nearby visible enemies that deals physical damage."
+        },
+        {
+          "id": "static_cooldown",
+          "description": "Static Cooldown",
+          "base_by_rank": [
+            4.0,
+            3.5,
+            3.0,
+            2.5,
+            2.0
+          ],
+          "context_notes": "Dance of Arrows' total cooldown is reduced to an amount while Lamb is within the area of Wolf's Frenzy."
+        },
+        {
+          "id": "kindred_q_effect_3",
+          "description": "Dance of Arrows resets Lamb's basic attack timer. Lamb can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Active: Lamb dashes toward the target location, gaining 35% (+ 5% per mark) bonus attack speed for 4 seconds and firing an arrow at up to 3 nearby visible enemies that deals physical damage. Her current attack target within any proximity will be prioritized by one of the arrows.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          35.0,
+          35.0,
+          35.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 500.0,
+        "effect_hitbox_radius": 100.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 500 + 100% movement speed.",
+        "Source effectRadius: 500 (+ 100% bonus  attack range).",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Wolf's Frenzy",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive: As  Kindred move and attack, they build up stacks of Hunter's Vigor. At full stacks,  Lamb's next basic attack  heals her.",
+      "effects": [
+        {
+          "id": "kindred_w_effect_1",
+          "description": "Passive: Lamb generates 1 stack of Hunter's Vigor for every 27 units she travels by any means and 5 stacks on-attack, up to a maximum of 100 stacks. At maximum stacks, her next basic attack heals her for 0% : 100% (based on Kindred's missing health) of 47 : 85 (based on level). The heal is not triggered if Kindred is at full health."
+        },
+        {
+          "id": "kindred_w_effect_2",
+          "description": "Active: Wolf dashes to the target location, then claims the surrounding area as his territory for the next 8.5 seconds, separating from Lamb. He automatically attacks the closest nearby visible enemy within the area, prioritizing the last enemy Lamb has attacked, then enemy champions, then non-champions."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "Wolf's attacks deal magic damage and the rate at which he attacks scale with 25% of Kindred's bonus attack speed."
+        },
+        {
+          "id": "monster_damage",
+          "description": "Monster Damage",
+          "base_by_rank": [
+            37.5,
+            45.0,
+            52.5,
+            60.0,
+            67.5
+          ],
+          "context_notes": "Wolf's attacks deal magic damage and the rate at which he attacks scale with 25% of Kindred's bonus attack speed."
+        },
+        {
+          "id": "kindred_w_effect_4",
+          "description": "Wolf's Frenzy ends immediately if Lamb leaves the area or dies."
+        }
+      ],
+      "description": "Passive: Lamb generates 1 stack of Hunter's Vigor for every 27 units she travels by any means and 5 stacks on-attack, up to a maximum of 100 stacks. At maximum stacks, her next basic attack heals her for 0% : 100% (based on Kindred's missing health) of 47 : 85 (based on level). The heal is not triggered if Kindred is at full health.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        17.0,
+        16.0,
+        15.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1400.0,
+        "effect_hitbox_radius": 800.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1400.",
+        "Source effectRadius: 800.",
+        "Source notes (summary): Hunter's Vigor's heal is not triggered on attacks against structures and wards."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Mounting Dread",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Lamb fires a shot at the target enemy that briefly  slows them applies a  stack of Mounting Dread. Lamb's  basic attacks against this target stack Mounting Dread up to a cap.",
+      "effects": [
+        {
+          "id": "kindred_e_effect_1",
+          "description": "Active: Lamb fires a shot at the target enemy that slows them by 30% (+ 5% per 100 AP) for 1 second and marks them for 4 seconds. Her basic attacks against the marked target each apply a stack, refreshing the duration and stacking up to 3 times."
+        },
+        {
+          "id": "additional_physical_damage",
+          "description": "Additional Physical Damage",
+          "base_by_rank": [
+            80.0,
+            110.0,
+            140.0,
+            170.0,
+            200.0
+          ],
+          "context_notes": "The third stack directs Wolf to pounce on the target, consuming all stacks to deal additional physical damage, increased by 0% : 50% (+ 0% : 15%) (based on critical strike chance)."
+        },
+        {
+          "id": "kindred_e_effect_3",
+          "description": "The damage based on the missing health ratio is capped at 200 against monsters."
+        }
+      ],
+      "description": "Active: Lamb fires a shot at the target enemy that slows them by 30% (+ 5% per 100 AP) for 1 second and marks them for 4 seconds. Her basic attacks against the marked target each apply a stack, refreshing the duration and stacking up to 3 times.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        12.5,
+        11.0,
+        9.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): If the target becomes untargetable, dies, or is too far away or no longer in sight during the cast time, this ability will cancel and not pay its cost but still go on cooldown."
+      ]
+    },
+    "ultimate": {
+      "name": "Lamb's Respite",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Lamb blesses the ground under herself for a few seconds. Any unit inside the area will become  invulnerable upon reaching  low health.",
+      "effects": [
+        {
+          "id": "kindred_r_effect_1",
+          "description": "Active: Lamb blesses the ground underneath herself and enters a 0.264 seconds cast time, creating a sacred zone at her location at the time of cast that lasts for 4 seconds. All units inside the zone gain a minimum health threshold equal to 10% of their maximum health, and will also become invulnerable while remaining in the area when they reach or are at the threshold, during which they also cannot be healed, but can still regenerate health."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            225.0,
+            300.0,
+            375.0
+          ],
+          "context_notes": "All targetable units within the zone are healed when the blessing ends."
+        }
+      ],
+      "description": "Active: Lamb blesses the ground underneath herself and enters a 0.264 seconds cast time, creating a sacred zone at her location at the time of cast that lasts for 4 seconds. All units inside the zone gain a minimum health threshold equal to 10% of their maximum health, and will also become invulnerable while remaining in the area when they reach or are at the threshold, during which they also cannot be healed, but can still regenerate health.",
+      "cooldown_seconds_by_rank": [
+        160.0,
+        140.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 535.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source effectRadius: 535.",
+        "Source notes (summary): Lamb's Respite will affect all champions, minions, and monsters, but not wards, turrets, or jungle plants."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Kindred.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Kindred"
+  }
+}

@@ -1,0 +1,397 @@
+{
+  "name": "Fizz",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 640.0,
+      "per_level": 106.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 317.0,
+      "per_level": 52.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 26.0,
+      "per_level": 4.6
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 3.1
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0970000028610229,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Nimble Fighter",
+      "type": "Passive",
+      "description_source": "Innate:  Fizz becomes permanently  ghosted and takes slightly reduced damage from all hits.",
+      "effects": [
+        {
+          "id": "fizz_p_effect_1",
+          "description": "Innate: Fizz is permanently ghosted and reduces every instance of incoming damage by 4 (+ 1% AP), up to a maximum of 50% reduction. The damage reduction is increased to 14 (+ 1% AP) against monsters."
+        }
+      ],
+      "description": "Innate: Fizz is permanently ghosted and reduces every instance of incoming damage by 4 (+ 1% AP), up to a maximum of 50% reduction. The damage reduction is increased to 14 (+ 1% AP) against monsters.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Urchin Strike",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Fizz  dashes through the target enemy, dealing magic damage, physical damage, and applying  on-hit effects.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            10.0,
+            25.0,
+            40.0,
+            55.0,
+            70.0
+          ],
+          "context_notes": "Active: Fizz dashes a fixed distance in the direction of the target enemy."
+        },
+        {
+          "id": "fizz_q_effect_2",
+          "description": "Seastone Trident and Chum the Waters can be cast during the dash."
+        }
+      ],
+      "description": "Active: Fizz dashes a fixed distance in the direction of the target enemy. If they are in range upon arrival, he deals magic damage plus 100% AD physical damage and applies on-hit effects.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): Urchin Strike can only go through walls if the target is on the other side."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Seastone Trident",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Fizz's basic attacks bleed his enemies, continually dealing magic damage.",
+      "effects": [
+        {
+          "id": "total_passive_magic_damage",
+          "description": "Total Passive Magic Damage",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0,
+            75.0,
+            90.0
+          ],
+          "context_notes": "Passive: Fizz's basic attacks rend enemies on-hit, dealing magic damage every 0."
+        },
+        {
+          "id": "passive_magic_damage_per_tick",
+          "description": "Passive Magic Damage per Tick",
+          "base_by_rank": [
+            5.0,
+            7.5,
+            10.0,
+            12.5,
+            15.0
+          ],
+          "context_notes": "Passive: Fizz's basic attacks rend enemies on-hit, dealing magic damage every 0."
+        },
+        {
+          "id": "active_magic_damage",
+          "description": "Active Magic Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Fizz empowers his next basic attack within 4 seconds to have an uncancellable windup, gain 50 bonus range, and deal bonus magic damage."
+        },
+        {
+          "id": "active_on_hit_magic_damage",
+          "description": "Active On-Hit Magic Damage",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "If Seastone Trident kills its target, the cooldown is reduced to 1 second and the mana cost is refunded."
+        },
+        {
+          "id": "fizz_w_effect_4",
+          "description": "Seastone Trident's active damage can be applied against structures at 50% effectiveness. Active and on-hit damage deal an additional 60 bonus magic damage against monsters."
+        },
+        {
+          "id": "fizz_w_effect_5",
+          "description": "Seastone Trident resets Fizz's basic attack timer."
+        }
+      ],
+      "description": "Passive: Fizz's basic attacks rend enemies on-hit, dealing magic damage every 0.5 seconds over 3 seconds, refreshing on subsequent hits.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.0,
+        5.0,
+        4.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          40.0,
+          50.0,
+          60.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Applies spell damage on the empowered attack, persistent damage on the damage over time effect, and proc damage on the bonus damage on-hit."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Playful",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Fizz  vaults in the target direction and balances onto his spear, becoming  untargetable. From this position, Fizz can either slam the ground or choose to jump again with  Trickster.",
+      "effects": [
+        {
+          "id": "fizz_e_effect_1",
+          "description": "Active: Fizz dashes to the target location while becoming untargetable, balancing on his trident for 0.75 seconds, during which he can cast Trickster after 0.15 seconds into the duration."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            130.0,
+            180.0,
+            230.0,
+            280.0
+          ],
+          "context_notes": "He then begins to hop off of his trident over 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "He then begins to hop off of his trident over 0."
+        },
+        {
+          "id": "fizz_e_effect_3",
+          "description": "While hopping off of the trident, Fizz may input movement commands to direct his landing."
+        }
+      ],
+      "description": "Active: Fizz dashes to the target location while becoming untargetable, balancing on his trident for 0.75 seconds, during which he can cast Trickster after 0.15 seconds into the duration.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.0,
+        12.0,
+        10.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          80.0,
+          85.0,
+          90.0,
+          95.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "ultimate": {
+      "name": "Chum the Waters",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Fizz tosses a lure in the target direction that lands on the ground, attracting a shark that erupts after a short delay, dealing magic damage to nearby enemies,  knocking them back and  slowing them.The farther the lure flies, the larger the shark that is attracted, increasing the effects.",
+      "effects": [
+        {
+          "id": "fizz_r_effect_1",
+          "description": "Active: Fizz throws down a lure at the target location that attracts a shark, granting sight of the area before it emerges to chomp at the lure after 2 seconds, dealing magic damage to nearby enemies, knocking them back, though not through terrain, and slowing them for 2 seconds. The further the lure travels in its initial flight, the larger the shark that is attracted; increasing Chum the Waters' damage, slow, eruption radius and knock back distance."
+        },
+        {
+          "id": "guppy_damage",
+          "description": "Guppy Damage",
+          "base_by_rank": [
+            180.0,
+            300.0,
+            420.0
+          ],
+          "context_notes": "Guppy (<455): 40% slow, 200 eruption radius and 150 unit knock back distance."
+        },
+        {
+          "id": "chomper_damage",
+          "description": "Chomper Damage",
+          "base_by_rank": [
+            225.0,
+            375.0,
+            525.0
+          ],
+          "context_notes": "Chomper (455-910): 125% damage, 60% slow, 325 eruption radius and 250 unit knock back distance."
+        },
+        {
+          "id": "gigalodon_damage",
+          "description": "Gigalodon Damage",
+          "base_by_rank": [
+            270.0,
+            450.0,
+            630.0
+          ],
+          "context_notes": "Gigalodon (>910): 150% damage, 80% slow, 450 eruption radius and 350 unit knock back distance."
+        },
+        {
+          "id": "fizz_r_effect_5",
+          "description": "Enemy champions can intercept the lure while it is in flight, which attaches to them upon contact and causes the shark to emerge at their position after the same delay. The lure's holder is slowed and revealed for the duration and afterwards is impacted by the eruption but is knocked up for 1 second instead of knocked back."
+        }
+      ],
+      "description": "Active: Fizz throws down a lure at the target location that attracts a shark, granting sight of the area before it emerges to chomp at the lure after 2 seconds, dealing magic damage to nearby enemies, knocking them back, though not through terrain, and slowing them for 2 seconds. The further the lure travels in its initial flight, the larger the shark that is attracted; increasing Chum the Waters' damage, slow, eruption radius and knock back distance.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1300.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1300.",
+        "Source notes (summary): Chum the Waters will not attach the lure to an enemy champion if they have a spell shield as well as against an enemy Malzahar with his Void Shift active (mitigation effect is consumed in both cases)."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Fizz.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Fizz"
+  }
+}

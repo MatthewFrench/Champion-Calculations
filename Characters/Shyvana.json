@@ -1,0 +1,407 @@
+{
+  "name": "Shyvana",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 665.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "fury",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 350.0,
+    "armor": {
+      "base": 38.0,
+      "per_level": 4.55
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 1.5
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.8
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.102631576359272,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Fury of the Dragonborn",
+      "type": "Passive",
+      "description_source": "Innate:  Shyvana gains  bonus armor and  bonus magic resist, which is permanently increased for every  elemental drake and  Elder Dragon her team slays.",
+      "effects": [
+        {
+          "id": "shyvana_p_effect_1",
+          "description": "Innate: Shyvana gains 5 bonus armor and 5 bonus magic resistance, which are each increased by 5 for every elemental drake and Elder Dragon her team slays."
+        },
+        {
+          "id": "shyvana_p_effect_2",
+          "description": "Additionally, Shyvana deals 20% increased damage to Dragons."
+        }
+      ],
+      "description": "Innate: Shyvana gains 5 bonus armor and 5 bonus magic resistance, which are each increased by 5 for every elemental drake and Elder Dragon her team slays.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Fury of the Dragonborn's increased damage modifier to Dragons does not affect true damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Twin Bite",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Shyvana's next  basic attack within a few seconds will cause her to quickly strike again, dealing bonus physical damage.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0,
+            80.0,
+            100.0
+          ],
+          "context_notes": "Active: Shyvana empowers her next basic attack within 6 seconds to gain 25 bonus range, deal 100% AD (+ 50% AP) physical damage, and cause her to strike again after 0."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            50.0,
+            55.0,
+            60.0,
+            65.0,
+            70.0
+          ],
+          "context_notes": "After consuming the empowered attack, her next two basic attacks within 5 seconds gain bonus attack speed."
+        },
+        {
+          "id": "shyvana_q_effect_3",
+          "description": "Basic attacks reduce Twin Bite's current cooldown by 0.5 seconds on-hit."
+        },
+        {
+          "id": "shyvana_q_effect_4",
+          "description": "Dragon Form Bonus: Twin Bite damages all enemies in a cone in front of Shyvana and additionally applies the second strike after 0.25 seconds to enemies near the primary target, with the same effects to all targets hit, but with the exception of the second strike not triggering on-attack effects for secondary targets struck. Additionally, Twin Bite's empowered attack has an uncancellable windup."
+        },
+        {
+          "id": "shyvana_q_effect_5",
+          "description": "Twin Bite resets Shyvana's basic attack timer."
+        }
+      ],
+      "description": "Active: Shyvana empowers her next basic attack within 6 seconds to gain 25 bonus range, deal 100% AD (+ 50% AP) physical damage, and cause her to strike again after 0.25 seconds to deal bonus physical damage.The second strike applies on-hit effects, triggers on-attack effects, and will critically strike for (200% + 30%) damage if the triggering attack does.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 325 /  250.",
+        "Source notes (summary): Applies spell damage and procs basic damage required effects."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Burnout",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Shyvana creates a flame aura, gaining a burst of  movement speed and continually dealing magic damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0."
+        },
+        {
+          "id": "bonus_movement_speed_decay",
+          "description": "Bonus Movement Speed Decay",
+          "base_by_rank": [
+            4.5,
+            5.25,
+            6.0,
+            6.75,
+            7.5
+          ],
+          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            5.0,
+            7.0,
+            9.0,
+            11.0,
+            13.0
+          ],
+          "context_notes": "During this time, Shyvana's basic attacks deal bonus magic damage on-hit to surrounding enemies and extend the duration of Burnout by 1 second, which can occur up to 4 times for a total of 4 additional seconds."
+        },
+        {
+          "id": "shyvana_w_effect_3",
+          "description": "Dragon Form Bonus: Burnout's radius increases, scaling with Dragon's Descent's rank."
+        }
+      ],
+      "description": "Active: Shyvana surrounds herself in flames for 3 seconds, gaining decaying bonus movement speed and dealing magic damage every 0.5 seconds to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        12.0,
+        12.0,
+        12.0,
+        12.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 162.5
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 162.5 / 350 / 365 / 380 (based on  Dragon's Descent's rank).",
+        "Source notes (summary): Magic damage on-hit can be dodged and miss due to blind."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Flame Breath",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Shyvana unleashes a fireball in the target direction that stops upon hitting an enemy  champion. The fireball deals magic damage to enemies hit and marks them for a few seconds.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            85.0,
+            125.0,
+            165.0,
+            205.0,
+            245.0
+          ],
+          "context_notes": "Active: Shyvana unleashes a fireball in the target direction that stops upon hitting an enemy champion, dealing magic damage to all enemies hit and marking them for 5 seconds."
+        },
+        {
+          "id": "shyvana_e_effect_2",
+          "description": "Shyvana's basic attacks against marked enemies are empowered to deal bonus magic damage on-hit equal to 3% (+ 1% per 100 bonus AD) of the target's maximum health, capped at 150 against monsters."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            75.0,
+            79.11764705882354,
+            83.23529411764706,
+            87.35294117647058,
+            91.47058823529412,
+            95.58823529411765,
+            99.70588235294117,
+            103.8235294117647,
+            107.94117647058823,
+            112.05882352941177,
+            116.17647058823529,
+            120.29411764705881,
+            124.41176470588235,
+            128.52941176470588,
+            132.6470588235294,
+            136.76470588235293,
+            140.88235294117646,
+            145.0
+          ],
+          "context_notes": "Dragon Form Bonus: The fireball explodes upon hitting an enemy champion or reaching the target location, dealing increased magic damage and creating a scorched field for 4 seconds."
+        }
+      ],
+      "description": "Active: Shyvana unleashes a fireball in the target direction that stops upon hitting an enemy champion, dealing magic damage to all enemies hit and marking them for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.0,
+        10.0,
+        9.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 345.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Location.",
+        "Source castTime: 0.25 / 0.3333.",
+        "Source speed: 1600 / 1575.",
+        "Source effectRadius: 345.",
+        "Source notes (summary): The fireball applies area damage and the on-hit effect against marked targets deals proc damage."
+      ]
+    },
+    "ultimate": {
+      "name": "Dragon's Descent",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "fury_generation_per_second",
+          "description": "Fury Generation per Second",
+          "base_by_rank": [
+            1.0,
+            1.5,
+            2.0
+          ],
+          "context_notes": "Passive - Fury: Shyvana generates Fury per second while alive and in Human form and 2 Fury per basic attack on-hit in either form."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Shyvana transforms into Dragon Form and dashes with displacement immunity to the target location, dealing magic damage to enemies she passes through and carrying them alongside her."
+        },
+        {
+          "id": "bonus_health",
+          "description": "Bonus Health",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Dragon Form: Shyvana gains bonus health, bonus attack range, and increased size."
+        },
+        {
+          "id": "bonus_range",
+          "description": "Bonus Range",
+          "base_by_rank": [
+            50.0,
+            65.0,
+            80.0
+          ],
+          "context_notes": "Dragon Form: Shyvana gains bonus health, bonus attack range, and increased size."
+        },
+        {
+          "id": "size_increase",
+          "description": "Size Increase",
+          "base_by_rank": [
+            8.5,
+            16.0
+          ],
+          "context_notes": "Dragon Form: Shyvana gains bonus health, bonus attack range, and increased size."
+        },
+        {
+          "id": "shyvana_r_effect_4",
+          "description": "100 Fury is required to cast this ability."
+        }
+      ],
+      "description": "Passive - Fury: Shyvana generates Fury per second while alive and in Human form and 2 Fury per basic attack on-hit in either form. Shyvana gains 100 Fury upon learning Dragon's Descent.",
+      "cost": {
+        "resource": "fury",
+        "value_by_rank": [
+          2.5,
+          2.5,
+          2.5
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Dragon Descent's displacement immunity begins from the start of the cast time."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Shyvana.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Shyvana"
+  }
+}

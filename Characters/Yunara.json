@@ -1,0 +1,416 @@
+{
+  "name": "Yunara",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 110.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 275.0,
+      "per_level": 45.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 25.0,
+      "per_level": 4.4
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 575.0,
+    "health_regeneration": {
+      "base": 4.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.5,
+      "per_level": 0.75
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.65,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.538,
+    "base_windup_seconds": 0.25,
+    "windup_fraction": 0.1625487646293888,
+    "windup_percent": 16.25487646293888,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.25,
+      "attack_total_time": 1.538,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Vow of the First Lands",
+      "type": "Passive",
+      "description_source": "Innate:  Yunara's  critical strikes deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "yunara_p_effect_1",
+          "description": "Innate: Yunara's critical strikes deal 10% (+ 10% per 100 AP) bonus magic damage."
+        }
+      ],
+      "description": "Innate: Yunara's critical strikes deal 10% (+ 10% per 100 AP) bonus magic damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): PENDING FOR TEST: Interaction with parry effects ( dodge, block and blind."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Cultivation of Spirit",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Yunara's  basic attacks deal bonus magic damage  on-hit and generate  stacks of Unleash  on-attack, stacking up to a cap upon which she can cast Cultivation of Spirit.",
+      "effects": [
+        {
+          "id": "passive_bonus_magic_damage",
+          "description": "Passive Bonus Magic Damage",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0,
+            25.0
+          ],
+          "context_notes": "Passive: Yunara's basic attacks deal bonus magic damage on-hit."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Yunara unleashes for 5 seconds: gaining bonus attack speed, dealing additional bonus magic damage on-hit, and augmenting her basic attacks to have increased missile speed, a 40% lower windup time, and an uncancellable windup."
+        },
+        {
+          "id": "active_bonus_magic_damage",
+          "description": "Active Bonus Magic Damage",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0,
+            25.0
+          ],
+          "context_notes": "Active: Yunara unleashes for 5 seconds: gaining bonus attack speed, dealing additional bonus magic damage on-hit, and augmenting her basic attacks to have increased missile speed, a 40% lower windup time, and an uncancellable windup."
+        },
+        {
+          "id": "combined_bonus_magic_damage",
+          "description": "Combined Bonus Magic Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "Active: Yunara unleashes for 5 seconds: gaining bonus attack speed, dealing additional bonus magic damage on-hit, and augmenting her basic attacks to have increased missile speed, a 40% lower windup time, and an uncancellable windup."
+        },
+        {
+          "id": "active_increased_minion_damage",
+          "description": "Active Increased Minion Damage",
+          "base_by_rank": [
+            12.5,
+            25.0,
+            37.5,
+            50.0,
+            62.5
+          ],
+          "context_notes": "Active: Yunara unleashes for 5 seconds: gaining bonus attack speed, dealing additional bonus magic damage on-hit, and augmenting her basic attacks to have increased missile speed, a 40% lower windup time, and an uncancellable windup."
+        },
+        {
+          "id": "combined_increased_minion_damage",
+          "description": "Combined Increased Minion Damage",
+          "base_by_rank": [
+            25.0,
+            50.0,
+            75.0,
+            100.0,
+            125.0
+          ],
+          "context_notes": "Active: Yunara unleashes for 5 seconds: gaining bonus attack speed, dealing additional bonus magic damage on-hit, and augmenting her basic attacks to have increased missile speed, a 40% lower windup time, and an uncancellable windup."
+        },
+        {
+          "id": "yunara_q_effect_3",
+          "description": "Cultivation of Spirit resets Yunara's basic attack timer. Targets do not have to be visible to be hit by the spread attacks."
+        }
+      ],
+      "description": "Passive: Yunara's basic attacks deal bonus magic damage on-hit. While this ability is inactive, her basic attacks on-attack generate a stack of Unleash for 6 seconds, increased to 2 stacks against champions. The stacks refresh on subsequent attacks, stack up to 8 times, and expire one by one every 0.5 seconds after the duration.",
+      "cost": {
+        "resource": "other",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 10000.0,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 10000 / 2000.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Cultivation of Spirit's damage classifications: Proc damage for the passive and active on-hit damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Arc of Judgment",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Yunara launches a spinning prayer bead that briefly slows down upon hitting an enemy. The initial hit against each enemy deals magic damage and  slows the target, and the bead continually deals magic damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "initial_magic_damage",
+          "description": "Initial Magic Damage",
+          "base_by_rank": [
+            55.0,
+            95.0,
+            135.0,
+            175.0,
+            215.0
+          ],
+          "context_notes": "Active: Yunara launches a spinning prayer bead in the target direction that briefly grants sight of its surroundings as it travels."
+        },
+        {
+          "id": "linger_magic_damage_per_tick",
+          "description": "Linger Magic Damage per Tick",
+          "base_by_rank": [
+            8.25,
+            14.25,
+            20.25,
+            26.25,
+            32.25
+          ],
+          "context_notes": "Active: Yunara launches a spinning prayer bead in the target direction that briefly grants sight of its surroundings as it travels."
+        },
+        {
+          "id": "total_expanded_damage",
+          "description": "Total Expanded Damage",
+          "base_by_rank": [
+            33.0,
+            57.0,
+            81.0,
+            105.0,
+            129.0
+          ],
+          "context_notes": "Active: Yunara launches a spinning prayer bead in the target direction that briefly grants sight of its surroundings as it travels."
+        },
+        {
+          "id": "yunara_w_effect_2",
+          "description": "Arc of Judgment deals 50% / 75% / 100% (based on level) damage against minions and executes them if they would be killed by 6 more damage instances from the linger effect."
+        }
+      ],
+      "description": "Active: Yunara launches a spinning prayer bead in the target direction that briefly grants sight of its surroundings as it travels. The bead slows down significantly while colliding with an enemy, lingering as it travels and resetting its remaining duration; upon reaching maximum range, it will expand and linger in place for 1 second regardless of enemies hit.The initial hit against each enemy before the bead's expansion deals magic damage and slows them by 99% decaying over 1.5 seconds. While lingering, the bead deals 60% of impact damage as magic damage to nearby enemies every 0.25 seconds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        10.0,
+        10.0,
+        10.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.45,
+        "projectile_speed": 2150.0,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.45 : 0.225 (based on bonus attack speed).",
+        "Source speed: 2150 / 150.",
+        "Source effectRadius: 150.",
+        "Source notes (summary): Applies area damage for the initial hit and persistent area damage for the lingering effect."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Kanmei's Steps",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Yunara briefly becomes  ghosted and gains  bonus move speed, increased while facing an enemy  champion.",
+      "effects": [
+        {
+          "id": "bonus_move_speed",
+          "description": "Bonus Move Speed",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Yunara becomes ghosted and gains bonus movement speed for 1."
+        },
+        {
+          "id": "increased_bonus_move_speed",
+          "description": "Increased Bonus Move Speed",
+          "base_by_rank": [
+            45.0,
+            52.5,
+            60.0,
+            67.5,
+            75.0
+          ],
+          "context_notes": "Active: Yunara becomes ghosted and gains bonus movement speed for 1."
+        }
+      ],
+      "description": "Active: Yunara becomes ghosted and gains bonus movement speed for 1.5 seconds. The movement speed is 50% more effective while facing a nearby visible enemy champion.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 2000."
+      ]
+    },
+    "ultimate": {
+      "name": "Transcend One's Self",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Arc of Ruin's damage and  Untouchable Shadow's dash speed are increased.",
+      "effects": [
+        {
+          "id": "arc_of_ruin_base_damage",
+          "description": "Arc of Ruin Base Damage",
+          "base_by_rank": [
+            160.0,
+            320.0,
+            480.0
+          ],
+          "context_notes": "Passive: Arc of Ruin's base damage and Untouchable Shadow's dash speed scale with Transcend One's Self's rank."
+        },
+        {
+          "id": "untouchable_shadow_dash_speed",
+          "description": "Untouchable Shadow Dash Speed",
+          "base_by_rank": [
+            1350.0,
+            1500.0,
+            1650.0
+          ],
+          "context_notes": "Passive: Arc of Ruin's base damage and Untouchable Shadow's dash speed scale with Transcend One's Self's rank."
+        },
+        {
+          "id": "yunara_r_effect_2",
+          "description": "Active: Yunara enters Transcendent State for 15 seconds, during which each of her basic abilities is empowered:\n Cultivation of Spirit: Automatically becomes active at no cost, with the duration increased to Transcendent State's.\n Arc of Judgment: Upgraded into Arc of Ruin, which has no cost and has its remaining cooldown reduced by 80% upon both entering and exiting the state.\n Kanmei's Steps: Upgraded into Untouchable Shadow, which has no cost and has its cooldown reset upon both entering and exiting the state."
+        }
+      ],
+      "description": "Passive: Arc of Ruin's base damage and Untouchable Shadow's dash speed scale with Transcend One's Self's rank.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        90.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): An ongoing Kanmei's Steps' effect is not lost when quickly replaced by Untouchable Shadow."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Yunara.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Yunara"
+  }
+}

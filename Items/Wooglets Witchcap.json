@@ -61,14 +61,19 @@
           "duration_seconds": 2.5
         }
       ],
-      "cannot_act": true
+      "cannot_act": true,
+      "cooldown_seconds": 120
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 6000,
+      "sell": 4200
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3385_forge_wooglets_witchcap.png",
   "simpleDescription": null,
@@ -80,7 +85,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.026007+00:00",
-    "effects_structured_reviewed": "2026-02-12"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Arena re-release keeps Magical Opus AP amplification plus Stasis active; cooldown metadata was filled from page-level historical/current tooltip notes."
+    ]
   },
   "sources": [
     {
@@ -100,6 +108,12 @@
       "path": "From Online/items/Wooglets Witchcap.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Wooglet%27s_Witchcap",
+      "accessed": "2026-02-24",
+      "used_for": "page-level Arena item stasis/passive verification"
     }
   ]
 }

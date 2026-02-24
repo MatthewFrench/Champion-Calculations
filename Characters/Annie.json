@@ -1,0 +1,350 @@
+{
+  "name": "Annie",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 560.0,
+      "per_level": 96.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 418.0,
+      "per_level": 25.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 23.0,
+      "per_level": 4.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 625.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 50.0,
+      "per_level": 2.65
+    },
+    "attack_speed": {
+      "base": 0.61,
+      "per_level_percent": 1.36
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.10420524328947,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Pyromania",
+      "type": "Passive",
+      "description_source": "Innate:  Annie's spell-casts generate stacks. At maximum stacks, her next offensive spell will consume them to  stun the target.",
+      "effects": [
+        {
+          "id": "annie_p_effect_1",
+          "description": "Innate - Pyromania: Annie generates a stack of Pyromania whenever she hits an enemy with Disintegrate or casts her other abilities, stacking up to 4 times, at which she gains Energized."
+        },
+        {
+          "id": "annie_p_effect_2",
+          "description": "Energized: Annie empowers her next cast of Disintegrate, Incinerate, or Summon: Tibbers to consume all Pyromania stacks to stun enemies hit for 1.25 / 1.5 / 1.75 (based on level) seconds."
+        },
+        {
+          "id": "annie_p_effect_3",
+          "description": "Annie gains maximum stacks of Pyromania when the game starts and upon respawning. She will lose Energized and all Pyromania stacks upon death."
+        }
+      ],
+      "description": "Innate - Pyromania: Annie generates a stack of Pyromania whenever she hits an enemy with Disintegrate or casts her other abilities, stacking up to 4 times, at which she gains Energized.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Annie does not lose any stacks upon entering or exiting resurrection."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Disintegrate",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Annie hurls a fireball at the target enemy that deals magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Annie hurls a fireball at the target enemy that deals magic damage."
+        },
+        {
+          "id": "annie_q_effect_2",
+          "description": "If this kills the target, Disintegrate's cooldown is reduced by 50% and its mana cost is refunded."
+        }
+      ],
+      "description": "Active: Annie hurls a fireball at the target enemy that deals magic damage.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1400.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 1400.",
+        "Source notes (summary): Disintegrate will also grant the cooldown reduction and mana cost refund if the target is dead upon the missile's arrival."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Incinerate",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Annie casts a blazing cone of fire, dealing magic damage to enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            110.0,
+            150.0,
+            190.0,
+            230.0
+          ],
+          "context_notes": "Active: Annie releases fire in a cone in the target direction, dealing magic damage to enemies hit."
+        }
+      ],
+      "description": "Active: Annie releases fire in a cone in the target direction, dealing magic damage to enemies hit.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 600.",
+        "Source notes (summary): Incinerate can hit targets behind Annie, provided their radius intersects with the cone hitbox."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Molten Shield",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Annie grants herself or an allied champion—and  Tibbers—a  shield with a burst of  move speed.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            60.0,
+            95.0,
+            130.0,
+            165.0,
+            200.0
+          ],
+          "context_notes": "Active: Annie grants herself or the target allied champion and Tibbers a shield for 3 seconds and 20% : 53."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            25.0,
+            35.0,
+            45.0,
+            55.0,
+            65.0
+          ],
+          "context_notes": "While Molten Shield is active, enemies that deal damage to it take magic damage."
+        }
+      ],
+      "description": "Active: Annie grants herself or the target allied champion and Tibbers a shield for 3 seconds and 20% : 53.53% (based on level) bonus movement speed that decays over 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.5,
+        11.0,
+        10.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit / Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Molten Shield casts on ally if targeted or if very close to targeting them (within a range of 225); otherwise self casts."
+      ]
+    },
+    "ultimate": {
+      "name": "Summon: Tibbers",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Annie summons her bear  Tibbers, dealing magic damage to enemies in the area.",
+      "effects": [
+        {
+          "id": "magic_penetration",
+          "description": "Magic Penetration",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0
+          ],
+          "context_notes": "Passive: Annie gains magic penetration."
+        },
+        {
+          "id": "initial_magic_damage",
+          "description": "Initial Magic Damage",
+          "base_by_rank": [
+            150.0,
+            275.0,
+            400.0
+          ],
+          "context_notes": "Active: Annie summons Tibbers to the target location in a burst of flame, dealing magic damage to enemies near him."
+        },
+        {
+          "id": "annie_r_effect_3",
+          "description": "Tibbers then remains on the field as a controllable pet for up to 45 seconds."
+        },
+        {
+          "id": "annie_r_effect_4",
+          "description": "Recast: Annie directs Tibbers to the target location."
+        },
+        {
+          "id": "annie_r_effect_5",
+          "description": "Summon: Tibbers' recast can be used while affected by cast-inhibiting crowd control. See Pets for more details about Tibbers."
+        }
+      ],
+      "description": "Passive: Annie gains magic penetration.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        115.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25 / None.",
+        "Source effectRadius: 250 /  350.",
+        "Source notes (summary): Only the initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Annie.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Annie"
+  }
+}

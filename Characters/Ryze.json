@@ -1,0 +1,341 @@
+{
+  "name": "Ryze",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Fighter",
+    "Mage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 645.0,
+      "per_level": 124.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 300.0,
+      "per_level": 70.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 22.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 1.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.11
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.100000001490116,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Arcane Mastery",
+      "type": "Passive",
+      "description_source": "Innate:  Ryze gains  maximum mana based on his  ability power.",
+      "effects": [
+        {
+          "id": "ryze_p_effect_1",
+          "description": "Innate: Ryze increases his maximum mana by (10% per 100 AP)."
+        }
+      ],
+      "description": "Innate: Ryze increases his maximum mana by (10% per 100 AP).",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The increase in maximum mana differentiates between base and bonus mana, similar to Overgrowth."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Overload",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Ryze's other  basic ability casts  reset Overload's cooldown and generate a  Rune stack, stacking up to 2 times.",
+      "effects": [
+        {
+          "id": "ryze_q_effect_1",
+          "description": "Passive: Ryze's other basic ability casts reset Overload's cooldown and charge a Rune stack for 4 seconds, refreshing on subsequent casts and stacking up to 2 times."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            95.0,
+            115.0,
+            135.0,
+            155.0
+          ],
+          "context_notes": "Active: Ryze unleashes a runic blast in the target direction that deals magic damage to the first enemy hit and consumes all Rune stacks."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            28.0,
+            32.0,
+            36.0,
+            40.0,
+            44.0
+          ],
+          "context_notes": "If Ryze consumed 2 stacks, he gains bonus movement speed for 2 seconds."
+        },
+        {
+          "id": "ryze_q_effect_4",
+          "description": "Flux Bonus: Overload deals 25% / 50% / 75% / 100% (based on Realm Warp's Rank) increased damage and spreads to surrounding Fluxed enemies."
+        }
+      ],
+      "description": "Passive: Ryze's other basic ability casts reset Overload's cooldown and charge a Rune stack for 4 seconds, refreshing on subsequent casts and stacking up to 2 times.",
+      "cooldown_seconds_by_rank": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          38.0,
+          36.0,
+          34.0,
+          32.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1700.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1700.",
+        "Source notes (summary): Overload can be buffered 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Rune Prison",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Ryze seizes the target enemy, dealing magic damage and briefly  slowing them.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Ryze seizes the target enemy, dealing magic damage and slowing them by 50% for 1."
+        },
+        {
+          "id": "ryze_w_effect_2",
+          "description": "Flux Bonus: The target is rooted instead of slowed."
+        }
+      ],
+      "description": "Active: Ryze seizes the target enemy, dealing magic damage and slowing them by 50% for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.5,
+        10.0,
+        9.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Rune Prison can be buffered 0."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Spell Flux",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Ryze projects an orb upon the target enemy that deals magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Ryze projects an orb upon the target enemy that deals magic damage."
+        },
+        {
+          "id": "ryze_e_effect_2",
+          "description": "Flux Bonus: Spell Flux spreads farther."
+        }
+      ],
+      "description": "Active: Ryze projects an orb upon the target enemy that deals magic damage.\nThe target and surrounding enemies are also marked with Flux for 4 seconds. Ryze's basic abilities against Flux targets consume the mark to become empowered with an additional effect.",
+      "cooldown_seconds_by_rank": [
+        3.5,
+        3.25,
+        3.0,
+        2.75,
+        2.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          45.0,
+          55.0,
+          65.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 4000.0,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 4000 / 1500.",
+        "Source effectRadius: 350.",
+        "Source notes (summary): Spell Flux's second cast on a target will apply a new Flux debuff as well as triggering the previous one (effectively refreshing the duration)."
+      ]
+    },
+    "ultimate": {
+      "name": "Realm Warp",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "bonus_overload_damage",
+          "description": "Bonus Overload Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0
+          ],
+          "context_notes": "Passive: Overload's Flux empowered damage is increased."
+        },
+        {
+          "id": "ryze_r_effect_2",
+          "description": "Active: Ryze channels for 2 seconds to open a portal beneath him, marking the target location as its destination and granting sight of its area. Ryze is able to act while channeling, but the portal will cancel if he is interrupted."
+        },
+        {
+          "id": "ryze_r_effect_3",
+          "description": "Upon completion, Ryze and allied units within will blink to the location and become rooted, disarmed, silenced and untargetable for 0.75 seconds."
+        }
+      ],
+      "description": "Passive: Overload's Flux empowered damage is increased.",
+      "cooldown_seconds_by_rank": [
+        180.0,
+        160.0,
+        140.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 250 : 350 : 465 /  515.",
+        "Source notes (summary): Realm Warp's portal may try to predict allied players' intention via their movement."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Ryze.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Ryze"
+  }
+}

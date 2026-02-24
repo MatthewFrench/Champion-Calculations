@@ -27,7 +27,11 @@
           "description": "Bonus duration after losing sight of enemy champion"
         }
       ],
-      "name": "Night Hunter"
+      "name": "Night Hunter",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Night Hunter grants directional pursuit movement speed near enemy champions, with a stronger value during Final Hour and short persistence after line-of-sight loss."
+      ]
     },
     "basic_ability_3": {
       "slot": "E",
@@ -41,7 +45,10 @@
       ],
       "default_keybinding": "E",
       "description_source": "Vayne draws a heavy crossbow from her back, and fires a huge bolt at her target, knocking them back and dealing damage. If they collide with terrain, they are impaled, dealing bonus damage and stunning them.",
-      "context_notes": "Missile speed is 2200/2000; knockback distance 475 units. Cast time 0.25s.",
+      "context_notes": [
+        "Execution metadata mapped from generated champion data: castTime 0.25 and missile speed 2200/2000 (canonicalized to 2200 primary value for projectile timing).",
+        "Missile speed is 2200/2000; knockback distance 475 units. Cast time 0.25s."
+      ],
       "range": 550,
       "cost": {
         "resource": "mana",
@@ -112,7 +119,11 @@
         }
       ],
       "type": "Active",
-      "description": "Knock back an enemy; if they collide with terrain, deal bonus damage and stun for 1.5s."
+      "description": "Knock back an enemy; if they collide with terrain, deal bonus damage and stun for 1.5s.",
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2200.0
+      }
     },
     "basic_ability_2": {
       "slot": "W",
@@ -193,8 +204,11 @@
           "description": "Bonus true damage cap vs monsters"
         }
       ],
-      "type": "Active",
-      "description": "Every third attack on the same target deals bonus true damage based on target max health (with a minimum value) and has a monster cap."
+      "type": "Passive",
+      "description": "Every third attack on the same target deals bonus true damage based on target max health (with a minimum value) and has a monster cap.",
+      "context_notes": [
+        "Data correction: Silver Bolts is passive-only in source targeting metadata; type normalized from Active to Passive."
+      ]
     },
     "basic_ability_1": {
       "slot": "Q",
@@ -415,7 +429,8 @@
     {
       "type": "Generated champion data",
       "path": "From Online/champions/Vayne.json",
-      "used_for": "raw basic attack timing stats and radii"
+      "used_for": "raw basic attack timing stats and radii",
+      "accessed": "2026-02-24"
     }
   ],
   "schema_notes": {

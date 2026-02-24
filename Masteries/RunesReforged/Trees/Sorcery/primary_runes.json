@@ -1,0 +1,954 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Tree Primary",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "tree": {
+    "id": 8200,
+    "key": "Sorcery",
+    "name": "Sorcery",
+    "icon": "perk-images/Styles/7202_Sorcery.png"
+  },
+  "selection_context": "primary_path",
+  "slot_count": 4,
+  "rune_count": 12,
+  "slots": [
+    {
+      "slot_index": 1,
+      "slot_type": "keystone",
+      "runes": [
+        {
+          "id": 8214,
+          "key": "SummonAery",
+          "name": "Summon Aery",
+          "icon": "perk-images/Styles/Sorcery/SummonAery/SummonAery.png",
+          "short_desc": "Your attacks and abilities send Aery to a target, damaging enemies or shielding allies.",
+          "long_desc": "Damaging enemy champions with basic attacks or abilities sends Aery to them, dealing 10 - 50 based on level (+<scaleAP>0.05 AP</scaleAP>) (+<scaleAD>0.1 bonus AD</scaleAD>).<br><br>Empowering or protecting allies with abilities sends Aery to them, shielding them for 30 - 100 based on level (+<scaleAP>0.05 AP</scaleAP>) (+<scaleAD>0.1 bonus AD</scaleAD>).<br><br>Aery cannot be sent out again until she returns to you.",
+          "wiki_descriptions": [
+            "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0. 45 seconds, dealing 10 – 54. 71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0. 35 seconds, shielding them for 30 – 108. 24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
+            "Aery applies her effects to the affected champion upon arrival. She then lingers on the target for 2 seconds before flying back to the user, and cannot be sent out again until she returns. While on her way back, she is initially very slow , but gradually accelerates , and can be picked up by moving near her .",
+            "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0. 45 seconds, dealing 10 – 54. 71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0. 35 seconds, shielding them for 30 – 108. 24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": [
+                10,
+                54.0
+              ],
+              "numbers_extracted": [
+                0.0,
+                45,
+                10,
+                54.0,
+                71,
+                10,
+                5,
+                0.0,
+                35,
+                30,
+                108.0,
+                24,
+                10,
+                5,
+                2
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 10,
+                "max": 54.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "on_hit",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "range",
+                "min": 10,
+                "max": 54.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Aery applies her effects to the affected champion upon arrival. She then lingers on the target for 2 seconds before flying back to the user, and cannot be sent out again until she returns. While on her way back, she is initially very slow , but gradually accelerates , and can be picked up by moving near her .",
+              "effect_type": "condition_note",
+              "stat": "aery_return_cycle_seconds",
+              "unit": "seconds",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                2
+              ],
+              "scaling": null,
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": {
+                "type": "flat",
+                "value": 2,
+                "unit": "seconds"
+              },
+              "conditions": [
+                "cannot_retrigger_until_aery_returns"
+              ],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage .",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                10,
+                5,
+                50
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 10,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Summon Aery"
+        },
+        {
+          "id": 8229,
+          "key": "ArcaneComet",
+          "name": "Arcane Comet",
+          "icon": "perk-images/Styles/Sorcery/ArcaneComet/ArcaneComet.png",
+          "short_desc": "Damaging a champion with an ability hurls a damaging comet at their location.",
+          "long_desc": "Damaging a champion with an ability hurls a comet at their location, or, if Arcane Comet is on cooldown, reduces its remaining cooldown.<br><br><lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>Adaptive Damage</font></lol-uikit-tooltipped-keyword>: 30 - 130 based on level (<scaleAP>+0.05 AP</scaleAP> and <scaleAD>+0.1 bonus AD</scaleAD>)<br>Cooldown: 20 - 8s<br><rules><br>Cooldown Reduction:<br>Single Target: 20%.<br>Area of Effect: 10%.<br>Damage over Time: 5%.<br></rules>",
+          "wiki_descriptions": [
+            "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0. 825 seconds , dealing 30 – 141. 76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
+            "Dealing forms of ability damage reduces the remaining cooldown. Spell damage : 20% Area damage : 10% per enemy hit Persistent damage : 5%",
+            "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0. 825 seconds , dealing 30 – 141. 76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": [
+                30,
+                141.0
+              ],
+              "numbers_extracted": [
+                0,
+                0.0,
+                825,
+                30,
+                141.0,
+                76,
+                10,
+                5,
+                140
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 30,
+                "max": 141.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "range",
+                "min": 30,
+                "max": 141.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Dealing forms of ability damage reduces the remaining cooldown. Spell damage : 20% Area damage : 10% per enemy hit Persistent damage : 5%",
+              "effect_type": "damage",
+              "stat": "cooldown",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                20,
+                10,
+                5
+              ],
+              "scaling": null,
+              "trigger": "on_ability_damage",
+              "applies_to": "enemy",
+              "formula": {
+                "type": "flat",
+                "value": 20,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage .",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                10,
+                5,
+                50
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 10,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Arcane Comet"
+        },
+        {
+          "id": 8230,
+          "key": "PhaseRush",
+          "name": "Phase Rush",
+          "icon": "perk-images/Styles/Sorcery/PhaseRush/PhaseRush.png",
+          "short_desc": "Hitting an enemy champion with 3 <b>separate</b> attacks or abilities grants a burst of <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> and Slow Resist. ",
+          "long_desc": "Hitting an enemy champion with 3 attacks or <b>separate</b> abilities within 4s grants <speed>25 - 50% Move Speed</speed> based on level and <status>50% Slow Resistance</status> for 3s. Move Speed is 50% effective for ranged champions.<br>Cooldown: 30s - 10s",
+          "wiki_descriptions": [
+            "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% – 52. 94 % / 12. 5 % – 26. 47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% – 52. 94 % / 12. 5 % – 26. 47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds.",
+              "effect_type": "damage",
+              "stat": "movement_speed",
+              "unit": "percent",
+              "values": [
+                3,
+                4,
+                25,
+                52.0,
+                94,
+                12.0,
+                5,
+                26.0,
+                47,
+                50,
+                3
+              ],
+              "value_range": null,
+              "numbers_extracted": [
+                3,
+                4,
+                25,
+                52.0,
+                94,
+                12.0,
+                5,
+                26.0,
+                47,
+                50,
+                3
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": null,
+                "max": null,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "on_hit",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  3,
+                  4,
+                  25,
+                  52.0,
+                  94,
+                  12.0,
+                  5,
+                  26.0,
+                  47,
+                  50,
+                  3
+                ],
+                "unit": "percent"
+              },
+              "conditions": [
+                "vs_champions"
+              ],
+              "parse_confidence": 1.0
+            }
+          ],
+          "template_source": "Template:Rune data Phase Rush"
+        }
+      ]
+    },
+    {
+      "slot_index": 2,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8224,
+          "key": "NullifyingOrb",
+          "name": "Axiom Arcanist",
+          "icon": "perk-images/Styles/Sorcery/NullifyingOrb/Axiom_Arcanist.png",
+          "short_desc": "Your Ultimate has increased damage, healing, and shielding. Scoring a takedown on an enemy champion reduces your Ultimate's current cooldown.",
+          "long_desc": "Your Ultimate has 12% increased damage, healing, and shielding. <br>(AoE damage is reduced to a 8% increase)<br><br>Scoring a takedown on an enemy champion reduces your Ultimate's current cooldown by 7%.",
+          "wiki_descriptions": [
+            "Passive: Your ultimate has 12% increased damage (reduced to 8% for area of effect abilities), healing and shielding .",
+            "Scoring an enemy champion takedown reduces your ultimate ability's current cooldown by 7%."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Your ultimate has 12% increased damage (reduced to 8% for area of effect abilities), healing and shielding .",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                12,
+                8
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 12,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Scoring an enemy champion takedown reduces your ultimate ability's current cooldown by 7%.",
+              "effect_type": "cooldown",
+              "stat": "cooldown",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                7
+              ],
+              "scaling": null,
+              "trigger": "on_takedown",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 7,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Axiom Arcanist"
+        },
+        {
+          "id": 8226,
+          "key": "ManaflowBand",
+          "name": "Manaflow Band",
+          "icon": "perk-images/Styles/Sorcery/ManaflowBand/ManaflowBand.png",
+          "short_desc": "Hitting an enemy champion with an ability permanently increases your maximum mana by 25, up to 250 mana.<br><br>After reaching 250 bonus mana, restore 1% of your missing mana every 5 seconds.",
+          "long_desc": "Hitting an enemy champion with an ability permanently increases your maximum mana by 25, up to 250 mana.<br><br>After reaching 250 bonus mana, restore 1% of your missing mana every 5 seconds.<br><br>Cooldown: 15 seconds",
+          "wiki_descriptions": [
+            "Passive: Affecting an enemy champion with an ability permanently increases your maximum mana by 25 , up to 250 mana . Mana gained from this effect preserves your current mana .",
+            "After reaching 250 bonus mana , permanently restore 1% of your missing mana every 5 seconds."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Affecting an enemy champion with an ability permanently increases your maximum mana by 25 , up to 250 mana . Mana gained from this effect preserves your current mana .",
+              "effect_type": "stat_modifier",
+              "stat": "mana",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                25,
+                250
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 25,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "After reaching 250 bonus mana , permanently restore 1% of your missing mana every 5 seconds.",
+              "effect_type": "stat_modifier",
+              "stat": "mana",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                250,
+                1,
+                5
+              ],
+              "scaling": null,
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 250,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Manaflow Band"
+        },
+        {
+          "id": 8275,
+          "key": "NimbusCloak",
+          "name": "Nimbus Cloak",
+          "icon": "perk-images/Styles/Sorcery/NimbusCloak/6361.png",
+          "short_desc": "After casting a Summoner Spell, gain a short <speed>Move Speed</speed> increase that allows you to pass through units.",
+          "long_desc": "After casting a Summoner Spell, gain a <speed>Move Speed</speed> increase that lasts for 2s and allows you to pass through units.<br><br>Increase: <speed>15% - 45% Move Speed</speed> based on the Summoner Spell's cooldown. (Higher cooldown Summoner Spells grant more <speed>Move Speed</speed>). ",
+          "wiki_descriptions": [
+            "Passive: Using a summoner spell grants ghosting and 15% – 45% (based on summoner spell cooldown) bonus movement speed decaying over 2 seconds."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Using a summoner spell grants ghosting and 15% – 45% (based on summoner spell cooldown) bonus movement speed decaying over 2 seconds.",
+              "effect_type": "cooldown",
+              "stat": "movement_speed",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                15,
+                45,
+                2
+              ],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 15,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Nimbus Cloak"
+        }
+      ]
+    },
+    {
+      "slot_index": 3,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8210,
+          "key": "Transcendence",
+          "name": "Transcendence",
+          "icon": "perk-images/Styles/Sorcery/Transcendence/Transcendence.png",
+          "short_desc": "Gain bonuses upon reaching the following levels:<br>Level 5: +5 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_CDR'>Ability Haste</lol-uikit-tooltipped-keyword> <br>Level 8: +5 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_CDR'>Ability Haste</lol-uikit-tooltipped-keyword> <br>Level 11: On Champion takedown, reduce the remaining cooldown of basic abilities by 20%.",
+          "long_desc": "Gain bonuses upon reaching the following levels:<br>Level 5: +5 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_CDR'>Ability Haste</lol-uikit-tooltipped-keyword> <br>Level 8: +5 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_CDR'>Ability Haste</lol-uikit-tooltipped-keyword> <br>Level 11: On Champion takedown, reduce the remaining cooldown of basic abilities by 20%.",
+          "wiki_descriptions": [
+            "Passive: Gain bonuses upon reaching the following levels: Level 5: + 5 ability haste . Level 8: + 5 ability haste . Level 11: Scoring a takedown against an enemy champion reduces the current cooldowns of your basic abilities by 20%."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain bonuses upon reaching the following levels: Level 5: + 5 ability haste . Level 8: + 5 ability haste . Level 11: Scoring a takedown against an enemy champion reduces the current cooldowns of your basic abilities by 20%.",
+              "effect_type": "cooldown",
+              "stat": "ability_haste",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                5,
+                5,
+                8,
+                5,
+                11,
+                20
+              ],
+              "scaling": null,
+              "trigger": "on_kill",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "flat",
+                "value": 5,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Transcendence"
+        },
+        {
+          "id": 8234,
+          "key": "Celerity",
+          "name": "Celerity",
+          "icon": "perk-images/Styles/Sorcery/Celerity/CelerityTemp.png",
+          "short_desc": "All <speed>Move Speed</speed> bonuses are 7% more effective on you and gain <speed>1% Move Speed</speed>.",
+          "long_desc": "All movement bonuses are 7% more effective on you and gain <speed>1% Move Speed</speed>.",
+          "wiki_descriptions": [
+            "Passive: All movement speed bonuses increase in effectiveness by 7%.",
+            "Additionally, you gain 1% bonus movement speed ."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: All movement speed bonuses increase in effectiveness by 7%.",
+              "effect_type": "stat_modifier",
+              "stat": "movement_speed",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                7
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "flat",
+                "value": 7,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Additionally, you gain 1% bonus movement speed .",
+              "effect_type": "stat_modifier",
+              "stat": "movement_speed",
+              "unit": "percent",
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [
+                1
+              ],
+              "scaling": null,
+              "trigger": null,
+              "applies_to": "ally",
+              "formula": {
+                "type": "flat",
+                "value": 1,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            }
+          ],
+          "template_source": "Template:Rune data Celerity"
+        },
+        {
+          "id": 8233,
+          "key": "AbsoluteFocus",
+          "name": "Absolute Focus",
+          "icon": "perk-images/Styles/Sorcery/AbsoluteFocus/AbsoluteFocus.png",
+          "short_desc": "While above 70% health, gain extra <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword>.",
+          "long_desc": "While above 70% health, gain an <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> bonus of up to 18 Attack Damage or 30 Ability Power (based on level). <br><br>Grants 1.8 Attack Damage or 3 Ability Power at level 1. ",
+          "wiki_descriptions": [
+            "Passive: Gain 1. 8 – 19. 91 (based on level) bonus Attack Damage or 3 – 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
+            "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain 1. 8 – 19. 91 (based on level) bonus Attack Damage or 3 – 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
+              "effect_type": "damage",
+              "stat": "attack_damage",
+              "unit": "percent",
+              "values": null,
+              "value_range": [
+                8,
+                19.0
+              ],
+              "numbers_extracted": [
+                1.0,
+                8,
+                19.0,
+                91,
+                3,
+                33.0,
+                18,
+                70
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 8,
+                "max": 19.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "range",
+                "min": 8,
+                "max": 19.0,
+                "unit": "percent"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed.",
+              "effect_type": "condition_note",
+              "stat": "adaptive_stat_selection_rule",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.75
+            }
+          ],
+          "template_source": "Template:Rune data Absolute Focus"
+        }
+      ]
+    },
+    {
+      "slot_index": 4,
+      "slot_type": "minor",
+      "runes": [
+        {
+          "id": 8237,
+          "key": "Scorch",
+          "name": "Scorch",
+          "icon": "perk-images/Styles/Sorcery/Scorch/Scorch.png",
+          "short_desc": "Your first damaging ability hit every 10s burns champions.",
+          "long_desc": "Your next damaging ability hit sets champions on fire dealing 20 - 40 bonus magic damage based on level after 1s.<br><br>Cooldown: 10s",
+          "wiki_descriptions": [
+            "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42. 35 (based on level) bonus magic damage after 1 second."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42. 35 (based on level) bonus magic damage after 1 second.",
+              "effect_type": "damage",
+              "stat": "damage",
+              "unit": "seconds",
+              "values": null,
+              "value_range": [
+                20,
+                42.0
+              ],
+              "numbers_extracted": [
+                20,
+                42.0,
+                35,
+                1
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 20,
+                "max": 42.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "conditional",
+              "applies_to": "enemy_champion",
+              "formula": {
+                "type": "range",
+                "min": 20,
+                "max": 42.0,
+                "unit": "seconds"
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            }
+          ],
+          "template_source": "Template:Rune data Scorch"
+        },
+        {
+          "id": 8232,
+          "key": "Waterwalking",
+          "name": "Waterwalking",
+          "icon": "perk-images/Styles/Sorcery/Waterwalking/Waterwalking.png",
+          "short_desc": "Gain <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> and AP or AD, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> in the river.",
+          "long_desc": "Gain <speed>10 Move Speed</speed> and <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>13 - 30 Adaptive Force</font></lol-uikit-tooltipped-keyword> (based on level) when in the river.<br><br><i>May you be as swift as the rushing river and agile as a startled Rift Scuttler.</i>",
+          "wiki_descriptions": [
+            "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 – 19. 2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
+            "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 – 19. 2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
+              "effect_type": "damage",
+              "stat": "attack_damage",
+              "unit": null,
+              "values": null,
+              "value_range": [
+                8,
+                19.0
+              ],
+              "numbers_extracted": [
+                10,
+                7.0,
+                8,
+                19.0,
+                2,
+                13,
+                32
+              ],
+              "scaling": {
+                "type": "by_level",
+                "min": 8,
+                "max": 19.0,
+                "levels": [
+                  1,
+                  18
+                ]
+              },
+              "trigger": "conditional",
+              "applies_to": null,
+              "formula": {
+                "type": "range",
+                "min": 8,
+                "max": 19.0,
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.9
+            },
+            {
+              "raw": "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed.",
+              "effect_type": "condition_note",
+              "stat": "adaptive_stat_selection_rule",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.75
+            }
+          ],
+          "template_source": "Template:Rune data Waterwalking"
+        },
+        {
+          "id": 8236,
+          "key": "GatheringStorm",
+          "name": "Gathering Storm",
+          "icon": "perk-images/Styles/Sorcery/GatheringStorm/GatheringStorm.png",
+          "short_desc": "Gain increasing amounts of AD or AP, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> over the course of the game.",
+          "long_desc": "Every 10 min gain AP or AD, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword>.<br><br><i>10 min</i>: + 8 AP or 5 AD <br><i>20 min</i>: + 24 AP or 14 AD<br><i>30 min</i>: + 48 AP or 29 AD<br><i>40 min</i>: + 80 AP or 48 AD<br><i>50 min</i>: + 120 AP or 72 AD<br><i>60 min</i>: + 168 AP or 101 AD<br>etc...",
+          "wiki_descriptions": [
+            "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
+            "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
+          ],
+          "effects_structured": [
+            {
+              "raw": "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
+              "effect_type": "damage",
+              "stat": "attack_damage",
+              "unit": null,
+              "values": [
+                10,
+                0,
+                4.0,
+                8,
+                14.0,
+                4,
+                28.0,
+                8,
+                48,
+                72,
+                100.0,
+                8,
+                134.0,
+                4,
+                0,
+                8,
+                24,
+                48,
+                80,
+                120,
+                168,
+                224
+              ],
+              "value_range": null,
+              "numbers_extracted": [
+                10,
+                0,
+                4.0,
+                8,
+                14.0,
+                4,
+                28.0,
+                8,
+                48,
+                72,
+                100.0,
+                8,
+                134.0,
+                4,
+                0,
+                8,
+                24,
+                48,
+                80,
+                120,
+                168,
+                224
+              ],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": null,
+              "applies_to": null,
+              "formula": {
+                "type": "per_rank",
+                "values": [
+                  10,
+                  0,
+                  4.0,
+                  8,
+                  14.0,
+                  4,
+                  28.0,
+                  8,
+                  48,
+                  72,
+                  100.0,
+                  8,
+                  134.0,
+                  4,
+                  0,
+                  8,
+                  24,
+                  48,
+                  80,
+                  120,
+                  168,
+                  224
+                ],
+                "unit": null
+              },
+              "conditions": [],
+              "parse_confidence": 0.8
+            },
+            {
+              "raw": "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed.",
+              "effect_type": "condition_note",
+              "stat": "adaptive_stat_selection_rule",
+              "unit": null,
+              "values": null,
+              "value_range": null,
+              "numbers_extracted": [],
+              "scaling": {
+                "type": "by_stat"
+              },
+              "trigger": "passive",
+              "applies_to": "self",
+              "formula": null,
+              "conditions": [],
+              "parse_confidence": 0.75
+            }
+          ],
+          "template_source": "Template:Rune data Gathering Storm"
+        }
+      ]
+    }
+  ],
+  "selection_rules": {
+    "keystone_slots_required": 1,
+    "minor_slots_required": 3
+  },
+  "schema_notes": {
+    "effects_structured": "Best-effort numeric parsing with canonical stat keys. Use raw text for exact wording.",
+    "wiki_templates": "Descriptions sourced from Template:Rune data <Rune Name> when available.",
+    "stat_shards_source": "Parsed from LoL Wiki Rune shards table.",
+    "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
+    "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
+    "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "primary rune-tree split generation"
+    }
+  ]
+}

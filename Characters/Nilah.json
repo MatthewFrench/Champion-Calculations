@@ -1,0 +1,378 @@
+{
+  "name": "Nilah",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 570.0,
+      "per_level": 101.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 350.0,
+      "per_level": 35.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 27.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 225.0,
+    "health_regeneration": {
+      "base": 6.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 8.2,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 58.0,
+      "per_level": 2.0
+    },
+    "attack_speed": {
+      "base": 0.697,
+      "per_level_percent": 1.25
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.08,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Joy Unending",
+      "type": "Passive",
+      "description_source": "Innate: Whenever  Nilah kills a  minion, she and the nearest allied champion gain an additional portion of the  experience they would have lost from sharing.",
+      "effects": [
+        {
+          "id": "nilah_p_effect_1",
+          "description": "Innate: Whenever Nilah kills a minion, she and the nearest allied champion gain an additional 50% of the experience they would have lost from sharing."
+        },
+        {
+          "id": "nilah_p_effect_2",
+          "description": "Innate: Whenever a nearby allied champion uses an ability to heal or shield either Nilah or themselves, both they and Nilah receive a bonus amount equal to 7.5% of the healing or 15% of the shielding after a 0.5-second delay. Bonus shielding lasts as long as the shield that triggered the effect, up to a maximum duration of 4 seconds."
+        }
+      ],
+      "description": "Innate: Whenever Nilah kills a minion, she and the nearest allied champion gain an additional 50% of the experience they would have lost from sharing.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 1000.",
+        "Source notes (summary): Nilah will gain a portion of all healing and all shielding from nearby allies that activate either of the effects on themselves while she is within range of them."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Formless Blade",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Passive:  Nilah gains  armor penetration based on her  critical strike chance. Also, her basic attacks and Formless Blade against  champions  heal her based on her  critical strike chance; overhealing becomes a  shield that lasts a few seconds.",
+      "effects": [
+        {
+          "id": "nilah_q_effect_1",
+          "description": "Passive: Nilah gains 0% : 30% (based on critical strike chance) armor penetration. Her basic attacks and Formless Blade heal her for 0% : 20% (based on critical strike chance) of the post-mitigation damage dealt to champions, converting each heal instance beyond maximum health into a shield that lasts 6 seconds."
+        },
+        {
+          "id": "minimum_physical_damage",
+          "description": "Minimum Physical Damage",
+          "base_by_rank": [
+            10.0,
+            20.0,
+            30.0,
+            40.0
+          ],
+          "context_notes": "Active: Nilah cracks her whip-blade in a line in the target direction that deals physical damage to enemies hit, increased by 0% : 70% (+ 0% : 21%) (based on critical strike chance)."
+        },
+        {
+          "id": "maximum_physical_damage",
+          "description": "Maximum Physical Damage",
+          "base_by_rank": [
+            19.1,
+            38.2,
+            57.3,
+            76.4
+          ],
+          "context_notes": "Active: Nilah cracks her whip-blade in a line in the target direction that deals physical damage to enemies hit, increased by 0% : 70% (+ 0% : 21%) (based on critical strike chance)."
+        },
+        {
+          "id": "nilah_q_effect_3",
+          "description": "If Formless Blade is cast during Slipstream, Nilah leaves behind a wave that is sent towards her location at the end of the dash, dealing the same damage to enemies hit."
+        },
+        {
+          "id": "nilah_q_effect_4",
+          "description": "If Formless Blade hits an enemy, Nilah empowers herself for 4 seconds: gaining 125 bonus attack range and 10% : 60% (based on level) bonus attack speed, and causing her basic attacks to strike in a cone that deals 100% AD physical damage to enemies hit. Against secondary non-champion targets, this is reduced to 33% AD for minions, and additionally executes minions left below 20 health. On-hit effects are applied only to the primary target."
+        }
+      ],
+      "description": "Passive: Nilah gains 0% : 30% (based on critical strike chance) armor penetration. Her basic attacks and Formless Blade heal her for 0% : 20% (based on critical strike chance) of the post-mitigation damage dealt to champions, converting each heal instance beyond maximum health into a shield that lasts 6 seconds.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.35
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.35 : 0.28 (based on bonus attack speed) / None.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Jubilant Veil",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Nilah briefly envelops herself in mist, during which she gains  ghosting,  move speed and magic damage reduction, and  dodges all non-turret basic attacks.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            15.0,
+            17.5,
+            20.0,
+            22.5,
+            25.0
+          ],
+          "context_notes": "Active: Nilah envelops herself in mist for 2."
+        },
+        {
+          "id": "nilah_w_effect_2",
+          "description": "Allied champions she touches will also be enveloped for 1.5 seconds, gaining the same effects."
+        }
+      ],
+      "description": "Active: Nilah envelops herself in mist for 2.25 seconds, during which she becomes ghosted, gains bonus movement speed, reduces all incoming magic damage taken by 25%, and dodges all non- turret basic attacks.",
+      "cooldown_seconds_by_rank": [
+        26.0,
+        25.0,
+        24.0,
+        23.0,
+        22.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          45.0,
+          30.0,
+          15.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source notes (summary): Allies may only be affected by Jubilant Veil once every 6 seconds."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Slipstream",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Nilah  dashes in the target enemy's direction, dealing physical damage to enemies she passes through.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            70.0,
+            80.0,
+            90.0,
+            100.0
+          ],
+          "context_notes": "Active: Nilah dashes a fixed distance in the direction of the target unit, dealing physical damage to enemies she passes through."
+        },
+        {
+          "id": "nilah_e_effect_2",
+          "description": "Nilah periodically stocks a Slipstream charge, up to a maximum of 2."
+        },
+        {
+          "id": "nilah_e_effect_3",
+          "description": "Slipstream resets Nilah's basic attack timer. Formless Blade and Apotheosis can be cast during the dash."
+        }
+      ],
+      "description": "Active: Nilah dashes a fixed distance in the direction of the target unit, dealing physical damage to enemies she passes through.",
+      "cooldown_seconds_by_rank": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 2200.",
+        "Source notes (summary): Formless Blade used during Slipstream might not register, rendering it on cooldown without being casted."
+      ]
+    },
+    "ultimate": {
+      "name": "Apotheosis",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Nilah whirls her whip-blade for a brief moment, continually dealing physical damage to nearby enemies. She then bursts to deal physical damage and  pull in nearby enemies. Each hit will also  slow enemies for a short time.",
+      "effects": [
+        {
+          "id": "physical_damage_per_tick",
+          "description": "Physical Damage per Tick",
+          "base_by_rank": [
+            15.0,
+            25.0,
+            35.0
+          ],
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            60.0,
+            100.0,
+            140.0
+          ],
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+        },
+        {
+          "id": "burst_physical_damage",
+          "description": "Burst Physical Damage",
+          "base_by_rank": [
+            125.0,
+            225.0,
+            325.0
+          ],
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+        },
+        {
+          "id": "maximum_total_physical_damage",
+          "description": "Maximum Total Physical Damage",
+          "base_by_rank": [
+            185.0,
+            325.0,
+            465.0
+          ],
+          "context_notes": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0."
+        },
+        {
+          "id": "nilah_r_effect_2",
+          "description": "Nilah heals herself and nearby allied champions for 20% : 50% (based on critical strike chance) of the post-mitigation damage dealt to champions, reduced to 10% against non-champions, converting each heal instance beyond maximum health into a shield that last 6 seconds."
+        },
+        {
+          "id": "nilah_r_effect_3",
+          "description": "Nilah is unable to basic attack and cast her other abilities during Apotheosis, but she is able to move."
+        }
+      ],
+      "description": "Active: Nilah whirls her whip-blade over 1 second, dealing physical damage to nearby enemies every 0.25 seconds. She then unleashes a burst that deals physical damage and pulls them 250 units towards her. Each hit also slows targets by 10% for 3 seconds, refreshing on subsequent hits.",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        95.0,
+        80.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 450.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source effectRadius: 450 / 1500.",
+        "Source notes (summary): Apotheosis can pull enemies through walls and can knock them across Nilah's location."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Nilah.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Nilah"
+  }
+}

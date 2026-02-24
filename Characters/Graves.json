@@ -1,0 +1,412 @@
+{
+  "name": "Graves",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Marksman",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 625.0,
+      "per_level": 106.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 325.0,
+      "per_level": 40.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.6
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 425.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 68.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.475,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.294999986886978,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "New Destiny",
+      "type": "Passive",
+      "description_source": "Innate:  Graves'  basic attacks consume up to 2 shells before needing to reload. The reload speed is reduced based on his  bonus attack speed.",
+      "effects": [
+        {
+          "id": "graves_p_effect_1",
+          "description": "Innate - Double Barrel: Graves' basic attacks fire his shotgun to consume ammunition within 2 shells. He will reload over a few seconds immediately after expending all shells or withholding leftover shells for a while. The reload time is reduced by Graves' level and bonus attack speed, and can be interrupted by declaring an attack or casting an ability."
+        },
+        {
+          "id": "graves_p_effect_2",
+          "description": "Innate - 12-Gauge: Graves' basic attack sprays 4 pellets in a cone, each colliding with the first enemy unit in their path, dealing 70% : 105.04% (based on level) AD physical damage plus[ 23.31% : 34.98% (based on level) AD additional physical damage ][ about one-third of the damage ]for each subsequent pellet hitting the same target, up to 139.93% : 209.99% (based on level) AD total physical damage against a single target. Pellets deal 25% reduced damage against structures."
+        },
+        {
+          "id": "graves_p_effect_3",
+          "description": "Critical strikes spray 6 pellets over a 25% wider cone, with each pellet dealing[ (50% + 15%) increased damage, ][ increased damage equal to 50% bonus critical damage, ]resulting in[ 199.976% (+ 19.998%) total damage ][ 279.84% : 419.93% (based on level) (+ 27.98% : 41.99% (based on level)) AD total physical damage ]if all pellets hit a single target."
+        },
+        {
+          "id": "graves_p_effect_4",
+          "description": "Pellets apply life steal. Only the first pellet to hit each enemy applies on-hit effects."
+        },
+        {
+          "id": "graves_p_effect_5",
+          "description": "Innate - Buckshot: Non-champion units hit by more than one pellet are knocked back, though not through terrain."
+        }
+      ],
+      "description": "Innate - Double Barrel: Graves' basic attacks fire his shotgun to consume ammunition within 2 shells. He will reload over a few seconds immediately after expending all shells or withholding leftover shells for a while. The reload time is reduced by Graves' level and bonus attack speed, and can be interrupted by declaring an attack or casting an ability.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source speed: 3800 / 3000 / 3400.",
+        "Source notes (summary): Graves takes 2."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "End of the Line",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Graves fires an explosive shell that deals physical damage to enemies it passes through.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Graves fires a round in the target direction that deals physical damage to enemies it passes through and leaves behind a powder trail."
+        },
+        {
+          "id": "physical_damage_2",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            125.0,
+            170.0,
+            215.0,
+            260.0
+          ],
+          "context_notes": "After 2 seconds, or 0."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            130.0,
+            200.0,
+            270.0,
+            340.0,
+            410.0
+          ],
+          "context_notes": "After 2 seconds, or 0."
+        },
+        {
+          "id": "graves_q_effect_3",
+          "description": "Enemies can only be hit once per pass."
+        }
+      ],
+      "description": "Active: Graves fires a round in the target direction that deals physical damage to enemies it passes through and leaves behind a powder trail.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        11.25,
+        9.5,
+        7.75,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          80.0,
+          80.0,
+          80.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Spell shields can only block one instance of the ability's damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Smoke Screen",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Graves fires a smoke canister at the target location that creates a cloud of smoke upon impact, dealing magic damage and  slowing nearby enemies.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            110.0,
+            160.0,
+            210.0,
+            260.0
+          ],
+          "context_notes": "Active: Graves fires a smoke canister at the target location that upon impact deals magic damage to enemies within the area and slows them by 50% for 0."
+        },
+        {
+          "id": "graves_w_effect_2",
+          "description": "The canister creates a cloud of smoke for 4 seconds that applies nearsight of outside the area to all enemies within every 0.25 seconds, reducing their sight radius relative to the center."
+        }
+      ],
+      "description": "Active: Graves fires a smoke canister at the target location that upon impact deals magic damage to enemies within the area and slows them by 50% for 0.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        26.0,
+        24.0,
+        22.0,
+        20.0,
+        18.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 1500.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Smoke Screen will nearsight untargetable units."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Quickdraw",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Graves  dashes in the target direction and reloads 1 shell. He also gains a  stack of True Grit, doubled if he dashed toward an enemy  champion.",
+      "effects": [
+        {
+          "id": "graves_e_effect_1",
+          "description": "Active: Graves dashes to the target location, reloading one shell while generating a stack of True Grit for 4 seconds, stacking up to 8 times. Dashing towards an enemy champion generates 2 stacks of True Grit."
+        },
+        {
+          "id": "graves_e_effect_2",
+          "description": "Quickdraw's current cooldown is reduced by 0.5 seconds for every pellet impacting an enemy."
+        },
+        {
+          "id": "bonus_armor",
+          "description": "Bonus Armor",
+          "base_by_rank": [
+            4.0,
+            7.0,
+            10.0,
+            13.0,
+            16.0
+          ],
+          "context_notes": "True Grit: For each stack, Graves gains bonus armor, and bonus magic resistance equal to 50% of that amount."
+        },
+        {
+          "id": "maximum_bonus_armor",
+          "description": "Maximum Bonus Armor",
+          "base_by_rank": [
+            32.0,
+            56.0,
+            80.0,
+            104.0,
+            128.0
+          ],
+          "context_notes": "True Grit: For each stack, Graves gains bonus armor, and bonus magic resistance equal to 50% of that amount."
+        },
+        {
+          "id": "bonus_magic_resistance",
+          "description": "Bonus Magic Resistance",
+          "base_by_rank": [
+            2.0,
+            3.5,
+            5.0,
+            6.5,
+            8.0
+          ],
+          "context_notes": "True Grit: For each stack, Graves gains bonus armor, and bonus magic resistance equal to 50% of that amount."
+        },
+        {
+          "id": "maximum_bonus_mr",
+          "description": "Maximum Bonus MR",
+          "base_by_rank": [
+            16.0,
+            28.0,
+            40.0,
+            52.0,
+            64.0
+          ],
+          "context_notes": "True Grit: For each stack, Graves gains bonus armor, and bonus magic resistance equal to 50% of that amount."
+        },
+        {
+          "id": "graves_e_effect_4",
+          "description": "Quickdraw resets Graves' basic attack timer."
+        }
+      ],
+      "description": "Active: Graves dashes to the target location, reloading one shell while generating a stack of True Grit for 4 seconds, stacking up to 8 times. Dashing towards an enemy champion generates 2 stacks of True Grit.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source notes (summary): If Graves dashes while reloading, he can cast any of his abilities during the dash."
+      ]
+    },
+    "ultimate": {
+      "name": "Collateral Damage",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Graves  recoils backward and fires an explosive shell in the target direction that deals physical damage to enemies it passes through.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            275.0,
+            425.0,
+            575.0
+          ],
+          "context_notes": "Active: Graves fires an explosive shell in the target direction that deals physical damage to enemies hit and causes him to recoil 400 units in the opposite direction."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            200.0,
+            320.0,
+            440.0
+          ],
+          "context_notes": "Upon hitting an enemy champion or reaching the end of its range, the shell explodes in a cone to deal reduced damage to additional enemies."
+        }
+      ],
+      "description": "Active: Graves fires an explosive shell in the target direction that deals physical damage to enemies hit and causes him to recoil 400 units in the opposite direction.",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        80.0,
+        60.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2100.0,
+        "effect_hitbox_radius": 740.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2100.",
+        "Source effectRadius: 740.",
+        "Source notes (summary): Applies spell damage to the target hit by the shell (including to non-champions struck before exploding(bug)) and area damage to targets within the explosion cone."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Graves.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Graves"
+  }
+}

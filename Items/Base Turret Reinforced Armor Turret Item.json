@@ -76,9 +76,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.713579+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Manual batch review A-items chunk 1."
+      "Manual batch review A-items chunk 1.",
+      "Turret pseudo-item semantics are sourced from Turret#Items; reinforcement and regeneration behavior are turret-state rules, not casted champion effects."
     ]
   },
   "sources": [
@@ -99,6 +100,18 @@
       "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
       "accessed": "2026-02-23",
       "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki item page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Base_Turret_Reinforced_Armor_(Turret_Item)",
+      "accessed": "2026-02-24",
+      "used_for": "page-level turret-item identity verification (redirect source)"
+    },
+    {
+      "name": "League Wiki gameplay page",
+      "url": "https://wiki.leagueoflegends.com/en-us/Turret",
+      "accessed": "2026-02-24",
+      "used_for": "canonical source for turret pseudo-item mechanics (Reinforced/Regeneration/True Sight)"
     }
   ]
 }

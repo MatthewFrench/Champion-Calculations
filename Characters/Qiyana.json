@@ -1,0 +1,389 @@
+{
+  "name": "Qiyana",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 590.0,
+      "per_level": 121.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 375.0,
+      "per_level": 60.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 31.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 150.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 3.1
+    },
+    "attack_speed": {
+      "base": 0.688,
+      "per_level_percent": 2.1
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.5,
+    "base_windup_seconds": 0.230000004172325,
+    "windup_fraction": 0.15333333611488334,
+    "windup_percent": 15.333333611488333,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.230000004172325,
+      "attack_total_time": 1.5,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Royal Privilege",
+      "type": "Passive",
+      "description_source": "Innate:  Qiyana's  basic attacks  on-hit and  basic abilities deal additional physical damage.",
+      "effects": [
+        {
+          "id": "qiyana_p_effect_1",
+          "description": "Innate: Qiyana's basic attacks on-hit and basic abilities deal 15 : 91 (based on level) (+ 25% bonus AD) (+ 30% AP) additional physical damage. This effect cannot occur on the same target more than once every few seconds."
+        },
+        {
+          "id": "qiyana_p_effect_2",
+          "description": "Gathering an Element with Terrashape resets Royal Privilege's per-target cooldown for enemies affected by Royal Privilege using a different Element (or no Element)."
+        }
+      ],
+      "description": "Innate: Qiyana's basic attacks on-hit and basic abilities deal 15 : 91 (based on level) (+ 25% bonus AD) (+ 30% AP) additional physical damage. This effect cannot occur on the same target more than once every few seconds.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Royal Privilege's trigger from a basic attack can be blocked (additional damage is negated and the on-target cooldown does not apply)."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Edge of Ixtal",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Qiyana slashes forward in the target direction, dealing physical damage to enemies hit in a line.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "Active: Qiyana slashes forward in the target direction, dealing physical damage to enemies in a line, reduced to 75% damage against targets beyond the first."
+        },
+        {
+          "id": "reduced_damage",
+          "description": "Reduced Damage",
+          "base_by_rank": [
+            52.5,
+            75.0,
+            97.5,
+            120.0,
+            142.5
+          ],
+          "context_notes": "Active: Qiyana slashes forward in the target direction, dealing physical damage to enemies in a line, reduced to 75% damage against targets beyond the first."
+        },
+        {
+          "id": "qiyana_q_effect_2",
+          "description": "Gathering an Element with Terrashape resets Edge of Ixtal's cooldown and upgrades it into Elemental Wrath."
+        },
+        {
+          "id": "qiyana_q_effect_3",
+          "description": "If cast during Audacity's dash towards an enemy champion and the target is within 150 units of Qiyana at the end of the dash, Edge of Ixtal will autonomously aim at the target."
+        }
+      ],
+      "description": "Active: Qiyana slashes forward in the target direction, dealing physical damage to enemies in a line, reduced to 75% damage against targets beyond the first. Edge of Ixtal deals 155% damage against monsters.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          35.0,
+          35.0,
+          35.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): If cast during Audacity and the target uses a dash or blink or is no longer in vision, Edge of Ixtal will aim at the target's last location prior to them starting the dash or blink or being in vision."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Terrashape",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive: While holding an Element,  Qiyana gains bonus  attack speed and  attack range, as well as bonus magic damage on her basic attacks and basic abilities. Qiyana gains  bonus movement speed speed while moving near the current Element.",
+      "effects": [
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Passive: While holding an Element, Qiyana gains bonus attack speed, 25 bonus attack range and bonus magic damage on her basic attacks on-hit and basic abilities."
+        },
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            8.0,
+            16.0,
+            24.0,
+            32.0,
+            40.0
+          ],
+          "context_notes": "Passive: While holding an Element, Qiyana gains bonus attack speed, 25 bonus attack range and bonus magic damage on her basic attacks on-hit and basic abilities."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            3.0,
+            5.0,
+            7.0,
+            9.0,
+            11.0
+          ],
+          "context_notes": "Passive: While holding an Element, Qiyana gains bonus attack speed, 25 bonus attack range and bonus magic damage on her basic attacks on-hit and basic abilities."
+        },
+        {
+          "id": "qiyana_w_effect_2",
+          "description": "Active: Qiyana dashes up to 300 units towards the target location to gather the Element of the nearest Brush, River or Terrain she targeted."
+        },
+        {
+          "id": "qiyana_w_effect_3",
+          "description": "A target Element is required to cast this ability."
+        },
+        {
+          "id": "qiyana_w_effect_4",
+          "description": "Once Terrashape has been learned, Qiyana is automatically given the Terrain element upon respawning."
+        },
+        {
+          "id": "qiyana_w_effect_5",
+          "description": "Qiyana can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Passive: While holding an Element, Qiyana gains bonus attack speed, 25 bonus attack range and bonus magic damage on her basic attacks on-hit and basic abilities. While out-of-combat and moving near the Element currently being held, she gains bonus movement speed.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          25.0,
+          30.0,
+          35.0,
+          40.0,
+          45.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 440.0,
+        "effect_hitbox_radius": 366.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 440 + 100% movement speed.",
+        "Source effectRadius: 366.",
+        "Source notes (summary): Terrashape does not interact with player-generated terrain."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Audacity",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Qiyana  dashes toward the target enemy and deals physical damage upon arrival.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            50.0,
+            90.0,
+            130.0,
+            170.0,
+            210.0
+          ],
+          "context_notes": "Active: Qiyana dashes a fixed distance in the direction of the target enemy."
+        },
+        {
+          "id": "qiyana_e_effect_2",
+          "description": "Qiyana can cast any of her abilities during the dash."
+        }
+      ],
+      "description": "Active: Qiyana dashes a fixed distance in the direction of the target enemy. If they are in range upon arrival, she deals physical damage.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          45.0,
+          50.0,
+          55.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 600 + 100% movement speed.",
+        "Source notes (summary): Audacity only damages targets if within 250 range upon completion of the dash."
+      ]
+    },
+    "ultimate": {
+      "name": "Supreme Display of Talent",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Qiyana sweeps a windblast in the target direction that  knocks back enemies hit and stops upon hitting Terrain.",
+      "effects": [
+        {
+          "id": "qiyana_r_effect_1",
+          "description": "Active: Qiyana sweeps a windblast in the target direction that knocks back enemies hit by 375 units, though not through terrain, and stops upon hitting Terrain."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            100.0,
+            200.0,
+            300.0
+          ],
+          "context_notes": "The windblast creates a cascading shockwave across any River or Brush it passes through, as well as around the borders of Terrain it reaches, dealing physical damage to enemies hit, stunning them for 0."
+        },
+        {
+          "id": "capped_monster_health_damage",
+          "description": "Capped Monster Health Damage",
+          "base_by_rank": [
+            500.0,
+            750.0,
+            1000.0
+          ],
+          "context_notes": "The windblast creates a cascading shockwave across any River or Brush it passes through, as well as around the borders of Terrain it reaches, dealing physical damage to enemies hit, stunning them for 0."
+        }
+      ],
+      "description": "Active: Qiyana sweeps a windblast in the target direction that knocks back enemies hit by 375 units, though not through terrain, and stops upon hitting Terrain.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        120.0,
+        120.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 11000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000 / 2840.",
+        "Source effectRadius: 11000.",
+        "Source notes (summary): The windblast needs only to reach near terrain to trigger the terrain shockwave."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Qiyana.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Qiyana"
+  }
+}

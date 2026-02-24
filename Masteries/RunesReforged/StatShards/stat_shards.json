@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Stat Shards",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "selection_rules": {
+    "stat_shard_slots": 3
+  },
+  "stat_shards": [
+    {
+      "slot": "Slot 1 Offense",
+      "category": "5. 4 bonus Attack Damage or 9 Ability Power ( Adaptive )",
+      "options": [
+        {
+          "text": "10% bonus attack speed",
+          "numbers_extracted": [
+            10
+          ],
+          "unit_hint": "percent",
+          "stat": "attack_speed"
+        },
+        {
+          "text": "8 ability haste",
+          "numbers_extracted": [
+            8
+          ],
+          "unit_hint": null,
+          "stat": "ability_haste"
+        }
+      ]
+    },
+    {
+      "slot": "Slot 2 Flex",
+      "category": "5. 4 bonus Attack Damage or 9 Ability Power ( Adaptive )",
+      "options": [
+        {
+          "text": "2. 5 % bonus movement speed",
+          "numbers_extracted": [
+            2.0,
+            5
+          ],
+          "unit_hint": "percent",
+          "stat": "movement_speed"
+        },
+        {
+          "text": "10 – 200 (based on level) bonus health",
+          "numbers_extracted": [
+            10,
+            200
+          ],
+          "unit_hint": "health",
+          "stat": "health"
+        }
+      ]
+    },
+    {
+      "slot": "Slot 3 Defense",
+      "category": "65 bonus health",
+      "options": [
+        {
+          "text": "15% tenacity and slow resist",
+          "numbers_extracted": [
+            15
+          ],
+          "unit_hint": "percent",
+          "stat": "tenacity"
+        },
+        {
+          "text": "10 – 200 (based on level) bonus health",
+          "numbers_extracted": [
+            10,
+            200
+          ],
+          "unit_hint": "health",
+          "stat": "health"
+        }
+      ]
+    }
+  ],
+  "canonical_stat_keys": [
+    "ability_haste",
+    "ability_power",
+    "adaptive",
+    "armor",
+    "attack_damage",
+    "attack_speed",
+    "cooldown",
+    "critical_strike",
+    "damage",
+    "energy",
+    "experience",
+    "gold",
+    "healing",
+    "health",
+    "lifesteal",
+    "magic_damage",
+    "magic_resistance",
+    "mana",
+    "mana_regen",
+    "missing_health",
+    "movement_speed",
+    "omnivamp",
+    "physical_damage",
+    "shield",
+    "slow_resist",
+    "tenacity",
+    "true_damage"
+  ],
+  "schema_notes": {
+    "effects_structured": "Best-effort numeric parsing with canonical stat keys. Use raw text for exact wording.",
+    "wiki_templates": "Descriptions sourced from Template:Rune data <Rune Name> when available.",
+    "stat_shards_source": "Parsed from LoL Wiki Rune shards table.",
+    "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
+    "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
+    "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "stat shard split generation"
+    }
+  ]
+}

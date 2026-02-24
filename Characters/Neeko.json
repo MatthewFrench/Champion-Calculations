@@ -1,0 +1,411 @@
+{
+  "name": "Neeko",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Burst",
+    "Catcher",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 450.0,
+      "per_level": 30.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.7
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 48.0,
+      "per_level": 2.5
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.54999995231628,
+    "base_windup_seconds": 0.3100000023841858,
+    "windup_fraction": 0.2000000076909227,
+    "windup_percent": 20.000000769092267,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3100000023841858,
+      "attack_total_time": 1.54999995231628,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Inherent Glamour",
+      "type": "Passive",
+      "description_source": "Innate:  Neeko has a collection of disguises to take on the appearance of allied champions. She can choose a new champion to switch her disguise or select herself to deactivate her disguise. Standing near a non-champion unit will collect its Sho'Ma, adding its disguise to the collection. She can collect only one Sho'Ma, but can discard or consume it.",
+      "effects": [
+        {
+          "id": "neeko_p_effect_1",
+          "description": "Innate: Neeko has a collection of disguises to take on the appearance of allied champions. She can choose a new champion to switch her disguise or select herself to deactivate her disguise, placing Inherent Glamour on a 0.5-second cooldown. Taking damage from a champion or turret while not disguised puts Inherent Glamour on a 2-second cooldown."
+        },
+        {
+          "id": "neeko_p_effect_2",
+          "description": "Standing by the nearest visible allied or neutral non-champion non-structure unit while not disguised will gather its Sho'Ma over 2 seconds, adding its disguise to the collection. Activating this disguise places Inherent Glamour on a 1-second cooldown. Neeko can collect only one Sho'Ma, but can discard or consume it. She can store Sho'Ma from the following units, as long as they are targetable:\n\nNon-epic monsters\n Minions\n Traps\n Wards\n Pets\nJungle plants"
+        },
+        {
+          "id": "neeko_p_effect_3",
+          "description": "While disguised, Neeko can use basic attacks while keeping her form. Her disguise breaks if she:\n\nuses a damaging ability, summoner spell, or item active\nbecomes immobilized\ntakes damage lethal to the disguise's form\nenters the enemy team's spawn platform*\nbegins a channel other than Recall / Empowered Recall\ndeals damage to a structure with a non-champion disguise form\ntakes damage from a turret\n dies"
+        },
+        {
+          "id": "neeko_p_effect_4",
+          "description": "Breaking the disguise via dying, being immobilized or taking damage from a turret puts Inherent Glamour on a 2-second cooldown, entering the enemy spawn platform does not put it on cooldown, and all other methods of breaking the disguise put Inherent Glamour on a 1-second cooldown."
+        },
+        {
+          "id": "neeko_p_effect_5",
+          "description": "Inherent Glamour's disguise is not deactivated from Pop Blossom until after 0.5 seconds of its cast. Neeko cannot activate Inherent Glamour while she is affected by cast-inhibiting crowd control or a lockout that disables casting abilities."
+        }
+      ],
+      "description": "Innate: Neeko has a collection of disguises to take on the appearance of allied champions. She can choose a new champion to switch her disguise or select herself to deactivate her disguise, placing Inherent Glamour on a 0.5-second cooldown. Taking damage from a champion or turret while not disguised puts Inherent Glamour on a 2-second cooldown.",
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source notes (summary): Before disguising Neeko's disguise collection is offered through a special menu in the HUD."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Blooming Burst",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Neeko tosses a seed that blooms at the target location, dealing magic damage to nearby enemies.",
+      "effects": [
+        {
+          "id": "initial_magic_damage",
+          "description": "Initial Magic Damage",
+          "base_by_rank": [
+            60.0,
+            110.0,
+            160.0,
+            210.0,
+            260.0
+          ],
+          "context_notes": "Active: Neeko tosses a seed that bursts upon landing at the target location, dealing magic damage to nearby enemies."
+        },
+        {
+          "id": "subsequent_magic_damage",
+          "description": "Subsequent Magic Damage",
+          "base_by_rank": [
+            35.0,
+            60.0,
+            85.0,
+            110.0,
+            135.0
+          ],
+          "context_notes": "If the burst kills an enemy or hits a champion or large monster, the seed blooms after 0."
+        },
+        {
+          "id": "total_maximum_magic_damage",
+          "description": "Total Maximum Magic Damage",
+          "base_by_rank": [
+            130.0,
+            230.0,
+            330.0,
+            430.0,
+            530.0
+          ],
+          "context_notes": "If the burst kills an enemy or hits a champion or large monster, the seed blooms after 0."
+        },
+        {
+          "id": "bonus_monster_damage",
+          "description": "Bonus Monster Damage",
+          "base_by_rank": [
+            35.0,
+            50.0,
+            65.0,
+            80.0,
+            95.0
+          ],
+          "context_notes": "Each bloom deals bonus magic damage against monsters."
+        }
+      ],
+      "description": "Active: Neeko tosses a seed that bursts upon landing at the target location, dealing magic damage to nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.5,
+        8.0,
+        7.5,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2000.0,
+        "effect_hitbox_radius": 250.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source speed: 2000.",
+        "Source effectRadius: 250.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Shapesplitter",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Neeko's  basic attacks  on-hit generate  stacks of Shapesplitter. At 2 stacks, her next basic attack will consume them all to become  non-projectile, deal bonus magic damage, and briefly grant her  bonus move speed.",
+      "effects": [
+        {
+          "id": "bonus_magic_damage",
+          "description": "Bonus Magic Damage",
+          "base_by_rank": [
+            30.0,
+            65.0,
+            100.0,
+            135.0,
+            170.0
+          ],
+          "context_notes": "Passive: Neeko's basic attacks on-hit generate a stack of Shapesplitter, which refreshes on subsequent attacks and stacks up to 2 times."
+        },
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            10.0,
+            17.5,
+            25.0,
+            32.5,
+            40.0
+          ],
+          "context_notes": "Passive: Neeko's basic attacks on-hit generate a stack of Shapesplitter, which refreshes on subsequent attacks and stacks up to 2 times."
+        },
+        {
+          "id": "bonus_movement_speed_2",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Neeko creates a clone of her current form, after which they both instantly become invisible for 0."
+        },
+        {
+          "id": "neeko_w_effect_3",
+          "description": "The clone lasts for 3 seconds, moves a fixed distance in the target direction, and is untargetable to allies and for the first 0.5 seconds of its lifespan to enemies. If the clone takes damage, it will disappear prematurely after 0.5 seconds.Casting an ability, summoner spell, item active, or starting a channel causes the clone to stop moving. Additionally, the clone plays the casting animations for Blooming Burst and Tangle-Barbs as well as Pop Blossom's visual effects whenever Neeko casts them. The clone will also play the animation of her next expression or Recall for a set duration that overrides its original duration and will become unable to move while doing so."
+        },
+        {
+          "id": "neeko_w_effect_4",
+          "description": "Recast: Neeko sends her clone to the target location if it is not playing an expression or Recall animation."
+        }
+      ],
+      "description": "Passive: Neeko's basic attacks on-hit generate a stack of Shapesplitter, which refreshes on subsequent attacks and stacks up to 2 times. At 2 stacks, her next basic attack on-attack consumes them all to become non-projectile, deal bonus magic damage and grant her bonus movement speed for 1 second. This attack deals 75 bonus magic damage against monsters.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.0,
+        14.0,
+        13.0,
+        12.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Location.",
+        "Source castTime: none.",
+        "Source notes (summary): The empowered attack will not trigger against wards and jungle plants."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Tangle-Barbs",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Neeko slings a magical spiral in the target direction that deals magic damage and  roots enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            105.0,
+            140.0,
+            175.0,
+            210.0
+          ],
+          "context_notes": "Active: Neeko slings a magical spiral in the target direction that deals magic damage to enemies hit and roots them for a duration."
+        },
+        {
+          "id": "root_duration",
+          "description": "Root Duration",
+          "base_by_rank": [
+            0.7,
+            0.9,
+            1.1,
+            1.3,
+            1.5
+          ],
+          "context_notes": "Active: Neeko slings a magical spiral in the target direction that deals magic damage to enemies hit and roots them for a duration."
+        },
+        {
+          "id": "empowered_root_duration",
+          "description": "Empowered Root Duration",
+          "base_by_rank": [
+            1.8,
+            2.1,
+            2.4,
+            2.7,
+            3.0
+          ],
+          "context_notes": "If the spiral hits at least one enemy, it grows in size and its speed and root duration is increased."
+        }
+      ],
+      "description": "Active: Neeko slings a magical spiral in the target direction that deals magic damage to enemies hit and roots them for a duration.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        11.5,
+        11.0,
+        10.5,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1300.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1300 / 1500.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "Pop Blossom",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "neeko_r_effect_1",
+          "description": "Active: Neeko winds up spiritual essence over 1.25 seconds and highlights an area around herself, which is visible to enemies unless she is disguised. If Neeko is in a disguise, it will break after 0.5 seconds into the duration."
+        },
+        {
+          "id": "neeko_r_effect_2",
+          "description": "After winding up, the cast time begins and Neeko leaps upward, knocking up nearby enemies for 0.6 seconds."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            350.0,
+            550.0
+          ],
+          "context_notes": "When the cast time ends, she lands to emit a burst of energy that deals magic damage to nearby enemies and stuns them for 0."
+        }
+      ],
+      "description": "Active: Neeko winds up spiritual essence over 1.25 seconds and highlights an area around herself, which is visible to enemies unless she is disguised. If Neeko is in a disguise, it will break after 0.5 seconds into the duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        105.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.6,
+        "effect_hitbox_radius": 590.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.6.",
+        "Source effectRadius: 590 /  600.",
+        "Source notes (summary): Ability details: The wind up uses a special bar similar to cast bars to represent when Pop Blossom's cast time will start."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Neeko.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Neeko"
+  }
+}

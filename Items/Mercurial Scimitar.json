@@ -39,16 +39,25 @@
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
-        "exclude_airborne"
+        "exclude_airborne",
+        "disabled_while_airborne"
       ],
       "status_effects": [
         "crowd_control_removed"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "auto_targeted_self_activation": true,
+        "no_cast_time": true,
+        "does_not_break_stealth": true,
+        "removes_suppression": true,
+        "removes_nearsight": true,
+        "cooldown_does_not_transfer_between_quicksilver_items": true
+      },
       "numbers_extracted": [
-        2
+        90
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.78
     },
     {
       "id": "quicksilver_bonus_movement_speed_and_ghosted",
@@ -74,7 +83,7 @@
         50,
         2
       ],
-      "parse_confidence": 0.74
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
@@ -103,8 +112,9 @@
     "effects_structured_generated_at": "2026-02-09T23:46:08.056381+00:00",
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Execution model: Quicksilver is a self-activated cleanse that removes most crowd-control effects but does not remove airborne effects.",
-      "Execution model: On successful activation, movement-speed bonus and Ghosting apply immediately for 2 seconds using a shared 90-second active cooldown."
+      "Execution model: Quicksilver is a self-activated cleanse with no cast time that removes most crowd-control effects (including suppression and nearsight) while excluding airborne effects.",
+      "Player-visible behavior: activation can be used while stealthed without breaking stealth, cannot be used while airborne, and movement-speed plus Ghosting apply immediately for 2 seconds.",
+      "Follow-up note: page notes indicate Quicksilver-group cooldown does not transfer between items and this should be mirrored in runtime item-group cooldown handling."
     ]
   },
   "sources": [

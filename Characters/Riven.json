@@ -1,0 +1,291 @@
+{
+  "name": "Riven",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Fighter",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 630.0,
+      "per_level": 100.0
+    },
+    "resource": {
+      "type": "none",
+      "base": 0.0,
+      "per_level": 0.0,
+      "context_notes": "Champion does not use mana/energy as a standard regenerating resource for ability costs."
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 33.0,
+      "per_level": 4.4
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.5,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.133333340287208,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Runic Blade",
+      "type": "Passive",
+      "description_source": "Innate:  Riven's  ability casts generate  stacks of Charge, which stacks up to a cap. Riven's  basic attacks consume a stack to deal bonus physical damage.",
+      "effects": [
+        {
+          "id": "riven_p_effect_1",
+          "description": "Innate: Riven's ability casts generate a stack of Charge for 6 seconds, refreshing on subsequent casts and stacking up to 3 times. Riven's basic attacks are empowered to each consume a stack to deal bonus physical damage equal to 30% : 46.76% (based on level) AD, reduced to[ 50% ][ 15% : 23.38% (based on level) AD ]against structures. Against monsters, it also deals 50 additional bonus physical damage."
+        },
+        {
+          "id": "riven_p_effect_2",
+          "description": "The bonus damage is affected by critical strike modifiers and applies life steal at 100% effectiveness."
+        }
+      ],
+      "description": "Innate: Riven's ability casts generate a stack of Charge for 6 seconds, refreshing on subsequent casts and stacking up to 3 times. Riven's basic attacks are empowered to each consume a stack to deal bonus physical damage equal to 30% : 46.76% (based on level) AD, reduced to[ 50% ][ 15% : 23.38% (based on level) AD ]against structures. Against monsters, it also deals 50 additional bonus physical damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Runic Blade's duration also refreshes when Riven consumes a stack."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Broken Wings",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Riven can cast this ability up to three times in quick succession, dealing physical damage to enemies hit.\nFirst Cast: Riven  dashes forward and slashes her sword in a circle.\nSecond Cast: Riven mimics the first cast.\nThird Cast: Riven mimics the first cast's dash, but now slams her sword in a larger circle, briefly  knocking back enemies hit as well.",
+      "effects": [
+        {
+          "id": "riven_q_effect_1",
+          "description": "Active: Riven can activate Broken Wings three times before the ability goes on cooldown, with a 0.3125-second static cooldown between casts. If Riven does not recast the ability within 4 seconds of the previous cast, it goes on cooldown."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            45.0,
+            75.0,
+            105.0,
+            135.0,
+            165.0
+          ],
+          "context_notes": "Riven slashes with her sword for each of the three casts, dealing physical damage to enemies struck within an area, resetting her basic attack timer, and ordering her to basic attack the target of Broken Wings if there are any."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            135.0,
+            225.0,
+            315.0,
+            405.0,
+            495.0
+          ],
+          "context_notes": "Riven slashes with her sword for each of the three casts, dealing physical damage to enemies struck within an area, resetting her basic attack timer, and ordering her to basic attack the target of Broken Wings if there are any."
+        },
+        {
+          "id": "riven_q_effect_3",
+          "description": "First Cast: Riven dashes 225 units in the direction she is currently facing, or up to 225 units towards the target enemy, striking enemies in the target area 100 units away. This cast cannot cross terrain."
+        },
+        {
+          "id": "riven_q_effect_4",
+          "description": "Second Cast: Riven mimics the first cast's effects."
+        },
+        {
+          "id": "riven_q_effect_5",
+          "description": "Third Cast: Riven mimics the first cast's effects in a larger area while also knocking back enemies hit 75 units over 0.5 seconds. This cast can cross terrain."
+        }
+      ],
+      "description": "Active: Riven can activate Broken Wings three times before the ability goes on cooldown, with a 0.3125-second static cooldown between casts. If Riven does not recast the ability within 4 seconds of the previous cast, it goes on cooldown.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        13.0,
+        13.0,
+        13.0,
+        13.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 150.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 150 / 250 / 200 / 300.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Ki Burst",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Riven emits a flash of runic energy, dealing physical damage and briefly  stunning nearby enemies.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            65.0,
+            95.0,
+            125.0,
+            155.0,
+            185.0
+          ],
+          "context_notes": "Active: Riven emits a flash of runic energy, dealing physical damage to nearby enemies and stunning them for 0."
+        }
+      ],
+      "description": "Active: Riven emits a flash of runic energy, dealing physical damage to nearby enemies and stunning them for 0.75 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 300.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 300 / 360.",
+        "Source notes (summary): Riven is briefly unable to basic attack after the cast time."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Valor",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Riven  dashes in the target direction and gains a brief  shield.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            70.0,
+            95.0,
+            120.0,
+            145.0,
+            170.0
+          ],
+          "context_notes": "Active: Riven dashes in the target direction, though not through terrain, while granting herself a shield for 1."
+        },
+        {
+          "id": "riven_e_effect_2",
+          "description": "Riven can cast any of her abilities during the dash. Valor will cast at max range if cast beyond that."
+        }
+      ],
+      "description": "Active: Riven dashes in the target direction, though not through terrain, while granting herself a shield for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source notes (summary): This ability always employs Quick cast."
+      ]
+    },
+    "ultimate": {
+      "name": "Blade of the Exile",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Riven empowers her blade for some time, gaining  bonus attack damage and increased  range on her  basic attacks,  Broken Wings and  Ki Burst.",
+      "effects": [
+        {
+          "id": "riven_r_effect_1",
+          "description": "Active: Riven empowers her blade for 15 seconds, gaining 25% AD bonus attack damage, 75 bonus attack range, and increased range on Broken Wings and Ki Burst. After 0.5 seconds, she can cast Wind Slash within the duration."
+        }
+      ],
+      "description": "Active: Riven empowers her blade for 15 seconds, gaining 25% AD bonus attack damage, 75 bonus attack range, and increased range on Broken Wings and Ki Burst. After 0.5 seconds, she can cast Wind Slash within the duration.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        90.0,
+        60.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): All bonuses are gained after 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Riven.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Riven"
+  }
+}

@@ -1,0 +1,401 @@
+{
+  "name": "Wukong",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Diver",
+    "Fighter",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 330.0,
+      "per_level": 65.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 31.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 3.5,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 66.0,
+      "per_level": 3.5
+    },
+    "attack_speed": {
+      "base": 0.69,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0916666686534881,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Stone Skin",
+      "type": "Passive",
+      "description_source": "Innate:  Wukong gains  bonus armor based on level and  health regeneration equal to a portion of his maximum health.",
+      "effects": [
+        {
+          "id": "monkeyking_p_effect_1",
+          "description": "Innate: Wukong gains 6 : 10.47 (based on level) bonus armor and regenerates an additional[ 0.35% of his maximum health every 5 seconds. ][ 0.035% of his maximum health every 0.5 seconds. ]Whenever Wukong or his clone damage an enemy champion or monster with his basic attacks or abilities, he generates a stack of Strength of Stone for 5 seconds, refreshing on subsequent hits and stacking up to 5 times. Stacks expire one by one every second when the duration ends."
+        },
+        {
+          "id": "monkeyking_p_effect_2",
+          "description": "Strength of Stone: For each stack,[ Stone Skin's effects are increased by 100%, ][ Wukong gains 6 : 10 (based on level) additional bonus armor and further regenerates an additional 0.35% of his maximum health every 5 seconds, ]up to a maximum of 36 : 62.82 (based on level) bonus armor and total additional regeneration of[ 2.1% maximum health every 5 seconds. ][ 0.21% maximum health every 0.5 seconds. ]"
+        }
+      ],
+      "description": "Innate: Wukong gains 6 : 10.47 (based on level) bonus armor and regenerates an additional[ 0.35% of his maximum health every 5 seconds. ][ 0.035% of his maximum health every 0.5 seconds. ]Whenever Wukong or his clone damage an enemy champion or monster with his basic attacks or abilities, he generates a stack of Strength of Stone for 5 seconds, refreshing on subsequent hits and stacking up to 5 times. Stacks expire one by one every second when the duration ends.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Stacks of Strength of Stone are also granted on-hit, but will specifically not be if the target is invulnerable."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Crushing Blow",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Wukong's next basic attack within a few seconds will gain  bonus range, deal bonus physical damage, and inflict  armor reduction for a short time.",
+      "effects": [
+        {
+          "id": "bonus_range",
+          "description": "Bonus Range",
+          "base_by_rank": [
+            135.0,
+            145.0,
+            155.0,
+            165.0,
+            175.0
+          ],
+          "context_notes": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds."
+        },
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            20.0,
+            45.0,
+            70.0,
+            95.0,
+            120.0
+          ],
+          "context_notes": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds."
+        },
+        {
+          "id": "armor_reduction",
+          "description": "Armor Reduction",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds."
+        },
+        {
+          "id": "monkeyking_q_effect_2",
+          "description": "Crushing Blow's cooldown is reduced by 0.5 seconds whenever Wukong or his clone damage an enemy."
+        },
+        {
+          "id": "monkeyking_q_effect_3",
+          "description": "Crushing Blow resets Wukong's and his clone's basic attack timer. Other abilities can be used during the attack's animation."
+        }
+      ],
+      "description": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.5,
+        7.0,
+        6.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          20.0,
+          20.0,
+          20.0,
+          20.0,
+          20.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Crushing Blow triggers on structures and wards but the armor reduction is not applied."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Warrior Trickster",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Wukong enters brief  invisibility and  dashes to the target location, leaving behind a  clone for a short time.",
+      "effects": [
+        {
+          "id": "monkeyking_w_effect_1",
+          "description": "Active: Wukong enters invisibility for 1 second and dashes in the target direction, leaving behind a clone of himself at his casting position for 3.25 seconds."
+        },
+        {
+          "id": "monkeyking_w_effect_2",
+          "description": "The clone is untargetable to allies and can basic attack autonomously, prioritizing the last enemy Wukong damaged. It can also gain the effects of Crushing Blow and Nimbus Strike's bonus attack speed, and casts Cyclone whenever Wukong does."
+        },
+        {
+          "id": "clone_outgoing_damage",
+          "description": "Clone Outgoing Damage",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "The clone deals reduced damage."
+        },
+        {
+          "id": "monkeyking_w_effect_4",
+          "description": "See Pets for more details about Wukong's clone. Wukong can cast any of his abilities during the dash."
+        }
+      ],
+      "description": "Active: Wukong enters invisibility for 1 second and dashes in the target direction, leaving behind a clone of himself at his casting position for 3.25 seconds.",
+      "cooldown_seconds_by_rank": [
+        22.0,
+        21.0,
+        20.0,
+        19.0,
+        18.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          55.0,
+          50.0,
+          45.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 900.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 900.",
+        "Source effectRadius: Clone's attack range.",
+        "Source notes (summary): Casting Warrior Trickster during an ability's effects will transfer them to the clone."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Nimbus Strike",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Wukong  dashes to the target enemy and sends  untargetable clones to briefly attack up to two surrounding enemies, dealing magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Wukong dashes to the target enemy's location and sends out untargetable clones to strike up to two additional enemies near the target's location, dealing magic damage."
+        },
+        {
+          "id": "bonus_attack_speed",
+          "description": "Bonus Attack Speed",
+          "base_by_rank": [
+            35.0,
+            40.0,
+            45.0,
+            50.0,
+            55.0
+          ],
+          "context_notes": "Upon arrival, Wukong gains bonus attack speed for 5 seconds."
+        },
+        {
+          "id": "monkeyking_e_effect_3",
+          "description": "Crushing Blow can be cast during the dash."
+        }
+      ],
+      "description": "Active: Wukong dashes to the target enemy's location and sends out untargetable clones to strike up to two additional enemies near the target's location, dealing magic damage.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.25,
+        8.5,
+        7.75,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 187.5
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source effectRadius: 187.5.",
+        "Source notes (summary): The clones can block non-targeted attacks or abilities for 0."
+      ]
+    },
+    "ultimate": {
+      "name": "Cyclone",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Wukong spins his staff around for a short time, becoming  ghosted and gaining  bonus movement speed. The staff continually deals physical damage to enemies hit based on their maximum health, and can briefly  knock them up once.",
+      "effects": [
+        {
+          "id": "physical_damage_per_tick",
+          "description": "Physical Damage Per Tick",
+          "base_by_rank": [
+            1.0,
+            1.5,
+            2.0
+          ],
+          "context_notes": "Active: Wukong spins his staff around for up to 2 seconds, becoming ghosted and gaining 20% bonus movement speed."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            8.0,
+            12.0,
+            16.0
+          ],
+          "context_notes": "Active: Wukong spins his staff around for up to 2 seconds, becoming ghosted and gaining 20% bonus movement speed."
+        },
+        {
+          "id": "monkeyking_r_effect_2",
+          "description": "Cyclone can be recast after 0.5 seconds within the duration, and does so automatically afterwards or by casting another ability."
+        },
+        {
+          "id": "maximum_total_physical_damage",
+          "description": "Maximum Total Physical Damage",
+          "base_by_rank": [
+            16.0,
+            24.0,
+            32.0
+          ],
+          "context_notes": "Recast: Wukong ends Cyclone."
+        },
+        {
+          "id": "monkeyking_r_effect_4",
+          "description": "Nimbus Strike's bonus attack speed duration is continuously refreshed while spinning."
+        },
+        {
+          "id": "monkeyking_r_effect_5",
+          "description": "Cyclone's damage is capped at 200 / 400 / 600 (based on level) per second against monsters."
+        }
+      ],
+      "description": "Active: Wukong spins his staff around for up to 2 seconds, becoming ghosted and gaining 20% bonus movement speed. The staff deals physical damage every 0.25 seconds to enemies hit, and can knock them up once for 0.6 seconds. Cyclone will not knock up enemies who were already hit by either Wukong or his clone within the same cast.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        110.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 162.5
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 162.5.",
+        "Source notes (summary): Cyclone is special cased to grant stacks of Conqueror for each tick of damage."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/MonkeyKing.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "MonkeyKing"
+  }
+}

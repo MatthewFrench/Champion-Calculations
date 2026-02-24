@@ -9,28 +9,53 @@
   "passives": [],
   "active": [
     {
-      "effects": "Summons a mist over the target location for 5 seconds, granting {{tip|sight}} of the area in a 375 radius and {{tip|true sight|revealing}} enemy {{tip|stealthed trap|traps}} within for 3 seconds.",
+      "effects": "Summons a mist over the target location for 5 seconds, granting {{tip|sight}} of the area in a 375 radius and {{tip|true sight|revealing}} enemy {{tip|stealthed trap|traps}} within for 3 seconds (30 second cooldown; 800 range).",
       "range": 800
     }
   ],
   "effects_structured": [
     {
       "id": "arcane_sweeper_reveal",
-      "raw": "Reveal area (375 radius) for 5s and traps for 3s. Range 800.",
-      "effect_type": "utility",
+      "raw": "Summon mist over the target area for 5 seconds, reveal the area in 375 radius, and reveal enemy stealthed traps for 3 seconds (30 second cooldown; 800 range).",
+      "effect_type": "reveal",
       "stat": "vision",
-      "duration_seconds": 5,
+      "value": 1,
+      "value_range": null,
+      "unit": "area",
+      "duration_seconds": 5.0,
+      "cooldown_seconds": 30.0,
+      "interval_seconds": null,
       "range_units": 800,
       "radius_units": 375,
-      "trigger": "active",
+      "trigger": "on_activate",
       "applies_to": "area",
       "conditions": [
-        "true_sight_traps_3s"
+        "reveals_stealthed_traps_for_3_seconds",
+        "arena_mode_only",
+        "cannot_activate_first_120_seconds"
       ],
-      "parse_confidence": 0.85
+      "status_effects": [
+        "true_sight_vs_stealthed_traps"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        5,
+        375,
+        3,
+        30,
+        800,
+        120
+      ],
+      "parse_confidence": 0.88
     }
   ],
-  "shop": {},
+  "shop": {
+    "prices": {
+      "total": 0,
+      "sell": 0
+    },
+    "purchasable": false
+  },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3348_arcanesweeper.png",
   "simpleDescription": "Activate to reveal a nearby area of the map",
   "nicknames": [],
@@ -38,9 +63,10 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.710827+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Manual batch review A-items chunk 1."
+      "Execution model: Arcane Sweeper is a targeted trinket cast (800 range) that creates a 5-second vision field, while true-sight trap revealing lasts 3 seconds within the same 375-radius area.",
+      "Mode/availability note: Arcane Sweeper is Arena-scoped and cannot be activated in the first 120 seconds of game time."
     ]
   },
   "sources": [
@@ -61,6 +87,12 @@
       "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
       "accessed": "2026-02-23",
       "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Arcane Sweeper",
+      "url": "https://wiki.leagueoflegends.com/en-us/Arcane_Sweeper",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of active cooldown, target range/radius, first-120s activation lockout, and Arena-scoped availability semantics"
     }
   ]
 }

@@ -13,7 +13,7 @@
       "effects": "Turrets have plating which provide them extra defensive measures against enemies. Attackers are rewarded for destroying portions of the plating."
     }
   ],
-  "active": {},
+  "active": [],
   "effects_structured": [],
   "shop": {},
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1504_turretshielder.png",
@@ -23,9 +23,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.049211+00:00",
-    "effects_structured_reviewed": "2026-02-12",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "No explicit plating values, damage reduction, or reward values are present in the source text."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-24",
+      "used_for": "baseline item identity, stat block, and shop metadata"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-24",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Turret Plating.json",
+      "used_for": "local ingestion snapshot used during item data authoring",
+      "accessed": "2026-02-24"
+    },
+    {
+      "name": "League of Legends Wiki - Turret Plating",
+      "url": "https://wiki.leagueoflegends.com/en-us/Turret_Plating",
+      "accessed": "2026-02-24",
+      "used_for": "page-level identity and availability cross-reference for non-structured item coverage"
+    }
+  ]
 }

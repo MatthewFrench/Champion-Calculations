@@ -1,0 +1,442 @@
+{
+  "name": "Maokai",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Support",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 665.0,
+      "per_level": 109.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 375.0,
+      "per_level": 43.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 6.0,
+      "per_level": 0.6
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 64.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.8,
+      "per_level_percent": 2.125
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": 0.0,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Sap Magic",
+      "type": "Passive",
+      "description_source": "Innate: Periodically,  Maokai's next basic attack will  heal him for a portion of his maximum health.",
+      "effects": [
+        {
+          "id": "maokai_p_effect_1",
+          "description": "Innate: Periodically, Maokai empowers his next basic attack to have an uncancellable windup and heal him for 4% : 14.1% (based on level) maximum health after a 0.25-second delay."
+        },
+        {
+          "id": "maokai_p_effect_2",
+          "description": "Each time Maokai casts an ability, hits at least one enemy champion or epic monster with Sapling Toss, or is struck by an enemy's ability, Sap Magic's cooldown is reduced by 4 seconds, modified to 1.5 if he is hit by a large monster's basic attack or ability."
+        },
+        {
+          "id": "maokai_p_effect_3",
+          "description": "Sap Magic resets Maokai's basic attack timer, and will not trigger if he is above 95% maximum health."
+        }
+      ],
+      "description": "Innate: Periodically, Maokai empowers his next basic attack to have an uncancellable windup and heal him for 4% : 14.1% (based on level) maximum health after a 0.25-second delay.",
+      "cooldown_seconds_by_rank": [
+        30.0,
+        29.41176470588235,
+        28.823529411764707,
+        28.235294117647058,
+        27.647058823529413,
+        27.058823529411764,
+        26.470588235294116,
+        25.88235294117647,
+        25.294117647058822,
+        24.705882352941178,
+        24.11764705882353,
+        23.529411764705884,
+        22.941176470588236,
+        22.352941176470587,
+        21.764705882352942,
+        21.176470588235293,
+        20.588235294117645,
+        20.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Sap Magic does not occur if Maokai begins his attack windup before its cooldown has elapsed."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Bramble Smash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Maokai sends a shockwave in the target direction that deals magic damage and briefly  slows enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            120.0,
+            165.0,
+            210.0,
+            255.0
+          ],
+          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0."
+        },
+        {
+          "id": "bonus_monster_damage",
+          "description": "Bonus Monster Damage",
+          "base_by_rank": [
+            120.0,
+            130.0,
+            140.0,
+            150.0,
+            160.0
+          ],
+          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0."
+        },
+        {
+          "id": "total_monster_damage",
+          "description": "Total Monster Damage",
+          "base_by_rank": [
+            195.0,
+            250.0,
+            305.0,
+            360.0,
+            415.0
+          ],
+          "context_notes": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0."
+        },
+        {
+          "id": "maokai_q_effect_2",
+          "description": "Enemies near Maokai are also stunned for 0.5 seconds and knocked back up to 300 units based on their proximity to him."
+        }
+      ],
+      "description": "Active: Maokai sends a shockwave in the target direction that deals magic damage to enemies hit and slows them by 99% for 0.25 seconds. Bramble Smash deals bonus magic damage to monsters.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        6.5,
+        6.0,
+        5.5,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.3,
+        "projectile_speed": 1600.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.3.",
+        "Source speed: 1600.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Twisted Advance",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Maokai  dashes to the target enemy while being  untargetable, dealing magic damage and briefly  rooting them upon arrival.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            85.0,
+            110.0,
+            135.0,
+            160.0
+          ],
+          "context_notes": "Active: Maokai dashes to the target enemy while being untargetable."
+        },
+        {
+          "id": "root_duration",
+          "description": "Root Duration",
+          "base_by_rank": [
+            1.0,
+            1.1,
+            1.2,
+            1.3,
+            1.4
+          ],
+          "context_notes": "Active: Maokai dashes to the target enemy while being untargetable."
+        }
+      ],
+      "description": "Active: Maokai dashes to the target enemy while being untargetable. Upon arrival, he deals magic damage and roots them for a duration.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1300.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source speed: 1300.",
+        "Source notes (summary): Maokai will track the target if they change locations."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Sapling Toss",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Maokai flings a Sapling to the target location, where it remains for some time. A Sapling will chase nearby enemies for a short time, expiring afterward or upon contact.",
+      "effects": [
+        {
+          "id": "maokai_e_effect_1",
+          "description": "Active: Maokai flings a Sapling to the target location, granting sight of the area."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Once landed, a Sapling remains stationary for 30 seconds or until it reacts to the first nearby visible enemy, chasing them for up to 2."
+        },
+        {
+          "id": "magic_damage_per_instance",
+          "description": "Magic Damage per Instance",
+          "base_by_rank": [
+            33.33,
+            50.0,
+            66.67,
+            83.33,
+            100.0
+          ],
+          "context_notes": "A Sapling placed in a brush becomes empowered: lasting 30 (+ 1."
+        },
+        {
+          "id": "total_attached_sapling_damage",
+          "description": "Total Attached Sapling Damage",
+          "base_by_rank": [
+            66.67,
+            100.0,
+            133.33,
+            166.67,
+            200.0
+          ],
+          "context_notes": "A Sapling placed in a brush becomes empowered: lasting 30 (+ 1."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0
+          ],
+          "context_notes": "A Sapling placed in a brush becomes empowered: lasting 30 (+ 1."
+        },
+        {
+          "id": "minion_damage",
+          "description": "Minion Damage",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "A Sapling placed in a brush becomes empowered: lasting 30 (+ 1."
+        },
+        {
+          "id": "maokai_e_effect_4",
+          "description": "See Pets for more details about Saplings."
+        }
+      ],
+      "description": "Active: Maokai flings a Sapling to the target location, granting sight of the area.",
+      "cooldown_seconds_by_rank": [
+        18.0,
+        17.0,
+        16.0,
+        15.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 175.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 175 / 350 / 475.",
+        "Source notes (summary): Applies area damage from a normal Sapling and deals persistent damage to enemies hit by an empowered Sapling."
+      ]
+    },
+    "ultimate": {
+      "name": "Nature's Grasp",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Maokai summons a colossal wall of five thorny brambles that slowly advances in the target direction, each stopping when they collide with an enemy  champion.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "Active: Maokai summons a colossal wall of five thorny brambles that slowly advances in the target direction, accelerating over time, each stopping when they collide with an enemy champion."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            150.0,
+            225.0,
+            300.0
+          ],
+          "context_notes": "Each bramble deals magic damage to enemies hit and roots them for 0."
+        }
+      ],
+      "description": "Active: Maokai summons a colossal wall of five thorny brambles that slowly advances in the target direction, accelerating over time, each stopping when they collide with an enemy champion. Hitting at least one enemy champion grants Maokai bonus movement speed decaying over 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        110.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 100.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.5.",
+        "Source speed: 100 / 400 / 700 / 750 (based on seconds active).",
+        "Source notes (summary): The brambles are made up of 4 missiles each which trail 100 units behind one another."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Maokai.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Maokai"
+  }
+}

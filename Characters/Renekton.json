@@ -1,0 +1,474 @@
+{
+  "name": "Renekton",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Diver",
+    "Fighter",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 660.0,
+      "per_level": 111.0
+    },
+    "resource": {
+      "type": "fury",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 8.0,
+      "per_level": 0.75
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 69.0,
+      "per_level": 4.15
+    },
+    "attack_speed": {
+      "base": 0.665,
+      "per_level_percent": 2.75
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.122695036232471,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Reign of Anger",
+      "type": "Passive",
+      "description_source": "Innate:  Renekton's  basic attacks  on-hit and  ability hits generate  Fury, which continually expires after a period without fighting. He generates bonus Fury while below half health.",
+      "effects": [
+        {
+          "id": "renekton_p_effect_1",
+          "description": "Innate: Renekton's basic attacks generate 5 Fury on-hit. After 12 seconds of being out of combat and not basic attacking, he loses 1 Fury every 0.25 seconds.Entering combat or using an attack will stop the Fury loss and refresh the timer. Additionally, while Dominus is active, the timer is continuously refreshed."
+        },
+        {
+          "id": "renekton_p_effect_2",
+          "description": "While Renekton has at least 50 Fury, his next basic ability, excluding Slice, consumes 50 Fury to become empowered with an additional effect. Empowered abilities do not generate Fury."
+        },
+        {
+          "id": "renekton_p_effect_3",
+          "description": "Renekton generates 50% bonus Fury from all sources while below 50% of his maximum health."
+        }
+      ],
+      "description": "Innate: Renekton's basic attacks generate 5 Fury on-hit. After 12 seconds of being out of combat and not basic attacking, he loses 1 Fury every 0.25 seconds.Entering combat or using an attack will stop the Fury loss and refresh the timer. Additionally, while Dominus is active, the timer is continuously refreshed.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Basic attacks against any enemy that is not a structure will generate the Fury."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Cull the Meek",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Renekton cleaves around himself, dealing physical damage to nearby enemies. He also generates Fury and  heals for each enemy hit, increased against  champions.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            60.0,
+            90.0,
+            120.0,
+            150.0,
+            180.0
+          ],
+          "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
+        },
+        {
+          "id": "enhanced_damage",
+          "description": "Enhanced Damage",
+          "base_by_rank": [
+            90.0,
+            135.0,
+            180.0,
+            225.0,
+            270.0
+          ],
+          "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
+        },
+        {
+          "id": "healing_cap",
+          "description": "Healing Cap",
+          "base_by_rank": [
+            50.0,
+            75.0,
+            100.0,
+            125.0,
+            150.0
+          ],
+          "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
+        },
+        {
+          "id": "enhanced_healing_cap",
+          "description": "Enhanced Healing Cap",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0,
+            500.0,
+            600.0
+          ],
+          "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
+        },
+        {
+          "id": "non_champion_healing",
+          "description": "Non-Champion Healing",
+          "base_by_rank": [
+            2.0,
+            3.0,
+            4.0,
+            5.0,
+            6.0
+          ],
+          "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
+        },
+        {
+          "id": "enhanced_non_champion_healing",
+          "description": "Enhanced Non-Champion Healing",
+          "base_by_rank": [
+            6.0,
+            9.0,
+            12.0,
+            15.0,
+            18.0
+          ],
+          "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
+        },
+        {
+          "id": "champion_healing",
+          "description": "Champion Healing",
+          "base_by_rank": [
+            12.0,
+            20.0,
+            28.0,
+            36.0,
+            44.0
+          ],
+          "context_notes": "Against champions, the healing is increased."
+        },
+        {
+          "id": "enhanced_champion_healing",
+          "description": "Enhanced Champion Healing",
+          "base_by_rank": [
+            36.0,
+            60.0,
+            84.0,
+            108.0,
+            132.0
+          ],
+          "context_notes": "Against champions, the healing is increased."
+        },
+        {
+          "id": "renekton_q_effect_3",
+          "description": "Renekton generates 2.5 Fury for each non-champion hit and 10 Fury for each champion hit, up to 30 total per cast."
+        },
+        {
+          "id": "renekton_q_effect_4",
+          "description": "Reign of Anger Bonus: Cull the Meek has increased damage, tripled total healing, and a quadrupled healing cap."
+        },
+        {
+          "id": "renekton_q_effect_5",
+          "description": "Renekton cannot basic attack nor cast Slice and Dice or Dominus for 0.25 seconds after Cull the Meek's activation."
+        }
+      ],
+      "description": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 400 / 480.",
+        "Source notes (summary): Healing modifiers such as Spirit Visage and Grievous Wounds take effect after Cull the Meek's healing cap."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Ruthless Predator",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Renekton's next basic attack within a few seconds will strike twice, dealing modified physical damage and briefly  stunning the target.",
+      "effects": [
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            10.0,
+            40.0,
+            70.0,
+            100.0,
+            130.0
+          ],
+          "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0."
+        },
+        {
+          "id": "physical_damage_per_hit",
+          "description": "Physical Damage Per Hit",
+          "base_by_rank": [
+            5.0,
+            20.0,
+            35.0,
+            50.0,
+            65.0
+          ],
+          "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0."
+        },
+        {
+          "id": "renekton_w_effect_2",
+          "description": "Ruthless Predator's first strike can critically strike for (100% + 30%) AD bonus physical damage."
+        },
+        {
+          "id": "total_physical_damage_2",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            15.0,
+            60.0,
+            105.0,
+            150.0,
+            195.0
+          ],
+          "context_notes": "Reign of Anger Bonus: Renekton instead strikes 3 times, completely destroying damage-mitigating shields on the target upon the first strike if they are not a monster, as well as increasing the stun duration to 1."
+        },
+        {
+          "id": "renekton_w_effect_4",
+          "description": "Ruthless Predator resets Renekton's basic attack timer. After Ruthless Predator's standard and empowered attack cast time, Renekton cannot move nor cast Cull the Meek or Slice and Dice for 0.528 seconds. Casting Dominus ends this lockout prematurely."
+        }
+      ],
+      "description": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0.2-second cast time, have 175 range and strike the target twice, dealing modified physical damage and stunning them for 0.75 seconds. Each strike applies on-hit effects and generates Fury. Hitting an enemy champion generates 10 bonus Fury.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.0,
+        12.0,
+        10.0,
+        8.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): Each strike of Ruthless Predator deals basic damage, but the first strike also triggers spell effects by also being tagged as spell damage."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Slice and Dice",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active - Slice:  Renekton  dashes in the target direction, dealing physical damage to enemies he passes through.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            40.0,
+            70.0,
+            100.0,
+            130.0,
+            160.0
+          ],
+          "context_notes": "Active - Slice: Renekton dashes a fixed distance in the target direction, dealing physical damage to enemies he passes through."
+        },
+        {
+          "id": "renekton_e_effect_2",
+          "description": "If Renekton hits an enemy, he can recast Slice and Dice within the next 4 seconds."
+        },
+        {
+          "id": "total_physical_damage",
+          "description": "Total Physical Damage",
+          "base_by_rank": [
+            80.0,
+            140.0,
+            200.0,
+            260.0,
+            320.0
+          ],
+          "context_notes": "Recast - Dice: Renekton repeats the first cast's effects."
+        },
+        {
+          "id": "renekton_e_effect_4",
+          "description": "Both casts generate 2 Fury for each non-champion hit and 10 Fury for each champion hit, up to 30 total per cast."
+        },
+        {
+          "id": "enhanced_physical_damage",
+          "description": "Enhanced Physical Damage",
+          "base_by_rank": [
+            70.0,
+            115.0,
+            160.0,
+            205.0,
+            250.0
+          ],
+          "context_notes": "Reign of Anger Bonus: Dice, the recast, deals bonus physical damage and inflicts armor reduction to enemies hit for 4 seconds."
+        },
+        {
+          "id": "total_enhanced_damage",
+          "description": "Total Enhanced Damage",
+          "base_by_rank": [
+            110.0,
+            185.0,
+            260.0,
+            335.0,
+            410.0
+          ],
+          "context_notes": "Reign of Anger Bonus: Dice, the recast, deals bonus physical damage and inflicts armor reduction to enemies hit for 4 seconds."
+        },
+        {
+          "id": "armor_reduction",
+          "description": "Armor Reduction",
+          "base_by_rank": [
+            25.0,
+            27.5,
+            30.0,
+            32.5,
+            35.0
+          ],
+          "context_notes": "Reign of Anger Bonus: Dice, the recast, deals bonus physical damage and inflicts armor reduction to enemies hit for 4 seconds."
+        }
+      ],
+      "description": "Active - Slice: Renekton dashes a fixed distance in the target direction, dealing physical damage to enemies he passes through.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        14.5,
+        13.0,
+        11.5,
+        10.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 760.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 760 + 100% movement speed.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "ultimate": {
+      "name": "Dominus",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Renekton empowers himself for some time, gaining Fury,  bonus health, bonus size,  bonus attack range, and increased area on  Cull the Meek.",
+      "effects": [
+        {
+          "id": "bonus_health",
+          "description": "Bonus Health",
+          "base_by_rank": [
+            300.0,
+            500.0,
+            700.0
+          ],
+          "context_notes": "Active: Renekton empowers himself for 15 seconds, gaining bonus health, 20% increased size, 25 bonus attack range, and 20 Fury, as well as increasing Cull the Meek's effect radius."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage Per Tick",
+          "base_by_rank": [
+            30.0,
+            75.0,
+            120.0
+          ],
+          "context_notes": "During this time, he deals magic damage every 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            900.0,
+            2250.0,
+            3600.0
+          ],
+          "context_notes": "During this time, he deals magic damage every 0."
+        }
+      ],
+      "description": "Active: Renekton empowers himself for 15 seconds, gaining bonus health, 20% increased size, 25 bonus attack range, and 20 Fury, as well as increasing Cull the Meek's effect radius.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 375.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 375.",
+        "Source notes (summary): Dominus' cooldown is not refunded if Renekton dies during the cast animation."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Renekton.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Renekton"
+  }
+}

@@ -1,0 +1,458 @@
+{
+  "name": "Anivia",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Battlemage",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 550.0,
+      "per_level": 92.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 495.0,
+      "per_level": 45.0
+    },
+    "move_speed": 325.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 600.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 51.0,
+      "per_level": 3.2
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 1.68
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Rebirth",
+      "type": "Passive",
+      "description_source": "Innate: Periodically, upon  dying,  Anivia will instead revert into an egg. If the egg can survive for a few seconds, she is gloriously  reborn.",
+      "effects": [
+        {
+          "id": "anivia_p_effect_1",
+          "description": "Innate: Periodically, upon taking fatal damage, Anivia enters resurrection for 6 seconds and restores all of her health."
+        },
+        {
+          "id": "anivia_p_effect_2",
+          "description": "While under resurrection, Anivia is unable to act and gains -40 : 20 (based on level) bonus armor and bonus magic resistance."
+        },
+        {
+          "id": "anivia_p_effect_3",
+          "description": "If Anivia remains alive by the end of the duration, she is revived with her current health."
+        }
+      ],
+      "description": "Innate: Periodically, upon taking fatal damage, Anivia enters resurrection for 6 seconds and restores all of her health.",
+      "cooldown_seconds_by_rank": [
+        240.0,
+        240.0,
+        240.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Triggering Rebirth will break tethers on Anivia."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Flash Frost",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Anivia launches a chunk of ice that deals magic damage and  slows enemies hit.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            70.0,
+            90.0,
+            110.0,
+            130.0
+          ],
+          "context_notes": "Active: Anivia launches a chunk of ice in the target direction that deals magic damage to enemies hit and slows them by 20% : 40% (based on Glacial Storm's Rank) for 3 seconds."
+        },
+        {
+          "id": "anivia_q_effect_2",
+          "description": "Flash Frost can be recast while the ice is in flight after its cast time, and does so automatically at maximum range."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            95.0,
+            130.0,
+            165.0,
+            200.0
+          ],
+          "context_notes": "Recast: Anivia shatters the ice, dealing magic damage to nearby enemies and stunning them for a duration, as well as refreshing the slow."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            110.0,
+            165.0,
+            220.0,
+            275.0,
+            330.0
+          ],
+          "context_notes": "Recast: Anivia shatters the ice, dealing magic damage to nearby enemies and stunning them for a duration, as well as refreshing the slow."
+        },
+        {
+          "id": "stun_duration",
+          "description": "Stun Duration",
+          "base_by_rank": [
+            1.1,
+            1.2,
+            1.3,
+            1.4,
+            1.5
+          ],
+          "context_notes": "Recast: Anivia shatters the ice, dealing magic damage to nearby enemies and stunning them for a duration, as well as refreshing the slow."
+        }
+      ],
+      "description": "Active: Anivia launches a chunk of ice in the target direction that deals magic damage to enemies hit and slows them by 20% : 40% (based on Glacial Storm's Rank) for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.0,
+        9.0,
+        8.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          85.0,
+          90.0,
+          95.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 950.0,
+        "effect_hitbox_radius": 225.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.25.",
+        "Source speed: 950.",
+        "Source effectRadius: 225.",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Crystallize",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Anivia  erects a wall of ice that lingers for a few seconds, blocking movement.",
+      "effects": [
+        {
+          "id": "width",
+          "description": "Width",
+          "base_by_rank": [
+            600.0,
+            700.0,
+            800.0,
+            900.0,
+            1000.0
+          ],
+          "context_notes": "Active: Anivia summons a wall of ice at the target location perpendicular to her facing, knocking all units away from it, though not through terrain."
+        },
+        {
+          "id": "number_of_ice_segments",
+          "description": "Number of ice segments",
+          "base_by_rank": [
+            4.0,
+            5.0,
+            6.0,
+            7.0,
+            8.0
+          ],
+          "context_notes": "Active: Anivia summons a wall of ice at the target location perpendicular to her facing, knocking all units away from it, though not through terrain."
+        },
+        {
+          "id": "distance_between_outermost_segments",
+          "description": "Distance between outermost segments",
+          "base_by_rank": [
+            400.0,
+            500.0,
+            600.0,
+            700.0,
+            800.0
+          ],
+          "context_notes": "Active: Anivia summons a wall of ice at the target location perpendicular to her facing, knocking all units away from it, though not through terrain."
+        },
+        {
+          "id": "distance_between_individual_segments",
+          "description": "Distance between individual segments",
+          "base_by_rank": [
+            133.33,
+            125.0,
+            120.0,
+            116.67,
+            114.29
+          ],
+          "context_notes": "Active: Anivia summons a wall of ice at the target location perpendicular to her facing, knocking all units away from it, though not through terrain."
+        }
+      ],
+      "description": "Active: Anivia summons a wall of ice at the target location perpendicular to her facing, knocking all units away from it, though not through terrain. The wall lingers as impassable terrain for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        17.0,
+        17.0,
+        17.0,
+        17.0,
+        17.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): Crystallize's displacement triggers in-combat effects by dealing 0 proc true damage, such as drawing turret aggro, Sudden Impact and applying Elixir of Sorcery."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Frostbite",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Anivia blasts a freezing wind at the target enemy that deals magic damage.",
+      "effects": [
+        {
+          "id": "anivia_e_effect_1",
+          "description": "Passive: Enemies hit by Flash Frost or a fully formed Glacial Storm become Chilled for 3 seconds, refreshing on subsequent hits."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            55.0,
+            80.0,
+            105.0,
+            130.0,
+            155.0
+          ],
+          "context_notes": "Active: Anivia blasts a freezing wind at the target enemy that deals magic damage, doubled if they were Chilled."
+        },
+        {
+          "id": "enhanced_damage",
+          "description": "Enhanced Damage",
+          "base_by_rank": [
+            110.0,
+            160.0,
+            210.0,
+            260.0,
+            310.0
+          ],
+          "context_notes": "Active: Anivia blasts a freezing wind at the target enemy that deals magic damage, doubled if they were Chilled."
+        }
+      ],
+      "description": "Passive: Enemies hit by Flash Frost or a fully formed Glacial Storm become Chilled for 3 seconds, refreshing on subsequent hits.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1600.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 1600.",
+        "Source notes (summary): The damage of Frostbite is calculated once it hits."
+      ]
+    },
+    "ultimate": {
+      "name": "Glacial Storm",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Passive:  Flash Frost's  slow is increased.",
+      "effects": [
+        {
+          "id": "slow_strength_increase",
+          "description": "Slow Strength Increase",
+          "base_by_rank": [
+            10.0,
+            20.0
+          ],
+          "context_notes": "Passive: Flash Frost's slow strength is increased."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            15.0,
+            22.5,
+            30.0
+          ],
+          "context_notes": "Active: Anivia calls forth a driving rain of ice and hail at the target location, dealing magic damage every 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0
+          ],
+          "context_notes": "Active: Anivia calls forth a driving rain of ice and hail at the target location, dealing magic damage every 0."
+        },
+        {
+          "id": "empowered_damage_per_tick",
+          "description": "Empowered Damage per Tick",
+          "base_by_rank": [
+            45.0,
+            67.5,
+            90.0
+          ],
+          "context_notes": "The blizzard increases in size over 1."
+        },
+        {
+          "id": "empowered_slow",
+          "description": "Empowered Slow",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0
+          ],
+          "context_notes": "The blizzard increases in size over 1."
+        },
+        {
+          "id": "anivia_r_effect_4",
+          "description": "Glacial Storm can be recast after 1 second, and does so automatically if Anivia is no longer in range or unable to pay the mana cost, or becomes affected by any form of cast-inhibiting crowd control."
+        },
+        {
+          "id": "anivia_r_effect_5",
+          "description": "Recast: Anivia ends Glacial Storm, dealing one last tick of damage."
+        }
+      ],
+      "description": "Passive: Flash Frost's slow strength is increased.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        3.0,
+        2.0
+      ],
+      "cost": {
+        "resource": "other",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Location / Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 200 : 400 (based on time active).",
+        "Source notes (summary): Toggle abilities do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Anivia.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Anivia"
+  }
+}

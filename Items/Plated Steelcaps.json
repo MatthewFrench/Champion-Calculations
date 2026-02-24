@@ -24,26 +24,33 @@
   "effects_structured": [
     {
       "id": "plating_reduce_incoming_basic_attack_damage_excluding_turrets",
-      "raw": "Reduces incoming basic attack damage by 10%, excluding turret attacks.",
+      "raw": "Reduces incoming basic damage by 10%, excluding turret attacks and on-hit effect damage.",
       "effect_type": "damage_multiplier",
-      "stat": "basic_attack_damage",
+      "stat": "basic_damage_taken_multiplier",
       "value": -0.1,
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_incoming_basic_attack",
+      "trigger": "on_incoming_basic_damage",
       "applies_to": "self",
       "conditions": [
-        "exclude_turret_attacks"
+        "exclude_turret_attacks",
+        "exclude_on_hit_effect_damage",
+        "basic_damage_tag_required"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "can_reduce_basic_damage_from_abilities_items_and_monsters": true,
+        "can_reduce_magic_damage_components_if_tagged_basic": true,
+        "does_not_reduce_true_damage_components": true
+      },
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
@@ -63,7 +70,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.031205+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Plating is a continuous incoming-damage reducer for damage instances tagged as basic damage; the reduction is not limited to ordinary auto attacks.",
+      "Player-visible behavior: turret shot damage and on-hit effect damage are excluded, while valid basic-damage instances from abilities/items can still be reduced."
+    ]
   },
   "sources": [
     {
@@ -83,6 +94,12 @@
       "path": "From Online/items/Plated Steelcaps.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Plated Steelcaps",
+      "url": "https://wiki.leagueoflegends.com/en-us/Plated_Steelcaps",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Plating exclusion rules and basic-damage classification behavior"
     }
   ]
 }

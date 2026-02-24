@@ -1,0 +1,344 @@
+{
+  "name": "Lux",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Artillery",
+    "Burst",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 580.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 480.0,
+      "per_level": 23.5
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 21.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 54.0,
+      "per_level": 3.3
+    },
+    "attack_speed": {
+      "base": 0.669,
+      "per_level_percent": 3.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.143749997019767,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Illumination",
+      "type": "Passive",
+      "description_source": "Innate:  Lux's abilities apply a mark to enemies hit for a few seconds. Her basic attacks and  Final Spark consume the mark to deal bonus magic damage.",
+      "effects": [
+        {
+          "id": "lux_p_effect_1",
+          "description": "Innate: Lux's abilities apply a mark to enemies hit for 6 seconds, refreshing on subsequent hits. Lux's basic attacks on-hit and Final Spark consume the mark to deal 30 : 220 (based on level) (+ 35% AP) bonus magic damage."
+        }
+      ],
+      "description": "Innate: Lux's abilities apply a mark to enemies hit for 6 seconds, refreshing on subsequent hits. Lux's basic attacks on-hit and Final Spark consume the mark to deal 30 : 220 (based on level) (+ 35% AP) bonus magic damage.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Starting an attack windup against a target with a mark that is about to expire refreshes its duration to 0."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Light Binding",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Lux shoots a sphere of light in the target direction that deals magic damage to the first two enemies hit and  roots them for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            120.0,
+            160.0,
+            200.0,
+            240.0
+          ],
+          "context_notes": "Active: Lux shoots a sphere of light in the target direction that deals magic damage to the first two enemies hit and roots them for 2 seconds."
+        }
+      ],
+      "description": "Active: Lux shoots a sphere of light in the target direction that deals magic damage to the first two enemies hit and roots them for 2 seconds.",
+      "cooldown_seconds_by_rank": [
+        11.0,
+        10.5,
+        10.0,
+        9.5,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1200.",
+        "Source notes (summary): Targets immune to the root still count towards Light Binding's two-target limit."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Prismatic Barrier",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Lux throws her wand in the target direction that homes back to her after reaching maximum range.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            40.0,
+            55.0,
+            70.0,
+            85.0,
+            100.0
+          ],
+          "context_notes": "Active: Lux throws her wand in the target direction that homes back to her after reaching maximum range."
+        },
+        {
+          "id": "maximum_shield",
+          "description": "Maximum Shield",
+          "base_by_rank": [
+            80.0,
+            110.0,
+            140.0,
+            170.0,
+            200.0
+          ],
+          "context_notes": "Active: Lux throws her wand in the target direction that homes back to her after reaching maximum range."
+        },
+        {
+          "id": "lux_w_effect_2",
+          "description": "Lux gains the shield upon throwing and upon retrieving the wand."
+        }
+      ],
+      "description": "Active: Lux throws her wand in the target direction that homes back to her after reaching maximum range. Allied champions hit by the wand gain a shield for 2.5 seconds, which can stack up to 2 times, stacking with the previous shield and refreshing its duration.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2400.0,
+        "effect_hitbox_radius": 110.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 2400.",
+        "Source effectRadius: 110.",
+        "Source notes (summary): Each pass of the wand grants a shield to each target once."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Lucent Singularity",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Lux sends a lucent singularity to the target location that lasts for a few seconds and slows enemies within.",
+      "effects": [
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            25.0,
+            30.0,
+            35.0,
+            40.0,
+            45.0
+          ],
+          "context_notes": "Active: Lux sends a lucent singularity to the target location, remaining there for 5 seconds to grant sight of the area and slow nearby enemies."
+        },
+        {
+          "id": "lux_e_effect_2",
+          "description": "Lucent Singularity can be recast at any time while it is in flight or within the duration, and does so automatically after the duration."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            65.0,
+            115.0,
+            165.0,
+            215.0,
+            265.0
+          ],
+          "context_notes": "Recast: Lux detonates the singularity, dealing magic damage to enemies within."
+        },
+        {
+          "id": "lux_e_effect_4",
+          "description": "The slow lingers for 1 second after leaving the area. Enemies hit by Lucent Singularity's detonation are also slowed by the same amount for 1 second."
+        }
+      ],
+      "description": "Active: Lux sends a lucent singularity to the target location, remaining there for 5 seconds to grant sight of the area and slow nearby enemies.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          80.0,
+          90.0,
+          100.0,
+          110.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1200.0,
+        "effect_hitbox_radius": 310.0
+      },
+      "context_notes": [
+        "Source targeting: Location / Auto.",
+        "Source castTime: 0.25.",
+        "Source speed: 1200.",
+        "Source effectRadius: 310 / 650.",
+        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "ultimate": {
+      "name": "Final Spark",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            300.0,
+            400.0,
+            500.0
+          ],
+          "context_notes": "Active: Lux fires a massive light beam in a line in the target direction that deals magic damage to enemies hit and reveals them for 1."
+        }
+      ],
+      "description": "Active: Lux fires a massive light beam in a line in the target direction that deals magic damage to enemies hit and reveals them for 1.5 seconds, as well as grants sight of the surrounding area.",
+      "cooldown_seconds_by_rank": [
+        60.0,
+        50.0,
+        40.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 1.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 1.",
+        "Source notes (summary): Final Spark grants sight of its surroundings during the cast time and for 0."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Lux.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Lux"
+  }
+}

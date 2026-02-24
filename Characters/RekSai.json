@@ -1,0 +1,313 @@
+{
+  "name": "Rek'Sai",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Diver",
+    "Fighter",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 99.0
+    },
+    "resource": {
+      "type": "rage",
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 35.0,
+      "per_level": 4.5
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 2.5,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.667,
+      "per_level_percent": 2.0
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.5,
+    "base_windup_seconds": 0.400000005960464,
+    "windup_fraction": 0.2666666706403093,
+    "windup_percent": 26.66666706403093,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.400000005960464,
+      "attack_total_time": 1.5,
+      "attack_delay_offset": -0.0916666686534881,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Fury of the Xer'Sai",
+      "type": "Passive",
+      "description_source": "Innate:  Rek'Sai's basic attacks and ability hits generate  Fury, which continually expires after a few seconds out of combat.",
+      "effects": [
+        {
+          "id": "reksai_p_effect_1",
+          "description": "Innate: Rek'Sai basic attacks generate 25 Fury on-hit, reduced to 4 per hit against minions, and to 5 per hit against wards, and plants. Rek'Sai's abilities other than Queen's Wrath generate 25 Fury upon hitting at least one unit. Prey Seeker does not generate Fury against non- champions. After 8 seconds of being out of combat, she loses 20 Fury per second."
+        },
+        {
+          "id": "reksai_p_effect_2",
+          "description": "When Rek'Sai becomes Burrowed, she consumes her current Fury over 3 seconds to heal for 0% : 100% (based on Fury) of 9% : 21.29% (based on level) maximum health, stopping once fully consumed or she reaches full health. If she starts generating Fury while Burrowed, the consumption occurs after 5 seconds."
+        }
+      ],
+      "description": "Innate: Rek'Sai basic attacks generate 25 Fury on-hit, reduced to 4 per hit against minions, and to 5 per hit against wards, and plants. Rek'Sai's abilities other than Queen's Wrath generate 25 Fury upon hitting at least one unit. Prey Seeker does not generate Fury against non- champions. After 8 seconds of being out of combat, she loses 20 Fury per second.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Fury bar changes from Yellow to Red when full."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Queen's Wrath",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Rek'Sai empowers her next 3 basic attacks within a few seconds to gain a moderate amount of  attack speed and deal bonus physical damage to the target and surrounding enemies.",
+      "effects": [
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Rek'Sai gains 35% bonus attack speed for 3 seconds."
+        },
+        {
+          "id": "total_bonus_physical_damage",
+          "description": "Total Bonus Physical Damage",
+          "base_by_rank": [
+            90.0,
+            105.0,
+            120.0,
+            135.0,
+            150.0
+          ],
+          "context_notes": "Active: Rek'Sai gains 35% bonus attack speed for 3 seconds."
+        },
+        {
+          "id": "reksai_q_effect_2",
+          "description": "If Rek'Sai completes an attack, the duration is refreshed, for up to 3 total empowered attacks."
+        },
+        {
+          "id": "reksai_q_effect_3",
+          "description": "Queen's Wrath resets Rek'Sai's basic attack timer."
+        }
+      ],
+      "description": "Active: Rek'Sai gains 35% bonus attack speed for 3 seconds. Her next basic attack on-hit within the duration will have an uncancellable windup and deal bonus physical damage to the target and surrounding enemies. Queen's Wrath's damage to the primary target is affected by critical strike modifiers.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        3.5,
+        3.0,
+        2.5,
+        2.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): Damage to the primary target applies spell damage and damage to secondary targets applies proc damage."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Burrow",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Rek'Sai becomes Burrowed, reducing her  attack range and her  sight radius while gaining access to her Burrowed abilities. She also becomes  ghosted and gains  bonus movement speed, as well as Tremor Sense.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            5.0,
+            10.0,
+            15.0,
+            20.0,
+            25.0
+          ],
+          "context_notes": "Active: Rek'Sai becomes Burrowed, reducing her attack range by 50 and her sight radius to 385 units, while gaining access to her Burrowed abilities."
+        },
+        {
+          "id": "reksai_w_effect_2",
+          "description": "Tremor Sense: Rek'Sai and her allies gain obscured vision of non-visible, moving enemies within range at a rate of once every second."
+        },
+        {
+          "id": "reksai_w_effect_3",
+          "description": "Once Burrow has been learned, Rek'Sai automatically becomes Burrowed upon completing a Recall channel or respawning."
+        }
+      ],
+      "description": "Active: Rek'Sai becomes Burrowed, reducing her attack range by 50 and her sight radius to 385 units, while gaining access to her Burrowed abilities. She also becomes ghosted and gains bonus movement speed, as well as Tremor Sense.",
+      "cooldown_seconds_by_rank": [
+        4.0,
+        4.0,
+        4.0,
+        4.0,
+        4.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 1500.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 1500.",
+        "Source notes (summary): Burrow does not count as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Furious Bite",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Rek'Sai bites the target enemy, dealing physical damage. At maximum  Fury, Furious Bite's damage is increased and converted into true damage.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            80.0,
+            108.0,
+            136.0,
+            164.0,
+            192.0
+          ],
+          "context_notes": "Active: Rek'Sai bites the target enemy, dealing physical damage."
+        },
+        {
+          "id": "true_damage",
+          "description": "True Damage",
+          "base_by_rank": [
+            100.0,
+            135.0,
+            170.0,
+            205.0,
+            240.0
+          ],
+          "context_notes": "At maximum Fury, Furious Bite deals 125% damage and is converted to true damage."
+        }
+      ],
+      "description": "Active: Rek'Sai bites the target enemy, dealing physical damage.",
+      "cooldown_seconds_by_rank": [
+        6.0,
+        6.0,
+        6.0,
+        6.0,
+        6.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source notes (summary): If the target becomes untargetable, dies, or is too far away or no longer in sight during the cast time, this ability will cancel but does not go on cooldown nor pay its cost (if applicable)."
+      ]
+    },
+    "ultimate": {
+      "name": "Void Rush",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "reksai_r_effect_1",
+          "description": "Passive: Rek'Sai applies Marked as Prey to enemy champions she damages, lasting for 5 seconds."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            150.0,
+            250.0,
+            350.0
+          ],
+          "context_notes": "Active: Rek'Sai singles out the target enemy champion Marked as Prey, becoming displacement immune and unable to act and vanishing into the ground, as well as revealing the target for 2 seconds."
+        },
+        {
+          "id": "reksai_r_effect_3",
+          "description": "If cast while in Burrowed form, Rek'Sai will automatically Unburrow at the end of Void Rush's cast time, placing Burrow on a 1-second cooldown without triggering Unburrow's effects. If Burrow is already on cooldown, its remaining cooldown is set to 1 second."
+        }
+      ],
+      "description": "Passive: Rek'Sai applies Marked as Prey to enemy champions she damages, lasting for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        100.0,
+        80.0
+      ],
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1400.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 1400.",
+        "Source notes (summary): Rek'Sai will track the target if they change locations while dashing to them."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/RekSai.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "RekSai"
+  }
+}

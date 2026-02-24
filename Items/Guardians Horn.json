@@ -38,16 +38,61 @@
       "interval_seconds": null,
       "trigger": "on_damage_from_champions",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "incoming_damage_from_champions",
+        "dot_uses_reduced_flat_value",
+        "pre_mitigation_damage_reference"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         15,
         3.75
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.86
     }
   ],
+  "mode_overrides": {
+    "ARENA": {
+      "stats": {
+        "health": {
+          "flat": 300.0
+        }
+      },
+      "effects_structured": [
+        {
+          "id": "undaunted_flat_damage_reduction_from_champions",
+          "raw": "Arena override: Reduces incoming champion damage by 12, modified to 4 against damage over time abilities.",
+          "effect_type": "damage_reduction_flat",
+          "stat": "incoming_damage",
+          "value": 12,
+          "value_range": {
+            "default": 12,
+            "dot": 4
+          },
+          "unit": "flat",
+          "duration_seconds": null,
+          "cooldown_seconds": null,
+          "interval_seconds": null,
+          "trigger": "on_damage_from_champions",
+          "applies_to": "self",
+          "conditions": [
+            "incoming_damage_from_champions",
+            "dot_uses_reduced_flat_value",
+            "pre_mitigation_damage_reference",
+            "arena_mode_override"
+          ],
+          "status_effects": [],
+          "scaling_terms": [],
+          "numbers_extracted": [
+            12,
+            4
+          ],
+          "parse_confidence": 0.8
+        }
+      ]
+    }
+  },
   "shop": {
     "prices": {
       "total": 950,
@@ -73,7 +118,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.040771+00:00",
-    "effects_structured_reviewed": "2026-02-10"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Undaunted applies flat incoming champion-damage reduction and uses reduced values for damage-over-time sources, evaluated on pre-mitigation damage.",
+      "Mode-scoped behavior: Arena map-difference notes report higher base health and adjusted Undaunted flat values; encoded under mode_overrides.ARENA for deferred runtime consumption."
+    ]
   },
   "sources": [
     {
@@ -93,6 +142,12 @@
       "path": "From Online/items/Guardians Horn.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Guardian's Horn",
+      "url": "https://wiki.leagueoflegends.com/en-us/Guardian%27s_Horn",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Undaunted pre-mitigation semantics and Arena-specific stat/value differences"
     }
   ]
 }

@@ -1,0 +1,483 @@
+{
+  "name": "Nunu & Willump",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 610.0,
+      "per_level": 90.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 280.0,
+      "per_level": 42.0
+    },
+    "move_speed": 345.0,
+    "armor": {
+      "base": 29.0,
+      "per_level": 4.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 5.0,
+      "per_level": 0.8
+    },
+    "resource_regeneration": {
+      "base": 7.0,
+      "per_level": 0.5
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 2.25
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.106413997709751,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Call of the Freljord",
+      "type": "Passive",
+      "description_source": "Innate: When  Nunu and  Willump deal damage against an enemy  champion, large  monster or  structure, they and a nearby allied champion gain Call of the Freljord for a few seconds, prioritizing the ally with  highest attack speed.",
+      "effects": [
+        {
+          "id": "nunu_p_effect_1",
+          "description": "Innate: When Nunu and Willump deal damage against an enemy champion, large monster or structure, they and a nearby allied champion gain Call of the Freljord for 4 seconds, prioritizing the ally with highest attack speed."
+        },
+        {
+          "id": "nunu_p_effect_2",
+          "description": "Call of the Freljord: Gain 20% bonus attack speed and 10% bonus movement speed. Willump's basic attacks additionally deal 30% AD physical damage to secondary targets in a cone in front of him."
+        },
+        {
+          "id": "nunu_p_effect_3",
+          "description": "Nunu and Willump cannot trigger Call of the Freljord from the same enemy again for a time. Successive triggers of Call of the Freljord while it is active will extend the duration by 4 seconds."
+        }
+      ],
+      "description": "Innate: When Nunu and Willump deal damage against an enemy champion, large monster or structure, they and a nearby allied champion gain Call of the Freljord for 4 seconds, prioritizing the ally with highest attack speed.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): The splash damage will critically strike when the basic attack does, but will not deal any bonus damage."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Consume",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Willump takes a bite out of the target enemy, dealing damage and  healing himself. The heal is increased when he is below half health.",
+      "effects": [
+        {
+          "id": "nunu_q_effect_1",
+          "description": "Active: Willump takes a bite out of the target enemy, dealing damage and healing himself. The heal is increased by 50% while he is below 50% maximum health."
+        },
+        {
+          "id": "non_champion_true_damage",
+          "description": "Non-Champion True Damage",
+          "base_by_rank": [
+            400.0,
+            600.0,
+            800.0,
+            1000.0,
+            1200.0
+          ],
+          "context_notes": "Against minions and monsters, he deals true damage."
+        },
+        {
+          "id": "base_non_champion_heal",
+          "description": "Base Non-Champion Heal",
+          "base_by_rank": [
+            65.0,
+            95.0,
+            125.0,
+            155.0,
+            185.0
+          ],
+          "context_notes": "Against minions and monsters, he deals true damage."
+        },
+        {
+          "id": "empowered_non_champion_heal",
+          "description": "Empowered Non-Champion Heal",
+          "base_by_rank": [
+            97.5,
+            142.5,
+            187.5,
+            232.5,
+            277.5
+          ],
+          "context_notes": "Against minions and monsters, he deals true damage."
+        },
+        {
+          "id": "champion_magic_damage",
+          "description": "Champion Magic Damage",
+          "base_by_rank": [
+            60.0,
+            100.0,
+            140.0,
+            180.0,
+            220.0
+          ],
+          "context_notes": "Against champions, he deals magic damage and the heal is reduced to 60%."
+        },
+        {
+          "id": "base_champion_heal",
+          "description": "Base Champion Heal",
+          "base_by_rank": [
+            39.0,
+            57.0,
+            75.0,
+            93.0,
+            111.0
+          ],
+          "context_notes": "Against champions, he deals magic damage and the heal is reduced to 60%."
+        },
+        {
+          "id": "empowered_champion_heal",
+          "description": "Empowered Champion Heal",
+          "base_by_rank": [
+            58.5,
+            85.5,
+            112.5,
+            139.5,
+            166.5
+          ],
+          "context_notes": "Against champions, he deals magic damage and the heal is reduced to 60%."
+        }
+      ],
+      "description": "Active: Willump takes a bite out of the target enemy, dealing damage and healing himself. The heal is increased by 50% while he is below 50% maximum health.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          60.0,
+          60.0,
+          60.0,
+          60.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.3
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.3.",
+        "Source notes (summary): Icon border glows when he is within the maximum healing threshold."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Biggest Snowball Ever!",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "effects": [
+        {
+          "id": "nunu_w_effect_1",
+          "description": "Active: Willump cleanses himself from all slows and channels for up to 10 seconds, becoming ghosted and slow-immune and creating a rolling snowball. Willump automatically navigates his movement in the direction of the cursor and can steer the snowball at an increasing speed over time, which resets upon changing direction. The duo have their movement speed reduced by 50% for the first 1 second, but after a delay they start gaining 14 movement speed every 0.25 seconds, up to a cap."
+        },
+        {
+          "id": "nunu_w_effect_2",
+          "description": "The snowball increases in size and power linearly over the duration. Its size changes from small to medium after 2.5 seconds, then to large after 5 seconds into the charge. Biggest Snowball Ever! can be recast after 0.5 seconds during the channel, and does so automatically after the channel or if interrupted."
+        },
+        {
+          "id": "minimum_magic_damage",
+          "description": "Minimum Magic Damage",
+          "base_by_rank": [
+            36.0,
+            45.0,
+            54.0,
+            63.0,
+            72.0
+          ],
+          "context_notes": "The snowball explodes upon hitting an enemy champion, large pet, medium or large monster, or terrain, dealing magic damage to nearby enemies, increased by 0% : 400% (based on charge time), knocking them up for 0."
+        },
+        {
+          "id": "maximum_magic_damage",
+          "description": "Maximum Magic Damage",
+          "base_by_rank": [
+            180.0,
+            225.0,
+            270.0,
+            315.0,
+            360.0
+          ],
+          "context_notes": "The snowball explodes upon hitting an enemy champion, large pet, medium or large monster, or terrain, dealing magic damage to nearby enemies, increased by 0% : 400% (based on charge time), knocking them up for 0."
+        },
+        {
+          "id": "minimum_minion_monster_roll_damage",
+          "description": "Minimum Minion/Monster Roll Damage",
+          "base_by_rank": [
+            11.988,
+            14.985,
+            17.982,
+            20.979,
+            23.976
+          ],
+          "context_notes": "The snowball rolls over enemy minions and small monsters hit, dealing 33."
+        },
+        {
+          "id": "maximum_minion_monster_roll_damage",
+          "description": "Maximum Minion/Monster Roll Damage",
+          "base_by_rank": [
+            59.94,
+            74.925,
+            89.91,
+            104.895,
+            119.88
+          ],
+          "context_notes": "The snowball rolls over enemy minions and small monsters hit, dealing 33."
+        },
+        {
+          "id": "nunu_w_effect_5",
+          "description": "Recast: Willump releases the snowball, sending it rolling forward up to a maximum distance during which it will not grow any larger and will explode upon hitting an enemy."
+        }
+      ],
+      "description": "Active: Willump cleanses himself from all slows and channels for up to 10 seconds, becoming ghosted and slow-immune and creating a rolling snowball. Willump automatically navigates his movement in the direction of the cursor and can steer the snowball at an increasing speed over time, which resets upon changing direction. The duo have their movement speed reduced by 50% for the first 1 second, but after a delay they start gaining 14 movement speed every 0.25 seconds, up to a cap.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        14.0,
+        14.0,
+        14.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 425.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: none.",
+        "Source speed: 425 / 435 : 594 / 595.",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and Force Pulse."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Snowball Barrage",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Nunu throws a volley of 3 snowballs in the target direction that each shatter upon hitting an enemy, dealing magic damage to enemies in a cone. Enemies hit 3 times are briefly  slowed.  Champions and large  monsters hit once are marked Snowbound for a few seconds. Shortly after activating Snowball Barrage, Snowbound enemies near  Willump take magic damage and are briefly  rooted.",
+      "effects": [
+        {
+          "id": "magic_damage_per_hit",
+          "description": "Magic Damage Per Hit",
+          "base_by_rank": [
+            15.0,
+            22.5,
+            30.0,
+            37.5,
+            45.0
+          ],
+          "context_notes": "Active: Nunu throws a volley of 3 snowballs in the target direction over 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            45.0,
+            67.5,
+            90.0,
+            112.5,
+            135.0
+          ],
+          "context_notes": "Active: Nunu throws a volley of 3 snowballs in the target direction over 0."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Enemies hit 3 times are slowed for 1 second."
+        },
+        {
+          "id": "maximum_total_magic_damage",
+          "description": "Maximum Total Magic Damage",
+          "base_by_rank": [
+            135.0,
+            202.5,
+            270.0,
+            337.5,
+            405.0
+          ],
+          "context_notes": "Recast: Nunu hurls another volley of snowballs, mimicking the first cast's effects."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            20.0,
+            30.0,
+            40.0,
+            50.0,
+            60.0
+          ],
+          "context_notes": "After 3 seconds from the first cast, Snowbound enemies near Willump take magic damage and are rooted for 0."
+        }
+      ],
+      "description": "Active: Nunu throws a volley of 3 snowballs in the target direction over 0.4 seconds that each shatter upon hitting an enemy, dealing magic damage to enemies in a cone.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "projectile_speed": 2000.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: None / None.",
+        "Source speed: 2000.",
+        "Source notes (summary): Each cast volley of snowballs counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+      ]
+    },
+    "ultimate": {
+      "name": "Absolute Zero",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            65.0,
+            75.0,
+            85.0
+          ],
+          "context_notes": "Active: Nunu and Willump channel a blizzard for up to 3 seconds, granting themselves a shield and slowing nearby enemies by 0% : 95% (based on channel time)."
+        },
+        {
+          "id": "nunu_r_effect_2",
+          "description": "Absolute Zero can be recast after 0.5 seconds during the channel, and does so automatically when the channel ends by any means."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            625.0,
+            950.0,
+            1275.0
+          ],
+          "context_notes": "Recast: Nunu and Willump cause the blizzard to explode, dealing magic damage to nearby enemies, modified to 0% : 100% (based on channel time)."
+        }
+      ],
+      "description": "Active: Nunu and Willump channel a blizzard for up to 3 seconds, granting themselves a shield and slowing nearby enemies by 0% : 95% (based on channel time).",
+      "cooldown_seconds_by_rank": [
+        110.0,
+        100.0,
+        90.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 650.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source effectRadius: 650.",
+        "Source notes (summary): The initial cast and the manual recast count as ability activations for the purposes of on-cast effects such as Spellblade and Force Pulse."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Nunu.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Nunu"
+  }
+}

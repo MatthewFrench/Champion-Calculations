@@ -1,0 +1,387 @@
+{
+  "name": "Malphite",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Tank",
+    "Vanguard"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 665.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 280.0,
+      "per_level": 60.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 40.0,
+      "per_level": 4.95
+    },
+    "magic_resist": {
+      "base": 28.0,
+      "per_level": 2.05
+    },
+    "attack_range": 125.0,
+    "health_regeneration": {
+      "base": 7.0,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 7.3,
+      "per_level": 0.55
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 62.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.736,
+      "per_level_percent": 3.4
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.0503188781440258,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Granite Shield",
+      "type": "Passive",
+      "description_source": "Innate:  Malphite  shields himself equal to a portion of his maximum health, which refreshes after a few seconds without taking damage.",
+      "effects": [
+        {
+          "id": "malphite_p_effect_1",
+          "description": "Innate - Shard of the Monolith: Malphite gains increased percentage size equal to 8% of his total armor, capped at 35% increased size at 437.5 armor."
+        },
+        {
+          "id": "malphite_p_effect_2",
+          "description": "Innate - Granite Shield: Malphite grants himself a shield equal to 10% of his maximum health. The shield lasts until it is broken, and replenishes to full strength after a few seconds of not taking damage."
+        }
+      ],
+      "description": "Innate - Shard of the Monolith: Malphite gains increased percentage size equal to 8% of his total armor, capped at 35% increased size at 437.5 armor.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        7.0,
+        6.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Malphite's increased size is affected by his base armor and growth, but also reduced by Black Cleaver."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Seismic Shard",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Malphite sends a shard to the target enemy that deals magic damage and  slows them for a few seconds.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            120.0,
+            170.0,
+            220.0,
+            270.0
+          ],
+          "context_notes": "Active: Malphite sends a shard to the target enemy that deals magic damage and slows them for 3 seconds."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0,
+            35.0,
+            40.0
+          ],
+          "context_notes": "Active: Malphite sends a shard to the target enemy that deals magic damage and slows them for 3 seconds."
+        },
+        {
+          "id": "malphite_q_effect_2",
+          "description": "Malphite also gains bonus movement speed equal to the raw amount of movement speed the target lost from the slow for the duration."
+        }
+      ],
+      "description": "Active: Malphite sends a shard to the target enemy that deals magic damage and slows them for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        8.0,
+        8.0,
+        8.0,
+        8.0,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 1200.",
+        "Source notes (summary): The rock spawns 100 units in front of Malphite."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Thunderclap",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Malphite gains  bonus armor, tripled while  Granite Shield is active.",
+      "effects": [
+        {
+          "id": "bonus_armor",
+          "description": "Bonus Armor",
+          "base_by_rank": [
+            10.0,
+            15.0,
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Passive: Malphite gains bonus armor, tripled while Granite Shield is active."
+        },
+        {
+          "id": "increased_bonus_armor",
+          "description": "Increased Bonus Armor",
+          "base_by_rank": [
+            30.0,
+            45.0,
+            60.0,
+            75.0,
+            90.0
+          ],
+          "context_notes": "Passive: Malphite gains bonus armor, tripled while Granite Shield is active."
+        },
+        {
+          "id": "bonus_physical_damage",
+          "description": "Bonus Physical Damage",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0,
+            60.0,
+            70.0
+          ],
+          "context_notes": "Active: Malphite empowers his next basic attack within 6 seconds to have an uncancellable windup, gain 50 bonus range, and deal bonus physical damage on-hit."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            15.0,
+            25.0,
+            35.0,
+            45.0,
+            55.0
+          ],
+          "context_notes": "Additionally, Malphite's basic attacks on-hit for the next 5 seconds are empowered to trigger a cone in the direction of the target that deals physical damage to enemies hit."
+        },
+        {
+          "id": "malphite_w_effect_4",
+          "description": "Thunderclap deals 180% damage against monsters."
+        },
+        {
+          "id": "malphite_w_effect_5",
+          "description": "Thunderclap resets Malphite's basic attack timer."
+        }
+      ],
+      "description": "Passive: Malphite gains bonus armor, tripled while Granite Shield is active.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          30.0,
+          35.0,
+          40.0,
+          45.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: None.",
+        "Source notes (summary): The main target is dealt basic damage, though without applying life steal, while the cone deals area non- proc damage without applying spell effects."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Ground Slam",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Malphite slams the ground beneath him, dealing magic damage to nearby enemies and  crippling them for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            95.0,
+            130.0,
+            165.0,
+            200.0
+          ],
+          "context_notes": "Active: Malphite slams the ground beneath him, dealing magic damage to nearby enemies and crippling them for 3 seconds."
+        },
+        {
+          "id": "cripple_strength",
+          "description": "Cripple Strength",
+          "base_by_rank": [
+            30.0,
+            35.0,
+            40.0,
+            45.0,
+            50.0
+          ],
+          "context_notes": "Active: Malphite slams the ground beneath him, dealing magic damage to nearby enemies and crippling them for 3 seconds."
+        }
+      ],
+      "description": "Active: Malphite slams the ground beneath him, dealing magic damage to nearby enemies and crippling them for 3 seconds.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          55.0,
+          60.0,
+          65.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.2419,
+        "effect_hitbox_radius": 400.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: 0.2419.",
+        "Source effectRadius: 400.",
+        "Source notes (summary): The cripple stacks multiplicatively with other sources of attack speed reductions."
+      ]
+    },
+    "ultimate": {
+      "name": "Unstoppable Force",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Malphite  dashes with  displacement immunity to the target location. Upon arrival, he deals magic damage to nearby enemies and briefly  knocks them up.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            200.0,
+            300.0,
+            400.0
+          ],
+          "context_notes": "Active: Malphite dashes with displacement immunity to the target location."
+        }
+      ],
+      "description": "Active: Malphite dashes with displacement immunity to the target location. Upon arrival, he deals magic damage to nearby enemies and knocks them up for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        115.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1500.0,
+        "effect_hitbox_radius": 325.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1500 + 100% movement speed.",
+        "Source effectRadius: 325.",
+        "Source notes (summary): The dash speed can be up-to doubled if Unstoppable Force is targeted at the middle of a wall so that his destination ends up on the other side."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Malphite.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Malphite"
+  }
+}

@@ -1,0 +1,405 @@
+{
+  "name": "Xerath",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Artillery",
+    "Mage",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 596.0,
+      "per_level": 106.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 400.0,
+      "per_level": 22.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 22.0,
+      "per_level": 4.7
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 525.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.55
+    },
+    "resource_regeneration": {
+      "base": 6.85,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 55.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 1.36
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Mana Surge",
+      "type": "Passive",
+      "description_source": "Innate: Periodically,  Xerath's next basic attack restores  mana, doubled against an enemy  champion.",
+      "effects": [
+        {
+          "id": "xerath_p_effect_1",
+          "description": "Innate: Periodically, Xerath empowers his next basic attack on-hit to restore 30 : 225 (based on level) mana, doubled to 60 : 450 (based on level) against enemy champions."
+        },
+        {
+          "id": "xerath_p_effect_2",
+          "description": "Mana Surge's cooldown is reduced by 3.5 seconds whenever Xerath kills an enemy."
+        },
+        {
+          "id": "xerath_p_effect_3",
+          "description": "Mana Surge does not trigger if Xerath would restore above his maximum mana."
+        }
+      ],
+      "description": "Innate: Periodically, Xerath empowers his next basic attack on-hit to restore 30 : 225 (based on level) mana, doubled to 60 : 450 (based on level) against enemy champions.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        16.0,
+        16.0
+      ],
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Mana Surge will trigger even if the attack is blocked, but not if it misses due to blind."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Arcanopulse",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "effects": [
+        {
+          "id": "xerath_q_effect_1",
+          "description": "Active: Xerath charges while being slowed by 0% : 40% (based on channel time) for up to 3 seconds to increase Arcanopulse's range over the first 1.5 to 1.75 seconds of the channel."
+        },
+        {
+          "id": "mana_refunded",
+          "description": "Mana Refunded",
+          "base_by_rank": [
+            40.0,
+            45.0,
+            50.0,
+            55.0,
+            60.0
+          ],
+          "context_notes": "Arcanopulse can be recast within the duration."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            115.0,
+            155.0,
+            195.0,
+            235.0
+          ],
+          "context_notes": "Recast: Xerath becomes unable to act for 0."
+        }
+      ],
+      "description": "Active: Xerath charges while being slowed by 0% : 40% (based on channel time) for up to 3 seconds to increase Arcanopulse's range over the first 1.5 to 1.75 seconds of the channel.",
+      "cooldown_seconds_by_rank": [
+        9.0,
+        8.0,
+        7.0,
+        6.0,
+        5.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          90.0,
+          100.0,
+          110.0,
+          120.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Direction.",
+        "Source castTime: none.",
+        "Source notes (summary): The onset of Arcanopulse's self- slow and first range increase is at a random interval of 0 to 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Eye of Destruction",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Xerath casts down a blast of energy that strikes the target location after a brief delay, dealing magic damage and  slowing enemies hit. The effects are increased against enemies in the epicenter.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            50.0,
+            85.0,
+            120.0,
+            155.0,
+            190.0
+          ],
+          "context_notes": "Active: Xerath casts down a blast of arcane energy that strikes the target location after 0."
+        },
+        {
+          "id": "increased_damage",
+          "description": "Increased Damage",
+          "base_by_rank": [
+            83.35,
+            141.695,
+            200.04,
+            258.385,
+            316.73
+          ],
+          "context_notes": "Enemies in the epicenter take 66."
+        },
+        {
+          "id": "increased_slow",
+          "description": "Increased Slow",
+          "base_by_rank": [
+            60.0,
+            65.0,
+            70.0,
+            75.0,
+            80.0
+          ],
+          "context_notes": "Enemies in the epicenter take 66."
+        }
+      ],
+      "description": "Active: Xerath casts down a blast of arcane energy that strikes the target location after 0.528 seconds, briefly granting sight of the area and dealing magic damage to enemies hit and slowing them by 25% for 2.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        13.0,
+        12.0,
+        11.0,
+        10.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          80.0,
+          90.0,
+          100.0,
+          110.0,
+          120.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 125.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 275 / 125 / 250.",
+        "Source notes (summary): Xerath's location gets revealed to the enemy (400 radius for 4."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Shocking Orb",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Xerath fires an orb of energy in the target direction that deals magic damage to the first enemy hit,  stunning them based on travel distance.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            70.0,
+            100.0,
+            130.0,
+            160.0,
+            190.0
+          ],
+          "context_notes": "Active: Xerath fires an orb of energy in the target direction that deals magic damage to the first enemy hit and stuns them for 0."
+        }
+      ],
+      "description": "Active: Xerath fires an orb of energy in the target direction that deals magic damage to the first enemy hit and stuns them for 0.75 : 2.25 (based on orb travel distance) seconds.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.5,
+        12.0,
+        11.5,
+        11.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 1400.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.25.",
+        "Source speed: 1400.",
+        "Source notes (summary): This ability will cast from wherever the caster is at the end of the cast time."
+      ]
+    },
+    "ultimate": {
+      "name": "Rite of the Arcane",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "number_of_recasts",
+          "description": "Number of Recasts",
+          "base_by_rank": [
+            4.0,
+            5.0,
+            6.0
+          ],
+          "context_notes": "Active: Xerath channels for up to 10 seconds, gaining the ability to recast Rite of the Arcane multiple times after 0."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            170.0,
+            220.0,
+            270.0
+          ],
+          "context_notes": "Recast - Arcane Barrage: Xerath catapults an arcane missile that strikes the target location after a 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            680.0,
+            1100.0,
+            1620.0
+          ],
+          "context_notes": "Recast - Arcane Barrage: Xerath catapults an arcane missile that strikes the target location after a 0."
+        },
+        {
+          "id": "maximum_stacks",
+          "description": "Maximum Stacks",
+          "base_by_rank": [
+            3.0,
+            4.0,
+            5.0
+          ],
+          "context_notes": "Hitting at least one enemy champion grants a stack of Arcane Perfection during the channel, stacking up to a maximum amount."
+        },
+        {
+          "id": "increased_damage_per_stack",
+          "description": "Increased Damage per Stack",
+          "base_by_rank": [
+            20.0,
+            25.0,
+            30.0
+          ],
+          "context_notes": "Hitting at least one enemy champion grants a stack of Arcane Perfection during the channel, stacking up to a maximum amount."
+        },
+        {
+          "id": "impact_distance_to_reveal",
+          "description": "Impact Distance to Reveal",
+          "base_by_rank": [
+            175.0,
+            200.0,
+            225.0
+          ],
+          "context_notes": "When there are no enemy champions nearby, Xerath will reveal himself for a couple of seconds if a missile strikes within a distance of an enemy unit."
+        }
+      ],
+      "description": "Active: Xerath channels for up to 10 seconds, gaining the ability to recast Rite of the Arcane multiple times after 0.5 seconds within the duration. If Rite of the Arcane ends without any of the recasts being used, half of its cooldown is refunded.",
+      "cooldown_seconds_by_rank": [
+        130.0,
+        115.0,
+        100.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "effect_hitbox_radius": 200.0
+      },
+      "context_notes": [
+        "Source targeting: Auto / Location.",
+        "Source castTime: none.",
+        "Source effectRadius: 200.",
+        "Source notes (summary): Rite of the Arcane cannot be canceled via movement commands during the first second of its channel."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Xerath.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Xerath"
+  }
+}

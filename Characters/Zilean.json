@@ -1,0 +1,336 @@
+{
+  "name": "Zilean",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Specialist",
+    "Support"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 574.0,
+      "per_level": 96.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 452.0,
+      "per_level": 50.0
+    },
+    "move_speed": 335.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 550.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.5
+    },
+    "resource_regeneration": {
+      "base": 11.35,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 52.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.658,
+      "per_level_percent": 2.13
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.11999999731779,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Time in a Bottle",
+      "type": "Passive",
+      "effects": [
+        {
+          "id": "zilean_p_effect_1",
+          "description": "Innate: Zilean generates 2 / 3.5 / 5 / 6 / 12 (based on level) experience (does not count towards his own level up) every 5 seconds. Time in a Bottle is on cooldown when the game starts and becomes disabled when everyone on Zilean's team including himself has reached level 18."
+        },
+        {
+          "id": "zilean_p_effect_2",
+          "description": "When he has stored enough to level up an allied champion and grant the same amount of experience to himself, he can select them to channel for 1.2 seconds after a 0.5-second cast time. The channel is interrupted and disabled upon entering combat with enemy champions or taking damage from turrets, placing it on a 10-second cooldown. If Zilean interrupts it himself, it is placed on a 1-second cooldown, increased to 2 if he used a basic attack against a turret to do so. Additionally, if Zilean becomes affected by any form of crowd control, the channel is placed on a 10-second cooldown."
+        },
+        {
+          "id": "zilean_p_effect_3",
+          "description": "A successful channel will grant an equal amount of experience to the ally to-level-up and Zilean, with a combined minimum of 15% of the stored experience."
+        },
+        {
+          "id": "zilean_p_effect_4",
+          "description": "Zilean cannot initiate the channel while he is affected by cast-inhibiting crowd control or a lockout that disables abilities."
+        }
+      ],
+      "description": "Innate: Zilean generates 2 / 3.5 / 5 / 6 / 12 (based on level) experience (does not count towards his own level up) every 5 seconds. Time in a Bottle is on cooldown when the game starts and becomes disabled when everyone on Zilean's team including himself has reached level 18.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        120.0,
+        120.0
+      ],
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source notes (summary): Time in a Bottle marks allied champions with two circles beneath them; the inner one represents how close they are to leveling up, turning golden when able to activate Time in a Bottle on them."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Time Bomb",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Zilean throws a ticking time bomb to the target location that will attach upon enemy contact,  revealing them. It will detonate after a short time or when the attached unit dies, dealing magic damage to nearby enemies hit.",
+      "effects": [
+        {
+          "id": "zilean_q_effect_1",
+          "description": "Active: Zilean throws a ticking time bomb to the target location that briefly grants sight of its surroundings as it travels as well as while lingering in the area. The bomb will attach itself to units that move within the epicenter, or those hit directly at the time of the bomb's landing, revealing them and their surroundings."
+        },
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            115.0,
+            165.0,
+            230.0,
+            300.0
+          ],
+          "context_notes": "After 3 seconds, or when the attached unit dies, the bomb explodes to deal magic damage to nearby enemies."
+        },
+        {
+          "id": "stun_duration",
+          "description": "Stun Duration",
+          "base_by_rank": [
+            1.1,
+            1.2,
+            1.3,
+            1.4,
+            1.5
+          ],
+          "context_notes": "The bomb detonates immediately if another bomb attaches itself to the same unit, stunning nearby enemies for a duration."
+        }
+      ],
+      "description": "Active: Zilean throws a ticking time bomb to the target location that briefly grants sight of its surroundings as it travels as well as while lingering in the area. The bomb will attach itself to units that move within the epicenter, or those hit directly at the time of the bomb's landing, revealing them and their surroundings.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          65.0,
+          70.0,
+          75.0,
+          80.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 350.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 350 /  500.",
+        "Source notes (summary): Time Bombs landing directly on top of multiple units follow a priority order for whom to attach themselves to."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Rewind",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Zilean  reduces the  remaining cooldowns of his other basic abilities.",
+      "effects": [
+        {
+          "id": "zilean_w_effect_1",
+          "description": "Active: Zilean reduces the remaining cooldowns of Time Bomb and Time Warp by 10 seconds each."
+        },
+        {
+          "id": "zilean_w_effect_2",
+          "description": "Either Time Bomb or Time Warp must be on cooldown to cast this ability."
+        }
+      ],
+      "description": "Active: Zilean reduces the remaining cooldowns of Time Bomb and Time Warp by 10 seconds each.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        12.0,
+        10.0,
+        8.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          35.0,
+          35.0,
+          35.0,
+          35.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Time Warp",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Zilean applies Time Warp to the target champion that lasts for a short time.",
+      "effects": [
+        {
+          "id": "zilean_e_effect_1",
+          "description": "Active: Zilean applies Time Warp to the target champion which lasts for 2.5 seconds."
+        },
+        {
+          "id": "movement_speed_modifier",
+          "description": "Movement Speed Modifier",
+          "base_by_rank": [
+            40.0,
+            55.0,
+            70.0,
+            85.0,
+            99.0
+          ],
+          "context_notes": "Time Warp: If the target is an ally, they gain bonus movement speed."
+        }
+      ],
+      "description": "Active: Zilean applies Time Warp to the target champion which lasts for 2.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        15.0,
+        15.0,
+        15.0,
+        15.0,
+        15.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          50.0,
+          50.0,
+          50.0,
+          50.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): No additional notes."
+      ]
+    },
+    "ultimate": {
+      "name": "Chronoshift",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Zilean places a protective time rune on himself or the target allied champion for a few seconds.",
+      "effects": [
+        {
+          "id": "zilean_r_effect_1",
+          "description": "Active: Zilean places a protective time rune on the target allied champion or himself for 5 seconds."
+        },
+        {
+          "id": "heal",
+          "description": "Heal",
+          "base_by_rank": [
+            600.0,
+            850.0,
+            1100.0
+          ],
+          "context_notes": "If the target takes fatal damage within the duration, they enter resurrection for 3 seconds, becoming invulnerable, untargetable, and unable to act."
+        }
+      ],
+      "description": "Active: Zilean places a protective time rune on the target allied champion or himself for 5 seconds.",
+      "cooldown_seconds_by_rank": [
+        120.0,
+        90.0,
+        60.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          125.0,
+          150.0,
+          175.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): Upon trigger, Chronoshift places all summoner spells that are not already on cooldown on a 3-second cooldown."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Zilean.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Zilean"
+  }
+}

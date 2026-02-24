@@ -1,0 +1,376 @@
+{
+  "name": "Urgot",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Fighter",
+    "Juggernaut",
+    "Tank"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 655.0,
+      "per_level": 102.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 340.0,
+      "per_level": 45.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 36.0,
+      "per_level": 5.0
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.05
+    },
+    "attack_range": 350.0,
+    "health_regeneration": {
+      "base": 7.5,
+      "per_level": 0.7
+    },
+    "resource_regeneration": {
+      "base": 7.25,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 63.0,
+      "per_level": 4.0
+    },
+    "attack_speed": {
+      "base": 0.625,
+      "per_level_percent": 3.75
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.150000005960464,
+      "gameplay_radius": 80.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Echoing Flames",
+      "type": "Passive",
+      "description_source": "Innate:  Urgot's six legs each conceal a shotgun that covers an arc, together forming a circle around him. Each shotgun can fire once before incurring a unique  cooldown.",
+      "effects": [
+        {
+          "id": "urgot_p_effect_1",
+          "description": "Innate: Urgot's six legs each conceal a shotgun that covers an arc, together forming a full circle of cover around him. Each shotgun can fire once before incurring a unique cooldown."
+        },
+        {
+          "id": "urgot_p_effect_2",
+          "description": "Urgot's next basic attack on-hit within the arc of a shotgun will cause it to fire in a cone, dealing 40% : 100% (based on level) AD (+ 2% : 6% (based on level) of target's maximum health) physical damage to enemies hit, capped at 100 : 390.59 (based on level) against monsters."
+        }
+      ],
+      "description": "Innate: Urgot's six legs each conceal a shotgun that covers an arc, together forming a full circle of cover around him. Each shotgun can fire once before incurring a unique cooldown.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 700.",
+        "Source notes (summary): Echoing Flames: Shotgun attack range scales with bonus attack range."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Corrosive Charge",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Urgot launches a canister at the target location that explodes after a brief delay, dealing physical damage and briefly  slowing enemies hit.",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            25.0,
+            70.0,
+            115.0,
+            160.0,
+            205.0
+          ],
+          "context_notes": "Active: Urgot launches a canister at the target location."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            45.0,
+            50.0,
+            55.0,
+            60.0,
+            65.0
+          ],
+          "context_notes": "Active: Urgot launches a canister at the target location."
+        }
+      ],
+      "description": "Active: Urgot launches a canister at the target location. Upon landing, it explodes after 0.3 seconds to deal physical damage to enemies hit and slow them for 1.25 seconds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.5,
+        9.0,
+        8.5,
+        8.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          70.0,
+          70.0,
+          70.0,
+          70.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 210.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 210.",
+        "Source notes (summary): Corrosive Charge prevents Purge from firing for 0."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Purge",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Urgot's other abilities mark enemy  champions hit for a few seconds, only one enemy can be marked at a time. At max rank, Purge lasts indefinitely and becomes a toggled ability.",
+      "effects": [
+        {
+          "id": "urgot_w_effect_1",
+          "description": "Passive: Urgot's other abilities mark enemy champions hit for 5 seconds. Only one enemy can be marked at a time. Additionally, at maximum rank, Purge lasts indefinitely and becomes a toggled ability."
+        },
+        {
+          "id": "urgot_w_effect_2",
+          "description": "Active: Urgot equips his machine gun for 4 seconds, granting ghosting to minions and non-epic monsters around him and autonomously firing at the nearest enemy at a fixed 3.0 attack speed, prioritizing marked enemy champions and refreshing the mark with every attack. While firing, Urgot is able to move and gains 40% slow resist, but his movement speed is reduced by 125."
+        },
+        {
+          "id": "modified_physical_damage",
+          "description": "Modified Physical Damage",
+          "base_by_rank": [
+            12.0,
+            12.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "context_notes": "Attacks with Purge deal modified physical damage, with a minimum threshold of 50 against monsters and minions, and cannot critically strike."
+        },
+        {
+          "id": "urgot_w_effect_4",
+          "description": "Purge can be recast after 0.5 seconds within the duration, and does so automatically afterwards."
+        },
+        {
+          "id": "urgot_w_effect_5",
+          "description": "Recast: Urgot ends Purge."
+        }
+      ],
+      "description": "Passive: Urgot's other abilities mark enemy champions hit for 5 seconds. Only one enemy can be marked at a time. Additionally, at maximum rank, Purge lasts indefinitely and becomes a toggled ability.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        9.0,
+        6.0,
+        3.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          30.0,
+          20.0,
+          10.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 2500.0,
+        "effect_hitbox_radius": 490.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source speed: 2500.",
+        "Source effectRadius: 490.",
+        "Source notes (summary): Autonomous attack range scales with bonus attack range."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Disdain",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Urgot  shields himself for a few seconds and  dashes in the target direction, dealing physical damage and briefly  stunning enemies hit,  knocking them aside.",
+      "effects": [
+        {
+          "id": "shield_strength",
+          "description": "Shield Strength",
+          "base_by_rank": [
+            55.0,
+            75.0,
+            95.0,
+            115.0,
+            135.0
+          ],
+          "context_notes": "Active: Urgot grants himself a shield for 4 seconds."
+        },
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            90.0,
+            120.0,
+            150.0,
+            180.0,
+            210.0
+          ],
+          "context_notes": "After the cast time, Urgot dashes in the target direction, though not through terrain, dealing physical damage to enemies he passes through, knocking them aside and stunning them for 1 second."
+        },
+        {
+          "id": "urgot_e_effect_3",
+          "description": "Urgot will stop upon hitting an enemy champion, stunning them for 1.5 seconds and, after 0.25 seconds, also flinging them to the location 100 units behind him, though not through terrain."
+        },
+        {
+          "id": "urgot_e_effect_4",
+          "description": "Purge can be cast during the dash."
+        }
+      ],
+      "description": "Active: Urgot grants himself a shield for 4 seconds.",
+      "cooldown_seconds_by_rank": [
+        16.0,
+        15.5,
+        15.0,
+        14.5,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          60.0,
+          70.0,
+          80.0,
+          90.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.45,
+        "projectile_speed": 1200.0
+      },
+      "context_notes": [
+        "Source targeting: Direction.",
+        "Source castTime: 0.45.",
+        "Source speed: 1200 + 100% movement speed.",
+        "Source notes (summary): Urgot turns around when tossing an enemy over him, always facing his victim."
+      ]
+    },
+    "ultimate": {
+      "name": "Fear Beyond Death",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "effects": [
+        {
+          "id": "physical_damage",
+          "description": "Physical Damage",
+          "base_by_rank": [
+            100.0,
+            225.0,
+            350.0
+          ],
+          "context_notes": "Active: Urgot fires a chem-drill in the target direction that impales the first enemy champion hit, dealing physical damage and leashing the target for 4 seconds, during which they are revealed and slowed by 0% : 75% (based on target's missing health)."
+        },
+        {
+          "id": "urgot_r_effect_2",
+          "description": "Fear Beyond Death can be recast if the leashed target is below 25% of their maximum health, and does so automatically if the chem-drill would kill the target, the ability is cast again while the target was above the threshold and is then brought within it, or the target is within the threshold at the end of the duration."
+        },
+        {
+          "id": "urgot_r_effect_3",
+          "description": "Recast - Mercy: Urgot launches chains at the leashed target, then channels for 1.5 seconds once they latch on. During this time, he reels them toward him, suppressing them, revealing them, rendering them untargetable, and preventing them from taking damage from other sources. If the target is near Urgot when the chains connect, they are pushed up to 1000 units away based on their proximity to him. This channel cannot be interrupted by crowd control."
+        },
+        {
+          "id": "urgot_r_effect_4",
+          "description": "Upon completing the channel, the target is executed. If the execution is successful, he fears nearby enemies for 1.5 seconds, during which they are slowed by 75%."
+        },
+        {
+          "id": "urgot_r_effect_5",
+          "description": "Fear Beyond Death's recast can be used while affected by cast-inhibiting crowd control. Urgot can move while channeling Fear Beyond Death's recast."
+        }
+      ],
+      "description": "Active: Urgot fires a chem-drill in the target direction that impales the first enemy champion hit, dealing physical damage and leashing the target for 4 seconds, during which they are revealed and slowed by 0% : 75% (based on target's missing health).",
+      "cooldown_seconds_by_rank": [
+        100.0,
+        85.0,
+        70.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          100.0,
+          100.0,
+          100.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.5,
+        "projectile_speed": 3200.0,
+        "effect_hitbox_radius": 600.0
+      },
+      "context_notes": [
+        "Source targeting: Direction / Auto.",
+        "Source castTime: 0.5.",
+        "Source speed: 3200.",
+        "Source effectRadius: Global /  600.",
+        "Source notes (summary): Unlike most projectiles, Fear Beyond Death can hit the edge of targets whose center is further than the missile range."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Urgot.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Urgot"
+  }
+}

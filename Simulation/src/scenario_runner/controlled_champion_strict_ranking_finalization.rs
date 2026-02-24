@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use super::*;
 
 pub(super) type ControlledChampionFallbackEvaluation =

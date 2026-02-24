@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0.0",
+  "system_name": "Runes Reforged Tree Index",
+  "data_version": "16.3.1",
+  "season": 2026,
+  "tree": {
+    "id": 8100,
+    "key": "Domination",
+    "name": "Domination",
+    "icon": "perk-images/Styles/7200_Domination.png"
+  },
+  "files": {
+    "primary_runes": "primary_runes.json",
+    "secondary_runes": "secondary_runes.json"
+  },
+  "slot_counts": {
+    "total_slots": 4,
+    "primary_slots": 4,
+    "secondary_slots": 3
+  },
+  "rune_counts": {
+    "total_tree_runes": 12,
+    "secondary_pool_runes": 9
+  },
+  "sources": [
+    {
+      "name": "Data Dragon runesReforged.json",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/runesReforged.json",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune paths, rune ids, icons, and slot structure"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune data templates category",
+      "url": "https://wiki.leagueoflegends.com/en-us/Category:Rune_data_templates",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "enumerating rune data templates"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Template:Rune data documentation",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Rune_data",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "rune template parameter definitions"
+      ]
+    },
+    {
+      "name": "League of Legends Wiki - Rune (Shards)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rune",
+      "accessed": "2026-02-23",
+      "used_for": [
+        "stat shard slot options"
+      ]
+    },
+    {
+      "name": "Split export from flat runes dataset",
+      "path": "Masteries/RunesReforged.json",
+      "accessed": "2026-02-24",
+      "used_for": "tree index split generation"
+    }
+  ]
+}

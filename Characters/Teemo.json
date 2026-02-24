@@ -1,0 +1,432 @@
+{
+  "name": "Teemo",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Mage",
+    "Marksman",
+    "Specialist"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 615.0,
+      "per_level": 104.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 334.0,
+      "per_level": 25.0
+    },
+    "move_speed": 330.0,
+    "armor": {
+      "base": 24.0,
+      "per_level": 4.95
+    },
+    "magic_resist": {
+      "base": 30.0,
+      "per_level": 1.3
+    },
+    "attack_range": 500.0,
+    "health_regeneration": {
+      "base": 5.5,
+      "per_level": 0.65
+    },
+    "resource_regeneration": {
+      "base": 9.6,
+      "per_level": 0.45
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 54.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.69,
+      "per_level_percent": 3.38
+    }
+  },
+  "basic_attack": {
+    "attack_type": "ranged",
+    "is_projectile": true,
+    "base_attack_period_seconds": 1.6,
+    "base_windup_seconds": 0.3,
+    "windup_fraction": 0.18749999999999997,
+    "windup_percent": 18.749999999999996,
+    "missile_speed": 2000.0,
+    "missile_travel_time_seconds_per_unit": 0.0005,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.3,
+      "attack_total_time": 1.6,
+      "attack_delay_offset": -0.1,
+      "gameplay_radius": 55.0
+    },
+    "calculation_notes": "Missile speed uses canonical ranged fallback (2000) because source champion payload omits basic-attack missile speed."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Guerrilla Warfare",
+      "type": "Passive",
+      "description_source": "Innate:  Teemo becomes  invisible after a brief moment remaining idle without taking damage, and will maintain so long as he remains idle or not  displaced.",
+      "effects": [
+        {
+          "id": "teemo_p_effect_1",
+          "description": "Innate: Teemo gains invisibility after 1.5 seconds without moving, taking damage, performing actions that break stealth, channeling, or being in stasis. Teemo will maintain stealth so long as he remains idle and is not displaced. While in brush, Teemo gains the stealth even while moving and can move without breaking stealth, but will lose the stealth in this case if he is knocked up."
+        },
+        {
+          "id": "teemo_p_effect_2",
+          "description": "Innate - Element of Surprise: When Teemo breaks the stealth, he gains 20% / 40% / 60% / 80% (based on level) bonus attack speed for 5 seconds."
+        }
+      ],
+      "description": "Innate: Teemo gains invisibility after 1.5 seconds without moving, taking damage, performing actions that break stealth, channeling, or being in stasis. Teemo will maintain stealth so long as he remains idle and is not displaced. While in brush, Teemo gains the stealth even while moving and can move without breaking stealth, but will lose the stealth in this case if he is knocked up.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Element of Surprise's buff does not stack with itself, only refreshes on subsequent triggers within the duration."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Blinding Dart",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Teemo shoots a dart at the target enemy that deals magic damage and  blinds them for a short time.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            80.0,
+            125.0,
+            170.0,
+            215.0,
+            260.0
+          ],
+          "context_notes": "Active: Teemo shoots a dart at the target enemy that deals magic damage and blinds them for a duration."
+        },
+        {
+          "id": "blind_duration",
+          "description": "Blind Duration",
+          "base_by_rank": [
+            2.0,
+            2.25,
+            2.5,
+            2.75,
+            3.0
+          ],
+          "context_notes": "Active: Teemo shoots a dart at the target enemy that deals magic damage and blinds them for a duration."
+        },
+        {
+          "id": "increased_blind_duration",
+          "description": "Increased Blind Duration",
+          "base_by_rank": [
+            4.0,
+            4.5,
+            5.0,
+            5.5,
+            6.0
+          ],
+          "context_notes": "The duration of the blind is doubled against minions and monsters."
+        }
+      ],
+      "description": "Active: Teemo shoots a dart at the target enemy that deals magic damage and blinds them for a duration.",
+      "cooldown_seconds_by_rank": [
+        7.0,
+        7.0,
+        7.0,
+        7.0,
+        7.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          70.0,
+          75.0,
+          80.0,
+          85.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2500.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 2500.",
+        "Source notes (summary): Blinding Dart will not make abilities that can trigger on-hit effects ( Parrrley, Mystic Shot) miss."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Move Quick",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Passive:  Teemo gains  bonus movement speed after a few seconds without taking damage from enemy  champions or  turrets.",
+      "effects": [
+        {
+          "id": "bonus_movement_speed",
+          "description": "Bonus Movement Speed",
+          "base_by_rank": [
+            12.0,
+            16.0,
+            20.0,
+            24.0,
+            28.0
+          ],
+          "context_notes": "Passive: Teemo gains bonus movement speed after 5 seconds without taking damage from enemy champions or turrets."
+        },
+        {
+          "id": "enhanced_bonus_movement_speed",
+          "description": "Enhanced Bonus Movement Speed",
+          "base_by_rank": [
+            24.0,
+            32.0,
+            40.0,
+            48.0,
+            56.0
+          ],
+          "context_notes": "Active: Teemo doubles the bonus movement speed for 3 seconds, preventing it from being removed for the duration."
+        },
+        {
+          "id": "teemo_w_effect_3",
+          "description": "Casting Move Quick does not interrupt Guerrilla Warfare."
+        }
+      ],
+      "description": "Passive: Teemo gains bonus movement speed after 5 seconds without taking damage from enemy champions or turrets.",
+      "cooldown_seconds_by_rank": [
+        14.0,
+        14.0,
+        14.0,
+        14.0,
+        14.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          40.0,
+          40.0,
+          40.0,
+          40.0,
+          40.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Auto.",
+        "Source castTime: none.",
+        "Source notes (summary): When Move Quick's active bonus movement speed ends Teemo will not regain the passive one if he was damaged during the active's duration."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Toxic Shot",
+      "type": "Passive",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Passive:  Teemo's  basic attacks deal bonus magic damage and inflict  poison.",
+      "effects": [
+        {
+          "id": "magic_damage_on_hit",
+          "description": "Magic Damage On-Hit",
+          "base_by_rank": [
+            9.0,
+            23.0,
+            37.0,
+            51.0,
+            65.0
+          ],
+          "context_notes": "Passive: Teemo's basic attacks are empowered to deal bonus magic damage on-hit and inflict poison."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            6.0,
+            12.0,
+            18.0,
+            24.0,
+            30.0
+          ],
+          "context_notes": "Passive: Teemo's basic attacks are empowered to deal bonus magic damage on-hit and inflict poison."
+        },
+        {
+          "id": "total_poison_damage",
+          "description": "Total Poison Damage",
+          "base_by_rank": [
+            24.0,
+            48.0,
+            72.0,
+            96.0,
+            120.0
+          ],
+          "context_notes": "Passive: Teemo's basic attacks are empowered to deal bonus magic damage on-hit and inflict poison."
+        },
+        {
+          "id": "monster_damage_on_hit",
+          "description": "Monster Damage On-Hit",
+          "base_by_rank": [
+            13.05,
+            33.35,
+            53.65,
+            73.95,
+            94.25
+          ],
+          "context_notes": "Toxic Shot deals 145% damage against monsters."
+        },
+        {
+          "id": "monster_damage_per_tick",
+          "description": "Monster Damage per Tick",
+          "base_by_rank": [
+            8.7,
+            17.4,
+            26.1,
+            34.8,
+            43.5
+          ],
+          "context_notes": "Toxic Shot deals 145% damage against monsters."
+        },
+        {
+          "id": "total_monster_poison_damage",
+          "description": "Total Monster Poison Damage",
+          "base_by_rank": [
+            34.8,
+            69.6,
+            104.4,
+            139.2,
+            174.0
+          ],
+          "context_notes": "Toxic Shot deals 145% damage against monsters."
+        }
+      ],
+      "description": "Passive: Teemo's basic attacks are empowered to deal bonus magic damage on-hit and inflict poison.\n poison: The target takes magic damage every second over 4 seconds. Subsequent inflictions refresh the duration.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source notes (summary): Toxic Shot deals persistent proc damage, and does not trigger spell effects."
+      ]
+    },
+    "ultimate": {
+      "name": "Noxious Trap",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Teemo tosses a poisonous mushroom to the target location that becomes  stealthed and lasts for a while. It will bounce forward upon landing on another mushroom.",
+      "effects": [
+        {
+          "id": "bounce_distance_cap",
+          "description": "Bounce Distance Cap",
+          "base_by_rank": [
+            350.0,
+            450.0,
+            550.0
+          ],
+          "context_notes": "Active: Teemo tosses a poisonous mushroom to the target location that becomes stealthed after arming over 1 second, lasting for up to 5 minutes and granting sight of its surroundings."
+        },
+        {
+          "id": "maximum_charges",
+          "description": "Maximum Charges",
+          "base_by_rank": [
+            3.0,
+            4.0,
+            5.0
+          ],
+          "context_notes": "Teemo periodically stocks a Noxious Trap charge, up to a maximum amount."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            30.0,
+            40.0,
+            50.0
+          ],
+          "context_notes": "The mushroom will explode upon enemy contact, inflicting poison to nearby enemies and slowing them for 4 seconds, as well as revealing them."
+        },
+        {
+          "id": "magic_damage_per_tick",
+          "description": "Magic Damage per Tick",
+          "base_by_rank": [
+            50.0,
+            81.25,
+            112.5
+          ],
+          "context_notes": "poison: The target takes magic damage every second over 4 seconds."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            200.0,
+            325.0,
+            450.0
+          ],
+          "context_notes": "poison: The target takes magic damage every second over 4 seconds."
+        },
+        {
+          "id": "teemo_r_effect_5",
+          "description": "A mushroom has 6 maximum health and can only be damaged by champion basic attacks (2 damage from ranged and 3 from melee)."
+        },
+        {
+          "id": "teemo_r_effect_6",
+          "description": "See Pets for more details about mushroom traps."
+        }
+      ],
+      "description": "Active: Teemo tosses a poisonous mushroom to the target location that becomes stealthed after arming over 1 second, lasting for up to 5 minutes and granting sight of its surroundings. If the mushroom lands on an already-placed one, it will bounce forward again for its cast distance, up to a cap, which can happen repeatedly.",
+      "cooldown_seconds_by_rank": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          55.0,
+          35.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "effect_hitbox_radius": 450.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.25.",
+        "Source effectRadius: 450.",
+        "Source notes (summary): The bounce can occur an indefinite amount of times while Teemo is alive."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Teemo.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Teemo"
+  }
+}

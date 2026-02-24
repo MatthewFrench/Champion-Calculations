@@ -11,48 +11,133 @@
     {
       "unique": true,
       "name": "Trinket",
-      "effects": "Places a visible {{tip|Farsight Ward}} at the target location that grants {{tip|sight}} of the surrounding area, including over [[terrain]] and through [[brush]] and lasting indefinitely. Also grants sight of the area in a 800 radius for 2 seconds. Upon detecting an enemy champion, the ward will increase its sight radius to 800 units and destroy itself after 3 seconds.",
+      "effects": "Places a visible {{tip|Farsight Ward}} at the target location that grants {{tip|sight}} of the surrounding area, including over [[terrain]] and through [[brush]] and lasting indefinitely. Also grants sight of the area in a 800 radius for 2 seconds. Upon detecting an enemy champion, the ward will increase its sight radius to 800 units and destroy itself after 3 seconds ({{pp|198 to 99|type=average champion level}} second cooldown; 4000 range).",
       "range": 4000
     }
   ],
   "effects_structured": [
     {
       "id": "farsight_place_ward",
-      "raw": "Place a visible Farsight Ward at the target location that grants sight over terrain and through brush indefinitely.",
+      "raw": "Place a visible Farsight Ward at the target location that grants vision over terrain and through brush indefinitely.",
       "effect_type": "summon_ward",
-      "applies_to": "self",
-      "trigger": {
-        "type": "on_activate"
-      },
+      "stat": "farsight_ward",
+      "value": 1,
+      "value_range": null,
+      "unit": "count",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_activate",
+      "applies_to": "target_location",
       "ward_type": "farsight",
       "ward_visibility": "visible",
       "range_units": 4000,
-      "duration_seconds": null
+      "conditions": [
+        "ward_sight_radius_500",
+        "ward_does_not_count_towards_standard_ward_limit",
+        "level_9_required_to_purchase"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        4000,
+        500,
+        9
+      ],
+      "parse_confidence": 0.84
     },
     {
       "id": "farsight_instant_reveal",
       "raw": "On cast, reveal a 800 radius area for 2 seconds.",
       "effect_type": "reveal",
+      "stat": "vision",
+      "value": 1,
+      "value_range": null,
+      "unit": "area",
       "applies_to": "area",
-      "trigger": {
-        "type": "on_activate"
-      },
+      "trigger": "on_activate",
       "radius_units": 800,
-      "duration_seconds": 2.0
+      "duration_seconds": 2.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        800,
+        2
+      ],
+      "parse_confidence": 0.84
     },
     {
       "id": "farsight_detection_behavior",
       "raw": "If the ward detects an enemy champion, its sight radius becomes 800 and it self-destructs after 3 seconds.",
       "effect_type": "ward_behavior",
+      "stat": "ward_sight_radius",
+      "value": 800,
+      "value_range": null,
+      "unit": "units",
+      "duration_seconds": 3.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
       "applies_to": "ward",
-      "trigger": {
-        "type": "on_enemy_champion_detected"
-      },
+      "trigger": "on_enemy_champion_detected",
       "radius_units": 800,
-      "self_destruct_delay_seconds": 3.0
+      "self_destruct_delay_seconds": 3.0,
+      "conditions": [],
+      "status_effects": [
+        "self_destruct_after_detection_delay"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        800,
+        3
+      ],
+      "parse_confidence": 0.84
+    },
+    {
+      "id": "farsight_recharge_scaling",
+      "raw": "Recharge time scales from 198 to 99 seconds based on average champion level and is affected by item haste.",
+      "effect_type": "condition_note",
+      "stat": "trinket_recharge_time",
+      "value": null,
+      "value_range": {
+        "min": 198,
+        "max": 99
+      },
+      "unit": "seconds",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [
+        "cooldown_scales_with_average_champion_level",
+        "affected_by_item_haste",
+        "level_9_required_to_purchase"
+      ],
+      "status_effects": [],
+      "scaling_terms": [
+        {
+          "stat": "average_champion_level",
+          "type": "linear_desc",
+          "min": 198,
+          "max": 99
+        }
+      ],
+      "numbers_extracted": [
+        198,
+        99,
+        9
+      ],
+      "parse_confidence": 0.82
     }
   ],
   "shop": {
+    "prices": {
+      "total": 0,
+      "sell": 0
+    },
     "purchasable": true
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3363_class_t1_farsightalteration.png",
@@ -66,7 +151,12 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.014134+00:00",
-    "effects_structured_reviewed": "2026-02-12"
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Farsight Alteration is a long-range targeted trinket cast (4000 range) that places a visible persistent ward and separately grants an immediate 2-second area reveal at cast location.",
+      "Detection branch: when the Farsight Ward sees an enemy champion, it temporarily expands to 800 sight radius and then self-destructs after 3 seconds.",
+      "Acquisition/charge semantics: purchase is gated to level 9 and recharge scales from 198 to 99 seconds by average champion level (item-haste affected)."
+    ]
   },
   "sources": [
     {
@@ -86,6 +176,12 @@
       "path": "From Online/items/Farsight Alteration.json",
       "used_for": "local ingestion snapshot used during structured effect authoring",
       "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Farsight Alteration",
+      "url": "https://wiki.leagueoflegends.com/en-us/Farsight_Alteration",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of recharge scaling, cast range, level requirement, ward visibility/radius behavior, and detection self-destruct timing"
     }
   ]
 }

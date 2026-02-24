@@ -1,0 +1,400 @@
+{
+  "name": "Sylas",
+  "data_version": "16.3.1",
+  "role_tags": [
+    "Assassin",
+    "Burst",
+    "Mage",
+    "Skirmisher"
+  ],
+  "base_stats": {
+    "health": {
+      "base": 600.0,
+      "per_level": 122.0
+    },
+    "resource": {
+      "type": "mana",
+      "base": 400.0,
+      "per_level": 70.0
+    },
+    "move_speed": 340.0,
+    "armor": {
+      "base": 29.0,
+      "per_level": 5.2
+    },
+    "magic_resist": {
+      "base": 32.0,
+      "per_level": 2.55
+    },
+    "attack_range": 175.0,
+    "health_regeneration": {
+      "base": 9.0,
+      "per_level": 0.9
+    },
+    "resource_regeneration": {
+      "base": 8.0,
+      "per_level": 0.8
+    },
+    "crit_chance": {
+      "base": 0.0,
+      "per_level": 0.0
+    },
+    "attack_damage": {
+      "base": 61.0,
+      "per_level": 3.0
+    },
+    "attack_speed": {
+      "base": 0.645,
+      "per_level_percent": 3.5
+    }
+  },
+  "basic_attack": {
+    "attack_type": "melee",
+    "is_projectile": false,
+    "base_attack_period_seconds": 1.54999995231628,
+    "base_windup_seconds": 0.259999990463256,
+    "windup_fraction": 0.16774193449149383,
+    "windup_percent": 16.774193449149383,
+    "missile_speed": 0.0,
+    "missile_travel_time_seconds_per_unit": 0.0,
+    "raw_timing_stats": {
+      "attack_cast_time": 0.259999990463256,
+      "attack_total_time": 1.54999995231628,
+      "attack_delay_offset": -0.0994649976491928,
+      "gameplay_radius": 65.0
+    },
+    "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
+  },
+  "abilities": {
+    "passive": {
+      "name": "Petricite Burst",
+      "type": "Passive",
+      "description_source": "Innate:  Sylas'  ability casts generate  stacks of Unshackled that stack up to a cap. While he has stacks, he gains tremendous  bonus attack speed.",
+      "effects": [
+        {
+          "id": "sylas_p_effect_1",
+          "description": "Innate: Whenever Sylas casts an ability, he generates a stack of Unshackled for 4 seconds, refreshing on subsequent casts and stacking up to 3 times."
+        },
+        {
+          "id": "sylas_p_effect_2",
+          "description": "Unshackled: Sylas' next basic attack gains 125% bonus attack speed and is empowered to have an uncancellable windup and consume a stack to whirl his chains around him, dealing 130% AD (+ 30% AP) magic damage to the primary target and 40% AD (+ 20% AP) magic damage to nearby enemies."
+        },
+        {
+          "id": "sylas_p_effect_3",
+          "description": "Unshackled deals 115% damage to monsters, and executes minions that are secondary targets and would be left below 25 health."
+        },
+        {
+          "id": "sylas_p_effect_4",
+          "description": "Petricite Burst can critically strike for (175% + 30%) damage only against the primary target."
+        }
+      ],
+      "description": "Innate: Whenever Sylas casts an ability, he generates a stack of Unshackled for 4 seconds, refreshing on subsequent casts and stacking up to 3 times.",
+      "context_notes": [
+        "Source targeting: Passive.",
+        "Source effectRadius: 300.",
+        "Source notes (summary): Spellblade damage does not get converted to magic damage, and will deal its damage only to the primary target."
+      ]
+    },
+    "basic_ability_1": {
+      "name": "Chain Lash",
+      "type": "Active",
+      "slot": "Q",
+      "default_keybinding": "Q",
+      "description_source": "Active:  Sylas lashes out two chains that converge at the target location, dealing magic damage to enemies hit and  slowing them for a brief moment.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            40.0,
+            60.0,
+            80.0,
+            100.0,
+            120.0
+          ],
+          "context_notes": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1."
+        },
+        {
+          "id": "slow",
+          "description": "Slow",
+          "base_by_rank": [
+            15.0,
+            20.0,
+            25.0,
+            30.0,
+            35.0
+          ],
+          "context_notes": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1."
+        },
+        {
+          "id": "magic_damage_2",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            60.0,
+            115.0,
+            170.0,
+            225.0,
+            280.0
+          ],
+          "context_notes": "After a 0."
+        },
+        {
+          "id": "total_magic_damage",
+          "description": "Total Magic Damage",
+          "base_by_rank": [
+            100.0,
+            175.0,
+            250.0,
+            325.0,
+            400.0
+          ],
+          "context_notes": "After a 0."
+        },
+        {
+          "id": "minion_damage",
+          "description": "Minion Damage",
+          "base_by_rank": [
+            24.0,
+            46.0,
+            68.0,
+            90.0,
+            112.0
+          ],
+          "context_notes": "After a 0."
+        },
+        {
+          "id": "total_minion_damage",
+          "description": "Total Minion Damage",
+          "base_by_rank": [
+            64.0,
+            106.0,
+            148.0,
+            190.0,
+            232.0
+          ],
+          "context_notes": "After a 0."
+        }
+      ],
+      "description": "Active: Sylas lashes out two chains that converge to the target location and extend beyond it up to a maximum range, dealing magic damage to enemies hit and slowing them for 1.5 seconds.",
+      "cooldown_seconds_by_rank": [
+        10.0,
+        9.0,
+        8.0,
+        7.0,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          55.0,
+          55.0,
+          55.0,
+          55.0,
+          55.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.4,
+        "effect_hitbox_radius": 180.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: 0.4.",
+        "Source effectRadius: 180 / 200.",
+        "Source notes (summary): The detonation's effect radius center is placed at the intersection between the chains from the initial cast, meaning a max range cast can create a detonation that reaches further than the chains do."
+      ]
+    },
+    "basic_ability_2": {
+      "name": "Kingslayer",
+      "type": "Active",
+      "slot": "W",
+      "default_keybinding": "W",
+      "description_source": "Active:  Sylas  dashes to the target enemy and strikes them to deal magic damage.",
+      "effects": [
+        {
+          "id": "magic_damage",
+          "description": "Magic Damage",
+          "base_by_rank": [
+            75.0,
+            110.0,
+            145.0,
+            180.0,
+            215.0
+          ],
+          "context_notes": "Active: Sylas dashes to the front of the target enemy's location then strikes them to deal magic damage."
+        },
+        {
+          "id": "minimum_heal",
+          "description": "Minimum Heal",
+          "base_by_rank": [
+            20.0,
+            40.0,
+            60.0,
+            80.0,
+            100.0
+          ],
+          "context_notes": "If this damages a champion, Sylas is also healed, increased by 0% : 100% (based on his missing health)."
+        },
+        {
+          "id": "maximum_heal",
+          "description": "Maximum Heal",
+          "base_by_rank": [
+            40.0,
+            80.0,
+            120.0,
+            160.0,
+            200.0
+          ],
+          "context_notes": "If this damages a champion, Sylas is also healed, increased by 0% : 100% (based on his missing health)."
+        }
+      ],
+      "description": "Active: Sylas dashes to the front of the target enemy's location then strikes them to deal magic damage.",
+      "cooldown_seconds_by_rank": [
+        12.0,
+        10.5,
+        9.0,
+        7.5,
+        6.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          50.0,
+          60.0,
+          70.0,
+          80.0,
+          90.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: none.",
+        "Source notes (summary): The damage will be dealt if the dash completed uninterrupted, and regardless of how far the target's location is at the end of the dash."
+      ]
+    },
+    "basic_ability_3": {
+      "name": "Abscond",
+      "type": "Active",
+      "slot": "E",
+      "default_keybinding": "E",
+      "description_source": "Active:  Sylas  dashes to the target location. He can then cast  Abduct within a short time.",
+      "effects": [
+        {
+          "id": "sylas_e_effect_1",
+          "description": "Active: Sylas dashes to the target location. Within 3.5 seconds, he can cast Abduct after a 0.2-second delay from casting Abscond."
+        },
+        {
+          "id": "sylas_e_effect_2",
+          "description": "Kingslayer can be cast during the dash."
+        }
+      ],
+      "description": "Active: Sylas dashes to the target location. Within 3.5 seconds, he can cast Abduct after a 0.2-second delay from casting Abscond.",
+      "cooldown_seconds_by_rank": [
+        13.0,
+        12.0,
+        11.0,
+        10.0,
+        9.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          65.0,
+          65.0,
+          65.0,
+          65.0,
+          65.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.0,
+        "projectile_speed": 1450.0
+      },
+      "context_notes": [
+        "Source targeting: Location.",
+        "Source castTime: none.",
+        "Source speed: 1450.",
+        "Source notes (summary): No additional details."
+      ]
+    },
+    "ultimate": {
+      "name": "Hijack",
+      "type": "Active",
+      "slot": "R",
+      "default_keybinding": "R",
+      "description_source": "Active:  Sylas launches his chains at the target enemy champion, gaining a copy of their  ultimate ability and briefly  revealing them. He cannot steal from the same champion again for a while, and can hold the hijacked ability for some time, during which he can recast Hijack.",
+      "effects": [
+        {
+          "id": "sylas_r_effect_1",
+          "description": "Active: Sylas launches his chains at the target enemy champion, gaining a copy of their ultimate ability and revealing them for 0.825 seconds. Sylas cannot select the same champion again for a set duration, and can hold the hijacked ultimate for up to 90 seconds, during which he can recast Hijack."
+        },
+        {
+          "id": "sylas_r_effect_2",
+          "description": "Recast: Sylas casts his hijacked ultimate ability at no cost, scaling based on Hijack's rank and his own statistics."
+        },
+        {
+          "id": "sylas_r_effect_3",
+          "description": "Hijacked ultimates and abilities that do not scale with ability power have their attack damage ratios converted to ability power ratios, scaling with 0.6% AP per 1% total AD, and 0.4% AP per 1% bonus AD respectively."
+        }
+      ],
+      "description": "Active: Sylas launches his chains at the target enemy champion, gaining a copy of their ultimate ability and revealing them for 0.825 seconds. Sylas cannot select the same champion again for a set duration, and can hold the hijacked ultimate for up to 90 seconds, during which he can recast Hijack.",
+      "cooldown_seconds_by_rank": [
+        80.0,
+        55.0,
+        30.0
+      ],
+      "cost": {
+        "resource": "mana",
+        "value_by_rank": [
+          75.0,
+          75.0,
+          75.0
+        ],
+        "value_type": "flat"
+      },
+      "execution": {
+        "cast_windup_seconds": 0.25,
+        "projectile_speed": 2200.0
+      },
+      "context_notes": [
+        "Source targeting: Unit.",
+        "Source castTime: 0.25.",
+        "Source speed: 2200.",
+        "Source notes (summary): Petricite Burst's stack from casting Hijack is given after Sylas receives the Hijacked ability."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Sylas.json",
+      "accessed": "2026-02-24",
+      "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    }
+  ],
+  "notes": [
+    "Generated from From Online champion payload as part of champion corpus parity coverage.",
+    "Ability execution metadata is source-derived from castTime/speed/effectRadius when present.",
+    "This baseline should be manually refined for high-impact simulation nuances before runtime scripting expansion."
+  ],
+  "schema_notes": {
+    "base_by_rank": "Arrays indexed by ability rank (1-based in game, 0-based in data).",
+    "base_by_champion_level": "Arrays indexed by champion level minus one.",
+    "formula": "Formula objects use explicit op/terms/output_stat when reliable source math is available.",
+    "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
+    "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
+    "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+  },
+  "simulation": {
+    "status": "data_only_unscripted",
+    "template_version": "1.0.0",
+    "generated_from_source_key": "Sylas"
+  }
+}
