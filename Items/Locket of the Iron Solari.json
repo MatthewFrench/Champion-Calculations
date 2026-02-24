@@ -12,7 +12,7 @@
     "health": {
       "flat": 200.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 25.0
     },
     "abilityHaste": {
@@ -30,7 +30,7 @@
   "effects_structured": [
     {
       "id": "devotion_active_shield_self_and_nearby_allies",
-      "raw": "Grants you and allied champions within {{tip cr icononly=true}} 850 units a {{tip shield}} for {{pp 200 to 360 type=target's level}} that decays over {{fd 2.5}} seconds.",
+      "raw": "Active: grant yourself and allied champions within 850 units a 200 to 360 (target level-scaled) shield that decays over 2.5 seconds (90s cooldown).",
       "effect_type": "shield",
       "stat": "damage_absorb",
       "value": 200,
@@ -41,7 +41,8 @@
       },
       "unit": "flat",
       "duration_seconds": 2.5,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
+      "cooldown_starts_on": "active_cast",
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self_and_allies_in_range",
@@ -58,15 +59,16 @@
         850,
         200,
         360,
-        2.5
+        2.5,
+        90
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 2200,
-      "sell": 880
+      "sell": 1540
     },
     "purchasable": true,
     "tags": [
@@ -81,6 +83,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.059708+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Devotion is an active cast that instantly applies a decaying shield to self and nearby allied champions within 850 units.",
+      "Player-visible behavior: shield strength scales by recipient level (200 to 360), decays over 2.5 seconds, and Devotion enters cooldown immediately on cast."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Locket of the Iron Solari)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Locket_of_the_Iron_Solari",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Devotion shield radius, level-scaled shield range, decay duration, and active cooldown timing"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Locket of the Iron Solari.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

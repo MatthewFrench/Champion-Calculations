@@ -7,16 +7,16 @@
   ],
   "stats": {
     "armor": {
-      "flat": 20.0
+      "flat": 20
     },
     "health": {
-      "flat": 200.0
+      "flat": 200
     },
-    "magicResistance": {
-      "flat": 20.0
+    "magicResist": {
+      "flat": 20
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [
@@ -26,7 +26,7 @@
       "effects": "{{tip|Slow|Slowing}} or {{tip|immobilize|immobilizing}} an enemy champion empowers you with ''Fanfare'' for {{rd|8|4}} seconds, granting you {{as|20 '''bonus''' movement speed}}. While empowered, you and nearby allied champions also gain {{as|{{rd|30|20}}% '''bonus''' attack speed}}.",
       "stats": {
         "movespeed": {
-          "flat": 20.0
+          "flat": 20
         }
       }
     }
@@ -43,7 +43,15 @@
       "duration_seconds": 8,
       "trigger": "on_cc",
       "applies_to": "self",
-      "parse_confidence": 0.8
+      "parse_confidence": 0.84,
+      "duration_seconds_by_attack_type": {
+        "melee": 8,
+        "ranged": 4
+      },
+      "conditions": [
+        "on_slow_or_immobilize_enemy_champion",
+        "fanfare_active"
+      ]
     },
     {
       "id": "bandlepipes_fanfare_ally_attack_speed",
@@ -55,13 +63,25 @@
       "duration_seconds": 8,
       "trigger": "on_cc",
       "applies_to": "ally",
-      "parse_confidence": 0.75
+      "parse_confidence": 0.82,
+      "value_by_attack_type": {
+        "melee": 0.3,
+        "ranged": 0.2
+      },
+      "duration_seconds_by_attack_type": {
+        "melee": 8,
+        "ranged": 4
+      },
+      "conditions": [
+        "fanfare_active",
+        "nearby_allies"
+      ]
     }
   ],
   "shop": {
     "prices": {
       "total": 2300,
-      "sell": 920
+      "sell": 1610
     },
     "purchasable": true,
     "tags": [
@@ -75,6 +95,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.713170+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Manual batch review A-items chunk 1.",
+      "Verified Fanfare trigger and melee/ranged split against page-level source: slow or immobilize enemy champion grants self movement speed and ally attack speed aura with shorter/lower ranged values."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bandlepipes.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Bandlepipes",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bandlepipes",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

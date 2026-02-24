@@ -30,10 +30,10 @@
       "duration_seconds": null,
       "cooldown_seconds": 1.5,
       "interval_seconds": null,
-      "trigger": "on_next_basic_attack",
-      "applies_to": "enemy",
+      "trigger": "on_next_basic_attack_after_ability",
+      "applies_to": "enemy_unit_hit",
       "conditions": [
-        "after_ability_cast_within_10_seconds"
+        "within_10_seconds"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -43,19 +43,28 @@
           "type": "percent"
         }
       ],
-      "buff_window_seconds": 10.0,
+      "timing": {
+        "window_seconds": 10.0,
+        "cooldown_starts_after_empowered_attack": true,
+        "consecutive_ability_casts_refresh_window": true
+      },
+      "modifiers": {
+        "consumes_spellblade_on_empowered_attack": true,
+        "can_trigger_on_structures": true,
+        "does_not_trigger_or_consume_on_jungle_plants": true
+      },
       "numbers_extracted": [
         10,
         100,
         1.5
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "prices": {
       "total": 900,
-      "sell": 360
+      "sell": 630
     },
     "purchasable": true,
     "tags": [
@@ -74,6 +83,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.076688+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: after ability cast, Sheen arms a Spellblade window for 10 seconds and the next qualifying basic attack consumes it for bonus physical damage equal to 100% base attack damage.",
+      "Timing model: Spellblade cooldown starts after the empowered attack is consumed, and consecutive ability casts refresh the armed window.",
+      "Player-visible behavior: Spellblade can be consumed on structures, but jungle plants do not consume or trigger the empowered hit."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Sheen.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Sheen",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sheen",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Spellblade timing, window refresh behavior, and trigger exclusions for structures versus jungle plants"
+    }
+  ]
 }

@@ -27,8 +27,9 @@
   "effects_structured": [
     {
       "id": "chempunk_chainsword_hackshorn",
-      "raw": "Dealing {{as physical damage}} to enemy champions inflicts them with {{tip Grievous Wounds}} for 3 seconds.",
+      "raw": "Dealing physical damage to enemy champions inflicts 40% Grievous Wounds for 3 seconds.",
       "effect_type": "status_effect",
+      "stat": "grievous_wounds",
       "value": 3,
       "value_range": null,
       "unit": "seconds",
@@ -38,7 +39,8 @@
       "trigger": "on_physical_damage_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [
-        "physical_damage"
+        "physical_damage",
+        "champion_damage"
       ],
       "status_effects": [
         "grievous_wounds"
@@ -47,13 +49,13 @@
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -71,6 +73,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.045848+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Hackshorn applies Grievous Wounds to enemy champions on any qualifying physical-damage event and refreshes the 3-second anti-heal window on repeated hits.",
+      "Player-visible behavior: anti-heal application is tied to champion damage and remains applied even when the triggering physical-damage instance is absorbed by a shield."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Chempunk Chainsword)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Chempunk_Chainsword",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Hackshorn trigger scope, Grievous Wounds duration, and shield-mitigated-hit application behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Chempunk Chainsword.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

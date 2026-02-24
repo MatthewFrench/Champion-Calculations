@@ -37,9 +37,12 @@
       "duration_seconds": 5.0,
       "cooldown_seconds": 9.0,
       "interval_seconds": null,
-      "trigger": "on_slow_or_immobilize_champions",
+      "trigger": "on_champion_ability_slow_or_immobilize",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "per_target_shared_cooldown",
+        "cooldown_starts_on_mark_application"
+      ],
       "status_effects": [
         "marked"
       ],
@@ -47,7 +50,7 @@
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     },
     {
       "id": "coordinated_fire_consume_mark_for_bonus_magic_damage",
@@ -58,11 +61,15 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 9.0,
       "interval_seconds": null,
       "trigger": "on_ally_damage_to_marked_target",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "consumes_imperial_mandate_mark",
+        "per_target_shared_cooldown",
+        "cooldown_starts_on_mark_application"
+      ],
       "status_effects": [
         "consume_imperial_mandate"
       ],
@@ -77,13 +84,13 @@
         10,
         9
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2250,
-      "sell": 900
+      "sell": 1575
     },
     "purchasable": true,
     "tags": [
@@ -100,9 +107,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.036945+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Cooldown is per target and shared between all Imperial Mandate users; starts on mark application."
+      "Execution model: A champion ability that slows or immobilizes an enemy champion applies Imperial Mandate mark for 5 seconds.",
+      "Execution model: Ally damage to a marked target consumes the mark and applies bonus magic damage based on target current health.",
+      "Limiter semantics: The 9-second cooldown is per target, shared between all Imperial Mandate users, and starts when mark is first applied."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Imperial Mandate.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Imperial Mandate)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Imperial_Mandate",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of mark duration, ally consume behavior, and per-target shared cooldown start timing"
+    }
+  ]
 }

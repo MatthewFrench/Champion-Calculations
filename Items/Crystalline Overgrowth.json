@@ -10,7 +10,7 @@
     {
       "unique": true,
       "name": "Buildup",
-      "effects": "After 90 seconds, turrets gain ''Overgrowth''. Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as|'''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time."
+      "effects": "After 90 seconds, targetable lane turrets gain ''Overgrowth''. Champions can attack a turret with ''Overgrowth'' to consume the effect and deal {{as|'''bonus''' true damage}} based on how long the ''Overgrowth'' has built up, capped at 300 seconds of growth time."
     }
   ],
   "active": [],
@@ -29,7 +29,8 @@
       "trigger": "time_elapsed",
       "applies_to": "structure",
       "conditions": [
-        "turret"
+        "targetable_lane_turret",
+        "deferred_if_enemy_unit_nearby"
       ],
       "status_effects": [
         "overgrowth"
@@ -38,7 +39,7 @@
       "numbers_extracted": [
         90
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "crystalline_overgrowth_consume_damage",
@@ -54,14 +55,17 @@
       "trigger": "on_attack_overgrowth_turret",
       "applies_to": "structure",
       "conditions": [
-        "overgrowth_consumed"
+        "overgrowth_consumed",
+        "requires_enemy_champion_turret_attack",
+        "not_consumed_while_backdoor_protection_active",
+        "damage_scales_linearly_after_60_seconds_up_to_300_seconds"
       ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         300
       ],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.66
     }
   ],
   "shop": {},
@@ -72,9 +76,43 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.026237+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Overgrowth damage scales with buildup time up to a 300 second cap; specific damage formula is not encoded here."
+      "Overgrowth applies to targetable lane turrets after a 90-second startup. If enemies are near the turret at activation time, application is deferred and then fast-forwarded once nearby enemies leave.",
+      "Player-visible execution: an enemy champion basic attack on a crystallized turret consumes Overgrowth on hit and applies bonus true damage; consumption is blocked while the turret has backdoor protection.",
+      "Overgrowth damage scales with buildup time (minimum state for 60 seconds, linear growth up to a 300 second cap); detailed level-scaling formula is tracked in sources but not fully encoded here."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "Riot patch notes (Patch 26.1)",
+      "url": "https://www.leagueoflegends.com/en-us/news/game-updates/patch-26-1-notes/",
+      "accessed": "2026-02-23",
+      "used_for": "official Crystalline Overgrowth startup, scaling window, suppression, and backdoor-protection interaction details"
+    },
+    {
+      "name": "League Wiki (Turret)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Turret",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Crystalline Overgrowth buildup, consume timing, and turret-attack resolution behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Crystalline Overgrowth.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

@@ -5,6 +5,13 @@
   "rank": [
     "LEGENDARY"
   ],
+  "lifecycle": {
+    "status": "retired_or_replaced",
+    "exclude_from_simulation": true,
+    "replacement_item": "Gunmetal Greaves",
+    "replacement_id": 3172,
+    "reason": "Data Dragon 16.3.1 maps ID 3172 to Gunmetal Greaves; Zephyr file is kept as legacy reference data."
+  },
   "stats": {
     "attackSpeed": {
       "flat": 50.0
@@ -59,7 +66,7 @@
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 770
     },
     "purchasable": true,
     "tags": [
@@ -74,6 +81,29 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.059125+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Legacy status: this file is preserved for historical reference but marked exclude_from_simulation because ID 3172 now resolves to Gunmetal Greaves in current Tier-1 datasets."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Zephyr.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

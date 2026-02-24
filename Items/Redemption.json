@@ -80,11 +80,17 @@
           "max": 350
         }
       ],
+      "modifiers": {
+        "heal_scales_with_target_level": true,
+        "heal_min_flat": 150,
+        "heal_max_flat": 350,
+        "impact_radius_units": 550
+      },
       "numbers_extracted": [
         150,
         350
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "Enemy champions in the area take true damage equal to 10% of target max health.",
@@ -99,7 +105,9 @@
       "interval_seconds": null,
       "trigger": "on_beam_impact",
       "applies_to": "enemy_champions_in_radius",
-      "conditions": [],
+      "conditions": [
+        "target_is_enemy_champion"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -108,10 +116,15 @@
           "type": "percent"
         }
       ],
+      "modifiers": {
+        "true_damage_ratio_of_target_max_health": 0.1,
+        "applies_to_enemy_champions_only": true,
+        "impact_radius_units": 550
+      },
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "Can be used while dead.",
@@ -135,8 +148,8 @@
   ],
   "shop": {
     "prices": {
-      "total": 2250,
-      "sell": 900
+      "total": 2300,
+      "sell": 1610
     },
     "purchasable": true,
     "tags": [
@@ -152,6 +165,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.017544+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Redemption is modeled as long-range support intervention: delayed area beam grants vision, heals allies by level scaling, and damages enemy champions by target max-health true damage while remaining castable when dead."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Redemption.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Redemption",
+      "url": "https://wiki.leagueoflegends.com/en-us/Redemption",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Intervention ally-heal level scaling and enemy-champion max-health true-damage semantics"
+    }
+  ]
 }

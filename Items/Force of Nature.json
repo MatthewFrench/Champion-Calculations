@@ -9,7 +9,7 @@
     "health": {
       "flat": 400.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 55.0
     },
     "movespeed": {
@@ -44,11 +44,18 @@
       "interval_seconds": null,
       "trigger": "on_magic_damage_from_champions",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "source_is_enemy_champion"
+      ],
       "status_effects": [
         "steadfast"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "refreshes_duration_on_subsequent_magic_damage": true,
+        "refreshes_duration_when_dealing_damage_to_source": true,
+        "stacks_last_seconds": 7.0
+      },
       "stack_rules": {
         "max_stacks": 8,
         "refresh_duration_on_apply": true,
@@ -58,7 +65,7 @@
         7,
         8
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "steadfast_gain_two_stacks_on_immobilized_by_champion",
@@ -74,15 +81,21 @@
       "interval_seconds": null,
       "trigger": "on_immobilized_by_champion",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "source_is_enemy_champion"
+      ],
       "status_effects": [
         "steadfast"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "grants_two_stacks_on_single_immobilize_event": true,
+        "refreshes_steadfast_duration": true
+      },
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "steadfast_stack_generation_rate_limit",
@@ -102,11 +115,16 @@
         "steadfast"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "rate_limit_scope": "per_cast_instance_per_damage_source",
+        "max_stacks_generated_per_window": 1,
+        "rate_limit_window_seconds": 1.0
+      },
       "numbers_extracted": [
         1,
         1
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "steadfast_max_stack_bonus_resist_and_movement_speed",
@@ -121,7 +139,9 @@
       "interval_seconds": null,
       "trigger": "on_max_stacks",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "steadfast_at_max_stacks"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -130,17 +150,22 @@
           "type": "percent"
         }
       ],
+      "modifiers": {
+        "required_stacks": 8,
+        "bonus_magic_resistance_flat": 70,
+        "bonus_movement_speed_ratio": 0.06
+      },
       "numbers_extracted": [
         70,
         6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -156,6 +181,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.065151+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Force of Nature is modeled as anti-magic sustained-combat ramp defense: incoming magic pressure and immobilize windows build Steadfast stacks that unlock a max-stack resist and movement-speed spike."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Force of Nature.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Force of Nature",
+      "url": "https://wiki.leagueoflegends.com/en-us/Force_of_Nature",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Steadfast stack generation cadence, refresh behavior, and max-stack bonuses"
+    }
+  ]
 }

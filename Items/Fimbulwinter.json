@@ -90,7 +90,7 @@
         3,
         8
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "everlasting_shield_strength_multiplier_with_multiple_nearby_enemies",
@@ -106,25 +106,32 @@
       "trigger": "on_multiple_enemies_nearby",
       "applies_to": "self",
       "conditions": [
-        "enemy_champions_within_1200_units"
+        "more_than_one_enemy_champion_within_1200_units"
       ],
       "status_effects": [],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "current_mana",
+          "ratio": 0.081,
+          "type": "percent"
+        }
+      ],
       "range_units": 1200,
       "numbers_extracted": [
         80,
         180,
+        8.1,
         4.5,
         1.8,
         1200
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2400,
-      "sell": 960
+      "sell": 1680
     },
     "tags": [
       "TANK"
@@ -137,6 +144,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.044232+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Shop sell value was corrected to Tier-1 canonical dataset/page values during Tear-line sibling review.",
+      "Everlasting is modeled as a reactive shield trigger on enemy-champion immobilize (or melee slow) with 3-second uptime and 8-second cooldown.",
+      "Multi-enemy amplification is modeled as a conditional shield-strength increase when more than one enemy champion is within 1200 units."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Fimbulwinter.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Fimbulwinter",
+      "url": "https://wiki.leagueoflegends.com/en-us/Fimbulwinter",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Everlasting shield trigger rules, duration/cooldown, and multi-enemy shield amplification scaling"
+    }
+  ]
 }

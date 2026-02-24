@@ -1,0 +1,633 @@
+use super::*;
+fn append_objective_score_breakdown_block(
+    content: &mut String,
+    title: &str,
+    breakdown: ObjectiveScoreBreakdown,
+) {
+    let push_component = |content: &mut String,
+                          label: &str,
+                          weight: f64,
+                          normalized_ratio: f64,
+                          contribution: f64,
+                          impact_percent: f64| {
+        let delta_vs_weight = impact_percent - weight * 100.0;
+        content.push_str(&format!(
+            "- {}: weight `{:.2}` | normalized `{:.4}` | contribution `{:.4}` | impact `{:.2}%` | delta vs weight `{:+.2}pp`\n",
+            label,
+            weight,
+            normalized_ratio,
+            contribution,
+            impact_percent,
+            delta_vs_weight
+        ));
+    };
+
+    content.push_str(&format!("### {}\n", title));
+    content.push_str(&format!(
+        "- Weighted-mean score: `{:.4}`\n- Worst-case scenario score: `{:.4}`\n- Worst-case blend weight: `{:.2}`\n- Final blended objective score: `{:.4}`\n",
+        breakdown.weighted_mean_score,
+        breakdown.worst_case_score,
+        breakdown.worst_case_weight,
+        breakdown.final_score
+    ));
+    push_component(
+        content,
+        "survival",
+        breakdown.survival.weight,
+        breakdown.survival.normalized_ratio,
+        breakdown.survival.contribution,
+        breakdown.survival.impact_percent,
+    );
+    push_component(
+        content,
+        "damage",
+        breakdown.damage.weight,
+        breakdown.damage.normalized_ratio,
+        breakdown.damage.contribution,
+        breakdown.damage.impact_percent,
+    );
+    push_component(
+        content,
+        "healing",
+        breakdown.healing.weight,
+        breakdown.healing.normalized_ratio,
+        breakdown.healing.contribution,
+        breakdown.healing.impact_percent,
+    );
+    push_component(
+        content,
+        "enemy_kills",
+        breakdown.enemy_kills.weight,
+        breakdown.enemy_kills.normalized_ratio,
+        breakdown.enemy_kills.contribution,
+        breakdown.enemy_kills.impact_percent,
+    );
+    push_component(
+        content,
+        "invulnerable_seconds",
+        breakdown.invulnerable_seconds.weight,
+        breakdown.invulnerable_seconds.normalized_ratio,
+        breakdown.invulnerable_seconds.contribution,
+        breakdown.invulnerable_seconds.impact_percent,
+    );
+    content.push('\n');
+}
+
+pub(crate) fn write_controlled_champion_report_markdown(
+    report_path: &Path,
+    data: &ControlledChampionReportData<'_>,
+) -> Result<()> {
+    if let Some(parent) = report_path.parent() {
+        fs::create_dir_all(parent)
+            .with_context(|| format!("Failed creating report directory {}", parent.display()))?;
+    }
+    let scenario_path = data.scenario_path;
+    let scenario_path_display = format_repo_relative_path(scenario_path);
+    let controlled_champion_name = data.controlled_champion_name;
+    let sim = data.sim;
+    let controlled_champion_base_level = data.controlled_champion_base_level;
+    let controlled_champion_end_stats = data.controlled_champion_end_stats;
+    let stack_notes = data.stack_notes;
+    let controlled_champion_loadout = data.controlled_champion_loadout;
+    let enemy_loadout = data.enemy_loadout;
+    let best_build = data.best_build;
+    let best_score = data.best_score;
+    let best_outcome = data.best_outcome;
+    let best_rune_proc_telemetry = data.best_rune_proc_telemetry;
+    let controlled_champion_unmodeled_item_effect_names =
+        unmodeled_runtime_item_effect_names(best_build);
+    let best_score_breakdown = data.best_score_breakdown;
+    let enemy_builds = data.enemy_builds;
+    let enemy_derived_combat_stats = data.enemy_derived_combat_stats;
+    let enemy_similarity_notes = data.enemy_similarity_notes;
+    let enemy_presets_used = data.enemy_presets_used;
+    let diverse_top_builds = data.diverse_top_builds;
+    let diverse_top_keys = data.diverse_top_keys;
+    let build_confidence = data.build_confidence;
+    let metrics_by_key = data.metrics_by_key;
+    let pareto_front = data.pareto_front;
+    let diagnostics = data.diagnostics;
+    let build_orders = data.build_orders;
+
+    validate_controlled_champion_selection_labels(
+        controlled_champion_name,
+        data.controlled_champion_loadout_selection,
+        &controlled_champion_loadout.selection_labels,
+        &controlled_champion_loadout.unmodeled_rune_names,
+    )?;
+
+    let now = SystemTime::now();
+    let generated_utc: DateTime<Utc> = now.into();
+    let generated_local: DateTime<Local> = DateTime::from(now);
+
+    let mut content = String::new();
+    content.push_str(&format!(
+        "# {} URF Run Report\n\n",
+        controlled_champion_name
+    ));
+    content.push_str(&format!(
+        "- Generated (local): `{}`\n",
+        generated_local.format("%Y-%m-%d %H:%M:%S %Z")
+    ));
+    content.push_str(&format!(
+        "- Generated (UTC): `{}`\n",
+        generated_utc.to_rfc3339()
+    ));
+    content.push_str(&format!("- Scenario: `{}`\n\n", scenario_path_display));
+
+    content.push_str("## Headline\n");
+    let best_damage = format_f64_with_commas(best_outcome.damage_dealt, 1);
+    let best_healing = format_f64_with_commas(best_outcome.healing_done, 1);
+    let best_invulnerable_seconds = format_f64_with_commas(best_outcome.invulnerable_seconds, 2);
+    content.push_str(&format!(
+        "- Best objective score: **{:.4}**\n- Best outcome:\n  - Time alive: **{:.2}s**\n  - Damage dealt: **{}**\n  - Healing done: **{}**\n  - Enemy kills: **{}**\n  - Invulnerable seconds: **{}s**\n- Best cap survivor: **{}**\n\n",
+        best_score,
+        best_outcome.time_alive_seconds,
+        best_damage,
+        best_healing,
+        best_outcome.enemy_kills,
+        best_invulnerable_seconds,
+        best_outcome.time_alive_seconds >= sim.max_time_seconds - 1e-6,
+    ));
+
+    content.push_str(&format!(
+        "- Champion level assumption: **{}**\n\n",
+        sim.champion_level
+    ));
+    content.push_str("## Objective Score Breakdown\n");
+    append_objective_score_breakdown_block(&mut content, "Best Build", best_score_breakdown);
+    content.push_str("## Rune Proc Telemetry (Best Trace)\n");
+    if best_rune_proc_telemetry.is_empty() {
+        content.push_str("- No rune procs were recorded during the best-trace replay.\n\n");
+    } else {
+        for entry in best_rune_proc_telemetry {
+            let damage_share_percent = if best_outcome.damage_dealt > 0.0 {
+                (entry.bonus_damage.max(0.0) / best_outcome.damage_dealt) * 100.0
+            } else {
+                0.0
+            };
+            let healing_share_percent = if best_outcome.healing_done > 0.0 {
+                (entry.bonus_healing.max(0.0) / best_outcome.healing_done) * 100.0
+            } else {
+                0.0
+            };
+            content.push_str(&format!(
+                "- {}:\n  - Procs: `{}`\n  - Attempts: `{}`\n  - Eligible: `{}`\n  - Proc rate (vs attempts): `{:.1}%`\n  - Proc rate (vs eligible): `{:.1}%`\n  - Bonus damage: `{:.2}` ({:.2}% share)\n  - Bonus healing: `{:.2}` ({:.2}% share)\n",
+                entry.rune_name,
+                entry.proc_count,
+                entry.attempt_count,
+                entry.eligible_count,
+                entry.proc_attempt_rate * 100.0,
+                entry.proc_eligible_rate * 100.0,
+                entry.bonus_damage,
+                damage_share_percent,
+                entry.bonus_healing,
+                healing_share_percent
+            ));
+            if !entry.source_breakdown.is_empty() {
+                content.push_str("  - Sources:\n");
+                for source in &entry.source_breakdown {
+                    content.push_str(&format!(
+                        "    - {}:\n      - Procs: `{}`\n      - Attempts: `{}`\n      - Eligible: `{}`\n      - Proc rate (vs attempts): `{:.1}%`\n      - Proc rate (vs eligible): `{:.1}%`\n      - Bonus damage: `{:.2}`\n      - Bonus healing: `{:.2}`\n",
+                        source.source,
+                        source.proc_count,
+                        source.attempt_count,
+                        source.eligible_count,
+                        source.proc_attempt_rate * 100.0,
+                        source.proc_eligible_rate * 100.0,
+                        source.bonus_damage,
+                        source.bonus_healing
+                    ));
+                }
+            }
+        }
+        content.push('\n');
+    }
+
+    let (seed_mean, seed_std) = mean_std(&diagnostics.seed_best_scores);
+    let processed_candidates = diagnostics
+        .processed_candidates
+        .min(diagnostics.total_candidates);
+    let total_score_requests = diagnostics
+        .search_type_breakdown
+        .iter()
+        .map(|breakdown| breakdown.score_requests)
+        .sum::<usize>();
+    content.push_str("## Search Diagnostics\n");
+    content.push_str(&format!(
+        "- Strategy: `{}`\n- Search quality profile: `{}`\n- Enemy scenarios: `{}`\n- Loadout:\n  - Candidates: `{}`\n  - Finalists: `{}`\n- Ensemble seeds: `{}`\n- Parallelism:\n  - Threads: `{}`\n  - Seed orchestration parallel: `{}`\n  - Portfolio parallel: `{}`\n  - Strategy-elites parallel: `{}`\n- Objective weights:\n  - survival: `{:.2}`\n  - damage: `{:.2}`\n  - healing: `{:.2}`\n  - enemy_kills: `{:.2}`\n  - invulnerable_seconds: `{:.2}`\n- Simulations executed (new full combat runs): `{}`\n- Unique scored candidates (all search stages): `{}`\n- Total score requests (all search stages): `{}`\n- In-memory full-evaluation cache:\n  - Hits: `{}`\n  - Misses: `{}`\n  - Waits: `{}`\n- Candidate key generation:\n  - Generated: `{}`\n  - Duplicate-pruned: `{}`\n  - Unique: `{}`\n- Strict candidate progression:\n  - Seed-scored: `{}`\n  - Remaining: `{}`\n  - Processed: `{}`\n- Strict stage:\n  - Non-finite: `{}`\n  - Timeout-skipped: `{}`\n  - Completion: `{:.1}%`\n- Strict ordering heuristic:\n  - Enabled: `{}`\n  - Rune signal weight: `{:.2}`\n  - Shard signal weight: `{:.2}`\n  - Exploration promotions: `{}`\n- Bleed candidates injected: `{}`\n- Adaptive candidates injected: `{}`\n- Seed-best stats:\n  - Mean: `{}`\n  - Stddev: `{}`\n- Search elapsed time: `{:.2}s`\n- Total run time (end-to-end): `{:.2}s`\n\n",
+        diagnostics.strategy_summary,
+        diagnostics.search_quality_profile,
+        format_usize_with_commas(diagnostics.scenario_count),
+        format_usize_with_commas(diagnostics.loadout_candidates),
+        format_usize_with_commas(diagnostics.loadout_finalists),
+        format_usize_with_commas(diagnostics.ensemble_seeds),
+        format_usize_with_commas(diagnostics.effective_threads),
+        diagnostics.seed_orchestration_parallel,
+        diagnostics.portfolio_strategy_parallel,
+        diagnostics.strategy_elites_parallel,
+        diagnostics.objective_survival_weight,
+        diagnostics.objective_damage_weight,
+        diagnostics.objective_healing_weight,
+        diagnostics.objective_enemy_kills_weight,
+        diagnostics.objective_invulnerable_seconds_weight,
+        format_usize_with_commas(diagnostics.full_evaluations),
+        format_usize_with_commas(diagnostics.unique_scored_candidates),
+        format_usize_with_commas(total_score_requests),
+        format_usize_with_commas(diagnostics.full_cache_hits),
+        format_usize_with_commas(diagnostics.full_cache_misses),
+        format_usize_with_commas(diagnostics.full_cache_waits),
+        format_usize_with_commas(diagnostics.candidate_keys_generated),
+        format_usize_with_commas(diagnostics.candidate_duplicates_pruned),
+        format_usize_with_commas(diagnostics.unique_candidate_builds),
+        format_usize_with_commas(diagnostics.strict_seed_scored_candidates),
+        format_usize_with_commas(diagnostics.strict_remaining_candidates),
+        format_usize_with_commas(processed_candidates),
+        format_usize_with_commas(diagnostics.strict_non_finite_candidates),
+        format_usize_with_commas(diagnostics.strict_candidates_skipped_timeout),
+        diagnostics.strict_completion_percent,
+        diagnostics.strict_heuristic_ordering_enabled,
+        diagnostics.strict_ranking_rune_signal_weight,
+        diagnostics.strict_ranking_shard_signal_weight,
+        format_usize_with_commas(diagnostics.strict_random_promotions_done),
+        format_usize_with_commas(diagnostics.bleed_candidates_injected),
+        format_usize_with_commas(diagnostics.adaptive_candidates_injected),
+        format_f64_with_commas(seed_mean, 2),
+        format_f64_with_commas(seed_std, 3),
+        diagnostics.elapsed_seconds,
+        diagnostics.total_run_seconds
+    ));
+    content.push_str(&format!(
+        "- Effective seed: `{}`\n",
+        diagnostics.effective_seed
+    ));
+    content.push_str(&format!(
+        "- Unmodeled rune gate:\n  - Hard gate: `{}`\n  - Penalty per rune: `{:.4}`\n  - Rejected: `{}`\n  - Penalized: `{}`\n",
+        diagnostics.unmodeled_rune_hard_gate,
+        diagnostics.unmodeled_rune_penalty_per_rune,
+        format_usize_with_commas(diagnostics.unmodeled_rune_candidates_rejected),
+        format_usize_with_commas(diagnostics.unmodeled_rune_candidates_penalized)
+    ));
+    content.push_str(&format!(
+        "- Unmodeled item-effect gate:\n  - Hard gate: `{}`\n  - Penalty per item: `{:.4}`\n  - Rejected: `{}`\n  - Penalized: `{}`\n",
+        diagnostics.unmodeled_item_effect_hard_gate,
+        diagnostics.unmodeled_item_effect_penalty_per_item,
+        format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_rejected),
+        format_usize_with_commas(diagnostics.unmodeled_item_effect_candidates_penalized)
+    ));
+    if diagnostics.coverage_stage_enabled {
+        content.push_str(&format!(
+            "- Coverage stage (pre-budget):\n  - Elapsed: `{:.2}s`\n  - Assets covered: `{}/{}`\n  - Seeded candidates (unique/raw): `{}/{}`\n",
+            diagnostics.coverage_stage_elapsed_seconds,
+            format_usize_with_commas(diagnostics.coverage_stage_assets_covered),
+            format_usize_with_commas(diagnostics.coverage_stage_assets_total),
+            format_usize_with_commas(diagnostics.coverage_stage_seed_candidates_unique),
+            format_usize_with_commas(diagnostics.coverage_stage_seed_candidates)
+        ));
+        if diagnostics.coverage_stage_incomplete && !diagnostics.coverage_stage_warning.is_empty() {
+            content.push_str(&format!(
+                "- Coverage warning: {}\n",
+                diagnostics.coverage_stage_warning
+            ));
+        }
+    }
+    if let Some(budget) = diagnostics.time_budget_seconds {
+        let coverage_note = if diagnostics.coverage_stage_enabled {
+            " (budget starts after pre-budget coverage stage)"
+        } else {
+            ""
+        };
+        content.push_str(&format!(
+            "- Time budget:\n  - Budget: `{:.1}s`\n  - Timed out: `{}`\n  - Progress: `{}/{}` ({:.1}%){}\n\n",
+            budget,
+            diagnostics.timed_out,
+            format_usize_with_commas(processed_candidates),
+            format_usize_with_commas(diagnostics.total_candidates),
+            diagnostics.strict_completion_percent,
+            coverage_note
+        ));
+    } else {
+        content.push_str(&format!(
+            "- Progress: `{}/{}` ({:.1}%)\n\n",
+            format_usize_with_commas(processed_candidates),
+            format_usize_with_commas(diagnostics.total_candidates),
+            diagnostics.strict_completion_percent
+        ));
+    }
+    if let Some(window) = diagnostics.popcorn_window_seconds {
+        content.push_str(&format!(
+            "- Popcorn mode:\n  - Window: `{:.1}s`\n  - Significant threshold: `{:.2}% of last best score`\n  - Significant events: `{}`\n  - Seconds since last significant improvement: `{:.1}`\n\n",
+            window,
+            diagnostics.popcorn_min_relative_improvement_percent,
+            format_usize_with_commas(diagnostics.significant_improvement_events),
+            diagnostics
+                .seconds_since_last_significant_improvement
+                .unwrap_or(0.0)
+        ));
+    }
+    if let Some(total) = diagnostics.estimated_total_candidate_space {
+        content.push_str(&format!(
+            "- Estimated total legal candidate space: `{}`\n",
+            format_f64_with_commas(total, 0)
+        ));
+    }
+    if let Some(run_coverage) = diagnostics.estimated_run_space_coverage_percent {
+        content.push_str(&format!(
+            "- Estimated legal-space coverage (this run): `{}`\n",
+            format_percent_display(run_coverage)
+        ));
+    }
+    if let Some(probability) = diagnostics.estimated_close_to_optimal_probability {
+        content.push_str(&format!(
+            "- Estimated closeness probability (top 0.000001% heuristic): `{:.2}%`\n",
+            probability * 100.0
+        ));
+    }
+    if !diagnostics
+        .estimated_close_to_optimal_probability_note
+        .is_empty()
+    {
+        content.push_str(&format!(
+            "- Closeness probability note: {}\n",
+            diagnostics.estimated_close_to_optimal_probability_note
+        ));
+    }
+    if !diagnostics.search_type_breakdown.is_empty() {
+        content.push_str("- Search-type simulation breakdown:\n");
+        for breakdown in &diagnostics.search_type_breakdown {
+            content.push_str(&format!(
+                "  - {}: requests `{}`, new simulations `{}`\n",
+                breakdown.name,
+                format_usize_with_commas(breakdown.score_requests),
+                format_usize_with_commas(breakdown.new_simulations)
+            ));
+        }
+    }
+    content.push('\n');
+
+    content.push_str(&format!(
+        "## {} Base Stats At Level\n",
+        controlled_champion_name
+    ));
+    content.push_str(&format!(
+        "- HP: {}, Armor: {}, MR: {}, AD: {}, AS: {}, MS: {}\n\n",
+        format_f64_with_commas(controlled_champion_base_level.base_health, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_armor, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_magic_resist, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_attack_damage, 1),
+        format_f64_with_commas(controlled_champion_base_level.base_attack_speed, 3),
+        format_f64_with_commas(controlled_champion_base_level.base_move_speed, 1)
+    ));
+
+    content.push_str("## Selected Rune Page And Shards\n");
+    content.push_str(&format!("- {}:\n", controlled_champion_name));
+    for s in &controlled_champion_loadout.selection_labels {
+        content.push_str(&format!("  - {}\n", s));
+    }
+    if enemy_loadout.selection_labels.is_empty() {
+        content.push_str(
+            "- Opponents: champion-specific preset rune pages are listed in Enemy Builds.\n\n",
+        );
+    } else {
+        content.push_str("- Opponents (shared):\n");
+        for s in &enemy_loadout.selection_labels {
+            content.push_str(&format!("  - {}\n", s));
+        }
+        content.push('\n');
+    }
+    if !controlled_champion_loadout.applied_notes.is_empty()
+        || !enemy_loadout.applied_notes.is_empty()
+    {
+        content.push_str("- Applied deterministic loadout effects:\n");
+        for note in &controlled_champion_loadout.applied_notes {
+            content.push_str(&format!("  - {}: {}\n", controlled_champion_name, note));
+        }
+        for note in &enemy_loadout.applied_notes {
+            content.push_str(&format!("  - Enemies: {}\n", note));
+        }
+    }
+    if !controlled_champion_loadout.skipped_notes.is_empty()
+        || !enemy_loadout.skipped_notes.is_empty()
+    {
+        content.push_str("- Skipped unsupported/non-deterministic effects:\n");
+        for note in &controlled_champion_loadout.skipped_notes {
+            content.push_str(&format!("  - {}: {}\n", controlled_champion_name, note));
+        }
+        for note in &enemy_loadout.skipped_notes {
+            content.push_str(&format!("  - Enemies: {}\n", note));
+        }
+    }
+    if !controlled_champion_loadout.unmodeled_rune_names.is_empty() {
+        content.push_str(
+            "- Controlled champion runes with no modeled deterministic/runtime combat effect:\n",
+        );
+        for rune_name in &controlled_champion_loadout.unmodeled_rune_names {
+            content.push_str(&format!("  - {}\n", rune_name));
+        }
+    }
+    if !controlled_champion_unmodeled_item_effect_names.is_empty() {
+        content.push_str(
+            "- Controlled champion items with unmodeled passive/active/structured runtime effects:\n",
+        );
+        for item_name in &controlled_champion_unmodeled_item_effect_names {
+            content.push_str(&format!("  - {}\n", item_name));
+        }
+    }
+    content.push('\n');
+
+    content.push_str("## Best Build\n");
+    content.push_str(&format!("- {}\n\n", item_names(best_build)));
+
+    content.push_str(&format!(
+        "## {} End Stats (Best Build)\n",
+        controlled_champion_name
+    ));
+    content.push_str(&format!(
+        "- HP: {}, Armor: {}, MR: {}, AP: {}, AD: {}, Ability Haste: {}, Move Speed (flat bonus): {}, Move Speed (% bonus): {}\n\n",
+        format_f64_with_commas(controlled_champion_end_stats.health, 1),
+        format_f64_with_commas(controlled_champion_end_stats.armor, 1),
+        format_f64_with_commas(controlled_champion_end_stats.magic_resist, 1),
+        format_f64_with_commas(controlled_champion_end_stats.ability_power, 1),
+        format_f64_with_commas(controlled_champion_end_stats.attack_damage, 1),
+        format_f64_with_commas(controlled_champion_end_stats.ability_haste, 1),
+        format_f64_with_commas(controlled_champion_end_stats.move_speed_flat, 1),
+        format_f64_with_commas(controlled_champion_end_stats.move_speed_percent, 1)
+    ));
+
+    content.push_str("## Stack Overrides\n");
+    if stack_notes.is_empty() {
+        content
+            .push_str("- No explicit stack overrides triggered for selected best build items.\n\n");
+    } else {
+        for note in stack_notes {
+            content.push_str(&format!("- {}\n", note));
+        }
+        content.push('\n');
+    }
+
+    content.push_str("## Enemy Builds (URF Presets)\n");
+    for (enemy, build, _) in enemy_builds {
+        content.push_str(&format!("- {}: {}\n", enemy.name, item_names(build)));
+        if let Some(preset) = enemy_presets_used.get(&to_norm_key(&enemy.name)) {
+            content.push_str(&format!(
+                "  - Source: {} (last checked {})\n",
+                preset.source_url, preset.last_checked
+            ));
+            content.push_str(&format!("  - Runes: {}\n", preset.runes.join(", ")));
+            content.push_str(&format!("  - Shards: {}\n", preset.shards.join(", ")));
+        }
+    }
+    content.push('\n');
+
+    content.push_str("## Enemy Derived Combat Profiles\n");
+    for profile in enemy_derived_combat_stats {
+        content.push_str(&format!(
+            "- {}: HP {:.1}, Armor {:.1}, MR {:.1}, AD {:.1}, AS {:.3} (interval {:.3}s), range {:.0}, projectile speed {:.0}, move speed {:.1}, desired combat range {:.0}, hit physical {:.1}, hit ability {:.1}, burst phys/magic/true {:.1}/{:.1}/{:.1}\n",
+            profile.champion,
+            profile.max_health,
+            profile.armor,
+            profile.magic_resist,
+            profile.attack_damage,
+            profile.attack_speed,
+            profile.attack_interval_seconds,
+            profile.attack_range,
+            profile.attack_projectile_speed,
+            profile.move_speed,
+            profile.desired_combat_range,
+            profile.physical_hit_damage,
+            profile.ability_hit_damage,
+            profile.burst_physical_damage,
+            profile.burst_magic_damage,
+            profile.burst_true_damage
+        ));
+    }
+    if !enemy_similarity_notes.is_empty() {
+        content.push_str("- Similarity checks:\n");
+        for note in enemy_similarity_notes {
+            content.push_str(&format!("  - {}\n", note));
+        }
+    }
+    content.push('\n');
+
+    content.push_str("## Diverse Top Builds\n");
+    if diverse_top_builds.is_empty() {
+        content.push_str("- No diverse builds found under current thresholds.\n\n");
+    } else {
+        let best = diverse_top_builds[0].1;
+        for (idx, (build, score)) in diverse_top_builds.iter().enumerate() {
+            let delta = score - best;
+            let key = diverse_top_keys.get(idx);
+            let confidence = key
+                .and_then(|k| build_confidence.iter().find(|c| c.key == *k))
+                .map(|c| {
+                    format!(
+                        " | seed hits: {}/{} ({:.0}%) {}",
+                        c.seed_hits,
+                        diagnostics.ensemble_seeds,
+                        c.seed_hit_rate * 100.0,
+                        c.robustness
+                    )
+                })
+                .unwrap_or_default();
+            let pareto = key.map(|k| pareto_front.contains(k)).unwrap_or(false);
+            let pareto_tag = if pareto { " | Pareto-front" } else { "" };
+            content.push_str(&format!(
+                "{}. `score {:.4}` ({:+.4} vs top): {}{}{}\n",
+                idx + 1,
+                score,
+                delta,
+                item_names(build),
+                confidence,
+                pareto_tag
+            ));
+            if let Some(k) = key
+                && let Some(m) = metrics_by_key.get(k)
+            {
+                content.push_str(&format!(
+                    "   - metrics: EHP~{}, AP~{}, timing score {:+.2}, total cost {}\n",
+                    format_f64_with_commas(m.ehp_mixed, 1),
+                    format_f64_with_commas(m.ap, 1),
+                    m.cost_timing,
+                    format_f64_with_commas(m.total_cost, 0)
+                ));
+            }
+        }
+        content.push('\n');
+    }
+
+    content.push_str("## Build Order Optimization\n");
+    if build_orders.is_empty() {
+        content.push_str("- No build-order optimization results available.\n\n");
+    } else {
+        for (idx, br) in build_orders.iter().enumerate() {
+            content.push_str(&format!(
+                "{}. Cumulative score: `{:.2}` | Order: {}\n",
+                idx + 1,
+                br.cumulative_score,
+                item_names(&br.ordered_items)
+            ));
+            for (stage_idx, lvl) in br.levels.iter().enumerate() {
+                let surv = br.stage_survival.get(stage_idx).copied().unwrap_or(0.0);
+                let dmg = br.stage_damage.get(stage_idx).copied().unwrap_or(0.0);
+                let heal = br.stage_healing.get(stage_idx).copied().unwrap_or(0.0);
+                let stage_objective = br
+                    .stage_objective_scores
+                    .get(stage_idx)
+                    .copied()
+                    .unwrap_or(0.0);
+                content.push_str(&format!(
+                    "   - Stage {} (level {}): objective `{:.3}`, time alive `{:.2}s`, damage `{}`, healing `{}`\n",
+                    stage_idx + 1,
+                    format_usize_with_commas(*lvl),
+                    stage_objective,
+                    surv,
+                    format_f64_with_commas(dmg, 1),
+                    format_f64_with_commas(heal, 1)
+                ));
+            }
+        }
+        content.push('\n');
+    }
+
+    content.push_str("## Deeper Insights\n");
+    if !diverse_top_builds.is_empty() {
+        let mut item_counts: HashMap<String, usize> = HashMap::new();
+        for (build, _) in diverse_top_builds {
+            for item in build {
+                *item_counts.entry(item.name.clone()).or_insert(0) += 1;
+            }
+        }
+        let mut counts = item_counts.into_iter().collect::<Vec<_>>();
+        counts.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
+        let core_items = counts
+            .iter()
+            .filter(|(_, c)| *c == diverse_top_builds.len())
+            .map(|(n, _)| n.clone())
+            .collect::<Vec<_>>();
+        let top_freq = counts
+            .iter()
+            .take(8)
+            .map(|(n, c)| format!("{} ({}/{})", n, c, diverse_top_builds.len()))
+            .collect::<Vec<_>>();
+
+        if core_items.is_empty() {
+            content.push_str("- No single item appears in every selected diverse top build.\n");
+        } else {
+            content.push_str(&format!(
+                "- Common core across all selected top builds: {}.\n",
+                core_items.join(", ")
+            ));
+        }
+        content.push_str(&format!(
+            "- Most frequent items in selected top set: {}.\n",
+            top_freq.join(", ")
+        ));
+        content.push_str("- Interpretation: these recurring items are your current high-confidence survivability spine; swaps around them represent viable style variants.\n");
+    } else {
+        content.push_str("- Broaden thresholds (`--max-relative-gap-percent`) or lower diversity constraint (`--min-item-diff`) to surface more alternatives.\n");
+    }
+
+    fs::write(report_path, content)
+        .with_context(|| format!("Failed writing report {}", report_path.display()))?;
+    Ok(())
+}

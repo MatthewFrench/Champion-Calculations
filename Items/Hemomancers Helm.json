@@ -57,7 +57,7 @@
         10,
         525
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
@@ -75,6 +75,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.022193+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Scarlet Allegiance checks the sum of life steal and omnivamp against a 30% threshold and activates when the combined value meets or exceeds that threshold.",
+      "Player-visible behavior: when active, the user gains bonus health and receives healing based on nearby enemy champion damage intake from all sources within 525 units.",
+      "Threshold behavior is additive across life steal and omnivamp; either source may be zero if the combined threshold is met."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Hemomancer's Helm)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hemomancer%27s_Helm",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Scarlet Allegiance threshold semantics and nearby-enemy-damage-to-heal conversion behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hemomancers Helm.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

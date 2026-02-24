@@ -89,10 +89,15 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "lifesteal_effectiveness_ratio": 1.0,
+        "applies_to_cleave_splash_damage": true,
+        "uses_owner_current_lifesteal": true
+      },
       "numbers_extracted": [
         100
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "Active: Deal 80% AD physical damage to enemies in a 450 radius in front of you.",
@@ -142,16 +147,21 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "lifesteal_effectiveness_ratio": 1.0,
+        "applies_to_ravenous_crescent_active_damage": true,
+        "uses_owner_current_lifesteal": true
+      },
       "numbers_extracted": [
         100
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3300,
-      "sell": 1320
+      "sell": 2310
     },
     "purchasable": true,
     "tags": [
@@ -167,9 +177,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.066375+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
+      "Ravenous Hydra is modeled as sustained fighter wave-clear where both passive cleave and active crescent preserve full lifesteal conversion from physical damage dealt.",
       "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Ravenous Hydra.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Ravenous Hydra",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ravenous_Hydra",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification that cleave and active damage both benefit from lifesteal at full effectiveness"
+    }
+  ]
 }

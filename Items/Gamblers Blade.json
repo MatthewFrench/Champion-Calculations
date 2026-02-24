@@ -41,7 +41,10 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack_or_ability_hit",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "per_attack_or_ability_cooldown_2_5_seconds",
+        "round_scoped_stored_gold_pool"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
@@ -50,7 +53,7 @@
         240,
         2.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.66
     },
     {
       "id": "money_in_the_bank_round_end_payout_or_loss",
@@ -65,13 +68,16 @@
       "interval_seconds": null,
       "trigger": "round_end",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "wins_round_gain_full_stored_gold",
+        "loss_round_forfeit_25_percent_of_stored_gold"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         25
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
@@ -84,9 +90,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.043375+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Round-based payout mechanic (Arena-style)."
+      "Execution model: Money In The Bank stores gold on qualifying basic-attack on-hit and ability-hit events with a 2.5-second per-attack/ability throttle.",
+      "Player-visible behavior: stored gold resolves at round end as full payout on round win or 25% loss on round loss.",
+      "Page notes indicate gold storage can continue briefly after winner determination before the next round starts; this edge timing is documented but not explicitly modeled."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Gambler's Blade)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gambler%27s_Blade",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Money In The Bank trigger chance, storage window behavior, and round-end payout/loss semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Gamblers Blade.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

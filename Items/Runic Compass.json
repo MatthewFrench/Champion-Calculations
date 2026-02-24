@@ -28,7 +28,7 @@
     {
       "unique": true,
       "name": "Shared Riches",
-      "effects": "Grants a '''Shared Riches''' charge every 20 seconds, up to 3 charges. When an allied champion is within {{tip|er|icononly=true}} 1050 units of you, consume a charge in the following ways:<br>• Kill a minion by any means, granting you {{g|20}} and the nearest allied champion kill {{g|gold}}. Damaging a minion {{as|'''below''' {{rd|50%|30%}} of its '''maximum''' health}} with a [[basic attack]] will {{tip|execute}} it, if any charges are available.<br>• Damage an enemy champion or structure with a basic attack or ability, granting you {{g|{{rd|24|22}}}}. A charge may be consumed this way only once per attack or ability."
+      "effects": "Grants a '''Shared Riches''' charge every 20 seconds, up to 3 charges. When an allied champion is within {{tip|er|icononly=true}} 1050 units of you, consume a charge in the following ways:<br>\u2022 Kill a minion by any means, granting you {{g|20}} and the nearest allied champion kill {{g|gold}}. Damaging a minion {{as|'''below''' {{rd|50%|30%}} of its '''maximum''' health}} with a [[basic attack]] will {{tip|execute}} it, if any charges are available.<br>\u2022 Damage an enemy champion or structure with a basic attack or ability, granting you {{g|{{rd|24|22}}}}. A charge may be consumed this way only once per attack or ability."
     },
     {
       "unique": true,
@@ -117,7 +117,7 @@
       "numbers_extracted": [
         1050
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "runic_compass_shared_riches_minion_kill_gold_grant",
@@ -140,7 +140,7 @@
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "runic_compass_shared_riches_execute_minions_below_health_threshold",
@@ -166,7 +166,7 @@
         50,
         30
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "runic_compass_shared_riches_damage_gold_grant_vs_champion_or_structure",
@@ -192,7 +192,7 @@
         24,
         22
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "runic_compass_shared_riches_consume_once_per_attack_or_ability",
@@ -211,7 +211,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "runic_compass_diminishing_gold_from_excessive_minion_kills",
@@ -227,12 +227,33 @@
       "trigger": "on_minion_kill",
       "applies_to": "self",
       "conditions": [
-        "excessive_minion_kills"
+        "excessive_minion_kills",
+        "support_item_team_scaled_thresholds",
+        "time_before_5_minutes_or_time_after_5_minutes"
       ],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.5
+      "modifiers": {
+        "support_income_rule_applies": true,
+        "threshold_formulas_encoded_from_page_level_sources": true,
+        "pre_5_minutes_minion_kill_threshold_formula": "7 / support_items_on_team",
+        "pre_5_minutes_gold_reduction_percent": 0.8,
+        "post_5_minutes_minions_per_minute_threshold_formula": "4 / support_items_on_team",
+        "post_5_minutes_gold_reduction_percent_min": 0.5,
+        "post_5_minutes_gold_reduction_percent_max": 0.8,
+        "post_5_minutes_gold_reduction_formula_note": "50% + 1% per minion kill starting from 20 kills, capped at 50 kills",
+        "per_minute_windowing_and_team_item_count_dynamics_require_shared_runtime_rule_table": true
+      },
+      "numbers_extracted": [
+        5,
+        7,
+        4,
+        80,
+        50,
+        20,
+        50
+      ],
+      "parse_confidence": 0.68
     },
     {
       "id": "runic_compass_ward_place_stealth_ward",
@@ -279,7 +300,7 @@
   "shop": {
     "prices": {
       "total": 400,
-      "sell": 160
+      "sell": 0
     },
     "tags": [
       "SUPPORT"
@@ -292,6 +313,39 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.065696+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Runic Compass is modeled as the second support-quest tier: Shared Riches charge economy plus quest progression into Bounty of Worlds with expanded ward stock.",
+      "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
+      "Execution-semantics review confirms Shared Riches is target/range gated: charge spend only occurs with an ally nearby and resolves on minion-kill execute or champion/structure damage events.",
+      "Sell-state policy resolved for support-quest staging: represent page-verified No Sell behavior with shop.prices.sell = 0 for quest-stage items.",
+      "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Runic Compass.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Runic Compass",
+      "url": "https://wiki.leagueoflegends.com/en-us/Runic_Compass",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Shared Riches execution thresholds, support-income diminishing-gold pre/post-5-minute rule formulas, and No Sell behavior"
+    }
+  ]
 }

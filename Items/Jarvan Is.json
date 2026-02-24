@@ -15,7 +15,7 @@
     "magicPenetration": {
       "flat": 12.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 20.0
     },
     "movespeed": {
@@ -65,11 +65,14 @@
       "interval_seconds": null,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "requires_quest_sneakerhead_augment",
+        "limited_to_one_boots_item"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.68
     },
     {
       "id": "fleetfooted_grant_slow_resist",
@@ -147,6 +150,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.019777+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: this is a Quest: Sneakerhead augment reward item that grants an aggregate boots package (stats plus named boot passives), with one-boots-slot limitation retained.",
+      "Player-visible behavior: Fleetfooted, Ionian Insight, and Plating effects are continuously active once the item is present; no cast or proc windup is required."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Jarvan I's)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Jarvan_I%27s",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Jarvan One passive semantics, required augment gating, and inherited boot passive set details"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Jarvan Is.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

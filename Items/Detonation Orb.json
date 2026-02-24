@@ -46,7 +46,9 @@
       "trigger": "on_ability_damage_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [
-        "post_mitigation"
+        "post_mitigation",
+        "arena_round_based_mode",
+        "stores_damage_until_detonation"
       ],
       "status_effects": [
         "marked"
@@ -57,7 +59,7 @@
         20,
         25
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "detonation_orb_mark_refresh",
@@ -72,13 +74,15 @@
       "interval_seconds": null,
       "trigger": "on_ability_damage_to_marked_champion",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "refreshes_mark_duration_on_each_ability_hit"
+      ],
       "status_effects": [
         "marked"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "detonation_orb_mark_detonate_expire",
@@ -94,11 +98,13 @@
       "interval_seconds": null,
       "trigger": "on_mark_expire",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "detonates_when_mark_duration_ends"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "detonation_orb_mark_detonate_lethal",
@@ -115,12 +121,13 @@
       "trigger": "on_mark_lethal",
       "applies_to": "enemy_champion",
       "conditions": [
-        "lethal_stored_damage"
+        "lethal_stored_damage",
+        "immediate_detonation"
       ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
@@ -136,6 +143,43 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.037227+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: ability damage to enemy champions applies and refreshes a 3-second mark that accumulates stored post-mitigation damage from each qualifying hit.",
+      "Player-visible behavior: marked targets take delayed true-damage detonation on expiry unless stored damage becomes lethal earlier, in which case the detonation resolves immediately.",
+      "Immobilized targets use the higher storage ratio, so crowd-control windows increase the delayed burst payload."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "Riot patch notes (Patch 25.06)",
+      "url": "https://www.leagueoflegends.com/en-au/news/game-updates/patch-25-06-notes/",
+      "accessed": "2026-02-23",
+      "used_for": "official verification of stored-damage ratio update (base vs immobilized target)"
+    },
+    {
+      "name": "League Wiki (Detonation Orb)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Detonation_Orb",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of mark refresh, delayed detonation, and lethal immediate-detonation behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Detonation Orb.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

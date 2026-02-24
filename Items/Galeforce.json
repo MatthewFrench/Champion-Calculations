@@ -12,7 +12,7 @@
     "attackSpeed": {
       "flat": 30.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "movespeed": {
@@ -37,12 +37,14 @@
       "value_range": null,
       "unit": "missiles",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self_and_target_enemy",
       "conditions": [
-        "prioritize_enemy_champions"
+        "fires_at_dash_end",
+        "prioritize_enemy_champions",
+        "targets_lowest_health_percent_enemy_within_750"
       ],
       "status_effects": [],
       "range_units": 750,
@@ -54,7 +56,7 @@
       "numbers_extracted": [
         750
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "cloudburst_missile_physical_damage_with_missing_health_amp",
@@ -69,11 +71,14 @@
       },
       "unit": "flat_total",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30.0,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "target_enemy",
-      "conditions": [],
+      "conditions": [
+        "damage_scales_with_target_missing_health",
+        "fires_three_homing_missiles_on_active"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -122,7 +127,7 @@
         5,
         7.5
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -140,6 +145,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.001597+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Cloudburst II is modeled as an active dash that resolves missile targeting at dash end against the lowest-health-percent enemy in range, prioritizing enemy champions.",
+      "Damage is modeled as three homing missiles with level-scaled total damage, bonus AD scaling, and additional scaling from target missing health."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Galeforce.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Galeforce",
+      "url": "https://wiki.leagueoflegends.com/en-us/Galeforce",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Cloudburst dash targeting, missile damage scaling, and active cooldown semantics"
+    }
+  ]
 }

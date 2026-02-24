@@ -43,9 +43,10 @@
       "value": -0.06,
       "unit": "percent_per_stack",
       "duration_seconds": 6,
-      "trigger": "on_damage",
+      "trigger": "on_physical_damage",
       "applies_to": "enemy_champion",
       "conditions": [
+        "physical_damage",
         "max_stacks_5"
       ],
       "parse_confidence": 0.85
@@ -58,15 +59,18 @@
       "value": 20,
       "unit": "flat",
       "duration_seconds": 2,
-      "trigger": "on_damage",
+      "trigger": "on_physical_damage",
       "applies_to": "self",
-      "parse_confidence": 0.8
+      "conditions": [
+        "physical_damage"
+      ],
+      "parse_confidence": 0.82
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -85,6 +89,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.714138+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Carve applies on physical damage instances to enemy champions, stacking armor reduction up to five stacks with independent refresh windows.",
+      "Player-visible behavior: Carve armor reduction applies after the triggering damage instance resolves, so the hit that applies a stack does not benefit from that new stack; Fervor grants short movement-speed bursts on physical-damage events."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Black Cleaver.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Black Cleaver)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Black_Cleaver",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Carve stack behavior, Fervor trigger semantics, and first-hit damage-order note"
+    }
+  ]
 }

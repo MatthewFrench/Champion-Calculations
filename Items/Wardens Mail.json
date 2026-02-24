@@ -17,25 +17,48 @@
       "effects": "Every first incoming instance of {{tt|post-mitigation|Damage calculated after modifiers}} {{tip|basic damage}} per {{tip|cast instance}} is [[Damage modifier|reduced]] by 15, with a '''maximum''' of 20% reduction each."
     }
   ],
-  "active": {},
+  "active": [],
   "effects_structured": [
     {
-      "id": "wardens_mail_rock_solid_flat",
-      "raw": "The first post-mitigation basic damage instance per cast is reduced by 15 (max 20% reduction).",
+      "id": "wardens_mail_rock_solid_reduce_first_basic_damage_instance_per_cast",
+      "raw": "Every first incoming post-mitigation basic-damage instance per cast instance is reduced by 15, capped at 20% reduction.",
       "effect_type": "damage_reduction_flat",
-      "applies_to": "self",
-      "trigger": {
-        "type": "on_basic_damage_instance",
-        "instance": "first_per_cast"
-      },
+      "stat": "incoming_basic_damage",
       "value": 15,
-      "max_percent_reduction": 20
+      "value_range": {
+        "max_percent_reduction_per_instance": 0.2
+      },
+      "unit": "flat",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "applies_to": "self",
+      "trigger": "on_incoming_basic_damage",
+      "conditions": [
+        "first_instance_per_cast",
+        "post_mitigation",
+        "basic_damage_source"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "max_percent_reduction_per_instance": 0.2,
+        "affects_non_champion_basic_damage_sources": true,
+        "includes_turret_basic_attacks": true,
+        "reduction_scales_down_when_post_mitigation_damage_below_75": true
+      },
+      "numbers_extracted": [
+        15,
+        20,
+        75
+      ],
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "prices": {
       "total": 1000,
-      "sell": 400
+      "sell": 700
     },
     "purchasable": true,
     "tags": [
@@ -49,9 +72,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.008107+00:00",
-    "effects_structured_reviewed": "2026-02-12",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "The term 'basic damage' and 'cast instance' are preserved; confirm if this includes on-hit effects or only basic attack damage."
+      "Execution-semantics review: Rock Solid reduces the first post-mitigation incoming basic-damage instance per cast instance by a flat 15, capped at 20% reduction for that instance.",
+      "Player-visible behavior: rapid multi-hit/rapid-attack sources are reduced on each qualifying first-per-cast instance, and the reduction scales down on low post-mitigation hits due to the 20% cap.",
+      "Page notes indicate Rock Solid applies to all basic attack damage sources (including non-champion sources such as turrets)."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Wardens Mail.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Warden's Mail",
+      "url": "https://wiki.leagueoflegends.com/en-us/Warden%27s_Mail",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Rock Solid first-instance-per-cast semantics, flat reduction and cap behavior, and notes on basic-damage source scope"
+    }
+  ]
 }

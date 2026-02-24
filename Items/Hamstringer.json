@@ -12,7 +12,7 @@
     "attackSpeed": {
       "flat": 40.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     }
   },
@@ -43,7 +43,8 @@
       "trigger": "on_critical_strike",
       "applies_to": "enemy_unit_hit",
       "conditions": [
-        "critical_strike"
+        "critical_strike",
+        "pre_mitigation_critical_instance"
       ],
       "status_effects": [
         "slow"
@@ -78,7 +79,7 @@
         25,
         7
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -96,9 +97,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.003048+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Bleed damage scales with critical strike instance and is affected by crit modifiers; bleed stacks infinitely."
+      "Execution model review: each critical strike applies an independent 2-second bleed instance (0.5-second damage ticks) and a concurrent slow application.",
+      "Bleed damage scales from the pre-mitigation critical-strike instance and stacks without cap; slow stacks are capped at 35%."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Hamstringer)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hamstringer",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Scour bleed/slow timing, stacking behavior, and critical-strike scaling semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hamstringer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

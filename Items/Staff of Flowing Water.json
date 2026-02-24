@@ -7,16 +7,16 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 35.0
+      "flat": 35
     },
     "healAndShieldPower": {
-      "flat": 10.0
+      "flat": 10
     },
     "manaRegen": {
-      "percent": 125.0
+      "percent": 125
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [
@@ -26,7 +26,7 @@
       "effects": "{{tip|Heal|Healing}} or {{tip|shield|shielding}} allied champions (''excluding yourself'') grants you and them {{as|45 ability power}} for 6 seconds.",
       "stats": {
         "abilityPower": {
-          "flat": 45.0
+          "flat": 45
         }
       }
     }
@@ -41,13 +41,14 @@
       "value": 45,
       "value_range": null,
       "unit": "flat",
-      "duration_seconds": 6.0,
+      "duration_seconds": 6,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_heal_or_shield_ally",
       "applies_to": "self_and_target_ally",
       "conditions": [
-        "exclude_self"
+        "exclude_self",
+        "ally_champion_target"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -55,13 +56,13 @@
         45,
         6
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 2250,
-      "sell": 900
+      "sell": 1575
     },
     "purchasable": true,
     "tags": [
@@ -77,6 +78,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.031002+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified Rapids execution model against page-level source: buff applies to both caster and healed/shielded ally champion; self-only healing/shielding does not trigger Rapids."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Staff of Flowing Water.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Staff of Flowing Water",
+      "url": "https://wiki.leagueoflegends.com/en-us/Staff_of_Flowing_Water",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

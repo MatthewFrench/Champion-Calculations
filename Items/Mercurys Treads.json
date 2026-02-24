@@ -6,7 +6,7 @@
     "BOOTS"
   ],
   "stats": {
-    "magicResistance": {
+    "magicResist": {
       "flat": 20.0
     },
     "movespeed": {
@@ -22,7 +22,7 @@
   "shop": {
     "prices": {
       "total": 1250,
-      "sell": 500
+      "sell": 875
     },
     "purchasable": true
   },

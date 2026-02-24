@@ -9,7 +9,7 @@
     "attackSpeed": {
       "flat": 50.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 45.0
     },
     "tenacity": {
@@ -33,16 +33,20 @@
       "trigger": {
         "type": "on_basic_attack"
       },
+      "conditions": [
+        "non_structure_target"
+      ],
       "damage_type": "magic",
       "value": 45,
       "unit": "flat",
-      "is_on_hit": true
+      "is_on_hit": true,
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -58,6 +62,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.000456+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Fray is an on-hit magic-damage proc attached to basic-attack hits.",
+      "Player-visible behavior: Fray does not apply to structures, so turret hits should not receive the 45 bonus magic-damage packet."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Wit's End)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Wit%27s_End",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Fray on-hit magic-damage amount and structure-exclusion behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Wits End.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

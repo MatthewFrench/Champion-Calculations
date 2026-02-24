@@ -9,7 +9,7 @@
     "abilityPower": {
       "flat": 50.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "abilityHaste": {
@@ -75,9 +75,11 @@
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_ability_cast",
-      "applies_to": "self_or_ally",
+      "applies_to": "self_or_targeted_ally",
       "conditions": [
-        "chance_scales_with_crit_chance"
+        "chance_scales_with_crit_chance",
+        "chance_equals_current_critical_strike_chance_percent_capped_at_100",
+        "targeted_ally_if_ability_targets_ally"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -114,13 +116,13 @@
         25,
         15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -134,9 +136,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.061730+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Shield chance equals critical strike chance, capped at 100%."
+      "Execution model: Wrath and Ruin adds temporary critical-strike-chance stacks on each ability cast (2.5% per cast, 6-second duration, 8-stack cap).",
+      "Player-visible behavior: Salvage the Wreckage rolls a per-cast shield trigger chance equal to current critical-strike chance (capped at 100%), then applies a short shield to self or targeted ally when the roll succeeds."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Rite of Ruin)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rite_of_Ruin",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of critical-strike-chance stack behavior and shield trigger chance scaling/cap semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Rite of Ruin.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

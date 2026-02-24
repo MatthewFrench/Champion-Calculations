@@ -75,11 +75,15 @@
           "dark"
         ]
       },
+      "modifiers": {
+        "light_and_dark_stacks_tracked_independently": true,
+        "alternates_mode_each_qualifying_hit": true
+      },
       "numbers_extracted": [
         5,
         3
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "Light hits grant bonus armor and magic resistance; Dark hits grant armor and magic penetration. Max stacks provide 30% penetration and higher resists.",
@@ -99,7 +103,7 @@
       "scaling_terms": [
         {
           "stat": "level",
-          "type": "linear",
+          "type": "stepped",
           "min": 6,
           "max": 8,
           "affects": "bonus_armor_and_magic_resist_per_light_stack"
@@ -111,6 +115,15 @@
           "affects": "armor_and_magic_penetration"
         }
       ],
+      "modifiers": {
+        "light_bonus_resists_per_stack_by_level_tier": {
+          "levels_1_to_10": 6,
+          "levels_11_to_13": 7,
+          "levels_14_to_18": 8
+        },
+        "dark_penetration_ratio_per_stack": 0.1,
+        "max_stacks_per_mode": 3
+      },
       "caps": {
         "penetration_ratio_max": 0.3,
         "max_stacks_per_mode": 3
@@ -121,13 +134,13 @@
         10,
         30
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -148,9 +161,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.018086+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Light stack resist values scale with level; Dark stacks grant 10% penetration per stack up to 30%."
+      "Light stack resist values scale with level; Dark stacks grant 10% penetration per stack up to 30%.",
+      "Terminus is modeled as a sustained on-hit dual-state cycle: alternating Light and Dark champion hits build separate short-duration stack sets for resist stats and penetration."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Terminus.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Terminus",
+      "url": "https://wiki.leagueoflegends.com/en-us/Terminus",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of alternating Light and Dark stack behavior, level-based resist tiers, and penetration caps"
+    }
+  ]
 }

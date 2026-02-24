@@ -38,14 +38,17 @@
       },
       "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 60.0,
       "interval_seconds": null,
-      "trigger": "active",
+      "trigger": "on_activate",
       "applies_to": "enemy_champion",
       "conditions": [],
       "status_effects": [
         "slow"
       ],
+      "timing": {
+        "cast_range_units": 700
+      },
       "scaling_terms": [
         {
           "stat": "ability_power",
@@ -72,13 +75,13 @@
         25,
         1.5
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -92,6 +95,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.025420+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Lightning Bolt is a targeted active against enemy champions and resolves both damage and slow on activation.",
+      "Player-visible behavior: active cast range is 700, cooldown is 60 seconds, and the slow branch is 25% for 1.5 seconds."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Hextech Gunblade)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hextech_Gunblade",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Lightning Bolt cooldown, cast range, level-based damage band, AP scaling, and slow duration/value"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hextech Gunblade.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

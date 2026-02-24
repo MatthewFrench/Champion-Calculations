@@ -51,7 +51,7 @@
       "numbers_extracted": [
         6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.8
     },
     {
       "id": "echo_consume_stacks_for_primary_and_secondary_magic_damage",
@@ -65,8 +65,9 @@
       "cooldown_seconds": 12.0,
       "interval_seconds": null,
       "trigger": "on_ability_damage",
-      "applies_to": "enemy",
+      "applies_to": "primary_and_additional_enemies",
       "conditions": [
+        "echo_stacks_at_least_1",
         "consume_all_echo_stacks"
       ],
       "status_effects": [],
@@ -80,7 +81,8 @@
       "stack_interaction": {
         "stack_id": "echo",
         "consume": "all",
-        "stacks_consumed_minimum": 1
+        "stacks_consumed_minimum": 1,
+        "stacks_consumed_maximum": 6
       },
       "extra_targets": {
         "per_stack_beyond_first": 1,
@@ -96,7 +98,7 @@
         0.5,
         12
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.72
     },
     {
       "id": "echo_remaining_stack_primary_damage_multiplier",
@@ -112,7 +114,7 @@
       "trigger": "on_ability_damage",
       "applies_to": "primary_target",
       "conditions": [
-        "remaining_echo_stacks_after_additional_targets"
+        "additional_targets_insufficient_for_echo_stacks"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -124,19 +126,20 @@
       ],
       "stack_interaction": {
         "stack_id": "echo",
-        "consume": "all"
+        "consume": "all",
+        "stacks_consumed_maximum": 6
       },
       "numbers_extracted": [
         20,
         12
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 2750,
-      "sell": 1100
+      "sell": 1925
     },
     "purchasable": true,
     "tags": [
@@ -150,6 +153,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.032723+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Luden's Echo is modeled as burst-plus-spread: one primary ability-hit proc with chained secondary orbs, then excess-stack spillover to the primary target."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Ludens Echo.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Luden's Echo",
+      "url": "https://wiki.leagueoflegends.com/en-us/Luden%27s_Echo",
+      "accessed": "2026-02-23",
+      "used_for": "effect wording and scaling clarification for structured effects"
+    }
+  ]
 }

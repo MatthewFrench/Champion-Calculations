@@ -7,16 +7,16 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 60.0
+      "flat": 60
     },
     "armorPenetration": {
-      "percent": 22.0
+      "percent": 22
     },
     "magicPenetration": {
-      "percent": 30.0
+      "percent": 30
     },
     "movespeed": {
-      "percent": 5.0
+      "percent": 5
     }
   },
   "passives": [
@@ -35,7 +35,7 @@
       "stat": "damage",
       "value": 0,
       "value_range": {
-        "min": 0.0,
+        "min": 0,
         "max": 0.15,
         "max_health_difference_max": 2500
       },
@@ -46,7 +46,9 @@
       "trigger": "on_damage_to_champion",
       "applies_to": "enemy_champion",
       "conditions": [
-        "target_max_health_greater_than_self"
+        "target_max_health_greater_than_self",
+        "champions_only",
+        "caps_at_2500_health_difference"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -65,13 +67,13 @@
         0.6,
         100
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -85,6 +87,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.038938+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified Giant Slayer scaling semantics from page-level source and Tier-1 datasets: damage amp scales with max-health difference and caps at 15% once the difference reaches 2500.",
+      "Patch-history note: older Arena values used higher max amplification; current structured values keep Tier-1-aligned 15% cap."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Perplexity.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Perplexity",
+      "url": "https://wiki.leagueoflegends.com/en-us/Perplexity",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formulas, and execution timing/targeting semantics"
+    }
+  ]
 }

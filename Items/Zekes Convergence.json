@@ -12,7 +12,7 @@
     "health": {
       "flat": 300.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 25.0
     },
     "abilityHaste": {
@@ -43,9 +43,9 @@
     },
     {
       "id": "zekes_frostfire_tempest_damage",
-      "raw": "On ultimate cast, summon a storm for 5s that deals magic damage every 0.25s to enemies within 350 units (45s cooldown).",
+      "raw": "On ultimate cast, summon a storm for 5s that deals 7.5 magic damage every 0.25s (150 total) to enemy champions within 350 units (45s cooldown starts on ultimate cast).",
       "effect_type": "damage",
-      "applies_to": "enemy_units_in_radius",
+      "applies_to": "enemy_champions_in_radius",
       "trigger": {
         "type": "on_ultimate_cast"
       },
@@ -53,35 +53,41 @@
       "interval_seconds": 0.25,
       "radius_units": 350,
       "damage_type": "magic",
-      "value": 30,
+      "value": 7.5,
       "unit": "flat_per_tick",
       "scaling_terms": [],
-      "damage_per_tick": 30,
-      "cooldown_seconds": 45.0
+      "damage_per_tick": 7.5,
+      "total_damage_over_duration": 150,
+      "cooldown_seconds": 45.0,
+      "cooldown_starts_on": "ultimate_cast",
+      "parse_confidence": 0.75
     },
     {
       "id": "zekes_frostfire_tempest_slow",
       "raw": "Enemies in the storm are slowed by 30% while it persists.",
       "effect_type": "status",
-      "applies_to": "enemy_units_in_radius",
+      "applies_to": "enemy_champions_in_radius",
       "trigger": {
         "type": "on_ultimate_cast"
       },
       "duration_seconds": 5.0,
       "radius_units": 350,
+      "cooldown_seconds": 45.0,
+      "cooldown_starts_on": "ultimate_cast",
       "status_effects": [
         {
           "type": "slow",
           "value": 30,
           "unit": "percent"
         }
-      ]
+      ],
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 2200,
-      "sell": 880
+      "sell": 1540
     },
     "purchasable": true,
     "tags": [
@@ -98,9 +104,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.046820+00:00",
-    "effects_structured_reviewed": "2026-02-12",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Damage per tick shown as 30; source also references a total value (30*5). Confirm if tick damage scales with any stats."
+      "Execution model: Frostfire Tempest begins on ultimate cast, ticks every 0.25 seconds for 5 seconds around the owner (350-unit centered radius), and only affects enemy champions.",
+      "Player-visible behavior: storm damage is 7.5 magic damage per tick (150 total over 5 seconds) with a 30% slow during storm uptime; cooldown starts at ultimate cast."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Zeke's Convergence)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Zeke%27s_Convergence",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Frostfire Tempest tick cadence/value split (7.5 per 0.25s, 150 total), champion-only target scope, radius, slow amount, and cooldown-start timing"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Zekes Convergence.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

@@ -36,6 +36,7 @@
       "raw": "While out of combat with enemy champions for 3s, gain 20 bonus move speed (10 if ranged).",
       "effect_type": "stat_modifier",
       "applies_to": "self",
+      "trigger": "passive",
       "conditions": [
         "out_of_combat_with_enemy_champions_for_3s"
       ],
@@ -43,16 +44,16 @@
       "value_by_attack_type": {
         "melee": 20,
         "ranged": 10
-      }
+      },
+      "parse_confidence": 0.74
     },
     {
       "id": "youmuus_wraith_step",
       "raw": "Active: Gain 20% bonus move speed (15% ranged) and Ghosted for 6s (4s ranged).",
       "effect_type": "status",
       "applies_to": "self",
-      "trigger": {
-        "type": "on_activate"
-      },
+      "trigger": "on_activate",
+      "cooldown_seconds": 45.0,
       "stat_modifiers": [
         {
           "stat": "movement_speed_bonus_percent",
@@ -70,13 +71,14 @@
             "ranged": 4
           }
         }
-      ]
+      ],
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -94,6 +96,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.008307+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Haunt grants flat movement speed only after remaining out of combat with enemy champions for 3 seconds.",
+      "Execution model: Wraith Step is a self-active that immediately grants movement-speed bonus and Ghosting for attack-type-specific durations.",
+      "Timing note: Wraith Step has a 45-second cooldown and no projectile/delayed resolution branch."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Youmuus Ghostblade.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Youmuu's Ghostblade)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Youmuu%27s_Ghostblade",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of out-of-combat gating, active movement-speed/ghosted duration split by attack type, and 45-second active cooldown"
+    }
+  ]
 }

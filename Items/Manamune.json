@@ -86,11 +86,11 @@
         8,
         4
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "manaflow_consume_charge_to_gain_bonus_mana",
-      "raw": "Consume a Manaflow charge on-hit or when an ability affects a unit to gain bonus mana (3, or 6 for champion targets), once per cast instance.",
+      "raw": "Consume a Manaflow charge on-hit and when an ability affects an enemy or ally to gain bonus mana (3, or 6 for champion targets), with ability events limited to once per cast instance.",
       "effect_type": "resource_gain",
       "stat": "bonus_mana",
       "value": 3,
@@ -104,7 +104,8 @@
       "trigger": "on_hit_or_ability_affect",
       "applies_to": "self",
       "conditions": [
-        "once_per_cast_instance"
+        "manaflow_charge_available",
+        "once_per_cast_instance_for_ability_events"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -112,11 +113,19 @@
         "stack_id": "manaflow_charge",
         "consume": 1
       },
+      "modifiers": {
+        "non_champion_target_bonus_mana": 3,
+        "champion_target_bonus_mana": 6,
+        "trigger_paths": [
+          "basic_attack_on_hit",
+          "ability_affects_enemy_or_ally"
+        ]
+      },
       "numbers_extracted": [
         3,
         6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "manaflow_bonus_mana_cap",
@@ -165,7 +174,7 @@
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -185,6 +194,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.055698+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Manamune Manaflow is modeled as two execution paths: on-hit basic attacks and ability-affect events.",
+      "Execution semantics note: ability-based Manaflow triggers are limited to once per cast instance, while on-hit path is charge-gated and resolves on hit.",
+      "Shop sell value was corrected to Tier-1 canonical dataset/page values during manual review."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Manamune.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Manamune",
+      "url": "https://wiki.leagueoflegends.com/en-us/Manamune",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Manaflow trigger semantics and transform/cap behavior"
+    }
+  ]
 }

@@ -9,7 +9,7 @@
     "attackSpeed": {
       "flat": 40.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "movespeed": {
@@ -38,20 +38,23 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "applies_to_non_ultimate_ability_cooldowns",
+        "uses_remaining_cooldown"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "affected_abilities": "basic",
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2650,
-      "sell": 1060
+      "sell": 1855
     },
     "purchasable": true,
     "tags": [
@@ -67,6 +70,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.071875+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Transcendence procs from basic-attack events and reduces remaining cooldown on non-ultimate abilities by a percentage of current remaining time, not total cooldown.",
+      "Player-visible behavior: cooldown acceleration occurs per attack cadence and is strongest when attacking continuously."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Navori Flickerblade.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Navori Flickerblade)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Navori_Flickerblade",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of on-attack cooldown-reduction semantics and non-ultimate ability scope"
+    }
+  ]
 }

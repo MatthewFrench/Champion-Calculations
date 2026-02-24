@@ -102,17 +102,24 @@
       "interval_seconds": null,
       "trigger": "on_immolate_tick",
       "applies_to": "minion",
-      "conditions": [],
+      "conditions": [
+        "immolate_active"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "applies_to_minions_only": true,
+        "execute_threshold_equals_next_immolate_tick_damage": true,
+        "threshold_uses_current_immolate_scaling_and_multipliers": true
+      },
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2700,
-      "sell": 1080
+      "sell": 1890
     },
     "purchasable": true,
     "tags": [
@@ -130,6 +137,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.045283+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Sunfire Aegis is modeled as persistent close-range tank DPS where Immolate uptime and per-tick damage define both area pressure and minion execute threshold behavior."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Sunfire Aegis.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Sunfire Aegis",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sunfire_Aegis",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Immolate execute semantics and aura behavior details"
+    }
+  ]
 }

@@ -71,13 +71,14 @@
       "scaling_terms": [],
       "stack_rules": {
         "max_stacks": 4,
-        "duration_seconds": 6.0
+        "duration_seconds": 6.0,
+        "per_cast_instance_min_interval_seconds": 1.0
       },
       "numbers_extracted": [
         6,
         4
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "spear_of_shojin_focused_will_damage_amp",
@@ -107,13 +108,13 @@
         3,
         12
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -128,6 +129,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.070766+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Focused Will stacks are granted by non-innate ability or pet damage, last 6 seconds, cap at 4, and each cast instance is throttled to one stack grant per second.",
+      "Player-visible behavior: each stack increases non-item-sourced ability, pet, and proc damage by 3%, reaching 12% at maximum stacks while Dragonforce separately provides always-on basic-ability haste."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Spear of Shojin)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Spear_of_Shojin",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Dragonforce haste, Focused Will stack duration/cap, per-stack damage increase, and per-cast-instance stack throttle"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Spear of Shojin.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

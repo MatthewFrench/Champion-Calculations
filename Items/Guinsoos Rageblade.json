@@ -94,7 +94,7 @@
       "trigger": "on_basic_attack",
       "applies_to": "self",
       "conditions": [
-        "at_max_stacks"
+        "seething_strike_stacks_4"
       ],
       "status_effects": [
         "phantom"
@@ -107,7 +107,12 @@
         6,
         2
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.7,
+      "stack_interaction": {
+        "stack_id": "seething_strike",
+        "required_stacks": 4,
+        "required_state": "max_stacks"
+      }
     },
     {
       "id": "phantom_hit_trigger_on_hit_effects_after_two_phantom_stacks",
@@ -123,7 +128,8 @@
       "trigger": "on_basic_attack",
       "applies_to": "enemy_unit_hit",
       "conditions": [
-        "phantom_stacks_2"
+        "phantom_stacks_2",
+        "next_basic_attack_consumes_phantom"
       ],
       "status_effects": [
         "consume_phantom_stacks"
@@ -136,13 +142,19 @@
         2,
         0.15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.7,
+      "stack_interaction": {
+        "stack_id": "phantom",
+        "consume": "all",
+        "required_stacks": 2
+      },
+      "on_hit_repeat_count": 1
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -158,6 +170,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.071371+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Guinsoo's Rageblade models sustained on-hit combat: Wrath adds flat magic damage while Seething Strike builds attack-speed tempo and Phantom Hit repeats on-hit effects after a short delay."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Guinsoos Rageblade.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Guinsoo's Rageblade",
+      "url": "https://wiki.leagueoflegends.com/en-us/Guinsoo%27s_Rageblade",
+      "accessed": "2026-02-23",
+      "used_for": "effect wording and scaling clarification for structured effects"
+    }
+  ]
 }

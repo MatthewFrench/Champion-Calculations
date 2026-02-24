@@ -92,7 +92,7 @@
         2,
         25
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "pull_their_strings_berserk_target_stat_modifiers",
@@ -127,7 +127,7 @@
         2,
         25
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "pull_their_strings_fear_instead_when_only_one_enemy_alive",
@@ -157,7 +157,7 @@
         2,
         25
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     },
     {
       "id": "pull_their_strings_cooldown_reduction_on_heal_shield_or_buff",
@@ -180,7 +180,7 @@
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -196,6 +196,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.031491+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: stacks are applied only by basic attacks that hit enemy champions; the fourth hit consumes all stacks and applies crowd-control immediately on the target.",
+      "Player-visible timing: berserk/fear duration is 2 seconds on resolution of the fourth stack, with shared 25-second item cooldown and 15-second stack expiration window.",
+      "Cooldown refund trigger is tied to ally/self heal, shield, or ability-sourced buff events and is limited to once per cast."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Puppeteer)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Puppeteer",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of stack duration/cap, control-on-fourth-hit behavior, cooldown refund constraints, and V25.05 timing updates (15s stack duration, 25s cooldown)"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Puppeteer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

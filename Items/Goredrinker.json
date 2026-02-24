@@ -7,16 +7,16 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 55.0
+      "flat": 55
     },
     "health": {
-      "flat": 400.0
+      "flat": 400
     },
     "abilityHaste": {
-      "flat": 20.0
+      "flat": 20
     },
     "omnivamp": {
-      "percent": 10.0
+      "percent": 10
     }
   },
   "passives": [],
@@ -37,11 +37,13 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 15,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "enemy_units_in_radius",
-      "conditions": [],
+      "conditions": [
+        "cast_time_equals_attack_windup"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -55,7 +57,7 @@
         175,
         450
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.78
     },
     {
       "id": "thirsting_slash_heal_per_enemy_champion_hit",
@@ -66,11 +68,13 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 15,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "heal_per_enemy_champion_hit"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -92,14 +96,18 @@
         20,
         8
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "FIGHTER"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6630_fighter_t4_goredrinker.png",
   "simpleDescription": null,
@@ -110,6 +118,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.048865+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified page-level Thirsting Slash semantics: 450-radius centered active, 15-second cooldown, damage before heal ordering, and healing computed per enemy champion hit.",
+      "Player-visible execution note: cast time follows the user's attack windup (not instant).",
+      "Mode-availability note: this distributed item is Arena-scoped (Prismatic Anvil source); treat non-Arena availability as mode-gated.",
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Goredrinker.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Goredrinker",
+      "url": "https://wiki.leagueoflegends.com/en-us/Goredrinker",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of active cooldown, radius, cast-time behavior, and per-champion-hit heal semantics"
+    }
+  ]
 }

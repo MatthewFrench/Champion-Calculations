@@ -72,7 +72,8 @@
       "trigger": "dynamic",
       "applies_to": "self",
       "conditions": [
-        "scales_with_missing_health"
+        "scales_with_missing_health",
+        "uses_attack_damage_from_other_sources_only"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -88,18 +89,23 @@
           "type": "percent_at_cap"
         }
       ],
+      "modifiers": {
+        "bonus_attack_damage_ratio_at_cap": 0.12,
+        "cap_reached_at_missing_health_percent": 70,
+        "scales_linearly_with_missing_health_until_cap": true
+      },
       "numbers_extracted": [
         0,
         12,
         70
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3300,
-      "sell": 1320
+      "sell": 2310
     },
     "purchasable": true,
     "tags": [
@@ -114,9 +120,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.044837+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
+      "Overlord's Bloodmail is modeled as bruiser durability-to-damage conversion: bonus health grants constant attack damage and missing-health windows amplify attack damage from external sources.",
       "Retribution scaling based on missing health references total attack damage from other sources; exact formula beyond cap is not specified here."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Overlords Bloodmail.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Overlord's Bloodmail",
+      "url": "https://wiki.leagueoflegends.com/en-us/Overlord%27s_Bloodmail",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Retribution missing-health scaling cap and attack-damage-from-other-sources semantics"
+    }
+  ]
 }

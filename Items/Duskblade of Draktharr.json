@@ -7,13 +7,13 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 50.0
+      "flat": 50
     },
     "lethality": {
       "flat": 20
     },
     "abilityHaste": {
-      "flat": 20.0
+      "flat": 20
     }
   },
   "passives": [
@@ -33,12 +33,12 @@
       "value": 0,
       "value_range": {
         "melee": {
-          "min": 0.0,
+          "min": 0,
           "max": 0.225,
           "missing_health_percent_max": 70
         },
         "ranged": {
-          "min": 0.0,
+          "min": 0,
           "max": 0.125,
           "missing_health_percent_max": 70
         }
@@ -70,7 +70,7 @@
         70,
         1
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     },
     {
       "id": "nightstalker_untargetable_on_recent_damage_takedown",
@@ -87,25 +87,32 @@
       "applies_to": "self",
       "conditions": [
         "takedown",
-        "damaged_target_within_3_seconds"
+        "damaged_target_within_3_seconds",
+        "user_not_channeling",
+        "takedown_target_not_clone"
       ],
       "status_effects": [
         "untargetable",
-        "stealth_break_on_action"
+        "stealth_break_on_action",
+        "destroy_incoming_non_turret_projectiles_on_trigger"
       ],
       "scaling_terms": [],
       "numbers_extracted": [
         3,
         1.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "ASSASSIN"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6691_assassin_t4_duskbladeofdraktharr.png",
   "simpleDescription": null,
@@ -116,6 +123,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.038488+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified page-level Nightstalker semantics: ability damage amplification scales with target missing-health percent (melee/ranged split), and takedown within 3 seconds of damaging a champion grants 1.5-second untargetability that breaks on stealth-breaking actions.",
+      "Execution nuance from page-level notes: Nightstalker takedown branch does not trigger while channeling and does not trigger from clone takedowns; trigger also destroys incoming non-turret projectiles.",
+      "Mode-availability note: this distributed item is Arena-scoped (Prismatic Anvil source); treat non-Arena availability as mode-gated.",
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Duskblade of Draktharr.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Duskblade of Draktharr",
+      "url": "https://wiki.leagueoflegends.com/en-us/Duskblade_of_Draktharr",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Nightstalker missing-health scaling and takedown-triggered untargetability execution details"
+    }
+  ]
 }

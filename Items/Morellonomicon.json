@@ -38,7 +38,9 @@
       "interval_seconds": null,
       "trigger": "on_magic_damage_to_champion",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "champion_damage"
+      ],
       "status_effects": [
         "grievous_wounds"
       ],
@@ -46,13 +48,13 @@
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 2850,
-      "sell": 1140
+      "sell": 1995
     },
     "purchasable": true,
     "tags": [
@@ -73,6 +75,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.057838+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: any qualifying magic-damage event against an enemy champion applies Grievous Wounds for 3 seconds.",
+      "Player-visible behavior: Wounds apply even if the triggering magic-damage instance is fully absorbed by shields (page-verified note)."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Morellonomicon.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Morellonomicon)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Morellonomicon",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Grievous Wounds duration and shield-mitigated-hit application behavior"
+    }
+  ]
 }

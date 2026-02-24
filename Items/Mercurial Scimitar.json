@@ -12,7 +12,7 @@
     "lifesteal": {
       "percent": 10.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 35.0
     }
   },
@@ -34,7 +34,7 @@
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -59,11 +59,13 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": 2.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "on_quicksilver_activate"
+      ],
       "status_effects": [
         "ghosted"
       ],
@@ -72,13 +74,13 @@
         50,
         2
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 3200,
-      "sell": 1280
+      "sell": 2240
     },
     "purchasable": true,
     "tags": [
@@ -99,6 +101,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.056381+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Quicksilver is a self-activated cleanse that removes most crowd-control effects but does not remove airborne effects.",
+      "Execution model: On successful activation, movement-speed bonus and Ghosting apply immediately for 2 seconds using a shared 90-second active cooldown."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Mercurial Scimitar.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Mercurial Scimitar)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Mercurial_Scimitar",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Quicksilver cleanse exception set, active cooldown, and movement-speed/ghosting timing semantics"
+    }
+  ]
 }

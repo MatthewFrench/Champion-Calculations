@@ -6,7 +6,7 @@
     "BOOTS"
   ],
   "stats": {
-    "magicResistance": {
+    "magicResist": {
       "flat": 30.0
     },
     "movespeed": {
@@ -62,13 +62,13 @@
         8,
         5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 1250,
-      "sell": 500
+      "sell": 875
     },
     "purchasable": true
   },
@@ -81,6 +81,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.068461+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model review: Noxian Persistence triggers only after taking champion magic damage, then grants a temporary self-only magic shield.",
+      "Formula validation: shield value scales 100-200 by level with +8% bonus-health contribution, lasts 5 seconds, and is gated by a 15-second cooldown."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Chainlaced Crushers)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Chainlaced_Crushers",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Noxian Persistence trigger condition, shield scaling, duration, and cooldown"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Chainlaced Crushers.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

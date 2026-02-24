@@ -43,7 +43,10 @@
       "interval_seconds": null,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "scales_with_missing_current_health",
+        "capped_at_3000_missing_health"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -72,7 +75,7 @@
         45,
         3000
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -90,9 +93,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.051189+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
+      "Sinister Pact is modeled as a missing-health scaler that increases both ability power and bonus movement speed at identical per-100-missing-health rates.",
       "Bonuses scale off missing current health, capped at 3000 missing health (45% AP and 45% bonus move speed)."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Demonic Embrace.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Demonic Embrace",
+      "url": "https://wiki.leagueoflegends.com/en-us/Demonic_Embrace",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Sinister Pact missing-health scaling rates and cap behavior"
+    }
+  ]
 }

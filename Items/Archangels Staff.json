@@ -7,13 +7,13 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 70.0
+      "flat": 70
     },
     "mana": {
-      "flat": 600.0
+      "flat": 600
     },
     "abilityHaste": {
-      "flat": 25.0
+      "flat": 25
     }
   },
   "passives": [
@@ -42,7 +42,13 @@
       "unit": "percent_bonus_mana",
       "trigger": "passive",
       "applies_to": "self",
-      "parse_confidence": 0.9
+      "parse_confidence": 0.9,
+      "scaling_terms": [
+        {
+          "stat": "mana_bonus",
+          "ratio": 0.01
+        }
+      ]
     },
     {
       "id": "archangels_manaflow_bonus_mana",
@@ -55,29 +61,37 @@
         10
       ],
       "conditions": [
-        "charge",
-        "max_bonus_mana_360"
+        "consumes_manaflow_charge"
       ],
-      "trigger": "on_ability",
+      "trigger": "on_ability_affects_unit",
       "applies_to": "self",
-      "parse_confidence": 0.8
+      "parse_confidence": 0.86,
+      "max_charges": 5,
+      "max_bonus_mana": 360,
+      "value_by_target_type": {
+        "non_champion": 5,
+        "champion": 10
+      }
     },
     {
       "id": "archangels_transform",
       "raw": "Transforms at 360 bonus mana.",
-      "effect_type": "utility",
-      "stat": "transform",
+      "effect_type": "transform",
       "value": 360,
       "unit": "bonus_mana",
       "trigger": "passive",
       "applies_to": "self",
-      "parse_confidence": 0.8
+      "parse_confidence": 0.88,
+      "target_item": "Seraph's Embrace",
+      "conditions": [
+        "bonus_mana_at_least_360"
+      ]
     }
   ],
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -95,6 +109,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.711056+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Manual batch review A-items chunk 1.",
+      "Shop sell value was corrected to Tier-1 canonical dataset/page values during Tear-line sibling review.",
+      "Verified Manaflow timing and consumption model against page-level source: one charge every 8s (max 5), consumed when an ability affects an enemy or ally, with champion-target bonus mana branch.",
+      "Transform semantics note: conversion to Seraph's Embrace occurs at 360 bonus mana threshold."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Archangels Staff.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Archangel's Staff",
+      "url": "https://wiki.leagueoflegends.com/en-us/Archangel%27s_Staff",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

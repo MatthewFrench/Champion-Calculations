@@ -50,12 +50,12 @@
         }
       ],
       "cooldown_seconds": 45,
-      "trigger": "on_ability",
+      "trigger": "on_next_champion_ability_damage_instance",
       "applies_to": "enemy_champion",
       "conditions": [
-        "epic_monster_or_champion"
+        "champion_or_epic_monster_target"
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.78
     },
     {
       "id": "bastionbreaker_sabotage",
@@ -76,18 +76,20 @@
         }
       ],
       "duration_seconds": 3,
-      "trigger": "on_kill",
-      "applies_to": "structure",
+      "trigger": "on_next_basic_attack_after_takedown",
+      "applies_to": "turret_or_epic_monster",
       "conditions": [
+        "takedown",
+        "damaged_target_within_3_seconds",
         "sabotage_buff_90s"
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3200,
-      "sell": 1280
+      "sell": 2240
     },
     "purchasable": true,
     "tags": [
@@ -103,6 +105,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.713784+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Shaped Charge arms one champion-ability damage instance against a champion or epic monster, then enters a 45-second cooldown.",
+      "Execution model: Sabotage is a two-phase takedown effect; a qualifying takedown grants a 90-second buff that is consumed by the next basic attack against a turret or epic monster.",
+      "Player-visible behavior: Sabotage damage resolves as bonus true damage over 3 seconds after the consuming attack."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bastionbreaker.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Bastionbreaker)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bastionbreaker",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Shaped Charge melee/ranged lethality scaling, Sabotage takedown gating, buff duration, and turret/epic-monster consume branch semantics"
+    }
+  ]
 }

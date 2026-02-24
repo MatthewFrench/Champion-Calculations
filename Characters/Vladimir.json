@@ -530,16 +530,21 @@
   "name": "Vladimir",
   "sources": [
     {
+      "type": "Generated champion data",
+      "path": "From Online/champions/Vladimir.json",
+      "used_for": "raw basic attack timing stats and radii"
+    },
+    {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Crimson_Pact",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "passive values"
     },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Transfusion",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Hemoplague",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (ability data template)",
-      "used_for": "Q values"
+      "used_for": "R values"
     },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Sanguine_Pool",
@@ -554,26 +559,16 @@
       "used_for": "E values"
     },
     {
-      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Hemoplague",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vladimir/Transfusion",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (ability data template)",
-      "used_for": "R values"
+      "used_for": "Q values"
     },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Vladimir",
       "accessed": "2026-02-09",
       "type": "League of Legends Wiki (base stats)",
       "used_for": "basic attack windup and missile speed"
-    },
-    {
-      "type": "Generated champion data",
-      "path": "From Online/champions/Vladimir.json",
-      "used_for": "raw basic attack timing stats and radii"
-    },
-    {
-      "type": "Generated champion data",
-      "path": "From Online/champions/Vladimir.json",
-      "used_for": "raw basic attack timing stats and radii"
     }
   ],
   "notes": [

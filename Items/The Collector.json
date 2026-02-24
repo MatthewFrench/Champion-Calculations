@@ -9,7 +9,7 @@
     "attackDamage": {
       "flat": 50.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "lethality": {
@@ -78,7 +78,7 @@
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -97,6 +97,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.075785+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Death only evaluates post-mitigation damage outcomes against enemy champions and executes at the 5% max-health threshold.",
+      "Player-visible behavior: Taxes grants the 25 bonus gold only on champion kill events and does not trigger on assists or non-champion takedowns."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (The Collector)",
+      "url": "https://wiki.leagueoflegends.com/en-us/The_Collector",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of post-mitigation execute threshold semantics and Taxes champion-kill bonus-gold behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/The Collector.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

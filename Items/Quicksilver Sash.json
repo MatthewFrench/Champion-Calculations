@@ -6,7 +6,7 @@
     "EPIC"
   ],
   "stats": {
-    "magicResistance": {
+    "magicResist": {
       "flat": 30.0
     }
   },
@@ -15,7 +15,7 @@
     {
       "unique": true,
       "name": "Quicksilver",
-      "effects": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion."
+      "effects": "Removes all {{tip|crowd control}} debuffs (except {{tip|Airborne}}) from your champion (90 second cooldown)."
     }
   ],
   "effects_structured": [
@@ -28,25 +28,36 @@
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
       "conditions": [
-        "exclude_airborne"
+        "exclude_airborne",
+        "disabled_while_airborne"
       ],
       "status_effects": [
         "crowd_control_removed"
       ],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.7
+      "modifiers": {
+        "auto_targeted_self_activation": true,
+        "no_cast_time": true,
+        "does_not_break_stealth": true,
+        "removes_suppression": true,
+        "removes_nearsight": true,
+        "cooldown_does_not_transfer_between_quicksilver_items": true
+      },
+      "numbers_extracted": [
+        90
+      ],
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
     "prices": {
       "total": 1300,
-      "sell": 520
+      "sell": 910
     },
     "purchasable": true,
     "tags": [
@@ -66,6 +77,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.075962+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Quicksilver is a self-activation cleanse with no cast time that removes most crowd-control effects (including suppression and nearsight) but excludes airborne effects.",
+      "Player-visible behavior: Quicksilver can be used while stealthed without breaking stealth, but it cannot be activated while airborne.",
+      "Follow-up note: page notes indicate cooldown does not transfer between Quicksilver-group items, which should be mirrored in runtime item-group cooldown handling."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Quicksilver Sash.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Quicksilver Sash",
+      "url": "https://wiki.leagueoflegends.com/en-us/Quicksilver_Sash",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of cooldown, cleanse scope, airborne activation restriction, and execution notes"
+    }
+  ]
 }

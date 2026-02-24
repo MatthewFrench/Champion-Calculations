@@ -23,39 +23,67 @@
   "active": [],
   "effects_structured": [
     {
-      "id": "catalyst_eternity_mana_restore",
+      "id": "eternity_restore_mana_from_pre_mitigation_champion_damage_taken",
       "raw": "Restore mana equal to 10% of pre-mitigation damage taken from champions.",
-      "effect_type": "resource",
+      "effect_type": "resource_restore",
       "stat": "mana",
-      "value": 0.10,
-      "unit": "percent_damage_taken",
-      "trigger": "on_damage",
+      "value": 0.1,
+      "value_range": null,
+      "unit": "ratio_of_damage_taken",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_damage_taken_from_champions",
       "applies_to": "self",
       "conditions": [
-        "damage_from_champions"
+        "pre_mitigation"
       ],
-      "parse_confidence": 0.9
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "uses_pre_mitigation_damage": true
+      },
+      "numbers_extracted": [
+        10
+      ],
+      "parse_confidence": 0.74
     },
     {
-      "id": "catalyst_eternity_heal",
+      "id": "eternity_heal_from_mana_spent_with_caps",
       "raw": "Heal for 25% of mana spent, up to 20 per cast (toggles: 20 per second).",
       "effect_type": "healing",
-      "stat": "heal",
+      "stat": "health",
       "value": 0.25,
-      "unit": "percent_mana_spent",
+      "value_range": {
+        "cap_per_cast": 20,
+        "cap_per_second_toggle": 20
+      },
+      "unit": "ratio_of_mana_spent",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
       "trigger": "on_mana_spend",
       "applies_to": "self",
-      "conditions": [
-        "cap_per_cast_20",
-        "toggle_cap_per_second_20"
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "cap_per_cast": 20,
+        "toggle_ability_cap_per_second": 20,
+        "triggers_from_all_mana_cost_sources": true
+      },
+      "numbers_extracted": [
+        25,
+        20,
+        20
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 1300,
-      "sell": 520
+      "sell": 910
     },
     "purchasable": true,
     "tags": [
@@ -71,6 +99,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.047767+00:00",
-    "effects_structured_reviewed": "Manual review: Eternity mana restore + heal with caps."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution-semantics review: Eternity mana restoration uses pre-mitigation champion damage only, so post-mitigation damage values should not be used for the conversion.",
+      "Player-visible behavior: Eternity healing converts 25% of mana spent with hard caps at 20 per cast and 20 per second for toggled abilities.",
+      "Page notes indicate Eternity triggers from all mana-cost sources, so non-ability mana expenditures are included unless mode/system rules explicitly override costs."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Catalyst of Aeons.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Catalyst of Aeons",
+      "url": "https://wiki.leagueoflegends.com/en-us/Catalyst_of_Aeons",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Eternity pre-mitigation damage conversion, mana-spend healing caps, toggle cap behavior, and all-mana-cost-source trigger notes"
+    }
+  ]
 }

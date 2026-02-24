@@ -12,7 +12,7 @@
     "health": {
       "flat": 350.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 45.0
     }
   },
@@ -40,7 +40,7 @@
       "trigger": "while_in_combat_with_champions",
       "applies_to": "self",
       "conditions": [
-        "in_combat"
+        "in_combat_with_enemy_champions"
       ],
       "status_effects": [
         "voidborn_resilience"
@@ -49,10 +49,16 @@
       "stack_rules": {
         "max_stacks": 5
       },
+      "modifiers": {
+        "stack_interval_seconds": 1.0,
+        "stack_generation_requires_enemy_champion_combat": true,
+        "max_stacks": 5,
+        "stacks_drop_on_combat_end": true
+      },
       "numbers_extracted": [
         5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "voidborn_resilience_bonus_resists_at_max_stacks",
@@ -79,7 +85,7 @@
   "shop": {
     "prices": {
       "total": 3200,
-      "sell": 1280
+      "sell": 2240
     },
     "purchasable": true,
     "tags": [
@@ -95,6 +101,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.021216+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Jak'Sho, The Protean is modeled as a sustained-fight tank ramp item where resist gains depend on maintaining champion combat long enough to reach maximum stacks."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/JakSho The Protean.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Jak'Sho, The Protean",
+      "url": "https://wiki.leagueoflegends.com/en-us/Jak'Sho,_The_Protean",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of stack cadence, maximum stack behavior, and combat-window resist amplification semantics"
+    }
+  ]
 }

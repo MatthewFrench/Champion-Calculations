@@ -22,18 +22,19 @@
     {
       "id": "grievous_wounds_on_physical_damage_to_champions",
       "raw": "Dealing {{as physical damage}} to enemy champions inflicts them with {{tip Grievous Wounds}} for 3 seconds.",
-      "effect_type": "status_effect",
+      "effect_type": "apply_status",
       "stat": "grievous_wounds",
-      "value": 3,
+      "value": null,
       "value_range": null,
-      "unit": "seconds",
+      "unit": null,
       "duration_seconds": 3.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_physical_damage_to_champions",
       "applies_to": "enemy_champion",
       "conditions": [
-        "physical_damage"
+        "physical_damage",
+        "applies_even_if_damage_is_absorbed_by_shield"
       ],
       "status_effects": [
         "grievous_wounds"
@@ -42,13 +43,13 @@
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "prices": {
       "total": 800,
-      "sell": 320
+      "sell": 560
     },
     "purchasable": true,
     "tags": [
@@ -67,6 +68,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.035479+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution-semantics review: any physical-damage event against enemy champions applies Grievous Wounds for 3 seconds.",
+      "Player-visible behavior: the healing-reduction debuff is applied on qualifying champion-damage events even when a shield absorbs the damage instance."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Executioners Calling.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Executioner's Calling",
+      "url": "https://wiki.leagueoflegends.com/en-us/Executioner%27s_Calling",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Grievous Wounds trigger scope, duration, and shield-interaction note"
+    }
+  ]
 }

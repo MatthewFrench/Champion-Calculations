@@ -44,7 +44,9 @@
       "trigger": "on_damage_from_champion",
       "applies_to": "self",
       "conditions": [
-        "post_damage"
+        "post_damage",
+        "refreshes_on_subsequent_champion_damage",
+        "aoe_dot_proc_damage_uses_ranged_values"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -80,7 +82,7 @@
         1,
         8
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "helping_hand_on_hit_bonus_physical_vs_minions",
@@ -128,9 +130,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.027451+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "AoE/DoT/proc damage uses ranged values for the regen effect."
+      "Enduring Focus is modeled as reactive sustain: champion damage starts an 8-second regen window that scales with current missing health and refreshes on additional champion hits.",
+      "AoE/DoT/proc damage uses ranged values for Enduring Focus regeneration.",
+      "Helping Hand is modeled as a basic-attack on-hit modifier against minions only."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Dorans Shield.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Doran's Shield",
+      "url": "https://wiki.leagueoflegends.com/en-us/Doran%27s_Shield",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Enduring Focus missing-health regen scaling, refresh behavior, and Helping Hand minion on-hit damage"
+    }
+  ]
 }

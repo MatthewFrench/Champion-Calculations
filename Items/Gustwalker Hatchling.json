@@ -31,17 +31,18 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "passive",
+      "trigger": "on_equip",
       "applies_to": "self",
       "conditions": [
-        "jungle_companion"
+        "jungle_companion",
+        "vs_monsters"
       ],
       "status_effects": [
         "companion"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "gustwalkers_gait_progression_evolve_companion_and_upgrade_smite",
@@ -56,13 +57,15 @@
       "interval_seconds": null,
       "trigger": "on_treats_collected",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "requires_treat_collection"
+      ],
       "status_effects": [
         "smite_upgrade"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.68
     },
     {
       "id": "gustwalkers_gait_grant_buff_on_final_companion_evolution",
@@ -77,19 +80,21 @@
       "interval_seconds": null,
       "trigger": "on_companion_final_evolution",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "item_consumed_on_final_evolution"
+      ],
       "status_effects": [
         "gustwalkers_gait"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 450,
-      "sell": 180
+      "sell": 0
     },
     "purchasable": true,
     "tags": [
@@ -114,9 +119,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.038212+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Jungle companion evolution depends on treats; item consumed on final evolution."
+      "Gustwalker Hatchling is modeled as a no-sell jungle starter that summons a companion and progresses via treat collection to Smite upgrade and final-evolution buff grant.",
+      "Final evolution consumes the starter item and grants the Gustwalker's Gait buff."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Gustwalker Hatchling.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Gustwalker Hatchling",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gustwalker_Hatchling",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of jungle companion progression, Smite upgrade flow, final-evolution item consumption, and No Sell behavior"
+    }
+  ]
 }

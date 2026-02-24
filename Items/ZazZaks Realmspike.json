@@ -68,12 +68,38 @@
       "id": "zazzaks_minion_kill_penalty",
       "raw": "Excessive minion kills reduce gold earned (diminishing returns).",
       "effect_type": "resource_modifier",
+      "stat": "gold_gain_from_minions",
       "applies_to": "self",
+      "trigger": "on_minion_kill",
       "resource": "gold",
       "conditions": [
-        "excessive_minion_kills"
+        "excessive_minion_kills",
+        "support_item_team_scaled_thresholds",
+        "time_before_5_minutes_or_time_after_5_minutes"
       ],
-      "modifier_type": "diminishing_returns"
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "support_income_rule_applies": true,
+        "threshold_formulas_encoded_from_page_level_sources": true,
+        "pre_5_minutes_minion_kill_threshold_formula": "7 / support_items_on_team",
+        "pre_5_minutes_gold_reduction_percent": 0.8,
+        "post_5_minutes_minions_per_minute_threshold_formula": "4 / support_items_on_team",
+        "post_5_minutes_gold_reduction_percent_min": 0.5,
+        "post_5_minutes_gold_reduction_percent_max": 0.8,
+        "post_5_minutes_gold_reduction_formula_note": "50% + 1% per minion kill starting from 20 kills, capped at 50 kills",
+        "per_minute_windowing_and_team_item_count_dynamics_require_shared_runtime_rule_table": true
+      },
+      "numbers_extracted": [
+        5,
+        7,
+        4,
+        80,
+        50,
+        20,
+        50
+      ],
+      "parse_confidence": 0.68
     },
     {
       "id": "zazzaks_ward_place",
@@ -114,6 +140,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.016033+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Zaz'Zak's Realmspike is modeled as an offensive support branch item: spell-hit champion triggers a delayed area magic explosion with AP and target-max-health scaling.",
+      "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/ZazZaks Realmspike.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Zaz'Zak's Realmspike",
+      "url": "https://wiki.leagueoflegends.com/en-us/Zaz%27Zak%27s_Realmspike",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Void Explosion behavior and support-income diminishing-gold pre/post-5-minute rule formulas"
+    }
+  ]
 }

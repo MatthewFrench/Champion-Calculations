@@ -52,7 +52,17 @@
         }
       ],
       "caps": {
-        "monsters_per_tick": 20
+        "monsters_per_tick": 20,
+        "monsters_total_over_duration": 120
+      },
+      "distribution": {
+        "type": "total_over_duration",
+        "duration_seconds": 3.0,
+        "interval_seconds": 0.5
+      },
+      "modifiers": {
+        "total_target_max_health_ratio_over_duration": 0.06,
+        "expected_tick_count": 6
       },
       "numbers_extracted": [
         1,
@@ -60,7 +70,7 @@
         3,
         20
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72
     },
     {
       "id": "suffering_damage_amp_per_second_in_champion_combat",
@@ -84,18 +94,21 @@
         "max_stacks": 3,
         "stack_value": 0.02
       },
+      "modifiers": {
+        "max_total_damage_multiplier": 1.06
+      },
       "numbers_extracted": [
         2,
         3,
         6
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -113,6 +126,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.074038+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Liandry's Torment is modeled as sustained anti-health burn pressure: periodic max-health magic damage plus an in-combat ramping damage amp.",
+      "Torment total is explicitly represented as six 0.5-second ticks over 3 seconds (6% target max health total before monster cap handling)."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Liandrys Torment.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Liandry's Torment",
+      "url": "https://wiki.leagueoflegends.com/en-us/Liandry%27s_Torment",
+      "accessed": "2026-02-23",
+      "used_for": "effect wording and scaling clarification for structured effects"
+    }
+  ]
 }

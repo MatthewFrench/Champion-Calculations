@@ -1,0 +1,8 @@
+pub(super) mod combat_event_champion_script_dispatch_resolution;
+pub(super) mod combat_event_controlled_champion_auto_attack_resolution;
+pub(super) mod combat_event_controlled_champion_offensive_ability_hit_resolution;
+pub(super) mod combat_event_dispatch_resolution;
+pub(super) mod combat_event_enemy_auto_attack_resolution;
+pub(super) mod controlled_champion_casting_resolution;
+pub(super) mod enemy_script_action_resolution;
+pub(super) mod incoming_damage_resolution;

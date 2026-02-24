@@ -54,14 +54,38 @@
     {
       "id": "bounty_of_worlds_minion_gold_penalty",
       "raw": "Diminishing gold from excessive minion kills.",
-      "effect_type": "resource",
-      "stat": "minion_gold_modifier",
-      "trigger": "passive",
+      "effect_type": "resource_modifier",
+      "stat": "gold_gain_from_minions",
+      "trigger": "on_minion_kill",
       "applies_to": "self",
       "conditions": [
-        "minion_kill_penalty"
+        "excessive_minion_kills",
+        "support_item_team_scaled_thresholds",
+        "time_before_5_minutes_or_time_after_5_minutes"
       ],
-      "parse_confidence": 0.85
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "support_income_rule_applies": true,
+        "threshold_formulas_encoded_from_page_level_sources": true,
+        "pre_5_minutes_minion_kill_threshold_formula": "7 / support_items_on_team",
+        "pre_5_minutes_gold_reduction_percent": 0.8,
+        "post_5_minutes_minions_per_minute_threshold_formula": "4 / support_items_on_team",
+        "post_5_minutes_gold_reduction_percent_min": 0.5,
+        "post_5_minutes_gold_reduction_percent_max": 0.8,
+        "post_5_minutes_gold_reduction_formula_note": "50% + 1% per minion kill starting from 20 kills, capped at 50 kills",
+        "per_minute_windowing_and_team_item_count_dynamics_require_shared_runtime_rule_table": true
+      },
+      "numbers_extracted": [
+        5,
+        7,
+        4,
+        80,
+        50,
+        20,
+        50
+      ],
+      "parse_confidence": 0.68
     },
     {
       "id": "bounty_of_worlds_ward_place",
@@ -81,7 +105,7 @@
   "shop": {
     "prices": {
       "total": 400,
-      "sell": 160
+      "sell": 0
     },
     "tags": [
       "SUPPORT"
@@ -94,6 +118,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.051858+00:00",
-    "effects_structured_reviewed": "Manual review: support quest upgrade + ward active + minion gold penalty."
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Bounty of Worlds is modeled as the support-quest completion hub that upgrades into one of the final support-item branches while retaining ward utility.",
+      "Support-income diminishing minion-gold behavior encodes page-verified pre/post-5-minute threshold formulas and reduction ranges, while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies.",
+      "Sell-state policy resolved for support-quest staging: represent page-verified No Sell behavior with shop.prices.sell = 0 for quest-stage items.",
+      "Tier-1 dataset discrepancy is intentionally tracked: Data Dragon and CommunityDragon still list sell=160 for this item while page-level gameplay behavior shows No Sell."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bounty of Worlds.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Bounty of Worlds",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bounty_of_Worlds",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of support-item branch upgrade semantics, support-income diminishing-gold pre/post-5-minute rule formulas, and No Sell behavior"
+    }
+  ]
 }

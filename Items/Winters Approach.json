@@ -7,13 +7,13 @@
   ],
   "stats": {
     "health": {
-      "flat": 550.0
+      "flat": 550
     },
     "mana": {
-      "flat": 500.0
+      "flat": 500
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [
@@ -44,7 +44,8 @@
           "stat": "mana_bonus",
           "ratio": 0.15
         }
-      ]
+      ],
+      "parse_confidence": 0.84
     },
     {
       "id": "winters_approach_manaflow_charge_gain",
@@ -53,10 +54,11 @@
       "applies_to": "self",
       "trigger": {
         "type": "periodic",
-        "interval_seconds": 8.0
+        "interval_seconds": 8
       },
       "stack_name": "manaflow_charge",
-      "max_stacks": 4
+      "max_stacks": 4,
+      "parse_confidence": 0.85
     },
     {
       "id": "winters_approach_manaflow_mana_gain",
@@ -72,7 +74,8 @@
       "stat": "mana_bonus",
       "value": 3,
       "value_if_target_is_champion": 6,
-      "max_bonus_mana": 360
+      "max_bonus_mana": 360,
+      "parse_confidence": 0.84
     },
     {
       "id": "winters_approach_transform",
@@ -82,13 +85,14 @@
       "conditions": [
         "bonus_mana_at_least_360"
       ],
-      "target_item": "Fimbulwinter"
+      "target_item": "Fimbulwinter",
+      "parse_confidence": 0.85
     }
   ],
   "shop": {
     "prices": {
       "total": 2400,
-      "sell": 960
+      "sell": 1680
     },
     "purchasable": true,
     "tags": [
@@ -105,6 +109,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.023572+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Shop sell value was corrected to Tier-1 canonical dataset/page values during Tear-line sibling review.",
+      "Verified Winter's Approach Manaflow semantics against page-level source: charges are consumed on hit or ability-affect events, with champion-target bonus-mana branch and 360 bonus-mana transform threshold."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Winters Approach.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Winter's Approach",
+      "url": "https://wiki.leagueoflegends.com/en-us/Winter%27s_Approach",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

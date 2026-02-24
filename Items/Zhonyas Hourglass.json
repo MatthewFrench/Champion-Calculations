@@ -45,13 +45,18 @@
           "duration_seconds": 2.5
         }
       ],
-      "cannot_act": true
+      "cannot_act": true,
+      "numbers_extracted": [
+        2.5,
+        120
+      ],
+      "parse_confidence": 0.85
     }
   ],
   "shop": {
     "prices": {
       "total": 3250,
-      "sell": 1300
+      "sell": 2275
     },
     "purchasable": true,
     "tags": [
@@ -71,6 +76,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.064174+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Zhonya's Hourglass is modeled as a deterministic defensive stasis window (2.5 seconds) with full untargetable and invulnerable lockout plus action disable."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Zhonyas Hourglass.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Zhonya's Hourglass",
+      "url": "https://wiki.leagueoflegends.com/en-us/Zhonya%27s_Hourglass",
+      "accessed": "2026-02-23",
+      "used_for": "effect wording and scaling clarification for structured effects"
+    }
+  ]
 }

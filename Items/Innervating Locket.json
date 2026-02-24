@@ -40,7 +40,8 @@
       "trigger": "on_ability_cast_within_range",
       "applies_to": "self",
       "conditions": [
-        "within_units"
+        "self_or_champion_within_800_units_casts_ability",
+        "charges_reset_between_rounds_and_round_phases"
       ],
       "status_effects": [
         "innervating"
@@ -54,7 +55,7 @@
         800,
         30
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.66
     },
     {
       "id": "fill_the_soul_max_charge_bonus_stats_and_shield",
@@ -72,7 +73,10 @@
       "interval_seconds": null,
       "trigger": "on_max_stacks",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "requires_30_charges",
+        "buffs_last_rest_of_round"
+      ],
       "status_effects": [
         "innervating_max"
       ],
@@ -97,7 +101,7 @@
         400,
         750
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
@@ -113,9 +117,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:07.999584+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Charges reset every round/phase (Arena-style mechanic)."
+      "Execution model: Fill the Soul gains one charge when the user or nearby champions (within 800 units) cast abilities, up to 30 charges.",
+      "Player-visible behavior: hitting maximum charges grants round-duration ability power and movement speed bonuses plus a shield that persists until broken.",
+      "Charge state resets between Arena rounds and between phases within a round."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Innervating Locket)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Innervating_Locket",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Fill the Soul charge generation radius, max-charge bonus package, and round/phase reset semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Innervating Locket.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

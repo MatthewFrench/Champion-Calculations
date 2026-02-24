@@ -38,7 +38,9 @@
       "interval_seconds": null,
       "trigger": "on_next_basic_attack",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "target_is_champion"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -63,6 +65,11 @@
         "melee": 0.6,
         "ranged": 0.8
       },
+      "modifiers": {
+        "forces_critical_strike_on_empowered_attack": true,
+        "cooldown_scope": "per_target",
+        "consumes_empower_on_hit": true
+      },
       "numbers_extracted": [
         60,
         80,
@@ -71,7 +78,7 @@
         6,
         10
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "id": "lightshield_strike_convert_overheal_to_temporary_bonus_health",
@@ -89,16 +96,19 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "stores_excess_healing_as_temporary_bonus_health": true
+      },
       "numbers_extracted": [
         8
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -112,10 +122,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.002508+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
       "Critical damage bonus differs for melee vs ranged (60% vs 80%).",
-      "Heal scales with base AD (melee 100% / ranged 50%) plus 6% missing health."
+      "Heal scales with base AD (melee 100% / ranged 50%) plus 6% missing health.",
+      "Sundered Sky is modeled as a per-target short-trade burst and sustain effect: first champion hit crit and heal, then temporary overheal conversion."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Sundered Sky.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Sundered Sky",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sundered_Sky",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of per-target cooldown, critical strike bonus damage, and overheal conversion behavior"
+    }
+  ]
 }

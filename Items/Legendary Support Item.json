@@ -12,7 +12,7 @@
   "shop": {
     "prices": {
       "total": 2000,
-      "sell": 800
+      "sell": 2000
     },
     "purchasable": true
   },

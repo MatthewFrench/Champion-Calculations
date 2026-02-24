@@ -6,11 +6,11 @@
     "LEGENDARY"
   ],
   "stats": {
-    "criticalStrikeChance": {
-      "percent": 20.0
+    "critChance": {
+      "percent": 20
     },
     "health": {
-      "flat": 700.0
+      "flat": 700
     }
   },
   "passives": [
@@ -26,24 +26,36 @@
       "id": "atmas_big_hands_crit_scaling",
       "raw": "Gain critical strike chance scaling with bonus health (up to 30%).",
       "effect_type": "stat_modifier",
-      "stat": "critical_strike",
-      "value_range": [
-        0,
-        30
-      ],
-      "unit": "percent",
+      "stat": "crit_chance_percent",
+      "value_range": {
+        "min": 0,
+        "max": 0.3,
+        "max_bonus_health": 3000
+      },
+      "unit": "ratio",
       "trigger": "passive",
       "applies_to": "self",
       "conditions": [
-        "scales_with_bonus_health"
+        "scales_with_bonus_health",
+        "caps_at_3000_bonus_health"
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.82,
+      "value": 0,
+      "scaling_terms": [
+        {
+          "stat": "bonus_health",
+          "ratio": 0.01,
+          "type": "percent_per_100",
+          "per": 100,
+          "cap": 0.3
+        }
+      ]
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -59,6 +71,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.711864+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Manual batch review A-items chunk 1.",
+      "Verified Big Hands scaling semantics from page-level source: crit chance scales at 1% per 100 bonus health, capped at 30% at 3000 bonus health.",
+      "Mode-variant note: patch-history entries show alternate stat/cost packages in rotating modes; canonical baseline remains Tier-1 dataset values for this repository snapshot."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Atmas Reckoning.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Atma's Reckoning",
+      "url": "https://wiki.leagueoflegends.com/en-us/Atma%27s_Reckoning",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formulas, and execution timing/targeting semantics"
+    }
+  ]
 }

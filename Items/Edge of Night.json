@@ -42,17 +42,20 @@
       "status_effects": [
         "spell_shield"
       ],
+      "timing": {
+        "cooldown_resets_on_champion_damage_taken": true
+      },
       "scaling_terms": [],
       "numbers_extracted": [
         40
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -71,9 +74,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.069720+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Cooldown timer restarts upon taking damage from champions."
+      "Execution model: Annul keeps a persistent spell shield that consumes on the next hostile ability hit.",
+      "Player-visible behavior: once consumed, the 40-second refresh timer restarts when the owner takes champion damage."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Edge of Night)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Edge_of_Night",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Annul spell-shield blocking behavior, cooldown value, and champion-damage timer reset semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Edge of Night.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

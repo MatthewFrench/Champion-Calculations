@@ -7,16 +7,16 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 100.0
+      "flat": 100
     },
     "health": {
-      "flat": 250.0
+      "flat": 250
     },
     "mana": {
-      "flat": 600.0
+      "flat": 600
     },
     "abilityHaste": {
-      "flat": 25.0
+      "flat": 25
     }
   },
   "passives": [],
@@ -37,7 +37,7 @@
       "value_range": null,
       "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "enemy_units_in_cone",
@@ -77,24 +77,33 @@
       "value_range": null,
       "unit": "seconds",
       "duration_seconds": 1.5,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 30,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "enemy_units_in_center_cone",
-      "conditions": [],
+      "conditions": [
+        "center_of_cone_hit"
+      ],
       "status_effects": [
         "root"
       ],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "numbers_extracted": [
+        1.5,
+        30
+      ],
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6656_mage_t4_everfrost.png",
   "simpleDescription": null,
@@ -107,6 +116,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.040474+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Everfrost is modeled as an active cone cast: enemies in the cone are slowed, and center-hit enemies are rooted for the same duration.",
+      "Execution-semantics review confirms both slow/root outcomes share the active cooldown and resolve from the same Glaciate cast.",
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase.",
+      "Mode-availability note: Everfrost is currently represented as an Arena-scoped distributed identity; non-Arena usage should be mode-gated by data policy."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Everfrost.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Everfrost",
+      "url": "https://wiki.leagueoflegends.com/en-us/Everfrost",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Glaciate cone damage/slow, center-hit root duration, and active cooldown"
+    }
+  ]
 }

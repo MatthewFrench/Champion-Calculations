@@ -57,8 +57,8 @@
       "parse_confidence": 0.7
     },
     {
-      "id": "overdrive_bonus_attack_speed_and_movement_speed_on_ultimate_cast",
-      "raw": "Upon casting your ultimate ability, enter ''Overdrive'' to gain {{as 50% '''bonus''' attack speed}} and {{as 20% '''bonus''' movement speed}} for 8 seconds (30 second cooldown, starts on ultimate cast).",
+      "id": "overdrive_bonus_attack_speed_on_ultimate_cast",
+      "raw": "Upon casting your ultimate ability, enter ''Overdrive'' to gain 50% bonus attack speed for 8 seconds (30 second cooldown, starts on ultimate cast).",
       "effect_type": "stat_modifier",
       "stat": "attack_speed",
       "value": 0.5,
@@ -73,26 +73,50 @@
       "status_effects": [
         "overdrive"
       ],
-      "scaling_terms": [
-        {
-          "stat": "movespeed",
-          "ratio": 0.2,
-          "type": "percent"
-        }
-      ],
+      "timing": {
+        "cooldown_starts_on": "ultimate_cast"
+      },
+      "scaling_terms": [],
       "numbers_extracted": [
         50,
+        8,
+        30
+      ],
+      "parse_confidence": 0.72
+    },
+    {
+      "id": "overdrive_bonus_movement_speed_on_ultimate_cast",
+      "raw": "Upon casting your ultimate ability, enter ''Overdrive'' to gain 20% bonus movement speed for 8 seconds (30 second cooldown, starts on ultimate cast).",
+      "effect_type": "stat_modifier",
+      "stat": "move_speed_percent",
+      "value": 0.2,
+      "value_range": null,
+      "unit": "ratio",
+      "duration_seconds": 8.0,
+      "cooldown_seconds": 30.0,
+      "interval_seconds": null,
+      "trigger": "on_ultimate_cast",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [
+        "overdrive"
+      ],
+      "timing": {
+        "cooldown_starts_on": "ultimate_cast"
+      },
+      "scaling_terms": [],
+      "numbers_extracted": [
         20,
         8,
         30
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -108,6 +132,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.058033+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Overdrive is triggered by ultimate cast and grants two parallel temporary buffs (attack speed and movement speed) for 8 seconds.",
+      "Player-visible behavior: Overdrive cooldown is 30 seconds and starts immediately on ultimate cast, not at buff end."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Experimental Hexplate)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Experimental_Hexplate",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Hexcharged ultimate haste and Overdrive trigger, buff values, duration, and cooldown-start timing"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Experimental Hexplate.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

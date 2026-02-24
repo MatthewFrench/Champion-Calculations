@@ -22,7 +22,7 @@
   "effects_structured": [
     {
       "id": "revved_bonus_magic_damage_on_champion_damage",
-      "raw": "Damaging an enemy champion deals {{as 65 '''bonus''' magic damage}}.",
+      "raw": "Damaging an enemy champion deals 65 bonus magic damage (40-second cooldown).",
       "effect_type": "damage",
       "stat": "magic_damage",
       "value": 65,
@@ -33,19 +33,27 @@
       "interval_seconds": null,
       "trigger": "on_damage_to_champions",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "proc_damage",
+        "procs_on_zero_damage_instances"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "does_not_trigger_spell_effects": true,
+        "not_blocked_by_spell_shield": true
+      },
       "numbers_extracted": [
-        65
+        65,
+        40
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "prices": {
       "total": 1100,
-      "sell": 440
+      "sell": 770
     },
     "purchasable": true,
     "tags": [
@@ -62,6 +70,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.062430+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution-semantics review: Revved is modeled as proc damage, so it should not recursively trigger spell-effect chains.",
+      "Player-visible behavior: once every 40 seconds, the next damaging champion interaction adds a 65 bonus-magic-damage burst.",
+      "Page notes indicate Revved can proc from 0-damage champion-hit instances and that the Revved damage itself is not blocked by spell shield."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hextech Alternator.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Hextech Alternator",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hextech_Alternator",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Revved cooldown and interaction notes (proc-damage classification, 0-damage proc behavior, and spell-shield handling)"
+    }
+  ]
 }

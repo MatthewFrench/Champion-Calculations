@@ -37,7 +37,7 @@
   "effects_structured": [
     {
       "id": "dead_mans_plate_momentum_gain",
-      "raw": "While moving, generates 7 stacks of ''Momentum'' every {{fd 0.25}} seconds, granting up to {{as 20 '''bonus''' movement speed}} at 100 stacks after {{fd 3.75}} seconds of moving",
+      "raw": "While moving, generate 7 Momentum stacks every 0.25 seconds, up to 100 stacks after 3.75 seconds of movement, granting up to 20 bonus movement speed.",
       "effect_type": "apply_stack",
       "stack_id": "momentum",
       "value": 7,
@@ -67,7 +67,7 @@
         100,
         3.75
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
       "id": "dead_mans_plate_momentum_hit",
@@ -79,7 +79,7 @@
       "unit": "per_stack",
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "interval_seconds": 1.0,
+      "interval_seconds": null,
       "trigger": "on_hit",
       "applies_to": "enemy_unit_hit",
       "conditions": [
@@ -148,7 +148,7 @@
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -168,9 +168,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.020918+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Momentum stacks grant up to 20 bonus move speed at 100 stacks over 3.75 seconds of moving."
+      "Momentum stacks grant up to 20 bonus movement speed while moving (7 stacks every 0.25 seconds up to 100 stacks).",
+      "Execution model: the next basic attack consumes all Momentum stacks to apply bonus on-hit physical damage that scales with stored stacks and includes a base-AD scaling component.",
+      "Unsinkable is a persistent 15% slow-resist stat effect active while the item is equipped."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Dead Man's Plate)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Dead_Man%27s_Plate",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Momentum stack cadence/cap, Shipwrecker on-hit discharge semantics, and Unsinkable slow-resist value"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Dead Mans Plate.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

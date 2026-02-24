@@ -40,7 +40,9 @@
       "interval_seconds": 0.5,
       "trigger": "on_next_ability_hit",
       "applies_to": "enemy_unit_hit",
-      "conditions": [],
+      "conditions": [
+        "max_health_difference_scaled"
+      ],
       "status_effects": [
         "burn"
       ],
@@ -72,13 +74,13 @@
         1,
         4
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -94,9 +96,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.007146+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Burn scales with maximum health difference and lethality; exact formula encoded as ratio per 8 lethality."
+      "Execution model review: this effect arms on item readiness and is consumed by the next qualifying ability hit, then burns over 4 seconds with 0.5-second tick cadence.",
+      "Burn scaling depends on target-vs-user maximum-health difference (capped by tooltip rule at 2500 difference) plus lethality scaling."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Hellfire Hatchet)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hellfire_Hatchet",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Char burn timing cadence and health-difference scaling envelope"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hellfire Hatchet.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

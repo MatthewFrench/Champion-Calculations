@@ -9,7 +9,7 @@
     "attackSpeed": {
       "flat": 45.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "movespeed": {
@@ -72,6 +72,7 @@
         "opening_barrage"
       ],
       "scaling_terms": [],
+      "charges": 3,
       "crit_bonus": {
         "if_noncrit": {
           "bonus_critical_damage": {
@@ -80,6 +81,10 @@
           }
         }
       },
+      "modifiers": {
+        "empower_window_seconds": 8.0,
+        "requires_ultimate_cast": true
+      },
       "numbers_extracted": [
         3,
         8,
@@ -87,7 +92,7 @@
         60,
         80
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "opening_barrage_true_damage_on_forced_critical_strike",
@@ -102,9 +107,15 @@
       "interval_seconds": null,
       "trigger": "on_critical_strike_with_opening_barrage",
       "applies_to": "enemy_unit_hit",
-      "conditions": [],
+      "conditions": [
+        "attack_would_already_critically_strike"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "forced_total_critical_damage_ratio": 1.0,
+        "bonus_true_damage_ratio_of_triggering_attack_damage": 0.15
+      },
       "numbers_extracted": [
         80,
         100,
@@ -112,13 +123,13 @@
         100,
         15
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2650,
-      "sell": 1060
+      "sell": 1855
     },
     "purchasable": true,
     "tags": [
@@ -133,9 +144,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.036134+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Opening Barrage affects next 3 basic attacks within 8 seconds after ultimate cast."
+      "Opening Barrage affects next 3 basic attacks within 8 seconds after ultimate cast.",
+      "Fiendhunter Bolts is modeled as an ultimate-synergy marksman burst window: temporary attack-speed and crit enhancement with conditional true-damage amplification on already-critical hits."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Fiendhunter Bolts.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Fiendhunter Bolts",
+      "url": "https://wiki.leagueoflegends.com/en-us/Fiendhunter_Bolts",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Opening Barrage crit conversion and conditional true-damage clause"
+    }
+  ]
 }

@@ -6,7 +6,7 @@
     "DISTRIBUTED"
   ],
   "stats": {
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 50.0
     }
   },
@@ -16,7 +16,7 @@
       "name": "Excoriate",
       "effects": "Gain a random amount of {{as|'''bonus''' critical strike damage|critical damage}} that scales up to {{as|50% of your critical strike chance}}, with the value of this amount changing every {{fd|0.25}} seconds.",
       "stats": {
-        "criticalStrikeChance": {
+        "critChance": {
           "percent": 50.0
         },
         "criticalStrikeDamage": {
@@ -34,6 +34,7 @@
       "stat": "bonus_critical_strike_damage",
       "value": null,
       "value_range": {
+        "min_ratio_of_crit_chance": 0.0,
         "max_ratio_of_crit_chance": 0.5
       },
       "unit": "ratio",
@@ -43,7 +44,9 @@
       "trigger": "on_equip",
       "applies_to": "self",
       "conditions": [
-        "randomized_value"
+        "randomized_value",
+        "rerolls_every_0_25_seconds",
+        "arena_round_based_mode"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -57,7 +60,7 @@
         50,
         0.25
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -75,9 +78,43 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.000835+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Bonus critical strike damage value is randomized and changes every 0.25 seconds."
+      "Execution model: Excoriate continuously rerolls bonus critical-strike-damage contribution every 0.25 seconds while equipped, scaling to a maximum tied to current critical-strike chance.",
+      "Player-visible behavior: crit-damage output fluctuates over time even without casting or hitting, so burst windows depend on random roll timing at hit resolution.",
+      "Patch-history verification confirms the current maximum scaling coefficient represented here."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "Riot patch notes (Patch 25.06)",
+      "url": "https://www.leagueoflegends.com/en-au/news/game-updates/patch-25-06-notes/",
+      "accessed": "2026-02-23",
+      "used_for": "official verification of Sword of the Divine critical-damage scaling update"
+    },
+    {
+      "name": "League Wiki (Sword of the Divine)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sword_of_the_Divine",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of periodic reroll cadence and crit-chance-linked random bonus range"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Sword of the Divine.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

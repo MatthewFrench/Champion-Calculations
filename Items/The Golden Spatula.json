@@ -10,7 +10,7 @@
       "flat": 125.0
     },
     "armor": {
-      "flat": 40.0
+      "flat": 30.0
     },
     "attackDamage": {
       "flat": 90.0
@@ -18,23 +18,23 @@
     "attackSpeed": {
       "flat": 60.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "health": {
-      "flat": 350.0
+      "flat": 250.0
     },
     "healthRegen": {
-      "percent": 200.0
+      "percent": 100.0
     },
-    "magicResistance": {
-      "flat": 40.0
+    "magicResist": {
+      "flat": 30.0
     },
     "mana": {
-      "flat": 350.0
+      "flat": 250.0
     },
     "manaRegen": {
-      "percent": 200.0
+      "percent": 100.0
     },
     "movespeed": {
       "percent": 10.0
@@ -43,7 +43,7 @@
       "flat": 20.0
     },
     "omnivamp": {
-      "percent": 15.0
+      "percent": 10.0
     }
   },
   "passives": [
@@ -61,7 +61,7 @@
   "active": [],
   "effects_structured": [
     {
-      "raw": "Permanently On Fire: burn nearby enemies every second and gain multiple buffs; also reduces cooldowns periodically.",
+      "raw": "Permanently On Fire: burn nearby enemies every second, reduce ability cooldowns every 0.25 seconds, and grant movement/attack speed plus scaling health and resource regeneration buffs.",
       "id": "golden_spatula_on_fire_aura_buffs",
       "effect_type": "aura_and_buff",
       "stat": "on_fire",
@@ -73,7 +73,10 @@
       "interval_seconds": 1.0,
       "trigger": "always",
       "applies_to": "self_and_nearby_enemies",
-      "conditions": [],
+      "conditions": [
+        "arena_or_mayhem_mode",
+        "on_fire_active"
+      ],
       "status_effects": [
         "on_fire"
       ],
@@ -131,7 +134,7 @@
         1.5,
         4
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     },
     {
       "raw": "While On Fire, take increased damage and reduced healing/shielding effectiveness.",
@@ -152,6 +155,7 @@
       "trigger": "always",
       "applies_to": "self",
       "conditions": [
+        "arena_or_mayhem_mode",
         "on_fire_active"
       ],
       "status_effects": [],
@@ -162,10 +166,14 @@
         35,
         25
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
+    "prices": {
+      "total": 2500,
+      "sell": 1750
+    },
     "purchasable": true
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4403_goldenspatula.png",
@@ -182,9 +190,57 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.050067+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "On Fire! has multiple concurrent effects; some values scale by level and/or are mode-specific."
+      "Tier-1 alignment review: base stat block and shop prices were reconciled to Data Dragon 16.3.1 / CommunityDragon for current Arena snapshot values.",
+      "Execution model: this is a no-input passive (no cast step). While owned, the holder is permanently On Fire, causing a 400-unit aura burn tick every second and periodic ability cooldown reduction (0.2 seconds every 0.25 seconds).",
+      "Player-visible behavior: movement speed has two states (base bonus and higher facing-nearby-enemy state); incoming-damage penalty is split by champion class (melee vs ranged), and heal/shield effectiveness is reduced while On Fire is active.",
+      "Mode-scope reconciliation: League Wiki module data marks this item for Arena and Mayhem while Tier-1 datasets provide the canonical baseline stat/economy snapshot; simulation data keeps Tier-1 stats and uses page/module sources for On Fire semantic detail.",
+      "Buff persistence note: Nexus Blitz On Fire documentation indicates On Fire is normally lost on death except when sourced from The Golden Spatula; this behavior is tracked as context and not yet runtime-modeled."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (The Golden Spatula)",
+      "url": "https://wiki.leagueoflegends.com/en-us/The_Golden_Spatula",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of passive On Fire numeric details and patch-history context for stat-package changes"
+    },
+    {
+      "name": "League Wiki module (ItemData/data)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Module:ItemData/data?action=raw",
+      "accessed": "2026-02-23",
+      "used_for": "module-level verification of passive string payload and mode-flag context (ar/mayhem)"
+    },
+    {
+      "name": "League Wiki template (Buff_data_On Fire!)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Buff_data_On_Fire!?action=raw",
+      "accessed": "2026-02-23",
+      "used_for": "cross-check of On Fire downside semantics and death-loss exception wording"
+    },
+    {
+      "name": "League Wiki (Nexus Blitz)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Nexus_Blitz",
+      "accessed": "2026-02-23",
+      "used_for": "cross-check of On Fire persistence-through-death exception when sourced from The Golden Spatula"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/The Golden Spatula.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

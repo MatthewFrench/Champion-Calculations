@@ -64,7 +64,7 @@
         10,
         3
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.66
     },
     {
       "id": "deaths_dance_defy_heal",
@@ -76,7 +76,7 @@
       "unit": "ratio",
       "duration_seconds": 2.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
+      "interval_seconds": 0.25,
       "trigger": "on_takedown_within_3s_damage",
       "applies_to": "self",
       "conditions": [
@@ -97,13 +97,13 @@
         75,
         2
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
     "prices": {
       "total": 3300,
-      "sell": 1320
+      "sell": 2310
     },
     "purchasable": true,
     "tags": [
@@ -119,6 +119,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.029325+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Ignore Pain stores a melee/ranged split portion of post-mitigation physical and magic incoming damage, then applies that stored amount as three true-damage ticks over 3 seconds.",
+      "Player-visible behavior: Defy triggers when a recently damaged enemy champion dies within 3 seconds, immediately clears remaining Ignore Pain storage, and restores health over 2 seconds in 0.25-second heal ticks."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Deaths Dance.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Death's Dance)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Death%27s_Dance",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Ignore Pain storage/tick semantics and Defy heal-tick cadence notes"
+    }
+  ]
 }

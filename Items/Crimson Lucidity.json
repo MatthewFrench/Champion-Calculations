@@ -67,7 +67,9 @@
       "conditions": [
         "healing_or_shielding_or_buffing_ally",
         "damaging_ability_to_champions",
-        "summoner_spell_cast"
+        "summoner_spell_cast",
+        "same_cast_instance_once_per_4_seconds",
+        "melee_ranged_movespeed_split"
       ],
       "status_effects": [
         "movespeed"
@@ -78,13 +80,13 @@
         8,
         4
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 900,
-      "sell": 360
+      "sell": 630
     },
     "purchasable": true
   },
@@ -97,9 +99,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.050834+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Move speed bonus uses melee/ranged split from tooltip (10% melee, 8% ranged)."
+      "Execution model: Noxian Haste triggers from ally-support casts, champion-damaging abilities, or summoner spell usage, then grants a 4-second movement-speed buff with a same-cast-instance throttle.",
+      "Player-visible behavior: movement speed bonus is role-split (10% melee, 8% ranged) and refresh windows are gated to once every 4 seconds per qualifying cast instance."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Crimson Lucidity)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Crimson_Lucidity",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Noxian Haste trigger set, melee/ranged movement-speed split, and cast-instance throttling semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Crimson Lucidity.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

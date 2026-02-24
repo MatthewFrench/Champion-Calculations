@@ -50,10 +50,10 @@
         8,
         4
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
-      "raw": "Ability affects a unit consumes a charge to grant bonus mana (3; 6 if champion), up to 360 bonus mana.",
+      "raw": "Affecting an enemy or ally with an ability consumes a charge to grant bonus mana (3; 6 vs champions), up to 360 bonus mana, once per cast instance.",
       "id": "tear_manaflow_mana_gain",
       "effect_type": "resource_gain",
       "stat": "bonus_mana",
@@ -68,6 +68,8 @@
       "trigger": "on_ability_affect",
       "applies_to": "self",
       "conditions": [
+        "manaflow_charge_available",
+        "ability_affects_enemy_or_ally",
         "once_per_cast_instance"
       ],
       "status_effects": [],
@@ -76,13 +78,18 @@
         "stack_id": "manaflow_charge",
         "consume": 1
       },
+      "modifiers": {
+        "non_champion_target_bonus_mana": 3,
+        "champion_target_bonus_mana": 6,
+        "ability_events_only": true
+      },
       "cap": 360,
       "numbers_extracted": [
         3,
         6,
         360
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "Basic attacks deal 5 bonus physical damage on-hit against minions.",
@@ -109,7 +116,7 @@
   "shop": {
     "prices": {
       "total": 400,
-      "sell": 160
+      "sell": 280
     },
     "purchasable": true,
     "tags": [
@@ -131,6 +138,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.013743+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Tear of the Goddess Manaflow is modeled as ability-affect gated stacking: mana gain resolves when an ability affects a unit, not on cast button press alone.",
+      "Execution semantics note: Manaflow is charge-gated (8-second cadence, max 4 charges) and limited to one trigger per cast instance for ability-based events.",
+      "Shop sell value was corrected to Tier-1 canonical dataset/page values during manual review."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Tear of the Goddess.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Tear of the Goddess",
+      "url": "https://wiki.leagueoflegends.com/en-us/Tear_of_the_Goddess",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Manaflow trigger semantics, charge cadence, and mana gain/cap values"
+    }
+  ]
 }

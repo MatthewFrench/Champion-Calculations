@@ -46,7 +46,7 @@
         {
           "stat": "base_attack_damage",
           "ratio": 0.75,
-          "type": "flat"
+          "type": "percent"
         },
         {
           "stat": "ability_power",
@@ -57,10 +57,16 @@
       "bonus_damage": {
         "stat": "magic_damage",
         "value": 0.75,
-        "unit": "ratio_of_base_ad"
+        "unit": "ratio_of_base_ad",
+        "ability_power_ratio": 0.4
       },
       "timing": {
-        "window_seconds": 10.0
+        "window_seconds": 10.0,
+        "cooldown_starts_after_empowered_attack": true
+      },
+      "modifiers": {
+        "consumes_spellblade_on_empowered_attack": true,
+        "attack_speed_bonus_applies_to_empowered_attack_only": true
       },
       "numbers_extracted": [
         10,
@@ -69,13 +75,13 @@
         40,
         1.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -92,6 +98,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.023317+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Lich Bane is modeled as a spell-weave burst pattern: cast an ability, then consume Spellblade with the next basic attack inside the 10-second window."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Lich Bane.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Lich Bane",
+      "url": "https://wiki.leagueoflegends.com/en-us/Lich_Bane",
+      "accessed": "2026-02-23",
+      "used_for": "effect wording and scaling clarification for structured effects"
+    }
+  ]
 }

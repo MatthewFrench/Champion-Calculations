@@ -7,13 +7,13 @@
   ],
   "stats": {
     "armorPenetration": {
-      "percent": 35.0
+      "percent": 35
     },
     "attackDamage": {
-      "flat": 45.0
+      "flat": 45
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [
@@ -33,13 +33,14 @@
       "value": 0.3,
       "value_range": null,
       "unit": "ratio",
-      "duration_seconds": 1.0,
+      "duration_seconds": 1,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_ability_damage",
       "applies_to": "enemy",
       "conditions": [
-        "target_health_percent_at_or_below_50"
+        "target_health_percent_at_or_below_50",
+        "health_threshold_checked_on_damage_resolution"
       ],
       "status_effects": [
         "slow"
@@ -50,13 +51,13 @@
         30,
         1
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -72,6 +73,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.079128+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified trigger gating against page-level source: slow applies when ability damage resolves on targets at or below 50% maximum health."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Seryldas Grudge.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Serylda's Grudge",
+      "url": "https://wiki.leagueoflegends.com/en-us/Serylda%27s_Grudge",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

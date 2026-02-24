@@ -12,7 +12,7 @@
     "attackDamage": {
       "flat": 35.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     }
   },
@@ -38,7 +38,10 @@
       "interval_seconds": null,
       "trigger": "on_physical_damage_to_champion",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "applies_on_physical_damage_instances",
+        "champion_targets_only"
+      ],
       "status_effects": [
         "grievous_wounds"
       ],
@@ -46,13 +49,13 @@
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -69,6 +72,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.024777+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Grievous Wounds is applied whenever the holder deals physical damage to an enemy champion and refreshes to a 3-second duration.",
+      "Player-visible behavior: anti-heal uptime is tied to continued damage cadence on champion targets."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Mortal Reminder.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Mortal Reminder)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Mortal_Reminder",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of physical-damage trigger scope and Grievous Wounds duration semantics"
+    }
+  ]
 }

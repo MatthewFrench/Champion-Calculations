@@ -49,13 +49,17 @@
       "status_effects": [],
       "scaling_terms": [],
       "charges": 3,
+      "modifiers": {
+        "empower_window_seconds": 8.0,
+        "damage_vs_non_champions_flat": 85
+      },
       "numbers_extracted": [
         3,
         8,
         60,
         85
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "id": "statikk_shiv_electrospark_chain",
@@ -75,12 +79,16 @@
       "scaling_terms": [],
       "chain": {
         "range_units": 500,
-        "max_targets": 5
+        "max_targets": 5,
+        "target_selection": "closest"
       },
       "cooldown_by_level_seconds": {
         "min": 10,
         "max": 25,
         "levels": 6
+      },
+      "modifiers": {
+        "cooldown_starts_after_first_empowered_attack": true
       },
       "numbers_extracted": [
         500,
@@ -89,7 +97,7 @@
         10,
         6
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     },
     {
       "id": "statikk_shiv_electrospark_takedown_reset",
@@ -109,16 +117,19 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "resets_electrospark_cooldown": true
+      },
       "numbers_extracted": [
         3
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2700,
-      "sell": 1080
+      "sell": 1890
     },
     "purchasable": true,
     "tags": [
@@ -133,6 +144,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.030761+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Statikk Shiv is modeled as a burst-chain attack cycle: three empowered hits, nearest-target chain propagation, and takedown-based cooldown reset."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Statikk Shiv.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Statikk Shiv",
+      "url": "https://wiki.leagueoflegends.com/en-us/Statikk_Shiv",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of electrospark chain targeting, cooldown scaling window, and takedown reset condition"
+    }
+  ]
 }

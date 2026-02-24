@@ -41,7 +41,8 @@
       "applies_to": "self_and_allied_champions_in_nova",
       "conditions": [
         "takedown",
-        "damaged_target_within_3_seconds"
+        "damaged_target_within_3_seconds",
+        "owner_alive"
       ],
       "status_effects": [],
       "scaling_terms": [
@@ -59,13 +60,13 @@
         100,
         20
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -79,6 +80,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.059901+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Life From Death only triggers when the owner is alive, secures a takedown, and damaged that enemy champion within the prior 3-second window.",
+      "Player-visible behavior: the heal resolves as an outward nova over 1.75 seconds from the takedown location, affecting the owner and allied champions hit."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Cryptbloom)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Cryptbloom",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Life From Death takedown-window gating, owner-alive requirement, nova travel timing, and cooldown semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Cryptbloom.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

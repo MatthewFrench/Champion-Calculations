@@ -19,7 +19,7 @@
   "shop": {
     "prices": {
       "total": 600,
-      "sell": 240
+      "sell": 420
     },
     "purchasable": true,
     "tags": [

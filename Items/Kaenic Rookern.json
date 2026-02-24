@@ -12,7 +12,7 @@
     "healthRegen": {
       "percent": 100.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 80.0
     }
   },
@@ -39,7 +39,8 @@
       "trigger": "after_no_magic_damage",
       "applies_to": "self",
       "conditions": [
-        "no_magic_damage_for_15_seconds"
+        "no_magic_damage_for_15_seconds",
+        "absorbs_magic_damage_only"
       ],
       "status_effects": [
         "shield"
@@ -55,13 +56,13 @@
         15,
         15
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -75,6 +76,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.034285+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Magebane restores a magic-damage-only shield after the holder has avoided magic damage for 15 seconds.",
+      "Timing note: shield value scales from current maximum health and refresh timing is reset by incoming magic damage."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Kaenic Rookern.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Kaenic Rookern)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kaenic_Rookern",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of no-magic-damage refresh window, shield scaling, and magic-only absorb semantics"
+    }
+  ]
 }

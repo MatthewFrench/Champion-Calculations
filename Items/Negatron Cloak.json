@@ -6,7 +6,7 @@
     "EPIC"
   ],
   "stats": {
-    "magicResistance": {
+    "magicResist": {
       "flat": 45.0
     }
   },
@@ -16,7 +16,7 @@
   "shop": {
     "prices": {
       "total": 850,
-      "sell": 340
+      "sell": 595
     },
     "purchasable": true,
     "tags": [

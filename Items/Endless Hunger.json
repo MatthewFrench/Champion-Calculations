@@ -56,7 +56,7 @@
         5,
         10
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     },
     {
       "id": "feast_bonus_omnivamp_on_recent_damage_takedown",
@@ -82,13 +82,13 @@
         15,
         8
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -102,6 +102,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.054855+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Famine is a persistent stat conversion that grants flat ability haste plus a bonus-attack-damage scaling term while equipped.",
+      "Execution model: Feast only triggers on champion takedowns where the owner damaged the target within 3 seconds, then grants temporary omnivamp for 8 seconds."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Endless Hunger)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Endless_Hunger",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Famine bonus-attack-damage ability-haste scaling and Feast takedown-window omnivamp timing"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Endless Hunger.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

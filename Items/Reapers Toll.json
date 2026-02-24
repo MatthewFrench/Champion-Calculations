@@ -41,7 +41,8 @@
       "trigger": "on_basic_attack_hit",
       "applies_to": "enemy_target",
       "conditions": [
-        "combat_phase_duration"
+        "combat_phase_duration",
+        "arena_round_based_mode"
       ],
       "status_effects": [
         "reap"
@@ -52,7 +53,7 @@
         "duration": "combat_phase"
       },
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "On-hit, deal bonus true damage equal to 0.7% (0.5% ranged) of target max health plus 0.1% per Reap stack.",
@@ -69,7 +70,9 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack_hit",
       "applies_to": "enemy_target",
-      "conditions": [],
+      "conditions": [
+        "arena_round_based_mode"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -95,7 +98,7 @@
         0.5,
         0.1
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "raw": "Target health threshold equals 100% max health minus total bonus damage dealt, capped at 50% max health, lasting until end of round.",
@@ -113,7 +116,9 @@
       "trigger": "on_reap_damage",
       "applies_to": "enemy_target",
       "conditions": [
-        "end_of_round_duration"
+        "end_of_round_duration",
+        "threshold_reduced_by_total_reap_bonus_damage",
+        "threshold_floor_50_percent_max_health"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -121,7 +126,7 @@
         100,
         50
       ],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.66
     },
     {
       "raw": "Increases attack speed gained from all sources by 15%.",
@@ -142,7 +147,7 @@
       "numbers_extracted": [
         15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -158,9 +163,43 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.073577+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Reap stacks are Arena-style (combat phase/round concepts)."
+      "Execution model: each basic attack on-hit applies a persistent Reap stack for the combat phase and simultaneously recalculates bonus true damage from target maximum health plus per-stack scaling.",
+      "Player-visible behavior: repeated hits progressively lower the target's health-threshold floor for the round (down to a 50% maximum-health floor), creating a sustained anti-frontline execute window.",
+      "Patch-history verification confirms this file's current ranged/melee baseline and attack-speed gain semantics for the latest Arena tuning."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "Riot patch notes (Patch 14.16)",
+      "url": "https://www.leagueoflegends.com/en-ph/news/game-updates/patch-14-16-notes/",
+      "accessed": "2026-02-23",
+      "used_for": "official verification of Reaper's Toll patch-history behavior adjustments referenced by current structured semantics"
+    },
+    {
+      "name": "League Wiki (Reaper's Toll)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Reaper%27s_Toll",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Reap stack duration, per-hit max-health true-damage scaling, and health-threshold floor behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Reapers Toll.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

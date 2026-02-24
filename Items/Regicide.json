@@ -38,13 +38,16 @@
       "interval_seconds": null,
       "trigger": "on_combat_phase_start",
       "applies_to": "enemy_champion_lowest_max_health",
-      "conditions": [],
+      "conditions": [
+        "arena_round_based_mode",
+        "targets_lowest_total_max_health_enemy"
+      ],
       "status_effects": [
         "regent_mark"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "regicide_first_regent_takedown_grants_permanent_ad_and_resets_ultimate_cooldown",
@@ -60,7 +63,8 @@
       "trigger": "on_regent_takedown",
       "applies_to": "self",
       "conditions": [
-        "first_takedown_per_combat_phase"
+        "first_takedown_per_combat_phase",
+        "regent_target_only"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -70,7 +74,7 @@
         10,
         0.5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -86,9 +90,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.002219+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Combat phase/round concepts indicate Arena-style rules."
+      "Execution model: at each Arena combat-phase start, Regicide designates the enemy with the lowest total maximum health as Regent for that phase.",
+      "Player-visible behavior: only the first takedown on the designated Regent in that combat phase grants permanent bonus attack damage and forces ultimate current cooldown to 0.5 seconds."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Regicide)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Regicide",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Regent target selection and first-Regent-takedown reward semantics per combat phase"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Regicide.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

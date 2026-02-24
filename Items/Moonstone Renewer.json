@@ -45,7 +45,8 @@
       "trigger": "on_heal_or_shield_ally",
       "applies_to": "nearest_other_ally",
       "conditions": [
-        "exclude_self"
+        "exclude_self",
+        "requires_other_ally_within_800_units_of_primary_target"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -55,7 +56,7 @@
         30,
         35
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     },
     {
       "id": "starlit_grace_bonus_heal_or_shield_to_same_target_if_no_chain_target",
@@ -74,7 +75,7 @@
       "trigger": "on_heal_or_shield_ally",
       "applies_to": "same_target",
       "conditions": [
-        "no_other_allies_in_range"
+        "no_other_allies_within_800_units_of_primary_target"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -83,13 +84,13 @@
         30,
         35
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 2200,
-      "sell": 880
+      "sell": 1540
     },
     "purchasable": true,
     "tags": [
@@ -105,6 +106,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.049807+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Healing or shielding an allied champion attempts to chain to the nearest other ally within 800 units of the primary target (excluding self), at 30% heal or 35% shield strength.",
+      "Fallback model: If no other ally is available in range, Moonstone applies the extra 30%/35% value to the same primary target instead.",
+      "Code follow-up needed: runtime currently needs explicit multi-ally target-selection and fallback resolution support to simulate Starlit Grace chain behavior accurately."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Moonstone Renewer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Moonstone Renewer)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Moonstone_Renewer",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of nearest-other-ally chain targeting, 800-unit range scope, and same-target fallback branch semantics"
+    }
+  ]
 }

@@ -17,22 +17,32 @@
   "effects_structured": [
     {
       "id": "consume_restore_health_over_time",
-      "raw": "Consume to restore Health over time.",
+      "raw": "Consume to restore 120 health over 15 seconds.",
       "effect_type": "healing_over_time",
       "stat": "health",
-      "value": null,
+      "value": 120,
       "value_range": null,
       "unit": "flat_total",
-      "duration_seconds": null,
+      "duration_seconds": 15.0,
       "cooldown_seconds": null,
-      "interval_seconds": null,
-      "trigger": "active",
+      "interval_seconds": 0.5,
+      "trigger": "on_activate",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "consume_item",
+        "cannot_activate_at_full_health"
+      ],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.4
+      "modifiers": {
+        "tick_interval_seconds": 0.5
+      },
+      "numbers_extracted": [
+        120,
+        15,
+        0.5
+      ],
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
@@ -55,9 +65,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.004623+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Exact healing amount and duration not present in source data."
+      "Health Potion is modeled as manual sustain: activation consumes the item and applies healing over time (not instant burst).",
+      "In-game behavior note: activation is treated as unavailable at full health under normal use."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Health Potion.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Health Potion",
+      "url": "https://wiki.leagueoflegends.com/en-us/Health_Potion",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of consume activation behavior and heal-over-time amount/timing"
+    }
+  ]
 }

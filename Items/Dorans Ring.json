@@ -40,13 +40,15 @@
       "interval_seconds": 1.0,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "can_gain_mana"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         1
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     },
     {
       "id": "drain_mana_regen_after_champion_damage",
@@ -61,14 +63,16 @@
       "interval_seconds": 1.0,
       "trigger": "on_damage_to_champions",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "can_gain_mana"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         2,
         5
       ],
-      "parse_confidence": 0.75
+      "parse_confidence": 0.8
     },
     {
       "id": "drain_heal_when_no_mana_resource",
@@ -83,7 +87,9 @@
       "interval_seconds": 1.0,
       "trigger": "if_no_mana_resource",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "cannot_gain_mana_or_at_full_mana"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -99,7 +105,7 @@
         2,
         0.45
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.76
     },
     {
       "id": "helping_hand_on_hit_bonus_physical_vs_minions",
@@ -144,6 +150,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.026642+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified Drain/Helping Hand behavior from page-level source: Drain restores 1 mana per second, upgrades to 2 mana per second for 5 seconds after dealing damage to an enemy champion, and converts to 45% healing when mana cannot be gained (including full-mana states).",
+      "Player-visible behavior: Helping Hand is an on-hit-only minion damage rider and does not apply to non-minion targets."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Dorans Ring.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Doran's Ring",
+      "url": "https://wiki.leagueoflegends.com/en-us/Doran%27s_Ring",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Drain mana/heal branch behavior and Helping Hand on-hit minion targeting semantics"
+    }
+  ]
 }

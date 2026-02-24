@@ -49,7 +49,10 @@
       "interval_seconds": null,
       "trigger": "on_move_or_basic_attack",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "energize_generated_by_movement_and_basic_attack_events",
+        "energize_stack_cap_100"
+      ],
       "status_effects": [
         "energize"
       ],
@@ -60,7 +63,7 @@
       "numbers_extracted": [
         100.0
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "polarity_preserve_energize_stacks_on_new_target",
@@ -76,14 +79,15 @@
       "trigger": "on_hit",
       "applies_to": "self",
       "conditions": [
-        "target_not_previous_energized_target"
+        "target_not_previous_energized_target",
+        "preserve_energize_stacks_on_target_swap"
       ],
       "status_effects": [
         "energize"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "dynamo_full_energize_on_hit_bonus_magic_damage",
@@ -130,6 +134,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.025753+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Fulmination uses Energize stack accumulation (up to 100), with Dynamo consuming a fully charged Energized basic attack to apply current-health bonus magic damage.",
+      "Player-visible behavior: Polarity preserves Energize charges when changing to a different target than the previous Energized-hit target, enabling consecutive charged hits across target swaps.",
+      "Dynamo ratio is verified at 13% of target current health in current page-level patch history."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Fulmination)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Fulmination",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Energize cap, Polarity target-swap stack-preservation rule, and Dynamo current-health damage ratio"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Fulmination.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

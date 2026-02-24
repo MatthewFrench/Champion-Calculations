@@ -35,7 +35,7 @@
   "effects_structured": [
     {
       "id": "cosmic_drive_spelldance",
-      "raw": "Dealing {{as magic magic damage}} or {{as true true damage}} damage to an enemy champion grants you {{as 20 '''bonus''' movement speed ms}} for 4 seconds.",
+      "raw": "Dealing magic or true damage to an enemy champion grants 20 bonus movement speed for 4 seconds.",
       "effect_type": "stat_modifier",
       "stat": "movespeed",
       "value": 20,
@@ -48,7 +48,8 @@
       "applies_to": "self",
       "conditions": [
         "magic_damage",
-        "true_damage"
+        "true_damage",
+        "champion_damage"
       ],
       "status_effects": [
         "movespeed"
@@ -58,13 +59,13 @@
         20,
         4
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -81,6 +82,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.057623+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Spelldance is a self-buff trigger that activates when the owner deals magic or true damage to an enemy champion.",
+      "Player-visible behavior: Spelldance grants +20 bonus movement speed for 4 seconds after qualifying champion damage, supporting short chase/reposition windows during spell trades."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Cosmic Drive)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Cosmic_Drive",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Spelldance trigger scope (magic/true damage to champions), movement-speed bonus amount, and duration"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Cosmic Drive.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

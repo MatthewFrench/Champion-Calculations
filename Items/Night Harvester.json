@@ -7,13 +7,13 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 90.0
+      "flat": 90
     },
     "health": {
-      "flat": 300.0
+      "flat": 300
     },
     "abilityHaste": {
-      "flat": 25.0
+      "flat": 25
     }
   },
   "passives": [
@@ -23,7 +23,7 @@
       "effects": "Damaging an enemy champion with a basic attack or [[ability damage]] deals {{as|125 {{as|(+ 15% AP)}} '''bonus''' magic damage|magic damage}} and grants you {{as|40% '''bonus''' movement speed}} for {{fd|1.5}} seconds, with the duration extending on subsequent triggers (10 second cooldown per champion).",
       "stats": {
         "movespeed": {
-          "percent": 40.0
+          "percent": 40
         }
       }
     }
@@ -39,7 +39,7 @@
       "value_range": null,
       "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": 10.0,
+      "cooldown_seconds": 10,
       "interval_seconds": null,
       "trigger": "on_basic_attack_or_ability_damage",
       "applies_to": "enemy_champion",
@@ -70,7 +70,7 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": 1.5,
-      "cooldown_seconds": 10.0,
+      "cooldown_seconds": 10,
       "interval_seconds": null,
       "trigger": "on_soulrend_trigger",
       "applies_to": "self",
@@ -85,14 +85,18 @@
         1.5,
         10
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4636_mage_t4_nightharvester.png",
   "simpleDescription": null,
@@ -104,6 +108,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.002759+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase.",
+      "Execution-semantics review: Soulrend is triggered by either basic attack damage or ability damage against champions, applies per-target cooldown gating, and refreshes movement-speed duration on subsequent champion triggers.",
+      "Mode-availability note: Night Harvester is a distributed/prismatic Arena item obtained via Prismatic Item Anvils when Arena is active."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Night Harvester.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Night Harvester",
+      "url": "https://wiki.leagueoflegends.com/en-us/Night_Harvester",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Soulrend trigger set, damage/movement values, per-target cooldown behavior, Arena exclusivity, and displayed cost/sell fields"
+    }
+  ]
 }

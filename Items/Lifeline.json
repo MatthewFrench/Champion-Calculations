@@ -34,18 +34,22 @@
       "value": 1,
       "value_range": null,
       "unit": "anchor",
-      "duration_seconds": null,
+      "duration_seconds": 4.0,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "anchor_location_persisted_for_4_seconds_or_until_recast"
+      ],
       "status_effects": [
         "soul_anchor"
       ],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "numbers_extracted": [
+        4
+      ],
+      "parse_confidence": 0.65
     },
     {
       "id": "soul_anchor_automatic_blink_after_delay",
@@ -58,10 +62,11 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "active",
+      "trigger": "on_anchor_timeout",
       "applies_to": "self",
       "conditions": [
-        "auto_blink_after_delay"
+        "auto_blink_after_anchor_timeout",
+        "blink_has_0_5_second_windup"
       ],
       "status_effects": [
         "blink"
@@ -75,7 +80,7 @@
         4,
         0.5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     },
     {
       "id": "soul_anchor_recast_manual_blink",
@@ -91,22 +96,30 @@
       "trigger": "active_recast",
       "applies_to": "self",
       "conditions": [
-        "recast_within_duration"
+        "recast_within_anchor_duration",
+        "cooldown_starts_after_blink_resolves"
       ],
       "status_effects": [
         "blink"
       ],
+      "timing": {
+        "recast_window_seconds": 4.0,
+        "blink_windup_seconds": 0.5,
+        "cooldown_start_event": "after_blink"
+      },
       "scaling_terms": [],
       "numbers_extracted": [
+        4,
+        0.5,
         45
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
     "prices": {
       "total": 1600,
-      "sell": 640
+      "sell": 1120
     },
     "purchasable": true,
     "tags": [
@@ -122,9 +135,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.028988+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Cooldown starts after the blink."
+      "Execution model: Soul Anchor stores a return location, then enforces a 4-second return window with either automatic timeout return or manual recast return.",
+      "Player-visible behavior: both automatic and recast returns include a 0.5-second blink windup; the 45-second cooldown starts after blink resolution.",
+      "Special-case interactions with displacement/channel/crowd-control states are not fully encoded and remain a fidelity follow-up area."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Lifeline)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Lifeline",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Soul Anchor mark, timeout return timing, recast return window, and cooldown-start-after-blink semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Lifeline.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

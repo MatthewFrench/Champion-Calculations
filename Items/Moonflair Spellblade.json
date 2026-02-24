@@ -7,13 +7,13 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 85.0
+      "flat": 85
     },
     "health": {
-      "flat": 400.0
+      "flat": 400
     },
     "tenacity": {
-      "percent": 30.0
+      "percent": 30
     }
   },
   "passives": [
@@ -42,7 +42,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "id": "relentless_empower_next_two_basic_attacks_with_bonus_attack_speed",
@@ -95,7 +95,11 @@
     "purchasable": true,
     "tags": [
       "MAGE"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7110_moonflairspellblade.png",
   "simpleDescription": null,
@@ -104,6 +108,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.052931+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase.",
+      "Execution-semantics review: Relentless is a cast-then-hit pattern (ability cast resets basic attack timer, then the next two attacks are empowered); cooldown reduction is applied on each basic attack event, not on cast.",
+      "Mode-availability note: Moonflair Spellblade is a distributed/prismatic Arena item obtained via Prismatic Item Anvils when Arena is active."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Moonflair Spellblade.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Moonflair Spellblade",
+      "url": "https://wiki.leagueoflegends.com/en-us/Moonflair_Spellblade",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Relentless attack-reset timing, empowered-hit cadence, on-attack cooldown-reduction behavior, Arena exclusivity, and displayed cost/sell fields"
+    }
+  ]
 }

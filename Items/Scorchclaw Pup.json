@@ -41,7 +41,7 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "scorchclaw_pup_upgrade_smite_on_companion_evolution",
@@ -56,12 +56,14 @@
       "interval_seconds": null,
       "trigger": "on_companion_evolution",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "requires_treat_collection"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "target_spell": "Smite",
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     },
     {
       "id": "scorchclaw_pup_consume_item_and_grant_slash_on_final_evolution",
@@ -76,20 +78,22 @@
       "interval_seconds": null,
       "trigger": "on_companion_final_evolution",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "item_consumed_on_final_evolution"
+      ],
       "status_effects": [
         "scorchclaws_slash"
       ],
       "scaling_terms": [],
       "consumes_item": true,
       "numbers_extracted": [],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 450,
-      "sell": 180
+      "sell": 0
     },
     "purchasable": true,
     "tags": [
@@ -114,9 +118,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.050346+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Companion evolution, treats, and Smite upgrade values are not specified in this payload."
+      "Scorchclaw Pup is modeled as a no-sell jungle starter that summons a companion and progresses via treat collection to Smite upgrade and final-evolution buff grant.",
+      "Final evolution consumes the starter item and grants the Scorchclaw's Slash buff."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Scorchclaw Pup.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Scorchclaw Pup",
+      "url": "https://wiki.leagueoflegends.com/en-us/Scorchclaw_Pup",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of jungle companion progression, Smite upgrade flow, final-evolution item consumption, and No Sell behavior"
+    }
+  ]
 }

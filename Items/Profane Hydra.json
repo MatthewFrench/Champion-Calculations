@@ -46,7 +46,9 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack_hit",
       "applies_to": "nearby_enemies",
-      "conditions": [],
+      "conditions": [
+        "splash_centered_on_primary_target"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -71,7 +73,7 @@
         20,
         350
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     },
     {
       "id": "heretical_cleave_active_area_physical_damage",
@@ -82,11 +84,13 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 10.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_radius",
-      "conditions": [],
+      "conditions": [
+        "self_centered_aoe"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -103,13 +107,13 @@
         80,
         450
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2850,
-      "sell": 1140
+      "sell": 1995
     },
     "purchasable": true,
     "tags": [
@@ -125,9 +129,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.064464+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
+      "Execution model: Cleave applies splash physical damage around the primary basic-attack target, with melee/ranged damage split (40% vs 20% AD).",
+      "Execution model: Heretical Cleave is a self-centered active area hit (450 radius) with a 10-second cooldown and immediate resolution on cast."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Profane Hydra.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Profane Hydra)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Profane_Hydra",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Cleave splash geometry, Heretical Cleave radius, and active cooldown timing"
+    }
+  ]
 }

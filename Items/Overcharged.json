@@ -9,7 +9,7 @@
   "passives": [
     {
       "unique": true,
-      "effects": "At 55 minutes, this turret begins to malfunction, losing {{as|armor}} and {{as|magic resist}}. After 5 minutes, it will start breaking down, losing an increasing percentage of its {{as|{{sti|health|'''maximum''' health}}}} every 30 seconds."
+      "effects": "At 55 minutes (Clash), this turret begins to malfunction, losing {{as|armor}} and {{as|magic resist}}. After 5 minutes, it starts breaking down, losing an increasing percentage of its {{as|{{sti|health|'''maximum''' health}}}} every 30 seconds."
     }
   ],
   "active": [],
@@ -28,6 +28,7 @@
       "trigger": "on_game_time",
       "applies_to": "structure",
       "conditions": [
+        "clash_mode_sudden_death",
         "game_time_at_least_55_minutes"
       ],
       "status_effects": [
@@ -37,7 +38,7 @@
       "numbers_extracted": [
         55
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     },
     {
       "id": "overcharged_turret_health_decay_after_60_minutes",
@@ -53,6 +54,7 @@
       "trigger": "on_game_time",
       "applies_to": "structure",
       "conditions": [
+        "clash_mode_sudden_death",
         "game_time_at_least_60_minutes"
       ],
       "status_effects": [
@@ -63,7 +65,7 @@
         5,
         30
       ],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.65
     }
   ],
   "shop": {},
@@ -74,9 +76,43 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.052362+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Exact armor/magic resist loss and health decay rate are not specified in this payload."
+      "Execution model: Sudden Death starts with a timed resistance-loss phase, then transitions to periodic structure max-health decay. The percentage values are mode-defined and not provided in this item payload.",
+      "Clash page-level behavior: resistance loss starts at 55:00, then escalating max-health decay starts at 60:00 in 30-second ticks.",
+      "Swiftplay uses different Sudden Death timing/values (Overcharged starts earlier), so this file keeps Clash-aligned timing semantics and tracks mode variance in sources."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Clash)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Clash",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Sudden Death timing for Overcharged (55:00 resistance loss, 60:00 escalating health decay every 30 seconds)"
+    },
+    {
+      "name": "League Wiki (Swiftplay)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Swiftplay",
+      "accessed": "2026-02-23",
+      "used_for": "mode-variance verification for Overcharged timing and Sudden Death behavior outside Clash"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Overcharged.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

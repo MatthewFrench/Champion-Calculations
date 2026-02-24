@@ -70,24 +70,33 @@
       "interval_seconds": null,
       "trigger": "on_hypershot_trigger",
       "applies_to": "area_around_target",
-      "conditions": [],
+      "conditions": [
+        "hypershot_triggered"
+      ],
       "status_effects": [
         "vision"
       ],
       "mark_duration_seconds": 3.0,
       "scaling_terms": [],
+      "modifiers": {
+        "vision_radius_units": 1400,
+        "vision_duration_seconds": 2.0,
+        "applies_hypershot_mark_to_enemy_champions_in_area": true,
+        "area_mark_duration_seconds": 3.0,
+        "grants_sight_through_terrain_and_brush": true
+      },
       "numbers_extracted": [
         1400,
         2,
         3
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2700,
-      "sell": 1080
+      "sell": 1890
     },
     "purchasable": true,
     "tags": [
@@ -104,6 +113,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.054075+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Horizon Focus is modeled as long-range mage target-amplification: long-distance ability hits mark targets for personal damage amplification, then trigger area sight and secondary mark spread."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Horizon Focus.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Horizon Focus",
+      "url": "https://wiki.leagueoflegends.com/en-us/Horizon_Focus",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Focus area sight radius, mark spread duration, and Hypershot-trigger dependency"
+    }
+  ]
 }

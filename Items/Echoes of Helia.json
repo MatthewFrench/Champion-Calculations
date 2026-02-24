@@ -51,6 +51,13 @@
         "soul_charge"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "soul_charge_storage_ratio": 0.35,
+        "charge_cap_scales_with_champion_level": true,
+        "charge_cap_min": 80,
+        "charge_cap_max": 250,
+        "single_accumulating_charge_pool": true
+      },
       "stack_rules": {
         "max_stacks": 1,
         "cap_value": {
@@ -68,7 +75,7 @@
         -1,
         20
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "soul_siphon_consume_charges_to_heal_ally",
@@ -97,7 +104,7 @@
   "shop": {
     "prices": {
       "total": 2200,
-      "sell": 880
+      "sell": 1540
     },
     "purchasable": true,
     "tags": [
@@ -113,6 +120,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.074531+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Echoes of Helia is modeled as an enchanter conversion item: pre-mitigation damage contributes to a capped charge pool that is fully converted into ally healing on the next qualifying heal or shield."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Echoes of Helia.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Echoes of Helia",
+      "url": "https://wiki.leagueoflegends.com/en-us/Echoes_of_Helia",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Soul Siphon charge storage ratio and level-scaled cap semantics"
+    }
+  ]
 }

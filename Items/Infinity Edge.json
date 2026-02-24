@@ -9,7 +9,7 @@
     "attackDamage": {
       "flat": 75.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "criticalStrikeDamage": {
@@ -22,7 +22,7 @@
   "shop": {
     "prices": {
       "total": 3500,
-      "sell": 1400
+      "sell": 2450
     },
     "purchasable": true,
     "tags": [

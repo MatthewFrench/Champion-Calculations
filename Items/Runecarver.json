@@ -142,7 +142,7 @@
         0.3,
         100
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "runecarver_spiral_out_rune_stacks_reset_each_round_or_phase",
@@ -161,7 +161,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -179,9 +179,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.077962+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Rune stacks are Arena-style (round/phase resets)."
+      "Execution model review: Energize stack flow combines move/basic cadence with ability-hit burst generation, while Helix trigger cadence is gated once per cast instance.",
+      "Spiral Out resolves on energized attack by adding a Rune stack then firing one missile per current Rune stack; Rune stacks reset at round/phase boundaries."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Runecarver)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Runecarver",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Energize generation cadence, Spiral Out missile-per-stack behavior, and round/phase reset semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Runecarver.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

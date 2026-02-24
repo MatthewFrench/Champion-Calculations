@@ -7,16 +7,16 @@
   ],
   "stats": {
     "armor": {
-      "flat": 35.0
+      "flat": 35
     },
     "healAndShieldPower": {
-      "flat": 12.0
+      "flat": 12
     },
     "health": {
-      "flat": 400.0
+      "flat": 400
     },
-    "magicResistance": {
-      "flat": 35.0
+    "magicResist": {
+      "flat": 35
     }
   },
   "passives": [
@@ -37,8 +37,8 @@
       "value": null,
       "value_range": null,
       "unit": null,
-      "duration_seconds": 9.0,
-      "cooldown_seconds": 30.0,
+      "duration_seconds": 9,
+      "cooldown_seconds": 30,
       "interval_seconds": null,
       "trigger": "on_ultimate_cast",
       "applies_to": "self",
@@ -61,8 +61,8 @@
       "value": 0.125,
       "value_range": null,
       "unit": "ratio",
-      "duration_seconds": 9.0,
-      "cooldown_seconds": 30.0,
+      "duration_seconds": 9,
+      "cooldown_seconds": 30,
       "interval_seconds": null,
       "trigger": "on_transcend_start",
       "applies_to": "self",
@@ -82,9 +82,9 @@
       "value": 0.03,
       "value_range": null,
       "unit": "ratio_of_self_max_health",
-      "duration_seconds": 9.0,
-      "cooldown_seconds": 30.0,
-      "interval_seconds": 3.0,
+      "duration_seconds": 9,
+      "cooldown_seconds": 30,
+      "interval_seconds": 3,
       "trigger": "on_transcend_tick",
       "applies_to": "self_and_allies_in_radius",
       "conditions": [],
@@ -104,14 +104,18 @@
         3,
         4
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "TANK"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6667_tank_t4_radiantvirtue.png",
   "simpleDescription": null,
@@ -122,6 +126,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.008896+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase.",
+      "Execution-semantics review: Guiding Light starts on ultimate cast, applies Transcend immediately, then heals on start plus every 3 seconds (4 total ticks over 9 seconds) within 1200 range based on the user's max health.",
+      "Mode-availability note: Radiant Virtue is a distributed/prismatic Arena item obtained via Prismatic Item Anvils when Arena is active."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Radiant Virtue.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Radiant Virtue",
+      "url": "https://wiki.leagueoflegends.com/en-us/Radiant_Virtue",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Transcend duration, max-health modifier, periodic-heal cadence, Arena exclusivity, and displayed cost/sell fields"
+    }
+  ]
 }

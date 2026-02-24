@@ -48,8 +48,22 @@
         "limit_per_attack_or_cast": 1,
         "window_seconds": 2.0
       },
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "modifiers": {
+        "eligible_sources": [
+          "basic_attack_damage",
+          "ability_damage",
+          "item_effect_damage",
+          "summoner_spell_damage",
+          "crowd_control_application",
+          "damage_over_time_application"
+        ]
+      },
+      "numbers_extracted": [
+        2,
+        2,
+        1
+      ],
+      "parse_confidence": 0.68
     },
     {
       "id": "ever_rising_moon_proc_damage_and_shield_on_two_stacks",
@@ -108,6 +122,10 @@
         "unit": "flat",
         "duration_seconds": 2.0
       },
+      "modifiers": {
+        "proc_requires_two_stacks_within_window_seconds": 2.0,
+        "cooldown_starts_on_proc": true
+      },
       "numbers_extracted": [
         2,
         2,
@@ -119,13 +137,13 @@
         20,
         2
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -141,6 +159,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.018361+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Eclipse is modeled as a short-trade burst cycle: two qualifying hits inside a 2-second window trigger max-health damage plus a brief self-shield."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Eclipse.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Eclipse",
+      "url": "https://wiki.leagueoflegends.com/en-us/Eclipse",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of stack window, proc damage split, and shield scaling semantics"
+    }
+  ]
 }

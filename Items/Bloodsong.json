@@ -89,12 +89,18 @@
       "trigger": "on_spellblade_hit",
       "applies_to": "enemy_champion",
       "conditions": [
-        "spellblade_empowered_attack"
+        "spellblade_empowered_attack",
+        "target_is_champion"
       ],
       "status_effects": [
         "expose_weakness"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "damage_taken_increase_melee_owner": 0.08,
+        "damage_taken_increase_ranged_owner": 0.05,
+        "cooldown_starts_after_empowered_attack": true
+      },
       "numbers_extracted": [
         4,
         8,
@@ -116,11 +122,34 @@
       "interval_seconds": null,
       "trigger": "on_minion_kill",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "excessive_minion_kills",
+        "support_item_team_scaled_thresholds",
+        "time_before_5_minutes_or_time_after_5_minutes"
+      ],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "modifiers": {
+        "support_income_rule_applies": true,
+        "threshold_formulas_encoded_from_page_level_sources": true,
+        "pre_5_minutes_minion_kill_threshold_formula": "7 / support_items_on_team",
+        "pre_5_minutes_gold_reduction_percent": 0.8,
+        "post_5_minutes_minions_per_minute_threshold_formula": "4 / support_items_on_team",
+        "post_5_minutes_gold_reduction_percent_min": 0.5,
+        "post_5_minutes_gold_reduction_percent_max": 0.8,
+        "post_5_minutes_gold_reduction_formula_note": "50% + 1% per minion kill starting from 20 kills, capped at 50 kills",
+        "per_minute_windowing_and_team_item_count_dynamics_require_shared_runtime_rule_table": true
+      },
+      "numbers_extracted": [
+        5,
+        7,
+        4,
+        80,
+        50,
+        20,
+        50
+      ],
+      "parse_confidence": 0.68
     },
     {
       "id": "bloodsong_ward_place",
@@ -135,13 +164,20 @@
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "ground_target",
-      "conditions": [],
+      "conditions": [
+        "consume_ward_charge"
+      ],
       "status_effects": [
         "vision"
       ],
       "scaling_terms": [],
+      "range_units": 600,
+      "modifiers": {
+        "consumes_one_ward_charge_per_cast": true,
+        "charges_refill_on_shop_visit": true
+      },
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -163,9 +199,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.062139+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Ward charges refill upon visiting the shop; charge count and ward duration are not encoded here."
+      "Bloodsong is modeled as a support Spellblade amplifier that marks champion targets to take increased damage after empowered hits.",
+      "Ward charges refill upon visiting the shop; charge count and ward duration are not encoded here.",
+      "Support-income diminishing minion-gold behavior now encodes page-verified threshold formulas and reduction ranges (pre-5-minutes and post-5-minutes), while exact per-minute windowing and team support-item dynamics remain shared-rule dependencies."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bloodsong.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Bloodsong",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bloodsong",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Expose Weakness champion-only trigger, melee/ranged split, and support-income diminishing-gold thresholds/reduction curve (before 5 minutes and after 5 minutes)"
+    }
+  ]
 }

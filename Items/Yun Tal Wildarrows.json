@@ -7,10 +7,10 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 50.0
+      "flat": 50
     },
     "attackSpeed": {
-      "flat": 40.0
+      "flat": 40
     }
   },
   "passives": [
@@ -33,7 +33,7 @@
       "effect_type": "stack_gain",
       "applies_to": "self",
       "trigger": {
-        "type": "on_basic_attack"
+        "type": "on_basic_attack_launch"
       },
       "stack_name": "practice_crit",
       "value_per_stack_percent_by_attack_type": {
@@ -44,7 +44,8 @@
         "melee": 63,
         "ranged": 125
       },
-      "max_total_crit_percent": 25
+      "max_total_crit_percent": 25,
+      "parse_confidence": 0.8
     },
     {
       "id": "yuntal_flurry_attack_speed",
@@ -56,24 +57,29 @@
       },
       "stat": "attack_speed_bonus_percent",
       "value": 30,
-      "duration_seconds": 6.0,
-      "cooldown_seconds": 30.0,
+      "duration_seconds": 6,
+      "cooldown_seconds": 30,
       "cooldown_reduction_rules": [
         {
           "type": "on_hit",
-          "amount_seconds": 1.0
+          "amount_seconds": 1
         },
         {
           "type": "on_critical_strike",
-          "amount_seconds": 2.0
+          "amount_seconds": 2
         }
-      ]
+      ],
+      "conditions": [
+        "target_is_champion",
+        "flurry_cooldown_reduces_on_hit_and_crit"
+      ],
+      "parse_confidence": 0.79
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -90,6 +96,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.033943+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified on-attack and Flurry timing semantics against page-level source: Practice stacks are granted on basic attack launch, and Flurry cooldown reduction is driven by hit/crit outcomes on subsequent attacks.",
+      "Stack-cap note: melee branch reaches crit cap via 63 displayed stacks due decimal rounding of per-stack gain."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Yun Tal Wildarrows.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Yun Tal Wildarrows",
+      "url": "https://wiki.leagueoflegends.com/en-us/Yun_Tal_Wildarrows",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

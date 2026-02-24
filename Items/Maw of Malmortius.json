@@ -9,7 +9,7 @@
     "attackDamage": {
       "flat": 60.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 40.0
     },
     "abilityHaste": {
@@ -24,7 +24,7 @@
       "cooldown": "90",
       "stats": {
         "omnivamp": {
-          "percent": 30.0
+          "percent": 10.0
         }
       }
     }
@@ -33,7 +33,7 @@
   "effects_structured": [
     {
       "id": "lifeline_magic_damage_shield_on_threshold",
-      "raw": "If magic damage would reduce you below 30% max health, gain a magic damage shield for 3s (90s cooldown).",
+      "raw": "If incoming magic damage would reduce you below 30% max health, gain a 3-second magic-damage shield (90s cooldown) with melee/ranged base-and-scaling splits.",
       "effect_type": "shield",
       "stat": "magic_damage",
       "value": 200,
@@ -48,7 +48,8 @@
       "trigger": "on_magic_damage_threshold",
       "applies_to": "self",
       "conditions": [
-        "health_below_30_percent"
+        "health_below_30_percent",
+        "owner_attack_type_split"
       ],
       "status_effects": [
         "lifeline_shield"
@@ -76,7 +77,7 @@
         3,
         90
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     },
     {
       "id": "lifeline_grant_omnivamp_until_combat_ends",
@@ -100,13 +101,13 @@
         10,
         90
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -122,9 +123,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.023862+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Shield base and bonus AD scaling are melee/ranged differentiated."
+      "Shield base and bonus AD scaling are melee/ranged differentiated.",
+      "Execution model: Lifeline only evaluates incoming magic damage against the 30% max-health threshold, then applies the shield before lethal overflow resolves.",
+      "Player-visible behavior: triggering Lifeline grants 10% omnivamp until combat ends and cannot retrigger until the 90-second cooldown resets."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Maw of Malmortius)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Maw_of_Malmortius",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Lifeline trigger gating, melee/ranged shield scaling splits, omnivamp value, combat-end condition, and cooldown"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Maw of Malmortius.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

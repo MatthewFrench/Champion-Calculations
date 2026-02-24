@@ -34,7 +34,28 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
+    },
+    {
+      "id": "control_ward_map_placement_limit",
+      "raw": "Limited to 1 Control Ward placed on the map per player.",
+      "effect_type": "condition_note",
+      "stat": "placement_limit",
+      "value": 1,
+      "value_range": null,
+      "unit": "ward",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "passive",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        1
+      ],
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -55,9 +76,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.075341+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Control Wards persist until destroyed; vision radius and placement range are not encoded here."
+      "Control Ward is a manually placed utility ward: the player actively places it, then it persistently reveals/disables enemy ward and trap vision interactions until destroyed.",
+      "Page-level behavior review confirms per-player map limit (one active Control Ward at a time)."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Control Ward.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Control Ward",
+      "url": "https://wiki.leagueoflegends.com/en-us/Control_Ward",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of ward reveal/disable behavior and map placement limit"
+    }
+  ]
 }

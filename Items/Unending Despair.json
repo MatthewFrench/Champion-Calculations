@@ -42,7 +42,8 @@
           "stat": "health_bonus",
           "ratio": 0.03
         }
-      ]
+      ],
+      "parse_confidence": 0.74
     },
     {
       "id": "unending_despair_heal_from_damage",
@@ -60,13 +61,14 @@
           "stat": "damage_dealt_post_mitigation",
           "ratio": 2.5
         }
-      ]
+      ],
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -80,6 +82,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.039686+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Anguish begins pulsing after entering champion combat, then resolves every 4 seconds while combat persists.",
+      "Execution model: Each pulse damages all enemy champions within 650 units based on bonus health and then heals the holder for 250% of post-mitigation damage dealt."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Unending Despair.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Unending Despair)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Unending_Despair",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of pulse cadence, radius, bonus-health scaling, and post-mitigation heal conversion semantics"
+    }
+  ]
 }

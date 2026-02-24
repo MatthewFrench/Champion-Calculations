@@ -67,7 +67,9 @@
       "interval_seconds": null,
       "trigger": "on_stack",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "vile_decay_stacks_active"
+      ],
       "status_effects": [
         "vile_decay"
       ],
@@ -83,18 +85,24 @@
         "min": -0.3,
         "unit": "percent"
       },
+      "modifiers": {
+        "magic_resistance_reduction_per_stack_percent": 7.5,
+        "maximum_reduction_percent": 30.0,
+        "max_stacks": 4,
+        "reduction_scales_with_current_stacks": true
+      },
       "numbers_extracted": [
         7.5,
         30,
         4
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2900,
-      "sell": 1160
+      "sell": 2030
     },
     "purchasable": true,
     "tags": [
@@ -108,6 +116,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.024102+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Bloodletter's Curse is modeled as sustained spell-pressure anti-magic-resistance shredding where repeated ability magic damage ramps target vulnerability over short windows."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bloodletters Curse.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Bloodletter's Curse",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bloodletter%27s_Curse",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Vile Decay stack-based magic resistance reduction scaling and cap behavior"
+    }
+  ]
 }

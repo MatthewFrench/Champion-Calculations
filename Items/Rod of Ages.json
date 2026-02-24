@@ -86,11 +86,20 @@
       "interval_seconds": null,
       "trigger": "on_stack_max",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "timeless_max_stacks_10"
+      ],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "modifiers": {
+        "preserves_current_experience": true,
+        "level_cap_unchanged": true
+      },
+      "numbers_extracted": [
+        10,
+        1
+      ],
+      "parse_confidence": 0.7
     },
     {
       "id": "eternity_restore_mana_from_pre_mitigation_champion_damage_taken",
@@ -110,10 +119,13 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "uses_pre_mitigation_damage": true
+      },
       "numbers_extracted": [
         10
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "id": "eternity_heal_from_mana_spent_with_caps",
@@ -134,18 +146,22 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "cap_per_cast": 20,
+        "toggle_ability_cap_per_second": 20
+      },
       "numbers_extracted": [
         25,
         20,
         20
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 2600,
-      "sell": 1040
+      "sell": 1820
     },
     "purchasable": true,
     "tags": [
@@ -161,9 +177,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.053763+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Timeless stacks are minute-based (10 stacks max)."
+      "Timeless stacks are minute-based (10 stacks max).",
+      "Rod of Ages is modeled as delayed-scaling survivability and resource sustain: minute-gated stat growth plus Eternity mana and healing conversions in champion combat."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Rod of Ages.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Rod of Ages",
+      "url": "https://wiki.leagueoflegends.com/en-us/Rod_of_Ages",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Timeless level-up clause and Eternity mana/heal cap behavior"
+    }
+  ]
 }

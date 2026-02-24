@@ -24,38 +24,42 @@
   "effects_structured": [
     {
       "id": "seekers_armguard_time_stop_stasis_untargetable_invulnerable",
-      "raw": "Put yourself in stasis for 2.5 seconds, becoming untargetable and invulnerable but unable to act.",
+      "raw": "Activate Time Stop to enter 2.5 seconds of stasis, becoming untargetable and invulnerable while unable to act.",
       "effect_type": "apply_status",
       "stat": "stasis",
       "value": true,
       "value_range": null,
       "unit": "boolean",
-      "duration_seconds": null,
+      "duration_seconds": 2.5,
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "single_use_activation",
+        "transforms_into_shattered_armguard_after_use"
+      ],
       "status_effects": [
         "stasis",
         "untargetable",
         "invulnerable"
       ],
       "scaling_terms": [],
-      "duration": {
-        "seconds": 2.5
+      "modifiers": {
+        "cannot_move": true,
+        "cannot_basic_attack": true,
+        "cannot_cast_abilities": true,
+        "cannot_use_summoner_spells": true,
+        "cannot_activate_items": true,
+        "no_cast_time": true,
+        "does_not_break_stealth": true,
+        "quicksilver_lockout_seconds_after_activation": 0.5
       },
-      "restrictions": [
-        "cannot_move",
-        "cannot_basic_attack",
-        "cannot_cast_abilities",
-        "cannot_use_summoner_spells",
-        "cannot_activate_items"
-      ],
       "numbers_extracted": [
-        2.5
+        2.5,
+        0.5
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
@@ -79,9 +83,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.058480+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "This item is a special/variant entry containing a stasis active."
+      "Seeker's Armguard is represented as the Time Stop active variant (single-use stasis entry) in the current dataset/version and transforms into Shattered Armguard after use.",
+      "Execution-semantics review: Time Stop is immediate (no cast time), grants 2.5 seconds of self stasis/untargetability/invulnerability, and prevents movement, attacks, abilities, summoner spells, and item activations while active.",
+      "Interaction note: page notes include a post-activation Quicksilver lockout window (0.5 seconds) and no stealth break on cast."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Seekers Armguard.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Seeker's Armguard",
+      "url": "https://wiki.leagueoflegends.com/en-us/Seeker%27s_Armguard",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Time Stop execution semantics, single-use transform behavior, and cast/interaction notes"
+    }
+  ]
 }

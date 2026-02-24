@@ -39,17 +39,18 @@
           "qualifier": "per_1"
         }
       ],
-      "trigger": "on_kill",
+      "trigger": "on_takedown",
       "conditions": [
-        "within_3s_of_damage"
+        "damaged_target_within_3_seconds",
+        "enemy_champion_takedown"
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.82
     }
   ],
   "shop": {
     "prices": {
       "total": 2750,
-      "sell": 1100
+      "sell": 1925
     },
     "purchasable": true,
     "tags": [
@@ -63,6 +64,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.712302+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Flux triggers on champion takedown (kill or assist) if the user damaged that champion within the prior 3 seconds, then refunds a percentage of the ultimate's total cooldown.",
+      "Timing note: For ultimates whose cooldown starts after cast resolution, Flux refund is applied once that cooldown actually starts."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Axiom Arc.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Axiom Arc)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Axiom_Arc",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of takedown trigger gating, 3-second damage window, and ultimate total-cooldown refund semantics"
+    }
+  ]
 }

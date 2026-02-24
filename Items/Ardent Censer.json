@@ -37,8 +37,9 @@
       "unit": "percent",
       "duration_seconds": 6,
       "trigger": "on_heal_shield",
-      "applies_to": "ally",
+      "applies_to": "self_and_ally",
       "conditions": [
+        "target_is_allied_champion",
         "not_self"
       ],
       "parse_confidence": 0.85
@@ -54,15 +55,16 @@
       "trigger": "on_hit",
       "applies_to": "enemy",
       "conditions": [
+        "basic_attack",
         "sanctify"
       ],
-      "parse_confidence": 0.8
+      "parse_confidence": 0.82
     }
   ],
   "shop": {
     "prices": {
       "total": 2200,
-      "sell": 880
+      "sell": 1540
     },
     "purchasable": true,
     "tags": [
@@ -79,6 +81,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.711295+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: healing or shielding another allied champion applies Sanctify to both the caster and the affected ally for 6 seconds.",
+      "Player-visible behavior: Sanctify grants attack speed and adds bonus magic damage on basic-attack on-hit events only; structure hits are not valid Sanctify on-hit targets."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Ardent Censer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Ardent Censer)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Ardent_Censer",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Sanctify target rules (excluding self-cast trigger), duration, and on-hit behavior notes"
+    }
+  ]
 }

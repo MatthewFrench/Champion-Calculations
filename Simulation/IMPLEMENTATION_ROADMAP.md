@@ -256,6 +256,361 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - cooldown handling is explicit and tested.
 
+19a. `IN_PROGRESS` Architecture modularization and ownership-channel hardening.
+- Scope:
+  - split oversized core files into explicit concern folders and small leaf modules
+  - adopt explicit naming standards for module files (avoid ambiguous names like `events.rs`)
+  - reduce `mod.rs` usage through explicit module file naming where practical
+  - enforce owner-channel mutation flows for runtime state, queues, caches, and data transforms
+  - track rollout via `ARCHITECTURE_TRANSFORMATION_PLAN.md`
+- Recent progress:
+  - continued high-impact `loadout_runtime` decomposition by extracting combat bonus-resolution ownership out of `src/scripts/runtime/loadout_runtime.rs` into:
+    - `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`
+  - moved on-hit and ability bonus-damage resolution, rune-trigger execution, and stack-window progression into explicit runtime owner helpers while preserving `calculate_on_hit_bonus_damage(...)` and `calculate_ability_bonus_damage(...)` as stable runtime API entrypoints
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `1347` to `777` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - started high-impact `loadout_runtime` decomposition by extracting rune-proc telemetry ownership out of `src/scripts/runtime/loadout_runtime.rs` into:
+    - `src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`
+  - moved rune telemetry trigger-source accounting, proc/attempt/eligibility tracking, and telemetry-entry assembly into explicit runtime owner helpers while preserving `rune_proc_telemetry(...)` as the stable runtime API surface
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `1639` to `1347` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - continued scenario execution decomposition by extracting strict-ranking fallback/tie-break/seed-diagnostics ownership out of `src/scenario_runner/controlled_champion_scenario_runner.rs` into:
+    - `src/scenario_runner/controlled_champion_strict_ranking_finalization.rs`
+  - moved strict-ranking fallback insertion, strict-score tie-break sorting, seed-best-score aggregation, and seed-hit diagnostics into the explicit owner API `finalize_controlled_champion_strict_ranking`
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` to delegate strict-ranking finalization and reduced it from `725` to `656` lines (below the `<=700` target)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - continued scenario execution decomposition by extracting setup and enemy-build preparation ownership out of `src/scenario_runner/controlled_champion_scenario_runner.rs` into:
+    - `src/scenario_runner/controlled_champion_scenario_setup.rs`
+  - moved scenario/controlled-champion/search setup parsing and enemy-build preparation into explicit setup owner APIs (`prepare_controlled_champion_scenario_search_setup`, `prepare_controlled_champion_enemy_build_setup`)
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` into thinner orchestration over setup/candidate-search/result-reporting owner modules and reduced it from `855` to `725` lines.
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - continued second-stage defaults decomposition by splitting `src/defaults/champion_item_simulation_defaults_loader.rs` into explicit leaves:
+    - `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`
+    - `src/defaults/champion_item_simulation_defaults_loader/item_simulation_defaults_loaders.rs`
+    - `src/defaults/champion_item_simulation_defaults_loader/simulation_defaults_extraction_helpers.rs`
+  - rewired `src/defaults/champion_item_simulation_defaults_loader.rs` into a thin defaults-loader facade/re-export surface and reduced it from `1065` to `16` lines.
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`).
+  - added `ARCHITECTURE_STANDARDS.md` and `ARCHITECTURE_TRANSFORMATION_PLAN.md` with baseline metrics, target tree, and milestone tracker
+  - expanded standards with explicit ownership/mutation matrix, deterministic/concurrency/error-handling rules, API-surface rules, and script-tree `mod.rs` migration conventions
+  - expanded transformation plan with subsystem boundary contracts, sequencing rules, risk/mitigation register, phased acceptance gates, and metrics checkpoints
+  - added `ARCHITECTURE_REFACTOR_CHECKLIST.md` and marked architecture checklist milestone complete (`ARCH-002`)
+  - started `ARCH-010` by extracting engine geometry into `src/engine/geometry/*` (vector math, segment intersection, hitbox distance, and reach/miss helpers)
+  - continued `ARCH-010` by extracting spawn/projectile kinematics into `src/engine/geometry/spawn_positioning.rs` and `src/engine/geometry/projectile_kinematics.rs`
+  - added focused geometry module tests in `src/engine/geometry/tests/geometry_module_tests.rs` to validate extracted low-level math/kinematics behavior directly
+  - continued `ARCH-010` by extracting enemy orbit movement-vector math into `src/engine/geometry/enemy_orbit_position_updates.rs`
+  - extracted explicit script-point conversion helpers into `src/engine/script_point_coordinate_conversions.rs` with dedicated module tests
+  - started `ARCH-011` by extracting queue ownership into `src/engine/event_queue/*`:
+    - `event_type_catalog.rs`
+    - `queued_event_record.rs`
+    - `event_queue_ordering.rs`
+    - `event_queue_scheduler.rs`
+  - rewired `engine.rs` queue writes/reads to explicit owner APIs (`enqueue_event`, `peek_next`, `pop_next`, `reschedule_recurring_event`)
+  - added focused event queue unit tests in `src/engine/event_queue/tests/event_queue_scheduler_tests.rs`
+  - completed queue projection/query ownership by moving next-attack/impact and projectile-projection lookups behind event-queue owner query APIs
+  - added `src/engine/event_queue/queued_projectile_impact_projection.rs` for explicit queue projection data shape
+  - rewired engine snapshot/reporting helpers to consume queue owner query APIs instead of scanning queue internals
+  - started `ARCH-012` by extracting incoming-damage ownership into:
+    - `src/engine/event_resolution.rs`
+    - `src/engine/event_resolution/incoming_damage_resolution.rs`
+  - moved controlled champion/enemy damage and runtime-heal mutation methods out of the facade into event-resolution ownership
+  - completed `ARCH-012` API hardening by switching to explicit owner-command channels for controlled champion damage/heal/revive (`apply_incoming_damage_*`, `apply_healing_*`, `apply_revive_or_mark_*`)
+  - moved controlled champion revive/death resolution ownership out of facade and into `src/engine/event_resolution/incoming_damage_resolution.rs`
+  - completed `ARCH-010` movement-step extraction by moving the remaining actor-position owner loop into:
+    - `src/engine/simulation_step.rs`
+    - `src/engine/simulation_step/enemy_movement_step.rs`
+  - rewired `engine.rs` to call explicit movement-step owner command (`apply_enemy_movement_step`) during hot-effect tick progression
+  - started `ARCH-013` by extracting enemy actor-state lifecycle ownership into:
+    - `src/engine/actor_state.rs`
+    - `src/engine/actor_state/enemy_runtime_state.rs`
+  - moved enemy respawn/regeneration loops and active/alive query helpers behind actor-state owner commands (`apply_enemy_respawn_updates`, `apply_enemy_regeneration_tick`, `enemy_is_alive`, `enemy_is_active`)
+  - continued `ARCH-013` by moving recurring-script eligibility checks, script-cadence readiness writes, and enemy next-attack physical-bonus mutation behind actor-state owner APIs
+  - continued `ARCH-013` by moving enemy auto-attack token lifecycle and next-hit bonus consume/reset behind actor-state owner APIs (`begin_enemy_attack_sequence`, `enemy_attack_sequence_matches`, `consume_enemy_attack_damage_with_on_hit`)
+  - hardened attack-event owner-call boundaries with fail-fast invariant checks for invalid indices (quality guardrail; no behavior change expected)
+  - continued `ARCH-013` by moving remaining script-runtime enemy-state mutation and script lifecycle projections behind actor-state owner APIs (`execute_enemy_script_event_actions`, `enemy_aftershock_magic_damage_on_immobilize`, `enemy_script_epoch_matches`, `enemy_script_event_ready_at_or_zero`)
+  - added focused actor-state regression tests in `src/tests/engine_tests.rs` for attack token lifecycle, next-hit bonus consume/reset, script epoch/readiness owner queries, and new script-runtime owner channels
+  - continued `ARCH-013` by moving high-traffic enemy read projections behind actor-state owner query APIs (`enemy_name`, `enemy_position`, `enemy_hitbox_radius`, `enemy_attack_*`, `enemy_target_health_snapshot_or_defaults`, `enemy_status_lines_at`, `enemy_is_*_at`)
+  - removed direct `enemy_state[idx]` and `enemy_state.get(...)` usage from `src/engine.rs` runtime paths
+  - added focused actor-state regression test `enemy_read_projection_owner_queries_return_expected_shapes`
+  - continued `ARCH-013` by moving trace-snapshot enemy-section read composition behind actor-state owner projection APIs (`enemy_count`, `enemy_trace_snapshot_at`)
+  - rewired `collect_state_snapshot_summary` to consume actor-state snapshots instead of facade-side `enemy_state` iteration/read composition
+  - extended actor-state regression coverage for `enemy_trace_snapshot_at` within `enemy_read_projection_owner_queries_return_expected_shapes`
+  - started `ARCH-020` by extracting first candidate-space owner module under:
+    - `src/search/candidate_space.rs`
+    - `src/search/candidate_space/full_loadout_candidate_operations.rs`
+  - moved full-loadout candidate helper ownership out of `search.rs` helper cluster:
+    - `candidate_order_key`
+    - `random_full_candidate`
+    - `candidate_loadout_variants`
+    - `repair_full_candidate`
+    - `mutate_full_candidate`
+    - `crossover_full_candidates`
+  - rewired `search.rs` facade call sites to candidate-space owner helpers
+  - added focused candidate-space regression tests in `src/search/candidate_space/tests/full_loadout_candidate_operations_tests.rs`
+  - continued `ARCH-020` by extracting additional candidate-space owner modules:
+    - `src/search/candidate_space/full_loadout_candidate_scoring.rs`
+    - `src/search/candidate_space/item_candidate_operations.rs`
+  - moved full-loadout scoring/ranking helper ownership out of `search.rs` helper cluster:
+    - `score_full_candidates`
+    - `unique_ranked_full_candidates`
+  - moved item-only candidate mutation/crossover/parent-selection helper ownership out of `search.rs` helper cluster:
+    - `tournament_parent`
+    - `crossover_builds`
+    - `mutate_build`
+  - continued `ARCH-020` by extracting item-only candidate scoring/dedupe owner module:
+    - `src/search/candidate_space/item_candidate_scoring.rs`
+  - moved item-only candidate scoring/dedupe helper ownership out of `search.rs` helper cluster:
+    - `score_candidates`
+    - `unique_ranked_from_candidates`
+  - started `ARCH-021` by extracting item-only strategy implementations into explicit strategy owner modules:
+    - `src/search/strategy.rs`
+    - `src/search/strategy/item_candidate_search_strategies.rs`
+  - moved item-only strategy helper ownership out of `search.rs` helper cluster:
+    - `beam_search_ranked`
+    - `random_search_ranked`
+    - `hill_climb_search_ranked`
+    - `genetic_search_ranked`
+    - `simulated_annealing_search_ranked`
+    - `mcts_search_ranked`
+  - moved item-only strategy-local rollout/selection helpers under strategy ownership:
+    - `available_actions`
+    - `rollout_completion`
+  - rewired `search.rs` strategy dispatch to consume strategy owner modules
+  - rewired `search.rs` facade and candidate-space call sites to the new owner modules
+  - added focused candidate-space regression tests:
+    - `src/search/candidate_space/tests/full_loadout_candidate_scoring_tests.rs`
+    - `src/search/candidate_space/tests/item_candidate_operations_tests.rs`
+    - `src/search/candidate_space/tests/item_candidate_scoring_tests.rs`
+  - added focused strategy-module regression tests:
+    - `src/search/strategy/tests/item_candidate_search_strategies_tests.rs`
+  - completed `ARCH-021` by extracting full-loadout strategy implementations into explicit strategy owner module:
+    - `src/search/strategy/full_loadout_search_strategies.rs`
+  - moved full-loadout strategy helper ownership out of `search.rs` helper cluster:
+    - `beam_search_ranked_full`
+    - `random_search_ranked_full`
+    - `hill_climb_search_ranked_full`
+    - `genetic_search_ranked_full`
+    - `simulated_annealing_search_ranked_full`
+    - `mcts_search_ranked_full`
+    - `tournament_parent_full`
+    - `MctsFullNode`
+  - rewired `search.rs` full-loadout strategy dispatch to consume strategy owner modules
+  - added focused strategy-module regression tests:
+    - `src/search/strategy/tests/full_loadout_search_strategies_tests.rs`
+  - started `ARCH-022` by extracting explicit scoring owner modules:
+    - `src/search/scoring.rs`
+    - `src/search/scoring/metric_scoring_helpers.rs`
+    - `src/search/scoring/item_build_scoring_and_diversity.rs`
+    - `src/search/scoring/full_loadout_scoring_and_diversity.rs`
+  - continued `ARCH-022` by extracting stat-key selection owner module:
+    - `src/search/scoring/stat_key_build_selection.rs`
+  - continued `ARCH-022` by extracting item-name formatting owner module:
+    - `src/search/scoring/item_name_list_formatting.rs`
+  - moved scoring/diversity helper ownership out of `search.rs` helper clusters:
+    - `select_diverse_top_builds`
+    - `compute_build_metrics`
+    - `pareto_front_keys`
+    - `select_diverse_top_candidates`
+    - `compute_build_metrics_for_candidate`
+    - `candidate_pareto_front_keys`
+    - `choose_best_build_by_stat`
+    - `item_names`
+  - rewired `search.rs` scoring/diversity facade paths to thin owner wrappers over `search/scoring/*`
+  - added focused scoring-module regression tests:
+    - `src/search/scoring/tests/item_build_scoring_and_diversity_tests.rs`
+    - `src/search/scoring/tests/full_loadout_scoring_and_diversity_tests.rs`
+    - `src/search/scoring/tests/stat_key_build_selection_tests.rs`
+    - `src/search/scoring/tests/item_name_list_formatting_tests.rs`
+  - started `ARCH-030` by extracting scenario parsing ownership into:
+    - `src/scenario_runner/scenario_parsing.rs`
+  - moved scenario parser helper ownership out of `scenario_runner.rs` helper cluster:
+    - `parse_controlled_champion_config`
+    - `parse_scenario_search_or_default`
+  - rewired `scenario_runner.rs` parser call sites to consume `scenario_runner/scenario_parsing.rs` owner APIs
+  - continued `ARCH-030` by extracting encounter parsing ownership into:
+    - `src/scenario_runner/encounter_parsing.rs`
+  - moved encounter parser helper ownership into typed owner APIs:
+    - `parse_opponent_encounters`
+    - `ParsedOpponentEncounter`
+  - rewired `scenario_runner.rs` encounter parse boundaries to consume `scenario_runner/encounter_parsing.rs` owner APIs
+  - continued `ARCH-030` by extracting run-output path/key ownership into:
+    - `src/scenario_runner/run_output_paths.rs`
+  - moved run-output helper ownership out of `scenario_runner.rs` helper cluster:
+    - `format_repo_relative_path`
+    - `search_quality_profile_key`
+    - `default_run_output_directory`
+    - `default_fixed_loadout_output_directory`
+    - `default_fixed_loadout_rune_sweep_output_directory`
+  - rewired `scenario_runner.rs` run-output path/reporting call sites to consume `scenario_runner/run_output_paths.rs` owner APIs
+  - continued `ARCH-030` by extracting scenario search-progress/runtime-counter ownership into:
+    - `src/scenario_runner/progress_reporting.rs`
+  - moved progress helper ownership out of `scenario_runner.rs` helper cluster:
+    - `initialize_search_type_counters`
+    - `increment_search_type_counter`
+    - `snapshot_search_type_counters`
+    - `unique_loadout_selection_count`
+    - `unique_loadout_selection_count_from_ranked`
+  - rewired `scenario_runner.rs` progress and diagnostics call sites to consume `scenario_runner/progress_reporting.rs` owner APIs
+  - continued `ARCH-030` by extracting strict-ranking and search-space estimation helper ownership into:
+    - `src/scenario_runner/strict_ranking_ordering.rs`
+    - `src/scenario_runner/search_space_estimation.rs`
+  - moved strict-ranking/search-space helper ownership out of `scenario_runner.rs` helper cluster:
+    - `heuristic_sort_remaining_candidates_for_strict_ranking`
+    - `estimated_legal_item_build_count`
+    - `estimated_legal_loadout_count`
+    - `estimate_close_to_optimal_probability`
+    - `format_percent_display`
+  - rewired `scenario_runner.rs` strict-ranking and diagnostics call sites to consume `scenario_runner/strict_ranking_ordering.rs` and `scenario_runner/search_space_estimation.rs` owner APIs
+  - started `ARCH-031` by extracting fixed-loadout execution entrypoints into dedicated runner modules:
+    - `src/scenario_runner/fixed_loadout_runner.rs`
+    - `src/scenario_runner/rune_sweep_runner.rs`
+  - moved execution-entrypoint implementation ownership out of `scenario_runner.rs`:
+    - `run_controlled_champion_fixed_loadout_evaluation`
+    - `run_controlled_champion_fixed_loadout_rune_sweep`
+  - rewired `scenario_runner.rs` to thin facade wrappers that delegate to fixed-loadout/rune-sweep runner owner modules
+  - added architecture progress metrics helper:
+    - `tools/architecture_metrics.sh`
+  - metrics helper now reports tracked-facade baseline/current/target lines and size-based completion percentage in one command
+  - completed `ARCH-031` by extracting controlled-champion scenario execution entrypoint ownership into:
+    - `src/scenario_runner/controlled_champion_scenario_runner.rs`
+  - moved controlled-champion execution-entrypoint implementation ownership out of `scenario_runner.rs`:
+    - `run_controlled_champion_scenario`
+  - rewired `scenario_runner.rs` to a thin facade wrapper delegating to `run_controlled_champion_scenario_impl`
+  - started `ARCH-040` by extracting defaults owner module:
+    - `src/defaults/champion_item_simulation_defaults_loader.rs`
+  - moved champion/item simulation-default loader ownership out of `src/defaults.rs`:
+    - Vladimir cast/offensive/pool/policy defaults loaders
+    - Warwick/Vayne/Morgana/Sona/Doctor Mundo ability defaults loaders
+    - Zhonya/Guardian Angel/Protoplasm item simulation-default loaders
+    - related champion/item ability-effect extraction helpers
+  - rewired `src/defaults.rs` to keep typed `OnceLock` facade accessors while delegating loader internals to the defaults owner module
+  - started `ARCH-041` by extracting data owner module:
+    - `src/data/champion_item_preset_data_loading.rs`
+  - moved champion/item/preset data loading ownership out of `src/data.rs`:
+    - champion base loading/lookup
+    - URF mode data loading
+    - item stat mapping/loading and item-pool legality helpers
+    - enemy preset loading/validation/loadout conversion
+  - rewired `src/data.rs` to keep parse/config/loadout-domain facade responsibilities while delegating champion/item/preset loader internals to the data owner module
+  - completed `ARCH-041` by extracting remaining data concern owner modules:
+    - `src/data/loadout_effect_resolution.rs`
+    - `src/data/simulation_search_configuration_parsing.rs`
+    - `src/data/loadout_domain_modeling.rs`
+  - rewired `src/data.rs` into a thin facade with explicit data-concern re-exports
+  - continued `ARCH-013` by extracting event-dispatch/casting/hot-effect ownership out of `src/engine.rs` into:
+    - `src/engine/event_resolution/combat_event_dispatch_resolution.rs`
+    - `src/engine/event_resolution/controlled_champion_casting_resolution.rs`
+    - `src/engine/event_resolution/enemy_script_action_resolution.rs`
+    - `src/engine/simulation_step/hot_effects_step.rs`
+  - moved event/casting/tick lifecycle method ownership out of `src/engine.rs`:
+    - `process_event`
+    - `step`
+    - `maybe_cast_controlled_champion_abilities_and_defensives`
+    - `apply_enemy_script_actions`
+    - `apply_hot_effects`
+  - rewired module carriers in `src/engine/event_resolution.rs` and `src/engine/simulation_step.rs` to explicit owner modules
+  - completed `ARCH-040` by extracting defaults schema/helper ownership out of `src/defaults.rs` into:
+    - `src/defaults/simulator_defaults_schema_types.rs`
+    - `src/defaults/defaults_path_key_and_effect_helpers.rs`
+  - rewired `src/defaults.rs` to explicit module re-exports/imports so it remains a thin typed facade and loader-access layer
+  - added focused scenario parser regression coverage in:
+    - `src/tests/scenario_runner_tests.rs`
+    - `parse_controlled_champion_config_rejects_legacy_baseline_items_key`
+    - `parse_opponent_encounters_preserves_typed_encounter_fields`
+    - `default_run_output_directory_compacts_popcorn_window_when_equal_to_budget`
+    - `default_fixed_loadout_output_directory_normalizes_label_key`
+    - `format_repo_relative_path_uses_repository_relative_simulation_paths`
+    - `unique_loadout_selection_count_helpers_track_distinct_loadouts`
+    - `search_type_counter_helpers_dedupe_keys_and_report_touched_entries_only`
+    - `estimated_legal_item_build_count_applies_single_boot_constraint`
+    - `estimated_legal_loadout_count_matches_small_domain_combinatorics`
+    - `estimate_close_to_optimal_probability_reports_unavailable_when_space_missing`
+    - `format_percent_display_uses_scientific_notation_for_tiny_percent_values`
+    - `strict_ranking_heuristic_ordering_sorts_by_signal_when_enabled_without_promotions`
+    - `strict_ranking_heuristic_ordering_keeps_input_order_when_scores_are_flat`
+  - reduced `src/scenario_runner.rs` from `4284` lines to `936` lines while keeping parser/output/progress/strict-ranking/execution regression coverage green
+  - reduced `src/defaults.rs` from `2455` lines to `679` lines while keeping defaults access behavior stable
+  - reduced `src/data.rs` from `2008` lines to `116` lines while keeping data parse/load behavior stable
+  - reduced `src/search.rs` from `2244` lines to `942` lines while keeping validation green
+  - reduced `src/engine.rs` further from `3277` lines to `1461` lines while keeping validation green
+  - continued `ARCH-013` by extracting trace/snapshot runtime reporting ownership out of `src/engine.rs` into:
+    - `src/engine/trace_snapshot_reporting.rs`
+  - reduced `src/engine.rs` from `1461` lines to `1025` lines while preserving behavior
+  - completed `ARCH-050` by extracting reporting writer ownership out of `src/reporting.rs` into:
+    - `src/reporting/controlled_champion_report_markdown_writer.rs`
+    - `src/reporting/controlled_champion_report_json_writer.rs`
+  - rewired `src/reporting.rs` into a thin report helper/re-export facade
+  - reduced `src/reporting.rs` from `1075` lines to `140` lines while preserving behavior
+  - continued `ARCH-013` by extracting combat timing/targeting/scheduling and enemy stat-model derivation ownership out of `src/engine.rs` into:
+    - `src/engine/combat_timing_and_targeting.rs`
+    - `src/engine/enemy_combat_stat_modeling.rs`
+  - moved controlled champion status/cast/attack gating, enemy range/targeting/projectile-block helpers, attack/event scheduling, and `run_until_end` into explicit owner methods
+  - moved `derive_enemy_model` and `derive_enemy_combat_stats` into explicit enemy combat-stat owner module while preserving `engine.rs` facade re-export for `derive_enemy_combat_stats`
+  - reduced `src/engine.rs` from `1025` lines to `601` lines while preserving behavior (below facade target `<=700`)
+  - completed `ARCH-020`/`ARCH-022` by extracting full-loadout search orchestration ownership out of `src/search.rs` into:
+    - `src/search/full_loadout_search_orchestration.rs`
+  - moved `FullLoadoutSearchParams` and full-loadout search orchestration helpers (`build_search_ranked_full_loadout`, seed-elite aggregation, adaptive strategy expansion, bleed candidate generation) into explicit search owner module
+  - rewired `src/search.rs` into a thinner facade with explicit full-loadout orchestration re-exports
+  - reduced `src/search.rs` from `942` lines to `569` lines while preserving behavior (below facade target `<=700`)
+  - completed `ARCH-030` by extracting controlled champion scenario runtime/search support helper ownership out of `src/scenario_runner.rs` into:
+    - `src/scenario_runner/controlled_champion_search_runtime_support.rs`
+  - moved coverage-asset locking, partial-candidate completion, progress-state/counter helpers, trace-event shaping, and rune telemetry helper ownership into explicit scenario support owner module
+  - rewired `src/scenario_runner.rs` to a thinner facade that imports support ownership for fixed-loadout/rune-sweep/progress-reporting/controlled-scenario flows
+  - reduced `src/scenario_runner.rs` from `936` lines to `273` lines while preserving behavior (below facade target `<=700`)
+  - started `ARCH-051` by extracting core combat primitives/status/cast-lock ownership out of `src/core.rs` into:
+    - `src/core/combat_primitives_state.rs`
+  - rewired `src/core.rs` to preserve facade re-exports while delegating status/cast-lock/combat-primitives ownership to explicit core owner module
+  - reduced `src/core.rs` from `933` lines to `611` lines while preserving behavior (below facade target `<=700`)
+  - continued scenario execution leaf decomposition by extracting controlled-champion candidate-search orchestration out of `src/scenario_runner/controlled_champion_scenario_runner.rs` into:
+    - `src/scenario_runner/controlled_champion_candidate_search.rs`
+  - moved maximum-quality coverage stage, ensemble-seed strategy orchestration, candidate merge/dedupe, and strict full-ranking loops into explicit scenario-runner search-owner helpers
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` to delegate search-phase orchestration while preserving fallback/reporting behavior
+  - reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `1783` lines to `1425` lines
+  - continued scenario execution leaf decomposition by extracting controlled-champion post-search result reporting/trace artifact ownership out of `src/scenario_runner/controlled_champion_scenario_runner.rs` into:
+    - `src/scenario_runner/controlled_champion_result_reporting.rs`
+  - moved console summary output, diagnostics assembly, build-order summary rendering, trace markdown/json writing, and report markdown/json writing into explicit scenario-runner result-reporting ownership
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` to delegate post-search reporting through `emit_controlled_champion_result_reporting`
+  - reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `1425` lines to `855` lines
+  - continued scenario result-reporting decomposition by extracting analysis and artifact-writing ownership out of `src/scenario_runner/controlled_champion_result_reporting.rs` into:
+    - `src/scenario_runner/controlled_champion_result_build_analysis.rs`
+    - `src/scenario_runner/controlled_champion_result_artifact_writing.rs`
+  - moved ranked-build analysis, diagnostics assembly, and build-order analysis into explicit analysis ownership and moved trace/report artifact writing plus final output emission into explicit artifact-writing ownership
+  - rewired `src/scenario_runner/controlled_champion_result_reporting.rs` into a thinner orchestration module that delegates to explicit analysis/artifact owners
+  - reduced `src/scenario_runner/controlled_champion_result_reporting.rs` from `813` lines to `489` lines
+  - completed `ARCH-014` by splitting event dispatch into explicit event-family owner modules:
+    - `src/engine/event_resolution/combat_event_enemy_auto_attack_resolution.rs`
+    - `src/engine/event_resolution/combat_event_controlled_champion_auto_attack_resolution.rs`
+    - `src/engine/event_resolution/combat_event_controlled_champion_offensive_ability_hit_resolution.rs`
+    - `src/engine/event_resolution/combat_event_champion_script_dispatch_resolution.rs`
+  - rewired `src/engine/event_resolution/combat_event_dispatch_resolution.rs` to a thin dispatcher + `step` lifecycle owner delegating through explicit `resolve_*` owner methods
+  - reduced `src/engine/event_resolution/combat_event_dispatch_resolution.rs` from `723` lines to `123` lines
+  - re-ran full correctness/quality validation after progress-owner extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after strict-ranking/search-space extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after fixed-loadout/rune-sweep execution extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after controlled-champion scenario execution extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after defaults owner-module extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after defaults schema/helper extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after data owner-module extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after completed data-facade decomposition (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after engine event-dispatch/casting/hot-effect extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after engine trace/snapshot extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after reporting module decomposition (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after combat timing/targeting and enemy stat-model extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after search full-loadout orchestration extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after scenario support-owner extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after core combat-primitives extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after scenario candidate-search extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after scenario result-reporting extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after scenario result-reporting analysis/artifact split (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+  - re-ran full correctness/quality validation after event-dispatch owner-slice extraction (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`) with no findings
+- Next valued items:
+  - continue high-impact decomposition of `src/scripts/runtime/loadout_runtime.rs` (`777` lines) by extracting remaining runtime-owner slices (state/cooldown description formatting and runtime-state initialization helpers) to close the final `<=700` gap
+  - continue `ARCH-051` by splitting remaining core utility clusters (objective-score math, random helpers, and build-key utilities) into explicit `src/core/*` owner modules
+  - continue second-stage defaults/data leaf decomposition (`src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`, `src/data/champion_item_preset_data_loading.rs`, `src/data/simulation_search_configuration_parsing.rs`) for maintainability risk reduction
+  - continue `ARCH-060` planning/execution by reducing or justifying remaining `mod.rs` usage after high-gap facade completion
+  - add focused regression coverage for each extraction slice while moving into engine/scenario/search/core decomposition
+- Success criteria:
+  - large core facades are thin, responsibilities are split by concern, and cross-module direct state mutation paths are removed.
+
 ## P1 Data Correctness, Calibration, Validation
 
 20. `IN_PROGRESS` Source-backed constants dataset with provenance.

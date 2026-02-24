@@ -92,7 +92,7 @@
   "shop": {
     "prices": {
       "total": 3333,
-      "sell": 1333
+      "sell": 2333
     },
     "purchasable": true,
     "tags": [
@@ -113,6 +113,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.034921+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Spellblade arms on ability cast and is consumed by the next basic attack hit within 10 seconds; the 1.5-second cooldown starts when the empowered attack is used.",
+      "Player-visible behavior: Quicken grants +20 bonus movement speed for 2 seconds on basic-attack hits, with repeated hits refreshing the short-duration movement buff."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Trinity Force)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Trinity_Force",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Spellblade timing semantics (10-second ready window, cooldown start on empowered attack) and Quicken movement-speed duration behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Trinity Force.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

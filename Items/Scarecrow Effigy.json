@@ -30,7 +30,9 @@
       "trigger": "on_activate",
       "applies_to": "target_location",
       "conditions": [
-        "consume_charge"
+        "consume_charge",
+        "placement_range_625_units",
+        "vision_radius_900_units"
       ],
       "status_effects": [
         "grants_vision"
@@ -47,7 +49,7 @@
         130,
         300
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     },
     {
       "id": "scarecrow_effigy_disguise_as_fiddlesticks_until_activation",
@@ -62,13 +64,15 @@
       "interval_seconds": null,
       "trigger": "on_effigy_place",
       "applies_to": "effigy",
-      "conditions": [],
+      "conditions": [
+        "disguise_visible_to_enemies_until_activation"
+      ],
       "status_effects": [
         "disguised_as_fiddlesticks"
       ],
       "scaling_terms": [],
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     },
     {
       "id": "scarecrow_effigy_activate_on_enemy_proximity_ping_and_fake_action",
@@ -83,7 +87,9 @@
       "interval_seconds": null,
       "trigger": "on_enemy_champion_proximity",
       "applies_to": "effigy",
-      "conditions": [],
+      "conditions": [
+        "enemy_champion_with_vision_activates_effigy"
+      ],
       "status_effects": [
         "danger_ping"
       ],
@@ -91,7 +97,7 @@
       "numbers_extracted": [
         2
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     },
     {
       "id": "scarecrow_effigy_self_destruct_if_not_destroyed_after_activation",
@@ -106,13 +112,15 @@
       "interval_seconds": null,
       "trigger": "on_activation_end",
       "applies_to": "effigy",
-      "conditions": [],
+      "conditions": [
+        "self_destruct_if_not_destroyed_during_activation_window"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         1
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -129,6 +137,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.067284+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Scarecrow Effigy is a charge-based trinket placement with vector-targeted placement range and level-scaled lifetime vision payload.",
+      "Player-visible behavior: enemy approach activates disguise behavior, triggers danger ping/fake-action animation for up to 2 seconds, then self-destructs if not destroyed first.",
+      "Page notes include additional edge rules (hard-crowd-control death behavior, untargetability window, and item-haste cooldown scaling) that are documented but not fully encoded as structured combat-state rules."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Scarecrow Effigy)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Scarecrow_Effigy",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of trinket placement geometry, activation/deception behavior, and self-destruction timing semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Scarecrow Effigy.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

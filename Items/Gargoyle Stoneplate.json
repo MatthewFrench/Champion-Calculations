@@ -7,16 +7,16 @@
   ],
   "stats": {
     "armor": {
-      "flat": 65.0
+      "flat": 65
     },
-    "magicResistance": {
-      "flat": 65.0
+    "magicResist": {
+      "flat": 65
     },
     "movespeed": {
-      "percent": 10.0
+      "percent": 10
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [],
@@ -36,12 +36,14 @@
       "value": 300,
       "value_range": null,
       "unit": "flat",
-      "duration_seconds": 5.0,
-      "cooldown_seconds": null,
+      "duration_seconds": 5,
+      "cooldown_seconds": 30,
       "interval_seconds": null,
       "trigger": "active",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "instant_cast"
+      ],
       "status_effects": [
         "shield",
         "size_increase"
@@ -49,17 +51,21 @@
       "scaling_terms": [
         {
           "stat": "bonus_health",
-          "ratio": 1.0,
+          "ratio": 1,
           "type": "percent"
         }
       ],
       "decay": {
-        "duration_seconds": 5.0
+        "duration_seconds": 5
       },
       "size_modifier": {
         "value": 0.25,
         "unit": "ratio",
-        "duration_seconds": 5.0
+        "duration_seconds": 5
+      },
+      "timing": {
+        "cast_time_seconds": 0,
+        "cooldown_starts_on": "active_cast"
       },
       "numbers_extracted": [
         300,
@@ -67,14 +73,18 @@
         5,
         25
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "TANK"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3193_tank_t3_gargoylestoneplate.png",
   "simpleDescription": null,
@@ -83,6 +93,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.036540+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified page-level Unbreakable semantics: active grants a 300 + 100% bonus-health decaying shield for 5 seconds with 25% size increase for the same duration and a 30-second cooldown.",
+      "Player-visible execution note: Unbreakable has no cast time and does not break stealth.",
+      "Mode-availability note: this distributed item is Arena-scoped (Prismatic Anvil source); treat non-Arena availability as mode-gated.",
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Gargoyle Stoneplate.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Gargoyle Stoneplate",
+      "url": "https://wiki.leagueoflegends.com/en-us/Gargoyle_Stoneplate",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of active shield formula, cooldown, and no-cast-time execution behavior"
+    }
+  ]
 }

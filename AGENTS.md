@@ -2,6 +2,22 @@
 
 These instructions apply to the entire repository.
 
+## Canonical Location And Discovery
+- The canonical repository-wide agent instruction file is this file at repository root: `AGENTS.md`.
+- Quick discovery command from this repository (or child paths):
+  - `find .. -name AGENTS.md -print`
+- Contributor documentation should reference this file directly when pointing to agent rules.
+
+## Coverage Documentation Index
+- Coverage status snapshot (complete vs incomplete):
+  - `Simulation/COVERAGE_GAPS.md`
+- Exemplar-derived standards for new coverage:
+  - `Simulation/COVERAGE_STANDARDS.md`
+- Required completion checklist:
+  - `Simulation/COVERAGE_CHECKLIST.md`
+- Data authoring and source/provenance workflow:
+  - `Simulation/DATA_AUTHORING_GUIDE.md`
+
 ## Core Architecture Standard
 - Keep the simulator generic and replaceable.
 - Do not add champion-specific, item-specific, rune-specific, or mastery-specific behavior to shared core modules when it can be scripted.

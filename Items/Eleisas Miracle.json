@@ -9,7 +9,7 @@
     "armor": {
       "flat": 50.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 50.0
     },
     "abilityHaste": {
@@ -58,7 +58,7 @@
         60,
         2400
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -74,6 +74,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.047452+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model review: Enduring Vitality scales continuously with missing current health and updates self heal/shield power without a trigger cooldown.",
+      "Formula validation: +2.5% heal and shield power per 100 missing health with a hard cap of 60% (reached at 2400 missing health)."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Eleisa's Miracle)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Eleisa%27s_Miracle",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Enduring Vitality missing-health scaling and cap behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Eleisas Miracle.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

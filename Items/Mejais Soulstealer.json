@@ -153,14 +153,19 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "source_item": "Dark Seal",
+        "preserve_existing_glory_stacks_on_upgrade": true,
+        "does_not_reset_stack_progress": true
+      },
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 1500,
-      "sell": 600
+      "sell": 1050
     },
     "purchasable": true,
     "tags": [
@@ -177,6 +182,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.041840+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Mejai's Soulstealer is modeled as a snowball mage item where takedown-derived stacks drive ability power scaling and movement-speed threshold rewards while death trims stack momentum."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Mejais Soulstealer.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Mejai's Soulstealer",
+      "url": "https://wiki.leagueoflegends.com/en-us/Mejai%27s_Soulstealer",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Dark Seal stack persistence behavior on upgrade to Mejai's Soulstealer"
+    }
+  ]
 }

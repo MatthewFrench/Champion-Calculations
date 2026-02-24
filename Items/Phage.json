@@ -37,21 +37,28 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "on_basic_attack_hit"
+      ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "refreshes_on_subsequent_basic_attack_hits": true,
+        "melee_bonus_movement_speed": 20,
+        "ranged_bonus_movement_speed": 10
+      },
       "numbers_extracted": [
         20,
         10,
         2
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 1100,
-      "sell": 440
+      "sell": 770
     },
     "purchasable": true,
     "tags": [
@@ -68,9 +75,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.021555+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Rage bonus movement speed differs for melee vs ranged (20 melee, 10 ranged)."
+      "Execution model: Rage grants bonus movement speed on basic-attack hits for 2 seconds, with 20 movement speed for melee and 10 for ranged.",
+      "Player-visible behavior: repeated basic attacks refresh the short movement-speed window and keep chase/disengage tempo active."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Phage.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Phage",
+      "url": "https://wiki.leagueoflegends.com/en-us/Phage",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Rage trigger cadence and melee-versus-ranged movement-speed values"
+    }
+  ]
 }

@@ -28,7 +28,10 @@
       "interval_seconds": null,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "arena_round_based_mode",
+        "round_outcome_scaling"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -79,7 +82,7 @@
         1.2,
         3
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
@@ -92,9 +95,43 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.072863+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Arena-style round scaling: +1.2% per round win, -3% per round loss."
+      "Execution model: this passive is always-on during Arena combat and scales the full listed stat package together, not independently by stat category.",
+      "Round-based scaling updates between rounds based on outcome (+1.2% per round win, -3% per round loss); in-combat stat contribution remains continuous once the round starts.",
+      "Patch-history verification confirms the lower per-win growth rate now used in this file."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "Riot patch notes (Patch 25.24)",
+      "url": "https://www.leagueoflegends.com/en-au/news/game-updates/patch-25-24-notes/",
+      "accessed": "2026-02-23",
+      "used_for": "official verification of Demon King's Crown round-win scaling update"
+    },
+    {
+      "name": "League Wiki (Demon King's Crown)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Demon_King%27s_Crown",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of per-round win/loss scaling behavior and Arena combat context"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Demon Kings Crown.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

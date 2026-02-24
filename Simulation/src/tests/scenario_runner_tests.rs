@@ -1,7 +1,9 @@
 use super::*;
+use crate::data::{LoadoutDomain, RunePathDomain};
 use serde_json::Value;
 use serde_json::json;
 use std::collections::{HashMap, HashSet};
+use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -103,6 +105,36 @@ fn trace_json_contract_schema_and_telemetry_shape() {
 }
 
 #[test]
+fn parse_controlled_champion_config_rejects_legacy_baseline_items_key() {
+    let champion_bases = load_champion_bases().expect("champion data should load");
+    let champion_name = champion_bases
+        .values()
+        .next()
+        .map(|champion| champion.name.clone())
+        .expect("at least one champion should exist");
+    let scenario = json!({
+        "controlled_champion": {
+            "champion": champion_name,
+            "baseline_items": ["Amplifying Tome"]
+        }
+    });
+    let result = parse_controlled_champion_config(&scenario, &champion_bases, 18, &HashMap::new());
+    assert!(
+        result.is_err(),
+        "legacy baseline_items key should be rejected"
+    );
+    let err = result
+        .err()
+        .expect("result should contain parse error for baseline_items");
+    assert!(
+        err.to_string()
+            .contains("baseline_items is no longer supported"),
+        "unexpected error: {}",
+        err
+    );
+}
+
+#[test]
 fn parse_opponent_encounters_rejects_all_zero_weights() {
     let champion_bases = load_champion_bases().expect("champion data should load");
     let champion_name = champion_bases
@@ -160,6 +192,37 @@ fn parse_opponent_encounters_accepts_positive_weight_mix() {
 }
 
 #[test]
+fn parse_opponent_encounters_preserves_typed_encounter_fields() {
+    let champion_bases = load_champion_bases().expect("champion data should load");
+    let champion_name = champion_bases
+        .values()
+        .next()
+        .map(|c| c.name.clone())
+        .expect("at least one champion should exist");
+    let scenario = json!({
+        "opponents": {
+            "encounters": [
+                {
+                    "name": "lane_trade",
+                    "weight": 0.75,
+                    "actors": [{ "champion": champion_name }]
+                }
+            ]
+        }
+    });
+    let encounters = parse_opponent_encounters(&scenario, &champion_bases, 18, &HashMap::new())
+        .expect("encounters should parse");
+    assert_eq!(encounters.len(), 1);
+    assert_eq!(encounters[0].name, "lane_trade");
+    assert!(
+        (encounters[0].weight - 0.75).abs() < 1e-9,
+        "unexpected weight: {}",
+        encounters[0].weight
+    );
+    assert_eq!(encounters[0].actors.len(), 1);
+}
+
+#[test]
 fn parse_opponent_encounters_rejects_duplicate_actor_ids_across_encounters() {
     let champion_bases = load_champion_bases().expect("champion data should load");
     let champion_names = champion_bases
@@ -193,6 +256,48 @@ fn parse_opponent_encounters_rejects_duplicate_actor_ids_across_encounters() {
             .contains("actor IDs must map to a single champion identity"),
         "unexpected error: {}",
         err
+    );
+}
+
+#[test]
+fn default_run_output_directory_compacts_popcorn_window_when_equal_to_budget() {
+    let output_dir =
+        default_run_output_directory(SearchQualityProfile::Fast, Some(300.0), Some(300.0), 5.0);
+    let expected_suffix = PathBuf::from("output")
+        .join("runs")
+        .join("controlled_champion")
+        .join("fast")
+        .join("300s__popcorn__min_improvement_5pct");
+    assert!(
+        output_dir.ends_with(&expected_suffix),
+        "unexpected output dir: {}",
+        output_dir.display()
+    );
+}
+
+#[test]
+fn default_fixed_loadout_output_directory_normalizes_label_key() {
+    let output_dir =
+        default_fixed_loadout_output_directory(SearchQualityProfile::Balanced, "My Label");
+    let expected_suffix = PathBuf::from("output")
+        .join("runs")
+        .join("controlled_champion")
+        .join("fixed_loadout")
+        .join("balanced")
+        .join("mylabel");
+    assert!(
+        output_dir.ends_with(&expected_suffix),
+        "unexpected output dir: {}",
+        output_dir.display()
+    );
+}
+
+#[test]
+fn format_repo_relative_path_uses_repository_relative_simulation_paths() {
+    let absolute_path = simulation_dir().join("output").join("test.md");
+    assert_eq!(
+        format_repo_relative_path(&absolute_path),
+        "Simulation/output/test.md"
     );
 }
 
@@ -255,6 +360,173 @@ fn unique_loadout_selection_count_helpers_track_distinct_loadouts() {
         unique_loadout_selection_count_from_ranked(&ranked),
         2,
         "ranked entries should count unique loadout pages"
+    );
+}
+
+#[test]
+fn search_type_counter_helpers_dedupe_keys_and_report_touched_entries_only() {
+    let active_strategies = vec!["beam".to_string(), "random".to_string(), "beam".to_string()];
+    let counters = initialize_search_type_counters(&active_strategies, "beam");
+    assert!(
+        counters.contains_key("seed_search:beam"),
+        "configured strategy counter should exist"
+    );
+    assert!(
+        counters.contains_key("seed_search:random"),
+        "active strategy counter should exist"
+    );
+
+    let initial_snapshot = snapshot_search_type_counters(counters.as_ref());
+    assert!(
+        initial_snapshot.is_empty(),
+        "untouched counters should be omitted from snapshot output"
+    );
+
+    increment_search_type_counter(counters.as_ref(), "seed_search:beam", 3, 2);
+    increment_search_type_counter(counters.as_ref(), "unknown_counter_key", 7, 7);
+    let touched_snapshot = snapshot_search_type_counters(counters.as_ref());
+    assert_eq!(
+        touched_snapshot.len(),
+        1,
+        "only touched counters should be included"
+    );
+    assert_eq!(touched_snapshot[0].name, "seed_search:beam");
+    assert_eq!(touched_snapshot[0].score_requests, 3);
+    assert_eq!(touched_snapshot[0].new_simulations, 2);
+}
+
+#[test]
+fn estimated_legal_item_build_count_applies_single_boot_constraint() {
+    let items = vec![
+        test_item("Boots A", true),
+        test_item("Boots B", true),
+        test_item("Item 1", false),
+        test_item("Item 2", false),
+        test_item("Item 3", false),
+    ];
+
+    let estimated = estimated_legal_item_build_count(&items, 2);
+    assert_eq!(
+        estimated, 9.0,
+        "legal two-item combinations should enforce at most one boots item"
+    );
+}
+
+#[test]
+fn estimated_legal_loadout_count_matches_small_domain_combinatorics() {
+    let domain = LoadoutDomain {
+        rune_paths: vec![
+            RunePathDomain {
+                slot_runes: vec![
+                    vec!["A keystone 1".to_string(), "A keystone 2".to_string()],
+                    vec!["A slot 1".to_string()],
+                    vec!["A slot 2".to_string()],
+                    vec!["A slot 3".to_string()],
+                ],
+            },
+            RunePathDomain {
+                slot_runes: vec![
+                    vec!["B keystone".to_string()],
+                    vec!["B slot 1a".to_string(), "B slot 1b".to_string()],
+                    vec!["B slot 2".to_string()],
+                    vec!["B slot 3".to_string()],
+                ],
+            },
+        ],
+        shard_slots: [
+            vec!["adaptive".to_string(), "ability_haste".to_string()],
+            vec!["adaptive".to_string()],
+            vec!["health".to_string()],
+        ],
+    };
+
+    assert_eq!(
+        estimated_legal_loadout_count(&domain),
+        32.0,
+        "small loadout-domain combinatorics should remain stable"
+    );
+}
+
+#[test]
+fn estimate_close_to_optimal_probability_reports_unavailable_when_space_missing() {
+    let (probability, note) = estimate_close_to_optimal_probability(12, None);
+    assert!(
+        probability.is_none(),
+        "missing candidate-space estimate should produce unavailable probability"
+    );
+    assert!(
+        note.contains("not finite"),
+        "note should explain unavailable finite-space estimate"
+    );
+}
+
+#[test]
+fn format_percent_display_uses_scientific_notation_for_tiny_percent_values() {
+    assert_eq!(format_percent_display(0.0000005), "5.000e-7%");
+    assert_eq!(format_percent_display(1.23456789), "1.234568%");
+}
+
+fn test_candidate(item_idx: usize, rune_key: &str, shard_key: &str) -> BuildKey {
+    BuildKey {
+        item_indices: vec![item_idx],
+        loadout_selection: LoadoutSelection {
+            rune_names: vec![rune_key.to_string()],
+            shard_stats: vec![shard_key.to_string()],
+        },
+    }
+}
+
+#[test]
+fn strict_ranking_heuristic_ordering_sorts_by_signal_when_enabled_without_promotions() {
+    let low = test_candidate(0, "Low Rune", "Low Shard");
+    let mid = test_candidate(1, "Mid Rune", "Mid Shard");
+    let high = test_candidate(2, "High Rune", "High Shard");
+
+    let mut strict_scores = HashMap::new();
+    strict_scores.insert(low.clone(), 1.0);
+    strict_scores.insert(mid.clone(), 5.0);
+    strict_scores.insert(high.clone(), 9.0);
+
+    let remaining = vec![mid.clone(), low.clone(), high.clone()];
+    let (sorted, promotions_done) = heuristic_sort_remaining_candidates_for_strict_ranking(
+        remaining,
+        &strict_scores,
+        3,
+        0.0,
+        0.0,
+        1337,
+        0,
+    );
+
+    assert_eq!(promotions_done, 0);
+    assert_eq!(sorted.first(), Some(&high));
+    assert_eq!(sorted.last(), Some(&low));
+}
+
+#[test]
+fn strict_ranking_heuristic_ordering_keeps_input_order_when_scores_are_flat() {
+    let first = test_candidate(0, "Rune A", "Shard A");
+    let second = test_candidate(1, "Rune B", "Shard B");
+
+    let mut strict_scores = HashMap::new();
+    strict_scores.insert(first.clone(), 4.0);
+    strict_scores.insert(second.clone(), 4.0);
+
+    let input_order = vec![second.clone(), first.clone()];
+    let (sorted, promotions_done) = heuristic_sort_remaining_candidates_for_strict_ranking(
+        input_order.clone(),
+        &strict_scores,
+        2,
+        1.0,
+        1.0,
+        4242,
+        0,
+    );
+
+    assert_eq!(promotions_done, 0);
+    assert_eq!(
+        sorted, input_order,
+        "flat strict scores should not introduce heuristic reordering"
     );
 }
 

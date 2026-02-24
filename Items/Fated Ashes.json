@@ -42,7 +42,7 @@
         3,
         15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "inflame_monster_bonus_burn_damage_per_tick",
@@ -71,13 +71,13 @@
         7.5,
         6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 900,
-      "sell": 360
+      "sell": 630
     },
     "purchasable": true,
     "tags": [
@@ -91,9 +91,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.016764+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Burn total is 15 magic damage over 3 seconds (0.5s ticks). Monster bonus is +7.5 magic damage per tick."
+      "Execution model review: ability damage applies the burn, then damage resolves every 0.5 seconds for 3 seconds (player-visible periodic damage ticks).",
+      "Inflame base burn totals 15 magic damage over full duration; monster bonus adds +7.5 magic damage per tick (45 bonus total over full duration)."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Fated Ashes)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Fated_Ashes",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Inflame tick cadence and monster bonus burn semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Fated Ashes.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

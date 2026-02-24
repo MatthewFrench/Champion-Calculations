@@ -33,10 +33,10 @@
       "raw": "Basic attacks and ability hits inflict Burn that deals magic damage over 3 seconds (5s cooldown).",
       "effect_type": "damage_over_time",
       "stat": "magic_damage",
-      "value": 100,
+      "value": 200,
       "value_range": {
-        "min": 100,
-        "max": 350
+        "min": 200,
+        "max": 450
       },
       "unit": "flat_total",
       "duration_seconds": 3.0,
@@ -44,7 +44,10 @@
       "interval_seconds": 0.25,
       "trigger": "on_basic_attack_or_ability_hit",
       "applies_to": "enemy",
-      "conditions": [],
+      "conditions": [
+        "spark_cooldown_5_seconds",
+        "applies_on_basic_attack_or_ability_hit"
+      ],
       "status_effects": [
         "burn"
       ],
@@ -63,7 +66,7 @@
         0.25,
         5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "spark_burn_tick_damage_profile",
@@ -81,7 +84,9 @@
       "interval_seconds": 0.25,
       "trigger": "on_burn_tick",
       "applies_to": "enemy",
-      "conditions": [],
+      "conditions": [
+        "spark_cooldown_5_seconds"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
@@ -92,7 +97,7 @@
         0.25,
         3
       ],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.66
     },
     {
       "id": "cleansing_flame_create_blaze_zone_on_burn_apply",
@@ -108,6 +113,7 @@
       "trigger": "on_burn_apply_to_champion",
       "applies_to": "ground_near_self",
       "conditions": [
+        "requires_burn_application_to_enemy_champion",
         "per_target_cooldown"
       ],
       "status_effects": [
@@ -121,7 +127,7 @@
         5,
         3
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "cleansing_flame_self_bonuses_and_healing_while_in_blaze",
@@ -155,7 +161,7 @@
         60,
         150
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.66
     },
     {
       "id": "cleansing_flame_enemy_damage_while_in_blaze",
@@ -178,7 +184,7 @@
       "numbers_extracted": [
         100
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "cleansing_flame_blaze_scaling_per_unique_burn_source",
@@ -234,7 +240,7 @@
         30,
         60
       ],
-      "parse_confidence": 0.5
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -254,9 +260,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.011562+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Burn and blaze values appear to be Arena-style; some details (exact formulas) are implicit."
+      "Execution model: Spark applies a burn on qualifying basic-attack or ability-hit events with a shared 5-second trigger cooldown; the burn then deals periodic damage for 3 seconds in 0.25-second ticks.",
+      "Player-visible behavior: applying Burn to a champion spawns a delayed fireball (0.5 seconds) that lands near the user and creates a temporary blaze zone with ally/self buff-heal effects and enemy periodic damage.",
+      "Blaze strength scales by unique Burn sources (up to 10); stack-scaling semantics are represented, but exact multi-source ownership timing remains a follow-up fidelity area."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Pyromancer's Cloak)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Pyromancer%27s_Cloak",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Spark burn totals/tick cadence and Cleansing Flame blaze timing, cooldown, and scaling semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Pyromancers Cloak.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

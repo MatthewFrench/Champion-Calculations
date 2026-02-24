@@ -47,7 +47,7 @@
       "numbers_extracted": [
         30
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     },
     {
       "id": "humility_apply_slow_to_nearby_enemies",
@@ -58,30 +58,32 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": 2.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 90.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_radius",
-      "conditions": [],
+      "conditions": [
+        "within_500_units"
+      ],
       "status_effects": [
         "slow"
       ],
       "scaling_terms": [],
       "area_of_effect": {
         "shape": "circle",
-        "radius_units": null
+        "radius_units": 500
       },
       "numbers_extracted": [
         70,
         2
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2700,
-      "sell": 1080
+      "sell": 1890
     },
     "purchasable": true,
     "tags": [
@@ -95,9 +97,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.010031+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Active shockwave radius is not specified in this payload."
+      "Execution model: Resilience is a persistent incoming critical-strike damage reduction on the holder.",
+      "Execution model: Humility is a targeted self-centered active that emits a visible 500-unit shockwave, applying a 70% slow to nearby enemies for 2 seconds.",
+      "Timing note: Humility has no projectile travel; nearby enemies are slowed immediately on activation and the active cooldown is 90 seconds."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Randuins Omen.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Randuin's Omen)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Randuin%27s_Omen",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Humility active radius and cooldown plus critical-strike damage reduction semantics"
+    }
+  ]
 }

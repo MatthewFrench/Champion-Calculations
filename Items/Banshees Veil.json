@@ -9,7 +9,7 @@
     "abilityPower": {
       "flat": 105.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 40.0
     }
   },
@@ -31,18 +31,19 @@
       "trigger": "passive",
       "applies_to": "self",
       "conditions": [
-        "reset_on_champion_damage"
+        "spell_shield_blocks_next_hostile_ability",
+        "cooldown_restarts_on_champion_damage"
       ],
       "status_effects": [
         "spell_shield"
       ],
-      "parse_confidence": 0.85
+      "parse_confidence": 0.88
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -60,6 +61,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.713382+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Annul grants a single-instance spell shield that blocks the next hostile ability, then enters cooldown.",
+      "Timing note: The 40-second refresh timer restarts when the holder takes damage from enemy champions, delaying shield return during sustained poke."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Banshees Veil.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Banshee's Veil)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Banshee%27s_Veil",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of spell-shield trigger semantics, 40-second cooldown, and champion-damage cooldown-reset behavior"
+    }
+  ]
 }

@@ -38,7 +38,10 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack_or_ability_damage",
       "applies_to": "enemy_target",
-      "conditions": [],
+      "conditions": [
+        "voidmites_spawn_from_basic_attack_or_damaging_ability",
+        "zzrot_trigger_cooldown_12_seconds"
+      ],
       "status_effects": [
         "voidmites_untargetable"
       ],
@@ -97,7 +100,10 @@
       "interval_seconds": null,
       "trigger": "on_death",
       "applies_to": "enemy_target",
-      "conditions": [],
+      "conditions": [
+        "summons_on_owner_death",
+        "clone_death_can_trigger_spawn_behavior"
+      ],
       "status_effects": [
         "voidmites_untargetable"
       ],
@@ -105,7 +111,7 @@
       "numbers_extracted": [
         6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.65
     }
   ],
   "shop": {
@@ -123,6 +129,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.041077+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: ZZ'Rot periodically spawns allied Voidmites from qualifying basic-attack or damaging-ability events, with a shared cooldown.",
+      "Player-visible behavior: spawned Voidmites are untargetable temporary attackers with short lifetime and per-attack scaling damage.",
+      "Page notes include clone-on-death spawn behavior and visual-state details (hidden health bar/transparency); visual details are documented but not modeled as combat-state mechanics."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Reality Fracture)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Reality_Fracture",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of ZZ'Rot spawn counts, cooldown/lifetime profile, scaling damage terms, and death-trigger spawn behavior notes"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Reality Fracture.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

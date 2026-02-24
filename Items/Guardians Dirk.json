@@ -43,14 +43,16 @@
       "interval_seconds": null,
       "trigger": "passive",
       "applies_to": "self",
-      "conditions": [],
+      "conditions": [
+        "applies_to_arena_power_flower_effects_only"
+      ],
       "status_effects": [],
       "scaling_terms": [],
       "numbers_extracted": [
         20,
         20
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "agricultural_reaper_bonus_movement_speed_on_power_flower_damage",
@@ -78,7 +80,7 @@
   "shop": {
     "prices": {
       "total": 500,
-      "sell": 200
+      "sell": 250
     },
     "purchasable": true,
     "tags": [
@@ -93,9 +95,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.047986+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Arena Power Flower interaction."
+      "Execution model: Agricultural Reaper amplifies Arena Power Flower effect outputs by a fixed 20% multiplier.",
+      "Player-visible behavior: damaging a Power Flower grants a temporary 100 flat bonus movement speed buff for 3 seconds."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Guardian's Dirk)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Guardian%27s_Dirk",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Agricultural Reaper Power Flower amplification ratio and movement-speed trigger semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Guardians Dirk.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

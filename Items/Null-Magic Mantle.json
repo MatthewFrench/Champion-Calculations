@@ -6,7 +6,7 @@
     "BASIC"
   ],
   "stats": {
-    "magicResistance": {
+    "magicResist": {
       "flat": 20.0
     }
   },
@@ -16,7 +16,7 @@
   "shop": {
     "prices": {
       "total": 400,
-      "sell": 160
+      "sell": 280
     },
     "purchasable": true,
     "tags": [

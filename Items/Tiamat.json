@@ -7,7 +7,7 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 20.0
+      "flat": 20
     }
   },
   "passives": [
@@ -40,7 +40,10 @@
       "interval_seconds": null,
       "trigger": "on_basic_attack_hit",
       "applies_to": "nearby_enemies",
-      "conditions": [],
+      "conditions": [
+        "does_not_trigger_on_structures",
+        "max_10_splashes_per_attack"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -65,7 +68,7 @@
         20,
         350
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     },
     {
       "raw": "Active: Deal 75% AD physical damage to enemies in a 450 radius in front of you.",
@@ -76,11 +79,15 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 10,
       "interval_seconds": null,
       "trigger": "on_activate",
-      "applies_to": "enemies_in_cone",
-      "conditions": [],
+      "applies_to": "enemy_units_in_offset_radius",
+      "conditions": [
+        "cast_time_equals_attack_windup",
+        "cooldown_starts_on_cast_end",
+        "auto_targeted"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -91,19 +98,26 @@
       ],
       "area_of_effect": {
         "shape": "circle",
-        "radius_units": 450
+        "radius_units": 450,
+        "center_offset_units": 100
       },
       "numbers_extracted": [
         75,
-        450
+        450,
+        10,
+        100
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72,
+      "timing": {
+        "cast_time_relation": "equals_basic_attack_windup",
+        "cooldown_starts_on": "cast_end"
+      }
     }
   ],
   "shop": {
     "prices": {
       "total": 1200,
-      "sell": 480
+      "sell": 840
     },
     "purchasable": true,
     "tags": [
@@ -119,9 +133,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.024560+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
+      "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
+      "Execution-semantics review: Crescent is not instant; cast time follows the user's attack windup and cooldown starts after cast completion.",
+      "Cleave applies splash damage to nearby secondary enemies and does not trigger on structure hits; Crescent resolves as an auto-targeted area cast offset in front of the user."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Tiamat.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Tiamat",
+      "url": "https://wiki.leagueoflegends.com/en-us/Tiamat",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Cleave/Crescent trigger classes, Crescent cooldown, cast-windup timing, and offset-radius execution semantics"
+    }
+  ]
 }

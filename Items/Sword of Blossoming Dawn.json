@@ -59,10 +59,10 @@
         1.2,
         1
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     },
     {
-      "raw": "Basic attacks heal the most wounded and nearest allied champion for 15–45 (+10% bonus AD) (+7% AP).",
+      "raw": "Basic attacks heal the most wounded and nearest allied champion for 15\u201345 (+10% bonus AD) (+7% AP).",
       "id": "sword_blossoming_dawn_ally_heal_on_hit",
       "effect_type": "healing",
       "stat": "health",
@@ -76,8 +76,11 @@
       "cooldown_seconds": null,
       "interval_seconds": null,
       "trigger": "on_basic_attack_hit",
-      "applies_to": "most_wounded_nearest_ally",
-      "conditions": [],
+      "applies_to": "most_wounded_nearest_ally_champion",
+      "conditions": [
+        "requires_basic_attack_on_hit_event",
+        "ally_selection_prefers_lowest_health_percent_then_nearest"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -97,13 +100,13 @@
         10,
         7
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -117,6 +120,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.028659+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Effervescence converts heal and shield power into bonus attack speed at 1.2% bonus attack speed per 1% heal and shield power.",
+      "Player-visible behavior: Peppermint resolves on each basic attack on-hit event and heals an allied champion rather than the struck enemy target.",
+      "Peppermint ally targeting prioritizes lowest-health-percent and nearest ally selection; outgoing-heal modifiers from mode rules (for example ARAM: Mayhem) apply downstream."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Sword of Blossoming Dawn)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Sword_of_Blossoming_Dawn",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Effervescence ratio conversion, Peppermint ally-targeting rules, and mode-adjusted heal behavior context"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Sword of Blossoming Dawn.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

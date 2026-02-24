@@ -7,13 +7,13 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 55.0
+      "flat": 55
     },
     "lethality": {
       "flat": 22
     },
     "abilityHaste": {
-      "flat": 20.0
+      "flat": 20
     }
   },
   "passives": [],
@@ -34,11 +34,13 @@
       "value_range": null,
       "unit": "ratio_of_target_max_health",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 25,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "target_enemy_champion"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -58,13 +60,18 @@
         "distance_units": 150,
         "relative_to_target": "beyond_target"
       },
+      "range_units": 500,
+      "timing": {
+        "cast_time_seconds": 0.15,
+        "cooldown_starts_on": "active_cast"
+      },
       "numbers_extracted": [
         150,
         12,
         5,
         100
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.78
     },
     {
       "id": "sandswipe_damage_amp_on_same_target",
@@ -74,8 +81,8 @@
       "value": 0.2,
       "value_range": null,
       "unit": "ratio",
-      "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "duration_seconds": 3,
+      "cooldown_seconds": 25,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "target",
@@ -87,14 +94,18 @@
         20,
         3
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "ASSASSIN"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6693_assassin_t4_prowlersclaw.png",
   "simpleDescription": null,
@@ -105,6 +116,39 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.006360+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified page-level Sandswipe semantics: active is champion-targeted with 500 range, 0.15-second cast time, and 25-second cooldown.",
+      "Execution ordering note: dash-hit damage resolves before the 3-second same-target damage amplification window; interruption or target untargetability at resolution cancels both branches.",
+      "Mode-availability note: this distributed item is Arena-scoped (Prismatic Anvil source); treat non-Arena availability as mode-gated.",
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase.",
+      "Dataset-vs-page availability drift: Data Dragon map flags for ID 446693 currently omit Arena while page-level data marks this item Arena-scoped; treat as mode-overlay drift until canonical policy is finalized."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Prowlers Claw.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Prowler's Claw",
+      "url": "https://wiki.leagueoflegends.com/en-us/Prowler%27s_Claw",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of active cast timing, range, cooldown, and dash/damage-amplification execution behavior"
+    }
+  ]
 }

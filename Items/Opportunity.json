@@ -53,6 +53,12 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "out_of_combat_requirement_seconds": 8,
+        "bonus_persist_after_champion_damage_seconds": 3,
+        "lethality_bonus_melee_owner": 11,
+        "lethality_bonus_ranged_owner": 5
+      },
       "timing": {
         "out_of_combat_seconds": 8,
         "persist_after_damage_seconds": 3
@@ -63,7 +69,7 @@
         5,
         3
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "extraction_bonus_movement_speed_on_recent_damage_takedown",
@@ -87,18 +93,23 @@
         "type": "linear_to_zero",
         "duration_seconds": 1.5
       },
+      "modifiers": {
+        "takedown_eligibility_window_seconds": 3.0,
+        "bonus_movement_speed_flat": 200,
+        "decays_to_zero_over_seconds": 1.5
+      },
       "numbers_extracted": [
         3,
         200,
         1.5
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2700,
-      "sell": 1080
+      "sell": 1890
     },
     "purchasable": true,
     "tags": [
@@ -115,9 +126,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.033020+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
+      "Opportunity is modeled as assassin tempo itemization: out-of-combat lethality priming and takedown-based burst mobility for rapid repositioning.",
       "Lethality bonus differs for melee vs ranged (11 melee, 5 ranged)."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Opportunity.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Opportunity",
+      "url": "https://wiki.leagueoflegends.com/en-us/Opportunity",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Preparation out-of-combat timing and Extraction takedown movement-speed window semantics"
+    }
+  ]
 }

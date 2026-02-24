@@ -7,10 +7,10 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 15.0
+      "flat": 15
     },
     "health": {
-      "flat": 50.0
+      "flat": 50
     }
   },
   "passives": [
@@ -20,7 +20,7 @@
       "effects": "Gain 2 stacks for each champion [[kill]] and 1 stack for each [[assist]], up to a '''maximum''' of 10 stacks. For every stack, gain {{as|4 ability power}}, up to {{as|40|AP}} at '''maximum''' stacks. Lose 5 stacks on [[death]]. Stacks are preserved when upgrading to {{ii|Mejai's Soulstealer}}.",
       "stats": {
         "abilityPower": {
-          "flat": 4.0
+          "flat": 4
         }
       }
     }
@@ -128,9 +128,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.021919+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Glory stacks are preserved when upgrading to Mejai's Soulstealer."
+      "Glory stacks are preserved when upgrading to Mejai's Soulstealer.",
+      "Execution-semantics review: Glory stacks are event-gated (kills/assists/death) and apply AP through the stack state, not through direct damage events.",
+      "Map-specific balancing differences exist on rotating modes; this file keeps baseline SR-facing stack values and preserves Mejai upgrade stack carryover behavior."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Dark Seal.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Dark Seal",
+      "url": "https://wiki.leagueoflegends.com/en-us/Dark_Seal",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Glory stack gain/loss cadence, AP-per-stack scaling, and upgrade stack preservation behavior"
+    }
+  ]
 }

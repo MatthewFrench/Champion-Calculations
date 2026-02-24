@@ -12,7 +12,7 @@
     "healthRegen": {
       "percent": 100.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 35.0
     }
   },
@@ -22,7 +22,7 @@
   "shop": {
     "prices": {
       "total": 1250,
-      "sell": 500
+      "sell": 875
     },
     "purchasable": true,
     "tags": [

@@ -20,31 +20,64 @@
   "active": [],
   "effects_structured": [
     {
-      "id": "bramble_vest_thorns_damage",
-      "raw": "On being hit by a basic attack, deal 10 magic damage to the attacker.",
+      "id": "bramble_vest_thorns_reflect_damage",
+      "raw": "When struck by a basic attack on-hit, deal 10 magic damage to the attacker.",
       "effect_type": "damage",
       "stat": "magic_damage",
       "value": 10,
+      "value_range": null,
       "unit": "flat",
-      "trigger": "on_hit",
-      "applies_to": "enemy",
-      "parse_confidence": 0.9
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_basic_attack_hit_by_enemy",
+      "applies_to": "attacker",
+      "conditions": [
+        "attack_must_land",
+        "not_on_dodged_or_blocked_or_blinded_miss"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "not_blocked_by_spell_shield": true,
+        "does_not_trigger_spell_effects": true
+      },
+      "numbers_extracted": [
+        10
+      ],
+      "parse_confidence": 0.76
     },
     {
-      "id": "bramble_vest_thorns_grievous_wounds",
+      "id": "bramble_vest_thorns_apply_grievous_wounds_to_champions",
       "raw": "If the attacker is a champion, apply Grievous Wounds for 3 seconds.",
-      "effect_type": "debuff",
+      "effect_type": "apply_status",
       "stat": "grievous_wounds",
-      "duration_seconds": 3,
-      "trigger": "on_hit",
-      "applies_to": "enemy_champion",
-      "parse_confidence": 0.9
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": 3.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_basic_attack_hit_by_champion",
+      "applies_to": "attacker",
+      "conditions": [
+        "attacker_is_champion",
+        "attack_must_land"
+      ],
+      "status_effects": [
+        "grievous_wounds"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 800,
-      "sell": 320
+      "sell": 560
     },
     "purchasable": true,
     "tags": [
@@ -60,6 +93,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.030054+00:00",
-    "effects_structured_reviewed": "Manual review: thorns damage + grievous wounds."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution-semantics review: Thorns triggers on landed enemy basic attacks only, and does not trigger on dodged, blocked, or blinded misses.",
+      "Player-visible behavior: Bramble Vest immediately reflects 10 magic damage, and champion attackers additionally receive 3-second Grievous Wounds.",
+      "Thorns reflection is modeled as proc damage that is not blocked by spell shield and does not trigger downstream spell-effect chains."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bramble Vest.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Bramble Vest",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bramble_Vest",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Thorns trigger conditions, Grievous Wounds champion-only gating, and interaction notes for dodge/block/blind and spell-shield behavior"
+    }
+  ]
 }

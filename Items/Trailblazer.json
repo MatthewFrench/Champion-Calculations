@@ -7,13 +7,13 @@
   ],
   "stats": {
     "armor": {
-      "flat": 40.0
+      "flat": 40
     },
     "health": {
-      "flat": 250.0
+      "flat": 250
     },
     "movespeed": {
-      "percent": 4.0
+      "percent": 4
     }
   },
   "passives": [
@@ -23,7 +23,7 @@
       "effects": "While moving, generate 7 stacks of ''Momentum'' every {{fd|0.25}} seconds, granting up to {{as|20 '''bonus''' movement speed}} at 100 stacks after {{fd|3.75}} seconds of moving. At '''maximum''' stacks, you leave behind a path briefly that grants {{as|15% of your '''total''' movement speed}} as {{as|'''bonus''' movement speed}} to allied champions within. Basic attacks consume all stacks. If you are {{tip|melee}} and at '''maximum''' stacks, your next basic attack {{tip|slow|slows}} the target by 50% for 1 second.",
       "stats": {
         "movespeed": {
-          "flat": 20.0
+          "flat": 20
         }
       }
     }
@@ -44,7 +44,9 @@
       "max_stacks": 100,
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "conditions": []
+      "conditions": [],
+      "max_stacks_time_seconds": 3.75,
+      "parse_confidence": 0.78
     },
     {
       "id": "trailblazer_momentum_speed",
@@ -60,7 +62,8 @@
       "max_value_at_max_stacks": true,
       "duration_seconds": null,
       "cooldown_seconds": null,
-      "conditions": []
+      "conditions": [],
+      "parse_confidence": 0.76
     },
     {
       "id": "trailblazer_ally_trail_speed",
@@ -81,8 +84,10 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "conditions": [
-        "trail_left_behind"
-      ]
+        "trail_left_behind",
+        "while_at_max_momentum"
+      ],
+      "parse_confidence": 0.74
     },
     {
       "id": "trailblazer_basic_attack_consume_stacks",
@@ -94,7 +99,8 @@
       },
       "stack_name": "momentum",
       "consume_amount": "all",
-      "conditions": []
+      "conditions": [],
+      "parse_confidence": 0.8
     },
     {
       "id": "trailblazer_melee_max_stack_slow",
@@ -109,19 +115,21 @@
           "type": "slow",
           "value": 50,
           "unit": "percent",
-          "duration_seconds": 1.0
+          "duration_seconds": 1
         }
       ],
       "conditions": [
         "melee_only",
-        "at_max_stacks"
-      ]
+        "at_max_stacks",
+        "consumes_momentum_on_attack"
+      ],
+      "parse_confidence": 0.76
     }
   ],
   "shop": {
     "prices": {
       "total": 2400,
-      "sell": 960
+      "sell": 1680
     },
     "purchasable": true,
     "tags": [
@@ -136,9 +144,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.076199+00:00",
-    "effects_structured_reviewed": "2026-02-12",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Trail duration for the ally movement speed bonus is not specified in the source text."
+      "Trail duration for the ally movement speed bonus is not specified in the source text.",
+      "Verified Momentum timing against page-level source: stack generation cadence is 7 per 0.25s up to 100, with tooltip-level max-stack timing around 3.75s of continuous movement.",
+      "Trail branch note: ally movement-speed trail exists only at maximum Momentum and is brief; source text does not publish an exact trail duration value."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Trailblazer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Trailblazer",
+      "url": "https://wiki.leagueoflegends.com/en-us/Trailblazer",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

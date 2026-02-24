@@ -7,13 +7,13 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 60.0
+      "flat": 60
     },
     "lethality": {
       "flat": 18
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [
@@ -45,9 +45,10 @@
         "type": "spotted_by_stealthed_ward_or_trap"
       },
       "buff_name": "blackout",
-      "duration_seconds": 8.0,
-      "cooldown_seconds": 90.0,
-      "range_units": 400
+      "duration_seconds": 8,
+      "cooldown_seconds": 90,
+      "range_units": 400,
+      "parse_confidence": 0.76
     },
     {
       "id": "umbral_blackout_reveal",
@@ -62,7 +63,8 @@
         "stealthed_wards",
         "stealthed_traps"
       ],
-      "disable_wards": true
+      "disable_wards": true,
+      "parse_confidence": 0.74
     },
     {
       "id": "umbral_blackout_ward_damage",
@@ -82,7 +84,8 @@
         "melee": 2,
         "ranged": 1
       },
-      "is_on_hit": true
+      "is_on_hit": true,
+      "parse_confidence": 0.75
     },
     {
       "id": "umbral_nightstalker_ready",
@@ -91,11 +94,13 @@
       "applies_to": "self",
       "trigger": {
         "type": "after_not_visible_to_enemies",
-        "duration_seconds": 1.0
+        "duration_seconds": 1
       },
       "buff_name": "nightstalker_ready",
-      "duration_seconds": 4.0,
-      "buff_expires_after_seen": true
+      "duration_seconds": 4,
+      "buff_expires_after_seen": true,
+      "buff_grace_after_seen_seconds": 4,
+      "parse_confidence": 0.72
     },
     {
       "id": "umbral_nightstalker_damage",
@@ -103,10 +108,11 @@
       "effect_type": "damage",
       "applies_to": "enemy_champion",
       "trigger": {
-        "type": "on_basic_attack"
+        "type": "on_basic_attack_against_champion"
       },
       "conditions": [
-        "nightstalker_ready"
+        "nightstalker_ready",
+        "target_is_champion"
       ],
       "damage_type": "true",
       "value": 50,
@@ -118,13 +124,14 @@
         }
       ],
       "is_on_hit": true,
-      "consumes_buff": "nightstalker_ready"
+      "consumes_buff": "nightstalker_ready",
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -140,9 +147,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.061002+00:00",
-    "effects_structured_reviewed": "2026-02-12",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Ward bonus true damage uses a melee/ranged split ({rd 2 1}) in the source; mapping assumed as melee=2, ranged=1."
+      "Ward bonus true damage uses a melee/ranged split ({rd 2 1}) in the source; mapping assumed as melee=2, ranged=1.",
+      "Verified Blackout/Nightstalker timing and visibility gates against page-level source: Blackout activates on ward/trap spotting with cooldown; Nightstalker arms after unseen window and applies to next champion basic attack."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Umbral Glaive.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Umbral Glaive",
+      "url": "https://wiki.leagueoflegends.com/en-us/Umbral_Glaive",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formula terms, and in-game execution timing/targeting semantics"
+    }
+  ]
 }

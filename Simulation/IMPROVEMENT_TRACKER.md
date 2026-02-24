@@ -1,6 +1,672 @@
 # Improvement Tracker
 
 ## Done
+- Continued data-first item execution-semantics and citation wave 35:
+  - manually reviewed and refined structured item behavior for `Oblivion Orb`, `Phage`, `Sheen`, `Quicksilver Sash`, and `Verdant Barrier`
+  - added page-level League Wiki citations for all five items and replaced stale review dates with `2026-02-24` manual execution-semantics notes
+  - normalized trigger/edge semantics for shield-applied Grievous Wounds (`Oblivion Orb`), Spellblade structure/plant behavior (`Sheen`), and Quicksilver activation/cleanse nuances (`Quicksilver Sash`)
+  - normalized `Verdant Barrier` Annul structure (`active: []`, passive shield lifecycle semantics) and documented death/cooldown-restart interactions
+  - increased page-level item citation depth from `197/243` to `202/243`
+  - reduced broader structured no-page citation queue from `46/243` to `41/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Continued high-impact `loadout_runtime` decomposition by extracting combat bonus-resolution ownership into a dedicated runtime leaf module:
+  - added `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs`
+  - moved on-hit and ability bonus-damage resolution, rune-trigger execution, and stack-window progression out of `src/scripts/runtime/loadout_runtime.rs`
+  - preserved `calculate_on_hit_bonus_damage(...)` and `calculate_ability_bonus_damage(...)` as stable runtime API entrypoints while delegating internals to the new combat-bonus owner module
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `1347` to `777` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Started high-impact `loadout_runtime` decomposition by extracting rune-proc telemetry ownership into a dedicated runtime leaf module:
+  - added `src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`
+  - moved telemetry trigger-source accounting, proc/attempt/eligibility tracking, and telemetry-entry assembly out of `src/scripts/runtime/loadout_runtime.rs`
+  - preserved `rune_proc_telemetry(...)` as the stable runtime API surface while delegating internals to the new telemetry owner module
+  - reduced `src/scripts/runtime/loadout_runtime.rs` from `1639` to `1347` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization by extracting controlled-champion strict-ranking finalization ownership into an explicit owner module:
+  - added `src/scenario_runner/controlled_champion_strict_ranking_finalization.rs`
+  - moved strict-ranking fallback insertion, tie-break sorting, seed-best-score aggregation, and seed-hit diagnostics into `finalize_controlled_champion_strict_ranking`
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` to delegate strict-ranking finalization to the new owner module
+  - reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `725` to `656` lines (now below the `<=700` target)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization by extracting controlled-champion setup and enemy-build preparation ownership into an explicit setup owner module:
+  - added `src/scenario_runner/controlled_champion_scenario_setup.rs`
+  - moved scenario/controlled-champion/search setup parsing and enemy-build preparation into explicit setup owner APIs (`prepare_controlled_champion_scenario_search_setup`, `prepare_controlled_champion_enemy_build_setup`)
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` into thinner orchestration over setup/candidate-search/result-reporting owner modules
+  - reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `855` to `725` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization by splitting defaults champion/item simulation-default loading into explicit leaf owner modules:
+  - extracted champion simulation-default loader ownership into `src/defaults/champion_item_simulation_defaults_loader/champion_simulation_defaults_loaders.rs`
+  - extracted item simulation-default loader ownership into `src/defaults/champion_item_simulation_defaults_loader/item_simulation_defaults_loaders.rs`
+  - extracted shared defaults effect/ability extraction helpers into `src/defaults/champion_item_simulation_defaults_loader/simulation_defaults_extraction_helpers.rs`
+  - rewired `src/defaults/champion_item_simulation_defaults_loader.rs` into a thin facade/re-export surface
+  - reduced `src/defaults/champion_item_simulation_defaults_loader.rs` from `1065` to `16` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization by splitting scenario result-reporting into explicit analysis and artifact-writing owner modules:
+  - extracted ranked-build analysis, diagnostics assembly, and build-order analysis ownership out of `src/scenario_runner/controlled_champion_result_reporting.rs` into `src/scenario_runner/controlled_champion_result_build_analysis.rs`
+  - extracted trace/report artifact writing and final output emission ownership out of `src/scenario_runner/controlled_champion_result_reporting.rs` into `src/scenario_runner/controlled_champion_result_artifact_writing.rs`
+  - rewired `src/scenario_runner/controlled_champion_result_reporting.rs` into a thinner orchestration module that delegates to explicit analysis/artifact owners
+  - reduced `src/scenario_runner/controlled_champion_result_reporting.rs` from `813` to `489` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization with a high-impact scenario execution/reporting split:
+  - extracted controlled-champion post-search result reporting/trace artifact ownership out of `src/scenario_runner/controlled_champion_scenario_runner.rs` into `src/scenario_runner/controlled_champion_result_reporting.rs`
+  - moved console summary output, diagnostics assembly, build-order summary rendering, trace markdown/json writing, and report markdown/json writing into the new owner module
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` to delegate post-search reporting via `emit_controlled_champion_result_reporting`
+  - reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `1425` to `855` lines while preserving behavior
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued data-first item execution-semantics and citation wave 31:
+  - manually reviewed and refined structured item behavior for `Doran's Ring`, `Divine Sunderer`, `Goredrinker`, `Prowler's Claw`, `Gargoyle Stoneplate`, and `Duskblade of Draktharr`
+  - added page-level League Wiki citations for all six items with explicit execution-model and mode-availability context notes
+  - corrected missing active metadata where sources provided values (`Divine Sunderer` Spellblade ICD timing, `Goredrinker` 15s cooldown + attack-windup cast semantics, `Prowler's Claw` 25s cooldown/500 range/0.15s cast time, `Gargoyle Stoneplate` 30s cooldown/no-cast-time behavior)
+  - increased page-level item citation depth from `176/243` to `182/243`
+  - reduced broader structured no-page citation queue from `67` to `61` while maintaining legal URF unmodeled no-page queue at `0/102`
+  - documented distributed-item mode-availability drift policy follow-up (dataset-vs-page mode/map divergence) in coverage gaps
+- Continued data-first item execution-semantics and economy-reconciliation wave 32:
+  - manually reviewed and refined structured item behavior for `Dark Seal`, `Tiamat`, `Night Harvester`, `Radiant Virtue`, and `Moonflair Spellblade`
+  - added page-level League Wiki citations for all five items with explicit execution-model notes (including windup/cast-timing behavior for `Tiamat` and cast-then-hit cadence for `Moonflair Spellblade`)
+  - added distributed/prismatic economy representation (`shop.prices`) for `Divine Sunderer`, `Goredrinker`, `Prowler's Claw`, `Gargoyle Stoneplate`, `Duskblade of Draktharr`, `Everfrost`, `Night Harvester`, `Radiant Virtue`, and `Moonflair Spellblade`
+  - documented non-shop acquisition semantics and dataset-vs-page availability drift notes for touched distributed items (including `Prowler's Claw` Arena map-flag divergence)
+  - increased page-level item citation depth from `182/243` to `187/243`
+  - reduced broader structured no-page citation queue from `61/243` to `56/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Continued data-first item execution-semantics and citation wave 33:
+  - manually reviewed and refined structured item behavior for `Bami's Cinder`, `Bramble Vest`, `Catalyst of Aeons`, `Hexdrinker`, and `Hextech Alternator`
+  - added page-level League Wiki citations for all five items and replaced generic notes with execution-model context notes
+  - encoded trigger-exclusion and interaction-edge semantics where source notes provided them (for example landed-hit exclusions, spell-shield/proc-damage behavior, zero-damage proc eligibility, and below-threshold retrigger behavior)
+  - increased page-level item citation depth from `187/243` to `192/243`
+  - reduced broader structured no-page citation queue from `56/243` to `51/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Continued data-first item execution-semantics and citation wave 34:
+  - manually reviewed and refined structured item behavior for `Lost Chapter`, `Haunting Guise`, `Executioner's Calling`, `Seeker's Armguard`, and `Warden's Mail`
+  - added page-level League Wiki citations for all five items and replaced minimal review notes with execution-model context notes
+  - normalized edge semantics for shield-application behavior (`Executioner's Calling`), single-use transform behavior (`Seeker's Armguard`), and first-instance/cap/source behavior (`Warden's Mail`)
+  - increased page-level item citation depth from `192/243` to `197/243`
+  - reduced broader structured no-page citation queue from `51/243` to `46/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Completed architecture modularization `ARCH-014` with a high-impact engine event-dispatch split:
+  - extracted event-family resolution ownership out of `src/engine/event_resolution/combat_event_dispatch_resolution.rs` into:
+    - `src/engine/event_resolution/combat_event_enemy_auto_attack_resolution.rs`
+    - `src/engine/event_resolution/combat_event_controlled_champion_auto_attack_resolution.rs`
+    - `src/engine/event_resolution/combat_event_controlled_champion_offensive_ability_hit_resolution.rs`
+    - `src/engine/event_resolution/combat_event_champion_script_dispatch_resolution.rs`
+  - rewired `src/engine/event_resolution/combat_event_dispatch_resolution.rs` into a thin dispatcher + `step` lifecycle owner that delegates event-family logic through explicit `resolve_*` owner methods
+  - reduced `src/engine/event_resolution/combat_event_dispatch_resolution.rs` from `723` to `123` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization with a high-impact scenario execution leaf split:
+  - extracted controlled-champion candidate-search orchestration ownership out of `src/scenario_runner/controlled_champion_scenario_runner.rs` into `src/scenario_runner/controlled_champion_candidate_search.rs`
+  - moved maximum-quality coverage stage, ensemble-seed strategy orchestration, candidate merge/dedupe, and strict full-ranking loops into the new owner module
+  - rewired `src/scenario_runner/controlled_champion_scenario_runner.rs` to delegate search-phase orchestration while preserving fallback/reporting behavior
+  - reduced `src/scenario_runner/controlled_champion_scenario_runner.rs` from `1783` to `1425` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+  - added explicit follow-up milestone tracking for engine event-dispatch second-stage decomposition (`ARCH-014`)
+- Continued data-first item execution-semantics and citation wave 30:
+  - manually reviewed and refined structured item behavior for `Wordless Promise`, `Anathema's Chains`, `Seraph's Embrace`, `Stormrazor`, `Perplexity`, and `Atma's Reckoning`
+  - added page-level League Wiki citations for all six items with explicit execution-model context notes
+  - corrected `Anathema's Chains` active semantics by separating true active cooldown (`90s`) from in-combat cast lockout (`15s`) and documenting global-target/no-cast-time behavior
+  - increased page-level item citation depth from `170/243` to `176/243`
+  - reduced broader structured no-page citation queue from `73` to `67` while maintaining legal URF unmodeled no-page queue at `0/102`
+  - documented rotating-mode stat/cost package drift notes for `Perplexity` and `Atma's Reckoning` as canonical-policy follow-up work
+- Continued data-first item execution-semantics and citation waves 28-29 with full legal-URF no-page queue closure:
+  - manually reviewed and refined structured item behavior for `Kaenic Rookern`, `Lord Dominik's Regards`, `Moonstone Renewer`, `Mortal Reminder`, `Nashor's Tooth`, `Actualizer`, `Archangel's Staff`, `Bandlepipes`, `Serylda's Grudge`, `Staff of Flowing Water`, `Trailblazer`, `Umbral Glaive`, `Whispering Circlet`, `Winter's Approach`, and `Yun Tal Wildarrows`
+  - added page-level League Wiki citations for all 15 items and verified URL accessibility at authoring time
+  - increased page-level item citation depth from `155/243` to `170/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `15/102` to `0/102` (cleared)
+  - completed dedicated crit-stat key migration and cleared legacy `stats.criticalStrikeChance` usage backlog (`0/322` remaining)
+  - documented deferred runtime follow-up scope for mode-aware resource branches, visibility-gated windows, movement-stack trail systems, attack-type split durations/values, on-attack cooldown-reduction timing, and ally-chain fallback resolution
+  - aligned `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, `Simulation/DATA_AUTHORING_GUIDE.md`, and `Simulation/COVERAGE_GAPS.md` to current data-first priorities and no-regression guardrails
+- Completed architecture modularization `ARCH-030` with a high-impact `scenario_runner.rs` decomposition slice that closed the facade budget gap:
+  - extracted controlled champion scenario runtime/search support helper ownership out of `src/scenario_runner.rs` into `src/scenario_runner/controlled_champion_search_runtime_support.rs`
+  - moved coverage-asset locking, partial-candidate completion, progress-state/counter helpers, rune telemetry formatting, and structured trace-event shaping into the new owner module
+  - rewired `src/scenario_runner.rs` into a thin facade that imports support ownership for fixed-loadout/rune-sweep/progress-reporting/controlled-scenario flows
+  - reduced `src/scenario_runner.rs` from `936` to `273` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Started architecture modularization `ARCH-051` with a high-impact `core.rs` decomposition slice that closed the facade budget gap:
+  - extracted status/cast-lock/combat-primitives ownership out of `src/core.rs` into `src/core/combat_primitives_state.rs`
+  - rewired `src/core.rs` facade exports to preserve current callsite contracts while delegating ownership to the new core module
+  - reduced `src/core.rs` from `933` to `611` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed architecture modularization `ARCH-020`/`ARCH-022` with a high-impact `search.rs` decomposition slice that closed the facade budget gap:
+  - extracted full-loadout search orchestration ownership out of `src/search.rs` into `src/search/full_loadout_search_orchestration.rs`
+  - moved `FullLoadoutSearchParams` and full-loadout orchestration helpers (`build_search_ranked_full_loadout`, `strategy_seed_elites_full_loadout`, `adaptive_strategy_candidates_full_loadout`, `generate_bleed_candidates_full_loadout`) into the new owner module
+  - rewired `src/search.rs` as a thinner facade with explicit full-loadout orchestration re-exports
+  - reduced `src/search.rs` from `942` to `569` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization `ARCH-013` with a high-impact `engine.rs` decomposition slice that closed the facade budget gap:
+  - extracted combat timing/targeting/scheduling ownership out of `src/engine.rs` into `src/engine/combat_timing_and_targeting.rs`
+  - extracted enemy stat-model derivation ownership (`derive_enemy_model`, `derive_enemy_combat_stats`) out of `src/engine.rs` into `src/engine/enemy_combat_stat_modeling.rs`
+  - preserved `engine.rs` public surface by re-exporting `derive_enemy_combat_stats` from the facade
+  - reduced `src/engine.rs` from `1025` to `601` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Completed architecture modularization `ARCH-050` with a high-impact `reporting.rs` decomposition slice:
+  - extracted markdown run-report rendering ownership out of `src/reporting.rs` into `src/reporting/controlled_champion_report_markdown_writer.rs`
+  - extracted JSON run-report serialization ownership out of `src/reporting.rs` into `src/reporting/controlled_champion_report_json_writer.rs`
+  - rewired `src/reporting.rs` into a thin reporting facade with helper functions and explicit writer re-exports
+  - reduced `src/reporting.rs` from `1075` to `140` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization `ARCH-013` with a high-impact `engine.rs` trace/snapshot extraction slice:
+  - extracted trace/snapshot runtime reporting ownership out of `src/engine.rs` into `src/engine/trace_snapshot_reporting.rs`
+  - moved trace lifecycle helpers (`trace_event`, `emit_trace_snapshot`, `emit_trace_snapshots_due`, `enable_trace`, `trace_events`, `controlled_champion_rune_proc_telemetry`) into the new owner module
+  - reduced `src/engine.rs` from `1461` to `1025` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued data-first item execution-semantics and citation wave 23:
+  - manually reviewed and refined structured item behavior for `Chempunk Chainsword`, `Cosmic Drive`, `Dead Man's Plate`, `Locket of the Iron Solari`, `Maw of Malmortius`, and `Rapid Firecannon`
+  - added page-level League Wiki citations for all six items with explicit execution-model context notes
+  - corrected `Maw of Malmortius` passive omnivamp metadata from incorrect `30%` to page-verified `10%`
+  - added `Locket of the Iron Solari` Devotion cooldown-start semantics and refined `Rapid Firecannon` energized stack-generation/structure-interaction semantics
+  - increased page-level item citation depth from `124/243` to `130/243`
+  - reduced legal URF unmodeled no-page-citation queue from `47/103` to `41/103`
+  - documented intended-behavior-first policy for known bug notes, with bug-emulation deferred to explicit runtime follow-up
+- Continued data-first item execution-semantics and citation wave 24:
+  - manually reviewed and refined structured item behavior for `Cryptbloom`, `Dusk and Dawn`, `Edge of Night`, `Hubris`, `Mikael's Blessing`, `Serpent's Fang`, and `Spear of Shojin`
+  - added page-level League Wiki citations for all seven items with explicit execution-model context notes
+  - corrected `Mikael's Blessing` active metadata by adding page-verified `120s` cooldown and `650` cast-range semantics to cleanse/heal branches
+  - added `Spear of Shojin` per-cast-instance Focused Will stack-throttle metadata (`1s` limit) and clarified stack-resolution notes
+  - increased page-level item citation depth from `130/243` to `137/243`
+  - reduced legal URF unmodeled no-page-citation queue from `41/103` to `34/103`
+  - documented targeted-active cooldown/range completeness as a recurring data-audit follow-up
+- Recalibrated legal-URF denominator metrics to runtime-filter parity (`default_item_pool` + runtime effect-payload detection):
+  - legal URF legendary pool now tracked as `113` items
+  - legal URF effect-payload set now tracked as `111` items
+  - legal URF unmodeled effect payload now tracked as `102` items
+- Continued data-first item execution-semantics and citation wave 25:
+  - manually reviewed and refined structured item behavior for `Bastionbreaker`, `Endless Hunger`, `Experimental Hexplate`, `Frozen Heart`, `Hextech Gunblade`, and `Immortal Shieldbow`
+  - added page-level League Wiki citations for all six items with explicit execution-model context notes
+  - corrected `Hextech Gunblade` active metadata completeness by adding page-verified `60s` cooldown and `700` cast-range semantics
+  - split `Experimental Hexplate` Overdrive into explicit attack-speed and movement-speed branches with cooldown-start-on-cast timing semantics
+  - increased page-level item citation depth from `137/243` to `143/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `33/102` to `27/102`
+  - documented bug-emulation as deferred runtime follow-up with intended-behavior simulation remaining the canonical default
+- Continued data-first item execution-semantics and citation wave 26:
+  - manually reviewed and refined structured item behavior for `Axiom Arc`, `Banshee's Veil`, `Imperial Mandate`, `Randuin's Omen`, `Shurelya's Battlesong`, and `Youmuu's Ghostblade`
+  - added page-level League Wiki citations for all six items with explicit execution-model context notes
+  - corrected trigger-gating semantics (`Axiom Arc` takedown scope, `Imperial Mandate` shared per-target cooldown/start semantics)
+  - corrected targeted active metadata completeness (`Randuin's Omen` `90s`/`500 radius`, `Shurelya's Battlesong` `75s`/`1000 range`, `Youmuu's Ghostblade` `45s`)
+  - increased page-level item citation depth from `143/243` to `149/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `27/102` to `21/102`
+- Continued data-first item execution-semantics and citation wave 27:
+  - manually reviewed and refined structured item behavior for `Mercurial Scimitar`, `Navori Flickerblade`, `Profane Hydra`, `Riftmaker`, `Unending Despair`, and `Voltaic Cyclosword`
+  - added page-level League Wiki citations for all six items with explicit execution-model context notes
+  - corrected active cooldown completeness (`Mercurial Scimitar` `90s`, `Profane Hydra` `10s`) and tightened trigger/timing semantics across all six items
+  - normalized `Navori Flickerblade` crit stat key to loader-canonical `stats.critChance`
+  - increased page-level item citation depth from `149/243` to `155/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `21/102` to `15/102`
+  - logged remaining legacy crit-stat key migration backlog (`criticalStrikeChance`: `23` files)
+- Continued data-first item execution-semantics and citation wave 22:
+  - manually reviewed and refined structured item behavior for `Trinity Force`, `Muramana`, `Sterak's Gage`, `The Collector`, `Wit's End`, and `Zeke's Convergence`
+  - added page-level League Wiki citations for all six items with explicit execution-model context notes
+  - corrected `Zeke's Convergence` Frostfire Tempest cadence/value semantics (`7.5` per `0.25` seconds, `150` total over 5 seconds), champion-only target scope, and cooldown-start timing
+  - expanded `Muramana` Shock structured coverage to include champion-ability damage branch (`4%` melee / `3%` ranged max mana), cast-instance/per-target limiter, and proc-damage exclusion semantics
+  - increased page-level item citation depth from `118/243` to `124/243`
+  - reduced legal URF unmodeled no-page-citation queue from `53/103` to `47/103`
+- Completed architecture modularization `ARCH-041` with a high-impact `data.rs` decomposition slice:
+  - extracted loadout effect/stat resolution ownership out of `src/data.rs` into `src/data/loadout_effect_resolution.rs`
+  - extracted simulation/search configuration parsing ownership out of `src/data.rs` into `src/data/simulation_search_configuration_parsing.rs`
+  - extracted loadout-domain modeling/legality/sampling ownership out of `src/data.rs` into `src/data/loadout_domain_modeling.rs`
+  - rewired `src/data.rs` into a thin facade with explicit data concern modules/re-exports
+  - reduced `src/data.rs` from `1400` to `116` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization with a high-impact `defaults.rs` decomposition slice:
+  - extracted schema/type ownership out of `src/defaults.rs` into `src/defaults/simulator_defaults_schema_types.rs`
+  - extracted defaults path/key normalization and shared champion/item JSON effect helper ownership out of `src/defaults.rs` into `src/defaults/defaults_path_key_and_effect_helpers.rs`
+  - rewired `src/defaults.rs` to explicit module imports/re-exports as a thin typed facade and loader-access layer
+  - reduced `src/defaults.rs` from `1435` to `679` lines (below facade target `<=700`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued architecture modularization with a high-impact `engine.rs` decomposition slice:
+  - extracted event-dispatch/casting/hot-effect lifecycle ownership out of `src/engine.rs` into explicit owner modules:
+    - `src/engine/event_resolution/combat_event_dispatch_resolution.rs`
+    - `src/engine/event_resolution/controlled_champion_casting_resolution.rs`
+    - `src/engine/event_resolution/enemy_script_action_resolution.rs`
+    - `src/engine/simulation_step/hot_effects_step.rs`
+  - rewired module carriers in `src/engine/event_resolution.rs` and `src/engine/simulation_step.rs`
+  - reduced `src/engine.rs` from `2778` to `1461` lines
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Continued data-first item execution-semantics and citation wave 21:
+  - manually reviewed and refined structured item behavior for `The Golden Spatula`, `Abyssal Mask`, `Ardent Censer`, `Black Cleaver`, `Death's Dance`, and `Morellonomicon`
+  - added page-level League Wiki citations for five high-impact legal URF unmodeled items and module/template/page-level cross-verification sources for `The Golden Spatula`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `1` to `0`
+  - increased page-level item citation depth from `113/243` to `118/243`
+  - reduced legal URF unmodeled no-page-citation queue from `58/103` to `53/103`
+  - documented Golden Spatula mode-scope/source-drift reconciliation as a follow-up fidelity area while clearing confidence-floor backlog
+- Continued data-first item execution-semantics and citation wave 20:
+  - manually reviewed and refined structured item behavior for `Flesheater`, `Force of Entropy`, `Gambler's Blade`, `Guardian's Dirk`, `Gusto`, `Hemomancer's Helm`, `Innervating Locket`, `Reality Fracture`, and `Scarecrow Effigy`
+  - added page-level League Wiki citations for all nine items (including `Melee minion` page-level sourcing for `Gusto` minion-rule semantics)
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `10` to `1`
+  - increased page-level item citation depth from `104/243` to `113/243`
+  - reduced low-confidence/no-page-citation queue from `9` to `0`
+  - documented remaining low-confidence concentration on `The Golden Spatula` as a dedicated semantic-normalization follow-up
+  - tracked `Gambler's Blade` stored-gold cap reconciliation (`240` current Tier-1/local tooltip vs historical `245` patch-history note) as a follow-up data-quality decision
+- Continued data-first item execution-semantics and citation wave 19:
+  - manually reviewed and refined structured item behavior for `Diadem of Songs`, `Sword of Blossoming Dawn`, `Lifeline`, `Hexbolt Companion`, and `Fulmination`
+  - added page-level League Wiki citations for all five items and expanded execution-model context notes (trigger gating, timing windows, and player-visible resolution behavior)
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `15` to `10`
+  - increased page-level item citation depth from `99/243` to `104/243`
+  - reduced low-confidence/no-page-citation queue from `14` to `9`
+  - documented a new fidelity follow-up: Lifeline special interactions with displacement/channel/crowd-control remain partially ambiguous and not fully encoded
+- Continued data-first item execution-semantics and citation wave 18:
+  - manually reviewed and refined structured item behavior for `Pyromancer's Cloak`, `Crimson Lucidity`, `Regicide`, `Rite of Ruin`, `Dragonheart`, and `Fire at Will`
+  - added page-level League Wiki citations for all six items (including Gangplank Cannon Barrage section verification for `Fire at Will`)
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `21` to `15`
+  - increased page-level item citation depth from `93/243` to `99/243`
+  - reduced low-confidence/no-page-citation queue from `20` to `14`
+  - documented a new fidelity follow-up: Dragonheart acquisition-round soul-backfill semantics are tracked but not yet encoded in structured effects
+  - documented a new policy follow-up: champion-ability upgrade pseudo-items (for example `Fire at Will`) need standardized coverage/provenance conventions
+- Continued data-first item execution-semantics and citation wave 17:
+  - manually reviewed and refined structured item behavior for `Demon King's Crown`, `Detonation Orb`, `Diamond-Tipped Spear`, `Reaper's Toll`, and `Sword of the Divine`
+  - added page-level League Wiki citations for all five items and official Riot patch-note citations for patch-history-sensitive tuning
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `26` to `21`
+  - increased page-level item citation depth from `88/243` to `93/243`
+  - reduced low-confidence/no-page-citation queue from `25` to `20`
+  - identified a secondary citation-depth queue: `58/103` legal URF unmodeled items still lack page-level citations
+  - documented a follow-up lifecycle-marker policy gap for retired/replaced identities to keep legacy data excluded from live simulation pools
+- Continued data-first item execution-semantics and citation wave 16:
+  - manually reviewed and refined structured item behavior for `Crystalline Overgrowth`, `Overcharged`, `Kinkou Jitte`, `Puppeteer`, and `Jarvan I's`
+  - added page-level League Wiki citations for all five items and added Riot Patch 26.1 notes for `Crystalline Overgrowth`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `31` to `26`
+  - increased page-level item citation depth from `83/243` to `88/243`
+  - reduced low-confidence/no-page-citation queue from `30` to `25`
+  - documented mode-variance semantics for `Overcharged` (Clash vs Swiftplay Sudden Death timing/value differences) as a policy follow-up
+- Continued data-first item execution-semantics and citation wave 15:
+  - manually reviewed and refined structured item behavior for `Eleisa's Miracle`, `Chainlaced Crushers`, `Cloak of Starry Night`, `Lightning Rod`, `Reverberation`, and `Runecarver`
+  - added page-level League Wiki citations and behavior-aligned context notes for all six items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `37` to `31`
+  - increased page-level item citation depth from `77/243` to `83/243`
+  - reduced low-confidence/no-page-citation queue from `36` to `30`
+  - corrected `Reverberation` crowd-control trigger fidelity by including grounding in Rumble stack-trigger semantics
+  - tracked a new data-policy follow-up: distributed/prismatic Arena item economy representation (`shop.prices` policy for non-shop acquisition paths)
+- Continued data-first item execution-semantics, stat-key normalization, and Tier-1 alignment wave 14:
+  - manually reviewed and refined structured item behavior for `Fated Ashes`, `Hellfire Hatchet`, `Hamstringer`, `Sanguine Gift`, and `Spectral Cutlass`
+  - added page-level League Wiki citations and behavior-aligned context notes for all five items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `42` to `37`
+  - increased page-level item citation depth from `71/243` to `77/243`
+  - normalized legacy item stat key usage from `30` files using `stats.magicResistance` to `0` by converting all to loader-canonical `stats.magicResist`
+  - reconciled Tier-1 drift in economy/stat profiles for `Spectral Cutlass`, `The Golden Spatula`, and `Redemption`
+  - identified and documented one remaining cross-version identity exception (`Zephyr` vs current Tier-1 `Gunmetal Greaves` on shared ID `3172`)
+- Continued data-first item execution-semantics and provenance wave 13:
+  - manually reviewed and refined structured item behavior for `Galeforce`, `Gustwalker Hatchling`, `Mosstomper Seedling`, `Scorchclaw Pup`, and `Talisman of Ascension`
+  - added page-level League Wiki citations and behavior-aligned context notes for all five items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `47` to `42`
+  - increased page-level item citation depth from `66/243` to `71/243`
+  - normalized structured-item source metadata completeness (`sources[].accessed`) from `203/243` files missing entries to `0/243`
+- Continued data-first item execution-semantics and provenance wave 12:
+  - manually reviewed and refined structured item behavior for `Control Ward`, `Doran's Shield`, `Everfrost`, `Fimbulwinter`, and `Demonic Embrace`
+  - added page-level League Wiki citations and behavior-aligned context notes for all five items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `52` to `47`
+  - increased page-level item citation depth from `61/243` to `66/243`
+  - identified a new provenance metadata quality gap: `203/243` structured item files still have at least one source entry missing `accessed` date metadata
+- Continued data-first support-economy and rune-semantic quality wave 11:
+  - resolved support-quest sell-state representation for quest-stage items (`World Atlas`, `Runic Compass`, `Bounty of Worlds`) by setting `shop.prices.sell = 0` to match page-verified No Sell behavior
+  - documented Tier-1 dataset discrepancy as an intentional exception on each affected item (`Data Dragon`/`CommunityDragon` currently list `sell = 160`)
+  - updated sell-audit reality from `0/238` mismatches to `3/238` intentional overrides with no unresolved accidental mismatches
+  - refined `Runic Compass` Shared Riches execution semantics and raised minimum confidence to `0.68`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `53` to `52`
+  - normalized low-confidence rune narrative notes across `17` runes and reduced rune low-confidence backlog (`parse_confidence <= 0.60`) from `17` to `0`
+- Continued data-first source-and-economy reconciliation across item data:
+  - completed wave 10 normalization for canonical source endpoint and sell-value consistency
+  - migrated legacy CommunityDragon item dataset citations from `235/243` to `0/243` structured item files
+  - reconciled Data Dragon sell-value mismatches from `209/238` to `0/238` checked items
+  - manually spot-checked representative starter, legendary, support-quest, and map-specific items after bulk updates
+  - shifted both tasks from active backlog into recurring no-regression audit requirements
+  - documented a lower-priority follow-up for non-structured item provenance (`79` files currently with null/empty `sources`)
+- Continued data-first consumable and Manaflow fidelity refinement with Tear-line sibling corrections:
+  - completed wave 9 updates for `Health Potion`, `Refillable Potion`, `Tear of the Goddess`, and `Manamune` with manual activation/timing review, page-level citations, and confidence normalization
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `57` to `53`
+  - increased page-level item citation depth from `57/243` to `61/243`
+  - corrected Tear-line sibling sell values to Tier-1 canonical values for `Archangel's Staff`, `Muramana`, `Winter's Approach`, and `Fimbulwinter`
+  - documented new follow-up issues for cross-cutting data quality: stale CommunityDragon endpoint references (`235/243`) and sell-value mismatch vs Data Dragon (`209/238`)
+- Continued data-first support-quest sibling harmonization for shared diminishing-gold rule quality:
+  - completed wave 8 updates for `World Atlas`, `Runic Compass`, `Bounty of Worlds`, `Celestial Opposition`, and `Zaz'Zak's Realmspike`
+  - normalized support-income diminishing-gold schema across the full support-quest family with page-verified pre/post-5-minute threshold/reduction formulas
+  - added page-level League Wiki provenance for all five wave-8 items and increased page-level citation depth from `52/243` to `57/243`
+  - closed the previously tracked support-quest sibling schema/confidence harmonization gap
+  - documented new follow-up issue for canonical sell-state policy resolution on `World Atlas` and `Runic Compass` (`shop.prices.sell` vs page-level No Sell behavior)
+- Continued data-first legal URF low-confidence item refinement with shared support-income rule precision:
+  - completed wave 7 semantic/formula updates for `Solstice Sleigh`, `Bloodsong`, and `Dream Maker`
+  - encoded page-verified pre/post-5-minute diminishing-gold threshold and reduction formulas in structured modifiers for all three items
+  - raised all three wave-7 support-income entries from low confidence (`0.50/0.60/0.60`) to `0.68`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `60` to `57`
+  - documented follow-up sibling harmonization gap for support-quest items (`World Atlas`, `Runic Compass`, `Bounty of Worlds`, `Celestial Opposition`, `Zaz'Zak's Realmspike`)
+- Continued data-first legal URF low-confidence item refinement and citation depth expansion:
+  - completed wave 6 semantic/citation updates for `Overlord's Bloodmail`, `Ravenous Hydra`, and `Redemption`
+  - added page-level League Wiki citations and entity-intent context notes for all three items
+  - raised all three wave-6 items to `>= 0.65` minimum confidence
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `63` to `60`
+  - increased page-level item citation depth from `49/243` to `52/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `3` to `0` (queue cleared)
+- Continued data-first legal URF low-confidence item refinement and citation depth expansion:
+  - completed wave 5 semantic/citation updates for `Horizon Focus`, `Hullbreaker`, `Knight's Vow`, `Mejai's Soulstealer`, and `Opportunity`
+  - added page-level League Wiki citations and entity-intent context notes for all five items
+  - raised four of five wave-5 items to `>= 0.68` minimum confidence and one (`Hullbreaker`) to `>= 0.65`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `68` to `63`
+  - increased page-level item citation depth from `44/243` to `49/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `8` to `3`
+- Continued data-first legal URF low-confidence item refinement and citation depth expansion:
+  - completed wave 4 semantic/citation updates for `Bloodsong`, `Dream Maker`, `Hexoptics C44`, `Hextech Rocketbelt`, and `Hollow Radiance`
+  - added page-level League Wiki citations and entity-intent context notes for all five items
+  - raised three of five wave-4 items to `>= 0.65` minimum confidence while keeping conservative confidence for support-income diminishing-gold effects in `Bloodsong` and `Dream Maker`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `71` to `68`
+  - increased page-level item citation depth from `39/243` to `44/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `13` to `8`
+  - tracked shared support-income rule precision dependency across `Solstice Sleigh`, `Bloodsong`, and `Dream Maker` in coverage docs
+- Continued data-first legal URF low-confidence item refinement and citation depth expansion:
+  - completed wave 3 semantic/citation updates for `Solstice Sleigh`, `Bloodletter's Curse`, `Dawncore`, `Echoes of Helia`, and `Force of Nature`
+  - added page-level League Wiki citations and entity-intent context notes for all five items
+  - raised four of five wave-3 items to `>= 0.65` minimum confidence while keeping conservative confidence for `Solstice Sleigh` support-income diminishing-gold semantics
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `75` to `71`
+  - increased page-level item citation depth from `34/243` to `39/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `18` to `13`
+  - tracked shared support-income rule precision as a data-gap dependency in coverage docs
+- Continued data-first legal URF low-confidence item refinement and citation depth expansion:
+  - completed wave 1 and wave 2 semantic/citation updates for `Malignance`, `Terminus`, `Sundered Sky`, `Statikk Shiv`, `Fiendhunter Bolts`, `Essence Reaver`, `Iceborn Gauntlet`, `Jak'Sho, The Protean`, `Runaan's Hurricane`, and `Sunfire Aegis`
+  - added page-level League Wiki citations and entity-intent context notes for all ten items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `85` to `75`
+  - increased page-level item citation depth from `24/243` to `34/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `28` to `18`
+  - updated `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, `Simulation/DATA_AUTHORING_GUIDE.md`, and `Simulation/COVERAGE_GAPS.md` with refreshed guardrails and next-wave priorities
+- Continued data-first coverage improvements on priority item data quality:
+  - refined preset-borderline item data for `Lich Bane`, `Stridebreaker`, and `Titanic Hydra`, raising each minimum `parse_confidence` from `0.65` to `>=0.70`
+  - refined low-confidence legal URF item data for `Eclipse` and `Rod of Ages`, improving trigger/stack/cap semantics and reducing low-confidence item backlog from `87` to `85`
+  - added page-level League Wiki citations for `Eclipse` and `Rod of Ages`, increasing page-level item citation depth from `22/243` to `24/243`
+  - updated `Simulation/DATA_AUTHORING_GUIDE.md` and `Simulation/COVERAGE_GAPS.md` priorities toward legal URF unmodeled low-confidence items with no page-level citations (`28/28` currently)
+- Continued data-first confidence hardening on priority item data:
+  - refined modeled runtime item structured effects for `Heartsteel`, `Kraken Slayer`, and `Liandry's Torment` with stronger formula/trigger metadata and higher confidence values
+  - refined `Stormsurge` threshold, delayed-strike, and death-trigger area-discharge semantics and raised its minimum confidence from `0.60` to `0.70`
+  - normalized modeled `Zhonya's Hourglass` confidence metadata from missing/null to explicit numeric confidence
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `88` to `87` files in this pass
+  - removed modeled runtime borderline confidence entries (`0.65`) from `3` to `0`
+  - updated `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, `Simulation/DATA_AUTHORING_GUIDE.md`, and `Simulation/COVERAGE_GAPS.md` with numeric-confidence guardrails, refreshed metrics, and re-prioritized next data queue
+- Continued data-first coverage hardening for item data quality and provenance verification:
+  - restored parser-compatible Protoplasm Lifeline condition token semantics in `Items/Protoplasm Harness.json` to keep runtime loader expectations intact during data-only updates
+  - refined structured effects for high-impact preset items (`Stridebreaker`, `Warmog's Armor`, `Titanic Hydra`, `Rabadon's Deathcap`, `Phantom Dancer`) with entity-intent context notes and higher-confidence normalization where behavior was explicit
+  - added page-level League Wiki citations for the refined preset items and raised item page-level citation depth from `17/243` to `22/243`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `90` to `88` files in this pass
+  - updated `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, `Simulation/DATA_AUTHORING_GUIDE.md`, and `Simulation/COVERAGE_GAPS.md` with compatibility guardrails, refreshed metrics, and next priorities
+- Added explicit architecture governance and transformation tracking docs:
+  - added `Simulation/ARCHITECTURE_STANDARDS.md` as the durable standards source for explicit naming, concern-based foldering, state ownership channels, file/function size budgets, and `mod.rs` reduction policy
+  - added `Simulation/ARCHITECTURE_TRANSFORMATION_PLAN.md` with baseline line-count snapshot, explicit target tree, phased rollout, and milestone progress tracker
+  - added `Simulation/ARCHITECTURE_REFACTOR_CHECKLIST.md` as a reusable architecture PR checklist template and marked `ARCH-002` complete
+  - completed second-pass hardening with concrete ownership/mutation matrix, module boundary contracts, sequencing-risk mitigations, and measurable phase acceptance gates
+  - added explicit `mod.rs` inventory and script-tree migration conventions with staged cleanup rules
+  - started `ARCH-010` with the first engine extraction:
+    - moved `Vec2`, line-segment intersection, hitbox distance checks, and hitbox reach/miss helpers from `src/engine.rs` into explicit geometry modules under `src/engine/geometry/`
+    - rewired `src/engine.rs` to consume those helpers via `mod geometry` + explicit imports
+    - continued extraction by moving enemy spawn positioning and projectile travel helpers into `src/engine/geometry/spawn_positioning.rs` and `src/engine/geometry/projectile_kinematics.rs`
+    - continued extraction by moving deterministic orbit movement math into `src/engine/geometry/enemy_orbit_position_updates.rs`
+    - moved script-point bridge helpers into `src/engine/script_point_coordinate_conversions.rs` with dedicated tests in `src/engine/tests/script_point_coordinate_conversions_tests.rs`
+    - started `ARCH-011` by moving event queue ownership and ordering into `src/engine/event_queue/*` and rewiring queue scheduling/requeue logic to owner APIs
+    - completed `ARCH-011` queue projection/query ownership by moving next-attack/impact and queued projectile projection lookups into event-queue owner query APIs
+    - added `src/engine/event_queue/queued_projectile_impact_projection.rs` for explicit queue projection data
+    - started `ARCH-012` by moving controlled champion/enemy incoming-damage and runtime-heal mutation methods into `src/engine/event_resolution/incoming_damage_resolution.rs`
+    - added `src/engine/event_resolution.rs` as the event-resolution facade carrier
+    - completed `ARCH-012` hardening with explicit owner-command channels for controlled champion damage/heal/revive:
+      - `apply_incoming_damage_to_controlled_champion`
+      - `apply_healing_to_controlled_champion`
+      - `apply_revive_or_mark_controlled_champion_death`
+    - moved controlled champion revive/death resolution ownership out of `src/engine.rs` into `src/engine/event_resolution/incoming_damage_resolution.rs`
+    - completed `ARCH-010` actor-position loop extraction by introducing simulation-step owner modules:
+      - `src/engine/simulation_step.rs`
+      - `src/engine/simulation_step/enemy_movement_step.rs`
+    - rewired hot-effect tick flow to use `apply_enemy_movement_step` owner command instead of facade-inline movement loop
+    - started `ARCH-013` by introducing actor-state owner modules:
+      - `src/engine/actor_state.rs`
+      - `src/engine/actor_state/enemy_runtime_state.rs`
+    - moved enemy respawn and regeneration lifecycle writes behind actor-state owner commands (`apply_enemy_respawn_updates`, `apply_enemy_regeneration_tick`)
+    - moved enemy active/alive runtime queries behind actor-state owner module (`enemy_is_alive`, `enemy_is_active`)
+    - continued `ARCH-013` by routing recurring-script lifecycle and script-cadence paths through actor-state owner APIs:
+      - `enemy_script_event_should_recur`
+      - `enemy_ability_haste_or_urf_default`
+      - `set_enemy_script_event_ready_at`
+      - `apply_enemy_next_attack_bonus_physical`
+    - continued `ARCH-013` by routing enemy auto-attack token lifecycle and next-hit bonus consume/reset through actor-state owner APIs:
+      - `begin_enemy_attack_sequence`
+      - `enemy_attack_sequence_matches`
+      - `consume_enemy_attack_damage_with_on_hit`
+    - hardened attack-event owner-call boundaries with explicit fail-fast invariant checks for invalid indices (quality guardrail; no expected behavior change)
+    - continued `ARCH-013` by routing remaining script-runtime enemy-state mutation and script lifecycle projections through actor-state owner APIs:
+      - `execute_enemy_script_event_actions`
+      - `enemy_aftershock_magic_damage_on_immobilize`
+      - `enemy_script_epoch_matches`
+      - `enemy_script_event_ready_at_or_zero`
+    - continued `ARCH-013` by routing high-traffic enemy read projections through actor-state owner query APIs:
+      - `enemy_name`
+      - `enemy_position`
+      - `enemy_hitbox_radius`
+      - `enemy_attack_range`
+      - `enemy_attack_windup_seconds`
+      - `enemy_attack_projectile_speed`
+      - `enemy_attack_effect_hitbox_radius`
+      - `enemy_attack_interval_seconds`
+      - `enemy_target_health_snapshot_or_defaults`
+      - `enemy_status_lines_at`
+      - `enemy_is_stunned_at`
+      - `enemy_is_invulnerable_or_untargetable_at`
+    - continued `ARCH-013` by routing trace-snapshot enemy-section read composition through actor-state owner projection APIs:
+      - `enemy_count`
+      - `enemy_trace_snapshot_at`
+      - `EnemyTraceSnapshot`
+    - added focused actor-state regression tests in `src/tests/engine_tests.rs`:
+      - `enemy_attack_sequence_owner_methods_advance_and_invalidate_old_tokens`
+      - `enemy_attack_bonus_physical_is_consumed_once_and_resets_after_hit`
+      - `enemy_script_epoch_and_ready_queries_read_owner_state`
+      - `enemy_script_execution_owner_method_generates_actions_for_in_range_event`
+      - `enemy_aftershock_owner_method_is_zero_without_aftershock_rune`
+      - `enemy_read_projection_owner_queries_return_expected_shapes`
+      - (extended) `enemy_read_projection_owner_queries_return_expected_shapes` with `enemy_trace_snapshot_at` assertions
+    - started `ARCH-020` by extracting first candidate-space owner module:
+      - `src/search/candidate_space.rs`
+      - `src/search/candidate_space/full_loadout_candidate_operations.rs`
+    - moved full-loadout candidate helper ownership out of `src/search.rs` helper cluster:
+      - `candidate_order_key`
+      - `random_full_candidate`
+      - `candidate_loadout_variants`
+      - `repair_full_candidate`
+      - `mutate_full_candidate`
+      - `crossover_full_candidates`
+    - continued `ARCH-020` by adding explicit candidate-space owner modules:
+      - `src/search/candidate_space/full_loadout_candidate_scoring.rs`
+      - `src/search/candidate_space/item_candidate_operations.rs`
+    - moved full-loadout scoring/ranking helper ownership out of `src/search.rs` helper cluster:
+      - `score_full_candidates`
+      - `unique_ranked_full_candidates`
+    - moved item-only candidate mutation/crossover/parent-selection helper ownership out of `src/search.rs` helper cluster:
+      - `tournament_parent`
+      - `crossover_builds`
+      - `mutate_build`
+    - continued `ARCH-020` by adding explicit candidate-space owner module:
+      - `src/search/candidate_space/item_candidate_scoring.rs`
+    - moved item-only candidate scoring/dedupe helper ownership out of `src/search.rs` helper cluster:
+      - `score_candidates`
+      - `unique_ranked_from_candidates`
+    - started `ARCH-021` by adding explicit strategy owner modules:
+      - `src/search/strategy.rs`
+      - `src/search/strategy/item_candidate_search_strategies.rs`
+    - moved item-only strategy helper ownership out of `src/search.rs` helper cluster:
+      - `beam_search_ranked`
+      - `random_search_ranked`
+      - `hill_climb_search_ranked`
+      - `genetic_search_ranked`
+      - `simulated_annealing_search_ranked`
+      - `mcts_search_ranked`
+    - moved item-only strategy-local rollout/selection helper ownership out of `src/search.rs` helper cluster:
+      - `available_actions`
+      - `rollout_completion`
+    - added focused candidate-space regression tests in:
+      - `src/search/candidate_space/tests/full_loadout_candidate_operations_tests.rs`
+      - `candidate_order_key_tracks_item_and_loadout_slots`
+      - `candidate_loadout_variants_deduplicates_anchor_and_base`
+      - `candidate_loadout_variants_includes_anchor_and_base_when_different`
+    - added focused candidate-space regression tests in:
+      - `src/search/candidate_space/tests/full_loadout_candidate_scoring_tests.rs`
+      - `score_full_candidates_deduplicates_canonical_candidates`
+      - `unique_ranked_full_candidates_tie_breaks_by_candidate_order_key`
+      - `src/search/candidate_space/tests/item_candidate_operations_tests.rs`
+      - `crossover_builds_produces_legal_child`
+      - `mutate_build_with_zero_rate_keeps_original_build`
+      - `mutate_build_preserves_build_legality`
+      - `tournament_parent_returns_existing_candidate`
+      - `src/search/candidate_space/tests/item_candidate_scoring_tests.rs`
+      - `score_candidates_scores_each_unique_canonical_key_once`
+      - `unique_ranked_from_candidates_dedupes_keys_and_filters_non_finite_scores`
+      - `score_candidates_returns_empty_when_deadline_reached`
+    - added focused strategy-module regression tests in:
+      - `src/search/strategy/tests/item_candidate_search_strategies_tests.rs`
+      - `available_actions_respects_boot_and_duplicate_constraints`
+      - `rollout_completion_returns_legal_canonical_key_and_expected_score`
+      - `mcts_search_ranked_returns_unique_legal_candidates_with_limit`
+    - completed `ARCH-021` by adding explicit full-loadout strategy owner module:
+      - `src/search/strategy/full_loadout_search_strategies.rs`
+    - moved full-loadout strategy helper ownership out of `src/search.rs` helper cluster:
+      - `beam_search_ranked_full`
+      - `random_search_ranked_full`
+      - `hill_climb_search_ranked_full`
+      - `genetic_search_ranked_full`
+      - `simulated_annealing_search_ranked_full`
+      - `mcts_search_ranked_full`
+      - `tournament_parent_full`
+      - `MctsFullNode`
+    - added focused strategy-module regression tests in:
+      - `src/search/strategy/tests/full_loadout_search_strategies_tests.rs`
+      - `random_search_ranked_full_respects_limit_and_candidate_legality`
+      - `beam_search_ranked_full_returns_legal_candidates`
+      - `mcts_search_ranked_full_returns_unique_legal_candidates_with_limit`
+    - started `ARCH-022` by adding explicit scoring owner modules:
+      - `src/search/scoring.rs`
+      - `src/search/scoring/metric_scoring_helpers.rs`
+      - `src/search/scoring/item_build_scoring_and_diversity.rs`
+      - `src/search/scoring/full_loadout_scoring_and_diversity.rs`
+      - `src/search/scoring/stat_key_build_selection.rs`
+      - `src/search/scoring/item_name_list_formatting.rs`
+    - moved scoring/diversity helper ownership out of `src/search.rs` helper clusters:
+      - `select_diverse_top_builds`
+      - `compute_build_metrics`
+      - `pareto_front_keys`
+      - `select_diverse_top_candidates`
+      - `compute_build_metrics_for_candidate`
+      - `candidate_pareto_front_keys`
+      - `choose_best_build_by_stat`
+      - `item_names`
+    - rewired `src/search.rs` scoring/diversity facade paths to thin owner wrappers over `src/search/scoring/*`
+    - added focused scoring-module regression tests in:
+      - `src/search/scoring/tests/item_build_scoring_and_diversity_tests.rs`
+      - `select_diverse_top_builds_applies_gap_and_diversity_filters`
+      - `pareto_front_keys_excludes_dominated_entries`
+      - `src/search/scoring/tests/full_loadout_scoring_and_diversity_tests.rs`
+      - `select_diverse_top_candidates_applies_gap_and_diversity_filters`
+      - `candidate_pareto_front_keys_excludes_dominated_entries`
+      - `src/search/scoring/tests/stat_key_build_selection_tests.rs`
+      - `choose_best_build_by_stat_returns_empty_when_no_slots_requested`
+      - `choose_best_build_by_stat_respects_single_boot_constraint`
+      - `choose_best_build_by_stat_picks_highest_stat_bundle`
+      - `src/search/scoring/tests/item_name_list_formatting_tests.rs`
+      - `format_item_name_list_comma_separated_returns_empty_for_empty_list`
+      - `format_item_name_list_comma_separated_returns_single_name_without_separator`
+      - `format_item_name_list_comma_separated_joins_multiple_names_in_order`
+    - started `ARCH-030` by extracting scenario parsing ownership into:
+      - `src/scenario_runner/scenario_parsing.rs`
+    - moved scenario parser helper ownership out of `src/scenario_runner.rs` helper cluster:
+      - `parse_controlled_champion_config`
+      - `parse_scenario_search_or_default`
+    - rewired `src/scenario_runner.rs` parser call sites to consume `src/scenario_runner/scenario_parsing.rs` owner APIs
+    - continued `ARCH-030` by extracting encounter parser ownership into:
+      - `src/scenario_runner/encounter_parsing.rs`
+    - moved encounter parser/legacy-key validation helper ownership into typed owner APIs:
+      - `parse_opponent_encounters`
+      - `ParsedOpponentEncounter`
+    - rewired `src/scenario_runner.rs` encounter parse boundaries to consume `src/scenario_runner/encounter_parsing.rs` owner APIs
+    - continued `ARCH-030` by extracting run-output path/key ownership into:
+      - `src/scenario_runner/run_output_paths.rs`
+    - moved run-output helper ownership out of `src/scenario_runner.rs` helper cluster:
+      - `format_repo_relative_path`
+      - `search_quality_profile_key`
+      - `default_run_output_directory`
+      - `default_fixed_loadout_output_directory`
+      - `default_fixed_loadout_rune_sweep_output_directory`
+    - rewired `src/scenario_runner.rs` run-output path/reporting call sites to consume `src/scenario_runner/run_output_paths.rs` owner APIs
+    - continued `ARCH-030` by extracting scenario search-progress/runtime-counter ownership into:
+      - `src/scenario_runner/progress_reporting.rs`
+    - moved progress helper ownership out of `src/scenario_runner.rs` helper cluster:
+      - `initialize_search_type_counters`
+      - `increment_search_type_counter`
+      - `snapshot_search_type_counters`
+      - `unique_loadout_selection_count`
+      - `unique_loadout_selection_count_from_ranked`
+    - rewired `src/scenario_runner.rs` progress and diagnostics call sites to consume `src/scenario_runner/progress_reporting.rs` owner APIs
+    - continued `ARCH-030` by extracting strict-ranking and search-space estimation helper ownership into:
+      - `src/scenario_runner/strict_ranking_ordering.rs`
+      - `src/scenario_runner/search_space_estimation.rs`
+    - moved strict-ranking/search-space helper ownership out of `src/scenario_runner.rs` helper cluster:
+      - `heuristic_sort_remaining_candidates_for_strict_ranking`
+      - `estimated_legal_item_build_count`
+      - `estimated_legal_loadout_count`
+      - `estimate_close_to_optimal_probability`
+      - `format_percent_display`
+    - rewired `src/scenario_runner.rs` strict-ranking and diagnostics call sites to consume `src/scenario_runner/strict_ranking_ordering.rs` and `src/scenario_runner/search_space_estimation.rs` owner APIs
+    - started `ARCH-031` by extracting fixed-loadout execution entrypoints into:
+      - `src/scenario_runner/fixed_loadout_runner.rs`
+      - `src/scenario_runner/rune_sweep_runner.rs`
+    - moved execution-entrypoint implementation ownership out of `src/scenario_runner.rs`:
+      - `run_controlled_champion_fixed_loadout_evaluation`
+      - `run_controlled_champion_fixed_loadout_rune_sweep`
+    - rewired `src/scenario_runner.rs` to thin facade wrappers for fixed-loadout/rune-sweep entrypoints
+    - completed `ARCH-031` by extracting controlled-champion scenario execution entrypoint ownership into:
+      - `src/scenario_runner/controlled_champion_scenario_runner.rs`
+    - moved controlled-champion execution-entrypoint implementation ownership out of `src/scenario_runner.rs`:
+      - `run_controlled_champion_scenario`
+    - rewired `src/scenario_runner.rs` to a thin facade wrapper delegating to `run_controlled_champion_scenario_impl`
+    - started `ARCH-040` by extracting defaults owner module:
+      - `src/defaults/champion_item_simulation_defaults_loader.rs`
+    - moved champion/item simulation-default loader ownership out of `src/defaults.rs`:
+      - Vladimir cast/offensive/pool/policy defaults loaders
+      - Warwick/Vayne/Morgana/Sona/Doctor Mundo ability defaults loaders
+      - Zhonya/Guardian Angel/Protoplasm item simulation-default loaders
+      - related champion/item ability-effect extraction helpers
+    - rewired `src/defaults.rs` to keep typed `OnceLock` facade accessors while delegating loader internals to defaults owner module
+    - started `ARCH-041` by extracting data owner module:
+      - `src/data/champion_item_preset_data_loading.rs`
+    - moved champion/item/preset data loading ownership out of `src/data.rs`:
+      - champion base loading/lookup
+      - URF mode data loading
+      - item stat mapping/loading and item-pool legality helpers
+      - enemy preset loading/validation/loadout conversion
+    - rewired `src/data.rs` to keep parse/config/loadout-domain facade responsibilities while delegating champion/item/preset loader internals to data owner module
+    - added architecture progress metrics helper:
+      - `tools/architecture_metrics.sh`
+    - added focused parser regression coverage in `src/tests/scenario_runner_tests.rs`:
+      - `parse_controlled_champion_config_rejects_legacy_baseline_items_key`
+      - `parse_opponent_encounters_preserves_typed_encounter_fields`
+      - `default_run_output_directory_compacts_popcorn_window_when_equal_to_budget`
+      - `default_fixed_loadout_output_directory_normalizes_label_key`
+      - `format_repo_relative_path_uses_repository_relative_simulation_paths`
+      - `unique_loadout_selection_count_helpers_track_distinct_loadouts`
+      - `search_type_counter_helpers_dedupe_keys_and_report_touched_entries_only`
+      - `estimated_legal_item_build_count_applies_single_boot_constraint`
+      - `estimated_legal_loadout_count_matches_small_domain_combinatorics`
+      - `estimate_close_to_optimal_probability_reports_unavailable_when_space_missing`
+      - `format_percent_display_uses_scientific_notation_for_tiny_percent_values`
+      - `strict_ranking_heuristic_ordering_sorts_by_signal_when_enabled_without_promotions`
+      - `strict_ranking_heuristic_ordering_keeps_input_order_when_scores_are_flat`
+    - reduced `src/scenario_runner.rs` from `4284` lines to `936` lines while preserving behavior
+    - reduced `src/defaults.rs` from `2455` lines to `1435` lines while preserving behavior
+    - reduced `src/data.rs` from `2008` lines to `1400` lines while preserving behavior
+    - added focused event queue unit tests in `src/engine/event_queue/tests/event_queue_scheduler_tests.rs`
+    - added focused geometry unit tests in `src/engine/geometry/tests/geometry_module_tests.rs`
+    - reduced `src/engine.rs` from `3579` lines to `2778` lines while preserving behavior
+    - reduced `src/search.rs` from `2244` lines to `942` lines while preserving behavior
+    - re-ran full correctness/quality validation after progress-owner extraction with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - re-ran full correctness/quality validation after strict-ranking/search-space extraction with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - re-ran full correctness/quality validation after fixed-loadout/rune-sweep execution extraction with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - re-ran full correctness/quality validation after controlled-champion scenario execution extraction with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - re-ran full correctness/quality validation after defaults owner-module extraction with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - re-ran full correctness/quality validation after data owner-module extraction with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - kept full validation green (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+    - completed a correctness/quality review pass for the latest extraction slice:
+      - no behavioral regressions found in validation
+      - no direct facade writes remain for enemy attack-token progression or next-hit bonus consume/reset
+      - direct mutable enemy-state facade borrow count is now zero in `src/engine.rs`
+      - direct `enemy_state[idx]`/`enemy_state.get(...)` projection usage is now zero in `src/engine.rs`
+      - `src/engine.rs` `enemy_state` references now remain only at declaration/bootstrap sites
+      - `src/search.rs` full-loadout candidate mutation/canonicalization helper ownership now routes through candidate-space module boundaries
+      - `src/search.rs` full-loadout scoring/ranking and item-only candidate mutation/crossover/parent-selection helper ownership now route through candidate-space module boundaries
+      - `src/search.rs` item-only candidate scoring/dedupe helper ownership now routes through candidate-space module boundaries
+      - `src/search.rs` item-only and full-loadout strategy helper ownership now routes through strategy module boundaries (`src/search/strategy/*`)
+      - `src/search.rs` item-build/full-loadout metric projection, pareto-front, and diversity helper ownership now routes through scoring module boundaries (`src/search/scoring/*`)
+      - `src/search.rs` stat-key targeted item-build selection helper ownership now routes through scoring module boundaries (`src/search/scoring/stat_key_build_selection.rs`)
+      - `src/search.rs` item-name list formatting helper ownership now routes through scoring module boundaries (`src/search/scoring/item_name_list_formatting.rs`)
+  - linked both documents from `README.md` and `Simulation/README.md`
+  - added a mirrored roadmap item in `Simulation/IMPLEMENTATION_ROADMAP.md` for architecture modularization and ownership-channel hardening
 - Addressed latest PR review findings in build-order encounter handling:
   - raw enemy base lookup for build-order stage scaling now seeds from all configured encounters (not only the primary encounter), preventing fallback double-scaling for secondary-only actors
   - build-order worst-case stage blending now ignores zero-weight encounters, so explicitly disabled encounters do not penalize stage scores

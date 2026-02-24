@@ -7,13 +7,10 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 50.0
+      "flat": 55.0
     },
     "lethality": {
-      "flat": 15
-    },
-    "movespeed": {
-      "percent": 4.0
+      "flat": 21
     }
   },
   "passives": [],
@@ -21,8 +18,8 @@
     {
       "unique": true,
       "name": "Soul Anchor",
-      "effects": "Mark your current location. After 4 seconds, you automatically {{tip|blink}} to the marked location after a {{fd|0.5}}-second delay. ''Soul Anchor'' may be recast within its duration to manually blink to the marked location after the same delay (45 second cooldown, starts after the blink).",
-      "cooldown": 45.0
+      "effects": "Mark your current location. After 5 seconds, you return to the marked location. ''Soul Anchor'' may be recast within its duration to return early (15 second cooldown starts after the return).",
+      "cooldown": 15.0
     }
   ],
   "effects_structured": [
@@ -34,8 +31,8 @@
       "value": null,
       "value_range": null,
       "unit": null,
-      "duration_seconds": 4.0,
-      "cooldown_seconds": 45.0,
+      "duration_seconds": 5.0,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -45,65 +42,60 @@
       ],
       "scaling_terms": [],
       "numbers_extracted": [
-        4,
-        0.5,
-        45
+        5,
+        15
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "id": "spectral_cutlass_soul_anchor_auto_blink",
-      "raw": "After 4 seconds, blink to the marked location after a 0.5-second delay.",
+      "raw": "After 5 seconds, return to the marked location.",
       "effect_type": "blink",
       "stat": "position",
       "value": null,
       "value_range": null,
       "unit": null,
       "duration_seconds": null,
-      "cooldown_seconds": 45.0,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "on_anchor_expire",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "delay_seconds": 0.5,
       "numbers_extracted": [
-        4,
-        0.5,
-        45
+        5,
+        15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "spectral_cutlass_soul_anchor_recast_rule",
-      "raw": "Recast within the duration to blink early with the same delay (45s cooldown starts after blink).",
+      "raw": "Recast within the duration to return early; cooldown starts after return.",
       "effect_type": "recast_rule",
       "stat": "soul_anchor",
       "value": null,
       "value_range": null,
       "unit": null,
-      "duration_seconds": 4.0,
-      "cooldown_seconds": 45.0,
+      "duration_seconds": 5.0,
+      "cooldown_seconds": 15.0,
       "interval_seconds": null,
       "trigger": "on_recast",
       "applies_to": "self",
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "delay_seconds": 0.5,
       "numbers_extracted": [
-        4,
-        0.5,
-        45
+        5,
+        15
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
-      "total": 2800,
-      "sell": 1120
+      "total": 2500,
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -117,6 +109,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.075577+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Tier-1 dataset alignment review: updated stats and total price to Data Dragon 16.3.1 / CommunityDragon baseline (55 AD, 21 lethality, 2500 total).",
+      "Execution model review: Soul Anchor marks current location, returns after 5 seconds unless recast early, and cooldown starts after the return event."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Spectral Cutlass)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Spectral_Cutlass",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Soul Anchor timing semantics and cooldown-start behavior"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Spectral Cutlass.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

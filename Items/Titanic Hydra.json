@@ -76,13 +76,16 @@
       "area_of_effect": {
         "shape": "cone"
       },
+      "modifiers": {
+        "primary_and_secondary_damage_use_separate_melee_ranged_ratios": true
+      },
       "numbers_extracted": [
         1,
         0.5,
         3,
         1.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "raw": "Next basic attack within 10 seconds empowers Cleave: 4% (2% ranged) max health to primary and 9% (4.5% ranged) to secondary targets (10s cooldown).",
@@ -129,6 +132,10 @@
         }
       ],
       "buff_window_seconds": 10.0,
+      "modifiers": {
+        "cooldown_starts_after_empowered_attack": true,
+        "consumes_empower_on_next_basic_attack": true
+      },
       "area_of_effect": {
         "shape": "cone"
       },
@@ -140,13 +147,13 @@
         4.5,
         10
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 3300,
-      "sell": 1320
+      "sell": 2310
     },
     "purchasable": true,
     "tags": [
@@ -165,9 +172,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.076908+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Cleave damage differs for melee vs ranged (primary: 1% vs 0.5%; secondary: 3% vs 1.5%)."
+      "Cleave damage differs for melee vs ranged (primary: 1% vs 0.5%; secondary: 3% vs 1.5%).",
+      "Titanic Hydra is a health-scaling sustained DPS item for fighters and tanks: repeated cleave pressure with periodic empowered attack windows."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Titanic Hydra.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Titanic Hydra",
+      "url": "https://wiki.leagueoflegends.com/en-us/Titanic_Hydra",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of melee/ranged max-health ratios and empowered attack cooldown wording"
+    }
+  ]
 }

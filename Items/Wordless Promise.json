@@ -7,13 +7,13 @@
   ],
   "stats": {
     "abilityPower": {
-      "flat": 50.0
+      "flat": 50
     },
     "healAndShieldPower": {
-      "flat": 25.0
+      "flat": 25
     },
     "abilityHaste": {
-      "flat": 25.0
+      "flat": 25
     }
   },
   "passives": [
@@ -38,13 +38,17 @@
       "applies_to": "self",
       "source": "promised_ally",
       "conditions": [
-        "tethered_within_1250"
+        "tethered_within_1250",
+        "promised_ally_alive",
+        "self_alive"
       ],
       "stats": [
         "ability_power"
       ],
       "value": 0.2,
-      "unit": "ratio"
+      "unit": "ratio",
+      "trigger": "while_tethered",
+      "parse_confidence": 0.82
     },
     {
       "id": "wordless_promise_tether_share_haste",
@@ -53,13 +57,17 @@
       "applies_to": "promised_ally",
       "source": "self",
       "conditions": [
-        "tethered_within_1250"
+        "tethered_within_1250",
+        "promised_ally_alive",
+        "self_alive"
       ],
       "stats": [
         "ability_haste"
       ],
       "value": 0.2,
-      "unit": "ratio"
+      "unit": "ratio",
+      "trigger": "while_tethered",
+      "parse_confidence": 0.82
     },
     {
       "id": "wordless_promise_recalculate",
@@ -68,7 +76,9 @@
       "applies_to": "self",
       "conditions": [
         "tether_active"
-      ]
+      ],
+      "trigger": "on_stat_change_while_tethered",
+      "parse_confidence": 0.78
     },
     {
       "id": "wordless_promise_activate",
@@ -78,13 +88,18 @@
       "trigger": {
         "type": "on_activate"
       },
-      "tether_range_units": 1250
+      "tether_range_units": 1250,
+      "cooldown_seconds": 0,
+      "conditions": [
+        "target_ally_champion"
+      ],
+      "parse_confidence": 0.8
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1250
     },
     "purchasable": true,
     "tags": [
@@ -98,6 +113,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.069083+00:00",
-    "effects_structured_reviewed": "2026-02-12"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified Promise execution semantics from page-level source: active is a targeted ally-link cast (0s tooltip cooldown), and passive stat sharing applies only while tether conditions are met.",
+      "Promise link behavior note: passive stat-sharing is suspended while the item holder is dead."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Wordless Promise.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Wordless Promise",
+      "url": "https://wiki.leagueoflegends.com/en-us/Wordless_Promise",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formulas, and execution timing/targeting semantics"
+    }
+  ]
 }

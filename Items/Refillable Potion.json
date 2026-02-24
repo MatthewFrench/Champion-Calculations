@@ -12,16 +12,54 @@
       "effects": "Holds charges that refill upon visiting the [[shop]]."
     }
   ],
-  "active": [],
+  "active": [
+    {
+      "unique": true,
+      "name": "Active",
+      "effects": "Consumes a charge to restore health over time."
+    }
+  ],
   "effects_structured": [
     {
-      "raw": "Holds charges that refill upon visiting the shop.",
+      "id": "refillable_potion_consume_charge_heal_over_time",
+      "raw": "Consume a charge to restore 100 health over 12 seconds.",
+      "effect_type": "healing_over_time",
+      "stat": "health",
+      "value": 100,
+      "value_range": null,
+      "unit": "flat_total",
+      "duration_seconds": 12.0,
+      "cooldown_seconds": null,
+      "interval_seconds": 0.5,
+      "trigger": "on_activate",
+      "applies_to": "self",
+      "conditions": [
+        "consume_charge",
+        "cannot_activate_at_full_health",
+        "cannot_activate_in_spawn"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "charges_consumed_per_use": 1,
+        "tick_interval_seconds": 0.5
+      },
+      "numbers_extracted": [
+        2,
+        100,
+        12,
+        0.5
+      ],
+      "parse_confidence": 0.78
+    },
+    {
+      "raw": "Holds charges that refill upon visiting the shop (2 charges).",
       "id": "refillable_potion_refill_charges_on_visit_shop",
       "effect_type": "charge_refill_rule",
       "stat": "charges",
-      "value": null,
+      "value": 2,
       "value_range": null,
-      "unit": null,
+      "unit": "charges",
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
@@ -30,8 +68,13 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
-      "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "modifiers": {
+        "max_charges": 2
+      },
+      "numbers_extracted": [
+        2
+      ],
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
@@ -54,9 +97,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.018559+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Healing amount and number of charges are not encoded in this payload."
+      "Refillable Potion is modeled as charge-gated sustain: each activation consumes one charge and heals over time.",
+      "In-game behavior note: activation is treated as unavailable at full health and in allied spawn."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Refillable Potion.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "League of Legends Wiki - Refillable Potion",
+      "url": "https://wiki.leagueoflegends.com/en-us/Refillable_Potion",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of charge count, consume activation behavior, and heal-over-time amount/timing"
+    }
+  ]
 }

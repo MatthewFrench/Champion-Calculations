@@ -7,13 +7,13 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 55.0
+      "flat": 55
     },
     "health": {
-      "flat": 350.0
+      "flat": 350
     },
     "abilityHaste": {
-      "flat": 20.0
+      "flat": 20
     }
   },
   "passives": [
@@ -34,7 +34,7 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 1.5,
       "interval_seconds": null,
       "trigger": "on_next_basic_attack_after_ability",
       "applies_to": "enemy_unit_hit",
@@ -65,7 +65,8 @@
         "min_base_attack_damage_ratio": 1.8
       },
       "timing": {
-        "window_seconds": 10.0
+        "window_seconds": 10,
+        "cooldown_starts_on": "empowered_attack_hit"
       },
       "numbers_extracted": [
         10,
@@ -74,7 +75,7 @@
         2,
         180
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.78
     },
     {
       "id": "divine_sunderer_spellblade_heal",
@@ -110,14 +111,18 @@
         55,
         1.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.78
     }
   ],
   "shop": {
     "purchasable": true,
     "tags": [
       "FIGHTER"
-    ]
+    ],
+    "prices": {
+      "total": 1000,
+      "sell": 400
+    }
   },
   "icon": "https://raw.communitydragon.org/16.3/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6632_fighter_t4_divinedevourer.png",
   "simpleDescription": null,
@@ -129,6 +134,38 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.033278+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified page-level Spellblade semantics: empowered attack window is 10 seconds, damage branch applies 180% base AD plus 4%/2% target max health (melee/ranged) with a minimum floor at 180% base AD.",
+      "Heal branch is champion-only and uses 55% of Spellblade damage value; internal cooldown is 1.5 seconds and starts after the empowered attack is consumed.",
+      "Mode-availability note: this distributed item is Arena-scoped (Prismatic Anvil source); treat non-Arena availability as mode-gated.",
+      "Economy representation note: Tier-1 datasets expose distributed-item gold fields (total 1000 / sell 400); these values are retained for reconciliation while acquisition remains Prismatic Item Anvil/mode-scoped rather than standard shop purchase."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Divine Sunderer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Divine Sunderer",
+      "url": "https://wiki.leagueoflegends.com/en-us/Divine_Sunderer",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Spellblade window, melee/ranged max-health ratios, heal branch, and cooldown-start timing"
+    }
+  ]
 }

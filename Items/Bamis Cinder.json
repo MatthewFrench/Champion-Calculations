@@ -23,27 +23,95 @@
   "active": [],
   "effects_structured": [
     {
-      "id": "bamis_cinder_immolate_aura",
-      "raw": "Immolate: deal 15 magic damage per second for 3s to nearby enemies (325 units), increased vs minions/monsters.",
-      "effect_type": "damage",
+      "id": "bamis_cinder_immolate_activate_on_damage_dealt_or_taken",
+      "raw": "Taking or dealing damage activates Immolate for 3 seconds.",
+      "effect_type": "apply_status",
+      "stat": "immolate",
+      "value": null,
+      "value_range": null,
+      "unit": null,
+      "duration_seconds": 3.0,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_damage_dealt_or_taken",
+      "applies_to": "self",
+      "conditions": [],
+      "status_effects": [
+        "immolate"
+      ],
+      "scaling_terms": [],
+      "numbers_extracted": [
+        3
+      ],
+      "parse_confidence": 0.73
+    },
+    {
+      "id": "bamis_cinder_immolate_aura_magic_damage_per_second",
+      "raw": "Immolate deals 15 magic damage per second to nearby enemies (325 radius, increased by bonus size), with increased damage against minions and monsters.",
+      "effect_type": "damage_over_time",
       "stat": "magic_damage",
       "value": 15,
+      "value_range": null,
       "unit": "flat_per_second",
-      "duration_seconds": 3,
-      "interval_seconds": 1,
-      "range_units": 325,
-      "trigger": "aura",
-      "applies_to": "enemy",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": 1.0,
+      "trigger": "on_immolate_tick",
+      "applies_to": "enemies_in_radius",
       "conditions": [
-        "immediately_after_damage"
+        "immolate_active"
       ],
-      "parse_confidence": 0.8
+      "status_effects": [],
+      "scaling_terms": [],
+      "area_of_effect": {
+        "shape": "circle",
+        "radius_units": 325,
+        "scales_with_bonus_size": true
+      },
+      "damage_multipliers": {
+        "minions": 1.5,
+        "monsters": 2.0
+      },
+      "numbers_extracted": [
+        15,
+        325,
+        100,
+        150,
+        200
+      ],
+      "parse_confidence": 0.74
+    },
+    {
+      "id": "bamis_cinder_immolate_execute_minions_below_next_tick_threshold",
+      "raw": "Immolate executes minions that would be killed by one more tick of damage.",
+      "effect_type": "execute",
+      "stat": "minion_health_threshold",
+      "value": null,
+      "value_range": null,
+      "unit": "next_tick",
+      "duration_seconds": null,
+      "cooldown_seconds": null,
+      "interval_seconds": null,
+      "trigger": "on_immolate_tick",
+      "applies_to": "minion",
+      "conditions": [
+        "immolate_active"
+      ],
+      "status_effects": [],
+      "scaling_terms": [],
+      "modifiers": {
+        "applies_to_minions_only": true,
+        "execute_threshold_equals_next_immolate_tick_damage": true,
+        "threshold_uses_current_immolate_scaling_and_multipliers": true
+      },
+      "numbers_extracted": [],
+      "parse_confidence": 0.71
     }
   ],
   "shop": {
     "prices": {
       "total": 900,
-      "sell": 360
+      "sell": 630
     },
     "purchasable": true,
     "tags": [
@@ -59,6 +127,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:56:19.712771+00:00",
-    "effects_structured_reviewed": "Manual batch review A-items chunk 1."
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution-semantics review: Immolate is a refreshed 3-second aura state that activates when the holder deals or takes damage, not a one-time instant effect.",
+      "Player-visible behavior: while Immolate is active, the aura ticks every second in a 325 (+100% bonus size) radius for 15 magic damage with 150%/200% minion/monster multipliers.",
+      "Minion execute behavior is modeled as a next-tick threshold check that should resolve from the current Immolate tick damage and multipliers."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Bamis Cinder.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Bami's Cinder",
+      "url": "https://wiki.leagueoflegends.com/en-us/Bami%27s_Cinder",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Immolate activation window, aura radius/tick cadence, minion/monster multipliers, and minion-execute wording"
+    }
+  ]
 }

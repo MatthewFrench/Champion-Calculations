@@ -6,7 +6,7 @@
     "BASIC"
   ],
   "stats": {
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 15.0
     }
   },
@@ -16,7 +16,7 @@
   "shop": {
     "prices": {
       "total": 600,
-      "sell": 240
+      "sell": 420
     },
     "purchasable": true,
     "tags": [

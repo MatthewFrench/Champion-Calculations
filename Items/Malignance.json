@@ -49,7 +49,7 @@
       "numbers_extracted": [
         20
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.72
     },
     {
       "id": "hatefog_create_scorched_zone_on_ultimate_damage",
@@ -63,7 +63,7 @@
       },
       "unit": "units",
       "duration_seconds": 3.0,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 3.0,
       "interval_seconds": null,
       "trigger": "on_ultimate_damage_to_champion",
       "applies_to": "ground",
@@ -80,14 +80,24 @@
           "formula": "250 + 2^(damage_dealt/100)"
         }
       ],
+      "modifiers": {
+        "radius_formula": "250 + 2^(ultimate_damage_instance/100)",
+        "radius_clamp_units": {
+          "min": 250,
+          "max": 823
+        },
+        "cooldown_scope": "per_target",
+        "cooldown_starts_on_zone_creation": true
+      },
       "numbers_extracted": [
         250,
         823,
         3,
-        2,
-        100
+        3,
+        100,
+        2
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.65
     },
     {
       "id": "hatefog_curse_magic_damage_over_time_in_zone",
@@ -118,6 +128,11 @@
         "base": 180,
         "ap_ratio": 0.15
       },
+      "modifiers": {
+        "base_magic_damage_per_tick": 15,
+        "ability_power_ratio_per_tick": 0.0125,
+        "tick_count_over_duration": 12
+      },
       "numbers_extracted": [
         60,
         4,
@@ -126,7 +141,7 @@
         0.25,
         3
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.7
     },
     {
       "id": "hatefog_reduce_magic_resistance_of_cursed_enemies",
@@ -146,17 +161,22 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "applies_while_cursed": true,
+        "cooldown_scope": "per_target",
+        "cooldown_starts_on_zone_creation": true
+      },
       "numbers_extracted": [
         10,
         3
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2700,
-      "sell": 1080
+      "sell": 1890
     },
     "purchasable": true,
     "tags": [
@@ -173,9 +193,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.043758+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Scorched zone radius scales with ultimate damage instance (formula: 250 + 2^(damage_dealt/100))."
+      "Scorched zone radius scales with ultimate damage instance (formula: 250 + 2^(damage_dealt/100)).",
+      "Malignance is modeled as an ultimate-linked zone control amplifier: ultimate hit creates scorched terrain that applies repeated magic damage and magic resistance reduction."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Malignance.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Malignance",
+      "url": "https://wiki.leagueoflegends.com/en-us/Malignance",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Hatefog zone radius, damage cadence, and per-target cooldown semantics"
+    }
+  ]
 }

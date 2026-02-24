@@ -38,7 +38,9 @@
       "interval_seconds": null,
       "trigger": "aura",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "within_700_units"
+      ],
       "status_effects": [
         "cripple"
       ],
@@ -48,13 +50,13 @@
         700,
         20
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 2500,
-      "sell": 1000
+      "sell": 1750
     },
     "purchasable": true,
     "tags": [
@@ -71,6 +73,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.061432+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Winter's Caress is a persistent aura debuff centered on the owner that applies Cripple to enemy champions within 700 units.",
+      "Player-visible behavior: enemy champions entering aura range have attack speed reduced by 20% while in range."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Frozen Heart)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Frozen_Heart",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Winter's Caress aura range and attack-speed reduction semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Frozen Heart.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

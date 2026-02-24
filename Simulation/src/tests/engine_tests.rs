@@ -178,12 +178,7 @@ fn test_urf() -> UrfBuffs {
 
 fn scheduled_enemy_attack_time(runner: &ControlledChampionCombatSimulation, idx: usize) -> f64 {
     runner
-        .event_queue
-        .iter()
-        .find_map(|event| match event.kind {
-            EventType::Attack(event_idx) if event_idx == idx => Some(event.time),
-            _ => None,
-        })
+        .enemy_next_attack_ready_at(idx)
         .expect("enemy auto attack should be scheduled")
 }
 
@@ -338,6 +333,220 @@ fn combat_seed_changes_enemy_attack_jitter_deterministically() {
 
     assert_ne!(attack_time_a, attack_time_b);
     assert!((attack_time_a - attack_time_a_repeat).abs() < 1e-12);
+}
+
+#[test]
+fn enemy_attack_sequence_owner_methods_advance_and_invalidate_old_tokens() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let sim = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+
+    let first_token = runner
+        .begin_enemy_attack_sequence(0)
+        .expect("enemy index should be valid");
+    assert!(runner.enemy_attack_sequence_matches(0, first_token));
+
+    let second_token = runner
+        .begin_enemy_attack_sequence(0)
+        .expect("enemy index should be valid");
+    assert_ne!(first_token, second_token);
+    assert!(!runner.enemy_attack_sequence_matches(0, first_token));
+    assert!(runner.enemy_attack_sequence_matches(0, second_token));
+}
+
+#[test]
+fn enemy_attack_bonus_physical_is_consumed_once_and_resets_after_hit() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let sim = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+
+    let bonus = 42.0;
+    runner
+        .apply_enemy_next_attack_bonus_physical(0, bonus)
+        .expect("enemy index should be valid");
+
+    let first = runner
+        .consume_enemy_attack_damage_with_on_hit(0, 1000.0, 1000.0)
+        .expect("enemy index should be valid");
+    let second = runner
+        .consume_enemy_attack_damage_with_on_hit(0, 1000.0, 1000.0)
+        .expect("enemy index should be valid");
+
+    assert!((first.0 - second.0 - bonus).abs() < 1e-9);
+}
+
+#[test]
+fn enemy_script_epoch_and_ready_queries_read_owner_state() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let sim = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+
+    assert!(runner.enemy_script_epoch_matches(0, 0));
+    assert_eq!(
+        runner.enemy_script_event_ready_at_or_zero(0, ChampionScriptEvent::SonaCrescendo),
+        0.0
+    );
+
+    runner.set_enemy_script_event_ready_at(0, ChampionScriptEvent::SonaCrescendo, 3.25);
+    assert_eq!(
+        runner.enemy_script_event_ready_at_or_zero(0, ChampionScriptEvent::SonaCrescendo),
+        3.25
+    );
+}
+
+#[test]
+fn enemy_script_execution_owner_method_generates_actions_for_in_range_event() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let sim = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+
+    let actions = runner.execute_enemy_script_event_actions(
+        0,
+        ChampionScriptEvent::SonaCrescendo,
+        100.0,
+        1200.0,
+        2000.0,
+        0.0,
+    );
+    assert!(!actions.is_empty());
+}
+
+#[test]
+fn enemy_aftershock_owner_method_is_zero_without_aftershock_rune() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let sim = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+
+    let aftershock_damage = runner.enemy_aftershock_magic_damage_on_immobilize(0);
+    assert_eq!(aftershock_damage, 0.0);
+}
+
+#[test]
+fn enemy_read_projection_owner_queries_return_expected_shapes() {
+    let controlled_champion = test_controlled_champion_base();
+    let enemies = vec![(test_enemy("Sona"), Vec::new(), Stats::default())];
+    let sim = test_simulation(2.0, false);
+    let urf = test_urf();
+    let runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        sim,
+        urf,
+    );
+
+    assert_eq!(runner.enemy_name(0).as_deref(), Some("Sona"));
+    assert!(runner.enemy_position(0).is_some());
+    assert!(
+        runner
+            .enemy_attack_interval_seconds(0, runner.tick_seconds(), 0.1)
+            .expect("enemy index should be valid")
+            > 0.0
+    );
+    assert!(
+        runner
+            .enemy_hitbox_radius(0)
+            .expect("enemy index should be valid")
+            > 0.0
+    );
+    assert!(
+        runner
+            .enemy_attack_range(0)
+            .expect("enemy index should be valid")
+            > 0.0
+    );
+    assert!(
+        runner
+            .enemy_attack_windup_seconds(0)
+            .expect("enemy index should be valid")
+            >= 0.0
+    );
+    assert!(
+        runner
+            .enemy_attack_projectile_speed(0)
+            .expect("enemy index should be valid")
+            >= 0.0
+    );
+    assert!(
+        runner
+            .enemy_attack_effect_hitbox_radius(0)
+            .expect("enemy index should be valid")
+            >= 0.0
+    );
+    let snapshot = runner
+        .enemy_trace_snapshot_at(0, 0.0)
+        .expect("enemy index should be valid");
+    assert_eq!(snapshot.name, "Sona");
+    assert!(snapshot.attack_speed > 0.0);
+    assert!(snapshot.attack_interval_seconds > 0.0);
+    assert!(!snapshot.scripted_ability_cooldowns.is_empty());
+    assert!(runner.enemy_trace_snapshot_at(99, 0.0).is_none());
+    assert_eq!(
+        runner.enemy_target_health_snapshot_or_defaults(99),
+        (0.0, 1.0)
+    );
+    assert_eq!(
+        runner.enemy_status_lines_at(99, 0.0),
+        vec!["none".to_string()]
+    );
 }
 
 #[test]
@@ -967,7 +1176,7 @@ fn pool_tick_moving_ranged_target_can_exit_range_before_tick() {
         y: 0.0,
     };
 
-    runner.update_actor_positions(0.5);
+    runner.apply_enemy_movement_step(0.5);
     assert!(
         runner.distance_to_target(0) > boundary_distance,
         "target should have moved outside pool range before tick"
@@ -1061,10 +1270,10 @@ fn controlled_champion_range_checks_respect_effect_hitbox_radius() {
         y: 0.0,
     };
 
-    let (_, without_effect_hitbox_hits) =
-        runner.apply_magic_damage_to_enemies_in_controlled_champion_range(40.0, 200.0, 0.0);
-    let (_, with_effect_hitbox_hits) =
-        runner.apply_magic_damage_to_enemies_in_controlled_champion_range(40.0, 200.0, 10.0);
+    let (_, without_effect_hitbox_hits) = runner
+        .apply_incoming_magic_damage_to_enemies_in_controlled_champion_range(40.0, 200.0, 0.0);
+    let (_, with_effect_hitbox_hits) = runner
+        .apply_incoming_magic_damage_to_enemies_in_controlled_champion_range(40.0, 200.0, 10.0);
 
     assert_eq!(without_effect_hitbox_hits, 0);
     assert_eq!(with_effect_hitbox_hits, 1);

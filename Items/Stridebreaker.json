@@ -156,14 +156,18 @@
       "conditions": [],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "can_move_while_casting": true,
+        "applies_during_breaking_shockwave_cast": true
+      },
       "numbers_extracted": [],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.7
     }
   ],
   "shop": {
     "prices": {
       "total": 3300,
-      "sell": 1320
+      "sell": 2310
     },
     "purchasable": true,
     "tags": [
@@ -181,9 +185,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.018804+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
-      "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
+      "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
+      "Stridebreaker is a fighter gap-closing and sticking tool: short-range area burst, slow, and temporary speed burst to continue melee pressure.",
+      "Movement-during-cast behavior is scoped to Breaking Shockwave activation for close-range engage and chase continuity."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Stridebreaker.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Stridebreaker",
+      "url": "https://wiki.leagueoflegends.com/en-us/Stridebreaker",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of active and movement-during-cast semantics"
+    }
+  ]
 }

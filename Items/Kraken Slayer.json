@@ -45,17 +45,19 @@
       ],
       "scaling_terms": [],
       "stack_rules": {
-        "max_stacks": 2
+        "max_stacks": 2,
+        "stack_duration_seconds": 3.0,
+        "consumed_by_effect_id": "bring_it_down_consume_stacks_for_bonus_physical_damage"
       },
       "numbers_extracted": [
         3,
         2
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.7
     },
     {
       "id": "bring_it_down_consume_stacks_for_bonus_physical_damage",
-      "raw": "At 2 stacks, the next basic attack consumes all stacks to deal {{as {{rd 150 + (200-150)/10*(x-1) for 13 150*0.8 + (200*0.8-150*0.8)/10*(x-1) for 13 levels=1;9 to 20 pp=true}} '''bonus''' physical damage physical damage}} on-hit, increased by {{pp 0 to 75 by 5 0 to 100 key=% color=health type=target's '''missing''' health key1=%}}, for up to {{as {{rd 150*1.75 + (200*1.75-150*1.75)/10*(x-1) for 13 150*0.8*1.75 + (200*0.8*1.75-150*0.8*1.75)/10*(x-1) for 13 levels=1;9 to 20 pp=true}} '''bonus''' physical damage physical damage}}.",
+      "raw": "At 2 stacks, the next basic attack consumes all stacks to deal 150 to 200 (120 to 160 ranged) bonus physical damage on-hit, increased by up to 75% based on target missing health.",
       "effect_type": "damage",
       "stat": "physical_damage",
       "value": 150,
@@ -78,78 +80,56 @@
       "trigger": "on_hit",
       "applies_to": "enemy_unit_hit",
       "conditions": [
-        "kraken_slayer_stacks_2"
+        "kraken_slayer_stacks_2",
+        "next_basic_attack"
       ],
       "status_effects": [
         "consume_kraken_slayer_stacks"
       ],
-      "scaling_terms": [],
+      "scaling_terms": [
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 150,
+          "max": 200,
+          "qualifier": "melee"
+        },
+        {
+          "stat": "level",
+          "type": "linear",
+          "min": 120,
+          "max": 160,
+          "qualifier": "ranged"
+        }
+      ],
       "missing_health_scaling": {
         "max_bonus_ratio": 0.75,
-        "scales_to": 1.0,
-        "metric": "target_missing_health_percent"
+        "metric": "target_missing_health_percent",
+        "interpolation": "linear_0_to_100"
       },
       "caps": {
         "max_damage_multiplier": 1.75
+      },
+      "modifiers": {
+        "consumes_all_kraken_slayer_stacks": true,
+        "max_missing_health_bonus_ratio": 0.75
       },
       "numbers_extracted": [
         2,
         150,
         200,
-        -150,
-        10,
-        -1,
-        13,
-        150,
-        0.8,
-        200,
-        0.8,
-        -150,
-        0.8,
-        10,
-        -1,
-        13,
-        1,
-        9,
-        20,
-        0,
+        120,
+        160,
         75,
-        5,
-        0,
-        100,
-        1,
-        150,
-        1.75,
-        200,
-        1.75,
-        -150,
-        1.75,
-        10,
-        -1,
-        13,
-        150,
-        0.8,
-        1.75,
-        200,
-        0.8,
-        1.75,
-        -150,
-        0.8,
-        1.75,
-        10,
-        -1,
-        13,
-        1,
-        9,
-        20
+        175
       ],
-      "parse_confidence": 0.55
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
     "prices": {
       "total": 3000,
-      "sell": 1200
+      "sell": 2100
     },
     "purchasable": true,
     "tags": [
@@ -165,6 +145,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.052690+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Kraken Slayer is modeled as sustained anti-frontline damage: stack on-hit attacks, then convert the third hit into a level-scaled physical burst with missing-health amplification.",
+      "Stack window is a short rolling cadence (3-second stack lifetime), reinforcing continuous attacks for reliable proc timing."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Kraken Slayer.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Kraken Slayer",
+      "url": "https://wiki.leagueoflegends.com/en-us/Kraken_Slayer",
+      "accessed": "2026-02-23",
+      "used_for": "effect wording and scaling clarification for structured effects"
+    }
+  ]
 }

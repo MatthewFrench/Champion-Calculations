@@ -1,38 +1,388 @@
-# Coverage Gaps Tracker (2026-02-19)
+# Coverage Gaps Tracker (2026-02-24)
 
-This file tracks known fidelity and coverage gaps against game-accurate behavior.
+This file tracks what is complete and not complete for coverage across data and runtime code.
 
-## Coverage Snapshot
-- Champion data files in repo: `6` (`DrMundo`, `Morgana`, `Sona`, `Vayne`, `Vladimir`, `Warwick`)
-- Controlled champion script coverage: `1/6` (`Vladimir` only)
-- Enemy scripted-event champion coverage: `5/6` (`Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`; `Vladimir` missing as enemy script actor)
-- Legal URF legendary item pool used by search: `114`
-- Legal pool items with passive/active/structured effect payload: `112`
-- Legal pool item effect scripts modeled in runtime: `9`
-- Legal pool item effect payloads unmodeled in runtime: `103`
-- Rune count in `RunesReforged`: `61`
-- Dynamic combat-time rune effects modeled: `16`
-- Deterministic static rune effects modeled: `6`
-- Runes with no modeled deterministic effect and no modeled combat-time effect: `39`
+## How To Use This File
+1. Read **Coverage At A Glance** for the current status.
+2. Use the domain sections to find exactly what is missing.
+3. Update this file whenever modeled sets, counts, or fidelity assumptions change.
+4. Keep this file aligned with:
+   - `Simulation/CURRENT_STATE.md`
+   - `Simulation/COVERAGE_CHECKLIST.md`
+   - `Simulation/COVERAGE_STANDARDS.md`
 
-## Champion And Ability Gaps
+## Coverage Quality Standards
+- Use `Simulation/COVERAGE_STANDARDS.md` to determine the expected data/code/test quality bar for each category before adding or claiming coverage.
+- Use this file (`COVERAGE_GAPS.md`) to track what is complete vs incomplete after those standards are applied.
+
+## Active Focus (Data-First)
+- Current priority is data coverage quality and provenance improvements.
+- Runtime/code expansion items are documented below as deferred backlog for later execution.
+
+## Coverage At A Glance
+| Domain | Data Coverage | Runtime Coverage | Current Gap |
+| --- | --- | --- | --- |
+| Champion files | `6/6` champions have canonical sections (`base_stats`, `basic_attack`, `abilities`) | N/A | No structural data gap |
+| Controlled champion scripts | `6/6` champions have canonical ability data | `1/6` (`Vladimir`) | `5` champions missing controlled scripts |
+| Enemy scripted-event champions | `6/6` champions have canonical ability data | `5/6` (`Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`) | `Vladimir` has no enemy scripted events |
+| Item files | `322` JSON files (`295` loaded by runtime after excluded ranks) | Runtime effect coverage is a subset of legal URF pool | Effect behavior not modeled for many items |
+| Legal URF legendary pool | `113` items | `9` items with modeled runtime effects (of `111` with effect payload) | `102` legal items still unmodeled at runtime |
+| RunesReforged runes | `61` runes | `22` modeled (`16` dynamic + `6` deterministic static) | `39` runes unmodeled |
+| Stat shards | `3` slots (`2` options each) | Deterministic parse covers shard stats | Tenacity runtime effect incomplete |
+
+## Deferred Runtime Expansion Backlog (Expand Later)
+- Expand controlled champion script coverage beyond `Vladimir` using the existing capability interface.
+- Add full enemy-script event-path tests (cooldown, range, and followup behavior per event).
+- Unify rune runtime key mapping and telemetry key mapping to one canonical table.
+- Complete runtime tenacity behavior application for shard-supported tenacity stats.
+- Add explicit opt-in bug-emulation runtime pathways (intended behavior remains default) for known bug-divergence scenarios tracked in coverage docs.
+- Add ally-target chain/fallback runtime resolution support for `Moonstone Renewer` Starlit Grace (nearest-other-ally within 800 units, else same-target fallback).
+- Add runtime support for charge-based Manaflow progression and transform thresholds (`Archangel's Staff`, `Whispering Circlet`, `Winter's Approach`) so stack/cap/transform behavior can be simulated directly.
+- Add runtime support for visibility-gated prep buffs and champion-only consume triggers (`Umbral Glaive` Nightstalker unseen/seen windows and empowered-hit consume branch).
+- Add runtime support for movement-state stack engines with max-stack trail aura windows and melee consume-on-next-hit branching (`Trailblazer` Momentum).
+- Add runtime support for owner attack-type split duration/value branches and on-CC ally-aura activation (`Bandlepipes` Fanfare melee/ranged variance).
+- Add runtime support for explicit on-attack trigger class and cooldown-reduction-on-hit/crit rules (`Yun Tal Wildarrows` Practice/Flurry timing model).
+- Add mode-aware gating support for resource-cost multiplier branches when mode rules set ability costs to zero (`Actualizer` in URF).
+- Add runtime support for ally-link ownership constraints and dead-state passive suspension (`Wordless Promise` Promise tether and stat-sharing behavior).
+- Add runtime support for Quicksilver-group cooldown isolation and expanded cleanse subtype handling (`Quicksilver Sash` airborne activation lockout plus suppression/nearsight scope).
+
+## Data Quality Gap Snapshot (2026-02-24 Audit, Updated)
+| Data Area | Current State | Gap |
+| --- | --- | --- |
+| Item provenance (`Items/*.json` with `effects_structured`) | `0/243` have `sources: null` | Provenance backlog is cleared; keep this as a no-regression guardrail |
+| Item source metadata completeness (`sources[].accessed`) | `0/243` structured item files have source entries missing `accessed` date metadata | Structured-item source metadata normalization is complete; keep this as a no-regression guardrail |
+| Item review metadata (`effects_structured_reviewed`) | `0` missing, `0` non-ISO format | Legacy non-ISO values normalized; enforce ISO format on new edits |
+| Item parse confidence | `0` item files have `parse_confidence < 0.65` | Low-confidence backlog is cleared; keep this as a no-regression guardrail |
+| Modeled runtime item data precision | `0/9` modeled runtime item files have minimum numeric `parse_confidence <= 0.60`; `0/9` remain at `0.65`; `0/9` have missing numeric confidence | Modeled runtime confidence floor is now >= `0.70`; maintain this as a no-regression guardrail |
+| Legal URF unmodeled item provenance | `0/102` legal unmodeled effect items still have `sources: null` | High-impact legal URF provenance backlog is cleared; maintain this as a guardrail |
+| Secondary citation depth | `243/243` item files with `effects_structured` include Tier-2 citations (`CommunityDragon` and/or League Wiki) | Tier-2 dataset coverage is complete; maintain for new updates |
+| Page-level formula citation depth | `202/243` item files include page-level League Wiki item citations | Continue expanding page-level provenance across remaining complex/non-trivial items |
+| Higher-priority no-page citation queue (`EPIC`/`LEGENDARY`/`BOOTS`/`STARTER`) | `14` files remain without page-level citation (`Armored Advance`, `Black Spear`, `Boots of Swiftness`, `Cull`, `Ghostcrawlers`, `Guardian's Amulet`, `Guardian's Horn`, `Guardian's Orb`, `Ionian Boots of Lucidity`, `Plated Steelcaps`, `Recurve Bow`, `Scout's Slingshot`, `Swiftmarch`, `Zephyr`) | Use this subset as the next page-depth wave queue before lower-impact/noise entries |
+| Low-confidence page-verification queue | `0/0` low-confidence item files (`parse_confidence < 0.65`) lack page-level citation | Queue is cleared; keep this as a no-regression guardrail |
+| Legal URF unmodeled page-level citation depth | `0/102` legal-URF unmodeled effect items still have no page-level citation | Queue is cleared; keep this as a no-regression guardrail while expanding broader page-depth coverage |
+| CommunityDragon source URL accessibility | `0/243` structured item files still cite legacy `global/en_us/v1/items.json` source URLs | Endpoint migration is complete; keep URL-health checks as a no-regression guardrail |
+| Canonical sell-price alignment | `3/238` item files with numeric sell values differ from Data Dragon `16.3.1` sell values (`World Atlas`, `Runic Compass`, `Bounty of Worlds`) | All current mismatches are intentional page-level No Sell overrides for support-quest staging; keep this explicit exception register |
+| Item stat-key canonicalization | `0/322` item files use legacy `stats.magicResistance` key (`30` files normalized to `stats.magicResist`) | Canonical key normalization is complete; keep this as a no-regression guardrail to avoid silent magic-resist stat drops in loader parsing |
+| Crit-stat key canonicalization | `0/322` item files use legacy `stats.criticalStrikeChance` keys (`22` files normalized in dedicated wave plus opportunistic early migration on `Navori Flickerblade`) | Canonical crit stat-key normalization is complete; keep this as a no-regression guardrail |
+| Canonical total-cost alignment | `1/239` item files with numeric total price differ from Data Dragon `16.3.1` due ID/version drift (`Zephyr` file uses legacy identity on ID `3172`, now `Gunmetal Greaves` in Tier-1 datasets) | Track explicit legacy-ID exception policy and resolve canonicalization strategy for mixed-epoch item identities |
+| Legacy/retired item exclusion markers | `1` file (`Zephyr`) currently uses explicit `lifecycle.exclude_from_simulation = true` metadata | Standardize lifecycle-marker policy for any additional retired/replaced identities so legacy data does not enter live simulation pools |
+| Rotating-mode availability lifecycle policy | `Wordless Promise`, `Perplexity`, and `Atma's Reckoning` now include page-level notes indicating rotating-mode/patch-history availability variance | Define canonical lifecycle/availability policy for rotating-mode-only item identities so simulation pools remain intentionally scoped |
+| Distributed-item economy semantics | `10/57` distributed/prismatic item files now include explicit `shop.prices`; `47` still omit economy fields | Continue rollout of explicit distributed-item economy representation while keeping non-shop acquisition semantics documented in context notes; resolve Tier-1-vs-page economy drift for distributed pages that show `Cost 0 / Sell 2000` while Tier-1 datasets expose `1000 / 400` |
+| Distributed-item mode-availability drift semantics | `Divine Sunderer`, `Goredrinker`, `Prowler's Claw`, `Gargoyle Stoneplate`, `Duskblade of Draktharr`, `Everfrost`, `Night Harvester`, `Radiant Virtue`, and `Moonflair Spellblade` now include page-verified Arena-scoped availability/context notes | Finalize canonical policy for dataset-vs-page availability/map-flag drift and mode overlays for distributed/prismatic identities (including `Prowler's Claw` map-flag divergence) |
+| Rotating-mode stat-package drift semantics | `Atma's Reckoning` and `Perplexity` now include page-level patch-history context notes showing alternate rotating-mode stat/cost packages versus Tier-1 baseline snapshots | Define canonical policy for representing mode-variant stat/cost packages when Tier-1 baseline and rotating-mode pages diverge |
+| Mode-scoped sudden-death timing semantics | `Overcharged` now encodes Clash Sudden Death timing with documented Swiftplay variance in context notes | Define canonical policy for shared-ID items whose timing/values differ by mode (inline mode conditions vs mode-owned overlays) |
+| Dragonheart late-acquisition stack semantics | `Dragonheart` now documents that acquisition-round immediate soul-grant behavior exists in patch-history notes but is not encoded | Decide whether to model acquisition-round soul backfill/phase timing as canonical structured data or keep as documented non-modeled behavior |
+| Champion-ability upgrade pseudo-item semantics | `Fire at Will` now documents Gangplank-ultimate-upgrade coupling and redirect-based source provenance | Define canonical policy for pseudo-item upgrade entries (source requirements, rank/tag conventions, and simulation eligibility expectations) |
+| Moonstone ally-chain runtime follow-up | `Moonstone Renewer` now documents nearest-other-ally chain targeting, same-target fallback branch, and 800-unit scope in structured/context notes | Add runtime ally-target selection + fallback chain-resolution support (deferred code work) so Starlit Grace behavior is simulation-faithful |
+| Manaflow charge/transform runtime follow-up | `Archangel's Staff`, `Whispering Circlet`, and `Winter's Approach` now encode page-verified charge cadence, consume triggers, and transform thresholds with clearer execution notes | Add runtime charge-state and transform-threshold support so stack/cap progression is simulation-faithful when these items are modeled |
+| Promise tether runtime follow-up | `Wordless Promise` now documents dead-state passive suspension, tether-gated stat sharing, and active link constraints with page-level verification | Add runtime ally-link ownership, dead-state suspension, and dynamic stat-link recalculation support for Promise behavior |
+| Visibility/movement/on-attack runtime follow-up | `Actualizer`, `Bandlepipes`, `Trailblazer`, `Umbral Glaive`, and `Yun Tal Wildarrows` now include page-verified mode gates, owner-attack-type splits, visibility windows, movement-stack timing, and on-attack cooldown-reduction semantics | Add runtime support for mode-aware resource branches, attack-type variance, visibility-state windows, movement-stack trail engines, and explicit on-attack trigger classes |
+| Lifeline special-interaction fidelity | `Lifeline` now documents anchor-window timing, recast-window timing, and cooldown-start-after-blink behavior | Special-case interactions with displacement/channel/crowd-control states remain partially ambiguous and are not fully encoded |
+| Muramana Shock proc-classification fidelity | `Muramana` now encodes both attack-hit and champion-ability Shock branches, including cast-instance/target throttling and proc-damage exclusion notes | Runtime proc-damage classification for champion-ability branches is still a deferred code-layer follow-up |
+| Golden Spatula multi-effect fidelity | `The Golden Spatula` now has module/page-level cross-verification, expanded execution-semantics notes, and minimum parse confidence `0.65` | Keep follow-up on cross-mode stat-package drift (Arena vs Mayhem) and non-modeled runtime handling for death-persistence edge behavior |
+| Gambler's Blade stored-gold cap reconciliation | Current Tier-1/local tooltip data and structured effects use `30` to `240` stored-gold range | Verify wiki patch-history `245` cap note against current authoritative data and clarify whether this is a historical-only value or an unresolved data discrepancy |
+| Runtime-modeled condition-token compatibility | Protoplasm Lifeline threshold token restored to loader-compatible form (`health_below_30_percent`) | Add repeatable audits for compatibility-sensitive condition-token edits on modeled runtime items |
+| Known-bug behavior simulation policy | Coverage standards/checklist now require intended-behavior modeling by default, with bug-specific observations captured as notes | Treat bug-emulation behavior as deferred runtime follow-up and only implement with explicit approval |
+| Active-cast execution metadata completeness | Targeted active metadata normalization now covers `Mikael's Blessing`, `Hextech Gunblade`, `Mercurial Scimitar`, `Profane Hydra`, `Randuin's Omen`, `Shurelya's Battlesong`, and `Youmuu's Ghostblade` with explicit cooldown/cast-range-or-radius semantics where source text provides values | Continue broader audit so targeted item actives consistently encode cooldown and cast-range metadata when sources publish them |
+| Quicksilver cleanse edge-semantics runtime follow-up | `Quicksilver Sash` now encodes page-verified cleanse/activation nuances in data (`90s` cooldown, airborne activation lockout, suppression/nearsight removal, no-cast-time/stealth-preserving activation, and item-group cooldown-transfer note) | Add runtime support for Quicksilver-group cooldown-isolation and extended cleanse subtype handling beyond generic cleanse semantics |
+| Trigger-exclusion and proc-edge semantics normalization | `Bami's Cinder`, `Bramble Vest`, `Catalyst of Aeons`, `Hexdrinker`, `Hextech Alternator`, `Executioner's Calling`, `Oblivion Orb`, `Sheen`, `Seeker's Armguard`, and `Warden's Mail` now include page-verified trigger exclusions and interaction-edge semantics (miss/parry/blind exclusions, shield/spell-shield interactions, proc-damage notes, zero-damage proc behavior, threshold retrigger clauses, and source/cap nuances) | Continue normalizing edge-semantics coverage across remaining on-hit/proc items so simulation behavior does not rely on implicit assumptions |
+| Legacy-expectation behavior drift clarity | `Seeker's Armguard` now has page-verified notes that current data-version behavior is the single-use Time Stop variant that transforms into `Shattered Armguard` | Continue documenting identity-vs-behavior drift where long-lived item names keep legacy expectations but current gameplay behavior differs materially |
+| Legal URF denominator parity | Coverage snapshot now reflects runtime-filter parity from `default_item_pool` + runtime effect-payload detection (`113` pool / `111` payload / `102` unmodeled) | Keep coverage metrics derived from runtime-filter-equivalent audits to avoid denominator drift |
+| Legal URF low-confidence unmodeled citation depth | `0/0` legal URF unmodeled low-confidence item files have no page-level League Wiki citation | Citation-depth queue is cleared; keep this as a no-regression guardrail |
+| Shared support-income rule precision | Support-quest family (`World Atlas`, `Runic Compass`, `Bounty of Worlds`, `Bloodsong`, `Celestial Opposition`, `Dream Maker`, `Solstice Sleigh`, `Zaz'Zak's Realmspike`) now encodes page-verified pre/post-5-minute threshold and reduction formulas | Exact per-minute windowing/team-item dynamics still rely on shared support-income rule-table encoding |
+| Support-quest sell-state representation | Quest-stage support items (`World Atlas`, `Runic Compass`, `Bounty of Worlds`) now encode page-verified No Sell behavior with `shop.prices.sell = 0` and explicit Tier-1 discrepancy notes | Keep intentional override policy documented and re-verify if official datasets expose sell-restriction flags |
+| Rune structured stat semantics | `0` runes include `stat_modifier` entries with null/empty `stat` | Cleared from baseline `21`; keep using `condition_note` for narrative-only entries |
+| Rune parse confidence | `0` runes include `parse_confidence <= 0.60` | Low-confidence rune note cleanup wave completed; maintain this as a no-regression guardrail |
+| Preset item provenance (`enemy_urf_presets` items with `effects_structured`) | `0` currently unsourced | Preset data now has provenance coverage; maintain for new preset updates |
+| Non-structured item provenance (`Items/*.json` without `effects_structured`) | `79` files currently have null/empty `sources` | Provenance baseline currently targets structured-effect items only; expand provenance expectations to non-structured items as a lower-priority data completeness pass |
+| Champion provenance consistency | `Characters/Vladimir.json` duplicate source removed (`8` -> `7` entries) | No current duplicate in Vladimir sources |
+
+## Data Coverage Progress (2026-02-24)
+- Completed:
+  - backfilled `sources` and normalized review date to `2026-02-23` for all `9` modeled runtime item files
+  - backfilled `sources` for `8` high-priority preset items (`Thornmail`, `Spirit Visage`, `Blackfire Torch`, `Stormsurge`, `Shadowflame`, `Rylai's Crystal Scepter`, `Lich Bane`, `Stridebreaker`)
+  - backfilled `sources` for `23` additional A/B/C item files with `effects_structured`
+  - backfilled `sources` for `30` additional legal-URF low-confidence unmodeled items (`Solstice Sleigh` through `Essence Reaver` batch)
+  - backfilled `sources` for the remaining `51` legal-URF unmodeled effect items that were still unsourced
+  - reduced item files with `effects_structured` and `sources: null` from `226` to `0`
+  - reduced legal URF unmodeled effect items missing sources from `81` to `0`
+  - standardized Tier-2 citation coverage across all structured item files (`243/243`)
+  - refined structured behavior semantics for modeled runtime items (`Guinsoo's Rageblade`, `Heartsteel`, `Kraken Slayer`, `Luden's Echo`, `Protoplasm Harness`) after entity-intent review
+  - reduced modeled runtime files with minimum `parse_confidence <= 0.60` from `5` to `0`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `95` to `85`
+  - normalized all remaining non-ISO item review metadata to ISO format (`23` -> `0`)
+  - filled missing review metadata for `Bloodthirster`
+  - deduplicated `Characters/Vladimir.json` source list
+  - reduced runes with null/empty `stat` in `stat_modifier` effects from `21` to `0`
+  - kept preset-rune null-stat set at `0` (none of current preset runes use null `stat_modifier`)
+  - restored parser-compatible Protoplasm Lifeline threshold condition token (`health_below_30_percent`) after detecting a data-only compatibility regression
+  - refined high-impact preset item data for `Stridebreaker`, `Warmog's Armor`, `Titanic Hydra`, `Rabadon's Deathcap`, and `Phantom Dancer` with entity-intent notes and page-level citations
+  - increased page-level item citation depth from `17/243` to `22/243`
+  - refined modeled runtime item data for `Heartsteel`, `Kraken Slayer`, and `Liandry's Torment`, removing modeled-borderline confidence entries (`3` -> `0`)
+  - refined `Stormsurge` data semantics and raised its minimum confidence from `0.60` to `0.70`
+  - normalized `Zhonya's Hourglass` modeled confidence from missing/null to explicit numeric confidence
+  - refined preset-borderline item data for `Lich Bane`, `Stridebreaker`, and `Titanic Hydra`, raising all three from `0.65` minimum confidence to `>=0.70`
+  - refined low-confidence legal URF item data for `Eclipse` and `Rod of Ages`, reducing backlog from `87` to `85`
+  - increased page-level item citation depth from `22/243` to `24/243` with new citations for `Eclipse` and `Rod of Ages`
+  - completed legal URF low-confidence citation/semantics wave 1 (`Malignance`, `Terminus`, `Sundered Sky`, `Statikk Shiv`, `Fiendhunter Bolts`) and raised each to `>= 0.65` minimum confidence
+  - completed legal URF low-confidence citation/semantics wave 2 (`Essence Reaver`, `Iceborn Gauntlet`, `Jak'Sho, The Protean`, `Runaan's Hurricane`, `Sunfire Aegis`) and raised each to `>= 0.65` minimum confidence
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `85` to `75`
+  - increased page-level item citation depth from `24/243` to `34/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `28` to `18`
+  - completed legal URF low-confidence citation/semantics wave 3 (`Solstice Sleigh`, `Bloodletter's Curse`, `Dawncore`, `Echoes of Helia`, `Force of Nature`), raising four of five to `>= 0.65` minimum confidence
+  - added page-level citations and entity-intent context notes for all wave-3 items
+  - kept conservative confidence on `Solstice Sleigh` support-income diminishing-gold semantics and documented shared-rule dependency for later data expansion
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `75` to `71`
+  - increased page-level item citation depth from `34/243` to `39/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `18` to `13`
+  - completed legal URF low-confidence citation/semantics wave 4 (`Bloodsong`, `Dream Maker`, `Hexoptics C44`, `Hextech Rocketbelt`, `Hollow Radiance`), raising three of five to `>= 0.65` minimum confidence
+  - added page-level citations and entity-intent context notes for all wave-4 items
+  - kept conservative confidence on support-income diminishing-gold effects for `Bloodsong` and `Dream Maker` and tracked shared-rule dependency with `Solstice Sleigh`
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `71` to `68`
+  - increased page-level item citation depth from `39/243` to `44/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `13` to `8`
+  - completed legal URF low-confidence citation/semantics wave 5 (`Horizon Focus`, `Hullbreaker`, `Knight's Vow`, `Mejai's Soulstealer`, `Opportunity`), raising four of five to `>= 0.68` minimum confidence and one (`Hullbreaker`) to `>= 0.65`
+  - added page-level citations and entity-intent context notes for all wave-5 items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `68` to `63`
+  - increased page-level item citation depth from `44/243` to `49/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `8` to `3`
+  - completed legal URF low-confidence citation/semantics wave 6 (`Overlord's Bloodmail`, `Ravenous Hydra`, `Redemption`), raising all three to `>= 0.65` minimum confidence
+  - added page-level citations and entity-intent context notes for all wave-6 items
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `63` to `60`
+  - increased page-level item citation depth from `49/243` to `52/243`
+  - reduced legal URF unmodeled low-confidence/no-page-citation queue from `3` to `0` (cleared)
+  - completed legal URF low-confidence support-income precision wave 7 (`Solstice Sleigh`, `Bloodsong`, `Dream Maker`) with page-verified pre/post-5-minute diminishing-gold formulas and explicit shared-rule-table dependency notes
+  - raised all three wave-7 support-income entries from conservative low confidence (`0.50/0.60/0.60`) to `0.68` after manual formula verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `60` to `57`
+  - documented a new follow-up quality gap: support-quest sibling item consistency for diminishing-gold rule schema/confidence representation
+  - completed support-quest sibling harmonization wave 8 (`World Atlas`, `Runic Compass`, `Bounty of Worlds`, `Celestial Opposition`, `Zaz'Zak's Realmspike`) for diminishing-gold rule schema, confidence, and page-level provenance
+  - raised page-level item citation depth from `52/243` to `57/243`
+  - closed sibling support-income schema/confidence harmonization backlog for the support-quest family
+  - documented a new follow-up quality gap: support-quest sell-state representation discrepancy (`World Atlas` and `Runic Compass`)
+  - cleared preset item confidence-borderline set (`minimum parse_confidence <= 0.65`) from `3` to `0`
+  - completed consumable-and-manaflow fidelity wave 9 (`Health Potion`, `Refillable Potion`, `Tear of the Goddess`, `Manamune`) with page-verified activation/timing semantics, improved structured precision, and updated page-level citations
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `57` to `53`
+  - increased page-level item citation depth from `57/243` to `61/243`
+  - completed Tear-line sibling sell-value corrections (`Archangel's Staff`, `Muramana`, `Winter's Approach`, `Fimbulwinter`) aligned to Data Dragon `16.3.1`
+  - completed source-and-economy reconciliation wave 10 across item data:
+    - migrated legacy CommunityDragon item dataset citations to the current endpoint (`global/default/v1/items.json`) for all structured item files (`235/243` -> `0/243`)
+    - reconciled item sell values to Data Dragon `16.3.1` for all checked items (`209/238` mismatches -> `0/238`)
+    - manually spot-checked representative starter, legendary, support-quest, and map-specific items after bulk normalization
+  - documented a new lower-priority provenance expansion opportunity: `79` non-structured item files currently have null/empty `sources`
+  - completed support sell-state policy resolution wave 11:
+    - set quest-stage support item sell values to page-verified No Sell behavior (`World Atlas`, `Runic Compass`, `Bounty of Worlds`: `sell = 0`)
+    - documented intentional Tier-1 dataset discrepancy notes on each affected file (`Data Dragon`/`CommunityDragon` still report `sell = 160`)
+    - reclassified sell-value mismatch tracking as explicit intentional overrides (`3/238`), with no unresolved accidental sell mismatches
+  - completed rune low-confidence note normalization wave 11:
+    - normalized low-confidence narrative effects across `17` runes to condition-note taxonomy with clearer trigger/owner semantics
+    - reduced rune low-confidence backlog (`parse_confidence <= 0.60`) from `17` to `0`
+  - refined `Runic Compass` Shared Riches execution semantics with higher-confidence target/range/timing-gate representation, reducing item low-confidence backlog (`parse_confidence < 0.65`) from `53` to `52`
+  - completed item execution-semantics and citation wave 12 (`Control Ward`, `Doran's Shield`, `Everfrost`, `Fimbulwinter`, `Demonic Embrace`) with manual behavior review and page-level sources
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `52` to `47`
+  - increased page-level item citation depth from `61/243` to `66/243`
+  - identified a new provenance metadata gap: `203/243` structured item files currently have at least one source entry missing `accessed` date metadata
+  - completed item execution-semantics and provenance wave 13 (`Galeforce`, `Gustwalker Hatchling`, `Mosstomper Seedling`, `Scorchclaw Pup`, `Talisman of Ascension`) with page-level behavior verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `47` to `42`
+  - increased page-level item citation depth from `66/243` to `71/243`
+  - normalized structured-item source metadata completeness (`sources[].accessed`) from `203/243` files missing entries to `0/243`
+  - completed item execution-semantics and alignment wave 14 (`Fated Ashes`, `Hellfire Hatchet`, `Hamstringer`, `Sanguine Gift`, `Spectral Cutlass`) with manual behavior review and page-level verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `42` to `37`
+  - increased page-level item citation depth from `71/243` to `77/243`
+  - corrected Tier-1 drift on `Spectral Cutlass` (stats, active timing/cooldown semantics, and total price) and reconciled `Redemption` total price to Data Dragon `16.3.1`
+  - normalized legacy item stat key usage from `30` files using `stats.magicResistance` to `0` by converting all to loader-canonical `stats.magicResist`
+  - reconciled `The Golden Spatula` base stat block and shop pricing to Tier-1 `16.3.1` values and added patch-history-aware page citation
+  - identified a remaining cross-version identity exception: `Zephyr` and `Gunmetal Greaves` currently share ID `3172`, creating one intentional Tier-1 total-price mismatch to be resolved by explicit legacy-ID policy
+  - completed item execution-semantics and citation wave 15 (`Eleisa's Miracle`, `Chainlaced Crushers`, `Cloak of Starry Night`, `Lightning Rod`, `Reverberation`, `Runecarver`) with manual behavior review and page-level verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `37` to `31`
+  - increased page-level item citation depth from `77/243` to `83/243`
+  - reduced low-confidence/no-page-citation queue from `36` to `30`
+  - corrected crowd-control trigger fidelity in `Reverberation` structured effects to include grounding in the Rumble trigger set
+  - completed item execution-semantics and citation wave 16 (`Crystalline Overgrowth`, `Overcharged`, `Kinkou Jitte`, `Puppeteer`, `Jarvan I's`) with manual behavior review and page-level/official verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `31` to `26`
+  - increased page-level item citation depth from `83/243` to `88/243`
+  - reduced low-confidence/no-page-citation queue from `30` to `25`
+  - documented mode-variance semantics on `Overcharged` (Clash vs Swiftplay Sudden Death timing/value differences) as a policy follow-up
+  - completed item execution-semantics and citation wave 17 (`Demon King's Crown`, `Detonation Orb`, `Diamond-Tipped Spear`, `Reaper's Toll`, `Sword of the Divine`) with manual behavior review and official/page-level verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `26` to `21`
+  - increased page-level item citation depth from `88/243` to `93/243`
+  - reduced low-confidence/no-page-citation queue from `25` to `20`
+  - documented a new lifecycle-marker follow-up: standardize retired/replaced item exclusion metadata policy beyond current `Zephyr` usage
+  - completed item execution-semantics and citation wave 18 (`Pyromancer's Cloak`, `Crimson Lucidity`, `Regicide`, `Rite of Ruin`, `Dragonheart`, `Fire at Will`) with manual behavior review and page-level verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `21` to `15`
+  - increased page-level item citation depth from `93/243` to `99/243`
+  - reduced low-confidence/no-page-citation queue from `20` to `14`
+  - documented Dragonheart acquisition-round soul-grant timing as a follow-up fidelity gap (tracked but not yet encoded in structured effects)
+  - completed item execution-semantics and citation wave 19 (`Diadem of Songs`, `Sword of Blossoming Dawn`, `Lifeline`, `Hexbolt Companion`, `Fulmination`) with manual behavior review and page-level verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `15` to `10`
+  - increased page-level item citation depth from `99/243` to `104/243`
+  - reduced low-confidence/no-page-citation queue from `14` to `9`
+  - documented Lifeline displacement/channel/crowd-control special-interaction semantics as a follow-up fidelity gap
+  - completed item execution-semantics and citation wave 20 (`Flesheater`, `Force of Entropy`, `Gambler's Blade`, `Guardian's Dirk`, `Gusto`, `Hemomancer's Helm`, `Innervating Locket`, `Reality Fracture`, `Scarecrow Effigy`) with manual behavior review and page-level verification
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `10` to `1`
+  - increased page-level item citation depth from `104/243` to `113/243`
+  - reduced low-confidence/no-page-citation queue from `9` to `0`
+  - documented remaining low-confidence concentration on `The Golden Spatula` as a dedicated semantic-normalization follow-up
+  - completed item execution-semantics and citation wave 21 (`The Golden Spatula`, `Abyssal Mask`, `Ardent Censer`, `Black Cleaver`, `Death's Dance`, `Morellonomicon`) with page-level/module-level verification where relevant
+  - reduced item low-confidence backlog (`parse_confidence < 0.65`) from `1` to `0`
+  - increased page-level item citation depth from `113/243` to `118/243`
+  - reduced legal URF unmodeled no-page-citation queue from `58/103` to `53/103`
+  - documented Golden Spatula mode-scope/source-drift semantics as an explicit follow-up fidelity area (confidence floor now cleared)
+  - completed item execution-semantics and citation wave 22 (`Trinity Force`, `Muramana`, `Sterak's Gage`, `The Collector`, `Wit's End`, `Zeke's Convergence`) with manual behavior review and page-level verification
+  - corrected `Zeke's Convergence` Frostfire Tempest tick-value semantics from incorrect 30-per-tick placeholder math to verified 7.5-per-0.25s cadence (150 total over storm duration) and champion-only target scope
+  - expanded `Muramana` Shock structured behavior to include champion-ability damage branch (4% melee / 3% ranged max mana) with cast-instance/per-target limiter and proc-damage exclusion semantics
+  - increased page-level item citation depth from `118/243` to `124/243`
+  - reduced legal URF unmodeled no-page-citation queue from `53/103` to `47/103`
+  - completed item execution-semantics and citation wave 23 (`Chempunk Chainsword`, `Cosmic Drive`, `Dead Man's Plate`, `Locket of the Iron Solari`, `Maw of Malmortius`, `Rapid Firecannon`) with manual behavior review and page-level verification
+  - corrected `Maw of Malmortius` passive omnivamp metadata from 30% to page-verified 10% and tightened Lifeline threshold semantics notes
+  - added `Locket of the Iron Solari` Devotion cooldown-start semantics and refreshed `Rapid Firecannon` Energize generation/structure-interaction behavior notes
+  - increased page-level item citation depth from `124/243` to `130/243`
+  - reduced legal URF unmodeled no-page-citation queue from `47/103` to `41/103`
+  - documented intended-behavior-first policy for known bug notes, with bug-emulation explicitly deferred to later runtime work
+  - completed item execution-semantics and citation wave 24 (`Cryptbloom`, `Dusk and Dawn`, `Edge of Night`, `Hubris`, `Mikael's Blessing`, `Serpent's Fang`, `Spear of Shojin`) with manual behavior review and page-level verification
+  - corrected `Mikael's Blessing` active structured metadata with page-verified cooldown (`120s`) and cast range (`650`) for both cleanse/heal branches
+  - added `Spear of Shojin` Focused Will per-cast-instance stack-throttle metadata (one stack per second) and refreshed execution-model notes across all seven wave-24 items
+  - increased page-level item citation depth from `130/243` to `137/243`
+  - reduced legal URF unmodeled no-page-citation queue from `41/103` to `34/103`
+  - identified active-cast cooldown/range completeness as a recurring data-audit follow-up
+  - recalibrated legal-URF denominator tracking to runtime-filter parity (`default_item_pool` + runtime effect-payload detection): `113` pool items, `111` with effect payload, `102` unmodeled
+  - completed item execution-semantics and citation wave 25 (`Bastionbreaker`, `Endless Hunger`, `Experimental Hexplate`, `Frozen Heart`, `Hextech Gunblade`, `Immortal Shieldbow`) with manual behavior review and page-level verification
+  - corrected active metadata completeness for `Hextech Gunblade` by adding page-verified cooldown (`60s`) and cast range (`700`) semantics
+  - split `Experimental Hexplate` Overdrive into explicit attack-speed and movement-speed branches with cooldown-start-on-cast timing semantics
+  - increased page-level item citation depth from `137/243` to `143/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `33/102` to `27/102`
+  - completed item execution-semantics and citation wave 26 (`Axiom Arc`, `Banshee's Veil`, `Imperial Mandate`, `Randuin's Omen`, `Shurelya's Battlesong`, `Youmuu's Ghostblade`) with manual behavior review and page-level verification
+  - corrected trigger-gating fidelity for `Axiom Arc` (takedown-driven ultimate cooldown refund) and `Imperial Mandate` (mark application/consume shared-cooldown semantics)
+  - corrected targeted active metadata completeness for `Randuin's Omen` (`90s`, `500 radius`), `Shurelya's Battlesong` (`75s`, `1000 range`), and `Youmuu's Ghostblade` (`45s`)
+  - increased page-level item citation depth from `143/243` to `149/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `27/102` to `21/102`
+  - completed item execution-semantics and citation wave 27 (`Mercurial Scimitar`, `Navori Flickerblade`, `Profane Hydra`, `Riftmaker`, `Unending Despair`, `Voltaic Cyclosword`) with manual behavior review and page-level verification
+  - corrected active cooldown completeness for `Mercurial Scimitar` (`90s`) and `Profane Hydra` (`10s`) plus execution-timing context notes across all six items
+  - normalized `Navori Flickerblade` crit stat key to loader-canonical `stats.critChance` and logged remaining `stats.criticalStrikeChance` backlog (`23` files) for follow-up
+  - increased page-level item citation depth from `149/243` to `155/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `21/102` to `15/102`
+  - completed dedicated crit-stat key migration pass: normalized remaining `22` files from legacy `stats.criticalStrikeChance` to loader-canonical `stats.critChance` (with earlier opportunistic migration on `Navori Flickerblade`) and cleared crit-key backlog (`0/322` remaining)
+  - completed item execution-semantics and citation wave 28 (`Kaenic Rookern`, `Lord Dominik's Regards`, `Moonstone Renewer`, `Mortal Reminder`, `Nashor's Tooth`) with manual behavior review and page-level verification
+  - increased page-level item citation depth from `155/243` to `160/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `15/102` to `10/102`
+  - documented explicit runtime code follow-up need for `Moonstone Renewer` ally-chain/fallback target-resolution behavior to preserve simulation fidelity
+  - completed item execution-semantics and citation wave 29 (`Actualizer`, `Archangel's Staff`, `Bandlepipes`, `Serylda's Grudge`, `Staff of Flowing Water`, `Trailblazer`, `Umbral Glaive`, `Whispering Circlet`, `Winter's Approach`, `Yun Tal Wildarrows`) with manual behavior review and page-level verification
+  - increased page-level item citation depth from `160/243` to `170/243`
+  - reduced runtime-filtered legal URF unmodeled no-page-citation queue from `10/102` to `0/102` (queue cleared)
+  - documented explicit deferred runtime follow-up scope for mode-aware resource branches, visibility-gated windows, movement-stack trail engines, attack-type split durations/values, and on-attack cooldown-reduction semantics
+  - completed item execution-semantics and citation wave 30 (`Wordless Promise`, `Anathema's Chains`, `Seraph's Embrace`, `Stormrazor`, `Perplexity`, `Atma's Reckoning`) with manual behavior review and page-level verification
+  - corrected `Anathema's Chains` active semantics by separating true active cooldown (`90s`) from in-combat cast-lockout gating (`15s`) and documented global-targeting/no-cast-time behavior notes
+  - finalized prior uncertainty handling for `Bandlepipes`, `Umbral Glaive`, and `Trailblazer` using intended-behavior assumptions in data notes, while keeping explicit runtime follow-up rows for capability gaps
+  - increased page-level item citation depth from `170/243` to `176/243`
+  - reduced broader structured no-page citation queue from `73` to `67` items while maintaining legal URF unmodeled no-page queue at `0/102`
+  - documented rotating-mode stat/cost package drift notes on `Perplexity` and `Atma's Reckoning` and tracked policy follow-up
+  - completed item execution-semantics and citation wave 31 (`Doran's Ring`, `Divine Sunderer`, `Goredrinker`, `Prowler's Claw`, `Gargoyle Stoneplate`, `Duskblade of Draktharr`) with manual behavior review and page-level verification
+  - corrected active metadata completeness across wave-31 actives and Spellblade timing (`Divine Sunderer` Spellblade ICD timing, `Goredrinker` 15s cooldown + attack-windup cast semantics, `Prowler's Claw` 25s cooldown/500 range/0.15s cast time, `Gargoyle Stoneplate` 30s cooldown/no-cast-time behavior)
+  - added explicit mode-availability context notes for distributed Arena-scoped identities and tracked dataset-vs-page availability/map-flag policy follow-up
+  - increased page-level item citation depth from `176/243` to `182/243`
+  - reduced broader structured no-page citation queue from `67` to `61` items while maintaining legal URF unmodeled no-page queue at `0/102`
+  - completed data-first item execution-semantics and economy-reconciliation wave 32 (`Dark Seal`, `Tiamat`, `Night Harvester`, `Radiant Virtue`, `Moonflair Spellblade`, plus distributed economy updates on `Divine Sunderer`, `Goredrinker`, `Prowler's Claw`, `Gargoyle Stoneplate`, `Duskblade of Draktharr`, and `Everfrost`)
+  - added page-level League Wiki citations and execution-semantics context notes for `Dark Seal`, `Tiamat`, `Night Harvester`, `Radiant Virtue`, and `Moonflair Spellblade`
+  - expanded distributed/prismatic economy representation (`shop.prices`) from `1/57` to `10/57` files and documented non-shop acquisition semantics on each touched item
+  - increased page-level item citation depth from `182/243` to `187/243`
+  - reduced broader structured no-page citation queue from `61/243` to `56/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+  - completed data-first item execution-semantics and citation wave 33 (`Bami's Cinder`, `Bramble Vest`, `Catalyst of Aeons`, `Hexdrinker`, `Hextech Alternator`) with manual behavior review and page-level verification
+  - added explicit trigger-exclusion and interaction-edge semantics where source notes published them (for example landed-hit exclusions, spell-shield/proc-damage behavior, zero-damage proc eligibility, and threshold retrigger notes)
+  - increased page-level item citation depth from `187/243` to `192/243`
+  - reduced broader structured no-page citation queue from `56/243` to `51/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+  - completed data-first item execution-semantics and citation wave 34 (`Lost Chapter`, `Haunting Guise`, `Executioner's Calling`, `Seeker's Armguard`, `Warden's Mail`) with manual behavior review and page-level verification
+  - corrected and expanded execution metadata for edge semantics and special-case behavior notes (for example shield-interaction on Grievous Wounds application, Time Stop single-use transform behavior, and Rock Solid source/cap nuances)
+  - increased page-level item citation depth from `192/243` to `197/243`
+  - reduced broader structured no-page citation queue from `51/243` to `46/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+  - completed data-first item execution-semantics and citation wave 35 (`Oblivion Orb`, `Phage`, `Sheen`, `Quicksilver Sash`, `Verdant Barrier`) with manual behavior review and page-level verification
+  - normalized execution-edge semantics for Spellblade structure/plant trigger behavior, Quicksilver activation/cleanse constraints, and Annul shield lifecycle notes (including death/cooldown-restart interactions)
+  - increased page-level item citation depth from `197/243` to `202/243`
+  - reduced broader structured no-page citation queue from `46/243` to `41/243` while maintaining legal URF unmodeled no-page queue at `0/102`
+- Deferred:
+  - runtime/code expansion backlog remains deferred by design (data-first execution mode)
+
+## Data-First Coverage Priorities (Next)
+1. Maintain modeled runtime confidence floor (`>= 0.70`) and continue second-pass semantic refinement on complex proc/per-target effects.
+2. Maintain item low-confidence backlog at `0` files (`parse_confidence < 0.65`) as a no-regression requirement.
+3. Expand page-level verification citation depth for complex item semantics (current League Wiki page coverage: `202/243`, remaining no-page queue: `41/243`).
+4. Maintain legal URF unmodeled page-level citation depth at `0/102` as a no-regression guardrail.
+5. Maintain rune low-confidence floor (`0` runes with `parse_confidence <= 0.60`) and continue condition-note taxonomy cleanup for remaining medium-confidence narrative effects.
+6. Maintain support-quest sell-state exception policy and remaining shared-rule precision details:
+   - keep intentional No Sell sell-value overrides documented for `World Atlas`, `Runic Compass`, and `Bounty of Worlds`
+   - shared support-income runtime rule-table encoding for exact per-minute windowing/team-item dynamics
+7. Maintain provenance and Tier-2 citation no-regression (structured item baseline: `243/243` sourced and Tier-2 cited).
+8. Keep source URL-health and sell-value reconciliation as recurring no-regression audits on future item data edits.
+9. Maintain canonical item stat-key normalization (`stats.magicResist`, `stats.critChance`) and block reintroduction of legacy stat keys (`stats.magicResistance`, `stats.criticalStrikeChance`).
+10. Resolve cross-version ID/name drift policy for legacy item files (`Zephyr`/`Gunmetal Greaves` shared ID `3172`) so Tier-1 reconciliation audits can stay deterministic.
+11. Maintain structured-item source metadata completeness (`sources[].accessed`) as a no-regression guardrail.
+12. Continue distributed/prismatic economy rollout (`10/57` currently explicit `shop.prices`) while finalizing canonical policy for non-shop acquisition vs Tier-1 economy fields.
+13. Define canonical distributed-item mode-overlay policy for dataset-vs-page availability drift (for example Arena map-flag divergence on distributed/prismatic IDs) using the documented `mode_overrides.<mode>` schema pattern.
+14. Standardize narrative effect taxonomy and maintain `condition_note` usage for non-stat behavioral constraints.
+15. Add recurring audits for modeled-item condition-token compatibility and numeric confidence completeness to prevent data-only parser/metrics regressions.
+16. Expand provenance coverage expectations to non-structured item files (`79` currently unsourced) after higher-impact structured-data priorities.
+17. Define canonical mode-scoping policy for shared-ID item effects when timing/values differ by game mode (for example `Overcharged` in Clash vs Swiftplay).
+18. Standardize lifecycle-marker policy for retired/replaced item identities (required fields: `status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) and enforce exclusion behavior guardrails.
+19. Resolve Dragonheart acquisition-round stack semantics (immediate soul backfill table and phase timing) as explicit structured behavior if simulation fidelity requires purchase-round sensitivity.
+20. Define canonical policy for champion-ability upgrade pseudo-items (for example `Fire at Will`) including source provenance shape and simulation-use expectations.
+21. Keep intended-behavior-first handling for known bug notes; treat any bug-emulation as explicit deferred runtime policy work, not implicit data defaults.
+
+### Planned Data Passes (Documented Plan)
+1. Trigger-Exclusion and Proc-Edge Normalization Plan:
+   - phase 1: inventory remaining on-hit/proc items with missing explicit exclusion/edge semantics (for example shield interactions, miss/parry/blind exclusions, spell-shield handling, zero-damage trigger behavior).
+   - phase 2: normalize those items to shared condition/modifier vocabulary and add page-level notes + `schema_notes.context_notes` execution impact.
+   - phase 3: run no-regression audits on trigger-token consistency and confidence floors, then update coverage metrics and remaining queue.
+2. Distributed/Prismatic Economy Rollout Plan:
+   - phase 1: fill `shop.prices.total` and `shop.prices.sell` on remaining distributed/prismatic files where Tier-1 exposes explicit economy fields.
+   - phase 2: add acquisition-scope context notes on each touched file (Arena/anvil/non-shop path) and flag page-vs-dataset economy drift per item.
+   - phase 3: consolidate discrepancy classes into canonical policy outcomes in coverage docs (accepted Tier-1 canonical, intentional override, or unresolved follow-up) with explicit queue counts.
+3. Policy-Resolution Plan (Data Documentation First):
+   - resolve distributed availability/map-overlay policy (dataset map flags vs page-level mode scope) with canonical root-baseline plus `mode_overrides.<mode>` divergence encoding.
+   - resolve legacy ID/name drift handling for deterministic Tier-1 reconciliation (for example `Zephyr`/`Gunmetal Greaves`) with standardized `lifecycle` metadata requirements.
+   - keep policy decisions documented in `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, and this tracker in the same change when resolved.
+
+### Active Low-Confidence Item Queue (`0`)
+- None currently (`parse_confidence < 0.65` queue cleared).
+
+## Source Of Truth For Coverage Checks
+- Champion script registries:
+  - `Simulation/src/scripts/champions/controlled_champion.rs`
+  - `Simulation/src/scripts/champions/mod.rs`
+- Runtime item/rune modeled sets:
+  - `Simulation/src/scripts/coverage.rs`
+  - `Simulation/src/scripts/runes/effects.rs`
+  - `Simulation/src/scripts/runtime/loadout_runtime.rs`
+- Data loaders and legal pool filters:
+  - `Simulation/src/data.rs`
+- Quality-gate wiring:
+  - `Simulation/src/scenario_runner.rs`
+
+## Champion And Ability Coverage
+| Champion | Canonical Data Present | Controlled Script | Enemy Scripted Events | Scripted Ability Coverage Summary |
+| --- | --- | --- | --- | --- |
+| Doctor Mundo | Yes | No | Yes | `Infected Bonesaw` |
+| Morgana | Yes | No | Yes | `Dark Binding`, `Soul Shackles`, `Soul Shackles Detonate` |
+| Sona | Yes | No | Yes | `Crescendo` |
+| Vayne | Yes | No | Yes | `Tumble` empower + periodic true-hit (`Silver Bolts` style) |
+| Vladimir | Yes | Yes | No | Controlled champion `Q`, `W`, `E`, `R` loop + Vladimir passive stat hook |
+| Warwick | Yes | No | Yes | `Infinite Duress` + passive on-hit profile |
+
+### Champion Gaps
 - Controlled champion generic script support:
-  - Only `Vladimir` has a controlled champion script implementation.
-  - Missing controlled champion scripts: `DrMundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`.
-- Enemy scripted ability depth:
-  - `Warwick`: only passive profile + `Infinite Duress` script event.
-  - `Vayne`: only `Tumble` and `Silver Bolts`-style periodic true-hit behavior.
-  - `Morgana`: only `Dark Binding` and `Soul Shackles` (including detonation follow-up).
-  - `Sona`: only `Crescendo`.
-  - `Doctor Mundo`: only `Infected Bonesaw`.
-  - `Vladimir`: no enemy-scripted spell events.
-- Vladimir fidelity is first-pass:
-  - Scripted `Q/E/R/W` loop exists, but not every live conditional nuance is modeled.
-- Slot/remap architecture:
-  - Foundations exist, but full actor-wide slot-agnostic remap/steal behavior is not complete.
+  - implemented only for `Vladimir`
+  - missing for `Doctor Mundo`, `Morgana`, `Sona`, `Vayne`, `Warwick`
+- Enemy script depth is intentionally partial for all scripted enemies.
+- `Vladimir` has no enemy-scripted spell events yet.
+- Slot/remap architecture foundations exist, but full actor-wide slot-agnostic remap/steal behavior is still incomplete.
 
-## Item Effect Gaps
-Modeled runtime item effect items in legal URF pool (`9`):
+## Item Effect Coverage
+### Item Snapshot
+- Item files in repository: `322`
+- Items loaded by runtime (`load_items`, excluding consumable/trinket ranks): `295`
+- Legal URF legendary search pool: `113`
+- Legal URF pool items with effect payload (passive text, active effect, or `effects_structured`): `111`
+- Legal URF pool items with modeled runtime effect behavior: `9`
+- Legal URF pool items with unmodeled runtime effect payload: `102`
+
+### Modeled Runtime Item Effects In Legal URF Pool (`9`)
 - `Blade of the Ruined King`
 - `Guardian Angel`
 - `Guinsoo's Rageblade`
@@ -43,7 +393,20 @@ Modeled runtime item effect items in legal URF pool (`9`):
 - `Protoplasm Harness`
 - `Zhonya's Hourglass`
 
-Legal URF pool items with effect payload but currently unmodeled runtime effects (`103`):
+### Runtime Item Effect Registry Keys (`10`)
+The runtime modeled registry contains `10` normalized keys:
+- `bladeoftheruinedking`
+- `guardianangel`
+- `guinsoosrageblade`
+- `heartsteel`
+- `krakenslayer`
+- `liandrystorment`
+- `ludensecho`
+- `ludenscompanion` (compatibility key; no corresponding current item file in this repository)
+- `protoplasmharness`
+- `zhonyashourglass`
+
+### Unmodeled Runtime Item Effects In Legal URF Pool (`102`)
 - `Abyssal Mask`
 - `Actualizer`
 - `Ardent Censer`
@@ -146,14 +509,20 @@ Legal URF pool items with effect payload but currently unmodeled runtime effects
 - `Yun Tal Wildarrows`
 - `Zaz'Zak's Realmspike`
 - `Zeke's Convergence`
-- `Zephyr`
 
-Known deterministic stat-model gaps:
-- Structured item passives are not globally applied during deterministic stat resolution; only selected paths are modeled.
-- Example impact class: ratio/stat-scaling passives (for example AP amplification) are not generally represented unless explicitly scripted.
+### Deterministic Item Stat-Model Gaps
+- Structured item passives are not globally applied in deterministic stat resolution; only selected paths are modeled.
+- Ratio and scaling passives (for example global amplification effects) are not represented unless explicitly scripted.
 
-## Rune And Mastery Gaps
-Dynamic combat-time runes modeled (`16`):
+## Rune, Mastery, And Shard Coverage
+### Rune Snapshot
+- Total runes in `Masteries/RunesReforged.json`: `61`
+- Dynamic combat-time runes modeled: `16`
+- Deterministic static runes modeled: `6`
+- Modeled union (`dynamic OR deterministic static`): `22`
+- Runes unmodeled in both paths: `39`
+
+### Dynamic Combat-Time Runes Modeled (`16`)
 - `Aftershock`
 - `Arcane Comet`
 - `Conqueror`
@@ -171,7 +540,7 @@ Dynamic combat-time runes modeled (`16`):
 - `Summon Aery`
 - `Triumph`
 
-Deterministic static runes modeled (`6`):
+### Deterministic Static Runes Modeled (`6`)
 - `Celerity`
 - `Jack Of All Trades`
 - `Legend: Alacrity`
@@ -179,7 +548,7 @@ Deterministic static runes modeled (`6`):
 - `Magical Footwear`
 - `Nimbus Cloak`
 
-Runes currently unmodeled (`39`):
+### Runes Unmodeled (`39`)
 - `Absolute Focus`
 - `Absorb Life`
 - `Approach Velocity`
@@ -220,33 +589,35 @@ Runes currently unmodeled (`39`):
 - `Unsealed Spellbook`
 - `Waterwalking`
 
-Mastery system coverage:
-- Legacy `Season2016` masteries are intentionally retired and unsupported by simulator runtime.
+### Mastery System Coverage
+- Legacy `Season2016` masteries are intentionally retired and unsupported by runtime.
+- Loadout parsing fails fast for `loadout.season2016_masteries`.
 
-## Stat And Shard Gaps
-- Tenacity shard stat now parses into deterministic stats, but runtime crowd-control duration reduction from tenacity is not yet modeled.
-- `crit_chance_percent` is loaded into stats but has no combat-time critical-strike behavior model.
+### Shard And Stat Gaps
+- Tenacity shard stat parses into deterministic stats, but runtime crowd-control duration reduction from tenacity is not modeled.
+- `crit_chance_percent` is loaded into stats, but combat-time critical-strike behavior is not modeled.
 
-## Engine And Physics Fidelity Gaps
+## Engine, Combat, And Scenario Fidelity Gaps
+### Engine And Physics
 - 2D-only combat geometry (`x`, `y`); no validated `z` interaction model.
-- Movement/pathing model is deterministic and simplified relative to live collision/turn/path behavior.
-- Projectile blocking/collision remains simplified relative to full live projectile rules.
-- Effect scheduling and timing are discrete-tick approximations, not full frame-accurate engine emulation.
+- Movement and pathing are deterministic simplifications versus live behavior.
+- Projectile blocking and collision remain simplified versus live rules.
+- Timing is discrete-tick simulation, not frame-accurate engine emulation.
 
-## Combat System Gaps
-- Resource systems (mana/energy/other champion resources) are not modeled as first-class runtime constraints.
-- Many champion-specific conditional states/interactions are not yet represented.
-- Item passives/actives and rune interactions outside modeled set are absent from runtime combat outcomes.
+### Combat System
+- Resource systems (mana, energy, other resources) are not first-class runtime constraints.
+- Many champion-specific conditional states and interactions are not represented.
+- Item and rune interactions outside modeled sets are absent from combat outcomes.
 
-## AI And Scenario Fidelity Gaps
-- Enemy and controlled champion tactical behavior is policy-driven but still narrow versus full gameplay decision space.
-- Scenario scope is teamfight-centric; lane-state/objective-state/map-state dynamics are not modeled.
+### Artificial Intelligence And Scenario Scope
+- Enemy and controlled champion behavior is policy-driven but narrow versus full gameplay decisions.
+- Scope is teamfight-centric; lane, objective, and map-state systems are not modeled.
 
 ## Tracking Notes
-- Search now has explicit quality gates for both unmodeled runes and unmodeled item effects.
-- Reports and diagnostics expose gate policy and rejected/penalized candidate counters.
-- This file should be updated whenever:
-  - modeled effect sets change,
-  - new champion scripts land,
-  - item/rune/shard support is added,
-  - or engine fidelity assumptions materially change.
+- Search quality gates exist for both unmodeled runes and unmodeled item effects.
+- Reports expose gate policy and rejected and penalized candidate counters.
+- Update this file when any of the following changes:
+  - modeled champion, item, or rune sets
+  - legal URF pool composition
+  - shard/stat runtime support
+  - engine or fidelity assumptions

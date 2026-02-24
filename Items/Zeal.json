@@ -9,7 +9,7 @@
     "attackSpeed": {
       "flat": 15.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 15.0
     },
     "movespeed": {
@@ -22,7 +22,7 @@
   "shop": {
     "prices": {
       "total": 1200,
-      "sell": 480
+      "sell": 840
     },
     "purchasable": true,
     "tags": [

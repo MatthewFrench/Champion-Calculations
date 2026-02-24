@@ -37,7 +37,8 @@
       "trigger": "on_basic_attack",
       "applies_to": "self",
       "conditions": [
-        "ally_within_range"
+        "ally_within_1200_units_center_to_edge",
+        "stack_generation_on_basic_attack_on_hit"
       ],
       "status_effects": [
         "covering_fire"
@@ -50,7 +51,7 @@
       "numbers_extracted": [
         1200
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     },
     {
       "id": "covering_fire_consume_stack_to_fire_ally_bolt_with_on_hit_effects",
@@ -66,10 +67,11 @@
       "duration_seconds": null,
       "cooldown_seconds": null,
       "interval_seconds": null,
-      "trigger": "on_basic_attack",
+      "trigger": "on_basic_attack_hit",
       "applies_to": "enemy_unit_hit",
       "conditions": [
-        "covering_fire_stack_1"
+        "covering_fire_stack_1_ready",
+        "consumes_stack_on_next_basic_attack_hit"
       ],
       "status_effects": [
         "consume_covering_fire"
@@ -84,7 +86,7 @@
         100,
         100
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
@@ -100,6 +102,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.030473+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: while allied-partner range criteria are met, the user builds Covering Fire on basic-attack on-hit events, then spends the stack on the next basic attack to trigger an ally-fired bolt.",
+      "Player-visible behavior: the ally-fired bolt applies ally on-hit effects at full effectiveness to the struck target.",
+      "Known edge semantics from page notes (for example ally stack/cooldown interactions on some effects) are not fully encoded and remain follow-up fidelity work."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Hexbolt Companion)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hexbolt_Companion",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Covering Fire range, stack-consume behavior, damage profile, and ally on-hit transfer semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hexbolt Companion.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

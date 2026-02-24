@@ -59,7 +59,8 @@
       ],
       "timing": {
         "window_seconds": 10.0,
-        "on_hit_repeat_delay_seconds": 0.2
+        "on_hit_repeat_delay_seconds": 0.2,
+        "cooldown_starts_on": "empowered_attack_hit"
       },
       "numbers_extracted": [
         10,
@@ -68,13 +69,13 @@
         0.2,
         1.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 3100,
-      "sell": 1240
+      "sell": 2170
     },
     "purchasable": true,
     "tags": [
@@ -90,9 +91,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.062980+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Spellblade also repeats on-hit effects after 0.2 seconds."
+      "Execution model: casting an ability arms a 10-second Spellblade window; the next basic attack in that window resolves the empowered on-hit magic damage.",
+      "Player-visible behavior: the empowered attack immediately applies its on-hit damage branch, then reapplies on-hit effects to that same target after a 0.2-second delay; cooldown begins after the empowered attack is consumed."
     ]
-  }
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Dusk and Dawn)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Dusk_and_Dawn",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Spellblade arm window, delayed on-hit reapplication timing, and cooldown-start semantics"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Dusk and Dawn.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

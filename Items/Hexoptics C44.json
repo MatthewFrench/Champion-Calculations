@@ -9,7 +9,7 @@
     "attackDamage": {
       "flat": 55.0
     },
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     }
   },
@@ -55,6 +55,12 @@
         "ratio_per_60_units": 0.01,
         "cap": 0.1
       },
+      "modifiers": {
+        "damage_amp_scales_with_distance_units": true,
+        "distance_step_units": 60,
+        "amp_ratio_per_step": 0.01,
+        "max_amp_ratio": 0.1
+      },
       "numbers_extracted": [
         0,
         10,
@@ -65,7 +71,7 @@
         60,
         10
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "arcane_aim_bonus_attack_range_on_recent_damage_takedown",
@@ -86,18 +92,23 @@
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "takedown_eligibility_window_seconds": 3.0,
+        "bonus_attack_range_flat": 100,
+        "bonus_attack_range_duration_seconds": 6.0
+      },
       "numbers_extracted": [
         3,
         100,
         6
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -111,6 +122,35 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.057007+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Hexoptics C44 is modeled as a spacing marksman item: distance from target increases basic damage, and takedowns grant temporary range extension."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hexoptics C44.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Hexoptics C44",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hexoptics_C44",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of distance-based basic damage amplification formula and Arcane Aim takedown window behavior"
+    }
+  ]
 }

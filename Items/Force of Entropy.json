@@ -6,7 +6,7 @@
     "DISTRIBUTED"
   ],
   "stats": {
-    "criticalStrikeChance": {
+    "critChance": {
       "percent": 25.0
     },
     "health": {
@@ -41,7 +41,11 @@
       "interval_seconds": null,
       "trigger": "on_immobilize_to_champions",
       "applies_to": "enemy_champion",
-      "conditions": [],
+      "conditions": [
+        "chance_scales_with_critical_strike_chance_percent",
+        "chance_capped_at_100_percent",
+        "suppression_and_stasis_not_extended"
+      ],
       "status_effects": [],
       "scaling_terms": [
         {
@@ -68,7 +72,7 @@
         0.25,
         33
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.66
     }
   ],
   "shop": {
@@ -84,6 +88,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.035304+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Execution model: Atrophy applies a chance-gated immobilize extension with chance equal to critical strike chance percent (1% chance per 1% critical strike chance), capped at 100%.",
+      "Player-visible behavior: successful procs extend qualifying immobilize effects by a flat 0.25 seconds and by 33% of the original immobilize duration.",
+      "Page notes state suppression and stasis are excluded from Atrophy extension semantics."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Force of Entropy)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Force_of_Entropy",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Atrophy chance scaling, duration-extension formula, and exclusion notes for non-qualifying control classes"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Force of Entropy.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

@@ -37,7 +37,7 @@
       "value_range": null,
       "unit": "targets",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 120.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self_or_ally",
@@ -51,6 +51,9 @@
       "status_effects": [
         "crowd_control_removed"
       ],
+      "timing": {
+        "cast_range_units": 650
+      },
       "scaling_terms": [],
       "numbers_extracted": [
         100,
@@ -70,12 +73,15 @@
       },
       "unit": "flat",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 120.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self_or_ally",
       "conditions": [],
       "status_effects": [],
+      "timing": {
+        "cast_range_units": 650
+      },
       "scaling_terms": [
         {
           "stat": "target_level",
@@ -88,13 +94,13 @@
         100,
         250
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2300,
-      "sell": 920
+      "sell": 1610
     },
     "purchasable": true,
     "tags": [
@@ -112,6 +118,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.063254+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution model: Purify is an active cast on self or one allied champion within 650 range, sharing one 120-second cooldown for both the cleanse and heal branches.",
+      "Player-visible behavior: the selected target is immediately cleansed of removable crowd-control debuffs and then healed for 100 to 250 based on the target's level."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League Wiki (Mikael's Blessing)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Mikael%27s_Blessing",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Purify cleanse exclusions, target-level heal range, active cooldown, and cast range"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Mikaels Blessing.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    }
+  ]
 }

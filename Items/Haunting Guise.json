@@ -43,18 +43,22 @@
         "max_stacks": 3,
         "stack_value": 0.02
       },
+      "modifiers": {
+        "stacks_multiplicatively_with_other_damage_modifiers": true,
+        "does_not_modify_true_damage": true
+      },
       "numbers_extracted": [
         2,
         3,
         6
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
     "prices": {
       "total": 1300,
-      "sell": 520
+      "sell": 910
     },
     "purchasable": true,
     "tags": [
@@ -70,6 +74,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.015386+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Execution-semantics review: Madness adds one damage-amplification stack each second while in champion combat, up to three stacks (6% total).",
+      "Player-visible behavior: the damage amplification ramps over time in combat rather than applying all at once.",
+      "Page notes indicate Madness stacks multiplicatively with other damage multipliers and should not amplify true damage."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Haunting Guise.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Haunting Guise",
+      "url": "https://wiki.leagueoflegends.com/en-us/Haunting_Guise",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Madness stack cadence, cap behavior, and interaction notes (multiplicative stacking and true-damage exclusion)"
+    }
+  ]
 }

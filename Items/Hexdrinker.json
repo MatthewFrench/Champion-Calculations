@@ -9,7 +9,7 @@
     "attackDamage": {
       "flat": 25.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 25.0
     }
   },
@@ -24,10 +24,10 @@
   "active": [],
   "effects_structured": [
     {
-      "id": "lifeline_magic_damage_shield_below_health_threshold",
-      "raw": "If you would take {{as magic damage}} that would reduce you below {{as 30% of your '''maximum''' health}}, you first gain a {{tip shield}} that absorbs {{as {{rd 110 to 280 82.5 to 210 pp=true}} magic damage}} for {{fd 2.5}} seconds.",
+      "id": "lifeline_magic_damage_shield_on_threshold",
+      "raw": "If incoming magic damage would reduce you below 30% max health, gain a 2.5-second magic-damage shield (90s cooldown) with melee/ranged level-based value splits.",
       "effect_type": "shield",
-      "stat": "magic_damage_absorb",
+      "stat": "magic_damage",
       "value": 110,
       "value_range": {
         "melee": {
@@ -43,30 +43,37 @@
       "duration_seconds": 2.5,
       "cooldown_seconds": 90.0,
       "interval_seconds": null,
-      "trigger": "on_magic_damage_below_health_threshold",
+      "trigger": "on_magic_damage_threshold",
       "applies_to": "self",
       "conditions": [
-        "health_below_30_percent"
+        "health_below_30_percent",
+        "owner_attack_type_split",
+        "triggers_while_already_below_threshold_if_incoming_magic_damage_event_qualifies"
       ],
       "status_effects": [
-        "shield"
+        "lifeline_shield"
       ],
       "scaling_terms": [],
+      "modifiers": {
+        "shield_values_scale_by_level": true,
+        "applies_before_lethal_overflow": true
+      },
       "numbers_extracted": [
         30,
         110,
         280,
         82.5,
         210,
-        2.5
+        2.5,
+        90
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.75
     }
   ],
   "shop": {
     "prices": {
       "total": 1300,
-      "sell": 520
+      "sell": 910
     },
     "purchasable": true,
     "tags": [
@@ -82,6 +89,37 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.051390+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Shield value is attack-type and level dependent: melee 110-280 and ranged 82.5-210 across levels.",
+      "Execution-semantics review: Lifeline checks incoming magic damage against the 30% max-health threshold and applies the shield before lethal overflow resolves.",
+      "Page notes indicate Lifeline can still trigger from a qualifying incoming magic-damage event while already below 30% maximum health if cooldown is available."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hexdrinker.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League Wiki (Hexdrinker)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hexdrinker",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of Lifeline threshold behavior, level-scaling melee/ranged shield splits, trigger-below-threshold note, duration, and cooldown"
+    }
+  ]
 }

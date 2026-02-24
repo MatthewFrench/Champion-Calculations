@@ -34,7 +34,7 @@
   "shop": {
     "prices": {
       "total": 1000,
-      "sell": 400
+      "sell": 700
     },
     "purchasable": true
   },
@@ -47,6 +47,29 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.048198+00:00",
-    "effects_structured_reviewed": "Manual review: slow resist passive."
-  }
+    "effects_structured_reviewed": "2026-02-23",
+    "context_notes": [
+      "Manual review: slow resist passive."
+    ]
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Boots of Swiftness.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    }
+  ]
 }

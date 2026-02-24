@@ -12,7 +12,7 @@
     "healthRegen": {
       "percent": 100.0
     },
-    "magicResistance": {
+    "magicResist": {
       "flat": 40.0
     },
     "abilityHaste": {
@@ -76,6 +76,14 @@
           "type": "percent"
         }
       ],
+      "modifiers": {
+        "base_magic_damage_per_second": 15,
+        "bonus_health_ratio_per_second": 0.01,
+        "aura_radius_units": 325,
+        "aura_radius_scales_with_bonus_size": true,
+        "minion_multiplier": 1.25,
+        "monster_multiplier": 1.25
+      },
       "range_units": 325,
       "damage_multipliers": {
         "minions": 1.25,
@@ -88,7 +96,7 @@
         100,
         125
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "desolate_eruption_damage_on_non_champion_kill",
@@ -104,10 +112,15 @@
       "trigger": "on_non_champion_unit_kill",
       "applies_to": "enemy_units_in_radius",
       "conditions": [
+        "non_champion_unit_excluding_wards_and_structures",
         "within_units"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "eruption_damage_ratio_of_immolate": 2.0,
+        "eruption_radius_units": 350
+      },
       "range_units": 350,
       "numbers_extracted": [
         2,
@@ -115,7 +128,7 @@
         200,
         350
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     },
     {
       "id": "desolate_larger_eruption_damage_on_recent_damage_takedown",
@@ -131,10 +144,16 @@
       "trigger": "on_takedown_within_3s_damage",
       "applies_to": "enemy_units_in_radius",
       "conditions": [
+        "takedown_within_3_seconds_of_damage",
         "within_units"
       ],
       "status_effects": [],
       "scaling_terms": [],
+      "modifiers": {
+        "larger_eruption_damage_ratio_of_immolate": 4.0,
+        "larger_eruption_radius_units": 500,
+        "takedown_window_seconds": 3.0
+      },
       "range_units": 500,
       "numbers_extracted": [
         3,
@@ -143,13 +162,13 @@
         400,
         500
       ],
-      "parse_confidence": 0.6
+      "parse_confidence": 0.68
     }
   ],
   "shop": {
     "prices": {
       "total": 2800,
-      "sell": 1120
+      "sell": 1960
     },
     "purchasable": true,
     "tags": [
@@ -165,9 +184,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.072420+00:00",
-    "effects_structured_reviewed": "2026-02-10",
+    "effects_structured_reviewed": "2026-02-23",
     "context_notes": [
+      "Hollow Radiance is modeled as a tank wave-control and teamfight splash item: Immolate provides persistent local damage while Desolate converts kills and takedowns into area eruptions.",
       "Immolate damage scales with bonus health and size affects aura radius."
     ]
-  }
+  },
+  "sources": [
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Hollow Radiance.json",
+      "accessed": "2026-02-23",
+      "used_for": "local ingestion snapshot used during structured effect authoring"
+    },
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "name": "League of Legends Wiki - Hollow Radiance",
+      "url": "https://wiki.leagueoflegends.com/en-us/Hollow_Radiance",
+      "accessed": "2026-02-23",
+      "used_for": "page-level verification of Immolate scaling/multipliers and Desolate eruption ratios/ranges"
+    }
+  ]
 }

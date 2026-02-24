@@ -7,13 +7,13 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 50.0
+      "flat": 50
     },
     "attackSpeed": {
-      "flat": 20.0
+      "flat": 20
     },
-    "criticalStrikeChance": {
-      "percent": 25.0
+    "critChance": {
+      "percent": 25
     }
   },
   "passives": [
@@ -28,7 +28,7 @@
       "effects": "When fully {{tip|Energized}}, your next basic attack deals {{as|100 '''bonus''' magic damage}} [[on-hit]] and grants you {{as|45% '''bonus''' movement speed}} for {{fd|1.5}} seconds.",
       "stats": {
         "movespeed": {
-          "percent": 45.0
+          "percent": 45
         }
       }
     }
@@ -59,7 +59,7 @@
       "numbers_extracted": [
         100
       ],
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     },
     {
       "id": "bolt_empowered_attack_bonus_magic_damage_and_movement_speed",
@@ -75,7 +75,8 @@
       "trigger": "on_next_basic_attack",
       "applies_to": "enemy",
       "conditions": [
-        "energize_full"
+        "energize_full",
+        "consumes_energize_stacks"
       ],
       "status_effects": [],
       "scaling_terms": [],
@@ -92,13 +93,18 @@
         45,
         1.5
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.76,
+      "movement_speed_applies_to": "self",
+      "on_hit_applies_to_structures_except": [
+        "inhibitor",
+        "nexus"
+      ]
     }
   ],
   "shop": {
     "prices": {
       "total": 3200,
-      "sell": 1280
+      "sell": 2240
     },
     "purchasable": true,
     "tags": [
@@ -116,6 +122,36 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.072092+00:00",
-    "effects_structured_reviewed": "2026-02-10"
-  }
+    "effects_structured_reviewed": "2026-02-24",
+    "context_notes": [
+      "Verified Energized/Bolt execution semantics from page-level source: moving and attacking generate Energize stacks, and Bolt consumes a fully energized attack to apply bonus magic on-hit and temporary self movement speed.",
+      "Bolt interaction note: energized on-hit effects apply to structures; Bolt excludes inhibitors and nexus targets per page-level notes/bug history."
+    ]
+  },
+  "sources": [
+    {
+      "name": "Data Dragon item dataset",
+      "url": "https://ddragon.leagueoflegends.com/cdn/16.3.1/data/en_US/item.json",
+      "accessed": "2026-02-23",
+      "used_for": "baseline item identity, stat block, and raw effect text"
+    },
+    {
+      "name": "CommunityDragon items dataset",
+      "url": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
+      "accessed": "2026-02-23",
+      "used_for": "secondary validation against canonical static item data mirror"
+    },
+    {
+      "type": "Generated item data",
+      "path": "From Online/items/Stormrazor.json",
+      "used_for": "local ingestion snapshot used during structured effect authoring",
+      "accessed": "2026-02-23"
+    },
+    {
+      "name": "League of Legends Wiki - Stormrazor",
+      "url": "https://wiki.leagueoflegends.com/en-us/Stormrazor",
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of item behavior, formulas, and execution timing/targeting semantics"
+    }
+  ]
 }
