@@ -108,16 +108,24 @@ This file is a concise handoff for developers and AI agents.
 - Non-test `expect(...)` callsites are now removed from `Simulation/src`.
 - Enemy champion script modules (`Morgana`, `Warwick`, `Vayne`, `Sona`) now fail soft (no action/cooldown output) when required canonical ability defaults are missing.
 - Champion-specific defaults loaders now use fallible cached reads (no panic paths in those optional per-champion defaults channels).
+- Required defaults channels now use centralized strict hard-fail ownership (`defaults.rs`) with no silent empty-map fallback for required simulator/champion/mode defaults channels.
+- Non-test `panic!(...)` callsites are now also removed from `Simulation/src`.
+- Startup now runs typed required-defaults preflight before mode dispatch and fails with contextual startup errors if required defaults ownership channels cannot load.
+- World encounter-state builder now includes baseline non-champion ecology anchors (structures, monsters, minion lane spawns) through explicit class/allegiance ownership.
+- Runtime enemy movement and respawn position updates now route through world ownership upsert/clamp channels, keeping enemy actor positions map-bounded each tick.
+- Runtime world lifecycle ownership now advances deterministic minion wave spawn/despawn loops and neutral objective spawn/respawn timers through `src/world/world_actor_lifecycle_channels.rs` and `src/engine/simulation_step/world_lifecycle_step.rs`.
+- Champion controller harness phase-2 integration now routes deterministic controlled-champion command ingress through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs`, including per-tick request sequencing, shared action execution channels, and command-owned controlled movement stepping.
+- Research-backed deterministic request/fast-forward guidance is now tracked in `DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`.
 
 ## Full-Game Transformation Status (Non-Data)
-- Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `96%` (`IN_PROGRESS`).
-- Weighted completion estimate: `43%` (`IN_PROGRESS`).
+- Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `100%` (`DONE`).
+- Weighted completion estimate: `54%` (`IN_PROGRESS`).
 - Bucket snapshot (complete / remaining):
-  - Runtime Systems Completeness (`30%` weight): `31% / 69%`
-  - Determinism And Replay Guarantees (`20%` weight): `58% / 42%`
-  - Calibration And Correctness (`20%` weight): `49% / 51%`
+  - Runtime Systems Completeness (`30%` weight): `52% / 48%`
+  - Determinism And Replay Guarantees (`20%` weight): `69% / 31%`
+  - Calibration And Correctness (`20%` weight): `60% / 40%`
   - Performance Envelope (`15%` weight): `47% / 53%`
-  - Renderer-Contract Readiness (`15%` weight): `30% / 70%`
+  - Renderer-Contract Readiness (`15%` weight): `38% / 62%`
 - Canonical status and gap detail:
   - `FULL_GAME_SIMULATION_BLUEPRINT.md` (`Current Status Snapshot` section)
 
@@ -127,13 +135,15 @@ This file is a concise handoff for developers and AI agents.
 
 ## Current Known Tradeoff
 - Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
-- Runtime crash-surface backlog is now concentrated in core defaults loaders (`10` non-test `panic!` callsites under `Simulation/src`) and should be converted to typed error propagation over additional slices.
+- Required defaults ownership is now strict and preflighted.
+- Remaining realism lift is now concentrated in command/path ownership and macro event coupling (objective/structure/economy/vision), not defaults or crash-surface channels.
+- Controller ingress is now harness-gated and deterministic, but full latency/buffering semantics and actor-symmetric command channels are still pending.
 
 ## Highest-Value Next Work (Largest Impact First)
-1. Add non-champion actor classes (minion/monster/structure) and lifecycle ownership channels under `src/world/*`.
-2. Integrate world-state ownership into simulation-step movement channels (replace isolated enemy-position ownership paths).
-3. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.
-4. Reduce remaining core defaults-loader `panic!` crash surfaces with typed fail-fast error propagation.
+1. Expand harness command channels from controlled champion to actor-symmetric ownership (all controllable actors through one legality/status ingress).
+2. Couple world lifecycle channels to combat outcomes (objective defeat, structure state transitions, and respawn ownership hooks) under `src/world/*` and engine event-resolution ownership.
+3. Replace mixed movement model with terrain-aware command/path channels (pathfinding, collision, and route replanning ownership).
+4. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.
 5. Expand controlled-champion script coverage beyond `Vladimir` and `Sona`, while reducing static registry coupling.
 6. Reduce coverage-stage latency by constructing legal locked rune pages directly (instead of random rejection sampling).
 7. Persist and reuse coverage-stage seed corpus across runs.

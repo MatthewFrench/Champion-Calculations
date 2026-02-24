@@ -275,7 +275,9 @@
         "Source castTime: 0.25.",
         "Source speed: 1300.",
         "Source effectRadius: 200 : 300 (based on cast distance).",
-        "Source notes (summary): No additional details."
+        "Manual behavior verification (2026-02-24): Looming Darkness damage and slow resolve when the shadow projectile reaches the target point and explodes; outcome is not instantaneous at cast input.",
+        "Manual behavior verification (2026-02-24): Explosion radius scales with cast distance (200 to 300), so effective hit area depends on launch distance.",
+        "Manual behavior verification (2026-02-24): If Doom is primed, fear direction from Looming Darkness uses the explosion epicenter rather than Vex's current position."
       ]
     },
     "ultimate": {
@@ -365,6 +367,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Vex",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vex/Looming_Darkness",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Looming Darkness explosion timing, cast-distance radius scaling, and Doom-interaction flee-origin semantics"
     }
   ],
   "notes": [
@@ -379,7 +387,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 106): Looming Darkness explosion timing, cast-distance-scaled radius semantics, and Doom flee-origin behavior were normalized with explicit follow-up notes."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

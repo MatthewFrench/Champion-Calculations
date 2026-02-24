@@ -91,4 +91,17 @@ pub(crate) struct EngineDefaults {
     pub ranged_spawn_radius_min: f64,
     pub ranged_spawn_radius_max: f64,
     pub minimum_attack_speed: f64,
+    pub world_lifecycle: WorldLifecycleDefaults,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub(crate) struct WorldLifecycleDefaults {
+    pub minion_wave_start_seconds: f64,
+    pub minion_wave_interval_seconds: f64,
+    pub minion_units_per_team_per_wave: usize,
+    pub minion_lifetime_seconds: f64,
+    pub dragon_initial_spawn_seconds: f64,
+    pub dragon_respawn_seconds: f64,
+    pub baron_initial_spawn_seconds: f64,
+    pub baron_respawn_seconds: f64,
 }

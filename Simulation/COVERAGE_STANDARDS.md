@@ -74,6 +74,10 @@ Data metadata requirements:
 - When editing an item file, backfill missing `sources[].accessed` values on existing source entries in that file so provenance metadata stays complete.
 - When editing champion or mastery files, backfill missing `sources[].accessed` values on existing source entries in the touched file so provenance metadata stays complete across domains.
 - When editing Runes Reforged data, keep flat and split datasets synchronized (`Masteries/RunesReforged.json` plus `Masteries/RunesReforged/` tree/stat-shard files) and treat split-vs-flat drift as blocking.
+- When correcting generated decimal-spacing artifacts in rune `effects_structured.raw` text, also normalize dependent numeric metadata (`numbers_extracted`, and when affected `value_range` / `scaling` / `formula`) so structured values remain semantically consistent.
+- When running scripted/bulk rune decimal normalization, run a post-edit scan for literal backreference placeholders (for example `\1.\2`) in `effects_structured.raw`; treat any hit as a blocking data defect.
+- When a rune `formula.type = per_rank` encodes multiple branches (for example melee/ranged, AD/AP, stack-threshold branches), add `semantic_components` that map each branch to explicit named fields.
+- If decimal/metadata normalization quality currently depends on manual scripts only, log deferred code follow-up for loader/lint enforcement in `Simulation/COVERAGE_GAPS.md` so future waves are automatically guarded.
 - When editing existing non-trivial champion/item/rune data, explicitly sanity-check the entity's gameplay purpose and behavior pattern, then record that intent in `schema_notes.context_notes` when confidence or semantics changed.
 - When semantics are updated, record the verified in-game execution model in `schema_notes.context_notes` (what the player does, when the effect resolves, and who is affected).
 - Keep champion ability `description_source` populated on touched abilities; if missing, backfill from authoritative/source-corpus ability text in the same change.
@@ -87,6 +91,9 @@ Data metadata requirements:
 - If truncation cleanup uses scripted/bulk edits, scope replacements to `context_notes` fields only and run a post-edit audit so canonical `description`/`description_source` text is unchanged unless intentionally edited.
 - When a note contains an integer quantity that is intentional (for example stack count), avoid terminal integer-dot phrasing (for example `up to 3.`) and include units/entity labels (for example `up to 3 stacks`) so truncation audits remain reliable.
 - When data semantics exceed current runtime capability (for example visibility-state windows, on-attack trigger classes, charge-state transforms, mode-gated resource branches), document the deferred code follow-up explicitly in `Simulation/COVERAGE_GAPS.md` in the same change.
+- For movement abilities with formula-based velocity (for example `base_speed + movement_speed`), preserve the published formula in notes and track deferred runtime follow-up if execution schema currently stores only base speed.
+- For effects with distance-scaled area size (for example `min_radius : max_radius based on cast distance`), document interpolation semantics and track deferred runtime follow-up if runtime cannot currently resolve dynamic radius.
+- For multi-stage same-slot abilities (for example stage-1 dash plus stage-2 recast skillshot), document stage windows and gating semantics explicitly and track deferred runtime follow-up when stage identity is not first-class in runtime execution.
 - For control-triggered effects, encode the full trigger set from source text (for example include both immobilize and ground triggers when both are listed).
 - If an item effect depends on a shared cross-item system rule (for example support-income diminishing-gold logic), preserve conservative confidence until that shared rule is encoded explicitly and track the dependency in `Simulation/COVERAGE_GAPS.md`.
 - If editing a shared-rule effect on one member of an item family (for example the support-quest upgrade line), review sibling items for rule-schema consistency and track deferred sibling harmonization in `Simulation/COVERAGE_GAPS.md`.
@@ -98,6 +105,7 @@ Data metadata requirements:
 - Treat removal of already-established distributed/prismatic `shop.prices` fields as a blocking regression unless an explicit policy change is documented in `Simulation/COVERAGE_GAPS.md`.
 - For round/phase progression effects, verify whether acquisition timing backfills prior progression states; if not encoded, document the gap explicitly in `schema_notes.context_notes` and track it in `Simulation/COVERAGE_GAPS.md`.
 - If Tier-1 dataset fields and page-level gameplay behavior disagree (for example sell-state restrictions), document the discrepancy in `schema_notes.context_notes` and track canonical-resolution follow-up in `Simulation/COVERAGE_GAPS.md`.
+- If page-level source sections disagree with each other (for example infobox/tooltip tables vs module-derived description lines), reconcile using highest-confidence current-state evidence (infobox values, tooltip tables, and patch-history context), then document the reconciliation decision explicitly in `schema_notes.context_notes`.
 - When item economy fields are edited (for example `shop.prices.sell`), validate against Tier-1 dataset values and document any intentional override policy in coverage docs.
 - Intentional economy overrides (for example page-verified No Sell behavior where Tier-1 datasets still provide numeric sell values) are acceptable only when the owning item file and `Simulation/COVERAGE_GAPS.md` both explicitly record the exception.
 - Item stat blocks must use loader-canonical key vocabulary (for example `magicResist` and `critChance` under `stats`); legacy aliases that bypass loader mapping (for example `magicResistance`, `criticalStrikeChance`) are not acceptable.
@@ -143,6 +151,7 @@ Data requirements:
 - Ability formulas and cooldown/range are sourced from canonical champion data, not inline constants.
 - If followup timing exists, keep the delay in canonical ability effect data when possible.
 - Ability execution semantics are documented where relevant: cast type, target/range requirements, windup/cast time, projectile or hit timing, and basic-attack-cadence coupling.
+- Ability execution semantics include dynamic geometry/speed branches when relevant (for example movement-speed-scaled dash velocity, cast-distance-scaled radius, and stage-gated recast windows).
 
 Code requirements:
 - Ability execution returns generic script actions (`ApplyDamage`, `ScheduleFollowup`, etc.).
@@ -207,6 +216,7 @@ Data requirements:
 - Split structure and flat file must remain synchronized on every rune/mastery edit until runtime loader migration lands.
 - Rune path slot ordering and shard slot options stay valid.
 - Deterministic stat effects are encoded in parseable structured-effect forms.
+- Multi-branch `per_rank` rune effects include `semantic_components` with explicit branch identities (for example melee/ranged or AD/AP) instead of relying only on positional arrays.
 - Mastery JSON files keep explicit `sources` provenance with complete `sources[].accessed` metadata on touched entries.
 - Avoid `effect_type = stat_modifier` entries with null/empty `stat` unless explicitly documented as narrative-only.
 - Prefer `effect_type = condition_note` for narrative constraints that are not direct stat modifiers.

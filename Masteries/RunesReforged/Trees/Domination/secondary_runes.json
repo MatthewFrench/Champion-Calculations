@@ -31,24 +31,23 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Damaging basic attacks and ability damage deal 10 – 49. 12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
+              "raw": "Passive: Damaging basic attacks and ability damage deal 10 – 49.12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
               "effect_type": "damage",
               "stat": "damage",
               "unit": null,
               "values": null,
               "value_range": [
                 10,
-                49.0
+                49.12
               ],
               "numbers_extracted": [
                 10,
-                49.0,
-                12
+                49.12
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 10,
-                "max": 49.0,
+                "max": 49.12,
                 "levels": [
                   1,
                   18
@@ -59,7 +58,7 @@
               "formula": {
                 "type": "range",
                 "min": 10,
-                "max": 49.0,
+                "max": 49.12,
                 "unit": null
               },
               "conditions": [],
@@ -122,26 +121,25 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Damaging an enemy champion heals you for 16 – 42. 82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
+              "raw": "Passive: Damaging an enemy champion heals you for 16 – 42.82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
               "effect_type": "healing",
               "stat": "healing",
               "unit": "percent",
               "values": null,
               "value_range": [
                 16,
-                42.0
+                42.82
               ],
               "numbers_extracted": [
                 16,
-                42.0,
-                82,
+                42.82,
                 10,
                 5
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 16,
-                "max": 42.0,
+                "max": 42.82,
                 "levels": [
                   1,
                   18
@@ -152,7 +150,7 @@
               "formula": {
                 "type": "range",
                 "min": 16,
-                "max": 42.0,
+                "max": 42.82,
                 "unit": "percent"
               },
               "conditions": [],
@@ -644,7 +642,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

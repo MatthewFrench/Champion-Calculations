@@ -17,7 +17,7 @@
     {
       "unique": true,
       "name": "The Path Between",
-      "effects": "If you have at least {{as|130 '''bonus''' attack damage}} and {{as|180 ability power}}, enter either the ''Material World'' or the ''Spirit World'', determined randomly, at the start of the combat phase in each round:<br><br>\u2022 '''Material World''': Increase your {{as|attack damage}} by 20% and gain {{as|{{pp|50 to 150|key=%}} '''bonus''' attack speed}}.<br>\u2022 '''Spirit World''': Increase your {{as|ability power}} by 20% and gain {{as|{{pp|30 to 120}} ability haste}}.",
+      "effects": "If you have at least {{as|130 '''bonus''' attack damage}} and {{as|180 ability power}}, enter either the ''Material World'' or the ''Spirit World'', determined randomly, at the start of the combat phase in each round:<br><br>\u2022 '''Material World''': Increase your {{as|attack damage}} by 25% and gain {{as|{{pp|50 to 150|key=%}} '''bonus''' attack speed}}.<br>\u2022 '''Spirit World''': Increase your {{as|ability power}} by 25% and gain {{as|{{pp|30 to 120}} ability haste}}.",
       "stats": {
         "abilityPower": {
           "flat": 180.0
@@ -61,9 +61,9 @@
         "mode": "material_world"
       },
       "stat": "attack_damage_total_percent",
-      "value": 20,
+      "value": 25,
       "duration_seconds": null,
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     },
     {
       "id": "twilights_edge_material_world_as",
@@ -79,8 +79,31 @@
         50,
         150
       ],
+      "modifiers": {
+        "scaling_axis": "champion_level",
+        "values_by_level_1_to_18_percent": [
+          50,
+          55.88,
+          61.76,
+          67.65,
+          73.53,
+          79.41,
+          85.29,
+          91.18,
+          97.06,
+          102.94,
+          108.82,
+          114.71,
+          120.59,
+          126.47,
+          132.35,
+          138.24,
+          144.12,
+          150
+        ]
+      },
       "duration_seconds": null,
-      "parse_confidence": 0.68
+      "parse_confidence": 0.74
     },
     {
       "id": "twilights_edge_spirit_world_ap",
@@ -92,9 +115,9 @@
         "mode": "spirit_world"
       },
       "stat": "ability_power_total_percent",
-      "value": 20,
+      "value": 25,
       "duration_seconds": null,
-      "parse_confidence": 0.7
+      "parse_confidence": 0.74
     },
     {
       "id": "twilights_edge_spirit_world_ability_haste",
@@ -110,8 +133,31 @@
         30,
         120
       ],
+      "modifiers": {
+        "scaling_axis": "champion_level",
+        "values_by_level_1_to_18": [
+          30,
+          35.29,
+          40.59,
+          45.88,
+          51.18,
+          56.47,
+          61.76,
+          67.06,
+          72.35,
+          77.65,
+          82.94,
+          88.24,
+          93.53,
+          98.82,
+          104.12,
+          109.41,
+          114.71,
+          120
+        ]
+      },
       "duration_seconds": null,
-      "parse_confidence": 0.68
+      "parse_confidence": 0.74
     }
   ],
   "shop": {
@@ -134,8 +180,9 @@
     "effects_structured_generated_at": "2026-02-09T23:46:08.042685+00:00",
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
-      "Value ranges (attack speed and ability haste) lack a defined scaling axis in the source text.",
-      "The Path Between randomly selects Material or Spirit World at round start after AD/AP thresholds are met; AD/AP percent branches were aligned to page-verified 20% values."
+      "The Path Between randomly selects Material or Spirit World at round start after AD/AP thresholds are met.",
+      "Material/Spirit value ranges are level-scaled: attack speed uses 50-150% and ability haste uses 30-120 with explicit level-1-to-18 table values extracted from page tooltip data.",
+      "Source reconciliation: League Wiki infobox plus patch-history section indicate 25% AD/AP world modifiers, while older module-derived description lines still show 20%; canonical structured values follow the current-state 25% modifiers."
     ]
   },
   "sources": [
@@ -161,7 +208,7 @@
       "name": "League Wiki item page",
       "url": "https://wiki.leagueoflegends.com/en-us/Twilight%27s_Edge",
       "accessed": "2026-02-24",
-      "used_for": "page-level Arena item mode-branch behavior verification"
+      "used_for": "page-level Arena mode-branch behavior verification, level-based tooltip scaling tables, and current-state 25% AD/AP branch reconciliation (including patch-history section)"
     }
   ]
 }

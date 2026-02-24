@@ -76,6 +76,8 @@ impl ControlledChampionCombatSimulation {
             }
 
             let target_time = self.sim.max_time_seconds.min(self.time + self.tick_seconds);
+            self.enqueue_controller_policy_action_request_for_tick();
+            self.process_pending_controlled_champion_action_requests();
             self.maybe_cast_controlled_champion_abilities_and_defensives();
 
             while let Some(top) = self.event_queue.peek_next().cloned() {

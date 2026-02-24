@@ -1,8 +1,12 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 
+use crate::champion_control_harness::{
+    ChampionActionDecisionPolicy, ChampionActionStatusReport, ChampionControllerIdentity,
+    ChampionControllerKind,
+};
 use crate::defaults::{
     champion_ai_profile, champion_hitbox_radius, protoplasm_lifeline_cooldown_seconds_default,
-    simulator_defaults,
+    simulator_defaults, world_lifecycle_defaults,
 };
 use crate::scripts::champions::{
     ChampionBehaviorProfile, ChampionLoadoutRuntime, ChampionRuneProcTelemetryEntry,
@@ -38,9 +42,14 @@ use crate::scripts::runtime::controlled_champion_loadout::{
 use crate::scripts::runtime::stat_resolution::{
     CooldownMetricSource, RuntimeBuffState, ScalarMetricSource, StatQuery, resolve_stat,
 };
+use crate::world::{
+    WorldActorAllegiance, WorldActorClass, WorldActorPosition, WorldLifecycleState, WorldState,
+    default_urf_world_map_state, seed_static_world_ecology_anchors,
+};
 
 mod actor_state;
 mod combat_timing_and_targeting;
+mod controlled_champion_controller_channels;
 mod enemy_combat_stat_modeling;
 mod event_queue;
 mod event_resolution;
@@ -168,6 +177,8 @@ struct DamageSourceContext {
     ability_name: String,
 }
 
+const CONTROLLED_CHAMPION_WORLD_ACTOR_ID: &str = "controlled_champion";
+
 pub(super) struct ControlledChampionCombatSimulation {
     controlled_champion_base: ChampionBase,
     sim: SimulationConfig,
@@ -238,9 +249,21 @@ pub(super) struct ControlledChampionCombatSimulation {
     emergency_shield_amount: f64,
     emergency_heal_rate: f64,
     emergency_heal_until: f64,
+    controlled_champion_controller_identity: ChampionControllerIdentity,
+    controlled_champion_controller_policy: Option<Box<dyn ChampionActionDecisionPolicy>>,
+    controlled_champion_manual_control_mode: bool,
+    controlled_champion_pending_action_requests:
+        VecDeque<controlled_champion_controller_channels::QueuedControlledChampionActionRequest>,
+    controlled_champion_next_action_request_sequence: u64,
+    controlled_champion_recent_action_status_reports: VecDeque<ChampionActionStatusReport>,
+    controlled_champion_pending_move_target_position: Option<Vec2>,
+    controlled_champion_basic_attack_target_actor_id: Option<String>,
 
     target_position: Vec2,
     enemy_state: Vec<EnemyState>,
+    world_state: WorldState,
+    world_lifecycle_state: WorldLifecycleState,
+    controlled_champion_world_actor_id: String,
     projectile_block_zones: Vec<ProjectileBlockZone>,
     trace_enabled: bool,
     trace_events: Vec<String>,
@@ -475,14 +498,38 @@ impl ControlledChampionCombatSimulation {
             emergency_shield_amount: 0.0,
             emergency_heal_rate: 0.0,
             emergency_heal_until: 0.0,
+            controlled_champion_controller_identity: ChampionControllerIdentity {
+                controller_id: "runtime_default_controller".to_string(),
+                controller_kind: ChampionControllerKind::ArtificialIntelligence,
+            },
+            controlled_champion_controller_policy: None,
+            controlled_champion_manual_control_mode: false,
+            controlled_champion_pending_action_requests: VecDeque::new(),
+            controlled_champion_next_action_request_sequence: 0,
+            controlled_champion_recent_action_status_reports: VecDeque::new(),
+            controlled_champion_pending_move_target_position: None,
+            controlled_champion_basic_attack_target_actor_id: None,
             target_position: Vec2 { x: 0.0, y: 0.0 },
             enemy_state: Vec::new(),
+            world_state: WorldState::new(default_urf_world_map_state()),
+            world_lifecycle_state: WorldLifecycleState::new(world_lifecycle_defaults()),
+            controlled_champion_world_actor_id: CONTROLLED_CHAMPION_WORLD_ACTOR_ID.to_string(),
             projectile_block_zones: Vec::new(),
             trace_enabled: false,
             trace_events: Vec::new(),
             trace_snapshot_interval_seconds: 5.0,
             trace_next_snapshot_at: 0.0,
         };
+        seed_static_world_ecology_anchors(&mut runner.world_state);
+        runner.world_state.upsert_actor_position_clamped(
+            &runner.controlled_champion_world_actor_id,
+            WorldActorClass::Champion,
+            WorldActorAllegiance::ControlledChampionTeam,
+            WorldActorPosition {
+                x: runner.target_position.x,
+                y: runner.target_position.y,
+            },
+        );
 
         let mut enemy_entries = enemies.to_vec();
         if let Some(seed) = seeded_combat_rng.as_mut() {
@@ -503,6 +550,20 @@ impl ControlledChampionCombatSimulation {
                 .unwrap_or_else(|| enemy_spawn_position(idx, enemy_count.max(1), model.behavior));
             let ai_profile = champion_ai_profile(&enemy.name, model.behavior.attack_range);
             let script_poll_interval_seconds = ai_profile.script_poll_interval_seconds.max(0.05);
+
+            let clamped_position = runner.world_state.upsert_actor_position_clamped(
+                &enemy.id,
+                WorldActorClass::Champion,
+                WorldActorAllegiance::OpponentTeam,
+                WorldActorPosition {
+                    x: position.x,
+                    y: position.y,
+                },
+            );
+            let position = Vec2 {
+                x: clamped_position.x,
+                y: clamped_position.y,
+            };
 
             runner.enemy_state.push(EnemyState {
                 enemy: enemy.clone(),

@@ -64,7 +64,30 @@
                 "unit": "percent"
               },
               "conditions": [],
-              "parse_confidence": 0.9
+              "parse_confidence": 0.9,
+              "semantic_components": [
+                {
+                  "component_id": "stacks_required_for_empowered_hit",
+                  "value": 3,
+                  "unit": "stacks"
+                },
+                {
+                  "component_id": "turret_bonus_damage_flat",
+                  "branches": {
+                    "melee": 85,
+                    "ranged": 50
+                  },
+                  "unit": "damage"
+                },
+                {
+                  "component_id": "turret_bonus_damage_max_health_ratio_percent",
+                  "branches": {
+                    "melee": 28,
+                    "ranged": 20
+                  },
+                  "unit": "percent"
+                }
+              ]
             },
             {
               "raw": "Demolish cannot be triggered on the same turret by any of its users more than once every 3 seconds.",
@@ -104,31 +127,27 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54. 71 / 7 – 38. 29 ) (based on your level).",
+              "raw": "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54.71 / 7 – 38.29 ) (based on your level).",
               "effect_type": "healing",
               "stat": "healing",
               "unit": null,
               "values": [
                 1000,
                 10,
-                54.0,
-                71,
+                54.71,
                 7,
-                38.0,
-                29
+                38.29
               ],
               "value_range": [
                 10,
-                54.0
+                54.71
               ],
               "numbers_extracted": [
                 1000,
                 10,
-                54.0,
-                71,
+                54.71,
                 7,
-                38.0,
-                29
+                38.29
               ],
               "scaling": {
                 "type": "by_stat"
@@ -140,16 +159,35 @@
                 "values": [
                   1000,
                   10,
-                  54.0,
-                  71,
+                  54.71,
                   7,
-                  38.0,
-                  29
+                  38.29
                 ],
                 "unit": null
               },
               "conditions": [],
-              "parse_confidence": 0.9
+              "parse_confidence": 0.9,
+              "semantic_components": [
+                {
+                  "component_id": "ally_heal_search_radius",
+                  "value": 1000,
+                  "unit": "units"
+                },
+                {
+                  "component_id": "healing_by_level",
+                  "branches": {
+                    "melee": [
+                      10,
+                      54.71
+                    ],
+                    "ranged": [
+                      7,
+                      38.29
+                    ]
+                  },
+                  "unit": "healing"
+                }
+              ]
             }
           ],
           "template_source": "Template:Rune data Font of Life"
@@ -167,28 +205,26 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
+              "raw": "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32.94 (based on level) (+ 2.5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
               "effect_type": "damage",
               "stat": "adaptive",
               "unit": "percent",
               "values": null,
               "value_range": [
                 5,
-                32.0
+                32.94
               ],
               "numbers_extracted": [
                 5,
-                32.0,
-                94,
-                2.0,
-                5,
+                32.94,
+                2.5,
                 15,
                 2
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 5,
-                "max": 32.0,
+                "max": 32.94,
                 "levels": [
                   1,
                   18
@@ -199,7 +235,7 @@
               "formula": {
                 "type": "range",
                 "min": 5,
-                "max": 32.0,
+                "max": 32.94,
                 "unit": "percent"
               },
               "conditions": [],
@@ -315,27 +351,25 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63. 53 (based on level) less damage (including true damage ).",
+              "raw": "Passive: After taking damage from an enemy champion , activate Bone Plating for 1.5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63.53 (based on level) less damage (including true damage ).",
               "effect_type": "damage",
               "stat": "damage",
               "unit": "seconds",
               "values": null,
               "value_range": [
                 30,
-                63.0
+                63.53
               ],
               "numbers_extracted": [
-                1.0,
-                5,
+                1.5,
                 3,
                 30,
-                63.0,
-                53
+                63.53
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 30,
-                "max": 63.0,
+                "max": 63.53,
                 "levels": [
                   1,
                   18
@@ -346,7 +380,7 @@
               "formula": {
                 "type": "range",
                 "min": 30,
-                "max": 63.0,
+                "max": 63.53,
                 "unit": "seconds"
               },
               "conditions": [],
@@ -396,7 +430,7 @@
               "parse_confidence": 0.8
             },
             {
-              "raw": "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3. 5 %.",
+              "raw": "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3.5 %.",
               "effect_type": "healing",
               "stat": "health",
               "unit": "percent",
@@ -405,15 +439,14 @@
               "numbers_extracted": [
                 15,
                 120,
-                3.0,
-                5
+                3.5
               ],
               "scaling": null,
               "trigger": "conditional",
               "applies_to": "minion",
               "formula": {
                 "type": "flat",
-                "value": 15,
+                "value": 3.5,
                 "unit": "percent"
               },
               "conditions": [],
@@ -560,7 +593,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

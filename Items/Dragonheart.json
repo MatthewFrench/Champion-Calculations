@@ -187,7 +187,7 @@
       ],
       "scaling_terms": [],
       "modifiers": {
-        "immediate_souls_by_acquisition_round_inferred": [
+        "immediate_souls_by_acquisition_round": [
           {
             "round_min": 3,
             "round_max": 4,
@@ -209,13 +209,34 @@
             "souls_granted": 4
           }
         ],
-        "inference_basis": "Derived from current note-level source statement (immediate backfill up to 4) and Inner Flame two-round cadence."
+        "source_round_table": {
+          "acquisition_round_values": [
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10+"
+          ],
+          "souls_granted_values": [
+            1,
+            1,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4
+          ]
+        }
       },
       "numbers_extracted": [
         1.0,
         4.0
       ],
-      "parse_confidence": 0.66
+      "parse_confidence": 0.72
     }
   ],
   "shop": {
@@ -236,9 +257,9 @@
     "context_notes": [
       "Execution model: Inner Flame grants a random Dragon Soul every two Arena rounds, with each soul increasing the full listed stat package by 4% (up to six base souls).",
       "Player-visible behavior: after collecting six souls, Aspect of the Dragon is granted on the next phase and then contributes as an additional soul-equivalent stack for the same stat amplifier.",
-      "Wiki notes indicate acquisition-round immediate Dragon Soul backfill (up to 4) in current behavior. Canonical data now includes an inferred round-threshold mapping from two-round cadence (3-4 => 1, 5-6 => 2, 7-8 => 3, 9+ => 4).",
+      "Acquisition-round immediate Dragon Soul backfill uses explicit page-published round mapping (3-4 => 1, 5-6 => 2, 7-8 => 3, 9+ => 4), capped at 4 souls.",
       "Availability/economy note: this distributed item is Arena-scoped and acquired through distributed systems (for example anvils, augments, or round rewards) rather than standard shop purchase; Tier-1 datasets expose reconciliation economy values (total 1000 / sell 400).",
-      "Research note (2026-02-24): current page-level notes publish up-to-4 immediate backfill but not explicit per-round thresholds; structured thresholds are currently an inference from published cadence and cap constraints."
+      "The explicit round table is sourced from the page's immediate-backfill tooltip values (round acquired vs souls granted)."
     ]
   },
   "sources": [
@@ -257,8 +278,8 @@
     {
       "name": "League Wiki (Dragonheart)",
       "url": "https://wiki.leagueoflegends.com/en-us/Dragonheart",
-      "accessed": "2026-02-23",
-      "used_for": "page-level verification of round-interval soul gain, per-soul stat amplification, next-phase Aspect grant, Aspect extra-soul interaction, and acquisition-round immediate soul backfill behavior"
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification of round-interval soul gain, per-soul stat amplification, next-phase Aspect grant, Aspect extra-soul interaction, and explicit acquisition-round immediate backfill table values"
     },
     {
       "name": "League Wiki (Dragonheart patch history)",

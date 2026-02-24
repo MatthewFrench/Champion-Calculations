@@ -1,11 +1,12 @@
 #![recursion_limit = "512"]
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use clap::Parser;
 use rayon::ThreadPoolBuilder;
 
 mod build_order;
 mod cache;
+mod champion_control_harness;
 mod core;
 mod data;
 mod defaults;
@@ -50,6 +51,8 @@ fn main() -> Result<()> {
     let default_threads = available.saturating_sub(1).max(1);
     let threads = cli.threads.unwrap_or(default_threads).max(1);
     let _ = ThreadPoolBuilder::new().num_threads(threads).build_global();
+    defaults::preflight_required_defaults_channels()
+        .context("required defaults startup preflight failed")?;
 
     let scenario_path = resolve_scenario_path(&cli.scenario);
     match cli.mode {

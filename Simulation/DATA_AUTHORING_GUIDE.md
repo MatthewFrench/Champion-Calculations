@@ -28,6 +28,11 @@ Start here before implementation:
 - Structured-item parse-confidence completeness is currently fully normalized:
   - `243/243` structured item files have numeric `effects_structured[].parse_confidence` entries on all structured effects (`0` missing/null entries)
 - Rune cadence-text spacing artifact queue is currently clear (`0` remaining `0. 5`-style interval strings in flat/split canonical files).
+- Broader rune decimal-spacing cleanup is now clear (`0` remaining `x. y` spacing artifacts in canonical flat/split rune files).
+- Rune multi-branch semantic decomposition is now explicit for all current `per_rank` effects:
+  - `14/14` `formula.type = per_rank` rune effects include `semantic_components`
+  - deferred runtime/code follow-up remains to consume/enforce these components automatically
+- Deferred code follow-up remains for maintainability: add loader/lint enforcement so raw-text numeric normalization and dependent metadata consistency are validated automatically.
 - We do **not** yet have full runtime-mechanic coverage for all assets.
 - The canonical gap tracker is `Simulation/COVERAGE_GAPS.md`.
 
@@ -224,8 +229,8 @@ Priority C. Champion inventory and planning hygiene:
 - Track lifecycle-policy exceptions in `Simulation/COVERAGE_GAPS.md` so legacy data does not silently re-enter active simulation pools.
 
 14. Dragonheart acquisition-round fidelity:
-- Canonical structured effects now include immediate backfill branch plus inferred round-threshold brackets (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) from cadence/cap constraints.
-- Keep inference validation tracked until an explicit authoritative threshold table is published.
+- Canonical structured effects include immediate backfill branch with explicit page-published round-threshold brackets (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`).
+- Keep this table as a no-regression guardrail and re-verify only when source tables change.
 
 15. Champion-ability upgrade pseudo-item policy:
 - Define canonical expectations for pseudo-item upgrade entries tied to champion abilities (for example `Fire at Will`), including source provenance shape and simulation-use eligibility semantics.
@@ -257,9 +262,73 @@ Priority C. Champion inventory and planning hygiene:
 - Maintain `682/682` champion active abilities with non-empty `execution` objects.
 - Treat missing active execution objects as a blocking data-quality gap unless source data is unavailable and explicitly documented.
 
+22. Rune decimal-spacing normalization no-regression:
+- Keep rune `effects_structured.raw` decimal formatting normalized (avoid `x. y` artifacts) while preserving source meaning.
+- When correcting raw decimal spacing, update dependent numeric fields (`numbers_extracted`, and when affected `value_range` / `scaling` / `formula`) and verify flat/split parity remains exact.
+
+23. Rune multi-branch semantic-explicitness no-regression:
+- Keep `semantic_components` populated for touched rune effects that use multi-branch `formula.type = per_rank` values (for example melee/ranged, AD/AP, threshold progression).
+- Keep flat/split parity exact when adding or adjusting semantic-component branch labels and values.
+- If runtime does not yet consume a new semantic-component branch, document deferred code follow-up in `Simulation/COVERAGE_GAPS.md` in the same change.
+
+24. Champion execution-metadata expressiveness follow-up:
+- For movement abilities with formula-based velocity (for example `base + movement speed`), preserve formula semantics in notes and track runtime follow-up when `execution` stores only base speed.
+- For multi-stage same-slot abilities, document stage windows/recast gating and track runtime follow-up if stage identity is not first-class.
+- For cast-distance-scaled area-size abilities, document min/max radius behavior and track runtime follow-up if current runtime cannot interpolate dynamic radius.
+
 ### Progress Snapshot (2026-02-24)
 - Note: historical bullets below retain per-wave baseline counts captured when each wave landed; use top-of-file "Current Data Reality" and `Simulation/COVERAGE_GAPS.md` for current totals.
 - Completed in current data-first lane:
+  - Completed champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
+    - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
+    - expanded context-note execution semantics and schema notes with page-level template provenance
+  - Completed champion execution-semantics wave 104 (`Renekton` `Slice and Dice`):
+    - manually re-verified two-stage recast gating, traversal-hit timing, and move-speed-scaled dash-velocity semantics
+    - documented deferred runtime follow-up for formula-based dash-speed consumption (`760 + 100% movement speed`)
+  - Completed champion execution-semantics wave 105 (`Sylas` `Chain Lash`, `Abscond`):
+    - repaired delayed-detonation truncation defects on `Chain Lash` effect notes (`After a 0.` -> full `0.6-second` semantics)
+    - re-verified `Abscond` stage-one/stage-two timing-window semantics and logged deferred runtime follow-up for explicit multi-stage ability identity handling
+  - Completed champion execution-semantics wave 106 (`Vex` `Looming Darkness`):
+    - manually re-verified projectile-to-explosion timing, cast-distance-scaled radius behavior (`200 : 300`), and Doom flee-origin semantics
+    - documented deferred runtime follow-up for dynamic radius interpolation so runtime does not flatten this to a static hitbox
+  - Completed champion cast-timing fidelity wave 91:
+    - manually re-verified attack-speed-scaled cast gating and player-visible hit resolution on `Jinx` (`W`), `Kai'Sa` (`E`), `Yone` (`Q`,`W`), and `Zeri` (`W`)
+    - added page-level ability template citations for each touched champion and recorded wave scope in `Simulation/champion_behavior_verification_tracker.json`
+    - corrected discovered truncation defect in `Yone` `Fate Sealed` context notes (`Yone will blink after a 0.` -> full follow-up timing semantics)
+  - Completed item source-reconciliation wave 92 (`Twilight's Edge`):
+    - aligned canonical Material/Spirit AD/AP modifiers to current page-verified `25%` values and documented infobox/module description divergence
+    - encoded level-1-to-18 tooltip tables for Material attack-speed (`50-150%`) and Spirit ability-haste (`30-120`) scaling branches
+  - Completed item confidence-resolution wave 93 (`Dragonheart`):
+    - replaced inferred immediate-backfill thresholds with explicit page-published acquisition-round table values (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`)
+    - raised immediate-backfill confidence and removed inference-only language from canonical context notes
+  - Completed runes decimal/value normalization wave 94:
+    - normalized decimal spacing and corrected structured numeric/value metadata on `Electrocute`, `Dark Harvest`, `Press the Attack`, and `Lethal Tempo`
+    - applied equivalent corrections in flat and split rune files to preserve parity
+  - Completed runes decimal/value normalization wave 95 (`Domination` + `Precision` tranche):
+    - normalized decimal-spacing artifacts and synchronized dependent numeric metadata for high-impact non-keystone entries (`Cheap Shot`, `Taste of Blood`, `Triumph`, `Presence of Mind`, `Conqueror`, `Fleet Footwork`, `Legend` variants)
+    - preserved flat/split parity during the batch update
+  - Completed runes decimal/value normalization wave 96 (`Resolve` tranche):
+    - normalized decimal artifacts and dependent metadata on `Grasp of the Undying`, `Aftershock`, `Guardian`, `Font of Life`, `Shield Bash`, `Bone Plating`, and `Overgrowth`
+    - corrected range/min-max metadata where decimal spacing had previously split values
+  - Completed runes decimal/value normalization wave 97 (`Sorcery` tranche):
+    - normalized decimal artifacts and dependent metadata on `Summon Aery`, `Arcane Comet`, `Phase Rush`, `Absolute Focus`, `Scorch`, `Waterwalking`, and `Gathering Storm`
+    - reconciled by-level min/max metadata for affected range-formula entries
+  - Completed runes decimal/value normalization wave 98 (cross-tree no-regression repair/audit tranche):
+    - cleared remaining broad decimal-spacing queue (`28` entries across `27` runes -> `0`)
+    - validated no literal scripted-placeholder artifacts remain in rune raw text and confirmed flat/split synchronization after batch normalization
+    - documented deferred runtime code follow-up for loader/lint enforcement of raw-to-metadata consistency checks
+  - Completed rune semantic-explicitness wave 99 (`Inspiration` tranche):
+    - added explicit `semantic_components` decomposition for multi-branch `per_rank` effects on `First Strike` and `Jack of All Trades`
+    - documented trigger-window/cadence/threshold semantics with named branches instead of positional-only value interpretation
+  - Completed rune semantic-explicitness wave 100 (`Precision` tranche):
+    - added explicit `semantic_components` decomposition for `Lethal Tempo`, `Fleet Footwork`, `Conqueror`, and `Presence of Mind` multi-branch `per_rank` effects
+    - encoded melee/ranged, stack-cadence, and AD/AP branch semantics explicitly
+  - Completed rune semantic-explicitness wave 101 (`Resolve` tranche):
+    - added explicit `semantic_components` decomposition for `Grasp of the Undying`, `Demolish`, and `Font of Life` multi-branch `per_rank` effects
+    - encoded stack windows, turret branch values, and ally-heal radius/progression semantics explicitly
+  - Completed rune semantic-explicitness wave 102 (`Sorcery` tranche):
+    - added explicit `semantic_components` decomposition for `Phase Rush` and `Gathering Storm` multi-branch `per_rank` effects
+    - completed full `per_rank` semantic decomposition baseline (`14/14`), with deferred runtime consumption/enforcement logged for code follow-up
   - Completed item parse-confidence completeness wave 87:
     - backfilled missing/null `effects_structured[].parse_confidence` values across `12` remaining effect entries in `5` item files (`Trinity Force`, `Twilight's Edge`, `Warden's Eye`, `Wooglet's Witchcap`, `Zeke's Convergence`)
     - cleared structured-item missing/null parse-confidence queue to `0` entries (`0/243` files with gaps)
@@ -281,7 +350,7 @@ Priority C. Champion inventory and planning hygiene:
     - repaired a discovered truncated context-note fragment in `Poppy` `Keeper's Verdict` while hardening provenance
     - added page-level champion ability citation provenance for all touched champions and recorded scope in `Simulation/champion_behavior_verification_tracker.json`
   - Completed item confidence-reconciliation wave 82:
-    - encoded `Dragonheart` acquisition-round immediate backfill threshold brackets as inferred structured modifiers (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) based on published cadence/cap constraints
+    - (historical wave-82 baseline) encoded `Dragonheart` acquisition-round immediate backfill threshold brackets as inferred structured modifiers (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) based on published cadence/cap constraints
     - reconciled `Gambler's Blade` historical V14.12 `245` cap note against current canonical `240` cap and documented historical-only context metadata
   - Completed data-quality audit wave 83:
     - re-ran split-vs-flat rune parity checks (`61/61` rune IDs, `3/3` stat shard slots)
@@ -670,7 +739,7 @@ Priority C. Champion inventory and planning hygiene:
   - Resolve the tracked cross-version ID/name drift exception (`Zephyr` vs current Tier-1 `Gunmetal Greaves` on ID `3172`) with explicit legacy-ID policy.
   - Resolve canonical lifecycle/availability policy for rotating-mode-only item identities (`Wordless Promise`, `Perplexity`, `Atma's Reckoning`) so simulation pools stay intentionally scoped.
   - Standardize lifecycle-marker coverage policy for any additional retired/replaced item identities (currently explicit on `Zephyr` only).
-  - Validate Dragonheart inferred acquisition-round threshold brackets against an explicit authoritative table if published; keep inferred mapping documented in confidence notes until then.
+  - Maintain Dragonheart acquisition-round table no-regression (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) and re-verify if the page-published threshold table changes.
   - Resolve Lifeline special-case snapback interactions (displacement/channel/crowd-control edge cases) if simulation accuracy should include these interaction branches.
   - Continue Golden Spatula fidelity follow-up on mode-scoped stat/economy drift and non-modeled runtime handling assumptions (confidence floor work is complete).
   - Muramana Shock proc-damage exclusion is now documented in data, but runtime proc-damage classification for champion-ability branches is still a deferred code-layer follow-up.

@@ -1,4 +1,5 @@
 use super::*;
+use crate::world::{WorldActorAllegiance, WorldActorClass, WorldActorPosition};
 
 impl ControlledChampionCombatSimulation {
     pub(in crate::engine) fn apply_enemy_respawn_updates(&mut self) {
@@ -37,6 +38,17 @@ impl ControlledChampionCombatSimulation {
                 );
             }
             self.trace_event("enemy_respawn", format!("{} respawned", name));
+            let respawn_position = self.enemy_state[idx].position;
+            let enemy_actor_id = self.enemy_state[idx].enemy.id.clone();
+            self.world_state.upsert_actor_position_clamped(
+                &enemy_actor_id,
+                WorldActorClass::Champion,
+                WorldActorAllegiance::OpponentTeam,
+                WorldActorPosition {
+                    x: respawn_position.x,
+                    y: respawn_position.y,
+                },
+            );
         }
     }
 

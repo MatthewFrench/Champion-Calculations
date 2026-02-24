@@ -12,9 +12,16 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Search is parallelized and supports multiple algorithms (`beam`, `hill_climb`, `genetic`, `simulated_annealing`, `mcts`, `random`, `portfolio`).
 - Controlled-champion and opponent simulation use shared generic abstractions (actors/champions), not enemy-only core paths.
 - A shared world ownership scaffold exists under `Simulation/src/world/` and is used for deterministic encounter placement validation before run execution.
+- World ownership now includes explicit actor allegiance channels and baseline non-champion ecology anchors (structures, monsters, minion spawns) for encounter-state assembly.
+- Runtime enemy movement and respawn position updates now route through world ownership upsert/clamp channels, keeping runtime enemy positions map-bounded.
+- Runtime world lifecycle channels now advance deterministic minion-wave spawn/despawn loops and neutral objective spawn/respawn timers through `Simulation/src/world/world_actor_lifecycle_channels.rs`.
+- Champion controller harness phase-2 runtime ingress now routes deterministic controlled-champion command handling through `Simulation/src/champion_control_harness/*` + `Simulation/src/engine/controlled_champion_controller_channels.rs` with sequence-ordered request execution and command-owned movement stepping.
 - Controlled champion script coverage currently includes `Vladimir` and `Sona`.
 - Controlled-champion modes now fail fast when the selected champion has no registered controlled-champion script, preventing silent no-script degradations.
-- Engine event-resolution/trace channels now guard stale actor-index payloads (non-test `expect(...)` callsites in `Simulation/src` are now zero).
+- Engine event-resolution/trace channels now guard stale actor-index payloads.
+- Non-test `expect(...)` and `panic!(...)` callsites in `Simulation/src` are now zero.
+- Required defaults channels now use centralized strict fail-fast ownership (`Simulation/src/defaults.rs`) with no silent empty-map fallback for required simulator/champion/mode defaults data.
+- CLI startup now runs required-defaults preflight and returns typed contextual startup errors before mode/scenario dispatch when required defaults channels fail to load.
 - Runtime metrics are resolved from canonical base data plus active buff state through shared stat queries:
   - cooldown metrics (ability/item/neutral)
   - scalar combat metrics (incoming damage taken, healing, movement speed, and outgoing bonus-ability damage)
@@ -160,6 +167,10 @@ This repository contains a data-driven combat simulator focused on URF team-figh
   - `Simulation/tools/architecture_metrics.sh` (line-budget/progress snapshot command)
 - Full-game target blueprint (non-data + runtime systems to renderer-ready parity):
   - `Simulation/FULL_GAME_SIMULATION_BLUEPRINT.md`
+- Champion controller harness architecture (player/AI parity contract and integration plan):
+  - `Simulation/CHAMPION_CONTROLLER_HARNESS_ARCHITECTURE.md`
+- Deterministic request/fast-forward runtime model (research-backed):
+  - `Simulation/DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`
 - Roadmap and status:
   - `Simulation/IMPLEMENTATION_ROADMAP.md`
   - `Simulation/IMPROVEMENT_TRACKER.md`

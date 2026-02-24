@@ -26,6 +26,9 @@ Read first:
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
 - [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
 - [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.
+- [ ] For movement abilities with formula-based dash speed (for example `base + movement speed`), the formula semantics are documented and deferred runtime follow-up is tracked if `execution` stores only base speed.
+- [ ] For distance-scaled area-size abilities, min/max radius semantics are documented and deferred runtime follow-up is tracked if runtime cannot currently interpolate dynamic radius.
+- [ ] For multi-stage same-slot abilities, stage timing windows/recast gating are explicitly documented and deferred runtime follow-up is tracked when stage identity is not first-class in runtime data flow.
 - [ ] Touched champion abilities have non-empty `description_source` values; missing values were backfilled from authoritative/source-corpus ability text.
 - [ ] If temporary fallback-derived `description_source` values were used to close completeness, provenance-hardening follow-up was explicitly tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] Touched champion/effect `context_notes` strings were checked for truncation artifacts (for example `for 0.` / `within 4.`) and normalized to complete timing/unit semantics.
@@ -94,6 +97,7 @@ Read first:
 - [ ] If item economy fields were edited (for example `shop.prices.sell`), values were cross-checked against Tier-1 dataset values and intentional overrides were documented.
 - [ ] If item economy fields were edited (for example `shop.prices.total` / `shop.prices.sell`), Tier-1 ID/name drift was checked (legacy file identity vs current dataset identity), and any exception was tracked in `Simulation/COVERAGE_GAPS.md`.
 - [ ] If Tier-1 and page-level sources diverge because one item ID maps to different mode-scoped identities, reconciliation notes were added in `schema_notes.context_notes` and mode-aware identity follow-up was tracked in `Simulation/COVERAGE_GAPS.md`.
+- [ ] If page-level sections disagree internally (for example infobox/tooltip tables vs module-derived description lines), the canonical value choice is reconciled and explicitly documented in `schema_notes.context_notes`.
 - [ ] If the item is retired/replaced but retained for reference, `lifecycle` metadata explicitly marks simulation exclusion (`exclude_from_simulation = true`) with replacement/reason notes.
 - [ ] Legacy/reference lifecycle metadata includes required fields (`status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) so ID/name drift handling is explicit.
 - [ ] Any intentional sell/economy override is listed as an explicit exception (item file context notes + `Simulation/COVERAGE_GAPS.md` snapshot/priority notes).
@@ -108,6 +112,10 @@ Read first:
 ## 4) Rune And Shard Coverage
 - [ ] Rune canonical data is synchronized between flat compatibility file (`Masteries/RunesReforged.json`) and split structure (`Masteries/RunesReforged/RunesReforged.json` + `Trees/*/primary_runes.json` + `Trees/*/secondary_runes.json` + `StatShards/stat_shards.json`).
 - [ ] Rune decimal text normalization was checked for generated spacing artifacts (for example `0. 5` -> `0.5`) in both flat and split files when touched.
+- [ ] Rune raw text was checked for broader decimal-spacing artifacts (`x. y` patterns) on touched entries, and corrected where it improved structured-value correctness.
+- [ ] When rune decimal-spacing artifacts were corrected, dependent numeric metadata (`numbers_extracted`, and where affected `value_range` / `scaling` / `formula`) was normalized in both flat and split files.
+- [ ] Post-edit rune scans confirmed no literal backreference placeholder artifacts (for example `\1.\2`) in `effects_structured.raw`.
+- [ ] Touched multi-branch rune `per_rank` effects include `semantic_components` with explicit branch labels (for example melee/ranged, AD/AP, threshold branches).
 - [ ] Split rune-tree structure exists and is complete for all trees (`Domination`, `Inspiration`, `Precision`, `Resolve`, `Sorcery`) with both primary and secondary files.
 - [ ] Mastery files touched in this change include explicit `sources` entries with complete `accessed` metadata (backfill missing `sources[].accessed` values in touched files).
 - [ ] Deterministic stat effects are parseable by `Simulation/src/data.rs`.

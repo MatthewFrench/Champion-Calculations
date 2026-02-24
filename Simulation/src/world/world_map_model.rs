@@ -10,6 +10,13 @@ impl WorldBounds {
     pub(crate) fn contains(self, x: f64, y: f64) -> bool {
         x >= self.min_x && x <= self.max_x && y >= self.min_y && y <= self.max_y
     }
+
+    pub(crate) fn clamp(self, x: f64, y: f64) -> (f64, f64) {
+        (
+            x.clamp(self.min_x, self.max_x),
+            y.clamp(self.min_y, self.max_y),
+        )
+    }
 }
 
 #[derive(Debug, Clone)]

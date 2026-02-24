@@ -31,28 +31,24 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0. 45 seconds, dealing 10 – 54. 71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0. 35 seconds, shielding them for 30 – 108. 24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
+              "raw": "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0.45 seconds, dealing 10 – 54.71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0.35 seconds, shielding them for 30 – 108.24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
               "effect_type": "damage",
               "stat": "damage",
               "unit": "percent",
               "values": null,
               "value_range": [
                 10,
-                54.0
+                54.71
               ],
               "numbers_extracted": [
-                0.0,
-                45,
+                0.45,
                 10,
-                54.0,
-                71,
+                54.71,
                 10,
                 5,
-                0.0,
-                35,
+                0.35,
                 30,
-                108.0,
-                24,
+                108.24,
                 10,
                 5,
                 2
@@ -60,7 +56,7 @@
               "scaling": {
                 "type": "by_level",
                 "min": 10,
-                "max": 54.0,
+                "max": 54.71,
                 "levels": [
                   1,
                   18
@@ -71,7 +67,7 @@
               "formula": {
                 "type": "range",
                 "min": 10,
-                "max": 54.0,
+                "max": 54.71,
                 "unit": "percent"
               },
               "conditions": [],
@@ -140,22 +136,20 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0. 825 seconds , dealing 30 – 141. 76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
+              "raw": "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0.825 seconds , dealing 30 – 141.76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
               "effect_type": "damage",
               "stat": "damage",
               "unit": "percent",
               "values": null,
               "value_range": [
                 30,
-                141.0
+                141.76
               ],
               "numbers_extracted": [
                 0,
-                0.0,
-                825,
+                0.825,
                 30,
-                141.0,
-                76,
+                141.76,
                 10,
                 5,
                 140
@@ -163,7 +157,7 @@
               "scaling": {
                 "type": "by_level",
                 "min": 30,
-                "max": 141.0,
+                "max": 141.76,
                 "levels": [
                   1,
                   18
@@ -174,7 +168,7 @@
               "formula": {
                 "type": "range",
                 "min": 30,
-                "max": 141.0,
+                "max": 141.76,
                 "unit": "percent"
               },
               "conditions": [],
@@ -241,7 +235,7 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% – 52. 94 % / 12. 5 % – 26. 47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds.",
+              "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% – 52.94 % / 12.5 % – 26.47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds.",
               "effect_type": "damage",
               "stat": "movement_speed",
               "unit": "percent",
@@ -249,12 +243,9 @@
                 3,
                 4,
                 25,
-                52.0,
-                94,
-                12.0,
-                5,
-                26.0,
-                47,
+                52.94,
+                12.5,
+                26.47,
                 50,
                 3
               ],
@@ -263,19 +254,16 @@
                 3,
                 4,
                 25,
-                52.0,
-                94,
-                12.0,
-                5,
-                26.0,
-                47,
+                52.94,
+                12.5,
+                26.47,
                 50,
                 3
               ],
               "scaling": {
                 "type": "by_level",
-                "min": null,
-                "max": null,
+                "min": 25,
+                "max": 52.94,
                 "levels": [
                   1,
                   18
@@ -289,12 +277,9 @@
                   3,
                   4,
                   25,
-                  52.0,
-                  94,
-                  12.0,
-                  5,
-                  26.0,
-                  47,
+                  52.94,
+                  12.5,
+                  26.47,
                   50,
                   3
                 ],
@@ -303,7 +288,43 @@
               "conditions": [
                 "vs_champions"
               ],
-              "parse_confidence": 1.0
+              "parse_confidence": 1.0,
+              "semantic_components": [
+                {
+                  "component_id": "stacks_required",
+                  "value": 3,
+                  "unit": "stacks"
+                },
+                {
+                  "component_id": "stack_window_seconds",
+                  "value": 4,
+                  "unit": "seconds"
+                },
+                {
+                  "component_id": "bonus_movement_speed_by_level_percent",
+                  "branches": {
+                    "melee": [
+                      25,
+                      52.94
+                    ],
+                    "ranged": [
+                      12.5,
+                      26.47
+                    ]
+                  },
+                  "unit": "percent"
+                },
+                {
+                  "component_id": "slow_resist_percent",
+                  "value": 50,
+                  "unit": "percent"
+                },
+                {
+                  "component_id": "effect_duration_seconds",
+                  "value": 3,
+                  "unit": "seconds"
+                }
+              ]
             }
           ],
           "template_source": "Template:Rune data Phase Rush"
@@ -587,29 +608,26 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 1. 8 – 19. 91 (based on level) bonus Attack Damage or 3 – 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
+              "raw": "Passive: Gain 1.8 – 19.91 (based on level) bonus Attack Damage or 3 – 33.18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
               "effect_type": "damage",
               "stat": "attack_damage",
               "unit": "percent",
               "values": null,
               "value_range": [
-                8,
-                19.0
+                1.8,
+                19.91
               ],
               "numbers_extracted": [
-                1.0,
-                8,
-                19.0,
-                91,
+                1.8,
+                19.91,
                 3,
-                33.0,
-                18,
+                33.18,
                 70
               ],
               "scaling": {
                 "type": "by_level",
-                "min": 8,
-                "max": 19.0,
+                "min": 1.8,
+                "max": 19.91,
                 "levels": [
                   1,
                   18
@@ -619,8 +637,8 @@
               "applies_to": null,
               "formula": {
                 "type": "range",
-                "min": 8,
-                "max": 19.0,
+                "min": 1.8,
+                "max": 19.91,
                 "unit": "percent"
               },
               "conditions": [],
@@ -664,25 +682,24 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42. 35 (based on level) bonus magic damage after 1 second.",
+              "raw": "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42.35 (based on level) bonus magic damage after 1 second.",
               "effect_type": "damage",
               "stat": "damage",
               "unit": "seconds",
               "values": null,
               "value_range": [
                 20,
-                42.0
+                42.35
               ],
               "numbers_extracted": [
                 20,
-                42.0,
-                35,
+                42.35,
                 1
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 20,
-                "max": 42.0,
+                "max": 42.35,
                 "levels": [
                   1,
                   18
@@ -693,7 +710,7 @@
               "formula": {
                 "type": "range",
                 "min": 20,
-                "max": 42.0,
+                "max": 42.35,
                 "unit": "seconds"
               },
               "conditions": [],
@@ -715,28 +732,26 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 – 19. 2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
+              "raw": "Passive: While in the river , you gain 10 bonus movement speed and 7.8 – 19.2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
               "effect_type": "damage",
               "stat": "attack_damage",
               "unit": null,
               "values": null,
               "value_range": [
-                8,
-                19.0
+                7.8,
+                19.2
               ],
               "numbers_extracted": [
                 10,
-                7.0,
-                8,
-                19.0,
-                2,
+                7.8,
+                19.2,
                 13,
                 32
               ],
               "scaling": {
                 "type": "by_level",
-                "min": 8,
-                "max": 19.0,
+                "min": 7.8,
+                "max": 19.2,
                 "levels": [
                   1,
                   18
@@ -746,8 +761,8 @@
               "applies_to": null,
               "formula": {
                 "type": "range",
-                "min": 8,
-                "max": 19.0,
+                "min": 7.8,
+                "max": 19.2,
                 "unit": null
               },
               "conditions": [],
@@ -786,25 +801,20 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
+              "raw": "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4.8 / 14.4 / 28.8 / 48 / 72 / 100.8 / 134.4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
               "effect_type": "damage",
               "stat": "attack_damage",
               "unit": null,
               "values": [
                 10,
                 0,
-                4.0,
-                8,
-                14.0,
-                4,
-                28.0,
-                8,
+                4.8,
+                14.4,
+                28.8,
                 48,
                 72,
-                100.0,
-                8,
-                134.0,
-                4,
+                100.8,
+                134.4,
                 0,
                 8,
                 24,
@@ -818,18 +828,13 @@
               "numbers_extracted": [
                 10,
                 0,
-                4.0,
-                8,
-                14.0,
-                4,
-                28.0,
-                8,
+                4.8,
+                14.4,
+                28.8,
                 48,
                 72,
-                100.0,
-                8,
-                134.0,
-                4,
+                100.8,
+                134.4,
                 0,
                 8,
                 24,
@@ -849,18 +854,13 @@
                 "values": [
                   10,
                   0,
-                  4.0,
-                  8,
-                  14.0,
-                  4,
-                  28.0,
-                  8,
+                  4.8,
+                  14.4,
+                  28.8,
                   48,
                   72,
-                  100.0,
-                  8,
-                  134.0,
-                  4,
+                  100.8,
+                  134.4,
                   0,
                   8,
                   24,
@@ -873,7 +873,47 @@
                 "unit": null
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.8,
+              "semantic_components": [
+                {
+                  "component_id": "interval_minutes",
+                  "value": 10,
+                  "unit": "minutes"
+                },
+                {
+                  "component_id": "attack_damage_progression_by_interval",
+                  "values": [
+                    0,
+                    4.8,
+                    14.4,
+                    28.8,
+                    48,
+                    72,
+                    100.8,
+                    134.4
+                  ],
+                  "unit": "attack_damage"
+                },
+                {
+                  "component_id": "ability_power_progression_by_interval",
+                  "values": [
+                    0,
+                    8,
+                    24,
+                    48,
+                    80,
+                    120,
+                    168,
+                    224
+                  ],
+                  "unit": "ability_power"
+                },
+                {
+                  "component_id": "progression_note",
+                  "value": "continues beyond listed intervals",
+                  "unit": null
+                }
+              ]
             },
             {
               "raw": "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed.",
@@ -909,7 +949,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

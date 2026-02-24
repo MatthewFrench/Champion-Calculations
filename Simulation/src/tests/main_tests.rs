@@ -256,6 +256,50 @@ fn champion_ai_script_priority_override_normalizes_event_key_format() {
 }
 
 #[test]
+fn required_defaults_channels_load_with_expected_shapes() {
+    crate::defaults::preflight_required_defaults_channels()
+        .expect("required defaults startup preflight should succeed");
+    let simulator_defaults = crate::defaults::simulator_defaults();
+    assert!(
+        simulator_defaults
+            .engine_defaults
+            .default_champion_hitbox_radius
+            > 0.0
+    );
+
+    let urf = crate::defaults::urf_respawn_defaults();
+    assert!(urf.time_scaling_cap_seconds >= 0.0);
+
+    let zhonya = crate::defaults::zhonya_time_stop_defaults();
+    assert!(zhonya.duration_seconds > 0.0);
+    assert!(zhonya.cooldown_seconds > 0.0);
+
+    let guardian_angel = crate::defaults::guardian_angel_rebirth_defaults();
+    assert!(guardian_angel.cooldown_seconds > 0.0);
+    assert!(guardian_angel.revive_duration_seconds > 0.0);
+
+    let protoplasm = crate::defaults::protoplasm_lifeline_defaults();
+    assert!(protoplasm.duration_seconds > 0.0);
+    assert!(protoplasm.trigger_health_percent > 0.0);
+
+    assert!(crate::defaults::heartsteel_colossal_consumption_cooldown_seconds_default() > 0.0);
+    assert!(crate::defaults::luden_echo_cooldown_seconds_default() > 0.0);
+    assert!(crate::defaults::protoplasm_lifeline_cooldown_seconds_default() > 0.0);
+
+    let ai_profile = crate::defaults::champion_ai_profile("Morgana", 450.0);
+    assert!(ai_profile.desired_combat_range >= 75.0);
+    assert!(ai_profile.script_poll_interval_seconds > 0.0);
+}
+
+#[test]
+fn required_defaults_startup_preflight_is_idempotent() {
+    crate::defaults::preflight_required_defaults_channels()
+        .expect("first required defaults preflight should succeed");
+    crate::defaults::preflight_required_defaults_channels()
+        .expect("second required defaults preflight should succeed");
+}
+
+#[test]
 fn shared_core_modules_do_not_include_vladimir_shortcuts() {
     let src_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src");
     for module_path in ["engine.rs", "core.rs", "search.rs", "reporting.rs"] {

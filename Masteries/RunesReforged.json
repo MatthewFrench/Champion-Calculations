@@ -22,12 +22,12 @@
               "short_desc": "Hitting a champion with 3 <b>separate</b> attacks or abilities in 3s deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword>.",
               "long_desc": "Hitting a champion with 3 <b>separate</b> attacks or abilities within 3s deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>adaptive damage</font></lol-uikit-tooltipped-keyword>.<br><br>Damage: 70 - 240 (+0.1 bonus AD, +0.05 AP) damage.<br>Cooldown: 20s<br><br><i>'We called them the Thunderlords, for to speak of their lightning was to invite disaster.'</i>",
               "wiki_descriptions": [
-                "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 3 second period causes them to be struck by lightning after a 0. 25 -second delay, dealing them 70 \u2013 260 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage.",
-                "If \u300c 10% bonus AD \u2265 5% AP ,\u00a0\u300d \u300c bonus AD \u2265 50% AP ,\u00a0\u300d deals physical damage . If otherwise, deals magic damage ."
+                "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 3 second period causes them to be struck by lightning after a 0. 25 -second delay, dealing them 70 – 260 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage.",
+                "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage ."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 3 second period causes them to be struck by lightning after a 0. 25 -second delay, dealing them 70 \u2013 260 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage.",
+                  "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 3 second period causes them to be struck by lightning after a 0.25-second delay, dealing them 70 – 260 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
@@ -39,8 +39,7 @@
                   "numbers_extracted": [
                     3,
                     3,
-                    0.0,
-                    25,
+                    0.25,
                     70,
                     260,
                     10,
@@ -69,7 +68,7 @@
                   "parse_confidence": 1.0
                 },
                 {
-                  "raw": "If \u300c 10% bonus AD \u2265 5% AP ,\u00a0\u300d \u300c bonus AD \u2265 50% AP ,\u00a0\u300d deals physical damage . If otherwise, deals magic damage .",
+                  "raw": "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage .",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
@@ -104,11 +103,11 @@
               "wiki_descriptions": [
                 "Passive: Damaging basic attacks and ability damage against enemy champions below 50% of their maximum health deal 30 (+ 11 per Soul) (+ 10% bonus AD) (+ 5% AP) bonus adaptive damage and, after a 1. 75 -second delay, reap 1 Soul . This cannot occur again for 35 seconds, resetting to 1 second upon scoring a takedown against an enemy champion.",
                 "While not on cooldown, also reap 1 Soul from receiving the kill credit of a champion killed by a minion , monster , or turret .",
-                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
+                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Damaging basic attacks and ability damage against enemy champions below 50% of their maximum health deal 30 (+ 11 per Soul) (+ 10% bonus AD) (+ 5% AP) bonus adaptive damage and, after a 1. 75 -second delay, reap 1 Soul . This cannot occur again for 35 seconds, resetting to 1 second upon scoring a takedown against an enemy champion.",
+                  "raw": "Passive: Damaging basic attacks and ability damage against enemy champions below 50% of their maximum health deal 30 (+ 11 per Soul) (+ 10% bonus AD) (+ 5% AP) bonus adaptive damage and, after a 1.75-second delay, reap 1 Soul . This cannot occur again for 35 seconds, resetting to 1 second upon scoring a takedown against an enemy champion.",
                   "effect_type": "damage",
                   "stat": "adaptive",
                   "unit": "percent",
@@ -120,8 +119,7 @@
                     11,
                     10,
                     5,
-                    1.0,
-                    75,
+                    1.75,
                     1,
                     35,
                     1
@@ -161,7 +159,7 @@
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
+                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
                   "effect_type": "condition_note",
                   "stat": "adaptive_damage_type_resolution",
                   "unit": null,
@@ -253,30 +251,29 @@
               "short_desc": "Deal bonus true damage to enemy champions with <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairAct'>impaired movement or actions</lol-uikit-tooltipped-keyword>. ",
               "long_desc": "Damaging champions with <b>impaired movement or actions</b> deals 10 - 45 bonus true damage (based on level).<br><br>Cooldown: 4s<br><rules>Activates on damage occurring after the impairment.</rules>",
               "wiki_descriptions": [
-                "Passive: Damaging basic attacks and ability damage deal 10 \u2013 49. 12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
+                "Passive: Damaging basic attacks and ability damage deal 10 – 49. 12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
                 "Valid Crowd Control: Immobilizes Blind Disarm Ground Nearsight Polymorph Silence Slow",
                 "The target must already be impaired prior to the damaging attack or spell in order to trigger the bonus damage."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Damaging basic attacks and ability damage deal 10 \u2013 49. 12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
+                  "raw": "Passive: Damaging basic attacks and ability damage deal 10 – 49.12 (based on level) bonus true damage to enemy champions affected by certain crowd control effects.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": null,
                   "values": null,
                   "value_range": [
                     10,
-                    49.0
+                    49.12
                   ],
                   "numbers_extracted": [
                     10,
-                    49.0,
-                    12
+                    49.12
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 10,
-                    "max": 49.0,
+                    "max": 49.12,
                     "levels": [
                       1,
                       18
@@ -287,7 +284,7 @@
                   "formula": {
                     "type": "range",
                     "min": 10,
-                    "max": 49.0,
+                    "max": 49.12,
                     "unit": null
                   },
                   "conditions": [],
@@ -345,31 +342,30 @@
               "short_desc": "Heal when you damage an enemy champion.",
               "long_desc": "Heal when you damage an enemy champion.<br><br>Healing: 16-40 (+0.1 bonus AD, +0.05 AP) health (based on level)<br><br>Cooldown: 20s",
               "wiki_descriptions": [
-                "Passive: Damaging an enemy champion heals you for 16 \u2013 42. 82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
+                "Passive: Damaging an enemy champion heals you for 16 – 42. 82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
                 "Does not trigger at full health."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Damaging an enemy champion heals you for 16 \u2013 42. 82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
+                  "raw": "Passive: Damaging an enemy champion heals you for 16 – 42.82 (based on level) (+ 10% bonus AD) (+ 5% AP) .",
                   "effect_type": "healing",
                   "stat": "healing",
                   "unit": "percent",
                   "values": null,
                   "value_range": [
                     16,
-                    42.0
+                    42.82
                   ],
                   "numbers_extracted": [
                     16,
-                    42.0,
-                    82,
+                    42.82,
                     10,
                     5
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 16,
-                    "max": 42.0,
+                    "max": 42.82,
                     "levels": [
                       1,
                       18
@@ -380,7 +376,7 @@
                   "formula": {
                     "type": "range",
                     "min": 16,
-                    "max": 42.0,
+                    "max": 42.82,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -412,11 +408,11 @@
               "short_desc": "Damaging basic attacks and abilities deal bonus true damage to enemy champions after using a dash, leap, blink, teleport, or when leaving stealth.",
               "long_desc": "Damaging basic attacks and abilities deal a bonus <trueDamage>20 - 80 True Damage</trueDamage> based on level to enemy champions after using a dash, leap, blink, teleport, or when leaving stealth for 4s.<br><br>Cooldown: 10s",
               "wiki_descriptions": [
-                "Passive: Dealing damage to an enemy champion within 4 seconds of using a dash or blink , or exiting from stealth , deals 20 \u2013 80 (based on level) bonus true damage to them."
+                "Passive: Dealing damage to an enemy champion within 4 seconds of using a dash or blink , or exiting from stealth , deals 20 – 80 (based on level) bonus true damage to them."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Dealing damage to an enemy champion within 4 seconds of using a dash or blink , or exiting from stealth , deals 20 \u2013 80 (based on level) bonus true damage to them.",
+                  "raw": "Passive: Dealing damage to an enemy champion within 4 seconds of using a dash or blink , or exiting from stealth , deals 20 – 80 (based on level) bonus true damage to them.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "seconds",
@@ -591,12 +587,12 @@
               "short_desc": "Your wards in the enemy jungle are <keywordMajor>Deep</keywordMajor>, gaining Health and Duration.<br><br>Level 9: Wards in the river are also <keywordMajor>Deep</keywordMajor>.",
               "long_desc": "Your wards in the enemy jungle are <keywordMajor>Deep</keywordMajor>. <keywordMajor>Deep</keywordMajor> wards gain +1 extra Health and +[30 - 45]s increased duration (+[45 - 150]s for Trinket stealth wards).<br><br>Level 9: Wards in the river are also <keywordMajor>Deep</keywordMajor>.",
               "wiki_descriptions": [
-                "Passive: Stealth Wards and Totem Wards placed in the enemy jungle are considered Deep . All Deep wards are granted 1 bonus health , Deep Stealth Wards last 30 \u2013 45 (based on average champion level) seconds longer, and Deep Totem Wards last 45 \u2013 150 (based on average champion level) seconds longer.",
+                "Passive: Stealth Wards and Totem Wards placed in the enemy jungle are considered Deep . All Deep wards are granted 1 bonus health , Deep Stealth Wards last 30 – 45 (based on average champion level) seconds longer, and Deep Totem Wards last 45 – 150 (based on average champion level) seconds longer.",
                 "At level 9, wards placed in the river will also be considered Deep ."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Stealth Wards and Totem Wards placed in the enemy jungle are considered Deep . All Deep wards are granted 1 bonus health , Deep Stealth Wards last 30 \u2013 45 (based on average champion level) seconds longer, and Deep Totem Wards last 45 \u2013 150 (based on average champion level) seconds longer.",
+                  "raw": "Passive: Stealth Wards and Totem Wards placed in the enemy jungle are considered Deep . All Deep wards are granted 1 bonus health , Deep Stealth Wards last 30 – 45 (based on average champion level) seconds longer, and Deep Totem Wards last 45 – 150 (based on average champion level) seconds longer.",
                   "effect_type": "healing",
                   "stat": "health",
                   "unit": "seconds",
@@ -1031,13 +1027,12 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Initiating combat with an enemy champion within the first 0. 25 seconds of champion combat grants 10 and First Strike for 3 seconds, causing all of your post-mitigation damage dealt against champions to deal 7% bonus true damage . Afterwards, you are granted gold equal to ( 50% / 35% ) of all bonus damage dealt within the duration.",
+                  "raw": "Passive: Initiating combat with an enemy champion within the first 0.25 seconds of champion combat grants 10 and First Strike for 3 seconds, causing all of your post-mitigation damage dealt against champions to deal 7% bonus true damage . Afterwards, you are granted gold equal to ( 50% / 35% ) of all bonus damage dealt within the duration.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
                   "values": [
-                    0.0,
-                    25,
+                    0.25,
                     10,
                     3,
                     7,
@@ -1046,8 +1041,7 @@
                   ],
                   "value_range": null,
                   "numbers_extracted": [
-                    0.0,
-                    25,
+                    0.25,
                     10,
                     3,
                     7,
@@ -1060,8 +1054,7 @@
                   "formula": {
                     "type": "per_rank",
                     "values": [
-                      0.0,
-                      25,
+                      0.25,
                       10,
                       3,
                       7,
@@ -1073,7 +1066,37 @@
                   "conditions": [
                     "vs_champions"
                   ],
-                  "parse_confidence": 1.0
+                  "parse_confidence": 1.0,
+                  "semantic_components": [
+                    {
+                      "component_id": "trigger_window_seconds",
+                      "value": 0.25,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "activation_gold",
+                      "value": 10,
+                      "unit": "gold"
+                    },
+                    {
+                      "component_id": "buff_duration_seconds",
+                      "value": 3,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "bonus_true_damage_percent",
+                      "value": 7,
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "bonus_damage_to_gold_conversion_percent",
+                      "branches": {
+                        "melee": 50,
+                        "ranged": 35
+                      },
+                      "unit": "percent"
+                    }
+                  ]
                 },
                 {
                   "raw": "First Strike will be placed on full cooldown without activating its effects after being struck by an enemy champion before you strike them.",
@@ -1135,15 +1158,14 @@
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "Active: You begin charging for up to 2. 5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
+                  "raw": "Active: You begin charging for up to 2.5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
                   "effect_type": "cooldown",
                   "stat": "movement_speed",
                   "unit": "seconds",
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    2.0,
-                    5,
+                    2.5,
                     0,
                     1,
                     1,
@@ -1154,14 +1176,14 @@
                   "applies_to": "enemy_champion",
                   "formula": {
                     "type": "flat",
-                    "value": 2.0,
+                    "value": 2.5,
                     "unit": "seconds"
                   },
                   "conditions": [],
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0. 25 seconds.",
+                  "raw": "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0.25 seconds.",
                   "effect_type": "stat_modifier",
                   "stat": "movement_speed",
                   "unit": "percent",
@@ -1169,8 +1191,7 @@
                   "value_range": null,
                   "numbers_extracted": [
                     50,
-                    0.0,
-                    25
+                    0.25
                   ],
                   "scaling": null,
                   "trigger": "on_cast",
@@ -1296,22 +1317,21 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Upon purchasing a Legendary item , you are automatically refunded 7. 5 % of its total gold cost.",
+                  "raw": "Passive: Upon purchasing a Legendary item , you are automatically refunded 7.5 % of its total gold cost.",
                   "effect_type": "resource",
                   "stat": "gold",
                   "unit": "percent",
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    7.0,
-                    5
+                    7.5
                   ],
                   "scaling": null,
                   "trigger": null,
                   "applies_to": "ally",
                   "formula": {
                     "type": "flat",
-                    "value": 7.0,
+                    "value": 7.5,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -1620,15 +1640,14 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain 7. 5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
+                  "raw": "Passive: Gain 7.5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
                   "effect_type": "stat_modifier",
                   "stat": "movement_speed",
                   "unit": "percent",
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    7.0,
-                    5,
+                    7.5,
                     1000
                   ],
                   "scaling": null,
@@ -1636,7 +1655,7 @@
                   "applies_to": "enemy_champion",
                   "formula": {
                     "type": "flat",
-                    "value": 7.0,
+                    "value": 7.5,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -1707,7 +1726,22 @@
                     "unit": null
                   },
                   "conditions": [],
-                  "parse_confidence": 0.8
+                  "parse_confidence": 0.8,
+                  "semantic_components": [
+                    {
+                      "component_id": "ability_haste_per_unique_item_stat",
+                      "value": 1,
+                      "unit": "ability_haste"
+                    },
+                    {
+                      "component_id": "adaptive_force_threshold_stacks",
+                      "values": [
+                        5,
+                        10
+                      ],
+                      "unit": "stacks"
+                    }
+                  ]
                 },
                 {
                   "raw": "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain 10 or 25 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks, respectively.",
@@ -1744,7 +1778,22 @@
                     "unit": null
                   },
                   "conditions": [],
-                  "parse_confidence": 0.8
+                  "parse_confidence": 0.8,
+                  "semantic_components": [
+                    {
+                      "component_id": "ability_haste_per_unique_item_stat",
+                      "value": 1,
+                      "unit": "ability_haste"
+                    },
+                    {
+                      "component_id": "adaptive_force_bonus_by_stack_threshold",
+                      "branches": {
+                        "5_stacks": 10,
+                        "10_stacks": 25
+                      },
+                      "unit": "adaptive_force"
+                    }
+                  ]
                 }
               ],
               "template_source": null
@@ -1771,33 +1820,32 @@
               "short_desc": "Hitting an enemy champion 3 consecutive times deals bonus damage and amplifies your damage until you leave combat with champions.",
               "long_desc": "Hitting an enemy champion with 3 consecutive basic attacks deals 40 - 160 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>adaptive damage</font></lol-uikit-tooltipped-keyword> (based on level) and amplifies your damage dealt by 8% until you leave combat with champions.",
               "wiki_descriptions": [
-                "Passive: Basic attacks on-hit against enemy champions apply a stack for 4 seconds, refreshing on subsequent applications, expiring upon attacking a new champion, and stacking up to 3 times. The third stack consumes all stacks to deal 40 \u2013 174. 12 (based on level) bonus adaptive damage and grant you 8% increased damage against champions until 5 seconds after exiting combat with them.",
-                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
+                "Passive: Basic attacks on-hit against enemy champions apply a stack for 4 seconds, refreshing on subsequent applications, expiring upon attacking a new champion, and stacking up to 3 times. The third stack consumes all stacks to deal 40 – 174. 12 (based on level) bonus adaptive damage and grant you 8% increased damage against champions until 5 seconds after exiting combat with them.",
+                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Basic attacks on-hit against enemy champions apply a stack for 4 seconds, refreshing on subsequent applications, expiring upon attacking a new champion, and stacking up to 3 times. The third stack consumes all stacks to deal 40 \u2013 174. 12 (based on level) bonus adaptive damage and grant you 8% increased damage against champions until 5 seconds after exiting combat with them.",
+                  "raw": "Passive: Basic attacks on-hit against enemy champions apply a stack for 4 seconds, refreshing on subsequent applications, expiring upon attacking a new champion, and stacking up to 3 times. The third stack consumes all stacks to deal 40 – 174.12 (based on level) bonus adaptive damage and grant you 8% increased damage against champions until 5 seconds after exiting combat with them.",
                   "effect_type": "damage",
                   "stat": "adaptive",
                   "unit": "percent",
                   "values": null,
                   "value_range": [
                     40,
-                    174.0
+                    174.12
                   ],
                   "numbers_extracted": [
                     4,
                     3,
                     40,
-                    174.0,
-                    12,
+                    174.12,
                     8,
                     5
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 40,
-                    "max": 174.0,
+                    "max": 174.12,
                     "levels": [
                       1,
                       18
@@ -1808,7 +1856,7 @@
                   "formula": {
                     "type": "range",
                     "min": 40,
-                    "max": 174.0,
+                    "max": 174.12,
                     "unit": "percent"
                   },
                   "conditions": [
@@ -1817,7 +1865,7 @@
                   "parse_confidence": 1.0
                 },
                 {
-                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
+                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
                   "effect_type": "condition_note",
                   "stat": "adaptive_damage_type_resolution",
                   "unit": null,
@@ -1843,13 +1891,13 @@
               "long_desc": "Attacking an enemy champion grants you [6% Melee || 4% Ranged] Attack Speed for 6 seconds, up to 6. At max stacks, deal [9 - 30 Melee || 6 - 24 Ranged] <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>bonus adaptive damage On-Attack, increased by 1% per 1% Bonus Attack Speed</lol-uikit-tooltipped-keyword>.",
               "wiki_descriptions": [
                 "Passive: Basic attacks on-attack against enemy champions grant a stack for 6 seconds, refreshing on subsequent attacks and stacking up to 6 times. Gain ( 6% / 4. 8 % ) bonus attack speed for each stack, up to ( 36% / 28. 8 % ) at maximum stacks.",
-                "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 \u2013 32. 47 / 6 \u2013 26. 12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0. 6 6 % ) per 1% bonus attack speed .",
+                "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 – 32. 47 / 6 – 26. 12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0. 6 6 % ) per 1% bonus attack speed .",
                 "Stacks expire one by one every 0.5 seconds when the duration ends.",
-                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
+                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Basic attacks on-attack against enemy champions grant a stack for 6 seconds, refreshing on subsequent attacks and stacking up to 6 times. Gain ( 6% / 4. 8 % ) bonus attack speed for each stack, up to ( 36% / 28. 8 % ) at maximum stacks.",
+                  "raw": "Passive: Basic attacks on-attack against enemy champions grant a stack for 6 seconds, refreshing on subsequent attacks and stacking up to 6 times. Gain ( 6% / 4.8% ) bonus attack speed for each stack, up to ( 36% / 28.8% ) at maximum stacks.",
                   "effect_type": "stat_modifier",
                   "stat": "attack_speed",
                   "unit": "percent",
@@ -1857,22 +1905,18 @@
                     6,
                     6,
                     6,
-                    4.0,
-                    8,
+                    4.8,
                     36,
-                    28.0,
-                    8
+                    28.8
                   ],
                   "value_range": null,
                   "numbers_extracted": [
                     6,
                     6,
                     6,
-                    4.0,
-                    8,
+                    4.8,
                     36,
-                    28.0,
-                    8
+                    28.8
                   ],
                   "scaling": null,
                   "trigger": "on_hit",
@@ -1883,58 +1927,76 @@
                       6,
                       6,
                       6,
-                      4.0,
-                      8,
+                      4.8,
                       36,
-                      28.0,
-                      8
+                      28.8
                     ],
                     "unit": "percent"
                   },
                   "conditions": [
                     "vs_champions"
                   ],
-                  "parse_confidence": 1.0
+                  "parse_confidence": 1.0,
+                  "semantic_components": [
+                    {
+                      "component_id": "stack_duration_seconds",
+                      "value": 6,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "max_stacks",
+                      "value": 6,
+                      "unit": "stacks"
+                    },
+                    {
+                      "component_id": "bonus_attack_speed_per_stack_percent",
+                      "branches": {
+                        "melee": 6,
+                        "ranged": 4.8
+                      },
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "max_bonus_attack_speed_percent",
+                      "branches": {
+                        "melee": 36,
+                        "ranged": 28.8
+                      },
+                      "unit": "percent"
+                    }
+                  ]
                 },
                 {
-                  "raw": "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 \u2013 32. 47 / 6 \u2013 26. 12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0. 6 6 % ) per 1% bonus attack speed .",
+                  "raw": "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 – 32.47 / 6 – 26.12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0.66% ) per 1% bonus attack speed .",
                   "effect_type": "damage",
                   "stat": "adaptive",
                   "unit": "percent",
                   "values": [
                     9,
-                    32.0,
-                    47,
+                    32.47,
                     6,
-                    26.0,
-                    12,
+                    26.12,
                     1,
-                    0.0,
-                    6,
-                    6,
+                    0.66,
                     1
                   ],
                   "value_range": [
                     9,
-                    32.0
+                    32.47
                   ],
                   "numbers_extracted": [
                     9,
-                    32.0,
-                    47,
+                    32.47,
                     6,
-                    26.0,
-                    12,
+                    26.12,
                     1,
-                    0.0,
-                    6,
-                    6,
+                    0.66,
                     1
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 9,
-                    "max": 32.0,
+                    "max": 32.47,
                     "levels": [
                       1,
                       18
@@ -1946,21 +2008,41 @@
                     "type": "per_rank",
                     "values": [
                       9,
-                      32.0,
-                      47,
+                      32.47,
                       6,
-                      26.0,
-                      12,
+                      26.12,
                       1,
-                      0.0,
-                      6,
-                      6,
+                      0.66,
                       1
                     ],
                     "unit": "percent"
                   },
                   "conditions": [],
-                  "parse_confidence": 0.9
+                  "parse_confidence": 0.9,
+                  "semantic_components": [
+                    {
+                      "component_id": "on_hit_bonus_adaptive_damage_by_level",
+                      "branches": {
+                        "melee": [
+                          9,
+                          32.47
+                        ],
+                        "ranged": [
+                          6,
+                          26.12
+                        ]
+                      },
+                      "unit": "damage"
+                    },
+                    {
+                      "component_id": "bonus_attack_speed_scaling_per_1_percent",
+                      "branches": {
+                        "melee": 1.0,
+                        "ranged": 0.66
+                      },
+                      "unit": "percent_bonus_damage_per_percent_bonus_attack_speed"
+                    }
+                  ]
                 },
                 {
                   "raw": "Stacks expire one by one every 0.5 seconds when the duration ends.",
@@ -1986,7 +2068,7 @@
                   "parse_confidence": 0.8
                 },
                 {
-                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
+                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
                   "effect_type": "condition_note",
                   "stat": "adaptive_damage_type_resolution",
                   "unit": null,
@@ -2011,12 +2093,12 @@
               "short_desc": "Attacking and moving builds Energy stacks. At 100 stacks, your next attack heals you and grants increased <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword>.",
               "long_desc": "Attacking and moving builds Energy stacks. At 100 stacks, your next attack is Energized<br><br>Energized attacks heal you for 10 - 130 (+0.1 Bonus AD, +0.05 AP) and grant <speed>20% Move Speed</speed> for 1s.<br><br>For Ranged Champions, Healing is 60% effective and Move Speed is 75% effective. All healing is 15% effective against Minions.",
               "wiki_descriptions": [
-                "Unique \u2013 Energized : Moving and basic attacking generates Charges , up to 100.",
-                "At 100 Charges , become Energized , empowering your next basic attack to heal you for ( 10 \u2013 148. 81 / 6 \u2013 89. 29 ) (based on level) (+ ( 10% / 6% ) bonus AD) (+ ( 5% / 3% ) AP) and grant ( 20% / 15% ) bonus movement speed for 1 second. Against minions , the healing is 15% effective."
+                "Unique – Energized : Moving and basic attacking generates Charges , up to 100.",
+                "At 100 Charges , become Energized , empowering your next basic attack to heal you for ( 10 – 148. 81 / 6 – 89. 29 ) (based on level) (+ ( 10% / 6% ) bonus AD) (+ ( 5% / 3% ) AP) and grant ( 20% / 15% ) bonus movement speed for 1 second. Against minions , the healing is 15% effective."
               ],
               "effects_structured": [
                 {
-                  "raw": "Unique \u2013 Energized : Moving and basic attacking generates Charges , up to 100.",
+                  "raw": "Unique – Energized : Moving and basic attacking generates Charges , up to 100.",
                   "effect_type": "condition_note",
                   "stat": null,
                   "unit": null,
@@ -2037,18 +2119,16 @@
                   "parse_confidence": 0.8
                 },
                 {
-                  "raw": "At 100 Charges , become Energized , empowering your next basic attack to heal you for ( 10 \u2013 148. 81 / 6 \u2013 89. 29 ) (based on level) (+ ( 10% / 6% ) bonus AD) (+ ( 5% / 3% ) AP) and grant ( 20% / 15% ) bonus movement speed for 1 second. Against minions , the healing is 15% effective.",
+                  "raw": "At 100 Charges , become Energized , empowering your next basic attack to heal you for ( 10 – 148.81 / 6 – 89.29 ) (based on level) (+ ( 10% / 6% ) bonus AD) (+ ( 5% / 3% ) AP) and grant ( 20% / 15% ) bonus movement speed for 1 second. Against minions , the healing is 15% effective.",
                   "effect_type": "healing",
                   "stat": "movement_speed",
                   "unit": "percent",
                   "values": [
                     100,
                     10,
-                    148.0,
-                    81,
+                    148.81,
                     6,
-                    89.0,
-                    29,
+                    89.29,
                     10,
                     6,
                     5,
@@ -2060,16 +2140,14 @@
                   ],
                   "value_range": [
                     10,
-                    148.0
+                    148.81
                   ],
                   "numbers_extracted": [
                     100,
                     10,
-                    148.0,
-                    81,
+                    148.81,
                     6,
-                    89.0,
-                    29,
+                    89.29,
                     10,
                     6,
                     5,
@@ -2082,7 +2160,7 @@
                   "scaling": {
                     "type": "by_level",
                     "min": 10,
-                    "max": 148.0,
+                    "max": 148.81,
                     "levels": [
                       1,
                       18
@@ -2095,11 +2173,9 @@
                     "values": [
                       100,
                       10,
-                      148.0,
-                      81,
+                      148.81,
                       6,
-                      89.0,
-                      29,
+                      89.29,
                       10,
                       6,
                       5,
@@ -2114,7 +2190,46 @@
                   "conditions": [
                     "vs_minions"
                   ],
-                  "parse_confidence": 1.0
+                  "parse_confidence": 1.0,
+                  "semantic_components": [
+                    {
+                      "component_id": "energized_charges_required",
+                      "value": 100,
+                      "unit": "charges"
+                    },
+                    {
+                      "component_id": "healing_by_level",
+                      "branches": {
+                        "melee": [
+                          10,
+                          148.81
+                        ],
+                        "ranged": [
+                          6,
+                          89.29
+                        ]
+                      },
+                      "unit": "healing"
+                    },
+                    {
+                      "component_id": "bonus_movement_speed_percent",
+                      "branches": {
+                        "melee": 20,
+                        "ranged": 15
+                      },
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "movement_speed_duration_seconds",
+                      "value": 1,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "healing_effectiveness_vs_minions_percent",
+                      "value": 15,
+                      "unit": "percent"
+                    }
+                  ]
                 }
               ],
               "template_source": "Template:Rune data Fleet Footwork"
@@ -2128,7 +2243,7 @@
               "long_desc": "Basic attacks or spells that deal damage to an enemy champion grant 2 stacks of Conqueror for 5s, gaining 1.8-4 <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>Adaptive Force</font></lol-uikit-tooltipped-keyword> per stack. Stacks up to 12 times. Ranged champions gain only 1 stack per basic attack.<br><br>When fully stacked, heal for 8% of the damage you deal to champions (5% for ranged champions).",
               "wiki_descriptions": [
                 "Passive: Dealing damage to enemy champions grants stacks of Conqueror , lasting for 5 seconds, refreshing on subsequent damage against champions, and stacking up to 12 times. Gain ( 2 / 1 ) stacks on-hit , and 2 stacks from ability damage or non- basic damage , prioritizing the latter.",
-                "Each stack of Conqueror grants 1. 08 \u2013 2. 56 (based on level) bonus Attack Damage or 1. 8 \u2013 4. 26 (based on level) Ability Power ( Adaptive ), up to 12. 96 \u2013 30. 66 (based on level) bonus Attack Damage or 21. 6 \u2013 51. 11 (based on level) Ability Power ( Adaptive ) at maximum stacks, at which you also heal for ( 8% / 5% ) of the post-mitigation damage dealt against enemy champions.",
+                "Each stack of Conqueror grants 1. 08 – 2. 56 (based on level) bonus Attack Damage or 1. 8 – 4. 26 (based on level) Ability Power ( Adaptive ), up to 12. 96 – 30. 66 (based on level) bonus Attack Damage or 21. 6 – 51. 11 (based on level) Ability Power ( Adaptive ) at maximum stacks, at which you also heal for ( 8% / 5% ) of the post-mitigation damage dealt against enemy champions.",
                 "Each cast instance can only grant stacks once every 4 seconds. Proc damage from non- pets ; and basic damage that does not apply on-hits , will not grant any stacks."
               ],
               "effects_structured": [
@@ -2169,61 +2284,70 @@
                   "conditions": [
                     "vs_champions"
                   ],
-                  "parse_confidence": 1.0
+                  "parse_confidence": 1.0,
+                  "semantic_components": [
+                    {
+                      "component_id": "stack_duration_seconds",
+                      "value": 5,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "max_stacks",
+                      "value": 12,
+                      "unit": "stacks"
+                    },
+                    {
+                      "component_id": "stacks_per_on_hit",
+                      "branches": {
+                        "melee": 2,
+                        "ranged": 1
+                      },
+                      "unit": "stacks"
+                    },
+                    {
+                      "component_id": "stacks_from_ability_or_non_basic_damage",
+                      "value": 2,
+                      "unit": "stacks"
+                    }
+                  ]
                 },
                 {
-                  "raw": "Each stack of Conqueror grants 1. 08 \u2013 2. 56 (based on level) bonus Attack Damage or 1. 8 \u2013 4. 26 (based on level) Ability Power ( Adaptive ), up to 12. 96 \u2013 30. 66 (based on level) bonus Attack Damage or 21. 6 \u2013 51. 11 (based on level) Ability Power ( Adaptive ) at maximum stacks, at which you also heal for ( 8% / 5% ) of the post-mitigation damage dealt against enemy champions.",
+                  "raw": "Each stack of Conqueror grants 1.08 – 2.56 (based on level) bonus Attack Damage or 1.8 – 4.26 (based on level) Ability Power ( Adaptive ), up to 12.96 – 30.66 (based on level) bonus Attack Damage or 21.6 – 51.11 (based on level) Ability Power ( Adaptive ) at maximum stacks, at which you also heal for ( 8% / 5% ) of the post-mitigation damage dealt against enemy champions.",
                   "effect_type": "damage",
                   "stat": "attack_damage",
                   "unit": "percent",
                   "values": [
-                    1.0,
-                    8,
-                    2.0,
-                    56,
-                    1.0,
-                    8,
-                    4.0,
-                    26,
-                    12.0,
-                    96,
-                    30.0,
-                    66,
-                    21.0,
-                    6,
-                    51.0,
-                    11,
+                    1.08,
+                    2.56,
+                    1.8,
+                    4.26,
+                    12.96,
+                    30.66,
+                    21.6,
+                    51.11,
                     8,
                     5
                   ],
                   "value_range": [
-                    8,
-                    2.0
+                    1.08,
+                    2.56
                   ],
                   "numbers_extracted": [
-                    1.0,
-                    8,
-                    2.0,
-                    56,
-                    1.0,
-                    8,
-                    4.0,
-                    26,
-                    12.0,
-                    96,
-                    30.0,
-                    66,
-                    21.0,
-                    6,
-                    51.0,
-                    11,
+                    1.08,
+                    2.56,
+                    1.8,
+                    4.26,
+                    12.96,
+                    30.66,
+                    21.6,
+                    51.11,
                     8,
                     5
                   ],
                   "scaling": {
                     "type": "by_level",
-                    "min": 8,
-                    "max": 2.0,
+                    "min": 1.08,
+                    "max": 2.56,
                     "levels": [
                       1,
                       18
@@ -2234,22 +2358,14 @@
                   "formula": {
                     "type": "per_rank",
                     "values": [
-                      1.0,
-                      8,
-                      2.0,
-                      56,
-                      1.0,
-                      8,
-                      4.0,
-                      26,
-                      12.0,
-                      96,
-                      30.0,
-                      66,
-                      21.0,
-                      6,
-                      51.0,
-                      11,
+                      1.08,
+                      2.56,
+                      1.8,
+                      4.26,
+                      12.96,
+                      30.66,
+                      21.6,
+                      51.11,
                       8,
                       5
                     ],
@@ -2258,7 +2374,45 @@
                   "conditions": [
                     "vs_champions"
                   ],
-                  "parse_confidence": 1.0
+                  "parse_confidence": 1.0,
+                  "semantic_components": [
+                    {
+                      "component_id": "adaptive_force_per_stack_by_level",
+                      "branches": {
+                        "attack_damage": [
+                          1.08,
+                          2.56
+                        ],
+                        "ability_power": [
+                          1.8,
+                          4.26
+                        ]
+                      },
+                      "unit": "adaptive_force"
+                    },
+                    {
+                      "component_id": "adaptive_force_at_max_stacks_by_level",
+                      "branches": {
+                        "attack_damage": [
+                          12.96,
+                          30.66
+                        ],
+                        "ability_power": [
+                          21.6,
+                          51.11
+                        ]
+                      },
+                      "unit": "adaptive_force"
+                    },
+                    {
+                      "component_id": "post_mitigation_healing_at_max_stacks_percent",
+                      "branches": {
+                        "melee": 8,
+                        "ranged": 5
+                      },
+                      "unit": "percent"
+                    }
+                  ]
                 },
                 {
                   "raw": "Each cast instance can only grant stacks once every 4 seconds. Proc damage from non- pets ; and basic damage that does not apply on-hits , will not grant any stacks.",
@@ -2298,11 +2452,11 @@
               "short_desc": "Killing a target heals you.",
               "long_desc": "Killing a target heals you for @HealAmount@.",
               "wiki_descriptions": [
-                "Passive: Killing an enemy heals you for 1 \u2013 27 (based on level) ."
+                "Passive: Killing an enemy heals you for 1 – 27 (based on level) ."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Killing an enemy heals you for 1 \u2013 27 (based on level) .",
+                  "raw": "Passive: Killing an enemy heals you for 1 – 27 (based on level) .",
                   "effect_type": "healing",
                   "stat": "healing",
                   "unit": null,
@@ -2344,21 +2498,20 @@
               "name": "Triumph",
               "icon": "perk-images/Styles/Precision/Triumph.png",
               "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Takedown'>Takedowns</lol-uikit-tooltipped-keyword> restore 5% of your missing health and grant an additional 20 gold. ",
-              "long_desc": "Takedowns restore 5% of your missing health, 2.5% of your max health, and grant an additional 20 gold. <br><br><hr><br><i>'The most dangerous game brings the greatest glory.' <br>\u2014Noxian Reckoner</i>",
+              "long_desc": "Takedowns restore 5% of your missing health, 2.5% of your max health, and grant an additional 20 gold. <br><br><hr><br><i>'The most dangerous game brings the greatest glory.' <br>—Noxian Reckoner</i>",
               "wiki_descriptions": [
                 "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
+                  "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2.5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
                   "effect_type": "healing",
                   "stat": "health",
                   "unit": "percent",
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    2.0,
-                    5,
+                    2.5,
                     5,
                     20,
                     1
@@ -2368,7 +2521,7 @@
                   "applies_to": "enemy_champion",
                   "formula": {
                     "type": "flat",
-                    "value": 2.0,
+                    "value": 2.5,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -2386,7 +2539,7 @@
               "long_desc": "Damaging an enemy champion restores 6-50 (80% for ranged) mana or 6 energy.<br><br>Takedowns restore 15% of your maximum mana or energy. <br><br>Cooldown for damage restoration: 8s",
               "wiki_descriptions": [
                 "Passive: Scoring a takedown against an enemy champion restores 15% of your maximum mana or 15% of your maximum energy after a 1-second delay.",
-                "Damaging an enemy champion restores ( 6 \u2013 56 / 4. 8 \u2013 44. 8 ) (based on level) mana or 6 energy (8 second cooldown)."
+                "Damaging an enemy champion restores ( 6 – 56 / 4. 8 – 44. 8 ) (based on level) mana or 6 energy (8 second cooldown)."
               ],
               "effects_structured": [
                 {
@@ -2413,17 +2566,15 @@
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "Damaging an enemy champion restores ( 6 \u2013 56 / 4. 8 \u2013 44. 8 ) (based on level) mana or 6 energy (8 second cooldown).",
+                  "raw": "Damaging an enemy champion restores ( 6 – 56 / 4.8 – 44.8 ) (based on level) mana or 6 energy (8 second cooldown).",
                   "effect_type": "cooldown",
                   "stat": "cooldown",
                   "unit": "seconds",
                   "values": [
                     6,
                     56,
-                    4.0,
-                    8,
-                    44.0,
-                    8,
+                    4.8,
+                    44.8,
                     6,
                     8
                   ],
@@ -2434,10 +2585,8 @@
                   "numbers_extracted": [
                     6,
                     56,
-                    4.0,
-                    8,
-                    44.0,
-                    8,
+                    4.8,
+                    44.8,
                     6,
                     8
                   ],
@@ -2457,17 +2606,41 @@
                     "values": [
                       6,
                       56,
-                      4.0,
-                      8,
-                      44.0,
-                      8,
+                      4.8,
+                      44.8,
                       6,
                       8
                     ],
                     "unit": "seconds"
                   },
                   "conditions": [],
-                  "parse_confidence": 0.8
+                  "parse_confidence": 0.8,
+                  "semantic_components": [
+                    {
+                      "component_id": "mana_restore_by_level",
+                      "branches": {
+                        "melee": [
+                          6,
+                          56
+                        ],
+                        "ranged": [
+                          4.8,
+                          44.8
+                        ]
+                      },
+                      "unit": "mana"
+                    },
+                    {
+                      "component_id": "energy_restore",
+                      "value": 6,
+                      "unit": "energy"
+                    },
+                    {
+                      "component_id": "trigger_cooldown_seconds",
+                      "value": 8,
+                      "unit": "seconds"
+                    }
+                  ]
                 }
               ],
               "template_source": "Template:Rune data Presence of Mind"
@@ -2491,7 +2664,7 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain 3% (+ 1. 5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
+                  "raw": "Passive: Gain 3% (+ 1.5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
                   "effect_type": "stat_modifier",
                   "stat": "attack_speed",
                   "unit": "percent",
@@ -2499,8 +2672,7 @@
                   "value_range": null,
                   "numbers_extracted": [
                     3,
-                    1.0,
-                    5,
+                    1.5,
                     18
                   ],
                   "scaling": null,
@@ -2561,15 +2733,14 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain 1. 5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
+                  "raw": "Passive: Gain 1.5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
                   "effect_type": "stat_modifier",
                   "stat": "ability_haste",
                   "unit": null,
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    1.0,
-                    5,
+                    1.5,
                     15
                   ],
                   "scaling": null,
@@ -2577,7 +2748,7 @@
                   "applies_to": null,
                   "formula": {
                     "type": "flat",
-                    "value": 1.0,
+                    "value": 1.5,
                     "unit": null
                   },
                   "conditions": [],
@@ -2625,17 +2796,15 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain 0. 45 % life steal per Legend stack , up to 6. 75 % at maximum stacks, at which you also gain 85 bonus health .",
+                  "raw": "Passive: Gain 0.45 % life steal per Legend stack , up to 6.75 % at maximum stacks, at which you also gain 85 bonus health .",
                   "effect_type": "healing",
                   "stat": "health",
                   "unit": "percent",
                   "values": null,
                   "value_range": null,
                   "numbers_extracted": [
-                    0.0,
-                    45,
-                    6.0,
-                    75,
+                    0.45,
+                    6.75,
                     85
                   ],
                   "scaling": null,
@@ -2643,7 +2812,7 @@
                   "applies_to": null,
                   "formula": {
                     "type": "flat",
-                    "value": 0.0,
+                    "value": 0.45,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -2822,7 +2991,7 @@
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Entering combat generates 1 stack every second for the next 3 seconds, refreshing the duration with each instance of combat and stacking the effect up to 4 times. At maximum stacks, your next basic attack on-hit within 5 seconds against an enemy champion consumes all stacks to deal bonus magic damage equal to ( 3. 5 % / 1. 4 % ) of your maximum health , heal you for (+ ( 1. 3 % / 0. 52 % ) of your maximum health) , and permanently grant you ( 5 / 2 ) bonus health .",
+                  "raw": "Passive: Entering combat generates 1 stack every second for the next 3 seconds, refreshing the duration with each instance of combat and stacking the effect up to 4 times. At maximum stacks, your next basic attack on-hit within 5 seconds against an enemy champion consumes all stacks to deal bonus magic damage equal to ( 3.5 % / 1.4 % ) of your maximum health , heal you for (+ ( 1.3 % / 0.52 % ) of your maximum health) , and permanently grant you ( 5 / 2 ) bonus health .",
                   "effect_type": "damage",
                   "stat": "health",
                   "unit": "percent",
@@ -2831,14 +3000,10 @@
                     3,
                     4,
                     5,
-                    3.0,
-                    5,
-                    1.0,
-                    4,
-                    1.0,
-                    3,
-                    0.0,
-                    52,
+                    3.5,
+                    1.4,
+                    1.3,
+                    0.52,
                     5,
                     2
                   ],
@@ -2848,14 +3013,10 @@
                     3,
                     4,
                     5,
-                    3.0,
-                    5,
-                    1.0,
-                    4,
-                    1.0,
-                    3,
-                    0.0,
-                    52,
+                    3.5,
+                    1.4,
+                    1.3,
+                    0.52,
                     5,
                     2
                   ],
@@ -2869,21 +3030,63 @@
                       3,
                       4,
                       5,
-                      3.0,
-                      5,
-                      1.0,
-                      4,
-                      1.0,
-                      3,
-                      0.0,
-                      52,
+                      3.5,
+                      1.4,
+                      1.3,
+                      0.52,
                       5,
                       2
                     ],
                     "unit": "percent"
                   },
                   "conditions": [],
-                  "parse_confidence": 0.9
+                  "parse_confidence": 0.9,
+                  "semantic_components": [
+                    {
+                      "component_id": "stack_generation_rate",
+                      "value": 1,
+                      "unit": "stack_per_second"
+                    },
+                    {
+                      "component_id": "initial_stack_window_seconds",
+                      "value": 3,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "max_stacks",
+                      "value": 4,
+                      "unit": "stacks"
+                    },
+                    {
+                      "component_id": "empowered_hit_window_seconds",
+                      "value": 5,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "bonus_damage_from_max_health_percent",
+                      "branches": {
+                        "melee": 3.5,
+                        "ranged": 1.4
+                      },
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "healing_from_max_health_percent",
+                      "branches": {
+                        "melee": 1.3,
+                        "ranged": 0.52
+                      },
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "permanent_health_gain",
+                      "branches": {
+                        "melee": 5,
+                        "ranged": 2
+                      },
+                      "unit": "health"
+                    }
+                  ]
                 }
               ],
               "template_source": "Template:Rune data Grasp of the Undying"
@@ -2896,12 +3099,12 @@
               "short_desc": "After <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Immobilize'>immobilizing</lol-uikit-tooltipped-keyword> an enemy champion gain defenses and later deal a burst of magic damage around you.",
               "long_desc": "After immobilizing an enemy champion, increase your Armor and Magic Resist by 35 + 80% of your Bonus Resists for 2.5s. Then explode, dealing magic damage to nearby enemies.<br><br>Damage: 25 - 120 (+8% of your bonus health)<br>Cooldown: 20s<br><br>Resistance bonus from Aftershock capped at: 80-150 (based on level)<br>",
               "wiki_descriptions": [
-                "Passive: Immobilizing an enemy champion grants you a static 35 (+ 80% bonus armor) bonus armor and 35 (+ 80% bonus magic resistance) bonus magic resistance for 2. 5 seconds. The bonus resistances are each capped at 80 \u2013 150 (based on level) .",
-                "After the duration, you release a shockwave that deals 25 \u2013 120 (based on level) (+ 8% of your bonus health) magic damage to enemy champions and monsters within a 350 radius."
+                "Passive: Immobilizing an enemy champion grants you a static 35 (+ 80% bonus armor) bonus armor and 35 (+ 80% bonus magic resistance) bonus magic resistance for 2. 5 seconds. The bonus resistances are each capped at 80 – 150 (based on level) .",
+                "After the duration, you release a shockwave that deals 25 – 120 (based on level) (+ 8% of your bonus health) magic damage to enemy champions and monsters within a 350 radius."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Immobilizing an enemy champion grants you a static 35 (+ 80% bonus armor) bonus armor and 35 (+ 80% bonus magic resistance) bonus magic resistance for 2. 5 seconds. The bonus resistances are each capped at 80 \u2013 150 (based on level) .",
+                  "raw": "Passive: Immobilizing an enemy champion grants you a static 35 (+ 80% bonus armor) bonus armor and 35 (+ 80% bonus magic resistance) bonus magic resistance for 2.5 seconds. The bonus resistances are each capped at 80 – 150 (based on level) .",
                   "effect_type": "stat_modifier",
                   "stat": "armor",
                   "unit": "percent",
@@ -2915,8 +3118,7 @@
                     80,
                     35,
                     80,
-                    2.0,
-                    5,
+                    2.5,
                     80,
                     150
                   ],
@@ -2941,7 +3143,7 @@
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "After the duration, you release a shockwave that deals 25 \u2013 120 (based on level) (+ 8% of your bonus health) magic damage to enemy champions and monsters within a 350 radius.",
+                  "raw": "After the duration, you release a shockwave that deals 25 – 120 (based on level) (+ 8% of your bonus health) magic damage to enemy champions and monsters within a 350 radius.",
                   "effect_type": "damage",
                   "stat": "health",
                   "unit": "percent",
@@ -2988,7 +3190,7 @@
               "long_desc": "<i>Guard</i> allies within 350 units of you, and allies you target with spells for 2.5s. While <i>Guarding</i>, if you or the ally take more than a small amount of damage over the duration of the <i>Guard</i>, both of you gain a shield for 1.5s.<br><br>Cooldown: <scaleLevel>90 - 40</scaleLevel> seconds<br>Shield: <scaleLevel>45 - 180</scaleLevel> + <scaleAP>25%</scaleAP> of your ability power + <scalehealth>5%</scalehealth> of your bonus health<br>Proc Threshold: <scaleLevel>50 - 165</scaleLevel> postmitigation damage",
               "wiki_descriptions": [
                 "Passive: While within 350 units of an allied champion , you raise your Guard . Allied champions you affect with unit-targeted abilities are also Guarded for 3 seconds, regardless of distance.",
-                "If you or a Guarded ally would take 50 \u2013 165 (based on level) damage within 2. 5 seconds or lethal damage from an enemy champion, monster or turret , you both gain a shield for 45 \u2013 180 (based on level) (+ 25% of your AP) (+ 5% of your bonus health) for 2 seconds.",
+                "If you or a Guarded ally would take 50 – 165 (based on level) damage within 2. 5 seconds or lethal damage from an enemy champion, monster or turret , you both gain a shield for 45 – 180 (based on level) (+ 25% of your AP) (+ 5% of your bonus health) for 2 seconds.",
                 "Guardian only goes on cooldown when the shield is triggered."
               ],
               "effects_structured": [
@@ -3015,7 +3217,7 @@
                   "parse_confidence": 0.8
                 },
                 {
-                  "raw": "If you or a Guarded ally would take 50 \u2013 165 (based on level) damage within 2. 5 seconds or lethal damage from an enemy champion, monster or turret , you both gain a shield for 45 \u2013 180 (based on level) (+ 25% of your AP) (+ 5% of your bonus health) for 2 seconds.",
+                  "raw": "If you or a Guarded ally would take 50 – 165 (based on level) damage within 2.5 seconds or lethal damage from an enemy champion, monster or turret , you both gain a shield for 45 – 180 (based on level) (+ 25% of your AP) (+ 5% of your bonus health) for 2 seconds.",
                   "effect_type": "damage",
                   "stat": "health",
                   "unit": "percent",
@@ -3027,8 +3229,7 @@
                   "numbers_extracted": [
                     50,
                     165,
-                    2.0,
-                    5,
+                    2.5,
                     45,
                     180,
                     25,
@@ -3126,7 +3327,30 @@
                     "unit": "percent"
                   },
                   "conditions": [],
-                  "parse_confidence": 0.9
+                  "parse_confidence": 0.9,
+                  "semantic_components": [
+                    {
+                      "component_id": "stacks_required_for_empowered_hit",
+                      "value": 3,
+                      "unit": "stacks"
+                    },
+                    {
+                      "component_id": "turret_bonus_damage_flat",
+                      "branches": {
+                        "melee": 85,
+                        "ranged": 50
+                      },
+                      "unit": "damage"
+                    },
+                    {
+                      "component_id": "turret_bonus_damage_max_health_ratio_percent",
+                      "branches": {
+                        "melee": 28,
+                        "ranged": 20
+                      },
+                      "unit": "percent"
+                    }
+                  ]
                 },
                 {
                   "raw": "Demolish cannot be triggered on the same turret by any of its users more than once every 3 seconds.",
@@ -3162,35 +3386,31 @@
               "short_desc": "<lol-uikit-tooltipped-keyword key='LinkTooltip_Description_ImpairMov'>Impairing</lol-uikit-tooltipped-keyword> the movement of an enemy champion heals nearby allied champions. ",
               "long_desc": "Impairing the movement of an enemy champion restores <healing>@BaseHeal@ Health</healing> to you and the lowest health nearby allied champion.<br><br>70% effect for Ranged Users.<br><br>Cooldown: 20s",
               "wiki_descriptions": [
-                "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 \u2013 54. 71 / 7 \u2013 38. 29 ) (based on your level)."
+                "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54. 71 / 7 – 38. 29 ) (based on your level)."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 \u2013 54. 71 / 7 \u2013 38. 29 ) (based on your level).",
+                  "raw": "Passive: Slowing or immobilizing an enemy champion heals you and the nearest and most wounded allied champion within 1000 units for ( 10 – 54.71 / 7 – 38.29 ) (based on your level).",
                   "effect_type": "healing",
                   "stat": "healing",
                   "unit": null,
                   "values": [
                     1000,
                     10,
-                    54.0,
-                    71,
+                    54.71,
                     7,
-                    38.0,
-                    29
+                    38.29
                   ],
                   "value_range": [
                     10,
-                    54.0
+                    54.71
                   ],
                   "numbers_extracted": [
                     1000,
                     10,
-                    54.0,
-                    71,
+                    54.71,
                     7,
-                    38.0,
-                    29
+                    38.29
                   ],
                   "scaling": {
                     "type": "by_stat"
@@ -3202,16 +3422,35 @@
                     "values": [
                       1000,
                       10,
-                      54.0,
-                      71,
+                      54.71,
                       7,
-                      38.0,
-                      29
+                      38.29
                     ],
                     "unit": null
                   },
                   "conditions": [],
-                  "parse_confidence": 0.9
+                  "parse_confidence": 0.9,
+                  "semantic_components": [
+                    {
+                      "component_id": "ally_heal_search_radius",
+                      "value": 1000,
+                      "unit": "units"
+                    },
+                    {
+                      "component_id": "healing_by_level",
+                      "branches": {
+                        "melee": [
+                          10,
+                          54.71
+                        ],
+                        "ranged": [
+                          7,
+                          38.29
+                        ]
+                      },
+                      "unit": "healing"
+                    }
+                  ]
                 }
               ],
               "template_source": "Template:Rune data Font of Life"
@@ -3224,33 +3463,31 @@
               "short_desc": "Whenever you gain a shield, your next basic attack against a champion deals bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> damage.",
               "long_desc": "Whenever you gain a new shield,  your next basic attack against a champion deals <scaleLevel>5 - 30</scaleLevel> <scaleHealth>(+2.5% Bonus Health)</scaleHealth> <scaleMana>(+15.0% New Shield Amount)</scaleMana> bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> damage.<br><br>You have up to 2s after the shield expires to use this effect.",
               "wiki_descriptions": [
-                "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 \u2013 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
-                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
+                "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
+                "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 \u2013 32. 94 (based on level) (+ 2. 5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
+                  "raw": "Passive: Whenever you gain a shield , your next basic attack against an enemy champion is empowered to deal 5 – 32.94 (based on level) (+ 2.5 % bonus health) (+ 15% shield amount) bonus adaptive damage . The empowered attack lasts for up to 2 seconds after the shield expires.",
                   "effect_type": "damage",
                   "stat": "adaptive",
                   "unit": "percent",
                   "values": null,
                   "value_range": [
                     5,
-                    32.0
+                    32.94
                   ],
                   "numbers_extracted": [
                     5,
-                    32.0,
-                    94,
-                    2.0,
-                    5,
+                    32.94,
+                    2.5,
                     15,
                     2
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 5,
-                    "max": 32.0,
+                    "max": 32.94,
                     "levels": [
                       1,
                       18
@@ -3261,14 +3498,14 @@
                   "formula": {
                     "type": "range",
                     "min": 5,
-                    "max": 32.0,
+                    "max": 32.94,
                     "unit": "percent"
                   },
                   "conditions": [],
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio \u2192 Physical damage Greater bonus damage from the AP ratio \u2192 Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
+                  "raw": "Adaptive Damage: This effect deals either physical or magic damage depending on the damage contribution from your attack damage and ability power to the effect's damage formula. Greater bonus damage from the AD ratio → Physical damage Greater bonus damage from the AP ratio → Magic damage If the damage contribution of AD and AP are zero or otherwise equal, the damage type depends on the effect's particular default.",
                   "effect_type": "condition_note",
                   "stat": "adaptive_damage_type_resolution",
                   "unit": null,
@@ -3373,31 +3610,29 @@
               "short_desc": "After taking damage from an enemy champion, the next 3 spells or attacks you receive from them deal 30-60 (based on level) less damage.<br><br>Duration: 1.5s<br>Cooldown: 55s",
               "long_desc": "After taking damage from an enemy champion, the next 3 spells or attacks you receive from them deal 30-60 (based on level) less damage.<br><br>Duration: 1.5s<br>Cooldown: 55s",
               "wiki_descriptions": [
-                "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 \u2013 63. 53 (based on level) less damage (including true damage )."
+                "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63. 53 (based on level) less damage (including true damage )."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: After taking damage from an enemy champion , activate Bone Plating for 1. 5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 \u2013 63. 53 (based on level) less damage (including true damage ).",
+                  "raw": "Passive: After taking damage from an enemy champion , activate Bone Plating for 1.5 seconds. While active, the next 3 spells or attacks you receive from the enemy champion that triggered this effect deal 30 – 63.53 (based on level) less damage (including true damage ).",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "seconds",
                   "values": null,
                   "value_range": [
                     30,
-                    63.0
+                    63.53
                   ],
                   "numbers_extracted": [
-                    1.0,
-                    5,
+                    1.5,
                     3,
                     30,
-                    63.0,
-                    53
+                    63.53
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 30,
-                    "max": 63.0,
+                    "max": 63.53,
                     "levels": [
                       1,
                       18
@@ -3408,7 +3643,7 @@
                   "formula": {
                     "type": "range",
                     "min": 30,
-                    "max": 63.0,
+                    "max": 63.53,
                     "unit": "seconds"
                   },
                   "conditions": [],
@@ -3458,7 +3693,7 @@
                   "parse_confidence": 0.8
                 },
                 {
-                  "raw": "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3. 5 %.",
+                  "raw": "After reaching 15 stacks (120 monsters or minions), your base and bonus health are permanently increased by 3.5 %.",
                   "effect_type": "healing",
                   "stat": "health",
                   "unit": "percent",
@@ -3467,15 +3702,14 @@
                   "numbers_extracted": [
                     15,
                     120,
-                    3.0,
-                    5
+                    3.5
                   ],
                   "scaling": null,
                   "trigger": "conditional",
                   "applies_to": "minion",
                   "formula": {
                     "type": "flat",
-                    "value": 15,
+                    "value": 3.5,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -3624,34 +3858,30 @@
               "short_desc": "Your attacks and abilities send Aery to a target, damaging enemies or shielding allies.",
               "long_desc": "Damaging enemy champions with basic attacks or abilities sends Aery to them, dealing 10 - 50 based on level (+<scaleAP>0.05 AP</scaleAP>) (+<scaleAD>0.1 bonus AD</scaleAD>).<br><br>Empowering or protecting allies with abilities sends Aery to them, shielding them for 30 - 100 based on level (+<scaleAP>0.05 AP</scaleAP>) (+<scaleAD>0.1 bonus AD</scaleAD>).<br><br>Aery cannot be sent out again until she returns to you.",
               "wiki_descriptions": [
-                "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0. 45 seconds, dealing 10 \u2013 54. 71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0. 35 seconds, shielding them for 30 \u2013 108. 24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
+                "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0. 45 seconds, dealing 10 – 54. 71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0. 35 seconds, shielding them for 30 – 108. 24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
                 "Aery applies her effects to the affected champion upon arrival. She then lingers on the target for 2 seconds before flying back to the user, and cannot be sent out again until she returns. While on her way back, she is initially very slow , but gradually accelerates , and can be picked up by moving near her .",
-                "If \u300c 10% bonus AD \u2265 5% AP ,\u00a0\u300d \u300c bonus AD \u2265 50% AP ,\u00a0\u300d deals physical damage . If otherwise, deals magic damage ."
+                "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage ."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0. 45 seconds, dealing 10 \u2013 54. 71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0. 35 seconds, shielding them for 30 \u2013 108. 24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
+                  "raw": "Passive: Damaging basic attacks , abilities , and item effects against an enemy champion signal Aery to pounce at them over 0.45 seconds, dealing 10 – 54.71 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage. Healing , shielding , or buffing an allied champion signals Aery to leap to their side over 0.35 seconds, shielding them for 30 – 108.24 (based on level) (+ 10% bonus AD) (+ 5% AP) for 2 seconds.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
                   "values": null,
                   "value_range": [
                     10,
-                    54.0
+                    54.71
                   ],
                   "numbers_extracted": [
-                    0.0,
-                    45,
+                    0.45,
                     10,
-                    54.0,
-                    71,
+                    54.71,
                     10,
                     5,
-                    0.0,
-                    35,
+                    0.35,
                     30,
-                    108.0,
-                    24,
+                    108.24,
                     10,
                     5,
                     2
@@ -3659,7 +3889,7 @@
                   "scaling": {
                     "type": "by_level",
                     "min": 10,
-                    "max": 54.0,
+                    "max": 54.71,
                     "levels": [
                       1,
                       18
@@ -3670,7 +3900,7 @@
                   "formula": {
                     "type": "range",
                     "min": 10,
-                    "max": 54.0,
+                    "max": 54.71,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -3700,7 +3930,7 @@
                   "parse_confidence": 0.8
                 },
                 {
-                  "raw": "If \u300c 10% bonus AD \u2265 5% AP ,\u00a0\u300d \u300c bonus AD \u2265 50% AP ,\u00a0\u300d deals physical damage . If otherwise, deals magic damage .",
+                  "raw": "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage .",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
@@ -3733,28 +3963,26 @@
               "short_desc": "Damaging a champion with an ability hurls a damaging comet at their location.",
               "long_desc": "Damaging a champion with an ability hurls a comet at their location, or, if Arcane Comet is on cooldown, reduces its remaining cooldown.<br><br><lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'><font color='#48C4B7'>Adaptive Damage</font></lol-uikit-tooltipped-keyword>: 30 - 130 based on level (<scaleAP>+0.05 AP</scaleAP> and <scaleAD>+0.1 bonus AD</scaleAD>)<br>Cooldown: 20 - 8s<br><rules><br>Cooldown Reduction:<br>Single Target: 20%.<br>Area of Effect: 10%.<br>Damage over Time: 5%.<br></rules>",
               "wiki_descriptions": [
-                "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0. 825 seconds , dealing 30 \u2013 141. 76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
+                "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0. 825 seconds , dealing 30 – 141. 76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
                 "Dealing forms of ability damage reduces the remaining cooldown. Spell damage : 20% Area damage : 10% per enemy hit Persistent damage : 5%",
-                "If \u300c 10% bonus AD \u2265 5% AP ,\u00a0\u300d \u300c bonus AD \u2265 50% AP ,\u00a0\u300d deals physical damage . If otherwise, deals magic damage ."
+                "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage ."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0. 825 seconds , dealing 30 \u2013 141. 76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
+                  "raw": "Passive: Dealing non-0 ability damage to an enemy champion hurls an Arcane Comet at their current location that lands after 0.825 seconds , dealing 30 – 141.76 (based on level) (+ 10% bonus AD) (+ 5% AP) physical or magic damage to enemies within a 140 radius upon impact.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
                   "values": null,
                   "value_range": [
                     30,
-                    141.0
+                    141.76
                   ],
                   "numbers_extracted": [
                     0,
-                    0.0,
-                    825,
+                    0.825,
                     30,
-                    141.0,
-                    76,
+                    141.76,
                     10,
                     5,
                     140
@@ -3762,7 +3990,7 @@
                   "scaling": {
                     "type": "by_level",
                     "min": 30,
-                    "max": 141.0,
+                    "max": 141.76,
                     "levels": [
                       1,
                       18
@@ -3773,7 +4001,7 @@
                   "formula": {
                     "type": "range",
                     "min": 30,
-                    "max": 141.0,
+                    "max": 141.76,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -3803,7 +4031,7 @@
                   "parse_confidence": 0.9
                 },
                 {
-                  "raw": "If \u300c 10% bonus AD \u2265 5% AP ,\u00a0\u300d \u300c bonus AD \u2265 50% AP ,\u00a0\u300d deals physical damage . If otherwise, deals magic damage .",
+                  "raw": "If 「 10% bonus AD ≥ 5% AP , 」 「 bonus AD ≥ 50% AP , 」 deals physical damage . If otherwise, deals magic damage .",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "percent",
@@ -3836,11 +4064,11 @@
               "short_desc": "Hitting an enemy champion with 3 <b>separate</b> attacks or abilities grants a burst of <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> and Slow Resist. ",
               "long_desc": "Hitting an enemy champion with 3 attacks or <b>separate</b> abilities within 4s grants <speed>25 - 50% Move Speed</speed> based on level and <status>50% Slow Resistance</status> for 3s. Move Speed is 50% effective for ranged champions.<br>Cooldown: 30s - 10s",
               "wiki_descriptions": [
-                "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% \u2013 52. 94 % / 12. 5 % \u2013 26. 47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds."
+                "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% – 52. 94 % / 12. 5 % – 26. 47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% \u2013 52. 94 % / 12. 5 % \u2013 26. 47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds.",
+                  "raw": "Passive: Damaging basic attacks , abilities , item effects , and summoner spells , as well as the application of crowd control and damage over time effects, generate stacks against enemy champions , up to one per attack or cast per champion. Applying 3 stacks to a target within a 4 second period grants you ( 25% – 52.94 % / 12.5 % – 26.47 % ) (based on level) bonus movement speed and 50% slow resist for 3 seconds.",
                   "effect_type": "damage",
                   "stat": "movement_speed",
                   "unit": "percent",
@@ -3848,12 +4076,9 @@
                     3,
                     4,
                     25,
-                    52.0,
-                    94,
-                    12.0,
-                    5,
-                    26.0,
-                    47,
+                    52.94,
+                    12.5,
+                    26.47,
                     50,
                     3
                   ],
@@ -3862,19 +4087,16 @@
                     3,
                     4,
                     25,
-                    52.0,
-                    94,
-                    12.0,
-                    5,
-                    26.0,
-                    47,
+                    52.94,
+                    12.5,
+                    26.47,
                     50,
                     3
                   ],
                   "scaling": {
                     "type": "by_level",
-                    "min": null,
-                    "max": null,
+                    "min": 25,
+                    "max": 52.94,
                     "levels": [
                       1,
                       18
@@ -3888,12 +4110,9 @@
                       3,
                       4,
                       25,
-                      52.0,
-                      94,
-                      12.0,
-                      5,
-                      26.0,
-                      47,
+                      52.94,
+                      12.5,
+                      26.47,
                       50,
                       3
                     ],
@@ -3902,7 +4121,43 @@
                   "conditions": [
                     "vs_champions"
                   ],
-                  "parse_confidence": 1.0
+                  "parse_confidence": 1.0,
+                  "semantic_components": [
+                    {
+                      "component_id": "stacks_required",
+                      "value": 3,
+                      "unit": "stacks"
+                    },
+                    {
+                      "component_id": "stack_window_seconds",
+                      "value": 4,
+                      "unit": "seconds"
+                    },
+                    {
+                      "component_id": "bonus_movement_speed_by_level_percent",
+                      "branches": {
+                        "melee": [
+                          25,
+                          52.94
+                        ],
+                        "ranged": [
+                          12.5,
+                          26.47
+                        ]
+                      },
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "slow_resist_percent",
+                      "value": 50,
+                      "unit": "percent"
+                    },
+                    {
+                      "component_id": "effect_duration_seconds",
+                      "value": 3,
+                      "unit": "seconds"
+                    }
+                  ]
                 }
               ],
               "template_source": "Template:Rune data Phase Rush"
@@ -3979,12 +4234,12 @@
               "short_desc": "Hitting an enemy champion with an ability permanently increases your maximum mana by 25, up to 250 mana.<br><br>After reaching 250 bonus mana, restore 1% of your missing mana every 5 seconds.",
               "long_desc": "Hitting an enemy champion with an ability permanently increases your maximum mana by 25, up to 250 mana.<br><br>After reaching 250 bonus mana, restore 1% of your missing mana every 5 seconds.<br><br>Cooldown: 15 seconds",
               "wiki_descriptions": [
-                "Passive: Affecting an enemy champion with an ability permanently increases your maximum mana by 25 , up to 250\u00a0mana . Mana gained from this effect preserves your current mana .",
-                "After reaching 250 bonus mana , permanently restore 1% of your missing mana every 5\u00a0seconds."
+                "Passive: Affecting an enemy champion with an ability permanently increases your maximum mana by 25 , up to 250 mana . Mana gained from this effect preserves your current mana .",
+                "After reaching 250 bonus mana , permanently restore 1% of your missing mana every 5 seconds."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Affecting an enemy champion with an ability permanently increases your maximum mana by 25 , up to 250\u00a0mana . Mana gained from this effect preserves your current mana .",
+                  "raw": "Passive: Affecting an enemy champion with an ability permanently increases your maximum mana by 25 , up to 250 mana . Mana gained from this effect preserves your current mana .",
                   "effect_type": "stat_modifier",
                   "stat": "mana",
                   "unit": null,
@@ -4006,7 +4261,7 @@
                   "parse_confidence": 0.8
                 },
                 {
-                  "raw": "After reaching 250 bonus mana , permanently restore 1% of your missing mana every 5\u00a0seconds.",
+                  "raw": "After reaching 250 bonus mana , permanently restore 1% of your missing mana every 5 seconds.",
                   "effect_type": "stat_modifier",
                   "stat": "mana",
                   "unit": "percent",
@@ -4039,11 +4294,11 @@
               "short_desc": "After casting a Summoner Spell, gain a short <speed>Move Speed</speed> increase that allows you to pass through units.",
               "long_desc": "After casting a Summoner Spell, gain a <speed>Move Speed</speed> increase that lasts for 2s and allows you to pass through units.<br><br>Increase: <speed>15% - 45% Move Speed</speed> based on the Summoner Spell's cooldown. (Higher cooldown Summoner Spells grant more <speed>Move Speed</speed>). ",
               "wiki_descriptions": [
-                "Passive: Using a summoner spell grants ghosting and 15% \u2013 45% (based on summoner spell cooldown) bonus movement speed decaying over 2 seconds."
+                "Passive: Using a summoner spell grants ghosting and 15% – 45% (based on summoner spell cooldown) bonus movement speed decaying over 2 seconds."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Using a summoner spell grants ghosting and 15% \u2013 45% (based on summoner spell cooldown) bonus movement speed decaying over 2 seconds.",
+                  "raw": "Passive: Using a summoner spell grants ghosting and 15% – 45% (based on summoner spell cooldown) bonus movement speed decaying over 2 seconds.",
                   "effect_type": "cooldown",
                   "stat": "movement_speed",
                   "unit": "percent",
@@ -4181,34 +4436,31 @@
               "short_desc": "While above 70% health, gain extra <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_AdaptiveDmg'>adaptive damage</lol-uikit-tooltipped-keyword>.",
               "long_desc": "While above 70% health, gain an <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword> bonus of up to 18 Attack Damage or 30 Ability Power (based on level). <br><br>Grants 1.8 Attack Damage or 3 Ability Power at level 1. ",
               "wiki_descriptions": [
-                "Passive: Gain 1. 8 \u2013 19. 91 (based on level) bonus Attack Damage or 3 \u2013 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
+                "Passive: Gain 1. 8 – 19. 91 (based on level) bonus Attack Damage or 3 – 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
                 "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain 1. 8 \u2013 19. 91 (based on level) bonus Attack Damage or 3 \u2013 33. 18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
+                  "raw": "Passive: Gain 1.8 – 19.91 (based on level) bonus Attack Damage or 3 – 33.18 (based on level) Ability Power ( Adaptive ) while above 70% of your maximum health .",
                   "effect_type": "damage",
                   "stat": "attack_damage",
                   "unit": "percent",
                   "values": null,
                   "value_range": [
-                    8,
-                    19.0
+                    1.8,
+                    19.91
                   ],
                   "numbers_extracted": [
-                    1.0,
-                    8,
-                    19.0,
-                    91,
+                    1.8,
+                    19.91,
                     3,
-                    33.0,
-                    18,
+                    33.18,
                     70
                   ],
                   "scaling": {
                     "type": "by_level",
-                    "min": 8,
-                    "max": 19.0,
+                    "min": 1.8,
+                    "max": 19.91,
                     "levels": [
                       1,
                       18
@@ -4218,8 +4470,8 @@
                   "applies_to": null,
                   "formula": {
                     "type": "range",
-                    "min": 8,
-                    "max": 19.0,
+                    "min": 1.8,
+                    "max": 19.91,
                     "unit": "percent"
                   },
                   "conditions": [],
@@ -4259,29 +4511,28 @@
               "short_desc": "Your first damaging ability hit every 10s burns champions.",
               "long_desc": "Your next damaging ability hit sets champions on fire dealing 20 - 40 bonus magic damage based on level after 1s.<br><br>Cooldown: 10s",
               "wiki_descriptions": [
-                "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 \u2013 42. 35 (based on level) bonus magic damage after 1 second."
+                "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42. 35 (based on level) bonus magic damage after 1 second."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 \u2013 42. 35 (based on level) bonus magic damage after 1 second.",
+                  "raw": "Passive: Dealing ability damage to an enemy champion sets them on fire, dealing them 20 – 42.35 (based on level) bonus magic damage after 1 second.",
                   "effect_type": "damage",
                   "stat": "damage",
                   "unit": "seconds",
                   "values": null,
                   "value_range": [
                     20,
-                    42.0
+                    42.35
                   ],
                   "numbers_extracted": [
                     20,
-                    42.0,
-                    35,
+                    42.35,
                     1
                   ],
                   "scaling": {
                     "type": "by_level",
                     "min": 20,
-                    "max": 42.0,
+                    "max": 42.35,
                     "levels": [
                       1,
                       18
@@ -4292,7 +4543,7 @@
                   "formula": {
                     "type": "range",
                     "min": 20,
-                    "max": 42.0,
+                    "max": 42.35,
                     "unit": "seconds"
                   },
                   "conditions": [],
@@ -4309,33 +4560,31 @@
               "short_desc": "Gain <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_MS'>MS</lol-uikit-tooltipped-keyword> and AP or AD, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> in the river.",
               "long_desc": "Gain <speed>10 Move Speed</speed> and <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>13 - 30 Adaptive Force</font></lol-uikit-tooltipped-keyword> (based on level) when in the river.<br><br><i>May you be as swift as the rushing river and agile as a startled Rift Scuttler.</i>",
               "wiki_descriptions": [
-                "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 \u2013 19. 2 (based on level) bonus Attack Damage or 13 \u2013 32 (based on level) Ability Power ( Adaptive ).",
+                "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 – 19. 2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
                 "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: While in the river , you gain 10 bonus movement speed and 7. 8 \u2013 19. 2 (based on level) bonus Attack Damage or 13 \u2013 32 (based on level) Ability Power ( Adaptive ).",
+                  "raw": "Passive: While in the river , you gain 10 bonus movement speed and 7.8 – 19.2 (based on level) bonus Attack Damage or 13 – 32 (based on level) Ability Power ( Adaptive ).",
                   "effect_type": "damage",
                   "stat": "attack_damage",
                   "unit": null,
                   "values": null,
                   "value_range": [
-                    8,
-                    19.0
+                    7.8,
+                    19.2
                   ],
                   "numbers_extracted": [
                     10,
-                    7.0,
-                    8,
-                    19.0,
-                    2,
+                    7.8,
+                    19.2,
                     13,
                     32
                   ],
                   "scaling": {
                     "type": "by_level",
-                    "min": 8,
-                    "max": 19.0,
+                    "min": 7.8,
+                    "max": 19.2,
                     "levels": [
                       1,
                       18
@@ -4345,8 +4594,8 @@
                   "applies_to": null,
                   "formula": {
                     "type": "range",
-                    "min": 8,
-                    "max": 19.0,
+                    "min": 7.8,
+                    "max": 19.2,
                     "unit": null
                   },
                   "conditions": [],
@@ -4380,30 +4629,25 @@
               "short_desc": "Gain increasing amounts of AD or AP, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>adaptive</lol-uikit-tooltipped-keyword> over the course of the game.",
               "long_desc": "Every 10 min gain AP or AD, <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'><font color='#48C4B7'>adaptive</font></lol-uikit-tooltipped-keyword>.<br><br><i>10 min</i>: + 8 AP or 5 AD <br><i>20 min</i>: + 24 AP or 14 AD<br><i>30 min</i>: + 48 AP or 29 AD<br><i>40 min</i>: + 80 AP or 48 AD<br><i>50 min</i>: + 120 AP or 72 AD<br><i>60 min</i>: + 168 AP or 101 AD<br>etc...",
               "wiki_descriptions": [
-                "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / \u221e (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / \u221e (based on minutes) Ability Power .",
+                "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
                 "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed."
               ],
               "effects_structured": [
                 {
-                  "raw": "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4. 8 / 14. 4 / 28. 8 / 48 / 72 / 100. 8 / 134. 4 / \u221e (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / \u221e (based on minutes) Ability Power .",
+                  "raw": "Passive: Gain increasing adaptive Force every 10 minutes that grants a total of 0 / 4.8 / 14.4 / 28.8 / 48 / 72 / 100.8 / 134.4 / ∞ (based on minutes) bonus Attack Damage or 0 / 8 / 24 / 48 / 80 / 120 / 168 / 224 / ∞ (based on minutes) Ability Power .",
                   "effect_type": "damage",
                   "stat": "attack_damage",
                   "unit": null,
                   "values": [
                     10,
                     0,
-                    4.0,
-                    8,
-                    14.0,
-                    4,
-                    28.0,
-                    8,
+                    4.8,
+                    14.4,
+                    28.8,
                     48,
                     72,
-                    100.0,
-                    8,
-                    134.0,
-                    4,
+                    100.8,
+                    134.4,
                     0,
                     8,
                     24,
@@ -4417,18 +4661,13 @@
                   "numbers_extracted": [
                     10,
                     0,
-                    4.0,
-                    8,
-                    14.0,
-                    4,
-                    28.0,
-                    8,
+                    4.8,
+                    14.4,
+                    28.8,
                     48,
                     72,
-                    100.0,
-                    8,
-                    134.0,
-                    4,
+                    100.8,
+                    134.4,
                     0,
                     8,
                     24,
@@ -4448,18 +4687,13 @@
                     "values": [
                       10,
                       0,
-                      4.0,
-                      8,
-                      14.0,
-                      4,
-                      28.0,
-                      8,
+                      4.8,
+                      14.4,
+                      28.8,
                       48,
                       72,
-                      100.0,
-                      8,
-                      134.0,
-                      4,
+                      100.8,
+                      134.4,
                       0,
                       8,
                       24,
@@ -4472,7 +4706,47 @@
                     "unit": null
                   },
                   "conditions": [],
-                  "parse_confidence": 0.8
+                  "parse_confidence": 0.8,
+                  "semantic_components": [
+                    {
+                      "component_id": "interval_minutes",
+                      "value": 10,
+                      "unit": "minutes"
+                    },
+                    {
+                      "component_id": "attack_damage_progression_by_interval",
+                      "values": [
+                        0,
+                        4.8,
+                        14.4,
+                        28.8,
+                        48,
+                        72,
+                        100.8,
+                        134.4
+                      ],
+                      "unit": "attack_damage"
+                    },
+                    {
+                      "component_id": "ability_power_progression_by_interval",
+                      "values": [
+                        0,
+                        8,
+                        24,
+                        48,
+                        80,
+                        120,
+                        168,
+                        224
+                      ],
+                      "unit": "ability_power"
+                    },
+                    {
+                      "component_id": "progression_note",
+                      "value": "continues beyond listed intervals",
+                      "unit": null
+                    }
+                  ]
                 },
                 {
                   "raw": "Adaptive: Grants bonuses based on which stat you already have the most bonuses for. Defaults to the first listed.",
@@ -4536,7 +4810,7 @@
           "stat": "movement_speed"
         },
         {
-          "text": "10 \u2013 200 (based on level) bonus health",
+          "text": "10 – 200 (based on level) bonus health",
           "numbers_extracted": [
             10,
             200
@@ -4559,7 +4833,7 @@
           "stat": "tenacity"
         },
         {
-          "text": "10 \u2013 200 (based on level) bonus health",
+          "text": "10 – 200 (based on level) bonus health",
           "numbers_extracted": [
             10,
             200
@@ -4616,7 +4890,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

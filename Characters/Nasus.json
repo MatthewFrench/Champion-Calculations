@@ -307,7 +307,8 @@
         "Source targeting: Location.",
         "Source castTime: 0.25.",
         "Source effectRadius: 400 /  200.",
-        "Source notes (summary): No additional details."
+        "Manual behavior verification (2026-02-24): Spirit Fire has cast windup then delayed first impact (~0.264 seconds); damage and armor-reduction effects resolve on zone interaction, not on cast input.",
+        "Manual behavior verification (2026-02-24): After the initial impact, Spirit Fire ticks every 1 second for 5 seconds and armor reduction lingers for 1 second after leaving the zone."
       ]
     },
     "ultimate": {
@@ -439,7 +440,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 103): Spirit Fire execution semantics were expanded with delayed-impact and per-second zone-tick timing notes."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

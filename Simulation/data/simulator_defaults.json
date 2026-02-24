@@ -111,7 +111,17 @@
     "ranged_spawn_radius_multiplier": 0.8,
     "ranged_spawn_radius_min": 360.0,
     "ranged_spawn_radius_max": 520.0,
-    "minimum_attack_speed": 0.25
+    "minimum_attack_speed": 0.25,
+    "world_lifecycle": {
+      "minion_wave_start_seconds": 65.0,
+      "minion_wave_interval_seconds": 30.0,
+      "minion_units_per_team_per_wave": 3,
+      "minion_lifetime_seconds": 45.0,
+      "dragon_initial_spawn_seconds": 300.0,
+      "dragon_respawn_seconds": 300.0,
+      "baron_initial_spawn_seconds": 1200.0,
+      "baron_respawn_seconds": 360.0
+    }
   },
   "rune_runtime_defaults": {
     "lethal_tempo": {

@@ -215,6 +215,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.55 : 0.3 (based on bonus attack speed).",
         "Source speed: 2500.",
+        "Manual behavior verification (2026-02-24): Ultrashock Laser is windup-gated and resolves on projectile/laser impact, not on cast press.",
+        "Manual behavior verification (2026-02-24): Terrain-hit branch grants brief sight and fires a delayed laser after 0.85 seconds; pulse can be projectile-blocked while the terrain laser branch is not blocked by projectile interception.",
         "Source notes (summary): Applies spell damage for the pulse and area damage for the laser."
       ]
     },
@@ -365,6 +367,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Burst Fire execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Zeri/Ultrashock_Laser",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Ultrashock Laser cast-time scaling, terrain laser delay, and projectile-interception split semantics"
     }
   ],
   "notes": [

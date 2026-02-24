@@ -77,15 +77,14 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
+              "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2.5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
               "effect_type": "healing",
               "stat": "health",
               "unit": "percent",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                2.0,
-                5,
+                2.5,
                 5,
                 20,
                 1
@@ -95,7 +94,7 @@
               "applies_to": "enemy_champion",
               "formula": {
                 "type": "flat",
-                "value": 2.0,
+                "value": 2.5,
                 "unit": "percent"
               },
               "conditions": [],
@@ -140,17 +139,15 @@
               "parse_confidence": 0.9
             },
             {
-              "raw": "Damaging an enemy champion restores ( 6 – 56 / 4. 8 – 44. 8 ) (based on level) mana or 6 energy (8 second cooldown).",
+              "raw": "Damaging an enemy champion restores ( 6 – 56 / 4.8 – 44.8 ) (based on level) mana or 6 energy (8 second cooldown).",
               "effect_type": "cooldown",
               "stat": "cooldown",
               "unit": "seconds",
               "values": [
                 6,
                 56,
-                4.0,
-                8,
-                44.0,
-                8,
+                4.8,
+                44.8,
                 6,
                 8
               ],
@@ -161,10 +158,8 @@
               "numbers_extracted": [
                 6,
                 56,
-                4.0,
-                8,
-                44.0,
-                8,
+                4.8,
+                44.8,
                 6,
                 8
               ],
@@ -184,17 +179,41 @@
                 "values": [
                   6,
                   56,
-                  4.0,
-                  8,
-                  44.0,
-                  8,
+                  4.8,
+                  44.8,
                   6,
                   8
                 ],
                 "unit": "seconds"
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.8,
+              "semantic_components": [
+                {
+                  "component_id": "mana_restore_by_level",
+                  "branches": {
+                    "melee": [
+                      6,
+                      56
+                    ],
+                    "ranged": [
+                      4.8,
+                      44.8
+                    ]
+                  },
+                  "unit": "mana"
+                },
+                {
+                  "component_id": "energy_restore",
+                  "value": 6,
+                  "unit": "energy"
+                },
+                {
+                  "component_id": "trigger_cooldown_seconds",
+                  "value": 8,
+                  "unit": "seconds"
+                }
+              ]
             }
           ],
           "template_source": "Template:Rune data Presence of Mind"
@@ -218,7 +237,7 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 3% (+ 1. 5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
+              "raw": "Passive: Gain 3% (+ 1.5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
               "effect_type": "stat_modifier",
               "stat": "attack_speed",
               "unit": "percent",
@@ -226,8 +245,7 @@
               "value_range": null,
               "numbers_extracted": [
                 3,
-                1.0,
-                5,
+                1.5,
                 18
               ],
               "scaling": null,
@@ -288,15 +306,14 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 1. 5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
+              "raw": "Passive: Gain 1.5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
               "effect_type": "stat_modifier",
               "stat": "ability_haste",
               "unit": null,
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                1.0,
-                5,
+                1.5,
                 15
               ],
               "scaling": null,
@@ -304,7 +321,7 @@
               "applies_to": null,
               "formula": {
                 "type": "flat",
-                "value": 1.0,
+                "value": 1.5,
                 "unit": null
               },
               "conditions": [],
@@ -352,17 +369,15 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 0. 45 % life steal per Legend stack , up to 6. 75 % at maximum stacks, at which you also gain 85 bonus health .",
+              "raw": "Passive: Gain 0.45 % life steal per Legend stack , up to 6.75 % at maximum stacks, at which you also gain 85 bonus health .",
               "effect_type": "healing",
               "stat": "health",
               "unit": "percent",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                0.0,
-                45,
-                6.0,
-                75,
+                0.45,
+                6.75,
                 85
               ],
               "scaling": null,
@@ -370,7 +385,7 @@
               "applies_to": null,
               "formula": {
                 "type": "flat",
-                "value": 0.0,
+                "value": 0.45,
                 "unit": "percent"
               },
               "conditions": [],
@@ -543,7 +558,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

@@ -36,9 +36,15 @@
 - Ability identity is still partially represented by champion-specific cast fields; slot mapping foundations exist, but full actor-wide slot-agnostic runtime remapping support (for stolen/swapped abilities) is not yet implemented.
 - Champion data uncertainty follow-up:
   - `Zyra` `Garden of Thorns` one-vs-two seed spawn distribution weighting remains unresolved from current source notes; lifecycle/state sequencing is modeled, but exact probability weighting needs an authoritative verification source before confidence can be raised further.
+  - Uncertainty 1 (deferred code follow-up): `Renekton` `Slice and Dice` uses formula-based dash velocity (`760 + 100% movement speed`), but runtime execution metadata currently consumes only base dash speed.
+  - Uncertainty 2 (deferred code follow-up): `Sylas` slot-E behavior (`Abscond` -> `Abduct`) is a multi-stage same-slot flow; runtime still lacks first-class stage identity and recast-window event modeling.
+  - Additional deferred code follow-up: `Vex` `Looming Darkness` uses cast-distance-scaled explosion radius (`200 : 300`), but runtime currently treats execution hitbox radius as a static value.
 - Item data uncertainty follow-up:
-  - `Dragonheart` immediate soul-backfill thresholds are currently modeled with inferred round brackets (derived from published two-round cadence and cap constraints), but no explicit authoritative threshold table is published in current sources.
-  - `Twilight's Edge` mode-branch range values (`50-150%` attack speed and `30-120` ability haste) are modeled as published ranges, but source text does not expose the exact scaling axis for interpolation.
+  - No open item-structure uncertainty remains in the latest wave for `Dragonheart` or `Twilight's Edge`; keep periodic source-drift checks because page/module text can diverge on distributed Arena items.
+- Rune data quality follow-up:
+  - Broad decimal-spacing cleanup is now complete for the previously tracked queue (`0` remaining `x. y` artifacts in `effects_structured.raw`).
+  - Deferred runtime/code follow-up remains: add loader/lint enforcement for raw-to-metadata consistency checks (including guardrails against scripted placeholder artifacts like `\1.\2`) so this stays no-regression by construction.
+  - Multi-branch rune `per_rank` effects are now explicitly decomposed via `semantic_components` (`14/14`), but runtime currently does not consume those components directly; this is tracked as deferred code follow-up for maintainability and future deterministic parsing paths.
 
 ## Questions To Review
 1. Do we want to include game-time as an explicit simulation input so death timers can apply full time-based scaling (not just level-based scaling)?
@@ -65,9 +71,12 @@
 
 ## Data Research Notes (2026-02-24)
 - Dragonheart immediate backfill:
-  - Current page notes confirm acquisition-round immediate soul backfill up to 4 stacks, but do not publish explicit per-round thresholds.
+  - Current page notes publish explicit acquisition-round mapping for immediate backfill (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) via the round-versus-souls tooltip table.
   - Source: [Dragonheart](https://wiki.leagueoflegends.com/en-us/Dragonheart)
   - Source: [Dragonheart Patch History](https://wiki.leagueoflegends.com/en-us/Dragonheart/Patch_history)
+- Twilight's Edge mode branches:
+  - Current page infobox + patch-history section provide level-based AS/AH tooltip tables and show `25%` AD/AP world modifiers; older module-derived description lines still show `20%`, so canonical data now follows page current-state values and records the reconciliation note.
+  - Source: [Twilight's Edge](https://wiki.leagueoflegends.com/en-us/Twilight%27s_Edge)
 - Gambler's Blade cap reconciliation:
   - Current canonical effect text shows max stored value 240; patch history records a V14.12 historical increase to 245.
   - Source: [Gambler's Blade](https://wiki.leagueoflegends.com/en-us/Gambler%27s_Blade)
@@ -82,6 +91,24 @@
   - Source: [Template:Data_Braum/Glacial_Fissure](https://wiki.leagueoflegends.com/en-us/Template:Data_Braum/Glacial_Fissure)
 - Rune cadence text normalization:
   - Corrected `Lethal Tempo` stack-decay interval text artifacts (`0. 5` -> `0.5`) and synchronized parsed numeric extraction (`0.5`) across flat and split rune structures.
+- Rune decimal/value normalization wave:
+  - Normalized decimal spacing and corrected parsed numeric/value metadata for `Electrocute`, `Dark Harvest`, `Press the Attack`, and `Lethal Tempo` in both flat and split rune files.
+- Runes decimal normalization completion waves:
+  - Completed four dedicated normalization waves across all rune trees (`Domination`, `Precision`, `Resolve`, `Sorcery`, `Inspiration`) and cleared the broader decimal-spacing backlog (`28` entries across `27` runes -> `0`).
+  - Corrected dependent numeric metadata for affected entries (`numbers_extracted`, and where impacted `value_range` / `scaling` / `formula`) in both flat and split files.
+  - Verified no literal backreference placeholder artifacts remain in rune raw text after bulk updates.
+- Runes semantic-explicitness decomposition waves:
+  - Added explicit `semantic_components` on all multi-branch `per_rank` rune effects (`14/14`) to label branch semantics (melee/ranged, AD/AP, thresholds, cadence windows) instead of relying only on positional value arrays.
+  - Synchronized semantic-component additions across flat and split rune files with no parity drift.
+- Champion cast-timing fidelity wave:
+  - Re-verified `Jinx` (`W`), `Kai'Sa` (`E`), `Yone` (`Q`,`W`), and `Zeri` (`W`) for attack-speed-scaled cast gating, player-visible resolution timing, and branch behavior (terrain/delayed or transform branches where applicable).
+- Champion execution-semantics wave (103-106):
+  - Re-verified `Nasus` `Spirit Fire` delayed-impact + periodic-tick cadence, `Renekton` `Slice and Dice` recast-gating + move-speed-scaled dash semantics, `Sylas` `Chain Lash` delayed-detonation timing plus `Abscond` stage-window flow, and `Vex` `Looming Darkness` cast-distance-scaled radius behavior.
+  - Source: [Template:Data_Nasus/Spirit_Fire](https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Spirit_Fire)
+  - Source: [Template:Data_Renekton/Slice_and_Dice](https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Slice_and_Dice)
+  - Source: [Template:Data_Sylas/Chain_Lash](https://wiki.leagueoflegends.com/en-us/Template:Data_Sylas/Chain_Lash)
+  - Source: [Template:Data_Sylas/Abscond](https://wiki.leagueoflegends.com/en-us/Template:Data_Sylas/Abscond)
+  - Source: [Template:Data_Vex/Looming_Darkness](https://wiki.leagueoflegends.com/en-us/Template:Data_Vex/Looming_Darkness)
 
 ## Script-Extraction Backlog (From Audit)
 - Vladimir defensive/offensive decisions are script-owned, but the engine still executes some Vladimir effect applications directly after script decisions.

@@ -137,6 +137,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.35 : 0.175 (based on bonus attack speed).",
         "Source speed: 1500.",
+        "Manual behavior verification (2026-02-24): Mortal Steel is cast-gated by attack-speed-scaled windup, then resolves as an on-hit/on-attack thrust on completion (not instant on key press).",
+        "Manual behavior verification (2026-02-24): Two-stack consumption transforms the next cast into dash + whirlwind knockup behavior; if disarmed during windup the hit fails and cooldown resets to 0.1 seconds.",
         "Source notes (summary): This ability always employs Quick cast."
       ]
     },
@@ -204,6 +206,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.5 : 0.19 (based on bonus attack speed).",
         "Source effectRadius: 600.",
+        "Manual behavior verification (2026-02-24): Spirit Cleave is a windup-based cone cast whose damage and shield are applied on cast completion; shield is granted only if at least one enemy is hit.",
+        "Manual behavior verification (2026-02-24): Attack-speed scaling shortens windup only; target direction and cone hit test remain cast-time-locked.",
         "Source notes (summary): This ability always employs Quick cast."
       ]
     },
@@ -321,7 +325,7 @@
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: 0.75.",
-        "Source notes (summary): Yone will blink after a 0."
+        "Source notes (summary): Yone blinks on cast completion, then the follow-up gust resolves after 0.3 seconds to pull marked targets."
       ]
     }
   },
@@ -331,6 +335,18 @@
       "path": "From Online/champions/Yone.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Mortal_Steel",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Mortal Steel cast-time scaling, stack transformation, and disarm interruption semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Spirit_Cleave",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Spirit Cleave windup scaling, cone-hit resolution timing, and on-hit shield gating"
     },
     {
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Fate_Sealed",

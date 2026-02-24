@@ -30,28 +30,27 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Basic attacks on-hit against enemy champions apply a stack for 4 seconds, refreshing on subsequent applications, expiring upon attacking a new champion, and stacking up to 3 times. The third stack consumes all stacks to deal 40 – 174. 12 (based on level) bonus adaptive damage and grant you 8% increased damage against champions until 5 seconds after exiting combat with them.",
+              "raw": "Passive: Basic attacks on-hit against enemy champions apply a stack for 4 seconds, refreshing on subsequent applications, expiring upon attacking a new champion, and stacking up to 3 times. The third stack consumes all stacks to deal 40 – 174.12 (based on level) bonus adaptive damage and grant you 8% increased damage against champions until 5 seconds after exiting combat with them.",
               "effect_type": "damage",
               "stat": "adaptive",
               "unit": "percent",
               "values": null,
               "value_range": [
                 40,
-                174.0
+                174.12
               ],
               "numbers_extracted": [
                 4,
                 3,
                 40,
-                174.0,
-                12,
+                174.12,
                 8,
                 5
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 40,
-                "max": 174.0,
+                "max": 174.12,
                 "levels": [
                   1,
                   18
@@ -62,7 +61,7 @@
               "formula": {
                 "type": "range",
                 "min": 40,
-                "max": 174.0,
+                "max": 174.12,
                 "unit": "percent"
               },
               "conditions": [
@@ -103,7 +102,7 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Basic attacks on-attack against enemy champions grant a stack for 6 seconds, refreshing on subsequent attacks and stacking up to 6 times. Gain ( 6% / 4. 8 % ) bonus attack speed for each stack, up to ( 36% / 28. 8 % ) at maximum stacks.",
+              "raw": "Passive: Basic attacks on-attack against enemy champions grant a stack for 6 seconds, refreshing on subsequent attacks and stacking up to 6 times. Gain ( 6% / 4.8% ) bonus attack speed for each stack, up to ( 36% / 28.8% ) at maximum stacks.",
               "effect_type": "stat_modifier",
               "stat": "attack_speed",
               "unit": "percent",
@@ -111,22 +110,18 @@
                 6,
                 6,
                 6,
-                4.0,
-                8,
+                4.8,
                 36,
-                28.0,
-                8
+                28.8
               ],
               "value_range": null,
               "numbers_extracted": [
                 6,
                 6,
                 6,
-                4.0,
-                8,
+                4.8,
                 36,
-                28.0,
-                8
+                28.8
               ],
               "scaling": null,
               "trigger": "on_hit",
@@ -137,58 +132,76 @@
                   6,
                   6,
                   6,
-                  4.0,
-                  8,
+                  4.8,
                   36,
-                  28.0,
-                  8
+                  28.8
                 ],
                 "unit": "percent"
               },
               "conditions": [
                 "vs_champions"
               ],
-              "parse_confidence": 1.0
+              "parse_confidence": 1.0,
+              "semantic_components": [
+                {
+                  "component_id": "stack_duration_seconds",
+                  "value": 6,
+                  "unit": "seconds"
+                },
+                {
+                  "component_id": "max_stacks",
+                  "value": 6,
+                  "unit": "stacks"
+                },
+                {
+                  "component_id": "bonus_attack_speed_per_stack_percent",
+                  "branches": {
+                    "melee": 6,
+                    "ranged": 4.8
+                  },
+                  "unit": "percent"
+                },
+                {
+                  "component_id": "max_bonus_attack_speed_percent",
+                  "branches": {
+                    "melee": 36,
+                    "ranged": 28.8
+                  },
+                  "unit": "percent"
+                }
+              ]
             },
             {
-              "raw": "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 – 32. 47 / 6 – 26. 12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0. 6 6 % ) per 1% bonus attack speed .",
+              "raw": "At maximum stacks, basic attacks are empowered to fire a bolt at the target on-attack that deals them ( 9 – 32.47 / 6 – 26.12 ) (based on level) bonus adaptive damage upon arrival, increased by ( 1% / 0.66% ) per 1% bonus attack speed .",
               "effect_type": "damage",
               "stat": "adaptive",
               "unit": "percent",
               "values": [
                 9,
-                32.0,
-                47,
+                32.47,
                 6,
-                26.0,
-                12,
+                26.12,
                 1,
-                0.0,
-                6,
-                6,
+                0.66,
                 1
               ],
               "value_range": [
                 9,
-                32.0
+                32.47
               ],
               "numbers_extracted": [
                 9,
-                32.0,
-                47,
+                32.47,
                 6,
-                26.0,
-                12,
+                26.12,
                 1,
-                0.0,
-                6,
-                6,
+                0.66,
                 1
               ],
               "scaling": {
                 "type": "by_level",
                 "min": 9,
-                "max": 32.0,
+                "max": 32.47,
                 "levels": [
                   1,
                   18
@@ -200,21 +213,41 @@
                 "type": "per_rank",
                 "values": [
                   9,
-                  32.0,
-                  47,
+                  32.47,
                   6,
-                  26.0,
-                  12,
+                  26.12,
                   1,
-                  0.0,
-                  6,
-                  6,
+                  0.66,
                   1
                 ],
                 "unit": "percent"
               },
               "conditions": [],
-              "parse_confidence": 0.9
+              "parse_confidence": 0.9,
+              "semantic_components": [
+                {
+                  "component_id": "on_hit_bonus_adaptive_damage_by_level",
+                  "branches": {
+                    "melee": [
+                      9,
+                      32.47
+                    ],
+                    "ranged": [
+                      6,
+                      26.12
+                    ]
+                  },
+                  "unit": "damage"
+                },
+                {
+                  "component_id": "bonus_attack_speed_scaling_per_1_percent",
+                  "branches": {
+                    "melee": 1.0,
+                    "ranged": 0.66
+                  },
+                  "unit": "percent_bonus_damage_per_percent_bonus_attack_speed"
+                }
+              ]
             },
             {
               "raw": "Stacks expire one by one every 0.5 seconds when the duration ends.",
@@ -291,18 +324,16 @@
               "parse_confidence": 0.8
             },
             {
-              "raw": "At 100 Charges , become Energized , empowering your next basic attack to heal you for ( 10 – 148. 81 / 6 – 89. 29 ) (based on level) (+ ( 10% / 6% ) bonus AD) (+ ( 5% / 3% ) AP) and grant ( 20% / 15% ) bonus movement speed for 1 second. Against minions , the healing is 15% effective.",
+              "raw": "At 100 Charges , become Energized , empowering your next basic attack to heal you for ( 10 – 148.81 / 6 – 89.29 ) (based on level) (+ ( 10% / 6% ) bonus AD) (+ ( 5% / 3% ) AP) and grant ( 20% / 15% ) bonus movement speed for 1 second. Against minions , the healing is 15% effective.",
               "effect_type": "healing",
               "stat": "movement_speed",
               "unit": "percent",
               "values": [
                 100,
                 10,
-                148.0,
-                81,
+                148.81,
                 6,
-                89.0,
-                29,
+                89.29,
                 10,
                 6,
                 5,
@@ -314,16 +345,14 @@
               ],
               "value_range": [
                 10,
-                148.0
+                148.81
               ],
               "numbers_extracted": [
                 100,
                 10,
-                148.0,
-                81,
+                148.81,
                 6,
-                89.0,
-                29,
+                89.29,
                 10,
                 6,
                 5,
@@ -336,7 +365,7 @@
               "scaling": {
                 "type": "by_level",
                 "min": 10,
-                "max": 148.0,
+                "max": 148.81,
                 "levels": [
                   1,
                   18
@@ -349,11 +378,9 @@
                 "values": [
                   100,
                   10,
-                  148.0,
-                  81,
+                  148.81,
                   6,
-                  89.0,
-                  29,
+                  89.29,
                   10,
                   6,
                   5,
@@ -368,7 +395,46 @@
               "conditions": [
                 "vs_minions"
               ],
-              "parse_confidence": 1.0
+              "parse_confidence": 1.0,
+              "semantic_components": [
+                {
+                  "component_id": "energized_charges_required",
+                  "value": 100,
+                  "unit": "charges"
+                },
+                {
+                  "component_id": "healing_by_level",
+                  "branches": {
+                    "melee": [
+                      10,
+                      148.81
+                    ],
+                    "ranged": [
+                      6,
+                      89.29
+                    ]
+                  },
+                  "unit": "healing"
+                },
+                {
+                  "component_id": "bonus_movement_speed_percent",
+                  "branches": {
+                    "melee": 20,
+                    "ranged": 15
+                  },
+                  "unit": "percent"
+                },
+                {
+                  "component_id": "movement_speed_duration_seconds",
+                  "value": 1,
+                  "unit": "seconds"
+                },
+                {
+                  "component_id": "healing_effectiveness_vs_minions_percent",
+                  "value": 15,
+                  "unit": "percent"
+                }
+              ]
             }
           ],
           "template_source": "Template:Rune data Fleet Footwork"
@@ -423,61 +489,70 @@
               "conditions": [
                 "vs_champions"
               ],
-              "parse_confidence": 1.0
+              "parse_confidence": 1.0,
+              "semantic_components": [
+                {
+                  "component_id": "stack_duration_seconds",
+                  "value": 5,
+                  "unit": "seconds"
+                },
+                {
+                  "component_id": "max_stacks",
+                  "value": 12,
+                  "unit": "stacks"
+                },
+                {
+                  "component_id": "stacks_per_on_hit",
+                  "branches": {
+                    "melee": 2,
+                    "ranged": 1
+                  },
+                  "unit": "stacks"
+                },
+                {
+                  "component_id": "stacks_from_ability_or_non_basic_damage",
+                  "value": 2,
+                  "unit": "stacks"
+                }
+              ]
             },
             {
-              "raw": "Each stack of Conqueror grants 1. 08 – 2. 56 (based on level) bonus Attack Damage or 1. 8 – 4. 26 (based on level) Ability Power ( Adaptive ), up to 12. 96 – 30. 66 (based on level) bonus Attack Damage or 21. 6 – 51. 11 (based on level) Ability Power ( Adaptive ) at maximum stacks, at which you also heal for ( 8% / 5% ) of the post-mitigation damage dealt against enemy champions.",
+              "raw": "Each stack of Conqueror grants 1.08 – 2.56 (based on level) bonus Attack Damage or 1.8 – 4.26 (based on level) Ability Power ( Adaptive ), up to 12.96 – 30.66 (based on level) bonus Attack Damage or 21.6 – 51.11 (based on level) Ability Power ( Adaptive ) at maximum stacks, at which you also heal for ( 8% / 5% ) of the post-mitigation damage dealt against enemy champions.",
               "effect_type": "damage",
               "stat": "attack_damage",
               "unit": "percent",
               "values": [
-                1.0,
-                8,
-                2.0,
-                56,
-                1.0,
-                8,
-                4.0,
-                26,
-                12.0,
-                96,
-                30.0,
-                66,
-                21.0,
-                6,
-                51.0,
-                11,
+                1.08,
+                2.56,
+                1.8,
+                4.26,
+                12.96,
+                30.66,
+                21.6,
+                51.11,
                 8,
                 5
               ],
               "value_range": [
-                8,
-                2.0
+                1.08,
+                2.56
               ],
               "numbers_extracted": [
-                1.0,
-                8,
-                2.0,
-                56,
-                1.0,
-                8,
-                4.0,
-                26,
-                12.0,
-                96,
-                30.0,
-                66,
-                21.0,
-                6,
-                51.0,
-                11,
+                1.08,
+                2.56,
+                1.8,
+                4.26,
+                12.96,
+                30.66,
+                21.6,
+                51.11,
                 8,
                 5
               ],
               "scaling": {
                 "type": "by_level",
-                "min": 8,
-                "max": 2.0,
+                "min": 1.08,
+                "max": 2.56,
                 "levels": [
                   1,
                   18
@@ -488,22 +563,14 @@
               "formula": {
                 "type": "per_rank",
                 "values": [
-                  1.0,
-                  8,
-                  2.0,
-                  56,
-                  1.0,
-                  8,
-                  4.0,
-                  26,
-                  12.0,
-                  96,
-                  30.0,
-                  66,
-                  21.0,
-                  6,
-                  51.0,
-                  11,
+                  1.08,
+                  2.56,
+                  1.8,
+                  4.26,
+                  12.96,
+                  30.66,
+                  21.6,
+                  51.11,
                   8,
                   5
                 ],
@@ -512,7 +579,45 @@
               "conditions": [
                 "vs_champions"
               ],
-              "parse_confidence": 1.0
+              "parse_confidence": 1.0,
+              "semantic_components": [
+                {
+                  "component_id": "adaptive_force_per_stack_by_level",
+                  "branches": {
+                    "attack_damage": [
+                      1.08,
+                      2.56
+                    ],
+                    "ability_power": [
+                      1.8,
+                      4.26
+                    ]
+                  },
+                  "unit": "adaptive_force"
+                },
+                {
+                  "component_id": "adaptive_force_at_max_stacks_by_level",
+                  "branches": {
+                    "attack_damage": [
+                      12.96,
+                      30.66
+                    ],
+                    "ability_power": [
+                      21.6,
+                      51.11
+                    ]
+                  },
+                  "unit": "adaptive_force"
+                },
+                {
+                  "component_id": "post_mitigation_healing_at_max_stacks_percent",
+                  "branches": {
+                    "melee": 8,
+                    "ranged": 5
+                  },
+                  "unit": "percent"
+                }
+              ]
             },
             {
               "raw": "Each cast instance can only grant stacks once every 4 seconds. Proc damage from non- pets ; and basic damage that does not apply on-hits , will not grant any stacks.",
@@ -604,15 +709,14 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2. 5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
+              "raw": "Passive: Scoring a takedown against an enemy champion heals you for 2.5 % of your maximum health (+ 5% of your missing health) and grants you an additional 20 , both after a 1-second delay.",
               "effect_type": "healing",
               "stat": "health",
               "unit": "percent",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                2.0,
-                5,
+                2.5,
                 5,
                 20,
                 1
@@ -622,7 +726,7 @@
               "applies_to": "enemy_champion",
               "formula": {
                 "type": "flat",
-                "value": 2.0,
+                "value": 2.5,
                 "unit": "percent"
               },
               "conditions": [],
@@ -667,17 +771,15 @@
               "parse_confidence": 0.9
             },
             {
-              "raw": "Damaging an enemy champion restores ( 6 – 56 / 4. 8 – 44. 8 ) (based on level) mana or 6 energy (8 second cooldown).",
+              "raw": "Damaging an enemy champion restores ( 6 – 56 / 4.8 – 44.8 ) (based on level) mana or 6 energy (8 second cooldown).",
               "effect_type": "cooldown",
               "stat": "cooldown",
               "unit": "seconds",
               "values": [
                 6,
                 56,
-                4.0,
-                8,
-                44.0,
-                8,
+                4.8,
+                44.8,
                 6,
                 8
               ],
@@ -688,10 +790,8 @@
               "numbers_extracted": [
                 6,
                 56,
-                4.0,
-                8,
-                44.0,
-                8,
+                4.8,
+                44.8,
                 6,
                 8
               ],
@@ -711,17 +811,41 @@
                 "values": [
                   6,
                   56,
-                  4.0,
-                  8,
-                  44.0,
-                  8,
+                  4.8,
+                  44.8,
                   6,
                   8
                 ],
                 "unit": "seconds"
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.8,
+              "semantic_components": [
+                {
+                  "component_id": "mana_restore_by_level",
+                  "branches": {
+                    "melee": [
+                      6,
+                      56
+                    ],
+                    "ranged": [
+                      4.8,
+                      44.8
+                    ]
+                  },
+                  "unit": "mana"
+                },
+                {
+                  "component_id": "energy_restore",
+                  "value": 6,
+                  "unit": "energy"
+                },
+                {
+                  "component_id": "trigger_cooldown_seconds",
+                  "value": 8,
+                  "unit": "seconds"
+                }
+              ]
             }
           ],
           "template_source": "Template:Rune data Presence of Mind"
@@ -745,7 +869,7 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 3% (+ 1. 5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
+              "raw": "Passive: Gain 3% (+ 1.5 % per Legend stack ) bonus attack speed , up to 18% at maximum stacks.",
               "effect_type": "stat_modifier",
               "stat": "attack_speed",
               "unit": "percent",
@@ -753,8 +877,7 @@
               "value_range": null,
               "numbers_extracted": [
                 3,
-                1.0,
-                5,
+                1.5,
                 18
               ],
               "scaling": null,
@@ -815,15 +938,14 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 1. 5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
+              "raw": "Passive: Gain 1.5 basic ability haste per Legend stack , up to 15 at maximum stacks.",
               "effect_type": "stat_modifier",
               "stat": "ability_haste",
               "unit": null,
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                1.0,
-                5,
+                1.5,
                 15
               ],
               "scaling": null,
@@ -831,7 +953,7 @@
               "applies_to": null,
               "formula": {
                 "type": "flat",
-                "value": 1.0,
+                "value": 1.5,
                 "unit": null
               },
               "conditions": [],
@@ -879,17 +1001,15 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 0. 45 % life steal per Legend stack , up to 6. 75 % at maximum stacks, at which you also gain 85 bonus health .",
+              "raw": "Passive: Gain 0.45 % life steal per Legend stack , up to 6.75 % at maximum stacks, at which you also gain 85 bonus health .",
               "effect_type": "healing",
               "stat": "health",
               "unit": "percent",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                0.0,
-                45,
-                6.0,
-                75,
+                0.45,
+                6.75,
                 85
               ],
               "scaling": null,
@@ -897,7 +1017,7 @@
               "applies_to": null,
               "formula": {
                 "type": "flat",
-                "value": 0.0,
+                "value": 0.45,
                 "unit": "percent"
               },
               "conditions": [],
@@ -1064,7 +1184,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

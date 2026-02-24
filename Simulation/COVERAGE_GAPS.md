@@ -49,7 +49,12 @@ This file tracks what is complete and not complete for coverage across data and 
 - Add runtime support for ally-link ownership constraints and dead-state passive suspension (`Wordless Promise` Promise tether and stat-sharing behavior).
 - Add runtime support for Quicksilver-group cooldown isolation and expanded cleanse subtype handling (`Quicksilver Sash` and `Mercurial Scimitar` airborne activation lockout plus suppression/nearsight scope).
 - Add runtime mode-overlay consumption for `mode_overrides` branches so mode-specific item semantics (for example `Overcharged` in Swiftplay/URF) are selected automatically at load/runtime.
+- Add loader/lint enforcement for rune raw-to-metadata consistency so decimal normalization regressions are blocked automatically (including placeholder-artifact rejection such as `\1.\2`).
+- Add runtime/data-loader support for consuming rune `semantic_components` (multi-branch `per_rank` decomposition) so branch semantics do not rely on positional arrays only.
 - Add runtime loader support for split rune authoring structure (`Masteries/RunesReforged/RunesReforged.json` + tree/stat-shard files) so flat compatibility file can be deprecated safely.
+- Add runtime support for formula-based dash velocity in champion execution metadata (for example `Renekton` `Slice and Dice` speed `760 + 100% movement speed`) so dynamic movement-state timing is simulation-faithful.
+- Add runtime support for explicit multi-stage same-slot ability identity and recast windows (for example `Sylas` `Abscond` -> `Abduct`) so stage-two timing/projectile branches are first-class runtime events.
+- Add runtime support for cast-distance-scaled area-radius resolution (for example `Vex` `Looming Darkness` `200 : 300` radius branch) so dynamic hit geometry is not flattened to a single static radius.
 - Keep runtime compile-integrity no-regression across ongoing schema/decomposition refactor slices so required validation gates (`cargo fmt`, `cargo clippy -D warnings`, `cargo test --release`) remain clean after data-only waves.
 
 ## Data Quality Gap Snapshot (2026-02-24 Audit, Updated)
@@ -82,7 +87,7 @@ This file tracks what is complete and not complete for coverage across data and 
 | Mode-scoped sudden-death timing semantics | `Overcharged` now keeps Clash timing at root and encodes Swiftplay/URF timing-value divergence under `mode_overrides` | Extend canonical mode-overlay policy beyond `Overcharged` and keep mode-key naming/shape consistent across future mode-variant items |
 | Mode-overrides runtime interpretation follow-up | `Overcharged` (`SWIFTPLAY`/`URF`) plus `Guardian's Horn` and `Guardian's Orb` (`ARENA`) now carry data-level `mode_overrides` branches for mode-variant semantics | Add runtime mode-overlay consumption so simulations can select mode branches automatically instead of relying only on root-baseline fields |
 | Trinket vision/charge runtime follow-up | `Arcane Sweeper`, `Farsight Alteration`, `Oracle Lens`, and `Stealth Ward` now encode page-verified cast windows, charge/recharge scaling, ward limits, and reveal/detection branches in structured data | Runtime currently lacks trinket vision-entity simulation (charge state, ward placement limits, reveal radius/scouting entities), so behavior remains data-documented but not executable in simulation loops |
-| Dragonheart late-acquisition stack semantics | `Dragonheart` now encodes acquisition-round immediate soul backfill as a structured branch (`1-4` souls, capped at `4`) and includes inferred threshold brackets (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) derived from published cadence + cap constraints | Confirm inferred per-round thresholds against an explicit authoritative threshold table if one is published; keep current inferred mapping tracked in confidence docs until then |
+| Dragonheart late-acquisition stack semantics | `Dragonheart` now encodes acquisition-round immediate soul backfill as a structured branch (`1-4` souls, capped at `4`) with explicit page-published thresholds (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) | Threshold-inference gap is closed; keep this as a no-regression guardrail and re-verify if source tables change |
 | Champion-ability upgrade pseudo-item semantics | `Fire at Will` now documents Gangplank-ultimate-upgrade coupling and redirect-based source provenance | Define canonical policy for pseudo-item upgrade entries (source requirements, rank/tag conventions, and simulation eligibility expectations) |
 | Moonstone ally-chain runtime follow-up | `Moonstone Renewer` now documents nearest-other-ally chain targeting, same-target fallback branch, and 800-unit scope in structured/context notes | Add runtime ally-target selection + fallback chain-resolution support (deferred code work) so Starlit Grace behavior is simulation-faithful |
 | Manaflow charge/transform runtime follow-up | `Archangel's Staff`, `Whispering Circlet`, and `Winter's Approach` now encode page-verified charge cadence, consume triggers, and transform thresholds with clearer execution notes | Add runtime charge-state and transform-threshold support so stack/cap progression is simulation-faithful when these items are modeled |
@@ -106,18 +111,21 @@ This file tracks what is complete and not complete for coverage across data and 
 | Support-quest sell-state representation | Quest-stage support items (`World Atlas`, `Runic Compass`, `Bounty of Worlds`) now encode page-verified No Sell behavior with `shop.prices.sell = 0` and explicit Tier-1 discrepancy notes | Keep intentional override policy documented and re-verify if official datasets expose sell-restriction flags |
 | Rune structured stat semantics | `0` runes include `stat_modifier` entries with null/empty `stat` | Cleared from baseline `21`; keep using `condition_note` for narrative-only entries |
 | Rune parse confidence | `0` runes include `parse_confidence <= 0.60` | Low-confidence rune note cleanup wave completed; maintain this as a no-regression guardrail |
+| Rune raw decimal-spacing normalization (`effects_structured.raw`) | Decimal-spacing artifact queue is clear (`0` remaining `x. y` entries; previously `28` across `27` runes), and dependent numeric metadata has been normalized on affected entries | Keep no-regression audits active and complete deferred loader/lint enforcement for raw-to-metadata consistency plus placeholder-artifact blocking (`\1.\2`) |
+| Rune multi-branch semantic explicitness (`semantic_components`) | All current multi-branch `per_rank` effects now include explicit semantic decomposition (`14/14` coverage) | Keep `semantic_components` as no-regression baseline and complete deferred loader/runtime follow-up so branch semantics can be consumed directly instead of positional-only `per_rank` arrays |
 | Preset item provenance (`enemy_urf_presets` items with `effects_structured`) | `0` currently unsourced | Preset data now has provenance coverage; maintain for new preset updates |
 | Non-structured item provenance (`Items/*.json` without `effects_structured`) | `0/77` canonical non-structured item files have null/empty `sources` | Queue is cleared for canonical item files; keep this as a no-regression guardrail |
 | Items-folder provenance completeness (`Items/*.json`, canonical + report artifacts) | `0/322` item JSON files have null/empty `sources`; `0/322` have source entries missing `accessed` | Folder-level provenance/accessed normalization is complete; keep this as a no-regression guardrail |
 | Champion corpus parity (`From Online/champions` -> `Characters`) | `172/172` champion keys have canonical `Characters/<Champion>.json` parity (`0` missing) | File-parity backlog is cleared; keep inventory as a no-regression guardrail |
 | Champion manual verification tracker coverage | `172/172` champions currently marked `manual_behavior_verified` (`100%`) in `Simulation/champion_behavior_verification_tracker.json` | Full-corpus manual verification is complete; keep this as a no-regression guardrail and re-open targeted waves when semantics change |
 | Champion verification tracker integrity | `manual_behavior_verified_champion_keys` count and tracker totals are reconciled (`172` verified keys, `0` source-extracted-only, corpus `172`) | Keep per-wave reconciliation check as a no-regression guardrail (`verified_count == key_count`; `source_extracted_only == corpus_total - verified_count`) |
-| Champion manual-verification page-level citation depth | `5/5` champions touched in the latest fidelity waves (`88-89`) include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
+| Champion manual-verification page-level citation depth | `4/4` champions touched in latest fidelity waves (`103-106`) include explicit page-level champion ability citations in both touched champion `sources` and tracker wave scope | Enforce this as a no-regression requirement for all future manual verification waves and backfill older-wave citation annotations where missing |
 | Champion context-note truncation audit | `0` ability entries across `0` champion files are currently flagged by strict regex audit as candidate truncated timing fragments in `context_notes`; secondary cadence-fragment sweep (`every 0.` class) and tertiary article-token sweep (`during the 0.` class) are also `0/0` | Queue is cleared; keep string+array-aware strict auditing plus cadence/article-token sweeps as no-regression guardrails |
 | Source-extracted-only strict-fragment queue | `0` source-extracted-only champions currently have strict-fragment notes | Queue is cleared; keep this as a no-regression guardrail while maintaining full-corpus manual verification coverage |
 | Champion source metadata completeness (`Characters/*.json`) | `0/173` champion JSON files have null/empty `sources`; `0/173` have source entries missing `accessed` | Champion provenance/accessed normalization is complete; keep this as a no-regression guardrail |
 | Champion active-ability execution metadata completeness | `682/682` champion active abilities include non-empty `execution` objects | Active-ability execution metadata backlog is cleared; keep this as a no-regression guardrail |
 | Champion context-note coverage completeness | `860/860` champion abilities include `context_notes` | Context-note completeness backlog is cleared; keep this as a no-regression guardrail |
+| Champion execution-metadata expressiveness follow-up | Latest waves now document dynamic semantics for `Nasus` (`Spirit Fire` delayed/tick cadence), `Renekton` (`Slice and Dice` move-speed-scaled dash), `Sylas` (`Abscond` two-stage recast flow), and `Vex` (`Looming Darkness` cast-distance radius scaling) | Keep canonical notes/source provenance updated and track deferred runtime support for formula-speed dashes, stage identity windows, and distance-scaled radius interpolation |
 | Champion ability `description_source` completeness | `860/860` champion abilities currently include non-empty `description_source` (`0` missing across `0` champions) | Backlog is cleared; keep this as a no-regression guardrail on all champion edits |
 | Champion `description_source` provenance depth | Missing entries were backfilled to close completeness (`860/860`), and waves `76-77` plus `80-81` hardened direct source-corpus phrasing on high-impact abilities (`Aatrox Q`, `Blitzcrank Q`, `Caitlyn R`, `Darius E`, `Aurelion Sol Q`, `Varus Q`, `Jhin R`, `Thresh Q`, `Braum R`, `Lux R`, `Pantheon Q`, `Poppy R`, `Mordekaiser R`, `Pyke Q`, `Sion Q`, `Urgot R`) | Continue provenance-hardening waves until remaining fallback-derived entries are replaced with direct source-corpus phrasing on prioritized champions |
 | Champion stochastic-spawn weighting confidence | `Zyra` `Garden of Thorns` lifecycle semantics are documented and manually verified; template + patch-history research confirms stochastic two-seed behavior but no deterministic one-vs-two weighting is published | Keep lifecycle behavior canonical and track weighting follow-up in `Simulation/CONFIDENCE_REVIEW.md` until an authoritative probability metric is available |
@@ -128,6 +136,56 @@ This file tracks what is complete and not complete for coverage across data and 
 - Note: historical bullets below retain per-wave baseline counts captured at the time each wave landed; use "Coverage At A Glance" and "Champion Corpus Parity Snapshot" for current totals.
 - Completed:
   - added `Simulation/champion_behavior_verification_tracker.json` to track deeper manual champion behavior verification beyond source extraction (current baseline: `172/172` manual verified, policy defaulting to intended non-bug behavior)
+  - completed champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
+    - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
+    - expanded ability context notes and schema notes with explicit player-visible resolution timing and page-level template provenance
+  - completed champion execution-semantics wave 104 (`Renekton` `Slice and Dice`):
+    - manually re-verified two-stage recast gating, traversal-hit timing, and move-speed-scaled dash-velocity semantics
+    - documented deferred runtime follow-up for formula-based dash speed consumption (`760 + 100% movement speed`)
+  - completed champion execution-semantics wave 105 (`Sylas` `Chain Lash`, `Abscond`):
+    - repaired truncation defects on delayed-detonation `Chain Lash` effect notes (`After a 0.` -> complete `0.6-second` semantics)
+    - re-verified `Abscond` stage-one/stage-two timing window semantics and documented deferred runtime follow-up for explicit multi-stage slot-E identity handling
+  - completed champion execution-semantics wave 106 (`Vex` `Looming Darkness`):
+    - manually re-verified projectile-to-explosion timing, cast-distance-scaled radius behavior (`200 : 300`), and Doom flee-origin semantics
+    - documented deferred runtime follow-up for distance-scaled radius interpolation instead of single static-radius flattening
+  - completed champion cast-timing fidelity wave 91:
+    - manually re-verified attack-speed-scaled cast gating and player-visible resolution timing on `Jinx` (`W`), `Kai'Sa` (`E`), `Yone` (`Q`,`W`), and `Zeri` (`W`)
+    - added page-level template citations for each touched champion/ability and recorded wave scope in `Simulation/champion_behavior_verification_tracker.json`
+    - corrected discovered truncation defect in `Yone` `Fate Sealed` context notes (`Yone will blink after a 0.` -> full follow-up timing note)
+  - completed item source-reconciliation wave 92 (`Twilight's Edge`):
+    - aligned canonical Material/Spirit AD/AP modifiers to current page-verified `25%` values and documented infobox/module description divergence in context notes
+    - encoded explicit level-1-to-18 tooltip tables for Material attack-speed (`50-150%`) and Spirit ability-haste (`30-120`) scaling branches
+  - completed item confidence-resolution wave 93 (`Dragonheart`):
+    - replaced inferred immediate-backfill threshold metadata with explicit page-published acquisition-round table values (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`)
+    - raised immediate-backfill branch confidence and removed inference-only uncertainty language from canonical context notes
+  - completed runes decimal/value normalization wave 94:
+    - normalized decimal spacing and corrected structured numeric/value metadata on `Electrocute`, `Dark Harvest`, `Press the Attack`, and `Lethal Tempo`
+    - applied identical corrections to both flat and split rune files to preserve no-drift parity
+  - completed runes decimal/value normalization wave 95 (`Domination` + `Precision` tranche):
+    - normalized decimal artifacts and synchronized dependent metadata for `Cheap Shot`, `Taste of Blood`, `Triumph`, `Presence of Mind`, `Conqueror`, `Fleet Footwork`, and `Legend` entries
+    - preserved flat/split parity during batch updates
+  - completed runes decimal/value normalization wave 96 (`Resolve` tranche):
+    - normalized decimal artifacts and synchronized dependent metadata for `Grasp of the Undying`, `Aftershock`, `Guardian`, `Font of Life`, `Shield Bash`, `Bone Plating`, and `Overgrowth`
+    - corrected range/min-max fields where decimal token splits had degraded structured values
+  - completed runes decimal/value normalization wave 97 (`Sorcery` tranche):
+    - normalized decimal artifacts and synchronized dependent metadata for `Summon Aery`, `Arcane Comet`, `Phase Rush`, `Absolute Focus`, `Scorch`, `Waterwalking`, and `Gathering Storm`
+    - re-aligned by-level range metadata on affected entries
+  - completed runes decimal/value normalization wave 98 (cross-tree no-regression repair/audit tranche):
+    - cleared the broader decimal-spacing queue (`28` entries across `27` runes -> `0`)
+    - validated no placeholder-artifact strings (for example `\1.\2`) remain after scripted updates and confirmed no flat/split drift
+    - logged deferred code follow-up for automated loader/lint enforcement of rune raw-to-metadata consistency
+  - completed rune semantic-explicitness wave 99 (`Inspiration` tranche):
+    - added explicit `semantic_components` decomposition for `First Strike` and `Jack of All Trades` multi-branch `per_rank` effects
+    - encoded trigger window, threshold, and conversion semantics as named components rather than positional-only arrays
+  - completed rune semantic-explicitness wave 100 (`Precision` tranche):
+    - added explicit `semantic_components` decomposition for `Lethal Tempo`, `Fleet Footwork`, `Conqueror`, and `Presence of Mind` multi-branch `per_rank` effects
+    - encoded melee/ranged, AD/AP, stack-cadence, and cooldown branch semantics explicitly
+  - completed rune semantic-explicitness wave 101 (`Resolve` tranche):
+    - added explicit `semantic_components` decomposition for `Grasp of the Undying`, `Demolish`, and `Font of Life` multi-branch `per_rank` effects
+    - encoded stack windows, turret branch values, and ally-heal radius/progression semantics explicitly
+  - completed rune semantic-explicitness wave 102 (`Sorcery` tranche):
+    - added explicit `semantic_components` decomposition for `Phase Rush` and `Gathering Storm` multi-branch `per_rank` effects
+    - completed current multi-branch `per_rank` semantic decomposition baseline (`14/14` coverage) and logged runtime consumption follow-up scope
   - completed item parse-confidence completeness wave 87:
     - backfilled missing/null `effects_structured[].parse_confidence` metadata on the remaining queue (`12` effect entries across `5` files: `Trinity Force`, `Twilight's Edge`, `Warden's Eye`, `Wooglet's Witchcap`, `Zeke's Convergence`)
     - cleared structured-item missing/null parse-confidence queue to `0` entries (`0/243` files with gaps)
@@ -606,7 +664,7 @@ This file tracks what is complete and not complete for coverage across data and 
 19. Maintain non-structured provenance no-regression on canonical item files (`0/77` unsourced) and maintain items-folder provenance/accessed completeness at `0/322` gaps (canonical files plus report artifacts).
 20. Extend canonical mode-scoping policy for shared-ID item effects beyond `Overcharged` now that `mode_overrides` overlays are in use for Clash/Swiftplay/URF plus Arena map-difference divergences (`Guardian's Horn`, `Guardian's Orb`).
 21. Standardize lifecycle-marker policy for retired/replaced item identities (required fields: `status`, `exclude_from_simulation`, `reason`, `replacement_item`, `replacement_id`) and enforce exclusion behavior guardrails.
-22. Validate Dragonheart acquisition-round inferred threshold brackets against an explicit authoritative threshold table (if published) and keep current inferred mapping auditable in confidence notes.
+22. Maintain Dragonheart acquisition-round table no-regression (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`) and re-verify when page-level threshold tables change.
 23. Define canonical policy for champion-ability upgrade pseudo-items (for example `Fire at Will`) including source provenance shape and simulation-use expectations.
 24. Keep intended-behavior-first handling for known bug notes; keep bug behavior out of canonical simulation data and document divergences as notes only.
 25. Maintain champion provenance/accessed no-regression (`Characters`: `0/173` unsourced and `0/173` with missing `sources[].accessed`).
@@ -615,6 +673,9 @@ This file tracks what is complete and not complete for coverage across data and 
 28. Maintain champion manual behavior-verification tracker at full-corpus coverage (`172/172` current baseline) and run targeted re-verification waves when semantics change.
 29. Keep champion context-note truncation queues at `0/0` (strict primary regex plus secondary cadence-fragment sweep plus tertiary article-token sweep plus cast-time fragment sweep for `have a 0.` patterns) on every champion wave so truncation regressions are caught immediately.
 30. Maintain champion ability `description_source` no-regression (`860/860` currently populated) and treat missing entries as blocking regressions.
+31. Maintain rune decimal-spacing artifact queue at `0` (`0` entries across `0` runes) and keep flat/split parity + numeric-metadata consistency as no-regression requirements.
+32. Complete deferred code follow-up for rune raw-to-metadata validation automation (reject placeholder artifacts like `\1.\2` and flag structured numeric drift).
+33. Maintain rune `per_rank` semantic decomposition coverage (`semantic_components`) at `14/14` and track runtime-consumption/lint-enforcement follow-up until branch semantics are first-class in loaders/runtime.
 
 ### Remaining Broader No-Page Queue (`0`)
 - None (queue cleared in wave 39; keep as a no-regression guardrail).
@@ -650,6 +711,15 @@ This file tracks what is complete and not complete for coverage across data and 
    - phase 1 (completed): quantified backlog and backfilled touched-wave missing entries where encountered.
    - phase 2 (completed): ran dedicated full-corpus backfill to close champion ability `description_source` backlog (`860/860`, `0` missing).
    - phase 3 (in progress): run full-corpus no-regression audits to keep champion ability `description_source` completeness at `860/860` on future edits.
+8. Rune Decimal-Normalization Plan:
+   - phase 1 (completed): normalize high-impact keystone examples (`Electrocute`, `Dark Harvest`, `Press the Attack`, `Lethal Tempo`) and synchronize flat/split structured fields.
+   - phase 2 (completed): corrected remaining decimal-spacing artifacts in rune `effects_structured.raw` (`28` entries across `27` runes -> `0`), pairing each raw-text fix with numeric metadata reconciliation.
+   - phase 3 (in progress): keep no-regression audits active so decimal-spacing artifact queue remains at `0` while preserving flat/split parity (`61/61` rune IDs).
+   - phase 4 (pending runtime/code follow-up): add automated loader/lint enforcement to reject placeholder artifacts (`\1.\2`) and detect raw-to-metadata numeric drift.
+9. Rune Semantic-Explicitness Plan:
+   - phase 1 (completed): decompose all current multi-branch `per_rank` rune effects into explicit `semantic_components` (`14/14` baseline).
+   - phase 2 (in progress): keep no-regression audits active so touched multi-branch `per_rank` effects preserve named branch semantics in both flat and split files.
+   - phase 3 (pending runtime/code follow-up): add loader/runtime consumption and lint enforcement for `semantic_components` so branch interpretation is deterministic and not positional-only.
 
 ### Active Low-Confidence Item Queue (`0`)
 - None currently (`parse_confidence < 0.65` queue cleared).

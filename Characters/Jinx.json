@@ -240,6 +240,8 @@
         "Source targeting: Direction.",
         "Source castTime: 0.6 : 0.4 (based on bonus attack speed).",
         "Source speed: 3300.",
+        "Manual behavior verification (2026-02-24): Zap! is a windup-gated direction cast; projectile release occurs on cast completion from Jinx's cast-start location, not instantly on key press.",
+        "Manual behavior verification (2026-02-24): Damage, slow, and reveal apply only when the projectile collides with the first enemy hit, preserving dodge/block windows during flight.",
         "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
       ]
     },
@@ -390,6 +392,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Jinx",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Jinx/Zap%21",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Zap cast windup scaling, start-position launch semantics, and first-hit resolution timing"
     }
   ],
   "notes": [

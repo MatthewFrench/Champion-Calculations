@@ -270,6 +270,12 @@ impl ControlledChampionCombatSimulation {
     }
 
     pub(super) fn first_active_enemy_in_controlled_champion_attack_range(&self) -> Option<usize> {
+        if let Some(preferred_target_index) = self.controlled_champion_basic_attack_target_index()
+            && self.controlled_champion_in_attack_range(preferred_target_index)
+        {
+            return Some(preferred_target_index);
+        }
+
         let mut best: Option<(usize, f64)> = None;
         for idx in 0..self.enemy_count() {
             if !self.enemy_is_active(idx) || !self.controlled_champion_in_attack_range(idx) {

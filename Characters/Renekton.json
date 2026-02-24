@@ -387,7 +387,9 @@
         "Source targeting: Direction.",
         "Source castTime: none.",
         "Source speed: 760 + 100% movement speed.",
-        "Source notes (summary): No additional details."
+        "Manual behavior verification (2026-02-24): Slice and Dice is a two-stage dash; Dice is armed only if Slice hits at least one enemy and the recast window lasts 4 seconds.",
+        "Manual behavior verification (2026-02-24): Damage is applied during dash traversal (pass-through hits), not at cast-input time.",
+        "Manual behavior verification (2026-02-24): Source speed includes movement-speed scaling (760 + 100% movement speed); current execution metadata stores base speed and tracks scaling as deferred runtime follow-up."
       ]
     },
     "ultimate": {
@@ -464,6 +466,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Ruthless Predator cast timing, multi-hit strike semantics, stun durations, and attack-cadence-coupled resolution"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Slice_and_Dice",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Slice and Dice recast gating, traversal-hit timing, and dash-speed scaling semantics"
     }
   ],
   "notes": [
@@ -478,7 +486,10 @@
     "ratio_type": "Common ratio types: total_ad, bonus_ad, ap, target_max_health, target_missing_health.",
     "value_percent": "Percent values are represented as whole percentages unless noted otherwise.",
     "basic_attack": "Basic attack timing and projectile defaults are source-derived with documented fallbacks.",
-    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability."
+    "basic_attack_raw_timing_stats": "Raw timing stats preserve source payload fields for auditability.",
+    "context_notes": [
+      "Manual behavior re-verification (2026-02-24, wave 104): Slice and Dice recast-gating and traversal-hit timing were verified; move-speed-scaled dash velocity is documented as deferred runtime-consumption follow-up."
+    ]
   },
   "simulation": {
     "status": "data_only_unscripted",

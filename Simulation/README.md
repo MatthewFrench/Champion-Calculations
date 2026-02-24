@@ -15,11 +15,19 @@ This simulator targets controlled-champion URF teamfight optimization with champ
   - `CURRENT_STATE.md`
 - Full-game target blueprint (systems required beyond data coverage):
   - `FULL_GAME_SIMULATION_BLUEPRINT.md`
+- Champion controller harness architecture (player/AI parity control contract):
+  - `CHAMPION_CONTROLLER_HARNESS_ARCHITECTURE.md`
+- Deterministic request/fast-forward runtime model (research-backed):
+  - `DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`
 
 ## What It Models
 - Vladimir uses scripted `W`, `Q`, `E`, and `R` ability cadence.
 - Controlled-champion run modes require a registered controlled-champion script and return an actionable error for unsupported champions.
 - `src/world/*` owns deterministic map-bound world state registration/projections and validates encounter placement before scenario execution.
+- Encounter world-state assembly now seeds baseline non-champion ecology anchors (`Structure`, `Monster`, `Minion`) with explicit allegiance ownership.
+- Runtime enemy movement and enemy respawn position updates now route through world ownership upsert/clamp channels (map-bounded actor position ownership).
+- Runtime world lifecycle channels now advance deterministic minion-wave spawn/despawn loops and neutral objective spawn/respawn timers through `src/world/world_actor_lifecycle_channels.rs`.
+- Champion controller harness phase-2 runtime ingress now routes deterministic controlled-champion command handling through `src/champion_control_harness/*` + `src/engine/controlled_champion_controller_channels.rs` with sequence-ordered request execution and command-owned movement stepping.
 - Combat runs with 2D positions (controlled champion fixed at origin; enemies maintain range with deterministic orbit/chase motion).
 - Simulation intentionally ignores vertical `z` index for now; combat checks use only 2D geometry (`x`,`y`) until a verified gameplay interaction requires `z`.
 - Fixed-timestep stepping via `ControlledChampionCombatSimulation.step()` at `server_tick_rate_hz`.
@@ -58,6 +66,9 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Controlled champion and enemy actors consume the same shared rune-combat runtime interfaces; controlled-champion runtime module now only owns defensive item/revive policy helpers.
 - Engine event-resolution and trace owner channels now guard stale/out-of-range actor indices and skip invalid payloads instead of panicking.
 - Blocking score cache lock/condvar poisoning now recovers via poisoned inner state instead of panicking.
+- Required defaults channels now load through centralized strict hard-fail ownership in `src/defaults.rs`; required simulator/champion/mode defaults loaders no longer silently fall back to empty maps.
+- Non-test `expect(...)` and `panic!(...)` callsites under `src/` are now zero.
+- Startup now runs `preflight_required_defaults_channels()` before mode dispatch, surfacing typed contextual startup errors for required defaults ownership failures.
 - Search scoring now also supports explicit unmodeled-item-effect quality gating (hard gate or per-item penalty) to reduce ranking bias from unimplemented item effects.
 - When unmodeled hard gates are enabled, controlled-champion candidate generation space is constrained up front (modeled-rune loadout domain and modeled-runtime-item pool) so invalid candidates are not generated and then rejected later.
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
@@ -77,6 +88,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Enemy script-action impact/followup scheduling ownership now routes through `src/engine/event_resolution/enemy_script_action_resolution.rs`.
 - Enemy movement position updates are routed through explicit simulation-step owner command `apply_enemy_movement_step` in `src/engine/simulation_step/enemy_movement_step.rs`.
 - Controlled champion hot-effect tick lifecycle ownership now routes through `src/engine/simulation_step/hot_effects_step.rs` (`apply_hot_effects`).
+- World lifecycle advancement ownership now routes through `src/engine/simulation_step/world_lifecycle_step.rs` (`apply_world_lifecycle_step`).
 - Controlled champion status/cast/attack gating, enemy range/targeting/projectile-block helpers, and attack/event scheduling ownership now route through `src/engine/combat_timing_and_targeting.rs`.
 - Enemy derived combat-stat/loadout-runtime modeling ownership now routes through `src/engine/enemy_combat_stat_modeling.rs` (`derive_enemy_model`, `derive_enemy_combat_stats`).
 - Enemy respawn/regeneration lifecycle and active/alive runtime queries are routed through actor-state owner facade `src/engine/actor_state/enemy_runtime_state.rs` plus explicit owner leaves under `src/engine/actor_state/enemy_runtime_state/`.

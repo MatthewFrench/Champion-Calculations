@@ -48,14 +48,16 @@ Implemented baseline highlights:
 - script-driven champion behavior channel for selected champions (`Simulation/src/scripts/champions/*`)
 - shared runtime stat/rune/item effect channels (`Simulation/src/scripts/runtime/*`)
 - search/orchestration/reporting pipeline for optimization (`Simulation/src/search.rs`, `Simulation/src/scenario_runner.rs`, `Simulation/src/reporting.rs`)
+- controller harness phase-1 scaffold with parity-focused perspective/action/status contracts (`Simulation/src/champion_control_harness/*`)
 
 Current non-data scope limitations:
 - scenario modes are combat-centric, not full match simulation (`Simulation/src/scenario_runner/*`)
-- actor ecosystem is champion-focused; no minion/jungle/structure runtime loops
+- actor ecosystem now includes baseline non-champion lifecycle loops but is not combat-coupled to macro outcomes
 - movement modes are limited (`HoldPosition`, `MaintainCombatRange`) and orbit/chase abstractions are simplified (`Simulation/src/engine/simulation_step/enemy_movement_step.rs`)
 - event taxonomy is combat-centric and does not include macro-map actions (`Simulation/src/engine/event_queue/event_type_catalog.rs`)
 - script event roster is narrow for enemies (`Simulation/src/scripts/champions/champion_script_event_channels.rs`)
 - runtime contracts do not yet represent full-map entities and macro state (`Simulation/src/simulation_contracts/runtime_actor_contracts.rs`)
+- controller harness now owns deterministic champion command ingress and legality/status handling, but full actor-symmetric adoption is still pending (`Simulation/src/champion_control_harness/*`, `Simulation/src/engine/*`)
 
 ## Required Capability Areas (Non-Data)
 
@@ -314,23 +316,23 @@ Status labels:
 - `BLOCKED`
 
 ## Current Status Snapshot (2026-02-24)
-Overall weighted completion estimate for this blueprint: `43%` (`IN_PROGRESS`).
+Overall weighted completion estimate for this blueprint: `54%` (`IN_PROGRESS`).
 
 Bucket status (complete / remaining):
-- Runtime Systems Completeness (`30%` weight): `31% / 69%`
-  - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation
-  - largest remaining gap: world state is not yet integrated into step-time pathing/collision, and no non-champion actor ecology or macro match systems exist yet
-- Determinism And Replay Guarantees (`20%` weight): `58% / 42%`
-  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, and fallible per-champion defaults cache loading
+- Runtime Systems Completeness (`30%` weight): `52% / 48%`
+  - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress, and command-owned controlled champion movement stepping
+  - largest remaining gap: world ownership still lacks terrain-aware pathfinding/collision and combat-coupled macro lifecycle transitions (objective damage, structure destruction, economy/xp ownership)
+- Determinism And Replay Guarantees (`20%` weight): `69% / 31%`
+  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, and per-tick stable-sequence controller request execution
   - largest remaining gap: no replay checksum verifier and no full-match deterministic replay contract
-- Calibration And Correctness (`20%` weight): `49% / 51%`
-  - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, and new world/script registration guardrails
+- Calibration And Correctness (`20%` weight): `60% / 40%`
+  - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, and deterministic ingress/movement command regressions
   - largest remaining gap: no golden interaction harness/property-suite for full-system invariants
 - Performance Envelope (`15%` weight): `47% / 53%`
   - what is done: broad parallelization and improved runtime diagnostics
   - largest remaining gap: coverage-stage fixed-cost latency and no enforced CI performance budgets
-- Renderer-Contract Readiness (`15%` weight): `30% / 70%`
-  - what is done: schema-versioned trace/report artifacts with stable structured events for current combat scope plus normalized world-state ownership scaffolding
+- Renderer-Contract Readiness (`15%` weight): `38% / 62%`
+  - what is done: schema-versioned trace/report artifacts with stable structured events for current combat scope plus normalized world-state ownership scaffolding, deterministic world-lifecycle event channels (minion/objective lifecycle traces), champion-controller perspective/status contract scaffolding, and deterministic command-ingress status buffering channels
   - largest remaining gap: no full world snapshot contract and no replay-loader validation loop
 
 Phase-level status:
@@ -342,22 +344,26 @@ Phase-level status:
 
 ## Current Non-Data High Friction
 - runtime remains optimized for combat-scenario evaluation, not full-map lifecycle orchestration
-- simplified movement and event taxonomy constrain expansion into full game behavior
-- runtime crash surfaces are now concentrated in core defaults-loader panic paths (current scan: `0` non-test `expect(...)` and `10` non-test `panic!` callsites under `Simulation/src`)
+- movement ownership is mixed (enemy orbit/range-maintain plus controlled command stepping) with no terrain-aware path planner/collision ownership yet
+- non-champion lifecycle loops now exist for minion waves and neutral objective spawn/respawn, but they are not yet coupled to combat outcomes (objective damage, structure pressure, end-state transitions)
+- startup preflight now surfaces typed required-defaults failures before run dispatch, but the runtime still uses process-fatal accessors for strict invariants in binary mode
+- current scan: `0` non-test `expect(...)` and `0` non-test `panic!` callsites under `Simulation/src`
 - controlled-champion script registry is still static and low-coverage (`Vladimir`, `Sona`) relative to full roster requirements
+- controller ingress is now deterministic and harness-gated, but full latency model, actor-symmetric command channels, and fog-aware legality still remain
 
 ## Immediate Next Work (Execution-Ready)
-1. Introduce actor-class abstraction for non-champion entities (minion/monster/structure) and owner lifecycle channels.
-2. Integrate `src/world/*` ownership into simulation-step movement/pathing channels (replace isolated enemy-position ownership paths).
-3. Expand event taxonomy to include non-combat match events (spawn/objective/economy/vision).
-4. Replace movement-orbit simplification with command/path model.
-5. Complete generic status/cast/projectile effect-instance registries.
-6. Add full target-selection policy module and AI intent channels.
-7. Add economy/xp subsystem and recall/shop state machine.
-8. Add objective/structure subsystem with match-end conditions.
-9. Add replay contract schema versioning and deterministic playback verifier.
-10. Stand up calibration harness + golden scenario suites with confidence gates.
-11. Expand controlled-champion script coverage beyond `Vladimir` and `Sona` and evolve registry wiring to reduce static coupling.
+1. Expand harness ingress from controlled champion to actor-symmetric command channels (all controllable actors through one legality/status path).
+2. Couple non-champion lifecycle channels to combat outcomes (objective defeat events, structure state transitions, and respawn ownership hooks).
+3. Expand world-owner movement from enemy-only updates to full command/path channels with terrain-aware routing.
+4. Expand event taxonomy to include non-combat match events (spawn/objective/economy/vision).
+5. Replace movement-orbit simplification with command/path model.
+6. Complete generic status/cast/projectile effect-instance registries.
+7. Add full target-selection policy module and AI intent channels.
+8. Add economy/xp subsystem and recall/shop state machine.
+9. Add objective/structure subsystem with match-end conditions.
+10. Add replay contract schema versioning and deterministic playback verifier.
+11. Stand up calibration harness + golden scenario suites with confidence gates.
+12. Expand controlled-champion script coverage beyond `Vladimir` and `Sona` and evolve registry wiring to reduce static coupling.
 
 ## Governance
 - This blueprint is the canonical full-game target document.
@@ -366,6 +372,8 @@ Phase-level status:
   - `Simulation/IMPROVEMENT_TRACKER.md`
   - `Simulation/CURRENT_STATE.md`
   - `Simulation/COVERAGE_GAPS.md`
+  - `Simulation/CHAMPION_CONTROLLER_HARNESS_ARCHITECTURE.md`
+  - `Simulation/DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`
 - Every major phase completion must update:
   - phase status
   - exit-gate evidence

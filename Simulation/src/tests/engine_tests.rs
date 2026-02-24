@@ -47,6 +47,203 @@ fn out_of_bounds_enemy_queries_return_safe_defaults() {
 }
 
 #[test]
+fn enemy_spawn_positions_are_clamped_to_world_bounds() {
+    let controlled_champion = test_controlled_champion_base();
+    let mut enemy = test_enemy("Out Of Bounds Target");
+    enemy.spawn_position_xy = Some((12_000.0, -12_000.0));
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let simulation = test_simulation(1.0, false);
+    let urf = test_urf();
+
+    let runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let Some(enemy_position) = runner.enemy_position(0) else {
+        panic!("enemy should be present");
+    };
+    let map_bounds = crate::world::default_urf_world_map_state().bounds;
+    assert!(
+        map_bounds.contains(enemy_position.x, enemy_position.y),
+        "enemy spawn position should be clamped into world bounds"
+    );
+}
+
+#[test]
+fn world_lifecycle_step_spawns_minion_wave_actors_during_runtime() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(70.0, false);
+    let urf = test_urf();
+
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+    while runner.step(1) {}
+
+    assert!(
+        runner
+            .world_actor_position("minion:blue:wave_1:unit_1")
+            .is_some(),
+        "first blue minion wave actor should be present after wave start timer"
+    );
+    assert!(
+        runner
+            .world_actor_position("minion:red:wave_1:unit_1")
+            .is_some(),
+        "first red minion wave actor should be present after wave start timer"
+    );
+    assert_eq!(
+        runner.world_actor_count_by_class_and_allegiance(
+            crate::world::WorldActorClass::Structure,
+            crate::world::WorldActorAllegiance::ControlledChampionTeam
+        ),
+        1
+    );
+}
+
+#[test]
+fn controller_move_command_steps_controlled_champion_position() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_controlled_champion_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: 1200.0, y: 0.0 },
+        },
+    );
+    assert!(matches!(
+        action_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    for _ in 0..8 {
+        runner.step(1);
+    }
+
+    let controlled_position = runner
+        .world_actor_position("controlled_champion")
+        .expect("controlled champion world actor should exist");
+    assert!(
+        controlled_position.x > 0.0,
+        "move command should advance controlled champion along x-axis"
+    );
+}
+
+#[test]
+fn controller_request_queue_preserves_sequence_order_per_tick() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+
+    let controller_identity = crate::champion_control_harness::ChampionControllerIdentity {
+        controller_id: "human_player_test".to_string(),
+        controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+    };
+    let first = runner.queue_controlled_champion_action_request(
+        controller_identity.clone(),
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: 1500.0, y: 0.0 },
+        },
+    );
+    let second = runner.queue_controlled_champion_action_request(
+        controller_identity,
+        crate::champion_control_harness::ChampionActionRequest::StopCurrentAction,
+    );
+    assert!(matches!(
+        first.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    assert!(matches!(
+        second.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    runner.step(1);
+
+    assert!(
+        runner
+            .controlled_champion_pending_move_target_position()
+            .is_none(),
+        "stop request should clear move command when applied after move in same tick"
+    );
+}
+
+#[test]
+fn unsupported_controller_cast_action_returns_explicit_rejection_status() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_controlled_champion_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        crate::champion_control_harness::ChampionActionRequest::CastAbilityBySlot {
+            ability_slot: crate::scripts::runtime::ability_slots::AbilitySlotKey::Q,
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            action_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedUnsupportedAction { .. }
+        ),
+        "unsupported cast channel should reject with explicit status"
+    );
+}
+
+#[test]
 fn projectile_path_intersection_detects_blocks() {
     let source = Vec2 { x: 0.0, y: 0.0 };
     let target = Vec2 { x: 1000.0, y: 0.0 };

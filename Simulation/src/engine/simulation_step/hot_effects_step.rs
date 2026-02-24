@@ -87,9 +87,11 @@ impl ControlledChampionCombatSimulation {
             self.apply_healing_to_controlled_champion(resolved_regen);
         }
         self.combat_primitives.tick(delta);
+        self.apply_controlled_champion_movement_step(delta);
         self.apply_enemy_movement_step(delta);
         self.apply_enemy_regeneration_tick(delta);
         self.time = to_time;
+        self.apply_world_lifecycle_step(self.time);
         self.cleanup_expired_projectile_blocks();
         self.emit_trace_snapshots_due();
     }

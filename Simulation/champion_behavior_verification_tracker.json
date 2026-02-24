@@ -2204,5 +2204,114 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_91": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Jinx",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Zap cast-start origin locking, attack-speed-scaled windup gating, and first-hit projectile resolution timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jinx/Zap%21"
+        ]
+      },
+      {
+        "key": "Kaisa",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Supercharge charge-state execution, movement-only command lock during charge, and post-charge attack-speed/invisibility timing split",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kai%27Sa/Supercharge"
+        ]
+      },
+      {
+        "key": "Yone",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_2"
+        ],
+        "focus": "Mortal Steel and Spirit Cleave attack-speed-scaled windup resolution, hit-gated shield/stack behavior, and disarm interruption semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Mortal_Steel",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yone/Spirit_Cleave"
+        ]
+      },
+      {
+        "key": "Zeri",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Ultrashock Laser cast-time scaling, terrain branch delayed-laser timing, and pulse-vs-laser projectile interception split",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zeri/Ultrashock_Laser"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_103": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Nasus",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Spirit Fire delayed-impact timing, per-second zone-tick cadence, and lingering armor-reduction execution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Spirit_Fire"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_104": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Renekton",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Slice and Dice recast-gating window, traversal-hit timing, and move-speed-scaled dash-velocity semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Slice_and_Dice"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_105": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Sylas",
+        "abilities_reviewed": [
+          "basic_ability_1",
+          "basic_ability_3"
+        ],
+        "focus": "Chain Lash delayed-detonation truncation repair plus Abscond stage-one/stage-two timing-window and overlap semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Sylas/Chain_Lash",
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Sylas/Abscond"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_106": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Vex",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Looming Darkness projectile-to-explosion timing, cast-distance-scaled radius behavior, and Doom flee-origin semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Vex/Looming_Darkness"
+        ]
+      }
+    ]
   }
 }

@@ -1,6 +1,110 @@
 # Improvement Tracker
 
 ## Done
+- Landed champion controller harness phase-2 runtime ingress integration:
+  - added deterministic controlled-champion ingress owner channels in `src/engine/controlled_champion_controller_channels.rs`:
+    - per-tick perspective projection + legality validation via `src/champion_control_harness/*`
+    - accepted-request queueing with stable sequence IDs
+    - sequence-ordered request execution at tick boundaries
+    - explicit runtime support rejections (`RejectedTargetInvalidForAction`, `RejectedUnsupportedAction`)
+  - added shared controlled-champion action execution owner channels in:
+    - `src/engine/event_resolution/controlled_champion_action_execution_channels.rs`
+    - script cadence and harness-driven requests now call the same cast/item activation execution methods
+  - integrated command-owned controlled movement stepping:
+    - `src/engine/simulation_step/controlled_champion_movement_step.rs`
+    - tick integration in `src/engine/simulation_step/hot_effects_step.rs`
+  - updated deterministic tick flow integration:
+    - `src/engine/event_resolution/combat_event_dispatch_resolution.rs`
+    - policy/request ingestion now executes before per-tick event dispatch
+  - updated targeting channel to honor explicit basic-attack target preference:
+    - `src/engine/combat_timing_and_targeting.rs`
+  - added regressions:
+    - `controller_move_command_steps_controlled_champion_position`
+    - `controller_request_queue_preserves_sequence_order_per_tick`
+    - `unsupported_controller_cast_action_returns_explicit_rejection_status`
+    (`src/tests/engine_tests.rs`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Landed source-backed deterministic request/fast-forward runtime model documentation:
+  - added `Simulation/DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`
+  - captured deterministic tick/request ordering guidance and fast-forward policy aligned to Riot engineering references
+  - linked model doc from:
+    - `Simulation/CHAMPION_CONTROLLER_HARNESS_ARCHITECTURE.md`
+    - `Simulation/FULL_GAME_SIMULATION_BLUEPRINT.md`
+    - `Simulation/CURRENT_STATE.md`
+    - `README.md`
+    - `Simulation/README.md`
+- Landed champion controller harness architecture and phase-1 control-surface scaffold:
+  - added new controller-harness owner module hierarchy:
+    - `src/champion_control_harness.rs`
+    - `src/champion_control_harness/champion_control_contracts.rs`
+    - `src/champion_control_harness/champion_control_observation_channels.rs`
+    - `src/champion_control_harness/champion_control_action_validation_channels.rs`
+    - `src/champion_control_harness/champion_control_decision_policy_channels.rs`
+  - added strict perspective-view contract (`ChampionPerspectiveView`) with visibility-gated actor projections and readiness snapshots.
+  - added typed action legality/status contract (`ChampionActionStatusReport`) that returns explicit rejection reasons for cooldown/lock/visibility/range/slot failures.
+  - added generic deterministic controller policy plus layered champion-specific fallback policy channels.
+  - added world-owner snapshot enumeration channel for controller-view projection:
+    - `WorldState::actor_snapshot_entries(...)` in `src/world/world_actor_position_channels.rs`.
+  - added harness regressions:
+    - `perspective_view_only_contains_visible_actors_in_vision_radius`
+    - `action_validation_is_identical_for_human_and_ai_controllers`
+    - `action_validation_rejects_out_of_range_targets`
+    - `generic_ai_policy_prefers_in_range_basic_attack`
+    - `layered_policy_uses_champion_specific_policy_before_fallback`
+    (`src/champion_control_harness/tests/champion_control_harness_tests.rs`)
+  - added architecture spec document:
+    - `Simulation/CHAMPION_CONTROLLER_HARNESS_ARCHITECTURE.md`
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Landed non-champion world lifecycle simulation channels and runtime integration:
+  - added `src/world/world_actor_lifecycle_channels.rs` as explicit world-owner lifecycle channel for:
+    - minion wave spawn/despawn loops
+    - neutral objective spawn/respawn timers with explicit defeat channel (`DragonObjective`, `BaronNashor`)
+  - added shared static ecology seeding channel `seed_static_world_ecology_anchors(...)` in `src/world/world_encounter_state_builder.rs` and reused it from both encounter assembly and runtime engine initialization.
+  - integrated lifecycle advancement into engine tick ownership:
+    - `src/engine/simulation_step/world_lifecycle_step.rs`
+    - `src/engine/simulation_step/hot_effects_step.rs`
+    - `src/engine.rs` (world lifecycle state bootstrap)
+  - extended schema-owned defaults with explicit world lifecycle tuning in `data/simulator_defaults.json` + typed schema in `src/defaults/simulator_defaults_schema_types/simulation_search_and_engine_defaults_schema.rs`.
+  - added regression coverage:
+    - `world_lifecycle_spawns_and_despawns_minion_wave_actors` (`src/world/tests/world_module_tests.rs`)
+    - `world_lifecycle_neutral_objectives_respawn_after_defeat` (`src/world/tests/world_module_tests.rs`)
+    - `world_lifecycle_step_spawns_minion_wave_actors_during_runtime` (`src/tests/engine_tests.rs`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Landed world actor ecology and runtime world-position ownership integration:
+  - extended world actor ownership channels with explicit allegiance metadata (`ControlledChampionTeam`, `OpponentTeam`, `NeutralWorld`) in `src/world/world_actor_position_channels.rs`.
+  - added runtime world position upsert/clamp ownership channel to keep actor positions map-bounded without panic paths.
+  - seeded encounter world state with baseline non-champion ecology anchors (structures, monsters, minion spawns) in `src/world/world_encounter_state_builder.rs`.
+  - wired runtime enemy movement and respawn channels through world ownership updates:
+    - `src/engine/simulation_step/enemy_movement_step.rs`
+    - `src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`
+  - added regression coverage:
+    - `enemy_spawn_positions_are_clamped_to_world_bounds` (`src/tests/engine_tests.rs`)
+    - `world_state_upsert_clamps_positions_to_map_bounds` (`src/world/tests/world_module_tests.rs`)
+    - `encounter_world_state_includes_non_champion_ecology_anchors` (`src/world/tests/world_module_tests.rs`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Landed required-defaults startup preflight with typed startup diagnostics:
+  - added `preflight_required_defaults_channels()` to `src/defaults.rs` to eagerly load required defaults ownership channels and return typed contextual errors.
+  - wired startup preflight into `src/main.rs` before mode dispatch (`required defaults startup preflight failed` error path).
+  - extended strict required ownership to ability-execution role defaults channel (removed fallback default role-entry behavior).
+  - added regression tests:
+    - `required_defaults_channels_load_with_expected_shapes` now exercises startup preflight first.
+    - `required_defaults_startup_preflight_is_idempotent`.
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
+- Landed strict required-defaults ownership hardening for core defaults channels:
+  - converted required defaults caches in `src/defaults.rs` to fallible cached loads with a single centralized strict hard-fail boundary.
+  - removed silent empty-map fallback behavior in required channels:
+    - `simulator_defaults`
+    - `champion_simulation_data_map`
+    - `champion_slot_bindings`
+    - `champion_ability_execution_data`
+    - `champion_ai_profiles`
+    - `urf_respawn_defaults`
+    - survivability item defaults (`zhonya`, `guardian_angel`, `protoplasm`) and related cooldown defaults.
+  - added regression test `required_defaults_channels_load_with_expected_shapes` in `src/tests/main_tests.rs`.
+  - net crash-surface reduction from previous checkpoint:
+    - non-test `panic!`: `10` -> `0`
+    - non-test `expect(...)`: `0` -> `0` (maintained)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed defaults-loader hardening follow-up for champion-owned channels:
   - converted champion-specific defaults caches in `src/defaults.rs` to fallible cached loading (no panic in these optional channels):
     - `vladimir_sanguine_pool_defaults`
@@ -162,6 +266,58 @@
 - Completed data-first runes cadence-text normalization wave 90:
   - corrected `Lethal Tempo` stack-decay interval text artifacts (`0. 5` -> `0.5`) in flat and split rune structures
   - synchronized parsed numeric extraction for the interval branch (`numbers_extracted: [0.5]`) while preserving full split-vs-flat parity (`61/61` rune IDs, `3/3` shard slots)
+- Completed data-first champion cast-timing fidelity wave 91:
+  - manually re-verified attack-speed-scaled cast gating and player-visible resolution timing for `Jinx` (`W`), `Kai'Sa` (`E`), `Yone` (`Q`,`W`), and `Zeri` (`W`)
+  - added page-level template citations for all touched champions and recorded wave scope in `Simulation/champion_behavior_verification_tracker.json`
+  - corrected `Yone` `Fate Sealed` context-note truncation (`Yone will blink after a 0.` -> full follow-up timing note)
+- Completed data-first item source-reconciliation wave 92 (`Twilight's Edge`):
+  - aligned canonical Material/Spirit AD/AP modifiers to current page-verified `25%` and documented infobox/module-text divergence handling in `schema_notes.context_notes`
+  - encoded explicit level-1-to-18 tooltip tables for Material attack-speed (`50-150%`) and Spirit ability-haste (`30-120`) scaling branches
+- Completed data-first item confidence-resolution wave 93 (`Dragonheart`):
+  - replaced inferred immediate-backfill thresholds with explicit page-published round mapping (`3-4 => 1`, `5-6 => 2`, `7-8 => 3`, `9+ => 4`)
+  - upgraded immediate-backfill branch confidence and removed inference-only wording from canonical context notes
+- Completed data-first rune numeric-normalization wave 94:
+  - normalized decimal-spacing artifacts and corrected dependent structured numeric metadata for `Electrocute`, `Dark Harvest`, `Press the Attack`, and `Lethal Tempo`
+  - applied equivalent corrections in flat and split rune files to preserve parity and avoid numeric drift
+  - identified and documented remaining broader decimal-spacing backlog (`28` entries across `27` runes) for follow-on normalization waves
+- Completed data-first rune numeric-normalization wave 95 (`Domination` + `Precision` tranche):
+  - normalized decimal artifacts and synchronized dependent structured metadata for `Cheap Shot`, `Taste of Blood`, `Triumph`, `Presence of Mind`, `Conqueror`, `Fleet Footwork`, and `Legend` entries
+  - preserved flat/split parity during batch updates
+- Completed data-first rune numeric-normalization wave 96 (`Resolve` tranche):
+  - normalized decimal artifacts and synchronized dependent structured metadata for `Grasp of the Undying`, `Aftershock`, `Guardian`, `Font of Life`, `Shield Bash`, `Bone Plating`, and `Overgrowth`
+  - corrected degraded by-level range/min-max metadata where prior decimal token splits had skewed values
+- Completed data-first rune numeric-normalization wave 97 (`Sorcery` tranche):
+  - normalized decimal artifacts and synchronized dependent structured metadata for `Summon Aery`, `Arcane Comet`, `Phase Rush`, `Absolute Focus`, `Scorch`, `Waterwalking`, and `Gathering Storm`
+  - re-aligned affected range/scaling metadata to corrected decimals
+- Completed data-first rune numeric-normalization wave 98 (cross-tree no-regression repair/audit tranche):
+  - cleared the broader rune decimal-spacing backlog (`28` entries across `27` runes -> `0`)
+  - verified no scripted placeholder artifacts remain in rune raw text (for example `\1.\2`) and confirmed flat/split no-drift state after batch normalization
+  - documented deferred code follow-up scope: add automated loader/lint enforcement for rune raw-to-metadata consistency and placeholder-artifact blocking
+- Completed data-first rune semantic-explicitness wave 99 (`Inspiration` tranche):
+  - added explicit `semantic_components` decomposition for multi-branch `per_rank` effects on `First Strike` and `Jack of All Trades`
+  - encoded trigger-window, threshold, and conversion semantics as named components
+- Completed data-first rune semantic-explicitness wave 100 (`Precision` tranche):
+  - added explicit `semantic_components` decomposition for `Lethal Tempo`, `Fleet Footwork`, `Conqueror`, and `Presence of Mind` multi-branch `per_rank` effects
+  - encoded melee/ranged, AD/AP, stack-cadence, and cooldown branch semantics explicitly
+- Completed data-first rune semantic-explicitness wave 101 (`Resolve` tranche):
+  - added explicit `semantic_components` decomposition for `Grasp of the Undying`, `Demolish`, and `Font of Life` multi-branch `per_rank` effects
+  - encoded stack windows, turret branch values, and ally-heal progression semantics explicitly
+- Completed data-first rune semantic-explicitness wave 102 (`Sorcery` tranche):
+  - added explicit `semantic_components` decomposition for `Phase Rush` and `Gathering Storm` multi-branch `per_rank` effects
+  - completed full current `per_rank` semantic decomposition baseline (`14/14`)
+  - documented deferred runtime follow-up scope: add loader/runtime consumption + lint enforcement for semantic components so branch semantics are first-class and deterministic
+- Completed data-first champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
+  - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
+  - expanded context-note execution semantics and schema notes with page-level ability-template provenance
+- Completed data-first champion execution-semantics wave 104 (`Renekton` `Slice and Dice`):
+  - manually re-verified two-stage recast gating, traversal-hit timing, and move-speed-scaled dash-velocity semantics
+  - documented deferred runtime follow-up for formula-based dash-speed consumption (`760 + 100% movement speed`)
+- Completed data-first champion execution-semantics wave 105 (`Sylas` `Chain Lash`, `Abscond`):
+  - repaired delayed-detonation truncation defects on `Chain Lash` effect notes (`After a 0.` -> full `0.6-second` timing semantics)
+  - re-verified `Abscond` stage-one/stage-two window behavior and logged deferred runtime follow-up for explicit multi-stage ability identity handling
+- Completed data-first champion execution-semantics wave 106 (`Vex` `Looming Darkness`):
+  - manually re-verified projectile-to-explosion timing, cast-distance-scaled radius behavior, and Doom flee-origin semantics
+  - documented deferred runtime follow-up for dynamic radius interpolation (avoid flattening to single static hitbox radius)
 - Completed data-first champion fidelity verification wave 75:
   - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
   - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`

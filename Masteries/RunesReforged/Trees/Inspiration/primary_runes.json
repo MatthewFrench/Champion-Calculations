@@ -182,13 +182,12 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Initiating combat with an enemy champion within the first 0. 25 seconds of champion combat grants 10 and First Strike for 3 seconds, causing all of your post-mitigation damage dealt against champions to deal 7% bonus true damage . Afterwards, you are granted gold equal to ( 50% / 35% ) of all bonus damage dealt within the duration.",
+              "raw": "Passive: Initiating combat with an enemy champion within the first 0.25 seconds of champion combat grants 10 and First Strike for 3 seconds, causing all of your post-mitigation damage dealt against champions to deal 7% bonus true damage . Afterwards, you are granted gold equal to ( 50% / 35% ) of all bonus damage dealt within the duration.",
               "effect_type": "damage",
               "stat": "damage",
               "unit": "percent",
               "values": [
-                0.0,
-                25,
+                0.25,
                 10,
                 3,
                 7,
@@ -197,8 +196,7 @@
               ],
               "value_range": null,
               "numbers_extracted": [
-                0.0,
-                25,
+                0.25,
                 10,
                 3,
                 7,
@@ -211,8 +209,7 @@
               "formula": {
                 "type": "per_rank",
                 "values": [
-                  0.0,
-                  25,
+                  0.25,
                   10,
                   3,
                   7,
@@ -224,7 +221,37 @@
               "conditions": [
                 "vs_champions"
               ],
-              "parse_confidence": 1.0
+              "parse_confidence": 1.0,
+              "semantic_components": [
+                {
+                  "component_id": "trigger_window_seconds",
+                  "value": 0.25,
+                  "unit": "seconds"
+                },
+                {
+                  "component_id": "activation_gold",
+                  "value": 10,
+                  "unit": "gold"
+                },
+                {
+                  "component_id": "buff_duration_seconds",
+                  "value": 3,
+                  "unit": "seconds"
+                },
+                {
+                  "component_id": "bonus_true_damage_percent",
+                  "value": 7,
+                  "unit": "percent"
+                },
+                {
+                  "component_id": "bonus_damage_to_gold_conversion_percent",
+                  "branches": {
+                    "melee": 50,
+                    "ranged": 35
+                  },
+                  "unit": "percent"
+                }
+              ]
             },
             {
               "raw": "First Strike will be placed on full cooldown without activating its effects after being struck by an enemy champion before you strike them.",
@@ -286,15 +313,14 @@
               "parse_confidence": 0.9
             },
             {
-              "raw": "Active: You begin charging for up to 2. 5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
+              "raw": "Active: You begin charging for up to 2.5 seconds, setting your movement speed to 0 , and increasing Hexflash's range over the duration. After at least 1 second, you can reactivate the spell, which is automatically done so when the charge completes without reactivation. Releasing the charge earlier than 1 second or entering combat with an enemy champion will put Hexflash on cooldown for 10 seconds.",
               "effect_type": "cooldown",
               "stat": "movement_speed",
               "unit": "seconds",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                2.0,
-                5,
+                2.5,
                 0,
                 1,
                 1,
@@ -305,14 +331,14 @@
               "applies_to": "enemy_champion",
               "formula": {
                 "type": "flat",
-                "value": 2.0,
+                "value": 2.5,
                 "unit": "seconds"
               },
               "conditions": [],
               "parse_confidence": 0.9
             },
             {
-              "raw": "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0. 25 seconds.",
+              "raw": "Recast: You blink to the target location within range and gain 50% bonus movement speed for up to 0.25 seconds.",
               "effect_type": "stat_modifier",
               "stat": "movement_speed",
               "unit": "percent",
@@ -320,8 +346,7 @@
               "value_range": null,
               "numbers_extracted": [
                 50,
-                0.0,
-                25
+                0.25
               ],
               "scaling": null,
               "trigger": "on_cast",
@@ -447,22 +472,21 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Upon purchasing a Legendary item , you are automatically refunded 7. 5 % of its total gold cost.",
+              "raw": "Passive: Upon purchasing a Legendary item , you are automatically refunded 7.5 % of its total gold cost.",
               "effect_type": "resource",
               "stat": "gold",
               "unit": "percent",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                7.0,
-                5
+                7.5
               ],
               "scaling": null,
               "trigger": null,
               "applies_to": "ally",
               "formula": {
                 "type": "flat",
-                "value": 7.0,
+                "value": 7.5,
                 "unit": "percent"
               },
               "conditions": [],
@@ -771,15 +795,14 @@
           ],
           "effects_structured": [
             {
-              "raw": "Passive: Gain 7. 5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
+              "raw": "Passive: Gain 7.5 % bonus total movement speed while facing visible enemy champions that are immobilized , grounded , or slowed within 1000 range.",
               "effect_type": "stat_modifier",
               "stat": "movement_speed",
               "unit": "percent",
               "values": null,
               "value_range": null,
               "numbers_extracted": [
-                7.0,
-                5,
+                7.5,
                 1000
               ],
               "scaling": null,
@@ -787,7 +810,7 @@
               "applies_to": "enemy_champion",
               "formula": {
                 "type": "flat",
-                "value": 7.0,
+                "value": 7.5,
                 "unit": "percent"
               },
               "conditions": [],
@@ -858,7 +881,22 @@
                 "unit": null
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.8,
+              "semantic_components": [
+                {
+                  "component_id": "ability_haste_per_unique_item_stat",
+                  "value": 1,
+                  "unit": "ability_haste"
+                },
+                {
+                  "component_id": "adaptive_force_threshold_stacks",
+                  "values": [
+                    5,
+                    10
+                  ],
+                  "unit": "stacks"
+                }
+              ]
             },
             {
               "raw": "For each different stat gained from items, gain one Jack stack. Each stack grants you <speed>1 Ability Haste</speed>.<br><br>Gain 10 or 25 bonus <lol-uikit-tooltipped-keyword key='LinkTooltip_Description_Adaptive'>Adaptive Force</lol-uikit-tooltipped-keyword> at 5 and 10 stacks, respectively.",
@@ -895,7 +933,22 @@
                 "unit": null
               },
               "conditions": [],
-              "parse_confidence": 0.8
+              "parse_confidence": 0.8,
+              "semantic_components": [
+                {
+                  "component_id": "ability_haste_per_unique_item_stat",
+                  "value": 1,
+                  "unit": "ability_haste"
+                },
+                {
+                  "component_id": "adaptive_force_bonus_by_stack_threshold",
+                  "branches": {
+                    "5_stacks": 10,
+                    "10_stacks": 25
+                  },
+                  "unit": "adaptive_force"
+                }
+              ]
             }
           ],
           "template_source": null
@@ -914,7 +967,8 @@
     "terminology": "In modern LoL, 'masteries' refers to the Runes Reforged system; treat these as equivalent names.",
     "formula": "formula provides normalized calculation forms (flat, range, per_rank) with units where possible.",
     "conditions": "conditions list indicates common conditional phrases parsed from rune descriptions.",
-    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low."
+    "parse_confidence": "parse_confidence is heuristic; use raw text for exact meaning if low.",
+    "semantic_components": "semantic_components decomposes multi-branch/per-rank effects into explicit machine-readable subcomponents while preserving raw/source wording in raw/wiki_descriptions."
   },
   "sources": [
     {

@@ -308,6 +308,8 @@
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: 1.2 : 0.6 (based on bonus attack speed).",
+        "Manual behavior verification (2026-02-24): Supercharge is a charge-state cast, not an instant steroid; Kai'Sa can move while charging but attack commands are converted to movement commands until charge completion.",
+        "Manual behavior verification (2026-02-24): Bonus attack speed and windup reduction start only after the charge resolves; evolution invisibility is applied at cast start while the charge timing still governs when post-cast attack-speed benefits begin.",
         "Source notes (summary): Her attack commands during this time are switched to movement commands instead."
       ]
     },
@@ -374,6 +376,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Kai%27Sa",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kai%27Sa/Supercharge",
+      "accessed": "2026-02-24",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Supercharge charge-state execution, command-lock behavior, and post-charge attack-speed timing"
     }
   ],
   "notes": [

@@ -103,6 +103,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - key combat-time engine/runtime call sites now resolve from base metric data + runtime buff state instead of direct raw values
   - event-resolution/trace/query owner channels now use guarded actor-index reads and fallback paths instead of panic-on-missing assumptions
   - non-test `expect(...)` callsites under `Simulation/src` are now eliminated
+  - required defaults channels now use centralized strict hard-fail ownership, with no silent required-defaults map fallback paths
+  - non-test `panic!(...)` callsites under `Simulation/src` are now eliminated
+  - startup now runs required-defaults preflight with typed contextual failures before scenario/mode dispatch
 - Success criteria:
   - combat effects represented as status instances, not ad hoc booleans.
 
@@ -132,10 +135,17 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - Success criteria:
   - event traces and combat outcomes differentiate blocked/missed/nullified hits from applied damage.
 
-8. `PLANNED` Upgrade position simulation to command-based movement.
+8. `IN_PROGRESS` Upgrade position simulation to command-based movement.
 - Scope:
   - chase, kite, hold, retreat commands
   - deterministic path updates and range-maintain behavior
+- Recent progress:
+  - world ownership channels now include actor allegiance plus runtime upsert/clamp position mutation APIs in `src/world/world_actor_position_channels.rs`.
+  - encounter world-state builder now seeds baseline non-champion ecology anchors (`Structure`, `Monster`, `Minion`) with explicit allegiances in `src/world/world_encounter_state_builder.rs`.
+  - enemy movement step now routes position updates through world ownership channels each tick (`src/engine/simulation_step/enemy_movement_step.rs`).
+  - enemy respawn path now routes spawn-position resets through world ownership channels (`src/engine/actor_state/enemy_runtime_state/enemy_lifecycle_channels.rs`).
+  - world lifecycle step now advances deterministic minion-wave and neutral-objective spawn channels through world ownership (`src/engine/simulation_step/world_lifecycle_step.rs`, `src/world/world_actor_lifecycle_channels.rs`).
+  - added world/engine regression coverage for map-bounded clamping and ecology-anchor registration.
 - Success criteria:
   - positioning changes materially affect damage windows.
 
@@ -149,9 +159,13 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - controlled champion and enemy actors cast through the same generic ability-instance interfaces.
   - stolen/swapped ability execution does not require core engine conditionals by champion.
 
-10. `PLANNED` Implement target-selection logic for both sides.
+10. `IN_PROGRESS` Implement target-selection logic for both sides.
 - Scope:
   - closest, lowest health, priority target, in-range fallback
+- Recent progress:
+  - added controller harness phase-1 contracts with perspective-visible actor projections and typed action legality/status responses under `src/champion_control_harness/*`.
+  - added generic deterministic controller policy (`GenericChampionControllerDecisionPolicy`) that selects targets/actions using only controller-visible state (no privileged runtime access).
+  - added layered policy channel (`LayeredChampionControllerDecisionPolicy`) enabling champion-specific policy override with generic fallback.
 - Success criteria:
   - target selection is configurable and scriptable.
 
@@ -1072,15 +1086,98 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - panic usage in optional champion defaults channels is removed.
   - crash-surface backlog is reduced to core required defaults loading paths only.
 
+50. `DONE` Strict required-defaults ownership hardening (core defaults channels).
+- Scope:
+  - convert required defaults caches in `src/defaults.rs` to fallible cached loads with centralized strict hard-fail behavior.
+  - remove silent empty-map fallback behavior for required channels (`simulator_defaults`, champion simulation data, champion slot bindings, champion ability execution data, champion AI profiles, URF respawn defaults, survivability item defaults).
+  - add focused regression coverage proving required defaults channels load with expected runtime shapes.
+- Success criteria:
+  - non-test panic/expect crash-surface scan under `Simulation/src` is zero.
+  - required defaults ownership is explicit and deterministic with one strict-fail boundary.
+
+51. `DONE` Required-defaults startup preflight (typed startup diagnostics).
+- Scope:
+  - add a startup preflight entrypoint in `src/defaults.rs` that eagerly loads all required defaults ownership channels with typed error propagation.
+  - wire preflight into `src/main.rs` before mode dispatch so required defaults failures are surfaced as contextual startup errors.
+  - add regression coverage for preflight success and idempotence.
+- Success criteria:
+  - required defaults ownership failures are reported before runtime dispatch with typed startup context.
+  - strict required defaults accessors remain deterministic and crash-surface scan remains zero for non-test panic/expect under `Simulation/src`.
+
+52. `DONE` World actor ecology and runtime world-position ownership integration.
+- Scope:
+  - extend world actor ownership with explicit allegiance channels (`controlled`, `opponent`, `neutral`) and runtime upsert/clamp position mutation APIs.
+  - register baseline non-champion world ecology anchors (structures, monsters, minion spawns) in encounter world-state assembly.
+  - route runtime enemy movement and respawn position updates through world ownership mutation channels instead of direct free-form position writes.
+  - add regression coverage for world clamping behavior and ecology-anchor registration.
+- Success criteria:
+  - runtime enemy position channels are map-bounded through world ownership APIs.
+  - encounter world state includes explicit non-champion actor-class scaffolding for future lifecycle loops.
+
+53. `DONE` Non-champion world lifecycle simulation channels (phase-1 integration).
+- Scope:
+  - add deterministic world lifecycle ownership for minion-wave spawn/despawn channels and neutral objective spawn/respawn timers under `src/world/world_actor_lifecycle_channels.rs`.
+  - seed static world ecology anchors in both encounter assembly and engine runtime startup through shared channel `seed_static_world_ecology_anchors(...)`.
+  - wire lifecycle advancement into engine hot-effect tick ownership through `src/engine/simulation_step/world_lifecycle_step.rs`.
+  - add lifecycle regressions for world-level channels and runtime integration.
+- Success criteria:
+  - runtime includes deterministic non-champion actor lifecycle loops for minion/objective channels.
+  - lifecycle behavior is guarded by regression coverage and strict validation gates.
+
+54. `DONE` Champion controller harness architecture + phase-1 control-surface scaffold.
+- Scope:
+  - add controller-harness module ownership under `src/champion_control_harness/*` with explicit contracts for:
+    - champion perspective projection (controller-visible state only)
+    - action request validation and typed status responses for illegal/blocked actions
+    - generic artificial-intelligence policy and layered champion-specific fallback policy channels
+  - add parity-focused regressions proving human-player and artificial-intelligence controllers receive equivalent legality outcomes for equivalent requests.
+  - add dedicated architecture document `Simulation/CHAMPION_CONTROLLER_HARNESS_ARCHITECTURE.md`.
+- Success criteria:
+  - player and artificial-intelligence control paths share one legality/status contract surface.
+  - no controller-specific privileged state bypass exists in harness channels.
+
+55. `DONE` Champion controller harness runtime ingress integration (phase-2).
+- Scope:
+  - add deterministic controlled-champion command ingress ownership in `src/engine/controlled_champion_controller_channels.rs`:
+    - per-tick harness perspective build
+    - harness legality validation/status return
+    - accepted-request queueing with stable sequence IDs
+    - sequence-ordered request execution before per-tick event dispatch
+  - add shared controlled-champion action execution channels in `src/engine/event_resolution/controlled_champion_action_execution_channels.rs` and route script cadence + harness requests through the same cast/item activation owner methods.
+  - add controlled champion command-movement stepping owner channel (`src/engine/simulation_step/controlled_champion_movement_step.rs`) with world-bound clamping.
+  - add focused regressions for:
+    - move command stepping
+    - same-tick request sequence ordering
+    - explicit unsupported-action rejection status
+- Success criteria:
+  - controlled champion command ingress is harness-gated and deterministic in runtime tick flow.
+  - script cadence and harness command execution do not diverge on shared cast/item execution semantics.
+  - command movement updates are world-bounded and covered by regression tests.
+
+56. `DONE` Deterministic request/fast-forward runtime model (research-backed).
+- Scope:
+  - document authoritative deterministic tick/request handling model in:
+    - `Simulation/DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`
+  - anchor model recommendations to Riot engineering and Riot developer sources.
+  - define repository target semantics for:
+    - tick-bound request sampling
+    - legality-first status reporting
+    - stable accepted-request ordering
+    - fixed-step fast-forward execution
+- Success criteria:
+  - deterministic request/fast-forward guidance is explicit and source-backed.
+  - controller-harness architecture and full-game blueprint docs reference the shared model.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
 - `DONE` Item 3
 - `DONE` Item 7 (hitbox-aware impact outcomes and melee windup interruption on stun)
-- `IN_PROGRESS` Item 8 (world ownership scaffold landed; command/path movement model migration pending)
+- `IN_PROGRESS` Item 8 (world ownership now drives enemy movement/respawn clamping, non-champion lifecycle channels, and controlled command stepping; terrain-aware path model migration pending)
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
+- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; runtime-wide target-selection integration pending)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
 - `DONE` Item 38 (audit completed; phased architecture migration and acceptance criteria documented)
@@ -1092,7 +1189,14 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 46 (world-state ownership scaffold + encounter placement guardrails landed)
 - `DONE` Item 47 (non-Vladimir controlled-champion path validated with typed script-init errors)
 - `DONE` Item 48 (runtime crash-surface hardening landed; non-test `expect(...)` now zero)
-- `DONE` Item 49 (champion defaults-loader hardening landed; non-test `panic!` reduced further)
+- `DONE` Item 49 (champion defaults-loader hardening landed; non-test `panic!` reduced to required defaults channels only)
+- `DONE` Item 50 (required defaults channels hardened; non-test `panic!/expect` now zero across `Simulation/src`)
+- `DONE` Item 51 (required-defaults startup preflight added; typed startup diagnostics now run before mode dispatch)
+- `DONE` Item 52 (world actor ecology anchors + runtime world-position ownership integration landed)
+- `DONE` Item 53 (non-champion world lifecycle channels integrated through world + engine simulation-step ownership)
+- `DONE` Item 54 (controller-harness contracts + phase-1 fairness/action-status scaffold landed)
+- `DONE` Item 55 (controller-harness runtime ingress integration with deterministic queueing + controlled movement stepping landed)
+- `DONE` Item 56 (research-backed deterministic request/fast-forward model documented and linked)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.
