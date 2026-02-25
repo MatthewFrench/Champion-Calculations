@@ -234,12 +234,20 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_empowered_basic_attack_or_leap_strike_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 6.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Harsh Lesson cannot be cast while pulling a Spirit."
+        "Source notes (summary): Harsh Lesson cannot be cast while pulling a Spirit.",
+        "Manual review (2026-02-25): Harsh Lesson is cast-primed and resolves on empowered-hit contact, with leap-routing when target distance exceeds normal attack range."
       ]
     },
     "basic_ability_3": {
@@ -374,6 +382,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Test of Spirit spirit-pull timing, tether-state transitions, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Illaoi/Harsh_Lesson",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Harsh Lesson leap-routing timing, empowered-hit cadence, and attack-reset resolution semantics"
     }
   ],
   "notes": [

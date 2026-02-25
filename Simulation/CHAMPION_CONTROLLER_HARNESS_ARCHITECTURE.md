@@ -104,6 +104,7 @@ Current scope:
 - actor-symmetric ingress scaffold now accepts `queue_actor_action_request(...)` for controlled champion and opponent actors, with explicit `RejectedControlledActorNotFound` for invalid actor IDs
 - opponent manual-control scaffold now supports deterministic `MoveToPosition`, `StartBasicAttack`, and `StopCurrentAction` command execution through the same queued ingress path
 - opponent manual-control cast channels now support mapped script-backed `CastAbilityBySlot` execution for supported enemy champions, including cooldown/range legality reporting through the same harness action-status path
+- opponent manual-control item-active channels now support mapped `UseItemActive` execution for `stasis_item` and `emergency_shield_item`, including explicit readiness/cooldown legality statuses
 - manual-control opponents now suppress autonomous script cadence so controller requests are the sole command ingress
 - unit tests for visibility, fairness parity, legality responses, and policy ordering
 
@@ -131,7 +132,7 @@ Required coverage for harness evolution:
 
 ## Remaining High-Friction Areas
 - current visibility projection is radius-only and not fog-of-war complete
-- actor-symmetric ingress is still partial (opponent move/stop/basic-attack and mapped script-cast channels are wired; opponent item-active channels and non-script cast channels are still unsupported)
+- actor-symmetric ingress is still partial (opponent move/stop/basic-attack, mapped script-cast channels, and mapped `stasis_item`/`emergency_shield_item` item-active channels are wired; broader item-actives and non-script cast channels are still unsupported)
 - command/path ownership is integrated for deterministic move targets, but pathfinding/collision/terrain routing are not yet integrated
 - objective/structure/economy channels are not yet wired into perspective visibility and action legality
 - only fixed delay ingestion is modeled; richer buffering/overwrite/packet-drop network semantics are still simplified versus live game

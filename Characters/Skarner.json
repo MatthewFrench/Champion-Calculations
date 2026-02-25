@@ -167,13 +167,21 @@
       },
       "execution": {
         "cast_windup_seconds": 0.35,
-        "effect_hitbox_radius": 300.0
+        "effect_hitbox_radius": 300.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 5.0,
+        "max_empowered_attacks": 3,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: 0.35.",
         "Source effectRadius: 300.",
-        "Source notes (summary): General The empowered attacks can be parried and will not trigger the area of effect if either the target blocks or dodges the attack, or if the attacks miss while Skarner is blinded."
+        "Source notes (summary): General The empowered attacks can be parried and will not trigger the area of effect if either the target blocks or dodges the attack, or if the attacks miss while Skarner is blinded.",
+        "Manual review (2026-02-25): Shattered Earth is a cast-then-empower sequence: cast applies the boulder/self-state, then each empowered attack resolves damage on hit with per-hit cadence and final-hit branch behavior."
       ]
     },
     "basic_ability_2": {
@@ -355,6 +363,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Skarner",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Skarner/Shattered_Earth",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Shattered Earth cast timing, empowered-hit sequence cadence, and final-hit branch resolution semantics"
     }
   ],
   "notes": [

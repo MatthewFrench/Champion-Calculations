@@ -25,6 +25,8 @@ impl ControlledChampionCombatSimulation {
             let movement_step = if state.respawn_at.is_some() || state.health <= 0.0 {
                 clear_move_command = true;
                 None
+            } else if !self.enemy_can_take_actions(idx) {
+                None
             } else if self.enemy_actor_manual_control_mode_enabled(&enemy_actor_id) {
                 self.enemy_pending_move_target_position(&enemy_actor_id)
                     .map(|command_target_position| {

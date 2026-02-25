@@ -240,12 +240,20 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 6.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: None.",
-        "Source notes (summary): The main target is dealt basic damage, though without applying life steal, while the cone deals area non- proc damage without applying spell effects."
+        "Source notes (summary): The main target is dealt basic damage, though without applying life steal, while the cone deals area non- proc damage without applying spell effects.",
+        "Manual review (2026-02-25): Thunderclap resolves in two phases: cast grants a temporary empowered-attack state, then the primary empowered-hit and cone payload resolve on attack contact."
       ]
     },
     "basic_ability_3": {
@@ -370,6 +378,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Unstoppable Force dash timing, impact resolution, and player-visible crowd-control semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Malphite/Thunderclap",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Thunderclap cast-state timing, empowered-hit cadence, and cone-on-hit resolution semantics"
     }
   ],
   "notes": [

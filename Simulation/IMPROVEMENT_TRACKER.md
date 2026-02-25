@@ -1,6 +1,26 @@
 # Improvement Tracker
 
 ## Done
+- Landed mapped opponent `stasis_item` item-active ingress and stasis lock correctness:
+  - extended opponent `UseItemActive` support for `stasis_item` in:
+    - `src/engine/controlled_champion_controller_channels.rs`
+    - accepted commands now execute deterministic enemy stasis activation through queued actor-id ingress.
+  - added enemy stasis item ownership channels in:
+    - `src/engine/actor_state/enemy_runtime_state/enemy_item_active_channels.rs`
+    - availability/readiness projection + activation channels now own enemy stasis runtime state.
+  - extended enemy runtime item-active legality projection in harness state:
+    - `src/engine/controlled_champion_controller_channels.rs`
+    - enemy perspective now exposes `stasis_item` readiness/range when supported.
+  - hardened stasis correctness in shared runtime channels:
+    - enemy movement now respects action locks (stun/stasis/invulnerability) in `src/engine/simulation_step/enemy_movement_step.rs`
+    - enemy incoming-damage channel now nullifies damage while enemy is invulnerable/untargetable (including stasis) in `src/engine/event_resolution/incoming_damage_resolution.rs`
+  - added regression coverage:
+    - `enemy_actor_item_active_stasis_request_rejects_when_enemy_has_no_stasis_item`
+    - `enemy_actor_item_active_stasis_request_accepts_and_blocks_pool_tick_damage`
+    - `enemy_actor_item_active_stasis_request_reports_cooldown_after_activation`
+    - `enemy_manual_move_command_does_not_step_position_during_stasis_window`
+    (`src/tests/engine_tests.rs`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed manual-opponent ingress expansion for basic-attack and mapped script-cast channels:
   - expanded actor-symmetric opponent command support in:
     - `src/engine/controlled_champion_controller_channels.rs`

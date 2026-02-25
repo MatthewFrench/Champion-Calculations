@@ -6,6 +6,9 @@ pub(crate) struct ItemHook;
 
 pub(crate) const ITEM_HOOK: ItemHook = ItemHook;
 const HEARTSTEEL_STACK_IDENTIFIER: &str = "heartsteel";
+const STASIS_ITEM_NAME: &str = "Zhonya's Hourglass";
+const REVIVE_ITEM_NAME: &str = "Guardian Angel";
+const EMERGENCY_SHIELD_ITEM_NAME: &str = "Protoplasm Harness";
 
 #[derive(Debug, Clone, Copy, Default)]
 pub(crate) struct ControlledChampionDefensiveItemCapabilities {
@@ -19,14 +22,31 @@ pub(crate) fn controlled_champion_defensive_item_capabilities(
 ) -> ControlledChampionDefensiveItemCapabilities {
     let mut capabilities = ControlledChampionDefensiveItemCapabilities::default();
     for item in build_items {
-        match item.name.as_str() {
-            "Zhonya's Hourglass" => capabilities.has_stasis_item = true,
-            "Guardian Angel" => capabilities.has_revive_item = true,
-            "Protoplasm Harness" => capabilities.has_emergency_shield_item = true,
-            _ => {}
-        }
+        apply_defensive_item_capability(item.name.as_str(), &mut capabilities);
     }
     capabilities
+}
+
+pub(crate) fn defensive_item_capabilities_from_item_names(
+    item_names: &[String],
+) -> ControlledChampionDefensiveItemCapabilities {
+    let mut capabilities = ControlledChampionDefensiveItemCapabilities::default();
+    for item_name in item_names {
+        apply_defensive_item_capability(item_name.as_str(), &mut capabilities);
+    }
+    capabilities
+}
+
+fn apply_defensive_item_capability(
+    item_name: &str,
+    capabilities: &mut ControlledChampionDefensiveItemCapabilities,
+) {
+    match item_name {
+        STASIS_ITEM_NAME => capabilities.has_stasis_item = true,
+        REVIVE_ITEM_NAME => capabilities.has_revive_item = true,
+        EMERGENCY_SHIELD_ITEM_NAME => capabilities.has_emergency_shield_item = true,
+        _ => {}
+    }
 }
 
 impl ScriptHook for ItemHook {

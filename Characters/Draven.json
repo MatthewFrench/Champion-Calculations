@@ -135,12 +135,19 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 5.8,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The landing location is determined by Draven's movement speed and direction at the time Spinning Axe hits the target."
+        "Source notes (summary): The landing location is determined by Draven's movement speed and direction at the time Spinning Axe hits the target.",
+        "Manual review (2026-02-25): Spinning Axe is cast-primed and attack-cadence-coupled; bonus damage resolves on empowered-hit contact while axe catch behavior re-arms future empowered attacks."
       ]
     },
     "basic_ability_2": {
@@ -368,6 +375,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Draven",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Draven/Spinning_Axe",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Spinning Axe empower-window timing, on-hit resolution semantics, and axe-catch rearm behavior"
     }
   ],
   "notes": [

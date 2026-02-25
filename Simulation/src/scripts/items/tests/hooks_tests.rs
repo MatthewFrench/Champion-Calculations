@@ -26,3 +26,16 @@ fn defensive_item_capabilities_detect_supported_items() {
     assert!(capabilities.has_revive_item);
     assert!(capabilities.has_emergency_shield_item);
 }
+
+#[test]
+fn defensive_item_capabilities_detect_supported_runtime_item_names() {
+    let runtime_item_names = vec![
+        "Zhonya's Hourglass".to_string(),
+        "Guardian Angel".to_string(),
+        "Protoplasm Harness".to_string(),
+    ];
+    let capabilities = defensive_item_capabilities_from_item_names(&runtime_item_names);
+    assert!(capabilities.has_stasis_item);
+    assert!(capabilities.has_revive_item);
+    assert!(capabilities.has_emergency_shield_item);
+}

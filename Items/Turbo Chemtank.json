@@ -29,6 +29,7 @@
       "unit": "state",
       "duration_seconds": null,
       "cooldown_seconds": 20.0,
+      "cast_windup_seconds": 0.0,
       "interval_seconds": null,
       "applies_to": "self",
       "trigger": "on_activate",
@@ -68,6 +69,7 @@
       ],
       "duration_seconds": 3.0,
       "cooldown_seconds": 20.0,
+      "cast_windup_seconds": 0.0,
       "interval_seconds": null,
       "conditions": [
         "auto_targeted",
@@ -109,7 +111,8 @@
     "context_notes": [
       "Execution model: Supercharged is an instant auto-targeted self-cast active with no cast time that does not break stealth and does not interrupt channels.",
       "Behavior branching: on activation, it first cleanses non-airborne crowd control debuffs, then applies 3 seconds of total crowd control immunity.",
-      "Availability/economy note: this distributed item is Arena-scoped via Prismatic Item Anvils; Tier-1 datasets expose reconciliation prices (total 1000 / sell 400) while page-level presentation shows anvil-style acquisition (cost 0 / sell 2000)."
+      "Availability/economy note: this distributed item is Arena-scoped via Prismatic Item Anvils; Tier-1 datasets expose reconciliation prices (total 1000 / sell 400) while page-level presentation shows anvil-style acquisition (cost 0 / sell 2000).",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution timing metadata (`cast_windup_seconds`) for no-cast-time cleanse/immunity activation semantics."
     ]
   },
   "sources": [

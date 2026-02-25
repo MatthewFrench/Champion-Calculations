@@ -29,6 +29,7 @@
       "unit": null,
       "duration_seconds": null,
       "cooldown_seconds": 90.0,
+      "cast_windup_seconds": 0.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self",
@@ -81,7 +82,8 @@
     "context_notes": [
       "Execution model: Quicksilver is a self-activation cleanse with no cast time that removes most crowd-control effects (including suppression and nearsight) but excludes airborne effects.",
       "Player-visible behavior: Quicksilver can be used while stealthed without breaking stealth, but it cannot be activated while airborne.",
-      "Follow-up note: page notes indicate cooldown does not transfer between Quicksilver-group items, which should be mirrored in runtime item-group cooldown handling."
+      "Follow-up note: page notes indicate cooldown does not transfer between Quicksilver-group items, which should be mirrored in runtime item-group cooldown handling.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution timing metadata (`cast_windup_seconds`) for no-cast-time cleanse behavior."
     ]
   },
   "sources": [

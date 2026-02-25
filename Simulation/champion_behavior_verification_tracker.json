@@ -2568,5 +2568,205 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_121": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Darius",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Crippling Strike cast-prime empowered-hit timing with attack-reset and post-hit cooldown-start semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Darius/Crippling_Strike"
+        ]
+      },
+      {
+        "key": "Shyvana",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Twin Bite cast-prime empowered-hit timing with delayed second-strike branch and attack-reset cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Shyvana/Twin_Bite"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_122": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "RekSai",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Queen's Wrath cast-buff timing plus empowered-hit sequence cadence and attack-reset behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rek%27Sai/Queen%27s_Wrath"
+        ]
+      },
+      {
+        "key": "Chogath",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Vorpal Spikes cast activation, empowered-hit cadence, and on-attack projectile resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Cho%27Gath/Vorpal_Spikes"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_123": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Skarner",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Shattered Earth cast timing with three-hit empowered cadence and final-hit branch resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Skarner/Shattered_Earth"
+        ]
+      },
+      {
+        "key": "Illaoi",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Harsh Lesson cast-prime leap-routing and empowered-hit contact timing with attack-reset behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Illaoi/Harsh_Lesson"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_124": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Draven",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Spinning Axe empowered-hit window timing with axe-catch rearm sequence behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Draven/Spinning_Axe"
+        ]
+      },
+      {
+        "key": "Gwen",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Skip 'n Slash dash-on-cast then empowered-attack window timing with first-hit cooldown-refund branch",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Gwen/Skip_%27n_Slash"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_125": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Fizz",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Seastone Trident cast-prime empowered-hit timing with post-hit rend branch and attack-reset semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Fizz/Seastone_Trident"
+        ]
+      },
+      {
+        "key": "Malphite",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Thunderclap cast-state plus empowered-hit timing with cone-on-hit branch resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Malphite/Thunderclap"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_126": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Shen",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Twilight Assault blade-recall cast timing with three-hit empowered attack window and hit-resolution cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Shen/Twilight_Assault"
+        ]
+      },
+      {
+        "key": "Gragas",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Drunken Rage channel/cast ordering with delayed empowered-hit payload and attack-cadence-coupled resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Gragas/Drunken_Rage"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_127": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Hecarim",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Devastating Charge cast-state movement buildup and first empowered-hit dash-contact resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Hecarim/Devastating_Charge"
+        ]
+      },
+      {
+        "key": "Kassadin",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Nether Blade cast-prime empowered-hit timing with attack-reset and mana-restore branch resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kassadin/Nether_Blade"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_128": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Kayle",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Starfire Spellblade cast-prime empowered-hit timing with explosion branch resolution on first empowered contact",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kayle/Starfire_Spellblade"
+        ]
+      },
+      {
+        "key": "Viktor",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Siphon Power two-phase resolution: cast-hit and shielding first, then Discharge empowered-hit payload window",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Viktor/Siphon_Power"
+        ]
+      }
+    ]
   }
 }

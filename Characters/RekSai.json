@@ -135,13 +135,21 @@
       ],
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 325.0
+        "effect_hitbox_radius": 325.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 3.0,
+        "max_empowered_attacks": 3,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 325.",
-        "Source notes (summary): Damage to the primary target applies spell damage and damage to secondary targets applies proc damage."
+        "Source notes (summary): Damage to the primary target applies spell damage and damage to secondary targets applies proc damage.",
+        "Manual review (2026-02-25): Queen's Wrath is a two-phase pattern where cast-time self-buffing (attack-speed window) occurs first, then empowered-hit damage resolves on each consumed attack event."
       ]
     },
     "basic_ability_2": {
@@ -297,6 +305,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Burrow execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rek%27Sai/Queen%27s_Wrath",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Queen's Wrath cast-buff timing, empowered-hit sequence cadence, and attack-reset semantics"
     }
   ],
   "notes": [

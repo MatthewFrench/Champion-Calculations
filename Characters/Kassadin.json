@@ -214,12 +214,20 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 5.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The passive damage applies proc damage and the active damage applies spell damage."
+        "Source notes (summary): The passive damage applies proc damage and the active damage applies spell damage.",
+        "Manual review (2026-02-25): Nether Blade is cast-primed and attack-cadence-coupled; empowered-hit damage and mana-restore branches resolve on attack contact."
       ]
     },
     "basic_ability_3": {
@@ -375,6 +383,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Kassadin",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kassadin/Nether_Blade",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Nether Blade empowered-hit timing, attack-reset behavior, and mana-restore branch resolution semantics"
     }
   ],
   "notes": [

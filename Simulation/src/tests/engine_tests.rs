@@ -615,6 +615,476 @@ fn enemy_actor_script_cast_request_reports_cooldown_after_successful_cast() {
 }
 
 #[test]
+fn enemy_actor_item_active_stasis_request_rejects_when_enemy_has_no_stasis_item() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_no_stasis_item_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_no_stasis_item_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "stasis_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            action_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedUnknownItemActive { .. }
+        ),
+        "enemy item-active command should reject when the active is not available in runtime readiness"
+    );
+}
+
+#[test]
+fn enemy_actor_item_active_stasis_request_accepts_and_blocks_pool_tick_damage() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_stasis_item_actor".to_string();
+    enemy.spawn_position_xy = Some((120.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemy_build = vec![test_item("Zhonya's Hourglass")];
+    let enemies = vec![(enemy, enemy_build, Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let first_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_stasis_item_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "stasis_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        first_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    runner.step(2);
+    assert!(
+        runner.enemy_state[0].stasis_until > runner.time,
+        "enemy stasis item command should set active stasis window"
+    );
+
+    let health_before = runner.enemy_state[0].health;
+    runner.controlled_champion_defensive_ability_two_damage_per_tick = 100.0;
+    runner.controlled_champion_defensive_ability_two_heal_ratio_of_damage = 0.0;
+    runner.pool_effect_range = 500.0;
+    runner.pool_damage_tick_interval_seconds = 0.5;
+    runner.pool_damage_until = runner.time + 0.5;
+    runner.pool_next_damage_tick_at = runner.time + 0.5;
+    runner.apply_hot_effects(0.6);
+    assert!(
+        (runner.enemy_state[0].health - health_before).abs() < 1e-9,
+        "enemy stasis should nullify incoming controlled-champion pool tick damage during the stasis window"
+    );
+}
+
+#[test]
+fn enemy_actor_item_active_stasis_request_reports_cooldown_after_activation() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_stasis_cooldown_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemy_build = vec![test_item("Zhonya's Hourglass")];
+    let enemies = vec![(enemy, enemy_build, Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let first_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_stasis_cooldown_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "stasis_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        first_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    runner.step(2);
+    for _ in 0..120 {
+        runner.step(1);
+    }
+
+    let second_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_stasis_cooldown_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "stasis_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            second_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedItemActiveOnCooldown { .. }
+        ),
+        "second enemy stasis-item command should report explicit cooldown rejection"
+    );
+}
+
+#[test]
+fn enemy_actor_item_active_emergency_shield_request_rejects_when_enemy_has_no_item() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_no_emergency_shield_item_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_no_emergency_shield_item_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "emergency_shield_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            action_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedUnknownItemActive { .. }
+        ),
+        "enemy emergency-shield command should reject when the active is not available in runtime readiness"
+    );
+}
+
+#[test]
+fn enemy_actor_item_active_emergency_shield_request_accepts_and_absorbs_damage() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_emergency_shield_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemy_build = vec![test_item("Protoplasm Harness")];
+    let enemies = vec![(enemy, enemy_build, Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+    runner.sim.protoplasm_bonus_health = 300.0;
+    runner.sim.protoplasm_heal_total = 0.0;
+    runner.sim.protoplasm_duration_seconds = 0.0;
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_emergency_shield_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "emergency_shield_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        action_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    runner.step(2);
+
+    let health_before = runner.enemy_state[0].health;
+    let dealt = runner.apply_incoming_magic_damage_to_enemy(0, 100.0);
+    assert!(
+        dealt <= 1e-9,
+        "enemy emergency shield should absorb incoming damage while shield amount remains"
+    );
+    assert!(
+        (runner.enemy_state[0].health - health_before).abs() < 1e-9,
+        "enemy health should remain unchanged when incoming damage is fully absorbed by emergency shield"
+    );
+}
+
+#[test]
+fn enemy_actor_item_active_emergency_shield_request_reports_cooldown_after_activation() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_emergency_shield_cooldown_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemy_build = vec![test_item("Protoplasm Harness")];
+    let enemies = vec![(enemy, enemy_build, Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let first_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_emergency_shield_cooldown_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "emergency_shield_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        first_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    runner.step(2);
+
+    let second_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_emergency_shield_cooldown_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "emergency_shield_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            second_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedItemActiveOnCooldown { .. }
+        ),
+        "second enemy emergency-shield command should report explicit cooldown rejection"
+    );
+}
+
+#[test]
+fn enemy_actor_emergency_shield_item_applies_heal_over_time() {
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_emergency_shield_heal_actor".to_string();
+    enemy.spawn_position_xy = Some((300.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(
+        enemy.clone(),
+        vec![test_item("Protoplasm Harness")],
+        Stats::default(),
+    )];
+
+    let mut baseline_runner = ControlledChampionCombatSimulation::new(
+        test_controlled_champion_base(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        test_simulation(8.0, false),
+        test_urf(),
+    );
+    baseline_runner.sim.protoplasm_bonus_health = 0.0;
+    baseline_runner.sim.protoplasm_heal_total = 300.0;
+    baseline_runner.sim.protoplasm_duration_seconds = 3.0;
+    baseline_runner.enemy_state[0].health =
+        (baseline_runner.enemy_state[0].max_health - 500.0).max(1.0);
+    for _ in 0..30 {
+        baseline_runner.step(1);
+    }
+    let baseline_health_after = baseline_runner.enemy_state[0].health;
+
+    let mut activated_runner = ControlledChampionCombatSimulation::new(
+        test_controlled_champion_base(),
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[(
+            enemy,
+            vec![test_item("Protoplasm Harness")],
+            Stats::default(),
+        )],
+        test_simulation(8.0, false),
+        test_urf(),
+    );
+    activated_runner.sim.protoplasm_bonus_health = 0.0;
+    activated_runner.sim.protoplasm_heal_total = 300.0;
+    activated_runner.sim.protoplasm_duration_seconds = 3.0;
+    activated_runner.enemy_state[0].health =
+        (activated_runner.enemy_state[0].max_health - 500.0).max(1.0);
+
+    let status = activated_runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_emergency_shield_heal_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "emergency_shield_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    for _ in 0..30 {
+        activated_runner.step(1);
+    }
+    assert!(
+        activated_runner.enemy_state[0].health > baseline_health_after,
+        "enemy emergency shield item should increase heal-over-time beyond baseline regen-only healing"
+    );
+}
+
+#[test]
+fn enemy_manual_move_command_does_not_step_position_during_stasis_window() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(6.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Morgana");
+    enemy.id = "enemy_stasis_move_lock_actor".to_string();
+    enemy.spawn_position_xy = Some((900.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemy_build = vec![test_item("Zhonya's Hourglass")];
+    let enemies = vec![(enemy, enemy_build, Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let stasis_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_stasis_move_lock_actor",
+        crate::champion_control_harness::ChampionActionRequest::UseItemActive {
+            item_active_id: "stasis_item".to_string(),
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(matches!(
+        stasis_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+    runner.step(2);
+    let position_before = runner
+        .world_actor_position("enemy_stasis_move_lock_actor")
+        .expect("enemy actor should be present");
+
+    let move_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_stasis_move_lock_actor",
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: -700.0, y: 0.0 },
+        },
+    );
+    assert!(
+        matches!(
+            move_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedMovementLocked { .. }
+        ),
+        "enemy movement commands should return explicit movement-lock rejection while stasis is active"
+    );
+    runner.step(2);
+
+    let position_after = runner
+        .world_actor_position("enemy_stasis_move_lock_actor")
+        .expect("enemy actor should be present");
+    assert!(
+        (position_after.x - position_before.x).abs() < 1e-9,
+        "enemy movement should remain locked while stasis is active"
+    );
+}
+
+#[test]
 fn enemy_manual_control_without_attack_target_prevents_auto_attack_hits() {
     let controlled_champion = test_controlled_champion_base();
     let simulation = test_simulation(6.0, false);
@@ -897,6 +1367,19 @@ fn test_enemy_with_role(name: &str, is_melee: bool) -> EnemyConfig {
     let mut enemy = test_enemy(name);
     enemy.base = test_enemy_base_with_role(name, is_melee);
     enemy
+}
+
+fn test_item(name: &str) -> Item {
+    Item {
+        name: name.to_string(),
+        stats: Stats::default(),
+        rank: Vec::new(),
+        shop_purchasable: true,
+        total_cost: 0.0,
+        passive_effects_text: Vec::new(),
+        has_active_effect: false,
+        structured_effect_count: 0,
+    }
 }
 
 fn test_simulation(

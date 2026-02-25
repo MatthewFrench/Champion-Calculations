@@ -38,6 +38,8 @@
       "unit": "targets",
       "duration_seconds": null,
       "cooldown_seconds": 120.0,
+      "cast_windup_seconds": 0.0,
+      "cast_range": 650.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self_or_ally",
@@ -74,6 +76,8 @@
       "unit": "flat",
       "duration_seconds": null,
       "cooldown_seconds": 120.0,
+      "cast_windup_seconds": 0.0,
+      "cast_range": 650.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self_or_ally",
@@ -121,7 +125,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Purify is an active cast on self or one allied champion within 650 range, sharing one 120-second cooldown for both the cleanse and heal branches.",
-      "Player-visible behavior: the selected target is immediately cleansed of removable crowd-control debuffs and then healed for 100 to 250 based on the target's level."
+      "Player-visible behavior: the selected target is immediately cleansed of removable crowd-control debuffs and then healed for 100 to 250 based on the target's level.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution metadata (`cast_range`, `cast_windup_seconds`) for targeted Purify cleanse/heal branches."
     ]
   },
   "sources": [

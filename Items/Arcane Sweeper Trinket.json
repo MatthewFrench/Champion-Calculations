@@ -24,6 +24,9 @@
       "unit": "area",
       "duration_seconds": 5.0,
       "cooldown_seconds": 30.0,
+      "cast_windup_seconds": 0.0,
+      "cast_range": 800.0,
+      "effect_hitbox_radius": 375.0,
       "interval_seconds": null,
       "range_units": 800,
       "radius_units": 375,
@@ -66,7 +69,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Arcane Sweeper is a targeted trinket cast (800 range) that creates a 5-second vision field, while true-sight trap revealing lasts 3 seconds within the same 375-radius area.",
-      "Mode/availability note: Arcane Sweeper is Arena-scoped and cannot be activated in the first 120 seconds of game time."
+      "Mode/availability note: Arcane Sweeper is Arena-scoped and cannot be activated in the first 120 seconds of game time.",
+      "Wave 125 (2026-02-25): Backfilled explicit active-cast execution fields (`cast_range`, `effect_hitbox_radius`, `cast_windup_seconds`) from page-verified reveal geometry and cooldown semantics."
     ]
   },
   "sources": [

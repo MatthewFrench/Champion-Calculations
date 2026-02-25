@@ -1232,6 +1232,25 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - autonomous enemy script cadence does not bypass controller ownership once manual-control mode is enabled.
   - mapped cast channels report explicit legality statuses instead of silently no-oping.
 
+60. `DONE` Add mapped opponent `stasis_item` item-active ingress and stasis lock correctness.
+- Scope:
+  - extend opponent manual-control `UseItemActive` support for `stasis_item` through deterministic queued ingress.
+  - add enemy item-active ownership state channels:
+    - stasis-item availability and cooldown readiness in enemy runtime state.
+  - project enemy item-active readiness/cast-range through harness runtime state so legality/status responses are explicit.
+  - enforce stasis movement/action lock consistency:
+    - enemy movement step now respects `enemy_can_take_actions(...)` gating.
+    - enemy incoming-damage channels now nullify damage while enemy is invulnerable/untargetable (including stasis).
+  - add regressions for:
+    - unavailable enemy stasis item rejection
+    - stasis activation + cooldown rejection
+    - stasis damage nullification
+    - stasis movement-lock behavior
+    (`src/tests/engine_tests.rs`)
+- Success criteria:
+  - opponent manual-control supports explicit `stasis_item` activation with deterministic legality/cooldown statuses.
+  - enemy stasis windows correctly block incoming damage and movement actions.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1241,7 +1260,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
-- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop/basic-attack + mapped script-cast ingress landed; runtime-wide target-selection and full opponent item/non-script cast channel integration pending)
+- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop/basic-attack + mapped script-cast + `stasis_item` ingress landed; runtime-wide target-selection and full opponent item/non-script cast channel integration pending)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
 - `DONE` Item 38 (audit completed; phased architecture migration and acceptance criteria documented)
@@ -1264,6 +1283,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 57 (data-owned controller vision + fixed tick-delay ingress semantics landed)
 - `DONE` Item 58 (partial actor-symmetric ingress with opponent move/stop command channels landed)
 - `DONE` Item 59 (manual opponent basic-attack + mapped script-cast ingress channels landed)
+- `DONE` Item 60 (manual opponent `stasis_item` ingress + stasis lock correctness landed)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

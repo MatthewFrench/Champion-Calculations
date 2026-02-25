@@ -152,13 +152,20 @@
       },
       "execution": {
         "cast_windup_seconds": 0.25,
-        "projectile_speed": 2000.0
+        "projectile_speed": 2000.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
         "Source speed: 2000.",
-        "Source notes (summary): Discharge does not convert the bonus damage dealt by Spellblade to magic damage from physical."
+        "Source notes (summary): Discharge does not convert the bonus damage dealt by Spellblade to magic damage from physical.",
+        "Manual review (2026-02-25): Siphon Power resolves in two phases: targeted cast damage plus shield on cast completion, then Discharge empowered-hit payload on the next basic attack within 4 seconds."
       ]
     },
     "basic_ability_2": {
@@ -390,6 +397,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Viktor",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Viktor/Siphon_Power",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Siphon Power cast-hit timing, Discharge empowered-hit window semantics, and player-visible two-phase resolution behavior"
     }
   ],
   "notes": [

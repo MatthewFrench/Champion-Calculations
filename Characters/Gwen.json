@@ -343,12 +343,19 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "dash_on_cast_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Location.",
         "Source castTime: none.",
-        "Source notes (summary): Skip 'n Slash has no minimum dash range."
+        "Source notes (summary): Skip 'n Slash has no minimum dash range.",
+        "Manual review (2026-02-25): Skip 'n Slash resolves in two phases: dash/reposition on cast, then empowered basic-attack state over the 4-second window with first-hit cooldown refund branch."
       ]
     },
     "ultimate": {
@@ -472,6 +479,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Gwen",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Gwen/Skip_%27n_Slash",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Skip 'n Slash dash timing, empowered basic-attack window semantics, and first-hit cooldown-refund branch"
     }
   ],
   "notes": [

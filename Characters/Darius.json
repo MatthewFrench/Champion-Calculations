@@ -211,7 +211,14 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -219,7 +226,8 @@
         "Source cooldown start: post-effect.",
         "Source notes (summary): Crippling Strike is a next-basic-attack empower with uncancellable empowered-hit windup and basic-attack-timer reset, so damage/slow resolve on the attack event rather than at cast time.",
         "Source notes (summary): Damage is basic-damage-class while also triggering spell-effect hooks; source notes specify spell-shield does not block damage and kill-triggered cooldown/mana refunds have explicit target exclusions.",
-        "Manual behavior verification (2026-02-24): Crippling Strike's empowered-hit outcome remains tied to the basic-attack event even when the swing animation is canceled by subsequent cast input (for example Decimate)."
+        "Manual behavior verification (2026-02-24): Crippling Strike's empowered-hit outcome remains tied to the basic-attack event even when the swing animation is canceled by subsequent cast input (for example Decimate).",
+        "Manual review (2026-02-25): Crippling Strike is cast-primed and attack-cadence-coupled; damage and slow resolve only on empowered-hit contact, not at cast press."
       ]
     },
     "basic_ability_3": {

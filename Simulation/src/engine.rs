@@ -32,7 +32,9 @@ use crate::scripts::champions::{
     on_ability_bonus_damage, on_hit_bonus_damage, on_immobilize_rune_damage, outgoing_damage_heal,
     scripted_champion_events, tick_regen_heal,
 };
-use crate::scripts::items::hooks::controlled_champion_defensive_item_capabilities;
+use crate::scripts::items::hooks::{
+    controlled_champion_defensive_item_capabilities, defensive_item_capabilities_from_item_names,
+};
 use crate::scripts::runtime::ability_slots::{
     ActorAbilityLoadout, default_champion_ability_loadout,
 };
@@ -107,6 +109,13 @@ struct EnemyState {
     stunned_until: f64,
     untargetable_until: f64,
     stasis_until: f64,
+    stasis_item_available: bool,
+    stasis_item_ready_at: f64,
+    emergency_shield_item_available: bool,
+    emergency_shield_item_ready_at: f64,
+    emergency_shield_amount: f64,
+    emergency_heal_rate: f64,
+    emergency_heal_until: f64,
     invulnerable_until: f64,
     hitbox_radius: f64,
 }
@@ -567,6 +576,11 @@ impl ControlledChampionCombatSimulation {
                 .unwrap_or_else(|| enemy_spawn_position(idx, enemy_count.max(1), model.behavior));
             let ai_profile = champion_ai_profile(&enemy.name, model.behavior.attack_range);
             let script_poll_interval_seconds = ai_profile.script_poll_interval_seconds.max(0.05);
+            let enemy_defensive_item_capabilities =
+                defensive_item_capabilities_from_item_names(&model.runtime_item_names);
+            let enemy_has_stasis_item = enemy_defensive_item_capabilities.has_stasis_item;
+            let enemy_has_emergency_shield_item =
+                enemy_defensive_item_capabilities.has_emergency_shield_item;
 
             let clamped_position = runner.world_state.upsert_actor_position_clamped(
                 &enemy.id,
@@ -613,6 +627,13 @@ impl ControlledChampionCombatSimulation {
                 stunned_until: 0.0,
                 untargetable_until: 0.0,
                 stasis_until: 0.0,
+                stasis_item_available: enemy_has_stasis_item,
+                stasis_item_ready_at: 0.0,
+                emergency_shield_item_available: enemy_has_emergency_shield_item,
+                emergency_shield_item_ready_at: 0.0,
+                emergency_shield_amount: 0.0,
+                emergency_heal_rate: 0.0,
+                emergency_heal_until: 0.0,
                 invulnerable_until: 0.0,
                 hitbox_radius: champion_hitbox_radius(&enemy.base.name),
             });

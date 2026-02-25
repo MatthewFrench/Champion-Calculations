@@ -85,6 +85,8 @@
       "unit": "ratio",
       "duration_seconds": null,
       "cooldown_seconds": 10.0,
+      "cast_windup_seconds": 0.0,
+      "effect_hitbox_radius": 450.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_radius",
@@ -132,7 +134,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Cleave applies splash physical damage around the primary basic-attack target, with melee/ranged damage split (40% vs 20% AD).",
-      "Execution model: Heretical Cleave is a self-centered active area hit (450 radius) with a 10-second cooldown and immediate resolution on cast."
+      "Execution model: Heretical Cleave is a self-centered active area hit (450 radius) with a 10-second cooldown and immediate resolution on cast.",
+      "Wave 125 (2026-02-25): Backfilled explicit active-cast execution fields (`effect_hitbox_radius`, `cast_windup_seconds`) from page-verified active area geometry and timing semantics."
     ]
   },
   "sources": [

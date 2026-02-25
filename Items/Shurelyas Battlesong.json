@@ -38,6 +38,8 @@
       "unit": "ratio",
       "duration_seconds": 4.0,
       "cooldown_seconds": 75.0,
+      "cast_windup_seconds": 0.0,
+      "effect_hitbox_radius": 1000.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "self_and_allies_in_radius",
@@ -79,7 +81,8 @@
     "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Execution model: Inspiring Speech is a team-targeted active that grants bonus movement speed to the user and allies within 1000 units at cast time.",
-      "Timing note: Movement-speed buff is applied immediately on activation, lasts 4 seconds, and uses a 75-second cooldown."
+      "Timing note: Movement-speed buff is applied immediately on activation, lasts 4 seconds, and uses a 75-second cooldown.",
+      "Wave 125 (2026-02-25): Backfilled explicit active-cast execution fields (`effect_hitbox_radius`, `cast_windup_seconds`) from page-verified ally-radius and immediate-application timing semantics."
     ]
   },
   "sources": [

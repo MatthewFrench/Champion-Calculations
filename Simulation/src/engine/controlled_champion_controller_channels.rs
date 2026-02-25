@@ -360,12 +360,9 @@ impl ControlledChampionCombatSimulation {
         controlled_actor_id: &str,
         request: &ChampionActionRequest,
     ) -> bool {
-        if self
-            .resolve_enemy_index_by_actor_id(controlled_actor_id)
-            .is_none()
-        {
+        let Some(enemy_index) = self.resolve_enemy_index_by_actor_id(controlled_actor_id) else {
             return false;
-        }
+        };
         match request {
             ChampionActionRequest::MoveToPosition { .. }
             | ChampionActionRequest::StartBasicAttack { .. }
@@ -373,7 +370,11 @@ impl ControlledChampionCombatSimulation {
             ChampionActionRequest::CastAbilityBySlot { ability_slot, .. } => self
                 .enemy_script_cast_channel_for_slot(controlled_actor_id, *ability_slot)
                 .is_some(),
-            ChampionActionRequest::UseItemActive { .. } => false,
+            ChampionActionRequest::UseItemActive { item_active_id, .. } => {
+                (item_active_id == STASIS_ITEM_ACTIVE_ID && self.enemy_has_stasis_item(enemy_index))
+                    || (item_active_id == EMERGENCY_SHIELD_ITEM_ACTIVE_ID
+                        && self.enemy_has_emergency_shield_item(enemy_index))
+            }
         }
     }
 
@@ -486,7 +487,48 @@ impl ControlledChampionCombatSimulation {
                     script_epoch,
                 );
             }
-            ChampionActionRequest::UseItemActive { .. } => {}
+            ChampionActionRequest::UseItemActive { item_active_id, .. } => {
+                let Some(enemy_index) = self
+                    .resolve_enemy_index_by_actor_id(&queued_action_request.controlled_actor_id)
+                else {
+                    return;
+                };
+                if item_active_id == STASIS_ITEM_ACTIVE_ID {
+                    if !self.try_activate_enemy_stasis_item_active(enemy_index) {
+                        return;
+                    }
+                    self.clear_enemy_move_command(&queued_action_request.controlled_actor_id);
+                    let _ = self.invalidate_enemy_attack_sequence(enemy_index);
+                    self.trace_event(
+                        "enemy_actor_item_active",
+                        format!(
+                            "{} activated {} for {:.2}s by {} #{}",
+                            queued_action_request.controlled_actor_id,
+                            item_active_id,
+                            self.sim.zhonya_duration_seconds,
+                            queued_action_request.controller_identity.controller_id,
+                            queued_action_request.sequence_id
+                        ),
+                    );
+                    return;
+                }
+                if item_active_id == EMERGENCY_SHIELD_ITEM_ACTIVE_ID
+                    && self.try_activate_enemy_emergency_shield_item_active(enemy_index)
+                {
+                    self.trace_event(
+                        "enemy_actor_item_active",
+                        format!(
+                            "{} activated {} ({:.1} shield, {:.1}s heal window) by {} #{}",
+                            queued_action_request.controlled_actor_id,
+                            item_active_id,
+                            self.sim.protoplasm_bonus_health,
+                            self.sim.protoplasm_duration_seconds,
+                            queued_action_request.controller_identity.controller_id,
+                            queued_action_request.sequence_id
+                        ),
+                    );
+                }
+            }
         }
     }
 
@@ -804,6 +846,28 @@ impl ControlledChampionCombatSimulation {
             .unwrap_or(self.time)
             .max(enemy_state.stunned_until)
             .max(enemy_state.stasis_until);
+        if self.enemy_has_stasis_item(enemy_index) {
+            action_runtime_state
+                .item_active_ready_at_seconds_by_id
+                .insert(
+                    STASIS_ITEM_ACTIVE_ID.to_string(),
+                    self.enemy_stasis_item_ready_at_or_zero(enemy_index),
+                );
+            action_runtime_state
+                .item_active_cast_range_by_id
+                .insert(STASIS_ITEM_ACTIVE_ID.to_string(), 0.0);
+        }
+        if self.enemy_has_emergency_shield_item(enemy_index) {
+            action_runtime_state
+                .item_active_ready_at_seconds_by_id
+                .insert(
+                    EMERGENCY_SHIELD_ITEM_ACTIVE_ID.to_string(),
+                    self.enemy_emergency_shield_item_ready_at_or_zero(enemy_index),
+                );
+            action_runtime_state
+                .item_active_cast_range_by_id
+                .insert(EMERGENCY_SHIELD_ITEM_ACTIVE_ID.to_string(), 0.0);
+        }
         action_runtime_state.movement_locked_until_seconds = lock_until_seconds;
         action_runtime_state.cast_locked_until_seconds = lock_until_seconds;
         Some(action_runtime_state)

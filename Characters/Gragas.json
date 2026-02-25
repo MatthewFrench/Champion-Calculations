@@ -255,13 +255,20 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 250.0
+        "effect_hitbox_radius": 250.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 5.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 250.",
-        "Source notes (summary): The enhanced attack will apply other on-hit effects and can critically strike as normal."
+        "Source notes (summary): The enhanced attack will apply other on-hit effects and can critically strike as normal.",
+        "Manual review (2026-02-25): Drunken Rage has cast/channel self-state timing first, then empowered-attack payload resolution on next hit within the 5-second window."
       ],
       "description_source": "Active: Gragas channels for 0.75 seconds, drinking out of his brew, and gains damage reduction for 2.5 seconds."
     },
@@ -382,6 +389,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Gragas",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Gragas/Drunken_Rage",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Drunken Rage channel/cast ordering, empowered-hit timing, and attack-cadence-coupled resolution semantics"
     }
   ],
   "notes": [

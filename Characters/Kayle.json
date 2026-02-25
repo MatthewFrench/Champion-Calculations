@@ -280,13 +280,21 @@
       ],
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 350.0
+        "effect_hitbox_radius": 350.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 6.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source effectRadius: 350.",
-        "Source notes (summary): Details Starfire Spellblade deals: The physical damage part of both the attack and the explosion deals basic damage and spell damage."
+        "Source notes (summary): Details Starfire Spellblade deals: The physical damage part of both the attack and the explosion deals basic damage and spell damage.",
+        "Manual review (2026-02-25): Starfire Spellblade is cast-primed and attack-cadence-coupled; first empowered-hit contact resolves the primary payload and explosion branch."
       ]
     },
     "ultimate": {
@@ -353,6 +361,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Kayle",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kayle/Starfire_Spellblade",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior re-verification for Starfire Spellblade empowered-hit timing, explosion-on-hit branch semantics, and attack-reset behavior"
     }
   ],
   "notes": [

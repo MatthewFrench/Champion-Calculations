@@ -59,6 +59,8 @@
       "unit": "ratio",
       "duration_seconds": 2.0,
       "cooldown_seconds": 90.0,
+      "cast_windup_seconds": 0.0,
+      "effect_hitbox_radius": 500.0,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_radius",
@@ -101,7 +103,8 @@
     "context_notes": [
       "Execution model: Resilience is a persistent incoming critical-strike damage reduction on the holder.",
       "Execution model: Humility is a targeted self-centered active that emits a visible 500-unit shockwave, applying a 70% slow to nearby enemies for 2 seconds.",
-      "Timing note: Humility has no projectile travel; nearby enemies are slowed immediately on activation and the active cooldown is 90 seconds."
+      "Timing note: Humility has no projectile travel; nearby enemies are slowed immediately on activation and the active cooldown is 90 seconds.",
+      "Wave 125 (2026-02-25): Backfilled explicit active-cast execution fields (`effect_hitbox_radius`, `cast_windup_seconds`) from page-verified shockwave geometry and immediate-resolution timing semantics."
     ]
   },
   "sources": [

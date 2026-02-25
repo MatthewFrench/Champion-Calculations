@@ -54,6 +54,7 @@
       "applies_to": "self",
       "trigger": "on_activate",
       "cooldown_seconds": 45.0,
+      "cast_windup_seconds": 0.0,
       "stat_modifiers": [
         {
           "stat": "movement_speed_bonus_percent",
@@ -100,7 +101,8 @@
     "context_notes": [
       "Execution model: Haunt grants flat movement speed only after remaining out of combat with enemy champions for 3 seconds.",
       "Execution model: Wraith Step is a self-active that immediately grants movement-speed bonus and Ghosting for attack-type-specific durations.",
-      "Timing note: Wraith Step has a 45-second cooldown and no projectile/delayed resolution branch."
+      "Timing note: Wraith Step has a 45-second cooldown and no projectile/delayed resolution branch.",
+      "Wave 129 (2026-02-25): Backfilled explicit fixed-cooldown active execution timing metadata (`cast_windup_seconds`) for immediate self-cast Wraith Step behavior."
     ]
   },
   "sources": [

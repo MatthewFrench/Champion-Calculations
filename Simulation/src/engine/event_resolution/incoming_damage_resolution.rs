@@ -47,7 +47,10 @@ impl ControlledChampionCombatSimulation {
         raw_magic_damage: f64,
         raw_true_damage: f64,
     ) -> f64 {
-        if !self.enemy_is_active(idx) {
+        // Enemy damage application is blocked while the target is invulnerable/untargetable
+        // (including stasis), matching the same impact-nullification semantics used by
+        // event-based hit resolution channels.
+        if !self.enemy_is_active(idx) || self.enemy_is_invulnerable_or_untargetable(idx) {
             return 0.0;
         }
         let (mitigated_physical, mitigated_magic, mitigated_true, enemy_level) = {
@@ -78,11 +81,24 @@ impl ControlledChampionCombatSimulation {
         if mitigated <= 0.0 {
             return 0.0;
         }
+        let effective_damage = {
+            let state = &mut self.enemy_state[idx];
+            let mut damage = mitigated;
+            if state.emergency_shield_amount > 0.0 && damage > 0.0 {
+                let absorbed = state.emergency_shield_amount.min(damage);
+                state.emergency_shield_amount -= absorbed;
+                damage -= absorbed;
+            }
+            damage
+        };
+        if effective_damage <= 0.0 {
+            return 0.0;
+        }
         let respawn_delay = self.enemy_respawn_delay_seconds(enemy_level);
         let mut killed_name = None;
         let dealt = {
             let state = &mut self.enemy_state[idx];
-            let d = mitigated.min(state.health.max(0.0));
+            let d = effective_damage.min(state.health.max(0.0));
             state.health -= d;
             if state.health <= 0.0 {
                 state.health = 0.0;
@@ -98,6 +114,9 @@ impl ControlledChampionCombatSimulation {
                 state.untargetable_until = 0.0;
                 state.stasis_until = 0.0;
                 state.invulnerable_until = 0.0;
+                state.emergency_shield_amount = 0.0;
+                state.emergency_heal_rate = 0.0;
+                state.emergency_heal_until = 0.0;
                 killed_name = Some(state.enemy.name.clone());
             }
             d
