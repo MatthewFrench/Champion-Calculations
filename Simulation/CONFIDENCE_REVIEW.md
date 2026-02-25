@@ -40,9 +40,11 @@
   - Uncertainty 2 (deferred code follow-up): `Sylas` slot-E behavior (`Abscond` -> `Abduct`) is a multi-stage same-slot flow; runtime still lacks first-class stage identity and recast-window event modeling.
   - Additional deferred code follow-up: `Vex` `Looming Darkness` uses cast-distance-scaled explosion radius (`200 : 300`), but runtime currently treats execution hitbox radius as a static value.
   - Additional deferred code follow-up: champion data now carries execution-semantic keys for attack-cadence-coupled behavior (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`), but runtime loaders/scripts do not consume these keys yet.
+  - Semantic-key authoring baseline has expanded to `10/682` active abilities (including `Nasus` `Siphoning Strike`, `Garen` `Decisive Strike`, `Jax` `Empower`, `Renekton` `Ruthless Predator`, `MonkeyKing` `Crushing Blow`, `Blitzcrank` `Power Fist`, `Leona` `Shield of Daybreak`, and `Vayne` `Tumble`); runtime consumption remains deferred code follow-up.
 - Item data uncertainty follow-up:
   - No open item-structure uncertainty remains in the latest wave for `Dragonheart` or `Twilight's Edge`; keep periodic source-drift checks because page/module text can diverge on distributed Arena items.
   - Active cooldown metadata was backfilled for `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`); runtime behavior remains deferred where item actives are not yet modeled.
+  - Active cooldown metadata was additionally backfilled for `Ravenous Hydra` (`10s`), while remaining `on_activate` entries without fixed `cooldown_seconds` are currently intentional charge/consume/single-use/round-limited semantics and should stay tracked as a separate queue class.
 - Rune data quality follow-up:
   - Broad decimal-spacing cleanup is now complete for the previously tracked queue (`0` remaining `x. y` artifacts in `effects_structured.raw`).
   - Rune narrative decimal-spacing cleanup is now complete for touched flat/split rune files (`88` `x. y` artifacts in rune narrative fields -> `0`).
@@ -116,11 +118,24 @@
   - Re-verified `Olaf` `Reckless Swing` and `Fiora` `Bladework` and encoded explicit execution-semantic fields in champion ability `execution` objects for future runtime consumption.
   - Source: [Template:Data_Olaf/Reckless_Swing](https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Reckless_Swing)
   - Source: [Template:Data_Fiora/Bladework](https://wiki.leagueoflegends.com/en-us/Template:Data_Fiora/Bladework)
+- Champion execution-semantics waves (111-114):
+  - Re-verified and encoded explicit execution-semantic keys for attack-cadence-coupled abilities on `Nasus` (`Siphoning Strike`), `Garen` (`Decisive Strike`), `Jax` (`Empower`), `Renekton` (`Ruthless Predator`), `MonkeyKing` (`Crushing Blow`), `Blitzcrank` (`Power Fist`), `Leona` (`Shield of Daybreak`), and `Vayne` (`Tumble`).
+  - Source: [Template:Data_Nasus/Siphoning_Strike](https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Siphoning_Strike)
+  - Source: [Template:Data_Garen/Decisive_Strike](https://wiki.leagueoflegends.com/en-us/Template:Data_Garen/Decisive_Strike)
+  - Source: [Template:Data_Jax/Empower](https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Empower)
+  - Source: [Template:Data_Renekton/Ruthless_Predator](https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Ruthless_Predator)
+  - Source: [Template:Data_Wukong/Crushing_Blow](https://wiki.leagueoflegends.com/en-us/Template:Data_Wukong/Crushing_Blow)
+  - Source: [Template:Data_Blitzcrank/Power_Fist](https://wiki.leagueoflegends.com/en-us/Template:Data_Blitzcrank/Power_Fist)
+  - Source: [Template:Data_Leona/Shield_of_Daybreak](https://wiki.leagueoflegends.com/en-us/Template:Data_Leona/Shield_of_Daybreak)
+  - Source: [Template:Data_Vayne/Tumble](https://wiki.leagueoflegends.com/en-us/Template:Data_Vayne/Tumble)
 - Item active cooldown completeness wave (109):
   - Re-verified and encoded explicit active cooldown metadata on `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`) across all active effect branches in structured data.
   - Source: [Stridebreaker](https://wiki.leagueoflegends.com/en-us/Stridebreaker)
   - Source: [Hextech Rocketbelt](https://wiki.leagueoflegends.com/en-us/Hextech_Rocketbelt)
   - Source: [Redemption](https://wiki.leagueoflegends.com/en-us/Redemption)
+- Item active cooldown completeness wave (115):
+  - Re-verified and encoded explicit active cooldown metadata on `Ravenous Hydra` (`10s`) for `ravenous_crescent_active_physical_damage`.
+  - Source: [Ravenous Hydra](https://wiki.leagueoflegends.com/en-us/Ravenous_Hydra)
 - Rune narrative decimal-normalization wave (110):
   - Normalized decimal-spacing artifacts in rune narrative fields (`wiki_descriptions` and touched `long_desc`) across flat and split structures while preserving structured-value parity.
 

@@ -1187,6 +1187,30 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - harness ingress no longer uses hardcoded controller delay/vision tuning literals.
   - deterministic fixed-delay execution is validated by regression tests.
 
+58. `DONE` Partial actor-symmetric harness ingress (opponent move/stop channels).
+- Scope:
+  - extend harness ingress to support actor-id keyed command queueing through:
+    - `src/engine/controlled_champion_controller_channels.rs`
+    - `queue_actor_action_request(controller_identity, controlled_actor_id, request)`
+  - preserve controlled-champion facade compatibility (`queue_controlled_champion_action_request(...)` now delegates into actor-id ingress).
+  - add explicit invalid-actor rejection status:
+    - `RejectedControlledActorNotFound { controlled_actor_id }`
+    (`src/champion_control_harness/champion_control_contracts.rs`)
+  - add deterministic opponent manual-control movement channels:
+    - command ownership fields in `src/engine.rs`
+    - movement-step integration in `src/engine/simulation_step/enemy_movement_step.rs`
+    - supported opponent command surface: `MoveToPosition`, `StopCurrentAction`
+  - keep unsupported opponent action families explicit (`CastAbilityBySlot`, `StartBasicAttack`, `UseItemActive` -> `RejectedUnsupportedAction`).
+  - add regressions for:
+    - opponent move command stepping through actor-id ingress
+    - unsupported opponent cast command rejection
+    - explicit unknown-actor rejection
+    (`src/tests/engine_tests.rs`)
+- Success criteria:
+  - runtime supports deterministic actor-id keyed harness ingress for controlled champion and opponents.
+  - opponent manual movement commands execute through the same queued deterministic ingress path.
+  - unsupported or invalid actor requests return explicit typed statuses.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1196,7 +1220,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `IN_PROGRESS` Item 4 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 5 (foundational scaffold merged; full migration pending)
 - `IN_PROGRESS` Item 9 (slot-agnostic ability architecture for remapping and stolen abilities; controlled champion foundation landed)
-- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; runtime-wide target-selection integration pending)
+- `IN_PROGRESS` Item 10 (controller-harness and generic policy scaffold landed; partial actor-symmetric move/stop ingress landed; runtime-wide target-selection and full opponent action-channel integration pending)
 - `IN_PROGRESS` Item 13 (controlled champion runtime rune effects are wired through simulation/objective; broader coverage pending)
 - `DONE` Item 14 (legacy mastery system removed; rune-page legality is strict and enforced)
 - `DONE` Item 38 (audit completed; phased architecture migration and acceptance criteria documented)
@@ -1217,6 +1241,7 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 55 (controller-harness runtime ingress integration with deterministic queueing + controlled movement stepping landed)
 - `DONE` Item 56 (research-backed deterministic request/fast-forward model documented and linked)
 - `DONE` Item 57 (data-owned controller vision + fixed tick-delay ingress semantics landed)
+- `DONE` Item 58 (partial actor-symmetric ingress with opponent move/stop command channels landed)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

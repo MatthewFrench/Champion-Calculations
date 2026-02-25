@@ -24,6 +24,7 @@ Read first:
 - [ ] Ability execution geometry and timing are on `abilities.<ability_key>.execution`.
 - [ ] Champion active abilities keep non-empty `execution` objects (no active-ability execution metadata regressions).
 - [ ] For non-trivial cast-vs-hit abilities, `execution` includes explicit semantic timing keys when source-verified (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`).
+- [ ] `resolution_timing` values are semantically explicit for two-phase abilities (for example cast-time self-buff plus empowered-hit resolution), not flattened to ambiguous timing labels.
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
 - [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
 - [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.
@@ -56,6 +57,7 @@ Read first:
 - [ ] Item `stats` keys use loader-canonical names (for example `magicResist`, `critChance`, not legacy aliases like `magicResistance` or `criticalStrikeChance`).
 - [ ] Structured effects use stable effect identifiers and include trigger, cooldown, duration, and scaling where applicable.
 - [ ] Active cast effects include explicit cooldown and cast-range metadata when these values are present in source text (blocking gate when applicable).
+- [ ] Any `on_activate` effect without fixed `cooldown_seconds` is explicitly documented as intentional (charge/consume/single-use/round-limited semantics) in `conditions` and/or `schema_notes.context_notes`.
 - [ ] If one active maps to multiple `effects_structured` branches, shared active cooldown metadata is encoded consistently on each branch.
 - [ ] Trinket/ward utility items encode source-verified charge count, recharge scaling, placement limits, level requirements, and reveal/detection timing windows when available.
 - [ ] Non-trivial active/on-hit/combat-triggered item effects were manually reviewed for execution semantics (activation gating, target/range requirements, timing/windup, and resolution timing).

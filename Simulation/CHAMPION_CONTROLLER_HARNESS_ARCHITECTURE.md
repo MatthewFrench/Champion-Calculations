@@ -55,7 +55,7 @@ Every request returns `ChampionActionStatusReport` with one typed status:
 - cooldown rejections (`RejectedAbilityOnCooldown`, `RejectedItemActiveOnCooldown`)
 - visibility/range rejections (`RejectedTargetNotVisible`, `RejectedTargetOutOfRange`)
 - ownership/keying rejections (`RejectedAbilitySlotUnbound`, `RejectedUnknownItemActive`)
-- execution-channel rejections (`RejectedTargetInvalidForAction`, `RejectedUnsupportedAction`)
+- execution-channel rejections (`RejectedTargetInvalidForAction`, `RejectedControlledActorNotFound`, `RejectedUnsupportedAction`)
 
 No illegal request may be silently accepted.
 
@@ -82,7 +82,7 @@ The runtime should model request handling as a server-authoritative tick loop:
 This preserves deterministic replay behavior while matching authoritative-server request semantics.
 Detailed source-backed guidance is tracked in `Simulation/DETERMINISTIC_REQUEST_AND_FAST_FORWARD_MODEL.md`.
 
-## Current Implementation (Phase-1 + Phase-2)
+## Current Implementation (Phase-1 + Phase-2 + Phase-3 Partial)
 Controller contracts and runtime integration are implemented under:
 - `src/champion_control_harness.rs`
 - `src/champion_control_harness/champion_control_contracts.rs`
@@ -101,6 +101,8 @@ Current scope:
 - data-owned controller visibility radius and fixed request-delay tuning via `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_controller_vision_radius`, `engine_defaults.controlled_champion_request_fixed_tick_delay`)
 - shared execution channels for controlled champion ability/item actions (script cadence and harness requests use the same execution paths)
 - command-owned controlled champion movement stepping with world-bound clamping
+- actor-symmetric ingress scaffold now accepts `queue_actor_action_request(...)` for controlled champion and opponent actors, with explicit `RejectedControlledActorNotFound` for invalid actor IDs
+- opponent manual-control scaffold now supports deterministic `MoveToPosition` and `StopCurrentAction` command execution through the same queued ingress path
 - unit tests for visibility, fairness parity, legality responses, and policy ordering
 
 ## Integration Target State
@@ -127,6 +129,7 @@ Required coverage for harness evolution:
 
 ## Remaining High-Friction Areas
 - current visibility projection is radius-only and not fog-of-war complete
+- actor-symmetric ingress is partial (opponent move/stop are wired; opponent cast/basic-attack/item command channels are still unsupported)
 - command/path ownership is integrated for deterministic move targets, but pathfinding/collision/terrain routing are not yet integrated
 - objective/structure/economy channels are not yet wired into perspective visibility and action legality
 - only fixed delay ingestion is modeled; richer buffering/overwrite/packet-drop network semantics are still simplified versus live game

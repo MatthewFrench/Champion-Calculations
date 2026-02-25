@@ -1,4 +1,4 @@
-use std::collections::{HashMap, VecDeque};
+use std::collections::{HashMap, HashSet, VecDeque};
 
 use crate::champion_control_harness::{
     ChampionActionDecisionPolicy, ChampionActionStatusReport, ChampionControllerIdentity,
@@ -257,12 +257,14 @@ pub(super) struct ControlledChampionCombatSimulation {
     controlled_champion_controller_vision_radius: f64,
     controlled_champion_request_fixed_tick_delay: u64,
     controlled_champion_pending_action_requests:
-        VecDeque<controlled_champion_controller_channels::QueuedControlledChampionActionRequest>,
+        VecDeque<controlled_champion_controller_channels::QueuedActorActionRequest>,
     controlled_champion_next_action_request_sequence: u64,
     controlled_champion_current_tick_index: u64,
     controlled_champion_recent_action_status_reports: VecDeque<ChampionActionStatusReport>,
     controlled_champion_pending_move_target_position: Option<Vec2>,
     controlled_champion_basic_attack_target_actor_id: Option<String>,
+    manually_controlled_enemy_actor_ids: HashSet<String>,
+    enemy_pending_move_target_position_by_actor_id: HashMap<String, Vec2>,
 
     target_position: Vec2,
     enemy_state: Vec<EnemyState>,
@@ -519,6 +521,8 @@ impl ControlledChampionCombatSimulation {
             controlled_champion_recent_action_status_reports: VecDeque::new(),
             controlled_champion_pending_move_target_position: None,
             controlled_champion_basic_attack_target_actor_id: None,
+            manually_controlled_enemy_actor_ids: HashSet::new(),
+            enemy_pending_move_target_position_by_actor_id: HashMap::new(),
             target_position: Vec2 { x: 0.0, y: 0.0 },
             enemy_state: Vec::new(),
             world_state: WorldState::new(default_urf_world_map_state()),

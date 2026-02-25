@@ -8,38 +8,38 @@
   ],
   "base_stats": {
     "health": {
-      "base": 660.0,
-      "per_level": 111.0
+      "base": 660,
+      "per_level": 111
     },
     "resource": {
       "type": "fury",
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
-    "move_speed": 345.0,
+    "move_speed": 345,
     "armor": {
-      "base": 35.0,
+      "base": 35,
       "per_level": 5.2
     },
     "magic_resist": {
-      "base": 28.0,
+      "base": 28,
       "per_level": 2.05
     },
-    "attack_range": 125.0,
+    "attack_range": 125,
     "health_regeneration": {
-      "base": 8.0,
+      "base": 8,
       "per_level": 0.75
     },
     "resource_regeneration": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "crit_chance": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "attack_damage": {
-      "base": 69.0,
+      "base": 69,
       "per_level": 4.15
     },
     "attack_speed": {
@@ -54,13 +54,13 @@
     "base_windup_seconds": 0.3,
     "windup_fraction": 0.18749999999999997,
     "windup_percent": 18.749999999999996,
-    "missile_speed": 0.0,
-    "missile_travel_time_seconds_per_unit": 0.0,
+    "missile_speed": 0,
+    "missile_travel_time_seconds_per_unit": 0,
     "raw_timing_stats": {
       "attack_cast_time": 0.3,
       "attack_total_time": 1.6,
       "attack_delay_offset": -0.122695036232471,
-      "gameplay_radius": 80.0
+      "gameplay_radius": 80
     },
     "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
   },
@@ -100,11 +100,11 @@
           "id": "physical_damage",
           "description": "Physical Damage",
           "base_by_rank": [
-            60.0,
-            90.0,
-            120.0,
-            150.0,
-            180.0
+            60,
+            90,
+            120,
+            150,
+            180
           ],
           "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
         },
@@ -112,11 +112,11 @@
           "id": "enhanced_damage",
           "description": "Enhanced Damage",
           "base_by_rank": [
-            90.0,
-            135.0,
-            180.0,
-            225.0,
-            270.0
+            90,
+            135,
+            180,
+            225,
+            270
           ],
           "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
         },
@@ -124,11 +124,11 @@
           "id": "healing_cap",
           "description": "Healing Cap",
           "base_by_rank": [
-            50.0,
-            75.0,
-            100.0,
-            125.0,
-            150.0
+            50,
+            75,
+            100,
+            125,
+            150
           ],
           "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
         },
@@ -136,11 +136,11 @@
           "id": "enhanced_healing_cap",
           "description": "Enhanced Healing Cap",
           "base_by_rank": [
-            200.0,
-            300.0,
-            400.0,
-            500.0,
-            600.0
+            200,
+            300,
+            400,
+            500,
+            600
           ],
           "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
         },
@@ -148,11 +148,11 @@
           "id": "non_champion_healing",
           "description": "Non-Champion Healing",
           "base_by_rank": [
-            2.0,
-            3.0,
-            4.0,
-            5.0,
-            6.0
+            2,
+            3,
+            4,
+            5,
+            6
           ],
           "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
         },
@@ -160,11 +160,11 @@
           "id": "enhanced_non_champion_healing",
           "description": "Enhanced Non-Champion Healing",
           "base_by_rank": [
-            6.0,
-            9.0,
-            12.0,
-            15.0,
-            18.0
+            6,
+            9,
+            12,
+            15,
+            18
           ],
           "context_notes": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap."
         },
@@ -172,11 +172,11 @@
           "id": "champion_healing",
           "description": "Champion Healing",
           "base_by_rank": [
-            12.0,
-            20.0,
-            28.0,
-            36.0,
-            44.0
+            12,
+            20,
+            28,
+            36,
+            44
           ],
           "context_notes": "Against champions, the healing is increased."
         },
@@ -184,11 +184,11 @@
           "id": "enhanced_champion_healing",
           "description": "Enhanced Champion Healing",
           "base_by_rank": [
-            36.0,
-            60.0,
-            84.0,
-            108.0,
-            132.0
+            36,
+            60,
+            84,
+            108,
+            132
           ],
           "context_notes": "Against champions, the healing is increased."
         },
@@ -207,15 +207,15 @@
       ],
       "description": "Active: Renekton cleaves around himself, dealing physical damage to nearby enemies and healing himself for each enemy hit, up to a cap.",
       "cooldown_seconds_by_rank": [
-        7.0,
-        7.0,
-        7.0,
-        7.0,
-        7.0
+        7,
+        7,
+        7,
+        7,
+        7
       ],
       "execution": {
-        "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 400.0
+        "cast_windup_seconds": 0,
+        "effect_hitbox_radius": 400
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -235,11 +235,11 @@
           "id": "total_physical_damage",
           "description": "Total Physical Damage",
           "base_by_rank": [
-            10.0,
-            40.0,
-            70.0,
-            100.0,
-            130.0
+            10,
+            40,
+            70,
+            100,
+            130
           ],
           "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0.2-second cast time, 175 range, and two-hit resolution that deals modified physical damage and stuns for 0.75 seconds."
         },
@@ -247,11 +247,11 @@
           "id": "physical_damage_per_hit",
           "description": "Physical Damage Per Hit",
           "base_by_rank": [
-            5.0,
-            20.0,
-            35.0,
-            50.0,
-            65.0
+            5,
+            20,
+            35,
+            50,
+            65
           ],
           "context_notes": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0.2-second cast time and strike twice, with each hit applying on-hit effects and per-hit physical damage."
         },
@@ -263,11 +263,11 @@
           "id": "total_physical_damage_2",
           "description": "Total Physical Damage",
           "base_by_rank": [
-            15.0,
-            60.0,
-            105.0,
-            150.0,
-            195.0
+            15,
+            60,
+            105,
+            150,
+            195
           ],
           "context_notes": "Reign of Anger Bonus: Renekton instead strikes 3 times, completely destroying damage-mitigating shields on the target upon the first strike if they are not a monster, and increases stun duration to 1.5 seconds."
         },
@@ -278,14 +278,20 @@
       ],
       "description": "Active: Renekton empowers his next basic attack within 7 seconds to have a 0.2-second cast time, have 175 range and strike the target twice, dealing modified physical damage and stunning them for 0.75 seconds. Each strike applies on-hit effects and generates Fury. Hitting an enemy champion generates 10 bonus Fury.",
       "cooldown_seconds_by_rank": [
-        16.0,
-        14.0,
-        12.0,
-        10.0,
-        8.0
+        16,
+        14,
+        12,
+        10,
+        8
       ],
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -306,11 +312,11 @@
           "id": "physical_damage",
           "description": "Physical Damage",
           "base_by_rank": [
-            40.0,
-            70.0,
-            100.0,
-            130.0,
-            160.0
+            40,
+            70,
+            100,
+            130,
+            160
           ],
           "context_notes": "Active - Slice: Renekton dashes a fixed distance in the target direction, dealing physical damage to enemies he passes through."
         },
@@ -322,11 +328,11 @@
           "id": "total_physical_damage",
           "description": "Total Physical Damage",
           "base_by_rank": [
-            80.0,
-            140.0,
-            200.0,
-            260.0,
-            320.0
+            80,
+            140,
+            200,
+            260,
+            320
           ],
           "context_notes": "Recast - Dice: Renekton repeats the first cast's effects."
         },
@@ -338,11 +344,11 @@
           "id": "enhanced_physical_damage",
           "description": "Enhanced Physical Damage",
           "base_by_rank": [
-            70.0,
-            115.0,
-            160.0,
-            205.0,
-            250.0
+            70,
+            115,
+            160,
+            205,
+            250
           ],
           "context_notes": "Reign of Anger Bonus: Dice, the recast, deals bonus physical damage and inflicts armor reduction to enemies hit for 4 seconds."
         },
@@ -350,11 +356,11 @@
           "id": "total_enhanced_damage",
           "description": "Total Enhanced Damage",
           "base_by_rank": [
-            110.0,
-            185.0,
-            260.0,
-            335.0,
-            410.0
+            110,
+            185,
+            260,
+            335,
+            410
           ],
           "context_notes": "Reign of Anger Bonus: Dice, the recast, deals bonus physical damage and inflicts armor reduction to enemies hit for 4 seconds."
         },
@@ -362,26 +368,26 @@
           "id": "armor_reduction",
           "description": "Armor Reduction",
           "base_by_rank": [
-            25.0,
+            25,
             27.5,
-            30.0,
+            30,
             32.5,
-            35.0
+            35
           ],
           "context_notes": "Reign of Anger Bonus: Dice, the recast, deals bonus physical damage and inflicts armor reduction to enemies hit for 4 seconds."
         }
       ],
       "description": "Active - Slice: Renekton dashes a fixed distance in the target direction, dealing physical damage to enemies he passes through.",
       "cooldown_seconds_by_rank": [
-        16.0,
+        16,
         14.5,
-        13.0,
+        13,
         11.5,
-        10.0
+        10
       ],
       "execution": {
-        "cast_windup_seconds": 0.0,
-        "projectile_speed": 760.0
+        "cast_windup_seconds": 0,
+        "projectile_speed": 760
       },
       "context_notes": [
         "Source targeting: Direction.",
@@ -403,9 +409,9 @@
           "id": "bonus_health",
           "description": "Bonus Health",
           "base_by_rank": [
-            300.0,
-            500.0,
-            700.0
+            300,
+            500,
+            700
           ],
           "context_notes": "Active: Renekton empowers himself for 15 seconds, gaining bonus health, 20% increased size, 25 bonus attack range, and 20 Fury, as well as increasing Cull the Meek's effect radius."
         },
@@ -413,9 +419,9 @@
           "id": "magic_damage_per_tick",
           "description": "Magic Damage Per Tick",
           "base_by_rank": [
-            30.0,
-            75.0,
-            120.0
+            30,
+            75,
+            120
           ],
           "context_notes": "During this time, he deals magic damage every 0.5 seconds to nearby enemies and generates 5 Fury per second, up to a maximum of 75 Fury."
         },
@@ -423,22 +429,22 @@
           "id": "total_magic_damage",
           "description": "Total Magic Damage",
           "base_by_rank": [
-            900.0,
-            2250.0,
-            3600.0
+            900,
+            2250,
+            3600
           ],
           "context_notes": "During this time, he deals magic damage every 0.5 seconds to nearby enemies and generates 5 Fury per second, up to a maximum of 75 Fury."
         }
       ],
       "description": "Active: Renekton empowers himself for 15 seconds, gaining bonus health, 20% increased size, 25 bonus attack range, and 20 Fury, as well as increasing Cull the Meek's effect radius.",
       "cooldown_seconds_by_rank": [
-        120.0,
-        100.0,
-        80.0
+        120,
+        100,
+        80
       ],
       "execution": {
         "cast_windup_seconds": 0.25,
-        "effect_hitbox_radius": 375.0
+        "effect_hitbox_radius": 375
       },
       "context_notes": [
         "Source targeting: Auto.",

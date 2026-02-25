@@ -1,6 +1,23 @@
 # Improvement Tracker
 
 ## Done
+- Landed partial actor-symmetric harness ingress with opponent move/stop command channels:
+  - extended actor-id keyed ingress in:
+    - `src/engine/controlled_champion_controller_channels.rs`
+    - added `queue_actor_action_request(...)` with controlled-champion wrapper compatibility.
+  - added explicit invalid controlled-actor rejection contract:
+    - `RejectedControlledActorNotFound { controlled_actor_id }`
+    - `src/champion_control_harness/champion_control_contracts.rs`
+  - integrated deterministic opponent manual command movement channels:
+    - new enemy command ownership state fields in `src/engine.rs`
+    - deterministic opponent move-step application in `src/engine/simulation_step/enemy_movement_step.rs`
+  - preserved explicit unsupported status behavior for opponent action families not yet wired (`CastAbilityBySlot`, `StartBasicAttack`, `UseItemActive`).
+  - added regression coverage:
+    - `enemy_actor_move_command_steps_position_under_manual_control`
+    - `enemy_actor_cast_request_returns_explicit_unsupported_status`
+    - `unknown_controlled_actor_request_returns_explicit_not_found_status`
+    (`src/tests/engine_tests.rs`)
+  - re-ran full validation with no findings (`cargo fmt`, `cargo clippy -- -D warnings`, `cargo test --release`)
 - Landed data-owned controller vision and fixed tick-delay ingress semantics:
   - moved controller visibility ownership to global engine defaults:
     - `Simulation/data/simulator_defaults.json` (`engine_defaults.controlled_champion_controller_vision_radius`)
@@ -346,6 +363,21 @@
   - normalized decimal-spacing artifacts in rune narrative fields across flat/split structures (`88` `x. y` artifacts -> `0`)
   - validated post-edit flat/split parity and JSON integrity after normalization
   - documented deferred code follow-up for optional lint/audit enforcement on rune narrative decimal artifacts
+- Completed data-first champion execution-semantics wave 111 (`Nasus` `Siphoning Strike`, `Garen` `Decisive Strike`):
+  - encoded explicit attack-cadence semantic keys for cast-prime plus empowered-hit resolution behavior
+  - added page-level template citation provenance and tracker wave scope for both champions
+- Completed data-first champion execution-semantics wave 112 (`Jax` `Empower`, `Renekton` `Ruthless Predator`):
+  - encoded explicit attack-cadence semantic keys including consume-path timing for `Empower` (basic attack or `Leap Strike` hit)
+  - added page-level template citation provenance and tracker wave scope for both champions
+- Completed data-first champion execution-semantics wave 113 (`MonkeyKing` `Crushing Blow`, `Blitzcrank` `Power Fist`):
+  - encoded explicit attack-cadence semantic keys for empowered-hit damage/control resolution and attack-reset timing
+  - added page-level template citation provenance and tracker wave scope for both champions
+- Completed data-first champion execution-semantics wave 114 (`Leona` `Shield of Daybreak`, `Vayne` `Tumble`):
+  - encoded explicit attack-cadence semantic keys, including two-phase dash-then-empowered-hit timing for `Tumble`
+  - added page-level template citation provenance and tracker wave scope for both champions
+- Completed data-first item active-cooldown completeness wave 115 (`Ravenous Hydra`):
+  - backfilled page-verified `10s` cooldown on `ravenous_crescent_active_physical_damage`
+  - refreshed source usage/context notes and normalized review timestamp to `2026-02-24`
 - Completed data-first champion fidelity verification wave 75:
   - manually reviewed and normalized execution-semantics notes across `3` champions (`Teemo`, `Viego`, `Zyra`)
   - added page-level champion ability source provenance to all three touched champion files (`sources`) and recorded wave-level page citations in `Simulation/champion_behavior_verification_tracker.json`

@@ -278,8 +278,10 @@ Priority C. Champion inventory and planning hygiene:
 - For cast-distance-scaled area-size abilities, document min/max radius behavior and track runtime follow-up if current runtime cannot interpolate dynamic radius.
 25. Champion attack-cadence semantic-key rollout:
 - For non-trivial cast-vs-hit abilities, encode source-verified execution semantics directly in `execution` using stable keys (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`) so downstream runtime logic can consume deterministic behavior metadata.
+- Current semantic-key baseline is `10/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit abilities.
 26. Item active cooldown metadata completeness:
 - When active cooldown values are source-published, encode `cooldown_seconds` consistently across every structured branch tied to that active (damage, movement, cast-rule, and follow-up effects).
+- Track intentional no-fixed-cooldown `on_activate` effects separately (charge/consume/single-use/round-limited) so they are not conflated with missing cooldown defects.
 27. Rune narrative decimal-format hygiene:
 - Keep rune narrative fields (`wiki_descriptions`, touched `long_desc`) free of generated decimal-spacing artifacts (`x. y`), and preserve flat/split parity after normalization.
 
@@ -298,6 +300,21 @@ Priority C. Champion inventory and planning hygiene:
   - Completed rune narrative decimal-format wave 110:
     - normalized decimal-spacing artifacts in rune narrative fields across flat and split structures (`88` `x. y` artifacts -> `0`)
     - preserved flat/split synchronization while keeping existing structured numeric metadata intact
+  - Completed champion execution-semantics wave 111 (`Nasus` `Siphoning Strike`, `Garen` `Decisive Strike`):
+    - encoded explicit attack-cadence execution semantic keys for cast-prime + empowered-hit resolution behavior
+    - added page-level template provenance and tracker wave scope for both champions
+  - Completed champion execution-semantics wave 112 (`Jax` `Empower`, `Renekton` `Ruthless Predator`):
+    - encoded explicit attack-cadence execution semantic keys including multi-consume-path timing (`Empower` basic attack vs `Leap Strike` consume)
+    - added page-level template provenance and tracker wave scope for both champions
+  - Completed champion execution-semantics wave 113 (`MonkeyKing` `Crushing Blow`, `Blitzcrank` `Power Fist`):
+    - encoded explicit attack-cadence execution semantic keys for empowered-hit damage/control resolution and attack-reset cadence
+    - added page-level template provenance and tracker wave scope for both champions
+  - Completed champion execution-semantics wave 114 (`Leona` `Shield of Daybreak`, `Vayne` `Tumble`):
+    - encoded explicit attack-cadence execution semantic keys, including two-phase dash-at-cast then empowered-hit resolution on `Tumble`
+    - added page-level template provenance and tracker wave scope for both champions
+  - Completed item active-cooldown completeness wave 115 (`Ravenous Hydra`):
+    - added page-verified `10s` active cooldown metadata for `ravenous_crescent_active_physical_damage`
+    - refreshed context/provenance notes and review timestamp (`effects_structured_reviewed = 2026-02-24`)
   - Completed champion execution-semantics wave 103 (`Nasus` `Spirit Fire`):
     - manually re-verified delayed first-impact timing, periodic zone-tick cadence, and armor-reduction linger semantics
     - expanded context-note execution semantics and schema notes with page-level template provenance

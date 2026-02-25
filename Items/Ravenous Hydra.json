@@ -7,13 +7,13 @@
   ],
   "stats": {
     "attackDamage": {
-      "flat": 65.0
+      "flat": 65
     },
     "lifesteal": {
-      "percent": 12.0
+      "percent": 12
     },
     "abilityHaste": {
-      "flat": 15.0
+      "flat": 15
     }
   },
   "passives": [
@@ -78,7 +78,7 @@
       "id": "cleave_lifesteal_full_effectiveness",
       "effect_type": "lifesteal_modifier",
       "stat": "lifesteal_effectiveness",
-      "value": 1.0,
+      "value": 1,
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
@@ -90,7 +90,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "modifiers": {
-        "lifesteal_effectiveness_ratio": 1.0,
+        "lifesteal_effectiveness_ratio": 1,
         "applies_to_cleave_splash_damage": true,
         "uses_owner_current_lifesteal": true
       },
@@ -108,7 +108,7 @@
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
-      "cooldown_seconds": null,
+      "cooldown_seconds": 10,
       "interval_seconds": null,
       "trigger": "on_activate",
       "applies_to": "enemies_in_cone",
@@ -129,14 +129,14 @@
         80,
         450
       ],
-      "parse_confidence": 0.65
+      "parse_confidence": 0.67
     },
     {
       "raw": "Active damage benefits from lifesteal at 100% effectiveness.",
       "id": "ravenous_crescent_active_lifesteal_full_effectiveness",
       "effect_type": "lifesteal_modifier",
       "stat": "lifesteal_effectiveness",
-      "value": 1.0,
+      "value": 1,
       "value_range": null,
       "unit": "ratio",
       "duration_seconds": null,
@@ -148,7 +148,7 @@
       "status_effects": [],
       "scaling_terms": [],
       "modifiers": {
-        "lifesteal_effectiveness_ratio": 1.0,
+        "lifesteal_effectiveness_ratio": 1,
         "applies_to_ravenous_crescent_active_damage": true,
         "uses_owner_current_lifesteal": true
       },
@@ -177,10 +177,11 @@
   "schema_notes": {
     "effects_structured": "Parsed from passive/active text for simulation use.",
     "effects_structured_generated_at": "2026-02-09T23:46:08.066375+00:00",
-    "effects_structured_reviewed": "2026-02-23",
+    "effects_structured_reviewed": "2026-02-24",
     "context_notes": [
       "Ravenous Hydra is modeled as sustained fighter wave-clear where both passive cleave and active crescent preserve full lifesteal conversion from physical damage dealt.",
-      "Cleave damage differs for melee vs ranged (40% vs 20% AD)."
+      "Cleave damage differs for melee vs ranged (40% vs 20% AD).",
+      "Wave 115 (2026-02-24): Added page-verified 10-second active cooldown metadata for Ravenous Crescent while preserving lifesteal-at-full-effectiveness semantics on active and passive cleave branches."
     ]
   },
   "sources": [
@@ -205,8 +206,8 @@
     {
       "name": "League of Legends Wiki - Ravenous Hydra",
       "url": "https://wiki.leagueoflegends.com/en-us/Ravenous_Hydra",
-      "accessed": "2026-02-23",
-      "used_for": "page-level verification that cleave and active damage both benefit from lifesteal at full effectiveness"
+      "accessed": "2026-02-24",
+      "used_for": "page-level verification that cleave and active damage both benefit from lifesteal at full effectiveness, including Ravenous Crescent 10-second active cooldown"
     }
   ]
 }

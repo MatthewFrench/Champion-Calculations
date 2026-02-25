@@ -8,39 +8,39 @@
   ],
   "base_stats": {
     "health": {
-      "base": 690.0,
-      "per_level": 98.0
+      "base": 690,
+      "per_level": 98
     },
     "resource": {
       "type": "none",
-      "base": 0.0,
-      "per_level": 0.0,
+      "base": 0,
+      "per_level": 0,
       "context_notes": "Champion does not use mana/energy as a standard regenerating resource for ability costs."
     },
-    "move_speed": 340.0,
+    "move_speed": 340,
     "armor": {
-      "base": 38.0,
+      "base": 38,
       "per_level": 4.2
     },
     "magic_resist": {
-      "base": 32.0,
+      "base": 32,
       "per_level": 1.55
     },
-    "attack_range": 175.0,
+    "attack_range": 175,
     "health_regeneration": {
-      "base": 8.0,
+      "base": 8,
       "per_level": 0.5
     },
     "resource_regeneration": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "crit_chance": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "attack_damage": {
-      "base": 69.0,
+      "base": 69,
       "per_level": 4.5
     },
     "attack_speed": {
@@ -55,13 +55,13 @@
     "base_windup_seconds": 0.3,
     "windup_fraction": 0.18749999999999997,
     "windup_percent": 18.749999999999996,
-    "missile_speed": 0.0,
-    "missile_travel_time_seconds_per_unit": 0.0,
+    "missile_speed": 0,
+    "missile_travel_time_seconds_per_unit": 0,
     "raw_timing_stats": {
       "attack_cast_time": 0.3,
       "attack_total_time": 1.6,
       "attack_delay_offset": -0.11999999731779,
-      "gameplay_radius": 65.0
+      "gameplay_radius": 65
     },
     "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
   },
@@ -97,7 +97,7 @@
           "id": "movement_speed_duration",
           "description": "Movement Speed Duration",
           "base_by_rank": [
-            1.0,
+            1,
             1.65,
             2.3,
             2.95,
@@ -109,11 +109,11 @@
           "id": "bonus_physical_damage",
           "description": "Bonus Physical Damage",
           "base_by_rank": [
-            30.0,
-            60.0,
-            90.0,
-            120.0,
-            150.0
+            30,
+            60,
+            90,
+            120,
+            150
           ],
           "context_notes": "Additionally, Garen empowers his next basic attack within 4 seconds to have an uncancellable windup, gain bonus range, and apply bonus physical damage plus silence on hit."
         },
@@ -124,20 +124,28 @@
       ],
       "description": "Active: Garen cleanses himself of all slows and gains 35% bonus movement speed for a duration.",
       "cooldown_seconds_by_rank": [
-        8.0,
-        8.0,
-        8.0,
-        8.0,
-        8.0
+        8,
+        8,
+        8,
+        8,
+        8
       ],
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source notes (summary): Decisive Strike applies immediate self-state changes (slow cleanse + movement speed), then waits for next basic-attack resolution for damage/silence (attack-cadence-coupled, not instant damage on cast).",
-        "Source notes (summary): The empowered hit keeps normal on-hit/critical interactions while bonus damage does not critically strike; source notes also specify that the hit can still complete on windup edge-cases (for example untargetable during windup) and spell-shield blocks only silence."
+        "Source notes (summary): The empowered hit keeps normal on-hit/critical interactions while bonus damage does not critically strike; source notes also specify that the hit can still complete on windup edge-cases (for example untargetable during windup) and spell-shield blocks only silence.",
+        "Manual review (2026-02-24): Decisive Strike executes in two phases: cast immediately applies self-buff state, while damage and silence resolve only when the empowered basic attack lands.",
+        "Manual review (2026-02-24): Attack reset behavior means the empowered hit still incurs normal attack windup/cadence and is not an instant spell-hit event."
       ]
     },
     "basic_ability_2": {
@@ -159,11 +167,11 @@
           "id": "damage_reduction",
           "description": "Damage Reduction",
           "base_by_rank": [
-            25.0,
-            29.0,
-            33.0,
-            37.0,
-            41.0
+            25,
+            29,
+            33,
+            37,
+            41
           ],
           "context_notes": "Active: Garen reduces incoming damage for 4 seconds."
         },
@@ -171,25 +179,25 @@
           "id": "shield_strength",
           "description": "Shield Strength",
           "base_by_rank": [
-            65.0,
-            85.0,
-            105.0,
-            125.0,
-            145.0
+            65,
+            85,
+            105,
+            125,
+            145
           ],
           "context_notes": "Active: Garen reduces incoming damage for 4 seconds."
         }
       ],
       "description": "Passive: Whenever Garen kills an enemy, he generates a stack of Courage, stacking up to 150 times.",
       "cooldown_seconds_by_rank": [
-        22.0,
+        22,
         19.5,
-        17.0,
+        17,
         14.5,
-        12.0
+        12
       ],
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -208,11 +216,11 @@
           "id": "physical_damage_per_spin",
           "description": "Physical Damage Per Spin",
           "base_by_rank": [
-            4.0,
-            7.0,
-            10.0,
-            13.0,
-            16.0
+            4,
+            7,
+            10,
+            13,
+            16
           ],
           "context_notes": "Active: Garen rapidly spins his sword around himself 7 (+ 1 per 25% bonus attack speed) times over 3 seconds, becoming unable to declare basic attacks but gaining ghosting and dealing physical damage to nearby enemies periodically."
         },
@@ -224,11 +232,11 @@
           "id": "increased_damage_per_spin",
           "description": "Increased Damage Per Spin",
           "base_by_rank": [
-            5.0,
+            5,
             8.75,
             12.5,
             16.25,
-            20.0
+            20
           ],
           "context_notes": "Judgment deals 25% increased damage against the nearest enemy hit."
         },
@@ -243,15 +251,15 @@
       ],
       "description": "Active: Garen rapidly spins his sword around himself 7 (+ 1 per 25% bonus attack speed) times over 3 seconds, becoming unable to declare basic attacks but gaining ghosting and dealing physical damage to nearby enemies periodically. Judgment can be recast after 1 second while active, and does so automatically after it ends.",
       "cooldown_seconds_by_rank": [
-        9.0,
+        9,
         8.25,
         7.5,
         6.75,
-        6.0
+        6
       ],
       "execution": {
-        "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 325.0
+        "cast_windup_seconds": 0,
+        "effect_hitbox_radius": 325
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -271,18 +279,18 @@
           "id": "true_damage",
           "description": "True Damage",
           "base_by_rank": [
-            150.0,
-            250.0,
-            350.0
+            150,
+            250,
+            350
           ],
           "context_notes": "Active: Garen calls upon the might of Demacia onto the target enemy champion, dealing them true damage as well as revealing them for 1 second at the start of the cast time."
         }
       ],
       "description": "Active: Garen calls upon the might of Demacia onto the target enemy champion, dealing them true damage as well as revealing them for 1 second at the start of the cast time.",
       "cooldown_seconds_by_rank": [
-        120.0,
-        100.0,
-        80.0
+        120,
+        100,
+        80
       ],
       "execution": {
         "cast_windup_seconds": 0.435
@@ -300,6 +308,12 @@
       "path": "From Online/champions/Garen.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Garen/Decisive_Strike",
+      "type": "League of Legends Wiki (ability data template)",
+      "accessed": "2026-02-24",
+      "used_for": "manual behavior verification for Decisive Strike cast-to-hit timing, attack-reset cadence, and empowered-hit silence resolution semantics"
     }
   ],
   "notes": [

@@ -122,7 +122,7 @@
       "description": "Knock back an enemy; if they collide with terrain, deal bonus damage and stun for 1.5s.",
       "execution": {
         "cast_windup_seconds": 0.25,
-        "projectile_speed": 2200.0
+        "projectile_speed": 2200
       }
     },
     "basic_ability_2": {
@@ -168,7 +168,7 @@
             "op": "multiply",
             "terms": [
               {
-                "coefficient": 1.0,
+                "coefficient": 1,
                 "input_stat": "target_max_health",
                 "coefficient_type": "multiplier"
               }
@@ -222,7 +222,7 @@
       ],
       "default_keybinding": "Q",
       "description_source": "Vayne tumbles, maneuvering to carefully place her next shot. Her next attack deals bonus damage.",
-      "context_notes": "Dash speed is 500 + total movement speed. Tumble resets basic attack timer.",
+      "context_notes": "Dash speed is 500 + total movement speed. Tumble resets basic attack timer. Manual review (2026-02-24): Tumble resolves in two phases: dash movement happens at cast time, while bonus damage resolves only on the next basic attack hit.",
       "range": 300,
       "cost": {
         "resource": "mana",
@@ -250,7 +250,7 @@
             "op": "add",
             "terms": [
               {
-                "coefficient": 1.0,
+                "coefficient": 1,
                 "input_stat": "attack_damage",
                 "coefficient_type": "multiplier"
               },
@@ -275,7 +275,13 @@
       "type": "Active",
       "description": "Dash and empower your next basic attack within 3s to deal bonus physical damage based on total AD and ability power.",
       "execution": {
-        "projectile_speed": 2200.0
+        "projectile_speed": 2200,
+        "resolution_timing": "dash_on_cast_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       }
     },
     "ultimate": {
@@ -347,7 +353,7 @@
       "type": "Active",
       "description": "Empower yourself for a duration with bonus attack damage; Tumble has reduced cooldown and grants brief invisibility. Takedowns extend the duration. Night Hunter bonus movement speed is tripled during the effect.",
       "execution": {
-        "projectile_speed": 2200.0
+        "projectile_speed": 2200
       }
     }
   },

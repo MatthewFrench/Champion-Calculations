@@ -8,26 +8,26 @@
   ],
   "base_stats": {
     "health": {
-      "base": 650.0,
-      "per_level": 104.0
+      "base": 650,
+      "per_level": 104
     },
     "resource": {
       "type": "mana",
-      "base": 326.0,
-      "per_level": 62.0
+      "base": 326,
+      "per_level": 62
     },
-    "move_speed": 350.0,
+    "move_speed": 350,
     "armor": {
-      "base": 34.0,
+      "base": 34,
       "per_level": 4.7
     },
     "magic_resist": {
-      "base": 32.0,
+      "base": 32,
       "per_level": 2.05
     },
-    "attack_range": 125.0,
+    "attack_range": 125,
     "health_regeneration": {
-      "base": 9.0,
+      "base": 9,
       "per_level": 0.9
     },
     "resource_regeneration": {
@@ -35,12 +35,12 @@
       "per_level": 0.5
     },
     "crit_chance": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "attack_damage": {
-      "base": 67.0,
-      "per_level": 4.0
+      "base": 67,
+      "per_level": 4
     },
     "attack_speed": {
       "base": 0.638,
@@ -54,13 +54,13 @@
     "base_windup_seconds": 0.3,
     "windup_fraction": 0.18749999999999997,
     "windup_percent": 18.749999999999996,
-    "missile_speed": 0.0,
-    "missile_travel_time_seconds_per_unit": 0.0,
+    "missile_speed": 0,
+    "missile_travel_time_seconds_per_unit": 0,
     "raw_timing_stats": {
       "attack_cast_time": 0.3,
       "attack_total_time": 1.6,
       "attack_delay_offset": -0.0986036509275436,
-      "gameplay_radius": 80.0
+      "gameplay_radius": 80
     },
     "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
   },
@@ -92,11 +92,11 @@
           "id": "bonus_physical_damage",
           "description": "Bonus Physical Damage",
           "base_by_rank": [
-            40.0,
-            60.0,
-            80.0,
-            100.0,
-            120.0
+            40,
+            60,
+            80,
+            100,
+            120
           ],
           "context_notes": "Active: Nasus empowers his next basic attack within 10 seconds to have an uncancellable windup, gain 50 bonus range, and deal bonus physical damage."
         },
@@ -120,23 +120,30 @@
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          20.0,
-          20.0,
-          20.0,
-          20.0,
-          20.0
+          20,
+          20,
+          20,
+          20,
+          20
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source cooldown start: post-effect.",
         "Source notes (summary): Siphoning Strike is a next-basic-attack empower with attack-cadence-coupled hit timing (not instant on cast), including an uncancellable windup and auto-attack-timer reset behavior.",
-        "Source notes (summary): Both base and stack bonus damage are treated as basic damage while also being tagged to trigger spell-effect hooks; stack gain applies on valid kill targets and excludes secondary-effect cleanups (for example Tiamat splash)."
+        "Source notes (summary): Both base and stack bonus damage are treated as basic damage while also being tagged to trigger spell-effect hooks; stack gain applies on valid kill targets and excludes secondary-effect cleanups (for example Tiamat splash).",
+        "Manual review (2026-02-24): Siphoning Strike is a two-phase execution model: cast primes the buff state, and bonus damage plus stack gain resolve only when the empowered basic attack lands on a valid target."
       ]
     },
     "basic_ability_2": {
@@ -150,11 +157,11 @@
           "id": "maximum_slow",
           "description": "Maximum Slow",
           "base_by_rank": [
-            47.0,
-            59.0,
-            71.0,
-            83.0,
-            95.0
+            47,
+            59,
+            71,
+            83,
+            95
           ],
           "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
         },
@@ -162,11 +169,11 @@
           "id": "additional_slow_per_second",
           "description": "Additional Slow Per Second",
           "base_by_rank": [
-            3.0,
-            6.0,
-            9.0,
-            12.0,
-            15.0
+            3,
+            6,
+            9,
+            12,
+            15
           ],
           "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
         },
@@ -189,7 +196,7 @@
             2.25,
             4.5,
             6.75,
-            9.0,
+            9,
             11.25
           ],
           "context_notes": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, with both values ramping upward each second over the duration."
@@ -197,20 +204,20 @@
       ],
       "description": "Active: Nasus ages the target enemy champion for 5 seconds, slowing them by 35% and crippling them by 26.25%, both increasing every second over the duration.",
       "cooldown_seconds_by_rank": [
-        15.0,
-        14.0,
-        13.0,
-        12.0,
-        11.0
+        15,
+        14,
+        13,
+        12,
+        11
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          80.0,
-          80.0,
-          80.0,
-          80.0,
-          80.0
+          80,
+          80,
+          80,
+          80,
+          80
         ],
         "value_type": "flat"
       },
@@ -235,11 +242,11 @@
           "id": "magic_damage",
           "description": "Magic Damage",
           "base_by_rank": [
-            50.0,
-            80.0,
-            110.0,
-            140.0,
-            170.0
+            50,
+            80,
+            110,
+            140,
+            170
           ],
           "context_notes": "Active: Nasus unleashes a spirit fire at the target location, granting sight of the area for 2.5 seconds and, after a 0.264 seconds delay, dealing magic damage to enemies within."
         },
@@ -247,11 +254,11 @@
           "id": "magic_damage_per_tick",
           "description": "Magic Damage Per Tick",
           "base_by_rank": [
-            10.0,
-            16.0,
-            22.0,
-            28.0,
-            34.0
+            10,
+            16,
+            22,
+            28,
+            34
           ],
           "context_notes": "The fire then remains for 5 seconds, dealing magic damage each second to enemies within and inflicting them with armor reduction, lingering for 1 second."
         },
@@ -259,11 +266,11 @@
           "id": "total_magic_damage",
           "description": "Total Magic Damage",
           "base_by_rank": [
-            100.0,
-            160.0,
-            220.0,
-            280.0,
-            340.0
+            100,
+            160,
+            220,
+            280,
+            340
           ],
           "context_notes": "The fire then remains for 5 seconds, dealing magic damage each second to enemies within and inflicting them with armor reduction, lingering for 1 second."
         },
@@ -271,37 +278,37 @@
           "id": "armor_reduction",
           "description": "Armor Reduction",
           "base_by_rank": [
-            30.0,
-            35.0,
-            40.0,
-            45.0,
-            50.0
+            30,
+            35,
+            40,
+            45,
+            50
           ],
           "context_notes": "The fire then remains for 5 seconds, dealing magic damage each second to enemies within and inflicting them with armor reduction, lingering for 1 second."
         }
       ],
       "description": "Active: Nasus unleashes a spirit fire at the target location, granting sight of the area for 2.5 seconds and, after a 0.264 seconds delay, dealing magic damage to enemies within.",
       "cooldown_seconds_by_rank": [
-        12.0,
-        12.0,
-        12.0,
-        12.0,
-        12.0
+        12,
+        12,
+        12,
+        12,
+        12
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          60.0,
-          70.0,
-          80.0,
-          90.0,
-          100.0
+          60,
+          70,
+          80,
+          90,
+          100
         ],
         "value_type": "flat"
       },
       "execution": {
         "cast_windup_seconds": 0.25,
-        "effect_hitbox_radius": 200.0
+        "effect_hitbox_radius": 200
       },
       "context_notes": [
         "Source targeting: Location.",
@@ -322,9 +329,9 @@
           "id": "bonus_health",
           "description": "Bonus Health",
           "base_by_rank": [
-            300.0,
-            450.0,
-            600.0
+            300,
+            450,
+            600
           ],
           "context_notes": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration."
         },
@@ -332,9 +339,9 @@
           "id": "bonus_resistances",
           "description": "Bonus Resistances",
           "base_by_rank": [
-            40.0,
-            55.0,
-            70.0
+            40,
+            55,
+            70
           ],
           "context_notes": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration."
         },
@@ -342,9 +349,9 @@
           "id": "increased_size",
           "description": "Increased Size",
           "base_by_rank": [
-            30.0,
-            35.0,
-            40.0
+            30,
+            35,
+            40
           ],
           "context_notes": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration."
         },
@@ -353,7 +360,7 @@
           "description": "Magic Damage Per Tick",
           "base_by_rank": [
             1.5,
-            2.0,
+            2,
             2.5
           ],
           "context_notes": "While Nasus is empowered, he deals magic damage every 0.5 seconds to nearby enemies, capped at 240 per second, and Siphoning Strike's cooldown is halved."
@@ -362,31 +369,31 @@
           "id": "total_magic_damage",
           "description": "Total Magic Damage",
           "base_by_rank": [
-            45.0,
-            60.0,
-            75.0
+            45,
+            60,
+            75
           ],
           "context_notes": "While Nasus is empowered, he deals magic damage every 0.5 seconds to nearby enemies, capped at 240 per second, and Siphoning Strike's cooldown is halved."
         }
       ],
       "description": "Active: Nasus empowers himself for 15 seconds, gaining bonus health, bonus armor, bonus magic resistance, increased size, and 50 bonus attack range for the duration.",
       "cooldown_seconds_by_rank": [
-        120.0,
-        100.0,
-        80.0
+        120,
+        100,
+        80
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          100.0,
-          100.0,
-          100.0
+          100,
+          100,
+          100
         ],
         "value_type": "flat"
       },
       "execution": {
         "cast_windup_seconds": 0.2,
-        "effect_hitbox_radius": 400.0
+        "effect_hitbox_radius": 400
       },
       "context_notes": [
         "Source targeting: Auto.",

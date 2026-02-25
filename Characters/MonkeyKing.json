@@ -8,43 +8,43 @@
   ],
   "base_stats": {
     "health": {
-      "base": 610.0,
-      "per_level": 99.0
+      "base": 610,
+      "per_level": 99
     },
     "resource": {
       "type": "mana",
-      "base": 330.0,
-      "per_level": 65.0
+      "base": 330,
+      "per_level": 65
     },
-    "move_speed": 340.0,
+    "move_speed": 340,
     "armor": {
-      "base": 31.0,
+      "base": 31,
       "per_level": 4.7
     },
     "magic_resist": {
-      "base": 28.0,
+      "base": 28,
       "per_level": 2.05
     },
-    "attack_range": 175.0,
+    "attack_range": 175,
     "health_regeneration": {
       "base": 3.5,
       "per_level": 0.65
     },
     "resource_regeneration": {
-      "base": 8.0,
+      "base": 8,
       "per_level": 0.8
     },
     "crit_chance": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "attack_damage": {
-      "base": 66.0,
+      "base": 66,
       "per_level": 3.5
     },
     "attack_speed": {
       "base": 0.69,
-      "per_level_percent": 3.0
+      "per_level_percent": 3
     }
   },
   "basic_attack": {
@@ -54,13 +54,13 @@
     "base_windup_seconds": 0.3,
     "windup_fraction": 0.18749999999999997,
     "windup_percent": 18.749999999999996,
-    "missile_speed": 0.0,
-    "missile_travel_time_seconds_per_unit": 0.0,
+    "missile_speed": 0,
+    "missile_travel_time_seconds_per_unit": 0,
     "raw_timing_stats": {
       "attack_cast_time": 0.3,
       "attack_total_time": 1.6,
       "attack_delay_offset": -0.0916666686534881,
-      "gameplay_radius": 65.0
+      "gameplay_radius": 65
     },
     "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
   },
@@ -96,11 +96,11 @@
           "id": "bonus_range",
           "description": "Bonus Range",
           "base_by_rank": [
-            135.0,
-            145.0,
-            155.0,
-            165.0,
-            175.0
+            135,
+            145,
+            155,
+            165,
+            175
           ],
           "context_notes": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds."
         },
@@ -108,11 +108,11 @@
           "id": "bonus_physical_damage",
           "description": "Bonus Physical Damage",
           "base_by_rank": [
-            20.0,
-            45.0,
-            70.0,
-            95.0,
-            120.0
+            20,
+            45,
+            70,
+            95,
+            120
           ],
           "context_notes": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds."
         },
@@ -120,11 +120,11 @@
           "id": "armor_reduction",
           "description": "Armor Reduction",
           "base_by_rank": [
-            10.0,
-            15.0,
-            20.0,
-            25.0,
-            30.0
+            10,
+            15,
+            20,
+            25,
+            30
           ],
           "context_notes": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds."
         },
@@ -139,25 +139,31 @@
       ],
       "description": "Active: Wukong empowers his next basic attack within 5 seconds to have an uncancellable windup, gain bonus range, deal bonus physical damage, and inflict armor reduction for 3 seconds.",
       "cooldown_seconds_by_rank": [
-        8.0,
+        8,
         7.5,
-        7.0,
+        7,
         6.5,
-        6.0
+        6
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          20.0,
-          20.0,
-          20.0,
-          20.0,
-          20.0
+          20,
+          20,
+          20,
+          20,
+          20
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -186,11 +192,11 @@
           "id": "clone_outgoing_damage",
           "description": "Clone Outgoing Damage",
           "base_by_rank": [
-            30.0,
-            35.0,
-            40.0,
-            45.0,
-            50.0
+            30,
+            35,
+            40,
+            45,
+            50
           ],
           "context_notes": "The clone deals reduced damage."
         },
@@ -201,26 +207,26 @@
       ],
       "description": "Active: Wukong enters invisibility for 1 second and dashes in the target direction, leaving behind a clone of himself at his casting position for 3.25 seconds.",
       "cooldown_seconds_by_rank": [
-        22.0,
-        21.0,
-        20.0,
-        19.0,
-        18.0
+        22,
+        21,
+        20,
+        19,
+        18
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          60.0,
-          55.0,
-          50.0,
-          45.0,
-          40.0
+          60,
+          55,
+          50,
+          45,
+          40
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0,
-        "projectile_speed": 900.0
+        "cast_windup_seconds": 0,
+        "projectile_speed": 900
       },
       "context_notes": [
         "Source targeting: Location.",
@@ -241,11 +247,11 @@
           "id": "magic_damage",
           "description": "Magic Damage",
           "base_by_rank": [
-            80.0,
-            120.0,
-            160.0,
-            200.0,
-            240.0
+            80,
+            120,
+            160,
+            200,
+            240
           ],
           "context_notes": "Active: Wukong dashes to the target enemy's location and sends out untargetable clones to strike up to two additional enemies near the target's location, dealing magic damage."
         },
@@ -253,11 +259,11 @@
           "id": "bonus_attack_speed",
           "description": "Bonus Attack Speed",
           "base_by_rank": [
-            35.0,
-            40.0,
-            45.0,
-            50.0,
-            55.0
+            35,
+            40,
+            45,
+            50,
+            55
           ],
           "context_notes": "Upon arrival, Wukong gains bonus attack speed for 5 seconds."
         },
@@ -268,25 +274,25 @@
       ],
       "description": "Active: Wukong dashes to the target enemy's location and sends out untargetable clones to strike up to two additional enemies near the target's location, dealing magic damage.",
       "cooldown_seconds_by_rank": [
-        10.0,
+        10,
         9.25,
         8.5,
         7.75,
-        7.0
+        7
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          30.0,
-          35.0,
-          40.0,
-          45.0,
-          50.0
+          30,
+          35,
+          40,
+          45,
+          50
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0,
+        "cast_windup_seconds": 0,
         "effect_hitbox_radius": 187.5
       },
       "context_notes": [
@@ -307,9 +313,9 @@
           "id": "physical_damage_per_tick",
           "description": "Physical Damage Per Tick",
           "base_by_rank": [
-            1.0,
+            1,
             1.5,
-            2.0
+            2
           ],
           "context_notes": "Active: Wukong spins his staff around for up to 2 seconds, becoming ghosted and gaining 20% bonus movement speed."
         },
@@ -317,9 +323,9 @@
           "id": "total_physical_damage",
           "description": "Total Physical Damage",
           "base_by_rank": [
-            8.0,
-            12.0,
-            16.0
+            8,
+            12,
+            16
           ],
           "context_notes": "Active: Wukong spins his staff around for up to 2 seconds, becoming ghosted and gaining 20% bonus movement speed."
         },
@@ -331,9 +337,9 @@
           "id": "maximum_total_physical_damage",
           "description": "Maximum Total Physical Damage",
           "base_by_rank": [
-            16.0,
-            24.0,
-            32.0
+            16,
+            24,
+            32
           ],
           "context_notes": "Recast: Wukong ends Cyclone."
         },
@@ -348,21 +354,21 @@
       ],
       "description": "Active: Wukong spins his staff around for up to 2 seconds, becoming ghosted and gaining 20% bonus movement speed. The staff deals physical damage every 0.25 seconds to enemies hit, and can knock them up once for 0.6 seconds. Cyclone will not knock up enemies who were already hit by either Wukong or his clone within the same cast.",
       "cooldown_seconds_by_rank": [
-        130.0,
-        110.0,
-        90.0
+        130,
+        110,
+        90
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          100.0,
-          100.0,
-          100.0
+          100,
+          100,
+          100
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0,
+        "cast_windup_seconds": 0,
         "effect_hitbox_radius": 162.5
       },
       "context_notes": [

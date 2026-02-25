@@ -2343,5 +2343,105 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_111": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Nasus",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Siphoning Strike cast-prime versus empowered-hit resolution timing, attack-reset cadence, and stack-accrual-on-hit semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Nasus/Siphoning_Strike"
+        ]
+      },
+      {
+        "key": "Garen",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Decisive Strike two-phase execution model (cast-time self-buff plus empowered-hit silence resolution) with attack-cadence-coupled timing",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Garen/Decisive_Strike"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_112": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Jax",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Empower cast-prime behavior and empowered-hit resolution across both basic-attack and Leap Strike consume paths",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Empower"
+        ]
+      },
+      {
+        "key": "Renekton",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Ruthless Predator empowered-attack hit resolution, attack-reset cadence, and fury-branch strike sequencing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Renekton/Ruthless_Predator"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_113": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "MonkeyKing",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Crushing Blow cast-gated empowered-hit timing, attack-reset cadence, and on-hit armor-reduction resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Wukong/Crushing_Blow"
+        ]
+      },
+      {
+        "key": "Blitzcrank",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Power Fist empowered-hit-only damage/control resolution and uncancellable attack-windup reset cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Blitzcrank/Power_Fist"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_114": {
+    "reviewed_at": "2026-02-24",
+    "champions": [
+      {
+        "key": "Leona",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Shield of Daybreak cast-prime and empowered-hit stun resolution timing with basic-attack cadence coupling",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Leona/Shield_of_Daybreak"
+        ]
+      },
+      {
+        "key": "Vayne",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Tumble two-phase execution (dash at cast, bonus damage on next basic attack hit) with attack-reset timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Vayne/Tumble"
+        ]
+      }
+    ]
   }
 }

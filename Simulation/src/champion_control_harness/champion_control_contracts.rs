@@ -166,6 +166,9 @@ pub(crate) enum ChampionActionStatus {
         target_actor_id: String,
         reason: String,
     },
+    RejectedControlledActorNotFound {
+        controlled_actor_id: String,
+    },
     RejectedUnsupportedAction {
         reason: String,
     },

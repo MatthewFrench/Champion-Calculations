@@ -6,7 +6,9 @@ use crate::champion_control_harness::{
     ChampionControlPerspectiveBuildInput, ChampionControllerIdentity, ChampionPerspectiveView,
     build_champion_perspective_view, validate_champion_action_request,
 };
-use crate::scripts::runtime::ability_slots::AbilitySlotKey;
+use crate::scripts::runtime::ability_slots::{
+    AbilitySlotKey, ActorAbilityLoadout, default_champion_ability_loadout,
+};
 use crate::world::WorldActorPosition;
 
 use super::*;
@@ -17,9 +19,10 @@ pub(in crate::engine) const EMERGENCY_SHIELD_ITEM_ACTIVE_ID: &str = "emergency_s
 const ACTION_STATUS_REPORT_BUFFER_LIMIT: usize = 512;
 
 #[derive(Debug, Clone)]
-pub(in crate::engine) struct QueuedControlledChampionActionRequest {
+pub(in crate::engine) struct QueuedActorActionRequest {
     pub sequence_id: u64,
     pub execute_at_tick: u64,
+    pub controlled_actor_id: String,
     pub controller_identity: ChampionControllerIdentity,
     pub request: ChampionActionRequest,
 }
@@ -43,29 +46,60 @@ impl ControlledChampionCombatSimulation {
         // Manual-control mode remains enabled so script cadence cannot silently resume.
     }
 
+    #[allow(dead_code)]
     pub(crate) fn queue_controlled_champion_action_request(
         &mut self,
         controller_identity: ChampionControllerIdentity,
         request: ChampionActionRequest,
     ) -> ChampionActionStatusReport {
-        self.controlled_champion_manual_control_mode = true;
-        let perspective_view =
-            self.build_controlled_champion_perspective_view(controller_identity.clone());
+        let controlled_actor_id = self.controlled_champion_world_actor_id.clone();
+        self.queue_actor_action_request(controller_identity, &controlled_actor_id, request)
+    }
+
+    pub(crate) fn queue_actor_action_request(
+        &mut self,
+        controller_identity: ChampionControllerIdentity,
+        controlled_actor_id: &str,
+        request: ChampionActionRequest,
+    ) -> ChampionActionStatusReport {
+        let Some(perspective_view) =
+            self.build_actor_perspective_view(controller_identity.clone(), controlled_actor_id)
+        else {
+            let status_report = ChampionActionStatusReport {
+                request,
+                status: ChampionActionStatus::RejectedControlledActorNotFound {
+                    controlled_actor_id: controlled_actor_id.to_string(),
+                },
+                server_time_seconds: self.time,
+            };
+            self.record_controlled_champion_action_status_report(status_report.clone());
+            return status_report;
+        };
+
+        if controlled_actor_id == self.controlled_champion_world_actor_id {
+            self.controlled_champion_manual_control_mode = true;
+        }
+
         let status_report = validate_champion_action_request(&perspective_view, request);
-        let status_report = self.apply_runtime_action_support_constraints(status_report);
+        let status_report =
+            self.apply_runtime_actor_action_support_constraints(controlled_actor_id, status_report);
         self.record_controlled_champion_action_status_report(status_report.clone());
 
         if matches!(status_report.status, ChampionActionStatus::AcceptedQueued) {
+            if controlled_actor_id != self.controlled_champion_world_actor_id {
+                self.manually_controlled_enemy_actor_ids
+                    .insert(controlled_actor_id.to_string());
+            }
             let sequence_id = self.next_controlled_champion_action_request_sequence();
             let execute_at_tick = self.next_controlled_champion_action_request_execute_tick();
-            self.controlled_champion_pending_action_requests.push_back(
-                QueuedControlledChampionActionRequest {
+            self.controlled_champion_pending_action_requests
+                .push_back(QueuedActorActionRequest {
                     sequence_id,
                     execute_at_tick,
+                    controlled_actor_id: controlled_actor_id.to_string(),
                     controller_identity,
                     request: status_report.request.clone(),
-                },
-            );
+                });
         }
         status_report
     }
@@ -85,14 +119,23 @@ impl ControlledChampionCombatSimulation {
 
     pub(in crate::engine) fn enqueue_controller_policy_action_request_for_tick(&mut self) {
         let controller_identity = self.controlled_champion_controller_identity.clone();
-        let view = self.build_controlled_champion_perspective_view(controller_identity.clone());
+        let Some(view) = self.build_actor_perspective_view(
+            controller_identity.clone(),
+            &self.controlled_champion_world_actor_id,
+        ) else {
+            return;
+        };
         let next_action = self
             .controlled_champion_controller_policy
             .as_mut()
             .and_then(|policy| policy.choose_action(&view));
         if let Some(action_request) = next_action {
-            let _ =
-                self.queue_controlled_champion_action_request(controller_identity, action_request);
+            let controlled_actor_id = self.controlled_champion_world_actor_id.clone();
+            let _ = self.queue_actor_action_request(
+                controller_identity,
+                &controlled_actor_id,
+                action_request,
+            );
         }
     }
 
@@ -110,7 +153,12 @@ impl ControlledChampionCombatSimulation {
             else {
                 return;
             };
-            self.execute_controlled_champion_action_request(queued_action_request);
+            if queued_action_request.controlled_actor_id == self.controlled_champion_world_actor_id
+            {
+                self.execute_controlled_champion_action_request(queued_action_request);
+            } else {
+                self.execute_enemy_actor_action_request(queued_action_request);
+            }
         }
     }
 
@@ -147,23 +195,68 @@ impl ControlledChampionCombatSimulation {
         self.controlled_champion_pending_move_target_position
     }
 
-    fn apply_runtime_action_support_constraints(
+    pub(in crate::engine) fn enemy_actor_manual_control_mode_enabled(
         &self,
+        actor_id: &str,
+    ) -> bool {
+        self.manually_controlled_enemy_actor_ids.contains(actor_id)
+    }
+
+    pub(in crate::engine) fn enemy_pending_move_target_position(
+        &self,
+        actor_id: &str,
+    ) -> Option<Vec2> {
+        self.enemy_pending_move_target_position_by_actor_id
+            .get(actor_id)
+            .copied()
+    }
+
+    pub(in crate::engine) fn apply_enemy_move_to_position_command(
+        &mut self,
+        actor_id: &str,
+        target_position: WorldActorPosition,
+    ) {
+        let (clamped_x, clamped_y) = self
+            .world_state
+            .map
+            .bounds
+            .clamp(target_position.x, target_position.y);
+        self.enemy_pending_move_target_position_by_actor_id.insert(
+            actor_id.to_string(),
+            Vec2 {
+                x: clamped_x,
+                y: clamped_y,
+            },
+        );
+    }
+
+    pub(in crate::engine) fn clear_enemy_move_command(&mut self, actor_id: &str) {
+        self.enemy_pending_move_target_position_by_actor_id
+            .remove(actor_id);
+    }
+
+    fn apply_runtime_actor_action_support_constraints(
+        &self,
+        controlled_actor_id: &str,
         mut status_report: ChampionActionStatusReport,
     ) -> ChampionActionStatusReport {
         if !matches!(status_report.status, ChampionActionStatus::AcceptedQueued) {
             return status_report;
         }
 
-        if !self.controlled_champion_supports_action_request(&status_report.request) {
+        if !self.actor_supports_action_request(controlled_actor_id, &status_report.request) {
             status_report.status = ChampionActionStatus::RejectedUnsupportedAction {
-                reason: "action is not currently supported by controlled champion runtime channels"
-                    .to_string(),
+                reason: format!(
+                    "action is not currently supported by runtime channels for actor `{}`",
+                    controlled_actor_id
+                ),
             };
             return status_report;
         }
 
-        if let ChampionActionRequest::StartBasicAttack { target_actor_id } = &status_report.request
+        if controlled_actor_id == self.controlled_champion_world_actor_id
+            && let ChampionActionRequest::StartBasicAttack { target_actor_id } =
+                &status_report.request
             && self
                 .resolve_enemy_index_by_actor_id(target_actor_id)
                 .is_none()
@@ -175,6 +268,17 @@ impl ControlledChampionCombatSimulation {
         }
 
         status_report
+    }
+
+    fn actor_supports_action_request(
+        &self,
+        controlled_actor_id: &str,
+        request: &ChampionActionRequest,
+    ) -> bool {
+        if controlled_actor_id == self.controlled_champion_world_actor_id {
+            return self.controlled_champion_supports_action_request(request);
+        }
+        self.enemy_actor_supports_action_request(controlled_actor_id, request)
     }
 
     fn controlled_champion_supports_action_request(&self, request: &ChampionActionRequest) -> bool {
@@ -194,6 +298,23 @@ impl ControlledChampionCombatSimulation {
         }
     }
 
+    fn enemy_actor_supports_action_request(
+        &self,
+        controlled_actor_id: &str,
+        request: &ChampionActionRequest,
+    ) -> bool {
+        if self
+            .resolve_enemy_index_by_actor_id(controlled_actor_id)
+            .is_none()
+        {
+            return false;
+        }
+        matches!(
+            request,
+            ChampionActionRequest::MoveToPosition { .. } | ChampionActionRequest::StopCurrentAction
+        )
+    }
+
     fn controlled_champion_supports_ability_id(&self, ability_id: &str) -> bool {
         ability_id == self.cast_profile.offensive_primary_ability_id
             || ability_id == self.cast_profile.offensive_secondary_ability_id
@@ -203,7 +324,7 @@ impl ControlledChampionCombatSimulation {
 
     fn execute_controlled_champion_action_request(
         &mut self,
-        queued_action_request: QueuedControlledChampionActionRequest,
+        queued_action_request: QueuedActorActionRequest,
     ) {
         match queued_action_request.request {
             ChampionActionRequest::MoveToPosition { target_position } => {
@@ -242,6 +363,37 @@ impl ControlledChampionCombatSimulation {
                 self.controlled_champion_attack_sequence =
                     self.controlled_champion_attack_sequence.wrapping_add(1);
             }
+        }
+    }
+
+    fn execute_enemy_actor_action_request(
+        &mut self,
+        queued_action_request: QueuedActorActionRequest,
+    ) {
+        match queued_action_request.request {
+            ChampionActionRequest::MoveToPosition { target_position } => {
+                self.apply_enemy_move_to_position_command(
+                    &queued_action_request.controlled_actor_id,
+                    target_position,
+                );
+                self.trace_event(
+                    "enemy_actor_command",
+                    format!(
+                        "{} queued move command to ({:.1}, {:.1}) by {} #{}",
+                        queued_action_request.controlled_actor_id,
+                        target_position.x,
+                        target_position.y,
+                        queued_action_request.controller_identity.controller_id,
+                        queued_action_request.sequence_id
+                    ),
+                );
+            }
+            ChampionActionRequest::StopCurrentAction => {
+                self.clear_enemy_move_command(&queued_action_request.controlled_actor_id);
+            }
+            ChampionActionRequest::CastAbilityBySlot { .. }
+            | ChampionActionRequest::StartBasicAttack { .. }
+            | ChampionActionRequest::UseItemActive { .. } => {}
         }
     }
 
@@ -356,20 +508,59 @@ impl ControlledChampionCombatSimulation {
         self.enemy_projectile_delay_from_points(self.target_position, target, projectile_speed)
     }
 
-    fn build_controlled_champion_perspective_view(
+    fn build_actor_perspective_view(
         &self,
         controller_identity: ChampionControllerIdentity,
-    ) -> ChampionPerspectiveView {
-        let action_runtime_state = self.controlled_champion_action_runtime_state();
-        build_champion_perspective_view(ChampionControlPerspectiveBuildInput {
-            now_seconds: self.time,
-            controller_identity,
-            controlled_actor_id: &self.controlled_champion_world_actor_id,
-            controlled_actor_snapshot: self.controlled_champion_control_snapshot(),
-            controlled_actor_ability_loadout: &self.controlled_champion_ability_loadout,
-            controlled_actor_runtime_state: &action_runtime_state,
-            world_state: &self.world_state,
-        })
+        controlled_actor_id: &str,
+    ) -> Option<ChampionPerspectiveView> {
+        let controlled_actor_snapshot = self.actor_control_snapshot(controlled_actor_id)?;
+        let action_runtime_state = self.actor_action_runtime_state(controlled_actor_id)?;
+        if controlled_actor_id == self.controlled_champion_world_actor_id {
+            return Some(build_champion_perspective_view(
+                ChampionControlPerspectiveBuildInput {
+                    now_seconds: self.time,
+                    controller_identity,
+                    controlled_actor_id,
+                    controlled_actor_snapshot,
+                    controlled_actor_ability_loadout: &self.controlled_champion_ability_loadout,
+                    controlled_actor_runtime_state: &action_runtime_state,
+                    world_state: &self.world_state,
+                },
+            ));
+        }
+
+        let enemy_ability_loadout = self.enemy_actor_ability_loadout(controlled_actor_id)?;
+        Some(build_champion_perspective_view(
+            ChampionControlPerspectiveBuildInput {
+                now_seconds: self.time,
+                controller_identity,
+                controlled_actor_id,
+                controlled_actor_snapshot,
+                controlled_actor_ability_loadout: &enemy_ability_loadout,
+                controlled_actor_runtime_state: &action_runtime_state,
+                world_state: &self.world_state,
+            },
+        ))
+    }
+
+    fn actor_control_snapshot(
+        &self,
+        controlled_actor_id: &str,
+    ) -> Option<ChampionActorControlSnapshot> {
+        if controlled_actor_id == self.controlled_champion_world_actor_id {
+            return Some(self.controlled_champion_control_snapshot());
+        }
+        self.enemy_actor_control_snapshot(controlled_actor_id)
+    }
+
+    fn actor_action_runtime_state(
+        &self,
+        controlled_actor_id: &str,
+    ) -> Option<ChampionActionRuntimeState> {
+        if controlled_actor_id == self.controlled_champion_world_actor_id {
+            return Some(self.controlled_champion_action_runtime_state());
+        }
+        self.enemy_actor_action_runtime_state(controlled_actor_id)
     }
 
     fn controlled_champion_control_snapshot(&self) -> ChampionActorControlSnapshot {
@@ -389,6 +580,30 @@ impl ControlledChampionCombatSimulation {
             },
             vision_radius: self.controlled_champion_controller_vision_radius,
         }
+    }
+
+    fn enemy_actor_control_snapshot(
+        &self,
+        controlled_actor_id: &str,
+    ) -> Option<ChampionActorControlSnapshot> {
+        let enemy_index = self.resolve_enemy_index_by_actor_id(controlled_actor_id)?;
+        let enemy_state = self.enemy_state.get(enemy_index)?;
+        let world_position = self
+            .world_state
+            .actor_position(controlled_actor_id)
+            .unwrap_or(WorldActorPosition {
+                x: enemy_state.position.x,
+                y: enemy_state.position.y,
+            });
+        Some(ChampionActorControlSnapshot {
+            position: world_position,
+            health_ratio: if enemy_state.max_health > 0.0 {
+                (enemy_state.health / enemy_state.max_health).clamp(0.0, 1.0)
+            } else {
+                0.0
+            },
+            vision_radius: self.controlled_champion_controller_vision_radius,
+        })
     }
 
     fn controlled_champion_action_runtime_state(&self) -> ChampionActionRuntimeState {
@@ -457,6 +672,39 @@ impl ControlledChampionCombatSimulation {
             movement_locked_until_seconds: lock_until_seconds,
             cast_locked_until_seconds: lock_until_seconds,
         }
+    }
+
+    fn enemy_actor_action_runtime_state(
+        &self,
+        controlled_actor_id: &str,
+    ) -> Option<ChampionActionRuntimeState> {
+        let enemy_index = self.resolve_enemy_index_by_actor_id(controlled_actor_id)?;
+        let enemy_state = self.enemy_state.get(enemy_index)?;
+        let mut action_runtime_state = ChampionActionRuntimeState {
+            basic_attack_ready_at_seconds: self.time,
+            basic_attack_range: enemy_state.behavior.attack_range.max(0.0),
+            ..ChampionActionRuntimeState::default()
+        };
+
+        let lock_until_seconds = enemy_state
+            .respawn_at
+            .unwrap_or(self.time)
+            .max(enemy_state.stunned_until)
+            .max(enemy_state.stasis_until);
+        action_runtime_state.movement_locked_until_seconds = lock_until_seconds;
+        action_runtime_state.cast_locked_until_seconds = lock_until_seconds;
+        Some(action_runtime_state)
+    }
+
+    fn enemy_actor_ability_loadout(
+        &self,
+        controlled_actor_id: &str,
+    ) -> Option<ActorAbilityLoadout> {
+        let enemy_index = self.resolve_enemy_index_by_actor_id(controlled_actor_id)?;
+        let enemy_state = self.enemy_state.get(enemy_index)?;
+        Some(default_champion_ability_loadout(
+            &enemy_state.enemy.base.name,
+        ))
     }
 
     fn resolve_enemy_index_by_actor_id(&self, actor_id: &str) -> Option<usize> {

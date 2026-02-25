@@ -8,39 +8,39 @@
   ],
   "base_stats": {
     "health": {
-      "base": 646.0,
-      "per_level": 101.0
+      "base": 646,
+      "per_level": 101
     },
     "resource": {
       "type": "mana",
-      "base": 302.0,
-      "per_level": 40.0
+      "base": 302,
+      "per_level": 40
     },
-    "move_speed": 335.0,
+    "move_speed": 335,
     "armor": {
-      "base": 43.0,
+      "base": 43,
       "per_level": 4.8
     },
     "magic_resist": {
-      "base": 32.0,
+      "base": 32,
       "per_level": 2.05
     },
-    "attack_range": 125.0,
+    "attack_range": 125,
     "health_regeneration": {
       "base": 8.5,
       "per_level": 0.85
     },
     "resource_regeneration": {
-      "base": 6.0,
+      "base": 6,
       "per_level": 0.8
     },
     "crit_chance": {
-      "base": 0.0,
-      "per_level": 0.0
+      "base": 0,
+      "per_level": 0
     },
     "attack_damage": {
-      "base": 60.0,
-      "per_level": 3.0
+      "base": 60,
+      "per_level": 3
     },
     "attack_speed": {
       "base": 0.625,
@@ -54,13 +54,13 @@
     "base_windup_seconds": 0.3,
     "windup_fraction": 0.18749999999999997,
     "windup_percent": 18.749999999999996,
-    "missile_speed": 0.0,
-    "missile_travel_time_seconds_per_unit": 0.0,
+    "missile_speed": 0,
+    "missile_travel_time_seconds_per_unit": 0,
     "raw_timing_stats": {
       "attack_cast_time": 0.3,
       "attack_total_time": 1.6,
       "attack_delay_offset": -0.0708333328366279,
-      "gameplay_radius": 65.0
+      "gameplay_radius": 65
     },
     "calculation_notes": "Basic-attack timing values are sourced from From Online stats payload."
   },
@@ -92,11 +92,11 @@
           "id": "bonus_magic_damage",
           "description": "Bonus Magic Damage",
           "base_by_rank": [
-            10.0,
-            35.0,
-            60.0,
-            85.0,
-            110.0
+            10,
+            35,
+            60,
+            85,
+            110
           ],
           "context_notes": "Active: Leona illuminates her shield, empowering her next basic attack within 6 seconds to have an uncancellable windup, gain 50 bonus range, deal bonus magic damage and stun the target for 1 second."
         },
@@ -107,30 +107,38 @@
       ],
       "description": "Active: Leona illuminates her shield, empowering her next basic attack within 6 seconds to have an uncancellable windup, gain 50 bonus range, deal bonus magic damage and stun the target for 1 second.",
       "cooldown_seconds_by_rank": [
-        5.0,
-        5.0,
-        5.0,
-        5.0,
-        5.0
+        5,
+        5,
+        5,
+        5,
+        5
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          30.0,
-          35.0,
-          40.0,
-          45.0,
-          50.0
+          30,
+          35,
+          40,
+          45,
+          50
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The enhanced attack will apply other on-hit effects and can critically strike as normal."
+        "Source notes (summary): The enhanced attack will apply other on-hit effects and can critically strike as normal.",
+        "Manual review (2026-02-24): Shield of Daybreak is cast-gated and attack-cadence-coupled; cast primes the empowered attack and stun/damage resolve on hit, not on input press.",
+        "Manual review (2026-02-24): The empowered strike keeps normal basic-attack windup and can still interact with regular on-hit/critical rules before stun resolution is applied."
       ]
     },
     "basic_ability_2": {
@@ -144,11 +152,11 @@
           "id": "flat_damage_reduction",
           "description": "Flat Damage Reduction",
           "base_by_rank": [
-            8.0,
-            12.0,
-            16.0,
-            20.0,
-            24.0
+            8,
+            12,
+            16,
+            20,
+            24
           ],
           "context_notes": "Active: Leona raises her guard for 3 seconds, gaining flat damage reduction of up to 50% of the damage instance and bonus armor and bonus magic resistance."
         },
@@ -156,11 +164,11 @@
           "id": "bonus_armor",
           "description": "Bonus Armor",
           "base_by_rank": [
-            20.0,
+            20,
             27.5,
-            35.0,
+            35,
             42.5,
-            50.0
+            50
           ],
           "context_notes": "Active: Leona raises her guard for 3 seconds, gaining flat damage reduction of up to 50% of the damage instance and bonus armor and bonus magic resistance."
         },
@@ -168,11 +176,11 @@
           "id": "bonus_magic_resistance",
           "description": "Bonus Magic Resistance",
           "base_by_rank": [
-            20.0,
+            20,
             27.5,
-            35.0,
+            35,
             42.5,
-            50.0
+            50
           ],
           "context_notes": "Active: Leona raises her guard for 3 seconds, gaining flat damage reduction of up to 50% of the damage instance and bonus armor and bonus magic resistance."
         },
@@ -180,37 +188,37 @@
           "id": "magic_damage",
           "description": "Magic Damage",
           "base_by_rank": [
-            55.0,
-            85.0,
-            115.0,
-            145.0,
-            175.0
+            55,
+            85,
+            115,
+            145,
+            175
           ],
           "context_notes": "Her shield detonates after the duration, dealing magic damage to nearby enemies."
         }
       ],
       "description": "Active: Leona raises her guard for 3 seconds, gaining flat damage reduction of up to 50% of the damage instance and bonus armor and bonus magic resistance.",
       "cooldown_seconds_by_rank": [
-        14.0,
-        13.0,
-        12.0,
-        11.0,
-        10.0
+        14,
+        13,
+        12,
+        11,
+        10
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          60.0,
-          60.0,
-          60.0,
-          60.0,
-          60.0
+          60,
+          60,
+          60,
+          60,
+          60
         ],
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 450.0
+        "cast_windup_seconds": 0,
+        "effect_hitbox_radius": 450
       },
       "context_notes": [
         "Source targeting: Auto.",
@@ -230,11 +238,11 @@
           "id": "magic_damage",
           "description": "Magic Damage",
           "base_by_rank": [
-            50.0,
-            90.0,
-            130.0,
-            170.0,
-            210.0
+            50,
+            90,
+            130,
+            170,
+            210
           ],
           "context_notes": "Active: Leona projects her sword in the target direction that deals magic damage to enemies hit."
         },
@@ -249,26 +257,26 @@
       ],
       "description": "Active: Leona projects her sword in the target direction that deals magic damage to enemies hit.",
       "cooldown_seconds_by_rank": [
-        12.0,
+        12,
         10.5,
-        9.0,
+        9,
         7.5,
-        6.0
+        6
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          40.0,
-          45.0,
-          50.0,
-          55.0,
-          60.0
+          40,
+          45,
+          50,
+          55,
+          60
         ],
         "value_type": "flat"
       },
       "execution": {
         "cast_windup_seconds": 0.25,
-        "projectile_speed": 2000.0
+        "projectile_speed": 2000
       },
       "context_notes": [
         "Source targeting: Direction.",
@@ -288,9 +296,9 @@
           "id": "magic_damage",
           "description": "Magic Damage",
           "base_by_rank": [
-            150.0,
-            225.0,
-            300.0
+            150,
+            225,
+            300
           ],
           "context_notes": "Active: Leona calls down a solar flare that strikes upon the target location after 0.625 seconds, granting sight of the area before impact and for another 3 seconds afterwards. Enemies hit are dealt magic damage."
         },
@@ -301,22 +309,22 @@
       ],
       "description": "Active: Leona calls down a solar flare that strikes upon the target location after 0.625 seconds, granting sight of the area before impact and for another 3 seconds afterwards. Enemies hit are dealt magic damage.",
       "cooldown_seconds_by_rank": [
-        90.0,
-        75.0,
-        60.0
+        90,
+        75,
+        60
       ],
       "cost": {
         "resource": "mana",
         "value_by_rank": [
-          100.0,
-          100.0,
-          100.0
+          100,
+          100,
+          100
         ],
         "value_type": "flat"
       },
       "execution": {
         "cast_windup_seconds": 0.25,
-        "effect_hitbox_radius": 175.0
+        "effect_hitbox_radius": 175
       },
       "context_notes": [
         "Source targeting: Location.",
@@ -338,6 +346,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Leona",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Leona/Shield_of_Daybreak",
+      "type": "League of Legends Wiki (ability data template)",
+      "accessed": "2026-02-24",
+      "used_for": "manual behavior verification for Shield of Daybreak cast-to-hit timing, attack-reset cadence, and empowered-hit stun resolution semantics"
     }
   ],
   "notes": [

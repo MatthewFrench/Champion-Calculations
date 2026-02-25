@@ -361,6 +361,139 @@ fn clearing_controller_policy_keeps_manual_control_mode_enabled() {
 }
 
 #[test]
+fn enemy_actor_move_command_steps_position_under_manual_control() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Enemy Manual Move");
+    enemy.id = "enemy_manual_move_actor".to_string();
+    enemy.spawn_position_xy = Some((900.0, 0.0));
+    enemy.movement_mode = OpponentMovementMode::HoldPosition;
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_manual_move_actor",
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: -600.0, y: 0.0 },
+        },
+    );
+    assert!(matches!(
+        action_status.status,
+        crate::champion_control_harness::ChampionActionStatus::AcceptedQueued
+    ));
+
+    let initial_position = runner
+        .world_actor_position("enemy_manual_move_actor")
+        .expect("enemy actor should be present");
+    runner.step(1);
+    let position_after_first_tick = runner
+        .world_actor_position("enemy_manual_move_actor")
+        .expect("enemy actor should still be present");
+    assert!(
+        position_after_first_tick.x < initial_position.x,
+        "enemy actor should move toward queued command target on first eligible execution tick"
+    );
+
+    runner.step(1);
+    let position_after_second_tick = runner
+        .world_actor_position("enemy_manual_move_actor")
+        .expect("enemy actor should still be present");
+    assert!(
+        position_after_second_tick.x < position_after_first_tick.x,
+        "enemy actor should continue stepping toward queued command target under manual control"
+    );
+}
+
+#[test]
+fn enemy_actor_cast_request_returns_explicit_unsupported_status() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut enemy = test_enemy("Vladimir");
+    enemy.id = "enemy_unsupported_cast_actor".to_string();
+    let enemies = vec![(enemy, Vec::new(), Stats::default())];
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &enemies,
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "enemy_unsupported_cast_actor",
+        crate::champion_control_harness::ChampionActionRequest::CastAbilityBySlot {
+            ability_slot: crate::scripts::runtime::ability_slots::AbilitySlotKey::Q,
+            target_actor_id: None,
+            target_position: None,
+        },
+    );
+    assert!(
+        matches!(
+            action_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedUnsupportedAction { .. }
+        ),
+        "enemy cast action should return explicit unsupported status until enemy cast channels are integrated"
+    );
+}
+
+#[test]
+fn unknown_controlled_actor_request_returns_explicit_not_found_status() {
+    let controlled_champion = test_controlled_champion_base();
+    let simulation = test_simulation(2.0, false);
+    let urf = test_urf();
+    let mut runner = ControlledChampionCombatSimulation::new(
+        controlled_champion,
+        &[],
+        &Stats::default(),
+        None,
+        None,
+        &[],
+        simulation,
+        urf,
+    );
+
+    let action_status = runner.queue_actor_action_request(
+        crate::champion_control_harness::ChampionControllerIdentity {
+            controller_id: "human_player_test".to_string(),
+            controller_kind: crate::champion_control_harness::ChampionControllerKind::HumanPlayer,
+        },
+        "unknown_actor_for_control",
+        crate::champion_control_harness::ChampionActionRequest::MoveToPosition {
+            target_position: crate::world::WorldActorPosition { x: 100.0, y: 100.0 },
+        },
+    );
+    assert!(
+        matches!(
+            action_status.status,
+            crate::champion_control_harness::ChampionActionStatus::RejectedControlledActorNotFound { .. }
+        ),
+        "unknown controlled actor requests should be rejected explicitly"
+    );
+}
+
+#[test]
 fn projectile_path_intersection_detects_blocks() {
     let source = Vec2 { x: 0.0, y: 0.0 };
     let target = Vec2 { x: 1000.0, y: 0.0 };

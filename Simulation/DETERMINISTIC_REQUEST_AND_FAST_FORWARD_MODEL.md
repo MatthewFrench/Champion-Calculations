@@ -66,6 +66,8 @@ Use this runtime contract for both human-player and artificial-intelligence cont
 Implemented:
 - deterministic controlled-champion request ingress owner channel:
   - `src/engine/controlled_champion_controller_channels.rs`
+- actor-id keyed ingress scaffold (controlled champion + opponent move/stop channels):
+  - `queue_actor_action_request(...)` in `src/engine/controlled_champion_controller_channels.rs`
 - harness legality/status contract integration:
   - `src/champion_control_harness/*`
 - sequence-ordered accepted-request execution at tick boundaries:
@@ -79,7 +81,7 @@ Implemented:
   - `src/engine/simulation_step/controlled_champion_movement_step.rs`
 
 Remaining:
-- actor-symmetric ingress for all controllable actors (not only controlled champion)
+- full actor-symmetric ingress for all controllable actors (opponent move/stop channels are wired; opponent cast/basic-attack/item command channels remain)
 - fog/vision-aware legality
 - full buffering overwrite/drop model parity beyond fixed-delay ingress
 - replay contract + checksum validation
