@@ -31,6 +31,7 @@ This file is a concise handoff for developers and AI agents.
 - Report and trace outputs are optimized-build only (baseline comparison path removed).
 - Trace JSON output is schema-versioned and structured for downstream tooling.
 - Controlled-champion and fixed-loadout trace/report artifacts now include deterministic replay signatures (final-state checksum, tick-state checksum, queue checksum, tick/event counters) for reproducibility audits.
+- Controlled-champion, fixed-loadout, and rune-sweep artifact trace generation now performs strict paired replay verification and hard-fails on signature mismatches.
 - Report and trace outputs now include rune proc telemetry totals plus source-attribution breakdown (`source_breakdown`), proc attempt/eligible metrics and rates, and damage/healing share metrics.
 - Search-time scoring simulations now run with full rune-proc telemetry collection disabled; dedicated trace/report replay simulations explicitly enable it.
 - Optional `simulation.combat_seed` now enables deterministic combat-variation simulation runs (enemy initialization ordering + initial auto-attack jitter).
@@ -129,24 +130,24 @@ This file is a concise handoff for developers and AI agents.
 
 ## Full-Game Transformation Status (Non-Data)
 - Architecture transformation status (module ownership, explicit naming, owner-channel isolation): `100%` (`DONE`).
-- Weighted completion estimate: `61%` (`IN_PROGRESS`).
+- Weighted completion estimate: `64%` (`IN_PROGRESS`).
 - Bucket snapshot (complete / remaining):
   - Runtime Systems Completeness (`30%` weight): `61% / 39%`
-  - Determinism And Replay Guarantees (`20%` weight): `80% / 20%`
-  - Calibration And Correctness (`20%` weight): `67% / 33%`
-  - Performance Envelope (`15%` weight): `47% / 53%`
+  - Determinism And Replay Guarantees (`20%` weight): `88% / 12%`
+  - Calibration And Correctness (`20%` weight): `69% / 31%`
+  - Performance Envelope (`15%` weight): `52% / 48%`
   - Renderer-Contract Readiness (`15%` weight): `40% / 60%`
 - Canonical status and gap detail:
   - `FULL_GAME_SIMULATION_BLUEPRINT.md` (`Current Status Snapshot` section)
 
 ## Recent Observed Runtime Characteristic
-- Coverage stage is currently the dominant fixed cost in short runs.
-- Example: a 1-second maximum-quality budget can still take tens of seconds wall-clock due to pre-budget coverage.
+- Coverage stage remains a dominant fixed cost in short runs, but locked rune/shard sampling now uses direct legal construction (no high-attempt rejection loop).
+- Short-budget runs can still overshoot wall-clock time because pre-budget coverage breadth is enforced before timed search starts.
 
 ## Current Known Tradeoff
-- Coverage breadth floor is strong, but short-iteration latency is higher than ideal.
+- Coverage breadth floor is strong, and lock-generation overhead is reduced, but short-iteration latency is still higher than ideal because coverage breadth remains mandatory pre-budget work.
 - Required defaults ownership is now strict and preflighted.
-- Deterministic replay signatures are now emitted in trace/report outputs, but deterministic replay enforcement is still audit-only (not yet hard-fail gated in CI/run commands).
+- Deterministic replay signatures are now hard-fail verified in controlled-champion, fixed-loadout, and rune-sweep trace flows; CI-wide replay-gate coverage is still pending.
 - Remaining realism lift is now concentrated in command/path ownership and macro event coupling (objective/structure/economy/vision), not defaults or crash-surface channels.
 - Controller ingress now includes deterministic fixed delay, data-owned vision radius, actor-symmetric opponent move/stop/basic-attack control, mapped script-cast channels, and mapped `stasis_item`/`emergency_shield_item` item-active channels, but broader opponent item-actives, non-script cast channels, and richer buffering/drop semantics are still pending.
 
@@ -156,13 +157,13 @@ This file is a concise handoff for developers and AI agents.
 3. Replace mixed movement model with terrain-aware command/path channels (pathfinding, collision, and route replanning ownership).
 4. Expand event taxonomy for macro systems (spawn/objective/economy/vision events) before adding feature logic.
 5. Expand controlled-champion script coverage beyond `Vladimir` and `Sona`, while reducing static registry coupling.
-6. Reduce coverage-stage latency by constructing legal locked rune pages directly (instead of random rejection sampling).
-7. Persist and reuse coverage-stage seed corpus across runs.
-8. Add explicit coverage tuning controls (enable/disable, trials-per-asset, top-per-asset).
-9. Add guardrail tests for:
+6. Persist and reuse coverage-stage seed corpus across runs.
+7. Add explicit coverage tuning controls (enable/disable, trials-per-asset, top-per-asset).
+8. Add guardrail tests for:
    - asset coverage guarantee
    - post-coverage time-budget start behavior.
-10. Promote replay signatures from diagnostics to hard-fail determinism gates (paired replay runs + checksum equality assertions) in CI and selected runtime entrypoints.
+9. Add CI performance budgets and profiling gates for coverage-stage and strict-ranking hot paths.
+10. Promote hard-fail replay verification from current artifact flows into CI-wide replay gates and remaining runtime entrypoints (for example broader scenario/stepper channels and future full-match replay channels).
 
 ## Where To Look First
 - Main orchestration:

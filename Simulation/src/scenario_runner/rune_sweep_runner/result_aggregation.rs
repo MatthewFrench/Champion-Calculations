@@ -8,6 +8,7 @@ pub(super) struct RuneSweepEntry {
     pub(super) outcome: CombatOutcome,
     pub(super) objective_breakdown: ObjectiveScoreBreakdown,
     pub(super) rune_proc_telemetry: Vec<crate::scripts::champions::ChampionRuneProcTelemetryEntry>,
+    pub(super) trace_determinism: SimulationDeterminismSignature,
     pub(super) seed_repeat_scores: Vec<f64>,
     pub(super) seed_repeat_values: Vec<u64>,
 }

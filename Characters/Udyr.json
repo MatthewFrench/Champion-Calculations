@@ -443,12 +443,20 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 0,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Udyr cannot dash while grounded or rooted, but he will still declare the empowered attack."
+        "Source notes (summary): Udyr cannot dash while grounded or rooted, but he will still declare the empowered attack.",
+        "Manual review (2026-02-25): Blazing Stampede is a cast-time self-buff state; empowered pounce/stun behavior resolves on attack contact during the stance duration.",
+        "Manual review (2026-02-25): `max_empowered_attacks` uses temporary `0` sentinel fallback for duration-limited variable-hit behavior; per-target stun-lockout semantics remain ability-note-governed until explicit schema support is added."
       ]
     },
     "ultimate": {
@@ -590,6 +598,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Iron_Mantle",
       "accessed": "2026-02-25",
       "used_for": "manual behavior verification for Iron Mantle cast-state shielding and empowered-hit healing cadence semantics"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Blazing_Stampede",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Blazing Stampede cast-state movement/stun semantics and duration-bounded empowered-hit cadence"
     }
   ],
   "notes": [

@@ -117,7 +117,7 @@
             55.0,
             62.5
           ],
-          "context_notes": "Tier 2 - 125 stacks: The fireball sends forth 2 (+ 0."
+          "context_notes": "Tier 2 - 125 stacks: The fireball sends forth 2 (+ 0.8 per 100 Dragon Practice stacks) bolts of fire in an arc upon collision that explode at maximum range, dealing 50% of the same damage to enemies hit."
         },
         {
           "id": "smolder_q_effect_5",
@@ -146,14 +146,19 @@
       "execution": {
         "cast_windup_seconds": 100.0,
         "projectile_speed": 1800.0,
-        "effect_hitbox_radius": 150.0
+        "effect_hitbox_radius": 150.0,
+        "resolution_timing": "on_projectile_hit",
+        "target_required": true,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 100% of Smolder's windup time (0.261 at base attack speed).",
         "Source speed: 1800 / 900.",
         "Source effectRadius: 285 / 150.",
-        "Source notes (summary): Any applied Dragon Practice damage is affected by the same damage modifiers as Super Scorcher Breath and does not benefit from the ability's life steal."
+        "Source notes (summary): Any applied Dragon Practice damage is affected by the same damage modifiers as Super Scorcher Breath and does not benefit from the ability's life steal.",
+        "Manual review (2026-02-25): Super Scorcher Breath is a windup-gated targeted projectile whose combat payload resolves on projectile-hit contact, not on cast completion."
       ]
     },
     "basic_ability_2": {
@@ -381,6 +386,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Smolder",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Smolder/Super_Scorcher_Breath",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Super Scorcher Breath projectile-hit timing, attack-windup cast scaling, and tiered-bolt behavior semantics"
     }
   ],
   "notes": [

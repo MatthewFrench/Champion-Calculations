@@ -280,7 +280,8 @@ Priority C. Champion inventory and planning hygiene:
 25. Champion attack-cadence semantic-key rollout:
 - For non-trivial cast-vs-hit abilities, encode source-verified execution semantics directly in `execution` using stable keys (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`) so downstream runtime logic can consume deterministic behavior metadata.
 - Use only canonical enum-like values for `execution.resolution_timing` from `Simulation/data/execution_semantics_vocabulary.json`; if a new timing class is needed, update the vocabulary file in the same change.
-- Current semantic-key baseline is `42/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit abilities.
+- For projectile-first-hit and dash-contact abilities, prefer semantically explicit timing values (`on_projectile_hit`, `on_dash_contact_or_completion`) instead of cast-complete fallback when source semantics are verified.
+- Current semantic-key baseline is `66/682` active abilities with explicit `resolution_timing`; keep expanding this queue on high-impact empowered-hit, projectile, and dash-contact abilities.
 - For duration-limited variable-hit empowered states where no fixed attack-count cap is source-published, temporary `max_empowered_attacks = 0` sentinel usage is acceptable only when documented in ability `context_notes` and tracked in `Simulation/COVERAGE_GAPS.md` for explicit-schema follow-up.
 26. Item active cooldown metadata completeness:
 - When active cooldown values are source-published, encode `cooldown_seconds` consistently across every structured branch tied to that active (damage, movement, cast-rule, and follow-up effects).
@@ -348,6 +349,15 @@ Priority C. Champion inventory and planning hygiene:
     - expanded canonical `resolution_timing` and companion attack-cadence semantic-key coverage to `42/682` active abilities
     - added page-level ability-template provenance and tracker wave scope (`manual_behavior_verification_wave_130` through `manual_behavior_verification_wave_133`)
     - documented temporary duration-limited variable-hit sentinel usage (`max_empowered_attacks = 0`) on `Sivir` `Ricochet` with deferred explicit-schema/runtime follow-up
+  - Completed champion execution-semantics waves 134-141 (`Ashe` `Ranger's Focus`, `KogMaw` `Bio-Arcane Barrage`, `Udyr` `Blazing Stampede`, `MasterYi` `Wuju Style`, `Twitch` `Spray and Pray`, `Xayah` `Deadly Plumage`, `Rammus` `Defensive Ball Curl`, `Olaf` `Tough It Out`, `DrMundo` `Blunt Force Trauma`, `Zaahen` `The Darkin Glaive`, `Jayce` `Transform Mercury Cannon`, `Talon` `Noxian Diplomacy`, `Irelia` `Bladesurge`, `Fizz` `Urchin Strike`, `Ezreal` `Mystic Shot`, `Smolder` `Super Scorcher Breath`):
+    - expanded canonical `resolution_timing` and companion execution semantic-key coverage to `58/682` active abilities
+    - expanded canonical execution vocabulary with `on_projectile_hit` and `on_dash_contact_or_completion` and applied both values in champion data
+    - added page-level ability-template provenance and tracker wave scope (`manual_behavior_verification_wave_134` through `manual_behavior_verification_wave_141`)
+    - expanded temporary duration-limited variable-hit sentinel coverage (`max_empowered_attacks = 0`) to current touched set: `Sivir`, `Ashe`, `KogMaw`, `Udyr` (`Blazing Stampede`), `MasterYi`, `Twitch`, and `Xayah`; deferred explicit-schema/runtime follow-up remains open
+  - Completed champion execution-semantics waves 142-145 (`DrMundo` `Infected Bonesaw`, `Teemo` `Blinding Dart`, `Jinx` `Zap!`, `Ezreal` `Trueshot Barrage`, `Jax` `Leap Strike`, `Qiyana` `Audacity`, `Vi` `Vault Breaker`, `Yasuo` `Sweeping Blade`):
+    - expanded canonical `resolution_timing` and companion execution semantic-key coverage to `66/682` active abilities
+    - added page-level ability-template provenance and tracker wave scope (`manual_behavior_verification_wave_142` through `manual_behavior_verification_wave_145`)
+    - documented remaining target-invalid pre-resolution edge uncertainty for `Teemo` `Blinding Dart`, `Jax` `Leap Strike`, `Qiyana` `Audacity`, and `Yasuo` `Sweeping Blade` as deferred runtime-policy follow-up
   - Completed item active execution-field completeness wave 129:
     - backfilled explicit fixed-cooldown active execution fields (`cast_windup_seconds`, `cast_range`, and/or `effect_hitbox_radius`) to full fixed-cooldown branch coverage (`22/22` `on_activate` effects)
     - preserved no-fixed-cooldown cadence-schema coverage at `11/11` effects across `10` files with canonical `activation_cadence` models

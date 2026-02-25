@@ -210,12 +210,20 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 8.0,
+        "max_empowered_attacks": 0,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The attacks do not deal the bonus damage against structures."
+        "Source notes (summary): The attacks do not deal the bonus damage against structures.",
+        "Manual review (2026-02-25): Bio-Arcane Barrage is a cast-time self-buff; bonus range and on-hit magic damage resolve on each empowered basic-attack hit during the 8-second window.",
+        "Manual review (2026-02-25): `max_empowered_attacks` uses temporary `0` sentinel fallback for duration-limited variable-hit behavior; follow-up should replace with explicit unbounded-within-window schema semantics."
       ]
     },
     "basic_ability_3": {
@@ -355,6 +363,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Kog%27Maw",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Kog%27Maw/Bio-Arcane_Barrage",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Bio-Arcane Barrage cast-state timing, duration-bounded empowered-hit cadence, and player-visible on-hit resolution semantics"
     }
   ],
   "notes": [

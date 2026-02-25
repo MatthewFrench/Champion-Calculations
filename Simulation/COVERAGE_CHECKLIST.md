@@ -25,8 +25,10 @@ Read first:
 - [ ] Champion active abilities keep non-empty `execution` objects (no active-ability execution metadata regressions).
 - [ ] For non-trivial cast-vs-hit abilities, `execution` includes explicit semantic timing keys when source-verified (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`, `max_empowered_attacks`).
 - [ ] `resolution_timing` values are semantically explicit for two-phase abilities (for example cast-time self-buff plus empowered-hit resolution), not flattened to ambiguous timing labels.
+- [ ] For non-trivial projectile and dash-contact abilities, `resolution_timing` uses semantically explicit values (`on_projectile_hit`, `on_dash_contact_or_completion`) instead of generic cast-complete fallback.
 - [ ] `resolution_timing` values are taken from `Simulation/data/execution_semantics_vocabulary.json` (or the vocabulary file is updated in the same change).
 - [ ] If `max_empowered_attacks = 0` is used as a temporary duration-limited variable-hit sentinel, ability `context_notes` explain the fallback and same-change follow-up is logged in `Simulation/COVERAGE_GAPS.md`.
+- [ ] If `target_required` or pre-resolution cancellation semantics are uncertain after source review, the chosen fallback is documented in ability `context_notes` and tracked in both `Simulation/CONFIDENCE_REVIEW.md` and `Simulation/COVERAGE_GAPS.md`.
 - [ ] Non-trivial ability data was manually reviewed for in-game execution semantics (activation requirements, target/range gating, timing/windup, and player-visible resolution behavior).
 - [ ] Full-corpus champion quality audit remains clean after edits (no regressions for active `execution` completeness or non-passive `context_notes` completeness).
 - [ ] For attack-cadence-coupled casts (empowered-hit/reset/timed-hit patterns), both cast gating and hit-resolution timing semantics are explicitly documented in ability notes.

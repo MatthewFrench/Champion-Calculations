@@ -233,11 +233,19 @@ fn fixed_loadout_report_json_contract_schema_and_telemetry_shape() {
 
 #[test]
 fn fixed_loadout_rune_sweep_json_contract_schema_and_telemetry_shape() {
-    assert_eq!(FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION, 2);
+    assert_eq!(FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION, 3);
     let entry = sample_rune_proc_telemetry_entry();
     let telemetry_json = rune_proc_telemetry_json(&[entry], 600.0, 200.0);
     assert_eq!(telemetry_json.len(), 1);
     assert_rune_telemetry_json_shape(&telemetry_json[0]);
+    let sample_determinism = json!({
+        "final_state_checksum_hex": "00",
+        "tick_state_checksum_hex": "00",
+        "queue_checksum_hex": "00",
+        "ticks_executed": 1,
+        "events_processed": 2
+    });
+    assert_determinism_json_shape(&sample_determinism);
 }
 
 #[test]
@@ -256,6 +264,46 @@ fn trace_json_contract_schema_and_telemetry_shape() {
         "events_processed": 2
     });
     assert_determinism_json_shape(&sample_determinism);
+}
+
+#[test]
+fn deterministic_replay_signature_verification_accepts_exact_match() {
+    let signature = SimulationDeterminismSignature {
+        final_state_checksum: 0x0102,
+        tick_state_checksum: 0x0304,
+        queue_checksum: 0x0506,
+        ticks_executed: 7,
+        events_processed: 11,
+    };
+    verify_deterministic_replay_signature_match(signature, signature, "scenario_runner_test")
+        .expect("matching signatures should pass deterministic replay verification");
+}
+
+#[test]
+fn deterministic_replay_signature_verification_rejects_mismatch() {
+    let reference_signature = SimulationDeterminismSignature {
+        final_state_checksum: 0x0102,
+        tick_state_checksum: 0x0304,
+        queue_checksum: 0x0506,
+        ticks_executed: 7,
+        events_processed: 11,
+    };
+    let replay_signature = SimulationDeterminismSignature {
+        final_state_checksum: 0x0102,
+        tick_state_checksum: 0x9999,
+        queue_checksum: 0x0506,
+        ticks_executed: 7,
+        events_processed: 11,
+    };
+    let err = verify_deterministic_replay_signature_match(
+        reference_signature,
+        replay_signature,
+        "scenario_runner_test",
+    )
+    .expect_err("mismatched signatures should fail deterministic replay verification");
+    let err_text = err.to_string();
+    assert!(err_text.contains("deterministic replay signature mismatch"));
+    assert!(err_text.contains("scenario_runner_test"));
 }
 
 #[test]
@@ -715,6 +763,143 @@ fn max_legal_build_size_enforces_single_boot_slot() {
         4,
         "pool with two boots and three non-boots can only fill four legal slots"
     );
+}
+
+fn coverage_lock_test_loadout_domain() -> LoadoutDomain {
+    LoadoutDomain {
+        rune_paths: vec![
+            RunePathDomain {
+                slot_runes: vec![
+                    vec!["Precision Keystone".to_string()],
+                    vec!["Triumph".to_string()],
+                    vec!["Legend Haste".to_string()],
+                    vec!["Coup de Grace".to_string()],
+                ],
+            },
+            RunePathDomain {
+                slot_runes: vec![
+                    vec!["Sorcery Keystone".to_string()],
+                    vec!["Nimbus Cloak".to_string()],
+                    vec!["Transcendence".to_string()],
+                    vec!["Scorch".to_string()],
+                ],
+            },
+            RunePathDomain {
+                slot_runes: vec![
+                    Vec::new(),
+                    vec!["Secondary Only Rune".to_string()],
+                    vec!["Second Wind".to_string()],
+                    vec!["Overgrowth".to_string()],
+                ],
+            },
+        ],
+        shard_slots: [
+            vec!["adaptive".to_string(), "attack_speed".to_string()],
+            vec!["health".to_string(), "armor".to_string()],
+            vec!["health".to_string(), "magic_resist".to_string()],
+        ],
+    }
+}
+
+#[test]
+fn random_locked_candidate_supports_secondary_only_locked_rune_generation() {
+    let domain = coverage_lock_test_loadout_domain();
+    let item_pool = vec![test_item("Item 1", false), test_item("Item 2", false)];
+    let base_loadout = LoadoutSelection::default();
+    let params = FullLoadoutSearchParams {
+        item_pool: &item_pool,
+        max_items: 1,
+        loadout_domain: &domain,
+        base_loadout: &base_loadout,
+    };
+    let asset = coverage_locked_assets(&item_pool, &domain)
+        .into_iter()
+        .find(|locked_asset| locked_asset.display_label(&item_pool) == "rune:Secondary Only Rune")
+        .expect("coverage assets should include the secondary-only rune");
+
+    for run_idx in 0..64 {
+        let mut seed = 0xACE0_u64 + run_idx as u64;
+        let candidate = random_locked_candidate(&params, &asset, &mut seed)
+            .expect("secondary-only locked rune should produce legal candidates");
+        assert!(
+            crate::data::is_legal_rune_page_selection(&candidate.loadout_selection, &domain),
+            "locked rune candidate should remain a legal page"
+        );
+        assert!(
+            candidate
+                .loadout_selection
+                .rune_names
+                .iter()
+                .any(|rune_name| to_norm_key(rune_name) == to_norm_key("Secondary Only Rune")),
+            "locked rune should be present in candidate loadout"
+        );
+    }
+}
+
+#[test]
+fn mutate_locked_candidate_preserves_secondary_only_locked_rune() {
+    let domain = coverage_lock_test_loadout_domain();
+    let item_pool = vec![test_item("Item 1", false), test_item("Item 2", false)];
+    let base_loadout = LoadoutSelection::default();
+    let params = FullLoadoutSearchParams {
+        item_pool: &item_pool,
+        max_items: 1,
+        loadout_domain: &domain,
+        base_loadout: &base_loadout,
+    };
+    let asset = coverage_locked_assets(&item_pool, &domain)
+        .into_iter()
+        .find(|locked_asset| locked_asset.display_label(&item_pool) == "rune:Secondary Only Rune")
+        .expect("coverage assets should include the secondary-only rune");
+
+    let mut seed = 0xBEEF_u64;
+    let mut candidate = random_locked_candidate(&params, &asset, &mut seed)
+        .expect("initial locked rune candidate should generate");
+    for _ in 0..32 {
+        candidate = mutate_locked_candidate(&params, &candidate, &asset, &mut seed)
+            .expect("mutated locked rune candidate should generate");
+        assert!(
+            candidate
+                .loadout_selection
+                .rune_names
+                .iter()
+                .any(|rune_name| to_norm_key(rune_name) == to_norm_key("Secondary Only Rune")),
+            "mutated locked rune candidate should preserve locked rune"
+        );
+    }
+}
+
+#[test]
+fn random_locked_candidate_enforces_locked_shard_slot_stat() {
+    let domain = coverage_lock_test_loadout_domain();
+    let item_pool = vec![test_item("Item 1", false), test_item("Item 2", false)];
+    let base_loadout = LoadoutSelection::default();
+    let params = FullLoadoutSearchParams {
+        item_pool: &item_pool,
+        max_items: 1,
+        loadout_domain: &domain,
+        base_loadout: &base_loadout,
+    };
+    let asset = coverage_locked_assets(&item_pool, &domain)
+        .into_iter()
+        .find(|locked_asset| locked_asset.display_label(&item_pool) == "shard_slot_2:armor")
+        .expect("coverage assets should include armor in shard slot 2");
+
+    for run_idx in 0..64 {
+        let mut seed = 0xC0DE_u64 + run_idx as u64;
+        let candidate = random_locked_candidate(&params, &asset, &mut seed)
+            .expect("locked shard should produce legal candidates");
+        assert_eq!(
+            candidate.loadout_selection.shard_stats.len(),
+            3,
+            "loadout should include all shard slots"
+        );
+        assert_eq!(
+            to_norm_key(&candidate.loadout_selection.shard_stats[1]),
+            "armor",
+            "locked shard slot should keep requested shard stat"
+        );
+    }
 }
 
 #[test]

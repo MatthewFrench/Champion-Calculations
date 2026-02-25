@@ -118,6 +118,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - Added a fixed-loadout keystone comparison mode (`controlled_champion_fixed_loadout_rune_sweep`) for direct one-build rune sweeps.
 - Reports and traces now include rune proc telemetry with trigger-source attribution and calibration metrics (opportunity counts, proc-opportunity rates, and damage/healing share).
 - Controlled-champion and fixed-loadout trace/report outputs now also include deterministic replay signatures (final-state checksum, tick-state checksum, queue checksum, tick/event counters).
+- Controlled-champion, fixed-loadout, and rune-sweep artifact trace flows now hard-fail on replay-signature mismatches via paired deterministic replay verification.
 - Optional `simulation.combat_seed` enables deterministic combat-variation runs (enemy init order + initial attack jitter); fixed-loadout rune sweep repeats now use distinct combat seeds per repeat.
 - Scenarios are strict/minimal and reference canonical data from:
   - `Characters/`
@@ -136,6 +137,7 @@ This repository contains a data-driven combat simulator focused on URF team-figh
 - In `maximum_quality`, a pre-budget coverage stage runs before timed optimization:
   - every legal item/rune/shard asset is explicitly touched at least once
   - top diverse seeds from that stage are injected into main search
+  - locked rune/shard candidate pages are now constructed directly (no high-attempt rejection sampling loop)
   - runtime budget starts after coverage stage completes
   - popcorn progress-window timeout is applied after coverage (coverage itself is protected from popcorn early-stop checks)
   - if coverage is incomplete (timeout boundary or non-finite candidate gaps), search continues in explicit degraded mode and reports a coverage warning flag

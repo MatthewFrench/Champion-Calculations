@@ -39,9 +39,10 @@
   - Uncertainty 1 (deferred code follow-up): `Renekton` `Slice and Dice` uses formula-based dash velocity (`760 + 100% movement speed`), but runtime execution metadata currently consumes only base dash speed.
   - Uncertainty 2 (deferred code follow-up): `Sylas` slot-E behavior (`Abscond` -> `Abduct`) is a multi-stage same-slot flow; runtime still lacks first-class stage identity and recast-window event modeling.
   - Additional deferred code follow-up: `Vex` `Looming Darkness` uses cast-distance-scaled explosion radius (`200 : 300`), but runtime currently treats execution hitbox radius as a static value.
-  - Additional deferred code follow-up: champion data now carries execution-semantic keys for attack-cadence-coupled behavior (for example `resolution_timing`, `target_required`, `resets_basic_attack_timer_on_cast`, `empowered_attack_window_seconds`), but runtime loaders/scripts do not consume these keys yet.
-  - Semantic-key authoring baseline has expanded to `42/682` active abilities after waves `121-133`, including latest execution-semantic coverage for `Sett` (`Knuckle Down`), `Volibear` (`Thundering Smash`), `TwistedFate` (`Pick a Card`), `Shaco` (`Deceive`), `Zac` (`Stretching Strikes`), `Udyr` (`Wilding Claw`, `Iron Mantle`), and `Sivir` (`Ricochet`); runtime consumption remains deferred code follow-up.
-  - Deferred code follow-up: `Sivir` `Ricochet` currently uses temporary `max_empowered_attacks = 0` sentinel to represent duration-limited variable-hit behavior; loader/runtime support should treat this as unbounded-within-window (or migrate to explicit schema) rather than literal zero attacks.
+  - Additional deferred code follow-up: champion data now carries expanded execution-semantic keys and timing vocabulary (`on_projectile_hit`, `on_dash_contact_or_completion`) for cast-vs-hit behavior, but runtime loaders/scripts do not consume these keys yet.
+  - Semantic-key authoring baseline has expanded to `66/682` active abilities after waves `121-145`, including latest execution-semantic coverage for `DrMundo` (`Infected Bonesaw`), `Teemo` (`Blinding Dart`), `Jinx` (`Zap!`), `Ezreal` (`Trueshot Barrage`), `Jax` (`Leap Strike`), `Qiyana` (`Audacity`), `Vi` (`Vault Breaker`), and `Yasuo` (`Sweeping Blade`); runtime consumption remains deferred code follow-up.
+  - Deferred code follow-up: temporary duration-limited variable-hit sentinel (`max_empowered_attacks = 0`) now exists on `Sivir` (`Ricochet`), `Ashe` (`Ranger's Focus`), `KogMaw` (`Bio-Arcane Barrage`), `Udyr` (`Blazing Stampede`), `MasterYi` (`Wuju Style`), `Twitch` (`Spray and Pray`), and `Xayah` (`Deadly Plumage`); loader/runtime support should treat this as unbounded-within-window (or migrate to explicit schema) rather than literal zero attacks.
+  - Additional uncertainty (tracked for follow-up): `Irelia` `Bladesurge`, `Fizz` `Urchin Strike`, `Smolder` `Super Scorcher Breath`, `Teemo` `Blinding Dart`, `Jax` `Leap Strike`, `Qiyana` `Audacity`, and `Yasuo` `Sweeping Blade` now use explicit post-cast resolution timing keys, but target-invalid cancellation behavior around dash/projectile pre-resolution windows still needs deeper runtime/edge-case verification.
   - Data-quality no-regression update: truncation audits now include effect-level `effects[*].context_notes`; wave 120 repaired previously discovered fragments on `XinZhao` `Wind Becomes Lightning` and `Fiora` `Riposte`, leaving current effect-level queue at `0/0`.
 - Item data uncertainty follow-up:
   - No open item-structure uncertainty remains in the latest wave for `Dragonheart` or `Twilight's Edge`; keep periodic source-drift checks because page/module text can diverge on distributed Arena items.
@@ -157,6 +158,37 @@
   - Source: [Template:Data_Udyr/Wilding_Claw](https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Wilding_Claw)
   - Source: [Template:Data_Udyr/Iron_Mantle](https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Iron_Mantle)
   - Source: [Template:Data_Sivir/Ricochet](https://wiki.leagueoflegends.com/en-us/Template:Data_Sivir/Ricochet)
+- Champion execution-semantics waves (134-141):
+  - Re-verified and encoded explicit execution-semantic keys for `Ashe` (`Ranger's Focus`), `KogMaw` (`Bio-Arcane Barrage`), `Udyr` (`Blazing Stampede`), `MasterYi` (`Wuju Style`), `Twitch` (`Spray and Pray`), `Xayah` (`Deadly Plumage`), `Rammus` (`Defensive Ball Curl`), `Olaf` (`Tough It Out`), `DrMundo` (`Blunt Force Trauma`), `Zaahen` (`The Darkin Glaive`), `Jayce` (`Transform Mercury Cannon`), `Talon` (`Noxian Diplomacy`), `Irelia` (`Bladesurge`), `Fizz` (`Urchin Strike`), `Ezreal` (`Mystic Shot`), and `Smolder` (`Super Scorcher Breath`).
+  - Expanded canonical `resolution_timing` coverage from `42/682` to `58/682`.
+  - Added canonical vocabulary entries `on_projectile_hit` and `on_dash_contact_or_completion` for semantically explicit cast-vs-hit timing modeling.
+  - Source: [Template:Data_Ashe/Ranger%27s_Focus](https://wiki.leagueoflegends.com/en-us/Template:Data_Ashe/Ranger%27s_Focus)
+  - Source: [Template:Data_Kog'Maw/Bio-Arcane_Barrage](https://wiki.leagueoflegends.com/en-us/Template:Data_Kog%27Maw/Bio-Arcane_Barrage)
+  - Source: [Template:Data_Udyr/Blazing_Stampede](https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Blazing_Stampede)
+  - Source: [Template:Data_Master_Yi/Wuju_Style](https://wiki.leagueoflegends.com/en-us/Template:Data_Master_Yi/Wuju_Style)
+  - Source: [Template:Data_Twitch/Spray_and_Pray](https://wiki.leagueoflegends.com/en-us/Template:Data_Twitch/Spray_and_Pray)
+  - Source: [Template:Data_Xayah/Deadly_Plumage](https://wiki.leagueoflegends.com/en-us/Template:Data_Xayah/Deadly_Plumage)
+  - Source: [Template:Data_Rammus/Defensive_Ball_Curl](https://wiki.leagueoflegends.com/en-us/Template:Data_Rammus/Defensive_Ball_Curl)
+  - Source: [Template:Data_Olaf/Tough_It_Out](https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Tough_It_Out)
+  - Source: [Template:Data_Dr._Mundo/Blunt_Force_Trauma](https://wiki.leagueoflegends.com/en-us/Template:Data_Dr._Mundo/Blunt_Force_Trauma)
+  - Source: [Template:Data_Zaahen/The_Darkin_Glaive](https://wiki.leagueoflegends.com/en-us/Template:Data_Zaahen/The_Darkin_Glaive)
+  - Source: [Template:Data_Jayce/Transform_Mercury_Cannon](https://wiki.leagueoflegends.com/en-us/Template:Data_Jayce/Transform_Mercury_Cannon)
+  - Source: [Template:Data_Talon/Noxian_Diplomacy](https://wiki.leagueoflegends.com/en-us/Template:Data_Talon/Noxian_Diplomacy)
+  - Source: [Template:Data_Irelia/Bladesurge](https://wiki.leagueoflegends.com/en-us/Template:Data_Irelia/Bladesurge)
+  - Source: [Template:Data_Fizz/Urchin_Strike](https://wiki.leagueoflegends.com/en-us/Template:Data_Fizz/Urchin_Strike)
+  - Source: [Template:Data_Ezreal/Mystic_Shot](https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Mystic_Shot)
+  - Source: [Template:Data_Smolder/Super_Scorcher_Breath](https://wiki.leagueoflegends.com/en-us/Template:Data_Smolder/Super_Scorcher_Breath)
+- Champion execution-semantics waves (142-145):
+  - Re-verified and encoded explicit execution-semantic keys for `DrMundo` (`Infected Bonesaw`), `Teemo` (`Blinding Dart`), `Jinx` (`Zap!`), `Ezreal` (`Trueshot Barrage`), `Jax` (`Leap Strike`), `Qiyana` (`Audacity`), `Vi` (`Vault Breaker`), and `Yasuo` (`Sweeping Blade`).
+  - Expanded canonical `resolution_timing` coverage from `58/682` to `66/682`.
+  - Source: [Template:Data_Dr._Mundo/Infected_Bonesaw](https://wiki.leagueoflegends.com/en-us/Template:Data_Dr._Mundo/Infected_Bonesaw)
+  - Source: [Template:Data_Teemo/Blinding_Dart](https://wiki.leagueoflegends.com/en-us/Template:Data_Teemo/Blinding_Dart)
+  - Source: [Template:Data_Jinx/Zap%21](https://wiki.leagueoflegends.com/en-us/Template:Data_Jinx/Zap%21)
+  - Source: [Template:Data_Ezreal/Trueshot_Barrage](https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Trueshot_Barrage)
+  - Source: [Template:Data_Jax/Leap_Strike](https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Leap_Strike)
+  - Source: [Template:Data_Qiyana/Audacity](https://wiki.leagueoflegends.com/en-us/Template:Data_Qiyana/Audacity)
+  - Source: [Template:Data_Vi/Vault_Breaker](https://wiki.leagueoflegends.com/en-us/Template:Data_Vi/Vault_Breaker)
+  - Source: [Template:Data_Yasuo/Sweeping_Blade](https://wiki.leagueoflegends.com/en-us/Template:Data_Yasuo/Sweeping_Blade)
 - Item active cooldown completeness wave (109):
   - Re-verified and encoded explicit active cooldown metadata on `Stridebreaker` (`15s`), `Hextech Rocketbelt` (`40s`), and `Redemption` (`90s`) across all active effect branches in structured data.
   - Source: [Stridebreaker](https://wiki.leagueoflegends.com/en-us/Stridebreaker)

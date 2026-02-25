@@ -173,13 +173,17 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "projectile_speed": 1450.0
+        "projectile_speed": 1450.0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": false,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto / Direction.",
         "Source castTime: none.",
         "Source speed: 1450 : 1540 (based on channel time).",
-        "Source notes (summary): Vault Breaker's dash range extends up to 50 units when going through a wall."
+        "Source notes (summary): Vault Breaker's dash range extends up to 50 units when going through a wall.",
+        "Manual review (2026-02-25): Vault Breaker is modeled as charge-then-dash contact resolution; damage and champion stop/knockback resolve on dash path contact, not at charge start."
       ],
       "description_source": "Active: Vi charges while being slowed by 15% for up to 4 seconds to increase Vault Breaker's range, speed, and damage over the first 1.25 seconds of the channel."
     },
@@ -349,6 +353,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Relentless Force charge use, primary-hit branch, and cone secondary-hit semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Vi/Vault_Breaker",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Vault Breaker charge-and-dash timing, collision stop behavior, and hit-resolution semantics"
     }
   ],
   "notes": [

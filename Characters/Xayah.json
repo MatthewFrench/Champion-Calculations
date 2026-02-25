@@ -222,13 +222,21 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "projectile_speed": 3000.0
+        "projectile_speed": 3000.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 0,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source speed: 3000.",
-        "Source notes (summary): The additional missile is visually a smaller feather than the normal feather missiles that are fired by Xayah's basic attacks and does not technically count as a Feather for Clean Cuts."
+        "Source notes (summary): The additional missile is visually a smaller feather than the normal feather missiles that are fired by Xayah's basic attacks and does not technically count as a Feather for Clean Cuts.",
+        "Manual review (2026-02-25): Deadly Plumage is a cast-time self-buff; additional feather-strike payload resolves on each empowered basic-attack hit during the 4-second window.",
+        "Manual review (2026-02-25): `max_empowered_attacks` uses temporary `0` sentinel fallback for duration-limited variable-hit behavior; follow-up should replace with explicit unbounded-within-window schema semantics."
       ]
     },
     "basic_ability_3": {
@@ -367,6 +375,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Xayah",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Xayah/Deadly_Plumage",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Deadly Plumage cast-state timing, duration-bounded empowered-hit cadence, and additional-feather strike resolution semantics"
     }
   ],
   "notes": [

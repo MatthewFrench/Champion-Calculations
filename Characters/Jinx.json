@@ -234,7 +234,11 @@
       },
       "execution": {
         "cast_windup_seconds": 0.6,
-        "projectile_speed": 3300.0
+        "projectile_speed": 3300.0,
+        "resolution_timing": "on_projectile_hit",
+        "target_required": false,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Direction.",
@@ -242,6 +246,7 @@
         "Source speed: 3300.",
         "Manual behavior verification (2026-02-24): Zap! is a windup-gated direction cast; projectile release occurs on cast completion from Jinx's cast-start location, not instantly on key press.",
         "Manual behavior verification (2026-02-24): Damage, slow, and reveal apply only when the projectile collides with the first enemy hit, preserving dodge/block windows during flight.",
+        "Manual review (2026-02-25): Zap timing is modeled as hit-resolved projectile behavior with attack-speed-scaled windup; no pre-hit damage occurs during cast lock.",
         "Source notes (summary): This ability will cast from wherever the caster is at the start of the cast time."
       ]
     },

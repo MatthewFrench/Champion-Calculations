@@ -150,13 +150,17 @@
       },
       "execution": {
         "cast_windup_seconds": 0.25,
-        "projectile_speed": 2500.0
+        "projectile_speed": 2500.0,
+        "resolution_timing": "on_projectile_hit",
+        "target_required": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: 0.25.",
         "Source speed: 2500.",
-        "Source notes (summary): Blinding Dart will not make abilities that can trigger on-hit effects ( Parrrley, Mystic Shot) miss."
+        "Source notes (summary): Blinding Dart will not make abilities that can trigger on-hit effects ( Parrrley, Mystic Shot) miss.",
+        "Manual review (2026-02-25): Blinding Dart is a target-locked projectile cast; blind and damage resolve on missile contact and do not apply on cast start."
       ]
     },
     "basic_ability_2": {
@@ -415,6 +419,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Noxious Trap charge cadence, arming timing, and player-visible trigger/bounce semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Teemo/Blinding_Dart",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Blinding Dart projectile-hit timing, unit-target gating, and player-visible resolution semantics"
     }
   ],
   "notes": [

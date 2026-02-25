@@ -129,14 +129,18 @@
       },
       "execution": {
         "cast_windup_seconds": 0.25,
-        "projectile_speed": 2000.0
+        "projectile_speed": 2000.0,
+        "resolution_timing": "on_projectile_hit",
+        "target_required": false,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source speed: 2000.",
         "Source notes (summary): Mystic Shot deals basic damage, but also triggers spell effects by also being tagged as spell damage.",
-        "Manual verification (2026-02-24): Mystic Shot is a 0.25-second cast linear projectile that applies on-hit and on-attack effects to the first unit hit and refunds 1.5 seconds from Ezreal ability cooldowns on successful hit, including Mystic Shot itself."
+        "Manual verification (2026-02-24): Mystic Shot is a 0.25-second cast linear projectile that applies on-hit and on-attack effects to the first unit hit and refunds 1.5 seconds from Ezreal ability cooldowns on successful hit, including Mystic Shot itself.",
+        "Manual review (2026-02-25): Mystic Shot resolution is first-hit projectile contact, not cast-complete timing."
       ]
     },
     "basic_ability_2": {
@@ -302,13 +306,17 @@
       },
       "execution": {
         "cast_windup_seconds": 1.0,
-        "projectile_speed": 2000.0
+        "projectile_speed": 2000.0,
+        "resolution_timing": "on_projectile_hit",
+        "target_required": false,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: 1.",
         "Source speed: 2000.",
-        "Source notes (summary): Trueshot Barrage's projectile has an icon on the mini-map while it is in flight."
+        "Source notes (summary): Trueshot Barrage's projectile has an icon on the mini-map while it is in flight.",
+        "Manual review (2026-02-25): Trueshot Barrage is modeled as windup then projectile-hit resolution; damage applies only on unit collision, preserving dodge/block windows before impact."
       ]
     }
   },
@@ -324,6 +332,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Mystic Shot execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Trueshot_Barrage",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Trueshot Barrage cast-windup and projectile-hit resolution semantics"
     }
   ],
   "notes": [

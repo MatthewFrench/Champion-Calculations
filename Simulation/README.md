@@ -74,6 +74,7 @@ This simulator targets controlled-champion URF teamfight optimization with champ
 - Optional `simulation.combat_seed` applies deterministic combat variation (enemy initialization order + initial attack jitter) for robust repeated evaluation without nondeterminism.
 - Full rune-proc telemetry collection is disabled for search-time scoring simulations and enabled explicitly for trace/report replay simulations.
 - Controlled-champion and fixed-loadout trace/report artifacts now emit deterministic replay signatures (final-state checksum, tick-state checksum, queue checksum, and tick/event counters) for replay-audit workflows.
+- Controlled-champion, fixed-loadout, and rune-sweep artifact trace flows now run paired replay verification and hard-fail if deterministic signatures diverge.
 - Rune telemetry runtime bookkeeping uses fixed-index counter arrays (no per-event hashmap lookup/allocation in hot paths).
 - Rune-proc telemetry trigger/source accounting and telemetry-entry assembly now route through `src/scripts/runtime/loadout_runtime/rune_proc_telemetry.rs`.
 - Runtime on-hit and ability bonus-damage resolution now routes through `src/scripts/runtime/loadout_runtime/combat_bonus_resolution.rs` facade plus explicit owner leaves under `src/scripts/runtime/loadout_runtime/combat_bonus_resolution/`.
@@ -655,6 +656,7 @@ Script-tree `mod.rs` cleanup and compatibility-shim removal are complete; archit
   - Startup validation fails fast if a preset references missing item/rune/shard data.
 - Default scenario is tuned for high search quality (deeper exploration and more seed stability), so expect higher CPU time than previous presets.
 - `maximum_quality` runs a pre-budget coverage stage that locks each item/rune/shard at least once, keeps top diverse candidates per locked asset, and injects those seeds into the main search.
+- locked rune/shard coverage candidates are now built through direct legal page construction (no high-attempt rejection loop).
 - Stack overrides (generic, keyed by stack identifier):
   - global defaults are loaded from `Simulation/data/simulator_defaults.json` (`simulation_defaults.stack_overrides`).
   - current default baseline includes `heartsteel: 20.0` unless overridden below.

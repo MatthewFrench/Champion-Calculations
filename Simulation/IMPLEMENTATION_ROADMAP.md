@@ -1297,6 +1297,53 @@ This file tracks all high-value follow-up work requested for simulator realism, 
   - trace/report artifacts expose deterministic replay signatures for downstream replay verification.
   - deterministic signatures are regression-covered and schema-versioned.
 
+63. `DONE` Enforce hard-fail deterministic replay verification for artifact traces.
+- Scope:
+  - add shared deterministic replay verification owner channel:
+    - `verify_deterministic_replay_signature_match(...)`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_runtime_reporting_projections.rs`
+  - run paired replay verification in artifact-producing flows:
+    - controlled champion optimized-build trace simulation
+    - fixed-loadout trace simulation
+  - fail artifact generation when replay signatures diverge (strict mode):
+    - compare final-state checksum, tick-state checksum, queue checksum, tick/event counters.
+  - keep artifact write entrypoints stable while enforcing strict replay parity behind delegated helper channels.
+  - add deterministic replay verification unit coverage for pass/fail cases in:
+    - `src/tests/scenario_runner_tests.rs`
+- Success criteria:
+  - artifact-producing trace flows hard-fail on deterministic replay mismatch.
+  - strict replay verification behavior is owner-channeled and regression-covered.
+
+64. `DONE` Extend hard-fail deterministic replay verification to rune-sweep trace flows.
+- Scope:
+  - enforce paired deterministic replay verification for each rune-sweep keystone trace run.
+  - include deterministic signature payloads in rune-sweep result reporting:
+    - markdown ranking section
+    - rune-sweep JSON result entries (`determinism`)
+  - bump rune-sweep JSON schema contract for determinism payload ownership.
+  - add/update schema contract coverage in scenario-runner tests.
+- Success criteria:
+  - rune-sweep execution hard-fails on deterministic replay mismatch.
+  - rune-sweep reports expose deterministic signature payloads per keystone trace entry.
+
+65. `DONE` Replace rejection-heavy locked rune/shard sampling with direct legal page construction.
+- Scope:
+  - remove 4096-attempt rejection-loop sampling from locked rune/shard coverage candidate generation in:
+    - `src/scenario_runner/controlled_champion_search_runtime_support/coverage_locked_asset_candidate_generation.rs`
+  - add direct lock-aware loadout construction channels:
+    - legal primary/secondary path pairing
+    - direct locked-rune slot placement for primary and secondary path positions
+    - direct locked-shard slot assignment on top of legal rune-page generation
+  - keep external scenario-runner/search entrypoints stable while shifting internals behind delegated helper channels.
+  - add scenario-runner regressions for:
+    - secondary-only rune lock generation
+    - lock preservation across mutate paths
+    - shard-slot lock enforcement
+    (`src/tests/scenario_runner_tests.rs`)
+- Success criteria:
+  - locked rune/shard candidate generation no longer depends on high-attempt rejection sampling loops.
+  - coverage-stage locked asset sampling remains legal and lock-preserving under mutation.
+
 ## Current Execution Batch
 - `DONE` Item 1
 - `DONE` Item 2
@@ -1332,6 +1379,9 @@ This file tracks all high-value follow-up work requested for simulator realism, 
 - `DONE` Item 60 (manual opponent `stasis_item` ingress + stasis lock correctness landed)
 - `DONE` Item 61 (manual opponent `emergency_shield_item` ingress + runtime shield/heal correctness landed)
 - `DONE` Item 62 (trace/report deterministic replay signatures landed with schema/tests)
+- `DONE` Item 63 (hard-fail deterministic replay verification landed for artifact trace flows)
+- `DONE` Item 64 (rune-sweep hard-fail deterministic replay verification + determinism reporting landed)
+- `DONE` Item 65 (direct locked rune/shard loadout construction replaced rejection-loop sampling)
 
 ## Notes
 - Large items are being delivered in iterative slices with strict compile/test/lint validation at each slice.

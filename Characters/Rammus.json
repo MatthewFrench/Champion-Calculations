@@ -212,12 +212,16 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_complete",
+        "target_required": false,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): The initial cast counts as an ability activation for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual review (2026-02-25): Defensive Ball Curl resolves its defensive self-state at cast time (resistances and reflection-ready stance), while reflected damage branches trigger reactively on incoming basic attacks during the active window."
       ]
     },
     "basic_ability_3": {
@@ -361,6 +365,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Powerball execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "type": "League of Legends Wiki (ability data template)",
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Rammus/Defensive_Ball_Curl",
+      "accessed": "2026-02-25",
+      "used_for": "manual behavior verification for Defensive Ball Curl cast-time defensive-state resolution and reactive on-attack reflection semantics"
     }
   ],
   "notes": [

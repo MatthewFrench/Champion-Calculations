@@ -64,11 +64,12 @@ use self::controlled_champion_search_runtime_support::{
     SignificantProgressState, append_rune_proc_telemetry_markdown_entries,
     apply_level_scaled_sim_defaults_after_controlled_level_override,
     arm_time_budget_deadline_if_unset, build_enemy_similarity_notes,
-    complete_partial_candidate_to_full, coverage_locked_assets,
+    complete_partial_candidate_to_full, coverage_locked_assets, deterministic_signature_json,
     filter_item_pool_to_modeled_runtime_effects, fixed_sweep_keystone_seed_base,
     fixed_sweep_repeat_seed, max_legal_build_size, mutate_locked_candidate,
     partial_candidate_completion_seed, random_locked_candidate, rune_proc_telemetry_json,
     select_search_base_loadout_selection, structured_trace_event,
+    verify_deterministic_replay_signature_match,
 };
 use self::encounter_parsing::{ParsedOpponentEncounter, parse_opponent_encounters};
 use self::fixed_loadout_runner::run_controlled_champion_fixed_loadout_evaluation_impl;
@@ -98,7 +99,7 @@ struct ControlledChampionScenarioConfig {
 
 const FIXED_LOADOUT_TRACE_JSON_SCHEMA_VERSION: u32 = 4;
 const FIXED_LOADOUT_REPORT_JSON_SCHEMA_VERSION: u32 = 3;
-const FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION: u32 = 2;
+const FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION: u32 = 3;
 const CONTROLLED_CHAMPION_TRACE_JSON_SCHEMA_VERSION: u32 = 3;
 const FIXED_SWEEP_REPEAT_SEED_STRIDE: u64 = 0x9E37_79B9_7F4A_7C15;
 

@@ -1,19 +1,9 @@
 use anyhow::Result;
-use serde_json::{Value, json};
+use serde_json::json;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use super::*;
-
-fn deterministic_signature_json(signature: SimulationDeterminismSignature) -> Value {
-    json!({
-        "final_state_checksum_hex": format!("{:016x}", signature.final_state_checksum),
-        "tick_state_checksum_hex": format!("{:016x}", signature.tick_state_checksum),
-        "queue_checksum_hex": format!("{:016x}", signature.queue_checksum),
-        "ticks_executed": signature.ticks_executed,
-        "events_processed": signature.events_processed,
-    })
-}
 
 pub(in crate::scenario_runner) struct FixedLoadoutReportWriteContext<'a> {
     pub(in crate::scenario_runner) scenario_path: &'a Path,
@@ -84,6 +74,7 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
 
     let mut trace_sim_cfg = sim.clone();
     trace_sim_cfg.collect_rune_proc_telemetry = true;
+    let trace_replay_sim_cfg = trace_sim_cfg.clone();
     let mut trace_sim = ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
         controlled_champion_base.clone(),
         fixed_build_items,
@@ -100,6 +91,25 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
     let trace_events = trace_sim.trace_events();
     let rune_proc_telemetry = trace_sim.controlled_champion_rune_proc_telemetry();
     let trace_determinism = trace_sim.deterministic_replay_signature();
+    let mut trace_replay_sim =
+        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+            controlled_champion_base.clone(),
+            fixed_build_items,
+            &controlled_champion_loadout.bonus_stats,
+            Some(controlled_champion_loadout_selection),
+            None,
+            Some(controlled_champion_stack_overrides),
+            enemy_builds,
+            trace_replay_sim_cfg,
+            urf.clone(),
+        );
+    while trace_replay_sim.step(1) {}
+    let trace_replay_determinism = trace_replay_sim.deterministic_replay_signature();
+    verify_deterministic_replay_signature_match(
+        trace_determinism,
+        trace_replay_determinism,
+        "fixed-loadout trace replay",
+    )?;
     let mut trace_markdown = String::new();
     trace_markdown.push_str("# Controlled Champion Fixed Loadout Trace\n\n");
     trace_markdown.push_str("## Rune Proc Telemetry\n");
@@ -311,6 +321,12 @@ pub(in crate::scenario_runner) fn write_fixed_loadout_reports(
     println!(
         "Fixed-loadout trace written: {}",
         format_repo_relative_path(&trace_markdown_path)
+    );
+    println!(
+        "Deterministic replay verification passed for fixed-loadout trace: tick={:016x} final={:016x} queue={:016x}",
+        trace_determinism.tick_state_checksum,
+        trace_determinism.final_state_checksum,
+        trace_determinism.queue_checksum,
     );
     Ok(())
 }

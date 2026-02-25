@@ -2868,5 +2868,305 @@
         ]
       }
     ]
+  },
+  "manual_behavior_verification_wave_134": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Ashe",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Ranger's Focus cast-state flurry buff timing with duration-bounded empowered-hit burst resolution cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ashe/Ranger%27s_Focus"
+        ]
+      },
+      {
+        "key": "KogMaw",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Bio-Arcane Barrage cast-state attack-range buff timing with duration-bounded empowered-hit on-hit payload resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Kog%27Maw/Bio-Arcane_Barrage"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_135": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Udyr",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Blazing Stampede cast-state movement/stun stance timing with duration-bounded empowered-hit pounce contact semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Udyr/Blazing_Stampede"
+        ]
+      },
+      {
+        "key": "MasterYi",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Wuju Style cast-state activation timing with duration-bounded empowered-hit true-damage resolution cadence",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Master_Yi/Wuju_Style"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_136": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Twitch",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Spray and Pray cast-state attack-replacement timing with duration-bounded empowered-hit line-bolt resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Twitch/Spray_and_Pray"
+        ]
+      },
+      {
+        "key": "Xayah",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Deadly Plumage cast-state frenzy timing with duration-bounded empowered-hit additional-feather strike resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Xayah/Deadly_Plumage"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_137": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Rammus",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Defensive Ball Curl cast-time defensive-state resolution and reactive on-attack reflection timing semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Rammus/Defensive_Ball_Curl"
+        ]
+      },
+      {
+        "key": "Olaf",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Tough It Out cast-time self-buff/shield resolution with conditional attack-timer reset behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Olaf/Tough_It_Out"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_138": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "DrMundo",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Blunt Force Trauma cast-primed empowered-hit timing with attack-reset cadence and 4-second consume window semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Dr._Mundo/Blunt_Force_Trauma"
+        ]
+      },
+      {
+        "key": "Zaahen",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "The Darkin Glaive cast-prime empowered-hit sequencing across base and recast windows with attack-reset timing behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Zaahen/The_Darkin_Glaive"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_139": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Jayce",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Transform Mercury Cannon two-phase timing: immediate stance-swap self-state on cast and next-hit resistance-shred payload resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jayce/Transform_Mercury_Cannon"
+        ]
+      },
+      {
+        "key": "Talon",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Noxian Diplomacy dash-contact strike timing with attack-windup cast branch, target-tracking behavior, and attack-reset semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Talon/Noxian_Diplomacy"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_140": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Irelia",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Bladesurge target-required dash timing with on-contact/on-completion damage, on-hit application, and cooldown-reset edge behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Irelia/Bladesurge"
+        ]
+      },
+      {
+        "key": "Fizz",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Urchin Strike target-required dash timing with on-contact resolution and on-hit branch behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Fizz/Urchin_Strike"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_141": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Ezreal",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Mystic Shot windup-gated projectile timing with first-hit on-hit/on-attack resolution and cooldown-refund trigger behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Mystic_Shot"
+        ]
+      },
+      {
+        "key": "Smolder",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Super Scorcher Breath windup-scaled targeted projectile timing with tiered-bolt branch semantics and first-hit resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Smolder/Super_Scorcher_Breath"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_142": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "DrMundo",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Infected Bonesaw windup-gated directional projectile timing with first-collision hit resolution and on-hit health-cost refund behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Dr._Mundo/Infected_Bonesaw"
+        ]
+      },
+      {
+        "key": "Teemo",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Blinding Dart target-locked projectile timing with missile-contact blind and damage resolution semantics",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Teemo/Blinding_Dart"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_143": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Jinx",
+        "abilities_reviewed": [
+          "basic_ability_2"
+        ],
+        "focus": "Zap cast-windup and projectile-contact resolution semantics with attack-speed-scaled windup behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jinx/Zap%21"
+        ]
+      },
+      {
+        "key": "Ezreal",
+        "abilities_reviewed": [
+          "ultimate"
+        ],
+        "focus": "Trueshot Barrage long-windup directional projectile timing with collision-based damage resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Ezreal/Trueshot_Barrage"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_144": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Jax",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Leap Strike target-required dash-contact timing with arrival-gated damage resolution",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Leap_Strike"
+        ]
+      },
+      {
+        "key": "Qiyana",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Audacity target-required dash-contact timing with post-arrival proximity-gated damage behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Qiyana/Audacity"
+        ]
+      }
+    ]
+  },
+  "manual_behavior_verification_wave_145": {
+    "reviewed_at": "2026-02-25",
+    "champions": [
+      {
+        "key": "Vi",
+        "abilities_reviewed": [
+          "basic_ability_1"
+        ],
+        "focus": "Vault Breaker charge-and-dash timing with path-contact hit resolution and champion-collision stop behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Vi/Vault_Breaker"
+        ]
+      },
+      {
+        "key": "Yasuo",
+        "abilities_reviewed": [
+          "basic_ability_3"
+        ],
+        "focus": "Sweeping Blade target-required dash-contact timing with on-arrival damage and stack-resolution behavior",
+        "page_level_sources": [
+          "https://wiki.leagueoflegends.com/en-us/Template:Data_Yasuo/Sweeping_Blade"
+        ]
+      }
+    ]
   }
 }

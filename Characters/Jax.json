@@ -137,12 +137,16 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0
+        "cast_windup_seconds": 0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: false.",
-        "Source notes (summary): Leap Strike cannot target structures; on enemy champions, Jax is ordered to basic attack after the dash, and spell shields block the damage."
+        "Source notes (summary): Leap Strike cannot target structures; on enemy champions, Jax is ordered to basic attack after the dash, and spell shields block the damage.",
+        "Manual review (2026-02-25): Leap Strike is modeled as target-required dash-contact resolution; damage is checked on arrival and the dash remains a movement action even when post-arrival damage conditions fail."
       ]
     },
     "basic_ability_2": {
@@ -388,6 +392,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Empower cast gating, attack-reset cadence, and empowered-hit resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Jax/Leap_Strike",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Leap Strike dash-contact timing, target-gating, and arrival-damage resolution behavior"
     }
   ],
   "notes": [

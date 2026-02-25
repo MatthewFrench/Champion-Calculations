@@ -191,12 +191,20 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": true,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Spell shield will only block the knock up from the recast."
+        "Source notes (summary): Spell shield will only block the knock up from the recast.",
+        "Manual review (2026-02-25): The Darkin Glaive is cast-primed and attack-cadence-coupled; each cast primes one empowered basic attack and resolution occurs on empowered-hit contact."
       ]
     },
     "basic_ability_2": {

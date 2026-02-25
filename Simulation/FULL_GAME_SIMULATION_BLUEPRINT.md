@@ -76,7 +76,7 @@ Current anchors:
 Needed code additions:
 - typed timeline channels for macro systems (objectives/spawns/structure states)
 - deterministic tie-break identifiers for all new event families
-- replay checksum support per tick window is now emitted in trace/report artifacts; cross-run hard-fail replay gates are still pending
+- replay checksum support per tick window is now emitted in trace/report artifacts, and cross-run hard-fail replay gates now cover controlled-champion, fixed-loadout, and rune-sweep artifact trace flows; broader CI/runtime coverage is still pending
 
 ### 2) World/Map Layer
 Required:
@@ -317,21 +317,21 @@ Status labels:
 - `BLOCKED`
 
 ## Current Status Snapshot (2026-02-25)
-Overall weighted completion estimate for this blueprint: `61%` (`IN_PROGRESS`).
+Overall weighted completion estimate for this blueprint: `64%` (`IN_PROGRESS`).
 
 Bucket status (complete / remaining):
 - Runtime Systems Completeness (`30%` weight): `61% / 39%`
   - what is done: deterministic combat kernel, scripted champion channels, runtime effect hooks, world-state skeleton with deterministic encounter placement validation, baseline non-champion world ecology anchors, runtime minion-wave spawn/despawn lifecycle channels, neutral-objective spawn/respawn lifecycle channels, world-owned enemy movement/respawn position channels, controller harness contracts, deterministic controller request ingress with fixed-delay execution, command-owned controlled champion movement stepping, partial actor-symmetric opponent move/stop/basic-attack channels, mapped script-cast `CastAbilityBySlot` command execution for supported enemy champions, and mapped opponent `UseItemActive` support for `stasis_item` and `emergency_shield_item` with runtime shield/heal ownership channels
   - largest remaining gap: world ownership still lacks terrain-aware pathfinding/collision and combat-coupled macro lifecycle transitions (objective damage, structure destruction, economy/xp ownership)
-- Determinism And Replay Guarantees (`20%` weight): `80% / 20%`
-  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, data-owned fixed tick delay for controller command application, deterministic actor-id keyed ingress routing, manual-control suppression of autonomous enemy script cadence, deterministic stasis movement-lock/nullification handling in enemy command channels, and replay-signature checksum emission (final-state, tick-state, queue checksums with tick/event counters) in trace/report artifacts
-  - largest remaining gap: replay checksum data is diagnostics-only today (no hard-fail replay verifier gate), and no full-match deterministic replay contract exists yet
-- Calibration And Correctness (`20%` weight): `67% / 33%`
+- Determinism And Replay Guarantees (`20%` weight): `88% / 12%`
+  - what is done: fixed-tick loop, seed controls, deterministic ordering discipline in major search/runtime paths, fail-fast controlled-script initialization, guarded event-resolution fallback paths, strict required-defaults ownership channels, typed startup preflight for required defaults, deterministic world-bounds clamping channels for runtime enemy position ownership, per-tick stable-sequence controller request execution, data-owned fixed tick delay for controller command application, deterministic actor-id keyed ingress routing, manual-control suppression of autonomous enemy script cadence, deterministic stasis movement-lock/nullification handling in enemy command channels, replay-signature checksum emission (final-state, tick-state, queue checksums with tick/event counters) in trace/report artifacts, and hard-fail replay-signature verification in controlled-champion, fixed-loadout, and rune-sweep artifact trace flows
+  - largest remaining gap: replay hard-fail gates are not yet enforced CI-wide or across all simulation entrypoints, and no full-match deterministic replay contract exists yet
+- Calibration And Correctness (`20%` weight): `69% / 31%`
   - what is done: strong regression coverage for current combat/search scope, fail-fast schema validation in key paths, world/script registration guardrails, explicit required-defaults regression coverage, startup preflight idempotence validation, world clamping/ecology scaffold regression coverage, runtime/world lifecycle regressions for minion/objective transitions, controller-harness legality/parity regression coverage, deterministic ingress/movement command regressions, fixed-delay/manual-mode harness regressions, actor-id ingress regressions (`RejectedControlledActorNotFound`), enemy manual script-cast channel regressions (autonomous script suppression, mapped cast acceptance, cooldown rejection), and enemy item-active command regressions (`stasis_item` + `emergency_shield_item` availability/activation/cooldown legality and shield-heal correctness)
   - largest remaining gap: no golden interaction harness/property-suite for full-system invariants
-- Performance Envelope (`15%` weight): `47% / 53%`
-  - what is done: broad parallelization and improved runtime diagnostics
-  - largest remaining gap: coverage-stage fixed-cost latency and no enforced CI performance budgets
+- Performance Envelope (`15%` weight): `52% / 48%`
+  - what is done: broad parallelization and improved runtime diagnostics, plus direct locked rune/shard loadout construction for coverage-stage asset locking (replacing high-attempt rejection loops)
+  - largest remaining gap: coverage breadth still carries fixed pre-budget cost, and CI performance budgets are not yet enforced
 - Renderer-Contract Readiness (`15%` weight): `40% / 60%`
   - what is done: schema-versioned trace/report artifacts with stable structured events for current combat scope plus normalized world-state ownership scaffolding, deterministic world-lifecycle event channels (minion/objective lifecycle traces), champion-controller perspective/status contract scaffolding, deterministic command-ingress status buffering channels, fixed-delay command semantics suitable for future replay serialization, and actor-id keyed status outcomes for control ingress
   - largest remaining gap: no full world snapshot contract and no replay-loader validation loop
@@ -350,6 +350,7 @@ Phase-level status:
 - startup preflight now surfaces typed required-defaults failures before run dispatch, but the runtime still uses process-fatal accessors for strict invariants in binary mode
 - current scan: `0` non-test `expect(...)` and `0` non-test `panic!` callsites under `Simulation/src`
 - controlled-champion script registry is still static and low-coverage (`Vladimir`, `Sona`) relative to full roster requirements
+- maximum-quality coverage lock generation no longer depends on high-attempt rejection sampling for rune/shard assets, but coverage-stage breadth still has noticeable fixed latency in short-budget runs
 - controller ingress now includes fixed-delay deterministic execution, data-owned vision radius, partial actor-symmetric move/stop/basic-attack channels, mapped enemy script-cast channels, and mapped `stasis_item`/`emergency_shield_item` item-active channels, but broader opponent item-active coverage, non-script cast channels, fog-aware legality, and richer buffering/drop semantics still remain
 
 ## Immediate Next Work (Execution-Ready)
@@ -365,6 +366,8 @@ Phase-level status:
 10. Add replay contract schema versioning and deterministic playback verifier.
 11. Stand up calibration harness + golden scenario suites with confidence gates.
 12. Expand controlled-champion script coverage beyond `Vladimir` and `Sona` and evolve registry wiring to reduce static coupling.
+13. Persist and reuse coverage-stage seed corpus across compatible runs to reduce repeated pre-budget warmup cost.
+14. Add CI performance budgets and profiling gates for coverage-stage and strict-ranking hot paths.
 
 ## Governance
 - This blueprint is the canonical full-game target document.

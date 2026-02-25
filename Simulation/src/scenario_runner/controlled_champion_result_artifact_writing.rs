@@ -1,16 +1,6 @@
 use super::controlled_champion_result_build_analysis::ControlledChampionBuildAnalysisOutput;
 use super::*;
-use serde_json::{Value, json};
-
-fn deterministic_signature_json(signature: SimulationDeterminismSignature) -> Value {
-    json!({
-        "final_state_checksum_hex": format!("{:016x}", signature.final_state_checksum),
-        "tick_state_checksum_hex": format!("{:016x}", signature.tick_state_checksum),
-        "queue_checksum_hex": format!("{:016x}", signature.queue_checksum),
-        "ticks_executed": signature.ticks_executed,
-        "events_processed": signature.events_processed,
-    })
-}
+use serde_json::json;
 
 pub(super) struct ControlledChampionResultArtifactWritingContext<'a> {
     pub(super) scenario_path: &'a Path,
@@ -164,6 +154,7 @@ pub(super) fn write_controlled_champion_result_artifacts(
 
     let mut best_trace_sim_cfg = sim.clone();
     best_trace_sim_cfg.collect_rune_proc_telemetry = true;
+    let best_trace_replay_sim_cfg = best_trace_sim_cfg.clone();
     let mut best_trace_sim =
         ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
             controlled_champion_base.clone(),
@@ -181,6 +172,25 @@ pub(super) fn write_controlled_champion_result_artifacts(
     let best_trace = best_trace_sim.trace_events().to_vec();
     let best_rune_proc_telemetry = best_trace_sim.controlled_champion_rune_proc_telemetry();
     let best_trace_determinism = best_trace_sim.deterministic_replay_signature();
+    let mut best_trace_replay_sim =
+        ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+            controlled_champion_base.clone(),
+            controlled_champion_best_build,
+            &controlled_champion_loadout.bonus_stats,
+            Some(controlled_champion_runtime_loadout_selection),
+            best_order_acquired_map.as_ref(),
+            Some(controlled_champion_stack_overrides),
+            enemy_builds,
+            best_trace_replay_sim_cfg,
+            urf.clone(),
+        );
+    while best_trace_replay_sim.step(1) {}
+    let best_trace_replay_determinism = best_trace_replay_sim.deterministic_replay_signature();
+    verify_deterministic_replay_signature_match(
+        best_trace_determinism,
+        best_trace_replay_determinism,
+        "controlled champion optimized build trace replay",
+    )?;
 
     let mut trace_markdown = String::new();
     trace_markdown.push_str(&format!("# {} Event Trace\n\n", controlled_champion_name));
@@ -289,6 +299,12 @@ pub(super) fn write_controlled_champion_result_artifacts(
     println!(
         "Trace json written: {}",
         format_repo_relative_path(&trace_json_path)
+    );
+    println!(
+        "Deterministic replay verification passed for optimized trace: tick={:016x} final={:016x} queue={:016x}",
+        best_trace_determinism.tick_state_checksum,
+        best_trace_determinism.final_state_checksum,
+        best_trace_determinism.queue_checksum,
     );
 
     Ok(())

@@ -171,6 +171,204 @@ fn candidate_matches_locked_asset(candidate: &BuildKey, asset: &CoverageLockedAs
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+enum LockedRunePlacement {
+    Primary(usize),
+    Secondary(usize),
+}
+
+#[derive(Debug, Clone, Copy)]
+struct LockedRuneSelectionOption {
+    primary_idx: usize,
+    secondary_idx: usize,
+    secondary_slot_a: usize,
+    secondary_slot_b: usize,
+    placement: LockedRunePlacement,
+}
+
+fn norm_equals(value: &str, target_key: &str) -> bool {
+    to_norm_key(value) == target_key
+}
+
+fn canonical_slot_value_by_key(values: &[String], target_key: &str) -> Option<String> {
+    values
+        .iter()
+        .find(|value| norm_equals(value, target_key))
+        .cloned()
+}
+
+fn legal_primary_path_indices(loadout_domain: &crate::data::LoadoutDomain) -> Vec<usize> {
+    loadout_domain
+        .rune_paths
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, path)| {
+            (path.slot_runes.len() >= 4
+                && path.slot_runes.iter().take(4).all(|slot| !slot.is_empty()))
+            .then_some(idx)
+        })
+        .collect::<Vec<_>>()
+}
+
+fn legal_secondary_slot_indices(slot_runes: &[Vec<String>]) -> Vec<usize> {
+    (1..=3)
+        .filter(|slot| {
+            slot_runes
+                .get(*slot)
+                .map(|runes| !runes.is_empty())
+                .unwrap_or(false)
+        })
+        .collect::<Vec<_>>()
+}
+
+fn random_legal_loadout_selection(
+    base_loadout: &LoadoutSelection,
+    loadout_domain: &crate::data::LoadoutDomain,
+    seed: &mut u64,
+) -> Option<LoadoutSelection> {
+    let sampled = random_loadout_selection(base_loadout, loadout_domain, seed);
+    if is_legal_rune_page_selection(&sampled, loadout_domain) {
+        return Some(sampled);
+    }
+    ensure_complete_loadout_selection(&LoadoutSelection::default(), loadout_domain).ok()
+}
+
+fn build_locked_rune_selection_options(
+    loadout_domain: &crate::data::LoadoutDomain,
+    target_rune_key: &str,
+) -> Vec<LockedRuneSelectionOption> {
+    let mut options = Vec::new();
+    for primary_idx in legal_primary_path_indices(loadout_domain) {
+        let primary_path = &loadout_domain.rune_paths[primary_idx];
+        let primary_matching_slots = (0..4)
+            .filter(|slot| {
+                primary_path
+                    .slot_runes
+                    .get(*slot)
+                    .map(|slot_runes| {
+                        slot_runes
+                            .iter()
+                            .any(|rune_name| norm_equals(rune_name, target_rune_key))
+                    })
+                    .unwrap_or(false)
+            })
+            .collect::<Vec<_>>();
+        for (secondary_idx, secondary_path) in loadout_domain.rune_paths.iter().enumerate() {
+            if secondary_idx == primary_idx || secondary_path.slot_runes.len() < 4 {
+                continue;
+            }
+            let secondary_slots = legal_secondary_slot_indices(&secondary_path.slot_runes);
+            if secondary_slots.len() < 2 {
+                continue;
+            }
+            for slot_a_index in 0..secondary_slots.len() {
+                for slot_b_index in (slot_a_index + 1)..secondary_slots.len() {
+                    let secondary_slot_a = secondary_slots[slot_a_index];
+                    let secondary_slot_b = secondary_slots[slot_b_index];
+                    for primary_slot in &primary_matching_slots {
+                        options.push(LockedRuneSelectionOption {
+                            primary_idx,
+                            secondary_idx,
+                            secondary_slot_a,
+                            secondary_slot_b,
+                            placement: LockedRunePlacement::Primary(*primary_slot),
+                        });
+                    }
+                    for secondary_slot in [secondary_slot_a, secondary_slot_b] {
+                        let has_target = secondary_path
+                            .slot_runes
+                            .get(secondary_slot)
+                            .map(|slot_runes| {
+                                slot_runes
+                                    .iter()
+                                    .any(|rune_name| norm_equals(rune_name, target_rune_key))
+                            })
+                            .unwrap_or(false);
+                        if has_target {
+                            options.push(LockedRuneSelectionOption {
+                                primary_idx,
+                                secondary_idx,
+                                secondary_slot_a,
+                                secondary_slot_b,
+                                placement: LockedRunePlacement::Secondary(secondary_slot),
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    options
+}
+
+fn construct_locked_rune_loadout_selection(
+    loadout_domain: &crate::data::LoadoutDomain,
+    rune_name: &str,
+    seed: &mut u64,
+) -> Option<LoadoutSelection> {
+    let target_rune_key = to_norm_key(rune_name);
+    let options = build_locked_rune_selection_options(loadout_domain, &target_rune_key);
+    if options.is_empty() {
+        return None;
+    }
+    let option = options[rand_index(seed, options.len())];
+    let primary_path = &loadout_domain.rune_paths[option.primary_idx];
+    let secondary_path = &loadout_domain.rune_paths[option.secondary_idx];
+
+    let mut rune_names = Vec::with_capacity(6);
+    for primary_slot in 0..4 {
+        let slot_runes = primary_path.slot_runes.get(primary_slot)?;
+        let selected_rune = match option.placement {
+            LockedRunePlacement::Primary(locked_slot) if locked_slot == primary_slot => {
+                canonical_slot_value_by_key(slot_runes, &target_rune_key)?
+            }
+            _ => slot_runes[rand_index(seed, slot_runes.len())].clone(),
+        };
+        rune_names.push(selected_rune);
+    }
+    for secondary_slot in [option.secondary_slot_a, option.secondary_slot_b] {
+        let slot_runes = secondary_path.slot_runes.get(secondary_slot)?;
+        let selected_rune = match option.placement {
+            LockedRunePlacement::Secondary(locked_slot) if locked_slot == secondary_slot => {
+                canonical_slot_value_by_key(slot_runes, &target_rune_key)?
+            }
+            _ => slot_runes[rand_index(seed, slot_runes.len())].clone(),
+        };
+        rune_names.push(selected_rune);
+    }
+
+    let shard_stats = loadout_domain
+        .shard_slots
+        .iter()
+        .map(|slot_stats| slot_stats[rand_index(seed, slot_stats.len())].clone())
+        .collect::<Vec<_>>();
+    let selection = LoadoutSelection {
+        rune_names,
+        shard_stats,
+    };
+    is_legal_rune_page_selection(&selection, loadout_domain).then_some(selection)
+}
+
+fn construct_locked_shard_loadout_selection(
+    base_loadout: &LoadoutSelection,
+    loadout_domain: &crate::data::LoadoutDomain,
+    slot: usize,
+    stat: &str,
+    seed: &mut u64,
+) -> Option<LoadoutSelection> {
+    let target_shard_key = to_norm_key(stat);
+    let canonical_shard_stat = loadout_domain
+        .shard_slots
+        .get(slot)
+        .and_then(|slot_stats| canonical_slot_value_by_key(slot_stats, &target_shard_key))?;
+    let mut selection = random_legal_loadout_selection(base_loadout, loadout_domain, seed)?;
+    if slot >= selection.shard_stats.len() {
+        return None;
+    }
+    selection.shard_stats[slot] = canonical_shard_stat;
+    is_legal_rune_page_selection(&selection, loadout_domain).then_some(selection)
+}
+
 fn enforce_locked_item(
     item_pool: &[Item],
     max_items: usize,
@@ -214,18 +412,21 @@ fn random_loadout_matching_asset(
     asset: &CoverageLockedAsset,
     seed: &mut u64,
 ) -> Option<LoadoutSelection> {
-    let attempts = 4096usize;
-    for _ in 0..attempts {
-        let selection = random_loadout_selection(base_loadout, loadout_domain, seed);
-        let candidate = BuildKey {
-            item_indices: Vec::new(),
-            loadout_selection: selection.clone(),
-        };
-        if candidate_matches_locked_asset(&candidate, asset) {
-            return Some(selection);
+    // Coverage stage must touch every locked asset reliably; direct construction avoids
+    // rejection-heavy random sampling loops for rune/shard locks.
+    match asset {
+        CoverageLockedAsset::Rune(rune_name) => {
+            construct_locked_rune_loadout_selection(loadout_domain, rune_name, seed)
         }
+        CoverageLockedAsset::Shard { slot, stat } => construct_locked_shard_loadout_selection(
+            base_loadout,
+            loadout_domain,
+            *slot,
+            stat,
+            seed,
+        ),
+        CoverageLockedAsset::Item(_) => None,
     }
-    None
 }
 
 fn enforce_locked_asset(

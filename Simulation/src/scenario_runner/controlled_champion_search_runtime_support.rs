@@ -20,7 +20,8 @@ pub(super) use self::coverage_locked_asset_candidate_generation::{
 };
 pub(super) use self::search_runtime_reporting_projections::{
     append_rune_proc_telemetry_markdown_entries, build_enemy_similarity_notes,
-    rune_proc_telemetry_json, structured_trace_event,
+    deterministic_signature_json, rune_proc_telemetry_json, structured_trace_event,
+    verify_deterministic_replay_signature_match,
 };
 pub(super) use self::search_seed_derivation::{
     fixed_sweep_keystone_seed_base, fixed_sweep_repeat_seed, partial_candidate_completion_seed,

@@ -233,12 +233,16 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_complete",
+        "target_required": false,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Olaf's attack timer will only reset from casting Tough It Out if the attack speed buff was not already active on him."
+        "Source notes (summary): Olaf's attack timer will only reset from casting Tough It Out if the attack speed buff was not already active on him.",
+        "Manual review (2026-02-25): Tough It Out resolves immediate self-state on cast (attack-speed buff and missing-health-scaled shield), with conditional attack-timer reset behavior when the buff was previously inactive."
       ]
     },
     "basic_ability_3": {

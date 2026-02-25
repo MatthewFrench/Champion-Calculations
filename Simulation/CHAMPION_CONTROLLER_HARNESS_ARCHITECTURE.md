@@ -137,7 +137,7 @@ Required coverage for harness evolution:
 - command/path ownership is integrated for deterministic move targets, but pathfinding/collision/terrain routing are not yet integrated
 - objective/structure/economy channels are not yet wired into perspective visibility and action legality
 - only fixed delay ingestion is modeled; richer buffering/overwrite/packet-drop network semantics are still simplified versus live game
-- replay signatures are currently diagnostics-only; hard-fail replay consistency gates are not yet enforced in CI/runtime entrypoints
+- replay signatures are now hard-fail verified in controlled-champion, fixed-loadout, and rune-sweep artifact trace flows; CI-wide/runtime-wide replay consistency gates are still incomplete
 
 ## Ownership Boundaries
 - Harness contract and legality channels:

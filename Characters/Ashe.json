@@ -153,13 +153,22 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 6.0,
+        "max_empowered_attacks": 0,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
         "Source notes (summary): The flurries deal 1 instance of basic damage followed by 4 instances of a non-reactive type of damage (either default or proc).",
-        "Manual verification (2026-02-24): Ranger's Focus consumes full Focus stacks into a 6-second flurry state; each attack becomes a five-arrow burst, applying on-hit once but Frost Shot and lifesteal per arrow, with attack-timer reset on activation."
+        "Manual verification (2026-02-24): Ranger's Focus consumes full Focus stacks into a 6-second flurry state; each attack becomes a five-arrow burst, applying on-hit once but Frost Shot and lifesteal per arrow, with attack-timer reset on activation.",
+        "Manual review (2026-02-25): Ranger's Focus is a cast-time self-buff; combat payload resolves on each empowered basic-attack hit during the 6-second window rather than at cast press.",
+        "Manual review (2026-02-25): `max_empowered_attacks` uses temporary `0` sentinel fallback for duration-limited variable-hit behavior; follow-up should replace with explicit unbounded-within-window schema semantics."
       ]
     },
     "basic_ability_2": {

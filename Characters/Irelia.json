@@ -150,13 +150,17 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "projectile_speed": 1400.0
+        "projectile_speed": 1400.0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source speed: 1400 + 100% movement speed.",
-        "Source notes (summary): Bladesurge will be buffered and cast when the cooldown ends or is reset if the player attempts to cast it within 0.5 seconds."
+        "Source notes (summary): Bladesurge will be buffered and cast when the cooldown ends or is reset if the player attempts to cast it within 0.5 seconds.",
+        "Manual review (2026-02-25): Bladesurge is target-required dash damage with on-hit and self-heal resolution on dash contact or dash completion, not instant on cast."
       ]
     },
     "basic_ability_2": {
@@ -229,7 +233,7 @@
         "Source targeting: Auto / Direction.",
         "Source castTime: None / 0.25.",
         "Source effectRadius: 300 /  120.",
-        "Source notes (summary): Enemies around Irelia will be dealt the damage once the recast's cast time ends, while enemies within the line are dealt the damage via a missile that reaches the furthest targets after a 0."
+        "Source notes (summary): Enemies around Irelia are dealt damage when the recast cast time ends, while line targets are damaged by a missile that reaches furthest targets after a 0.066-second delay."
       ],
       "description_source": "Active: Irelia assumes a defensive stance with her blades to charge for up to 1.5 seconds, during which she reduces incoming physical damage by 40% : 70% (based on level) (+ 7% per 100 AP) and incoming magic damage by 20% : 35% (based on level) (+ 3.5% per 100 AP). Additionally, Defiant Dance's damage increases over the first 0.75 seconds of the channel."
     },
@@ -355,6 +359,12 @@
       "path": "From Online/champions/Irelia.json",
       "accessed": "2026-02-24",
       "used_for": "canonical champion baseline generation for stats, abilities, and execution metadata"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Irelia/Bladesurge",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Bladesurge dash-contact resolution timing, target gating, and on-hit/heal execution semantics"
     }
   ],
   "notes": [

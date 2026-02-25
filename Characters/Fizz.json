@@ -124,12 +124,16 @@
         "value_type": "flat"
       },
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: none.",
-        "Source notes (summary): Urchin Strike can only go through walls if the target is on the other side."
+        "Source notes (summary): Urchin Strike can only go through walls if the target is on the other side.",
+        "Manual review (2026-02-25): Urchin Strike is target-required dash damage that resolves on dash contact/completion with on-hit application, rather than immediate cast-time damage."
       ]
     },
     "basic_ability_2": {
@@ -393,6 +397,12 @@
       "accessed": "2026-02-25",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior re-verification for Seastone Trident empowered-hit timing, attack-reset semantics, and post-hit rend branch execution behavior"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Fizz/Urchin_Strike",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Urchin Strike dash-contact timing, target gating, and on-hit execution semantics"
     }
   ],
   "notes": [

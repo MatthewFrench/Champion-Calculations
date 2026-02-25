@@ -1,6 +1,46 @@
 # Improvement Tracker
 
 ## Done
+- Reduced maximum-quality coverage-stage lock sampling friction by replacing rejection-loop rune/shard generation with direct legal construction:
+  - removed rejection-heavy (up to `4096` attempts) locked rune/shard sampling from:
+    - `src/scenario_runner/controlled_champion_search_runtime_support/coverage_locked_asset_candidate_generation.rs`
+  - added direct lock-aware construction channels for:
+    - legal primary/secondary path pairing
+    - direct primary/secondary locked-rune slot placement
+    - direct locked-shard slot assignment on a legal rune page
+  - preserved scenario-runner facade entrypoints while moving logic behind explicit delegated helper functions.
+  - added scenario-runner regressions in:
+    - `src/tests/scenario_runner_tests.rs`
+    - `random_locked_candidate_supports_secondary_only_locked_rune_generation`
+    - `mutate_locked_candidate_preserves_secondary_only_locked_rune`
+    - `random_locked_candidate_enforces_locked_shard_slot_stat`
+- Completed data-first champion execution-semantics expansion waves 142-145:
+  - champion execution-semantics waves `142-145`:
+    - added explicit `execution.resolution_timing` + companion execution semantic keys for `8` additional active abilities (`DrMundo` `Infected Bonesaw`, `Teemo` `Blinding Dart`, `Jinx` `Zap!`, `Ezreal` `Trueshot Barrage`, `Jax` `Leap Strike`, `Qiyana` `Audacity`, `Vi` `Vault Breaker`, `Yasuo` `Sweeping Blade`)
+    - expanded semantic-key baseline from `58/682` to `66/682` active abilities with explicit `resolution_timing`
+    - recorded page-level manual verification scope in `Simulation/champion_behavior_verification_tracker.json` waves `142-145`
+    - added/updated page-level ability template citations in touched champion files for all newly reviewed abilities
+  - uncertainty tracking and follow-up documentation:
+    - documented remaining target-invalid pre-resolution ambiguity for `Teemo` `Blinding Dart`, `Jax` `Leap Strike`, `Qiyana` `Audacity`, and `Yasuo` `Sweeping Blade` in `Simulation/CONFIDENCE_REVIEW.md` and `Simulation/COVERAGE_GAPS.md` as deferred runtime-policy follow-up
+- Extended hard-fail deterministic replay verification into rune-sweep flows:
+  - rune-sweep keystone trace runs now execute paired deterministic replay verification and fail on signature mismatch.
+  - rune-sweep reports now include deterministic signature payloads per keystone entry:
+    - markdown ranking entries
+    - JSON `results[].determinism`
+  - rune-sweep JSON schema contract bumped:
+    - `FIXED_LOADOUT_RUNE_SWEEP_JSON_SCHEMA_VERSION`: `2 -> 3`
+  - updated schema contract tests in:
+    - `src/tests/scenario_runner_tests.rs`
+- Landed hard-fail deterministic replay verification for artifact trace flows:
+  - added shared verification owner channel:
+    - `verify_deterministic_replay_signature_match(...)`
+    - `src/scenario_runner/controlled_champion_search_runtime_support/search_runtime_reporting_projections.rs`
+  - wired strict paired replay verification into:
+    - `src/scenario_runner/controlled_champion_result_artifact_writing.rs`
+    - `src/scenario_runner/fixed_loadout_runner/report_writing.rs`
+  - artifact generation now fails if deterministic replay signatures diverge between primary and replay runs.
+  - added deterministic verification pass/fail tests in:
+    - `src/tests/scenario_runner_tests.rs`
 - Landed deterministic replay signature channels and artifact wiring:
   - added deterministic replay signature ownership on combat runtime:
     - final-state checksum
@@ -23,6 +63,19 @@
   - updated schema contract tests in:
     - `src/tests/scenario_runner_tests.rs`
     - `src/tests/reporting_tests.rs`
+- Completed data-first champion execution-semantics expansion waves 134-141:
+  - champion execution-semantics waves `134-141`:
+    - added explicit `execution.resolution_timing` + companion execution semantic keys for `16` additional active abilities (`Ashe`, `KogMaw`, `Udyr` `Blazing Stampede`, `MasterYi`, `Twitch`, `Xayah`, `Rammus`, `Olaf`, `DrMundo`, `Zaahen`, `Jayce`, `Talon`, `Irelia`, `Fizz`, `Ezreal`, `Smolder`)
+    - expanded semantic-key baseline from `42/682` to `58/682` active abilities with explicit `resolution_timing`
+    - expanded canonical timing vocabulary in `Simulation/data/execution_semantics_vocabulary.json` with `on_projectile_hit` and `on_dash_contact_or_completion`
+    - recorded page-level manual verification scope in `Simulation/champion_behavior_verification_tracker.json` waves `134-141`
+    - expanded temporary duration-limited variable-hit sentinel tracking (`max_empowered_attacks = 0`) from `Sivir`-only to current touched set (`Sivir`, `Ashe`, `KogMaw`, `Udyr` `Blazing Stampede`, `MasterYi`, `Twitch`, `Xayah`) with deferred explicit-schema/runtime follow-up
+  - targeted data-quality fixes during wave execution:
+    - corrected truncation defect in `Characters/Smolder.json` (`Super Scorcher Breath` tier-2 bolt context note)
+    - corrected truncation defect in `Characters/Irelia.json` (`Defiant Dance` recast missile-delay context note)
+  - documentation alignment sweep:
+    - updated `Simulation/COVERAGE_STANDARDS.md`, `Simulation/COVERAGE_CHECKLIST.md`, `Simulation/CONFIDENCE_REVIEW.md`, `Simulation/DATA_AUTHORING_GUIDE.md`, and `Simulation/COVERAGE_GAPS.md` for new baselines, vocabulary additions, and uncertainty follow-up tracking
+    - documented deferred code/runtime follow-up for dash/projectile target-invalid edge-case ambiguity and execution semantic-key consumption
 - Completed data-first champion/item execution-semantics expansion waves 121-133:
   - champion execution-semantics waves `121-128`:
     - added explicit `execution.resolution_timing` + companion attack-cadence semantic keys for `16` additional active abilities (`Darius`, `Shyvana`, `RekSai`, `Chogath`, `Skarner`, `Illaoi`, `Draven`, `Gwen`, `Fizz`, `Malphite`, `Shen`, `Gragas`, `Hecarim`, `Kassadin`, `Kayle`, `Viktor`)

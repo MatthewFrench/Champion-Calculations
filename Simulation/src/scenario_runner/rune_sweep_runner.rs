@@ -212,6 +212,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
             if let Some(seed) = seed_repeat_values.first().copied() {
                 trace_sim_cfg.combat_seed = Some(seed);
             }
+            let trace_replay_sim_cfg = trace_sim_cfg.clone();
 
             let mut trace_sim =
                 ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
@@ -226,6 +227,25 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
                     urf.clone(),
                 );
             while trace_sim.step(1) {}
+            let trace_determinism = trace_sim.deterministic_replay_signature();
+            let mut trace_replay_sim =
+                ControlledChampionCombatSimulation::new_with_controlled_champion_loadout(
+                    controlled_champion_base.clone(),
+                    &fixed_build_items,
+                    &resolved_loadout.bonus_stats,
+                    Some(&loadout_selection),
+                    None,
+                    Some(&controlled_champion_stack_overrides),
+                    &enemy_builds,
+                    trace_replay_sim_cfg,
+                    urf.clone(),
+                );
+            while trace_replay_sim.step(1) {}
+            verify_deterministic_replay_signature_match(
+                trace_determinism,
+                trace_replay_sim.deterministic_replay_signature(),
+                &format!("fixed-loadout rune sweep keystone '{}'", keystone),
+            )?;
 
             Ok(RuneSweepEntry {
                 keystone_name: keystone.clone(),
@@ -234,6 +254,7 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
                 outcome,
                 objective_breakdown,
                 rune_proc_telemetry: trace_sim.controlled_champion_rune_proc_telemetry(),
+                trace_determinism,
                 seed_repeat_scores,
                 seed_repeat_values,
             })
@@ -259,5 +280,10 @@ pub(super) fn run_controlled_champion_fixed_loadout_rune_sweep_impl(
         sweep_seed_repeats,
         seed_base: search_cfg.seed,
         sweep_results: &sweep_results,
-    })
+    })?;
+    println!(
+        "Deterministic replay verification passed for rune-sweep trace set: {} keystones",
+        sweep_results.len(),
+    );
+    Ok(())
 }

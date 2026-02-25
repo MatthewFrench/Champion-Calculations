@@ -9,6 +9,14 @@
         "meaning": "Effect resolution occurs at cast completion, without waiting for a subsequent empowered basic-attack contact."
       },
       {
+        "value": "on_projectile_hit",
+        "meaning": "Effect resolution occurs when the casted projectile collides with an enemy or resolves on first-hit contact rules."
+      },
+      {
+        "value": "on_dash_contact_or_completion",
+        "meaning": "Effect resolution occurs on dash contact with the target, or at dash completion when contact-based rules fail or fall through."
+      },
+      {
         "value": "on_empowered_basic_attack_hit",
         "meaning": "Cast primes an empowered basic attack; effect resolution occurs only when that empowered hit lands."
       },
@@ -26,6 +34,14 @@
       }
     ],
     "required_companion_fields_guidance": {
+      "on_projectile_hit": [
+        "target_required",
+        "cancels_if_target_invalid_before_resolution"
+      ],
+      "on_dash_contact_or_completion": [
+        "target_required",
+        "cancels_if_target_invalid_before_resolution"
+      ],
       "on_empowered_basic_attack_hit": [
         "target_required",
         "max_empowered_attacks",

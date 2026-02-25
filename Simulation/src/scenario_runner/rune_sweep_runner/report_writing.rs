@@ -110,7 +110,7 @@ fn build_rune_sweep_report_markdown(input: &RuneSweepReportWriteInput<'_>) -> St
                 result.outcome.healing_done,
                 result.outcome.enemy_kills,
                 result.outcome.invulnerable_seconds,
-                repeat_seeds
+                repeat_seeds,
             ));
         } else {
             markdown.push_str(&format!(
@@ -126,6 +126,14 @@ fn build_rune_sweep_report_markdown(input: &RuneSweepReportWriteInput<'_>) -> St
                 result.outcome.invulnerable_seconds
             ));
         }
+        markdown.push_str(&format!(
+            "  - Deterministic replay signature:\n    - Tick checksum: `{:016x}`\n    - Final checksum: `{:016x}`\n    - Queue checksum: `{:016x}`\n    - Ticks executed: `{}`\n    - Events processed: `{}`\n",
+            result.trace_determinism.tick_state_checksum,
+            result.trace_determinism.final_state_checksum,
+            result.trace_determinism.queue_checksum,
+            result.trace_determinism.ticks_executed,
+            result.trace_determinism.events_processed,
+        ));
     }
     markdown.push('\n');
     markdown.push_str("## Rune Proc Telemetry\n");
@@ -209,6 +217,7 @@ fn build_rune_sweep_json_report(input: &RuneSweepReportWriteInput<'_>) -> serde_
                 },
                 "seed_repeat_scores": result.seed_repeat_scores,
                 "seed_repeat_values": result.seed_repeat_values,
+                "determinism": deterministic_signature_json(result.trace_determinism),
                 "rune_proc_telemetry": rune_proc_telemetry_json(
                     &result.rune_proc_telemetry,
                     result.outcome.damage_dealt,

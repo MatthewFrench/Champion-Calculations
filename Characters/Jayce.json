@@ -328,12 +328,17 @@
         6.0
       ],
       "execution": {
-        "cast_windup_seconds": 0.0
+        "cast_windup_seconds": 0.0,
+        "resolution_timing": "on_cast_for_self_buff_then_on_empowered_basic_attack_hit",
+        "target_required": false,
+        "max_empowered_attacks": 1,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Auto.",
         "Source castTime: none.",
-        "Source notes (summary): Transformations do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive."
+        "Source notes (summary): Transformations do not count as ability activations for the purposes of on-cast effects such as Spellblade and triggering Force Pulse's passive.",
+        "Manual review (2026-02-25): Transform Mercury Cannon resolves immediate stance-swap self-state on cast, while the resistance-shred payload resolves on the next empowered basic-attack hit."
       ]
     }
   },
@@ -349,6 +354,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Jayce",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Jayce/Transform_Mercury_Cannon",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Transform Mercury Cannon cast-state timing and empowered-next-hit resistance-shred resolution semantics"
     }
   ],
   "notes": [

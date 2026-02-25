@@ -268,13 +268,17 @@
       ],
       "execution": {
         "cast_windup_seconds": 0.0,
-        "projectile_speed": 750.0
+        "projectile_speed": 750.0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source speed: 750 + 60% movement speed.",
-        "Source notes (summary): If Steel Tempest has been buffered, Wind Wall may also be cast during the dash."
+        "Source notes (summary): If Steel Tempest has been buffered, Wind Wall may also be cast during the dash.",
+        "Manual review (2026-02-25): Sweeping Blade is modeled as target-required dash-contact resolution; damage and stack generation resolve on dash completion against the dashed-through target."
       ]
     },
     "ultimate": {
@@ -337,6 +341,12 @@
       "accessed": "2026-02-24",
       "type": "League of Legends Wiki (ability data template)",
       "used_for": "manual behavior verification for Steel Tempest execution timing, activation gating, and player-visible resolution semantics"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Yasuo/Sweeping_Blade",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Sweeping Blade dash-contact timing, target gating, and hit-resolution semantics"
     }
   ],
   "notes": [

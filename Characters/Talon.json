@@ -144,13 +144,19 @@
       },
       "execution": {
         "cast_windup_seconds": 100.0,
-        "projectile_speed": 1400.0
+        "projectile_speed": 1400.0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": true,
+        "resets_basic_attack_timer_on_cast": true,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: None / 100% of Talon's windup time (0.198 at base attack speed).",
         "Source speed: 1400.",
-        "Source notes (summary): Talon will track the target if they change locations with the ranged version of Noxian Diplomacy, landing at an offset of 100 units before reaching them."
+        "Source notes (summary): Talon will track the target if they change locations with the ranged version of Noxian Diplomacy, landing at an offset of 100 units before reaching them.",
+        "Manual review (2026-02-25): Noxian Diplomacy is a target-required dash strike whose damage resolves on dash contact/completion; close-range cast uses attack-windup-scaled timing and grants a short next-attack range bonus window."
       ]
     },
     "basic_ability_2": {
@@ -365,6 +371,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Talon",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Talon/Noxian_Diplomacy",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Noxian Diplomacy dash-contact timing, attack-windup cast branch behavior, and attack-reset semantics"
     }
   ],
   "notes": [

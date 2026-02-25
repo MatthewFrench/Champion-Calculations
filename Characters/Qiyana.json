@@ -289,13 +289,17 @@
       },
       "execution": {
         "cast_windup_seconds": 0.0,
-        "projectile_speed": 600.0
+        "projectile_speed": 600.0,
+        "resolution_timing": "on_dash_contact_or_completion",
+        "target_required": true,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Unit.",
         "Source castTime: none.",
         "Source speed: 600 + 100% movement speed.",
-        "Source notes (summary): Audacity only damages targets if within 250 range upon completion of the dash."
+        "Source notes (summary): Audacity only damages targets if within 250 range upon completion of the dash.",
+        "Manual review (2026-02-25): Audacity is modeled as target-required dash-contact resolution with damage gated on post-dash proximity instead of immediate cast-time damage."
       ]
     },
     "ultimate": {
@@ -371,6 +375,12 @@
       "url": "https://wiki.leagueoflegends.com/en-us/Qiyana",
       "accessed": "2026-02-24",
       "used_for": "manual verification of ability timing and execution semantics for context-note normalization"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Qiyana/Audacity",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Audacity dash-contact timing, target gating, and post-arrival damage semantics"
     }
   ],
   "notes": [

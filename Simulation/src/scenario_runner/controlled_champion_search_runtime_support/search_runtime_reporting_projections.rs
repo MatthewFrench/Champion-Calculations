@@ -1,3 +1,4 @@
+use anyhow::{Result, anyhow};
 use serde_json::{Value, json};
 
 use super::*;
@@ -115,6 +116,42 @@ pub(in crate::scenario_runner) fn rune_proc_telemetry_json(
             })
         })
         .collect::<Vec<_>>()
+}
+
+pub(in crate::scenario_runner) fn deterministic_signature_json(
+    signature: SimulationDeterminismSignature,
+) -> Value {
+    json!({
+        "final_state_checksum_hex": format!("{:016x}", signature.final_state_checksum),
+        "tick_state_checksum_hex": format!("{:016x}", signature.tick_state_checksum),
+        "queue_checksum_hex": format!("{:016x}", signature.queue_checksum),
+        "ticks_executed": signature.ticks_executed,
+        "events_processed": signature.events_processed,
+    })
+}
+
+pub(in crate::scenario_runner) fn verify_deterministic_replay_signature_match(
+    reference_signature: SimulationDeterminismSignature,
+    replay_signature: SimulationDeterminismSignature,
+    context_label: &str,
+) -> Result<()> {
+    if reference_signature == replay_signature {
+        return Ok(());
+    }
+    Err(anyhow!(
+        "deterministic replay signature mismatch for {}: reference(final={:016x}, tick={:016x}, queue={:016x}, ticks={}, events={}) replay(final={:016x}, tick={:016x}, queue={:016x}, ticks={}, events={})",
+        context_label,
+        reference_signature.final_state_checksum,
+        reference_signature.tick_state_checksum,
+        reference_signature.queue_checksum,
+        reference_signature.ticks_executed,
+        reference_signature.events_processed,
+        replay_signature.final_state_checksum,
+        replay_signature.tick_state_checksum,
+        replay_signature.queue_checksum,
+        replay_signature.ticks_executed,
+        replay_signature.events_processed,
+    ))
 }
 
 pub(in crate::scenario_runner) fn structured_trace_event(line: &str) -> Value {

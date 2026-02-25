@@ -201,10 +201,18 @@
       "description": "Passive: gain bonus attack damage based on max health. Active: empower next attack to deal bonus physical damage scaling with bonus health, increasing with missing health; damage is increased vs minions and monsters.",
       "execution": {
         "cast_windup_seconds": 0.0,
-        "effect_hitbox_radius": 155.0
+        "effect_hitbox_radius": 155.0,
+        "resolution_timing": "on_empowered_basic_attack_hit",
+        "target_required": true,
+        "resets_basic_attack_timer_on_cast": true,
+        "empowered_attack_window_seconds": 4.0,
+        "max_empowered_attacks": 1,
+        "windup_scales_with_bonus_attack_speed": true,
+        "cancels_if_target_invalid_before_resolution": true
       },
       "context_notes": [
-        "Execution metadata mapped from generated champion data: castTime none (instant cast) and effectRadius 155 for empowered strike body-impact zone."
+        "Execution metadata mapped from generated champion data: castTime none (instant cast) and effectRadius 155 for empowered strike body-impact zone.",
+        "Manual review (2026-02-25): Blunt Force Trauma is cast-primed and attack-cadence-coupled; cast applies empowered-attack state immediately and damage resolves only on empowered-hit contact within a 4-second window."
       ]
     },
     "basic_ability_2": {
@@ -472,14 +480,18 @@
       "execution": {
         "cast_windup_seconds": 0.2,
         "projectile_speed": 2000.0,
-        "effect_hitbox_radius": 75.0
+        "effect_hitbox_radius": 75.0,
+        "resolution_timing": "on_projectile_hit",
+        "target_required": false,
+        "cancels_if_target_invalid_before_resolution": false
       },
       "context_notes": [
         "Source targeting: Direction.",
         "Source castTime: 0.25.",
         "Source speed: 2000.",
         "Source targetRange: 1050 / 990.",
-        "Source notes (summary): Bonesaw uses directional projectile resolution and still refunds health-cost healing against valid champion/monster hits even when spell-shielded."
+        "Source notes (summary): Bonesaw uses directional projectile resolution and still refunds health-cost healing against valid champion/monster hits even when spell-shielded.",
+        "Manual review (2026-02-25): Infected Bonesaw is a directional projectile cast; damage, slow, and health-cost refund resolve only when the projectile collides with the first valid enemy, not on cast input."
       ]
     },
     "ultimate": {
@@ -650,6 +662,18 @@
       "path": "From Online/champions/DrMundo.json",
       "used_for": "raw basic attack timing stats and radii",
       "accessed": "2026-02-24"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Dr._Mundo/Blunt_Force_Trauma",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Blunt Force Trauma empowered-hit timing, attack-reset semantics, and player-visible resolution behavior"
+    },
+    {
+      "url": "https://wiki.leagueoflegends.com/en-us/Template:Data_Dr._Mundo/Infected_Bonesaw",
+      "accessed": "2026-02-25",
+      "type": "League of Legends Wiki (ability data template)",
+      "used_for": "manual behavior verification for Infected Bonesaw projectile-hit timing, target gating, and player-visible hit-resolution behavior"
     }
   ],
   "schema_notes": {
